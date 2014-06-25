@@ -29,7 +29,9 @@
 #define PROTOBUF_C__NO_DEPRECATED
 #endif
 
-#include "kinetic.pb-c.h"
+#include "KineticProto.h"
+
+
 void KineticProto_command__init(KineticProto_Command* message)
 {
     static KineticProto_Command init_value = KINETIC_PROTO_COMMAND__INIT;
