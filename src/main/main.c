@@ -35,10 +35,10 @@ int main(int argc, char** argv)
 
     header.clusterversion = 12345678;
     header.has_clusterversion = TRUE;
-    printf("> clusterversion: %08llX\n", header.clusterversion);
+    printf("> clusterversion: %016llX\n", (unsigned long long)header.clusterversion);
     header.identity = -12345678;
     header.has_identity = TRUE;
-    printf("> identity: %08llX\n", header.identity);
+    printf("> identity: %016llX\n", (unsigned long long)header.identity);
     cmd.header = &header;
     proto.command = &cmd;
 
@@ -99,10 +99,10 @@ int main(int argc, char** argv)
     assert (pproto != NULL);
     assert (pproto->command->header->has_identity == TRUE);
     assert (pproto->command->header->identity == -12345678ul);
-    printf("< identity: %08llX\n", header.identity);
+    printf("< identity: %016llX\n", (unsigned long long)header.identity);
     assert (pproto->command->header->has_clusterversion == TRUE);
     assert (pproto->command->header->clusterversion == 12345678ul);
-    printf("< clusterversion: %08llX\n", header.clusterversion);
+    printf("< clusterversion: %016llX\n", (unsigned long long)header.clusterversion);
 
     // Unpack and verify the raw buffer results
     printf("\nValidating unpacked dynamically allocated buffer contents...\n");
@@ -110,10 +110,10 @@ int main(int argc, char** argv)
     assert (pproto != NULL);
     assert (pproto->command->header->has_identity == TRUE);
     assert (pproto->command->header->identity == -12345678ul);
-    printf("< identity: %08llX\n", header.identity);
+    printf("< identity: %016llX\n", (unsigned long long)header.identity);
     assert (pproto->command->header->has_clusterversion == TRUE);
     assert (pproto->command->header->clusterversion == 12345678ul);
-    printf("< clusterversion: %08llX\n", header.clusterversion);
+    printf("< clusterversion: %016llX\n", (unsigned long long)header.clusterversion);
 
     // Free dynamically allocated memory
     KineticProto_free_unpacked(pproto, NULL);
