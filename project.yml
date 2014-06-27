@@ -57,15 +57,27 @@
     int8:     INT8
     bool:     UINT8
 
-#:tools:
-# Ceedling defaults to using gcc for compiling, linking, etc.
-# As [:tools] is blank, gcc will be used (so long as it's in your system path)
-# See documentation to configure a given toolchain for use
+:tools:
+  :test_includes_preprocessor:
+    :executable: gcc
+    :arguments:
+      - -E
+      - -MM
+      - -MG
+      - -I"$": COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR
+      - -I"$": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
+      - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
+      - -D"$": DEFINES_TEST_PREPROCESS
+      - -DGNU_COMPILER
+      - -w
+      - -nostdinc
+      - ${1}
+
 
 :plugins:
   :load_paths:
     - vendor/ceedling/plugins
   :enabled:
-    - stdout_pretty_tests_report
+    - teamcity_tests_report
     - module_generator
 ...
