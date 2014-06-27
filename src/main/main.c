@@ -121,5 +121,5 @@ int main(int argc, char** argv)
 
     printf("ALL TESTS PASSED!\n\n");
 
-	return 0;
+    return 0;
 }
