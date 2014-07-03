@@ -6,6 +6,6 @@ do
         echo Skipping ${file}
     else
         echo Applying license to ${file}...
-        cat license_template $file > tmp && mv tmp $file
+        cat ./config/license_template $file > tmp && mv tmp $file
     fi
 done
