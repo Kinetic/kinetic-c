@@ -1,10 +1,10 @@
-[submodule "kinetic-protocol"]
-	path = vendor/kinetic-protocol
-	url = https://github.com/Seagate/kinetic-protocol.git
-	branch = 2.0.4
 [submodule "vendor/ceedling"]
 	path = vendor/ceedling
 	url = https://github.com/ThrowTheSwitch/Ceedling.git
 [submodule "vendor/protobuf-c"]
 	path = vendor/protobuf-c
 	url = https://github.com/protobuf-c/protobuf-c
+[submodule "vendor/kinetic-protocol"]
+	path = vendor/kinetic-protocol
+	url = https://github.com/Seagate/kinetic-protocol.git
+	branch = 2.0.4
