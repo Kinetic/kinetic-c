@@ -27,8 +27,7 @@
     - +:test/**
     - -:test/support
   :source:
-    - src/main/**
-    - src/vendor/**
+    - src/**
     - include/**
   :support:
     - test/support
@@ -78,6 +77,7 @@
   :load_paths:
     - vendor/ceedling/plugins
   :enabled:
+    - stdout_ide_tests_report
     - teamcity_tests_report
     - module_generator
 ...
