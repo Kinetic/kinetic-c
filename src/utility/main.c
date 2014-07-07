@@ -16,15 +16,15 @@ int main(int argc, char** argv)
     size_t len, len1, len2;
     KineticProto proto = KINETIC_PROTO_INIT;
     KineticProto* pproto;
-    KineticProto_Command cmd = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto_Header header = KINETIC_PROTO_HEADER__INIT;
+    KineticProto_Command cmd = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;
     uint8_t buffer[1024];
     ProtobufCBufferSimple bs = PROTOBUF_C_BUFFER_SIMPLE_INIT(buffer);
     uint8_t* packed;
 
     KineticProto_init(&proto);
-    KineticProto_command__init(&cmd);
-    KineticProto_header__init(&header);
+    KineticProto_command_init(&cmd);
+    KineticProto_header_init(&header);
 
     printf ("Seagate Kinetic Protocol C Client Test Utility\n\n");
 
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
     KineticProto_free_unpacked(pproto, NULL);
     free(packed);
 
-    printf("ALL TESTS PASSED!\n\n");
+    printf("\nKinetic C Client test utility ran successfully!\n");
 
     return 0;
 }

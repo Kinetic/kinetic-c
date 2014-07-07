@@ -25,15 +25,15 @@ void test_KineticProto_should_pack_and_unpack_protocol_buffers(void)
     size_t expectedLen;
     KineticProto proto = KINETIC_PROTO_INIT;
     KineticProto* unpacked;
-    KineticProto_Command cmd = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto_Header header = KINETIC_PROTO_HEADER__INIT;
+    KineticProto_Command cmd = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;
     uint8_t buffer[1024];
     ProtobufCBufferSimple bs = PROTOBUF_C_BUFFER_SIMPLE_INIT(buffer);
     uint8_t* packed;
 
     KineticProto_init(&proto);
-    KineticProto_command__init(&cmd);
-    KineticProto_header__init(&header);
+    KineticProto_command_init(&cmd);
+    KineticProto_header_init(&header);
 
     cmd.header = &header;
     proto.command = &cmd;
@@ -58,13 +58,13 @@ void test_KineticProto_should_pass_data_accurately_through_raw_buffers(void)
     uint8_t* packed;
     KineticProto* unpacked;
     KineticProto proto = KINETIC_PROTO_INIT;
-    KineticProto_Command cmd = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto_Header header = KINETIC_PROTO_HEADER__INIT;
+    KineticProto_Command cmd = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;
 
     KineticProto_init(&proto);
-    KineticProto_command__init(&cmd);
+    KineticProto_command_init(&cmd);
     proto.command = &cmd;
-    KineticProto_header__init(&header);
+    KineticProto_header_init(&header);
     header.clusterversion = 12345678;
     header.has_clusterversion = TRUE;
     header.identity = -12345678;
@@ -92,15 +92,15 @@ void test_KineticProto_should_pass_data_accurately_through_BufferSimple(void)
 {
     KineticProto proto = KINETIC_PROTO_INIT;
     KineticProto* unpacked;
-    KineticProto_Command cmd = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto_Header header = KINETIC_PROTO_HEADER__INIT;
+    KineticProto_Command cmd = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;
     uint8_t buffer[1024];
     ProtobufCBufferSimple bs = PROTOBUF_C_BUFFER_SIMPLE_INIT(buffer);
 
     KineticProto_init(&proto);
-    KineticProto_command__init(&cmd);
+    KineticProto_command_init(&cmd);
     proto.command = &cmd;
-    KineticProto_header__init(&header);
+    KineticProto_header_init(&header);
     header.clusterversion = 12345678;
     header.has_clusterversion = TRUE;
     header.identity = -12345678;

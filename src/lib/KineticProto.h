@@ -46,123 +46,123 @@ typedef struct _KineticProto_KeyValue KineticProto_KeyValue;
 typedef struct _KineticProto_Range KineticProto_Range;
 typedef struct _KineticProto_Setup KineticProto_Setup;
 typedef struct _KineticProto_P2POperation KineticProto_P2POperation;
-typedef struct _KineticProto_P2POperation__Operation KineticProto_P2POperation__Operation;
-typedef struct _KineticProto_P2POperation__Peer KineticProto_P2POperation__Peer;
+typedef struct _KineticProto_P2POperation_Operation KineticProto_P2POperation_Operation;
+typedef struct _KineticProto_P2POperation_Peer KineticProto_P2POperation_Peer;
 typedef struct _KineticProto_GetLog KineticProto_GetLog;
-typedef struct _KineticProto_GetLog__Utilization KineticProto_GetLog__Utilization;
-typedef struct _KineticProto_GetLog__Temperature KineticProto_GetLog__Temperature;
-typedef struct _KineticProto_GetLog__Capacity KineticProto_GetLog__Capacity;
-typedef struct _KineticProto_GetLog__Configuration KineticProto_GetLog__Configuration;
-typedef struct _KineticProto_GetLog__Configuration__Interface KineticProto_GetLog__Configuration__Interface;
-typedef struct _KineticProto_GetLog__Statistics KineticProto_GetLog__Statistics;
-typedef struct _KineticProto_GetLog__Limits KineticProto_GetLog__Limits;
+typedef struct _KineticProto_GetLog_Utilization KineticProto_GetLog_Utilization;
+typedef struct _KineticProto_GetLog_Temperature KineticProto_GetLog_Temperature;
+typedef struct _KineticProto_GetLog_Capacity KineticProto_GetLog_Capacity;
+typedef struct _KineticProto_GetLog_Configuration KineticProto_GetLog_Configuration;
+typedef struct _KineticProto_GetLog_Configuration_Interface KineticProto_GetLog_Configuration_Interface;
+typedef struct _KineticProto_GetLog_Statistics KineticProto_GetLog_Statistics;
+typedef struct _KineticProto_GetLog_Limits KineticProto_GetLog_Limits;
 typedef struct _KineticProto_Security KineticProto_Security;
-typedef struct _KineticProto_Security__ACL KineticProto_Security__ACL;
-typedef struct _KineticProto_Security__ACL__Scope KineticProto_Security__ACL__Scope;
+typedef struct _KineticProto_Security_ACL KineticProto_Security_ACL;
+typedef struct _KineticProto_Security_ACL_Scope KineticProto_Security_ACL_Scope;
 
 /* --- enums --- */
 
-typedef enum _KineticProto_Status__StatusCode
+typedef enum _KineticProto_Status_StatusCode
 {
-    KINETIC_PROTO_STATUS__STATUS_CODE__INVALID_STATUS_CODE = -1,
-    KINETIC_PROTO_STATUS__STATUS_CODE__NOT_ATTEMPTED = 0,
-    KINETIC_PROTO_STATUS__STATUS_CODE__SUCCESS = 1,
-    KINETIC_PROTO_STATUS__STATUS_CODE__HMAC_FAILURE = 2,
-    KINETIC_PROTO_STATUS__STATUS_CODE__NOT_AUTHORIZED = 3,
-    KINETIC_PROTO_STATUS__STATUS_CODE__VERSION_FAILURE = 4,
-    KINETIC_PROTO_STATUS__STATUS_CODE__INTERNAL_ERROR = 5,
-    KINETIC_PROTO_STATUS__STATUS_CODE__HEADER_REQUIRED = 6,
-    KINETIC_PROTO_STATUS__STATUS_CODE__NOT_FOUND = 7,
-    KINETIC_PROTO_STATUS__STATUS_CODE__VERSION_MISMATCH = 8,
-    KINETIC_PROTO_STATUS__STATUS_CODE__SERVICE_BUSY = 9,
-    KINETIC_PROTO_STATUS__STATUS_CODE__EXPIRED = 10,
-    KINETIC_PROTO_STATUS__STATUS_CODE__DATA_ERROR = 11,
-    KINETIC_PROTO_STATUS__STATUS_CODE__PERM_DATA_ERROR = 12,
-    KINETIC_PROTO_STATUS__STATUS_CODE__REMOTE_CONNECTION_ERROR = 13,
-    KINETIC_PROTO_STATUS__STATUS_CODE__NO_SPACE = 14,
-    KINETIC_PROTO_STATUS__STATUS_CODE__NO_SUCH_HMAC_ALGORITHM = 15,
-    KINETIC_PROTO_STATUS__STATUS_CODE__INVALID_REQUEST = 16,
-    KINETIC_PROTO_STATUS__STATUS_CODE__NESTED_OPERATION_ERRORS = 17
-    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_STATUS__STATUS_CODE)
-} KineticProto_Status__StatusCode;
-typedef enum _KineticProto_GetLog__Type
+    KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE = -1,
+    KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED = 0,
+    KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS = 1,
+    KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE = 2,
+    KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED = 3,
+    KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE = 4,
+    KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR = 5,
+    KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED = 6,
+    KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND = 7,
+    KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH = 8,
+    KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY = 9,
+    KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED = 10,
+    KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR = 11,
+    KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR = 12,
+    KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR = 13,
+    KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE = 14,
+    KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM = 15,
+    KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST = 16,
+    KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS = 17
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_STATUS_STATUS_CODE)
+} KineticProto_Status_StatusCode;
+typedef enum _KineticProto_GetLog_Type
 {
-    KINETIC_PROTO_GET_LOG__TYPE__INVALID_TYPE = -1,
-    KINETIC_PROTO_GET_LOG__TYPE__UTILIZATIONS = 0,
-    KINETIC_PROTO_GET_LOG__TYPE__TEMPERATURES = 1,
-    KINETIC_PROTO_GET_LOG__TYPE__CAPACITIES = 2,
-    KINETIC_PROTO_GET_LOG__TYPE__CONFIGURATION = 3,
-    KINETIC_PROTO_GET_LOG__TYPE__STATISTICS = 4,
-    KINETIC_PROTO_GET_LOG__TYPE__MESSAGES = 5,
-    KINETIC_PROTO_GET_LOG__TYPE__LIMITS = 6
-    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_GET_LOG__TYPE)
-} KineticProto_GetLog__Type;
-typedef enum _KineticProto_Security__ACL__HMACAlgorithm
+    KINETIC_PROTO_GET_LOG_TYPE_INVALID_TYPE = -1,
+    KINETIC_PROTO_GET_LOG_TYPE_UTILIZATIONS = 0,
+    KINETIC_PROTO_GET_LOG_TYPE_TEMPERATURES = 1,
+    KINETIC_PROTO_GET_LOG_TYPE_CAPACITIES = 2,
+    KINETIC_PROTO_GET_LOG_TYPE_CONFIGURATION = 3,
+    KINETIC_PROTO_GET_LOG_TYPE_STATISTICS = 4,
+    KINETIC_PROTO_GET_LOG_TYPE_MESSAGES = 5,
+    KINETIC_PROTO_GET_LOG_TYPE_LIMITS = 6
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_GET_LOG_TYPE)
+} KineticProto_GetLog_Type;
+typedef enum _KineticProto_Security_ACL_HMACAlgorithm
 {
-    KINETIC_PROTO_SECURITY__ACL__HMACALGORITHM__INVALID_HMAC_ALGORITHM = -1,
-    KINETIC_PROTO_SECURITY__ACL__HMACALGORITHM__HmacSHA1 = 1
-    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_SECURITY__ACL__HMACALGORITHM)
-} KineticProto_Security__ACL__HMACAlgorithm;
-typedef enum _KineticProto_Security__ACL__Permission
+    KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM = -1,
+    KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1 = 1
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM)
+} KineticProto_Security_ACL_HMACAlgorithm;
+typedef enum _KineticProto_Security_ACL_Permission
 {
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__INVALID_PERMISSION = -1,
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__READ = 0,
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__WRITE = 1,
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__DELETE = 2,
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__RANGE = 3,
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__SETUP = 4,
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__P2POP = 5,
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__GETLOG = 7,
-    KINETIC_PROTO_SECURITY__ACL__PERMISSION__SECURITY = 8
-    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_SECURITY__ACL__PERMISSION)
-} KineticProto_Security__ACL__Permission;
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_INVALID_PERMISSION = -1,
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_READ = 0,
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_WRITE = 1,
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_DELETE = 2,
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_RANGE = 3,
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_SETUP = 4,
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_P2POP = 5,
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_GETLOG = 7,
+    KINETIC_PROTO_SECURITY_ACL_PERMISSION_SECURITY = 8
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_SECURITY_ACL_PERMISSION)
+} KineticProto_Security_ACL_Permission;
 typedef enum _KineticProto_Synchronization
 {
-    KINETIC_PROTO_SYNCHRONIZATION__INVALID_SYNCHRONIZATION = -1,
-    KINETIC_PROTO_SYNCHRONIZATION__WRITETHROUGH = 1,
-    KINETIC_PROTO_SYNCHRONIZATION__WRITEBACK = 2,
-    KINETIC_PROTO_SYNCHRONIZATION__FLUSH = 3
+    KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION = -1,
+    KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH = 1,
+    KINETIC_PROTO_SYNCHRONIZATION_WRITEBACK = 2,
+    KINETIC_PROTO_SYNCHRONIZATION_FLUSH = 3
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_SYNCHRONIZATION)
 } KineticProto_Synchronization;
 typedef enum _KineticProto_Algorithm
 {
-    KINETIC_PROTO_ALGORITHM__INVALID_ALGORITHM = -1,
-    KINETIC_PROTO_ALGORITHM__SHA1 = 1,
-    KINETIC_PROTO_ALGORITHM__SHA2 = 2,
-    KINETIC_PROTO_ALGORITHM__SHA3 = 3,
-    KINETIC_PROTO_ALGORITHM__CRC32 = 4,
-    KINETIC_PROTO_ALGORITHM__CRC64 = 5
+    KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM = -1,
+    KINETIC_PROTO_ALGORITHM_SHA1 = 1,
+    KINETIC_PROTO_ALGORITHM_SHA2 = 2,
+    KINETIC_PROTO_ALGORITHM_SHA3 = 3,
+    KINETIC_PROTO_ALGORITHM_CRC32 = 4,
+    KINETIC_PROTO_ALGORITHM_CRC64 = 5
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_ALGORITHM)
 } KineticProto_Algorithm;
 typedef enum _KineticProto_MessageType
 {
-    KINETIC_PROTO_MESSAGE_TYPE__INVALID_MESSAGE_TYPE = -1,
-    KINETIC_PROTO_MESSAGE_TYPE__GET = 2,
-    KINETIC_PROTO_MESSAGE_TYPE__GET_RESPONSE = 1,
-    KINETIC_PROTO_MESSAGE_TYPE__PUT = 4,
-    KINETIC_PROTO_MESSAGE_TYPE__PUT_RESPONSE = 3,
-    KINETIC_PROTO_MESSAGE_TYPE__DELETE = 6,
-    KINETIC_PROTO_MESSAGE_TYPE__DELETE_RESPONSE = 5,
-    KINETIC_PROTO_MESSAGE_TYPE__GETNEXT = 8,
-    KINETIC_PROTO_MESSAGE_TYPE__GETNEXT_RESPONSE = 7,
-    KINETIC_PROTO_MESSAGE_TYPE__GETPREVIOUS = 10,
-    KINETIC_PROTO_MESSAGE_TYPE__GETPREVIOUS_RESPONSE = 9,
-    KINETIC_PROTO_MESSAGE_TYPE__GETKEYRANGE = 12,
-    KINETIC_PROTO_MESSAGE_TYPE__GETKEYRANGE_RESPONSE = 11,
-    KINETIC_PROTO_MESSAGE_TYPE__GETVERSION = 16,
-    KINETIC_PROTO_MESSAGE_TYPE__GETVERSION_RESPONSE = 15,
-    KINETIC_PROTO_MESSAGE_TYPE__SETUP = 22,
-    KINETIC_PROTO_MESSAGE_TYPE__SETUP_RESPONSE = 21,
-    KINETIC_PROTO_MESSAGE_TYPE__GETLOG = 24,
-    KINETIC_PROTO_MESSAGE_TYPE__GETLOG_RESPONSE = 23,
-    KINETIC_PROTO_MESSAGE_TYPE__SECURITY = 26,
-    KINETIC_PROTO_MESSAGE_TYPE__SECURITY_RESPONSE = 25,
-    KINETIC_PROTO_MESSAGE_TYPE__PEER2PEERPUSH = 28,
-    KINETIC_PROTO_MESSAGE_TYPE__PEER2PEERPUSH_RESPONSE = 27,
-    KINETIC_PROTO_MESSAGE_TYPE__NOOP = 30,
-    KINETIC_PROTO_MESSAGE_TYPE__NOOP_RESPONSE = 29,
-    KINETIC_PROTO_MESSAGE_TYPE__FLUSHALLDATA = 32,
-    KINETIC_PROTO_MESSAGE_TYPE__FLUSHALLDATA_RESPONSE = 31
+    KINETIC_PROTO_MESSAGE_TYPE_INVALID_MESSAGE_TYPE = -1,
+    KINETIC_PROTO_MESSAGE_TYPE_GET = 2,
+    KINETIC_PROTO_MESSAGE_TYPE_GET_RESPONSE = 1,
+    KINETIC_PROTO_MESSAGE_TYPE_PUT = 4,
+    KINETIC_PROTO_MESSAGE_TYPE_PUT_RESPONSE = 3,
+    KINETIC_PROTO_MESSAGE_TYPE_DELETE = 6,
+    KINETIC_PROTO_MESSAGE_TYPE_DELETE_RESPONSE = 5,
+    KINETIC_PROTO_MESSAGE_TYPE_GETNEXT = 8,
+    KINETIC_PROTO_MESSAGE_TYPE_GETNEXT_RESPONSE = 7,
+    KINETIC_PROTO_MESSAGE_TYPE_GETPREVIOUS = 10,
+    KINETIC_PROTO_MESSAGE_TYPE_GETPREVIOUS_RESPONSE = 9,
+    KINETIC_PROTO_MESSAGE_TYPE_GETKEYRANGE = 12,
+    KINETIC_PROTO_MESSAGE_TYPE_GETKEYRANGE_RESPONSE = 11,
+    KINETIC_PROTO_MESSAGE_TYPE_GETVERSION = 16,
+    KINETIC_PROTO_MESSAGE_TYPE_GETVERSION_RESPONSE = 15,
+    KINETIC_PROTO_MESSAGE_TYPE_SETUP = 22,
+    KINETIC_PROTO_MESSAGE_TYPE_SETUP_RESPONSE = 21,
+    KINETIC_PROTO_MESSAGE_TYPE_GETLOG = 24,
+    KINETIC_PROTO_MESSAGE_TYPE_GETLOG_RESPONSE = 23,
+    KINETIC_PROTO_MESSAGE_TYPE_SECURITY = 26,
+    KINETIC_PROTO_MESSAGE_TYPE_SECURITY_RESPONSE = 25,
+    KINETIC_PROTO_MESSAGE_TYPE_PEER2PEERPUSH = 28,
+    KINETIC_PROTO_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE = 27,
+    KINETIC_PROTO_MESSAGE_TYPE_NOOP = 30,
+    KINETIC_PROTO_MESSAGE_TYPE_NOOP_RESPONSE = 29,
+    KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA = 32,
+    KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE = 31
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(KINETIC_PROTO_MESSAGE_TYPE)
 } KineticProto_MessageType;
 
@@ -175,8 +175,8 @@ struct _KineticProto_Command
     KineticProto_Body* body;
     KineticProto_Status* status;
 };
-#define KINETIC_PROTO_COMMAND__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_command__descriptor) \
+#define KINETIC_PROTO_COMMAND_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_command_descriptor) \
     , NULL, NULL, NULL }
 
 struct _KineticProto_Header
@@ -201,8 +201,8 @@ struct _KineticProto_Header
     protobuf_c_boolean has_backgroundscan;
     protobuf_c_boolean backgroundscan;
 };
-#define KINETIC_PROTO_HEADER__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_header__descriptor) \
+#define KINETIC_PROTO_HEADER_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_header_descriptor) \
     , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
 
 struct _KineticProto_Body
@@ -215,21 +215,21 @@ struct _KineticProto_Body
     KineticProto_GetLog* getlog;
     KineticProto_Security* security;
 };
-#define KINETIC_PROTO_BODY__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_body__descriptor) \
+#define KINETIC_PROTO_BODY_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_body_descriptor) \
     , NULL, NULL, NULL, NULL, NULL, NULL }
 
 struct _KineticProto_Status
 {
     ProtobufCMessage base;
     protobuf_c_boolean has_code;
-    KineticProto_Status__StatusCode code;
+    KineticProto_Status_StatusCode code;
     char* statusmessage;
     protobuf_c_boolean has_detailedmessage;
     ProtobufCBinaryData detailedmessage;
 };
-#define KINETIC_PROTO_STATUS__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_status__descriptor) \
+#define KINETIC_PROTO_STATUS_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_status_descriptor) \
     , 0,0, NULL, 0,{0,NULL} }
 
 struct _KineticProto_KeyValue
@@ -252,8 +252,8 @@ struct _KineticProto_KeyValue
     protobuf_c_boolean has_synchronization;
     KineticProto_Synchronization synchronization;
 };
-#define KINETIC_PROTO_KEY_VALUE__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_key_value__descriptor) \
+#define KINETIC_PROTO_KEY_VALUE_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_key_value_descriptor) \
     , 0,{0,NULL}, 0,0, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,0, 0,0, 0,0 }
 
 struct _KineticProto_Range
@@ -274,8 +274,8 @@ struct _KineticProto_Range
     size_t n_key;
     ProtobufCBinaryData* key;
 };
-#define KINETIC_PROTO_RANGE__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_range__descriptor) \
+#define KINETIC_PROTO_RANGE_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_range_descriptor) \
     , 0,{0,NULL}, 0,{0,NULL}, 0,0, 0,0, 0,0, 0,0, 0,NULL }
 
 struct _KineticProto_Setup
@@ -292,11 +292,11 @@ struct _KineticProto_Setup
     protobuf_c_boolean has_firmwaredownload;
     protobuf_c_boolean firmwaredownload;
 };
-#define KINETIC_PROTO_SETUP__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_setup__descriptor) \
+#define KINETIC_PROTO_SETUP_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_setup_descriptor) \
     , 0,0, 0,0, 0,{0,NULL}, 0,{0,NULL}, 0,0 }
 
-struct _KineticProto_P2POperation__Operation
+struct _KineticProto_P2POperation_Operation
 {
     ProtobufCMessage base;
     protobuf_c_boolean has_key;
@@ -310,11 +310,11 @@ struct _KineticProto_P2POperation__Operation
     KineticProto_Status* status;
     KineticProto_P2POperation* p2pop;
 };
-#define KINETIC_PROTO_P2_POPERATION__OPERATION__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation__operation__descriptor) \
+#define KINETIC_PROTO_P2_POPERATION_OPERATION_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_operation_descriptor) \
     , 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,0, NULL, NULL }
 
-struct _KineticProto_P2POperation__Peer
+struct _KineticProto_P2POperation_Peer
 {
     ProtobufCMessage base;
     char* hostname;
@@ -323,35 +323,35 @@ struct _KineticProto_P2POperation__Peer
     protobuf_c_boolean has_tls;
     protobuf_c_boolean tls;
 };
-#define KINETIC_PROTO_P2_POPERATION__PEER__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation__peer__descriptor) \
+#define KINETIC_PROTO_P2_POPERATION_PEER_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_peer_descriptor) \
     , NULL, 0,0, 0,0 }
 
 struct _KineticProto_P2POperation
 {
     ProtobufCMessage base;
-    KineticProto_P2POperation__Peer* peer;
+    KineticProto_P2POperation_Peer* peer;
     size_t n_operation;
-    KineticProto_P2POperation__Operation** operation;
+    KineticProto_P2POperation_Operation** operation;
     protobuf_c_boolean has_allchildoperationssucceeded;
     protobuf_c_boolean allchildoperationssucceeded;
 };
-#define KINETIC_PROTO_P2_POPERATION__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation__descriptor) \
+#define KINETIC_PROTO_P2_POPERATION_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_descriptor) \
     , NULL, 0,NULL, 0,0 }
 
-struct _KineticProto_GetLog__Utilization
+struct _KineticProto_GetLog_Utilization
 {
     ProtobufCMessage base;
     char* name;
     protobuf_c_boolean has_value;
     float value;
 };
-#define KINETIC_PROTO_GET_LOG__UTILIZATION__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__utilization__descriptor) \
+#define KINETIC_PROTO_GET_LOG_UTILIZATION_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_utilization_descriptor) \
     , NULL, 0,0 }
 
-struct _KineticProto_GetLog__Temperature
+struct _KineticProto_GetLog_Temperature
 {
     ProtobufCMessage base;
     char* name;
@@ -364,11 +364,11 @@ struct _KineticProto_GetLog__Temperature
     protobuf_c_boolean has_target;
     float target;
 };
-#define KINETIC_PROTO_GET_LOG__TEMPERATURE__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__temperature__descriptor) \
+#define KINETIC_PROTO_GET_LOG_TEMPERATURE_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_temperature_descriptor) \
     , NULL, 0,0, 0,0, 0,0, 0,0 }
 
-struct _KineticProto_GetLog__Capacity
+struct _KineticProto_GetLog_Capacity
 {
     ProtobufCMessage base;
     protobuf_c_boolean has_nominalcapacityinbytes;
@@ -376,11 +376,11 @@ struct _KineticProto_GetLog__Capacity
     protobuf_c_boolean has_portionfull;
     float portionfull;
 };
-#define KINETIC_PROTO_GET_LOG__CAPACITY__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__capacity__descriptor) \
+#define KINETIC_PROTO_GET_LOG_CAPACITY_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_capacity_descriptor) \
     , 0,0, 0,0 }
 
-struct _KineticProto_GetLog__Configuration__Interface
+struct _KineticProto_GetLog_Configuration_Interface
 {
     ProtobufCMessage base;
     char* name;
@@ -391,11 +391,11 @@ struct _KineticProto_GetLog__Configuration__Interface
     protobuf_c_boolean has_ipv6address;
     ProtobufCBinaryData ipv6address;
 };
-#define KINETIC_PROTO_GET_LOG__CONFIGURATION__INTERFACE__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__configuration__interface__descriptor) \
+#define KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_configuration_interface_descriptor) \
     , NULL, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL} }
 
-struct _KineticProto_GetLog__Configuration
+struct _KineticProto_GetLog_Configuration
 {
     ProtobufCMessage base;
     char* vendor;
@@ -411,17 +411,17 @@ struct _KineticProto_GetLog__Configuration
     char* protocolcompilationdate;
     char* protocolsourcehash;
     size_t n_interface;
-    KineticProto_GetLog__Configuration__Interface** interface;
+    KineticProto_GetLog_Configuration_Interface** interface;
     protobuf_c_boolean has_port;
     int32_t port;
     protobuf_c_boolean has_tlsport;
     int32_t tlsport;
 };
-#define KINETIC_PROTO_GET_LOG__CONFIGURATION__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__configuration__descriptor) \
+#define KINETIC_PROTO_GET_LOG_CONFIGURATION_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_configuration_descriptor) \
     , NULL, NULL, 0,{0,NULL}, 0,{0,NULL}, NULL, NULL, NULL, NULL, NULL, NULL, 0,NULL, 0,0, 0,0 }
 
-struct _KineticProto_GetLog__Statistics
+struct _KineticProto_GetLog_Statistics
 {
     ProtobufCMessage base;
     protobuf_c_boolean has_messagetype;
@@ -431,11 +431,11 @@ struct _KineticProto_GetLog__Statistics
     protobuf_c_boolean has_bytes;
     uint64_t bytes;
 };
-#define KINETIC_PROTO_GET_LOG__STATISTICS__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__statistics__descriptor) \
+#define KINETIC_PROTO_GET_LOG_STATISTICS_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_statistics_descriptor) \
     , 0,0, 0,0, 0,0 }
 
-struct _KineticProto_GetLog__Limits
+struct _KineticProto_GetLog_Limits
 {
     ProtobufCMessage base;
     protobuf_c_boolean has_maxkeysize;
@@ -457,32 +457,32 @@ struct _KineticProto_GetLog__Limits
     protobuf_c_boolean has_maxkeyrangecount;
     uint32_t maxkeyrangecount;
 };
-#define KINETIC_PROTO_GET_LOG__LIMITS__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__limits__descriptor) \
+#define KINETIC_PROTO_GET_LOG_LIMITS_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_limits_descriptor) \
     , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
 
 struct _KineticProto_GetLog
 {
     ProtobufCMessage base;
     size_t n_type;
-    KineticProto_GetLog__Type* type;
+    KineticProto_GetLog_Type* type;
     size_t n_utilization;
-    KineticProto_GetLog__Utilization** utilization;
+    KineticProto_GetLog_Utilization** utilization;
     size_t n_temperature;
-    KineticProto_GetLog__Temperature** temperature;
-    KineticProto_GetLog__Capacity* capacity;
-    KineticProto_GetLog__Configuration* configuration;
+    KineticProto_GetLog_Temperature** temperature;
+    KineticProto_GetLog_Capacity* capacity;
+    KineticProto_GetLog_Configuration* configuration;
     size_t n_statistics;
-    KineticProto_GetLog__Statistics** statistics;
+    KineticProto_GetLog_Statistics** statistics;
     protobuf_c_boolean has_messages;
     ProtobufCBinaryData messages;
-    KineticProto_GetLog__Limits* limits;
+    KineticProto_GetLog_Limits* limits;
 };
-#define KINETIC_PROTO_GET_LOG__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__descriptor) \
+#define KINETIC_PROTO_GET_LOG_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_descriptor) \
     , 0,NULL, 0,NULL, 0,NULL, NULL, NULL, 0,NULL, 0,{0,NULL}, NULL }
 
-struct _KineticProto_Security__ACL__Scope
+struct _KineticProto_Security_ACL_Scope
 {
     ProtobufCMessage base;
     protobuf_c_boolean has_offset;
@@ -490,15 +490,15 @@ struct _KineticProto_Security__ACL__Scope
     protobuf_c_boolean has_value;
     ProtobufCBinaryData value;
     size_t n_permission;
-    KineticProto_Security__ACL__Permission* permission;
+    KineticProto_Security_ACL_Permission* permission;
     protobuf_c_boolean has_tlsrequired;
     protobuf_c_boolean tlsrequired;
 };
-#define KINETIC_PROTO_SECURITY__ACL__SCOPE__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security__acl__scope__descriptor) \
+#define KINETIC_PROTO_SECURITY_ACL_SCOPE_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl_scope_descriptor) \
     , 0,0, 0,{0,NULL}, 0,NULL, 0,0 }
 
-struct _KineticProto_Security__ACL
+struct _KineticProto_Security_ACL
 {
     ProtobufCMessage base;
     protobuf_c_boolean has_identity;
@@ -506,22 +506,22 @@ struct _KineticProto_Security__ACL
     protobuf_c_boolean has_key;
     ProtobufCBinaryData key;
     protobuf_c_boolean has_hmacalgorithm;
-    KineticProto_Security__ACL__HMACAlgorithm hmacalgorithm;
+    KineticProto_Security_ACL_HMACAlgorithm hmacalgorithm;
     size_t n_scope;
-    KineticProto_Security__ACL__Scope** scope;
+    KineticProto_Security_ACL_Scope** scope;
 };
-#define KINETIC_PROTO_SECURITY__ACL__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security__acl__descriptor) \
+#define KINETIC_PROTO_SECURITY_ACL_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl_descriptor) \
     , 0,0, 0,{0,NULL}, 0,0, 0,NULL }
 
 struct _KineticProto_Security
 {
     ProtobufCMessage base;
     size_t n_acl;
-    KineticProto_Security__ACL** acl;
+    KineticProto_Security_ACL** acl;
 };
-#define KINETIC_PROTO_SECURITY__INIT \
- { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security__descriptor) \
+#define KINETIC_PROTO_SECURITY_INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_descriptor) \
     , 0,NULL }
 
 struct _KineticProto
@@ -536,47 +536,47 @@ struct _KineticProto
     , NULL, 0,{0,NULL} }
 
 /* KineticProto_Command methods */
-void KineticProto_command__init(KineticProto_Command* message);
+void KineticProto_command_init(KineticProto_Command* message);
 /* KineticProto_Header methods */
-void KineticProto_header__init(KineticProto_Header* message);
+void KineticProto_header_init(KineticProto_Header* message);
 /* KineticProto_Body methods */
-void KineticProto_body__init(KineticProto_Body* message);
+void KineticProto_body_init(KineticProto_Body* message);
 /* KineticProto_Status methods */
-void KineticProto_status__init(KineticProto_Status* message);
+void KineticProto_status_init(KineticProto_Status* message);
 /* KineticProto_KeyValue methods */
-void KineticProto_key_value__init(KineticProto_KeyValue* message);
+void KineticProto_key_value_init(KineticProto_KeyValue* message);
 /* KineticProto_Range methods */
-void KineticProto_range__init(KineticProto_Range* message);
+void KineticProto_range_init(KineticProto_Range* message);
 /* KineticProto_Setup methods */
-void KineticProto_setup__init(KineticProto_Setup* message);
-/* KineticProto_P2POperation__Operation methods */
-void KineticProto_p2_poperation__operation__init(KineticProto_P2POperation__Operation* message);
-/* KineticProto_P2POperation__Peer methods */
-void KineticProto_p2_poperation__peer__init(KineticProto_P2POperation__Peer* message);
+void KineticProto_setup_init(KineticProto_Setup* message);
+/* KineticProto_P2POperation_Operation methods */
+void KineticProto_p2_poperation_operation_init(KineticProto_P2POperation_Operation* message);
+/* KineticProto_P2POperation_Peer methods */
+void KineticProto_p2_poperation_peer_init(KineticProto_P2POperation_Peer* message);
 /* KineticProto_P2POperation methods */
-void KineticProto_p2_poperation__init(KineticProto_P2POperation* message);
-/* KineticProto_GetLog__Utilization methods */
-void KineticProto_get_log__utilization__init(KineticProto_GetLog__Utilization* message);
-/* KineticProto_GetLog__Temperature methods */
-void KineticProto_get_log__temperature__init(KineticProto_GetLog__Temperature* message);
-/* KineticProto_GetLog__Capacity methods */
-void KineticProto_get_log__capacity__init(KineticProto_GetLog__Capacity* message);
-/* KineticProto_GetLog__Configuration__Interface methods */
-void KineticProto_get_log__configuration__interface__init(KineticProto_GetLog__Configuration__Interface* message);
-/* KineticProto_GetLog__Configuration methods */
-void KineticProto_get_log__configuration__init(KineticProto_GetLog__Configuration* message);
-/* KineticProto_GetLog__Statistics methods */
-void KineticProto_get_log__statistics__init(KineticProto_GetLog__Statistics* message);
-/* KineticProto_GetLog__Limits methods */
-void KineticProto_get_log__limits__init(KineticProto_GetLog__Limits* message);
+void KineticProto_p2_poperation_init(KineticProto_P2POperation* message);
+/* KineticProto_GetLog_Utilization methods */
+void KineticProto_get_log_utilization_init(KineticProto_GetLog_Utilization* message);
+/* KineticProto_GetLog_Temperature methods */
+void KineticProto_get_log_temperature_init(KineticProto_GetLog_Temperature* message);
+/* KineticProto_GetLog_Capacity methods */
+void KineticProto_get_log_capacity_init(KineticProto_GetLog_Capacity* message);
+/* KineticProto_GetLog_Configuration_Interface methods */
+void KineticProto_get_log_configuration_interface_init(KineticProto_GetLog_Configuration_Interface* message);
+/* KineticProto_GetLog_Configuration methods */
+void KineticProto_get_log_configuration_init(KineticProto_GetLog_Configuration* message);
+/* KineticProto_GetLog_Statistics methods */
+void KineticProto_get_log_statistics_init(KineticProto_GetLog_Statistics* message);
+/* KineticProto_GetLog_Limits methods */
+void KineticProto_get_log_limits_init(KineticProto_GetLog_Limits* message);
 /* KineticProto_GetLog methods */
-void KineticProto_get_log__init(KineticProto_GetLog* message);
-/* KineticProto_Security__ACL__Scope methods */
-void KineticProto_security__acl__scope__init(KineticProto_Security__ACL__Scope* message);
-/* KineticProto_Security__ACL methods */
-void KineticProto_security__acl__init(KineticProto_Security__ACL* message);
+void KineticProto_get_log_init(KineticProto_GetLog* message);
+/* KineticProto_Security_ACL_Scope methods */
+void KineticProto_security_acl_scope_init(KineticProto_Security_ACL_Scope* message);
+/* KineticProto_Security_ACL methods */
+void KineticProto_security_acl_init(KineticProto_Security_ACL* message);
 /* KineticProto_Security methods */
-void KineticProto_security__init(KineticProto_Security* message);
+void KineticProto_security_init(KineticProto_Security* message);
 /* KineticProto methods */
 void KineticProto_init(KineticProto* message);
 size_t KineticProto_get_packed_size(const KineticProto* message);
@@ -593,19 +593,19 @@ typedef void (*KineticProto_Status_Closure)(const KineticProto_Status* message, 
 typedef void (*KineticProto_KeyValue_Closure)(const KineticProto_KeyValue* message, void* closure_data);
 typedef void (*KineticProto_Range_Closure)(const KineticProto_Range* message, void* closure_data);
 typedef void (*KineticProto_Setup_Closure)(const KineticProto_Setup* message, void* closure_data);
-typedef void (*KineticProto_P2POperation__Operation_Closure)(const KineticProto_P2POperation__Operation* message, void* closure_data);
-typedef void (*KineticProto_P2POperation__Peer_Closure)(const KineticProto_P2POperation__Peer* message, void* closure_data);
+typedef void (*KineticProto_P2POperation_Operation_Closure)(const KineticProto_P2POperation_Operation* message, void* closure_data);
+typedef void (*KineticProto_P2POperation_Peer_Closure)(const KineticProto_P2POperation_Peer* message, void* closure_data);
 typedef void (*KineticProto_P2POperation_Closure)(const KineticProto_P2POperation* message, void* closure_data);
-typedef void (*KineticProto_GetLog__Utilization_Closure)(const KineticProto_GetLog__Utilization* message, void* closure_data);
-typedef void (*KineticProto_GetLog__Temperature_Closure)(const KineticProto_GetLog__Temperature* message, void* closure_data);
-typedef void (*KineticProto_GetLog__Capacity_Closure)(const KineticProto_GetLog__Capacity* message, void* closure_data);
-typedef void (*KineticProto_GetLog__Configuration__Interface_Closure)(const KineticProto_GetLog__Configuration__Interface* message, void* closure_data);
-typedef void (*KineticProto_GetLog__Configuration_Closure)(const KineticProto_GetLog__Configuration* message, void* closure_data);
-typedef void (*KineticProto_GetLog__Statistics_Closure)(const KineticProto_GetLog__Statistics* message, void* closure_data);
-typedef void (*KineticProto_GetLog__Limits_Closure)(const KineticProto_GetLog__Limits* message, void* closure_data);
+typedef void (*KineticProto_GetLog_Utilization_Closure)(const KineticProto_GetLog_Utilization* message, void* closure_data);
+typedef void (*KineticProto_GetLog_Temperature_Closure)(const KineticProto_GetLog_Temperature* message, void* closure_data);
+typedef void (*KineticProto_GetLog_Capacity_Closure)(const KineticProto_GetLog_Capacity* message, void* closure_data);
+typedef void (*KineticProto_GetLog_Configuration_Interface_Closure)(const KineticProto_GetLog_Configuration_Interface* message, void* closure_data);
+typedef void (*KineticProto_GetLog_Configuration_Closure)(const KineticProto_GetLog_Configuration* message, void* closure_data);
+typedef void (*KineticProto_GetLog_Statistics_Closure)(const KineticProto_GetLog_Statistics* message, void* closure_data);
+typedef void (*KineticProto_GetLog_Limits_Closure)(const KineticProto_GetLog_Limits* message, void* closure_data);
 typedef void (*KineticProto_GetLog_Closure)(const KineticProto_GetLog* message, void* closure_data);
-typedef void (*KineticProto_Security__ACL__Scope_Closure)(const KineticProto_Security__ACL__Scope* message, void* closure_data);
-typedef void (*KineticProto_Security__ACL_Closure)(const KineticProto_Security__ACL* message, void* closure_data);
+typedef void (*KineticProto_Security_ACL_Scope_Closure)(const KineticProto_Security_ACL_Scope* message, void* closure_data);
+typedef void (*KineticProto_Security_ACL_Closure)(const KineticProto_Security_ACL* message, void* closure_data);
 typedef void (*KineticProto_Security_Closure)(const KineticProto_Security* message, void* closure_data);
 typedef void (*KineticProto_Closure)(const KineticProto* message, void* closure_data);
 
@@ -614,34 +614,34 @@ typedef void (*KineticProto_Closure)(const KineticProto* message, void* closure_
 /* --- descriptors --- */
 
 extern const ProtobufCMessageDescriptor KineticProto_descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_command__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_header__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_body__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_status__descriptor;
-extern const ProtobufCEnumDescriptor    KineticProto_status__status_code__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_key_value__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_range__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_setup__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_p2_poperation__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_p2_poperation__operation__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_p2_poperation__peer__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_get_log__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_get_log__utilization__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_get_log__temperature__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_get_log__capacity__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_get_log__configuration__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_get_log__configuration__interface__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_get_log__statistics__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_get_log__limits__descriptor;
-extern const ProtobufCEnumDescriptor    KineticProto_get_log__type__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_security__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_security__acl__descriptor;
-extern const ProtobufCMessageDescriptor KineticProto_security__acl__scope__descriptor;
-extern const ProtobufCEnumDescriptor    KineticProto_security__acl__hmacalgorithm__descriptor;
-extern const ProtobufCEnumDescriptor    KineticProto_security__acl__permission__descriptor;
-extern const ProtobufCEnumDescriptor    KineticProto_synchronization__descriptor;
-extern const ProtobufCEnumDescriptor    KineticProto_algorithm__descriptor;
-extern const ProtobufCEnumDescriptor    KineticProto_message_type__descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_command_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_header_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_body_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_status_descriptor;
+extern const ProtobufCEnumDescriptor    KineticProto_status_status_code_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_key_value_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_range_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_setup_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_p2_poperation_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_p2_poperation_operation_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_p2_poperation_peer_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_get_log_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_get_log_utilization_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_get_log_temperature_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_get_log_capacity_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_get_log_configuration_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_get_log_configuration_interface_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_get_log_statistics_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_get_log_limits_descriptor;
+extern const ProtobufCEnumDescriptor    KineticProto_get_log_type_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_security_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_security_acl_descriptor;
+extern const ProtobufCMessageDescriptor KineticProto_security_acl_scope_descriptor;
+extern const ProtobufCEnumDescriptor    KineticProto_security_acl_hmacalgorithm_descriptor;
+extern const ProtobufCEnumDescriptor    KineticProto_security_acl_permission_descriptor;
+extern const ProtobufCEnumDescriptor    KineticProto_synchronization_descriptor;
+extern const ProtobufCEnumDescriptor    KineticProto_algorithm_descriptor;
+extern const ProtobufCEnumDescriptor    KineticProto_message_type_descriptor;
 
 PROTOBUF_C__END_DECLS
 

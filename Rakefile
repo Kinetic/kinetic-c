@@ -9,7 +9,7 @@ def report(message='')
 end
 
 def report_banner(message)
-  report "\n#{message}\n#{'='*message.length}"
+  report "\n#{message}\n#{'='*message.length}\n\n"
 end
 
 desc "Analyze code w/CppCheck"
@@ -24,7 +24,7 @@ task :default => ['cppcheck', 'test:all', 'release']
 
 desc "Run client test utility"
 task :run do
-  report_banner "Running the Kinetic C Client test utility"
+  report_banner "Running client test utility"
   sh "./build/release/kinetic-c-client"
 end
 
