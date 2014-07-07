@@ -20,10 +20,11 @@ task :cppcheck do
   report ''
 end
 
-task :default => %w|cppcheck test:all release|
+task :default => ['cppcheck', 'test:all', 'release']
 
-desc "Run the kinetic C test utility"
+desc "Run client test utility"
 task :run do
+  report_banner "Running the Kinetic C Client test utility"
   sh "./build/release/kinetic-c-client"
 end
 
