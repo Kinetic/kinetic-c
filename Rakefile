@@ -1,5 +1,5 @@
 PROJECT_CEEDLING_ROOT = "vendor/ceedling"
-TEAMCITY_BUILD = defined?(TEAMCITY_PROJECT_NAME)
+TEAMCITY_BUILD = !ENV['TEAMCITY_PROJECT_NAME'].nil?
 
 load "#{PROJECT_CEEDLING_ROOT}/lib/ceedling/rakefile.rb"
 
