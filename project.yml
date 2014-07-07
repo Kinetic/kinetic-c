@@ -45,6 +45,7 @@
     - TEST
 
 :cmock:
+  :mock_prefix: mock_
   :when_no_prototypes: :warn
   :enforce_strict_ordering: TRUE
   :plugins:

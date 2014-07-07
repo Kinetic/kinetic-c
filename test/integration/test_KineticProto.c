@@ -1,16 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c.h"
+#include "KineticTypes.h"
 #include "KineticProto.h"
 #include "unity.h"
-
-#ifndef TRUE
-#define TRUE 1
-#endif
-#ifndef FALSE
-#define FALSE 0
-#endif
 
 void setUp(void)
 {
@@ -66,9 +60,9 @@ void test_KineticProto_should_pass_data_accurately_through_raw_buffers(void)
     proto.command = &cmd;
     KineticProto_header_init(&header);
     header.clusterversion = 12345678;
-    header.has_clusterversion = TRUE;
+    header.has_clusterversion = true;
     header.identity = -12345678;
-    header.has_identity = TRUE;
+    header.has_identity = true;
     cmd.header = &header;
 
     // Pack the buffer
@@ -102,9 +96,9 @@ void test_KineticProto_should_pass_data_accurately_through_BufferSimple(void)
     proto.command = &cmd;
     KineticProto_header_init(&header);
     header.clusterversion = 12345678;
-    header.has_clusterversion = TRUE;
+    header.has_clusterversion = true;
     header.identity = -12345678;
-    header.has_identity = TRUE;
+    header.has_identity = true;
     cmd.header = &header;
 
     // Pack the buffer
