@@ -20,13 +20,26 @@ def execute_command(cmd, banner=nil)
 end
 
 HERE = File.expand_path(File.dirname(__FILE__))
+PROTOBUF_CORE = File.join(HERE, 'vendor', 'protobuf-2.5.0')
 PROTOBUF_C = File.join(HERE, 'vendor', 'protobuf-c')
 PROTO_IN = File.join(HERE, 'vendor', 'kinetic-protocol')
 PROTO_OUT = File.join(HERE, 'build', 'temp', 'proto')
 directory PROTO_OUT
 
+task :clobber do
+  cd PROTOBUF_CORE do
+    report_banner "Cleaning out vendor directory"
+    sh "git clean -f -d"
+  end
+end
+
 desc "Generate protocol buffers"
 task :proto => [PROTO_OUT] do
+
+  report_banner "Building protobuf v2.5.0"
+  cd PROTOBUF_CORE do
+    execute_command "./configure --disable-shared; make; make check; make install"
+  end
 
   report_banner "Building protobuf-c and installing protoc-c"
   cd PROTOBUF_C do
