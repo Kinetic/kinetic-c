@@ -67,7 +67,7 @@ task :cppcheck do
   execute_command "cppcheck ./src ./build/temp/proto", "Analyzing code w/CppCheck"
 end
 
-task :default => ['proto', 'cppcheck', 'test:all', 'release']
+task :default => ['cppcheck', 'test:all', 'release']
 
 desc "Run client test utility"
 task :run do
