@@ -20,12 +20,29 @@ def execute_command(cmd, banner=nil)
 end
 
 HERE = File.expand_path(File.dirname(__FILE__))
-PROTO_IN = File.expand_path(File.join(HERE, 'vendor', 'kinetic-protocol'))
+PROTOBUF_C = File.join(HERE, 'vendor', 'protobuf-c')
+PROTO_IN = File.join(HERE, 'vendor', 'kinetic-protocol')
 PROTO_OUT = File.join(HERE, 'build', 'temp', 'proto')
 directory PROTO_OUT
 
 desc "Generate protocol buffers"
 task :proto => [PROTO_OUT] do
+
+  report_banner "Building protobuf-c and installing protoc-c"
+  cd PROTOBUF_C do
+    execute_command "./autogen.sh && ./configure && make && make install"
+    protoc_c = `which protoc-c`
+    raise "Failed to find protoc-c utility" if protoc_c.strip.empty?
+    versions = `protoc-c --version`
+    version_match = versions.match /^protobuf-c (\d+\.\d+\.\d+-?r?c?\d*)\nlibprotoc (\d+\.\d+\.\d+-?r?c?\d*)$/mi
+    raise "Failed to query protoc-c/libprotoc version info" if version_match.nil?
+    protobuf_c_ver, libprotoc_ver = version_match[1..2]
+    report_banner "Successfully built protobuf-c"
+    report "protoc-c  v#{protobuf_c_ver}"
+    report "libprotoc v#{libprotoc_ver}"
+    report
+  end
+
   report_banner "Generating Kinetic C protocol buffers"
   cd PROTO_OUT do
     rm Dir["*.h", "*.c", "*.proto"]
@@ -33,6 +50,7 @@ task :proto => [PROTO_OUT] do
     execute_command "protoc-c --c_out=. kinetic.proto"
     report "Generated #{Dir['*.h', '*.c'].join(', ')}\n\n"
   end
+
 end
 
 desc "Analyze code w/CppCheck"
