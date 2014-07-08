@@ -28,13 +28,6 @@ PROTO_OUT = File.join(HERE, 'build', 'temp', 'proto')
 
 directory PROTO_OUT
 
-task :clobber do
-  report_banner "Cleaning out vendor directory"
-  cd VENDOR_PATH do
-    sh "git clean -f -d ."
-  end
-end
-
 desc "Generate protocol buffers"
 task :proto => [PROTO_OUT] do
 
