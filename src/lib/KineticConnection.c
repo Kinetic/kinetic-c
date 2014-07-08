@@ -1,23 +1,26 @@
 #include "KineticConnection.h"
-#include "KineticNetwork.h"
-#include <netinet/in.h>
+#include "KineticSocket.h"
 #include <string.h>
 
 KineticConnection KineticConnection_Create(void)
 {
-	KineticConnection connection;
-	memset(&connection, 0, sizeof(connection));
-	return connection;
+    KineticConnection connection;
+    memset(&connection, 0, sizeof(connection));
+    connection.Blocking = true;
+    connection.FileDescriptor = -1;
+    return connection;
 }
 
-KineticProto_Status_StatusCode KineticConnection_Connect(KineticConnection* connection)
+bool KineticConnection_Connect(KineticConnection* connection, const char* host, int port, bool blocking)
 {
-	struct ifaddrs addr = KineticNetwork_GetDestinationIP();
-	connection->Connected = true;
-	strcpy(connection->Name, addr.ifa_name);
-	connection->Flags = addr.ifa_flags;
-	memcpy(&connection->Addr, addr.ifa_addr, sizeof(struct sockaddr));
-	memcpy(&connection->NetMask, addr.ifa_netmask, sizeof(struct sockaddr));
-	memcpy(&connection->DestAddr, addr.ifa_dstaddr, sizeof(struct sockaddr));
-	return KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    connection->Connected = false;
+    connection->Blocking = blocking;
+    connection->Port = port;
+    connection->FileDescriptor = -1;
+    strcpy(connection->Host, host);
+
+    connection->FileDescriptor = KineticSocket_Connect(connection->Host, connection->Port);
+    connection->Connected = (connection->FileDescriptor >= 0);
+
+    return connection->Connected;
 }

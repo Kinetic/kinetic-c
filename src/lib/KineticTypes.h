@@ -11,4 +11,15 @@
 #include <netinet/in.h>
 #include <ifaddrs.h>
 
+#define HOST_NAME_MAX 256
+
+typedef struct _KineticConnection
+{
+    bool    Connected;
+    bool    Blocking;
+    int     Port;
+    int     FileDescriptor;
+    char    Host[HOST_NAME_MAX];
+} KineticConnection;
+
 #endif // _KINETIC_TYPES_H
