@@ -20,16 +20,18 @@ def execute_command(cmd, banner=nil)
 end
 
 HERE = File.expand_path(File.dirname(__FILE__))
-PROTOBUF_CORE = File.join(HERE, 'vendor', 'protobuf-2.5.0')
-PROTOBUF_C = File.join(HERE, 'vendor', 'protobuf-c')
-PROTO_IN = File.join(HERE, 'vendor', 'kinetic-protocol')
+VENDOR_PATH = File.join(HERE, 'vendor')
+PROTOBUF_CORE = File.join(VENDOR_PATH, 'protobuf-2.5.0')
+PROTOBUF_C = File.join(VENDOR_PATH, 'protobuf-c')
+PROTO_IN = File.join(VENDOR_PATH, 'kinetic-protocol')
 PROTO_OUT = File.join(HERE, 'build', 'temp', 'proto')
+
 directory PROTO_OUT
 
 task :clobber do
-  cd PROTOBUF_CORE do
-    report_banner "Cleaning out vendor directory"
-    sh "git clean -f -d"
+  report_banner "Cleaning out vendor directory"
+  cd VENDOR_PATH do
+    sh "git clean -f -d ."
   end
 end
 
