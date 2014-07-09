@@ -14,6 +14,11 @@ Cloning the Repo
 
 *NOTE: Once you have performed the above steps, you can get updates to kinetic-c and all nested submodules by simply doing: `git submodule update --recursive`
 
+Continuous Integration
+======================
+kinetic-c conducts continuous integration on [Travis CI](http://travis-ci.org).
+The current build status for HEAD is [![Build Status](https://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](https://travis-ci.org/atomicobject/kinetic-c).
+
 Protocol Version
 =================
 The client is using version `2.0.4` of the [Kinetic-Protocol](https://github.com/Seagate/kinetic-protocol/releases/tag/2.0.4).
