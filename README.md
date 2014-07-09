@@ -6,12 +6,7 @@ Cloning the Repo
 ================
     > git clone https://github.com/atomicobject/kinetic-c.git
     > cd kinetic-c
-    > git submodule init
-    > git submodule update
-    > cd vendor/ceedling
-    > git submodule init # Needed since ceedling has its own submodules
-    > cd - # go back to the kinetic-c repo root
-    > git submodule update --recursive # Updates ALL submodules, including nested ones (ceedling)
+    > git submodule update --init --recursive # needed for nested submodules
 
     > bundle install # Ensures you have all RubyGems needed
 
