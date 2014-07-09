@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <ifaddrs.h>
 
+#define KINETIC_PORT 8213
 #define HOST_NAME_MAX 256
 
 typedef struct _KineticConnection

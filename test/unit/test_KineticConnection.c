@@ -34,7 +34,7 @@ void test_KineticConnection_Connect_should_report_a_failed_connection(void)
     strcpy(Connection.Host, "invalid-host.com");
     Expected = Connection;
 
-    KineticSocket_Connect_ExpectAndReturn(Expected.Host, Expected.Port, -1);
+    KineticSocket_Connect_ExpectAndReturn(Expected.Host, Expected.Port, true, -1);
 
     TEST_ASSERT_FALSE(KineticConnection_Connect(&Connection, "invalid-host.com", 1234, true));
     TEST_ASSERT_FALSE(Connection.Connected);
@@ -43,7 +43,7 @@ void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_blocking_connection(void)
 {
-    KineticSocket_Connect_ExpectAndReturn("valid-host.com", 1234, 24);
+    KineticSocket_Connect_ExpectAndReturn("valid-host.com", 1234, true, 24);
 
     KineticConnection_Connect(&Connection, "valid-host.com", 1234, true);
 
@@ -56,7 +56,7 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
 
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_blocking_connection(void)
 {
-    KineticSocket_Connect_ExpectAndReturn("valid-host.com", 2345, 48);
+    KineticSocket_Connect_ExpectAndReturn("valid-host.com", 2345, false, 48);
 
     KineticConnection_Connect(&Connection, "valid-host.com", 2345, false);
 

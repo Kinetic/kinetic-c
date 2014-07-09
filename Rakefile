@@ -4,7 +4,10 @@ TEAMCITY_BUILD = !ENV['TEAMCITY_PROJECT_NAME'].nil?
 load "#{PROJECT_CEEDLING_ROOT}/lib/ceedling/rakefile.rb"
 
 def report(message='')
+  $stderr.flush
+  $stdout.flush
   puts message
+  $stderr.flush
   $stdout.flush
 end
 
@@ -67,7 +70,81 @@ task :cppcheck do
   execute_command "cppcheck ./src ./build/temp/proto", "Analyzing code w/CppCheck"
 end
 
-task :default => ['cppcheck', 'test:all', 'release']
+namespace :test_server do
+
+  require "webrick"
+
+  $test_server = nil
+
+  # WEBrick is a Ruby library that makes it easy to build an HTTP server with Ruby.
+  # It comes with most installations of Ruby by default (it’s part of the standard library),
+  # so you can usually create a basic web/HTTP server with only several lines of code.
+  #
+  # The following code creates a generic WEBrick server on the local machine on port 1234
+  class KineticServlet < WEBrick::HTTPServlet::AbstractServlet
+    def do_GET (request, response)
+      # a = request.query["a"]
+      response.status = 200
+      response.content_type = "text/plain"
+      response.body = "Kinetic Fake Test Server"
+
+      case request.path
+      when "/admin"
+        response.body += " - admin mode"
+      when "/config"
+        response.body += " - config mode"
+      else
+        response.body += " - normal mode"
+      end
+    end
+  end
+
+  class KineticTestServer
+
+    def initialize(port=8213)
+      @server = WEBrick::HTTPServer.new(:Port => port)
+      @server.mount "/", KineticServlet
+      trap("INT") do
+        report "INT triggered Kintic Test Server shutdown"
+        shutdown
+      end
+      @abort = false
+      @worker = Thread.new do
+        @server.start
+        while !@abort do
+          puts 'X'
+        end
+      end
+    end
+
+    def shutdown
+      report_banner "Kinetic Test Server shutting down..."
+      @abort = true
+      @worker.join(2)
+      @server.shutdown
+      sleep(0.2)
+      report "Kinetic Test Server shutdown complete"
+    end
+
+  end
+
+  task :start do
+    $test_server ||= KineticTestServer.new
+  end
+
+  task :shutdown do
+    $test_server.shutdown unless $test_server.nil?
+    $test_server = nil
+  end
+
+end
+
+task :default => [
+  'test_server:start',
+  'test:all',
+  'test_server:shutdown',
+  'release'
+]
 
 desc "Run client test utility"
 task :run do
@@ -75,7 +152,22 @@ task :run do
 end
 
 desc "Build all and run test utility"
-task :all => ['default', 'run']
+task :all => [
+  'cppcheck',
+  'default',
+  'run'
+]
 
 desc "Run full CI build"
-task :ci => ['clobber', 'all']
+task :ci => [
+  'clobber',
+  'all'
+]
+
+
+# This block of code will be run prior to Rake instance terminating
+END {
+  # Ensure test server is shutdown, so we can terminate cleanly
+  $test_server.shutdown unless $test_server.nil?
+  $test_server = nil
+}

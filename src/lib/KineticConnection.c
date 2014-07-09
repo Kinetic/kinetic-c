@@ -19,7 +19,7 @@ bool KineticConnection_Connect(KineticConnection* connection, const char* host, 
     connection->FileDescriptor = -1;
     strcpy(connection->Host, host);
 
-    connection->FileDescriptor = KineticSocket_Connect(connection->Host, connection->Port);
+    connection->FileDescriptor = KineticSocket_Connect(connection->Host, connection->Port, blocking);
     connection->Connected = (connection->FileDescriptor >= 0);
 
     return connection->Connected;

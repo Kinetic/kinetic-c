@@ -4,7 +4,7 @@
 #include <string.h>
 
 static char LogFile[256] = "";
-bool LogToStdErr = false;
+bool LogToStdErr = true;
 
 void KineticLogger_Init(const char* log_file)
 {
