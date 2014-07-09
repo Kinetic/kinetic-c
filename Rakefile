@@ -129,7 +129,7 @@ namespace :test_server do
   end
 
   task :start do
-    $test_server ||= KineticTestServer.new
+    $test_server ||= KineticTestServer.new(8999)
   end
 
   task :shutdown do

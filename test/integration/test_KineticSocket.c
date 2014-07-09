@@ -19,7 +19,7 @@ void test_KineticSocket_KINETIC_PORT_should_be_8213(void)
 
 void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 {
-    int fd = KineticSocket_Connect("localhost", KINETIC_PORT, true);
+    int fd = KineticSocket_Connect("localhost", 8999, true);
 
     TEST_ASSERT_MESSAGE(fd >= 0, "File descriptor invalid");
 
