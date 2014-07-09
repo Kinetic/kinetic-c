@@ -1,6 +1,19 @@
 Introduction
 ============
-This repo contains code for producing C kinetic clients.
+This repo contains code for producing C Kinetic clients which use the Seagate Kinetic protocol. Code examples/utilities that use the Kinetic C library are included for reference and usage during development.
+
+Cloning the Repo
+================
+    > git clone https://github.com/atomicobject/kinetic-c.git
+    > cd kinetic-c
+    > git submodule init
+    > git submodule update
+    > cd vendor/ceedling
+    > git submodule init # Needed since ceedling has its own submodules
+    > cd - # go back to the kinetic-c repo root
+    > git submodule update --recursive # Updates ALL submodules, including nested ones (ceedling)
+
+*NOTE: Once you have performed the above steps, you can get updates to kinetic-c and all nested submodules by simply doing: `git submodule update --recursive`
 
 Protocol Version
 =================
