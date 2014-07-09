@@ -13,6 +13,10 @@ Cloning the Repo
     > cd - # go back to the kinetic-c repo root
     > git submodule update --recursive # Updates ALL submodules, including nested ones (ceedling)
 
+    > bundle install # Ensures you have all RubyGems needed
+
+    > rake #run all tests and build kinetic-c library and examples
+
 *NOTE: Once you have performed the above steps, you can get updates to kinetic-c and all nested submodules by simply doing: `git submodule update --recursive`
 
 Protocol Version
@@ -43,30 +47,26 @@ TBD
 Common Developer Tasks
 ======================
 
-**Building the lib**: TBD
-`rake release`
+* Run all tests and build the library and examples
+    * `rake`
 
-**Running tests**
-`rake test:all`
+* Just build the library
+    * `rake release`
 
-There is also an integration test suite. This suite reads the environment
-variable `KINETIC_PATH` to determine a simulator executable to run tests
-against. If that variable is not set, it instead assumes that a Kinetic server
-is running on port 8123 on `localhost`. To run the integration tests, set
-`KINETIC_PATH` if appropriate and run `make integration_test`. This will write
-a JUnit report to `integrationresults.xml`.
+* Run all unit/integration tests
+    * `rake test:all`
 
-**Checking code style**
-`rake cppcheck`
+* Analyze code
+    * `rake cppcheck`
 
-**Generating documentation**
-TBD
+* Generating documentation
+    * TBD
 
-**Apply licenses**
-`./config/apply_license.sh my_new_file.cc` or `./config/apply_license.sh src/lib/*.h`
+* Apply licenses
+    * `./config/apply_license.sh my_new_file.cc` or `./config/apply_license.sh src/lib/*.h`
 
-**Build/install Google Protocol Buffers support for the Kinetic-Protocol**
-`rake proto`
+* Build/install Google Protocol Buffers support for the Kinetic-Protocol
+    * `rake proto`
 
 Examples
 ========
