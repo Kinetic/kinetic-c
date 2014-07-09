@@ -74,47 +74,31 @@ Examples
 The following examples are provided for development reference and as utilities to aid development
 
 `read_file_blocking` (incomplete!)
-------------------------------------------------------
 
 `read_file_nonblocking` (incomplete!)
-------------------------------------------------------
 
 `write_file_blocking` (incomplete!)
-------------------------------------------------------
 
 `write_file_nonblocking` (incomplete!)
-------------------------------------------------------
 
 `write_file_blocking_threads` (incomplete!)
-------------------------------------------------------
 
 `delete_file_blocking` (incomplete!)
-------------------------------------------------------
 
 `delete_file_nonblocking` (incomplete!)
-------------------------------------------------------
 
 `instant_secure_erase` (incomplete!)
-------------------------------------------------------
 
 `kinetic_stat` (incomplete!)
-------------------------------------------------------
 
 `dump_keyspace` (incomplete!)
-------------------------------------------------------
 
 `set_acls` (incomplete!)
-------------------------------------------------------
 
 `set_pin` (incomplete!)
-------------------------------------------------------
 
 `set_clusterversion` (incomplete!)
-------------------------------------------------------
 
 `update_firmware` (incomplete!)
-------------------------------------------------------
 
 `copy_drive` (incomplete!)
-------------------------------------------------------
-
