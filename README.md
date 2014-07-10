@@ -1,6 +1,21 @@
 Introduction
 ============
-This repo contains code for producing C kinetic clients.
+This repo contains code for producing C Kinetic clients which use the Seagate Kinetic protocol. Code examples/utilities that use the Kinetic C library are included for reference and usage during development.
+
+Cloning the Repo
+================
+    > git clone --recursive https://github.com/atomicobject/kinetic-c.git
+
+    > cd kinetic-c
+    > bundle install # Ensures you have all RubyGems needed
+    > rake #run all tests and build kinetic-c library and examples
+
+*NOTE: Once you have performed the above steps, you can get updates to kinetic-c and all nested submodules by simply doing: `git submodule update --recursive`
+
+Continuous Integration
+======================
+kinetic-c conducts continuous integration on [Travis CI](http://travis-ci.org).
+The current build status for HEAD is [![Build Status](https://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](https://travis-ci.org/atomicobject/kinetic-c).
 
 Protocol Version
 =================
@@ -8,8 +23,20 @@ The client is using version `2.0.4` of the [Kinetic-Protocol](https://github.com
 
 Dependencies
 ============
-* CMake??/Ceedling??
-* Doxygen/graphviz for generating documentation
+* [Ruby](http://ruby-doc.org) v1.9.3 or higher
+    * Required RubyGems
+        * bundler 1.3.5 or higher
+        * rake 0.9.2.2 or higher
+        * require_all
+        * constructor
+        * diy
+* [Ceedling](https://github.com/ThrowTheSwitch/Ceedling) build/test system for C projects
+    * Ceedling also includes the following tools for testing C code
+        * [Unity](https://github.com/ThrowTheSwitch/Unity) lightweight assertion framework and test executor for C
+        * [CMock](https://github.com/ThrowTheSwitch/CMock) mock/fake generator for C modules using only C header files as input (written in Ruby)
+* [CppCheck](http://cppcheck.sourceforge.net/) for static analysis source code
+* [Valgrind](http://valgrind.org/) for memory tests
+* [Doxygen](https://github.com/doxygen) and [GraphViz](http://www.graphviz.org/) for generating documentation
 
 Initial Setup
 =============
@@ -18,19 +45,58 @@ TBD
 Common Developer Tasks
 ======================
 
-**Building the lib**: TBD
+* Run all tests and build the library and examples
+    * `rake`
 
-**Running tests**: TBD
+* Just build the library
+    * `rake release`
 
-There is also an integration test suite. This suite reads the environment
-variable `KINETIC_PATH` to determine a simulator executable to run tests
-against. If that variable is not set, it instead assumes that a Kinetic server
-is running on port 8123 on `localhost`. To run the integration tests, set
-`KINETIC_PATH` if appropriate and run `make integration_test`. This will write
-a JUnit report to `integrationresults.xml`.
+* Run all unit/integration tests
+    * `rake test:all`
 
-**Checking code style**: TBD
+* Analyze code
+    * `rake cppcheck`
 
-**Generating documentation**: TBD
+* Generating documentation
+    * TBD
 
-**Apply licenses**: Run something like `./apply_license.sh my_new_file.c` or `./apply_license.sh include/*.h`
+* Apply licenses
+    * `./config/apply_license.sh my_new_file.cc` or `./config/apply_license.sh src/lib/*.h`
+
+* Build/install Google Protocol Buffers support for the Kinetic-Protocol
+    * `rake proto`
+
+Examples
+========
+
+The following examples are provided for development reference and as utilities to aid development
+
+`read_file_blocking` (incomplete!)
+
+`read_file_nonblocking` (incomplete!)
+
+`write_file_blocking` (incomplete!)
+
+`write_file_nonblocking` (incomplete!)
+
+`write_file_blocking_threads` (incomplete!)
+
+`delete_file_blocking` (incomplete!)
+
+`delete_file_nonblocking` (incomplete!)
+
+`instant_secure_erase` (incomplete!)
+
+`kinetic_stat` (incomplete!)
+
+`dump_keyspace` (incomplete!)
+
+`set_acls` (incomplete!)
+
+`set_pin` (incomplete!)
+
+`set_clusterversion` (incomplete!)
+
+`update_firmware` (incomplete!)
+
+`copy_drive` (incomplete!)

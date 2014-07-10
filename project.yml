@@ -45,6 +45,7 @@
     - TEST
 
 :cmock:
+  :mock_prefix: mock_
   :when_no_prototypes: :warn
   :enforce_strict_ordering: TRUE
   :plugins:
@@ -72,10 +73,9 @@
       - -nostdinc
       - ${1}
 
-
 :plugins:
   :load_paths:
-    - vendor/ceedling/plugins
+    - "#{Ceedling.load_path}"
   :enabled:
     - stdout_ide_tests_report
     - teamcity_tests_report
