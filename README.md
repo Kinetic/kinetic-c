@@ -2,6 +2,8 @@ Introduction
 ============
 This repo contains code for producing C Kinetic clients which use the Seagate Kinetic protocol. Code examples/utilities that use the Kinetic C library are included for reference and usage during development.
 
+Continuous integration for kinetic-c on [Travis CI](http://travis-ci.org). [![Build Status](https://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](https://travis-ci.org/atomicobject/kinetic-c)
+
 Cloning the Repo
 ================
     > git clone --recursive https://github.com/atomicobject/kinetic-c.git
@@ -10,12 +12,6 @@ Cloning the Repo
     > bundle install # Ensures you have all RubyGems needed
     > rake #run all tests and build kinetic-c library and examples
 
-*NOTE: Once you have performed the above steps, you can get updates to kinetic-c and all nested submodules by simply doing: `git submodule update --recursive`
-
-Continuous Integration
-======================
-kinetic-c conducts continuous integration on [Travis CI](http://travis-ci.org).
-The current build status for HEAD is [![Build Status](https://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](https://travis-ci.org/atomicobject/kinetic-c).
 
 Protocol Version
 =================
@@ -24,23 +20,19 @@ The client is using version `2.0.4` of the [Kinetic-Protocol](https://github.com
 Dependencies
 ============
 * [Ruby](http://ruby-doc.org) v1.9.3 or higher
-    * Required RubyGems
-        * bundler 1.3.5 or higher
-        * rake 0.9.2.2 or higher
-        * require_all
-        * constructor
-        * diy
-* [Ceedling](https://github.com/ThrowTheSwitch/Ceedling) build/test system for C projects
-    * Ceedling also includes the following tools for testing C code
+* RubyGems (installed w/ `bundle install`)
+    * bundler 1.3.5 or higher
+    * rake 0.9.2.2 or higher
+    * require_all
+    * constructor
+    * diy
+    * [ceedling](https://github.com/ThrowTheSwitch/Ceedling) build/test system for C projects
+        * Ceedling also includes the following tools for testing C code
         * [Unity](https://github.com/ThrowTheSwitch/Unity) lightweight assertion framework and test executor for C
         * [CMock](https://github.com/ThrowTheSwitch/CMock) mock/fake generator for C modules using only C header files as input (written in Ruby)
 * [CppCheck](http://cppcheck.sourceforge.net/) for static analysis source code
 * [Valgrind](http://valgrind.org/) for memory tests
 * [Doxygen](https://github.com/doxygen) and [GraphViz](http://www.graphviz.org/) for generating documentation
-
-Initial Setup
-=============
-TBD
 
 Common Developer Tasks
 ======================
