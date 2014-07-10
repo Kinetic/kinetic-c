@@ -139,10 +139,10 @@ namespace :test_server do
 
 end
 
+task 'test/integration/test_KineticSocket.c' => ['test_server:start']
+
 task :default => [
-  'test_server:start',
   'test:all',
-  'test_server:shutdown',
   'release'
 ]
 
