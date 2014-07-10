@@ -2,10 +2,9 @@ language: ruby
 rvm:
   - "1.9.3"
   - "2.0.0"
-git:
-  submodules: false
-before_install:
-  - git submodule update --init --recursive
-script:
+install:
+  - sudo apt-get update
+  - sudo apt-get install cppcheck
   - bundle install
+script:
   - bundle exec rake ci
