@@ -1,9 +1,7 @@
 TEAMCITY_BUILD = !ENV['TEAMCITY_PROJECT_NAME'].nil?
 
 require 'ceedling'
-
-# Need to manually load the Ceedling rakefile for now, until it is baked into loading of ceedling.rb
-require 'ceedling/rakefile'
+Ceedling.load_project(config: './project.yml')
 
 def report(message='')
   $stderr.flush
