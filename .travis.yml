@@ -2,7 +2,10 @@ language: ruby
 rvm:
   - "1.9.3"
   - "2.0.0"
-# uncomment this line if your project needs to run something other than `rake`:
-script: bundle exec rake ci
+git:
+  submodules: false
 before_install:
   - git submodule update --init --recursive
+script:
+  - bundle install
+  - bundle exec rake ci
