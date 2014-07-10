@@ -1,6 +1,3 @@
-[submodule "vendor/ceedling"]
-	path = vendor/ceedling
-	url = https://github.com/ThrowTheSwitch/Ceedling.git
 [submodule "vendor/protobuf-c"]
 	path = vendor/protobuf-c
 	url = https://github.com/protobuf-c/protobuf-c

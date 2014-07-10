@@ -1,7 +1,9 @@
-PROJECT_CEEDLING_ROOT = "vendor/ceedling"
 TEAMCITY_BUILD = !ENV['TEAMCITY_PROJECT_NAME'].nil?
 
-load "#{PROJECT_CEEDLING_ROOT}/lib/ceedling/rakefile.rb"
+require 'ceedling'
+
+# Need to manually load the Ceedling rakefile for now, until it is baked into loading of ceedling.rb
+require 'ceedling/rakefile'
 
 def report(message='')
   $stderr.flush

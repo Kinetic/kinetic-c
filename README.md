@@ -4,12 +4,10 @@ This repo contains code for producing C Kinetic clients which use the Seagate Ki
 
 Cloning the Repo
 ================
-    > git clone https://github.com/atomicobject/kinetic-c.git
+    > git clone --recursive https://github.com/atomicobject/kinetic-c.git
+
     > cd kinetic-c
-    > git submodule update --init --recursive # needed for nested submodules
-
     > bundle install # Ensures you have all RubyGems needed
-
     > rake #run all tests and build kinetic-c library and examples
 
 *NOTE: Once you have performed the above steps, you can get updates to kinetic-c and all nested submodules by simply doing: `git submodule update --recursive`
