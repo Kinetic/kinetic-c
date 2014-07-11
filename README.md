@@ -1,4 +1,4 @@
-<a href="https://travis-ci.org/atomicobject/kinetic-c"><img style="float: right" src="https://travis-ci.org/atomicobject/kinetic-c.png?branch=master" /></a>
+<div style="float: right"><a href="https://travis-ci.org/atomicobject/kinetic-c"><img src="https://travis-ci.org/atomicobject/kinetic-c.png?branch=master" /></a></div>
 
 Introduction
 ============
