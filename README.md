@@ -1,10 +1,8 @@
-Introduction
+Introduction [![Build Status](https://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](https://travis-ci.org/atomicobject/kinetic-c)
 ============
 This repo contains code for producing C Kinetic clients which use the Seagate Kinetic protocol. Code examples/utilities that use the Kinetic C library are included for reference and usage during development.
 
-Continuous integration for kinetic-c on [Travis CI](http://travis-ci.org). [![Build Status](https://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](https://travis-ci.org/atomicobject/kinetic-c)
-
-Cloning the Repo
+Getting Started
 ================
     > git clone --recursive https://github.com/atomicobject/kinetic-c.git
 
@@ -12,15 +10,12 @@ Cloning the Repo
     > bundle install # Ensures you have all RubyGems needed
     > rake #run all tests and build kinetic-c library and examples
 
-
-Protocol Version
-=================
-The client is using version `2.0.4` of the [Kinetic-Protocol](https://github.com/Seagate/kinetic-protocol/releases/tag/2.0.4).
-
 Dependencies
 ============
-* [Ruby](http://ruby-doc.org) v1.9.3 or higher
-* RubyGems (installed w/ `bundle install`)
+* [Kinetic Protocol](https://github.com/Seagate/kinetic-protocol)
+    * [Kinetic-Protocol v2.0.4](https://github.com/Seagate/kinetic-protocol/releases/tag/2.0.4)
+* [Ruby](https://www.ruby-lang.org) v1.9.3 or higher
+* [RubyGems](http://rubygems.org) (installed w/ `bundle install`)
     * bundler 1.3.5 or higher
     * rake 0.9.2.2 or higher
     * require_all
