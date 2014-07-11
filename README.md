@@ -1,5 +1,6 @@
+<div style="float: right"><a href="https://travis-ci.org/atomicobject/kinetic-c"><img src="https://travis-ci.org/atomicobject/kinetic-c.png?branch=master" /></a></div>
 Introduction
-============ <div style="float: right"><a href="https://travis-ci.org/atomicobject/kinetic-c"><img src="https://travis-ci.org/atomicobject/kinetic-c.png?branch=master" /></a></div>
+============
 This repo contains code for producing C Kinetic clients which use the Seagate Kinetic protocol. Code examples/utilities that use the Kinetic C library are included for reference and usage during development.
 
 Getting Started
