@@ -15,7 +15,7 @@ Dependencies
 * [Kinetic Protocol](https://github.com/Seagate/kinetic-protocol)
     * [Kinetic-Protocol v2.0.4](https://github.com/Seagate/kinetic-protocol/releases/tag/2.0.4)
 * [Ruby](https://www.ruby-lang.org) v1.9.3 or higher
-* [RubyGems](http://rubygems.org) (installed w/ `bundle install`)
+* [RubyGems](http://rubygems.org) (installed w/ `bundle install)
     * bundler 1.3.5 or higher
     * rake 0.9.2.2 or higher
     * require_all
