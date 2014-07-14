@@ -11,6 +11,10 @@ Getting Started
     > bundle install # Ensures you have all RubyGems needed
     > bundle execute rake #run all tests and build kinetic-c library and examples
 
+API Docuemntation
+=================
+[Kinetic-C API](http://atomicobject.github.io/kinetic-c/) (generated with Doxygen)
+
 Dependencies
 ============
 * [Kinetic Protocol](https://github.com/Seagate/kinetic-protocol)
