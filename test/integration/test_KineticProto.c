@@ -17,10 +17,10 @@ void tearDown(void)
 void test_KineticProto_should_pack_and_unpack_protocol_buffers(void)
 {
     size_t expectedLen;
-    KineticProto proto = KINETIC_PROTO_INIT;
+    KineticProto proto;
     KineticProto* unpacked;
-    KineticProto_Command cmd = KINETIC_PROTO_COMMAND_INIT;
-    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;
+    KineticProto_Command cmd;
+    KineticProto_Header header;
     uint8_t buffer[1024];
     ProtobufCBufferSimple bs = PROTOBUF_C_BUFFER_SIMPLE_INIT(buffer);
     uint8_t* packed;
@@ -51,9 +51,9 @@ void test_KineticProto_should_pass_data_accurately_through_raw_buffers(void)
 {
     uint8_t* packed;
     KineticProto* unpacked;
-    KineticProto proto = KINETIC_PROTO_INIT;
-    KineticProto_Command cmd = KINETIC_PROTO_COMMAND_INIT;
-    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;
+    KineticProto proto;
+    KineticProto_Command cmd;
+    KineticProto_Header header;
 
     KineticProto_init(&proto);
     KineticProto_command_init(&cmd);
@@ -84,10 +84,10 @@ void test_KineticProto_should_pass_data_accurately_through_raw_buffers(void)
 
 void test_KineticProto_should_pass_data_accurately_through_BufferSimple(void)
 {
-    KineticProto proto = KINETIC_PROTO_INIT;
+    KineticProto proto;
     KineticProto* unpacked;
-    KineticProto_Command cmd = KINETIC_PROTO_COMMAND_INIT;
-    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;
+    KineticProto_Command cmd;
+    KineticProto_Header header;
     uint8_t buffer[1024];
     ProtobufCBufferSimple bs = PROTOBUF_C_BUFFER_SIMPLE_INIT(buffer);
 

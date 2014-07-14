@@ -9,7 +9,7 @@ Getting Started
 
     > cd kinetic-c
     > bundle install # Ensures you have all RubyGems needed
-    > rake #run all tests and build kinetic-c library and examples
+    > bundle execute rake #run all tests and build kinetic-c library and examples
 
 Dependencies
 ============
@@ -32,6 +32,8 @@ Dependencies
 
 Common Developer Tasks
 ======================
+
+NOTE: Prefix the following commands with `bundle exec` so that they execute in the context of the bundle environment setup via `bundle install`.
 
 * Run all tests and build the library and examples
     * `rake`
