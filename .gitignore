@@ -33,3 +33,4 @@ docs/
 # Other local files to ignore
 .tags*
 *.sublime-workspace
+.DS_Store
