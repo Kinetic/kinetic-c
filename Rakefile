@@ -90,9 +90,7 @@ namespace :doxygen do
     # Update API version in doxygen config
     doxyfile = "config/Doxyfile"
     content = File.read(doxyfile).sub(/^PROJECT_NUMBER +=.*$/, "PROJECT_NUMBER = \"v#{VERSION}\"")
-    puts content
     File.open(doxyfile, 'w').puts content
-    # git "add #{doxyfile}"
 
     # Generate the Doxygen API docs
     report_banner "Generating Doxygen API Docs (kinetic-c v#{VERSION}"
@@ -105,6 +103,7 @@ namespace :doxygen do
       git "status"
       git "commit -m 'Regenerated API docs for v#{VERSION}'"
       git "push"
+      report_banner "Published updated API docs to GitHub!"
     end
   end
 
