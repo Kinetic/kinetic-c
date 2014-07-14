@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>Kinetic C Client: src/lib/KineticSocket.h Source File</title>
+<title>Kinetic C Client: src/lib/KineticMessage.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -84,22 +84,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">KineticSocket.h</div>  </div>
+<div class="title">KineticMessage.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef _KINETIC_SOCKET_H</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define _KINETIC_SOCKET_H</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;KineticTypes.h&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keywordtype">int</span> KineticSocket_Connect(<span class="keyword">const</span> <span class="keywordtype">char</span>* host, <span class="keywordtype">int</span> port, <span class="keywordtype">bool</span> blocking);</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keywordtype">void</span> KineticSocket_Close(<span class="keywordtype">int</span> socket_descriptor);</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#endif // _KINETIC_SOCKET_H</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;KineticMessage.h&quot;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keywordtype">void</span> KineticMessage_Init(<a class="code" href="struct___kinetic_message.html">KineticMessage</a>* message, <a class="code" href="struct___kinetic_exchange.html">KineticExchange</a>* exchange)</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;{</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;    <span class="comment">// Initialize protobuf fields</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    KineticProto_init(&amp;message-&gt;proto);</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    KineticProto_command_init(&amp;message-&gt;command);</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    KineticProto_header_init(&amp;message-&gt;header);</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    KineticProto_body_init(&amp;message-&gt;body);</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    KineticProto_status_init(&amp;message-&gt;status);</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="comment">// Assemble the message</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    message-&gt;command.header = &amp;message-&gt;header;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    message-&gt;command.body = &amp;message-&gt;body;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    message-&gt;command.status = &amp;message-&gt;status;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    message-&gt;proto.command = &amp;message-&gt;command;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="comment">// Configure/associate the message with the exchange</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    KineticExchange_ConfigureHeader(exchange, &amp;message-&gt;header);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    message-&gt;exchange = exchange;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;}</div>
+<div class="ttc" id="struct___kinetic_message_html"><div class="ttname"><a href="struct___kinetic_message.html">_KineticMessage</a></div><div class="ttdef"><b>Definition:</b> <a href="_kinetic_message_8h_source.html#l00008">KineticMessage.h:8</a></div></div>
+<div class="ttc" id="struct___kinetic_exchange_html"><div class="ttname"><a href="struct___kinetic_exchange.html">_KineticExchange</a></div><div class="ttdef"><b>Definition:</b> <a href="_kinetic_exchange_8h_source.html#l00007">KineticExchange.h:7</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 14 2014 16:12:08 for Kinetic C Client by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 14 2014 16:12:07 for Kinetic C Client by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

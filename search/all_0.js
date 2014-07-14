@@ -2,6 +2,7 @@ var searchData=
 [
   ['_5fkineticconnection',['_KineticConnection',['../struct___kinetic_connection.html',1,'']]],
   ['_5fkineticexchange',['_KineticExchange',['../struct___kinetic_exchange.html',1,'']]],
+  ['_5fkineticmessage',['_KineticMessage',['../struct___kinetic_message.html',1,'']]],
   ['_5fkineticpdu',['_KineticPDU',['../struct___kinetic_p_d_u.html',1,'']]],
   ['_5fkineticproto',['_KineticProto',['../struct___kinetic_proto.html',1,'']]],
   ['_5fkineticproto_5fbody',['_KineticProto_Body',['../struct___kinetic_proto___body.html',1,'']]],

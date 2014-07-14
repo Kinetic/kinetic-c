@@ -94,15 +94,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;KineticProto.h&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;KineticExchange.h&quot;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keywordtype">void</span> KineticMessage_Init(KineticProto* message, <a class="code" href="struct___kinetic_exchange.html">KineticExchange</a>* exchange);</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keywordtype">void</span> KineticMessage_NOOP(KineticProto* message);</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#endif // _KINETIC_MESSAGE_H</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="struct___kinetic_message.html">    8</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct___kinetic_message.html">_KineticMessage</a></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="comment">// Kinetic Protocol Buffer Elements</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    KineticProto            proto;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <a class="code" href="struct___kinetic_proto___command.html">KineticProto_Command</a>    command;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <a class="code" href="struct___kinetic_proto___header.html">KineticProto_Header</a>     header;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <a class="code" href="struct___kinetic_proto___body.html">KineticProto_Body</a>       body;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="struct___kinetic_proto___status.html">KineticProto_Status</a>     status;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="comment">// Other pertinent data members</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="struct___kinetic_exchange.html">KineticExchange</a>*        exchange;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;} <a class="code" href="struct___kinetic_message.html">KineticMessage</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">void</span> KineticMessage_Init(<a class="code" href="struct___kinetic_message.html">KineticMessage</a>* message, <a class="code" href="struct___kinetic_exchange.html">KineticExchange</a>* exchange);</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#endif // _KINETIC_MESSAGE_H</span></div>
+<div class="ttc" id="struct___kinetic_proto___status_html"><div class="ttname"><a href="struct___kinetic_proto___status.html">_KineticProto_Status</a></div><div class="ttdef"><b>Definition:</b> <a href="_kinetic_proto_8h_source.html#l00222">KineticProto.h:222</a></div></div>
+<div class="ttc" id="struct___kinetic_message_html"><div class="ttname"><a href="struct___kinetic_message.html">_KineticMessage</a></div><div class="ttdef"><b>Definition:</b> <a href="_kinetic_message_8h_source.html#l00008">KineticMessage.h:8</a></div></div>
+<div class="ttc" id="struct___kinetic_proto___command_html"><div class="ttname"><a href="struct___kinetic_proto___command.html">_KineticProto_Command</a></div><div class="ttdef"><b>Definition:</b> <a href="_kinetic_proto_8h_source.html#l00171">KineticProto.h:171</a></div></div>
 <div class="ttc" id="struct___kinetic_exchange_html"><div class="ttname"><a href="struct___kinetic_exchange.html">_KineticExchange</a></div><div class="ttdef"><b>Definition:</b> <a href="_kinetic_exchange_8h_source.html#l00007">KineticExchange.h:7</a></div></div>
+<div class="ttc" id="struct___kinetic_proto___header_html"><div class="ttname"><a href="struct___kinetic_proto___header.html">_KineticProto_Header</a></div><div class="ttdef"><b>Definition:</b> <a href="_kinetic_proto_8h_source.html#l00182">KineticProto.h:182</a></div></div>
+<div class="ttc" id="struct___kinetic_proto___body_html"><div class="ttname"><a href="struct___kinetic_proto___body.html">_KineticProto_Body</a></div><div class="ttdef"><b>Definition:</b> <a href="_kinetic_proto_8h_source.html#l00208">KineticProto.h:208</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 14 2014 13:23:38 for Kinetic C Client by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 14 2014 16:12:07 for Kinetic C Client by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
