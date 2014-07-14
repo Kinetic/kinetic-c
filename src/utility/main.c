@@ -1,14 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "KineticProto.h"
-
-#ifndef TRUE
-#define TRUE 1
-#endif
-#ifndef FALSE
-#define FALSE 0
-#endif
+#include "kinetic.h"
 
 int main(int argc, char** argv)
 {
@@ -34,10 +27,10 @@ int main(int argc, char** argv)
     printf("  pre-packed size: %lu\n", KineticProto_get_packed_size(&proto));
 
     header.clusterversion = 12345678;
-    header.has_clusterversion = TRUE;
+    header.has_clusterversion = true;
     printf("> clusterversion: %016llX\n", (unsigned long long)header.clusterversion);
     header.identity = -12345678;
-    header.has_identity = TRUE;
+    header.has_identity = true;
     printf("> identity: %016llX\n", (unsigned long long)header.identity);
     cmd.header = &header;
     proto.command = &cmd;
@@ -97,10 +90,10 @@ int main(int argc, char** argv)
     printf("\nValidating unpacked ProtobufCBufferSimple contents...\n");
     pproto = KineticProto_unpack(NULL, len, bs.data);
     assert (pproto != NULL);
-    assert (pproto->command->header->has_identity == TRUE);
+    assert (pproto->command->header->has_identity == true);
     assert (pproto->command->header->identity == -12345678ul);
     printf("< identity: %016llX\n", (unsigned long long)header.identity);
-    assert (pproto->command->header->has_clusterversion == TRUE);
+    assert (pproto->command->header->has_clusterversion == true);
     assert (pproto->command->header->clusterversion == 12345678ul);
     printf("< clusterversion: %016llX\n", (unsigned long long)header.clusterversion);
 
@@ -108,10 +101,10 @@ int main(int argc, char** argv)
     printf("\nValidating unpacked dynamically allocated buffer contents...\n");
     pproto = KineticProto_unpack(NULL, len, packed);
     assert (pproto != NULL);
-    assert (pproto->command->header->has_identity == TRUE);
+    assert (pproto->command->header->has_identity == true);
     assert (pproto->command->header->identity == -12345678ul);
     printf("< identity: %016llX\n", (unsigned long long)header.identity);
-    assert (pproto->command->header->has_clusterversion == TRUE);
+    assert (pproto->command->header->has_clusterversion == true);
     assert (pproto->command->header->clusterversion == 12345678ul);
     printf("< clusterversion: %016llX\n", (unsigned long long)header.clusterversion);
 

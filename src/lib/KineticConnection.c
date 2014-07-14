@@ -24,3 +24,10 @@ bool KineticConnection_Connect(KineticConnection* connection, const char* host, 
 
     return connection->Connected;
 }
+
+bool KineticConnection_SendMessage(KineticConnection* connection, KineticMessage* message)
+{
+    connection = connection;
+    message = message;
+    return false;
+}

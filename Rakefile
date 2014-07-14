@@ -103,7 +103,7 @@ namespace :doxygen do
       git "status"
       git "commit -m 'Regenerated API docs for v#{VERSION}'"
       git "push"
-      report_banner "Published updated API docs to GitHub!"
+      report_banner "Published updated API docs for v#{VERSION} to GitHub!"
     end
   end
 

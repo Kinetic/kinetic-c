@@ -1,5 +1,4 @@
 #include "KineticApi.h"
-#include "KineticConnection.h"
 #include "KineticLogger.h"
 #include <stdio.h>
 
@@ -28,7 +27,14 @@ const KineticConnection KineticApi_Connect(const char* host, int port, bool bloc
 	return connection;
 }
 
-KineticProto_Status_StatusCode KineticApi_SendNoop(const KineticConnection* connection)
+KineticProto_Status_StatusCode KineticApi_SendNoop(
+    KineticConnection* connection,
+    KineticExchange* exchange,
+    KineticMessage* message)
 {
-	return KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+    KineticExchange_Init(exchange, 1234, 5678);
+    KineticMessage_Init(message, exchange);
+    KineticConnection_SendMessage(connection, message);
+
+	return KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED;
 }

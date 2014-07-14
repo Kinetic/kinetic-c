@@ -21,6 +21,9 @@
 #ifndef KINETIC_C_CLIENT_KINETIC_H_
 #define KINETIC_C_CLIENT_KINETIC_H_
 
-/// Applications should only include this file
+#include "KineticTypes.h"
+#include "KineticAPI.h"
+#include "KineticProto.h"
+#include "KineticConnection.h"
 
 #endif /* KINETIC_C_CLIENT_KINETIC_H_ */

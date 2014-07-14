@@ -1,10 +1,25 @@
 #include "KineticApi.h"
 #include "unity.h"
-#include "kinetic.h"
+#include <stdio.h>
+#include <protobuf-c/protobuf-c.h>
+#include "KineticProto.h"
 #include "mock_KineticMessage.h"
 #include "mock_KineticLogger.h"
 #include "mock_KineticConnection.h"
 #include "mock_KineticExchange.h"
+
+#define TEST_ASSERT_EQUAL_KINETIC_STATUS(expected, actual) \
+if (expected != actual) { \
+    char err[128]; \
+    sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
+        protobuf_c_enum_descriptor_get_value( \
+            &KineticProto_status_status_code_descriptor, expected)->name, \
+        expected, \
+        protobuf_c_enum_descriptor_get_value( \
+            &KineticProto_status_status_code_descriptor, actual)->name, \
+        actual); \
+    TEST_FAIL_MESSAGE(err); \
+}
 
 void setUp(void)
 {
@@ -68,10 +83,15 @@ void test_KineticApi_SendNoop_should_send_NOOP_command(void)
     KineticConnection_Connect_ExpectAndReturn(&connection, "salgood.com", 88, false, true);
 
     connection = KineticApi_Connect("salgood.com", 88, false);
+
     KineticExchange_Init_Expect(&exchange, identity, connectionID);
     KineticMessage_Init_Expect(&message, &exchange);
+    KineticConnection_SendMessage_ExpectAndReturn(&connection, &message, true);
 
-    status = KineticApi_SendNoop(&connection);
+    status = KineticApi_SendNoop(&connection, &exchange, &message);
 
+    TEST_IGNORE_MESSAGE("Finish imlementation!");
+
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
 }

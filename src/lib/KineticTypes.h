@@ -37,13 +37,4 @@
 
 #define KINETIC_PORT 8213
 
-typedef struct _KineticConnection
-{
-    bool    Connected;
-    bool    Blocking;
-    int     Port;
-    int     FileDescriptor;
-    char    Host[HOST_NAME_MAX];
-} KineticConnection;
-
 #endif // _KINETIC_TYPES_H
