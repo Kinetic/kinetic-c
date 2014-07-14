@@ -97,7 +97,8 @@ namespace :doxygen do
     execute_command "doxygen config/Doxyfile"
   end
 
-  task :gen_github_pages => ['doxygen:checkout_github_pages', 'doxygen:gen'] do
+  desc "Generate and publish API docs"
+  task :update_public_api => ['doxygen:checkout_github_pages', 'doxygen:gen'] do
     cd DOCS_PATH do
       git "add --all"
       git "status"
