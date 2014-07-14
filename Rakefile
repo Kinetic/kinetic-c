@@ -23,14 +23,7 @@ def execute_command(cmd, banner=nil)
 end
 
 def git(cmd)
-  safe_system("git " + cmd)
-end
-
-def safe_system(cmd)
-  if !system(cmd)
-    puts "Failed: #{cmd}"
-    exit
-  end
+  execute_command "git #{cmd}"
 end
 
 HERE = File.expand_path(File.dirname(__FILE__))
@@ -86,25 +79,33 @@ namespace :doxygen do
   DOCS_PATH = "./docs/"
   directory DOCS_PATH
   CLOBBER.include DOCS_PATH
+  VERSION = File.read('VERSION').strip
 
   task :checkout_github_pages => ['clobber', DOCS_PATH] do
     git "clone git@github.com:atomicobject/kinetic-c.git -b gh-pages #{DOCS_PATH}"
-    cd DOCS_PATH do
-      git "rm -r docs/"
-      cp "../README.md", "."
-      cp "../LICENSE", "."
-    end
   end
 
   desc "Generate API docs"
   task :gen => [DOCS_PATH] do
-    report_banner "Generating Doxygen API Docs"
+    # Update API version in doxygen config
+    doxyfile = "config/Doxyfile"
+    content = File.read(doxyfile).sub(/^PROJECT_NUMBER +=.*$/, "PROJECT_NUMBER = \"v#{VERSION}\"")
+    puts content
+    File.open(doxyfile, 'w').puts content
+    # git "add #{doxyfile}"
+
+    # Generate the Doxygen API docs
+    report_banner "Generating Doxygen API Docs (kinetic-c v#{VERSION}"
     execute_command "doxygen config/Doxyfile"
   end
 
   task :gen_github_pages => ['doxygen:checkout_github_pages', 'doxygen:gen'] do
-    git "add --all"
-    git "status"
+    cd DOCS_PATH do
+      git "add --all"
+      git "status"
+      git "commit -m 'Regenerated API docs for v#{VERSION}'"
+      git "push"
+    end
   end
 
 end
