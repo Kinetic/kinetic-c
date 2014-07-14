@@ -81,14 +81,32 @@ task :cppcheck do
   execute_command "cppcheck ./src ./build/temp/proto", "Analyzing code w/CppCheck"
 end
 
-DOCS_PATH = "./docs/"
-directory DOCS_PATH
-CLOBBER.include DOCS_PATH
-desc "Generate API docs"
-task :doxygen => [DOCS_PATH] do
-  report_banner "Generating Doxygen API Docs"
-  execute_command "doxygen config/Doxyfile"
-  git "add docs/"
+namespace :doxygen do
+
+  DOCS_PATH = "./docs/"
+  directory DOCS_PATH
+  CLOBBER.include DOCS_PATH
+
+  task :checkout_github_pages => ['clobber', DOCS_PATH] do
+    git "clone git@github.com:atomicobject/kinetic-c.git -b gh-pages #{DOCS_PATH}"
+    cd DOCS_PATH do
+      git "rm -r docs/"
+      cp "../README.md", "."
+      cp "../LICENSE", "."
+    end
+  end
+
+  desc "Generate API docs"
+  task :gen => [DOCS_PATH] do
+    report_banner "Generating Doxygen API Docs"
+    execute_command "doxygen config/Doxyfile"
+  end
+
+  task :gen_github_pages => ['doxygen:checkout_github_pages', 'doxygen:gen'] do
+    git "add --all"
+    git "status"
+  end
+
 end
 
 namespace :test_server do

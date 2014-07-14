@@ -28,6 +28,7 @@
 # Temp folders
 bin/
 build/
+docs/
 
 # Other local files to ignore
 .tags*

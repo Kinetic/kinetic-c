@@ -1,9 +1,0 @@
-<map id="_KineticProto_GetLog" name="_KineticProto_GetLog">
-<area shape="rect" id="node2" href="$struct___kinetic_proto___get_log___temperature.html" title="_KineticProto_GetLog\l_Temperature" alt="" coords="277,5,429,49"/>
-<area shape="rect" id="node3" href="$struct___kinetic_proto___get_log___limits.html" title="_KineticProto_GetLog\l_Limits" alt="" coords="277,73,429,117"/>
-<area shape="rect" id="node4" href="$struct___kinetic_proto___get_log___utilization.html" title="_KineticProto_GetLog\l_Utilization" alt="" coords="277,141,429,185"/>
-<area shape="rect" id="node5" href="$struct___kinetic_proto___get_log___statistics.html" title="_KineticProto_GetLog\l_Statistics" alt="" coords="277,209,429,253"/>
-<area shape="rect" id="node6" href="$struct___kinetic_proto___get_log___configuration.html" title="_KineticProto_GetLog\l_Configuration" alt="" coords="277,277,429,321"/>
-<area shape="rect" id="node7" href="$struct___kinetic_proto___get_log___configuration___interface.html" title="_KineticProto_GetLog\l_Configuration_Interface" alt="" coords="6,277,173,321"/>
-<area shape="rect" id="node8" href="$struct___kinetic_proto___get_log___capacity.html" title="_KineticProto_GetLog\l_Capacity" alt="" coords="277,345,429,389"/>
-</map>
