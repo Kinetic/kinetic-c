@@ -22,6 +22,17 @@ def execute_command(cmd, banner=nil)
   report unless banner.nil?
 end
 
+def git(cmd)
+  safe_system("git " + cmd)
+end
+
+def safe_system(cmd)
+  if !system(cmd)
+    puts "Failed: #{cmd}"
+    exit
+  end
+end
+
 HERE = File.expand_path(File.dirname(__FILE__))
 VENDOR_PATH = File.join(HERE, 'vendor')
 PROTOBUF_CORE = File.join(VENDOR_PATH, 'protobuf-2.5.0')
@@ -68,6 +79,16 @@ desc "Analyze code w/CppCheck"
 task :cppcheck do
   raise "CppCheck not found!" unless `cppcheck --version` =~ /cppcheck \d+.\d+/mi
   execute_command "cppcheck ./src ./build/temp/proto", "Analyzing code w/CppCheck"
+end
+
+DOCS_PATH = "./docs/"
+directory DOCS_PATH
+CLOBBER.include DOCS_PATH
+desc "Generate API docs"
+task :doxygen => [DOCS_PATH] do
+  report_banner "Generating Doxygen API Docs"
+  execute_command "doxygen config/Doxyfile"
+  git "add docs/"
 end
 
 namespace :test_server do

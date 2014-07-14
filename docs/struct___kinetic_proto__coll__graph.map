@@ -1,0 +1,23 @@
+<map id="_KineticProto" name="_KineticProto">
+<area shape="rect" id="node2" href="$struct___kinetic_proto___command.html" title="_KineticProto_Command" alt="" coords="1203,186,1373,214"/>
+<area shape="rect" id="node3" href="$struct___kinetic_proto___status.html" title="_KineticProto_Status" alt="" coords="16,26,162,54"/>
+<area shape="rect" id="node6" href="$struct___kinetic_proto___p2_p_operation___operation.html" title="_KineticProto_P2POperation\l_Operation" alt="" coords="296,59,488,103"/>
+<area shape="rect" id="node4" href="$struct___kinetic_proto___body.html" title="_KineticProto_Body" alt="" coords="964,186,1103,214"/>
+<area shape="rect" id="node5" href="$struct___kinetic_proto___p2_p_operation.html" title="_KineticProto_P2POperation" alt="" coords="635,134,827,162"/>
+<area shape="rect" id="node7" href="$struct___kinetic_proto___p2_p_operation___peer.html" title="_KineticProto_P2POperation_Peer" alt="" coords="278,134,506,162"/>
+<area shape="rect" id="node8" href="$struct___kinetic_proto___security.html" title="_KineticProto_Security" alt="" coords="653,186,809,214"/>
+<area shape="rect" id="node9" href="$struct___kinetic_proto___security___a_c_l.html" title="_KineticProto_Security_ACL" alt="" coords="297,186,487,214"/>
+<area shape="rect" id="node10" href="$struct___kinetic_proto___security___a_c_l___scope.html" title="_KineticProto_Security\l_ACL_Scope" alt="" coords="11,178,167,222"/>
+<area shape="rect" id="node11" href="$struct___kinetic_proto___range.html" title="_KineticProto_Range" alt="" coords="657,238,804,266"/>
+<area shape="rect" id="node12" href="$struct___kinetic_proto___get_log.html" title="_KineticProto_GetLog" alt="" coords="655,342,807,370"/>
+<area shape="rect" id="node13" href="$struct___kinetic_proto___get_log___temperature.html" title="_KineticProto_GetLog\l_Temperature" alt="" coords="316,510,468,554"/>
+<area shape="rect" id="node14" href="$struct___kinetic_proto___get_log___limits.html" title="_KineticProto_GetLog\l_Limits" alt="" coords="316,578,468,622"/>
+<area shape="rect" id="node15" href="$struct___kinetic_proto___get_log___utilization.html" title="_KineticProto_GetLog\l_Utilization" alt="" coords="316,238,468,282"/>
+<area shape="rect" id="node16" href="$struct___kinetic_proto___get_log___statistics.html" title="_KineticProto_GetLog\l_Statistics" alt="" coords="316,306,468,350"/>
+<area shape="rect" id="node17" href="$struct___kinetic_proto___get_log___configuration.html" title="_KineticProto_GetLog\l_Configuration" alt="" coords="316,374,468,418"/>
+<area shape="rect" id="node18" href="$struct___kinetic_proto___get_log___configuration___interface.html" title="_KineticProto_GetLog\l_Configuration_Interface" alt="" coords="6,374,173,418"/>
+<area shape="rect" id="node19" href="$struct___kinetic_proto___get_log___capacity.html" title="_KineticProto_GetLog\l_Capacity" alt="" coords="316,442,468,486"/>
+<area shape="rect" id="node20" href="$struct___kinetic_proto___key_value.html" title="_KineticProto_KeyValue" alt="" coords="649,394,813,422"/>
+<area shape="rect" id="node21" href="$struct___kinetic_proto___setup.html" title="_KineticProto_Setup" alt="" coords="659,82,802,110"/>
+<area shape="rect" id="node22" href="$struct___kinetic_proto___header.html" title="_KineticProto_Header" alt="" coords="957,238,1109,266"/>
+</map>
