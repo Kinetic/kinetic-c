@@ -94,7 +94,8 @@ namespace :doxygen do
 
     # Generate the Doxygen API docs
     report_banner "Generating Doxygen API Docs (kinetic-c v#{VERSION}"
-    execute_command "doxygen config/Doxyfile"
+    rm_rf DOCS_PATH
+    execute_command "doxygen #{doxyfile}"
   end
 
   desc "Generate and publish API docs"
@@ -102,8 +103,8 @@ namespace :doxygen do
     cd DOCS_PATH do
       git "add --all"
       git "status"
-      git "commit -m 'Regenerated API docs for v#{VERSION}'"
-      git "push"
+      # git "commit -m 'Regenerated API docs for v#{VERSION}'"
+      # git "push"
       report_banner "Published updated API docs for v#{VERSION} to GitHub!"
     end
   end
