@@ -17,7 +17,7 @@ void tearDown(void)
 
 void test_KineticExchange_Init_should_initialize_a_KineticExchange(void)
 {
-    TEST_ASSERT_EQUAL_HEX32(&Connection, Exchange.connection);
+    TEST_ASSERT_EQUAL_PTR(&Connection, Exchange.connection);
     TEST_ASSERT_FALSE(Exchange.has_clusterVersion);
     TEST_ASSERT_EQUAL_INT64(0, Exchange.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(1234, Exchange.identity);
