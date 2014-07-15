@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+  <namespace>org.doxygen.Project</namespace>
+  <virtualFolder>doc</virtualFolder>
+  <filterSection>
+    <filterAttribute>doxygen</filterAttribute>
+    <toc>
+      <section title="protobuf-c v0.3.1-beta" ref="index.html">
+        <section title="Data Structures">
+          <section title="Data Structures" ref="annotated.html">
+            <section title="_KineticProto" ref="struct___kinetic_proto.html">
+              <section title="base" ref="struct___kinetic_proto.html#a2eeaecc27f3dda9d8769147fb34d6f96" />
+              <section title="command" ref="struct___kinetic_proto.html#aa925e77301819d0902f65bc98195ed15" />
+              <section title="has_hmac" ref="struct___kinetic_proto.html#aa753179d540b1015cba3107b0e9d191a" />
+              <section title="hmac" ref="struct___kinetic_proto.html#a306b9c8db7eb01650c79d2e342d6ef0e" />
+            </section>
+            <section title="KineticConnection" ref="struct_kinetic_connection.html">
+              <section title="Connected" ref="struct_kinetic_connection.html#a01bd54acc4523e6d1822657b7e696564" />
+              <section title="Blocking" ref="struct_kinetic_connection.html#a6877cd8cff086a50a3bb5c94e7729924" />
+              <section title="Port" ref="struct_kinetic_connection.html#ae2ce8092517e663eda1d672e37350c2c" />
+              <section title="FileDescriptor" ref="struct_kinetic_connection.html#a8b729af6f1d0bfa6002cfca17cffcd1b" />
+              <section title="Host" ref="struct_kinetic_connection.html#ae13fe72f7dd3251dddb97866c6ce6554" />
+            </section>
+            <section title="KineticExchange" ref="struct_kinetic_exchange.html">
+              <section title="has_clusterVersion" ref="struct_kinetic_exchange.html#adc316ea8e8b894ff842cbc10bcfe915e" />
+              <section title="clusterVersion" ref="struct_kinetic_exchange.html#a5cf7e39edf70d73512c0a769847dcf10" />
+              <section title="identity" ref="struct_kinetic_exchange.html#a855522d7c0f9662c27c7df4381286b3c" />
+              <section title="connectionID" ref="struct_kinetic_exchange.html#ac04664033ff7f79717d60fa9b5d11fa5" />
+              <section title="sequence" ref="struct_kinetic_exchange.html#af6fe080c0557282b43680baf9bd1c600" />
+              <section title="connection" ref="struct_kinetic_exchange.html#aa419c48291fb6542e616e13c8a7d4701" />
+            </section>
+            <section title="KineticMessage" ref="struct_kinetic_message.html">
+              <section title="proto" ref="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757" />
+              <section title="command" ref="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36" />
+              <section title="header" ref="struct_kinetic_message.html#a4b19350314903651d286213bc22a8a3f" />
+              <section title="body" ref="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763" />
+              <section title="status" ref="struct_kinetic_message.html#ae8b91d9e5db53830c73a9beb1df7d5a4" />
+              <section title="exchange" ref="struct_kinetic_message.html#a6138cc9de4450cc08896517fa3775852" />
+            </section>
+            <section title="KineticPDU" ref="struct_kinetic_p_d_u.html">
+              <section title="prefix" ref="struct_kinetic_p_d_u.html#adf3e91293b570cb9457d18252d080445" />
+              <section title="protoLength" ref="struct_kinetic_p_d_u.html#ac9283ef4cd85e568d6025ca85f8eaacb" />
+              <section title="valueLength" ref="struct_kinetic_p_d_u.html#acbc5df3f7162365268b5936680313a07" />
+              <section title="proto" ref="struct_kinetic_p_d_u.html#ae1e313a9a5cb163d2a39c2225e16ec11" />
+              <section title="value" ref="struct_kinetic_p_d_u.html#ab84f745a1b9aad99b4fc42c02a25f1f3" />
+              <section title="data" ref="struct_kinetic_p_d_u.html#a0468f444df466b9a19b848e8c2ab291f" />
+            </section>
+            <section title="KineticProto_Body" ref="struct___kinetic_proto___body.html">
+              <section title="base" ref="struct___kinetic_proto___body.html#acd5942518e2c964f806fbe7d3fcc2b8e" />
+              <section title="keyvalue" ref="struct___kinetic_proto___body.html#abbc6921e4aeeb5760da3ac6e6646fe70" />
+              <section title="range" ref="struct___kinetic_proto___body.html#a08d36407b6a8dbcb4667af7e9747d0f7" />
+              <section title="setup" ref="struct___kinetic_proto___body.html#ad9bab3f05d947ab7167b48958a892305" />
+              <section title="p2poperation" ref="struct___kinetic_proto___body.html#a16134465822938ee6599d048d0feccd7" />
+              <section title="getlog" ref="struct___kinetic_proto___body.html#af2c62f35e75f045b446c7e351ef9c2b9" />
+              <section title="security" ref="struct___kinetic_proto___body.html#a5772564fdecfa5b490ee8b72a30bd462" />
+            </section>
+            <section title="KineticProto_Command" ref="struct___kinetic_proto___command.html">
+              <section title="base" ref="struct___kinetic_proto___command.html#a53d74c5a9f728836ea96ec462a8573cf" />
+              <section title="header" ref="struct___kinetic_proto___command.html#a0e128680880b77f3dd3c24796facb524" />
+              <section title="body" ref="struct___kinetic_proto___command.html#a7396a93ea814869dae0e18da1a6473ae" />
+              <section title="status" ref="struct___kinetic_proto___command.html#aa4bcbbef0b17fef3ea127c0cb58a98c3" />
+            </section>
+            <section title="KineticProto_GetLog" ref="struct___kinetic_proto___get_log.html">
+              <section title="base" ref="struct___kinetic_proto___get_log.html#a6b231e19bff41eab6e195733456e7684" />
+              <section title="n_type" ref="struct___kinetic_proto___get_log.html#ad9a0a8c8d22a878b6cdaa4c416b4c864" />
+              <section title="type" ref="struct___kinetic_proto___get_log.html#a201c407b317371ee7928886e5d5ade5d" />
+              <section title="n_utilization" ref="struct___kinetic_proto___get_log.html#a93d6c718ee3c705455c2ff31ffa84cce" />
+              <section title="utilization" ref="struct___kinetic_proto___get_log.html#ab1b8b8d92325558f5bf03a91a673d355" />
+              <section title="n_temperature" ref="struct___kinetic_proto___get_log.html#a6eb1f952a71c86415b598f212ae7f006" />
+              <section title="temperature" ref="struct___kinetic_proto___get_log.html#a7def2f20ad198ed80c070330ec1dc120" />
+              <section title="capacity" ref="struct___kinetic_proto___get_log.html#a9667aef49d21624c05be743056146ec7" />
+              <section title="configuration" ref="struct___kinetic_proto___get_log.html#a2eabd16ea4d8395a0ca761099f63638e" />
+              <section title="n_statistics" ref="struct___kinetic_proto___get_log.html#adbfaf8ffaf1be61b5bf61f281043bb96" />
+              <section title="statistics" ref="struct___kinetic_proto___get_log.html#a9e775a8ee7fd1d5853f31682d58baa77" />
+              <section title="has_messages" ref="struct___kinetic_proto___get_log.html#ad1691bf979bc8d547f852cbc5d19ad05" />
+              <section title="messages" ref="struct___kinetic_proto___get_log.html#a84d3f57b4ce0bedd1de6eb7ca4227e65" />
+              <section title="limits" ref="struct___kinetic_proto___get_log.html#a8be74b5dfc8b6897027046a1375e108c" />
+            </section>
+            <section title="KineticProto_GetLog_Capacity" ref="struct___kinetic_proto___get_log___capacity.html">
+              <section title="base" ref="struct___kinetic_proto___get_log___capacity.html#a4423ddb756784b55bb683b12d207f0c8" />
+              <section title="has_nominalcapacityinbytes" ref="struct___kinetic_proto___get_log___capacity.html#ad1e8358e2332b3854332b5aca3b7f8af" />
+              <section title="nominalcapacityinbytes" ref="struct___kinetic_proto___get_log___capacity.html#ad7807df0b683ec6393b8362c9034f177" />
+              <section title="has_portionfull" ref="struct___kinetic_proto___get_log___capacity.html#a12a663e992771105cc3c8539352ed818" />
+              <section title="portionfull" ref="struct___kinetic_proto___get_log___capacity.html#ac638151469c524cd3ada9668e90f06ed" />
+            </section>
+            <section title="KineticProto_GetLog_Configuration" ref="struct___kinetic_proto___get_log___configuration.html">
+              <section title="base" ref="struct___kinetic_proto___get_log___configuration.html#a2ff081ad32a6e67859468155156f4039" />
+              <section title="vendor" ref="struct___kinetic_proto___get_log___configuration.html#a4981eb7e990314ad80933c99be8df823" />
+              <section title="model" ref="struct___kinetic_proto___get_log___configuration.html#a7fff80eee652c5f122f526f3e1b12ea2" />
+              <section title="has_serialnumber" ref="struct___kinetic_proto___get_log___configuration.html#a168827737bf01d31f22f80a8f20c5b6c" />
+              <section title="serialnumber" ref="struct___kinetic_proto___get_log___configuration.html#a7f025c1dbbf4b46ebe13cf16664496ae" />
+              <section title="has_worldwidename" ref="struct___kinetic_proto___get_log___configuration.html#a345c15be057bf4f596f21c47074e2a9e" />
+              <section title="worldwidename" ref="struct___kinetic_proto___get_log___configuration.html#a5c59d7c27e441454ea2eb1a2b24db33d" />
+              <section title="version" ref="struct___kinetic_proto___get_log___configuration.html#ab251ce14ae392a8c024797d78059b4b6" />
+              <section title="compilationdate" ref="struct___kinetic_proto___get_log___configuration.html#a662b5a81f65bf77e4a6565a7dea05529" />
+              <section title="sourcehash" ref="struct___kinetic_proto___get_log___configuration.html#a19889d9c89ea1b2b5a17c0708c6e866c" />
+              <section title="protocolversion" ref="struct___kinetic_proto___get_log___configuration.html#a9e122544f254a4b493c80f6c03224568" />
+              <section title="protocolcompilationdate" ref="struct___kinetic_proto___get_log___configuration.html#af159345c1f2f546c6ea2e5c0fdbc8475" />
+              <section title="protocolsourcehash" ref="struct___kinetic_proto___get_log___configuration.html#a097fb86a5e7ca424d46860ac10fa1a0e" />
+              <section title="n_interface" ref="struct___kinetic_proto___get_log___configuration.html#af2c90f806d2c6ad540044efe8a773a28" />
+              <section title="interface" ref="struct___kinetic_proto___get_log___configuration.html#afc540d050001189d544bb2df9fa12a76" />
+              <section title="has_port" ref="struct___kinetic_proto___get_log___configuration.html#a341c931ab7ee91a0cb0f46e068834907" />
+              <section title="port" ref="struct___kinetic_proto___get_log___configuration.html#a874ac04f24f97312c43d402aa5b0c431" />
+              <section title="has_tlsport" ref="struct___kinetic_proto___get_log___configuration.html#ab1b113fc47f9c337ab51cf503934baaa" />
+              <section title="tlsport" ref="struct___kinetic_proto___get_log___configuration.html#aca1fddaeeea4b40be9ebd8a148a97ced" />
+            </section>
+            <section title="KineticProto_GetLog_Configuration_Interface" ref="struct___kinetic_proto___get_log___configuration___interface.html">
+              <section title="base" ref="struct___kinetic_proto___get_log___configuration___interface.html#a99ad6f1b0d1e9414407ed96effb6ac29" />
+              <section title="name" ref="struct___kinetic_proto___get_log___configuration___interface.html#a0e20f1e89d8853a812e7ac201d04b256" />
+              <section title="has_mac" ref="struct___kinetic_proto___get_log___configuration___interface.html#a3abd5a4a6515397a5dad3c5b1e1eeaa2" />
+              <section title="mac" ref="struct___kinetic_proto___get_log___configuration___interface.html#a693f9ea817e46d902aca5e8940b77fe4" />
+              <section title="has_ipv4address" ref="struct___kinetic_proto___get_log___configuration___interface.html#af63dd649d0f1801e99511df1e719f2b1" />
+              <section title="ipv4address" ref="struct___kinetic_proto___get_log___configuration___interface.html#a12065f1b6236d16b518cc37eafb59f6f" />
+              <section title="has_ipv6address" ref="struct___kinetic_proto___get_log___configuration___interface.html#ac9ca5133e5124939045714aa7573dfc0" />
+              <section title="ipv6address" ref="struct___kinetic_proto___get_log___configuration___interface.html#a848af61d2c0cb9e5f735d15f44601972" />
+            </section>
+            <section title="KineticProto_GetLog_Limits" ref="struct___kinetic_proto___get_log___limits.html">
+              <section title="base" ref="struct___kinetic_proto___get_log___limits.html#a82796926094251b9d1cf43ff9c9df62a" />
+              <section title="has_maxkeysize" ref="struct___kinetic_proto___get_log___limits.html#aff5f073987a9d9f826231e29471fdb52" />
+              <section title="maxkeysize" ref="struct___kinetic_proto___get_log___limits.html#ab14786f3f676bc7858809d4a4d8494f2" />
+              <section title="has_maxvaluesize" ref="struct___kinetic_proto___get_log___limits.html#a25edbb1237d8bdf75125286783be47e4" />
+              <section title="maxvaluesize" ref="struct___kinetic_proto___get_log___limits.html#ace25ef61bd44e63e4613cc1444deece7" />
+              <section title="has_maxversionsize" ref="struct___kinetic_proto___get_log___limits.html#a74e188c9a6f43046ffb470bc8ae5c693" />
+              <section title="maxversionsize" ref="struct___kinetic_proto___get_log___limits.html#a5b7ec932d1ada094a7f5676f61a81aa9" />
+              <section title="has_maxtagsize" ref="struct___kinetic_proto___get_log___limits.html#a2c644e8c05bf26299b0821f66dae52a2" />
+              <section title="maxtagsize" ref="struct___kinetic_proto___get_log___limits.html#ac1de96f39017f432aa2a0b3ca3b50b29" />
+              <section title="has_maxconnections" ref="struct___kinetic_proto___get_log___limits.html#aa9e45bc318769beb8c3f5d1f8b8ed56b" />
+              <section title="maxconnections" ref="struct___kinetic_proto___get_log___limits.html#adf0c16cedb335ab8f5d35cec78e6032e" />
+              <section title="has_maxoutstandingreadrequests" ref="struct___kinetic_proto___get_log___limits.html#af053fb5824db94077cd268b60fad60f6" />
+              <section title="maxoutstandingreadrequests" ref="struct___kinetic_proto___get_log___limits.html#a3e84934c7c447e22f6ad269099050418" />
+              <section title="has_maxoutstandingwriterequests" ref="struct___kinetic_proto___get_log___limits.html#a673ba67def4ddbee7bc02a99626c5967" />
+              <section title="maxoutstandingwriterequests" ref="struct___kinetic_proto___get_log___limits.html#a8eb313304df2ee32a54b40376010f29d" />
+              <section title="has_maxmessagesize" ref="struct___kinetic_proto___get_log___limits.html#a88e1dd022d9d05b171ea98fe961413a2" />
+              <section title="maxmessagesize" ref="struct___kinetic_proto___get_log___limits.html#acfe4970330f1b3b7cbef8452f6f9f632" />
+              <section title="has_maxkeyrangecount" ref="struct___kinetic_proto___get_log___limits.html#a945fe99e1b4c76f2969d355076d5025e" />
+              <section title="maxkeyrangecount" ref="struct___kinetic_proto___get_log___limits.html#af43e170dcbc2453ffd8cf877cb358d11" />
+            </section>
+            <section title="KineticProto_GetLog_Statistics" ref="struct___kinetic_proto___get_log___statistics.html">
+              <section title="base" ref="struct___kinetic_proto___get_log___statistics.html#ade0303a9415747b2578fa8315a3839e7" />
+              <section title="has_messagetype" ref="struct___kinetic_proto___get_log___statistics.html#ab5a27418d4fddb48f618723b7266d727" />
+              <section title="messagetype" ref="struct___kinetic_proto___get_log___statistics.html#ad8493f7ee83cb03c885e469e4f6956c2" />
+              <section title="has_count" ref="struct___kinetic_proto___get_log___statistics.html#ab77168cac75a45289dc186c290f570e6" />
+              <section title="count" ref="struct___kinetic_proto___get_log___statistics.html#ae3ac50ddb3d2b6301add33fad7aefb30" />
+              <section title="has_bytes" ref="struct___kinetic_proto___get_log___statistics.html#a1f8fb28d90bf5a33c1351c078bc4dc12" />
+              <section title="bytes" ref="struct___kinetic_proto___get_log___statistics.html#af97c03df6b8cf61cb6834242393eb37f" />
+            </section>
+            <section title="KineticProto_GetLog_Temperature" ref="struct___kinetic_proto___get_log___temperature.html">
+              <section title="base" ref="struct___kinetic_proto___get_log___temperature.html#a36a9e32ecbaf9aceb26790414bc5304a" />
+              <section title="name" ref="struct___kinetic_proto___get_log___temperature.html#ad926aefc3950cee0a65df78ea0c62259" />
+              <section title="has_current" ref="struct___kinetic_proto___get_log___temperature.html#a9fb7eb5af813a0f77a1cd9e2a31816e6" />
+              <section title="current" ref="struct___kinetic_proto___get_log___temperature.html#a39f48f29dd8c29b82a088b431bc66fb5" />
+              <section title="has_minimum" ref="struct___kinetic_proto___get_log___temperature.html#ac25134b3527b6113a0a56c464da3835d" />
+              <section title="minimum" ref="struct___kinetic_proto___get_log___temperature.html#ac6d16ade7b698e59c7fed447fc402ba7" />
+              <section title="has_maximum" ref="struct___kinetic_proto___get_log___temperature.html#a0d2a1c0364ead36bd40ceae084cc0579" />
+              <section title="maximum" ref="struct___kinetic_proto___get_log___temperature.html#a4c200d9aa7fd2200dc21929d8ddbd5cd" />
+              <section title="has_target" ref="struct___kinetic_proto___get_log___temperature.html#a438203eb72c04c8c802c9d7e48742872" />
+              <section title="target" ref="struct___kinetic_proto___get_log___temperature.html#a173d11b07f2d2caf0bddf7206366c66f" />
+            </section>
+            <section title="KineticProto_GetLog_Utilization" ref="struct___kinetic_proto___get_log___utilization.html">
+              <section title="base" ref="struct___kinetic_proto___get_log___utilization.html#a679a6c61c24e4c01a8c9ca430ae1c866" />
+              <section title="name" ref="struct___kinetic_proto___get_log___utilization.html#a32af861c7e7a1860c83e9aed740fe25a" />
+              <section title="has_value" ref="struct___kinetic_proto___get_log___utilization.html#a12093bd324167c0eccab4ee54b22555b" />
+              <section title="value" ref="struct___kinetic_proto___get_log___utilization.html#a01400cc21401ba04711b89adebb6734a" />
+            </section>
+            <section title="KineticProto_Header" ref="struct___kinetic_proto___header.html">
+              <section title="base" ref="struct___kinetic_proto___header.html#afecf3723673b66a35fd33b01d34ec257" />
+              <section title="has_clusterversion" ref="struct___kinetic_proto___header.html#a3a860d5b4eb8ccf479125e0851d608e2" />
+              <section title="clusterversion" ref="struct___kinetic_proto___header.html#ae9eb0aff852520d663aa66797eddbb56" />
+              <section title="has_identity" ref="struct___kinetic_proto___header.html#ab3e386e77e4b717aabb54a48eff11f4a" />
+              <section title="identity" ref="struct___kinetic_proto___header.html#a3f0484c792262e175fe2dbe979f2d9c3" />
+              <section title="has_connectionid" ref="struct___kinetic_proto___header.html#a774496bd3804f1e05949c106fc4630d8" />
+              <section title="connectionid" ref="struct___kinetic_proto___header.html#a9b5cca40f8f2ff4f3ffb3e48d4eecf20" />
+              <section title="has_sequence" ref="struct___kinetic_proto___header.html#a657b2506c018537765c99496f2e51e5f" />
+              <section title="sequence" ref="struct___kinetic_proto___header.html#aba48c36634e0df8df1ee2bf002c616a2" />
+              <section title="has_acksequence" ref="struct___kinetic_proto___header.html#a14dd48ae51d4aec460f1a1824aa5eb5e" />
+              <section title="acksequence" ref="struct___kinetic_proto___header.html#a25626d7f0f78b628250a184bda1b9f1e" />
+              <section title="has_messagetype" ref="struct___kinetic_proto___header.html#a587d9e388c0e2baddd29097ec33d28e5" />
+              <section title="messagetype" ref="struct___kinetic_proto___header.html#ad4911faf858731be2e684c2358f8fca4" />
+              <section title="has_timeout" ref="struct___kinetic_proto___header.html#ae9584686354ce7a4be19e081dc8b78dd" />
+              <section title="timeout" ref="struct___kinetic_proto___header.html#a30bb53d62e190881da8843327f2ff920" />
+              <section title="has_earlyexit" ref="struct___kinetic_proto___header.html#afd82cd05c58257c3d65d77cd6161d0d4" />
+              <section title="earlyexit" ref="struct___kinetic_proto___header.html#af4aeb9479498d9fa0d55b73b42441434" />
+              <section title="has_backgroundscan" ref="struct___kinetic_proto___header.html#ac85ad43e5ccba2228da83b2538e55aad" />
+              <section title="backgroundscan" ref="struct___kinetic_proto___header.html#af0c234ac1907f4c45efe1cdfbc955e5f" />
+            </section>
+            <section title="KineticProto_KeyValue" ref="struct___kinetic_proto___key_value.html">
+              <section title="base" ref="struct___kinetic_proto___key_value.html#a1c4dc1c2adea39a1fcf60d5246c5e8c2" />
+              <section title="has_newversion" ref="struct___kinetic_proto___key_value.html#abab819b70930bbf38aae67fe68078e5c" />
+              <section title="newversion" ref="struct___kinetic_proto___key_value.html#a548db39bd6f8a8b2f1f1d709cefa61ad" />
+              <section title="has_force" ref="struct___kinetic_proto___key_value.html#a0bf9b2e32e776a717a0f3c39d276326f" />
+              <section title="force" ref="struct___kinetic_proto___key_value.html#af1ced1d2465cb03456045e044be89afd" />
+              <section title="has_key" ref="struct___kinetic_proto___key_value.html#ab1a126fb9a09680611ff2ccc3e3f7cac" />
+              <section title="key" ref="struct___kinetic_proto___key_value.html#a33b99c0b542633e93db0031c401de230" />
+              <section title="has_dbversion" ref="struct___kinetic_proto___key_value.html#a3532b299962cb707def081a3bfc6bde9" />
+              <section title="dbversion" ref="struct___kinetic_proto___key_value.html#a37b6ba29ee1e5519f708a07d3ec957ee" />
+              <section title="has_tag" ref="struct___kinetic_proto___key_value.html#a666eaacc9a833269fb2291287f29d736" />
+              <section title="tag" ref="struct___kinetic_proto___key_value.html#a48594aa949ed0719a0adb665b87d10db" />
+              <section title="has_algorithm" ref="struct___kinetic_proto___key_value.html#ab76aa6973c7385bc72b4e5e1c0690ef6" />
+              <section title="algorithm" ref="struct___kinetic_proto___key_value.html#a9ac4170787dc360925793dbd2e5860b5" />
+              <section title="has_metadataonly" ref="struct___kinetic_proto___key_value.html#a72a6383d1477a8751211e9ea2a3b4022" />
+              <section title="metadataonly" ref="struct___kinetic_proto___key_value.html#a37d35d318333c905548b0d7219d86d67" />
+              <section title="has_synchronization" ref="struct___kinetic_proto___key_value.html#acf7b4f500c06a951d5ed69de620f4c10" />
+              <section title="synchronization" ref="struct___kinetic_proto___key_value.html#a077fd8fc49e02c072fd7f977cd82f71c" />
+            </section>
+            <section title="KineticProto_P2POperation" ref="struct___kinetic_proto___p2_p_operation.html">
+              <section title="base" ref="struct___kinetic_proto___p2_p_operation.html#adf077cc685efc1c6ae0952c834eb4ff9" />
+              <section title="peer" ref="struct___kinetic_proto___p2_p_operation.html#ac0cfa5fec5eff253bb4e9096726d8c63" />
+              <section title="n_operation" ref="struct___kinetic_proto___p2_p_operation.html#a998f37874ae4218d236a0404e6de863d" />
+              <section title="operation" ref="struct___kinetic_proto___p2_p_operation.html#ad03bf449ba04e765c85bff371cdf3ebf" />
+              <section title="has_allchildoperationssucceeded" ref="struct___kinetic_proto___p2_p_operation.html#a78f0e640298bfabe40e75d6924ddfdcf" />
+              <section title="allchildoperationssucceeded" ref="struct___kinetic_proto___p2_p_operation.html#a736d04c33d26695cdb1a7962cbaa58d6" />
+            </section>
+            <section title="KineticProto_P2POperation_Operation" ref="struct___kinetic_proto___p2_p_operation___operation.html">
+              <section title="base" ref="struct___kinetic_proto___p2_p_operation___operation.html#af7bdcdb068a8e2eebdf65d4d8fcf75d9" />
+              <section title="has_key" ref="struct___kinetic_proto___p2_p_operation___operation.html#a516faa657a2b6beb0b12bc9d910d96b4" />
+              <section title="key" ref="struct___kinetic_proto___p2_p_operation___operation.html#a5e504d751374f4ceb3eb5deae73b3c82" />
+              <section title="has_version" ref="struct___kinetic_proto___p2_p_operation___operation.html#a326694d9d1d09abcfeeb8745dc49000a" />
+              <section title="version" ref="struct___kinetic_proto___p2_p_operation___operation.html#a7898ec087bbca94ae43a5e91e8479e17" />
+              <section title="has_newkey" ref="struct___kinetic_proto___p2_p_operation___operation.html#ab9315b4434ffd5d310c3069c7da3bf4f" />
+              <section title="newkey" ref="struct___kinetic_proto___p2_p_operation___operation.html#ab19934c7745082c8f2e8125dde7f62cf" />
+              <section title="has_force" ref="struct___kinetic_proto___p2_p_operation___operation.html#aee1131b7ff5ed3808c0d645feef5b1ba" />
+              <section title="force" ref="struct___kinetic_proto___p2_p_operation___operation.html#a1636f76e03b9e31f0352ba9cdba1188a" />
+              <section title="status" ref="struct___kinetic_proto___p2_p_operation___operation.html#a3d0ca6744caafe23a35f167d56bea7ad" />
+              <section title="p2pop" ref="struct___kinetic_proto___p2_p_operation___operation.html#a82c8579070d949c02261270cc40c73a7" />
+            </section>
+            <section title="KineticProto_P2POperation_Peer" ref="struct___kinetic_proto___p2_p_operation___peer.html">
+              <section title="base" ref="struct___kinetic_proto___p2_p_operation___peer.html#a822e812ff1516c7c7bc18d7c04054506" />
+              <section title="hostname" ref="struct___kinetic_proto___p2_p_operation___peer.html#a26a8e1e56c2cb7181ee89da9f2bbd447" />
+              <section title="has_port" ref="struct___kinetic_proto___p2_p_operation___peer.html#ad28592a8475824548f4344ca1553131b" />
+              <section title="port" ref="struct___kinetic_proto___p2_p_operation___peer.html#a94ef8c6c8caa35f68bcfe75e0d86d619" />
+              <section title="has_tls" ref="struct___kinetic_proto___p2_p_operation___peer.html#ab80eb4a88d3f99f5052283d57f695cc4" />
+              <section title="tls" ref="struct___kinetic_proto___p2_p_operation___peer.html#abf8ad347cd98aa4680f57cde73f529d5" />
+            </section>
+            <section title="KineticProto_Range" ref="struct___kinetic_proto___range.html">
+              <section title="base" ref="struct___kinetic_proto___range.html#af997bb765fccfb98afe96be3ecfa8413" />
+              <section title="has_startkey" ref="struct___kinetic_proto___range.html#abfe1dc940b8abd8d4dd4284eb309919d" />
+              <section title="startkey" ref="struct___kinetic_proto___range.html#ae26b0242bde2eed638d02494f27f6d71" />
+              <section title="has_endkey" ref="struct___kinetic_proto___range.html#acaadb6cc9b6706b6b1c1c24687505232" />
+              <section title="endkey" ref="struct___kinetic_proto___range.html#a3f22bebadc5cf5890ac7575b5b7f6861" />
+              <section title="has_startkeyinclusive" ref="struct___kinetic_proto___range.html#a0a29dadbd59230c2f685a4efc848550b" />
+              <section title="startkeyinclusive" ref="struct___kinetic_proto___range.html#a185cbe7e48e4dc71b3ceed5f3b9f8b30" />
+              <section title="has_endkeyinclusive" ref="struct___kinetic_proto___range.html#a1d3c469ad5d6fc0fa4c5a97e84d2c53c" />
+              <section title="endkeyinclusive" ref="struct___kinetic_proto___range.html#a5bcdc5339fa20be75d1ac12034d89c05" />
+              <section title="has_maxreturned" ref="struct___kinetic_proto___range.html#aa46c5fe918daeb66f317f36cd3679189" />
+              <section title="maxreturned" ref="struct___kinetic_proto___range.html#ac77a85cce4927f2c1c5c69851833f617" />
+              <section title="has_reverse" ref="struct___kinetic_proto___range.html#ada176d195fef471835f8f79b4dec855c" />
+              <section title="reverse" ref="struct___kinetic_proto___range.html#ab4af51f6463334f6f99f5cc080ada672" />
+              <section title="n_key" ref="struct___kinetic_proto___range.html#acfacddfb575e2fd21596334b44c1b4d2" />
+              <section title="key" ref="struct___kinetic_proto___range.html#a1dba427cfe657e9b520fb5dc80d0136a" />
+            </section>
+            <section title="KineticProto_Security" ref="struct___kinetic_proto___security.html">
+              <section title="base" ref="struct___kinetic_proto___security.html#a76b76f2a6e9913ea6797c4445feca5f6" />
+              <section title="n_acl" ref="struct___kinetic_proto___security.html#a718e85e606d6e0e89591dbc843a85d97" />
+              <section title="acl" ref="struct___kinetic_proto___security.html#a856d296ff070c812c513361e7cabc3ec" />
+            </section>
+            <section title="KineticProto_Security_ACL" ref="struct___kinetic_proto___security___a_c_l.html">
+              <section title="base" ref="struct___kinetic_proto___security___a_c_l.html#a0eda056b82d37f56b847b4fadcdf2d38" />
+              <section title="has_identity" ref="struct___kinetic_proto___security___a_c_l.html#a0b132ceff5d4b597b05082c501dc1fa0" />
+              <section title="identity" ref="struct___kinetic_proto___security___a_c_l.html#a74296111e8e574ed062a76e8a47358d4" />
+              <section title="has_key" ref="struct___kinetic_proto___security___a_c_l.html#a7ae806175fb9dc01c039acf3266464d1" />
+              <section title="key" ref="struct___kinetic_proto___security___a_c_l.html#a1f08374b25e2e60de26b26b498bfde63" />
+              <section title="has_hmacalgorithm" ref="struct___kinetic_proto___security___a_c_l.html#a235872af83370039c15255449be37a8b" />
+              <section title="hmacalgorithm" ref="struct___kinetic_proto___security___a_c_l.html#abbc27fc389f2c3cdf1ca777a051a62c8" />
+              <section title="n_scope" ref="struct___kinetic_proto___security___a_c_l.html#adc12cf2a6be8d7fa9113e86f050e61a1" />
+              <section title="scope" ref="struct___kinetic_proto___security___a_c_l.html#a8f3ceafeb61035a115e2466faf6a45eb" />
+            </section>
+            <section title="KineticProto_Security_ACL_Scope" ref="struct___kinetic_proto___security___a_c_l___scope.html">
+              <section title="base" ref="struct___kinetic_proto___security___a_c_l___scope.html#a1028ca1f4742f8ccbcce75cc89779e18" />
+              <section title="has_offset" ref="struct___kinetic_proto___security___a_c_l___scope.html#aa24d3b4a97ade79074f3b5a8726324b4" />
+              <section title="offset" ref="struct___kinetic_proto___security___a_c_l___scope.html#a934b2b373426d04fdb4ee552ea6bb5b8" />
+              <section title="has_value" ref="struct___kinetic_proto___security___a_c_l___scope.html#a0691fc5a0397282602b83c7cd208b5e3" />
+              <section title="value" ref="struct___kinetic_proto___security___a_c_l___scope.html#a0f4b4bb25cc568c92e09a018a6ce5aa0" />
+              <section title="n_permission" ref="struct___kinetic_proto___security___a_c_l___scope.html#a5a6cf7eb44595cca0ebd0887c3cb8ea0" />
+              <section title="permission" ref="struct___kinetic_proto___security___a_c_l___scope.html#ac755521a99b20a0062fbaacc86a6711a" />
+              <section title="has_tlsrequired" ref="struct___kinetic_proto___security___a_c_l___scope.html#a1536d6cfafb38b324a83668460f95f1e" />
+              <section title="tlsrequired" ref="struct___kinetic_proto___security___a_c_l___scope.html#a7455f50567bff6fad6bfe59db6b225f7" />
+            </section>
+            <section title="KineticProto_Setup" ref="struct___kinetic_proto___setup.html">
+              <section title="base" ref="struct___kinetic_proto___setup.html#af88e4acc9c9fd18803d66bbec1611291" />
+              <section title="has_newclusterversion" ref="struct___kinetic_proto___setup.html#ab1f23984d930959cc6170f093fd4ed1c" />
+              <section title="newclusterversion" ref="struct___kinetic_proto___setup.html#a9b85f350eedfbf3a8d19d278b4cc2a71" />
+              <section title="has_instantsecureerase" ref="struct___kinetic_proto___setup.html#a29edb8bdfd31463e13d3d917aa26939b" />
+              <section title="instantsecureerase" ref="struct___kinetic_proto___setup.html#a95d9864d50a6ac14390aa77d2f362a0c" />
+              <section title="has_setpin" ref="struct___kinetic_proto___setup.html#aca551e9088ba2635797ec41d45643e30" />
+              <section title="setpin" ref="struct___kinetic_proto___setup.html#a4a66c2d4fcbe61b59da969fc08a5a536" />
+              <section title="has_pin" ref="struct___kinetic_proto___setup.html#a49f27342d34a7807ef08d62f54b7b287" />
+              <section title="pin" ref="struct___kinetic_proto___setup.html#aa624effcd555cd05fc72c518d20a4eb5" />
+              <section title="has_firmwaredownload" ref="struct___kinetic_proto___setup.html#a8883ff5d6489f6c43720d4b2945653a0" />
+              <section title="firmwaredownload" ref="struct___kinetic_proto___setup.html#ae5fc15ea0700073eb7791e076bf95898" />
+            </section>
+            <section title="KineticProto_Status" ref="struct___kinetic_proto___status.html">
+              <section title="base" ref="struct___kinetic_proto___status.html#ac76b15c161f2321fe901d8c74b95522f" />
+              <section title="has_code" ref="struct___kinetic_proto___status.html#af92da504c7ffc48277eb76bfd27348f6" />
+              <section title="code" ref="struct___kinetic_proto___status.html#af86a0bbfa6f31ad965a17d54b147548e" />
+              <section title="statusmessage" ref="struct___kinetic_proto___status.html#ac301361593f5eeaa6dcf39529368c94e" />
+              <section title="has_detailedmessage" ref="struct___kinetic_proto___status.html#a1c8133a7a533c61246fe5ef949db555b" />
+              <section title="detailedmessage" ref="struct___kinetic_proto___status.html#af1c5b05f6e5abeffab423c62b0522e3b" />
+            </section>
+          </section>
+        </section>
+        <section title="Files">
+          <section title="File List" ref="files.html">
+            <section title="kinetic.h" ref="kinetic_8h_source.html" />
+            <section title="KineticApi.c" ref="_kinetic_api_8c_source.html" />
+            <section title="KineticApi.h" ref="_kinetic_api_8h_source.html" />
+            <section title="KineticConnection.c" ref="_kinetic_connection_8c_source.html" />
+            <section title="KineticConnection.h" ref="_kinetic_connection_8h_source.html" />
+            <section title="KineticExchange.c" ref="_kinetic_exchange_8c_source.html" />
+            <section title="KineticExchange.h" ref="_kinetic_exchange_8h_source.html" />
+            <section title="KineticLogger.c" ref="_kinetic_logger_8c_source.html" />
+            <section title="KineticLogger.h" ref="_kinetic_logger_8h_source.html" />
+            <section title="KineticMessage.c" ref="_kinetic_message_8c_source.html" />
+            <section title="KineticMessage.h" ref="_kinetic_message_8h_source.html" />
+            <section title="KineticPDU.c" ref="_kinetic_p_d_u_8c_source.html" />
+            <section title="KineticPDU.h" ref="_kinetic_p_d_u_8h_source.html" />
+            <section title="KineticProto.c" ref="_kinetic_proto_8c_source.html" />
+            <section title="KineticProto.h" ref="_kinetic_proto_8h_source.html" />
+            <section title="KineticSocket.c" ref="_kinetic_socket_8c_source.html" />
+            <section title="KineticSocket.h" ref="_kinetic_socket_8h_source.html" />
+            <section title="KineticTypes.h" ref="_kinetic_types_8h_source.html" />
+            <section title="main.c" ref="main_8c_source.html" />
+          </section>
+        </section>
+      </section>
+    </toc>
+    <keywords>
+      <keyword name="_KineticProto" id="_KineticProto" ref="struct___kinetic_proto.html" />
+      <keyword name="base" id="_KineticProto::base" ref="struct___kinetic_proto.html#a2eeaecc27f3dda9d8769147fb34d6f96" />
+      <keyword name="command" id="_KineticProto::command" ref="struct___kinetic_proto.html#aa925e77301819d0902f65bc98195ed15" />
+      <keyword name="has_hmac" id="_KineticProto::has_hmac" ref="struct___kinetic_proto.html#aa753179d540b1015cba3107b0e9d191a" />
+      <keyword name="hmac" id="_KineticProto::hmac" ref="struct___kinetic_proto.html#a306b9c8db7eb01650c79d2e342d6ef0e" />
+      <keyword name="KineticConnection" id="KineticConnection" ref="struct_kinetic_connection.html" />
+      <keyword name="Connected" id="KineticConnection::Connected" ref="struct_kinetic_connection.html#a01bd54acc4523e6d1822657b7e696564" />
+      <keyword name="Blocking" id="KineticConnection::Blocking" ref="struct_kinetic_connection.html#a6877cd8cff086a50a3bb5c94e7729924" />
+      <keyword name="Port" id="KineticConnection::Port" ref="struct_kinetic_connection.html#ae2ce8092517e663eda1d672e37350c2c" />
+      <keyword name="FileDescriptor" id="KineticConnection::FileDescriptor" ref="struct_kinetic_connection.html#a8b729af6f1d0bfa6002cfca17cffcd1b" />
+      <keyword name="Host" id="KineticConnection::Host" ref="struct_kinetic_connection.html#ae13fe72f7dd3251dddb97866c6ce6554" />
+      <keyword name="KineticExchange" id="KineticExchange" ref="struct_kinetic_exchange.html" />
+      <keyword name="has_clusterVersion" id="KineticExchange::has_clusterVersion" ref="struct_kinetic_exchange.html#adc316ea8e8b894ff842cbc10bcfe915e" />
+      <keyword name="clusterVersion" id="KineticExchange::clusterVersion" ref="struct_kinetic_exchange.html#a5cf7e39edf70d73512c0a769847dcf10" />
+      <keyword name="identity" id="KineticExchange::identity" ref="struct_kinetic_exchange.html#a855522d7c0f9662c27c7df4381286b3c" />
+      <keyword name="connectionID" id="KineticExchange::connectionID" ref="struct_kinetic_exchange.html#ac04664033ff7f79717d60fa9b5d11fa5" />
+      <keyword name="sequence" id="KineticExchange::sequence" ref="struct_kinetic_exchange.html#af6fe080c0557282b43680baf9bd1c600" />
+      <keyword name="connection" id="KineticExchange::connection" ref="struct_kinetic_exchange.html#aa419c48291fb6542e616e13c8a7d4701" />
+      <keyword name="KineticMessage" id="KineticMessage" ref="struct_kinetic_message.html" />
+      <keyword name="proto" id="KineticMessage::proto" ref="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757" />
+      <keyword name="command" id="KineticMessage::command" ref="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36" />
+      <keyword name="header" id="KineticMessage::header" ref="struct_kinetic_message.html#a4b19350314903651d286213bc22a8a3f" />
+      <keyword name="body" id="KineticMessage::body" ref="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763" />
+      <keyword name="status" id="KineticMessage::status" ref="struct_kinetic_message.html#ae8b91d9e5db53830c73a9beb1df7d5a4" />
+      <keyword name="exchange" id="KineticMessage::exchange" ref="struct_kinetic_message.html#a6138cc9de4450cc08896517fa3775852" />
+      <keyword name="KineticPDU" id="KineticPDU" ref="struct_kinetic_p_d_u.html" />
+      <keyword name="prefix" id="KineticPDU::prefix" ref="struct_kinetic_p_d_u.html#adf3e91293b570cb9457d18252d080445" />
+      <keyword name="protoLength" id="KineticPDU::protoLength" ref="struct_kinetic_p_d_u.html#ac9283ef4cd85e568d6025ca85f8eaacb" />
+      <keyword name="valueLength" id="KineticPDU::valueLength" ref="struct_kinetic_p_d_u.html#acbc5df3f7162365268b5936680313a07" />
+      <keyword name="proto" id="KineticPDU::proto" ref="struct_kinetic_p_d_u.html#ae1e313a9a5cb163d2a39c2225e16ec11" />
+      <keyword name="value" id="KineticPDU::value" ref="struct_kinetic_p_d_u.html#ab84f745a1b9aad99b4fc42c02a25f1f3" />
+      <keyword name="data" id="KineticPDU::data" ref="struct_kinetic_p_d_u.html#a0468f444df466b9a19b848e8c2ab291f" />
+      <keyword name="_KineticProto_Body" id="_KineticProto_Body" ref="struct___kinetic_proto___body.html" />
+      <keyword name="base" id="_KineticProto_Body::base" ref="struct___kinetic_proto___body.html#acd5942518e2c964f806fbe7d3fcc2b8e" />
+      <keyword name="keyvalue" id="_KineticProto_Body::keyvalue" ref="struct___kinetic_proto___body.html#abbc6921e4aeeb5760da3ac6e6646fe70" />
+      <keyword name="range" id="_KineticProto_Body::range" ref="struct___kinetic_proto___body.html#a08d36407b6a8dbcb4667af7e9747d0f7" />
+      <keyword name="setup" id="_KineticProto_Body::setup" ref="struct___kinetic_proto___body.html#ad9bab3f05d947ab7167b48958a892305" />
+      <keyword name="p2poperation" id="_KineticProto_Body::p2poperation" ref="struct___kinetic_proto___body.html#a16134465822938ee6599d048d0feccd7" />
+      <keyword name="getlog" id="_KineticProto_Body::getlog" ref="struct___kinetic_proto___body.html#af2c62f35e75f045b446c7e351ef9c2b9" />
+      <keyword name="security" id="_KineticProto_Body::security" ref="struct___kinetic_proto___body.html#a5772564fdecfa5b490ee8b72a30bd462" />
+      <keyword name="_KineticProto_Command" id="_KineticProto_Command" ref="struct___kinetic_proto___command.html" />
+      <keyword name="base" id="_KineticProto_Command::base" ref="struct___kinetic_proto___command.html#a53d74c5a9f728836ea96ec462a8573cf" />
+      <keyword name="header" id="_KineticProto_Command::header" ref="struct___kinetic_proto___command.html#a0e128680880b77f3dd3c24796facb524" />
+      <keyword name="body" id="_KineticProto_Command::body" ref="struct___kinetic_proto___command.html#a7396a93ea814869dae0e18da1a6473ae" />
+      <keyword name="status" id="_KineticProto_Command::status" ref="struct___kinetic_proto___command.html#aa4bcbbef0b17fef3ea127c0cb58a98c3" />
+      <keyword name="_KineticProto_GetLog" id="_KineticProto_GetLog" ref="struct___kinetic_proto___get_log.html" />
+      <keyword name="base" id="_KineticProto_GetLog::base" ref="struct___kinetic_proto___get_log.html#a6b231e19bff41eab6e195733456e7684" />
+      <keyword name="n_type" id="_KineticProto_GetLog::n_type" ref="struct___kinetic_proto___get_log.html#ad9a0a8c8d22a878b6cdaa4c416b4c864" />
+      <keyword name="type" id="_KineticProto_GetLog::type" ref="struct___kinetic_proto___get_log.html#a201c407b317371ee7928886e5d5ade5d" />
+      <keyword name="n_utilization" id="_KineticProto_GetLog::n_utilization" ref="struct___kinetic_proto___get_log.html#a93d6c718ee3c705455c2ff31ffa84cce" />
+      <keyword name="utilization" id="_KineticProto_GetLog::utilization" ref="struct___kinetic_proto___get_log.html#ab1b8b8d92325558f5bf03a91a673d355" />
+      <keyword name="n_temperature" id="_KineticProto_GetLog::n_temperature" ref="struct___kinetic_proto___get_log.html#a6eb1f952a71c86415b598f212ae7f006" />
+      <keyword name="temperature" id="_KineticProto_GetLog::temperature" ref="struct___kinetic_proto___get_log.html#a7def2f20ad198ed80c070330ec1dc120" />
+      <keyword name="capacity" id="_KineticProto_GetLog::capacity" ref="struct___kinetic_proto___get_log.html#a9667aef49d21624c05be743056146ec7" />
+      <keyword name="configuration" id="_KineticProto_GetLog::configuration" ref="struct___kinetic_proto___get_log.html#a2eabd16ea4d8395a0ca761099f63638e" />
+      <keyword name="n_statistics" id="_KineticProto_GetLog::n_statistics" ref="struct___kinetic_proto___get_log.html#adbfaf8ffaf1be61b5bf61f281043bb96" />
+      <keyword name="statistics" id="_KineticProto_GetLog::statistics" ref="struct___kinetic_proto___get_log.html#a9e775a8ee7fd1d5853f31682d58baa77" />
+      <keyword name="has_messages" id="_KineticProto_GetLog::has_messages" ref="struct___kinetic_proto___get_log.html#ad1691bf979bc8d547f852cbc5d19ad05" />
+      <keyword name="messages" id="_KineticProto_GetLog::messages" ref="struct___kinetic_proto___get_log.html#a84d3f57b4ce0bedd1de6eb7ca4227e65" />
+      <keyword name="limits" id="_KineticProto_GetLog::limits" ref="struct___kinetic_proto___get_log.html#a8be74b5dfc8b6897027046a1375e108c" />
+      <keyword name="_KineticProto_GetLog_Capacity" id="_KineticProto_GetLog_Capacity" ref="struct___kinetic_proto___get_log___capacity.html" />
+      <keyword name="base" id="_KineticProto_GetLog_Capacity::base" ref="struct___kinetic_proto___get_log___capacity.html#a4423ddb756784b55bb683b12d207f0c8" />
+      <keyword name="has_nominalcapacityinbytes" id="_KineticProto_GetLog_Capacity::has_nominalcapacityinbytes" ref="struct___kinetic_proto___get_log___capacity.html#ad1e8358e2332b3854332b5aca3b7f8af" />
+      <keyword name="nominalcapacityinbytes" id="_KineticProto_GetLog_Capacity::nominalcapacityinbytes" ref="struct___kinetic_proto___get_log___capacity.html#ad7807df0b683ec6393b8362c9034f177" />
+      <keyword name="has_portionfull" id="_KineticProto_GetLog_Capacity::has_portionfull" ref="struct___kinetic_proto___get_log___capacity.html#a12a663e992771105cc3c8539352ed818" />
+      <keyword name="portionfull" id="_KineticProto_GetLog_Capacity::portionfull" ref="struct___kinetic_proto___get_log___capacity.html#ac638151469c524cd3ada9668e90f06ed" />
+      <keyword name="_KineticProto_GetLog_Configuration" id="_KineticProto_GetLog_Configuration" ref="struct___kinetic_proto___get_log___configuration.html" />
+      <keyword name="base" id="_KineticProto_GetLog_Configuration::base" ref="struct___kinetic_proto___get_log___configuration.html#a2ff081ad32a6e67859468155156f4039" />
+      <keyword name="vendor" id="_KineticProto_GetLog_Configuration::vendor" ref="struct___kinetic_proto___get_log___configuration.html#a4981eb7e990314ad80933c99be8df823" />
+      <keyword name="model" id="_KineticProto_GetLog_Configuration::model" ref="struct___kinetic_proto___get_log___configuration.html#a7fff80eee652c5f122f526f3e1b12ea2" />
+      <keyword name="has_serialnumber" id="_KineticProto_GetLog_Configuration::has_serialnumber" ref="struct___kinetic_proto___get_log___configuration.html#a168827737bf01d31f22f80a8f20c5b6c" />
+      <keyword name="serialnumber" id="_KineticProto_GetLog_Configuration::serialnumber" ref="struct___kinetic_proto___get_log___configuration.html#a7f025c1dbbf4b46ebe13cf16664496ae" />
+      <keyword name="has_worldwidename" id="_KineticProto_GetLog_Configuration::has_worldwidename" ref="struct___kinetic_proto___get_log___configuration.html#a345c15be057bf4f596f21c47074e2a9e" />
+      <keyword name="worldwidename" id="_KineticProto_GetLog_Configuration::worldwidename" ref="struct___kinetic_proto___get_log___configuration.html#a5c59d7c27e441454ea2eb1a2b24db33d" />
+      <keyword name="version" id="_KineticProto_GetLog_Configuration::version" ref="struct___kinetic_proto___get_log___configuration.html#ab251ce14ae392a8c024797d78059b4b6" />
+      <keyword name="compilationdate" id="_KineticProto_GetLog_Configuration::compilationdate" ref="struct___kinetic_proto___get_log___configuration.html#a662b5a81f65bf77e4a6565a7dea05529" />
+      <keyword name="sourcehash" id="_KineticProto_GetLog_Configuration::sourcehash" ref="struct___kinetic_proto___get_log___configuration.html#a19889d9c89ea1b2b5a17c0708c6e866c" />
+      <keyword name="protocolversion" id="_KineticProto_GetLog_Configuration::protocolversion" ref="struct___kinetic_proto___get_log___configuration.html#a9e122544f254a4b493c80f6c03224568" />
+      <keyword name="protocolcompilationdate" id="_KineticProto_GetLog_Configuration::protocolcompilationdate" ref="struct___kinetic_proto___get_log___configuration.html#af159345c1f2f546c6ea2e5c0fdbc8475" />
+      <keyword name="protocolsourcehash" id="_KineticProto_GetLog_Configuration::protocolsourcehash" ref="struct___kinetic_proto___get_log___configuration.html#a097fb86a5e7ca424d46860ac10fa1a0e" />
+      <keyword name="n_interface" id="_KineticProto_GetLog_Configuration::n_interface" ref="struct___kinetic_proto___get_log___configuration.html#af2c90f806d2c6ad540044efe8a773a28" />
+      <keyword name="interface" id="_KineticProto_GetLog_Configuration::interface" ref="struct___kinetic_proto___get_log___configuration.html#afc540d050001189d544bb2df9fa12a76" />
+      <keyword name="has_port" id="_KineticProto_GetLog_Configuration::has_port" ref="struct___kinetic_proto___get_log___configuration.html#a341c931ab7ee91a0cb0f46e068834907" />
+      <keyword name="port" id="_KineticProto_GetLog_Configuration::port" ref="struct___kinetic_proto___get_log___configuration.html#a874ac04f24f97312c43d402aa5b0c431" />
+      <keyword name="has_tlsport" id="_KineticProto_GetLog_Configuration::has_tlsport" ref="struct___kinetic_proto___get_log___configuration.html#ab1b113fc47f9c337ab51cf503934baaa" />
+      <keyword name="tlsport" id="_KineticProto_GetLog_Configuration::tlsport" ref="struct___kinetic_proto___get_log___configuration.html#aca1fddaeeea4b40be9ebd8a148a97ced" />
+      <keyword name="_KineticProto_GetLog_Configuration_Interface" id="_KineticProto_GetLog_Configuration_Interface" ref="struct___kinetic_proto___get_log___configuration___interface.html" />
+      <keyword name="base" id="_KineticProto_GetLog_Configuration_Interface::base" ref="struct___kinetic_proto___get_log___configuration___interface.html#a99ad6f1b0d1e9414407ed96effb6ac29" />
+      <keyword name="name" id="_KineticProto_GetLog_Configuration_Interface::name" ref="struct___kinetic_proto___get_log___configuration___interface.html#a0e20f1e89d8853a812e7ac201d04b256" />
+      <keyword name="has_mac" id="_KineticProto_GetLog_Configuration_Interface::has_mac" ref="struct___kinetic_proto___get_log___configuration___interface.html#a3abd5a4a6515397a5dad3c5b1e1eeaa2" />
+      <keyword name="mac" id="_KineticProto_GetLog_Configuration_Interface::mac" ref="struct___kinetic_proto___get_log___configuration___interface.html#a693f9ea817e46d902aca5e8940b77fe4" />
+      <keyword name="has_ipv4address" id="_KineticProto_GetLog_Configuration_Interface::has_ipv4address" ref="struct___kinetic_proto___get_log___configuration___interface.html#af63dd649d0f1801e99511df1e719f2b1" />
+      <keyword name="ipv4address" id="_KineticProto_GetLog_Configuration_Interface::ipv4address" ref="struct___kinetic_proto___get_log___configuration___interface.html#a12065f1b6236d16b518cc37eafb59f6f" />
+      <keyword name="has_ipv6address" id="_KineticProto_GetLog_Configuration_Interface::has_ipv6address" ref="struct___kinetic_proto___get_log___configuration___interface.html#ac9ca5133e5124939045714aa7573dfc0" />
+      <keyword name="ipv6address" id="_KineticProto_GetLog_Configuration_Interface::ipv6address" ref="struct___kinetic_proto___get_log___configuration___interface.html#a848af61d2c0cb9e5f735d15f44601972" />
+      <keyword name="_KineticProto_GetLog_Limits" id="_KineticProto_GetLog_Limits" ref="struct___kinetic_proto___get_log___limits.html" />
+      <keyword name="base" id="_KineticProto_GetLog_Limits::base" ref="struct___kinetic_proto___get_log___limits.html#a82796926094251b9d1cf43ff9c9df62a" />
+      <keyword name="has_maxkeysize" id="_KineticProto_GetLog_Limits::has_maxkeysize" ref="struct___kinetic_proto___get_log___limits.html#aff5f073987a9d9f826231e29471fdb52" />
+      <keyword name="maxkeysize" id="_KineticProto_GetLog_Limits::maxkeysize" ref="struct___kinetic_proto___get_log___limits.html#ab14786f3f676bc7858809d4a4d8494f2" />
+      <keyword name="has_maxvaluesize" id="_KineticProto_GetLog_Limits::has_maxvaluesize" ref="struct___kinetic_proto___get_log___limits.html#a25edbb1237d8bdf75125286783be47e4" />
+      <keyword name="maxvaluesize" id="_KineticProto_GetLog_Limits::maxvaluesize" ref="struct___kinetic_proto___get_log___limits.html#ace25ef61bd44e63e4613cc1444deece7" />
+      <keyword name="has_maxversionsize" id="_KineticProto_GetLog_Limits::has_maxversionsize" ref="struct___kinetic_proto___get_log___limits.html#a74e188c9a6f43046ffb470bc8ae5c693" />
+      <keyword name="maxversionsize" id="_KineticProto_GetLog_Limits::maxversionsize" ref="struct___kinetic_proto___get_log___limits.html#a5b7ec932d1ada094a7f5676f61a81aa9" />
+      <keyword name="has_maxtagsize" id="_KineticProto_GetLog_Limits::has_maxtagsize" ref="struct___kinetic_proto___get_log___limits.html#a2c644e8c05bf26299b0821f66dae52a2" />
+      <keyword name="maxtagsize" id="_KineticProto_GetLog_Limits::maxtagsize" ref="struct___kinetic_proto___get_log___limits.html#ac1de96f39017f432aa2a0b3ca3b50b29" />
+      <keyword name="has_maxconnections" id="_KineticProto_GetLog_Limits::has_maxconnections" ref="struct___kinetic_proto___get_log___limits.html#aa9e45bc318769beb8c3f5d1f8b8ed56b" />
+      <keyword name="maxconnections" id="_KineticProto_GetLog_Limits::maxconnections" ref="struct___kinetic_proto___get_log___limits.html#adf0c16cedb335ab8f5d35cec78e6032e" />
+      <keyword name="has_maxoutstandingreadrequests" id="_KineticProto_GetLog_Limits::has_maxoutstandingreadrequests" ref="struct___kinetic_proto___get_log___limits.html#af053fb5824db94077cd268b60fad60f6" />
+      <keyword name="maxoutstandingreadrequests" id="_KineticProto_GetLog_Limits::maxoutstandingreadrequests" ref="struct___kinetic_proto___get_log___limits.html#a3e84934c7c447e22f6ad269099050418" />
+      <keyword name="has_maxoutstandingwriterequests" id="_KineticProto_GetLog_Limits::has_maxoutstandingwriterequests" ref="struct___kinetic_proto___get_log___limits.html#a673ba67def4ddbee7bc02a99626c5967" />
+      <keyword name="maxoutstandingwriterequests" id="_KineticProto_GetLog_Limits::maxoutstandingwriterequests" ref="struct___kinetic_proto___get_log___limits.html#a8eb313304df2ee32a54b40376010f29d" />
+      <keyword name="has_maxmessagesize" id="_KineticProto_GetLog_Limits::has_maxmessagesize" ref="struct___kinetic_proto___get_log___limits.html#a88e1dd022d9d05b171ea98fe961413a2" />
+      <keyword name="maxmessagesize" id="_KineticProto_GetLog_Limits::maxmessagesize" ref="struct___kinetic_proto___get_log___limits.html#acfe4970330f1b3b7cbef8452f6f9f632" />
+      <keyword name="has_maxkeyrangecount" id="_KineticProto_GetLog_Limits::has_maxkeyrangecount" ref="struct___kinetic_proto___get_log___limits.html#a945fe99e1b4c76f2969d355076d5025e" />
+      <keyword name="maxkeyrangecount" id="_KineticProto_GetLog_Limits::maxkeyrangecount" ref="struct___kinetic_proto___get_log___limits.html#af43e170dcbc2453ffd8cf877cb358d11" />
+      <keyword name="_KineticProto_GetLog_Statistics" id="_KineticProto_GetLog_Statistics" ref="struct___kinetic_proto___get_log___statistics.html" />
+      <keyword name="base" id="_KineticProto_GetLog_Statistics::base" ref="struct___kinetic_proto___get_log___statistics.html#ade0303a9415747b2578fa8315a3839e7" />
+      <keyword name="has_messagetype" id="_KineticProto_GetLog_Statistics::has_messagetype" ref="struct___kinetic_proto___get_log___statistics.html#ab5a27418d4fddb48f618723b7266d727" />
+      <keyword name="messagetype" id="_KineticProto_GetLog_Statistics::messagetype" ref="struct___kinetic_proto___get_log___statistics.html#ad8493f7ee83cb03c885e469e4f6956c2" />
+      <keyword name="has_count" id="_KineticProto_GetLog_Statistics::has_count" ref="struct___kinetic_proto___get_log___statistics.html#ab77168cac75a45289dc186c290f570e6" />
+      <keyword name="count" id="_KineticProto_GetLog_Statistics::count" ref="struct___kinetic_proto___get_log___statistics.html#ae3ac50ddb3d2b6301add33fad7aefb30" />
+      <keyword name="has_bytes" id="_KineticProto_GetLog_Statistics::has_bytes" ref="struct___kinetic_proto___get_log___statistics.html#a1f8fb28d90bf5a33c1351c078bc4dc12" />
+      <keyword name="bytes" id="_KineticProto_GetLog_Statistics::bytes" ref="struct___kinetic_proto___get_log___statistics.html#af97c03df6b8cf61cb6834242393eb37f" />
+      <keyword name="_KineticProto_GetLog_Temperature" id="_KineticProto_GetLog_Temperature" ref="struct___kinetic_proto___get_log___temperature.html" />
+      <keyword name="base" id="_KineticProto_GetLog_Temperature::base" ref="struct___kinetic_proto___get_log___temperature.html#a36a9e32ecbaf9aceb26790414bc5304a" />
+      <keyword name="name" id="_KineticProto_GetLog_Temperature::name" ref="struct___kinetic_proto___get_log___temperature.html#ad926aefc3950cee0a65df78ea0c62259" />
+      <keyword name="has_current" id="_KineticProto_GetLog_Temperature::has_current" ref="struct___kinetic_proto___get_log___temperature.html#a9fb7eb5af813a0f77a1cd9e2a31816e6" />
+      <keyword name="current" id="_KineticProto_GetLog_Temperature::current" ref="struct___kinetic_proto___get_log___temperature.html#a39f48f29dd8c29b82a088b431bc66fb5" />
+      <keyword name="has_minimum" id="_KineticProto_GetLog_Temperature::has_minimum" ref="struct___kinetic_proto___get_log___temperature.html#ac25134b3527b6113a0a56c464da3835d" />
+      <keyword name="minimum" id="_KineticProto_GetLog_Temperature::minimum" ref="struct___kinetic_proto___get_log___temperature.html#ac6d16ade7b698e59c7fed447fc402ba7" />
+      <keyword name="has_maximum" id="_KineticProto_GetLog_Temperature::has_maximum" ref="struct___kinetic_proto___get_log___temperature.html#a0d2a1c0364ead36bd40ceae084cc0579" />
+      <keyword name="maximum" id="_KineticProto_GetLog_Temperature::maximum" ref="struct___kinetic_proto___get_log___temperature.html#a4c200d9aa7fd2200dc21929d8ddbd5cd" />
+      <keyword name="has_target" id="_KineticProto_GetLog_Temperature::has_target" ref="struct___kinetic_proto___get_log___temperature.html#a438203eb72c04c8c802c9d7e48742872" />
+      <keyword name="target" id="_KineticProto_GetLog_Temperature::target" ref="struct___kinetic_proto___get_log___temperature.html#a173d11b07f2d2caf0bddf7206366c66f" />
+      <keyword name="_KineticProto_GetLog_Utilization" id="_KineticProto_GetLog_Utilization" ref="struct___kinetic_proto___get_log___utilization.html" />
+      <keyword name="base" id="_KineticProto_GetLog_Utilization::base" ref="struct___kinetic_proto___get_log___utilization.html#a679a6c61c24e4c01a8c9ca430ae1c866" />
+      <keyword name="name" id="_KineticProto_GetLog_Utilization::name" ref="struct___kinetic_proto___get_log___utilization.html#a32af861c7e7a1860c83e9aed740fe25a" />
+      <keyword name="has_value" id="_KineticProto_GetLog_Utilization::has_value" ref="struct___kinetic_proto___get_log___utilization.html#a12093bd324167c0eccab4ee54b22555b" />
+      <keyword name="value" id="_KineticProto_GetLog_Utilization::value" ref="struct___kinetic_proto___get_log___utilization.html#a01400cc21401ba04711b89adebb6734a" />
+      <keyword name="_KineticProto_Header" id="_KineticProto_Header" ref="struct___kinetic_proto___header.html" />
+      <keyword name="base" id="_KineticProto_Header::base" ref="struct___kinetic_proto___header.html#afecf3723673b66a35fd33b01d34ec257" />
+      <keyword name="has_clusterversion" id="_KineticProto_Header::has_clusterversion" ref="struct___kinetic_proto___header.html#a3a860d5b4eb8ccf479125e0851d608e2" />
+      <keyword name="clusterversion" id="_KineticProto_Header::clusterversion" ref="struct___kinetic_proto___header.html#ae9eb0aff852520d663aa66797eddbb56" />
+      <keyword name="has_identity" id="_KineticProto_Header::has_identity" ref="struct___kinetic_proto___header.html#ab3e386e77e4b717aabb54a48eff11f4a" />
+      <keyword name="identity" id="_KineticProto_Header::identity" ref="struct___kinetic_proto___header.html#a3f0484c792262e175fe2dbe979f2d9c3" />
+      <keyword name="has_connectionid" id="_KineticProto_Header::has_connectionid" ref="struct___kinetic_proto___header.html#a774496bd3804f1e05949c106fc4630d8" />
+      <keyword name="connectionid" id="_KineticProto_Header::connectionid" ref="struct___kinetic_proto___header.html#a9b5cca40f8f2ff4f3ffb3e48d4eecf20" />
+      <keyword name="has_sequence" id="_KineticProto_Header::has_sequence" ref="struct___kinetic_proto___header.html#a657b2506c018537765c99496f2e51e5f" />
+      <keyword name="sequence" id="_KineticProto_Header::sequence" ref="struct___kinetic_proto___header.html#aba48c36634e0df8df1ee2bf002c616a2" />
+      <keyword name="has_acksequence" id="_KineticProto_Header::has_acksequence" ref="struct___kinetic_proto___header.html#a14dd48ae51d4aec460f1a1824aa5eb5e" />
+      <keyword name="acksequence" id="_KineticProto_Header::acksequence" ref="struct___kinetic_proto___header.html#a25626d7f0f78b628250a184bda1b9f1e" />
+      <keyword name="has_messagetype" id="_KineticProto_Header::has_messagetype" ref="struct___kinetic_proto___header.html#a587d9e388c0e2baddd29097ec33d28e5" />
+      <keyword name="messagetype" id="_KineticProto_Header::messagetype" ref="struct___kinetic_proto___header.html#ad4911faf858731be2e684c2358f8fca4" />
+      <keyword name="has_timeout" id="_KineticProto_Header::has_timeout" ref="struct___kinetic_proto___header.html#ae9584686354ce7a4be19e081dc8b78dd" />
+      <keyword name="timeout" id="_KineticProto_Header::timeout" ref="struct___kinetic_proto___header.html#a30bb53d62e190881da8843327f2ff920" />
+      <keyword name="has_earlyexit" id="_KineticProto_Header::has_earlyexit" ref="struct___kinetic_proto___header.html#afd82cd05c58257c3d65d77cd6161d0d4" />
+      <keyword name="earlyexit" id="_KineticProto_Header::earlyexit" ref="struct___kinetic_proto___header.html#af4aeb9479498d9fa0d55b73b42441434" />
+      <keyword name="has_backgroundscan" id="_KineticProto_Header::has_backgroundscan" ref="struct___kinetic_proto___header.html#ac85ad43e5ccba2228da83b2538e55aad" />
+      <keyword name="backgroundscan" id="_KineticProto_Header::backgroundscan" ref="struct___kinetic_proto___header.html#af0c234ac1907f4c45efe1cdfbc955e5f" />
+      <keyword name="_KineticProto_KeyValue" id="_KineticProto_KeyValue" ref="struct___kinetic_proto___key_value.html" />
+      <keyword name="base" id="_KineticProto_KeyValue::base" ref="struct___kinetic_proto___key_value.html#a1c4dc1c2adea39a1fcf60d5246c5e8c2" />
+      <keyword name="has_newversion" id="_KineticProto_KeyValue::has_newversion" ref="struct___kinetic_proto___key_value.html#abab819b70930bbf38aae67fe68078e5c" />
+      <keyword name="newversion" id="_KineticProto_KeyValue::newversion" ref="struct___kinetic_proto___key_value.html#a548db39bd6f8a8b2f1f1d709cefa61ad" />
+      <keyword name="has_force" id="_KineticProto_KeyValue::has_force" ref="struct___kinetic_proto___key_value.html#a0bf9b2e32e776a717a0f3c39d276326f" />
+      <keyword name="force" id="_KineticProto_KeyValue::force" ref="struct___kinetic_proto___key_value.html#af1ced1d2465cb03456045e044be89afd" />
+      <keyword name="has_key" id="_KineticProto_KeyValue::has_key" ref="struct___kinetic_proto___key_value.html#ab1a126fb9a09680611ff2ccc3e3f7cac" />
+      <keyword name="key" id="_KineticProto_KeyValue::key" ref="struct___kinetic_proto___key_value.html#a33b99c0b542633e93db0031c401de230" />
+      <keyword name="has_dbversion" id="_KineticProto_KeyValue::has_dbversion" ref="struct___kinetic_proto___key_value.html#a3532b299962cb707def081a3bfc6bde9" />
+      <keyword name="dbversion" id="_KineticProto_KeyValue::dbversion" ref="struct___kinetic_proto___key_value.html#a37b6ba29ee1e5519f708a07d3ec957ee" />
+      <keyword name="has_tag" id="_KineticProto_KeyValue::has_tag" ref="struct___kinetic_proto___key_value.html#a666eaacc9a833269fb2291287f29d736" />
+      <keyword name="tag" id="_KineticProto_KeyValue::tag" ref="struct___kinetic_proto___key_value.html#a48594aa949ed0719a0adb665b87d10db" />
+      <keyword name="has_algorithm" id="_KineticProto_KeyValue::has_algorithm" ref="struct___kinetic_proto___key_value.html#ab76aa6973c7385bc72b4e5e1c0690ef6" />
+      <keyword name="algorithm" id="_KineticProto_KeyValue::algorithm" ref="struct___kinetic_proto___key_value.html#a9ac4170787dc360925793dbd2e5860b5" />
+      <keyword name="has_metadataonly" id="_KineticProto_KeyValue::has_metadataonly" ref="struct___kinetic_proto___key_value.html#a72a6383d1477a8751211e9ea2a3b4022" />
+      <keyword name="metadataonly" id="_KineticProto_KeyValue::metadataonly" ref="struct___kinetic_proto___key_value.html#a37d35d318333c905548b0d7219d86d67" />
+      <keyword name="has_synchronization" id="_KineticProto_KeyValue::has_synchronization" ref="struct___kinetic_proto___key_value.html#acf7b4f500c06a951d5ed69de620f4c10" />
+      <keyword name="synchronization" id="_KineticProto_KeyValue::synchronization" ref="struct___kinetic_proto___key_value.html#a077fd8fc49e02c072fd7f977cd82f71c" />
+      <keyword name="_KineticProto_P2POperation" id="_KineticProto_P2POperation" ref="struct___kinetic_proto___p2_p_operation.html" />
+      <keyword name="base" id="_KineticProto_P2POperation::base" ref="struct___kinetic_proto___p2_p_operation.html#adf077cc685efc1c6ae0952c834eb4ff9" />
+      <keyword name="peer" id="_KineticProto_P2POperation::peer" ref="struct___kinetic_proto___p2_p_operation.html#ac0cfa5fec5eff253bb4e9096726d8c63" />
+      <keyword name="n_operation" id="_KineticProto_P2POperation::n_operation" ref="struct___kinetic_proto___p2_p_operation.html#a998f37874ae4218d236a0404e6de863d" />
+      <keyword name="operation" id="_KineticProto_P2POperation::operation" ref="struct___kinetic_proto___p2_p_operation.html#ad03bf449ba04e765c85bff371cdf3ebf" />
+      <keyword name="has_allchildoperationssucceeded" id="_KineticProto_P2POperation::has_allchildoperationssucceeded" ref="struct___kinetic_proto___p2_p_operation.html#a78f0e640298bfabe40e75d6924ddfdcf" />
+      <keyword name="allchildoperationssucceeded" id="_KineticProto_P2POperation::allchildoperationssucceeded" ref="struct___kinetic_proto___p2_p_operation.html#a736d04c33d26695cdb1a7962cbaa58d6" />
+      <keyword name="_KineticProto_P2POperation_Operation" id="_KineticProto_P2POperation_Operation" ref="struct___kinetic_proto___p2_p_operation___operation.html" />
+      <keyword name="base" id="_KineticProto_P2POperation_Operation::base" ref="struct___kinetic_proto___p2_p_operation___operation.html#af7bdcdb068a8e2eebdf65d4d8fcf75d9" />
+      <keyword name="has_key" id="_KineticProto_P2POperation_Operation::has_key" ref="struct___kinetic_proto___p2_p_operation___operation.html#a516faa657a2b6beb0b12bc9d910d96b4" />
+      <keyword name="key" id="_KineticProto_P2POperation_Operation::key" ref="struct___kinetic_proto___p2_p_operation___operation.html#a5e504d751374f4ceb3eb5deae73b3c82" />
+      <keyword name="has_version" id="_KineticProto_P2POperation_Operation::has_version" ref="struct___kinetic_proto___p2_p_operation___operation.html#a326694d9d1d09abcfeeb8745dc49000a" />
+      <keyword name="version" id="_KineticProto_P2POperation_Operation::version" ref="struct___kinetic_proto___p2_p_operation___operation.html#a7898ec087bbca94ae43a5e91e8479e17" />
+      <keyword name="has_newkey" id="_KineticProto_P2POperation_Operation::has_newkey" ref="struct___kinetic_proto___p2_p_operation___operation.html#ab9315b4434ffd5d310c3069c7da3bf4f" />
+      <keyword name="newkey" id="_KineticProto_P2POperation_Operation::newkey" ref="struct___kinetic_proto___p2_p_operation___operation.html#ab19934c7745082c8f2e8125dde7f62cf" />
+      <keyword name="has_force" id="_KineticProto_P2POperation_Operation::has_force" ref="struct___kinetic_proto___p2_p_operation___operation.html#aee1131b7ff5ed3808c0d645feef5b1ba" />
+      <keyword name="force" id="_KineticProto_P2POperation_Operation::force" ref="struct___kinetic_proto___p2_p_operation___operation.html#a1636f76e03b9e31f0352ba9cdba1188a" />
+      <keyword name="status" id="_KineticProto_P2POperation_Operation::status" ref="struct___kinetic_proto___p2_p_operation___operation.html#a3d0ca6744caafe23a35f167d56bea7ad" />
+      <keyword name="p2pop" id="_KineticProto_P2POperation_Operation::p2pop" ref="struct___kinetic_proto___p2_p_operation___operation.html#a82c8579070d949c02261270cc40c73a7" />
+      <keyword name="_KineticProto_P2POperation_Peer" id="_KineticProto_P2POperation_Peer" ref="struct___kinetic_proto___p2_p_operation___peer.html" />
+      <keyword name="base" id="_KineticProto_P2POperation_Peer::base" ref="struct___kinetic_proto___p2_p_operation___peer.html#a822e812ff1516c7c7bc18d7c04054506" />
+      <keyword name="hostname" id="_KineticProto_P2POperation_Peer::hostname" ref="struct___kinetic_proto___p2_p_operation___peer.html#a26a8e1e56c2cb7181ee89da9f2bbd447" />
+      <keyword name="has_port" id="_KineticProto_P2POperation_Peer::has_port" ref="struct___kinetic_proto___p2_p_operation___peer.html#ad28592a8475824548f4344ca1553131b" />
+      <keyword name="port" id="_KineticProto_P2POperation_Peer::port" ref="struct___kinetic_proto___p2_p_operation___peer.html#a94ef8c6c8caa35f68bcfe75e0d86d619" />
+      <keyword name="has_tls" id="_KineticProto_P2POperation_Peer::has_tls" ref="struct___kinetic_proto___p2_p_operation___peer.html#ab80eb4a88d3f99f5052283d57f695cc4" />
+      <keyword name="tls" id="_KineticProto_P2POperation_Peer::tls" ref="struct___kinetic_proto___p2_p_operation___peer.html#abf8ad347cd98aa4680f57cde73f529d5" />
+      <keyword name="_KineticProto_Range" id="_KineticProto_Range" ref="struct___kinetic_proto___range.html" />
+      <keyword name="base" id="_KineticProto_Range::base" ref="struct___kinetic_proto___range.html#af997bb765fccfb98afe96be3ecfa8413" />
+      <keyword name="has_startkey" id="_KineticProto_Range::has_startkey" ref="struct___kinetic_proto___range.html#abfe1dc940b8abd8d4dd4284eb309919d" />
+      <keyword name="startkey" id="_KineticProto_Range::startkey" ref="struct___kinetic_proto___range.html#ae26b0242bde2eed638d02494f27f6d71" />
+      <keyword name="has_endkey" id="_KineticProto_Range::has_endkey" ref="struct___kinetic_proto___range.html#acaadb6cc9b6706b6b1c1c24687505232" />
+      <keyword name="endkey" id="_KineticProto_Range::endkey" ref="struct___kinetic_proto___range.html#a3f22bebadc5cf5890ac7575b5b7f6861" />
+      <keyword name="has_startkeyinclusive" id="_KineticProto_Range::has_startkeyinclusive" ref="struct___kinetic_proto___range.html#a0a29dadbd59230c2f685a4efc848550b" />
+      <keyword name="startkeyinclusive" id="_KineticProto_Range::startkeyinclusive" ref="struct___kinetic_proto___range.html#a185cbe7e48e4dc71b3ceed5f3b9f8b30" />
+      <keyword name="has_endkeyinclusive" id="_KineticProto_Range::has_endkeyinclusive" ref="struct___kinetic_proto___range.html#a1d3c469ad5d6fc0fa4c5a97e84d2c53c" />
+      <keyword name="endkeyinclusive" id="_KineticProto_Range::endkeyinclusive" ref="struct___kinetic_proto___range.html#a5bcdc5339fa20be75d1ac12034d89c05" />
+      <keyword name="has_maxreturned" id="_KineticProto_Range::has_maxreturned" ref="struct___kinetic_proto___range.html#aa46c5fe918daeb66f317f36cd3679189" />
+      <keyword name="maxreturned" id="_KineticProto_Range::maxreturned" ref="struct___kinetic_proto___range.html#ac77a85cce4927f2c1c5c69851833f617" />
+      <keyword name="has_reverse" id="_KineticProto_Range::has_reverse" ref="struct___kinetic_proto___range.html#ada176d195fef471835f8f79b4dec855c" />
+      <keyword name="reverse" id="_KineticProto_Range::reverse" ref="struct___kinetic_proto___range.html#ab4af51f6463334f6f99f5cc080ada672" />
+      <keyword name="n_key" id="_KineticProto_Range::n_key" ref="struct___kinetic_proto___range.html#acfacddfb575e2fd21596334b44c1b4d2" />
+      <keyword name="key" id="_KineticProto_Range::key" ref="struct___kinetic_proto___range.html#a1dba427cfe657e9b520fb5dc80d0136a" />
+      <keyword name="_KineticProto_Security" id="_KineticProto_Security" ref="struct___kinetic_proto___security.html" />
+      <keyword name="base" id="_KineticProto_Security::base" ref="struct___kinetic_proto___security.html#a76b76f2a6e9913ea6797c4445feca5f6" />
+      <keyword name="n_acl" id="_KineticProto_Security::n_acl" ref="struct___kinetic_proto___security.html#a718e85e606d6e0e89591dbc843a85d97" />
+      <keyword name="acl" id="_KineticProto_Security::acl" ref="struct___kinetic_proto___security.html#a856d296ff070c812c513361e7cabc3ec" />
+      <keyword name="_KineticProto_Security_ACL" id="_KineticProto_Security_ACL" ref="struct___kinetic_proto___security___a_c_l.html" />
+      <keyword name="base" id="_KineticProto_Security_ACL::base" ref="struct___kinetic_proto___security___a_c_l.html#a0eda056b82d37f56b847b4fadcdf2d38" />
+      <keyword name="has_identity" id="_KineticProto_Security_ACL::has_identity" ref="struct___kinetic_proto___security___a_c_l.html#a0b132ceff5d4b597b05082c501dc1fa0" />
+      <keyword name="identity" id="_KineticProto_Security_ACL::identity" ref="struct___kinetic_proto___security___a_c_l.html#a74296111e8e574ed062a76e8a47358d4" />
+      <keyword name="has_key" id="_KineticProto_Security_ACL::has_key" ref="struct___kinetic_proto___security___a_c_l.html#a7ae806175fb9dc01c039acf3266464d1" />
+      <keyword name="key" id="_KineticProto_Security_ACL::key" ref="struct___kinetic_proto___security___a_c_l.html#a1f08374b25e2e60de26b26b498bfde63" />
+      <keyword name="has_hmacalgorithm" id="_KineticProto_Security_ACL::has_hmacalgorithm" ref="struct___kinetic_proto___security___a_c_l.html#a235872af83370039c15255449be37a8b" />
+      <keyword name="hmacalgorithm" id="_KineticProto_Security_ACL::hmacalgorithm" ref="struct___kinetic_proto___security___a_c_l.html#abbc27fc389f2c3cdf1ca777a051a62c8" />
+      <keyword name="n_scope" id="_KineticProto_Security_ACL::n_scope" ref="struct___kinetic_proto___security___a_c_l.html#adc12cf2a6be8d7fa9113e86f050e61a1" />
+      <keyword name="scope" id="_KineticProto_Security_ACL::scope" ref="struct___kinetic_proto___security___a_c_l.html#a8f3ceafeb61035a115e2466faf6a45eb" />
+      <keyword name="_KineticProto_Security_ACL_Scope" id="_KineticProto_Security_ACL_Scope" ref="struct___kinetic_proto___security___a_c_l___scope.html" />
+      <keyword name="base" id="_KineticProto_Security_ACL_Scope::base" ref="struct___kinetic_proto___security___a_c_l___scope.html#a1028ca1f4742f8ccbcce75cc89779e18" />
+      <keyword name="has_offset" id="_KineticProto_Security_ACL_Scope::has_offset" ref="struct___kinetic_proto___security___a_c_l___scope.html#aa24d3b4a97ade79074f3b5a8726324b4" />
+      <keyword name="offset" id="_KineticProto_Security_ACL_Scope::offset" ref="struct___kinetic_proto___security___a_c_l___scope.html#a934b2b373426d04fdb4ee552ea6bb5b8" />
+      <keyword name="has_value" id="_KineticProto_Security_ACL_Scope::has_value" ref="struct___kinetic_proto___security___a_c_l___scope.html#a0691fc5a0397282602b83c7cd208b5e3" />
+      <keyword name="value" id="_KineticProto_Security_ACL_Scope::value" ref="struct___kinetic_proto___security___a_c_l___scope.html#a0f4b4bb25cc568c92e09a018a6ce5aa0" />
+      <keyword name="n_permission" id="_KineticProto_Security_ACL_Scope::n_permission" ref="struct___kinetic_proto___security___a_c_l___scope.html#a5a6cf7eb44595cca0ebd0887c3cb8ea0" />
+      <keyword name="permission" id="_KineticProto_Security_ACL_Scope::permission" ref="struct___kinetic_proto___security___a_c_l___scope.html#ac755521a99b20a0062fbaacc86a6711a" />
+      <keyword name="has_tlsrequired" id="_KineticProto_Security_ACL_Scope::has_tlsrequired" ref="struct___kinetic_proto___security___a_c_l___scope.html#a1536d6cfafb38b324a83668460f95f1e" />
+      <keyword name="tlsrequired" id="_KineticProto_Security_ACL_Scope::tlsrequired" ref="struct___kinetic_proto___security___a_c_l___scope.html#a7455f50567bff6fad6bfe59db6b225f7" />
+      <keyword name="_KineticProto_Setup" id="_KineticProto_Setup" ref="struct___kinetic_proto___setup.html" />
+      <keyword name="base" id="_KineticProto_Setup::base" ref="struct___kinetic_proto___setup.html#af88e4acc9c9fd18803d66bbec1611291" />
+      <keyword name="has_newclusterversion" id="_KineticProto_Setup::has_newclusterversion" ref="struct___kinetic_proto___setup.html#ab1f23984d930959cc6170f093fd4ed1c" />
+      <keyword name="newclusterversion" id="_KineticProto_Setup::newclusterversion" ref="struct___kinetic_proto___setup.html#a9b85f350eedfbf3a8d19d278b4cc2a71" />
+      <keyword name="has_instantsecureerase" id="_KineticProto_Setup::has_instantsecureerase" ref="struct___kinetic_proto___setup.html#a29edb8bdfd31463e13d3d917aa26939b" />
+      <keyword name="instantsecureerase" id="_KineticProto_Setup::instantsecureerase" ref="struct___kinetic_proto___setup.html#a95d9864d50a6ac14390aa77d2f362a0c" />
+      <keyword name="has_setpin" id="_KineticProto_Setup::has_setpin" ref="struct___kinetic_proto___setup.html#aca551e9088ba2635797ec41d45643e30" />
+      <keyword name="setpin" id="_KineticProto_Setup::setpin" ref="struct___kinetic_proto___setup.html#a4a66c2d4fcbe61b59da969fc08a5a536" />
+      <keyword name="has_pin" id="_KineticProto_Setup::has_pin" ref="struct___kinetic_proto___setup.html#a49f27342d34a7807ef08d62f54b7b287" />
+      <keyword name="pin" id="_KineticProto_Setup::pin" ref="struct___kinetic_proto___setup.html#aa624effcd555cd05fc72c518d20a4eb5" />
+      <keyword name="has_firmwaredownload" id="_KineticProto_Setup::has_firmwaredownload" ref="struct___kinetic_proto___setup.html#a8883ff5d6489f6c43720d4b2945653a0" />
+      <keyword name="firmwaredownload" id="_KineticProto_Setup::firmwaredownload" ref="struct___kinetic_proto___setup.html#ae5fc15ea0700073eb7791e076bf95898" />
+      <keyword name="_KineticProto_Status" id="_KineticProto_Status" ref="struct___kinetic_proto___status.html" />
+      <keyword name="base" id="_KineticProto_Status::base" ref="struct___kinetic_proto___status.html#ac76b15c161f2321fe901d8c74b95522f" />
+      <keyword name="has_code" id="_KineticProto_Status::has_code" ref="struct___kinetic_proto___status.html#af92da504c7ffc48277eb76bfd27348f6" />
+      <keyword name="code" id="_KineticProto_Status::code" ref="struct___kinetic_proto___status.html#af86a0bbfa6f31ad965a17d54b147548e" />
+      <keyword name="statusmessage" id="_KineticProto_Status::statusmessage" ref="struct___kinetic_proto___status.html#ac301361593f5eeaa6dcf39529368c94e" />
+      <keyword name="has_detailedmessage" id="_KineticProto_Status::has_detailedmessage" ref="struct___kinetic_proto___status.html#a1c8133a7a533c61246fe5ef949db555b" />
+      <keyword name="detailedmessage" id="_KineticProto_Status::detailedmessage" ref="struct___kinetic_proto___status.html#af1c5b05f6e5abeffab423c62b0522e3b" />
+    </keywords>
+    <files>
+      <file>tabs.css</file>
+      <file>tab_a.png</file>
+      <file>tab_b.png</file>
+      <file>tab_h.png</file>
+      <file>tab_s.png</file>
+      <file>nav_h.png</file>
+      <file>nav_f.png</file>
+      <file>bc_s.png</file>
+      <file>doxygen.png</file>
+      <file>closed.png</file>
+      <file>open.png</file>
+      <file>bdwn.png</file>
+      <file>sync_on.png</file>
+      <file>sync_off.png</file>
+      <file>seagate-logo-w-title-sm.png</file>
+      <file>ftv2blank.png</file>
+      <file>ftv2doc.png</file>
+      <file>ftv2folderclosed.png</file>
+      <file>ftv2folderopen.png</file>
+      <file>ftv2ns.png</file>
+      <file>ftv2mo.png</file>
+      <file>ftv2cl.png</file>
+      <file>ftv2lastnode.png</file>
+      <file>ftv2link.png</file>
+      <file>ftv2mlastnode.png</file>
+      <file>ftv2mnode.png</file>
+      <file>ftv2node.png</file>
+      <file>ftv2plastnode.png</file>
+      <file>ftv2pnode.png</file>
+      <file>ftv2vertline.png</file>
+      <file>ftv2splitbar.png</file>
+      <file>doxygen.css</file>
+      <file>kinetic_8h_source.html</file>
+      <file>_kinetic_api_8c_source.html</file>
+      <file>_kinetic_api_8h_source.html</file>
+      <file>_kinetic_connection_8c_source.html</file>
+      <file>_kinetic_connection_8h_source.html</file>
+      <file>_kinetic_exchange_8c_source.html</file>
+      <file>_kinetic_exchange_8h_source.html</file>
+      <file>_kinetic_logger_8c_source.html</file>
+      <file>_kinetic_logger_8h_source.html</file>
+      <file>_kinetic_message_8c_source.html</file>
+      <file>_kinetic_message_8h_source.html</file>
+      <file>_kinetic_p_d_u_8c_source.html</file>
+      <file>_kinetic_p_d_u_8h_source.html</file>
+      <file>_kinetic_proto_8c_source.html</file>
+      <file>_kinetic_proto_8h_source.html</file>
+      <file>_kinetic_socket_8c_source.html</file>
+      <file>_kinetic_socket_8h_source.html</file>
+      <file>_kinetic_types_8h_source.html</file>
+      <file>main_8c_source.html</file>
+      <file>struct___kinetic_proto.html</file>
+      <file>struct_kinetic_connection.html</file>
+      <file>struct_kinetic_exchange.html</file>
+      <file>struct_kinetic_message.html</file>
+      <file>struct_kinetic_p_d_u.html</file>
+      <file>struct___kinetic_proto___body.html</file>
+      <file>struct___kinetic_proto___command.html</file>
+      <file>struct___kinetic_proto___get_log.html</file>
+      <file>struct___kinetic_proto___get_log___capacity.html</file>
+      <file>struct___kinetic_proto___get_log___configuration.html</file>
+      <file>struct___kinetic_proto___get_log___configuration___interface.html</file>
+      <file>struct___kinetic_proto___get_log___limits.html</file>
+      <file>struct___kinetic_proto___get_log___statistics.html</file>
+      <file>struct___kinetic_proto___get_log___temperature.html</file>
+      <file>struct___kinetic_proto___get_log___utilization.html</file>
+      <file>struct___kinetic_proto___header.html</file>
+      <file>struct___kinetic_proto___key_value.html</file>
+      <file>struct___kinetic_proto___p2_p_operation.html</file>
+      <file>struct___kinetic_proto___p2_p_operation___operation.html</file>
+      <file>struct___kinetic_proto___p2_p_operation___peer.html</file>
+      <file>struct___kinetic_proto___range.html</file>
+      <file>struct___kinetic_proto___security.html</file>
+      <file>struct___kinetic_proto___security___a_c_l.html</file>
+      <file>struct___kinetic_proto___security___a_c_l___scope.html</file>
+      <file>struct___kinetic_proto___setup.html</file>
+      <file>struct___kinetic_proto___status.html</file>
+      <file>dir_d44c64559bbebec7f509842c48db8b23.html</file>
+      <file>dir_c2b4164bda3b5d5cb3cde3da6b43be80.html</file>
+      <file>dir_c85d3e3c5052e9ad9ce18c6863244a25.html</file>
+      <file>dir_68267d1309a1af8e8297ef4c3efbcdba.html</file>
+      <file>dir_0619a8f54b4fad7043a6de45be8fde0b.html</file>
+      <file>index.html</file>
+      <file>annotated.html</file>
+      <file>classes.html</file>
+      <file>files.html</file>
+    </files>
+  </filterSection>
+</QtHelpProject>

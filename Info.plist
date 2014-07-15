@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+     <key>CFBundleName</key>
+     <string>protobuf-c</string>
+     <key>CFBundleIdentifier</key>
+     <string>com.seagate.kinetic-c</string>
+     <key>CFBundleVersion</key>
+     <string>v0.3.1-beta</string>
+     <key>DocSetFeedName</key>
+     <string>Seagate Kinetic Docs</string>
+     <key>DocSetPublisherIdentifier</key>
+     <string>com.seagate</string>
+     <key>DocSetPublisherName</key>
+     <string>Seagate</string>
+     <key>DashDocSetFamily</key>
+     <string>doxy</string>
+     <key>DocSetPlatformFamily</key>
+     <string>doxygen</string>
+</dict>
+</plist>

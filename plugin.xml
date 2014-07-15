@@ -1,0 +1,6 @@
+<plugin name="com.seagate.kinetic-c" id="com.seagate.kinetic-c"
+        version="1.0.0" provider-name="Doxygen">
+  <extension point="org.eclipse.help.toc">
+    <toc file="toc.xml" primary="true" />
+  </extension>
+</plugin>
