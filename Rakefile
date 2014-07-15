@@ -200,9 +200,14 @@ task :all => [
   'run'
 ]
 
+task :verbose do
+  Rake::Task[:verbosity].invoke(4) # Set verbosity to 4-obnoxious for debugging
+end
+
 desc "Run full CI build"
 task :ci => [
   'clobber',
+  'verbose',
   'all'
 ]
 
