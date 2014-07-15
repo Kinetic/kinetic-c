@@ -207,7 +207,7 @@ end
 desc "Run full CI build"
 task :ci => [
   'clobber',
-  'verbose',
+  # 'verbose', # uncomment to enable verbose output for CI builds
   'all'
 ]
 

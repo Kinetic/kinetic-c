@@ -26,11 +26,17 @@
   :test:
     - +:test/**
     - -:test/support
-  :source:
-    - src/**
     - include/**
+    - src/**
   :support:
-    - test/support
+    - test/support/**
+  :source:
+    - src/lib/*
+    - src/utility/*
+    - vendor/protobuf-c/protobuf-c/*
+  # Refactor release build once the Kinetic-C library is built, and link to it sepearately
+  :release_toolchain_include:
+    - include/**
 
 :defines:
   # in order to add common defines:

@@ -21,9 +21,10 @@
 #ifndef KINETIC_C_CLIENT_KINETIC_H_
 #define KINETIC_C_CLIENT_KINETIC_H_
 
-#include "KineticTypes.h"
-#include "KineticAPI.h"
-#include "KineticProto.h"
-#include "KineticConnection.h"
+#include "../../src/lib/KineticTypes.h"
+#include "../../src/lib/KineticApi.h"
+#include "../../src/lib/KineticProto.h"
+#include "../../src/lib/KineticConnection.h"
+#include "../../src/vendor/protobuf-c/protobuf-c.h"
 
 #endif /* KINETIC_C_CLIENT_KINETIC_H_ */
