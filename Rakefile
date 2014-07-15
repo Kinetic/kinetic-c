@@ -91,7 +91,8 @@ namespace :doxygen do
   task :gen => [DOCS_PATH] do
     # Update API version in doxygen config
     doxyfile = "config/Doxyfile"
-    content = File.read(doxyfile).sub(/^PROJECT_NUMBER +=.*$/, "PROJECT_NUMBER = \"v#{VERSION}\"")
+    content = File.read(doxyfile)
+    content.sub!(/^PROJECT_NUMBER +=.*$/, "PROJECT_NUMBER           = \"v#{VERSION}\"")
     File.open(doxyfile, 'w').puts content
 
     # Generate the Doxygen API docs

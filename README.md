@@ -1,17 +1,21 @@
-<div style="float: right"><a href="https://travis-ci.org/atomicobject/kinetic-c"><img src="https://travis-ci.org/atomicobject/kinetic-c.png?branch=master" /></a></div>
-Introduction
-============
+Kinetic-C Client Library
+========================
+![](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)
+
 This repo contains code for producing C Kinetic clients which use the Seagate Kinetic protocol. Code examples/utilities that use the Kinetic C library are included for reference and usage during development.
+
+[Kinetic-C build status](http://travis-ci.org/atomicobject/kinetic-c) is provided via [Travis CI](http://travis-ci.org)
 
 Getting Started
 ================
+
     > git clone --recursive https://github.com/atomicobject/kinetic-c.git
 
     > cd kinetic-c
     > bundle install # Ensures you have all RubyGems needed
-    > bundle execute rake #run all tests and build kinetic-c library and examples
+    > bundle execute rake # Run all tests and build kinetic-c library and examples
 
-API Docuemntation
+API Documentation
 =================
 [Kinetic-C API](http://atomicobject.github.io/kinetic-c/) (generated with Doxygen)
 
