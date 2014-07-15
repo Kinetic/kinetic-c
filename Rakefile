@@ -200,6 +200,13 @@ task :all => [
   'run'
 ]
 
+desc "Prepend license to source files"
+task :apply_license do
+  Dir['include/**/*.h', 'src/**/*.h', 'src/**/*.c', 'test/**/*.h', 'test/**/*.c'].each do |f|
+    sh "config/apply_license.sh #{f}"
+  end
+end
+
 task :verbose do
   Rake::Task[:verbosity].invoke(4) # Set verbosity to 4-obnoxious for debugging
 end

@@ -39,6 +39,8 @@ Common Developer Tasks
 
 NOTE: Prefix the following commands with `bundle exec` so that they execute in the context of the bundle environment setup via `bundle install`.
 
+* List available Rake tasks w/descriptions
+    * `rake -T`
 * Run all tests and build the library and examples
     * `rake`
 * Build the library
@@ -48,11 +50,13 @@ NOTE: Prefix the following commands with `bundle exec` so that they execute in t
 * Analyze code
     * `rake cppcheck`
 * Generate documentation
-    * TBD
-* Apply licenses
-    * `./config/apply_license.sh my_new_file.cc` or `./config/apply_license.sh src/lib/*.h`
+    * `rake doxygen:gen`
+* Apply license to source files (skips already licensed files)
+    * `rake apply_license`
 * Build/install Google Protocol Buffers support for the Kinetic-Protocol
     * `rake proto`
+* Enable verbose output (for current Rake run)
+    * `rake verbose *<task_A>* *<task_B>*`
 
 Examples
 ========
