@@ -18,7 +18,7 @@
  *
  */
 
-#include "KineticExchange.h"
+#include "kinetic_exchange.h"
 #include <string.h>
 
 void KineticExchange_Init(

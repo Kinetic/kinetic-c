@@ -18,31 +18,20 @@
  *
  */
 
-#ifndef _KINETIC_PDU_H
-#define _KINETIC_PDU_H
+#ifndef _KINETIC_API_H
+#define _KINETIC_API_H
 
-#include "KineticProto.h"
+#include "kinetic_types.h"
+#include "kinetic_proto.h"
+#include "kinetic_connection.h"
+#include "kinetic_exchange.h"
+#include "kinetic_message.h"
 
-#define PDU_HEADER_LEN      (1 + (2 * sizeof(int64_t)))
-#define PDU_PROTO_MAX_LEN   (1024 * 1024)
-#define PDU_VALUE_MAX_LEN   (1024 * 1024)
-#define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
+void KineticApi_Init(const char* log_file);
+const KineticConnection KineticApi_Connect(const char* host, int port, bool blocking);
+KineticProto_Status_StatusCode KineticApi_SendNoop(
+    KineticConnection* const connection,
+    KineticMessage* const request,
+    KineticMessage* const response);
 
-typedef struct _KineticPDU
-{
-    uint8_t* prefix;
-    uint8_t* protoLength;
-    uint8_t* valueLength;
-    uint8_t* proto;
-    uint8_t* value;
-    uint8_t* data;
-} KineticPDU;
-
-void KineticPDU_Create(
-    KineticPDU* const pdu,
-    uint8_t* const buffer,
-    const KineticProto* const proto,
-    const uint8_t* const value,
-    const int64_t valueLength);
-
-#endif // _KINETIC_PDU_H
+#endif // _KINETIC_API_H

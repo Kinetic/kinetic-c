@@ -21,9 +21,9 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include <protobuf-c/protobuf-c.h>
-#include "KineticPDU.h"
-#include "KineticExchange.h"
-#include "KineticProto.h"
+#include "kinetic_pdu.h"
+#include "kinetic_exchange.h"
+#include "kinetic_proto.h"
 #include <string.h>
 
 KineticProto Proto;

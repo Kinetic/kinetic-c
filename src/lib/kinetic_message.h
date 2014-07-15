@@ -18,12 +18,30 @@
  *
  */
 
-#ifndef _KINETIC_SOCKET_H
-#define _KINETIC_SOCKET_H
+#ifndef _KINETIC_MESSAGE_H
+#define _KINETIC_MESSAGE_H
 
-#include "KineticTypes.h"
+#include "kinetic_types.h"
+#include "kinetic_proto.h"
+#include "kinetic_exchange.h"
 
-int KineticSocket_Connect(const char* host, int port, bool blocking);
-void KineticSocket_Close(int socket_descriptor);
+typedef struct _KineticMessage
+{
+    // Kinetic Protocol Buffer Elements
+    KineticProto            proto;
+    KineticProto_Command    command;
+    KineticProto_Header     header;
+    KineticProto_Body       body;
+    KineticProto_Status     status;
 
-#endif // _KINETIC_SOCKET_H
+    // Other pertinent data members
+    KineticExchange*        exchange;
+} KineticMessage;
+
+void KineticMessage_Init(
+    KineticMessage* const message,
+    KineticExchange* const exchange);
+void KineticMessage_BuildNoop(
+    KineticMessage* const message);
+
+#endif // _KINETIC_MESSAGE_H

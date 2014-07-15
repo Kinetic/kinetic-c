@@ -18,7 +18,7 @@
  *
  */
 
-#include "KineticPDU.h"
+#include "kinetic_pdu.h"
 #include <string.h>
 #include <arpa/inet.h>
 #include <stdio.h>

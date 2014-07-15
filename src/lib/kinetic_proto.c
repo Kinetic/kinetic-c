@@ -29,7 +29,7 @@
 #define PROTOBUF_C__NO_DEPRECATED
 #endif
 
-#include "KineticProto.h"
+#include "kinetic_proto.h"
 
 
 void KineticProto_command_init(KineticProto_Command* message)

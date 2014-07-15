@@ -18,16 +18,16 @@
  *
  */
 
-#include "KineticApi.h"
+#include "kinetic_api.h"
 #include "unity.h"
 #include "unity_helper.h"
 #include <stdio.h>
 #include <protobuf-c/protobuf-c.h>
-#include "KineticProto.h"
-#include "mock_KineticMessage.h"
-#include "mock_KineticLogger.h"
-#include "mock_KineticConnection.h"
-#include "mock_KineticExchange.h"
+#include "kinetic_proto.h"
+#include "mock_kinetic_message.h"
+#include "mock_kinetic_logger.h"
+#include "mock_kinetic_connection.h"
+#include "mock_kinetic_exchange.h"
 
 void setUp(void)
 {

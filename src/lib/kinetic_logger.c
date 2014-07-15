@@ -18,30 +18,39 @@
  *
  */
 
-#include "KineticSocket.h"
-#include "KineticLogger.h"
-#include "unity.h"
+#include "kinetic_logger.h"
+#include "kinetic_types.h"
+#include <stdio.h>
 #include <string.h>
 
-void setUp(void)
+static char LogFile[256] = "";
+bool LogToStdErr = true;
+
+void KineticLogger_Init(const char* log_file)
 {
-    KineticLogger_Init(KINETIC_LOG_FILE);
+    if (log_file == NULL)
+    {
+        LogToStdErr = true;
+    }
+    else
+    {
+        FILE* fd;
+        strcpy(LogFile, log_file);
+        fd = fopen(LogFile, "w");
+        fclose(fd);
+    }
 }
 
-void tearDown(void)
+void KineticLogger_Log(const char* message)
 {
-}
-
-void test_KineticSocket_KINETIC_PORT_should_be_8213(void)
-{
-    TEST_ASSERT_EQUAL(8213, KINETIC_PORT);
-}
-
-void test_KineticSocket_Connect_should_create_a_socket_connection(void)
-{
-    int fd = KineticSocket_Connect("localhost", 8999, true);
-
-    TEST_ASSERT_MESSAGE(fd >= 0, "File descriptor invalid");
-
-    KineticSocket_Close(fd);
+    if (LogToStdErr)
+    {
+        fprintf(stderr, "%s\n", message);
+    }
+    else if (LogFile != NULL)
+    {
+        FILE* fd = fopen(LogFile, "a");
+        fprintf(fd, "%s\n", message);
+        fclose(fd);
+    }
 }

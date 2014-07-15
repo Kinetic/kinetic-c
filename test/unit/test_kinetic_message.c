@@ -19,11 +19,11 @@
  */
 
 #include "unity.h"
-#include "KineticTypes.h"
+#include "kinetic_types.h"
 #include <protobuf-c/protobuf-c.h>
-#include "mock_KineticExchange.h"
-#include "KineticProto.h"
-#include "KineticMessage.h"
+#include "mock_kinetic_Exchange.h"
+#include "kinetic_proto.h"
+#include "kinetic_message.h"
 
 void setUp(void)
 {

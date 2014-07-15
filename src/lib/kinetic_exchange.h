@@ -21,8 +21,8 @@
 #ifndef _KINETIC_EXCHANGE_H
 #define _KINETIC_EXCHANGE_H
 
-#include "KineticTypes.h"
-#include "KineticProto.h"
+#include "kinetic_types.h"
+#include "kinetic_proto.h"
 
 typedef struct _KineticExchange
 {

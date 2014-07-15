@@ -18,8 +18,8 @@
  *
  */
 
-#include "KineticApi.h"
-#include "KineticLogger.h"
+#include "kinetic_api.h"
+#include "kinetic_logger.h"
 #include <stdio.h>
 
 void KineticApi_Init(const char* log_file)

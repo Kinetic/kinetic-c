@@ -19,8 +19,8 @@
  */
 
 #include "unity.h"
-#include "KineticExchange.h"
-#include "KineticProto.h"
+#include "kinetic_exchange.h"
+#include "kinetic_proto.h"
 #include <protobuf-c/protobuf-c.h>
 
 static KineticConnection Connection;

@@ -18,9 +18,9 @@
  *
  */
 
-#include "KineticConnection.h"
+#include "kinetic_connection.h"
 #include "unity.h"
-#include "mock_KineticSocket.h"
+#include "mock_kinetic_socket.h"
 #include <string.h>
 
 static KineticConnection Connection, Expected;

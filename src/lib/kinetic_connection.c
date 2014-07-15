@@ -18,8 +18,8 @@
  *
  */
 
-#include "KineticConnection.h"
-#include "KineticSocket.h"
+#include "kinetic_connection.h"
+#include "kinetic_socket.h"
 #include <string.h>
 
 KineticConnection KineticConnection_Create(void)

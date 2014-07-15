@@ -26,7 +26,7 @@
 #include <stdbool.h>
 #endif
 
-#include "KineticProto.h"
+#include "kinetic_proto.h"
 #include <netinet/in.h>
 #include <ifaddrs.h>
 

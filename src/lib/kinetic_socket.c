@@ -18,8 +18,8 @@
  *
  */
 
-#include "KineticSocket.h"
-#include "KineticLogger.h"
+#include "kinetic_socket.h"
+#include "kinetic_logger.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
