@@ -35,6 +35,8 @@ PROTO_OUT = File.join(HERE, 'build', 'temp', 'proto')
 
 directory PROTO_OUT
 
+task :test => ['test:delta']
+
 desc "Generate protocol buffers"
 task :proto => [PROTO_OUT] do
 
@@ -71,7 +73,7 @@ end
 desc "Analyze code w/CppCheck"
 task :cppcheck do
   raise "CppCheck not found!" unless `cppcheck --version` =~ /cppcheck \d+.\d+/mi
-  execute_command "cppcheck ./src ./build/temp/proto", "Analyzing code w/CppCheck"
+  execute_command "cppcheck ./src ./test ./build/temp/proto", "Analyzing code w/CppCheck"
 end
 
 namespace :doxygen do

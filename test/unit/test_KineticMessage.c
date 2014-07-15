@@ -1,9 +1,9 @@
 #include "unity.h"
 #include "KineticTypes.h"
 #include "protobuf-c.h"
+#include "mock_KineticExchange.h"
 #include "KineticProto.h"
 #include "KineticMessage.h"
-#include "mock_KineticExchange.h"
 
 void setUp(void)
 {
@@ -22,12 +22,14 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
 
     KineticMessage_Init(&message, &exchange);
 
-    TEST_ASSERT_EQUAL_HEX(&message.header, message.command.header);
-    TEST_ASSERT_EQUAL_HEX(&message.body, message.command.body);
-    TEST_ASSERT_EQUAL_HEX(&message.status, message.command.status);
-    TEST_ASSERT_EQUAL_HEX(&message.command, message.proto.command);
-    TEST_ASSERT_EQUAL_HEX(&exchange, message.exchange);
+    TEST_ASSERT_EQUAL_PTR(&message.header, message.command.header);
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.status, message.command.status);
+    TEST_ASSERT_EQUAL_PTR(&message.command, message.proto.command);
+    TEST_ASSERT_EQUAL_PTR(&exchange, message.exchange);
 }
+
+// void test
 
 // void test_KineticProto_should_pack_and_unpack_protocol_buffers(void)
 // {

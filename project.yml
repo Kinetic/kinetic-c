@@ -58,6 +58,12 @@
     bool:     UINT8
 
 :tools:
+  # :test_dependencies_generator:
+  #   :arguments:
+  #     - "-:-MD"
+  # :release_dependencies_generator:
+  #   :arguments:
+  #     - "-:-MD"
   :test_includes_preprocessor:
     :executable: gcc
     :arguments:

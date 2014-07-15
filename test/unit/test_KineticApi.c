@@ -1,5 +1,6 @@
 #include "KineticApi.h"
 #include "unity.h"
+#include "unity_helper.h"
 #include <stdio.h>
 #include <protobuf-c/protobuf-c.h>
 #include "KineticProto.h"
@@ -7,19 +8,6 @@
 #include "mock_KineticLogger.h"
 #include "mock_KineticConnection.h"
 #include "mock_KineticExchange.h"
-
-#define TEST_ASSERT_EQUAL_KINETIC_STATUS(expected, actual) \
-if (expected != actual) { \
-    char err[128]; \
-    sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
-        protobuf_c_enum_descriptor_get_value( \
-            &KineticProto_status_status_code_descriptor, expected)->name, \
-        expected, \
-        protobuf_c_enum_descriptor_get_value( \
-            &KineticProto_status_status_code_descriptor, actual)->name, \
-        actual); \
-    TEST_FAIL_MESSAGE(err); \
-}
 
 void setUp(void)
 {
@@ -74,24 +62,28 @@ void test_KineticApi_SendNoop_should_send_NOOP_command(void)
 {
     KineticConnection connection;
     KineticExchange exchange;
-    KineticMessage message;
+    KineticMessage request, response;
     KineticProto_Status_StatusCode status;
     int64_t identity = 1234;
     int64_t connectionID = 5678;
+    request.exchange = &exchange;
 
     KineticConnection_Create_ExpectAndReturn(connection);
     KineticConnection_Connect_ExpectAndReturn(&connection, "salgood.com", 88, false, true);
 
     connection = KineticApi_Connect("salgood.com", 88, false);
 
-    KineticExchange_Init_Expect(&exchange, identity, connectionID);
-    KineticMessage_Init_Expect(&message, &exchange);
-    KineticConnection_SendMessage_ExpectAndReturn(&connection, &message, true);
+    KineticExchange_Init_Expect(&exchange, identity, connectionID, &connection);
+    KineticMessage_Init_Expect(&request, &exchange);
+    KineticMessage_BuildNoop_Expect(&request);
+    KineticConnection_SendMessage_ExpectAndReturn(&connection, &request, true);
+    KineticConnection_ReceiveMessage_ExpectAndReturn(&connection, &response, true);
 
-    status = KineticApi_SendNoop(&connection, &exchange, &message);
+    status = KineticApi_SendNoop(&connection, &request, &response);
 
-    TEST_IGNORE_MESSAGE("Finish imlementation!");
+    TEST_IGNORE_MESSAGE("Finish me!!!");
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+    TEST_ASSERT_EQUAL_PTR(&exchange, response.exchange);
 }

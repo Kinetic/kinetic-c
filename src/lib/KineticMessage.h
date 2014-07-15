@@ -18,6 +18,10 @@ typedef struct _KineticMessage
     KineticExchange*        exchange;
 } KineticMessage;
 
-void KineticMessage_Init(KineticMessage* message, KineticExchange* exchange);
+void KineticMessage_Init(
+    KineticMessage* const message,
+    KineticExchange* const exchange);
+void KineticMessage_BuildNoop(
+    KineticMessage* const message);
 
 #endif // _KINETIC_MESSAGE_H

@@ -66,3 +66,34 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_
     TEST_ASSERT_EQUAL(48, Connection.FileDescriptor);
     TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.Host);
 }
+
+
+void test_KineticConnection_SendMessage_should_send_the_specified_message_and_report_success(void)
+{
+    TEST_IGNORE();
+}
+
+void test_KineticConnection_SendMessage_should_send_the_specified_message_and_report_failure(void)
+{
+    TEST_IGNORE();
+}
+
+
+void test_KineticConnection_SendMessage_should_receive_a_message_for_the_exchange_and_report_success(void)
+{
+    TEST_IGNORE();
+}
+
+void test_KineticConnection_SendMessage_should_receive_a_message_for_the_exchange_and_report_failure(void)
+{
+    TEST_IGNORE();
+}
+
+
+
+
+
+
+
+
+

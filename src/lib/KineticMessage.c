@@ -1,6 +1,8 @@
 #include "KineticMessage.h"
 
-void KineticMessage_Init(KineticMessage* message, KineticExchange* exchange)
+void KineticMessage_Init(
+    KineticMessage* const message,
+    KineticExchange* const exchange)
 {
     // Initialize protobuf fields
     KineticProto_init(&message->proto);
@@ -18,4 +20,8 @@ void KineticMessage_Init(KineticMessage* message, KineticExchange* exchange)
     // Configure/associate the message with the exchange
     KineticExchange_ConfigureHeader(exchange, &message->header);
     message->exchange = exchange;
+}
+
+void KineticMessage_BuildNoop(KineticMessage* const message)
+{
 }

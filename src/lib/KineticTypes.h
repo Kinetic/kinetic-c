@@ -7,7 +7,6 @@
 #endif
 
 #include "KineticProto.h"
-
 #include <netinet/in.h>
 #include <ifaddrs.h>
 
@@ -25,7 +24,9 @@
     #else
         #if defined(__unix__)
             // Some Linux environments require this, although not all, but it's benign.
-            #define _BSD_SOURCE
+            #ifndef _BSD_SOURCE
+                #define _BSD_SOURCE
+            #endif // _BSD_SOURCE
             #include <unistd.h>
         #else
             #if !defined(HOST_NAME_MAX)
@@ -36,5 +37,14 @@
 #endif  // WIN32
 
 #define KINETIC_PORT 8213
+
+typedef struct _KineticConnection
+{
+    bool    Connected;
+    bool    Blocking;
+    int     Port;
+    int     FileDescriptor;
+    char    Host[HOST_NAME_MAX];
+} KineticConnection;
 
 #endif // _KINETIC_TYPES_H

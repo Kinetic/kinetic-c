@@ -1,8 +1,9 @@
+#include "unity.h"
+#include "unity_helper.h"
+#include "protobuf-c.h"
 #include "KineticPDU.h"
 #include "KineticExchange.h"
 #include "KineticProto.h"
-#include "protobuf-c.h"
-#include "unity.h"
 #include <string.h>
 
 KineticProto Proto;
@@ -43,13 +44,6 @@ void setUp(void)
 
 void tearDown(void)
 {
-}
-
-#define TEST_ASSERT_EQUAL_NBO_INT64(expected, buf) { \
-    int i; int64_t val; char err[64];\
-    for(i = 0; i < sizeof(int64_t); i++) {val <<= 8; val += buf[i]; } \
-    sprintf(err, "@ index %d", i); \
-    TEST_ASSERT_EQUAL_INT64_MESSAGE(expected, val, err); \
 }
 
 void test_KineticPDU_Create_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer(void)

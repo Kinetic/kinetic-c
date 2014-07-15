@@ -28,13 +28,21 @@ const KineticConnection KineticApi_Connect(const char* host, int port, bool bloc
 }
 
 KineticProto_Status_StatusCode KineticApi_SendNoop(
-    KineticConnection* connection,
-    KineticExchange* exchange,
-    KineticMessage* message)
+    KineticConnection* const connection,
+    KineticMessage* const request,
+    KineticMessage* const response)
 {
-    KineticExchange_Init(exchange, 1234, 5678);
-    KineticMessage_Init(message, exchange);
-    KineticConnection_SendMessage(connection, message);
+    KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+
+    KineticExchange_Init(request->exchange, 1234, 5678, connection);
+    KineticMessage_Init(request, request->exchange);
+    KineticMessage_BuildNoop(request);
+    KineticConnection_SendMessage(connection, request);
+    response->exchange = request->exchange;
+    if (KineticConnection_ReceiveMessage(connection, response))
+    {
+        status = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    }
 
 	return KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED;
 }

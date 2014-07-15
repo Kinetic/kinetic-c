@@ -33,11 +33,23 @@ typedef struct _KineticExchange
     // Required field
     // A monotonically increasing number for each request in a TCP connection.
     int64_t sequence;
+
+    // Associated Kinetic connection
+    KineticConnection* connection;
 } KineticExchange;
 
-void KineticExchange_Init(KineticExchange* const exchange, int64_t identity, int64_t connectionID);
-void KineticExchange_SetClusterVersion(KineticExchange* const exchange, int64_t clusterVersion);
-void KineticExchange_IncrementSequence(KineticExchange* const exchange);
-void KineticExchange_ConfigureHeader(const KineticExchange* const exchange, KineticProto_Header* const header);
+void KineticExchange_Init(
+    KineticExchange* const exchange,
+    int64_t identity,
+    int64_t connectionID,
+    KineticConnection* const connection);
+void KineticExchange_SetClusterVersion(
+    KineticExchange* const exchange,
+    int64_t clusterVersion);
+void KineticExchange_IncrementSequence(
+    KineticExchange* const exchange);
+void KineticExchange_ConfigureHeader(
+    const KineticExchange* const exchange,
+    KineticProto_Header* const header);
 
 #endif // _KINETIC_EXCHANGE_H

@@ -4,11 +4,13 @@
 void KineticExchange_Init(
     KineticExchange* const exchange,
     int64_t identity,
-    int64_t connectionID)
+    int64_t connectionID,
+    KineticConnection* const connection)
 {
     memset(exchange, 0, sizeof(KineticExchange));
     exchange->identity = identity;
     exchange->connectionID = connectionID;
+    exchange->connection = connection;
 }
 
 void KineticExchange_SetClusterVersion(
@@ -19,7 +21,8 @@ void KineticExchange_SetClusterVersion(
     exchange->has_clusterVersion = true;
 }
 
-void KineticExchange_IncrementSequence(KineticExchange* const exchange)
+void KineticExchange_IncrementSequence(
+    KineticExchange* const exchange)
 {
     exchange->sequence++;
 }
