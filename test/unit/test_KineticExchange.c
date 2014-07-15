@@ -1,7 +1,7 @@
 #include "unity.h"
 #include "KineticExchange.h"
 #include "KineticProto.h"
-#include "vendor/protobuf-c/protobuf-c.h"
+#include <protobuf-c/protobuf-c.h>
 
 static KineticConnection Connection;
 static KineticExchange Exchange;

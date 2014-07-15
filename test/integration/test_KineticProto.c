@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "protobuf-c.h"
+#include <protobuf-c/protobuf-c.h>
 #include "KineticTypes.h"
 #include "KineticProto.h"
 #include "unity.h"

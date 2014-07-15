@@ -6,21 +6,20 @@
 # This sample, therefore, only demonstrates running a collection of unit tests.
 
 :project:
-  :use_exceptions: FALSE
-  :use_test_preprocessor: TRUE
-  :use_deep_dependencies: TRUE
+  :use_exceptions: false
+  :use_test_preprocessor: true
+  :use_deep_dependencies: true
   :build_root: build
-  :release_build: TRUE
+  :release_build: true
   :test_file_prefix: test_
 
 :release_build:
   :output: kinetic-c-client
-  :use_assembly: FALSE
+  # Uncomment the following to enable use of assembly files
+  # :use_assembly: true
 
-:environment:
-
-:extension:
-  :executable: .out
+# Enable this section to configure environment vars, if needed
+# :environment:
 
 :paths:
   :test:
@@ -28,6 +27,7 @@
     - -:test/support
     - include/**
     - src/**
+    - vendor/protobuf-c/*
   :support:
     - test/support/**
   :source:
@@ -37,6 +37,7 @@
   # Refactor release build once the Kinetic-C library is built, and link to it sepearately
   :release_toolchain_include:
     - include/**
+    - vendor/protobuf-c/*
 
 :defines:
   # in order to add common defines:
@@ -53,7 +54,7 @@
 :cmock:
   :mock_prefix: mock_
   :when_no_prototypes: :warn
-  :enforce_strict_ordering: TRUE
+  :enforce_strict_ordering: true
   :plugins:
     - :ignore
   :treat_as:

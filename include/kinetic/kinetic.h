@@ -25,6 +25,6 @@
 #include "../../src/lib/KineticApi.h"
 #include "../../src/lib/KineticProto.h"
 #include "../../src/lib/KineticConnection.h"
-#include "../../src/vendor/protobuf-c/protobuf-c.h"
+#include <protobuf-c/protobuf-c.h>
 
 #endif /* KINETIC_C_CLIENT_KINETIC_H_ */
