@@ -26,7 +26,7 @@
 
 KineticConnection KineticConnection_Create(void);
 bool KineticConnection_Connect(KineticConnection* const connection, const char* host, int port, bool blocking);
-bool KineticConnection_SendMessage(KineticConnection* const connection, KineticMessage* const message);
-bool KineticConnection_ReceiveMessage(KineticConnection* const connection, KineticMessage* const reponse);
+bool KineticConnection_SendMessage(KineticConnection* const connection, KineticMessage* const request);
+bool KineticConnection_ReceiveMessage(KineticConnection* const connection, KineticMessage* const response);
 
 #endif // _KINETIC_CONNECTION_H

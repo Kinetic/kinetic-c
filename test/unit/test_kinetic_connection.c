@@ -19,16 +19,29 @@
 */
 
 #include "kinetic_connection.h"
+#include <protobuf-c/protobuf-c.h>
+#include "kinetic_proto.h"
 #include "unity.h"
 #include "mock_kinetic_socket.h"
+#include "kinetic_message.h"
+#include "kinetic_exchange.h"
+#include "mock_kinetic_pdu.h"
 #include <string.h>
 
 static KineticConnection Connection, Expected;
+static const int64_t Identity = 1234;
+static const int64_t ConnectionID = 1234;
+static KineticExchange Exchange;
+static KineticMessage MessageOut, MessageIn;
+static KineticPDU PDUOut, PDUIn;
 
 void setUp(void)
 {
     Connection = KineticConnection_Create();
     Expected = KineticConnection_Create();
+    KineticExchange_Init(&Exchange, Identity, ConnectionID, &Connection);
+    KineticMessage_Init(&MessageOut, &Exchange);
+    KineticMessage_Init(&MessageIn, &Exchange);
 }
 
 void tearDown(void)
@@ -87,33 +100,63 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_
     TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.Host);
 }
 
+void DoConnect(void)
+{
+    KineticSocket_Connect_ExpectAndReturn("valid-host.com", 2345, false, 48);
+    KineticConnection_Connect(&Connection, "valid-host.com", 2345, false);
+}
 
 void test_KineticConnection_SendMessage_should_send_the_specified_message_and_report_success(void)
 {
-    TEST_IGNORE();
+    DoConnect();
+
+    MessageOut.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS; // Fake success for now
+
+    KineticPDU_Create_Expect(&PDUOut, (uint8_t*)0x12345678, &MessageOut.proto, (uint8_t*)0xDEADBEEF, 789);
+
+    TEST_ASSERT_TRUE(KineticConnection_SendMessage(&Connection, &MessageOut));
+
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, MessageOut.status.code);
+
+    TEST_IGNORE_MESSAGE("Need to actually send the message still!");
 }
 
 void test_KineticConnection_SendMessage_should_send_the_specified_message_and_report_failure(void)
 {
-    TEST_IGNORE();
+    DoConnect();
+
+    MessageOut.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM; // Fake failure for now
+
+    TEST_ASSERT_FALSE(KineticConnection_SendMessage(&Connection, &MessageOut));
+
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM, MessageOut.status.code);
+
+    TEST_IGNORE_MESSAGE("Need to actually send the message still!");
 }
 
 
-void test_KineticConnection_SendMessage_should_receive_a_message_for_the_exchange_and_report_success(void)
+void test_KineticConnection_ReceiveMessage_should_receive_a_message_for_the_exchange_and_report_success(void)
 {
-    TEST_IGNORE();
+    DoConnect();
+
+    MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS; // Fake success for now
+
+    TEST_ASSERT_TRUE(KineticConnection_ReceiveMessage(&Connection, &MessageIn));
+
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, MessageIn.status.code);
+
+    TEST_IGNORE_MESSAGE("Need to actually receive the message still!");
 }
 
-void test_KineticConnection_SendMessage_should_receive_a_message_for_the_exchange_and_report_failure(void)
+void test_KineticConnection_ReceiveMessage_should_receive_a_message_for_the_exchange_and_report_failure(void)
 {
-    TEST_IGNORE();
+    DoConnect();
+
+    MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR; // Fake success for now
+
+    TEST_ASSERT_FALSE(KineticConnection_ReceiveMessage(&Connection, &MessageIn));
+
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR, MessageIn.status.code);
+
+    TEST_IGNORE_MESSAGE("Need to actually receive the message still!");
 }
-
-
-
-
-
-
-
-
-

@@ -50,14 +50,18 @@ bool KineticConnection_Connect(
 
 bool KineticConnection_SendMessage(
     KineticConnection* const connection,
-    KineticMessage* const message)
+    KineticMessage* const request)
 {
-    return false;
+    // .... NEED TO SEND THE MESSAGE STILL!!!!!!!
+
+    return (request->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 }
 
 bool KineticConnection_ReceiveMessage(
     KineticConnection* const connection,
-    KineticMessage* const reponse)
+    KineticMessage* const response)
 {
-    return KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+    // .... NEED TO RECEIVE THE MESSAGE STILL!!!!!!!
+
+    return (response->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 }
