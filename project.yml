@@ -1,10 +1,5 @@
 ---
 
-# Notes:
-# Sample project C code is not presently written to produce a release artifact.
-# As such, release build options are disabled.
-# This sample, therefore, only demonstrates running a collection of unit tests.
-
 :project:
   :use_exceptions: false
   :use_test_preprocessor: true
@@ -25,7 +20,6 @@
   :test:
     - +:test/**
     - -:test/support
-    - include/**
     - src/**
     - vendor/protobuf-c/*
   :support:
@@ -34,6 +28,8 @@
     - src/lib/*
     - src/utility/*
     - vendor/protobuf-c/protobuf-c/*
+  :include:
+    - include/**
   # Refactor release build once the Kinetic-C library is built, and link to it sepearately
   :release_toolchain_include:
     - include/**
@@ -55,6 +51,7 @@
   :mock_prefix: mock_
   :when_no_prototypes: :warn
   :enforce_strict_ordering: true
+  :unity_helper: test/support/unity_helper.h
   :plugins:
     - :ignore
   :treat_as:

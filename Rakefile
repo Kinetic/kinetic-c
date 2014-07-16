@@ -31,9 +31,15 @@ VENDOR_PATH = File.join(HERE, 'vendor')
 PROTOBUF_CORE = File.join(VENDOR_PATH, 'protobuf-2.5.0')
 PROTOBUF_C = File.join(VENDOR_PATH, 'protobuf-c')
 PROTO_IN = File.join(VENDOR_PATH, 'kinetic-protocol')
-PROTO_OUT = File.join(HERE, 'build', 'temp', 'proto')
+BUILD_ARTIFACTS = File.join(HERE, 'build', 'artifacts', 'release')
+TEST_ARTIFACTS = File.join(HERE, 'build', 'artifacts', 'test')
+PROTO_OUT = TEST_ARTIFACTS
+TEST_TEMP = File.join(HERE, 'build', 'test', 'temp')
 
 directory PROTO_OUT
+CLOBBER.include PROTO_OUT
+directory TEST_TEMP
+CLOBBER.include TEST_TEMP
 
 task :test => ['test:delta']
 
@@ -182,7 +188,7 @@ namespace :test_server do
 
 end
 
-task 'test/integration/test_KineticSocket.c' => ['test_server:start']
+task 'test/integration/test_kinetic_socket.c' => ['test_server:start']
 
 task :default => [
   'test:all',

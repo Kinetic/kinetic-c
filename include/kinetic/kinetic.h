@@ -21,10 +21,10 @@
 #ifndef KINETIC_C_CLIENT_KINETIC_H_
 #define KINETIC_C_CLIENT_KINETIC_H_
 
-#include "../../src/lib/KineticTypes.h"
-#include "../../src/lib/KineticApi.h"
-#include "../../src/lib/KineticProto.h"
-#include "../../src/lib/KineticConnection.h"
+#include "../../src/lib/kinetic_types.h"
+#include "../../src/lib/kinetic_api.h"
+#include "../../src/lib/kinetic_proto.h"
+#include "../../src/lib/kinetic_connection.h"
 #include <protobuf-c/protobuf-c.h>
 
 #endif /* KINETIC_C_CLIENT_KINETIC_H_ */
