@@ -18,8 +18,8 @@
 *
 */
 
-#include "kinetic_logger.h"
 #include "unity_helper.h"
+#include "kinetic_logger.h"
 
 void setUp(void)
 {
@@ -38,10 +38,7 @@ void test_KineticLogger_KINETIC_LOG_FILE_should_be_defined_properly(void)
 
 void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_file(void)
 {
-    char cwd[1024], test_file[1024];
-    GET_CWD(cwd);
-    sprintf(test_file, "%s/%s", cwd, TEST_LOG_FILE);
-    KineticLogger_Init(test_file);
+    KineticLogger_Init(TEST_LOG_FILE);
 
     TEST_ASSERT_FILE_EXISTS(TEST_LOG_FILE);
 }

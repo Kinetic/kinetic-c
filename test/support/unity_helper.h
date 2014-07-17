@@ -84,7 +84,7 @@ if (expected != actual) { \
 /** Custom Unity assertion which validates the contents of a file ('len' - length in bytes) */
 #define TEST_ASSERT_EQUAL_FILE_CONTENT(fname, content, len) { \
     FILE* f; \
-    char c, buff[len], err[1024 + len]; \
+    char c, buff[len], err[1024 + len] = ""; \
     size_t actualLen; \
     TEST_ASSERT_FILE_EXISTS(fname); \
     f = fopen(fname, "r"); \
@@ -94,13 +94,13 @@ if (expected != actual) { \
         if (c == EOF) { printf("EOF found! EOF: 0x%02X", (int)c); break; } \
         buff[actualLen] = c; } \
     buff[actualLen] = '\0'; /* Append NULL terminator */ \
-    sprintf(err, "End-of-file unexpectedly reached when length expected to be " \
-        "at least %lld at byte %lld in file: '%s'", \
-        (long long int)len, (long long int)actualLen, fname); \
+    if (c == EOF) { \
+        sprintf(err, "End-of-file unexpectedly reached when length expected to be " \
+            "at least %zd at byte %zd in file: '%s'", \
+            (size_t)len, actualLen, fname); } \
     TEST_ASSERT_NOT_EQUAL_MESSAGE(EOF, c, err); \
-    sprintf(err, "Failed reading %d bytes from file: %s\n  read: %s", (int)len, fname, buff); \
-    TEST_ASSERT_EQUAL_SIZET_MESSAGE(len, actualLen, "File read error (truncated?)"); \
-    TEST_ASSERT_EQUAL_STRING_MESSAGE(content, buff, "File contents did not match"); \
+    TEST_ASSERT_EQUAL_SIZET_MESSAGE(len, actualLen, "File read error (truncated?)! read: " err); \
+    TEST_ASSERT_EQUAL_STRING_MESSAGE(content, buff, "File contents did not match! read:" err); \
     TEST_ASSERT_EQUAL_MESSAGE(0, fclose(f), "Failed closing file: " #fname ); \
     fclose(f); \
 }
