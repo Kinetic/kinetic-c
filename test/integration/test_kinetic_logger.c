@@ -18,6 +18,7 @@
 *
 */
 
+#include "unity.h"
 #include "unity_helper.h"
 #include "kinetic_logger.h"
 
