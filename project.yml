@@ -51,9 +51,6 @@
   :mock_prefix: mock_
   :when_no_prototypes: :warn
   :enforce_strict_ordering: true
-  :include:
-    - test/**
-  :unity_helper: test/support/unity_helper.h
   :plugins:
     - :ignore
   :treat_as:
