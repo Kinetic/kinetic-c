@@ -96,7 +96,7 @@ if (expected != actual) { \
     buff[actualLen] = '\0'; /* Append NULL terminator */ \
     sprintf(err, "End-of-file unexpectedly reached when length expected to be " \
         "at least %lld at byte %lld in file: '%s'", \
-        (int64_t)len, (int64_t)actualLen, fname); \
+        (long long int)len, (long long int)actualLen, fname); \
     TEST_ASSERT_NOT_EQUAL_MESSAGE(EOF, c, err); \
     sprintf(err, "Failed reading %d bytes from file: %s\n  read: %s", (int)len, fname, buff); \
     TEST_ASSERT_EQUAL_SIZET_MESSAGE(len, actualLen, "File read error (truncated?)"); \
