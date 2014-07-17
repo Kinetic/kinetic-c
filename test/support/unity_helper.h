@@ -94,10 +94,6 @@ if (expected != actual) { \
         if (c == EOF) { printf("EOF found! EOF: 0x%02X", (int)c); break; } \
         buff[actualLen] = c; } \
     buff[actualLen] = '\0'; /* Append NULL terminator */ \
-    /*if (c == EOF) { \
-        sprintf(err, "End-of-file unexpectedly reached when length expected to be " \
-            "at least %zd at byte %zd in file: '%s'", \
-            (size_t)len, actualLen, fname); } */ \
     TEST_ASSERT_NOT_EQUAL_MESSAGE(EOF, c, err); \
     TEST_ASSERT_EQUAL_SIZET_MESSAGE(len, actualLen, "File read error (truncated?)!"); \
     TEST_ASSERT_EQUAL_STRING_MESSAGE(content, buff, "File contents did not match!"); \
