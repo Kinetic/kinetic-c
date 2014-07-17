@@ -34,3 +34,4 @@ docs/
 .tags*
 *.sublime-workspace
 .DS_Store
+.rake_t_cache
