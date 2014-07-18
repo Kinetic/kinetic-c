@@ -49,8 +49,6 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
     TEST_ASSERT_EQUAL_PTR(&exchange, message.exchange);
 }
 
-// void test
-
 // void test_KineticProto_should_pack_and_unpack_protocol_buffers(void)
 // {
 //     size_t expectedLen;

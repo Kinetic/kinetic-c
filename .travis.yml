@@ -9,7 +9,9 @@ rvm:
   - "1.9.3"
   - "2.0.0"
 install:
-  - ruby script/travis_install.rb
+  - pwd
+  - ls ./script
+  - ruby ./script/travis_install.rb
   - bundle install
 script:
   - bundle exec rake verbose ci
