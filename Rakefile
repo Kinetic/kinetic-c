@@ -222,7 +222,7 @@ end
 desc "Validate .travis.yml config file"
 namespace :travis do
   task :validate do
-    execute_command "travis-lint", "Validating Travis CI Configuration"
+    execute_command "travis lint --skip-version-check", "Validating Travis CI Configuration"
   end
 end
 
@@ -241,13 +241,13 @@ task :all => [
   'cppcheck',
   'default',
   'run',
-  #'travis:validate'
+  'travis:validate'
 ]
 
 desc "Run full CI build"
 task :ci => [
   'clobber',
-  'verbose', # uncomment to enable verbose output for CI builds
+  # 'verbose', # uncomment to enable verbose output for CI builds
   'all'
 ]
 
