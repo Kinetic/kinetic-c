@@ -21,23 +21,20 @@
 #include "unity_helper.h"
 #include "kinetic_socket.h"
 #include "mock_kinetic_logger.h"
-#include "unity.h"
 
-static char Msg[1024];
 static int FileDesc;
 static int KineticTestPort = 8999;
 
 void setUp(void)
 {
     FileDesc = -1;
+    KineticLogger_Log_Ignore();
 }
 
 void tearDown(void)
 {
     if (FileDesc > 0)
     {
-        sprintf(Msg, "Closing socket with FileDesc=%d", FileDesc);
-        KineticLogger_Log_Expect(Msg);
         KineticSocket_Close(FileDesc);
     }
 }
@@ -49,12 +46,6 @@ void test_KineticSocket_KINETIC_PORT_should_be_8213(void)
 
 void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 {
-    char msg[128];
-    sprintf(msg, "Connecting to localhost:%d", KineticTestPort);
-    KineticLogger_Log_Expect(msg);
-    KineticLogger_Log_Expect("Trying to connect to host");
-    KineticLogger_Log_Expect("Connected to host!");
-
     int FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
 
     TEST_ASSERT_MESSAGE(FileDesc >= 0, "File descriptor invalid");
