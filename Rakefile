@@ -222,7 +222,7 @@ end
 desc "Validate .travis.yml config file"
 namespace :travis do
   task :validate do
-    execute_command "travis lint --skip-version-check", "Validating Travis CI Configuration"
+    execute_command "bundle exec travis lint --skip-version-check --skip-completion-check", "Validating Travis CI Configuration"
   end
 end
 
