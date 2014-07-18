@@ -25,6 +25,7 @@
 
 static char Msg[1024];
 static int FileDesc;
+static int KineticTestPort = 8999;
 
 void setUp(void)
 {
@@ -48,11 +49,13 @@ void test_KineticSocket_KINETIC_PORT_should_be_8213(void)
 
 void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 {
-    KineticLogger_Log_Expect("Connecting to localhost:8999");
+    char msg[128];
+    sprintf(msg, "Connecting to localhost:%d", KineticTestPort);
+    KineticLogger_Log_Expect(msg);
     KineticLogger_Log_Expect("Trying to connect to host");
     KineticLogger_Log_Expect("Connected to host!");
 
-    int FileDesc = KineticSocket_Connect("localhost", 8999, true);
+    int FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
 
     TEST_ASSERT_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }

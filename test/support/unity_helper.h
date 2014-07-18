@@ -91,14 +91,14 @@ if (expected != actual) { \
     TEST_ASSERT_NOT_NULL_MESSAGE(f, "Failed to open file for reading: " #fname ); \
     for (actualLen = 0; actualLen < len; actualLen++) { \
         c = fgetc(f); \
-        if (c == EOF) { printf("EOF found! EOF: 0x%02X", (int)c); break; } \
+        if (c == EOF) { perror("EOF found!"); break; } \
         buff[actualLen] = c; } \
     buff[actualLen] = '\0'; /* Append NULL terminator */ \
-    TEST_ASSERT_NOT_EQUAL_MESSAGE(EOF, c, err); \
+    if (actualLen != len) { \
+        TEST_ASSERT_NOT_EQUAL_MESSAGE(EOF, c, err); } \
     TEST_ASSERT_EQUAL_SIZET_MESSAGE(len, actualLen, "File read error (truncated?)!"); \
     TEST_ASSERT_EQUAL_STRING_MESSAGE(content, buff, "File contents did not match!"); \
     TEST_ASSERT_EQUAL_MESSAGE(0, fclose(f), "Failed closing file: " #fname ); \
-    fclose(f); \
 }
 
 

@@ -18,7 +18,6 @@
 *
 */
 
-#include "unity.h"
 #include "unity_helper.h"
 #include "kinetic_logger.h"
 
@@ -59,6 +58,4 @@ void test_KineticLogger_Log_should_write_log_message_to_file(void)
 
     TEST_ASSERT_EQUAL_FILE_CONTENT(TEST_LOG_FILE, content, length);
 }
-
-
 
