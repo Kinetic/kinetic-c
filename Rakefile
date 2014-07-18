@@ -122,7 +122,8 @@ end
 namespace :test_server do
 
   require "webrick"
-
+  DEFAULT_KINETIC_PORT = 8123
+  TEST_KINETIC_PORT = 8999
   $test_server = nil
 
   # WEBrick is a Ruby library that makes it easy to build an HTTP server with Ruby.
@@ -150,35 +151,51 @@ namespace :test_server do
 
   class KineticTestServer
 
-    def initialize(port=8213)
-      @server = WEBrick::HTTPServer.new(:Port => port)
+    def initialize(port = DEFAULT_KINETIC_PORT)
+      raise "Invalid Kinetic test server port specified (port: #{port})" if !port || port < 0
+      @port = port
+      @server = nil
+      @worker = nil
+    end
+
+    def start
+      return unless @server.nil?
+
+      # Start the werver
+      @server = WEBrick::HTTPServer.new(:Port => @port)
+
+      # Mount test server servlet
       @server.mount "/", KineticServlet
+
+      # Setup handler for signaled shutdown (via ctrl+c)
       trap("INT") do
         report "INT triggered Kintic Test Server shutdown"
         shutdown
       end
-      @abort = false
+
+      # Create worker thread for test server to run in so we can continue
       @worker = Thread.new do
         @server.start
-        while !@abort do
-          puts 'X'
-        end
       end
     end
 
     def shutdown
-      report_banner "Kinetic Test Server shutting down..."
-      @abort = true
-      @worker.join(2)
-      @server.shutdown
-      sleep(0.2)
+      return if @server.nil?
+      if @worker
+        report_banner "Kinetic Test Server shutting down..."
+        @server.shutdown
+        @worker.join(5)
+      end
+      @server = nil
+      @worker = nil
       report "Kinetic Test Server shutdown complete"
     end
 
   end
 
   task :start do
-    $test_server ||= KineticTestServer.new(8999)
+    $test_server ||= KineticTestServer.new(TEST_KINETIC_PORT)
+    $test_server.start
   end
 
   task :shutdown do
@@ -190,22 +207,10 @@ end
 
 task 'test/integration/test_kinetic_socket.c' => ['test_server:start']
 
-task :default => [
-  'test:all',
-  'release'
-]
-
 desc "Run client test utility"
 task :run do
   execute_command "./build/release/kinetic-c-client", "Running client test utility"
 end
-
-desc "Build all and run test utility"
-task :all => [
-  'cppcheck',
-  'default',
-  'run'
-]
 
 desc "Prepend license to source files"
 task :apply_license do
@@ -214,14 +219,35 @@ task :apply_license do
   end
 end
 
+desc "Validate .travis.yml config file"
+namespace :travis do
+  task :validate do
+    execute_command "travis-lint", "Validating Travis CI Configuration"
+  end
+end
+
+desc "Enable verbose Ceedling output"
 task :verbose do
   Rake::Task[:verbosity].invoke(4) # Set verbosity to 4-obnoxious for debugging
 end
 
+task :default => [
+  'test:delta',
+  'release'
+]
+
+desc "Build all and run test utility"
+task :all => [
+  'cppcheck',
+  'default',
+  'run',
+  'travis:validate'
+]
+
 desc "Run full CI build"
 task :ci => [
   'clobber',
-  # 'verbose', # uncomment to enable verbose output for CI builds
+  'verbose', # uncomment to enable verbose output for CI builds
   'all'
 ]
 

@@ -1,10 +1,15 @@
+os:
+  - linux
+  - osx
+matrix:
+  allow_failures:
+    - os: osx
 language: ruby
 rvm:
   - "1.9.3"
   - "2.0.0"
 install:
-  - sudo apt-get update
-  - sudo apt-get install cppcheck
+  - ruby script/travis_install.rb
   - bundle install
 script:
   - bundle exec rake verbose ci
