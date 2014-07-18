@@ -241,7 +241,7 @@ task :all => [
   'cppcheck',
   'default',
   'run',
-  'travis:validate'
+  #'travis:validate'
 ]
 
 desc "Run full CI build"
