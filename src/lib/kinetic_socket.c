@@ -20,7 +20,9 @@
 
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
+#include <protobuf-c/protobuf-c.h>
 
+#include <errno.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -150,21 +152,132 @@ int KineticSocket_Connect(const char* host, int port, bool blocking)
     return socket_fd;
 }
 
-void KineticSocket_Close(int socket_descriptor)
+void KineticSocket_Close(int socketDescriptor)
 {
     char message[64];
-    if (socket_descriptor == -1)
+    if (socketDescriptor == -1)
     {
         LOG("Not connected so no cleanup needed");
     }
     else
     {
-        sprintf(message, "Closing socket with fd=%d", socket_descriptor);
+        sprintf(message, "Closing socket with fd=%d", socketDescriptor);
         LOG(message);
-        if (close(socket_descriptor))
+        if (close(socketDescriptor))
         {
             LOG("Error closing socket file descriptor");
         }
     }
 }
 
+bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length)
+{
+    size_t count;
+    uint8_t* data = (uint8_t*)buffer;
+
+    for (count = 0; count < length; )
+    {
+        int status;
+        fd_set readSet;
+        struct timeval timeout;
+
+        // Time out after 5 seconds
+        timeout.tv_sec = 5;
+        timeout.tv_usec = 0;
+
+        FD_ZERO(&readSet);
+        FD_SET(socketDescriptor, &readSet);
+        status = select(socketDescriptor+1, &readSet, NULL, NULL, &timeout);
+
+        if (status < 0) // Error occurred
+        {
+            char msg[128];
+            sprintf(msg, "Failed waiting to read from socket! status=%d, errno=%d\n", status, errno);
+            LOG(msg);
+            return false;
+        }
+        else if (status == 0) // Timeout occurred
+        {
+            LOG("Timed out waiting for socket data to arrive!");
+            return false;
+        }
+        else if (status > 0) // Data available to read
+        {
+            // The socket is ready for reading
+            status = read(socketDescriptor, &buffer[count], length - count);
+            if (status == -1 && errno == EINTR)
+            {
+                continue;
+            }
+            else if (status <= 0)
+            {
+                char msg[128];
+                sprintf(msg, "Failed to read from socket! status=%d, errno=%d\n", status, errno);
+                LOG(msg);
+                return false;
+            }
+            else
+            {
+                count += status;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length)
+{
+    int status;
+    size_t count;
+    uint8_t* data = (uint8_t*)buffer;
+
+    for (count = 0; count < length; count += status)
+    {
+        status = write(socketDescriptor, &buffer[count], length - count);
+        if (status == -1 && errno == EINTR)
+        {
+            continue;
+        }
+        else if (status <= 0)
+        {
+            char msg[128];
+            sprintf(msg, "Failed to write to socket! status=%d, errno=%d\n", status, errno);
+            LOG(msg);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+// protobuf-c ProtobufCBuffer for serializing direct to a file
+typedef struct _ProtobufAppendToFile
+{
+  ProtobufCBuffer base;     /* 'base' must be first member of Buffer subclass */
+  int fileHandle;
+  protobuf_c_boolean error;
+} ProtobufAppendToFile;
+
+static void KineticSocket_AppendProtobufToFile(ProtobufCBuffer* buffer, size_t length, const uint8_t* data)
+{
+    ProtobufAppendToFile *fileBuffer = (ProtobufAppendToFile*)buffer;
+    if (!fileBuffer->error)
+    {
+        fileBuffer->error = !KineticSocket_Write(fileBuffer->fileHandle, data, length);
+    }
+}
+
+bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticMessage* message)
+{
+    bool success = false;
+    ProtobufAppendToFile appender;
+
+    appender.base.append = KineticSocket_AppendProtobufToFile;
+    appender.fileHandle = socketDescriptor;
+    appender.error = false;
+    protobuf_c_message_pack_to_buffer(&message->proto.base, (ProtobufCBuffer*)&appender);
+
+    return !appender.error;
+}

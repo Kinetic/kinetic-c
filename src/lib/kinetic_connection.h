@@ -22,11 +22,11 @@
 #define _KINETIC_CONNECTION_H
 
 #include "kinetic_types.h"
-#include "kinetic_message.h"
+#include "kinetic_pdu.h"
 
-KineticConnection KineticConnection_Create(void);
+KineticConnection KineticConnection_Init(void);
 bool KineticConnection_Connect(KineticConnection* const connection, const char* host, int port, bool blocking);
-bool KineticConnection_SendMessage(KineticConnection* const connection, KineticMessage* const request);
-bool KineticConnection_ReceiveMessage(KineticConnection* const connection, KineticMessage* const response);
+bool KineticConnection_SendPDU(KineticPDU* const request);
+bool KineticConnection_ReceivePDU(KineticPDU* const response);
 
 #endif // _KINETIC_CONNECTION_H

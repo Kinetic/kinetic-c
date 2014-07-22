@@ -20,50 +20,64 @@
 
 #include "kinetic_pdu.h"
 #include <string.h>
-#include <arpa/inet.h>
-#include <stdio.h>
 
 static void KineticPDU_PackInt64(uint8_t* const buffer, int64_t value);
 static int64_t KineticPDU_UnpackInt64(const uint8_t* const buffer);
 
-void KineticPDU_Create(
+void KineticPDU_Init(
     KineticPDU* const pdu,
+    KineticExchange* const exchange,
     uint8_t* const buffer,
-    const KineticProto* const proto,
+    KineticMessage* const message,
     const uint8_t* const value,
     int64_t valueLength)
 {
     size_t protoPackedSize;
 
-    // Initialize the instance struct
     assert(pdu != NULL);
+    assert(message != NULL);
+    assert(exchange != NULL);
+    assert(buffer != NULL);
+
+    // Initialize the instance struct
     memset(pdu, 0, sizeof(KineticPDU));
 
+    // Associate with the specified exchange
+    pdu->exchange = exchange;
+
+    // Configure the protobuf header with exchange info
+    KineticExchange_ConfigureHeader(exchange, &message->header);
+
     // Assign the data buffer pointer
-    assert(buffer != NULL);
     pdu->data = buffer;
 
     // Setup the PDU header fields
     pdu->prefix = &buffer[0];
     *pdu->prefix = (uint8_t)'F';
     pdu->protoLength = &buffer[1];
-    assert(proto != NULL);
-    protoPackedSize = KineticProto_get_packed_size(proto);
-    KineticPDU_PackInt64(pdu->protoLength, protoPackedSize);
+    protoPackedSize = KineticProto_get_packed_size(&message->proto);
+    KineticPDU_PackInt64(pdu->protoLength, protoPackedSize); // Pack protobuf length field
     pdu->valueLength = &buffer[1 + sizeof(int64_t)];
-    KineticPDU_PackInt64(pdu->valueLength, valueLength);
+    KineticPDU_PackInt64(pdu->valueLength, valueLength); // Pack value length field
 
     // Populate with the encoded kinetic protocol buffer
     pdu->proto = &buffer[PDU_HEADER_LEN];
-    assert(proto != NULL);
-    KineticProto_pack(proto, pdu->proto);
+    KineticProto_pack(&message->proto, pdu->proto);
 
     // Populate with the value data, if specified
-    if (value != NULL)
+    if (value == NULL)
+    {
+        pdu->value = NULL;
+        pdu->valueLength = 0;
+    }
+    else
     {
         pdu->value = &buffer[PDU_HEADER_LEN + protoPackedSize];
         memcpy(pdu->value, value, valueLength);
     }
+
+    // Associate PDU with message
+    pdu->message = message;
 }
 
 void KineticPDU_PackInt64(uint8_t* const buffer, int64_t value)
@@ -87,4 +101,3 @@ int64_t KineticPDU_UnpackInt64(const uint8_t* const buffer)
     }
     return value;
 }
-//

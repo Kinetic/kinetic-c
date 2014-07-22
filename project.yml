@@ -47,6 +47,16 @@
     - *common_defines
     - TEST
 
+:flags:
+  :release:
+    :link:
+      :kinetic-c-client:
+        - -l libssl
+  :test:
+    :link:
+      :test_kinetic_hmac:
+        - -l libssl
+
 :cmock:
   :mock_prefix: mock_
   :when_no_prototypes: :warn
@@ -80,6 +90,20 @@
       - -DGNU_COMPILER
       - -w
       - ${1}
+  :test_linker:
+    :executable: gcc
+    :name: test_linker
+    :arguments:
+      - "\"${1}\""
+      - "-l crypto"
+      - "-o \"${2}\""
+  :release_linker:
+    :executable: gcc
+    :name: release_linker
+    :arguments:
+      - "\"${1}\""
+      - "-l crypto"
+      - "-o \"${2}\""
 
 :plugins:
   :load_paths:

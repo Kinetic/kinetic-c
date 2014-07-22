@@ -135,3 +135,4 @@ void test_KineticProto_should_pass_data_accurately_through_BufferSimple(void)
     // Free dynamically allocated memory
     KineticProto_free_unpacked(unpacked, NULL);
 }
+

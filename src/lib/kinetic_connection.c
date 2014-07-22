@@ -22,7 +22,7 @@
 #include "kinetic_socket.h"
 #include <string.h>
 
-KineticConnection KineticConnection_Create(void)
+KineticConnection KineticConnection_Init(void)
 {
     KineticConnection connection;
     memset(&connection, 0, sizeof(connection));
@@ -48,20 +48,16 @@ bool KineticConnection_Connect(
     return connection->Connected;
 }
 
-bool KineticConnection_SendMessage(
-    KineticConnection* const connection,
-    KineticMessage* const request)
+bool KineticConnection_SendPDU(KineticPDU* const request)
 {
     // .... NEED TO SEND THE MESSAGE STILL!!!!!!!
 
-    return (request->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    return (request->message->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 }
 
-bool KineticConnection_ReceiveMessage(
-    KineticConnection* const connection,
-    KineticMessage* const response)
+bool KineticConnection_ReceivePDU(KineticPDU* const response)
 {
-    // .... NEED TO RECEIVE THE MESSAGE STILL!!!!!!!
+    // KineticPDU_Init(&PDUOut, (uint8_t*)0x12345678, &MessageOut.proto, (uint8_t*)0xDEADBEEF, 789);
 
-    return (response->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    return (response->message->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 }

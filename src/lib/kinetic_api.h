@@ -22,16 +22,12 @@
 #define _KINETIC_API_H
 
 #include "kinetic_types.h"
-#include "kinetic_proto.h"
-#include "kinetic_connection.h"
-#include "kinetic_exchange.h"
-#include "kinetic_message.h"
+#include "kinetic_pdu.h"
 
 void KineticApi_Init(const char* log_file);
 const KineticConnection KineticApi_Connect(const char* host, int port, bool blocking);
 KineticProto_Status_StatusCode KineticApi_SendNoop(
-    KineticConnection* const connection,
-    KineticMessage* const request,
-    KineticMessage* const response);
+    KineticPDU* const request, KineticPDU* const response,
+    uint8_t* const requestBuffer, uint8_t* const responseBuffer);
 
 #endif // _KINETIC_API_H

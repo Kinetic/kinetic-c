@@ -25,11 +25,13 @@
 #if !defined(__bool_true_false_are_defined) || (__bool_true_false_are_defined == 0)
 #include <stdbool.h>
 #endif
+#include <stdint.h>
+#include <assert.h>
+#include <stddef.h>
+#include <limits.h>
 
-#include "kinetic_proto.h"
 #include <netinet/in.h>
 #include <ifaddrs.h>
-
 // Windows doesn't use <unistd.h> nor does it define HOST_NAME_MAX.
 #if defined(WIN32)
     #include <windows.h>

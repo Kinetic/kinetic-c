@@ -21,7 +21,9 @@
 #ifndef _KINETIC_PDU_H
 #define _KINETIC_PDU_H
 
-#include "kinetic_proto.h"
+#include "kinetic_types.h"
+#include "kinetic_exchange.h"
+#include "kinetic_message.h"
 
 #define PDU_HEADER_LEN      (1 + (2 * sizeof(int64_t)))
 #define PDU_PROTO_MAX_LEN   (1024 * 1024)
@@ -30,19 +32,27 @@
 
 typedef struct _KineticPDU
 {
+    // PDU Fields
     uint8_t* prefix;
     uint8_t* protoLength;
     uint8_t* valueLength;
     uint8_t* proto;
     uint8_t* value;
     uint8_t* data;
+
+    // Exchange associated with this PDU instance
+    KineticExchange* exchange;
+
+    // Message associated with this PDU instance
+    KineticMessage* message;
 } KineticPDU;
 
-void KineticPDU_Create(
+void KineticPDU_Init(
     KineticPDU* const pdu,
+    KineticExchange* const exchange,
     uint8_t* const buffer,
-    const KineticProto* const proto,
+    KineticMessage* const message,
     const uint8_t* const value,
-    const int64_t valueLength);
+    int64_t valueLength);
 
 #endif // _KINETIC_PDU_H

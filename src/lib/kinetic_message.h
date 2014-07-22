@@ -21,9 +21,11 @@
 #ifndef _KINETIC_MESSAGE_H
 #define _KINETIC_MESSAGE_H
 
-#include "kinetic_types.h"
 #include "kinetic_proto.h"
-#include "kinetic_exchange.h"
+#include <openssl/sha.h>
+
+// #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
+
 
 typedef struct _KineticMessage
 {
@@ -33,15 +35,10 @@ typedef struct _KineticMessage
     KineticProto_Header     header;
     KineticProto_Body       body;
     KineticProto_Status     status;
-
-    // Other pertinent data members
-    KineticExchange*        exchange;
+    uint8_t                 hmacData[SHA_DIGEST_LENGTH];
 } KineticMessage;
 
-void KineticMessage_Init(
-    KineticMessage* const message,
-    KineticExchange* const exchange);
-void KineticMessage_BuildNoop(
-    KineticMessage* const message);
+void KineticMessage_Init(KineticMessage* const message);
+void KineticMessage_BuildNoop(KineticMessage* const message);
 
 #endif // _KINETIC_MESSAGE_H

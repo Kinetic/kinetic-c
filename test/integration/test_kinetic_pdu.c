@@ -21,38 +21,37 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include <protobuf-c/protobuf-c.h>
+#include "kinetic_connection.h"
 #include "kinetic_pdu.h"
 #include "kinetic_exchange.h"
 #include "kinetic_proto.h"
+#include "kinetic_message.h"
+#include "kinetic_socket.h"
+#include "kinetic_logger.h"
+
 #include <string.h>
 
-KineticProto Proto;
-KineticProto_Command Command;
-KineticProto_Header Header;
+KineticPDU PDU;
+KineticConnection Connection;
+KineticExchange Exchange;
+KineticMessage Message;
 int64_t ProtoBufferLength;
 uint8_t Value[1024*1024];
 const int64_t ValueLength = (int64_t)sizeof(Value);
 uint8_t PDUBuffer[PDU_MAX_LEN];
-KineticPDU PDU;
 
 void setUp(void)
 {
     uint32_t i;
 
     // Assemble a Kinetic protocol instance
-    KineticProto_init(&Proto);
-    KineticProto_command_init(&Command);
-    KineticProto_header_init(&Header);
-    Header.clusterversion = 0x0011223344556677;
-    Header.has_clusterversion = true;
-    Header.identity = 0x7766554433221100;
-    Header.has_identity = true;
-    Command.header = &Header;
-    Proto.command = &Command;
+    Connection = KineticConnection_Init();
+    KineticExchange_Init(&Exchange, 0x7766554433221100, 5544332211, &Connection);
+    KineticExchange_SetClusterVersion(&Exchange, 0x0011223344556677);
+    KineticMessage_Init(&Message);
 
     // Compute the size of the encoded proto buffer
-    ProtoBufferLength = KineticProto_get_packed_size(&Proto);
-
+    ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
     memset(PDUBuffer, 0, sizeof(PDUBuffer));
 
     // Populate the value buffer with test payload
@@ -66,34 +65,42 @@ void tearDown(void)
 {
 }
 
-void test_KineticPDU_Create_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer(void)
+void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer(void)
 {
-    int i;
+    KineticPDU_Init(&PDU, &Exchange, PDUBuffer, &Message, NULL, 0);
 
-    KineticPDU_Create(&PDU, PDUBuffer, &Proto, NULL, 0);
+    // Validate KineticExchange associated
+    TEST_ASSERT_EQUAL_PTR(&Exchange, PDU.exchange);
+
+    // Validate KineticMessage associated
+    TEST_ASSERT_EQUAL_PTR(&Message, PDU.message);
 
     // Valiate prefix
     TEST_ASSERT_EQUAL_HEX8('F', *PDU.prefix);
 
-    // Validate proto buf size and packed content
-    ProtoBufferLength = KineticProto_get_packed_size(&Proto);
-    TEST_ASSERT_EQUAL_NBO_INT64(ProtoBufferLength, PDU.protoLength);
+    // Validate 'value' field is empty
+    TEST_ASSERT_EQUAL(0, PDU.valueLength);
 
-    // Validate value field size (no content)
-    TEST_ASSERT_EQUAL_NBO_INT64(0, PDU.valueLength);
+    // // Validate proto buf size and packed content
+    // ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
+    // TEST_ASSERT_EQUAL_NBO_INT64(ProtoBufferLength, PDU.protoLength);
+
+    // // Validate value field size (no content)
+    // TEST_ASSERT_NULL(PDU.value);
+    // TEST_ASSERT_EQUAL_NBO_INT64(0, PDU.valueLength);
 }
 
-void test_KineticPDU_Create_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer_and_value_payload(void)
+void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer_and_value_payload(void)
 {
-    int i;
+    size_t i;
 
-    KineticPDU_Create(&PDU, PDUBuffer, &Proto, Value, ValueLength);
+    KineticPDU_Init(&PDU, &Exchange, PDUBuffer, &Message, Value, ValueLength);
 
     // Valiate prefix
     TEST_ASSERT_EQUAL_HEX8('F', *PDU.prefix);
 
     // Validate proto buf size and packed content
-    ProtoBufferLength = KineticProto_get_packed_size(&Proto);
+    ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
     TEST_ASSERT_EQUAL_NBO_INT64(ProtoBufferLength, PDU.protoLength);
 
     // Validate value field size and content
@@ -101,7 +108,7 @@ void test_KineticPDU_Create_should_populate_the_PDU_structure_and_PDU_buffer_wit
     for (i = 0; i < ValueLength; i++)
     {
         char err[64];
-        sprintf(err, "@ value payload index %d", i);
+        sprintf(err, "@ value payload index %zu", i);
         TEST_ASSERT_EQUAL_HEX8_MESSAGE((i & 0xFFu), PDU.value[i], err);
     }
 }

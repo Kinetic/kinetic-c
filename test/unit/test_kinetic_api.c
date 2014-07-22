@@ -24,10 +24,11 @@
 #include <stdio.h>
 #include <protobuf-c/protobuf-c.h>
 #include "kinetic_proto.h"
-#include "mock_kinetic_message.h"
-#include "mock_kinetic_logger.h"
 #include "mock_kinetic_connection.h"
+#include "mock_kinetic_message.h"
 #include "mock_kinetic_exchange.h"
+#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_logger.h"
 
 void setUp(void)
 {
@@ -51,7 +52,7 @@ void test_KineticApi_Connect_should_create_a_connection(void)
 
     dummy.Connected = false; // Ensure gets set appropriately by internal connect call
 
-    KineticConnection_Create_ExpectAndReturn(dummy);
+    KineticConnection_Init_ExpectAndReturn(dummy);
     KineticConnection_Connect_ExpectAndReturn(&dummy, "somehost.com", 321, true, true);
 
     result = KineticApi_Connect("somehost.com", 321, true);
@@ -68,7 +69,7 @@ void test_KineticApi_Connect_should_log_a_failed_connection(void)
     dummy.Connected = true;
     dummy.FileDescriptor = 333;
 
-    KineticConnection_Create_ExpectAndReturn(dummy);
+    KineticConnection_Init_ExpectAndReturn(dummy);
     KineticConnection_Connect_ExpectAndReturn(&dummy, "somehost.com", 123, true, false);
     KineticLogger_Log_Expect("Failed creating connection to somehost.com:123");
 
@@ -82,26 +83,36 @@ void test_KineticApi_SendNoop_should_send_NOOP_command(void)
 {
     KineticConnection connection;
     KineticExchange exchange;
-    KineticMessage request, response;
+    KineticMessage requestMsg, responseMsg;
+    KineticPDU request, response;
     KineticProto_Status_StatusCode status;
     int64_t identity = 1234;
     int64_t connectionID = 5678;
-    request.exchange = &exchange;
+    uint8_t requestBuffer[3*(1024*1024)];
+    uint8_t responseBuffer[3*(1024*1024)];
 
-    KineticConnection_Create_ExpectAndReturn(connection);
+    exchange.connection = &connection;
+
+    request.exchange = &exchange;
+    request.message = &requestMsg;
+
+    response.exchange = &exchange;
+    response.message = &responseMsg;
+
+    KineticConnection_Init_ExpectAndReturn(connection);
     KineticConnection_Connect_ExpectAndReturn(&connection, "salgood.com", 88, false, true);
 
     connection = KineticApi_Connect("salgood.com", 88, false);
 
     KineticExchange_Init_Expect(&exchange, identity, connectionID, &connection);
-    KineticMessage_Init_Expect(&request, &exchange);
-    KineticMessage_BuildNoop_Expect(&request);
-    KineticConnection_SendMessage_ExpectAndReturn(&connection, &request, true);
-    KineticConnection_ReceiveMessage_ExpectAndReturn(&connection, &response, true);
+    KineticMessage_Init_Expect(&requestMsg);
+    KineticMessage_BuildNoop_Expect(&requestMsg);
+    KineticPDU_Init_Expect(&request, &exchange, requestBuffer, &requestMsg, NULL, 0);
+    KineticConnection_SendPDU_ExpectAndReturn(&request, true);
+    KineticPDU_Init_Expect(&response, &exchange, responseBuffer, &responseMsg, NULL, 0);
+    KineticConnection_ReceivePDU_ExpectAndReturn(&response, true);
 
-    status = KineticApi_SendNoop(&connection, &request, &response);
-
-    TEST_IGNORE_MESSAGE("Finish me!!!");
+    status = KineticApi_SendNoop(&request, &response, requestBuffer, responseBuffer);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);

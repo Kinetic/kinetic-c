@@ -63,11 +63,14 @@ void KineticExchange_Init(
     int64_t identity,
     int64_t connectionID,
     KineticConnection* const connection);
+
 void KineticExchange_SetClusterVersion(
     KineticExchange* const exchange,
     int64_t clusterVersion);
+
 void KineticExchange_IncrementSequence(
     KineticExchange* const exchange);
+
 void KineticExchange_ConfigureHeader(
     const KineticExchange* const exchange,
     KineticProto_Header* const header);

@@ -18,17 +18,25 @@
 *
 */
 
-#ifndef _KINETIC_SOCKET_H
-#define _KINETIC_SOCKET_H
+#ifndef _KINETIC_HMAC_H
+#define _KINETIC_HMAC_H
 
 #include "kinetic_types.h"
 #include "kinetic_message.h"
+#include <openssl/sha.h>
 
-int KineticSocket_Connect(const char* host, int port, bool blocking);
-void KineticSocket_Close(int socketDescriptor);
+#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
+#define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
 
-bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length);
-bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length);
-bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticMessage* message);
+typedef struct _KineticHMAC
+{
+    KineticProto_Security_ACL_HMACAlgorithm algorithm;
+    unsigned int valueLength;
+    uint8_t value[KINETIC_HMAC_MAX_LEN];
+} KineticHMAC;
 
-#endif // _KINETIC_SOCKET_H
+void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm);
+void KineticHMAC_Populate(KineticHMAC* hmac, KineticMessage* message, const uint8_t* const key, size_t keyLen);
+bool KineticHMAC_Validate(const KineticMessage* message, const uint8_t* const key, size_t keyLen);
+
+#endif  // _KINETIC_HMAC_H

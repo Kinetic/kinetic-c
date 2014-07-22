@@ -18,11 +18,10 @@
 *
 */
 
+#include "kinetic_types.h"
 #include "kinetic_message.h"
 
-void KineticMessage_Init(
-    KineticMessage* const message,
-    KineticExchange* const exchange)
+void KineticMessage_Init(KineticMessage* const message)
 {
     // Initialize protobuf fields
     KineticProto_init(&message->proto);
@@ -32,16 +31,14 @@ void KineticMessage_Init(
     KineticProto_status_init(&message->status);
 
     // Assemble the message
+    message->proto.hmac.data = message->hmacData;
     message->command.header = &message->header;
     message->command.body = &message->body;
     message->command.status = &message->status;
     message->proto.command = &message->command;
-
-    // Configure/associate the message with the exchange
-    KineticExchange_ConfigureHeader(exchange, &message->header);
-    message->exchange = exchange;
 }
 
 void KineticMessage_BuildNoop(KineticMessage* const message)
 {
+    assert(false); // Need to complete!!!
 }
