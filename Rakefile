@@ -156,39 +156,57 @@ namespace :test_server do
       @port = port
       @server = nil
       @worker = nil
+      @listeners = []
     end
 
     def start
       return unless @server.nil?
 
-      # Start the werver
-      @server = WEBrick::HTTPServer.new(:Port => @port)
-
-      # Mount test server servlet
-      @server.mount "/", KineticServlet
+      @server = TCPServer.new @port
+      @listeners = []
 
       # Setup handler for signaled shutdown (via ctrl+c)
       trap("INT") do
-        report "INT triggered Kintic Test Server shutdown"
+        report "Test server: INT triggered Kintic Test Server shutdown"
         shutdown
       end
 
       # Create worker thread for test server to run in so we can continue
       @worker = Thread.new do
-        @server.start
+        report "Test server: Listening for Kinetic clients..."
+        loop do
+          @listeners << Thread.start(@server.accept) do |client|
+            report "Test server: Connected to #{client.inspect}"
+            request = ""
+            while request += client.getc # Read characters from socket
+              request_match = request.match(/^read\((\d+)\)/)
+              if request_match
+                len = request_match[1].to_i
+                response = "G"*len
+                report "Test server: Responding to 'read(#{len})' w/ '#{response}'"
+                client.write response
+                request = ""
+              end
+            end
+            # report "Test server: Client #{client.inspect} disconnected!"
+          end
+        end
       end
+
     end
 
     def shutdown
       return if @server.nil?
-      if @worker
-        report_banner "Kinetic Test Server shutting down..."
-        @server.shutdown
-        @worker.join(5)
+      report_banner "Test server: Kinetic Test Server shutting down..."
+      @listeners.each do |client|
+        client.join(0.3) if client.alive?
       end
-      @server = nil
+      @listeners = []
+      @worker.exit
       @worker = nil
-      report "Kinetic Test Server shutdown complete"
+      @server.close
+      @server = nil
+      report "Test server: Kinetic Test Server shutdown complete"
     end
 
   end

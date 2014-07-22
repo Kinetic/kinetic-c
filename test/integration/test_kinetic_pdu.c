@@ -81,13 +81,13 @@ void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_
     // Validate 'value' field is empty
     TEST_ASSERT_EQUAL(0, PDU.valueLength);
 
-    // // Validate proto buf size and packed content
-    // ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
-    // TEST_ASSERT_EQUAL_NBO_INT64(ProtoBufferLength, PDU.protoLength);
+    // Validate proto buf size and packed content
+    ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
+    TEST_ASSERT_EQUAL_NBO_INT64(ProtoBufferLength, PDU.protoLength);
 
-    // // Validate value field size (no content)
-    // TEST_ASSERT_NULL(PDU.value);
-    // TEST_ASSERT_EQUAL_NBO_INT64(0, PDU.valueLength);
+    // Validate value field size (no content)
+    TEST_ASSERT_NULL(PDU.value);
+    TEST_ASSERT_NULL(PDU.valueLength);
 }
 
 void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer_and_value_payload(void)
@@ -95,6 +95,12 @@ void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_
     size_t i;
 
     KineticPDU_Init(&PDU, &Exchange, PDUBuffer, &Message, Value, ValueLength);
+
+    // Validate KineticExchange associated
+    TEST_ASSERT_EQUAL_PTR(&Exchange, PDU.exchange);
+
+    // Validate KineticMessage associated
+    TEST_ASSERT_EQUAL_PTR(&Message, PDU.message);
 
     // Valiate prefix
     TEST_ASSERT_EQUAL_HEX8('F', *PDU.prefix);
