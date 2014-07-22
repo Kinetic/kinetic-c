@@ -113,18 +113,71 @@ void test_KineticConnection_SendPDU_should_send_the_PDU_and_report_success(void)
 
     DoConnect();
 
-    KineticMessage_Init(&MessageOut);
-    MessageOut.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS; // Fake success for now
     KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
+
+    Connection.Connected = true;
+    Connection.Blocking = true;
+    Connection.Port = 1234;
+    Connection.FileDescriptor = 456;
+    strcpy(Connection.Host, "valid-host.com");
+    Expected = Connection;
+
+    KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(456, PDUOut.protobuf, true);
+    KineticSocket_Write_ExpectAndReturn(456, PDUOut.value, PDUOut.valueLength, true);
 
     status = KineticConnection_SendPDU(&PDUOut);
 
     TEST_ASSERT_TRUE(status);
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, MessageOut.status.code);
-
-    TEST_IGNORE_MESSAGE("Need to actually send the message still!");
 }
 
+
+void test_KineticConnection_SendPDU_should_send_the_specified_message_and_report_failure_to_send_header(void)
+{
+    bool status;
+    uint8_t buffer[20], value[10];
+
+    DoConnect();
+
+    KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
+
+    Connection.Connected = true;
+    Connection.Blocking = true;
+    Connection.Port = 1234;
+    Connection.FileDescriptor = 456;
+    strcpy(Connection.Host, "valid-host.com");
+    Expected = Connection;
+
+    KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), false);
+
+    status = KineticConnection_SendPDU(&PDUOut);
+
+    TEST_ASSERT_FALSE(status);
+}
+
+void test_KineticConnection_SendPDU_should_send_the_specified_message_and_report_failure_to_send_protobuf(void)
+{
+    bool status;
+    uint8_t buffer[20], value[10];
+
+    DoConnect();
+
+    KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
+
+    Connection.Connected = true;
+    Connection.Blocking = true;
+    Connection.Port = 1234;
+    Connection.FileDescriptor = 456;
+    strcpy(Connection.Host, "valid-host.com");
+    Expected = Connection;
+
+    KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(456, PDUOut.protobuf, false);
+
+    status = KineticConnection_SendPDU(&PDUOut);
+
+    TEST_ASSERT_FALSE(status);
+}
 
 void test_KineticConnection_SendPDU_should_send_the_specified_message_and_report_failure(void)
 {
@@ -133,17 +186,22 @@ void test_KineticConnection_SendPDU_should_send_the_specified_message_and_report
 
     DoConnect();
 
-    KineticMessage_Init(&MessageOut);
-    MessageOut.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM; // Fake failure for now
     KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
+
+    Connection.Connected = true;
+    Connection.Blocking = true;
+    Connection.Port = 1234;
+    Connection.FileDescriptor = 456;
+    strcpy(Connection.Host, "valid-host.com");
+    Expected = Connection;
+
+    KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(456, PDUOut.protobuf, true);
+    KineticSocket_Write_ExpectAndReturn(456, PDUOut.value, PDUOut.valueLength, false);
 
     status = KineticConnection_SendPDU(&PDUOut);
 
     TEST_ASSERT_FALSE(status);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM, MessageOut.status.code);
-
-    TEST_IGNORE_MESSAGE("Need to actually send the message still!");
 }
 
 void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange_and_report_success(void)
@@ -153,7 +211,6 @@ void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange
 
     DoConnect();
 
-    KineticMessage_Init(&MessageIn);
     MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS; // Fake success for now
     KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
 
@@ -173,7 +230,6 @@ void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange
 
     DoConnect();
 
-    KineticMessage_Init(&MessageIn);
     MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR; // Fake success for now
     KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
 
@@ -184,4 +240,9 @@ void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR, MessageIn.status.code);
 
     TEST_IGNORE_MESSAGE("Need to actually receive the message still!");
+}
+
+void test_SOMEONE_needs_to_configure_or_validate_HMAC_on_messages(void)
+{
+    TEST_IGNORE_MESSAGE("INCOMPLETE!");
 }

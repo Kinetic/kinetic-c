@@ -50,9 +50,30 @@ bool KineticConnection_Connect(
 
 bool KineticConnection_SendPDU(KineticPDU* const request)
 {
-    // .... NEED TO SEND THE MESSAGE STILL!!!!!!!
+    int fd = request->exchange->connection->FileDescriptor;
 
-    return (request->protobuf->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    // Send the PDU header
+    if (!KineticSocket_Write(fd, &request->header, sizeof(KineticPDUHeader)))
+    {
+        return false;
+    }
+
+    // Send the protobuf message
+    if (!KineticSocket_WriteProtobuf(fd, request->protobuf))
+    {
+        return false;
+    }
+
+    // Send the value/payload, if specified
+    if ((request->valueLength > 0) && (request->value != NULL))
+    {
+        if (!KineticSocket_Write(fd, request->value, request->valueLength))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool KineticConnection_ReceivePDU(KineticPDU* const response)
