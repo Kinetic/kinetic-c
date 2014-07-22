@@ -121,6 +121,8 @@ void test_KineticConnection_SendPDU_should_send_the_PDU_and_report_success(void)
 
     TEST_ASSERT_TRUE(status);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, MessageOut.status.code);
+
+    TEST_IGNORE_MESSAGE("Need to actually send the message still!");
 }
 
 
