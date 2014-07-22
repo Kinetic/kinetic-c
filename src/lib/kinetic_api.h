@@ -26,8 +26,6 @@
 
 void KineticApi_Init(const char* log_file);
 const KineticConnection KineticApi_Connect(const char* host, int port, bool blocking);
-KineticProto_Status_StatusCode KineticApi_SendNoop(
-    KineticPDU* const request, KineticPDU* const response,
-    uint8_t* const requestBuffer, uint8_t* const responseBuffer);
+KineticProto_Status_StatusCode KineticApi_SendNoop(KineticPDU* request, KineticPDU* response);
 
 #endif // _KINETIC_API_H

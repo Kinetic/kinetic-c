@@ -19,7 +19,7 @@
 */
 
 #include "kinetic_api.h"
-#include "kinetic_connction.h"
+#include "kinetic_connection.h"
 #include "kinetic_pdu.h"
 #include "kinetic_logger.h"
 #include <stdio.h>
@@ -49,29 +49,27 @@ const KineticConnection KineticApi_Connect(const char* host, int port, bool bloc
 	return connection;
 }
 
-KineticProto_Status_StatusCode KineticApi_SendNoop(
-    KineticPDU* const request, KineticPDU* const response,
-    uint8_t* const requestBuffer, uint8_t* const responseBuffer)
+KineticProto_Status_StatusCode KineticApi_SendNoop(KineticPDU* request, KineticPDU* response)
 {
     KineticProto_Status_StatusCode status =
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
 
     // Initialize request
-    KineticExchange_Init(request->exchange, 1234, 5678, connection);
-    KineticMessage_Init(request->message);
-    KineticMessage_BuildNoop(request->message);
+    KineticExchange_Init(request->exchange, 1234, 5678, request->exchange->connection);
+    KineticMessage_Init(request->protobuf);
+    KineticMessage_BuildNoop(request->protobuf);
 
-    KineticPDU_Init(request, request->exchange, requestBuffer, request->message, NULL, 0);
+    KineticPDU_Init(request, request->exchange, request->protobuf, NULL, 0);
 
     // Send the request
     KineticConnection_SendPDU(request);
 
     // Associate response with same exchange as request
-    response->exchange = request->exchange;
-    if (KineticConnection_ReceivePDU(connection, response))
+    KineticPDU_Init(response, response->exchange, response->protobuf, NULL, 0);
+    if (KineticConnection_ReceivePDU(response))
     {
-        status = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+        status = response->protobuf->command.status->code;
     }
 
-	return KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED;
+	return status;
 }

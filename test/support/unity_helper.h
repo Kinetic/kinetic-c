@@ -59,11 +59,11 @@ if (expected != actual) { \
 
 /** Custom Unity assertion which validates the expected int64_t value is
     packed properly into a buffer in Network Byte-Order (big endian) */
-#define TEST_ASSERT_EQUAL_NBO_INT64(expected, buf) { \
-    int i; int64_t val = 0; char err[64];\
-    for(i = 0; i < sizeof(int64_t); i++) {val <<= 8; val += buf[i]; } \
+#define TEST_ASSERT_EQUAL_NBO_INT32(expected, buf) { \
+    int i; int32_t val = 0; char err[64]; uint8_t* p = (uint8_t*)&buf;\
+    for(i = 0; i < sizeof(int32_t); i++) {val <<= 8; val += p[i]; } \
     sprintf(err, "@ index %d", i); \
-    TEST_ASSERT_EQUAL_INT64_MESSAGE(expected, val, err); \
+    TEST_ASSERT_EQUAL_INT32_MESSAGE(expected, val, err); \
 }
 
 #define GET_CWD(cwd) \

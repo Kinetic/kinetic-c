@@ -38,7 +38,6 @@ KineticMessage Message;
 int64_t ProtoBufferLength;
 uint8_t Value[1024*1024];
 const int64_t ValueLength = (int64_t)sizeof(Value);
-uint8_t PDUBuffer[PDU_MAX_LEN];
 
 void setUp(void)
 {
@@ -52,7 +51,6 @@ void setUp(void)
 
     // Compute the size of the encoded proto buffer
     ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
-    memset(PDUBuffer, 0, sizeof(PDUBuffer));
 
     // Populate the value buffer with test payload
     for (i = 0; i < ValueLength; i++)
@@ -67,54 +65,48 @@ void tearDown(void)
 
 void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer(void)
 {
-    KineticPDU_Init(&PDU, &Exchange, PDUBuffer, &Message, NULL, 0);
+    KineticPDU_Init(&PDU, &Exchange, &Message, NULL, 0);
 
     // Validate KineticExchange associated
     TEST_ASSERT_EQUAL_PTR(&Exchange, PDU.exchange);
 
     // Validate KineticMessage associated
-    TEST_ASSERT_EQUAL_PTR(&Message, PDU.message);
+    TEST_ASSERT_EQUAL_PTR(&Message, PDU.protobuf);
 
     // Valiate prefix
-    TEST_ASSERT_EQUAL_HEX8('F', *PDU.prefix);
+    TEST_ASSERT_EQUAL_HEX8('F', PDU.header.versionPrefix);
+
+    // Validate protobuf length
+    ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
+    TEST_ASSERT_EQUAL_INT32(ProtoBufferLength, PDU.protobufLength);
+    TEST_ASSERT_EQUAL_NBO_INT32(ProtoBufferLength, PDU.header.protobufLength);
 
     // Validate 'value' field is empty
-    TEST_ASSERT_EQUAL(0, PDU.valueLength);
-
-    // Validate proto buf size and packed content
-    ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
-    TEST_ASSERT_EQUAL_NBO_INT64(ProtoBufferLength, PDU.protoLength);
-
-    // Validate value field size (no content)
+    TEST_ASSERT_EQUAL_INT32(0, PDU.valueLength);
+    TEST_ASSERT_EQUAL_NBO_INT32(0, PDU.header.valueLength);
     TEST_ASSERT_NULL(PDU.value);
-    TEST_ASSERT_NULL(PDU.valueLength);
 }
 
 void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer_and_value_payload(void)
 {
-    size_t i;
-
-    KineticPDU_Init(&PDU, &Exchange, PDUBuffer, &Message, Value, ValueLength);
+    KineticPDU_Init(&PDU, &Exchange, &Message, Value, ValueLength);
 
     // Validate KineticExchange associated
     TEST_ASSERT_EQUAL_PTR(&Exchange, PDU.exchange);
 
     // Validate KineticMessage associated
-    TEST_ASSERT_EQUAL_PTR(&Message, PDU.message);
+    TEST_ASSERT_EQUAL_PTR(&Message, PDU.protobuf);
 
     // Valiate prefix
-    TEST_ASSERT_EQUAL_HEX8('F', *PDU.prefix);
+    TEST_ASSERT_EQUAL_HEX8('F', PDU.header.versionPrefix);
 
-    // Validate proto buf size and packed content
+    // Validate protobuf length
     ProtoBufferLength = KineticProto_get_packed_size(&Message.proto);
-    TEST_ASSERT_EQUAL_NBO_INT64(ProtoBufferLength, PDU.protoLength);
+    TEST_ASSERT_EQUAL_INT32(ProtoBufferLength, PDU.protobufLength);
+    TEST_ASSERT_EQUAL_NBO_INT32(ProtoBufferLength, PDU.header.protobufLength);
 
-    // Validate value field size and content
-    TEST_ASSERT_EQUAL_NBO_INT64(ValueLength, PDU.valueLength);
-    for (i = 0; i < ValueLength; i++)
-    {
-        char err[64];
-        sprintf(err, "@ value payload index %zu", i);
-        TEST_ASSERT_EQUAL_HEX8_MESSAGE((i & 0xFFu), PDU.value[i], err);
-    }
+    // Validate value field size and content association
+    TEST_ASSERT_EQUAL_INT32(ValueLength, PDU.valueLength);
+    TEST_ASSERT_EQUAL_NBO_INT32(ValueLength, PDU.header.valueLength);
+    TEST_ASSERT_EQUAL_PTR(Value, PDU.value);
 }

@@ -40,5 +40,5 @@ void KineticMessage_Init(KineticMessage* const message)
 
 void KineticMessage_BuildNoop(KineticMessage* const message)
 {
-    assert(false); // Need to complete!!!
+    // assert(false); // Need to complete!!!
 }

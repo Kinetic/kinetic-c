@@ -30,29 +30,35 @@
 #define PDU_VALUE_MAX_LEN   (1024 * 1024)
 #define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
 
+typedef struct _KineticPDUHeader
+{
+    uint8_t     versionPrefix;
+    uint32_t    protobufLength;
+    uint32_t    valueLength;
+} KineticPDUHeader;
+
 typedef struct _KineticPDU
 {
-    // PDU Fields
-    uint8_t* prefix;
-    uint8_t* protoLength;
-    uint8_t* valueLength;
-    uint8_t* proto;
-    uint8_t* value;
-    uint8_t* data;
-
-    // Exchange associated with this PDU instance
-    KineticExchange* exchange;
+    // Binary PDU header (binary packed in NBO)
+    KineticPDUHeader header;
 
     // Message associated with this PDU instance
-    KineticMessage* message;
+    KineticMessage* protobuf;
+    uint32_t protobufLength; // Embedded in header in NBO byte order (this is for reference)
+
+    // Value data associated with PDU (if any)
+    uint8_t* value;
+    uint32_t valueLength; // Embedded in header in NBO byte order (this is for reference)
+
+    // Exchange associated with this PDU instance (info gets embedded in protobuf message)
+    KineticExchange* exchange;
 } KineticPDU;
 
 void KineticPDU_Init(
     KineticPDU* const pdu,
     KineticExchange* const exchange,
-    uint8_t* const buffer,
     KineticMessage* const message,
-    const uint8_t* const value,
-    int64_t valueLength);
+    uint8_t* const value,
+    int32_t valueLength);
 
 #endif // _KINETIC_PDU_H

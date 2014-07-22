@@ -115,7 +115,7 @@ void test_KineticConnection_SendPDU_should_send_the_PDU_and_report_success(void)
 
     KineticMessage_Init(&MessageOut);
     MessageOut.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS; // Fake success for now
-    KineticPDU_Init(&PDUOut, &Exchange, buffer, &MessageOut, value, sizeof(value));
+    KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
 
     status = KineticConnection_SendPDU(&PDUOut);
 
@@ -123,29 +123,41 @@ void test_KineticConnection_SendPDU_should_send_the_PDU_and_report_success(void)
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, MessageOut.status.code);
 }
 
-#if 0
 
 void test_KineticConnection_SendPDU_should_send_the_specified_message_and_report_failure(void)
 {
+    bool status;
+    uint8_t buffer[20], value[10];
+
     DoConnect();
 
+    KineticMessage_Init(&MessageOut);
     MessageOut.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM; // Fake failure for now
+    KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
 
-    TEST_ASSERT_FALSE(KineticConnection_SendPDU(&Connection, &MessageOut));
+    status = KineticConnection_SendPDU(&PDUOut);
+
+    TEST_ASSERT_FALSE(status);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM, MessageOut.status.code);
 
     TEST_IGNORE_MESSAGE("Need to actually send the message still!");
 }
 
-
 void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange_and_report_success(void)
 {
+    bool status;
+    uint8_t buffer[20], value[10];
+
     DoConnect();
 
+    KineticMessage_Init(&MessageIn);
     MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS; // Fake success for now
+    KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
 
-    TEST_ASSERT_TRUE(KineticConnection_ReceivePDU(&Connection, &MessageIn));
+    status = KineticConnection_ReceivePDU(&PDUIn);
+
+    TEST_ASSERT_TRUE(status);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, MessageIn.status.code);
 
@@ -154,20 +166,20 @@ void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange
 
 void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange_and_report_failure(void)
 {
+    bool status;
+    uint8_t buffer[20], value[10];
+
     DoConnect();
 
+    KineticMessage_Init(&MessageIn);
     MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR; // Fake success for now
+    KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
 
-    TEST_ASSERT_FALSE(KineticConnection_ReceivePDU(&Connection, &MessageIn));
+    status = KineticConnection_ReceivePDU(&PDUIn);
+
+    TEST_ASSERT_FALSE(status);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR, MessageIn.status.code);
 
     TEST_IGNORE_MESSAGE("Need to actually receive the message still!");
-}
-
-#endif
-
-void test_KineticConnection_tests_are_disabled(void)
-{
-    TEST_IGNORE_MESSAGE("Re-enabled disabled tests!!!");
 }

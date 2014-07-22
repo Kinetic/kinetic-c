@@ -25,7 +25,7 @@
 #include <protobuf-c/protobuf-c.h>
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
-#include "mock_kinetic_message.h"
+#include "kinetic_message.h"
 #include "mock_kinetic_exchange.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_logger.h"
@@ -88,16 +88,17 @@ void test_KineticApi_SendNoop_should_send_NOOP_command(void)
     KineticProto_Status_StatusCode status;
     int64_t identity = 1234;
     int64_t connectionID = 5678;
-    uint8_t requestBuffer[3*(1024*1024)];
-    uint8_t responseBuffer[3*(1024*1024)];
 
     exchange.connection = &connection;
 
     request.exchange = &exchange;
-    request.message = &requestMsg;
+    KineticMessage_Init(&requestMsg);
+    request.protobuf = &requestMsg;
 
     response.exchange = &exchange;
-    response.message = &responseMsg;
+    KineticMessage_Init(&responseMsg);
+    response.protobuf = &responseMsg;
+    response.protobuf->status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
     KineticConnection_Init_ExpectAndReturn(connection);
     KineticConnection_Connect_ExpectAndReturn(&connection, "salgood.com", 88, false, true);
@@ -105,14 +106,14 @@ void test_KineticApi_SendNoop_should_send_NOOP_command(void)
     connection = KineticApi_Connect("salgood.com", 88, false);
 
     KineticExchange_Init_Expect(&exchange, identity, connectionID, &connection);
-    KineticMessage_Init_Expect(&requestMsg);
-    KineticMessage_BuildNoop_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &exchange, requestBuffer, &requestMsg, NULL, 0);
+    // KineticMessage_Init_Expect(&requestMsg);
+    // KineticMessage_BuildNoop_Expect(&requestMsg);
+    KineticPDU_Init_Expect(&request, &exchange, &requestMsg, NULL, 0);
     KineticConnection_SendPDU_ExpectAndReturn(&request, true);
-    KineticPDU_Init_Expect(&response, &exchange, responseBuffer, &responseMsg, NULL, 0);
+    KineticPDU_Init_Expect(&response, &exchange, &responseMsg, NULL, 0);
     KineticConnection_ReceivePDU_ExpectAndReturn(&response, true);
 
-    status = KineticApi_SendNoop(&request, &response, requestBuffer, responseBuffer);
+    status = KineticApi_SendNoop(&request, &response);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);

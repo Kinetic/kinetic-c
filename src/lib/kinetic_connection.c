@@ -52,12 +52,12 @@ bool KineticConnection_SendPDU(KineticPDU* const request)
 {
     // .... NEED TO SEND THE MESSAGE STILL!!!!!!!
 
-    return (request->message->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    return (request->protobuf->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 }
 
 bool KineticConnection_ReceivePDU(KineticPDU* const response)
 {
     // KineticPDU_Init(&PDUOut, (uint8_t*)0x12345678, &MessageOut.proto, (uint8_t*)0xDEADBEEF, 789);
 
-    return (response->message->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    return (response->protobuf->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 }
