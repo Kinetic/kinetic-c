@@ -20,22 +20,12 @@
 
 #include "kinetic_types.h"
 #include "kinetic_message.h"
+#include "kinetic_hmac.h"
 
 void KineticMessage_Init(KineticMessage* const message)
 {
-    // Initialize protobuf fields
-    KineticProto_init(&message->proto);
-    KineticProto_command_init(&message->command);
-    KineticProto_header_init(&message->header);
-    KineticProto_body_init(&message->body);
-    KineticProto_status_init(&message->status);
-
-    // Assemble the message
-    message->proto.hmac.data = message->hmacData;
-    message->command.header = &message->header;
-    message->command.body = &message->body;
-    message->command.status = &message->status;
-    message->proto.command = &message->command;
+    // Initialize protobuf fields and ssemble the message
+    KINETIC_MESSSAGE_INIT(message);
 }
 
 void KineticMessage_BuildNoop(KineticMessage* const message)

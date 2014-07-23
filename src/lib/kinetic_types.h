@@ -26,12 +26,15 @@
 #include <stdbool.h>
 #endif
 #include <stdint.h>
-#include <assert.h>
 #include <stddef.h>
+#include <string.h>
+#include <stdio.h>
+#include <assert.h>
 #include <limits.h>
 
 #include <netinet/in.h>
 #include <ifaddrs.h>
+
 // Windows doesn't use <unistd.h> nor does it define HOST_NAME_MAX.
 #if defined(WIN32)
     #include <windows.h>
@@ -68,5 +71,26 @@ typedef struct _KineticConnection
     int     FileDescriptor;
     char    Host[HOST_NAME_MAX];
 } KineticConnection;
+
+#include <protobuf-c/protobuf-c.h>
+#include "kinetic_proto.h"
+#include "kinetic_message.h"
+
+#define KINETIC_MAX_KEY_LEN 128
+
+#define KINETIC_MESSSAGE_INIT(msg) \
+    msg->proto = KINETIC_PROTO_INIT; \
+    msg->command = KINETICPROTO_COMMAND_INIT; \
+    msg->header = KINETIC_PROTO_HEADER_INIT; \
+    msg->body = KINETIC_PROTO_BODY_INIT; \
+    msg->status = KINETIC_PROTO_STATUS_INIT; \
+    msg->security = KINETIC_PROTO_SECURITY_INIT; \
+    msg->acl = KINETIC_PROTO_SECURITY_ACL_INIT; \
+    msg->proto.hmac.data = msg->hmacData; \
+    msg->command.header = &msg->header; \
+    msg->command.body = &msg->body; \
+    msg->command.status = &msg->status; \
+    msg->proto.command = &msg->command; \
+    msmset(msg->hmac_data, 0, SHA_DIGEST_LENGTH);
 
 #endif // _KINETIC_TYPES_H

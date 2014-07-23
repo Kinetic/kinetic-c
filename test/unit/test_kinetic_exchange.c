@@ -25,10 +25,22 @@
 
 static KineticConnection Connection;
 static KineticExchange Exchange;
+static int64_t Identity = 1234;
+static uint8_t Key[KINETIC_MAX_KEY_LEN];
+static size_t KeyLength = 0;
+static int64_t ConnectionID = 5678;
 
 void setUp(void)
 {
-    KineticExchange_Init(&Exchange, 1234, 5678, &Connection);
+    size_t i;
+    memset(Key, 0, sizeof(Key));
+    KeyLength = 17;
+    for (i = 0; i < KeyLength; i++)
+    {
+        Key[i] = (uint8_t)(0x0FFu & i);
+    }
+
+    KineticExchange_Init(&Exchange, Identity, Key, KeyLength, ConnectionID, &Connection);
 }
 
 void tearDown(void)
@@ -41,6 +53,40 @@ void test_KineticExchange_Init_should_initialize_a_KineticExchange(void)
     TEST_ASSERT_FALSE(Exchange.has_clusterVersion);
     TEST_ASSERT_EQUAL_INT64(0, Exchange.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(1234, Exchange.identity);
+    TEST_ASSERT_TRUE(Exchange.has_key);
+    TEST_ASSERT_EQUAL_UINT64(KeyLength, Exchange.keyLength);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(Key, Exchange.key, KeyLength);
+    TEST_ASSERT_EQUAL_INT64(5678, Exchange.connectionID);
+    TEST_ASSERT_EQUAL_INT64(0, Exchange.sequence);
+}
+
+void test_KineticExchange_Init_should_initialize_a_KineticExchange_without_a_key(void)
+{
+    memset(Key, 0, sizeof(Key));
+
+    KineticExchange_Init(&Exchange, Identity, NULL, 1823642323, ConnectionID, &Connection);
+
+    TEST_ASSERT_EQUAL_PTR(&Connection, Exchange.connection);
+    TEST_ASSERT_FALSE(Exchange.has_clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(0, Exchange.clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(1234, Exchange.identity);
+    TEST_ASSERT_FALSE(Exchange.has_key);
+    TEST_ASSERT_EQUAL_UINT64(0, Exchange.keyLength);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(Key, Exchange.key, sizeof(Key));
+    TEST_ASSERT_EQUAL_INT64(5678, Exchange.connectionID);
+    TEST_ASSERT_EQUAL_INT64(0, Exchange.sequence);
+    KineticExchange_Init(&Exchange, Identity, NULL, 1823642323, ConnectionID, &Connection);
+
+
+    KineticExchange_Init(&Exchange, Identity, Key, 0, ConnectionID, &Connection);
+
+    TEST_ASSERT_EQUAL_PTR(&Connection, Exchange.connection);
+    TEST_ASSERT_FALSE(Exchange.has_clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(0, Exchange.clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(1234, Exchange.identity);
+    TEST_ASSERT_FALSE(Exchange.has_key);
+    TEST_ASSERT_EQUAL_UINT64(0, Exchange.keyLength);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(Key, Exchange.key, sizeof(Key));
     TEST_ASSERT_EQUAL_INT64(5678, Exchange.connectionID);
     TEST_ASSERT_EQUAL_INT64(0, Exchange.sequence);
 }

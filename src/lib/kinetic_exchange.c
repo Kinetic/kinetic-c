@@ -24,11 +24,19 @@
 void KineticExchange_Init(
     KineticExchange* const exchange,
     int64_t identity,
+    uint8_t* key,
+    size_t keyLength,
     int64_t connectionID,
     KineticConnection* const connection)
 {
     memset(exchange, 0, sizeof(KineticExchange));
     exchange->identity = identity;
+    if (key != NULL && keyLength > 0)
+    {
+        memcpy(&exchange->key, key, keyLength);
+        exchange->keyLength = keyLength;
+        exchange->has_key = true;
+    }
     exchange->connectionID = connectionID;
     exchange->connection = connection;
 }

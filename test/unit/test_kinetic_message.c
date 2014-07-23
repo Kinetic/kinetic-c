@@ -23,6 +23,7 @@
 #include <protobuf-c/protobuf-c.h>
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
+#include "mock_kinetic_hmac.h"
 
 void setUp(void)
 {
@@ -42,4 +43,17 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
     TEST_ASSERT_EQUAL_PTR(&message.status, message.command.status);
     TEST_ASSERT_EQUAL_PTR(&message.command, message.proto.command);
+}
+
+void test_KineticMessage_BuildNoop_should_build_a_NOOP_message(void)
+{
+    KineticMessage message;
+    KineticHMAC hmac;
+
+    KineticMessage_Init(&message);
+
+    KineticHMAC_Init_Expect(&hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Populate_Expect(&hmac, &message, key, keyLen);
+
+    KineticMessage_BuildNoop(&message);
 }

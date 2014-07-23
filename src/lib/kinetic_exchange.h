@@ -43,6 +43,13 @@ typedef struct _KineticExchange
     int64_t identity;
 
     // Required field
+    // This is the identity's HMAC Key. This is a shared secret between the
+    // client and the device, used to sign requests.
+    bool has_key;
+    size_t keyLength;
+    uint8_t key[KINETIC_MAX_KEY_LEN];
+
+    // Required field
     // A unique number for this connection between the source and target.
     // On the first request to the drive, this should be the time of day in
     // seconds since 1970. The drive can change this number and the client must
@@ -61,6 +68,8 @@ typedef struct _KineticExchange
 void KineticExchange_Init(
     KineticExchange* const exchange,
     int64_t identity,
+    uint8_t* key,
+    size_t keyLength,
     int64_t connectionID,
     KineticConnection* const connection);
 

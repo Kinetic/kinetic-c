@@ -24,18 +24,17 @@
 #include "kinetic_proto.h"
 #include <openssl/sha.h>
 
-// #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
-
-
 typedef struct _KineticMessage
 {
     // Kinetic Protocol Buffer Elements
-    KineticProto            proto;
-    KineticProto_Command    command;
-    KineticProto_Header     header;
-    KineticProto_Body       body;
-    KineticProto_Status     status;
-    uint8_t                 hmacData[SHA_DIGEST_LENGTH];
+    KineticProto                proto;
+    KineticProto_Command        command;
+    KineticProto_Header         header;
+    KineticProto_Body           body;
+    KineticProto_Status         status;
+    KineticProto_Security       security;
+    KineticProto_Security_ACL   acl;
+    uint8_t                     hmacData[SHA_DIGEST_LENGTH];
 } KineticMessage;
 
 void KineticMessage_Init(KineticMessage* const message);
