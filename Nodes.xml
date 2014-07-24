@@ -44,29 +44,29 @@
             <Path>struct_kinetic_connection.html</Path>
             <Subnodes>
              <Node>
-              <Name>Connected</Name>
+              <Name>connected</Name>
               <Path>struct_kinetic_connection.html</Path>
-              <Anchor>a01bd54acc4523e6d1822657b7e696564</Anchor>
+              <Anchor>a5bdd709737de27e845262d7b291bcc53</Anchor>
              </Node>
              <Node>
-              <Name>Blocking</Name>
+              <Name>blocking</Name>
               <Path>struct_kinetic_connection.html</Path>
-              <Anchor>a6877cd8cff086a50a3bb5c94e7729924</Anchor>
+              <Anchor>a228abfe2450ff0e613d7a8d5e3ba38fc</Anchor>
              </Node>
              <Node>
-              <Name>Port</Name>
+              <Name>port</Name>
               <Path>struct_kinetic_connection.html</Path>
-              <Anchor>ae2ce8092517e663eda1d672e37350c2c</Anchor>
+              <Anchor>a9d1d59a120924fdc2a5cd6a6915c1023</Anchor>
              </Node>
              <Node>
-              <Name>FileDescriptor</Name>
+              <Name>socketDescriptor</Name>
               <Path>struct_kinetic_connection.html</Path>
-              <Anchor>a8b729af6f1d0bfa6002cfca17cffcd1b</Anchor>
+              <Anchor>a5701de64aa829b62f3bf5c410658ade6</Anchor>
              </Node>
              <Node>
-              <Name>Host</Name>
+              <Name>host</Name>
               <Path>struct_kinetic_connection.html</Path>
-              <Anchor>ae13fe72f7dd3251dddb97866c6ce6554</Anchor>
+              <Anchor>abfa40cc2ff08010634a92f4d951cd5f6</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -90,6 +90,21 @@
               <Anchor>a855522d7c0f9662c27c7df4381286b3c</Anchor>
              </Node>
              <Node>
+              <Name>has_key</Name>
+              <Path>struct_kinetic_exchange.html</Path>
+              <Anchor>a8a5f4178d5c1e939808c67d9f3fa282a</Anchor>
+             </Node>
+             <Node>
+              <Name>keyLength</Name>
+              <Path>struct_kinetic_exchange.html</Path>
+              <Anchor>a4ffdb052e01304f936d94ecd38b3f4f1</Anchor>
+             </Node>
+             <Node>
+              <Name>key</Name>
+              <Path>struct_kinetic_exchange.html</Path>
+              <Anchor>aa5dfdefcb35dbee81495eeb1998de06b</Anchor>
+             </Node>
+             <Node>
               <Name>connectionID</Name>
               <Path>struct_kinetic_exchange.html</Path>
               <Anchor>ac04664033ff7f79717d60fa9b5d11fa5</Anchor>
@@ -103,6 +118,27 @@
               <Name>connection</Name>
               <Path>struct_kinetic_exchange.html</Path>
               <Anchor>aa419c48291fb6542e616e13c8a7d4701</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticHMAC</Name>
+            <Path>struct_kinetic_h_m_a_c.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>algorithm</Name>
+              <Path>struct_kinetic_h_m_a_c.html</Path>
+              <Anchor>a8b00d3368fc08fba9b41370568dc6d11</Anchor>
+             </Node>
+             <Node>
+              <Name>valueLength</Name>
+              <Path>struct_kinetic_h_m_a_c.html</Path>
+              <Anchor>ac80f549084bc5a7c204795f30badc7a3</Anchor>
+             </Node>
+             <Node>
+              <Name>value</Name>
+              <Path>struct_kinetic_h_m_a_c.html</Path>
+              <Anchor>acfe6f39a380b645cdc582c473797cdea</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -136,9 +172,40 @@
               <Anchor>ae8b91d9e5db53830c73a9beb1df7d5a4</Anchor>
              </Node>
              <Node>
-              <Name>exchange</Name>
+              <Name>security</Name>
               <Path>struct_kinetic_message.html</Path>
-              <Anchor>a6138cc9de4450cc08896517fa3775852</Anchor>
+              <Anchor>a8ac954e6b0ade063aabda9ec4091eee8</Anchor>
+             </Node>
+             <Node>
+              <Name>acl</Name>
+              <Path>struct_kinetic_message.html</Path>
+              <Anchor>a097b8188945a5ab6cc58ef57e11d917d</Anchor>
+             </Node>
+             <Node>
+              <Name>hmacData</Name>
+              <Path>struct_kinetic_message.html</Path>
+              <Anchor>a5882b07af169a28bba89ed60a51fae10</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticOperation</Name>
+            <Path>struct_kinetic_operation.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>exchange</Name>
+              <Path>struct_kinetic_operation.html</Path>
+              <Anchor>ae1cce2538150c9687cae5b0e9325ae9b</Anchor>
+             </Node>
+             <Node>
+              <Name>request</Name>
+              <Path>struct_kinetic_operation.html</Path>
+              <Anchor>a05327c0a8b795a748548255b736e4ebc</Anchor>
+             </Node>
+             <Node>
+              <Name>response</Name>
+              <Path>struct_kinetic_operation.html</Path>
+              <Anchor>a9474f1811fbed7a7ac32e0f11f154d3c</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -147,24 +214,24 @@
             <Path>struct_kinetic_p_d_u.html</Path>
             <Subnodes>
              <Node>
-              <Name>prefix</Name>
+              <Name>header</Name>
               <Path>struct_kinetic_p_d_u.html</Path>
-              <Anchor>adf3e91293b570cb9457d18252d080445</Anchor>
+              <Anchor>a626673d332c72f6b188e9629b09cb2c8</Anchor>
              </Node>
              <Node>
-              <Name>protoLength</Name>
+              <Name>protobuf</Name>
               <Path>struct_kinetic_p_d_u.html</Path>
-              <Anchor>ac9283ef4cd85e568d6025ca85f8eaacb</Anchor>
+              <Anchor>a596d6cc864ccf02250c5fb03702cbd8e</Anchor>
              </Node>
              <Node>
-              <Name>valueLength</Name>
+              <Name>protobufLength</Name>
               <Path>struct_kinetic_p_d_u.html</Path>
-              <Anchor>acbc5df3f7162365268b5936680313a07</Anchor>
+              <Anchor>a0cab72fb4d7f6536cc54cf74d6bcdebe</Anchor>
              </Node>
              <Node>
-              <Name>proto</Name>
+              <Name>protobufScratch</Name>
               <Path>struct_kinetic_p_d_u.html</Path>
-              <Anchor>ae1e313a9a5cb163d2a39c2225e16ec11</Anchor>
+              <Anchor>a7677322bce753465451ae3406e0d6897</Anchor>
              </Node>
              <Node>
               <Name>value</Name>
@@ -172,9 +239,40 @@
               <Anchor>ab84f745a1b9aad99b4fc42c02a25f1f3</Anchor>
              </Node>
              <Node>
-              <Name>data</Name>
+              <Name>valueLength</Name>
               <Path>struct_kinetic_p_d_u.html</Path>
-              <Anchor>a0468f444df466b9a19b848e8c2ab291f</Anchor>
+              <Anchor>aa5a8d53cd8b1202b600ebfac26800100</Anchor>
+             </Node>
+             <Node>
+              <Name>hmac</Name>
+              <Path>struct_kinetic_p_d_u.html</Path>
+              <Anchor>a24cd6071d964ac66ddca742c6023ab85</Anchor>
+             </Node>
+             <Node>
+              <Name>exchange</Name>
+              <Path>struct_kinetic_p_d_u.html</Path>
+              <Anchor>a2e33e714621fd2316d394048f4480f86</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticPDUHeader</Name>
+            <Path>struct_kinetic_p_d_u_header.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>versionPrefix</Name>
+              <Path>struct_kinetic_p_d_u_header.html</Path>
+              <Anchor>a0993dcfa55a0e4342c20745d37a13a65</Anchor>
+             </Node>
+             <Node>
+              <Name>protobufLength</Name>
+              <Path>struct_kinetic_p_d_u_header.html</Path>
+              <Anchor>ac10131898fbde74d86af498a85e0dc2f</Anchor>
+             </Node>
+             <Node>
+              <Name>valueLength</Name>
+              <Path>struct_kinetic_p_d_u_header.html</Path>
+              <Anchor>a10f7b4b1ba3f91e9060010920247a365</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -1349,6 +1447,27 @@
              </Node>
             </Subnodes>
            </Node>
+           <Node>
+            <Name>ProtobufAppendToFile</Name>
+            <Path>struct_protobuf_append_to_file.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>base</Name>
+              <Path>struct_protobuf_append_to_file.html</Path>
+              <Anchor>a5812a1a23e4cd53ca8f4ca002d2def06</Anchor>
+             </Node>
+             <Node>
+              <Name>fileHandle</Name>
+              <Path>struct_protobuf_append_to_file.html</Path>
+              <Anchor>a82aa2a0b3d83ff09698fc484822297e9</Anchor>
+             </Node>
+             <Node>
+              <Name>error</Name>
+              <Path>struct_protobuf_append_to_file.html</Path>
+              <Anchor>a923f0c15cfe16bf5562f7abdbec320c2</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
           </Subnodes>
          </Node>
         </Subnodes>
@@ -1366,72 +1485,88 @@
             <Path>kinetic_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticApi.c</Name>
-            <Path>_kinetic_api_8c_source.html</Path>
+            <Name>kinetic_api.c</Name>
+            <Path>kinetic__api_8c_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticApi.h</Name>
-            <Path>_kinetic_api_8h_source.html</Path>
+            <Name>kinetic_api.h</Name>
+            <Path>kinetic__api_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticConnection.c</Name>
-            <Path>_kinetic_connection_8c_source.html</Path>
+            <Name>kinetic_connection.c</Name>
+            <Path>kinetic__connection_8c_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticConnection.h</Name>
-            <Path>_kinetic_connection_8h_source.html</Path>
+            <Name>kinetic_connection.h</Name>
+            <Path>kinetic__connection_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticExchange.c</Name>
-            <Path>_kinetic_exchange_8c_source.html</Path>
+            <Name>kinetic_exchange.c</Name>
+            <Path>kinetic__exchange_8c_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticExchange.h</Name>
-            <Path>_kinetic_exchange_8h_source.html</Path>
+            <Name>kinetic_exchange.h</Name>
+            <Path>kinetic__exchange_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticLogger.c</Name>
-            <Path>_kinetic_logger_8c_source.html</Path>
+            <Name>kinetic_hmac.c</Name>
+            <Path>kinetic__hmac_8c_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticLogger.h</Name>
-            <Path>_kinetic_logger_8h_source.html</Path>
+            <Name>kinetic_hmac.h</Name>
+            <Path>kinetic__hmac_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticMessage.c</Name>
-            <Path>_kinetic_message_8c_source.html</Path>
+            <Name>kinetic_logger.c</Name>
+            <Path>kinetic__logger_8c_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticMessage.h</Name>
-            <Path>_kinetic_message_8h_source.html</Path>
+            <Name>kinetic_logger.h</Name>
+            <Path>kinetic__logger_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticPDU.c</Name>
-            <Path>_kinetic_p_d_u_8c_source.html</Path>
+            <Name>kinetic_message.c</Name>
+            <Path>kinetic__message_8c_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticPDU.h</Name>
-            <Path>_kinetic_p_d_u_8h_source.html</Path>
+            <Name>kinetic_message.h</Name>
+            <Path>kinetic__message_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticProto.c</Name>
-            <Path>_kinetic_proto_8c_source.html</Path>
+            <Name>kinetic_operation.c</Name>
+            <Path>kinetic__operation_8c_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticProto.h</Name>
-            <Path>_kinetic_proto_8h_source.html</Path>
+            <Name>kinetic_operation.h</Name>
+            <Path>kinetic__operation_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticSocket.c</Name>
-            <Path>_kinetic_socket_8c_source.html</Path>
+            <Name>kinetic_pdu.c</Name>
+            <Path>kinetic__pdu_8c_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticSocket.h</Name>
-            <Path>_kinetic_socket_8h_source.html</Path>
+            <Name>kinetic_pdu.h</Name>
+            <Path>kinetic__pdu_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>KineticTypes.h</Name>
-            <Path>_kinetic_types_8h_source.html</Path>
+            <Name>kinetic_proto.c</Name>
+            <Path>kinetic__proto_8c_source.html</Path>
+           </Node>
+           <Node>
+            <Name>kinetic_proto.h</Name>
+            <Path>kinetic__proto_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>kinetic_socket.c</Name>
+            <Path>kinetic__socket_8c_source.html</Path>
+           </Node>
+           <Node>
+            <Name>kinetic_socket.h</Name>
+            <Path>kinetic__socket_8h_source.html</Path>
+           </Node>
+           <Node>
+            <Name>kinetic_types.h</Name>
+            <Path>kinetic__types_8h_source.html</Path>
            </Node>
            <Node>
             <Name>main.c</Name>

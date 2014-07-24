@@ -3,8 +3,11 @@ var annotated =
     [ "_KineticProto", "struct___kinetic_proto.html", "struct___kinetic_proto" ],
     [ "KineticConnection", "struct_kinetic_connection.html", "struct_kinetic_connection" ],
     [ "KineticExchange", "struct_kinetic_exchange.html", "struct_kinetic_exchange" ],
+    [ "KineticHMAC", "struct_kinetic_h_m_a_c.html", "struct_kinetic_h_m_a_c" ],
     [ "KineticMessage", "struct_kinetic_message.html", "struct_kinetic_message" ],
+    [ "KineticOperation", "struct_kinetic_operation.html", "struct_kinetic_operation" ],
     [ "KineticPDU", "struct_kinetic_p_d_u.html", "struct_kinetic_p_d_u" ],
+    [ "KineticPDUHeader", "struct_kinetic_p_d_u_header.html", "struct_kinetic_p_d_u_header" ],
     [ "KineticProto_Body", "struct___kinetic_proto___body.html", "struct___kinetic_proto___body" ],
     [ "KineticProto_Command", "struct___kinetic_proto___command.html", "struct___kinetic_proto___command" ],
     [ "KineticProto_GetLog", "struct___kinetic_proto___get_log.html", "struct___kinetic_proto___get_log" ],
@@ -25,5 +28,6 @@ var annotated =
     [ "KineticProto_Security_ACL", "struct___kinetic_proto___security___a_c_l.html", "struct___kinetic_proto___security___a_c_l" ],
     [ "KineticProto_Security_ACL_Scope", "struct___kinetic_proto___security___a_c_l___scope.html", "struct___kinetic_proto___security___a_c_l___scope" ],
     [ "KineticProto_Setup", "struct___kinetic_proto___setup.html", "struct___kinetic_proto___setup" ],
-    [ "KineticProto_Status", "struct___kinetic_proto___status.html", "struct___kinetic_proto___status" ]
+    [ "KineticProto_Status", "struct___kinetic_proto___status.html", "struct___kinetic_proto___status" ],
+    [ "ProtobufAppendToFile", "struct_protobuf_append_to_file.html", "struct_protobuf_append_to_file" ]
 ];

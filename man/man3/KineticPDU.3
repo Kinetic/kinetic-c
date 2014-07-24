@@ -1,4 +1,4 @@
-.TH "KineticPDU" 3 "Tue Jul 15 2014" "Version v0.3.1-beta" "protobuf-c" \" -*- nroff -*-
+.TH "KineticPDU" 3 "Thu Jul 24 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,27 +10,33 @@ KineticPDU \-
 
 .in +1c
 .ti -1c
-.RI "uint8_t * \fBprefix\fP"
+.RI "\fBKineticPDUHeader\fP \fBheader\fP"
 .br
 .ti -1c
-.RI "uint8_t * \fBprotoLength\fP"
+.RI "\fBKineticMessage\fP * \fBprotobuf\fP"
 .br
 .ti -1c
-.RI "uint8_t * \fBvalueLength\fP"
+.RI "uint32_t \fBprotobufLength\fP"
 .br
 .ti -1c
-.RI "uint8_t * \fBproto\fP"
+.RI "uint8_t \fBprotobufScratch\fP [1024 *1024]"
 .br
 .ti -1c
 .RI "uint8_t * \fBvalue\fP"
 .br
 .ti -1c
-.RI "uint8_t * \fBdata\fP"
+.RI "uint32_t \fBvalueLength\fP"
+.br
+.ti -1c
+.RI "\fBKineticHMAC\fP \fBhmac\fP"
+.br
+.ti -1c
+.RI "\fBKineticExchange\fP * \fBexchange\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 31 of file KineticPDU\&.h\&.
+Definition at line 41 of file kinetic_pdu\&.h\&.
 
 .SH "Author"
 .PP 

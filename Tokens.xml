@@ -29,6 +29,15 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticHMAC</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>KineticHMAC</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_h_m_a_c.html</Path>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticMessage</Name>
       <APILanguage>c</APILanguage>
       <Type>cl</Type>
@@ -38,12 +47,30 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticOperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>KineticOperation</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_operation.html</Path>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticPDU</Name>
       <APILanguage>c</APILanguage>
       <Type>cl</Type>
       <Scope>KineticPDU</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDUHeader</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>KineticPDUHeader</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p_d_u_header.html</Path>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -233,5 +260,14 @@
       <Scope>_KineticProto_Status</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___status.html</Path>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ProtobufAppendToFile</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>ProtobufAppendToFile</Scope>
+    </TokenIdentifier>
+    <Path>struct_protobuf_append_to_file.html</Path>
   </Token>
 </Tokens>

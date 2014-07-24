@@ -1,4 +1,4 @@
-.TH "KineticMessage" 3 "Tue Jul 15 2014" "Version v0.3.1-beta" "protobuf-c" \" -*- nroff -*-
+.TH "KineticMessage" 3 "Thu Jul 24 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,12 +25,18 @@ KineticMessage \-
 .RI "KineticProto_Status \fBstatus\fP"
 .br
 .ti -1c
-.RI "\fBKineticExchange\fP * \fBexchange\fP"
+.RI "KineticProto_Security \fBsecurity\fP"
+.br
+.ti -1c
+.RI "KineticProto_Security_ACL \fBacl\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBhmacData\fP [((SHA_DIGEST_LENGTH))]"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 28 of file KineticMessage\&.h\&.
+Definition at line 87 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

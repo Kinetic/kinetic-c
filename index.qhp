@@ -5,7 +5,7 @@
   <filterSection>
     <filterAttribute>doxygen</filterAttribute>
     <toc>
-      <section title="protobuf-c v0.3.1-beta" ref="index.html">
+      <section title="protobuf-c v0.3.3" ref="index.html">
         <section title="Data Structures">
           <section title="Data Structures" ref="annotated.html">
             <section title="_KineticProto" ref="struct___kinetic_proto.html">
@@ -15,19 +15,27 @@
               <section title="hmac" ref="struct___kinetic_proto.html#a306b9c8db7eb01650c79d2e342d6ef0e" />
             </section>
             <section title="KineticConnection" ref="struct_kinetic_connection.html">
-              <section title="Connected" ref="struct_kinetic_connection.html#a01bd54acc4523e6d1822657b7e696564" />
-              <section title="Blocking" ref="struct_kinetic_connection.html#a6877cd8cff086a50a3bb5c94e7729924" />
-              <section title="Port" ref="struct_kinetic_connection.html#ae2ce8092517e663eda1d672e37350c2c" />
-              <section title="FileDescriptor" ref="struct_kinetic_connection.html#a8b729af6f1d0bfa6002cfca17cffcd1b" />
-              <section title="Host" ref="struct_kinetic_connection.html#ae13fe72f7dd3251dddb97866c6ce6554" />
+              <section title="connected" ref="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53" />
+              <section title="blocking" ref="struct_kinetic_connection.html#a228abfe2450ff0e613d7a8d5e3ba38fc" />
+              <section title="port" ref="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023" />
+              <section title="socketDescriptor" ref="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6" />
+              <section title="host" ref="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6" />
             </section>
             <section title="KineticExchange" ref="struct_kinetic_exchange.html">
               <section title="has_clusterVersion" ref="struct_kinetic_exchange.html#adc316ea8e8b894ff842cbc10bcfe915e" />
               <section title="clusterVersion" ref="struct_kinetic_exchange.html#a5cf7e39edf70d73512c0a769847dcf10" />
               <section title="identity" ref="struct_kinetic_exchange.html#a855522d7c0f9662c27c7df4381286b3c" />
+              <section title="has_key" ref="struct_kinetic_exchange.html#a8a5f4178d5c1e939808c67d9f3fa282a" />
+              <section title="keyLength" ref="struct_kinetic_exchange.html#a4ffdb052e01304f936d94ecd38b3f4f1" />
+              <section title="key" ref="struct_kinetic_exchange.html#aa5dfdefcb35dbee81495eeb1998de06b" />
               <section title="connectionID" ref="struct_kinetic_exchange.html#ac04664033ff7f79717d60fa9b5d11fa5" />
               <section title="sequence" ref="struct_kinetic_exchange.html#af6fe080c0557282b43680baf9bd1c600" />
               <section title="connection" ref="struct_kinetic_exchange.html#aa419c48291fb6542e616e13c8a7d4701" />
+            </section>
+            <section title="KineticHMAC" ref="struct_kinetic_h_m_a_c.html">
+              <section title="algorithm" ref="struct_kinetic_h_m_a_c.html#a8b00d3368fc08fba9b41370568dc6d11" />
+              <section title="valueLength" ref="struct_kinetic_h_m_a_c.html#ac80f549084bc5a7c204795f30badc7a3" />
+              <section title="value" ref="struct_kinetic_h_m_a_c.html#acfe6f39a380b645cdc582c473797cdea" />
             </section>
             <section title="KineticMessage" ref="struct_kinetic_message.html">
               <section title="proto" ref="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757" />
@@ -35,15 +43,29 @@
               <section title="header" ref="struct_kinetic_message.html#a4b19350314903651d286213bc22a8a3f" />
               <section title="body" ref="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763" />
               <section title="status" ref="struct_kinetic_message.html#ae8b91d9e5db53830c73a9beb1df7d5a4" />
-              <section title="exchange" ref="struct_kinetic_message.html#a6138cc9de4450cc08896517fa3775852" />
+              <section title="security" ref="struct_kinetic_message.html#a8ac954e6b0ade063aabda9ec4091eee8" />
+              <section title="acl" ref="struct_kinetic_message.html#a097b8188945a5ab6cc58ef57e11d917d" />
+              <section title="hmacData" ref="struct_kinetic_message.html#a5882b07af169a28bba89ed60a51fae10" />
+            </section>
+            <section title="KineticOperation" ref="struct_kinetic_operation.html">
+              <section title="exchange" ref="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b" />
+              <section title="request" ref="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc" />
+              <section title="response" ref="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c" />
             </section>
             <section title="KineticPDU" ref="struct_kinetic_p_d_u.html">
-              <section title="prefix" ref="struct_kinetic_p_d_u.html#adf3e91293b570cb9457d18252d080445" />
-              <section title="protoLength" ref="struct_kinetic_p_d_u.html#ac9283ef4cd85e568d6025ca85f8eaacb" />
-              <section title="valueLength" ref="struct_kinetic_p_d_u.html#acbc5df3f7162365268b5936680313a07" />
-              <section title="proto" ref="struct_kinetic_p_d_u.html#ae1e313a9a5cb163d2a39c2225e16ec11" />
+              <section title="header" ref="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8" />
+              <section title="protobuf" ref="struct_kinetic_p_d_u.html#a596d6cc864ccf02250c5fb03702cbd8e" />
+              <section title="protobufLength" ref="struct_kinetic_p_d_u.html#a0cab72fb4d7f6536cc54cf74d6bcdebe" />
+              <section title="protobufScratch" ref="struct_kinetic_p_d_u.html#a7677322bce753465451ae3406e0d6897" />
               <section title="value" ref="struct_kinetic_p_d_u.html#ab84f745a1b9aad99b4fc42c02a25f1f3" />
-              <section title="data" ref="struct_kinetic_p_d_u.html#a0468f444df466b9a19b848e8c2ab291f" />
+              <section title="valueLength" ref="struct_kinetic_p_d_u.html#aa5a8d53cd8b1202b600ebfac26800100" />
+              <section title="hmac" ref="struct_kinetic_p_d_u.html#a24cd6071d964ac66ddca742c6023ab85" />
+              <section title="exchange" ref="struct_kinetic_p_d_u.html#a2e33e714621fd2316d394048f4480f86" />
+            </section>
+            <section title="KineticPDUHeader" ref="struct_kinetic_p_d_u_header.html">
+              <section title="versionPrefix" ref="struct_kinetic_p_d_u_header.html#a0993dcfa55a0e4342c20745d37a13a65" />
+              <section title="protobufLength" ref="struct_kinetic_p_d_u_header.html#ac10131898fbde74d86af498a85e0dc2f" />
+              <section title="valueLength" ref="struct_kinetic_p_d_u_header.html#a10f7b4b1ba3f91e9060010920247a365" />
             </section>
             <section title="KineticProto_Body" ref="struct___kinetic_proto___body.html">
               <section title="base" ref="struct___kinetic_proto___body.html#acd5942518e2c964f806fbe7d3fcc2b8e" />
@@ -296,28 +318,37 @@
               <section title="has_detailedmessage" ref="struct___kinetic_proto___status.html#a1c8133a7a533c61246fe5ef949db555b" />
               <section title="detailedmessage" ref="struct___kinetic_proto___status.html#af1c5b05f6e5abeffab423c62b0522e3b" />
             </section>
+            <section title="ProtobufAppendToFile" ref="struct_protobuf_append_to_file.html">
+              <section title="base" ref="struct_protobuf_append_to_file.html#a5812a1a23e4cd53ca8f4ca002d2def06" />
+              <section title="fileHandle" ref="struct_protobuf_append_to_file.html#a82aa2a0b3d83ff09698fc484822297e9" />
+              <section title="error" ref="struct_protobuf_append_to_file.html#a923f0c15cfe16bf5562f7abdbec320c2" />
+            </section>
           </section>
         </section>
         <section title="Files">
           <section title="File List" ref="files.html">
             <section title="kinetic.h" ref="kinetic_8h_source.html" />
-            <section title="KineticApi.c" ref="_kinetic_api_8c_source.html" />
-            <section title="KineticApi.h" ref="_kinetic_api_8h_source.html" />
-            <section title="KineticConnection.c" ref="_kinetic_connection_8c_source.html" />
-            <section title="KineticConnection.h" ref="_kinetic_connection_8h_source.html" />
-            <section title="KineticExchange.c" ref="_kinetic_exchange_8c_source.html" />
-            <section title="KineticExchange.h" ref="_kinetic_exchange_8h_source.html" />
-            <section title="KineticLogger.c" ref="_kinetic_logger_8c_source.html" />
-            <section title="KineticLogger.h" ref="_kinetic_logger_8h_source.html" />
-            <section title="KineticMessage.c" ref="_kinetic_message_8c_source.html" />
-            <section title="KineticMessage.h" ref="_kinetic_message_8h_source.html" />
-            <section title="KineticPDU.c" ref="_kinetic_p_d_u_8c_source.html" />
-            <section title="KineticPDU.h" ref="_kinetic_p_d_u_8h_source.html" />
-            <section title="KineticProto.c" ref="_kinetic_proto_8c_source.html" />
-            <section title="KineticProto.h" ref="_kinetic_proto_8h_source.html" />
-            <section title="KineticSocket.c" ref="_kinetic_socket_8c_source.html" />
-            <section title="KineticSocket.h" ref="_kinetic_socket_8h_source.html" />
-            <section title="KineticTypes.h" ref="_kinetic_types_8h_source.html" />
+            <section title="kinetic_api.c" ref="kinetic__api_8c_source.html" />
+            <section title="kinetic_api.h" ref="kinetic__api_8h_source.html" />
+            <section title="kinetic_connection.c" ref="kinetic__connection_8c_source.html" />
+            <section title="kinetic_connection.h" ref="kinetic__connection_8h_source.html" />
+            <section title="kinetic_exchange.c" ref="kinetic__exchange_8c_source.html" />
+            <section title="kinetic_exchange.h" ref="kinetic__exchange_8h_source.html" />
+            <section title="kinetic_hmac.c" ref="kinetic__hmac_8c_source.html" />
+            <section title="kinetic_hmac.h" ref="kinetic__hmac_8h_source.html" />
+            <section title="kinetic_logger.c" ref="kinetic__logger_8c_source.html" />
+            <section title="kinetic_logger.h" ref="kinetic__logger_8h_source.html" />
+            <section title="kinetic_message.c" ref="kinetic__message_8c_source.html" />
+            <section title="kinetic_message.h" ref="kinetic__message_8h_source.html" />
+            <section title="kinetic_operation.c" ref="kinetic__operation_8c_source.html" />
+            <section title="kinetic_operation.h" ref="kinetic__operation_8h_source.html" />
+            <section title="kinetic_pdu.c" ref="kinetic__pdu_8c_source.html" />
+            <section title="kinetic_pdu.h" ref="kinetic__pdu_8h_source.html" />
+            <section title="kinetic_proto.c" ref="kinetic__proto_8c_source.html" />
+            <section title="kinetic_proto.h" ref="kinetic__proto_8h_source.html" />
+            <section title="kinetic_socket.c" ref="kinetic__socket_8c_source.html" />
+            <section title="kinetic_socket.h" ref="kinetic__socket_8h_source.html" />
+            <section title="kinetic_types.h" ref="kinetic__types_8h_source.html" />
             <section title="main.c" ref="main_8c_source.html" />
           </section>
         </section>
@@ -330,32 +361,51 @@
       <keyword name="has_hmac" id="_KineticProto::has_hmac" ref="struct___kinetic_proto.html#aa753179d540b1015cba3107b0e9d191a" />
       <keyword name="hmac" id="_KineticProto::hmac" ref="struct___kinetic_proto.html#a306b9c8db7eb01650c79d2e342d6ef0e" />
       <keyword name="KineticConnection" id="KineticConnection" ref="struct_kinetic_connection.html" />
-      <keyword name="Connected" id="KineticConnection::Connected" ref="struct_kinetic_connection.html#a01bd54acc4523e6d1822657b7e696564" />
-      <keyword name="Blocking" id="KineticConnection::Blocking" ref="struct_kinetic_connection.html#a6877cd8cff086a50a3bb5c94e7729924" />
-      <keyword name="Port" id="KineticConnection::Port" ref="struct_kinetic_connection.html#ae2ce8092517e663eda1d672e37350c2c" />
-      <keyword name="FileDescriptor" id="KineticConnection::FileDescriptor" ref="struct_kinetic_connection.html#a8b729af6f1d0bfa6002cfca17cffcd1b" />
-      <keyword name="Host" id="KineticConnection::Host" ref="struct_kinetic_connection.html#ae13fe72f7dd3251dddb97866c6ce6554" />
+      <keyword name="connected" id="KineticConnection::connected" ref="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53" />
+      <keyword name="blocking" id="KineticConnection::blocking" ref="struct_kinetic_connection.html#a228abfe2450ff0e613d7a8d5e3ba38fc" />
+      <keyword name="port" id="KineticConnection::port" ref="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023" />
+      <keyword name="socketDescriptor" id="KineticConnection::socketDescriptor" ref="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6" />
+      <keyword name="host" id="KineticConnection::host" ref="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6" />
       <keyword name="KineticExchange" id="KineticExchange" ref="struct_kinetic_exchange.html" />
       <keyword name="has_clusterVersion" id="KineticExchange::has_clusterVersion" ref="struct_kinetic_exchange.html#adc316ea8e8b894ff842cbc10bcfe915e" />
       <keyword name="clusterVersion" id="KineticExchange::clusterVersion" ref="struct_kinetic_exchange.html#a5cf7e39edf70d73512c0a769847dcf10" />
       <keyword name="identity" id="KineticExchange::identity" ref="struct_kinetic_exchange.html#a855522d7c0f9662c27c7df4381286b3c" />
+      <keyword name="has_key" id="KineticExchange::has_key" ref="struct_kinetic_exchange.html#a8a5f4178d5c1e939808c67d9f3fa282a" />
+      <keyword name="keyLength" id="KineticExchange::keyLength" ref="struct_kinetic_exchange.html#a4ffdb052e01304f936d94ecd38b3f4f1" />
+      <keyword name="key" id="KineticExchange::key" ref="struct_kinetic_exchange.html#aa5dfdefcb35dbee81495eeb1998de06b" />
       <keyword name="connectionID" id="KineticExchange::connectionID" ref="struct_kinetic_exchange.html#ac04664033ff7f79717d60fa9b5d11fa5" />
       <keyword name="sequence" id="KineticExchange::sequence" ref="struct_kinetic_exchange.html#af6fe080c0557282b43680baf9bd1c600" />
       <keyword name="connection" id="KineticExchange::connection" ref="struct_kinetic_exchange.html#aa419c48291fb6542e616e13c8a7d4701" />
+      <keyword name="KineticHMAC" id="KineticHMAC" ref="struct_kinetic_h_m_a_c.html" />
+      <keyword name="algorithm" id="KineticHMAC::algorithm" ref="struct_kinetic_h_m_a_c.html#a8b00d3368fc08fba9b41370568dc6d11" />
+      <keyword name="valueLength" id="KineticHMAC::valueLength" ref="struct_kinetic_h_m_a_c.html#ac80f549084bc5a7c204795f30badc7a3" />
+      <keyword name="value" id="KineticHMAC::value" ref="struct_kinetic_h_m_a_c.html#acfe6f39a380b645cdc582c473797cdea" />
       <keyword name="KineticMessage" id="KineticMessage" ref="struct_kinetic_message.html" />
       <keyword name="proto" id="KineticMessage::proto" ref="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757" />
       <keyword name="command" id="KineticMessage::command" ref="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36" />
       <keyword name="header" id="KineticMessage::header" ref="struct_kinetic_message.html#a4b19350314903651d286213bc22a8a3f" />
       <keyword name="body" id="KineticMessage::body" ref="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763" />
       <keyword name="status" id="KineticMessage::status" ref="struct_kinetic_message.html#ae8b91d9e5db53830c73a9beb1df7d5a4" />
-      <keyword name="exchange" id="KineticMessage::exchange" ref="struct_kinetic_message.html#a6138cc9de4450cc08896517fa3775852" />
+      <keyword name="security" id="KineticMessage::security" ref="struct_kinetic_message.html#a8ac954e6b0ade063aabda9ec4091eee8" />
+      <keyword name="acl" id="KineticMessage::acl" ref="struct_kinetic_message.html#a097b8188945a5ab6cc58ef57e11d917d" />
+      <keyword name="hmacData" id="KineticMessage::hmacData" ref="struct_kinetic_message.html#a5882b07af169a28bba89ed60a51fae10" />
+      <keyword name="KineticOperation" id="KineticOperation" ref="struct_kinetic_operation.html" />
+      <keyword name="exchange" id="KineticOperation::exchange" ref="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b" />
+      <keyword name="request" id="KineticOperation::request" ref="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc" />
+      <keyword name="response" id="KineticOperation::response" ref="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c" />
       <keyword name="KineticPDU" id="KineticPDU" ref="struct_kinetic_p_d_u.html" />
-      <keyword name="prefix" id="KineticPDU::prefix" ref="struct_kinetic_p_d_u.html#adf3e91293b570cb9457d18252d080445" />
-      <keyword name="protoLength" id="KineticPDU::protoLength" ref="struct_kinetic_p_d_u.html#ac9283ef4cd85e568d6025ca85f8eaacb" />
-      <keyword name="valueLength" id="KineticPDU::valueLength" ref="struct_kinetic_p_d_u.html#acbc5df3f7162365268b5936680313a07" />
-      <keyword name="proto" id="KineticPDU::proto" ref="struct_kinetic_p_d_u.html#ae1e313a9a5cb163d2a39c2225e16ec11" />
+      <keyword name="header" id="KineticPDU::header" ref="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8" />
+      <keyword name="protobuf" id="KineticPDU::protobuf" ref="struct_kinetic_p_d_u.html#a596d6cc864ccf02250c5fb03702cbd8e" />
+      <keyword name="protobufLength" id="KineticPDU::protobufLength" ref="struct_kinetic_p_d_u.html#a0cab72fb4d7f6536cc54cf74d6bcdebe" />
+      <keyword name="protobufScratch" id="KineticPDU::protobufScratch" ref="struct_kinetic_p_d_u.html#a7677322bce753465451ae3406e0d6897" />
       <keyword name="value" id="KineticPDU::value" ref="struct_kinetic_p_d_u.html#ab84f745a1b9aad99b4fc42c02a25f1f3" />
-      <keyword name="data" id="KineticPDU::data" ref="struct_kinetic_p_d_u.html#a0468f444df466b9a19b848e8c2ab291f" />
+      <keyword name="valueLength" id="KineticPDU::valueLength" ref="struct_kinetic_p_d_u.html#aa5a8d53cd8b1202b600ebfac26800100" />
+      <keyword name="hmac" id="KineticPDU::hmac" ref="struct_kinetic_p_d_u.html#a24cd6071d964ac66ddca742c6023ab85" />
+      <keyword name="exchange" id="KineticPDU::exchange" ref="struct_kinetic_p_d_u.html#a2e33e714621fd2316d394048f4480f86" />
+      <keyword name="KineticPDUHeader" id="KineticPDUHeader" ref="struct_kinetic_p_d_u_header.html" />
+      <keyword name="versionPrefix" id="KineticPDUHeader::versionPrefix" ref="struct_kinetic_p_d_u_header.html#a0993dcfa55a0e4342c20745d37a13a65" />
+      <keyword name="protobufLength" id="KineticPDUHeader::protobufLength" ref="struct_kinetic_p_d_u_header.html#ac10131898fbde74d86af498a85e0dc2f" />
+      <keyword name="valueLength" id="KineticPDUHeader::valueLength" ref="struct_kinetic_p_d_u_header.html#a10f7b4b1ba3f91e9060010920247a365" />
       <keyword name="_KineticProto_Body" id="_KineticProto_Body" ref="struct___kinetic_proto___body.html" />
       <keyword name="base" id="_KineticProto_Body::base" ref="struct___kinetic_proto___body.html#acd5942518e2c964f806fbe7d3fcc2b8e" />
       <keyword name="keyvalue" id="_KineticProto_Body::keyvalue" ref="struct___kinetic_proto___body.html#abbc6921e4aeeb5760da3ac6e6646fe70" />
@@ -586,6 +636,10 @@
       <keyword name="statusmessage" id="_KineticProto_Status::statusmessage" ref="struct___kinetic_proto___status.html#ac301361593f5eeaa6dcf39529368c94e" />
       <keyword name="has_detailedmessage" id="_KineticProto_Status::has_detailedmessage" ref="struct___kinetic_proto___status.html#a1c8133a7a533c61246fe5ef949db555b" />
       <keyword name="detailedmessage" id="_KineticProto_Status::detailedmessage" ref="struct___kinetic_proto___status.html#af1c5b05f6e5abeffab423c62b0522e3b" />
+      <keyword name="ProtobufAppendToFile" id="ProtobufAppendToFile" ref="struct_protobuf_append_to_file.html" />
+      <keyword name="base" id="ProtobufAppendToFile::base" ref="struct_protobuf_append_to_file.html#a5812a1a23e4cd53ca8f4ca002d2def06" />
+      <keyword name="fileHandle" id="ProtobufAppendToFile::fileHandle" ref="struct_protobuf_append_to_file.html#a82aa2a0b3d83ff09698fc484822297e9" />
+      <keyword name="error" id="ProtobufAppendToFile::error" ref="struct_protobuf_append_to_file.html#a923f0c15cfe16bf5562f7abdbec320c2" />
     </keywords>
     <files>
       <file>tabs.css</file>
@@ -621,29 +675,36 @@
       <file>ftv2splitbar.png</file>
       <file>doxygen.css</file>
       <file>kinetic_8h_source.html</file>
-      <file>_kinetic_api_8c_source.html</file>
-      <file>_kinetic_api_8h_source.html</file>
-      <file>_kinetic_connection_8c_source.html</file>
-      <file>_kinetic_connection_8h_source.html</file>
-      <file>_kinetic_exchange_8c_source.html</file>
-      <file>_kinetic_exchange_8h_source.html</file>
-      <file>_kinetic_logger_8c_source.html</file>
-      <file>_kinetic_logger_8h_source.html</file>
-      <file>_kinetic_message_8c_source.html</file>
-      <file>_kinetic_message_8h_source.html</file>
-      <file>_kinetic_p_d_u_8c_source.html</file>
-      <file>_kinetic_p_d_u_8h_source.html</file>
-      <file>_kinetic_proto_8c_source.html</file>
-      <file>_kinetic_proto_8h_source.html</file>
-      <file>_kinetic_socket_8c_source.html</file>
-      <file>_kinetic_socket_8h_source.html</file>
-      <file>_kinetic_types_8h_source.html</file>
+      <file>kinetic__api_8c_source.html</file>
+      <file>kinetic__api_8h_source.html</file>
+      <file>kinetic__connection_8c_source.html</file>
+      <file>kinetic__connection_8h_source.html</file>
+      <file>kinetic__exchange_8c_source.html</file>
+      <file>kinetic__exchange_8h_source.html</file>
+      <file>kinetic__hmac_8c_source.html</file>
+      <file>kinetic__hmac_8h_source.html</file>
+      <file>kinetic__logger_8c_source.html</file>
+      <file>kinetic__logger_8h_source.html</file>
+      <file>kinetic__message_8c_source.html</file>
+      <file>kinetic__message_8h_source.html</file>
+      <file>kinetic__operation_8c_source.html</file>
+      <file>kinetic__operation_8h_source.html</file>
+      <file>kinetic__pdu_8c_source.html</file>
+      <file>kinetic__pdu_8h_source.html</file>
+      <file>kinetic__proto_8c_source.html</file>
+      <file>kinetic__proto_8h_source.html</file>
+      <file>kinetic__socket_8c_source.html</file>
+      <file>kinetic__socket_8h_source.html</file>
+      <file>kinetic__types_8h_source.html</file>
       <file>main_8c_source.html</file>
       <file>struct___kinetic_proto.html</file>
       <file>struct_kinetic_connection.html</file>
       <file>struct_kinetic_exchange.html</file>
+      <file>struct_kinetic_h_m_a_c.html</file>
       <file>struct_kinetic_message.html</file>
+      <file>struct_kinetic_operation.html</file>
       <file>struct_kinetic_p_d_u.html</file>
+      <file>struct_kinetic_p_d_u_header.html</file>
       <file>struct___kinetic_proto___body.html</file>
       <file>struct___kinetic_proto___command.html</file>
       <file>struct___kinetic_proto___get_log.html</file>
@@ -665,6 +726,7 @@
       <file>struct___kinetic_proto___security___a_c_l___scope.html</file>
       <file>struct___kinetic_proto___setup.html</file>
       <file>struct___kinetic_proto___status.html</file>
+      <file>struct_protobuf_append_to_file.html</file>
       <file>dir_d44c64559bbebec7f509842c48db8b23.html</file>
       <file>dir_c2b4164bda3b5d5cb3cde3da6b43be80.html</file>
       <file>dir_c85d3e3c5052e9ad9ce18c6863244a25.html</file>

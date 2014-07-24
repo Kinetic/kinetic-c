@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.3.1-beta</span>
+   &#160;<span id="projectnumber">v0.3.3</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -61,30 +61,36 @@ $(document).ready(function(){initNavTree('struct_kinetic_p_d_u.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:adf3e91293b570cb9457d18252d080445"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf3e91293b570cb9457d18252d080445"></a>
-uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>prefix</b></td></tr>
-<tr class="separator:adf3e91293b570cb9457d18252d080445"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9283ef4cd85e568d6025ca85f8eaacb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9283ef4cd85e568d6025ca85f8eaacb"></a>
-uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>protoLength</b></td></tr>
-<tr class="separator:ac9283ef4cd85e568d6025ca85f8eaacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbc5df3f7162365268b5936680313a07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acbc5df3f7162365268b5936680313a07"></a>
-uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>valueLength</b></td></tr>
-<tr class="separator:acbc5df3f7162365268b5936680313a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1e313a9a5cb163d2a39c2225e16ec11"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1e313a9a5cb163d2a39c2225e16ec11"></a>
-uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>proto</b></td></tr>
-<tr class="separator:ae1e313a9a5cb163d2a39c2225e16ec11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a626673d332c72f6b188e9629b09cb2c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a626673d332c72f6b188e9629b09cb2c8"></a>
+<a class="el" href="struct_kinetic_p_d_u_header.html">KineticPDUHeader</a>&#160;</td><td class="memItemRight" valign="bottom"><b>header</b></td></tr>
+<tr class="separator:a626673d332c72f6b188e9629b09cb2c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a596d6cc864ccf02250c5fb03702cbd8e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a596d6cc864ccf02250c5fb03702cbd8e"></a>
+<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>protobuf</b></td></tr>
+<tr class="separator:a596d6cc864ccf02250c5fb03702cbd8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cab72fb4d7f6536cc54cf74d6bcdebe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0cab72fb4d7f6536cc54cf74d6bcdebe"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>protobufLength</b></td></tr>
+<tr class="separator:a0cab72fb4d7f6536cc54cf74d6bcdebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7677322bce753465451ae3406e0d6897"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7677322bce753465451ae3406e0d6897"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>protobufScratch</b> [1024 *1024]</td></tr>
+<tr class="separator:a7677322bce753465451ae3406e0d6897"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab84f745a1b9aad99b4fc42c02a25f1f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab84f745a1b9aad99b4fc42c02a25f1f3"></a>
 uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>value</b></td></tr>
 <tr class="separator:ab84f745a1b9aad99b4fc42c02a25f1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0468f444df466b9a19b848e8c2ab291f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0468f444df466b9a19b848e8c2ab291f"></a>
-uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b></td></tr>
-<tr class="separator:a0468f444df466b9a19b848e8c2ab291f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5a8d53cd8b1202b600ebfac26800100"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5a8d53cd8b1202b600ebfac26800100"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>valueLength</b></td></tr>
+<tr class="separator:aa5a8d53cd8b1202b600ebfac26800100"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24cd6071d964ac66ddca742c6023ab85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a24cd6071d964ac66ddca742c6023ab85"></a>
+<a class="el" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>&#160;</td><td class="memItemRight" valign="bottom"><b>hmac</b></td></tr>
+<tr class="separator:a24cd6071d964ac66ddca742c6023ab85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e33e714621fd2316d394048f4480f86"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e33e714621fd2316d394048f4480f86"></a>
+<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>exchange</b></td></tr>
+<tr class="separator:a2e33e714621fd2316d394048f4480f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="_kinetic_p_d_u_8h_source.html#l00031">31</a> of file <a class="el" href="_kinetic_p_d_u_8h_source.html">KineticPDU.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00041">41</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li><a class="el" href="_kinetic_p_d_u_8h_source.html">KineticPDU.h</a></li>
+<li><a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
