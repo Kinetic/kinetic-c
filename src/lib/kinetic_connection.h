@@ -24,6 +24,11 @@
 #include "kinetic_types.h"
 
 void KineticConnection_Init(KineticConnection* connection);
-bool KineticConnection_Connect(KineticConnection* const connection, const char* host, int port, bool blocking);
+
+bool KineticConnection_Connect(
+    KineticConnection* const connection,
+    const char* host,
+    int port,
+    bool blocking);
 
 #endif // _KINETIC_CONNECTION_H

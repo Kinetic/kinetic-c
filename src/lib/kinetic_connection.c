@@ -32,15 +32,15 @@ bool KineticConnection_Connect(
     KineticConnection* const connection,
     const char* host, int port, bool blocking)
 {
-    connection->Connected = false;
-    connection->Blocking = blocking;
-    connection->Port = port;
-    connection->FileDescriptor = -1;
-    strcpy(connection->Host, host);
+    connection->connected = false;
+    connection->blocking = blocking;
+    connection->port = port;
+    connection->socketDescriptor = -1;
+    strcpy(connection->host, host);
 
-    connection->FileDescriptor = KineticSocket_Connect(
-        connection->Host, connection->Port, blocking);
-    connection->Connected = (connection->FileDescriptor >= 0);
+    connection->socketDescriptor = KineticSocket_Connect(
+        connection->host, connection->port, blocking);
+    connection->connected = (connection->socketDescriptor >= 0);
 
-    return connection->Connected;
+    return connection->connected;
 }

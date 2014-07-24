@@ -29,47 +29,107 @@ void KineticApi_Init(const char* log_file)
     KineticLogger_Init(log_file);
 }
 
-const KineticConnection KineticApi_Connect(const char* host, int port, bool blocking)
+void KineticApi_Connect(
+    KineticConnection* connection,
+    const char* host,
+    int port,
+    bool blocking)
 {
-    KineticConnection connection;
-    KineticConnection_Init(connction);
+    KineticConnection_Init(connection);
 
-    if (!KineticConnection_Connect(&connection, host, port, blocking))
+    if (!KineticConnection_Connect(connection, host, port, blocking))
     {
-        connection.Connected = false;
-        connection.FileDescriptor = -1;
+        connection->connected = false;
+        connection->socketDescriptor = -1;
         char message[64];
         sprintf(message, "Failed creating connection to %s:%d", host, port);
         LOG(message);
     }
     else
     {
-        connection.Connected = true;
+        connection->connected = true;
     }
-
-	return connection;
 }
 
-KineticProto_Status_StatusCode KineticApi_SendNoop(KineticPDU* request, KineticPDU* response)
+bool KineticApi_ConfigureExchange(
+    KineticExchange* exchange,
+    KineticConnection* connection,
+    int64_t identity,
+    uint8_t* key,
+    size_t keyLength,
+    int64_t connectionID)
+{
+    if (exchange == NULL)
+    {
+        LOG("Specified KineticExchange is NULL!");
+        return false;
+    }
+
+    if (connection == NULL)
+    {
+        LOG("Specified KineticConnection is NULL!");
+        return false;
+    }
+
+    if (key == NULL)
+    {
+        LOG("Specified Kinetic Protocol key is NULL!");
+        return false;
+    }
+
+    if (keyLength == 0)
+    {
+        LOG("Specified Kinetic Protocol key length is NULL!");
+        return false;
+    }
+
+    KineticExchange_Init(exchange, identity, key, keyLength, connectionID, connection);
+
+    return true;
+}
+
+KineticOperation KineticApi_CreateOperation(
+    KineticExchange* exchange,
+    KineticPDU* request,
+    KineticPDU* response)
+{
+    KineticOperation op;
+
+    op.exchange = exchange;
+    op.request = request;
+    op.response = response;
+
+    return op;
+}
+
+KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation* operation)
 {
     KineticProto_Status_StatusCode status =
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
 
-    // Initialize request
-    KineticExchange_Init(request->exchange, 1234, 5678, request->exchange->connection);
-    KineticMessage_Init(request->protobuf);
-    KineticMessage_BuildNoop(request->protobuf);
+    assert(operation->exchange != NULL);
+    assert(operation->exchange->connection != NULL);
+    assert(operation->request != NULL);
+    assert(operation->request->protobuf != NULL);
+    assert(operation->response != NULL);
+    assert(operation->response->protobuf != NULL);
 
-    KineticPDU_Init(request, request->exchange, request->protobuf, NULL, 0);
+    // Initialize request
+    KineticExchange_IncrementSequence(operation->exchange);
+    KineticMessage_Init(operation->request->protobuf);
+    KineticPDU_Init(operation->request, operation->request->exchange, operation->request->protobuf, NULL, 0);
+    KineticOperation_BuildNoop(operation);
 
     // Send the request
-    KineticConnection_SendPDU(request);
+    KineticPDU_Send(operation->request);
 
     // Associate response with same exchange as request
-    KineticPDU_Init(response, response->exchange, response->protobuf, NULL, 0);
-    if (KineticConnection_ReceivePDU(response))
+    KineticPDU_Init(operation->response, operation->response->exchange, operation->response->protobuf, NULL, 0);
+
+    // Receive the response
+    if (KineticPDU_Receive(operation->response))
     {
-        status = response->protobuf->command.status->code;
+        status = operation->response->protobuf->command.status->code;
     }
 
 	return status;

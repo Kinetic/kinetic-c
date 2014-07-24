@@ -24,12 +24,14 @@
 #include <stdio.h>
 #include <protobuf-c/protobuf-c.h>
 #include "kinetic_proto.h"
+#include "kinetic_message.h"
+#include "kinetic_exchange.h"
+#include "kinetic_pdu.h"
+#include "kinetic_logger.h"
+#include "kinetic_operation.h"
+#include "kinetic_hmac.h"
 #include "mock_kinetic_connection.h"
-#include "mock_kinetic_message.h"
-#include "mock_kinetic_exchange.h"
-#include "mock_kinetic_pdu.h"
-#include "mock_kinetic_logger.h"
-#include "mock_kinetic_operation.h"
+#include "mock_kinetic_socket.h"
 
 void setUp(void)
 {
@@ -39,73 +41,12 @@ void tearDown(void)
 {
 }
 
-void test_KineticApi_Init_should_initialize_the_logger(void)
+void test_NoOp_should_succeed(void)
 {
-    KineticLogger_Init_Expect("some/file.log");
-
-    KineticApi_Init("some/file.log");
+    TEST_IGNORE_MESSAGE("Need to implement!");
 }
 
-void test_KineticApi_Connect_should_configure_a_connection(void)
-{
-    KineticConnection connection;
-
-    connection.connected = false; // Ensure gets set appropriately by internal connect call
-
-    KineticConnection_Init_Expect(&connection);
-    KineticConnection_Connect_ExpectAndReturn(&connection, "somehost.com", 321, true, true);
-
-    KineticApi_Connect(&connection, "somehost.com", 321, true);
-
-    TEST_ASSERT_TRUE(connection.connected);
-}
-
-void test_KineticApi_Connect_should_log_a_failed_connection(void)
-{
-    KineticConnection connection;
-
-    // Ensure appropriately updated per internal connect call result
-    connection.connected = true;
-    connection.socketDescriptor = 333;
-
-    KineticConnection_Init_Expect(&connection);
-    KineticConnection_Connect_ExpectAndReturn(&connection, "somehost.com", 123, true, false);
-    KineticLogger_Log_Expect("Failed creating connection to somehost.com:123");
-
-    KineticApi_Connect(&connection, "somehost.com", 123, true);
-
-    TEST_ASSERT_FALSE(connection.connected);
-    TEST_ASSERT_EQUAL(-1, connection.socketDescriptor);
-}
-
-void test_KineticAPI_ConfigureExchange_should_configure_specified_KineticExchange(void)
-{
-    bool success;
-    KineticConnection connection;
-    KINETIC_CONNECTION_INIT(&connection);
-    KineticExchange exchange;
-    uint8_t key[8];
-
-    KineticExchange_Init_Expect(&exchange, 1234, key, sizeof(key), 9876, &connection);
-
-    success = KineticApi_ConfigureExchange(&exchange, &connection, 1234, key, sizeof(key), 9876);
-
-    TEST_ASSERT_TRUE(success);
-}
-
-void test_KineticApi_CreateOperation_should_create_configure_and_return_a_valid_operation_instance(void)
-{
-    KineticOperation op;
-    KineticExchange exchange;
-    KineticPDU request, response;
-
-    op = KineticApi_CreateOperation(&exchange, &request, &response);
-
-    TEST_ASSERT_EQUAL_PTR(&exchange, op.exchange);
-    TEST_ASSERT_EQUAL_PTR(&request, op.request);
-    TEST_ASSERT_EQUAL_PTR(&response, op.response);
-}
-
+#if 0
 void test_KineticApi_NoOp_should_send_NOOP_command(void)
 {
     KineticConnection connection;
@@ -144,3 +85,4 @@ void test_KineticApi_NoOp_should_send_NOOP_command(void)
     TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&exchange, response.exchange);
 }
+#endif

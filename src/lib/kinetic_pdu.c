@@ -67,7 +67,7 @@ void KineticPDU_Init(
 
 bool KineticPDU_Send(KineticPDU* const request)
 {
-    int fd = request->exchange->connection->FileDescriptor;
+    int fd = request->exchange->connection->socketDescriptor;
 
     // Send the PDU header
     if (!KineticSocket_Write(fd, &request->header, sizeof(KineticPDUHeader)))
@@ -102,7 +102,7 @@ bool KineticPDU_Send(KineticPDU* const request)
 
 bool KineticPDU_Receive(KineticPDU* const response)
 {
-    const int fd = response->exchange->connection->FileDescriptor;
+    const int fd = response->exchange->connection->socketDescriptor;
 
     // Send the PDU header
     if (!KineticSocket_Read(fd, &response->header, sizeof(KineticPDUHeader)))

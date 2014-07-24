@@ -26,6 +26,8 @@
 #include "kinetic_message.h"
 #include "kinetic_exchange.h"
 #include "kinetic_pdu.h"
+#include "kinetic_hmac.h"
+#include "kinetic_logger.h"
 #include <string.h>
 
 static KineticConnection Connection, Expected;
@@ -55,27 +57,27 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 
     KineticConnection_Init(&connection);
 
-    TEST_ASSERT_FALSE(connection.Connected);
-    TEST_ASSERT_TRUE(connection.Blocking);
-    TEST_ASSERT_EQUAL(0, connection.Port);
-    TEST_ASSERT_EQUAL(-1, connection.FileDescriptor);
-    TEST_ASSERT_EQUAL_STRING("", connection.Host);
+    TEST_ASSERT_FALSE(connection.connected);
+    TEST_ASSERT_TRUE(connection.blocking);
+    TEST_ASSERT_EQUAL(0, connection.port);
+    TEST_ASSERT_EQUAL(-1, connection.socketDescriptor);
+    TEST_ASSERT_EQUAL_STRING("", connection.host);
 }
 
 void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 {
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = -1;
-    strcpy(Connection.Host, "invalid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = -1;
+    strcpy(Connection.host, "invalid-host.com");
     Expected = Connection;
 
-    KineticSocket_Connect_ExpectAndReturn(Expected.Host, Expected.Port, true, -1);
+    KineticSocket_Connect_ExpectAndReturn(Expected.host, Expected.port, true, -1);
 
     TEST_ASSERT_FALSE(KineticConnection_Connect(&Connection, "invalid-host.com", 1234, true));
-    TEST_ASSERT_FALSE(Connection.Connected);
-    TEST_ASSERT_EQUAL(-1, Connection.FileDescriptor);
+    TEST_ASSERT_FALSE(Connection.connected);
+    TEST_ASSERT_EQUAL(-1, Connection.socketDescriptor);
 }
 
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_blocking_connection(void)
@@ -84,11 +86,11 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
 
     KineticConnection_Connect(&Connection, "valid-host.com", 1234, true);
 
-    TEST_ASSERT_TRUE(Connection.Connected);
-    TEST_ASSERT_TRUE(Connection.Blocking);
-    TEST_ASSERT_EQUAL(1234, Connection.Port);
-    TEST_ASSERT_EQUAL(24, Connection.FileDescriptor);
-    TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.Host);
+    TEST_ASSERT_TRUE(Connection.connected);
+    TEST_ASSERT_TRUE(Connection.blocking);
+    TEST_ASSERT_EQUAL(1234, Connection.port);
+    TEST_ASSERT_EQUAL(24, Connection.socketDescriptor);
+    TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.host);
 }
 
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_blocking_connection(void)
@@ -97,9 +99,9 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_
 
     KineticConnection_Connect(&Connection, "valid-host.com", 2345, false);
 
-    TEST_ASSERT_TRUE(Connection.Connected);
-    TEST_ASSERT_FALSE(Connection.Blocking);
-    TEST_ASSERT_EQUAL(2345, Connection.Port);
-    TEST_ASSERT_EQUAL(48, Connection.FileDescriptor);
-    TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.Host);
+    TEST_ASSERT_TRUE(Connection.connected);
+    TEST_ASSERT_FALSE(Connection.blocking);
+    TEST_ASSERT_EQUAL(2345, Connection.port);
+    TEST_ASSERT_EQUAL(48, Connection.socketDescriptor);
+    TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.host);
 }

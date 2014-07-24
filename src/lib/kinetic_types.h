@@ -71,17 +71,17 @@
 
 typedef struct _KineticConnection
 {
-    bool    Connected;
-    bool    Blocking;
-    int     Port;
-    int     FileDescriptor;
-    char    Host[HOST_NAME_MAX];
+    bool    connected;
+    bool    blocking;
+    int     port;
+    int     socketDescriptor;
+    char    host[HOST_NAME_MAX];
 } KineticConnection;
 
 #define KINETIC_CONNECTION_INIT(connection) { \
     memset((connection), 0, sizeof(KineticConnection)); \
-    (connection)->Blocking = true; \
-    (connection)->FileDescriptor = -1; \
+    (connection)->blocking = true; \
+    (connection)->socketDescriptor = -1; \
 }
 
 typedef struct _KineticMessage

@@ -23,21 +23,26 @@
 
 #include "kinetic_types.h"
 #include "kinetic_exchange.h"
-#include "kinetic_message.h"
+#include "kinetic_pdu.h"
 
 typedef struct _KineticOperation
 {
     KineticExchange* exchange;
-    KineticMessage* message;
+    KineticPDU* request;
+    KineticPDU* response;
 } KineticOperation;
 
-#define KINETIC_OPERATION_INIT(op, xchng, msg) { \
+#define KINETIC_OPERATION_INIT(op, xchng, req, resp) { \
     (op)->exchange = (xchng); \
-    (op)->message = (msg); }
+    (op)->request = (req); \
+    (op)->response = (resp); \
+}
 
-void KineticOperation_Init(KineticOperation* operation,
+void KineticOperation_Init(
+    KineticOperation* operation,
     KineticExchange* exchange,
-    KineticMessage* message);
+    KineticPDU* request,
+    KineticPDU* response);
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
 

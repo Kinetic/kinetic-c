@@ -26,6 +26,7 @@
 #include "mock_kinetic_exchange.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
+#include "mock_kinetic_pdu.h"
 
 void setUp(void)
 {
@@ -38,35 +39,64 @@ void tearDown(void)
 void test_KINETIC_OPERATION_INIT_should_initialize_a_KineticOperation(void)
 {
     KineticOperation op;
+    KineticExchange exchange;
+    KineticPDU request, response;
 
-    KINETIC_OPERATION_INIT(&op, (KineticExchange*)0x1234, (KineticMessage*)0x2345);
+    KINETIC_OPERATION_INIT(&op, &exchange, &request, &response);
 
-    TEST_ASSERT_EQUAL_PTR(0x1234, op.exchange);
-    TEST_ASSERT_EQUAL_PTR(0x2345, op.message);
+    TEST_ASSERT_EQUAL_PTR(&exchange, op.exchange);
+    TEST_ASSERT_EQUAL_PTR(&request, op.request);
+    TEST_ASSERT_EQUAL_PTR(&response, op.response);
 }
 
 void test_KineticOperation_Init_should_initialize_a_KineticOperation(void)
 {
     KineticOperation op;
+    KineticExchange exchange;
+    KineticPDU request, response;
 
-    KineticOperation_Init(&op, (KineticExchange*)0x1234, (KineticMessage*)0x2345);
+    KineticOperation_Init(&op, &exchange, &request, &response);
 
-    TEST_ASSERT_EQUAL_PTR(0x1234, op.exchange);
-    TEST_ASSERT_EQUAL_PTR(0x2345, op.message);
+    TEST_ASSERT_EQUAL_PTR(&exchange, op.exchange);
+    TEST_ASSERT_EQUAL_PTR(&request, op.request);
+    TEST_ASSERT_EQUAL_PTR(&response, op.response);
 }
 
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
-    KineticMessage message;
-    KineticOperation op;
     KineticExchange exchange;
-    KINETIC_MESSAGE_INIT(&message);
-    KINETIC_OPERATION_INIT(&op, &exchange, &message);
+    KineticMessage requestMsg, responseMsg;
+    KineticPDU request, response;
+    KineticOperation op;
+    KINETIC_MESSAGE_INIT(&requestMsg);
+    KINETIC_MESSAGE_INIT(&responseMsg);
+    KINETIC_OPERATION_INIT(&op, &exchange, &request, &response);
+    request.protobuf = &requestMsg;
+    response.protobuf = &responseMsg;
 
-    KineticMessage_Init_Expect(&message);
-    KineticExchange_ConfigureHeader_Expect(&exchange, &message.header);
+    KineticMessage_Init_Expect(&requestMsg);
+    KineticMessage_Init_Expect(&responseMsg);
+    KineticExchange_ConfigureHeader_Expect(&exchange, &requestMsg.header);
 
     KineticOperation_BuildNoop(&op);
 
-    TEST_IGNORE_MESSAGE("Need to populate with NOOP fields/content!");
+    // NOOP
+    // The NOOP operation can be used as a quick test of whether the Kinetic
+    // Device is running and available. If the Kinetic Device is running,
+    // this operation will always succeed.
+    //
+    // Request Message:
+    //
+    // command {
+    //   header {
+    //     clusterVersion: ...
+    //     identity: ...
+    //     connectionID: ...
+    //     sequence: ...
+    //     messageType: NOOP
+    //   }
+    // }
+    // hmac: "..."
+    TEST_ASSERT_TRUE(requestMsg.header.has_messagetype);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_NOOP, requestMsg.header.messagetype);
 }

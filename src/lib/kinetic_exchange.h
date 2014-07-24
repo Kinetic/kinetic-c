@@ -77,6 +77,7 @@ typedef struct _KineticExchange
     } \
     (exchg)->connectionID = conid; \
     (exchg)->connection = con; \
+    (exchg)->sequence = -1; \
 }
 
 void KineticExchange_Init(

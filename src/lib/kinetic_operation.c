@@ -23,13 +23,22 @@
 void KineticOperation_Init(
     KineticOperation* operation,
     KineticExchange* exchange,
-    KineticMessage* message)
+    KineticPDU* request,
+    KineticPDU* response)
 {
-    KINETIC_OPERATION_INIT(operation, exchange, message);
+    KINETIC_OPERATION_INIT(operation, exchange, request, response);
 }
 
 void KineticOperation_BuildNoop(KineticOperation* operation)
 {
-    KineticMessage_Init(operation->message);
-    KineticExchange_ConfigureHeader(operation->exchange, &operation->message->header);
+    assert(operation != NULL);
+    assert(operation->exchange != NULL);
+    assert(operation->request != NULL);
+    assert(operation->response != NULL);
+
+    KineticMessage_Init(operation->request->protobuf);
+    KineticMessage_Init(operation->response->protobuf);
+    KineticExchange_ConfigureHeader(operation->exchange, &operation->request->protobuf->header);
+    operation->request->protobuf->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
+    operation->request->protobuf->header.has_messagetype = true;
 }

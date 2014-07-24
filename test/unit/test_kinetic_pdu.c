@@ -144,11 +144,11 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
 
     KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, NULL, 0);
 
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = 456;
+    strcpy(Connection.host, "valid-host.com");
 
     KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
     KineticHMAC_Init_Expect(&PDUOut.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
@@ -168,11 +168,11 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
 
     KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
 
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = 456;
+    strcpy(Connection.host, "valid-host.com");
 
     KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
     KineticHMAC_Init_Expect(&PDUOut.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
@@ -193,11 +193,11 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_upo
     KineticExchange_ConfigureHeader_Expect(&Exchange, &MessageOut.header);
     KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
 
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = 456;
+    strcpy(Connection.host, "valid-host.com");
 
     KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), false);
 
@@ -214,11 +214,11 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_upo
     KineticExchange_ConfigureHeader_Expect(&Exchange, &MessageOut.header);
     KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
 
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = 456;
+    strcpy(Connection.host, "valid-host.com");
 
     KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
     KineticHMAC_Init_Expect(&PDUOut.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
@@ -238,11 +238,11 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false(voi
     KineticExchange_ConfigureHeader_Expect(&Exchange, &MessageOut.header);
     KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
 
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = 456;
+    strcpy(Connection.host, "valid-host.com");
 
     KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
     KineticHMAC_Init_Expect(&PDUOut.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
@@ -269,16 +269,16 @@ void test_KineticPDU_Receive_should_receive_a_message_with_value_payload_for_the
     PDUIn.header.protobufLength = 10;
     PDUIn.header.valueLength = 8;
 
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = 456;
+    strcpy(Connection.host, "valid-host.com");
 
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
     KineticHMAC_Validate_ExpectAndReturn(&PDUIn.protobuf->proto, PDUIn.exchange->key, PDUIn.exchange->keyLength, true);
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, value, PDUIn.valueLength, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, value, PDUIn.valueLength, true);
 
     status = KineticPDU_Receive(&PDUIn);
 
@@ -297,14 +297,14 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_for_
     PDUIn.header.protobufLength = 10;
     PDUIn.header.valueLength = 0;
 
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = 456;
+    strcpy(Connection.host, "valid-host.com");
 
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
     KineticHMAC_Validate_ExpectAndReturn(&PDUIn.protobuf->proto, PDUIn.exchange->key, PDUIn.exchange->keyLength, true);
 
     status = KineticPDU_Receive(&PDUIn);
@@ -324,14 +324,14 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_for_
     PDUIn.header.protobufLength = 10;
     PDUIn.header.valueLength = 0;
 
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
+    Connection.connected = true;
+    Connection.blocking = true;
+    Connection.port = 1234;
+    Connection.socketDescriptor = 456;
+    strcpy(Connection.host, "valid-host.com");
 
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
     KineticHMAC_Validate_ExpectAndReturn(&PDUIn.protobuf->proto, PDUIn.exchange->key, PDUIn.exchange->keyLength, true);
 
     status = KineticPDU_Receive(&PDUIn);
@@ -350,7 +350,7 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
     MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR; // Fake success for now
 
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), false);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), false);
 
     status = KineticPDU_Receive(&PDUIn);
 
@@ -366,8 +366,8 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
     MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR; // Fake success for now
 
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, false);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, false);
 
     status = KineticPDU_Receive(&PDUIn);
 
@@ -383,8 +383,8 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
     MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR; // Fake success for now
 
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
     KineticHMAC_Validate_ExpectAndReturn(&PDUIn.protobuf->proto, PDUIn.exchange->key, PDUIn.exchange->keyLength, false);
 
     status = KineticPDU_Receive(&PDUIn);
@@ -401,10 +401,10 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
     MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR; // Fake success for now
 
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.FileDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDUIn.protobuf->proto, PDUIn.protobufScratch, PDUIn.header.protobufLength, true);
     KineticHMAC_Validate_ExpectAndReturn(&PDUIn.protobuf->proto, PDUIn.exchange->key, PDUIn.exchange->keyLength, true);
-    KineticSocket_Read_ExpectAndReturn(Connection.FileDescriptor, value, PDUIn.valueLength, false);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, value, PDUIn.valueLength, false);
 
     status = KineticPDU_Receive(&PDUIn);
 
