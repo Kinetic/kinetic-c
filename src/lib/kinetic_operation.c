@@ -20,10 +20,16 @@
 
 #include "kinetic_operation.h"
 
-void KineticOperation_BuildNoop(
-    KineticMessage* const message,
-    KineticExchange* const exchange,
-    KineticHMAC* const hmac)
+void KineticOperation_Init(
+    KineticOperation* operation,
+    KineticExchange* exchange,
+    KineticMessage* message)
 {
-    // assert(false); // Need to complete!!!
+    KINETIC_OPERATION_INIT(operation, exchange, message);
+}
+
+void KineticOperation_BuildNoop(KineticOperation* operation)
+{
+    KineticMessage_Init(operation->message);
+    KineticExchange_ConfigureHeader(operation->exchange, &operation->message->header);
 }

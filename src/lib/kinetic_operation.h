@@ -24,24 +24,21 @@
 #include "kinetic_types.h"
 #include "kinetic_exchange.h"
 #include "kinetic_message.h"
-#include "kinetic_hmac.h"
 
 typedef struct _KineticOperation
 {
     KineticExchange* exchange;
     KineticMessage* message;
-    KineticHMAC* hmac;
 } KineticOperation;
 
-#define KINETIC_OPERATION_INIT(op, exchange, msg, hmac) { \
-    op.exchange = exchange; \
-    op.message = msg; \
-    op.hmac = hmac; \
-}
+#define KINETIC_OPERATION_INIT(op, xchng, msg) { \
+    (op)->exchange = (xchng); \
+    (op)->message = (msg); }
 
-void KineticOperation_BuildNoop(
-    KineticMessage* const message,
-    KineticExchange* const exchange,
-    KineticHMAC* const hmac);
+void KineticOperation_Init(KineticOperation* operation,
+    KineticExchange* exchange,
+    KineticMessage* message);
+
+void KineticOperation_BuildNoop(KineticOperation* operation);
 
 #endif // _KINETIC_OPERATION_H

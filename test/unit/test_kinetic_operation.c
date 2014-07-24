@@ -25,9 +25,7 @@
 #include "kinetic_proto.h"
 #include "mock_kinetic_exchange.h"
 #include "mock_kinetic_connection.h"
-#include "mock_kinetic_pdu.h"
 #include "mock_kinetic_message.h"
-#include "mock_kinetic_hmac.h"
 
 void setUp(void)
 {
@@ -41,23 +39,34 @@ void test_KINETIC_OPERATION_INIT_should_initialize_a_KineticOperation(void)
 {
     KineticOperation op;
 
-    KINETIC_OPERATION_INIT(op, (KineticExchange*)0x1234, (KineticMessage*)0x2345, (KineticHMAC*)0x3456);
+    KINETIC_OPERATION_INIT(&op, (KineticExchange*)0x1234, (KineticMessage*)0x2345);
 
     TEST_ASSERT_EQUAL_PTR(0x1234, op.exchange);
     TEST_ASSERT_EQUAL_PTR(0x2345, op.message);
-    TEST_ASSERT_EQUAL_PTR(0x3456, op.hmac);
 }
 
-void test_KineticMessage_BuildNoop_should_build_a_NOOP_message(void)
+void test_KineticOperation_Init_should_initialize_a_KineticOperation(void)
+{
+    KineticOperation op;
+
+    KineticOperation_Init(&op, (KineticExchange*)0x1234, (KineticMessage*)0x2345);
+
+    TEST_ASSERT_EQUAL_PTR(0x1234, op.exchange);
+    TEST_ASSERT_EQUAL_PTR(0x2345, op.message);
+}
+
+void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
     KineticMessage message;
-    KineticHMAC hmac;
-
-    KINETIC_MESSAGE_INIT(&message); // Init here with macro, since mock won't initialize the struct
+    KineticOperation op;
+    KineticExchange exchange;
+    KINETIC_MESSAGE_INIT(&message);
+    KINETIC_OPERATION_INIT(&op, &exchange, &message);
 
     KineticMessage_Init_Expect(&message);
-    KineticHMAC_Init_Expect(&hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&hmac, &message, key, keyLen);
+    KineticExchange_ConfigureHeader_Expect(&exchange, &message.header);
 
-    KineticMessage_BuildNoop(&message);
+    KineticOperation_BuildNoop(&op);
+
+    TEST_IGNORE_MESSAGE("Need to populate with NOOP fields/content!");
 }
