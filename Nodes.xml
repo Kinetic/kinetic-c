@@ -1447,27 +1447,6 @@
              </Node>
             </Subnodes>
            </Node>
-           <Node>
-            <Name>ProtobufAppendToFile</Name>
-            <Path>struct_protobuf_append_to_file.html</Path>
-            <Subnodes>
-             <Node>
-              <Name>base</Name>
-              <Path>struct_protobuf_append_to_file.html</Path>
-              <Anchor>a5812a1a23e4cd53ca8f4ca002d2def06</Anchor>
-             </Node>
-             <Node>
-              <Name>fileHandle</Name>
-              <Path>struct_protobuf_append_to_file.html</Path>
-              <Anchor>a82aa2a0b3d83ff09698fc484822297e9</Anchor>
-             </Node>
-             <Node>
-              <Name>error</Name>
-              <Path>struct_protobuf_append_to_file.html</Path>
-              <Anchor>a923f0c15cfe16bf5562f7abdbec320c2</Anchor>
-             </Node>
-            </Subnodes>
-           </Node>
           </Subnodes>
          </Node>
         </Subnodes>
@@ -1485,80 +1464,40 @@
             <Path>kinetic_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>kinetic_api.c</Name>
-            <Path>kinetic__api_8c_source.html</Path>
-           </Node>
-           <Node>
             <Name>kinetic_api.h</Name>
             <Path>kinetic__api_8h_source.html</Path>
-           </Node>
-           <Node>
-            <Name>kinetic_connection.c</Name>
-            <Path>kinetic__connection_8c_source.html</Path>
            </Node>
            <Node>
             <Name>kinetic_connection.h</Name>
             <Path>kinetic__connection_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>kinetic_exchange.c</Name>
-            <Path>kinetic__exchange_8c_source.html</Path>
-           </Node>
-           <Node>
             <Name>kinetic_exchange.h</Name>
             <Path>kinetic__exchange_8h_source.html</Path>
-           </Node>
-           <Node>
-            <Name>kinetic_hmac.c</Name>
-            <Path>kinetic__hmac_8c_source.html</Path>
            </Node>
            <Node>
             <Name>kinetic_hmac.h</Name>
             <Path>kinetic__hmac_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>kinetic_logger.c</Name>
-            <Path>kinetic__logger_8c_source.html</Path>
-           </Node>
-           <Node>
             <Name>kinetic_logger.h</Name>
             <Path>kinetic__logger_8h_source.html</Path>
-           </Node>
-           <Node>
-            <Name>kinetic_message.c</Name>
-            <Path>kinetic__message_8c_source.html</Path>
            </Node>
            <Node>
             <Name>kinetic_message.h</Name>
             <Path>kinetic__message_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>kinetic_operation.c</Name>
-            <Path>kinetic__operation_8c_source.html</Path>
-           </Node>
-           <Node>
             <Name>kinetic_operation.h</Name>
             <Path>kinetic__operation_8h_source.html</Path>
-           </Node>
-           <Node>
-            <Name>kinetic_pdu.c</Name>
-            <Path>kinetic__pdu_8c_source.html</Path>
            </Node>
            <Node>
             <Name>kinetic_pdu.h</Name>
             <Path>kinetic__pdu_8h_source.html</Path>
            </Node>
            <Node>
-            <Name>kinetic_proto.c</Name>
-            <Path>kinetic__proto_8c_source.html</Path>
-           </Node>
-           <Node>
             <Name>kinetic_proto.h</Name>
             <Path>kinetic__proto_8h_source.html</Path>
-           </Node>
-           <Node>
-            <Name>kinetic_socket.c</Name>
-            <Path>kinetic__socket_8c_source.html</Path>
            </Node>
            <Node>
             <Name>kinetic_socket.h</Name>
@@ -1567,10 +1506,6 @@
            <Node>
             <Name>kinetic_types.h</Name>
             <Path>kinetic__types_8h_source.html</Path>
-           </Node>
-           <Node>
-            <Name>main.c</Name>
-            <Path>main_8c_source.html</Path>
            </Node>
           </Subnodes>
          </Node>

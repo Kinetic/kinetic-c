@@ -261,13 +261,4 @@
     </TokenIdentifier>
     <Path>struct___kinetic_proto___status.html</Path>
   </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>ProtobufAppendToFile</Name>
-      <APILanguage>c</APILanguage>
-      <Type>cl</Type>
-      <Scope>ProtobufAppendToFile</Scope>
-    </TokenIdentifier>
-    <Path>struct_protobuf_append_to_file.html</Path>
-  </Token>
 </Tokens>

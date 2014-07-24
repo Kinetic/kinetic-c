@@ -318,38 +318,22 @@
               <section title="has_detailedmessage" ref="struct___kinetic_proto___status.html#a1c8133a7a533c61246fe5ef949db555b" />
               <section title="detailedmessage" ref="struct___kinetic_proto___status.html#af1c5b05f6e5abeffab423c62b0522e3b" />
             </section>
-            <section title="ProtobufAppendToFile" ref="struct_protobuf_append_to_file.html">
-              <section title="base" ref="struct_protobuf_append_to_file.html#a5812a1a23e4cd53ca8f4ca002d2def06" />
-              <section title="fileHandle" ref="struct_protobuf_append_to_file.html#a82aa2a0b3d83ff09698fc484822297e9" />
-              <section title="error" ref="struct_protobuf_append_to_file.html#a923f0c15cfe16bf5562f7abdbec320c2" />
-            </section>
           </section>
         </section>
         <section title="Files">
           <section title="File List" ref="files.html">
             <section title="kinetic.h" ref="kinetic_8h_source.html" />
-            <section title="kinetic_api.c" ref="kinetic__api_8c_source.html" />
             <section title="kinetic_api.h" ref="kinetic__api_8h_source.html" />
-            <section title="kinetic_connection.c" ref="kinetic__connection_8c_source.html" />
             <section title="kinetic_connection.h" ref="kinetic__connection_8h_source.html" />
-            <section title="kinetic_exchange.c" ref="kinetic__exchange_8c_source.html" />
             <section title="kinetic_exchange.h" ref="kinetic__exchange_8h_source.html" />
-            <section title="kinetic_hmac.c" ref="kinetic__hmac_8c_source.html" />
             <section title="kinetic_hmac.h" ref="kinetic__hmac_8h_source.html" />
-            <section title="kinetic_logger.c" ref="kinetic__logger_8c_source.html" />
             <section title="kinetic_logger.h" ref="kinetic__logger_8h_source.html" />
-            <section title="kinetic_message.c" ref="kinetic__message_8c_source.html" />
             <section title="kinetic_message.h" ref="kinetic__message_8h_source.html" />
-            <section title="kinetic_operation.c" ref="kinetic__operation_8c_source.html" />
             <section title="kinetic_operation.h" ref="kinetic__operation_8h_source.html" />
-            <section title="kinetic_pdu.c" ref="kinetic__pdu_8c_source.html" />
             <section title="kinetic_pdu.h" ref="kinetic__pdu_8h_source.html" />
-            <section title="kinetic_proto.c" ref="kinetic__proto_8c_source.html" />
             <section title="kinetic_proto.h" ref="kinetic__proto_8h_source.html" />
-            <section title="kinetic_socket.c" ref="kinetic__socket_8c_source.html" />
             <section title="kinetic_socket.h" ref="kinetic__socket_8h_source.html" />
             <section title="kinetic_types.h" ref="kinetic__types_8h_source.html" />
-            <section title="main.c" ref="main_8c_source.html" />
           </section>
         </section>
       </section>
@@ -636,10 +620,6 @@
       <keyword name="statusmessage" id="_KineticProto_Status::statusmessage" ref="struct___kinetic_proto___status.html#ac301361593f5eeaa6dcf39529368c94e" />
       <keyword name="has_detailedmessage" id="_KineticProto_Status::has_detailedmessage" ref="struct___kinetic_proto___status.html#a1c8133a7a533c61246fe5ef949db555b" />
       <keyword name="detailedmessage" id="_KineticProto_Status::detailedmessage" ref="struct___kinetic_proto___status.html#af1c5b05f6e5abeffab423c62b0522e3b" />
-      <keyword name="ProtobufAppendToFile" id="ProtobufAppendToFile" ref="struct_protobuf_append_to_file.html" />
-      <keyword name="base" id="ProtobufAppendToFile::base" ref="struct_protobuf_append_to_file.html#a5812a1a23e4cd53ca8f4ca002d2def06" />
-      <keyword name="fileHandle" id="ProtobufAppendToFile::fileHandle" ref="struct_protobuf_append_to_file.html#a82aa2a0b3d83ff09698fc484822297e9" />
-      <keyword name="error" id="ProtobufAppendToFile::error" ref="struct_protobuf_append_to_file.html#a923f0c15cfe16bf5562f7abdbec320c2" />
     </keywords>
     <files>
       <file>tabs.css</file>
@@ -675,28 +655,18 @@
       <file>ftv2splitbar.png</file>
       <file>doxygen.css</file>
       <file>kinetic_8h_source.html</file>
-      <file>kinetic__api_8c_source.html</file>
       <file>kinetic__api_8h_source.html</file>
-      <file>kinetic__connection_8c_source.html</file>
       <file>kinetic__connection_8h_source.html</file>
-      <file>kinetic__exchange_8c_source.html</file>
       <file>kinetic__exchange_8h_source.html</file>
-      <file>kinetic__hmac_8c_source.html</file>
       <file>kinetic__hmac_8h_source.html</file>
-      <file>kinetic__logger_8c_source.html</file>
       <file>kinetic__logger_8h_source.html</file>
-      <file>kinetic__message_8c_source.html</file>
       <file>kinetic__message_8h_source.html</file>
-      <file>kinetic__operation_8c_source.html</file>
       <file>kinetic__operation_8h_source.html</file>
-      <file>kinetic__pdu_8c_source.html</file>
       <file>kinetic__pdu_8h_source.html</file>
-      <file>kinetic__proto_8c_source.html</file>
       <file>kinetic__proto_8h_source.html</file>
-      <file>kinetic__socket_8c_source.html</file>
       <file>kinetic__socket_8h_source.html</file>
       <file>kinetic__types_8h_source.html</file>
-      <file>main_8c_source.html</file>
+      <file>_r_e_a_d_m_e_8md_source.html</file>
       <file>struct___kinetic_proto.html</file>
       <file>struct_kinetic_connection.html</file>
       <file>struct_kinetic_exchange.html</file>
@@ -726,12 +696,10 @@
       <file>struct___kinetic_proto___security___a_c_l___scope.html</file>
       <file>struct___kinetic_proto___setup.html</file>
       <file>struct___kinetic_proto___status.html</file>
-      <file>struct_protobuf_append_to_file.html</file>
       <file>dir_d44c64559bbebec7f509842c48db8b23.html</file>
       <file>dir_c2b4164bda3b5d5cb3cde3da6b43be80.html</file>
       <file>dir_c85d3e3c5052e9ad9ce18c6863244a25.html</file>
       <file>dir_68267d1309a1af8e8297ef4c3efbcdba.html</file>
-      <file>dir_0619a8f54b4fad7043a6de45be8fde0b.html</file>
       <file>index.html</file>
       <file>annotated.html</file>
       <file>classes.html</file>

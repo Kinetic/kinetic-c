@@ -311,38 +311,22 @@
         <topic label="has_detailedmessage" href="struct___kinetic_proto___status.html#a1c8133a7a533c61246fe5ef949db555b"/>
         <topic label="detailedmessage" href="struct___kinetic_proto___status.html#af1c5b05f6e5abeffab423c62b0522e3b"/>
       </topic>
-      <topic label="ProtobufAppendToFile" href="struct_protobuf_append_to_file.html">
-        <topic label="base" href="struct_protobuf_append_to_file.html#a5812a1a23e4cd53ca8f4ca002d2def06"/>
-        <topic label="fileHandle" href="struct_protobuf_append_to_file.html#a82aa2a0b3d83ff09698fc484822297e9"/>
-        <topic label="error" href="struct_protobuf_append_to_file.html#a923f0c15cfe16bf5562f7abdbec320c2"/>
-      </topic>
     </topic>
   </topic>
   <topic label="Files">
     <topic label="File List" href="files.html">
       <topic label="kinetic.h" href="kinetic_8h_source.html"/>
-      <topic label="kinetic_api.c" href="kinetic__api_8c_source.html"/>
       <topic label="kinetic_api.h" href="kinetic__api_8h_source.html"/>
-      <topic label="kinetic_connection.c" href="kinetic__connection_8c_source.html"/>
       <topic label="kinetic_connection.h" href="kinetic__connection_8h_source.html"/>
-      <topic label="kinetic_exchange.c" href="kinetic__exchange_8c_source.html"/>
       <topic label="kinetic_exchange.h" href="kinetic__exchange_8h_source.html"/>
-      <topic label="kinetic_hmac.c" href="kinetic__hmac_8c_source.html"/>
       <topic label="kinetic_hmac.h" href="kinetic__hmac_8h_source.html"/>
-      <topic label="kinetic_logger.c" href="kinetic__logger_8c_source.html"/>
       <topic label="kinetic_logger.h" href="kinetic__logger_8h_source.html"/>
-      <topic label="kinetic_message.c" href="kinetic__message_8c_source.html"/>
       <topic label="kinetic_message.h" href="kinetic__message_8h_source.html"/>
-      <topic label="kinetic_operation.c" href="kinetic__operation_8c_source.html"/>
       <topic label="kinetic_operation.h" href="kinetic__operation_8h_source.html"/>
-      <topic label="kinetic_pdu.c" href="kinetic__pdu_8c_source.html"/>
       <topic label="kinetic_pdu.h" href="kinetic__pdu_8h_source.html"/>
-      <topic label="kinetic_proto.c" href="kinetic__proto_8c_source.html"/>
       <topic label="kinetic_proto.h" href="kinetic__proto_8h_source.html"/>
-      <topic label="kinetic_socket.c" href="kinetic__socket_8c_source.html"/>
       <topic label="kinetic_socket.h" href="kinetic__socket_8h_source.html"/>
       <topic label="kinetic_types.h" href="kinetic__types_8h_source.html"/>
-      <topic label="main.c" href="main_8c_source.html"/>
     </topic>
   </topic>
 </toc>

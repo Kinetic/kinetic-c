@@ -56,15 +56,102 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="title">protobuf-c Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<ul><li><a href="index.html"><span>Main&#160;Page</span></a>
-</li><li><a href="annotated.html"><span>Data&#160;Structures</span></a>
-<ul><li><a href="annotated.html"><span>Data&#160;Structures</span></a>
-</li></ul>
-</li><li><a href="files.html"><span>Files</span></a>
-<ul><li><a href="files.html"><span>File&#160;List</span></a>
-</li></ul>
-</li></ul>
-</div><!-- contents -->
+<div class="textblock"><div class="image">
+<img src="http://travis-ci.org/atomicobject/kinetic-c.png?branch=master" />
+</div>
+<p>This repo contains code for producing C Kinetic clients which use the Seagate Kinetic protocol. Code examples/utilities that use the Kinetic C library are included for reference and usage during development.</p>
+<p><a href="http://travis-ci.org/atomicobject/kinetic-c">Kinetic-C build status</a> is provided via <a href="http://travis-ci.org">Travis CI</a></p>
+<h1>Getting Started </h1>
+<pre class="fragment">&gt; git clone --recursive https://github.com/atomicobject/kinetic-c.git
+
+&gt; cd kinetic-c
+&gt; bundle install # Ensures you have all RubyGems needed
+&gt; bundle execute rake # Run all tests and build kinetic-c library and examples
+</pre><h1>API Documentation </h1>
+<p><a href="http://atomicobject.github.io/kinetic-c/">Kinetic-C API</a> (generated with Doxygen)</p>
+<h1>Dependencies </h1>
+<ul>
+<li><a href="https://github.com/Seagate/kinetic-protocol">Kinetic Protocol</a><ul>
+<li><a href="https://github.com/Seagate/kinetic-protocol/releases/tag/2.0.4">Kinetic-Protocol v2.0.4</a></li>
+</ul>
+</li>
+<li><a href="https://www.ruby-lang.org">Ruby</a> (v1.9.3 or higher) scripting language</li>
+<li><a href="http://rubygems.org">RubyGems</a> (installed w/ `bundle install)<ul>
+<li><a href="http://bundler.io">bundler</a> (v1.3.5 or higher) environment/dependency manager for Ruby projects</li>
+<li><a href="https://github.com/jimweirich/rake">rake</a> (0.9.2.2 or higher) Ruby implementation of Make</li>
+<li><a href="https://github.com/jarmo/require_all">require_all</a></li>
+<li><a href="https://github.com/atomicobject/constructor">constructor</a></li>
+<li><a href="https://github.com/atomicobject/diy">diy</a></li>
+<li><a href="https://github.com/ThrowTheSwitch/Ceedling">ceedling</a> Ruby/Rake-based build/test system for C projects<ul>
+<li>Ceedling also includes the following tools for testing C code</li>
+<li><a href="https://github.com/ThrowTheSwitch/Unity">Unity</a> lightweight assertion framework and test executor for C</li>
+<li><a href="https://github.com/ThrowTheSwitch/CMock">CMock</a> mock/fake generator for C modules using only C header files as input (written in Ruby)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="http://cppcheck.sourceforge.net/">CppCheck</a> for static analysis of source code</li>
+<li><a href="http://valgrind.org/">Valgrind</a> for validation of memory usage/management</li>
+<li><a href="https://github.com/doxygen">Doxygen</a> and <a href="http://www.graphviz.org/">GraphViz</a> for generating API documentation</li>
+</ul>
+<h1>Common Developer Tasks </h1>
+<p>NOTE: Prefix the following commands with <code>bundle exec</code> so that they execute in the context of the bundle environment setup via <code>bundle install</code>.</p>
+<ul>
+<li>List available Rake tasks w/descriptions<ul>
+<li><code>rake -T</code></li>
+</ul>
+</li>
+<li>Run all tests and build the library and examples<ul>
+<li><code>rake</code></li>
+</ul>
+</li>
+<li>Build the library<ul>
+<li><code>rake release</code></li>
+</ul>
+</li>
+<li>Run all unit/integration tests<ul>
+<li><code>rake test:all</code></li>
+</ul>
+</li>
+<li>Analyze code<ul>
+<li><code>rake cppcheck</code></li>
+</ul>
+</li>
+<li>Generate documentation<ul>
+<li><code>rake doxygen:gen</code></li>
+</ul>
+</li>
+<li>Apply license to source files (skips already licensed files)<ul>
+<li><code>rake apply_license</code></li>
+</ul>
+</li>
+<li>Build/install Google Protocol Buffers support for the Kinetic-Protocol<ul>
+<li><code>rake proto</code></li>
+</ul>
+</li>
+<li>Enable verbose output (for current Rake run)<ul>
+<li><code>rake verbose *&lt;task_A&gt;* *&lt;task_B&gt;*</code></li>
+</ul>
+</li>
+</ul>
+<h1>Examples </h1>
+<p>The following examples are provided for development reference and as utilities to aid development</p>
+<p><code>read_file_blocking</code> (incomplete!)</p>
+<p><code>read_file_nonblocking</code> (incomplete!)</p>
+<p><code>write_file_blocking</code> (incomplete!)</p>
+<p><code>write_file_nonblocking</code> (incomplete!)</p>
+<p><code>write_file_blocking_threads</code> (incomplete!)</p>
+<p><code>delete_file_blocking</code> (incomplete!)</p>
+<p><code>delete_file_nonblocking</code> (incomplete!)</p>
+<p><code>instant_secure_erase</code> (incomplete!)</p>
+<p><code>kinetic_stat</code> (incomplete!)</p>
+<p><code>dump_keyspace</code> (incomplete!)</p>
+<p><code>set_acls</code> (incomplete!)</p>
+<p><code>set_pin</code> (incomplete!)</p>
+<p><code>set_clusterversion</code> (incomplete!)</p>
+<p><code>update_firmware</code> (incomplete!)</p>
+<p><code>copy_drive</code> (incomplete!) </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

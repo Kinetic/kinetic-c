@@ -13,7 +13,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"struct___kinetic_proto___setup.html#aa624effcd555cd05fc72c518d20a4eb5"
+"struct___kinetic_proto___status.html#af92da504c7ffc48277eb76bfd27348f6"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -28,6 +28,5 @@ var annotated =
     [ "KineticProto_Security_ACL", "struct___kinetic_proto___security___a_c_l.html", "struct___kinetic_proto___security___a_c_l" ],
     [ "KineticProto_Security_ACL_Scope", "struct___kinetic_proto___security___a_c_l___scope.html", "struct___kinetic_proto___security___a_c_l___scope" ],
     [ "KineticProto_Setup", "struct___kinetic_proto___setup.html", "struct___kinetic_proto___setup" ],
-    [ "KineticProto_Status", "struct___kinetic_proto___status.html", "struct___kinetic_proto___status" ],
-    [ "ProtobufAppendToFile", "struct_protobuf_append_to_file.html", "struct_protobuf_append_to_file" ]
+    [ "KineticProto_Status", "struct___kinetic_proto___status.html", "struct___kinetic_proto___status" ]
 ];
