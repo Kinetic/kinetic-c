@@ -193,7 +193,7 @@ namespace :test_server do
               if request =~ /^readProto()/
                 kruby = KineticRuby.new
                 response = kruby.encode_test_message
-                report "Test server: Responding to 'read(#{len})' w/ '#{response}'"
+                report "Test server: Responding to 'read(#{len})' w/ dummy protobuf (#{response.length} bytes)"
                 client.write response
                 request = ""
               end
