@@ -18,28 +18,30 @@
 *
 */
 
-#include "unity.h"
-#include <protobuf-c/protobuf-c.h>
+#ifndef _KINETIC_OPERATION_H
+#define _KINETIC_OPERATION_H
+
 #include "kinetic_types.h"
-#include "kinetic_proto.h"
+#include "kinetic_exchange.h"
 #include "kinetic_message.h"
+#include "kinetic_hmac.h"
 
-void setUp(void)
+typedef struct _KineticOperation
 {
+    KineticExchange* exchange;
+    KineticMessage* message;
+    KineticHMAC* hmac;
+} KineticOperation;
+
+#define KINETIC_OPERATION_INIT(op, exchange, msg, hmac) { \
+    op.exchange = exchange; \
+    op.message = msg; \
+    op.hmac = hmac; \
 }
 
-void tearDown(void)
-{
-}
+void KineticOperation_BuildNoop(
+    KineticMessage* const message,
+    KineticExchange* const exchange,
+    KineticHMAC* const hmac);
 
-void test_KineticMessage_Init_should_initialize_the_message_and_required_protobuf_fields(void)
-{
-    KineticMessage message;
-
-    KineticMessage_Init(&message);
-
-    TEST_ASSERT_EQUAL_PTR(&message.header, message.command.header);
-    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
-    TEST_ASSERT_EQUAL_PTR(&message.status, message.command.status);
-    TEST_ASSERT_EQUAL_PTR(&message.command, message.proto.command);
-}
+#endif // _KINETIC_OPERATION_H

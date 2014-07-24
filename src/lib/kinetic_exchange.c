@@ -29,16 +29,7 @@ void KineticExchange_Init(
     int64_t connectionID,
     KineticConnection* const connection)
 {
-    memset(exchange, 0, sizeof(KineticExchange));
-    exchange->identity = identity;
-    if (key != NULL && keyLength > 0)
-    {
-        memcpy(&exchange->key, key, keyLength);
-        exchange->keyLength = keyLength;
-        exchange->has_key = true;
-    }
-    exchange->connectionID = connectionID;
-    exchange->connection = connection;
+    KINETIC_EXCHANGE_INIT(exchange, identity, key, keyLength, connectionID, connection);
 }
 
 void KineticExchange_SetClusterVersion(

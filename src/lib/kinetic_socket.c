@@ -226,6 +226,30 @@ bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length)
     return true;
 }
 
+bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticProto* message, void* buffer, size_t length)
+{
+    bool success = false;
+    KineticProto* proto;
+
+    if (KineticSocket_Read(socketDescriptor, buffer, length))
+    {
+        proto = KineticProto_unpack(NULL, length, buffer);
+        if (proto == NULL)
+        {
+            LOG("Error unpacking incoming Kinetic protobuf message!");
+        }
+        else
+        {
+            assert(message != NULL);
+            memcpy(message, proto, length);
+            KineticProto_free_unpacked(proto, NULL);
+            success = true;
+        }
+    }
+
+    return success;
+}
+
 bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length)
 {
     int status;

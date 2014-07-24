@@ -107,7 +107,7 @@ void test_KineticHMAC_Validate_should_return_true_if_the_HMAC_for_the_supplied_m
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate(&actual, &message, key, sizeof(key));
 
-    TEST_ASSERT_TRUE(KineticHMAC_Validate(&message, key, sizeof(key)));
+    TEST_ASSERT_TRUE(KineticHMAC_Validate(&message.proto, key, sizeof(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_value_of_the_supplied_message_and_key_is_incorrect(void)
@@ -124,7 +124,7 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_value_of_the_supp
     // Bork the HMAC
     message.proto.hmac.data[3]++;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message, key, sizeof(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, sizeof(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_length_of_the_supplied_message_and_key_is_incorrect(void)
@@ -141,7 +141,7 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_length_of_the_sup
     // Bork the HMAC
     message.proto.hmac.len--;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message, key, sizeof(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, sizeof(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_presence_is_false_for_the_supplied_message_and_key_is_incorrect(void)
@@ -158,5 +158,5 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_presence_is_false
     // Bork the HMAC
     message.proto.has_hmac = false;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message, key, sizeof(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, sizeof(key)));
 }

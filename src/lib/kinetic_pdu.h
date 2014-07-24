@@ -24,6 +24,7 @@
 #include "kinetic_types.h"
 #include "kinetic_exchange.h"
 #include "kinetic_message.h"
+#include "kinetic_hmac.h"
 
 #define PDU_HEADER_LEN      (1 + (2 * sizeof(int64_t)))
 #define PDU_PROTO_MAX_LEN   (1024 * 1024)
@@ -45,10 +46,14 @@ typedef struct _KineticPDU
     // Message associated with this PDU instance
     KineticMessage* protobuf;
     uint32_t protobufLength; // Embedded in header in NBO byte order (this is for reference)
+    uint8_t protobufScratch[1024*1024];
 
     // Value data associated with PDU (if any)
     uint8_t* value;
     uint32_t valueLength; // Embedded in header in NBO byte order (this is for reference)
+
+    // Embedded HMAC instance
+    KineticHMAC hmac;
 
     // Exchange associated with this PDU instance (info gets embedded in protobuf message)
     KineticExchange* exchange;
@@ -60,5 +65,8 @@ void KineticPDU_Init(
     KineticMessage* const message,
     uint8_t* const value,
     int32_t valueLength);
+
+bool KineticPDU_Send(KineticPDU* const request);
+bool KineticPDU_Receive(KineticPDU* const response);
 
 #endif // _KINETIC_PDU_H

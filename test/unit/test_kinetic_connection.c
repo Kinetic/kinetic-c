@@ -30,6 +30,7 @@
 
 static KineticConnection Connection, Expected;
 static const int64_t Identity = 1234;
+static uint8_t Key[] = {1,2,3,4,5,6,7,8};
 static const int64_t ConnectionID = 1234;
 static KineticExchange Exchange;
 static KineticMessage MessageOut, MessageIn;
@@ -37,9 +38,9 @@ static KineticPDU PDUOut, PDUIn;
 
 void setUp(void)
 {
-    Connection = KineticConnection_Init();
-    Expected = KineticConnection_Init();
-    KineticExchange_Init(&Exchange, Identity, ConnectionID, &Connection);
+    KineticConnection_Init(&Connection);
+    KineticConnection_Init(&Expected);
+    KineticExchange_Init(&Exchange, Identity, Key, sizeof(Key), ConnectionID, &Connection);
     KineticMessage_Init(&MessageOut);
     KineticMessage_Init(&MessageIn);
 }
@@ -50,12 +51,15 @@ void tearDown(void)
 
 void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 {
-    TEST_ASSERT(sizeof(KineticConnection) > 0);
-    TEST_ASSERT_FALSE(Connection.Connected);
-    TEST_ASSERT_TRUE(Connection.Blocking);
-    TEST_ASSERT_EQUAL(0, Connection.Port);
-    TEST_ASSERT_EQUAL(-1, Connection.FileDescriptor);
-    TEST_ASSERT_EQUAL_STRING("", Connection.Host);
+    KineticConnection connection;
+
+    KineticConnection_Init(&connection);
+
+    TEST_ASSERT_FALSE(connection.Connected);
+    TEST_ASSERT_TRUE(connection.Blocking);
+    TEST_ASSERT_EQUAL(0, connection.Port);
+    TEST_ASSERT_EQUAL(-1, connection.FileDescriptor);
+    TEST_ASSERT_EQUAL_STRING("", connection.Host);
 }
 
 void test_KineticConnection_Connect_should_report_a_failed_connection(void)
@@ -98,151 +102,4 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_
     TEST_ASSERT_EQUAL(2345, Connection.Port);
     TEST_ASSERT_EQUAL(48, Connection.FileDescriptor);
     TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.Host);
-}
-
-void DoConnect(void)
-{
-    KineticSocket_Connect_ExpectAndReturn("valid-host.com", 2345, false, 48);
-    KineticConnection_Connect(&Connection, "valid-host.com", 2345, false);
-}
-
-void test_KineticConnection_SendPDU_should_send_the_PDU_and_report_success(void)
-{
-    bool status;
-    uint8_t buffer[20], value[10];
-
-    DoConnect();
-
-    KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
-
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
-    Expected = Connection;
-
-    KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(456, PDUOut.protobuf, true);
-    KineticSocket_Write_ExpectAndReturn(456, PDUOut.value, PDUOut.valueLength, true);
-
-    status = KineticConnection_SendPDU(&PDUOut);
-
-    TEST_ASSERT_TRUE(status);
-}
-
-
-void test_KineticConnection_SendPDU_should_send_the_specified_message_and_report_failure_to_send_header(void)
-{
-    bool status;
-    uint8_t buffer[20], value[10];
-
-    DoConnect();
-
-    KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
-
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
-    Expected = Connection;
-
-    KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), false);
-
-    status = KineticConnection_SendPDU(&PDUOut);
-
-    TEST_ASSERT_FALSE(status);
-}
-
-void test_KineticConnection_SendPDU_should_send_the_specified_message_and_report_failure_to_send_protobuf(void)
-{
-    bool status;
-    uint8_t buffer[20], value[10];
-
-    DoConnect();
-
-    KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
-
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
-    Expected = Connection;
-
-    KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(456, PDUOut.protobuf, false);
-
-    status = KineticConnection_SendPDU(&PDUOut);
-
-    TEST_ASSERT_FALSE(status);
-}
-
-void test_KineticConnection_SendPDU_should_send_the_specified_message_and_report_failure(void)
-{
-    bool status;
-    uint8_t buffer[20], value[10];
-
-    DoConnect();
-
-    KineticPDU_Init(&PDUOut, &Exchange, &MessageOut, value, sizeof(value));
-
-    Connection.Connected = true;
-    Connection.Blocking = true;
-    Connection.Port = 1234;
-    Connection.FileDescriptor = 456;
-    strcpy(Connection.Host, "valid-host.com");
-    Expected = Connection;
-
-    KineticSocket_Write_ExpectAndReturn(456, &PDUOut.header, sizeof(KineticPDUHeader), true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(456, PDUOut.protobuf, true);
-    KineticSocket_Write_ExpectAndReturn(456, PDUOut.value, PDUOut.valueLength, false);
-
-    status = KineticConnection_SendPDU(&PDUOut);
-
-    TEST_ASSERT_FALSE(status);
-}
-
-void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange_and_report_success(void)
-{
-    bool status;
-    uint8_t buffer[20], value[10];
-
-    DoConnect();
-
-    MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS; // Fake success for now
-    KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
-
-    status = KineticConnection_ReceivePDU(&PDUIn);
-
-    TEST_ASSERT_TRUE(status);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, MessageIn.status.code);
-
-    TEST_IGNORE_MESSAGE("Need to actually receive the message still!");
-}
-
-void test_KineticConnection_ReceivePDU_should_receive_a_message_for_the_exchange_and_report_failure(void)
-{
-    bool status;
-    uint8_t buffer[20], value[10];
-
-    DoConnect();
-
-    MessageIn.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR; // Fake success for now
-    KineticPDU_Init(&PDUIn, &Exchange, &MessageIn, value, sizeof(value));
-
-    status = KineticConnection_ReceivePDU(&PDUIn);
-
-    TEST_ASSERT_FALSE(status);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR, MessageIn.status.code);
-
-    TEST_IGNORE_MESSAGE("Need to actually receive the message still!");
-}
-
-void test_SOMEONE_needs_to_configure_or_validate_HMAC_on_messages(void)
-{
-    TEST_IGNORE_MESSAGE("INCOMPLETE!");
 }

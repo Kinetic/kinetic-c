@@ -21,23 +21,9 @@
 #ifndef _KINETIC_MESSAGE_H
 #define _KINETIC_MESSAGE_H
 
-#include "kinetic_proto.h"
-#include <openssl/sha.h>
-
-typedef struct _KineticMessage
-{
-    // Kinetic Protocol Buffer Elements
-    KineticProto                proto;
-    KineticProto_Command        command;
-    KineticProto_Header         header;
-    KineticProto_Body           body;
-    KineticProto_Status         status;
-    KineticProto_Security       security;
-    KineticProto_Security_ACL   acl;
-    uint8_t                     hmacData[SHA_DIGEST_LENGTH];
-} KineticMessage;
+#include "kinetic_types.h"
+#include "kinetic_hmac.h"
 
 void KineticMessage_Init(KineticMessage* const message);
-void KineticMessage_BuildNoop(KineticMessage* const message);
 
 #endif // _KINETIC_MESSAGE_H

@@ -66,7 +66,7 @@ void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
 }
 
-void test_KineticSocket_WriteProtobuf_should_write_serializedprotobuf_to_the_specified_socket(void)
+void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_specified_socket(void)
 {
     bool success = false;
     KineticMessage msg;
@@ -94,6 +94,7 @@ void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
 
     // Send request to test server to send us some data
     success = KineticSocket_Write(FileDesc, readRequest, strlen(readRequest));
+    TEST_ASSERT_TRUE(success);
 
     success = KineticSocket_Read(FileDesc, data, sizeof(data));
 
@@ -110,4 +111,47 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
     success = KineticSocket_Read(FileDesc, data, sizeof(data));
 
     TEST_ASSERT_FALSE_MESSAGE(success, "Expected socket to timeout waiting on data!");
+}
+
+void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
+{
+    bool success = false;
+    const char* readRequest = "readProto()\0";
+    uint8_t data[256];
+    uint8_t protoBuf[1024*1024];
+    KineticProto* proto = (KineticProto*)protoBuf;
+    size_t expectedLength = 125; // This would normally be extracted from the PDU header
+
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+
+    // Send request to test server to send us a Kinetic protobuf
+    success = KineticSocket_Write(FileDesc, readRequest, strlen(readRequest));
+    TEST_ASSERT_TRUE(success);
+
+    success = KineticSocket_ReadProtobuf(FileDesc, proto, data, expectedLength);
+
+    TEST_ASSERT_TRUE_MESSAGE(success, "Failed to read from socket!");
+
+    printf("Received Kinetic protobuf:\n  identity: %016llX\n",
+        (unsigned long long)proto->command->header->identity);
+}
+
+void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_specified_length_fails_to_be_read_within_timeout(void)
+{
+    bool success = false;
+    const char* readRequest = "readProto()\0";
+    uint8_t data[256];
+    uint8_t protoBuf[1024*1024];
+    KineticProto* proto = (KineticProto*)protoBuf;
+    size_t expectedLength = 150; // This would normally be extracted from the PDU header
+
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+
+    // Send request to test server to send us a Kinetic protobuf
+    success = KineticSocket_Write(FileDesc, readRequest, strlen(readRequest));
+    TEST_ASSERT_TRUE(success);
+
+    success = KineticSocket_ReadProtobuf(FileDesc, proto, data, expectedLength);
+
+    TEST_ASSERT_FALSE_MESSAGE(success, "Expected timeout!");
 }

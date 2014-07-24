@@ -19,6 +19,9 @@
 */
 
 #include "kinetic_pdu.h"
+#include "kinetic_socket.h"
+#include "kinetic_hmac.h"
+#include "kinetic_logger.h"
 #include <string.h>
 
 static void KineticPDU_PackInt32(uint8_t* const buffer, int32_t value);
@@ -60,6 +63,82 @@ void KineticPDU_Init(
     pdu->valueLength = valueLength;
     KineticPDU_PackInt32((uint8_t*)&pdu->header.valueLength, pdu->valueLength); // Pack value length field
     pdu->value = value;
+}
+
+bool KineticPDU_Send(KineticPDU* const request)
+{
+    int fd = request->exchange->connection->FileDescriptor;
+
+    // Send the PDU header
+    if (!KineticSocket_Write(fd, &request->header, sizeof(KineticPDUHeader)))
+    {
+        LOG("Failed to send PDU header!");
+        return false;
+    }
+
+    // Populate the HMAC for the protobuf
+    KineticHMAC_Init(&request->hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Populate(&request->hmac, request->protobuf, request->exchange->key, request->exchange->keyLength);
+
+    // Send the protobuf message
+    if (!KineticSocket_WriteProtobuf(fd, request->protobuf))
+    {
+        LOG("Failed to send PDU protobuf message!");
+        return false;
+    }
+
+    // Send the value/payload, if specified
+    if ((request->valueLength > 0) && (request->value != NULL))
+    {
+        if (!KineticSocket_Write(fd, request->value, request->valueLength))
+        {
+            LOG("Failed to send PDU value payload!");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool KineticPDU_Receive(KineticPDU* const response)
+{
+    const int fd = response->exchange->connection->FileDescriptor;
+
+    // Send the PDU header
+    if (!KineticSocket_Read(fd, &response->header, sizeof(KineticPDUHeader)))
+    {
+        LOG("Failed to receive PDU header!");
+        return false;
+    }
+
+    // Send the protobuf message
+    if (!KineticSocket_ReadProtobuf(fd, &response->protobuf->proto,
+            (KineticProto*)response->protobufScratch,
+            response->header.protobufLength))
+    {
+        LOG("Failed to receive PDU protobuf message!");
+        return false;
+    }
+
+    // Validate the HMAC for the recevied protobuf message
+    if (!KineticHMAC_Validate(&response->protobuf->proto,
+            response->exchange->key, response->exchange->keyLength))
+    {
+        LOG("Received PDU protobuf message has invalid HMAC!");
+        return false;
+    }
+
+    // Send the value payload, if specified
+    if (response->header.valueLength)
+    {
+        if (!KineticSocket_Read(fd, response->value, response->valueLength))
+        {
+            LOG("Failed to receive PDU value payload!");
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void KineticPDU_PackInt32(uint8_t* const buffer, int32_t value)

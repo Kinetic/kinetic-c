@@ -34,6 +34,12 @@
 
 #include <netinet/in.h>
 #include <ifaddrs.h>
+#include <openssl/sha.h>
+
+#define KINETIC_PORT            8213
+#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
+#define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
+#define KINETIC_MAX_KEY_LEN     128
 
 // Windows doesn't use <unistd.h> nor does it define HOST_NAME_MAX.
 #if defined(WIN32)
@@ -61,7 +67,7 @@
     #endif // __APPLE__
 #endif  // WIN32
 
-#define KINETIC_PORT 8213
+#include "kinetic_proto.h"
 
 typedef struct _KineticConnection
 {
@@ -72,25 +78,37 @@ typedef struct _KineticConnection
     char    Host[HOST_NAME_MAX];
 } KineticConnection;
 
-#include <protobuf-c/protobuf-c.h>
-#include "kinetic_proto.h"
-#include "kinetic_message.h"
+#define KINETIC_CONNECTION_INIT(connection) { \
+    memset((connection), 0, sizeof(KineticConnection)); \
+    (connection)->Blocking = true; \
+    (connection)->FileDescriptor = -1; \
+}
 
-#define KINETIC_MAX_KEY_LEN 128
+typedef struct _KineticMessage
+{
+    // Kinetic Protocol Buffer Elements
+    KineticProto                proto;
+    KineticProto_Command        command;
+    KineticProto_Header         header;
+    KineticProto_Body           body;
+    KineticProto_Status         status;
+    KineticProto_Security       security;
+    KineticProto_Security_ACL   acl;
+    uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
+} KineticMessage;
 
-#define KINETIC_MESSSAGE_INIT(msg) \
-    msg->proto = KINETIC_PROTO_INIT; \
-    msg->command = KINETICPROTO_COMMAND_INIT; \
-    msg->header = KINETIC_PROTO_HEADER_INIT; \
-    msg->body = KINETIC_PROTO_BODY_INIT; \
-    msg->status = KINETIC_PROTO_STATUS_INIT; \
-    msg->security = KINETIC_PROTO_SECURITY_INIT; \
-    msg->acl = KINETIC_PROTO_SECURITY_ACL_INIT; \
-    msg->proto.hmac.data = msg->hmacData; \
-    msg->command.header = &msg->header; \
-    msg->command.body = &msg->body; \
-    msg->command.status = &msg->status; \
-    msg->proto.command = &msg->command; \
-    msmset(msg->hmac_data, 0, SHA_DIGEST_LENGTH);
+#define KINETIC_MESSAGE_INIT(msg) { \
+    KineticProto_init(&(msg)->proto); \
+    KineticProto_command_init(&(msg)->command); \
+    KineticProto_header_init(&(msg)->header); \
+    KineticProto_body_init(&(msg)->body); \
+    KineticProto_status_init(&(msg)->status); \
+    (msg)->proto.hmac.data = (msg)->hmacData; \
+    (msg)->command.header = &(msg)->header; \
+    (msg)->command.body = &(msg)->body; \
+    (msg)->command.status = &(msg)->status; \
+    (msg)->proto.command = &(msg)->command; \
+    memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
+}
 
 #endif // _KINETIC_TYPES_H

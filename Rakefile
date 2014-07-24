@@ -153,6 +153,7 @@ namespace :test_server do
 
     def initialize(port = DEFAULT_KINETIC_PORT)
       raise "Invalid Kinetic test server port specified (port: #{port})" if !port || port < 0
+      require 'kinetic-ruby'
       @port = port
       @server = nil
       @worker = nil
@@ -179,10 +180,19 @@ namespace :test_server do
             report "Test server: Connected to #{client.inspect}"
             request = ""
             while request += client.getc # Read characters from socket
+
               request_match = request.match(/^read\((\d+)\)/)
               if request_match
                 len = request_match[1].to_i
                 response = "G"*len
+                report "Test server: Responding to 'read(#{len})' w/ '#{response}'"
+                client.write response
+                request = ""
+              end
+
+              if request =~ /^readProto()/
+                kruby = KineticRuby.new
+                response = kruby.encode_test_message
                 report "Test server: Responding to 'read(#{len})' w/ '#{response}'"
                 client.write response
                 request = ""

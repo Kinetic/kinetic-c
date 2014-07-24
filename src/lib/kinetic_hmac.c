@@ -24,7 +24,7 @@
 #include <arpa/inet.h>
 #include <openssl/hmac.h>
 
-static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticMessage* message, const uint8_t* const key, size_t keyLen);
+static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, const uint8_t* const key, size_t keyLen);
 
 void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm)
 {
@@ -47,7 +47,7 @@ void KineticHMAC_Populate(
     size_t keyLen)
 {
     KineticHMAC_Init(hmac, hmac->algorithm);
-    KineticHMAC_Compute(hmac, message, key, keyLen);
+    KineticHMAC_Compute(hmac, &message->proto, key, keyLen);
 
     // Copy computed HMAC into message
     memcpy(message->proto.hmac.data, hmac->value, hmac->valueLength);
@@ -56,7 +56,7 @@ void KineticHMAC_Populate(
 }
 
 bool KineticHMAC_Validate(
-    const KineticMessage* message,
+    const KineticProto* proto,
     const uint8_t* const key,
     size_t keyLen)
 {
@@ -64,22 +64,22 @@ bool KineticHMAC_Validate(
     int result = 0;
     KineticHMAC tempHMAC;
 
-    if (!message->proto.has_hmac)
+    if (!proto->has_hmac)
     {
         return false;
     }
 
     KineticHMAC_Init(&tempHMAC, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM);
-    KineticHMAC_Compute(&tempHMAC, message, key, keyLen);
+    KineticHMAC_Compute(&tempHMAC, proto, key, keyLen);
 
-    if (message->proto.hmac.len != tempHMAC.valueLength)
+    if (proto->hmac.len != tempHMAC.valueLength)
     {
         return false;
     }
 
     for (i = 0; i < tempHMAC.valueLength; i++)
     {
-        result |= message->proto.hmac.data[i] ^ tempHMAC.value[i];
+        result |= proto->hmac.data[i] ^ tempHMAC.value[i];
     }
 
     return (result == 0);
@@ -87,15 +87,15 @@ bool KineticHMAC_Validate(
 
 static void KineticHMAC_Compute(
     KineticHMAC* hmac,
-    const KineticMessage* message,
+    const KineticProto* proto,
     const uint8_t* const key,
     size_t keyLen)
 {
     HMAC_CTX ctx;
 
-    unsigned int len = protobuf_c_message_get_packed_size((ProtobufCMessage*)&message->command);
+    unsigned int len = protobuf_c_message_get_packed_size((ProtobufCMessage*)proto->command);
     uint8_t* command = malloc(len);
-    protobuf_c_message_pack((ProtobufCMessage*)&message->command, command);
+    protobuf_c_message_pack((ProtobufCMessage*)proto->command, command);
     HMAC_CTX_init(&ctx);
     HMAC_Init_ex(&ctx, key, keyLen, EVP_sha1(), NULL);
 

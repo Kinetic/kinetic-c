@@ -15,20 +15,13 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*
+
 */
 
-#include "kinetic_types.h"
 #include "kinetic_message.h"
-#include "kinetic_hmac.h"
 
 void KineticMessage_Init(KineticMessage* const message)
 {
     // Initialize protobuf fields and ssemble the message
-    KINETIC_MESSSAGE_INIT(message);
-}
-
-void KineticMessage_BuildNoop(KineticMessage* const message)
-{
-    // assert(false); // Need to complete!!!
+    KINETIC_MESSAGE_INIT(message);
 }

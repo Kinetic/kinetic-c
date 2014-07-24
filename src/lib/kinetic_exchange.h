@@ -23,6 +23,7 @@
 
 #include "kinetic_types.h"
 #include "kinetic_proto.h"
+#include "kinetic_connection.h"
 
 typedef struct _KineticExchange
 {
@@ -64,6 +65,19 @@ typedef struct _KineticExchange
     // Associated Kinetic connection
     KineticConnection* connection;
 } KineticExchange;
+
+#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, conid, con) { \
+    memset((exchg), 0, sizeof(KineticExchange)); \
+    (exchg)->identity = id; \
+    if (k != NULL && klen > 0) \
+    { \
+        memcpy((exchg)->key, k, klen); \
+        (exchg)->keyLength = klen; \
+        (exchg)->has_key = true; \
+    } \
+    (exchg)->connectionID = conid; \
+    (exchg)->connection = con; \
+}
 
 void KineticExchange_Init(
     KineticExchange* const exchange,

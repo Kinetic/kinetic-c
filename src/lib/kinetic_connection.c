@@ -20,15 +20,12 @@
 
 #include "kinetic_connection.h"
 #include "kinetic_socket.h"
+#include "kinetic_pdu.h"
 #include <string.h>
 
-KineticConnection KineticConnection_Init(void)
+void KineticConnection_Init(KineticConnection* connection)
 {
-    KineticConnection connection;
-    memset(&connection, 0, sizeof(connection));
-    connection.Blocking = true;
-    connection.FileDescriptor = -1;
-    return connection;
+    KINETIC_CONNECTION_INIT(connection);
 }
 
 bool KineticConnection_Connect(
@@ -46,39 +43,4 @@ bool KineticConnection_Connect(
     connection->Connected = (connection->FileDescriptor >= 0);
 
     return connection->Connected;
-}
-
-bool KineticConnection_SendPDU(KineticPDU* const request)
-{
-    int fd = request->exchange->connection->FileDescriptor;
-
-    // Send the PDU header
-    if (!KineticSocket_Write(fd, &request->header, sizeof(KineticPDUHeader)))
-    {
-        return false;
-    }
-
-    // Send the protobuf message
-    if (!KineticSocket_WriteProtobuf(fd, request->protobuf))
-    {
-        return false;
-    }
-
-    // Send the value/payload, if specified
-    if ((request->valueLength > 0) && (request->value != NULL))
-    {
-        if (!KineticSocket_Write(fd, request->value, request->valueLength))
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool KineticConnection_ReceivePDU(KineticPDU* const response)
-{
-    // KineticPDU_Init(&PDUOut, (uint8_t*)0x12345678, &MessageOut.proto, (uint8_t*)0xDEADBEEF, 789);
-
-    return (response->protobuf->status.code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 }

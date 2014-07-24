@@ -23,10 +23,6 @@
 
 #include "kinetic_types.h"
 #include "kinetic_message.h"
-#include <openssl/sha.h>
-
-#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
-#define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
 
 typedef struct _KineticHMAC
 {
@@ -37,6 +33,6 @@ typedef struct _KineticHMAC
 
 void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm);
 void KineticHMAC_Populate(KineticHMAC* hmac, KineticMessage* message, const uint8_t* const key, size_t keyLen);
-bool KineticHMAC_Validate(const KineticMessage* message, const uint8_t* const key, size_t keyLen);
+bool KineticHMAC_Validate(const KineticProto* proto, const uint8_t* const key, size_t keyLen);
 
 #endif  // _KINETIC_HMAC_H

@@ -22,11 +22,8 @@
 #define _KINETIC_CONNECTION_H
 
 #include "kinetic_types.h"
-#include "kinetic_pdu.h"
 
-KineticConnection KineticConnection_Init(void);
+void KineticConnection_Init(KineticConnection* connection);
 bool KineticConnection_Connect(KineticConnection* const connection, const char* host, int port, bool blocking);
-bool KineticConnection_SendPDU(KineticPDU* const request);
-bool KineticConnection_ReceivePDU(KineticPDU* const response);
 
 #endif // _KINETIC_CONNECTION_H

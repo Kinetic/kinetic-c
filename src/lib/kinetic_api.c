@@ -31,7 +31,8 @@ void KineticApi_Init(const char* log_file)
 
 const KineticConnection KineticApi_Connect(const char* host, int port, bool blocking)
 {
-    KineticConnection connection = KineticConnection_Init();
+    KineticConnection connection;
+    KineticConnection_Init(connction);
 
     if (!KineticConnection_Connect(&connection, host, port, blocking))
     {

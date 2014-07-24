@@ -15,31 +15,15 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*
+
 */
 
-#include "unity.h"
-#include <protobuf-c/protobuf-c.h>
-#include "kinetic_types.h"
-#include "kinetic_proto.h"
-#include "kinetic_message.h"
+#include "kinetic_operation.h"
 
-void setUp(void)
+void KineticOperation_BuildNoop(
+    KineticMessage* const message,
+    KineticExchange* const exchange,
+    KineticHMAC* const hmac)
 {
-}
-
-void tearDown(void)
-{
-}
-
-void test_KineticMessage_Init_should_initialize_the_message_and_required_protobuf_fields(void)
-{
-    KineticMessage message;
-
-    KineticMessage_Init(&message);
-
-    TEST_ASSERT_EQUAL_PTR(&message.header, message.command.header);
-    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
-    TEST_ASSERT_EQUAL_PTR(&message.status, message.command.status);
-    TEST_ASSERT_EQUAL_PTR(&message.command, message.proto.command);
+    // assert(false); // Need to complete!!!
 }
