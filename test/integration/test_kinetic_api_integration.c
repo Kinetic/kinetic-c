@@ -35,6 +35,7 @@
 
 void setUp(void)
 {
+    KineticApi_Init(TEST_LOG_FILE);
 }
 
 void tearDown(void)
@@ -43,46 +44,25 @@ void tearDown(void)
 
 void test_NoOp_should_succeed(void)
 {
-    TEST_IGNORE_MESSAGE("Need to implement!");
-}
-
-#if 0
-void test_KineticApi_NoOp_should_send_NOOP_command(void)
-{
     KineticConnection connection;
     KineticExchange exchange;
     KineticOperation operation;
-    KineticMessage requestMsg, responseMsg;
     KineticPDU request, response;
-    KineticProto_Status_StatusCode status;
     int64_t identity = 1234;
-    int64_t connectionID = 5678;
+    uint8_t key[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    int64_t connectionID = 5678; // ?????
+    // KineticMessage requestMsg, responseMsg;
 
-    exchange.connection = &connection;
+    KineticApi_Connect(&connection, "localhost", 8999, true);
 
-    request.exchange = &exchange;
-    KINETIC_MESSAGE_INIT(&requestMsg);
-    request.protobuf = &requestMsg;
+    TEST_ASSERT_TRUE_MESSAGE(
+        KineticApi_ConfigureExchange(&exchange, &connection, identity,
+            key, sizeof(key), connectionID),
+        "Failed configuring exchange!");
 
-    response.exchange = &exchange;
-    KINETIC_MESSAGE_INIT(&responseMsg);
-    response.protobuf = &responseMsg;
-    response.protobuf->status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    operation = KineticApi_CreateOperation(&exchange, &request, &response);
 
-    KINETIC_OPERATION_INIT(&operation, &exchange, &request, &response);
-
-    KineticExchange_IncrementSequence_Expect(&exchange);
-    KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &exchange, &requestMsg, NULL, 0);
-    KineticOperation_BuildNoop_Expect(&operation);
-    KineticPDU_Send_ExpectAndReturn(&request, true);
-    KineticPDU_Init_Expect(&response, &exchange, &responseMsg, NULL, 0);
-    KineticPDU_Receive_ExpectAndReturn(&response, true);
-
-    status = KineticApi_NoOp(&operation);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-    TEST_ASSERT_EQUAL_PTR(&exchange, response.exchange);
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(
+        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
+        KineticApi_NoOp(&operation));
 }
-#endif
