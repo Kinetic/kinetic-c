@@ -42,7 +42,7 @@ void setUp(void)
 {
     KineticConnection_Init(&Connection);
     KineticConnection_Init(&Expected);
-    KineticExchange_Init(&Exchange, Identity, Key, sizeof(Key), ConnectionID, &Connection);
+    KineticExchange_Init(&Exchange, Identity, Key, sizeof(Key), &Connection);
     KineticMessage_Init(&MessageOut);
     KineticMessage_Init(&MessageIn);
 }

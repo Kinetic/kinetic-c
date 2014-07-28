@@ -40,7 +40,6 @@ static KineticExchange Exchange;
 static int64_t Identity = 1234;
 static uint8_t Key[] = {1,2,3,4,5,6,7,8};
 static size_t KeyLength = 0;
-static int64_t ConnectionID = 5678;
 
 static KineticMessage MessageOut, MessageIn;
 static KineticPDU PDUOut, PDUIn;
@@ -63,7 +62,7 @@ void setUp(void)
 
     // Assemble a Kinetic protocol instance
     KINETIC_CONNECTION_INIT(&Connection);
-    KINETIC_EXCHANGE_INIT(&Exchange, Identity, Key, KeyLength, ConnectionID, &Connection);
+    KINETIC_EXCHANGE_INIT(&Exchange, Identity, Key, KeyLength, &Connection);
     KINETIC_MESSAGE_INIT(&MessageOut);
     KINETIC_MESSAGE_INIT(&MessageIn);
 
