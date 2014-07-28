@@ -55,12 +55,12 @@ void test_KineticApi_Connect_should_configure_a_connection(void)
     KineticConnection_Init_Expect(&connection);
     KineticConnection_Connect_ExpectAndReturn(&connection, "somehost.com", 321, true, true);
 
-    KineticApi_Connect(&connection, "somehost.com", 321, true);
+    TEST_ASSERT_TRUE(KineticApi_Connect(&connection, "somehost.com", 321, true));
 
     TEST_ASSERT_TRUE(connection.connected);
 }
 
-void test_KineticApi_Connect_should_log_a_failed_connection(void)
+void test_KineticApi_Connect_should_log_a_failed_connection_and_return_false(void)
 {
     KineticConnection connection;
 
@@ -72,7 +72,7 @@ void test_KineticApi_Connect_should_log_a_failed_connection(void)
     KineticConnection_Connect_ExpectAndReturn(&connection, "somehost.com", 123, true, false);
     KineticLogger_Log_Expect("Failed creating connection to somehost.com:123");
 
-    KineticApi_Connect(&connection, "somehost.com", 123, true);
+    TEST_ASSERT_FALSE(KineticApi_Connect(&connection, "somehost.com", 123, true));
 
     TEST_ASSERT_FALSE(connection.connected);
     TEST_ASSERT_EQUAL(-1, connection.socketDescriptor);
@@ -98,12 +98,20 @@ void test_KineticApi_CreateOperation_should_create_configure_and_return_a_valid_
     KineticOperation op;
     KineticExchange exchange;
     KineticPDU request, response;
+    KineticMessage requestMsg, responseMsg;
 
-    op = KineticApi_CreateOperation(&exchange, &request, &response);
+    KineticMessage_Init_Expect(&requestMsg);
+    KineticPDU_Init_Expect(&request, &exchange, &requestMsg, NULL, 0);
+    KineticMessage_Init_Expect(&responseMsg);
+    KineticPDU_Init_Expect(&response, &exchange, &responseMsg, NULL, 0);
+
+    op = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response, &responseMsg);
 
     TEST_ASSERT_EQUAL_PTR(&exchange, op.exchange);
     TEST_ASSERT_EQUAL_PTR(&request, op.request);
+    TEST_ASSERT_EQUAL_PTR(&requestMsg, op.request->protobuf);
     TEST_ASSERT_EQUAL_PTR(&response, op.response);
+    TEST_ASSERT_EQUAL_PTR(&responseMsg, op.response->protobuf);
 }
 
 void test_KineticApi_NoOp_should_send_NOOP_command(void)
@@ -131,11 +139,8 @@ void test_KineticApi_NoOp_should_send_NOOP_command(void)
     KINETIC_OPERATION_INIT(&operation, &exchange, &request, &response);
 
     KineticExchange_IncrementSequence_Expect(&exchange);
-    KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &exchange, &requestMsg, NULL, 0);
     KineticOperation_BuildNoop_Expect(&operation);
     KineticPDU_Send_ExpectAndReturn(&request, true);
-    KineticPDU_Init_Expect(&response, &exchange, &responseMsg, NULL, 0);
     KineticPDU_Receive_ExpectAndReturn(&response, true);
 
     status = KineticApi_NoOp(&operation);

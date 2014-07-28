@@ -29,7 +29,7 @@ void KineticApi_Init(const char* log_file)
     KineticLogger_Init(log_file);
 }
 
-void KineticApi_Connect(
+bool KineticApi_Connect(
     KineticConnection* connection,
     const char* host,
     int port,
@@ -44,11 +44,12 @@ void KineticApi_Connect(
         char message[64];
         sprintf(message, "Failed creating connection to %s:%d", host, port);
         LOG(message);
+        return false;
     }
-    else
-    {
-        connection->connected = true;
-    }
+
+    connection->connected = true;
+
+    return true;
 }
 
 bool KineticApi_ConfigureExchange(
@@ -91,13 +92,53 @@ bool KineticApi_ConfigureExchange(
 KineticOperation KineticApi_CreateOperation(
     KineticExchange* exchange,
     KineticPDU* request,
-    KineticPDU* response)
+    KineticMessage* requestMsg,
+    KineticPDU* response,
+    KineticMessage* responseMsg)
 {
     KineticOperation op;
 
+    if (exchange == NULL)
+    {
+        LOG("Specified KineticExchange is NULL!");
+        assert(exchange != NULL);
+    }
+
+    if (request == NULL)
+    {
+        LOG("Specified request KineticPDU is NULL!");
+        assert(request != NULL);
+    }
+
+    if (requestMsg == NULL)
+    {
+        LOG("Specified request KineticMessage is NULL!");
+        assert(requestMsg != NULL);
+    }
+
+    if (response == NULL)
+    {
+        LOG("Specified response KineticPDU is NULL!");
+        assert(response != NULL);
+    }
+
+    if (responseMsg == NULL)
+    {
+        LOG("Specified response KineticMessage is NULL!");
+        assert(responseMsg != NULL);
+    }
+
+    KineticMessage_Init(requestMsg);
+    KineticPDU_Init(request, exchange, requestMsg, NULL, 0);
+
+    KineticMessage_Init(responseMsg);
+    KineticPDU_Init(response, exchange, responseMsg, NULL, 0);
+
     op.exchange = exchange;
     op.request = request;
+    op.request->protobuf = requestMsg;
     op.response = response;
+    op.response->protobuf = responseMsg;
 
     return op;
 }
@@ -116,15 +157,13 @@ KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation* operation)
 
     // Initialize request
     KineticExchange_IncrementSequence(operation->exchange);
-    KineticMessage_Init(operation->request->protobuf);
-    KineticPDU_Init(operation->request, operation->request->exchange, operation->request->protobuf, NULL, 0);
     KineticOperation_BuildNoop(operation);
 
     // Send the request
     KineticPDU_Send(operation->request);
 
     // Associate response with same exchange as request
-    KineticPDU_Init(operation->response, operation->response->exchange, operation->response->protobuf, NULL, 0);
+    operation->response->exchange = operation->request->exchange;
 
     // Receive the response
     if (KineticPDU_Receive(operation->response))

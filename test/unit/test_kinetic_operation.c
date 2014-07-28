@@ -74,8 +74,6 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     request.protobuf = &requestMsg;
     response.protobuf = &responseMsg;
 
-    KineticMessage_Init_Expect(&requestMsg);
-    KineticMessage_Init_Expect(&responseMsg);
     KineticExchange_ConfigureHeader_Expect(&exchange, &requestMsg.header);
 
     KineticOperation_BuildNoop(&op);

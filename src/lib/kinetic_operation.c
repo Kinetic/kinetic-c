@@ -36,8 +36,8 @@ void KineticOperation_BuildNoop(KineticOperation* operation)
     assert(operation->request != NULL);
     assert(operation->response != NULL);
 
-    KineticMessage_Init(operation->request->protobuf);
-    KineticMessage_Init(operation->response->protobuf);
+    // KineticMessage_Init(operation->request->protobuf);
+    // KineticMessage_Init(operation->response->protobuf);
     KineticExchange_ConfigureHeader(operation->exchange, &operation->request->protobuf->header);
     operation->request->protobuf->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
     operation->request->protobuf->header.has_messagetype = true;

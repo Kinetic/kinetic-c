@@ -22,7 +22,6 @@
 #include "kinetic_socket.h"
 #include "kinetic_hmac.h"
 #include "kinetic_logger.h"
-#include <string.h>
 
 static void KineticPDU_PackInt32(uint8_t* const buffer, int32_t value);
 static int32_t KineticPDU_UnpackInt32(const uint8_t* const buffer);
@@ -34,35 +33,29 @@ void KineticPDU_Init(
     uint8_t* const value,
     int32_t valueLength)
 {
-    size_t protoPackedSize;
-
     assert(pdu != NULL);
     assert(message != NULL);
     assert(exchange != NULL);
 
-    // Initialize the instance struct
-    memset(pdu, 0, sizeof(KineticPDU));
+    // Create properly initialized PDU and populate passed instance
+    const KineticPDU tmpPDU = {
+        .exchange = exchange,
+        .protobuf = message,
+        .protobufLength = KineticProto_get_packed_size(&message->proto),
+        .value = value,
+        .valueLength = valueLength,
+        .header.versionPrefix = (uint8_t)'F' // Set header version prefix appropriately
+    };
+    *pdu = tmpPDU; // Copy initial value into target PDU
 
-    // Associate with the specified exchange
-    pdu->exchange = exchange;
+    // Pack protobuf length field
+    KineticPDU_PackInt32((uint8_t*)&pdu->header.protobufLength, pdu->protobufLength);
 
-    // Associate with the specified message
-    pdu->protobuf = message;
+    // Pack value length field
+    KineticPDU_PackInt32((uint8_t*)&pdu->header.valueLength, pdu->valueLength);
 
     // Configure the protobuf header with exchange info
-    KineticExchange_ConfigureHeader(exchange, &pdu->protobuf->header);
-
-    // Setup the PDU header fields
-    pdu->header.versionPrefix = (uint8_t)'F';
-
-    // Associate with protobuf
-    pdu->protobufLength = KineticProto_get_packed_size(&pdu->protobuf->proto);
-    KineticPDU_PackInt32((uint8_t*)&pdu->header.protobufLength, pdu->protobufLength); // Pack protobuf length field
-
-    // Associate with payload (if present)
-    pdu->valueLength = valueLength;
-    KineticPDU_PackInt32((uint8_t*)&pdu->header.valueLength, pdu->valueLength); // Pack value length field
-    pdu->value = value;
+    KineticExchange_ConfigureHeader(exchange, &message->header);
 }
 
 bool KineticPDU_Send(KineticPDU* const request)

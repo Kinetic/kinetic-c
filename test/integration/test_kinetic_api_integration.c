@@ -35,7 +35,7 @@
 
 void setUp(void)
 {
-    KineticApi_Init(TEST_LOG_FILE);
+    KineticApi_Init(NULL);
 }
 
 void tearDown(void)
@@ -44,25 +44,44 @@ void tearDown(void)
 
 void test_NoOp_should_succeed(void)
 {
-    KineticConnection connection;
     KineticExchange exchange;
     KineticOperation operation;
     KineticPDU request, response;
-    int64_t identity = 1234;
-    uint8_t key[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-    int64_t connectionID = 5678; // ?????
-    // KineticMessage requestMsg, responseMsg;
+    const int64_t identity = 1234;
+    uint8_t key[] = {1,2,3};
+    const int64_t connectionID = 5678;
+    const int socketDesc = 783;
+    KineticConnection connection = {
+        .socketDescriptor = socketDesc // Fill in, since KineticConnection is mocked
+    };
+    KineticMessage requestMsg, responseMsg;
+    KineticProto_Status_StatusCode status;
+    KineticHMAC respTempHMAC;
 
-    KineticApi_Connect(&connection, "localhost", 8999, true);
+    KineticConnection_Init_Expect(&connection);
+    KineticConnection_Connect_ExpectAndReturn(&connection, "localhost", 8999, true, true);
+
+    TEST_ASSERT_TRUE(KineticApi_Connect(&connection, "localhost", 8999, true));
+
+    TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
 
     TEST_ASSERT_TRUE_MESSAGE(
         KineticApi_ConfigureExchange(&exchange, &connection, identity,
             key, sizeof(key), connectionID),
         "Failed configuring exchange!");
 
-    operation = KineticApi_CreateOperation(&exchange, &request, &response);
+    operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response, &responseMsg);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
-        KineticApi_NoOp(&operation));
+    // Initialize response message status and HMAC, since receipt of packed protobuf is mocked out
+    responseMsg.command.status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    KineticHMAC_Populate(&respTempHMAC, &responseMsg, key, sizeof(key));
+
+    KineticSocket_Write_ExpectAndReturn(socketDesc, &request.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(socketDesc, &requestMsg, true);
+    KineticSocket_Read_ExpectAndReturn(socketDesc, &response.header, sizeof(KineticPDUHeader), true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(socketDesc, &responseMsg.proto, response.protobufScratch, 0x08000000, true);
+
+    status = KineticApi_NoOp(&operation);
+
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
 }

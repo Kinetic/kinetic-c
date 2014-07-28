@@ -29,7 +29,7 @@
 void KineticApi_Init(
     const char* log_file);
 
-void KineticApi_Connect(
+bool KineticApi_Connect(
     KineticConnection* connection,
     const char* host,
     int port,
@@ -46,7 +46,9 @@ bool KineticApi_ConfigureExchange(
 KineticOperation KineticApi_CreateOperation(
     KineticExchange* exchange,
     KineticPDU* request,
-    KineticPDU* response);
+    KineticMessage* requestMsg,
+    KineticPDU* response,
+    KineticMessage* responseMsg);
 
 KineticProto_Status_StatusCode KineticApi_NoOp(
     KineticOperation* operation
