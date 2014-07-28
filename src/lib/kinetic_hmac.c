@@ -96,6 +96,10 @@ static void KineticHMAC_Compute(
     unsigned int len = protobuf_c_message_get_packed_size((ProtobufCMessage*)proto->command);
     uint8_t* command = malloc(len);
     protobuf_c_message_pack((ProtobufCMessage*)proto->command, command);
+
+#pragma push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
     HMAC_CTX_init(&ctx);
     HMAC_Init_ex(&ctx, key, keyLen, EVP_sha1(), NULL);
 
@@ -108,6 +112,8 @@ static void KineticHMAC_Compute(
 
     HMAC_Final(&ctx, hmac->value, &hmac->valueLength);
     HMAC_CTX_cleanup(&ctx);
+
+#pragma pop
 
     free(command);
 }
