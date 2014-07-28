@@ -264,10 +264,24 @@ task :default => [
   'release'
 ]
 
+task :test_all do
+  report_banner "Running Unit Tests"
+  Rake::Task['test:path'].reenable
+  Rake::Task['test:path'].invoke('test/unit')
+  report_banner "Running Integration Tests"
+  Rake::Task['test:path'].reenable
+  Rake::Task['test:path'].invoke('test/integration')
+  report_banner "Running System Tests"
+  Rake::Task['test:path'].reenable
+  Rake::Task['test:path'].invoke('test/system')
+  report_banner "Finished executing all test suites"
+end
+
 desc "Build all and run test utility"
 task :all => [
   'cppcheck',
-  'default',
+  'test_all',
+  'release',
   'run',
   'travis:validate'
 ]
