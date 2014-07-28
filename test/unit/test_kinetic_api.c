@@ -86,9 +86,10 @@ void test_KineticAPI_ConfigureExchange_should_configure_specified_KineticExchang
     KineticExchange exchange;
     uint8_t key[8];
 
-    KineticExchange_Init_Expect(&exchange, 1234, key, sizeof(key), 9876, &connection);
+    KineticExchange_Init_Expect(&exchange, 1234, key, sizeof(key), &connection);
+    KineticExchange_ConfigureConnectionID_Expect(&exchange);
 
-    success = KineticApi_ConfigureExchange(&exchange, &connection, 1234, key, sizeof(key), 9876);
+    success = KineticApi_ConfigureExchange(&exchange, &connection, 1234, key, sizeof(key));
 
     TEST_ASSERT_TRUE(success);
 }

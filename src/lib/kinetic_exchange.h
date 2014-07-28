@@ -66,7 +66,7 @@ typedef struct _KineticExchange
     KineticConnection* connection;
 } KineticExchange;
 
-#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, conid, con) { \
+#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, con) { \
     memset((exchg), 0, sizeof(KineticExchange)); \
     (exchg)->identity = id; \
     if (k != NULL && klen > 0) \
@@ -75,7 +75,6 @@ typedef struct _KineticExchange
         (exchg)->keyLength = klen; \
         (exchg)->has_key = true; \
     } \
-    (exchg)->connectionID = conid; \
     (exchg)->connection = con; \
     (exchg)->sequence = -1; \
 }
@@ -85,8 +84,10 @@ void KineticExchange_Init(
     int64_t identity,
     uint8_t* key,
     size_t keyLength,
-    int64_t connectionID,
     KineticConnection* const connection);
+
+void KineticExchange_ConfigureConnectionID(
+    KineticExchange* const exchange);
 
 void KineticExchange_SetClusterVersion(
     KineticExchange* const exchange,

@@ -43,9 +43,9 @@ void tearDown(void)
     }
 }
 
-void test_KineticSocket_KINETIC_PORT_should_be_8213(void)
+void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
 {
-    TEST_ASSERT_EQUAL(8213, KINETIC_PORT);
+    TEST_ASSERT_EQUAL(8123, KINETIC_PORT);
 }
 
 void test_KineticSocket_Connect_should_create_a_socket_connection(void)

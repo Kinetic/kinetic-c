@@ -20,16 +20,24 @@
 
 #include "kinetic_exchange.h"
 #include <string.h>
+#include <time.h>
 
 void KineticExchange_Init(
     KineticExchange* const exchange,
     int64_t identity,
     uint8_t* key,
     size_t keyLength,
-    int64_t connectionID,
     KineticConnection* const connection)
 {
-    KINETIC_EXCHANGE_INIT(exchange, identity, key, keyLength, connectionID, connection);
+    KINETIC_EXCHANGE_INIT(exchange, identity, key, keyLength, connection);
+}
+
+void KineticExchange_ConfigureConnectionID(
+    KineticExchange* const exchange)
+{
+    time_t cur_time;
+    cur_time = time(NULL);
+    exchange->connectionID = (int64_t)cur_time;
 }
 
 void KineticExchange_SetClusterVersion(

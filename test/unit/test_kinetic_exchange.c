@@ -23,6 +23,7 @@
 #include "mock_kinetic_connection.h"
 #include "kinetic_exchange.h"
 #include <protobuf-c/protobuf-c.h>
+#include <time.h>
 
 static KineticConnection Connection;
 static KineticExchange Exchange;
@@ -41,7 +42,7 @@ void setUp(void)
         Key[i] = (uint8_t)(0x0FFu & i);
     }
 
-    KineticExchange_Init(&Exchange, Identity, Key, KeyLength, ConnectionID, &Connection);
+    KineticExchange_Init(&Exchange, Identity, Key, KeyLength, &Connection);
 }
 
 void tearDown(void)
@@ -57,7 +58,7 @@ void test_KineticExchange_Init_should_initialize_a_KineticExchange(void)
     TEST_ASSERT_TRUE(Exchange.has_key);
     TEST_ASSERT_EQUAL_UINT64(KeyLength, Exchange.keyLength);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(Key, Exchange.key, KeyLength);
-    TEST_ASSERT_EQUAL_INT64(5678, Exchange.connectionID);
+    TEST_ASSERT_EQUAL_INT64(0, Exchange.connectionID);
     TEST_ASSERT_EQUAL_INT64(-1, Exchange.sequence);
 }
 
@@ -65,7 +66,7 @@ void test_KineticExchange_Init_should_initialize_a_KineticExchange_without_a_key
 {
     memset(Key, 0, sizeof(Key));
 
-    KineticExchange_Init(&Exchange, Identity, NULL, 1823642323, ConnectionID, &Connection);
+    KineticExchange_Init(&Exchange, Identity, NULL, 1823642323, &Connection);
 
     TEST_ASSERT_EQUAL_PTR(&Connection, Exchange.connection);
     TEST_ASSERT_FALSE(Exchange.has_clusterVersion);
@@ -74,12 +75,12 @@ void test_KineticExchange_Init_should_initialize_a_KineticExchange_without_a_key
     TEST_ASSERT_FALSE(Exchange.has_key);
     TEST_ASSERT_EQUAL_UINT64(0, Exchange.keyLength);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(Key, Exchange.key, sizeof(Key));
-    TEST_ASSERT_EQUAL_INT64(5678, Exchange.connectionID);
+    TEST_ASSERT_EQUAL_INT64(0, Exchange.connectionID);
     TEST_ASSERT_EQUAL_INT64(-1, Exchange.sequence);
-    KineticExchange_Init(&Exchange, Identity, NULL, 1823642323, ConnectionID, &Connection);
+    KineticExchange_Init(&Exchange, Identity, NULL, 1823642323, &Connection);
 
 
-    KineticExchange_Init(&Exchange, Identity, Key, 0, ConnectionID, &Connection);
+    KineticExchange_Init(&Exchange, Identity, Key, 0, &Connection);
 
     TEST_ASSERT_EQUAL_PTR(&Connection, Exchange.connection);
     TEST_ASSERT_FALSE(Exchange.has_clusterVersion);
@@ -88,8 +89,21 @@ void test_KineticExchange_Init_should_initialize_a_KineticExchange_without_a_key
     TEST_ASSERT_FALSE(Exchange.has_key);
     TEST_ASSERT_EQUAL_UINT64(0, Exchange.keyLength);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(Key, Exchange.key, sizeof(Key));
-    TEST_ASSERT_EQUAL_INT64(5678, Exchange.connectionID);
+    TEST_ASSERT_EQUAL_INT64(0, Exchange.connectionID);
     TEST_ASSERT_EQUAL_INT64(-1, Exchange.sequence);
+}
+
+void test_KineticExchange_ConfigureConnectionID_should_set_ID_to_seconds_since_epoch_from_now(void)
+{
+    time_t cur_time;
+    cur_time = time(NULL);
+
+    KineticExchange_ConfigureConnectionID(&Exchange);
+
+    // Give 1-second flexibility in the rare case that
+    // we were on a second boundary
+    TEST_ASSERT_TRUE(Exchange.connectionID >= cur_time);
+    TEST_ASSERT_TRUE(Exchange.connectionID <= cur_time + 1);
 }
 
 void test_KineticExchange_SetClusterVersion_should_set_and_enable_the_field(void)
@@ -122,7 +136,7 @@ void test_KineticExchange_ConfigureHeader_should_set_the_exchange_fields_in_the_
     TEST_ASSERT_TRUE(header.has_identity);
     TEST_ASSERT_EQUAL_INT64(1234, header.identity);
     TEST_ASSERT_TRUE(header.has_connectionid);
-    TEST_ASSERT_EQUAL_INT64(5678, header.connectionid);
+    TEST_ASSERT_EQUAL_INT64(0, header.connectionid);
     TEST_ASSERT_TRUE(header.has_sequence);
     TEST_ASSERT_EQUAL_INT64(24, header.sequence);
 }
@@ -138,7 +152,7 @@ void test_KineticExchange_ConfigureHeader_should_not_set_nor_enable_the_exchange
     TEST_ASSERT_TRUE(header.has_identity);
     TEST_ASSERT_EQUAL_INT64(1234, header.identity);
     TEST_ASSERT_TRUE(header.has_connectionid);
-    TEST_ASSERT_EQUAL_INT64(5678, header.connectionid);
+    TEST_ASSERT_EQUAL_INT64(0, header.connectionid);
     TEST_ASSERT_TRUE(header.has_sequence);
     TEST_ASSERT_EQUAL_INT64(0, header.sequence);
 
@@ -149,7 +163,7 @@ void test_KineticExchange_ConfigureHeader_should_not_set_nor_enable_the_exchange
     TEST_ASSERT_TRUE(header.has_identity);
     TEST_ASSERT_EQUAL_INT64(1234, header.identity);
     TEST_ASSERT_TRUE(header.has_connectionid);
-    TEST_ASSERT_EQUAL_INT64(5678, header.connectionid);
+    TEST_ASSERT_EQUAL_INT64(0, header.connectionid);
     TEST_ASSERT_TRUE(header.has_sequence);
     TEST_ASSERT_EQUAL_INT64(1, header.sequence);
 
@@ -161,7 +175,7 @@ void test_KineticExchange_ConfigureHeader_should_not_set_nor_enable_the_exchange
     TEST_ASSERT_TRUE(header.has_identity);
     TEST_ASSERT_EQUAL_INT64(1234, header.identity);
     TEST_ASSERT_TRUE(header.has_connectionid);
-    TEST_ASSERT_EQUAL_INT64(5678, header.connectionid);
+    TEST_ASSERT_EQUAL_INT64(0, header.connectionid);
     TEST_ASSERT_TRUE(header.has_sequence);
     TEST_ASSERT_EQUAL_INT64(58, header.sequence);
 }

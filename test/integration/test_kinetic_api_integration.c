@@ -49,7 +49,6 @@ void test_NoOp_should_succeed(void)
     KineticPDU request, response;
     const int64_t identity = 1234;
     uint8_t key[] = {1,2,3};
-    const int64_t connectionID = 5678;
     const int socketDesc = 783;
     KineticConnection connection = {
         .socketDescriptor = socketDesc // Fill in, since KineticConnection is mocked
@@ -67,7 +66,7 @@ void test_NoOp_should_succeed(void)
 
     TEST_ASSERT_TRUE_MESSAGE(
         KineticApi_ConfigureExchange(&exchange, &connection, identity,
-            key, sizeof(key), connectionID),
+            key, sizeof(key)),
         "Failed configuring exchange!");
 
     operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response, &responseMsg);

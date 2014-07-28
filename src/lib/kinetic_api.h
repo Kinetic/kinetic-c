@@ -40,8 +40,7 @@ bool KineticApi_ConfigureExchange(
     KineticConnection* connection,
     int64_t identity,
     uint8_t* key,
-    size_t keyLength,
-    int64_t connectionID);
+    size_t keyLength);
 
 KineticOperation KineticApi_CreateOperation(
     KineticExchange* exchange,

@@ -57,18 +57,11 @@ bool KineticApi_ConfigureExchange(
     KineticConnection* connection,
     int64_t identity,
     uint8_t* key,
-    size_t keyLength,
-    int64_t connectionID)
+    size_t keyLength)
 {
     if (exchange == NULL)
     {
         LOG("Specified KineticExchange is NULL!");
-        return false;
-    }
-
-    if (connection == NULL)
-    {
-        LOG("Specified KineticConnection is NULL!");
         return false;
     }
 
@@ -84,7 +77,8 @@ bool KineticApi_ConfigureExchange(
         return false;
     }
 
-    KineticExchange_Init(exchange, identity, key, keyLength, connectionID, connection);
+    KineticExchange_Init(exchange, identity, key, keyLength, connection);
+    KineticExchange_ConfigureConnectionID(exchange);
 
     return true;
 }
