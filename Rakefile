@@ -222,7 +222,7 @@ namespace :test_server do
   end
 
   task :start do
-    $test_server ||= KineticTestServer.new(TEST_KINETIC_PORT)
+    $test_server ||= KineticTestServer.new(DEFAULT_KINETIC_PORT)
     $test_server.start
   end
 

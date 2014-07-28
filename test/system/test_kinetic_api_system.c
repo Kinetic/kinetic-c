@@ -56,6 +56,7 @@ void test_NoOp_should_succeed(void)
     KineticApi_Init(NULL);
 
     success = KineticApi_Connect(&connection, "localhost", KINETIC_PORT, true);
+
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT(connection.socketDescriptor >= 0);
 

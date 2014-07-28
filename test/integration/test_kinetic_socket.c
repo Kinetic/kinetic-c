@@ -26,7 +26,7 @@
 #include "kinetic_message.h"
 
 static int FileDesc;
-static int KineticTestPort = 8999;
+static int KineticTestPort = KINETIC_PORT; //8999;
 const char* TestData = "Some like it hot!";
 
 void setUp(void)
