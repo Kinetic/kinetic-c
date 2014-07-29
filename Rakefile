@@ -122,6 +122,54 @@ namespace :doxygen do
 
 end
 
+namespace :java_sim do
+
+  $java_sim = nil
+
+  def java_sim_start
+
+    report_banner "Starting Kinetic Java Simulator"
+
+    # Validate JAVA_HOME
+    raise "JAVA_HOME must be set!" unless ENV["JAVA_HOME"]
+    java = File.join(ENV['JAVA_HOME'], 'bin', 'java')
+
+    # Find the java simulator jar
+    sim_jars = Dir["vendor/kinetic-java/kinetic-simulator*.jar"]
+    raise "No Kinetic Java simulator .jar files found!" if sim_jars.empty?
+
+    # Configure the classpath
+    ENV['CLASSPATH'] = '' unless ENV['CLASSPATH']
+    jars = [File.join(ENV['JAVA_HOME'], 'lib', 'tools.jar')] + sim_jars
+    jars.each do |jar|
+      ENV['CLASSPATH'] += ':' + jar
+    end
+
+    $java_sim = spawn("#{java} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
+    sleep 2
+  end
+
+  def java_sim_shutdown
+
+    report_banner "Shutting down Kinetic Java Simulator"
+
+    if $java_sim
+      Process.kill("INT", $java_sim)
+      Process.wait($java_sim)
+    end
+    $java_sim = nil
+  end
+
+  task :start do
+    java_sim_start
+  end
+
+  task :shutdown do
+    java_sim_shutdown
+  end
+
+end
+
 task 'test/integration/test_kinetic_socket.c' => ['server:start']
 
 desc "Run client test utility"
@@ -154,15 +202,24 @@ task :default => [
 ]
 
 task :test_all do
+
   report_banner "Running Unit Tests"
   Rake::Task['test:path'].reenable
   Rake::Task['test:path'].invoke('test/unit')
+
   report_banner "Running Integration Tests"
   Rake::Task['test:path'].reenable
   Rake::Task['test:path'].invoke('test/integration')
+
+  Rake::Task['server:shutdown'].reenable
+  Rake::Task['server:shutdown'].invoke
+
   report_banner "Running System Tests"
+  java_sim_start
   Rake::Task['test:path'].reenable
   Rake::Task['test:path'].invoke('test/system')
+  java_sim_shutdown
+
   report_banner "Finished executing all test suites"
 end
 
@@ -179,5 +236,12 @@ desc "Run full CI build"
 task :ci => [
   'clobber',
   # 'verbose', # uncomment to enable verbose output for CI builds
-  'all'
+  'all',
+  'server:shutdown',
+  'java_sim:start',
 ]
+
+END {
+  # Ensure java simlator is shutdown prior to rake exiting
+  java_sim_shutdown
+}
