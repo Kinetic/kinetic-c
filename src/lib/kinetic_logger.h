@@ -25,7 +25,7 @@
 
 #define KINETIC_LOG_FILE "kinetic.log"
 
-void KineticLogger_Init(const char* log_file);
+void KineticLogger_Init(const char* logFile);
 void KineticLogger_Log(const char* message);
 
 #define LOG(message) KineticLogger_Log(message);

@@ -1,5 +1,8 @@
 TEAMCITY_BUILD = !ENV['TEAMCITY_PROJECT_NAME'].nil?
 
+require 'kinetic-ruby'
+load 'kinetic-ruby.rake'
+
 require 'ceedling'
 Ceedling.load_project(config: './project.yml')
 
@@ -119,121 +122,7 @@ namespace :doxygen do
 
 end
 
-namespace :test_server do
-
-  require "webrick"
-  DEFAULT_KINETIC_PORT = 8123
-  TEST_KINETIC_PORT = 8999
-  $test_server = nil
-
-  # WEBrick is a Ruby library that makes it easy to build an HTTP server with Ruby.
-  # It comes with most installations of Ruby by default (it’s part of the standard library),
-  # so you can usually create a basic web/HTTP server with only several lines of code.
-  #
-  # The following code creates a generic WEBrick server on the local machine on port 1234
-  class KineticServlet < WEBrick::HTTPServlet::AbstractServlet
-    def do_GET (request, response)
-      # a = request.query["a"]
-      response.status = 200
-      response.content_type = "text/plain"
-      response.body = "Kinetic Fake Test Server"
-
-      case request.path
-      when "/admin"
-        response.body += " - admin mode"
-      when "/config"
-        response.body += " - config mode"
-      else
-        response.body += " - normal mode"
-      end
-    end
-  end
-
-  class KineticTestServer
-
-    def initialize(port = DEFAULT_KINETIC_PORT)
-      raise "Invalid Kinetic test server port specified (port: #{port})" if !port || port < 0
-      require 'kinetic-ruby'
-      @port = port
-      @server = nil
-      @worker = nil
-      @listeners = []
-    end
-
-    def start
-      return unless @server.nil?
-
-      @server = TCPServer.new @port
-      @listeners = []
-
-      # Setup handler for signaled shutdown (via ctrl+c)
-      trap("INT") do
-        report "Test server: INT triggered Kintic Test Server shutdown"
-        shutdown
-      end
-
-      # Create worker thread for test server to run in so we can continue
-      @worker = Thread.new do
-        report "Test server: Listening for Kinetic clients..."
-        loop do
-          @listeners << Thread.start(@server.accept) do |client|
-            report "Test server: Connected to #{client.inspect}"
-            request = ""
-            while request += client.getc # Read characters from socket
-
-              request_match = request.match(/^read\((\d+)\)/)
-              if request_match
-                len = request_match[1].to_i
-                response = "G"*len
-                report "Test server: Responding to 'read(#{len})' w/ '#{response}'"
-                client.write response
-                request = ""
-              end
-
-              if request =~ /^readProto()/
-                kruby = KineticRuby.new
-                response = kruby.encode_test_message
-                report "Test server: Responding to 'read(#{len})' w/ dummy protobuf (#{response.length} bytes)"
-                client.write response
-                request = ""
-              end
-            end
-            # report "Test server: Client #{client.inspect} disconnected!"
-          end
-        end
-      end
-
-    end
-
-    def shutdown
-      return if @server.nil?
-      report_banner "Test server: Kinetic Test Server shutting down..."
-      @listeners.each do |client|
-        client.join(0.3) if client.alive?
-      end
-      @listeners = []
-      @worker.exit
-      @worker = nil
-      @server.close
-      @server = nil
-      report "Test server: Kinetic Test Server shutdown complete"
-    end
-
-  end
-
-  task :start do
-    $test_server ||= KineticTestServer.new(DEFAULT_KINETIC_PORT)
-    $test_server.start
-  end
-
-  task :shutdown do
-    $test_server.shutdown unless $test_server.nil?
-    $test_server = nil
-  end
-
-end
-
-task 'test/integration/test_kinetic_socket.c' => ['test_server:start']
+task 'test/integration/test_kinetic_socket.c' => ['server:start']
 
 desc "Run client test utility"
 task :run do
@@ -292,11 +181,3 @@ task :ci => [
   # 'verbose', # uncomment to enable verbose output for CI builds
   'all'
 ]
-
-
-# This block of code will be run prior to Rake instance terminating
-END {
-  # Ensure test server is shutdown, so we can terminate cleanly
-  $test_server.shutdown unless $test_server.nil?
-  $test_server = nil
-}

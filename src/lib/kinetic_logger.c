@@ -26,16 +26,16 @@
 static char LogFile[256] = "";
 bool LogToStdErr = true;
 
-void KineticLogger_Init(const char* log_file)
+void KineticLogger_Init(const char* logFile)
 {
-    if (log_file == NULL)
+    if (logFile == NULL)
     {
         LogToStdErr = true;
     }
     else
     {
         FILE* fd;
-        strcpy(LogFile, log_file);
+        strcpy(LogFile, logFile);
         fd = fopen(LogFile, "w");
         fclose(fd);
         LogToStdErr = false;

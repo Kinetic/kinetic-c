@@ -24,9 +24,9 @@
 #include "kinetic_logger.h"
 #include <stdio.h>
 
-void KineticApi_Init(const char* log_file)
+void KineticApi_Init(const char* logFile)
 {
-    KineticLogger_Init(log_file);
+    KineticLogger_Init(logFile);
 }
 
 bool KineticApi_Connect(
