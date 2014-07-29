@@ -37,11 +37,11 @@ void KineticApi_Init(
 /**
  * @brief Establishes a Kinetic protocol socket connection to a host.
  *
- * @param connection     KineticConnection instance to configure with connection info
- * @param host           Host name or IP address to connect to
- * @param port           Port to establish socket connection on
- * @param blocking       Set to true for blocking or false for non-bloocking I/O
- * @return               Returns true if connection succeeded
+ * @param connection    KineticConnection instance to configure with connection info
+ * @param host          Host name or IP address to connect to
+ * @param port          Port to establish socket connection on
+ * @param blocking      Set to true for blocking or false for non-bloocking I/O
+ * @return              Returns true if connection succeeded
  */
 bool KineticApi_Connect(
     KineticConnection* connection,
@@ -52,12 +52,12 @@ bool KineticApi_Connect(
 /**
  * @brief Initializes and configures a Kinetic exchange.
  *
- * @param exchange   KineticExchange instance to configure with exchange info
- * @param connection KineticConnection to associate with exchange
- * @param identity   Identity to use for the exchange
- * @param key        Key to use for HMAC calculations
- * @param keyLength  Length of HMAC key
- * @return           Returns true if configuration succeeded
+ * @param exchange      KineticExchange instance to configure with exchange info
+ * @param connection    KineticConnection to associate with exchange
+ * @param identity      Identity to use for the exchange
+ * @param key           Key to use for HMAC calculations
+ * @param keyLength     Length of HMAC key
+ * @return              Returns true if configuration succeeded
  */
 bool KineticApi_ConfigureExchange(
     KineticExchange* exchange,
@@ -69,12 +69,12 @@ bool KineticApi_ConfigureExchange(
 /**
  * @brief Creates and initializes a Kinetic operation.
  *
- * @param exchange   KineticExchange instance to populate with exchange info
- * @param request    KineticPDU instance to use for request
- * @param requestMsg KineticMessage instance to use for request
- * @param reponse    KineticPDU instance to use for reponse
- * @param reponseMsg KineticMessage instance to use for reponse
- * @return           Returns a configured operation instance
+ * @param exchange      KineticExchange instance to populate with exchange info
+ * @param request       KineticPDU instance to use for request
+ * @param requestMsg    KineticMessage instance to use for request
+ * @param response      KineticPDU instance to use for reponse
+ * @param responseMsg   KineticMessage instance to use for reponse
+ * @return              Returns a configured operation instance
  */
 KineticOperation KineticApi_CreateOperation(
     KineticExchange* exchange,
@@ -86,8 +86,8 @@ KineticOperation KineticApi_CreateOperation(
 /**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational
  *
- * @param exchange   KineticOperation instance to use for the operation
- * @return           Returns the resultant status code
+ * @param operation     KineticOperation instance to use for the operation
+ * @return              Returns the resultant status code
  */
 KineticProto_Status_StatusCode KineticApi_NoOp(
     KineticOperation* operation
