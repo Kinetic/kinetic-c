@@ -236,9 +236,7 @@ desc "Run full CI build"
 task :ci => [
   'clobber',
   # 'verbose', # uncomment to enable verbose output for CI builds
-  'all',
-  'server:shutdown',
-  'java_sim:start',
+  'all'
 ]
 
 END {
