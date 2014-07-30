@@ -48,7 +48,7 @@ typedef struct _KineticExchange
     // client and the device, used to sign requests.
     bool has_key;
     size_t keyLength;
-    uint8_t key[KINETIC_MAX_KEY_LEN];
+    char key[KINETIC_MAX_KEY_LEN];
 
     // Required field
     // A unique number for this connection between the source and target.
@@ -72,6 +72,7 @@ typedef struct _KineticExchange
     if (k != NULL && klen > 0) \
     { \
         memcpy((exchg)->key, k, klen); \
+        (exchg)->key[klen] = '\0'; \
         (exchg)->keyLength = klen; \
         (exchg)->has_key = true; \
     } \
@@ -82,7 +83,7 @@ typedef struct _KineticExchange
 void KineticExchange_Init(
     KineticExchange* const exchange,
     int64_t identity,
-    uint8_t* key,
+    const char* key,
     size_t keyLength,
     KineticConnection* const connection);
 

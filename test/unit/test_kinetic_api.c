@@ -84,12 +84,12 @@ void test_KineticAPI_ConfigureExchange_should_configure_specified_KineticExchang
     KineticConnection connection;
     KINETIC_CONNECTION_INIT(&connection);
     KineticExchange exchange;
-    uint8_t key[8];
+    const char* key = "U_i472";
 
-    KineticExchange_Init_Expect(&exchange, 1234, key, sizeof(key), &connection);
+    KineticExchange_Init_Expect(&exchange, 1234, key, strlen(key), &connection);
     KineticExchange_ConfigureConnectionID_Expect(&exchange);
 
-    success = KineticApi_ConfigureExchange(&exchange, &connection, 1234, key, sizeof(key));
+    success = KineticApi_ConfigureExchange(&exchange, &connection, 1234, key, strlen(key));
 
     TEST_ASSERT_TRUE(success);
 }

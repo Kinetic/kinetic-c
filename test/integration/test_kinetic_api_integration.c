@@ -48,7 +48,7 @@ void test_NoOp_should_succeed(void)
     KineticOperation operation;
     KineticPDU request, response;
     const int64_t identity = 1234;
-    uint8_t key[] = {1,2,3};
+    const char* key = "123abcXYZ";
     const int socketDesc = 783;
     KineticConnection connection = {
         .socketDescriptor = socketDesc // Fill in, since KineticConnection is mocked
@@ -66,14 +66,14 @@ void test_NoOp_should_succeed(void)
 
     TEST_ASSERT_TRUE_MESSAGE(
         KineticApi_ConfigureExchange(&exchange, &connection, identity,
-            key, sizeof(key)),
+            key, strlen(key)),
         "Failed configuring exchange!");
 
     operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response, &responseMsg);
 
     // Initialize response message status and HMAC, since receipt of packed protobuf is mocked out
     responseMsg.command.status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-    KineticHMAC_Populate(&respTempHMAC, &responseMsg, key, sizeof(key));
+    KineticHMAC_Populate(&respTempHMAC, &responseMsg, key, strlen(key));
 
     KineticSocket_Write_ExpectAndReturn(socketDesc, &request.header, sizeof(KineticPDUHeader), true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(socketDesc, &requestMsg, true);

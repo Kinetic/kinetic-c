@@ -151,14 +151,12 @@ namespace :java_sim do
   end
 
   def java_sim_shutdown
-
-    report_banner "Shutting down Kinetic Java Simulator"
-
     if $java_sim
+      report_banner "Shutting down Kinetic Java Simulator"
       Process.kill("INT", $java_sim)
       Process.wait($java_sim)
+      $java_sim = nil
     end
-    $java_sim = nil
   end
 
   task :start do

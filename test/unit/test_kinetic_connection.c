@@ -32,7 +32,7 @@
 
 static KineticConnection Connection, Expected;
 static const int64_t Identity = 1234;
-static uint8_t Key[] = {1,2,3,4,5,6,7,8};
+static const char* Key = "12345678";
 static const int64_t ConnectionID = 1234;
 static KineticExchange Exchange;
 static KineticMessage MessageOut, MessageIn;
@@ -42,7 +42,7 @@ void setUp(void)
 {
     KineticConnection_Init(&Connection);
     KineticConnection_Init(&Expected);
-    KineticExchange_Init(&Exchange, Identity, Key, sizeof(Key), &Connection);
+    KineticExchange_Init(&Exchange, Identity, Key, strlen(Key), &Connection);
     KineticMessage_Init(&MessageOut);
     KineticMessage_Init(&MessageIn);
 }

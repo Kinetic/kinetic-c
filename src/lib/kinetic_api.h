@@ -63,7 +63,7 @@ bool KineticApi_ConfigureExchange(
     KineticExchange* exchange,
     KineticConnection* connection,
     int64_t identity,
-    uint8_t* key,
+    const char* key,
     size_t keyLength);
 
 /**

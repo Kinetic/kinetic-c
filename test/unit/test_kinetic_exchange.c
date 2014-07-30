@@ -28,7 +28,7 @@
 static KineticConnection Connection;
 static KineticExchange Exchange;
 static int64_t Identity = 1234;
-static uint8_t Key[KINETIC_MAX_KEY_LEN];
+static char Key[KINETIC_MAX_KEY_LEN];
 static size_t KeyLength = 0;
 static int64_t ConnectionID = 5678;
 
@@ -41,6 +41,7 @@ void setUp(void)
     {
         Key[i] = (uint8_t)(0x0FFu & i);
     }
+    Key[i] = '\0';
 
     KineticExchange_Init(&Exchange, Identity, Key, KeyLength, &Connection);
 }
@@ -74,11 +75,9 @@ void test_KineticExchange_Init_should_initialize_a_KineticExchange_without_a_key
     TEST_ASSERT_EQUAL_INT64(1234, Exchange.identity);
     TEST_ASSERT_FALSE(Exchange.has_key);
     TEST_ASSERT_EQUAL_UINT64(0, Exchange.keyLength);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(Key, Exchange.key, sizeof(Key));
     TEST_ASSERT_EQUAL_INT64(0, Exchange.connectionID);
     TEST_ASSERT_EQUAL_INT64(-1, Exchange.sequence);
     KineticExchange_Init(&Exchange, Identity, NULL, 1823642323, &Connection);
-
 
     KineticExchange_Init(&Exchange, Identity, Key, 0, &Connection);
 
@@ -88,7 +87,6 @@ void test_KineticExchange_Init_should_initialize_a_KineticExchange_without_a_key
     TEST_ASSERT_EQUAL_INT64(1234, Exchange.identity);
     TEST_ASSERT_FALSE(Exchange.has_key);
     TEST_ASSERT_EQUAL_UINT64(0, Exchange.keyLength);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(Key, Exchange.key, sizeof(Key));
     TEST_ASSERT_EQUAL_INT64(0, Exchange.connectionID);
     TEST_ASSERT_EQUAL_INT64(-1, Exchange.sequence);
 }

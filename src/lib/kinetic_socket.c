@@ -69,7 +69,7 @@ int KineticSocket_Connect(const char* host, int port, bool blocking)
         char service[NI_MAXSERV];
         int res;
 
-        res = getnameinfo(ai->ai_addr, ai->ai_addrlen, host, sizeof(host), service,
+        res = getnameinfo(ai->ai_addr, ai->ai_addrlen, host, strlen(host), service,
                 sizeof(service), NI_NUMERICHOST | NI_NUMERICSERV);
         if (res != 0)
         {

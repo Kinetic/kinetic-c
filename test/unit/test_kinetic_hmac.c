@@ -78,12 +78,12 @@ void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the
     int i = 0;
     KineticHMAC actual;
     KineticMessage message;
-    uint8_t key[] = {1,2,3,4,5,6,7,8,9,10,11};
+    const char *key = "1234567890ABCDEFGHIJK";
 
     KineticMessage_Init(&message);
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, sizeof(key));
+    KineticHMAC_Populate(&actual, &message, key, strlen(key));
 
     printf("Computed HMAC: %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n",
         actual.value[0],  actual.value[1],  actual.value[2],  actual.value[3],
@@ -100,63 +100,63 @@ void test_KineticHMAC_Validate_should_return_true_if_the_HMAC_for_the_supplied_m
 {
     KineticHMAC actual;
     KineticMessage message;
-    uint8_t key[] = {1,2,3,4,5,6,7,8,9,10,11};
+    const char *key = "1234567890ABCDEFGHIJK";
 
     KineticMessage_Init(&message);
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, sizeof(key));
+    KineticHMAC_Populate(&actual, &message, key, strlen(key));
 
-    TEST_ASSERT_TRUE(KineticHMAC_Validate(&message.proto, key, sizeof(key)));
+    TEST_ASSERT_TRUE(KineticHMAC_Validate(&message.proto, key, strlen(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_value_of_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
     KineticMessage message;
-    uint8_t key[] = {1,2,3,4,5,6,7,8,9,10,11};
+    const char *key = "1234567890ABCDEFGHIJK";
 
     KineticMessage_Init(&message);
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, sizeof(key));
+    KineticHMAC_Populate(&actual, &message, key, strlen(key));
 
     // Bork the HMAC
     message.proto.hmac.data[3]++;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, sizeof(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, strlen(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_length_of_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
     KineticMessage message;
-    uint8_t key[] = {1,2,3,4,5,6,7,8,9,10,11};
+    const char *key = "1234567890ABCDEFGHIJK";
 
     KineticMessage_Init(&message);
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, sizeof(key));
+    KineticHMAC_Populate(&actual, &message, key, strlen(key));
 
     // Bork the HMAC
     message.proto.hmac.len--;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, sizeof(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, strlen(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_presence_is_false_for_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
     KineticMessage message;
-    uint8_t key[] = {1,2,3,4,5,6,7,8,9,10,11};
+    const char *key = "1234567890ABCDEFGHIJK";
 
     KineticMessage_Init(&message);
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, sizeof(key));
+    KineticHMAC_Populate(&actual, &message, key, strlen(key));
 
     // Bork the HMAC
     message.proto.has_hmac = false;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, sizeof(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, strlen(key)));
 }

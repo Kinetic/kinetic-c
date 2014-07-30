@@ -24,7 +24,7 @@
 #include <arpa/inet.h>
 #include <openssl/hmac.h>
 
-static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, const uint8_t* const key, size_t keyLen);
+static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, const char* const key, size_t keyLen);
 
 void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm)
 {
@@ -43,7 +43,7 @@ void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorith
 void KineticHMAC_Populate(
     KineticHMAC* hmac,
     KineticMessage* message,
-    const uint8_t* const key,
+    const char* const key,
     size_t keyLen)
 {
     KineticHMAC_Init(hmac, hmac->algorithm);
@@ -57,7 +57,7 @@ void KineticHMAC_Populate(
 
 bool KineticHMAC_Validate(
     const KineticProto* proto,
-    const uint8_t* const key,
+    const char* const key,
     size_t keyLen)
 {
     size_t i;
@@ -88,7 +88,7 @@ bool KineticHMAC_Validate(
 static void KineticHMAC_Compute(
     KineticHMAC* hmac,
     const KineticProto* proto,
-    const uint8_t* const key,
+    const char* const key,
     size_t keyLen)
 {
     HMAC_CTX ctx;

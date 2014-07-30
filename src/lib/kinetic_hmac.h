@@ -32,7 +32,7 @@ typedef struct _KineticHMAC
 } KineticHMAC;
 
 void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm);
-void KineticHMAC_Populate(KineticHMAC* hmac, KineticMessage* message, const uint8_t* const key, size_t keyLen);
-bool KineticHMAC_Validate(const KineticProto* proto, const uint8_t* const key, size_t keyLen);
+void KineticHMAC_Populate(KineticHMAC* hmac, KineticMessage* message, const char* const key, size_t keyLen);
+bool KineticHMAC_Validate(const KineticProto* proto, const char* const key, size_t keyLen);
 
 #endif  // _KINETIC_HMAC_H

@@ -61,7 +61,7 @@ void test_NoOp_should_succeed(void)
     TEST_ASSERT(connection.socketDescriptor >= 0);
 
     success = KineticApi_ConfigureExchange(&exchange, &connection, identity,
-            (uint8_t*)key, strlen(key));
+            key, strlen(key));
     TEST_ASSERT_TRUE(success);
 
     operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg,

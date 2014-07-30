@@ -25,7 +25,7 @@
 void KineticExchange_Init(
     KineticExchange* const exchange,
     int64_t identity,
-    uint8_t* key,
+    const char* key,
     size_t keyLength,
     KineticConnection* const connection)
 {

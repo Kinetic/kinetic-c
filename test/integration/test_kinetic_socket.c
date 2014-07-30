@@ -84,6 +84,8 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
 }
 
+#if 0
+
 void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
 {
     bool success = false;
@@ -155,3 +157,5 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
 
     TEST_ASSERT_FALSE_MESSAGE(success, "Expected timeout!");
 }
+
+#endif
