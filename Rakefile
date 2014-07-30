@@ -145,8 +145,9 @@ namespace :java_sim do
       ENV['CLASSPATH'] += ':' + jar
     end
 
-    $java_sim = spawn("#{java} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
     sleep 2
+    $java_sim = spawn("#{java} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
+    sleep 5
   end
 
   def java_sim_shutdown
