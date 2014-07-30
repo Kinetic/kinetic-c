@@ -1,0 +1,104 @@
+.TH "kinetic_exchange.h" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_exchange.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_types\&.h'\fP
+.br
+\fC#include 'kinetic_proto\&.h'\fP
+.br
+\fC#include 'kinetic_connection\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBKineticExchange\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBKINETIC_EXCHANGE_INIT\fP(exchg, id, k, klen, con)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBKineticExchange_Init\fP (\fBKineticExchange\fP *const exchange, int64_t identity, uint8_t *key, size_t keyLength, \fBKineticConnection\fP *const connection)"
+.br
+.ti -1c
+.RI "void \fBKineticExchange_ConfigureConnectionID\fP (\fBKineticExchange\fP *const exchange)"
+.br
+.ti -1c
+.RI "void \fBKineticExchange_SetClusterVersion\fP (\fBKineticExchange\fP *const exchange, int64_t clusterVersion)"
+.br
+.ti -1c
+.RI "void \fBKineticExchange_IncrementSequence\fP (\fBKineticExchange\fP *const exchange)"
+.br
+.ti -1c
+.RI "void \fBKineticExchange_ConfigureHeader\fP (const \fBKineticExchange\fP *const exchange, KineticProto_Header *const header)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, con)"
+\fBValue:\fP
+.PP
+.nf
+{ \
+    memset((exchg), 0, sizeof(KineticExchange)); \
+    (exchg)->identity = id; \
+    if (k != NULL && klen > 0) \
+    { \
+        memcpy((exchg)->key, k, klen); \
+        (exchg)->keyLength = klen; \
+        (exchg)->has_key = true; \
+    } \
+    (exchg)->connection = con; \
+    (exchg)->sequence = -1; \
+}
+.fi
+.PP
+Definition at line 69 of file kinetic_exchange\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "void KineticExchange_Init (\fBKineticExchange\fP *constexchange, int64_tidentity, uint8_t *key, size_tkeyLength, \fBKineticConnection\fP *constconnection)"
+
+.PP
+Definition at line 25 of file kinetic_exchange\&.c\&.
+.PP
+References KINETIC_EXCHANGE_INIT\&.
+.SS "void KineticExchange_ConfigureConnectionID (\fBKineticExchange\fP *constexchange)"
+
+.PP
+Definition at line 35 of file kinetic_exchange\&.c\&.
+.PP
+References KineticExchange::connectionID\&.
+.SS "void KineticExchange_SetClusterVersion (\fBKineticExchange\fP *constexchange, int64_tclusterVersion)"
+
+.PP
+Definition at line 43 of file kinetic_exchange\&.c\&.
+.PP
+References KineticExchange::clusterVersion, and KineticExchange::has_clusterVersion\&.
+.SS "void KineticExchange_IncrementSequence (\fBKineticExchange\fP *constexchange)"
+
+.PP
+Definition at line 51 of file kinetic_exchange\&.c\&.
+.PP
+References KineticExchange::sequence\&.
+.SS "void KineticExchange_ConfigureHeader (const \fBKineticExchange\fP *constexchange, KineticProto_Header *constheader)"
+
+.PP
+Definition at line 57 of file kinetic_exchange\&.c\&.
+.PP
+References KineticExchange::clusterVersion, KineticExchange::connectionID, KineticExchange::has_clusterVersion, KineticExchange::identity, and KineticExchange::sequence\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

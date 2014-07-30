@@ -56,7 +56,7 @@ $(document).ready(function(){initNavTree('kinetic__types_8h_source.html','');});
 <div class="title">kinetic_types.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<a href="kinetic__types_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
@@ -94,10 +94,10 @@ $(document).ready(function(){initNavTree('kinetic__types_8h_source.html','');});
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;ifaddrs.h&gt;</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &lt;openssl/sha.h&gt;</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#define KINETIC_PORT            8213</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define KINETIC_MAX_KEY_LEN     128</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="kinetic__types_8h.html#add9d47513f5472c08a593999978f8018">   39</a></span>&#160;<span class="preprocessor">#define KINETIC_PORT            8123</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="kinetic__types_8h.html#a634c0f8d37b8f5980e51d9c7cf5e90e5">   40</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">   41</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="kinetic__types_8h.html#a7f225a5911212081b2f7c8d9c4b81c90">   42</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define KINETIC_MAX_KEY_LEN     128</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">// Windows doesn&#39;t use &lt;unistd.h&gt; nor does it define HOST_NAME_MAX.</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#if defined(WIN32)</span></div>
@@ -119,24 +119,24 @@ $(document).ready(function(){initNavTree('kinetic__types_8h_source.html','');});
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor"></span><span class="preprocessor">            #include &lt;unistd.h&gt;</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">        #else</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor"></span><span class="preprocessor">            #if !defined(HOST_NAME_MAX)</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor"></span><span class="preprocessor">                #define HOST_NAME_MAX 256</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75">   64</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">                #define HOST_NAME_MAX 256</span></div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor"></span><span class="preprocessor">            #endif // HOST_NAME_MAX</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor"></span><span class="preprocessor">        #endif  // __unix__</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #endif // __APPLE__</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif  // WIN32</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &quot;kinetic_proto.h&quot;</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__proto_8h.html">kinetic_proto.h</a>&quot;</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
 <div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="struct_kinetic_connection.html">   72</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>_KineticConnection</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">bool</span>    connected;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">bool</span>    blocking;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">int</span>     port;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">int</span>     socketDescriptor;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">char</span>    host[HOST_NAME_MAX];</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">   74</a></span>&#160;    <span class="keywordtype">bool</span>    <a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="struct_kinetic_connection.html#a228abfe2450ff0e613d7a8d5e3ba38fc">   75</a></span>&#160;    <span class="keywordtype">bool</span>    <a class="code" href="struct_kinetic_connection.html#a228abfe2450ff0e613d7a8d5e3ba38fc">blocking</a>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">   76</a></span>&#160;    <span class="keywordtype">int</span>     <a class="code" href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">port</a>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">   77</a></span>&#160;    <span class="keywordtype">int</span>     <a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6">   78</a></span>&#160;    <span class="keywordtype">char</span>    host[<a class="code" href="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75">HOST_NAME_MAX</a>];</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <a class="code" href="struct_kinetic_connection.html">KineticConnection</a>;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#define KINETIC_CONNECTION_INIT(connection) { \</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="kinetic__types_8h.html#a86d1cc89037e1edabea474dbeff715ef">   81</a></span>&#160;<span class="preprocessor">#define KINETIC_CONNECTION_INIT(connection) { \</span></div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">    memset((connection), 0, sizeof(KineticConnection)); \</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">    (connection)-&gt;blocking = true; \</span></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">    (connection)-&gt;socketDescriptor = -1; \</span></div>
@@ -145,17 +145,17 @@ $(document).ready(function(){initNavTree('kinetic__types_8h_source.html','');});
 <div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html">   87</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>_KineticMessage</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;{</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="comment">// Kinetic Protocol Buffer Elements</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    KineticProto                proto;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    KineticProto_Command        command;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    KineticProto_Header         header;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    KineticProto_Body           body;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    KineticProto_Status         status;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    KineticProto_Security       security;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    KineticProto_Security_ACL   acl;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];</div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757">   90</a></span>&#160;    <a class="code" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a>                <a class="code" href="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757">proto</a>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36">   91</a></span>&#160;    KineticProto_Command        <a class="code" href="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36">command</a>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html#a4b19350314903651d286213bc22a8a3f">   92</a></span>&#160;    KineticProto_Header         <a class="code" href="struct_kinetic_message.html#a4b19350314903651d286213bc22a8a3f">header</a>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763">   93</a></span>&#160;    KineticProto_Body           <a class="code" href="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763">body</a>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html#ae8b91d9e5db53830c73a9beb1df7d5a4">   94</a></span>&#160;    KineticProto_Status         <a class="code" href="struct_kinetic_message.html#ae8b91d9e5db53830c73a9beb1df7d5a4">status</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html#a8ac954e6b0ade063aabda9ec4091eee8">   95</a></span>&#160;    KineticProto_Security       <a class="code" href="struct_kinetic_message.html#a8ac954e6b0ade063aabda9ec4091eee8">security</a>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html#a097b8188945a5ab6cc58ef57e11d917d">   96</a></span>&#160;    KineticProto_Security_ACL   <a class="code" href="struct_kinetic_message.html#a097b8188945a5ab6cc58ef57e11d917d">acl</a>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="struct_kinetic_message.html#a5882b07af169a28bba89ed60a51fae10">   97</a></span>&#160;    uint8_t                     hmacData[<a class="code" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a>];</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;} <a class="code" href="struct_kinetic_message.html">KineticMessage</a>;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#define KINETIC_MESSAGE_INIT(msg) { \</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">  100</a></span>&#160;<span class="preprocessor">#define KINETIC_MESSAGE_INIT(msg) { \</span></div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">    KineticProto_init(&amp;(msg)-&gt;proto); \</span></div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">    KineticProto_command_init(&amp;(msg)-&gt;command); \</span></div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">    KineticProto_header_init(&amp;(msg)-&gt;header); \</span></div>
@@ -170,14 +170,29 @@ $(document).ready(function(){initNavTree('kinetic__types_8h_source.html','');});
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">}</span></div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">#endif // _KINETIC_TYPES_H</span></div>
+<div class="ttc" id="struct_kinetic_connection_html_a5701de64aa829b62f3bf5c410658ade6"><div class="ttname"><a href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">KineticConnection::socketDescriptor</a></div><div class="ttdeci">int socketDescriptor</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00077">kinetic_types.h:77</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_ae8b91d9e5db53830c73a9beb1df7d5a4"><div class="ttname"><a href="struct_kinetic_message.html#ae8b91d9e5db53830c73a9beb1df7d5a4">KineticMessage::status</a></div><div class="ttdeci">KineticProto_Status status</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00094">kinetic_types.h:94</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a9d1d59a120924fdc2a5cd6a6915c1023"><div class="ttname"><a href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">KineticConnection::port</a></div><div class="ttdeci">int port</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00076">kinetic_types.h:76</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html"><div class="ttname"><a href="kinetic__proto_8h.html">kinetic_proto.h</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_ab25f5f599fde5352c70e529ebba7a6da"><div class="ttname"><a href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a></div><div class="ttdeci">#define KINETIC_HMAC_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00041">kinetic_types.h:41</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a262532fd0f7f4361327ca17511204763"><div class="ttname"><a href="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763">KineticMessage::body</a></div><div class="ttdeci">KineticProto_Body body</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00093">kinetic_types.h:93</a></div></div>
 <div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00072">kinetic_types.h:72</a></div></div>
 <div class="ttc" id="struct_kinetic_message_html"><div class="ttname"><a href="struct_kinetic_message.html">KineticMessage</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00087">kinetic_types.h:87</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a8ac954e6b0ade063aabda9ec4091eee8"><div class="ttname"><a href="struct_kinetic_message.html#a8ac954e6b0ade063aabda9ec4091eee8">KineticMessage::security</a></div><div class="ttdeci">KineticProto_Security security</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00095">kinetic_types.h:95</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a5bdd709737de27e845262d7b291bcc53"><div class="ttname"><a href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">KineticConnection::connected</a></div><div class="ttdeci">bool connected</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00074">kinetic_types.h:74</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_ad0a95a86f790c67b513ec195e4f4c352"><div class="ttname"><a href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a></div><div class="ttdeci">typedefPROTOBUF_C__BEGIN_DECLS struct _KineticProto KineticProto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00040">kinetic_proto.h:40</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a760d787dc11866d5e8b3bcc8c7117b36"><div class="ttname"><a href="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36">KineticMessage::command</a></div><div class="ttdeci">KineticProto_Command command</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00091">kinetic_types.h:91</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a362c035c73ee232ca93ff9a6994ff757"><div class="ttname"><a href="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757">KineticMessage::proto</a></div><div class="ttdeci">KineticProto proto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00090">kinetic_types.h:90</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a4b19350314903651d286213bc22a8a3f"><div class="ttname"><a href="struct_kinetic_message.html#a4b19350314903651d286213bc22a8a3f">KineticMessage::header</a></div><div class="ttdeci">KineticProto_Header header</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00092">kinetic_types.h:92</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_ac956117a90023ec0971b8f9fce9dec75"><div class="ttname"><a href="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75">HOST_NAME_MAX</a></div><div class="ttdeci">#define HOST_NAME_MAX</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00064">kinetic_types.h:64</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a228abfe2450ff0e613d7a8d5e3ba38fc"><div class="ttname"><a href="struct_kinetic_connection.html#a228abfe2450ff0e613d7a8d5e3ba38fc">KineticConnection::blocking</a></div><div class="ttdeci">bool blocking</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00075">kinetic_types.h:75</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a097b8188945a5ab6cc58ef57e11d917d"><div class="ttname"><a href="struct_kinetic_message.html#a097b8188945a5ab6cc58ef57e11d917d">KineticMessage::acl</a></div><div class="ttdeci">KineticProto_Security_ACL acl</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00096">kinetic_types.h:96</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><b>kinetic_types.h</b></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="kinetic__types_8h.html">kinetic_types.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

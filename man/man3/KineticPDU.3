@@ -1,4 +1,4 @@
-.TH "KineticPDU" 3 "Mon Jul 28 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "KineticPDU" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,6 +6,8 @@ KineticPDU \-
 .SH SYNOPSIS
 .br
 .PP
+.PP
+\fC#include <kinetic_pdu\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
@@ -37,6 +39,40 @@ KineticPDU \-
 .SH "Detailed Description"
 .PP 
 Definition at line 41 of file kinetic_pdu\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "\fBKineticPDUHeader\fP KineticPDU::header"
+
+.PP
+Definition at line 44 of file kinetic_pdu\&.h\&.
+.SS "\fBKineticMessage\fP* KineticPDU::protobuf"
+
+.PP
+Definition at line 47 of file kinetic_pdu\&.h\&.
+.SS "uint32_t KineticPDU::protobufLength"
+
+.PP
+Definition at line 48 of file kinetic_pdu\&.h\&.
+.SS "uint8_t KineticPDU::protobufScratch[1024 *1024]"
+
+.PP
+Definition at line 49 of file kinetic_pdu\&.h\&.
+.SS "uint8_t* KineticPDU::value"
+
+.PP
+Definition at line 52 of file kinetic_pdu\&.h\&.
+.SS "uint32_t KineticPDU::valueLength"
+
+.PP
+Definition at line 53 of file kinetic_pdu\&.h\&.
+.SS "\fBKineticHMAC\fP KineticPDU::hmac"
+
+.PP
+Definition at line 56 of file kinetic_pdu\&.h\&.
+.SS "\fBKineticExchange\fP* KineticPDU::exchange"
+
+.PP
+Definition at line 59 of file kinetic_pdu\&.h\&.
 
 .SH "Author"
 .PP 

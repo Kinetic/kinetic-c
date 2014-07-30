@@ -56,7 +56,7 @@ $(document).ready(function(){initNavTree('kinetic__connection_8c_source.html',''
 <div class="title">kinetic_connection.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<a href="kinetic__connection_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
@@ -76,39 +76,51 @@ $(document).ready(function(){initNavTree('kinetic__connection_8c_source.html',''
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;kinetic_connection.h&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;kinetic_socket.h&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;kinetic_pdu.h&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__connection_8h.html">kinetic_connection.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__socket_8h.html">kinetic_socket.h</a>&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__pdu_8h.html">kinetic_pdu.h</a>&quot;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;string.h&gt;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> KineticConnection_Init(<a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* connection)</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="kinetic__connection_8h.html#a6524070218513d73d3bf8e02f50c75b3">   26</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__connection_8c.html#a6524070218513d73d3bf8e02f50c75b3">KineticConnection_Init</a>(<a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* connection)</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    KINETIC_CONNECTION_INIT(connection);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="kinetic__types_8h.html#a86d1cc89037e1edabea474dbeff715ef">KINETIC_CONNECTION_INIT</a>(connection);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">bool</span> KineticConnection_Connect(</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="kinetic__connection_8h.html#a067e3a232197b9d572244d40607ab24f">   31</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__connection_8c.html#a067e3a232197b9d572244d40607ab24f">KineticConnection_Connect</a>(</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* <span class="keyword">const</span> connection,</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* host, <span class="keywordtype">int</span> port, <span class="keywordtype">bool</span> blocking)</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    connection-&gt;connected = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    connection-&gt;blocking = blocking;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    connection-&gt;port = port;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    connection-&gt;socketDescriptor = -1;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    strcpy(connection-&gt;host, host);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a228abfe2450ff0e613d7a8d5e3ba38fc">blocking</a> = blocking;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">port</a> = port;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> = -1;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    strcpy(connection-&gt;<a class="code" href="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6">host</a>, host);</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    connection-&gt;socketDescriptor = KineticSocket_Connect(</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        connection-&gt;host, connection-&gt;port, blocking);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    connection-&gt;connected = (connection-&gt;socketDescriptor &gt;= 0);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> = <a class="code" href="kinetic__socket_8c.html#a394e63ed3d139d9effddd91fadaf2c4e">KineticSocket_Connect</a>(</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        connection-&gt;<a class="code" href="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6">host</a>, connection-&gt;<a class="code" href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">port</a>, blocking);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a> = (connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> &gt;= 0);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> connection-&gt;connected;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
+<div class="ttc" id="struct_kinetic_connection_html_a5701de64aa829b62f3bf5c410658ade6"><div class="ttname"><a href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">KineticConnection::socketDescriptor</a></div><div class="ttdeci">int socketDescriptor</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00077">kinetic_types.h:77</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a9d1d59a120924fdc2a5cd6a6915c1023"><div class="ttname"><a href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">KineticConnection::port</a></div><div class="ttdeci">int port</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00076">kinetic_types.h:76</a></div></div>
+<div class="ttc" id="kinetic__connection_8c_html_a6524070218513d73d3bf8e02f50c75b3"><div class="ttname"><a href="kinetic__connection_8c.html#a6524070218513d73d3bf8e02f50c75b3">KineticConnection_Init</a></div><div class="ttdeci">void KineticConnection_Init(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__connection_8c_source.html#l00026">kinetic_connection.c:26</a></div></div>
+<div class="ttc" id="kinetic__socket_8c_html_a394e63ed3d139d9effddd91fadaf2c4e"><div class="ttname"><a href="kinetic__socket_8c.html#a394e63ed3d139d9effddd91fadaf2c4e">KineticSocket_Connect</a></div><div class="ttdeci">int KineticSocket_Connect(const char *host, int port, bool blocking)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00036">kinetic_socket.c:36</a></div></div>
+<div class="ttc" id="kinetic__connection_8h_html"><div class="ttname"><a href="kinetic__connection_8h.html">kinetic_connection.h</a></div></div>
 <div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00072">kinetic_types.h:72</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a5bdd709737de27e845262d7b291bcc53"><div class="ttname"><a href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">KineticConnection::connected</a></div><div class="ttdeci">bool connected</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00074">kinetic_types.h:74</a></div></div>
+<div class="ttc" id="kinetic__connection_8c_html_a067e3a232197b9d572244d40607ab24f"><div class="ttname"><a href="kinetic__connection_8c.html#a067e3a232197b9d572244d40607ab24f">KineticConnection_Connect</a></div><div class="ttdeci">bool KineticConnection_Connect(KineticConnection *const connection, const char *host, int port, bool blocking)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__connection_8c_source.html#l00031">kinetic_connection.c:31</a></div></div>
+<div class="ttc" id="kinetic__pdu_8h_html"><div class="ttname"><a href="kinetic__pdu_8h.html">kinetic_pdu.h</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a86d1cc89037e1edabea474dbeff715ef"><div class="ttname"><a href="kinetic__types_8h.html#a86d1cc89037e1edabea474dbeff715ef">KINETIC_CONNECTION_INIT</a></div><div class="ttdeci">#define KINETIC_CONNECTION_INIT(connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00081">kinetic_types.h:81</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a228abfe2450ff0e613d7a8d5e3ba38fc"><div class="ttname"><a href="struct_kinetic_connection.html#a228abfe2450ff0e613d7a8d5e3ba38fc">KineticConnection::blocking</a></div><div class="ttdeci">bool blocking</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00075">kinetic_types.h:75</a></div></div>
+<div class="ttc" id="kinetic__socket_8h_html"><div class="ttname"><a href="kinetic__socket_8h.html">kinetic_socket.h</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_abfa40cc2ff08010634a92f4d951cd5f6"><div class="ttname"><a href="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6">KineticConnection::host</a></div><div class="ttdeci">char host[256]</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00078">kinetic_types.h:78</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><b>kinetic_connection.c</b></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="kinetic__connection_8c.html">kinetic_connection.c</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

@@ -1,0 +1,57 @@
+.TH "kinetic_logger.c" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_logger.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include 'kinetic_types\&.h'\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBKineticLogger_Init\fP (const char *logFile)"
+.br
+.ti -1c
+.RI "void \fBKineticLogger_Log\fP (const char *message)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "bool \fBLogToStdErr\fP = true"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void KineticLogger_Init (const char *logFile)"
+
+.PP
+Definition at line 29 of file kinetic_logger\&.c\&.
+.PP
+References LogToStdErr\&.
+.SS "void KineticLogger_Log (const char *message)"
+
+.PP
+Definition at line 45 of file kinetic_logger\&.c\&.
+.PP
+References LogToStdErr\&.
+.SH "Variable Documentation"
+.PP 
+.SS "bool LogToStdErr = true"
+
+.PP
+Definition at line 27 of file kinetic_logger\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

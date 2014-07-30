@@ -1,0 +1,98 @@
+.TH "kinetic_socket.c" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_socket.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_socket\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include <protobuf-c/protobuf-c\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <sys/socket\&.h>\fP
+.br
+\fC#include <netinet/in\&.h>\fP
+.br
+\fC#include <arpa/inet\&.h>\fP
+.br
+\fC#include <netdb\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBKineticSocket_Connect\fP (const char *host, int port, bool blocking)"
+.br
+.ti -1c
+.RI "void \fBKineticSocket_Close\fP (int socketDescriptor)"
+.br
+.ti -1c
+.RI "bool \fBKineticSocket_Read\fP (int socketDescriptor, void *buffer, size_t length)"
+.br
+.ti -1c
+.RI "bool \fBKineticSocket_ReadProtobuf\fP (int socketDescriptor, \fBKineticProto\fP *message, void *buffer, size_t length)"
+.br
+.ti -1c
+.RI "bool \fBKineticSocket_Write\fP (int socketDescriptor, const void *buffer, size_t length)"
+.br
+.ti -1c
+.RI "bool \fBKineticSocket_WriteProtobuf\fP (int socketDescriptor, const \fBKineticMessage\fP *message)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int KineticSocket_Connect (const char *host, intport, boolblocking)"
+
+.PP
+Definition at line 36 of file kinetic_socket\&.c\&.
+.PP
+References LOG\&.
+.SS "void KineticSocket_Close (intsocketDescriptor)"
+
+.PP
+Definition at line 155 of file kinetic_socket\&.c\&.
+.PP
+References LOG\&.
+.SS "bool KineticSocket_Read (intsocketDescriptor, void *buffer, size_tlength)"
+
+.PP
+Definition at line 173 of file kinetic_socket\&.c\&.
+.PP
+References LOG\&.
+.SS "bool KineticSocket_ReadProtobuf (intsocketDescriptor, \fBKineticProto\fP *message, void *buffer, size_tlength)"
+
+.PP
+Definition at line 229 of file kinetic_socket\&.c\&.
+.PP
+References KineticProto_free_unpacked(), KineticProto_unpack(), KineticSocket_Read(), and LOG\&.
+.SS "bool KineticSocket_Write (intsocketDescriptor, const void *buffer, size_tlength)"
+
+.PP
+Definition at line 253 of file kinetic_socket\&.c\&.
+.PP
+References LOG\&.
+.SS "bool KineticSocket_WriteProtobuf (intsocketDescriptor, const \fBKineticMessage\fP *message)"
+
+.PP
+Definition at line 296 of file kinetic_socket\&.c\&.
+.PP
+References KineticMessage::proto\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

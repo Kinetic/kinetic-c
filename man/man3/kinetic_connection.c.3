@@ -1,0 +1,44 @@
+.TH "kinetic_connection.c" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_connection.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_connection\&.h'\fP
+.br
+\fC#include 'kinetic_socket\&.h'\fP
+.br
+\fC#include 'kinetic_pdu\&.h'\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBKineticConnection_Init\fP (\fBKineticConnection\fP *connection)"
+.br
+.ti -1c
+.RI "bool \fBKineticConnection_Connect\fP (\fBKineticConnection\fP *const connection, const char *host, int port, bool blocking)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void KineticConnection_Init (\fBKineticConnection\fP *connection)"
+
+.PP
+Definition at line 26 of file kinetic_connection\&.c\&.
+.PP
+References KINETIC_CONNECTION_INIT\&.
+.SS "bool KineticConnection_Connect (\fBKineticConnection\fP *constconnection, const char *host, intport, boolblocking)"
+
+.PP
+Definition at line 31 of file kinetic_connection\&.c\&.
+.PP
+References KineticConnection::blocking, KineticConnection::connected, KineticConnection::host, KineticSocket_Connect(), KineticConnection::port, and KineticConnection::socketDescriptor\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

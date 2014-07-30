@@ -1,0 +1,123 @@
+.TH "kinetic_types.h" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_types.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stddef\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <limits\&.h>\fP
+.br
+\fC#include <netinet/in\&.h>\fP
+.br
+\fC#include <ifaddrs\&.h>\fP
+.br
+\fC#include <openssl/sha\&.h>\fP
+.br
+\fC#include 'kinetic_proto\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBKineticConnection\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticMessage\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBKINETIC_PORT\fP   8123"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_HMAC_SHA1_LEN\fP   (SHA_DIGEST_LENGTH)"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_HMAC_MAX_LEN\fP   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_MAX_KEY_LEN\fP   128"
+.br
+.ti -1c
+.RI "#define \fBHOST_NAME_MAX\fP   256"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_CONNECTION_INIT\fP(connection)"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_MESSAGE_INIT\fP(msg)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define KINETIC_PORT   8123"
+
+.PP
+Definition at line 39 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)"
+
+.PP
+Definition at line 40 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_HMAC_MAX_LEN   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
+
+.PP
+Definition at line 41 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_MAX_KEY_LEN   128"
+
+.PP
+Definition at line 42 of file kinetic_types\&.h\&.
+.SS "#define HOST_NAME_MAX   256"
+
+.PP
+Definition at line 64 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_CONNECTION_INIT(connection)"
+\fBValue:\fP
+.PP
+.nf
+{ \
+    memset((connection), 0, sizeof(KineticConnection)); \
+    (connection)->blocking = true; \
+    (connection)->socketDescriptor = -1; \
+}
+.fi
+.PP
+Definition at line 81 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_MESSAGE_INIT(msg)"
+\fBValue:\fP
+.PP
+.nf
+{ \\
+    KineticProto_init(&(msg)->proto); \\
+    KineticProto_command_init(&(msg)->command); \\
+    KineticProto_header_init(&(msg)->header); \\
+    KineticProto_body_init(&(msg)->body); \\
+    KineticProto_status_init(&(msg)->status); \
+    (msg)->proto\&.hmac\&.data = (msg)->hmacData; \
+    (msg)->command\&.header = &(msg)->header; \
+    (msg)->command\&.body = &(msg)->body; \
+    (msg)->command\&.status = &(msg)->status; \
+    (msg)->proto\&.command = &(msg)->command; \
+    memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
+}
+.fi
+.PP
+Definition at line 100 of file kinetic_types\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

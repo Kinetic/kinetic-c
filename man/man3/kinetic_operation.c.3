@@ -1,0 +1,38 @@
+.TH "kinetic_operation.c" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_operation.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_operation\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBKineticOperation_Init\fP (\fBKineticOperation\fP *operation, \fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticPDU\fP *response)"
+.br
+.ti -1c
+.RI "void \fBKineticOperation_BuildNoop\fP (\fBKineticOperation\fP *operation)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void KineticOperation_Init (\fBKineticOperation\fP *operation, \fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticPDU\fP *response)"
+
+.PP
+Definition at line 23 of file kinetic_operation\&.c\&.
+.PP
+References KINETIC_OPERATION_INIT\&.
+.SS "void KineticOperation_BuildNoop (\fBKineticOperation\fP *operation)"
+
+.PP
+Definition at line 32 of file kinetic_operation\&.c\&.
+.PP
+References KineticOperation::exchange, KineticMessage::header, KINETIC_PROTO_MESSAGE_TYPE_NOOP, KineticExchange_ConfigureHeader(), KineticPDU::protobuf, KineticOperation::request, and KineticOperation::response\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

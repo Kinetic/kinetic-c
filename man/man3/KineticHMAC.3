@@ -1,4 +1,4 @@
-.TH "KineticHMAC" 3 "Mon Jul 28 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "KineticHMAC" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,11 +6,13 @@ KineticHMAC \-
 .SH SYNOPSIS
 .br
 .PP
+.PP
+\fC#include <kinetic_hmac\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
 .ti -1c
-.RI "KineticProto_Security_ACL_HMACAlgorithm \fBalgorithm\fP"
+.RI "\fBKineticProto_Security_ACL_HMACAlgorithm\fP \fBalgorithm\fP"
 .br
 .ti -1c
 .RI "unsigned int \fBvalueLength\fP"
@@ -22,6 +24,20 @@ KineticHMAC \-
 .SH "Detailed Description"
 .PP 
 Definition at line 27 of file kinetic_hmac\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "\fBKineticProto_Security_ACL_HMACAlgorithm\fP KineticHMAC::algorithm"
+
+.PP
+Definition at line 29 of file kinetic_hmac\&.h\&.
+.SS "unsigned int KineticHMAC::valueLength"
+
+.PP
+Definition at line 30 of file kinetic_hmac\&.h\&.
+.SS "uint8_t KineticHMAC::value[((SHA_DIGEST_LENGTH))]"
+
+.PP
+Definition at line 31 of file kinetic_hmac\&.h\&.
 
 .SH "Author"
 .PP 

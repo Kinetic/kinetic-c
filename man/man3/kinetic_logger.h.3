@@ -1,0 +1,58 @@
+.TH "kinetic_logger.h" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_logger.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_types\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBKINETIC_LOG_FILE\fP   'kinetic\&.log'"
+.br
+.ti -1c
+.RI "#define \fBLOG\fP(message)   \fBKineticLogger_Log\fP(message);"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBKineticLogger_Init\fP (const char *logFile)"
+.br
+.ti -1c
+.RI "void \fBKineticLogger_Log\fP (const char *message)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define KINETIC_LOG_FILE   'kinetic\&.log'"
+
+.PP
+Definition at line 26 of file kinetic_logger\&.h\&.
+.SS "#define LOG(message)   \fBKineticLogger_Log\fP(message);"
+
+.PP
+Definition at line 31 of file kinetic_logger\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "void KineticLogger_Init (const char *logFile)"
+
+.PP
+Definition at line 29 of file kinetic_logger\&.c\&.
+.PP
+References LogToStdErr\&.
+.SS "void KineticLogger_Log (const char *message)"
+
+.PP
+Definition at line 45 of file kinetic_logger\&.c\&.
+.PP
+References LogToStdErr\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "KineticProto_Header" 3 "Mon Jul 28 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "KineticProto_Header" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,6 +6,8 @@ KineticProto_Header \-
 .SH SYNOPSIS
 .br
 .PP
+.PP
+\fC#include <kinetic_proto\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
@@ -46,7 +48,7 @@ KineticProto_Header \-
 .RI "protobuf_c_boolean \fBhas_messagetype\fP"
 .br
 .ti -1c
-.RI "KineticProto_MessageType \fBmessagetype\fP"
+.RI "\fBKineticProto_MessageType\fP \fBmessagetype\fP"
 .br
 .ti -1c
 .RI "protobuf_c_boolean \fBhas_timeout\fP"
@@ -70,6 +72,84 @@ KineticProto_Header \-
 .SH "Detailed Description"
 .PP 
 Definition at line 182 of file kinetic_proto\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "ProtobufCMessage KineticProto_Header::base"
+
+.PP
+Definition at line 184 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_clusterversion"
+
+.PP
+Definition at line 185 of file kinetic_proto\&.h\&.
+.SS "int64_t KineticProto_Header::clusterversion"
+
+.PP
+Definition at line 186 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_identity"
+
+.PP
+Definition at line 187 of file kinetic_proto\&.h\&.
+.SS "int64_t KineticProto_Header::identity"
+
+.PP
+Definition at line 188 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_connectionid"
+
+.PP
+Definition at line 189 of file kinetic_proto\&.h\&.
+.SS "int64_t KineticProto_Header::connectionid"
+
+.PP
+Definition at line 190 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_sequence"
+
+.PP
+Definition at line 191 of file kinetic_proto\&.h\&.
+.SS "int64_t KineticProto_Header::sequence"
+
+.PP
+Definition at line 192 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_acksequence"
+
+.PP
+Definition at line 193 of file kinetic_proto\&.h\&.
+.SS "int64_t KineticProto_Header::acksequence"
+
+.PP
+Definition at line 194 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_messagetype"
+
+.PP
+Definition at line 195 of file kinetic_proto\&.h\&.
+.SS "\fBKineticProto_MessageType\fP KineticProto_Header::messagetype"
+
+.PP
+Definition at line 196 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_timeout"
+
+.PP
+Definition at line 197 of file kinetic_proto\&.h\&.
+.SS "int64_t KineticProto_Header::timeout"
+
+.PP
+Definition at line 198 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_earlyexit"
+
+.PP
+Definition at line 199 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::earlyexit"
+
+.PP
+Definition at line 200 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::has_backgroundscan"
+
+.PP
+Definition at line 201 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_Header::backgroundscan"
+
+.PP
+Definition at line 202 of file kinetic_proto\&.h\&.
 
 .SH "Author"
 .PP 

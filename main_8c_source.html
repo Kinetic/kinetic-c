@@ -56,7 +56,7 @@ $(document).ready(function(){initNavTree('main_8c_source.html','');});
 <div class="title">main.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<a href="main_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
@@ -79,30 +79,30 @@ $(document).ready(function(){initNavTree('main_8c_source.html','');});
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;string.h&gt;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;kinetic.h&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic_8h.html">kinetic.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">   26</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordtype">size_t</span> i, j;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordtype">size_t</span> len, len1, len2;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    KineticProto proto = KINETIC_PROTO_INIT;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    KineticProto* pproto;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    KineticProto_Command cmd = KINETIC_PROTO_COMMAND_INIT;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a> proto = <a class="code" href="kinetic__proto_8h.html#af5059bfd2eda584662ecb56caba8366d">KINETIC_PROTO_INIT</a>;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a>* pproto;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    KineticProto_Command cmd = <a class="code" href="kinetic__proto_8h.html#ab8fc5e15ccd15686f2df4107036656fa">KINETIC_PROTO_COMMAND_INIT</a>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    KineticProto_Header header = <a class="code" href="kinetic__proto_8h.html#a2444ec429c7df8627cc62b743595397d">KINETIC_PROTO_HEADER_INIT</a>;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    uint8_t buffer[1024];</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    ProtobufCBufferSimple bs = PROTOBUF_C_BUFFER_SIMPLE_INIT(buffer);</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    uint8_t* packed;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    KineticProto_init(&amp;proto);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    KineticProto_command_init(&amp;cmd);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    KineticProto_header_init(&amp;header);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="kinetic__proto_8c.html#a22266e0b2008357e1a61faff0f1056f8">KineticProto_init</a>(&amp;proto);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="kinetic__proto_8c.html#ad67706b010e4cd1ff94a9321bfb587c1">KineticProto_command_init</a>(&amp;cmd);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="kinetic__proto_8c.html#a8175b2f96741b397533df6eec5fe3271">KineticProto_header_init</a>(&amp;header);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    printf (<span class="stringliteral">&quot;Seagate Kinetic Protocol C Client Test Utility\n\n&quot;</span>);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    printf(<span class="stringliteral">&quot;KineticProto:\n&quot;</span>);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    printf(<span class="stringliteral">&quot;  size: %lu\n&quot;</span>, <span class="keyword">sizeof</span>(proto));</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    printf(<span class="stringliteral">&quot;  pre-packed size: %lu\n&quot;</span>, KineticProto_get_packed_size(&amp;proto));</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    printf(<span class="stringliteral">&quot;  pre-packed size: %lu\n&quot;</span>, <a class="code" href="kinetic__proto_8c.html#a535c41fa53e969b823c11492172e88da">KineticProto_get_packed_size</a>(&amp;proto));</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    header.clusterversion = 12345678;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    header.has_clusterversion = <span class="keyword">true</span>;</div>
@@ -113,17 +113,17 @@ $(document).ready(function(){initNavTree('main_8c_source.html','');});
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    cmd.header = &amp;header;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    proto.command = &amp;cmd;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    len = KineticProto_get_packed_size(&amp;proto);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    len = <a class="code" href="kinetic__proto_8c.html#a535c41fa53e969b823c11492172e88da">KineticProto_get_packed_size</a>(&amp;proto);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    printf(<span class="stringliteral">&quot;  calculated packed size: %lu\n&quot;</span>, len);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    printf(<span class="stringliteral">&quot;\nPacking message into raw allocated buffer...\n&quot;</span>);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    packed = malloc(KineticProto_get_packed_size(&amp;proto));</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    packed = malloc(<a class="code" href="kinetic__proto_8c.html#a535c41fa53e969b823c11492172e88da">KineticProto_get_packed_size</a>(&amp;proto));</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    assert(packed);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    len1 = KineticProto_pack(&amp;proto, packed);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    len1 = <a class="code" href="kinetic__proto_8c.html#a3b0b987f271840aa17c7bec9046eb77f">KineticProto_pack</a>(&amp;proto, packed);</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    printf(<span class="stringliteral">&quot;  actual packed size: %lu\n&quot;</span>, len1);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    assert(len1 == len);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    assert(KineticProto_get_packed_size(&amp;proto) == len1);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    assert(<a class="code" href="kinetic__proto_8c.html#a535c41fa53e969b823c11492172e88da">KineticProto_get_packed_size</a>(&amp;proto) == len1);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    printf(<span class="stringliteral">&quot;  buffer contents:\n&quot;</span>);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">for</span> (i = 0; i &lt; len; i++)</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    {</div>
@@ -140,11 +140,11 @@ $(document).ready(function(){initNavTree('main_8c_source.html','');});
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    printf(<span class="stringliteral">&quot;\nPacking message into ProtobufCBufferSimple...\n&quot;</span>);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    len2 = KineticProto_pack_to_buffer(&amp;proto, &amp;bs.base);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    len2 = <a class="code" href="kinetic__proto_8c.html#a04c944dbeeae270bd8303f0f0ccc12b1">KineticProto_pack_to_buffer</a>(&amp;proto, &amp;bs.base);</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    printf(<span class="stringliteral">&quot;  actual packed size: %lu\n&quot;</span>, len1);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    assert(len2 == len);</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    assert(bs.len == len);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    assert(KineticProto_get_packed_size(&amp;proto) == len);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    assert(<a class="code" href="kinetic__proto_8c.html#a535c41fa53e969b823c11492172e88da">KineticProto_get_packed_size</a>(&amp;proto) == len);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    printf(<span class="stringliteral">&quot;  buffer contents:\n&quot;</span>);</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">for</span> (i = 0; i &lt; len; i++)</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    {</div>
@@ -166,7 +166,7 @@ $(document).ready(function(){initNavTree('main_8c_source.html','');});
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment">// Unpack and verify the simple buffer results</span></div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    printf(<span class="stringliteral">&quot;\nValidating unpacked ProtobufCBufferSimple contents...\n&quot;</span>);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    pproto = KineticProto_unpack(NULL, len, bs.data);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    pproto = <a class="code" href="kinetic__proto_8c.html#a0623fe40025b387b445cff513988f8fe">KineticProto_unpack</a>(NULL, len, bs.data);</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    assert (pproto != NULL);</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    assert (pproto-&gt;command-&gt;header-&gt;has_identity == <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    assert (pproto-&gt;command-&gt;header-&gt;identity == -12345678ul);</div>
@@ -177,7 +177,7 @@ $(document).ready(function(){initNavTree('main_8c_source.html','');});
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="comment">// Unpack and verify the raw buffer results</span></div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    printf(<span class="stringliteral">&quot;\nValidating unpacked dynamically allocated buffer contents...\n&quot;</span>);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    pproto = KineticProto_unpack(NULL, len, packed);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    pproto = <a class="code" href="kinetic__proto_8c.html#a0623fe40025b387b445cff513988f8fe">KineticProto_unpack</a>(NULL, len, packed);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    assert (pproto != NULL);</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    assert (pproto-&gt;command-&gt;header-&gt;has_identity == <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    assert (pproto-&gt;command-&gt;header-&gt;identity == -12345678ul);</div>
@@ -187,19 +187,33 @@ $(document).ready(function(){initNavTree('main_8c_source.html','');});
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    printf(<span class="stringliteral">&quot;&lt; clusterversion: %016llX\n&quot;</span>, (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>)header.clusterversion);</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="comment">// Free dynamically allocated memory</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    KineticProto_free_unpacked(pproto, NULL);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <a class="code" href="kinetic__proto_8c.html#a9e2103604490393f727e9019e3e89340">KineticProto_free_unpacked</a>(pproto, NULL);</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    free(packed);</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    printf(<span class="stringliteral">&quot;\nKinetic C Client test utility ran successfully!\n&quot;</span>);</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
+<div class="ttc" id="kinetic__proto_8c_html_a22266e0b2008357e1a61faff0f1056f8"><div class="ttname"><a href="kinetic__proto_8c.html#a22266e0b2008357e1a61faff0f1056f8">KineticProto_init</a></div><div class="ttdeci">void KineticProto_init(KineticProto *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00161">kinetic_proto.c:161</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_ad67706b010e4cd1ff94a9321bfb587c1"><div class="ttname"><a href="kinetic__proto_8c.html#ad67706b010e4cd1ff94a9321bfb587c1">KineticProto_command_init</a></div><div class="ttdeci">void KineticProto_command_init(KineticProto_Command *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00035">kinetic_proto.c:35</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a0623fe40025b387b445cff513988f8fe"><div class="ttname"><a href="kinetic__proto_8c.html#a0623fe40025b387b445cff513988f8fe">KineticProto_unpack</a></div><div class="ttdeci">KineticProto * KineticProto_unpack(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00185">kinetic_proto.c:185</a></div></div>
+<div class="ttc" id="kinetic_8h_html"><div class="ttname"><a href="kinetic_8h.html">kinetic.h</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_a2444ec429c7df8627cc62b743595397d"><div class="ttname"><a href="kinetic__proto_8h.html#a2444ec429c7df8627cc62b743595397d">KINETIC_PROTO_HEADER_INIT</a></div><div class="ttdeci">#define KINETIC_PROTO_HEADER_INIT</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00204">kinetic_proto.h:204</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a3b0b987f271840aa17c7bec9046eb77f"><div class="ttname"><a href="kinetic__proto_8c.html#a3b0b987f271840aa17c7bec9046eb77f">KineticProto_pack</a></div><div class="ttdeci">size_t KineticProto_pack(const KineticProto *message, uint8_t *out)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00173">kinetic_proto.c:173</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_af5059bfd2eda584662ecb56caba8366d"><div class="ttname"><a href="kinetic__proto_8h.html#af5059bfd2eda584662ecb56caba8366d">KINETIC_PROTO_INIT</a></div><div class="ttdeci">#define KINETIC_PROTO_INIT</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00534">kinetic_proto.h:534</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_ad0a95a86f790c67b513ec195e4f4c352"><div class="ttname"><a href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a></div><div class="ttdeci">typedefPROTOBUF_C__BEGIN_DECLS struct _KineticProto KineticProto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00040">kinetic_proto.h:40</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a9e2103604490393f727e9019e3e89340"><div class="ttname"><a href="kinetic__proto_8c.html#a9e2103604490393f727e9019e3e89340">KineticProto_free_unpacked</a></div><div class="ttdeci">void KineticProto_free_unpacked(KineticProto *message, ProtobufCAllocator *allocator)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00190">kinetic_proto.c:190</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a04c944dbeeae270bd8303f0f0ccc12b1"><div class="ttname"><a href="kinetic__proto_8c.html#a04c944dbeeae270bd8303f0f0ccc12b1">KineticProto_pack_to_buffer</a></div><div class="ttdeci">size_t KineticProto_pack_to_buffer(const KineticProto *message, ProtobufCBuffer *buffer)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00179">kinetic_proto.c:179</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_ab8fc5e15ccd15686f2df4107036656fa"><div class="ttname"><a href="kinetic__proto_8h.html#ab8fc5e15ccd15686f2df4107036656fa">KINETIC_PROTO_COMMAND_INIT</a></div><div class="ttdeci">#define KINETIC_PROTO_COMMAND_INIT</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00178">kinetic_proto.h:178</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a8175b2f96741b397533df6eec5fe3271"><div class="ttname"><a href="kinetic__proto_8c.html#a8175b2f96741b397533df6eec5fe3271">KineticProto_header_init</a></div><div class="ttdeci">void KineticProto_header_init(KineticProto_Header *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00041">kinetic_proto.c:41</a></div></div>
+<div class="ttc" id="main_8c_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="main_8c_source.html#l00026">main.c:26</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a535c41fa53e969b823c11492172e88da"><div class="ttname"><a href="kinetic__proto_8c.html#a535c41fa53e969b823c11492172e88da">KineticProto_get_packed_size</a></div><div class="ttdeci">size_t KineticProto_get_packed_size(const KineticProto *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00167">kinetic_proto.c:167</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_0619a8f54b4fad7043a6de45be8fde0b.html">utility</a></li><li class="navelem"><b>main.c</b></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_0619a8f54b4fad7043a6de45be8fde0b.html">utility</a></li><li class="navelem"><a class="el" href="main_8c.html">main.c</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

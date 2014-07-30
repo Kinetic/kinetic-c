@@ -1,0 +1,1339 @@
+.TH "kinetic_proto.c" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_proto.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_proto\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBPROTOBUF_C__NO_DEPRECATED\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBKineticProto_command_init\fP (KineticProto_Command *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_header_init\fP (KineticProto_Header *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_body_init\fP (KineticProto_Body *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_status_init\fP (KineticProto_Status *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_key_value_init\fP (KineticProto_KeyValue *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_range_init\fP (KineticProto_Range *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_setup_init\fP (KineticProto_Setup *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_p2_poperation_operation_init\fP (KineticProto_P2POperation_Operation *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_p2_poperation_peer_init\fP (KineticProto_P2POperation_Peer *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_p2_poperation_init\fP (KineticProto_P2POperation *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_get_log_utilization_init\fP (KineticProto_GetLog_Utilization *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_get_log_temperature_init\fP (KineticProto_GetLog_Temperature *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_get_log_capacity_init\fP (KineticProto_GetLog_Capacity *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_get_log_configuration_interface_init\fP (KineticProto_GetLog_Configuration_Interface *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_get_log_configuration_init\fP (KineticProto_GetLog_Configuration *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_get_log_statistics_init\fP (KineticProto_GetLog_Statistics *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_get_log_limits_init\fP (KineticProto_GetLog_Limits *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_get_log_init\fP (KineticProto_GetLog *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_security_acl_scope_init\fP (KineticProto_Security_ACL_Scope *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_security_acl_init\fP (KineticProto_Security_ACL *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_security_init\fP (KineticProto_Security *message)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_init\fP (\fBKineticProto\fP *message)"
+.br
+.ti -1c
+.RI "size_t \fBKineticProto_get_packed_size\fP (const \fBKineticProto\fP *message)"
+.br
+.ti -1c
+.RI "size_t \fBKineticProto_pack\fP (const \fBKineticProto\fP *message, uint8_t *out)"
+.br
+.ti -1c
+.RI "size_t \fBKineticProto_pack_to_buffer\fP (const \fBKineticProto\fP *message, ProtobufCBuffer *buffer)"
+.br
+.ti -1c
+.RI "\fBKineticProto\fP * \fBKineticProto_unpack\fP (ProtobufCAllocator *allocator, size_t len, const uint8_t *data)"
+.br
+.ti -1c
+.RI "void \fBKineticProto_free_unpacked\fP (\fBKineticProto\fP *message, ProtobufCAllocator *allocator)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_command_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_header_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_body_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValue \fBKineticProto_status_status_code_enum_values_by_number\fP [19]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValueIndex \fBKineticProto_status_status_code_enum_values_by_name\fP [19]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_status_status_code_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_status_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_key_value_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_range_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_setup_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation_operation_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation_peer_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_utilization_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_temperature_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_capacity_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_configuration_interface_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_configuration_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_statistics_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_limits_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValue \fBKineticProto_get_log_type_enum_values_by_number\fP [8]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValueIndex \fBKineticProto_get_log_type_enum_values_by_name\fP [8]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_get_log_type_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_security_acl_scope_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValue \fBKineticProto_security_acl_hmacalgorithm_enum_values_by_number\fP [2]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValueIndex \fBKineticProto_security_acl_hmacalgorithm_enum_values_by_name\fP [2]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_security_acl_hmacalgorithm_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValue \fBKineticProto_security_acl_permission_enum_values_by_number\fP [9]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValueIndex \fBKineticProto_security_acl_permission_enum_values_by_name\fP [9]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_security_acl_permission_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_security_acl_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_security_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValue \fBKineticProto_synchronization_enum_values_by_number\fP [4]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValueIndex \fBKineticProto_synchronization_enum_values_by_name\fP [4]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_synchronization_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValue \fBKineticProto_algorithm_enum_values_by_number\fP [6]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValueIndex \fBKineticProto_algorithm_enum_values_by_name\fP [6]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_algorithm_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValue \fBKineticProto_message_type_enum_values_by_number\fP [27]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumValueIndex \fBKineticProto_message_type_enum_values_by_name\fP [27]"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_message_type_descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_descriptor\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define PROTOBUF_C__NO_DEPRECATED"
+
+.PP
+Definition at line 29 of file kinetic_proto\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "void KineticProto_command_init (KineticProto_Command *message)"
+
+.PP
+Definition at line 35 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_COMMAND_INIT\&.
+.SS "void KineticProto_header_init (KineticProto_Header *message)"
+
+.PP
+Definition at line 41 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_HEADER_INIT\&.
+.SS "void KineticProto_body_init (KineticProto_Body *message)"
+
+.PP
+Definition at line 47 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_BODY_INIT\&.
+.SS "void KineticProto_status_init (KineticProto_Status *message)"
+
+.PP
+Definition at line 53 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_STATUS_INIT\&.
+.SS "void KineticProto_key_value_init (KineticProto_KeyValue *message)"
+
+.PP
+Definition at line 59 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_KEY_VALUE_INIT\&.
+.SS "void KineticProto_range_init (KineticProto_Range *message)"
+
+.PP
+Definition at line 65 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_RANGE_INIT\&.
+.SS "void KineticProto_setup_init (KineticProto_Setup *message)"
+
+.PP
+Definition at line 71 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_SETUP_INIT\&.
+.SS "void KineticProto_p2_poperation_operation_init (KineticProto_P2POperation_Operation *message)"
+
+.PP
+Definition at line 77 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_P2_POPERATION_OPERATION_INIT\&.
+.SS "void KineticProto_p2_poperation_peer_init (KineticProto_P2POperation_Peer *message)"
+
+.PP
+Definition at line 83 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_P2_POPERATION_PEER_INIT\&.
+.SS "void KineticProto_p2_poperation_init (KineticProto_P2POperation *message)"
+
+.PP
+Definition at line 89 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_P2_POPERATION_INIT\&.
+.SS "void KineticProto_get_log_utilization_init (KineticProto_GetLog_Utilization *message)"
+
+.PP
+Definition at line 95 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_UTILIZATION_INIT\&.
+.SS "void KineticProto_get_log_temperature_init (KineticProto_GetLog_Temperature *message)"
+
+.PP
+Definition at line 101 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_TEMPERATURE_INIT\&.
+.SS "void KineticProto_get_log_capacity_init (KineticProto_GetLog_Capacity *message)"
+
+.PP
+Definition at line 107 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_CAPACITY_INIT\&.
+.SS "void KineticProto_get_log_configuration_interface_init (KineticProto_GetLog_Configuration_Interface *message)"
+
+.PP
+Definition at line 113 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE_INIT\&.
+.SS "void KineticProto_get_log_configuration_init (KineticProto_GetLog_Configuration *message)"
+
+.PP
+Definition at line 119 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_CONFIGURATION_INIT\&.
+.SS "void KineticProto_get_log_statistics_init (KineticProto_GetLog_Statistics *message)"
+
+.PP
+Definition at line 125 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_STATISTICS_INIT\&.
+.SS "void KineticProto_get_log_limits_init (KineticProto_GetLog_Limits *message)"
+
+.PP
+Definition at line 131 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_LIMITS_INIT\&.
+.SS "void KineticProto_get_log_init (KineticProto_GetLog *message)"
+
+.PP
+Definition at line 137 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_INIT\&.
+.SS "void KineticProto_security_acl_scope_init (KineticProto_Security_ACL_Scope *message)"
+
+.PP
+Definition at line 143 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_SECURITY_ACL_SCOPE_INIT\&.
+.SS "void KineticProto_security_acl_init (KineticProto_Security_ACL *message)"
+
+.PP
+Definition at line 149 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_SECURITY_ACL_INIT\&.
+.SS "void KineticProto_security_init (KineticProto_Security *message)"
+
+.PP
+Definition at line 155 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_SECURITY_INIT\&.
+.SS "void KineticProto_init (\fBKineticProto\fP *message)"
+
+.PP
+Definition at line 161 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_INIT\&.
+.SS "size_t KineticProto_get_packed_size (const \fBKineticProto\fP *message)"
+
+.PP
+Definition at line 167 of file kinetic_proto\&.c\&.
+.PP
+References KineticProto_descriptor\&.
+.SS "size_t KineticProto_pack (const \fBKineticProto\fP *message, uint8_t *out)"
+
+.PP
+Definition at line 173 of file kinetic_proto\&.c\&.
+.PP
+References KineticProto_descriptor\&.
+.SS "size_t KineticProto_pack_to_buffer (const \fBKineticProto\fP *message, ProtobufCBuffer *buffer)"
+
+.PP
+Definition at line 179 of file kinetic_proto\&.c\&.
+.PP
+References KineticProto_descriptor\&.
+.SS "\fBKineticProto\fP* KineticProto_unpack (ProtobufCAllocator *allocator, size_tlen, const uint8_t *data)"
+
+.PP
+Definition at line 185 of file kinetic_proto\&.c\&.
+.PP
+References KineticProto_descriptor\&.
+.SS "void KineticProto_free_unpacked (\fBKineticProto\fP *message, ProtobufCAllocator *allocator)"
+
+.PP
+Definition at line 190 of file kinetic_proto\&.c\&.
+.PP
+References KineticProto_descriptor\&.
+.SH "Variable Documentation"
+.PP 
+.SS "const ProtobufCMessageDescriptor KineticProto_command_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Command",
+    "Command",
+    "KineticProto_Command",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Command),
+    3,
+    KineticProto_command_field_descriptors,
+    KineticProto_command_field_indices_by_name,
+    1,  KineticProto_command_number_ranges,
+    (ProtobufCMessageInit) KineticProto_command_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 249 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_header_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Header",
+    "Header",
+    "KineticProto_Header",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Header),
+    9,
+    KineticProto_header_field_descriptors,
+    KineticProto_header_field_indices_by_name,
+    3,  KineticProto_header_number_ranges,
+    (ProtobufCMessageInit) KineticProto_header_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 398 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_body_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Body",
+    "Body",
+    "KineticProto_Body",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Body),
+    6,
+    KineticProto_body_field_descriptors,
+    KineticProto_body_field_indices_by_name,
+    2,  KineticProto_body_number_ranges,
+    (ProtobufCMessageInit) KineticProto_body_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 507 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValue KineticProto_status_status_code_enum_values_by_number[19]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "INVALID_STATUS_CODE", "KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE", -1 },
+    { "NOT_ATTEMPTED", "KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED", 0 },
+    { "SUCCESS", "KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS", 1 },
+    { "HMAC_FAILURE", "KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE", 2 },
+    { "NOT_AUTHORIZED", "KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED", 3 },
+    { "VERSION_FAILURE", "KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE", 4 },
+    { "INTERNAL_ERROR", "KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR", 5 },
+    { "HEADER_REQUIRED", "KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED", 6 },
+    { "NOT_FOUND", "KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND", 7 },
+    { "VERSION_MISMATCH", "KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH", 8 },
+    { "SERVICE_BUSY", "KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY", 9 },
+    { "EXPIRED", "KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED", 10 },
+    { "DATA_ERROR", "KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR", 11 },
+    { "PERM_DATA_ERROR", "KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR", 12 },
+    { "REMOTE_CONNECTION_ERROR", "KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR", 13 },
+    { "NO_SPACE", "KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE", 14 },
+    { "NO_SUCH_HMAC_ALGORITHM", "KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM", 15 },
+    { "INVALID_REQUEST", "KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST", 16 },
+    { "NESTED_OPERATION_ERRORS", "KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS", 17 },
+}
+.fi
+.PP
+Definition at line 523 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValueIndex KineticProto_status_status_code_enum_values_by_name[19]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "DATA_ERROR", 12 },
+    { "EXPIRED", 11 },
+    { "HEADER_REQUIRED", 7 },
+    { "HMAC_FAILURE", 3 },
+    { "INTERNAL_ERROR", 6 },
+    { "INVALID_REQUEST", 17 },
+    { "INVALID_STATUS_CODE", 0 },
+    { "NESTED_OPERATION_ERRORS", 18 },
+    { "NOT_ATTEMPTED", 1 },
+    { "NOT_AUTHORIZED", 4 },
+    { "NOT_FOUND", 8 },
+    { "NO_SPACE", 15 },
+    { "NO_SUCH_HMAC_ALGORITHM", 16 },
+    { "PERM_DATA_ERROR", 13 },
+    { "REMOTE_CONNECTION_ERROR", 14 },
+    { "SERVICE_BUSY", 10 },
+    { "SUCCESS", 2 },
+    { "VERSION_FAILURE", 5 },
+    { "VERSION_MISMATCH", 9 },
+}
+.fi
+.PP
+Definition at line 551 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_status_status_code_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Status\&.StatusCode",
+    "StatusCode",
+    "KineticProto_Status_StatusCode",
+    "com\&.seagate\&.kinetic\&.proto",
+    19,
+    KineticProto_status_status_code_enum_values_by_number,
+    19,
+    KineticProto_status_status_code_enum_values_by_name,
+    1,
+    KineticProto_status_status_code_value_ranges,
+    NULL, NULL, NULL, NULL 
+}
+.fi
+.PP
+Definition at line 574 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_status_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Status",
+    "Status",
+    "KineticProto_Status",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Status),
+    3,
+    KineticProto_status_field_descriptors,
+    KineticProto_status_field_indices_by_name,
+    1,  KineticProto_status_number_ranges,
+    (ProtobufCMessageInit) KineticProto_status_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 643 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_key_value_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.KeyValue",
+    "KeyValue",
+    "KineticProto_KeyValue",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_KeyValue),
+    8,
+    KineticProto_key_value_field_descriptors,
+    KineticProto_key_value_field_indices_by_name,
+    1,  KineticProto_key_value_number_ranges,
+    (ProtobufCMessageInit) KineticProto_key_value_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 777 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_range_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Range",
+    "Range",
+    "KineticProto_Range",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Range),
+    7,
+    KineticProto_range_field_descriptors,
+    KineticProto_range_field_indices_by_name,
+    2,  KineticProto_range_number_ranges,
+    (ProtobufCMessageInit) KineticProto_range_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 899 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_setup_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Setup",
+    "Setup",
+    "KineticProto_Setup",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Setup),
+    5,
+    KineticProto_setup_field_descriptors,
+    KineticProto_setup_field_indices_by_name,
+    1,  KineticProto_setup_number_ranges,
+    (ProtobufCMessageInit) KineticProto_setup_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 994 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation_operation_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.P2POperation\&.Operation",
+    "Operation",
+    "KineticProto_P2POperation_Operation",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_P2POperation_Operation),
+    6,
+    KineticProto_p2_poperation_operation_field_descriptors,
+    KineticProto_p2_poperation_operation_field_indices_by_name,
+    1,  KineticProto_p2_poperation_operation_number_ranges,
+    (ProtobufCMessageInit) KineticProto_p2_poperation_operation_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1102 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation_peer_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.P2POperation\&.Peer",
+    "Peer",
+    "KineticProto_P2POperation_Peer",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_P2POperation_Peer),
+    3,
+    KineticProto_p2_poperation_peer_field_descriptors,
+    KineticProto_p2_poperation_peer_field_indices_by_name,
+    1,  KineticProto_p2_poperation_peer_number_ranges,
+    (ProtobufCMessageInit) KineticProto_p2_poperation_peer_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1171 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.P2POperation",
+    "P2POperation",
+    "KineticProto_P2POperation",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_P2POperation),
+    3,
+    KineticProto_p2_poperation_field_descriptors,
+    KineticProto_p2_poperation_field_indices_by_name,
+    1,  KineticProto_p2_poperation_number_ranges,
+    (ProtobufCMessageInit) KineticProto_p2_poperation_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1240 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_utilization_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog\&.Utilization",
+    "Utilization",
+    "KineticProto_GetLog_Utilization",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_GetLog_Utilization),
+    2,
+    KineticProto_get_log_utilization_field_descriptors,
+    KineticProto_get_log_utilization_field_indices_by_name,
+    1,  KineticProto_get_log_utilization_number_ranges,
+    (ProtobufCMessageInit) KineticProto_get_log_utilization_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1296 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_temperature_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog\&.Temperature",
+    "Temperature",
+    "KineticProto_GetLog_Temperature",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_GetLog_Temperature),
+    5,
+    KineticProto_get_log_temperature_field_descriptors,
+    KineticProto_get_log_temperature_field_indices_by_name,
+    1,  KineticProto_get_log_temperature_number_ranges,
+    (ProtobufCMessageInit) KineticProto_get_log_temperature_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1391 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_capacity_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog\&.Capacity",
+    "Capacity",
+    "KineticProto_GetLog_Capacity",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_GetLog_Capacity),
+    2,
+    KineticProto_get_log_capacity_field_descriptors,
+    KineticProto_get_log_capacity_field_indices_by_name,
+    1,  KineticProto_get_log_capacity_number_ranges,
+    (ProtobufCMessageInit) KineticProto_get_log_capacity_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1447 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_configuration_interface_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog\&.Configuration\&.Interface",
+    "Interface",
+    "KineticProto_GetLog_Configuration_Interface",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_GetLog_Configuration_Interface),
+    4,
+    KineticProto_get_log_configuration_interface_field_descriptors,
+    KineticProto_get_log_configuration_interface_field_indices_by_name,
+    1,  KineticProto_get_log_configuration_interface_number_ranges,
+    (ProtobufCMessageInit) KineticProto_get_log_configuration_interface_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1529 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_configuration_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog\&.Configuration",
+    "Configuration",
+    "KineticProto_GetLog_Configuration",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_GetLog_Configuration),
+    13,
+    KineticProto_get_log_configuration_field_descriptors,
+    KineticProto_get_log_configuration_field_indices_by_name,
+    1,  KineticProto_get_log_configuration_number_ranges,
+    (ProtobufCMessageInit) KineticProto_get_log_configuration_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1728 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_statistics_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog\&.Statistics",
+    "Statistics",
+    "KineticProto_GetLog_Statistics",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_GetLog_Statistics),
+    3,
+    KineticProto_get_log_statistics_field_descriptors,
+    KineticProto_get_log_statistics_field_indices_by_name,
+    2,  KineticProto_get_log_statistics_number_ranges,
+    (ProtobufCMessageInit) KineticProto_get_log_statistics_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1798 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_limits_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog\&.Limits",
+    "Limits",
+    "KineticProto_GetLog_Limits",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_GetLog_Limits),
+    9,
+    KineticProto_get_log_limits_field_descriptors,
+    KineticProto_get_log_limits_field_indices_by_name,
+    1,  KineticProto_get_log_limits_number_ranges,
+    (ProtobufCMessageInit) KineticProto_get_log_limits_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 1945 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValue KineticProto_get_log_type_enum_values_by_number[8]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "INVALID_TYPE", "KINETIC_PROTO_GET_LOG_TYPE_INVALID_TYPE", -1 },
+    { "UTILIZATIONS", "KINETIC_PROTO_GET_LOG_TYPE_UTILIZATIONS", 0 },
+    { "TEMPERATURES", "KINETIC_PROTO_GET_LOG_TYPE_TEMPERATURES", 1 },
+    { "CAPACITIES", "KINETIC_PROTO_GET_LOG_TYPE_CAPACITIES", 2 },
+    { "CONFIGURATION", "KINETIC_PROTO_GET_LOG_TYPE_CONFIGURATION", 3 },
+    { "STATISTICS", "KINETIC_PROTO_GET_LOG_TYPE_STATISTICS", 4 },
+    { "MESSAGES", "KINETIC_PROTO_GET_LOG_TYPE_MESSAGES", 5 },
+    { "LIMITS", "KINETIC_PROTO_GET_LOG_TYPE_LIMITS", 6 },
+}
+.fi
+.PP
+Definition at line 1961 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValueIndex KineticProto_get_log_type_enum_values_by_name[8]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "CAPACITIES", 3 },
+    { "CONFIGURATION", 4 },
+    { "INVALID_TYPE", 0 },
+    { "LIMITS", 7 },
+    { "MESSAGES", 6 },
+    { "STATISTICS", 5 },
+    { "TEMPERATURES", 2 },
+    { "UTILIZATIONS", 1 },
+}
+.fi
+.PP
+Definition at line 1978 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_get_log_type_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog\&.Type",
+    "Type",
+    "KineticProto_GetLog_Type",
+    "com\&.seagate\&.kinetic\&.proto",
+    8,
+    KineticProto_get_log_type_enum_values_by_number,
+    8,
+    KineticProto_get_log_type_enum_values_by_name,
+    1,
+    KineticProto_get_log_type_value_ranges,
+    NULL, NULL, NULL, NULL 
+}
+.fi
+.PP
+Definition at line 1990 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.GetLog",
+    "GetLog",
+    "KineticProto_GetLog",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_GetLog),
+    8,
+    KineticProto_get_log_field_descriptors,
+    KineticProto_get_log_field_indices_by_name,
+    1,  KineticProto_get_log_number_ranges,
+    (ProtobufCMessageInit) KineticProto_get_log_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 2124 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_security_acl_scope_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Security\&.ACL\&.Scope",
+    "Scope",
+    "KineticProto_Security_ACL_Scope",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Security_ACL_Scope),
+    4,
+    KineticProto_security_acl_scope_field_descriptors,
+    KineticProto_security_acl_scope_field_indices_by_name,
+    1,  KineticProto_security_acl_scope_number_ranges,
+    (ProtobufCMessageInit) KineticProto_security_acl_scope_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 2206 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValue KineticProto_security_acl_hmacalgorithm_enum_values_by_number[2]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "INVALID_HMAC_ALGORITHM", "KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM", -1 },
+    { "HmacSHA1", "KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1", 1 },
+}
+.fi
+.PP
+Definition at line 2222 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValueIndex KineticProto_security_acl_hmacalgorithm_enum_values_by_name[2]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "HmacSHA1", 1 },
+    { "INVALID_HMAC_ALGORITHM", 0 },
+}
+.fi
+.PP
+Definition at line 2233 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_security_acl_hmacalgorithm_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Security\&.ACL\&.HMACAlgorithm",
+    "HMACAlgorithm",
+    "KineticProto_Security_ACL_HMACAlgorithm",
+    "com\&.seagate\&.kinetic\&.proto",
+    2,
+    KineticProto_security_acl_hmacalgorithm_enum_values_by_number,
+    2,
+    KineticProto_security_acl_hmacalgorithm_enum_values_by_name,
+    2,
+    KineticProto_security_acl_hmacalgorithm_value_ranges,
+    NULL, NULL, NULL, NULL 
+}
+.fi
+.PP
+Definition at line 2239 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValue KineticProto_security_acl_permission_enum_values_by_number[9]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "INVALID_PERMISSION", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_INVALID_PERMISSION", -1 },
+    { "READ", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_READ", 0 },
+    { "WRITE", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_WRITE", 1 },
+    { "DELETE", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_DELETE", 2 },
+    { "RANGE", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_RANGE", 3 },
+    { "SETUP", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_SETUP", 4 },
+    { "P2POP", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_P2POP", 5 },
+    { "GETLOG", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_GETLOG", 7 },
+    { "SECURITY", "KINETIC_PROTO_SECURITY_ACL_PERMISSION_SECURITY", 8 },
+}
+.fi
+.PP
+Definition at line 2255 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValueIndex KineticProto_security_acl_permission_enum_values_by_name[9]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "DELETE", 3 },
+    { "GETLOG", 7 },
+    { "INVALID_PERMISSION", 0 },
+    { "P2POP", 6 },
+    { "RANGE", 4 },
+    { "READ", 1 },
+    { "SECURITY", 8 },
+    { "SETUP", 5 },
+    { "WRITE", 2 },
+}
+.fi
+.PP
+Definition at line 2273 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_security_acl_permission_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Security\&.ACL\&.Permission",
+    "Permission",
+    "KineticProto_Security_ACL_Permission",
+    "com\&.seagate\&.kinetic\&.proto",
+    9,
+    KineticProto_security_acl_permission_enum_values_by_number,
+    9,
+    KineticProto_security_acl_permission_enum_values_by_name,
+    2,
+    KineticProto_security_acl_permission_value_ranges,
+    NULL, NULL, NULL, NULL 
+}
+.fi
+.PP
+Definition at line 2286 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_security_acl_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Security\&.ACL",
+    "ACL",
+    "KineticProto_Security_ACL",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Security_ACL),
+    4,
+    KineticProto_security_acl_field_descriptors,
+    KineticProto_security_acl_field_indices_by_name,
+    1,  KineticProto_security_acl_number_ranges,
+    (ProtobufCMessageInit) KineticProto_security_acl_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 2368 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_security_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Security",
+    "Security",
+    "KineticProto_Security",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto_Security),
+    1,
+    KineticProto_security_field_descriptors,
+    KineticProto_security_field_indices_by_name,
+    1,  KineticProto_security_number_ranges,
+    (ProtobufCMessageInit) KineticProto_security_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 2411 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValue KineticProto_synchronization_enum_values_by_number[4]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "INVALID_SYNCHRONIZATION", "KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION", -1 },
+    { "WRITETHROUGH", "KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH", 1 },
+    { "WRITEBACK", "KINETIC_PROTO_SYNCHRONIZATION_WRITEBACK", 2 },
+    { "FLUSH", "KINETIC_PROTO_SYNCHRONIZATION_FLUSH", 3 },
+}
+.fi
+.PP
+Definition at line 2427 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValueIndex KineticProto_synchronization_enum_values_by_name[4]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "FLUSH", 3 },
+    { "INVALID_SYNCHRONIZATION", 0 },
+    { "WRITEBACK", 2 },
+    { "WRITETHROUGH", 1 },
+}
+.fi
+.PP
+Definition at line 2440 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_synchronization_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Synchronization",
+    "Synchronization",
+    "KineticProto_Synchronization",
+    "com\&.seagate\&.kinetic\&.proto",
+    4,
+    KineticProto_synchronization_enum_values_by_number,
+    4,
+    KineticProto_synchronization_enum_values_by_name,
+    2,
+    KineticProto_synchronization_value_ranges,
+    NULL, NULL, NULL, NULL 
+}
+.fi
+.PP
+Definition at line 2448 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValue KineticProto_algorithm_enum_values_by_number[6]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "INVALID_ALGORITHM", "KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM", -1 },
+    { "SHA1", "KINETIC_PROTO_ALGORITHM_SHA1", 1 },
+    { "SHA2", "KINETIC_PROTO_ALGORITHM_SHA2", 2 },
+    { "SHA3", "KINETIC_PROTO_ALGORITHM_SHA3", 3 },
+    { "CRC32", "KINETIC_PROTO_ALGORITHM_CRC32", 4 },
+    { "CRC64", "KINETIC_PROTO_ALGORITHM_CRC64", 5 },
+}
+.fi
+.PP
+Definition at line 2464 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValueIndex KineticProto_algorithm_enum_values_by_name[6]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "CRC32", 4 },
+    { "CRC64", 5 },
+    { "INVALID_ALGORITHM", 0 },
+    { "SHA1", 1 },
+    { "SHA2", 2 },
+    { "SHA3", 3 },
+}
+.fi
+.PP
+Definition at line 2479 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_algorithm_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.Algorithm",
+    "Algorithm",
+    "KineticProto_Algorithm",
+    "com\&.seagate\&.kinetic\&.proto",
+    6,
+    KineticProto_algorithm_enum_values_by_number,
+    6,
+    KineticProto_algorithm_enum_values_by_name,
+    2,
+    KineticProto_algorithm_value_ranges,
+    NULL, NULL, NULL, NULL 
+}
+.fi
+.PP
+Definition at line 2489 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValue KineticProto_message_type_enum_values_by_number[27]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "INVALID_MESSAGE_TYPE", "KINETIC_PROTO_MESSAGE_TYPE_INVALID_MESSAGE_TYPE", -1 },
+    { "GET_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_GET_RESPONSE", 1 },
+    { "GET", "KINETIC_PROTO_MESSAGE_TYPE_GET", 2 },
+    { "PUT_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_PUT_RESPONSE", 3 },
+    { "PUT", "KINETIC_PROTO_MESSAGE_TYPE_PUT", 4 },
+    { "DELETE_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_DELETE_RESPONSE", 5 },
+    { "DELETE", "KINETIC_PROTO_MESSAGE_TYPE_DELETE", 6 },
+    { "GETNEXT_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_GETNEXT_RESPONSE", 7 },
+    { "GETNEXT", "KINETIC_PROTO_MESSAGE_TYPE_GETNEXT", 8 },
+    { "GETPREVIOUS_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_GETPREVIOUS_RESPONSE", 9 },
+    { "GETPREVIOUS", "KINETIC_PROTO_MESSAGE_TYPE_GETPREVIOUS", 10 },
+    { "GETKEYRANGE_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_GETKEYRANGE_RESPONSE", 11 },
+    { "GETKEYRANGE", "KINETIC_PROTO_MESSAGE_TYPE_GETKEYRANGE", 12 },
+    { "GETVERSION_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_GETVERSION_RESPONSE", 15 },
+    { "GETVERSION", "KINETIC_PROTO_MESSAGE_TYPE_GETVERSION", 16 },
+    { "SETUP_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_SETUP_RESPONSE", 21 },
+    { "SETUP", "KINETIC_PROTO_MESSAGE_TYPE_SETUP", 22 },
+    { "GETLOG_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_GETLOG_RESPONSE", 23 },
+    { "GETLOG", "KINETIC_PROTO_MESSAGE_TYPE_GETLOG", 24 },
+    { "SECURITY_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_SECURITY_RESPONSE", 25 },
+    { "SECURITY", "KINETIC_PROTO_MESSAGE_TYPE_SECURITY", 26 },
+    { "PEER2PEERPUSH_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE", 27 },
+    { "PEER2PEERPUSH", "KINETIC_PROTO_MESSAGE_TYPE_PEER2PEERPUSH", 28 },
+    { "NOOP_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_NOOP_RESPONSE", 29 },
+    { "NOOP", "KINETIC_PROTO_MESSAGE_TYPE_NOOP", 30 },
+    { "FLUSHALLDATA_RESPONSE", "KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE", 31 },
+    { "FLUSHALLDATA", "KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA", 32 },
+}
+.fi
+.PP
+Definition at line 2505 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumValueIndex KineticProto_message_type_enum_values_by_name[27]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    { "DELETE", 6 },
+    { "DELETE_RESPONSE", 5 },
+    { "FLUSHALLDATA", 26 },
+    { "FLUSHALLDATA_RESPONSE", 25 },
+    { "GET", 2 },
+    { "GETKEYRANGE", 12 },
+    { "GETKEYRANGE_RESPONSE", 11 },
+    { "GETLOG", 18 },
+    { "GETLOG_RESPONSE", 17 },
+    { "GETNEXT", 8 },
+    { "GETNEXT_RESPONSE", 7 },
+    { "GETPREVIOUS", 10 },
+    { "GETPREVIOUS_RESPONSE", 9 },
+    { "GETVERSION", 14 },
+    { "GETVERSION_RESPONSE", 13 },
+    { "GET_RESPONSE", 1 },
+    { "INVALID_MESSAGE_TYPE", 0 },
+    { "NOOP", 24 },
+    { "NOOP_RESPONSE", 23 },
+    { "PEER2PEERPUSH", 22 },
+    { "PEER2PEERPUSH_RESPONSE", 21 },
+    { "PUT", 4 },
+    { "PUT_RESPONSE", 3 },
+    { "SECURITY", 20 },
+    { "SECURITY_RESPONSE", 19 },
+    { "SETUP", 16 },
+    { "SETUP_RESPONSE", 15 },
+}
+.fi
+.PP
+Definition at line 2541 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_message_type_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message\&.MessageType",
+    "MessageType",
+    "KineticProto_MessageType",
+    "com\&.seagate\&.kinetic\&.proto",
+    27,
+    KineticProto_message_type_enum_values_by_number,
+    27,
+    KineticProto_message_type_enum_values_by_name,
+    4,
+    KineticProto_message_type_value_ranges,
+    NULL, NULL, NULL, NULL 
+}
+.fi
+.PP
+Definition at line 2572 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_descriptor"
+\fBInitial value:\fP
+.PP
+.nf
+=
+{
+    PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+    "com\&.seagate\&.kinetic\&.proto\&.Message",
+    "Message",
+    "KineticProto",
+    "com\&.seagate\&.kinetic\&.proto",
+    sizeof(KineticProto),
+    2,
+    KineticProto_field_descriptors,
+    KineticProto_field_indices_by_name,
+    2,  KineticProto_number_ranges,
+    (ProtobufCMessageInit) KineticProto_init,
+    NULL, NULL, NULL  
+}
+.fi
+.PP
+Definition at line 2629 of file kinetic_proto\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

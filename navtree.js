@@ -2,10 +2,23 @@ var NAVTREE =
 [
   [ "protobuf-c", "index.html", [
     [ "Data Structures", null, [
-      [ "Data Structures", "annotated.html", "annotated" ]
+      [ "Data Structures", "annotated.html", "annotated" ],
+      [ "Data Fields", "functions.html", [
+        [ "All", "functions.html", "functions_dup" ],
+        [ "Variables", "functions_vars.html", "functions_vars" ]
+      ] ]
     ] ],
     [ "Files", null, [
-      [ "File List", "files.html", "files" ]
+      [ "File List", "files.html", "files" ],
+      [ "Globals", "globals.html", [
+        [ "All", "globals.html", "globals_dup" ],
+        [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
+        [ "Typedefs", "globals_type.html", null ],
+        [ "Enumerations", "globals_enum.html", null ],
+        [ "Enumerator", "globals_eval.html", null ],
+        [ "Macros", "globals_defs.html", null ]
+      ] ]
     ] ]
   ] ]
 ];
@@ -13,7 +26,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"struct___kinetic_proto___status.html#af92da504c7ffc48277eb76bfd27348f6"
+"kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea4a41080d0505e452aadfa9adf15b3ced",
+"struct___kinetic_proto___get_log___configuration___interface.html#a99ad6f1b0d1e9414407ed96effb6ac29"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
