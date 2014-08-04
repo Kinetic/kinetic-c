@@ -31,12 +31,15 @@
 #define PDU_VALUE_MAX_LEN   (1024 * 1024)
 #define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
 
+#pragma pack(push)  /* push current alignment to stack */
+#pragma pack(1)     /* set alignment to 1 byte boundary */
 typedef struct _KineticPDUHeader
 {
     uint8_t     versionPrefix;
     uint32_t    protobufLength;
     uint32_t    valueLength;
 } KineticPDUHeader;
+#pragma pack(pop)   /* restore original alignment from stack */
 
 typedef struct _KineticPDU
 {

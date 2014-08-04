@@ -25,74 +25,113 @@
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdio.h>
+
 static int FileDesc;
-static int KineticTestPort = KINETIC_PORT; //8999;
-const char* TestData = "Some like it hot!";
+static int KineticTestPort = KINETIC_PORT /*8999*/;
+static const char* TestData = "Some like it hot!";
+static KineticMessage Msg;
+static KineticProto* pProto;
+static bool LogInitialized = false;
 
 void setUp(void)
 {
     FileDesc = -1;
-    KineticLogger_Init(NULL); // Log to stderr
+    pProto = NULL;
+    if (!LogInitialized)
+    {
+        KineticLogger_Init("test_kinetic_socket.log");
+        LogInitialized = true;
+    }
+    LOG("--------------------------------------------------------------------------------");
 }
 
 void tearDown(void)
 {
-    if (FileDesc > 0)
+    // Free the allocated protobuf so we don't leak memory!
+    if (pProto)
     {
+        LOG("Freeing protobuf...");
+        KineticProto_free_unpacked(pProto, NULL);
+    }
+
+    if (FileDesc >= 0)
+    {
+        LOG("Shutting down socket...");
         KineticSocket_Close(FileDesc);
     }
 }
 
 void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
 {
+    LOG(__func__);
     TEST_ASSERT_EQUAL(8123, KINETIC_PORT);
 }
 
 void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 {
+    LOG(__func__);
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
-
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }
 
 void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void)
 {
     bool success = false;
+    char data[40];
+    LOG(__func__);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     success = KineticSocket_Write(FileDesc, TestData, strlen(TestData));
-
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
+
+    LOG("Flushing socket read pipe...");
+    KineticSocket_Read(FileDesc, data, sizeof(data));
 }
 
 void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_specified_socket(void)
 {
     bool success = false;
-    KineticMessage msg;
+    LOG(__func__);
+    char data[5];
 
-    KineticMessage_Init(&msg);
-    msg.header.clusterversion = 12345678;
-    msg.header.has_clusterversion = true;
-    msg.header.identity = -12345678;
-    msg.header.has_identity = true;
+    KineticMessage_Init(&Msg);
+    Msg.header.clusterversion = 12345678;
+    Msg.header.has_clusterversion = true;
+    Msg.header.identity = -12345678;
+    Msg.header.has_identity = true;
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
-    success = KineticSocket_WriteProtobuf(FileDesc, &msg);
-
+    LOG("Writing a dummy protobuf...");
+    success = KineticSocket_WriteProtobuf(FileDesc, &Msg);
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
-}
 
-#if 0
+    LOG("Flushing socket read pipe...");
+    KineticSocket_Read(FileDesc, data, sizeof(data));
+}
 
 void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
 {
     bool success = false;
     const char* readRequest = "read(5)\0";
     char data[5];
+    LOG(__func__);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     // Send request to test server to send us some data
     success = KineticSocket_Write(FileDesc, readRequest, strlen(readRequest));
@@ -107,8 +146,10 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
 {
     bool success = false;
     char data[64];
+    LOG(__func__);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     success = KineticSocket_Read(FileDesc, data, sizeof(data));
 
@@ -118,44 +159,54 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
 void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
 {
     bool success = false;
-    const char* readRequest = "readProto()\0";
-    uint8_t data[256];
-    uint8_t protoBuf[1024*1024];
-    KineticProto* proto = (KineticProto*)protoBuf;
+    const char* readRequest = "readProto()";
+    uint8_t data[1024*1024];
     size_t expectedLength = 125; // This would normally be extracted from the PDU header
+    LOG(__func__);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     // Send request to test server to send us a Kinetic protobuf
     success = KineticSocket_Write(FileDesc, readRequest, strlen(readRequest));
     TEST_ASSERT_TRUE(success);
 
-    success = KineticSocket_ReadProtobuf(FileDesc, proto, data, expectedLength);
+    // Receive the response
+    success = KineticSocket_ReadProtobuf(FileDesc, &pProto, data, expectedLength);
 
-    TEST_ASSERT_TRUE_MESSAGE(success, "Failed to read from socket!");
+    TEST_ASSERT_TRUE(success);
+    TEST_ASSERT_NOT_NULL_MESSAGE(pProto, "Protobuf pointer was NULL, but expected dynamic memory allocation!");
+    LOG( "Received Kinetic protobuf:");
+    LOGF("  command: (0x%08X)", (int)pProto->command);
+    LOGF("    header: (0x%08X)", (int)pProto->command->header);
+    LOGF("      identity: %016llX", (unsigned long long)pProto->command->header->identity);
+    LOGF("  hmac: (%zd bytes): %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+        pProto->hmac.len,
+        pProto->hmac.data[0], pProto->hmac.data[1], pProto->hmac.data[2], pProto->hmac.data[3],
+        pProto->hmac.data[4], pProto->hmac.data[5], pProto->hmac.data[6], pProto->hmac.data[7],
+        pProto->hmac.data[8], pProto->hmac.data[9], pProto->hmac.data[10], pProto->hmac.data[11],
+        pProto->hmac.data[12], pProto->hmac.data[13], pProto->hmac.data[14], pProto->hmac.data[15],
+        pProto->hmac.data[16], pProto->hmac.data[17], pProto->hmac.data[18], pProto->hmac.data[19]);
 
-    printf("Received Kinetic protobuf:\n  identity: %016llX\n",
-        (unsigned long long)proto->command->header->identity);
+    LOG("Kinetic ProtoBuf read successfully!");
 }
 
 void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_specified_length_fails_to_be_read_within_timeout(void)
 {
     bool success = false;
-    const char* readRequest = "readProto()\0";
+    const char* readRequest = "readProto()";
     uint8_t data[256];
-    uint8_t protoBuf[1024*1024];
-    KineticProto* proto = (KineticProto*)protoBuf;
     size_t expectedLength = 150; // This would normally be extracted from the PDU header
+    LOG(__func__);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     // Send request to test server to send us a Kinetic protobuf
     success = KineticSocket_Write(FileDesc, readRequest, strlen(readRequest));
     TEST_ASSERT_TRUE(success);
 
-    success = KineticSocket_ReadProtobuf(FileDesc, proto, data, expectedLength);
-
+    success = KineticSocket_ReadProtobuf(FileDesc, &pProto, data, expectedLength);
     TEST_ASSERT_FALSE_MESSAGE(success, "Expected timeout!");
+    TEST_ASSERT_NULL_MESSAGE(pProto, "Protobuf pointer should not have gotten set, since no memory allocated.");
 }
-
-#endif

@@ -48,7 +48,7 @@ typedef struct _KineticExchange
     // client and the device, used to sign requests.
     bool has_key;
     size_t keyLength;
-    char key[KINETIC_MAX_KEY_LEN];
+    char key[KINETIC_MAX_KEY_LEN+1];
 
     // Required field
     // A unique number for this connection between the source and target.

@@ -41,6 +41,15 @@
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
 #define KINETIC_MAX_KEY_LEN     128
 
+// Ensure __func__ is defined (for debugging)
+#if __STDC_VERSION__ < 199901L
+    #if __GNUC__ >= 2
+        #define __func__ __FUNCTION__
+    #else
+        #define __func__ "<unknown>"
+    #endif
+#endif
+
 // Windows doesn't use <unistd.h> nor does it define HOST_NAME_MAX.
 #if defined(WIN32)
     #include <windows.h>

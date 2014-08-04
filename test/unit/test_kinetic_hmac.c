@@ -85,12 +85,12 @@ void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate(&actual, &message, key, strlen(key));
 
-    printf("Computed HMAC: %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n",
-        actual.value[0],  actual.value[1],  actual.value[2],  actual.value[3],
-        actual.value[4],  actual.value[5],  actual.value[6],  actual.value[7],
-        actual.value[8],  actual.value[9],  actual.value[10], actual.value[11],
-        actual.value[12], actual.value[13], actual.value[14], actual.value[15],
-        actual.value[16], actual.value[17], actual.value[18], actual.value[19]);
+    // printf("Computed HMAC: %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n",
+    //     actual.value[0],  actual.value[1],  actual.value[2],  actual.value[3],
+    //     actual.value[4],  actual.value[5],  actual.value[6],  actual.value[7],
+    //     actual.value[8],  actual.value[9],  actual.value[10], actual.value[11],
+    //     actual.value[12], actual.value[13], actual.value[14], actual.value[15],
+    //     actual.value[16], actual.value[17], actual.value[18], actual.value[19]);
 
     TEST_ASSERT_TRUE(message.proto.has_hmac);
     TEST_ASSERT_EQUAL(20, message.proto.hmac.len);

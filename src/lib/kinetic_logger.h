@@ -22,12 +22,15 @@
 #define _KINETIC_LOGGER_H
 
 #include "kinetic_types.h"
+#include <stdarg.h>
 
 #define KINETIC_LOG_FILE "kinetic.log"
 
 void KineticLogger_Init(const char* logFile);
 void KineticLogger_Log(const char* message);
+int KineticLogger_LogPrintf(const char* format, ...);
 
-#define LOG(message) KineticLogger_Log(message);
+#define LOG(message) KineticLogger_Log(message)
+#define LOGF(message, ...) KineticLogger_LogPrintf(message, ##__VA_ARGS__)
 
 #endif // _KINETIC_LOGGER_H

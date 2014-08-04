@@ -28,7 +28,7 @@ int KineticSocket_Connect(const char* host, int port, bool blocking);
 void KineticSocket_Close(int socketDescriptor);
 
 bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length);
-bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticProto* message, void* buffer, size_t length);
+bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticProto** message, void* buffer, size_t length);
 
 bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length);
 bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticMessage* message);

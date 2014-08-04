@@ -33,6 +33,137 @@
 #include <string.h>
 #include <stdio.h>
 
+int KineticSocket_GetSocketError(int fd)
+{
+    int err = 1;
+    socklen_t len = sizeof err;
+    
+    if (getsockopt(fd, SOL_SOCKET, SO_ERROR, (char *)&err, &len) == -1)
+    {
+        LOG("Failed to get socket options!");
+    }
+
+    if (err)
+    {
+        errno = err; // set errno to the socket SO_ERROR
+    }
+
+    return err;
+}
+
+bool KineticSocket_HaveInput(int fd, double timeout)
+{
+    int status;
+    fd_set fds;
+    struct timeval tv;
+    FD_ZERO(&fds);
+    FD_SET(fd, &fds);
+    tv.tv_sec  = (long)timeout; // cast needed for C++
+    tv.tv_usec = (long)((timeout - tv.tv_sec) * 1000000); // 'suseconds_t'
+
+    while (1)
+    {
+        if (!(status = select(fd + 1, &fds, 0, 0, &tv)))
+        {
+            return false;
+        }
+        else if (status > 0 && FD_ISSET(fd, &fds))
+        {
+            return true;
+        }
+        else if (status > 0)
+        {
+            LOG("I am confused!!!");
+        }
+        else if (errno != EINTR)
+        {
+            LOG("Failed select upon flush!"); // tbd EBADF: man page "an error has occurred"
+        }
+    }
+}
+
+bool KineticSocket_FlushSocketBeforeClose(int fd/*, double timeout*/)
+{
+    // const double start = getWallTimeEpoch();
+    char discard[99];
+    int i, iterations = 5;
+
+    assert(SHUT_WR == 1);
+
+    if (shutdown(fd, 1) != -1)
+    {
+        for (i = 0; i < iterations; i++)
+        {
+            while (KineticSocket_HaveInput(fd, 0.01)) // can block for 0.01 secs
+            {
+                if (!read(fd, discard, sizeof discard))
+                {
+                    return true; // success!
+                }
+            }
+        }
+    }
+
+   return false;
+}
+
+bool KineticSocket_CloseSocket(int fd)
+{
+    if (fd >= 0)
+    {
+        char msg[64];
+        int err;
+
+        LOG("KineticSocket_CloseSocket");
+
+        if (!KineticSocket_FlushSocketBeforeClose(fd))
+        {
+            LOG("Failed to gracefully close socket!");
+        }
+        else
+        {
+            LOG("Socket flushed successfully");
+        }
+        
+        err = KineticSocket_GetSocketError(fd); // first clear any errors, which can cause close to fail
+        if (err)
+        {
+            sprintf(msg, "Socket error had occurred: err=%d", err);
+            LOG(msg);
+        }
+        else
+        {
+            LOG("Socket errors cleared successfully!");
+        }
+        
+        if (shutdown(fd, SHUT_RDWR) < 0) // secondly, terminate the 'reliable' delivery
+        {
+            if (errno != ENOTCONN && errno != EINVAL) // SGI causes EINVAL
+            {
+                sprintf(msg, "Socket error occurred! errno=%d", errno);
+                return false;
+            }
+
+            if (close(fd) < 0) // finally call close()
+            {
+                LOG("Failed closing socket!");
+                return false;
+            }
+            else
+            {
+                LOG("Succeeded closing socket");
+            }
+        }
+        else
+        {
+            LOG("Call to shutdown socket failed!");
+            return false;
+        }
+    }
+
+    return true;
+}
+
 int KineticSocket_Connect(const char* host, int port, bool blocking)
 {
     char message[256];
@@ -43,7 +174,7 @@ int KineticSocket_Connect(const char* host, int port, bool blocking)
     int socket_fd;
     int res;
 
-    sprintf(message, "Connecting to %s:%d", host, port);
+    sprintf(message, "\nConnecting to %s:%d", host, port);
     LOG(message);
 
     memset(&hints, 0, sizeof(struct addrinfo));
@@ -163,7 +294,11 @@ void KineticSocket_Close(int socketDescriptor)
     {
         sprintf(message, "Closing socket with fd=%d", socketDescriptor);
         LOG(message);
-        if (close(socketDescriptor))
+        if (KineticSocket_CloseSocket(socketDescriptor))
+        {
+            LOG("Socket closed successfully");
+        }
+        else
         {
             LOG("Error closing socket file descriptor");
         }
@@ -226,25 +361,37 @@ bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length)
     return true;
 }
 
-bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticProto* message, void* buffer, size_t length)
+bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticProto** message, void* buffer, size_t length)
 {
     bool success = false;
-    KineticProto* proto;
+    char msg[128];
+    KineticProto* unpacked = NULL;
+
+    LOG("Attempting to read protobuf...");
+    sprintf(msg, "Reading %zd bytes into buffer @ 0x%X from fd=%d", length, (unsigned int)buffer, socketDescriptor);
+    LOG(msg);
 
     if (KineticSocket_Read(socketDescriptor, buffer, length))
     {
-        proto = KineticProto_unpack(NULL, length, buffer);
-        if (proto == NULL)
+        LOG("Read completed!");
+        unpacked = KineticProto_unpack(NULL, length, buffer);
+        if (unpacked == NULL)
         {
             LOG("Error unpacking incoming Kinetic protobuf message!");
+            *message = NULL;
+            success = false;
         }
         else
         {
-            assert(message != NULL);
-            memcpy(message, proto, length);
-            KineticProto_free_unpacked(proto, NULL);
+            LOG("Protobuf unpacked successfully!");
+            *message = unpacked;
             success = true;
         }
+    }
+    else
+    {
+        *message = NULL;
+        success = false;
     }
 
     return success;
@@ -255,23 +402,35 @@ bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length
     int status;
     size_t count;
     uint8_t* data = (uint8_t*)buffer;
+    char msg[128];
 
-    for (count = 0; count < length; count += status)
+    for (count = 0; count < length; )
     {
+        LOG("Sending data to client...");
+        sprintf(msg, "Attempting to write %zd bytes to socket", (length - count));
+        LOG(msg);
         status = write(socketDescriptor, &buffer[count], length - count);
         if (status == -1 && errno == EINTR)
         {
+            LOG("Write interrupted... retrying...");
             continue;
         }
         else if (status <= 0)
         {
-            char msg[128];
+            LOG("Failed writing data to socket!");
             sprintf(msg, "Failed to write to socket! status=%d, errno=%d\n", status, errno);
             LOG(msg);
             return false;
         }
+        else
+        {
+            count += status;
+            sprintf(msg, "Wrote %zd bytes to socket! %zd more to send...", status, (length - count));
+            LOG(msg);
+        }
     }
 
+    LOG("Write completed successfully!");
     return true;
 }
 
@@ -297,10 +456,17 @@ bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticMessage* mes
 {
     bool success = false;
     ProtobufAppendToFile appender;
+    size_t len = KineticProto_get_packed_size(&message->proto);
+    char msg[64];
 
+    sprintf(msg, "Writing protobuf (%zd bytes)", len);
+    LOG(msg);
     appender.base.append = KineticSocket_AppendProtobufToFile;
     appender.fileHandle = socketDescriptor;
     appender.error = false;
+
+    // FIXME!!! protobuf-c appears to be prepending an extra 2 bytes to the
+    // file stream as an initial write before the actual buffer!!! 
     protobuf_c_message_pack_to_buffer(&message->proto.base, (ProtobufCBuffer*)&appender);
 
     return !appender.error;

@@ -55,3 +55,18 @@ void KineticLogger_Log(const char* message)
         fclose(fd);
     }
 }
+
+int KineticLogger_LogPrintf(const char* format, ...)
+{
+   va_list arg_ptr;
+   char buffer[1024];
+   int result;
+
+   va_start(arg_ptr, format);
+   result = vsprintf(buffer, format, arg_ptr);
+   va_end(arg_ptr);
+
+   KineticLogger_Log(buffer);
+
+   return(result);
+}

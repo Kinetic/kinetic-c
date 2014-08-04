@@ -1,7 +1,7 @@
 TEAMCITY_BUILD = !ENV['TEAMCITY_PROJECT_NAME'].nil?
 
 require 'kinetic-ruby'
-load 'kinetic-ruby.rake'
+KineticRuby::Rake::load_tasks()
 
 require 'ceedling'
 Ceedling.load_project(config: './project.yml')
@@ -169,7 +169,30 @@ namespace :java_sim do
 
 end
 
-task 'test/integration/test_kinetic_socket.c' => ['server:start']
+namespace :ruby_sim do
+
+  def start_ruby_server
+    port = KineticRuby::DEFAULT_KINETIC_PORT
+    # port = KineticRuby::TEST_KINETIC_PORT
+    $kinetic_server ||= KineticRuby::Server.new(port)
+    $kinetic_server.start
+  end
+
+  def shutdown_ruby_server
+    $kinetic_server.shutdown unless $kinetic_server.nil?
+    $kinetic_server = nil
+  end
+
+  task :start do
+    start_ruby_server
+  end
+
+  task :shutdown do
+    shutdown_ruby_server
+  end
+end
+
+task 'test/integration/test_kinetic_socket.c' => ['ruby_sim:start']
 
 desc "Run client test utility"
 task :run do
@@ -207,11 +230,10 @@ task :test_all do
   Rake::Task['test:path'].invoke('test/unit')
 
   report_banner "Running Integration Tests"
+  start_ruby_server
   Rake::Task['test:path'].reenable
   Rake::Task['test:path'].invoke('test/integration')
-
-  Rake::Task['server:shutdown'].reenable
-  Rake::Task['server:shutdown'].invoke
+  shutdown_ruby_server
 
   report_banner "Running System Tests"
   java_sim_start
