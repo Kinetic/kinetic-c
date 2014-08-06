@@ -191,7 +191,6 @@ namespace :ruby_sim do
 end
 
 task 'test/integration/test_kinetic_socket.c' => ['ruby_sim:start']
-# task 'test/system/test_kinetic_api_system.c' => ['java_sim:shutdown', 'ruby_sim:start']
 task 'test/system/test_kinetic_api_system.c' => ['ruby_sim:shutdown', 'java_sim:start']
 
 namespace :system do
@@ -234,9 +233,9 @@ namespace :travis do
   end
 end
 
-desc "Enable verbose Ceedling output"
+desc "Enable verbose output"
 task :verbose do
-  Rake::Task[:verbosity].invoke(4) # Set verbosity to 4-obnoxious for debugging
+  Rake::Task[:verbosity].invoke(3) # Set verbosity to 3:semi-obnoxious for debugging
 end
 
 task :default => [
@@ -257,10 +256,10 @@ task :test_all do
   shutdown_ruby_server
 
   report_banner "Running System Tests"
-  # java_sim_start
+  java_sim_start
   Rake::Task['test:path'].reenable
   Rake::Task['test:path'].invoke('test/system')
-  # java_sim_shutdown
+  java_sim_shutdown
 
   report_banner "Finished executing all test suites"
 end
