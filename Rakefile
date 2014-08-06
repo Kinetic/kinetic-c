@@ -131,23 +131,21 @@ namespace :java_sim do
     report_banner "Starting Kinetic Java Simulator"
 
     # Validate JAVA_HOME
-    raise "JAVA_HOME must be set!" unless ENV["JAVA_HOME"]
-    java = File.join(ENV['JAVA_HOME'], 'bin', 'java')
+    java_home = ENV.fetch('JAVA_HOME', '/usr')
+    java = File.join(java_home, 'bin/java')
 
     # Find the java simulator jar
-    sim_jars = Dir["vendor/kinetic-java/kinetic-simulator*.jar"]
-    raise "No Kinetic Java simulator .jar files found!" if sim_jars.empty?
+    jars = Dir["vendor/kinetic-java/kinetic-simulator*.jar"]
+    raise "No Kinetic Java simulator .jar files found!" if jars.empty?
 
     # Configure the classpath
     ENV['CLASSPATH'] = '' unless ENV['CLASSPATH']
-    jars = [File.join(ENV['JAVA_HOME'], 'lib', 'tools.jar')] + sim_jars
-    jars.each do |jar|
-      ENV['CLASSPATH'] += ':' + jar
-    end
-
-    sleep 2
+    jars += [File.join(java_home, 'lib/tools.jar')]
+    jars.each {|jar| ENV['CLASSPATH'] += ':' + jar }
     $java_sim = spawn("#{java} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
-    sleep 5
+    sleep 5 # wait for simulator to start up and server ready to receive connections
+    # TODO: use netstat or something to just wait until the server opens the port
+    #       since it might take longer than the hardcoded sleep(x) above :-/ 
   end
 
   def java_sim_shutdown
@@ -193,6 +191,29 @@ namespace :ruby_sim do
 end
 
 task 'test/integration/test_kinetic_socket.c' => ['ruby_sim:start']
+# task 'test/system/test_kinetic_api_system.c' => ['java_sim:shutdown', 'ruby_sim:start']
+task 'test/system/test_kinetic_api_system.c' => ['ruby_sim:shutdown', 'java_sim:start']
+
+namespace :system do
+  desc "Run system tests w/KineticRuby for message inspection"
+  task :test_sniff do
+    [
+      'java_sim:shutdown',
+      'ruby_sim:start',
+    ].each do |task|
+      Rake::Task[task].reenable
+      Rake::Task[task].invoke
+    end
+
+    [
+      'test/system/test_kinetic_api_system.c'
+    ].each do |task|
+      Rake::Task[task].clear_prerequisites
+      Rake::Task[task].invoke
+    end
+
+  end
+end
 
 desc "Run client test utility"
 task :run do
@@ -236,10 +257,10 @@ task :test_all do
   shutdown_ruby_server
 
   report_banner "Running System Tests"
-  java_sim_start
+  # java_sim_start
   Rake::Task['test:path'].reenable
   Rake::Task['test:path'].invoke('test/system')
-  java_sim_shutdown
+  # java_sim_shutdown
 
   report_banner "Finished executing all test suites"
 end

@@ -32,6 +32,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 int KineticSocket_GetSocketError(int fd)
 {
@@ -434,40 +436,21 @@ bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length
     return true;
 }
 
-
-// protobuf-c ProtobufCBuffer for serializing direct to a file
-typedef struct _ProtobufAppendToFile
-{
-  ProtobufCBuffer base;     /* 'base' must be first member of Buffer subclass */
-  int fileHandle;
-  protobuf_c_boolean error;
-} ProtobufAppendToFile;
-
-static void KineticSocket_AppendProtobufToFile(ProtobufCBuffer* buffer, size_t length, const uint8_t* data)
-{
-    ProtobufAppendToFile *fileBuffer = (ProtobufAppendToFile*)buffer;
-    if (!fileBuffer->error)
-    {
-        fileBuffer->error = !KineticSocket_Write(fileBuffer->fileHandle, data, length);
-    }
-}
-
-bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticMessage* message)
+bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticProto* proto)
 {
     bool success = false;
-    ProtobufAppendToFile appender;
-    size_t len = KineticProto_get_packed_size(&message->proto);
+    size_t len = KineticProto_get_packed_size(proto);
+    size_t packedLen;
     char msg[64];
+    uint8_t* packed = malloc(len);
 
     sprintf(msg, "Writing protobuf (%zd bytes)", len);
     LOG(msg);
-    appender.base.append = KineticSocket_AppendProtobufToFile;
-    appender.fileHandle = socketDescriptor;
-    appender.error = false;
 
-    // FIXME!!! protobuf-c appears to be prepending an extra 2 bytes to the
-    // file stream as an initial write before the actual buffer!!! 
-    protobuf_c_message_pack_to_buffer(&message->proto.base, (ProtobufCBuffer*)&appender);
+    packed = malloc(KineticProto_get_packed_size(proto));
+    assert(packed);
+    packedLen = KineticProto_pack(proto, packed);
+    assert(packedLen == len);
 
-    return !appender.error;
+    return KineticSocket_Write(socketDescriptor, packed, packedLen);
 }

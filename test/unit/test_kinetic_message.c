@@ -39,7 +39,10 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
     KineticMessage_Init(&message);
 
     TEST_ASSERT_EQUAL_PTR(&message.header, message.command.header);
-    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
-    TEST_ASSERT_EQUAL_PTR(&message.status, message.command.status);
     TEST_ASSERT_EQUAL_PTR(&message.command, message.proto.command);
+    TEST_ASSERT_TRUE(message.proto.has_hmac);
+    TEST_ASSERT_EQUAL_PTR(message.hmacData, message.proto.hmac.data);
+    TEST_ASSERT_EQUAL(KINETIC_HMAC_MAX_LEN, message.proto.hmac.len);
+    TEST_ASSERT_NULL(message.command.body);
+    TEST_ASSERT_NULL(message.command.status);
 }

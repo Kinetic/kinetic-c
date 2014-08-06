@@ -26,7 +26,7 @@
 #include "kinetic_message.h"
 #include "kinetic_hmac.h"
 
-#define PDU_HEADER_LEN      (1 + (2 * sizeof(int64_t)))
+#define PDU_HEADER_LEN      (1 + (2 * sizeof(int32_t)))
 #define PDU_PROTO_MAX_LEN   (1024 * 1024)
 #define PDU_VALUE_MAX_LEN   (1024 * 1024)
 #define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
@@ -45,9 +45,11 @@ typedef struct _KineticPDU
 {
     // Binary PDU header (binary packed in NBO)
     KineticPDUHeader header;
+    uint8_t rawHeader[sizeof(KineticPDUHeader)];
 
     // Message associated with this PDU instance
-    KineticMessage* protobuf;
+    KineticMessage* message;
+    KineticProto* proto;
     uint32_t protobufLength; // Embedded in header in NBO byte order (this is for reference)
     uint8_t protobufScratch[1024*1024];
 

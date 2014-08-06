@@ -31,6 +31,6 @@ bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length);
 bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticProto** message, void* buffer, size_t length);
 
 bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length);
-bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticMessage* message);
+bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticProto* proto);
 
 #endif // _KINETIC_SOCKET_H

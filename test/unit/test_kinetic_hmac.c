@@ -59,7 +59,7 @@ void test_KineticHMAC_Init_should_initialize_the_HMAC_struct_with_the_specified_
     KineticHMAC_Init(&actual, expectedAlgorithm);
 
     TEST_ASSERT_EQUAL(expected.algorithm, actual.algorithm);
-    TEST_ASSERT_EQUAL_SIZET(0, actual.valueLength);
+    TEST_ASSERT_EQUAL_SIZET(KINETIC_HMAC_MAX_LEN, actual.valueLength);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(expected.value, actual.value, KINETIC_HMAC_MAX_LEN);
 }
 
@@ -77,86 +77,111 @@ void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the
 {
     int i = 0;
     KineticHMAC actual;
-    KineticMessage message;
+    KineticProto_Command command = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto proto = KINETIC_PROTO_INIT;
+    uint8_t data[KINETIC_HMAC_MAX_LEN];
+    ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
     const char *key = "1234567890ABCDEFGHIJK";
 
-    KineticMessage_Init(&message);
+    proto.command = &command;
+    proto.hmac = hmac;
+    proto.has_hmac = true;
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, strlen(key));
+    KineticHMAC_Populate(&actual, &proto, key, strlen(key));
+
+    TEST_ASSERT_TRUE(proto.has_hmac);
+    TEST_ASSERT_EQUAL(KINETIC_HMAC_MAX_LEN, proto.hmac.len);
 
     // printf("Computed HMAC: %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n",
-    //     actual.value[0],  actual.value[1],  actual.value[2],  actual.value[3],
-    //     actual.value[4],  actual.value[5],  actual.value[6],  actual.value[7],
-    //     actual.value[8],  actual.value[9],  actual.value[10], actual.value[11],
-    //     actual.value[12], actual.value[13], actual.value[14], actual.value[15],
-    //     actual.value[16], actual.value[17], actual.value[18], actual.value[19]);
-
-    TEST_ASSERT_TRUE(message.proto.has_hmac);
-    TEST_ASSERT_EQUAL(20, message.proto.hmac.len);
+    //     (int)actual.value[0],  (int)actual.value[1],  (int)actual.value[2],  (int)actual.value[3],
+    //     (int)actual.value[4],  (int)actual.value[5],  (int)actual.value[6],  (int)actual.value[7],
+    //     (int)actual.value[8],  (int)actual.value[9],  (int)actual.value[10], (int)actual.value[11],
+    //     (int)actual.value[12], (int)actual.value[13], (int)actual.value[14], (int)actual.value[15],
+    //     (int)actual.value[16], (int)actual.value[17], (int)actual.value[18], (int)actual.value[19]);
 }
 
 void test_KineticHMAC_Validate_should_return_true_if_the_HMAC_for_the_supplied_message_and_key_is_correct(void)
 {
     KineticHMAC actual;
-    KineticMessage message;
+    KineticProto_Command command = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto proto = KINETIC_PROTO_INIT;
+    uint8_t data[64];
+    ProtobufCBinaryData hmac = {.len = 0, .data = data};
     const char *key = "1234567890ABCDEFGHIJK";
 
-    KineticMessage_Init(&message);
+    proto.command = &command;
+    proto.hmac = hmac;
+    proto.has_hmac = true;
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, strlen(key));
+    KineticHMAC_Populate(&actual, &proto, key, strlen(key));
 
-    TEST_ASSERT_TRUE(KineticHMAC_Validate(&message.proto, key, strlen(key)));
+    TEST_ASSERT_TRUE(KineticHMAC_Validate(&proto, key, strlen(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_value_of_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
-    KineticMessage message;
+    KineticProto_Command command = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto proto = KINETIC_PROTO_INIT;
+    uint8_t data[64];
+    ProtobufCBinaryData hmac = {.len = 0, .data = data};
     const char *key = "1234567890ABCDEFGHIJK";
 
-    KineticMessage_Init(&message);
+    proto.command = &command;
+    proto.hmac = hmac;
+    proto.has_hmac = true;
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, strlen(key));
+    KineticHMAC_Populate(&actual, &proto, key, strlen(key));
 
     // Bork the HMAC
-    message.proto.hmac.data[3]++;
+    proto.hmac.data[3]++;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, strlen(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&proto, key, strlen(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_length_of_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
-    KineticMessage message;
+    KineticProto_Command command = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto proto = KINETIC_PROTO_INIT;
+    uint8_t data[64];
+    ProtobufCBinaryData hmac = {.len = 0, .data = data};
     const char *key = "1234567890ABCDEFGHIJK";
 
-    KineticMessage_Init(&message);
+    proto.command = &command;
+    proto.hmac = hmac;
+    proto.has_hmac = true;
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, strlen(key));
+    KineticHMAC_Populate(&actual, &proto, key, strlen(key));
 
     // Bork the HMAC
-    message.proto.hmac.len--;
+    proto.hmac.len--;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, strlen(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&proto, key, strlen(key)));
 }
 
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_presence_is_false_for_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
-    KineticMessage message;
+    KineticProto_Command command = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto proto = KINETIC_PROTO_INIT;
+    uint8_t data[64];
+    ProtobufCBinaryData hmac = {.len = 0, .data = data};
     const char *key = "1234567890ABCDEFGHIJK";
 
-    KineticMessage_Init(&message);
+    proto.command = &command;
+    proto.hmac = hmac;
+    proto.has_hmac = true;
 
     KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &message, key, strlen(key));
+    KineticHMAC_Populate(&actual, &proto, key, strlen(key));
 
     // Bork the HMAC
-    message.proto.has_hmac = false;
+    proto.has_hmac = false;
 
-    TEST_ASSERT_FALSE(KineticHMAC_Validate(&message.proto, key, strlen(key)));
+    TEST_ASSERT_FALSE(KineticHMAC_Validate(&proto, key, strlen(key)));
 }

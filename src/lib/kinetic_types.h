@@ -26,6 +26,7 @@
 #include <stdbool.h>
 #endif
 #include <stdint.h>
+#include <inttypes.h>
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
@@ -112,12 +113,14 @@ typedef struct _KineticMessage
     KineticProto_header_init(&(msg)->header); \
     KineticProto_body_init(&(msg)->body); \
     KineticProto_status_init(&(msg)->status); \
-    (msg)->proto.hmac.data = (msg)->hmacData; \
-    (msg)->command.header = &(msg)->header; \
-    (msg)->command.body = &(msg)->body; \
-    (msg)->command.status = &(msg)->status; \
-    (msg)->proto.command = &(msg)->command; \
     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
+    (msg)->proto.hmac.data = (msg)->hmacData; \
+    (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; \
+    (msg)->proto.has_hmac = true; /* Enable HMAC to allow length calculation prior to population */ \
+    (msg)->command.header = &(msg)->header; \
+    (msg)->proto.command = &(msg)->command; \
+    /*(msg)->command.body = &(msg)->body;*/ \
+    /*(msg)->command.status = &(msg)->status;*/ \
 }
 
 #endif // _KINETIC_TYPES_H

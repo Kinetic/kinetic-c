@@ -87,9 +87,10 @@ void test_KineticAPI_ConfigureExchange_should_configure_specified_KineticExchang
     const char* key = "U_i472";
 
     KineticExchange_Init_Expect(&exchange, 1234, key, strlen(key), &connection);
+    KineticExchange_SetClusterVersion_Expect(&exchange, 76543210);
     KineticExchange_ConfigureConnectionID_Expect(&exchange);
 
-    success = KineticApi_ConfigureExchange(&exchange, &connection, 1234, key, strlen(key));
+    success = KineticApi_ConfigureExchange(&exchange, &connection, 76543210, 1234, key, strlen(key));
 
     TEST_ASSERT_TRUE(success);
 }
@@ -99,20 +100,20 @@ void test_KineticApi_CreateOperation_should_create_configure_and_return_a_valid_
     KineticOperation op;
     KineticExchange exchange;
     KineticPDU request, response;
-    KineticMessage requestMsg, responseMsg;
+    KineticMessage requestMsg;
 
     KineticMessage_Init_Expect(&requestMsg);
     KineticPDU_Init_Expect(&request, &exchange, &requestMsg, NULL, 0);
-    KineticMessage_Init_Expect(&responseMsg);
-    KineticPDU_Init_Expect(&response, &exchange, &responseMsg, NULL, 0);
+    KineticPDU_Init_Expect(&response, &exchange, NULL, NULL, 0);
 
-    op = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response, &responseMsg);
+    op = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response);
 
     TEST_ASSERT_EQUAL_PTR(&exchange, op.exchange);
     TEST_ASSERT_EQUAL_PTR(&request, op.request);
-    TEST_ASSERT_EQUAL_PTR(&requestMsg, op.request->protobuf);
+    TEST_ASSERT_EQUAL_PTR(&requestMsg, op.request->message);
     TEST_ASSERT_EQUAL_PTR(&response, op.response);
-    TEST_ASSERT_EQUAL_PTR(&responseMsg, op.response->protobuf);
+    TEST_ASSERT_NULL(op.response->message);
+    TEST_ASSERT_NULL(op.response->proto);
 }
 
 void test_KineticApi_NoOp_should_send_NOOP_command(void)
@@ -120,8 +121,11 @@ void test_KineticApi_NoOp_should_send_NOOP_command(void)
     KineticConnection connection;
     KineticExchange exchange;
     KineticOperation operation;
-    KineticMessage requestMsg, responseMsg;
+    KineticMessage requestMsg;
     KineticPDU request, response;
+    KineticProto responseProto = KINETIC_PROTO_INIT;
+    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND_INIT;
+    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS_INIT;
     KineticProto_Status_StatusCode status;
     int64_t identity = 1234;
     int64_t connectionID = 5678;
@@ -130,15 +134,18 @@ void test_KineticApi_NoOp_should_send_NOOP_command(void)
 
     request.exchange = &exchange;
     KINETIC_MESSAGE_INIT(&requestMsg);
-    request.protobuf = &requestMsg;
+    request.message = &requestMsg;
 
     response.exchange = &exchange;
-    KINETIC_MESSAGE_INIT(&responseMsg);
-    response.protobuf = &responseMsg;
-    response.protobuf->status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    response.message = NULL;
+    response.proto = &responseProto;
+    response.proto->command = &responseCommand;
+    response.proto->command->status = &responseStatus;
+    response.proto->command->status->has_code = true;
+    response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
     KINETIC_OPERATION_INIT(&operation, &exchange, &request, &response);
-
+    
     KineticExchange_IncrementSequence_Expect(&exchange);
     KineticOperation_BuildNoop_Expect(&operation);
     KineticPDU_Send_ExpectAndReturn(&request, true);

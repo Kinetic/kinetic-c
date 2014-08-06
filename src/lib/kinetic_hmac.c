@@ -32,7 +32,7 @@ void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorith
     {
         hmac->algorithm = algorithm;
         memset(hmac->value, 0, KINETIC_HMAC_MAX_LEN);
-        hmac->valueLength = 0;
+        hmac->valueLength = KINETIC_HMAC_MAX_LEN;
     }
     else
     {
@@ -40,25 +40,18 @@ void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorith
     }
 }
 
-void KineticHMAC_Populate(
-    KineticHMAC* hmac,
-    KineticMessage* message,
-    const char* const key,
-    size_t keyLen)
+void KineticHMAC_Populate(KineticHMAC* hmac, KineticProto* proto, const char* const key, size_t keyLen)
 {
-    KineticHMAC_Init(hmac, hmac->algorithm);
-    KineticHMAC_Compute(hmac, &message->proto, key, keyLen);
+    KineticHMAC_Init(hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Compute(hmac, proto, key, keyLen);
 
     // Copy computed HMAC into message
-    memcpy(message->proto.hmac.data, hmac->value, hmac->valueLength);
-    message->proto.hmac.len = hmac->valueLength;
-    message->proto.has_hmac = true;
+    memcpy(proto->hmac.data, hmac->value, hmac->valueLength);
+    proto->hmac.len = hmac->valueLength;
+    proto->has_hmac = true;
 }
 
-bool KineticHMAC_Validate(
-    const KineticProto* proto,
-    const char* const key,
-    size_t keyLen)
+bool KineticHMAC_Validate(const KineticProto* proto, const char* const key, size_t keyLen)
 {
     size_t i;
     int result = 0;
@@ -69,7 +62,7 @@ bool KineticHMAC_Validate(
         return false;
     }
 
-    KineticHMAC_Init(&tempHMAC, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM);
+    KineticHMAC_Init(&tempHMAC, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Compute(&tempHMAC, proto, key, keyLen);
 
     if (proto->hmac.len != tempHMAC.valueLength)
@@ -85,35 +78,24 @@ bool KineticHMAC_Validate(
     return (result == 0);
 }
 
-static void KineticHMAC_Compute(
-    KineticHMAC* hmac,
-    const KineticProto* proto,
-    const char* const key,
-    size_t keyLen)
+static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, const char* const key, size_t keyLen)
 {
     HMAC_CTX ctx;
 
     unsigned int len = protobuf_c_message_get_packed_size((ProtobufCMessage*)proto->command);
-    uint8_t* command = malloc(len);
-    protobuf_c_message_pack((ProtobufCMessage*)proto->command, command);
+    uint8_t* packed = malloc(len);
+    protobuf_c_message_pack((ProtobufCMessage*)proto->command, packed);
 
 #pragma push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
+    uint32_t messageLengthNBO = htonl(len);
     HMAC_CTX_init(&ctx);
     HMAC_Init_ex(&ctx, key, keyLen, EVP_sha1(), NULL);
-
-    if (keyLen != 0)
-    {
-        uint32_t messageLengthNBO = htonl(keyLen);
-        HMAC_Update(&ctx, (uint8_t*)(&messageLengthNBO), sizeof(uint32_t));
-        HMAC_Update(&ctx, command, len);
-    }
-
+    HMAC_Update(&ctx, (uint8_t*)&messageLengthNBO, sizeof(uint32_t));
+    HMAC_Update(&ctx, packed, len);
     HMAC_Final(&ctx, hmac->value, &hmac->valueLength);
     HMAC_CTX_cleanup(&ctx);
-
 #pragma pop
 
-    free(command);
+    free(packed);
 }

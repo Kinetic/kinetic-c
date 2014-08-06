@@ -116,7 +116,7 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     LOG("Writing a dummy protobuf...");
-    success = KineticSocket_WriteProtobuf(FileDesc, &Msg);
+    success = KineticSocket_WriteProtobuf(FileDesc, &Msg.proto);
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
 
     LOG("Flushing socket read pipe...");

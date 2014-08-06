@@ -55,6 +55,7 @@ bool KineticApi_Connect(
 bool KineticApi_ConfigureExchange(
     KineticExchange* exchange,
     KineticConnection* connection,
+    int64_t clusterVersion,
     int64_t identity,
     const char* key,
     size_t keyLength)
@@ -78,6 +79,7 @@ bool KineticApi_ConfigureExchange(
     }
 
     KineticExchange_Init(exchange, identity, key, keyLength, connection);
+    KineticExchange_SetClusterVersion(exchange, clusterVersion);
     KineticExchange_ConfigureConnectionID(exchange);
 
     return true;
@@ -87,8 +89,7 @@ KineticOperation KineticApi_CreateOperation(
     KineticExchange* exchange,
     KineticPDU* request,
     KineticMessage* requestMsg,
-    KineticPDU* response,
-    KineticMessage* responseMsg)
+    KineticPDU* response)
 {
     KineticOperation op;
 
@@ -116,23 +117,18 @@ KineticOperation KineticApi_CreateOperation(
         assert(response != NULL);
     }
 
-    if (responseMsg == NULL)
-    {
-        LOG("Specified response KineticMessage is NULL!");
-        assert(responseMsg != NULL);
-    }
-
     KineticMessage_Init(requestMsg);
     KineticPDU_Init(request, exchange, requestMsg, NULL, 0);
 
-    KineticMessage_Init(responseMsg);
-    KineticPDU_Init(response, exchange, responseMsg, NULL, 0);
+    // KineticMessage_Init(responseMsg);
+    KineticPDU_Init(response, exchange, NULL, NULL, 0);
 
     op.exchange = exchange;
     op.request = request;
-    op.request->protobuf = requestMsg;
+    op.request->message = requestMsg;
     op.response = response;
-    op.response->protobuf = responseMsg;
+    op.response->message = NULL;
+    op.response->proto = NULL;
 
     return op;
 }
@@ -145,9 +141,9 @@ KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation* operation)
     assert(operation->exchange != NULL);
     assert(operation->exchange->connection != NULL);
     assert(operation->request != NULL);
-    assert(operation->request->protobuf != NULL);
+    assert(operation->request->message != NULL);
     assert(operation->response != NULL);
-    assert(operation->response->protobuf != NULL);
+    assert(operation->response->message == NULL);
 
     // Initialize request
     KineticExchange_IncrementSequence(operation->exchange);
@@ -162,7 +158,7 @@ KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation* operation)
     // Receive the response
     if (KineticPDU_Receive(operation->response))
     {
-        status = operation->response->protobuf->command.status->code;
+        status = operation->response->proto->command->status->code;
     }
 
 	return status;
