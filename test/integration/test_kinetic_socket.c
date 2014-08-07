@@ -68,6 +68,7 @@ void tearDown(void)
     {
         LOG("Shutting down socket...");
         KineticSocket_Close(FileDesc);
+        sleep(2);
     }
 }
 
