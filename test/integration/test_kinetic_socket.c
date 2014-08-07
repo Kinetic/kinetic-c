@@ -96,6 +96,10 @@ void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
+#if defined(__unix__) && !defined(__APPLE__)
+    TEST_IGNORE_MESSAGE("Disabled on Linux until KineticRuby server client connection cleanup is fixed!");
+#endif
+
     success = KineticSocket_Write(FileDesc, TestData, strlen(TestData));
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
 
@@ -118,6 +122,10 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
+#if defined(__unix__) && !defined(__APPLE__)
+    TEST_IGNORE_MESSAGE("Disabled on Linux until KineticRuby server client connection cleanup is fixed!");
+#endif
+    
     LOG("Writing a dummy protobuf...");
     success = KineticSocket_WriteProtobuf(FileDesc, &Msg.proto);
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
