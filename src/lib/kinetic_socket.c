@@ -341,7 +341,7 @@ bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length)
         else if (status > 0) // Data available to read
         {
             // The socket is ready for reading
-            status = read(socketDescriptor, &buffer[count], length - count);
+            status = read(socketDescriptor, &((uint8_t*)buffer)[count], length - count);
             if (status == -1 && errno == EINTR)
             {
                 continue;
@@ -370,7 +370,7 @@ bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticProto** message, vo
     KineticProto* unpacked = NULL;
 
     LOG("Attempting to read protobuf...");
-    sprintf(msg, "Reading %zd bytes into buffer @ 0x%X from fd=%d", length, (unsigned int)buffer, socketDescriptor);
+    sprintf(msg, "Reading %zd bytes into buffer @ 0x%zX from fd=%d", length, (size_t)buffer, socketDescriptor);
     LOG(msg);
 
     if (KineticSocket_Read(socketDescriptor, buffer, length))
@@ -411,7 +411,7 @@ bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length
         LOG("Sending data to client...");
         sprintf(msg, "Attempting to write %zd bytes to socket", (length - count));
         LOG(msg);
-        status = write(socketDescriptor, &buffer[count], length - count);
+        status = write(socketDescriptor, &((uint8_t*)buffer)[count], length - count);
         if (status == -1 && errno == EINTR)
         {
             LOG("Write interrupted... retrying...");
@@ -427,7 +427,7 @@ bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length
         else
         {
             count += status;
-            sprintf(msg, "Wrote %zd bytes to socket! %zd more to send...", status, (length - count));
+            sprintf(msg, "Wrote %d bytes to socket! %zd more to send...", status, (length - count));
             LOG(msg);
         }
     }

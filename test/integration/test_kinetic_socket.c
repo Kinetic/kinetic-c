@@ -177,8 +177,8 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT_NOT_NULL_MESSAGE(pProto, "Protobuf pointer was NULL, but expected dynamic memory allocation!");
     LOG( "Received Kinetic protobuf:");
-    LOGF("  command: (0x%08X)", (int)pProto->command);
-    LOGF("    header: (0x%08X)", (int)pProto->command->header);
+    LOGF("  command: (0x%zX)", (size_t)pProto->command);
+    LOGF("    header: (0x%zX)", (size_t)pProto->command->header);
     LOGF("      identity: %016llX", (unsigned long long)pProto->command->header->identity);
     LOGF("  hmac: (%zd bytes): %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
         pProto->hmac.len,
