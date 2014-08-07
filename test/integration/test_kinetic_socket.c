@@ -47,6 +47,7 @@ void setUp(void)
 {
     FileDesc = -1;
     pProto = NULL;
+    sleep(2);
     if (!LogInitialized)
     {
         KineticLogger_Init(NULL);//"test_kinetic_socket.log");
