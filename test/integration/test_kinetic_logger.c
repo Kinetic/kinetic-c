@@ -21,6 +21,8 @@
 #include "unity_helper.h"
 #include "kinetic_logger.h"
 
+extern bool LogToStdOut;
+
 void setUp(void)
 {
     DELETE_FILE(TEST_LOG_FILE);
@@ -36,10 +38,17 @@ void test_KineticLogger_KINETIC_LOG_FILE_should_be_defined_properly(void)
     TEST_ASSERT_EQUAL_STRING("kinetic.log", KINETIC_LOG_FILE);
 }
 
+void test_KineticLogger_Init_should_log_to_STDOUT_by_default(void)
+{
+    KineticLogger_Init(NULL);
+    TEST_ASSERT_TRUE(LogToStdOut);
+}
+
 void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_file(void)
 {
     KineticLogger_Init(TEST_LOG_FILE);
 
+    TEST_ASSERT_FALSE(LogToStdOut);
     TEST_ASSERT_FILE_EXISTS(TEST_LOG_FILE);
 }
 

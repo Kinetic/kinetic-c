@@ -24,29 +24,33 @@
 #include <string.h>
 
 static char LogFile[256] = "";
-bool LogToStdErr = true;
+bool LogToStdOut = true;
 
 void KineticLogger_Init(const char* logFile)
 {
-    if (logFile == NULL)
-    {
-        LogToStdErr = true;
-    }
-    else
+    LogToStdOut = true;
+    if (logFile != NULL)
     {
         FILE* fd;
         strcpy(LogFile, logFile);
         fd = fopen(LogFile, "w");
-        fclose(fd);
-        LogToStdErr = false;
+        if (fd > 0)
+        {
+            fclose(fd);
+            LogToStdOut = false;
+        }
+        else
+        {
+            KineticLogger_LogPrintf("Failed to initialize logger with file: fopen('%s') => fd=%d", logFile, fd);
+        }
     }
 }
 
 void KineticLogger_Log(const char* message)
 {
-    if (LogToStdErr)
+    if (LogToStdOut)
     {
-        fprintf(stderr, "%s\n", message);
+        fprintf(stdout, "%s\n", message);
     }
     else if (LogFile != NULL)
     {
