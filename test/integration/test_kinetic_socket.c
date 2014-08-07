@@ -49,7 +49,7 @@ void setUp(void)
     pProto = NULL;
     if (!LogInitialized)
     {
-        KineticLogger_Init("test_kinetic_socket.log");
+        KineticLogger_Init(NULL);//"test_kinetic_socket.log");
         LogInitialized = true;
     }
     LOG("--------------------------------------------------------------------------------");
@@ -68,7 +68,7 @@ void tearDown(void)
     {
         LOG("Shutting down socket...");
         KineticSocket_Close(FileDesc);
-        sleep(2);
+        FileDesc = 0;
     }
 }
 
@@ -97,8 +97,8 @@ void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void
     success = KineticSocket_Write(FileDesc, TestData, strlen(TestData));
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
 
-    LOG("Flushing socket read pipe...");
-    KineticSocket_Read(FileDesc, data, sizeof(data));
+    // LOG("Flushing socket read pipe...");
+    // KineticSocket_Read(FileDesc, data, sizeof(data));
 }
 
 void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_specified_socket(void)
@@ -120,14 +120,14 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     success = KineticSocket_WriteProtobuf(FileDesc, &Msg.proto);
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");
 
-    LOG("Flushing socket read pipe...");
-    KineticSocket_Read(FileDesc, data, sizeof(data));
+    // LOG("Flushing socket read pipe...");
+    // KineticSocket_Read(FileDesc, data, sizeof(data));
 }
 
 void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
 {
     bool success = false;
-    const char* readRequest = "read(5)\0";
+    const char* readRequest = "read(5)";
     char data[5];
     LOG(__func__);
 

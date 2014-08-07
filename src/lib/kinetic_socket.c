@@ -239,17 +239,19 @@ int KineticSocket_Connect(const char* host, int port, bool blocking)
         // On BSD-like systems we can set SO_NOSIGPIPE on the socket to prevent it from sending a
         // PIPE signal and bringing down the whole application if the server closes the socket
         // forcibly
-// #ifdef SO_NOSIGPIPE
-//         int set = 1;
-//         int setsockopt_result = setsockopt(socket_fd, SOL_SOCKET, SO_NOSIGPIPE, &set, sizeof(set));
-//         // Allow ENOTSOCK because it allows tests to use pipes instead of real sockets
-//         if (setsockopt_result != 0 && setsockopt_result != ENOTSOCK)
-//         {
-//             LOG("Failed to set SO_NOSIGPIPE on socket");
-//             close(socket_fd);
-//             continue;
-//         }
-// #endif
+#if defined(SO_NOSIGPIPE) && !defined(__APPLE__)
+        {
+            int set = 1;
+            int setsockopt_result = setsockopt(socket_fd, SOL_SOCKET, SO_NOSIGPIPE, &set, sizeof(set));
+            // Allow ENOTSOCK because it allows tests to use pipes instead of real sockets
+            if (setsockopt_result != 0 && setsockopt_result != ENOTSOCK)
+            {
+                LOG("Failed to set SO_NOSIGPIPE on socket");
+                close(socket_fd);
+                continue;
+            }
+        }
+#endif
 
         if (connect(socket_fd, ai->ai_addr, ai->ai_addrlen) == -1)
         {

@@ -25,7 +25,7 @@ GEM
       net-http-pipeline
     highline (1.6.21)
     json (1.8.1)
-    kinetic-ruby (0.6.2)
+    kinetic-ruby (0.6.3)
       beefcake
       rake (>= 0.9.2.2)
       rspec

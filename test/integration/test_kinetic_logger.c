@@ -59,3 +59,7 @@ void test_KineticLogger_Log_should_write_log_message_to_file(void)
     TEST_ASSERT_EQUAL_FILE_CONTENT(TEST_LOG_FILE, content, length);
 }
 
+void test_KineticLogger_should_handle_logging_to_file(void)
+{
+    TEST_IGNORE_MESSAGE("Need fix deadlock when logging to a file!");
+}
