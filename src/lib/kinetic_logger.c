@@ -41,7 +41,7 @@ void KineticLogger_Init(const char* logFile)
         }
         else
         {
-            fprintf(stderr, "Failed to initialize logger with file: fopen('%s') => fd=%zd", logFile, fd);
+            fprintf(stderr, "Failed to initialize logger with file: fopen('%s') => fd=%zd", logFile, (size_t)fd);
             fflush(fd);
         }
     }

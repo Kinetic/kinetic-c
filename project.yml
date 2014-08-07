@@ -83,6 +83,7 @@
       - -D"$": DEFINES_TEST_PREPROCESS
       - -DGNU_COMPILER
       - -w
+      - -Wformat
       - ${1}
   :test_linker:
     :executable: gcc
