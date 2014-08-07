@@ -47,7 +47,6 @@ void setUp(void)
 {
     FileDesc = -1;
     pProto = NULL;
-    sleep(2);
     if (!LogInitialized)
     {
         KineticLogger_Init(NULL);//"test_kinetic_socket.log");
@@ -70,7 +69,6 @@ void tearDown(void)
         LOG("Shutting down socket...");
         KineticSocket_Close(FileDesc);
         FileDesc = 0;
-        sleep(2);
     }
 }
 
@@ -125,7 +123,7 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
 #if defined(__unix__) && !defined(__APPLE__)
     TEST_IGNORE_MESSAGE("Disabled on Linux until KineticRuby server client connection cleanup is fixed!");
 #endif
-    
+
     LOG("Writing a dummy protobuf...");
     success = KineticSocket_WriteProtobuf(FileDesc, &Msg.proto);
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to write to socket!");

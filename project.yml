@@ -104,6 +104,5 @@
     - "#{Ceedling.load_path}"
   :enabled:
     - stdout_ide_tests_report
-    - teamcity_tests_report
     - module_generator
 ...

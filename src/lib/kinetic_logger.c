@@ -24,53 +24,64 @@
 #include <string.h>
 
 static char LogFile[256] = "";
-bool LogToStdOut = true;
+bool LogToConsole = true;
 
 void KineticLogger_Init(const char* logFile)
 {
-    LogToStdOut = true;
+    LogToConsole = true;
     if (logFile != NULL)
     {
         FILE* fd;
         strcpy(LogFile, logFile);
         fd = fopen(LogFile, "w");
-        if (fd > 0)
+        if (fd != stdout && fd != stderr && fd != stdin)
         {
             fclose(fd);
-            LogToStdOut = false;
+            LogToConsole = false;
         }
         else
         {
-            KineticLogger_LogPrintf("Failed to initialize logger with file: fopen('%s') => fd=%d", logFile, fd);
+            fprintf(stderr, "Failed to initialize logger with file: fopen('%s') => fd=%zd", logFile, fd);
+            fflush(fd);
         }
     }
 }
 
 void KineticLogger_Log(const char* message)
 {
-    if (LogToStdOut)
+    FILE* fd = NULL;
+    if (message == NULL)
     {
-        fprintf(stdout, "%s\n", message);
+        return;
     }
-    else if (LogFile != NULL)
+
+    fd = LogToConsole ? stderr : fopen(LogFile, "a");
+    if (fd >= 0)
     {
-        FILE* fd = fopen(LogFile, "a");
         fprintf(fd, "%s\n", message);
-        fclose(fd);
+        fflush(fd);
+
+        // Don't close std/already-opened streams
+        if (LogFile != NULL && fd != stdout && fd != stderr && fd != stdin)
+        {
+            fclose(fd);
+        }
     }
 }
 
 int KineticLogger_LogPrintf(const char* format, ...)
 {
-   va_list arg_ptr;
-   char buffer[1024];
-   int result;
+    int result = -1;
 
-   va_start(arg_ptr, format);
-   result = vsprintf(buffer, format, arg_ptr);
-   va_end(arg_ptr);
-
-   KineticLogger_Log(buffer);
+    if (format != NULL)
+    {
+        va_list arg_ptr;
+        char buffer[1024];
+        va_start(arg_ptr, format);
+        result = vsprintf(buffer, format, arg_ptr);
+        KineticLogger_Log(buffer);
+        va_end(arg_ptr);
+    }
 
    return(result);
 }
