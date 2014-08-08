@@ -154,6 +154,7 @@ namespace :java_sim do
       Process.kill("INT", $java_sim)
       Process.wait($java_sim)
       $java_sim = nil
+      sleep 0.5
     end
   end
 
@@ -283,4 +284,6 @@ task :ci => [
 END {
   # Ensure java simlator is shutdown prior to rake exiting
   java_sim_shutdown
+  $stdout.flush
+  $stderr.flush
 }
