@@ -87,8 +87,8 @@
       - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
       - -D"$": DEFINES_TEST_PREPROCESS
       - -DGNU_COMPILER
-      - -std=c99
-      - -Wall
+      # - -std=c99
+      # - -Wall
       - ${1}
   :test_linker:
     :executable: gcc
@@ -112,8 +112,8 @@
       - -I"$": 'COLLECTION_PATHS_RELEASE_TOOLCHAIN_INCLUDE'
       - -D"$": 'COLLECTION_DEFINES_RELEASE_AND_VENDOR'
       - -DGNU_COMPILER
-      - -std=c99
-      - -Wall
+      # - -std=c99
+      # - -Wall
       - "-c \"${1}\""
       - "-o \"${2}\""
   :release_linker:

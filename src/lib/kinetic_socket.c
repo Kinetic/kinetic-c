@@ -39,137 +39,7 @@
     #define _BSD_SOURCE
 #endif // _BSD_SOURCE
 #include <unistd.h>
-
-int KineticSocket_GetSocketError(int fd)
-{
-    int err = 1;
-    socklen_t len = sizeof err;
-    
-    if (getsockopt(fd, SOL_SOCKET, SO_ERROR, (char *)&err, &len) == -1)
-    {
-        LOG("Failed to get socket options!");
-    }
-
-    if (err)
-    {
-        errno = err; // set errno to the socket SO_ERROR
-    }
-
-    return err;
-}
-
-bool KineticSocket_HaveInput(int fd, double timeout)
-{
-    int status;
-    fd_set fds;
-    struct timeval tv;
-    FD_ZERO(&fds);
-    FD_SET(fd, &fds);
-    tv.tv_sec  = (long)timeout; // cast needed for C++
-    tv.tv_usec = (long)((timeout - tv.tv_sec) * 1000000); // 'suseconds_t'
-
-    while (1)
-    {
-        if (!(status = select(fd + 1, &fds, 0, 0, &tv)))
-        {
-            return false;
-        }
-        else if (status > 0 && FD_ISSET(fd, &fds))
-        {
-            return true;
-        }
-        else if (status > 0)
-        {
-            LOG("I am confused!!!");
-        }
-        else if (errno != EINTR)
-        {
-            LOG("Failed select upon flush!"); // tbd EBADF: man page "an error has occurred"
-        }
-    }
-}
-
-bool KineticSocket_FlushSocketBeforeClose(int fd/*, double timeout*/)
-{
-    // const double start = getWallTimeEpoch();
-    char discard[99];
-    int i, iterations = 5;
-
-    assert(SHUT_WR == 1);
-
-    if (shutdown(fd, 1) != -1)
-    {
-        for (i = 0; i < iterations; i++)
-        {
-            while (KineticSocket_HaveInput(fd, 0.01)) // can block for 0.01 secs
-            {
-                if (!read(fd, discard, sizeof discard))
-                {
-                    return true; // success!
-                }
-            }
-        }
-    }
-
-   return false;
-}
-
-bool KineticSocket_CloseSocket(int fd)
-{
-    if (fd >= 0)
-    {
-        char msg[64];
-        int err;
-
-        LOG("KineticSocket_CloseSocket");
-
-        if (!KineticSocket_FlushSocketBeforeClose(fd))
-        {
-            LOG("Failed to gracefully close socket!");
-        }
-        else
-        {
-            LOG("Socket flushed successfully");
-        }
-        
-        err = KineticSocket_GetSocketError(fd); // first clear any errors, which can cause close to fail
-        if (err)
-        {
-            sprintf(msg, "Socket error had occurred: err=%d", err);
-            LOG(msg);
-        }
-        else
-        {
-            LOG("Socket errors cleared successfully!");
-        }
-        
-        if (shutdown(fd, SHUT_RDWR) < 0) // secondly, terminate the 'reliable' delivery
-        {
-            if (errno != ENOTCONN && errno != EINVAL) // SGI causes EINVAL
-            {
-                sprintf(msg, "Socket error occurred! errno=%d", errno);
-                return false;
-            }
-
-            if (close(fd) < 0) // finally call close()
-            {
-                LOG("Failed closing socket!");
-                return false;
-            }
-            else
-            {
-                LOG("Succeeded closing socket");
-            }
-        }
-        else
-        {
-            LOG("Call to shutdown socket failed!");
-            return false;
-        }
-    }
-
-    return true;
-}
+#include <sys/types.h>
 
 int KineticSocket_Connect(char* host, int port, bool blocking)
 {
@@ -265,7 +135,6 @@ void KineticSocket_Close(int socketDescriptor)
     {
         sprintf(message, "Closing socket with fd=%d", socketDescriptor);
         LOG(message);
-        // if (KineticSocket_CloseSocket(socketDescriptor))
         if (close(socketDescriptor))
         {
             LOG("Socket closed successfully");

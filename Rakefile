@@ -165,8 +165,13 @@ namespace :java_sim do
     # Ensure stray simulators are not still running
     `ps -ef | grep kinetic-simulator`.each_line do |l|
       next if l =~ /grep kinetic-simulator/
-      pid = l.match /^\w*\d+\w+(\d+)/
-      sh "kill -9 pid[1]" if pid
+      pid = l.match /^\s*\d+\s+(\d+)/
+      if pid
+        sh "kill -9 #{pid[1]}"
+        report "Killed Java simulator with PID: #{pid[1]}"
+      else
+        report "Did not find any running Java Kinetic simulators"
+      end
     end
   end
 
@@ -229,7 +234,7 @@ end
 
 desc "Run client test utility"
 task :run do
-  execute_command "./build/release/kinetic-c-client", "Running client test utility"
+  execute_command "./build/artifacts/release/kinetic-c", "Running client test utility"
 end
 
 desc "Prepend license to source files"

@@ -57,6 +57,7 @@
     #define _BSD_SOURCE
 #endif // _BSD_SOURCE
 #include <unistd.h>
+#include <sys/types.h>
 #ifndef HOST_NAME_MAX
     #define HOST_NAME_MAX 256
 #endif // HOST_NAME_MAX
