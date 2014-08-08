@@ -67,6 +67,30 @@ Examples
 
 The following examples are provided for development reference and as utilities to aid development
 
+In order to execute a given example, execute `kinetic-c` with a given example name and optional arguments (below)
+
+
+First, `cd` into the `build/release` folder, and then execute the desired command.
+If no command is specified, kinetic-c will execute all of the example commands.
+
+
+**e.g.** - Execute the NoOp operation against default host: `localhost`:
+
+```
+cd build/release
+kinetic-c noop
+```
+
+**e.g.** - Execute the NoOp operation against `my-kinetic-server.com`:
+
+```
+cd build/release
+kinetic-c noop --host my-kinetic-server.com
+```
+
+
+`noop [--hostname|-h "some_host.com"|123.253.253.23]`
+
 `read_file_blocking` (incomplete!)
 
 `read_file_nonblocking` (incomplete!)

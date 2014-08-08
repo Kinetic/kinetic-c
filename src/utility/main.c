@@ -32,35 +32,71 @@ int main(int argc, char** argv)
     const int64_t clusterVersion = 0;
     const int64_t identity = 1;
     const char* key = "asdfasdf";
+    bool doNoOp = false;
+    bool argumentError = true;
 
     // Parse command line arguments, if supplied
-    if (argc >= 3)
+    if (argc == 1)
     {
-        // Simple parser for --host <ip/hostname> for now
-        if ((strcmp("--host", argv[1]) == 0) ||
-            (strcmp("--host", argv[1]) == 0))
+        doNoOp = true;
+        argumentError = false;
+    }
+    else if (argc == 2)
+    {
+        if (strcmp("noop", argv[1]) == 0)
+        {
+            doNoOp = true;
+            argumentError = false;
+        }
+    }
+    else if (argc == 3)
+    {
+        if ((strcmp("--host", argv[1]) == 0) || (strcmp("-h", argv[1]) == 0))
         {
             strcpy(host, argv[2]);
+            doNoOp = true;
+            argumentError = false;
+        }
+    }
+    else if (argc > 3)
+    {
+        // Simple parser for --host <ip/hostname> for now
+        if ((strcmp("noop", argv[1]) == 0) &&
+            ((strcmp("--host", argv[2]) == 0) || (strcmp("-h", argv[2]) == 0)))
+        {
+            strcpy(host, argv[3]);
+            doNoOp = true;
+            argumentError = false;
         }
     }
 
-    printf("\n"
-           "Executing NoOp w/configuration:\n"
-           "-------------------------------\n"
-           "  host: %s\n"
-           "  port: %d\n"
-           "  clusterVersion: %lld\n"
-           "  identity: %lld\n"
-           "  key: '%s'\n", 
-        host, port, (long long int)clusterVersion, (long long int)identity, key);
-    status = NoOp(host, port, clusterVersion, identity, key);
-    if (status == 0)
+    // Abort unless arguments were invalid!
+    if (argumentError)
     {
-        printf("\nNoOp executed successfully!\n\n");
+        printf("\nInvalid arguments specified!\n");
+        return -1;
     }
-    else
+
+    if (doNoOp)
     {
-        printf("\nNoOp operation failed! status=%d\n\n", status);
+        printf("\n"
+               "Executing NoOp w/configuration:\n"
+               "-------------------------------\n"
+               "  host: %s\n"
+               "  port: %d\n"
+               "  clusterVersion: %lld\n"
+               "  identity: %lld\n"
+               "  key: '%s'\n", 
+            host, port, (long long int)clusterVersion, (long long int)identity, key);
+        status = NoOp(host, port, clusterVersion, identity, key);
+        if (status == 0)
+        {
+            printf("\nNoOp executed successfully!\n\n");
+        }
+        else
+        {
+            printf("\nNoOp operation failed! status=%d\n\n", status);
+        }
     }
     
     return status;
