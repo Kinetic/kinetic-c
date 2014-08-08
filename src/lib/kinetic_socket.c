@@ -243,8 +243,7 @@ int KineticSocket_Connect(char* host, int port, bool blocking)
     if (ai == NULL)
     {
         // we went through all addresses without finding one we could bind to
-        sprintf(message, "Could not connect to %s:%d", host, port);
-        LOG(message);
+        LOGF("Could not connect to %s:%d", host, port);
         return -1;
     }
 
