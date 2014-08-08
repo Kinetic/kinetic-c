@@ -105,7 +105,7 @@ namespace :doxygen do
     File.open(doxyfile, 'w').puts content
 
     # Generate the Doxygen API docs
-    report_banner "Generating Doxygen API Docs (kinetic-c v#{VERSION}"
+    report_banner "Generating Doxygen API Docs (kinetic-c v#{VERSION})"
     execute_command "doxygen #{doxyfile}"
   end
 
