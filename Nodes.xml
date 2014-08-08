@@ -4553,26 +4553,6 @@
             <Path>kinetic__socket_8c.html</Path>
             <Subnodes>
              <Node>
-              <Name>KineticSocket_GetSocketError</Name>
-              <Path>kinetic__socket_8c.html</Path>
-              <Anchor>a6c67edbf3478e7bcafd8f6ee0e3604d0</Anchor>
-             </Node>
-             <Node>
-              <Name>KineticSocket_HaveInput</Name>
-              <Path>kinetic__socket_8c.html</Path>
-              <Anchor>a8332134238469ffdb81ff4da40364cf5</Anchor>
-             </Node>
-             <Node>
-              <Name>KineticSocket_FlushSocketBeforeClose</Name>
-              <Path>kinetic__socket_8c.html</Path>
-              <Anchor>a05bada384ff9ec8591be85193da9d049</Anchor>
-             </Node>
-             <Node>
-              <Name>KineticSocket_CloseSocket</Name>
-              <Path>kinetic__socket_8c.html</Path>
-              <Anchor>a0b1f99e243f8dd5f8e72c6b4318a1bdf</Anchor>
-             </Node>
-             <Node>
               <Name>KineticSocket_Connect</Name>
               <Path>kinetic__socket_8c.html</Path>
               <Anchor>a153be47ff8a2e21b5e55c15eba510dfe</Anchor>
@@ -4873,6 +4853,11 @@
               <Name>__func__</Name>
               <Path>kinetic__types_8h.html</Path>
               <Anchor>a7d6e1cf1a8d53f38471e9e9db3faf740</Anchor>
+             </Node>
+             <Node>
+              <Name>_BSD_SOURCE</Name>
+              <Path>kinetic__types_8h.html</Path>
+              <Anchor>ad3d8a3bd0c0b677acef144f2c2ef6d73</Anchor>
              </Node>
              <Node>
               <Name>HOST_NAME_MAX</Name>

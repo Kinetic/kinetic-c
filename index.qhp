@@ -5,7 +5,7 @@
   <filterSection>
     <filterAttribute>doxygen</filterAttribute>
     <toc>
-      <section title="protobuf-c v0.4.2" ref="index.html">
+      <section title="protobuf-c v0.4.3" ref="index.html">
         <section title="Data Structures">
           <section title="Data Structures" ref="annotated.html">
             <section title="_KineticProto" ref="struct___kinetic_proto.html">
@@ -988,10 +988,6 @@
               <section title="KineticProto_message_type_descriptor" ref="kinetic__proto_8h.html#adeb076a05cae7e63c37289f89e6c78eb" />
             </section>
             <section title="kinetic_socket.c" ref="kinetic__socket_8c.html">
-              <section title="KineticSocket_GetSocketError" ref="kinetic__socket_8c.html#a6c67edbf3478e7bcafd8f6ee0e3604d0" />
-              <section title="KineticSocket_HaveInput" ref="kinetic__socket_8c.html#a8332134238469ffdb81ff4da40364cf5" />
-              <section title="KineticSocket_FlushSocketBeforeClose" ref="kinetic__socket_8c.html#a05bada384ff9ec8591be85193da9d049" />
-              <section title="KineticSocket_CloseSocket" ref="kinetic__socket_8c.html#a0b1f99e243f8dd5f8e72c6b4318a1bdf" />
               <section title="KineticSocket_Connect" ref="kinetic__socket_8c.html#a153be47ff8a2e21b5e55c15eba510dfe" />
               <section title="KineticSocket_Close" ref="kinetic__socket_8c.html#a7cc4074d34235650f7975f6b7765948e" />
               <section title="KineticSocket_Read" ref="kinetic__socket_8c.html#aded36525a210d1e0eae8cdb820997e62" />
@@ -1058,6 +1054,7 @@
               <section title="KINETIC_HMAC_MAX_LEN" ref="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da" />
               <section title="KINETIC_MAX_KEY_LEN" ref="kinetic__types_8h.html#a7f225a5911212081b2f7c8d9c4b81c90" />
               <section title="__func__" ref="kinetic__types_8h.html#a7d6e1cf1a8d53f38471e9e9db3faf740" />
+              <section title="_BSD_SOURCE" ref="kinetic__types_8h.html#ad3d8a3bd0c0b677acef144f2c2ef6d73" />
               <section title="HOST_NAME_MAX" ref="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75" />
               <section title="KINETIC_CONNECTION_INIT" ref="kinetic__types_8h.html#a86d1cc89037e1edabea474dbeff715ef" />
               <section title="KINETIC_MESSAGE_INIT" ref="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f" />
@@ -1407,10 +1404,6 @@
       <keyword name="KINETIC_PROTO_MESSAGE_TYPE_NOOP_RESPONSE" id="kinetic_proto.h::KINETIC_PROTO_MESSAGE_TYPE_NOOP_RESPONSE" ref="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4eaaf8f999fc7e899307facf28428e660fe" />
       <keyword name="KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA" id="kinetic_proto.h::KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA" ref="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea9f619677466d7056bbe75532d7d90298" />
       <keyword name="KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE" id="kinetic_proto.h::KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE" ref="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea4a41080d0505e452aadfa9adf15b3ced" />
-      <keyword name="KineticSocket_GetSocketError" id="kinetic_socket.c::KineticSocket_GetSocketError" ref="kinetic__socket_8c.html#a6c67edbf3478e7bcafd8f6ee0e3604d0" />
-      <keyword name="KineticSocket_HaveInput" id="kinetic_socket.c::KineticSocket_HaveInput" ref="kinetic__socket_8c.html#a8332134238469ffdb81ff4da40364cf5" />
-      <keyword name="KineticSocket_FlushSocketBeforeClose" id="kinetic_socket.c::KineticSocket_FlushSocketBeforeClose" ref="kinetic__socket_8c.html#a05bada384ff9ec8591be85193da9d049" />
-      <keyword name="KineticSocket_CloseSocket" id="kinetic_socket.c::KineticSocket_CloseSocket" ref="kinetic__socket_8c.html#a0b1f99e243f8dd5f8e72c6b4318a1bdf" />
       <keyword name="KineticSocket_Connect" id="kinetic_socket.c::KineticSocket_Connect" ref="kinetic__socket_8c.html#a153be47ff8a2e21b5e55c15eba510dfe" />
       <keyword name="KineticSocket_Close" id="kinetic_socket.c::KineticSocket_Close" ref="kinetic__socket_8c.html#a7cc4074d34235650f7975f6b7765948e" />
       <keyword name="KineticSocket_Read" id="kinetic_socket.c::KineticSocket_Read" ref="kinetic__socket_8c.html#aded36525a210d1e0eae8cdb820997e62" />
@@ -1428,6 +1421,7 @@
       <keyword name="KINETIC_HMAC_MAX_LEN" id="kinetic_types.h::KINETIC_HMAC_MAX_LEN" ref="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da" />
       <keyword name="KINETIC_MAX_KEY_LEN" id="kinetic_types.h::KINETIC_MAX_KEY_LEN" ref="kinetic__types_8h.html#a7f225a5911212081b2f7c8d9c4b81c90" />
       <keyword name="__func__" id="kinetic_types.h::__func__" ref="kinetic__types_8h.html#a7d6e1cf1a8d53f38471e9e9db3faf740" />
+      <keyword name="_BSD_SOURCE" id="kinetic_types.h::_BSD_SOURCE" ref="kinetic__types_8h.html#ad3d8a3bd0c0b677acef144f2c2ef6d73" />
       <keyword name="HOST_NAME_MAX" id="kinetic_types.h::HOST_NAME_MAX" ref="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75" />
       <keyword name="KINETIC_CONNECTION_INIT" id="kinetic_types.h::KINETIC_CONNECTION_INIT" ref="kinetic__types_8h.html#a86d1cc89037e1edabea474dbeff715ef" />
       <keyword name="KINETIC_MESSAGE_INIT" id="kinetic_types.h::KINETIC_MESSAGE_INIT" ref="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f" />
@@ -1907,11 +1901,6 @@
       <file>kinetic__proto_8h_a0623fe40025b387b445cff513988f8fe_icgraph.png</file>
       <file>kinetic__socket_8c.html</file>
       <file>kinetic__socket_8c__incl.png</file>
-      <file>kinetic__socket_8c_a6c67edbf3478e7bcafd8f6ee0e3604d0_icgraph.png</file>
-      <file>kinetic__socket_8c_a8332134238469ffdb81ff4da40364cf5_icgraph.png</file>
-      <file>kinetic__socket_8c_a05bada384ff9ec8591be85193da9d049_cgraph.png</file>
-      <file>kinetic__socket_8c_a05bada384ff9ec8591be85193da9d049_icgraph.png</file>
-      <file>kinetic__socket_8c_a0b1f99e243f8dd5f8e72c6b4318a1bdf_cgraph.png</file>
       <file>kinetic__socket_8c_a153be47ff8a2e21b5e55c15eba510dfe_icgraph.png</file>
       <file>kinetic__socket_8c_aded36525a210d1e0eae8cdb820997e62_icgraph.png</file>
       <file>kinetic__socket_8c_aac07ac642119c019651884f4e877c5a5_cgraph.png</file>

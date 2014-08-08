@@ -981,10 +981,6 @@
         <topic label="KineticProto_message_type_descriptor" href="kinetic__proto_8h.html#adeb076a05cae7e63c37289f89e6c78eb"/>
       </topic>
       <topic label="kinetic_socket.c" href="kinetic__socket_8c.html">
-        <topic label="KineticSocket_GetSocketError" href="kinetic__socket_8c.html#a6c67edbf3478e7bcafd8f6ee0e3604d0"/>
-        <topic label="KineticSocket_HaveInput" href="kinetic__socket_8c.html#a8332134238469ffdb81ff4da40364cf5"/>
-        <topic label="KineticSocket_FlushSocketBeforeClose" href="kinetic__socket_8c.html#a05bada384ff9ec8591be85193da9d049"/>
-        <topic label="KineticSocket_CloseSocket" href="kinetic__socket_8c.html#a0b1f99e243f8dd5f8e72c6b4318a1bdf"/>
         <topic label="KineticSocket_Connect" href="kinetic__socket_8c.html#a153be47ff8a2e21b5e55c15eba510dfe"/>
         <topic label="KineticSocket_Close" href="kinetic__socket_8c.html#a7cc4074d34235650f7975f6b7765948e"/>
         <topic label="KineticSocket_Read" href="kinetic__socket_8c.html#aded36525a210d1e0eae8cdb820997e62"/>
@@ -1051,6 +1047,7 @@
         <topic label="KINETIC_HMAC_MAX_LEN" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da"/>
         <topic label="KINETIC_MAX_KEY_LEN" href="kinetic__types_8h.html#a7f225a5911212081b2f7c8d9c4b81c90"/>
         <topic label="__func__" href="kinetic__types_8h.html#a7d6e1cf1a8d53f38471e9e9db3faf740"/>
+        <topic label="_BSD_SOURCE" href="kinetic__types_8h.html#ad3d8a3bd0c0b677acef144f2c2ef6d73"/>
         <topic label="HOST_NAME_MAX" href="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75"/>
         <topic label="KINETIC_CONNECTION_INIT" href="kinetic__types_8h.html#a86d1cc89037e1edabea474dbeff715ef"/>
         <topic label="KINETIC_MESSAGE_INIT" href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f"/>

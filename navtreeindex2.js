@@ -1,8 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"struct___kinetic_proto___get_log___configuration.html#a097fb86a5e7ca424d46860ac10fa1a0e":[0,0,11,12],
-"struct___kinetic_proto___get_log___configuration.html#a168827737bf01d31f22f80a8f20c5b6c":[0,0,11,3],
-"struct___kinetic_proto___get_log___configuration.html#a19889d9c89ea1b2b5a17c0708c6e866c":[0,0,11,9],
 "struct___kinetic_proto___get_log___configuration.html#a2ff081ad32a6e67859468155156f4039":[0,0,11,0],
 "struct___kinetic_proto___get_log___configuration.html#a341c931ab7ee91a0cb0f46e068834907":[0,0,11,15],
 "struct___kinetic_proto___get_log___configuration.html#a345c15be057bf4f596f21c47074e2a9e":[0,0,11,5],

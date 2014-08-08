@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.4.2</span>
+   &#160;<span id="projectnumber">v0.4.3</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -72,13 +72,15 @@ $(document).ready(function(){initNavTree('kinetic__types_8h.html','');});
 <code>#include &lt;netinet/in.h&gt;</code><br />
 <code>#include &lt;ifaddrs.h&gt;</code><br />
 <code>#include &lt;openssl/sha.h&gt;</code><br />
+<code>#include &lt;unistd.h&gt;</code><br />
+<code>#include &lt;sys/types.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__proto_8h_source.html">kinetic_proto.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for kinetic_types.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="kinetic__types_8h__incl.png" border="0" usemap="#kinetic__types_8h" alt=""/></div>
 <map name="kinetic__types_8h" id="kinetic__types_8h">
-<area shape="rect" id="node13" href="kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1381,86,1533,117"/></map>
+<area shape="rect" id="node15" href="kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1639,86,1792,117"/></map>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -115,6 +117,8 @@ Macros</h2></td></tr>
 <tr class="separator:a7f225a5911212081b2f7c8d9c4b81c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d6e1cf1a8d53f38471e9e9db3faf740"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a7d6e1cf1a8d53f38471e9e9db3faf740">__func__</a>&#160;&#160;&#160;&quot;&lt;unknown&gt;&quot;</td></tr>
 <tr class="separator:a7d6e1cf1a8d53f38471e9e9db3faf740"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3d8a3bd0c0b677acef144f2c2ef6d73"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ad3d8a3bd0c0b677acef144f2c2ef6d73">_BSD_SOURCE</a></td></tr>
+<tr class="separator:ad3d8a3bd0c0b677acef144f2c2ef6d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac956117a90023ec0971b8f9fce9dec75"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75">HOST_NAME_MAX</a>&#160;&#160;&#160;256</td></tr>
 <tr class="separator:ac956117a90023ec0971b8f9fce9dec75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86d1cc89037e1edabea474dbeff715ef"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a86d1cc89037e1edabea474dbeff715ef">KINETIC_CONNECTION_INIT</a>(connection)</td></tr>
@@ -213,6 +217,20 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad3d8a3bd0c0b677acef144f2c2ef6d73"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define _BSD_SOURCE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00057">57</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ac956117a90023ec0971b8f9fce9dec75"></a>
 <div class="memitem">
 <div class="memproto">
@@ -223,7 +241,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00076">76</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00062">62</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -245,9 +263,9 @@ Variables</h2></td></tr>
 <div class="line">    (connection)-&gt;blocking = <span class="keyword">true</span>; \</div>
 <div class="line">    (connection)-&gt;socketDescriptor = -1; \</div>
 <div class="line">}</div>
-<div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00093">kinetic_types.h:93</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00074">kinetic_types.h:74</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00102">102</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00083">83</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -286,7 +304,7 @@ Variables</h2></td></tr>
 <div class="ttc" id="kinetic__proto_8c_html_abb627d71e73b93865460ff4370a3ea76"><div class="ttname"><a href="kinetic__proto_8c.html#abb627d71e73b93865460ff4370a3ea76">KineticProto_body_init</a></div><div class="ttdeci">void KineticProto_body_init(KineticProto_Body *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00047">kinetic_proto.c:47</a></div></div>
 <div class="ttc" id="kinetic__proto_8c_html_a8175b2f96741b397533df6eec5fe3271"><div class="ttname"><a href="kinetic__proto_8c.html#a8175b2f96741b397533df6eec5fe3271">KineticProto_header_init</a></div><div class="ttdeci">void KineticProto_header_init(KineticProto_Header *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00041">kinetic_proto.c:41</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00121">121</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00102">102</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -344,9 +362,9 @@ Variables</h2></td></tr>
 <div class="line">    (exchg)-&gt;connection = con; \</div>
 <div class="line">    (exchg)-&gt;sequence = -1; \</div>
 <div class="line">}</div>
-<div class="ttc" id="struct_kinetic_exchange_html"><div class="ttname"><a href="struct_kinetic_exchange.html">KineticExchange</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00138">kinetic_types.h:138</a></div></div>
+<div class="ttc" id="struct_kinetic_exchange_html"><div class="ttname"><a href="struct_kinetic_exchange.html">KineticExchange</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00119">kinetic_types.h:119</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00179">179</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00160">160</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -360,7 +378,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00196">196</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00177">177</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -374,7 +392,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00197">197</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00178">178</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -388,7 +406,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00198">198</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00179">179</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -402,7 +420,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00199">199</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00180">180</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -421,7 +439,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00201">201</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00182">182</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -436,7 +454,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00206">206</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00187">187</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Fri Aug 8 2014" "Version v0.4.2" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Fri Aug 8 2014" "Version v0.4.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,6 +27,10 @@ kinetic_types.h \-
 \fC#include <ifaddrs\&.h>\fP
 .br
 \fC#include <openssl/sha\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
 .br
 \fC#include 'kinetic_proto\&.h'\fP
 .br
@@ -67,6 +71,9 @@ kinetic_types.h \-
 .br
 .ti -1c
 .RI "#define \fB__func__\fP   '<unknown>'"
+.br
+.ti -1c
+.RI "#define \fB_BSD_SOURCE\fP"
 .br
 .ti -1c
 .RI "#define \fBHOST_NAME_MAX\fP   256"
@@ -129,10 +136,14 @@ Definition at line 43 of file kinetic_types\&.h\&.
 
 .PP
 Definition at line 50 of file kinetic_types\&.h\&.
+.SS "#define _BSD_SOURCE"
+
+.PP
+Definition at line 57 of file kinetic_types\&.h\&.
 .SS "#define HOST_NAME_MAX   256"
 
 .PP
-Definition at line 76 of file kinetic_types\&.h\&.
+Definition at line 62 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_CONNECTION_INIT(connection)"
 \fBValue:\fP
 .PP
@@ -144,7 +155,7 @@ Definition at line 76 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 102 of file kinetic_types\&.h\&.
+Definition at line 83 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_MESSAGE_INIT(msg)"
 \fBValue:\fP
 .PP
@@ -166,7 +177,7 @@ Definition at line 102 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 121 of file kinetic_types\&.h\&.
+Definition at line 102 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, con)"
 \fBValue:\fP
 .PP
@@ -186,35 +197,35 @@ Definition at line 121 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 179 of file kinetic_types\&.h\&.
+Definition at line 160 of file kinetic_types\&.h\&.
 .SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int32_t)))"
 
 .PP
-Definition at line 196 of file kinetic_types\&.h\&.
+Definition at line 177 of file kinetic_types\&.h\&.
 .SS "#define PDU_PROTO_MAX_LEN   (1024 * 1024)"
 
 .PP
-Definition at line 197 of file kinetic_types\&.h\&.
+Definition at line 178 of file kinetic_types\&.h\&.
 .SS "#define PDU_VALUE_MAX_LEN   (1024 * 1024)"
 
 .PP
-Definition at line 198 of file kinetic_types\&.h\&.
+Definition at line 179 of file kinetic_types\&.h\&.
 .SS "#define PDU_MAX_LEN   (\fBPDU_HEADER_LEN\fP + \fBPDU_PROTO_MAX_LEN\fP + \fBPDU_VALUE_MAX_LEN\fP)"
 
 .PP
-Definition at line 199 of file kinetic_types\&.h\&.
+Definition at line 180 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "struct __attribute__ ((__packed__))"
 
 .PP
-Definition at line 201 of file kinetic_types\&.h\&.
+Definition at line 182 of file kinetic_types\&.h\&.
 .SH "Variable Documentation"
 .PP 
 .SS "KineticPDUHeader"
 
 .PP
-Definition at line 206 of file kinetic_types\&.h\&.
+Definition at line 187 of file kinetic_types\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.
