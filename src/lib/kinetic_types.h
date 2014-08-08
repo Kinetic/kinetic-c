@@ -51,7 +51,9 @@
     #endif
 #endif
 
+#ifndef HOST_NAME_MAX
 #define HOST_NAME_MAX 256
+#endif // HOST_NAME_MAX
 
 #include "kinetic_proto.h"
 
