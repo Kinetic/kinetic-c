@@ -1,0 +1,5 @@
+<map id="KineticSocket_CloseSocket" name="KineticSocket_CloseSocket">
+<area shape="rect" id="node2" href="$kinetic__socket_8c.html#a05bada384ff9ec8591be85193da9d049" title="KineticSocket_FlushSocket\lBeforeClose" alt="" coords="310,5,551,54"/>
+<area shape="rect" id="node4" href="$kinetic__socket_8c.html#a6c67edbf3478e7bcafd8f6ee0e3604d0" title="KineticSocket_GetSocketError" alt="" coords="297,78,564,109"/>
+<area shape="rect" id="node3" href="$kinetic__socket_8c.html#a8332134238469ffdb81ff4da40364cf5" title="KineticSocket_HaveInput" alt="" coords="614,14,837,45"/>
+</map>

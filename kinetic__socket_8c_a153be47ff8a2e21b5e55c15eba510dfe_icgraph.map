@@ -1,0 +1,6 @@
+<map id="KineticSocket_Connect" name="KineticSocket_Connect">
+<area shape="rect" id="node2" href="$kinetic__connection_8h.html#a067e3a232197b9d572244d40607ab24f" title="KineticConnection_Connect" alt="" coords="262,5,503,35"/>
+<area shape="rect" id="node3" href="$kinetic__api_8h.html#a8d9dd4011a9a09eae17c0d317d3f4225" title="Establishes a Kinetic protocol socket connection to a host. " alt="" coords="553,5,733,35"/>
+<area shape="rect" id="node4" href="$noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="781,5,838,35"/>
+<area shape="rect" id="node5" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="885,5,942,35"/>
+</map>

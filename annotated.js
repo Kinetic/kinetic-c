@@ -7,7 +7,6 @@ var annotated =
     [ "KineticMessage", "struct_kinetic_message.html", "struct_kinetic_message" ],
     [ "KineticOperation", "struct_kinetic_operation.html", "struct_kinetic_operation" ],
     [ "KineticPDU", "struct_kinetic_p_d_u.html", "struct_kinetic_p_d_u" ],
-    [ "KineticPDUHeader", "struct_kinetic_p_d_u_header.html", "struct_kinetic_p_d_u_header" ],
     [ "KineticProto_Body", "struct___kinetic_proto___body.html", "struct___kinetic_proto___body" ],
     [ "KineticProto_Command", "struct___kinetic_proto___command.html", "struct___kinetic_proto___command" ],
     [ "KineticProto_GetLog", "struct___kinetic_proto___get_log.html", "struct___kinetic_proto___get_log" ],

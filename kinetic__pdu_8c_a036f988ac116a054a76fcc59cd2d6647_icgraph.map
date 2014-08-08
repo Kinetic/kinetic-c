@@ -1,0 +1,5 @@
+<map id="KineticPDU_Init" name="KineticPDU_Init">
+<area shape="rect" id="node2" href="$kinetic__api_8h.html#a67b761a422cb1fa75f30e62708a00117" title="Creates and initializes a Kinetic operation. " alt="" coords="208,5,458,35"/>
+<area shape="rect" id="node3" href="$noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="506,5,563,35"/>
+<area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="610,5,667,35"/>
+</map>

@@ -1,4 +1,4 @@
-.TH "kinetic_socket.c" 3 "Thu Aug 7 2014" "Version v0.4.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_socket.c" 3 "Fri Aug 8 2014" "Version v0.4.2" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -118,19 +118,19 @@ References LOG\&.
 .SS "bool KineticSocket_ReadProtobuf (intsocketDescriptor, \fBKineticProto\fP **message, void *buffer, size_tlength)"
 
 .PP
-Definition at line 332 of file kinetic_socket\&.c\&.
+Definition at line 331 of file kinetic_socket\&.c\&.
 .PP
 References KineticProto_unpack(), KineticSocket_Read(), and LOG\&.
 .SS "bool KineticSocket_Write (intsocketDescriptor, const void *buffer, size_tlength)"
 
 .PP
-Definition at line 368 of file kinetic_socket\&.c\&.
+Definition at line 367 of file kinetic_socket\&.c\&.
 .PP
 References LOG\&.
 .SS "bool KineticSocket_WriteProtobuf (intsocketDescriptor, const \fBKineticProto\fP *proto)"
 
 .PP
-Definition at line 405 of file kinetic_socket\&.c\&.
+Definition at line 403 of file kinetic_socket\&.c\&.
 .PP
 References KineticProto_get_packed_size(), KineticProto_pack(), KineticSocket_Write(), and LOG\&.
 .SH "Author"

@@ -1,0 +1,5 @@
+<map id="KineticExchange_SetClusterVersion" name="KineticExchange_SetClusterVersion">
+<area shape="rect" id="node2" href="$kinetic__api_8h.html#a7e039cf7d74c333802b2a1cd876cfc2c" title="Initializes and configures a Kinetic exchange. " alt="" coords="305,14,572,45"/>
+<area shape="rect" id="node3" href="$noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="621,14,678,45"/>
+<area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="725,14,782,45"/>
+</map>

@@ -1,4 +1,4 @@
-.TH "kinetic_exchange.h" 3 "Thu Aug 7 2014" "Version v0.4.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_exchange.h" 3 "Fri Aug 8 2014" "Version v0.4.2" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,20 +13,6 @@ kinetic_exchange.h \-
 \fC#include 'kinetic_connection\&.h'\fP
 .br
 
-.SS "Data Structures"
-
-.in +1c
-.ti -1c
-.RI "struct \fBKineticExchange\fP"
-.br
-.in -1c
-.SS "Macros"
-
-.in +1c
-.ti -1c
-.RI "#define \fBKINETIC_EXCHANGE_INIT\fP(exchg, id, k, klen, con)"
-.br
-.in -1c
 .SS "Functions"
 
 .in +1c
@@ -46,28 +32,6 @@ kinetic_exchange.h \-
 .RI "void \fBKineticExchange_ConfigureHeader\fP (const \fBKineticExchange\fP *const exchange, KineticProto_Header *const header)"
 .br
 .in -1c
-.SH "Macro Definition Documentation"
-.PP 
-.SS "#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, con)"
-\fBValue:\fP
-.PP
-.nf
-{ \
-    memset((exchg), 0, sizeof(KineticExchange)); \
-    (exchg)->identity = id; \
-    if (k != NULL && klen > 0) \
-    { \
-        memcpy((exchg)->key, k, klen); \
-        (exchg)->key[klen] = '\0'; \
-        (exchg)->keyLength = klen; \
-        (exchg)->has_key = true; \
-    } \
-    (exchg)->connection = con; \
-    (exchg)->sequence = -1; \
-}
-.fi
-.PP
-Definition at line 69 of file kinetic_exchange\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "void KineticExchange_Init (\fBKineticExchange\fP *constexchange, int64_tidentity, const char *key, size_tkeyLength, \fBKineticConnection\fP *constconnection)"

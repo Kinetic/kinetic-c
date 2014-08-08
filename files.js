@@ -22,5 +22,7 @@ var files =
     [ "kinetic_socket.c", "kinetic__socket_8c.html", "kinetic__socket_8c" ],
     [ "kinetic_socket.h", "kinetic__socket_8h.html", "kinetic__socket_8h" ],
     [ "kinetic_types.h", "kinetic__types_8h.html", "kinetic__types_8h" ],
-    [ "main.c", "main_8c.html", "main_8c" ]
+    [ "main.c", "main_8c.html", "main_8c" ],
+    [ "noop.c", "noop_8c.html", "noop_8c" ],
+    [ "noop.h", "noop_8h.html", "noop_8h" ]
 ];

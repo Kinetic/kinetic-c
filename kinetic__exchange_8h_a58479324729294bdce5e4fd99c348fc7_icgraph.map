@@ -1,0 +1,8 @@
+<map id="KineticExchange_ConfigureHeader" name="KineticExchange_ConfigureHeader">
+<area shape="rect" id="node2" href="$kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888" title="KineticOperation_BuildNoop" alt="" coords="296,5,546,35"/>
+<area shape="rect" id="node6" href="$kinetic__pdu_8h.html#a036f988ac116a054a76fcc59cd2d6647" title="KineticPDU_Init" alt="" coords="345,59,498,90"/>
+<area shape="rect" id="node3" href="$kinetic__api_8h.html#ab8f3c3fa01178f9331949d774334f940" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="643,5,797,35"/>
+<area shape="rect" id="node4" href="$noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="893,33,950,63"/>
+<area shape="rect" id="node5" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="997,33,1054,63"/>
+<area shape="rect" id="node7" href="$kinetic__api_8h.html#a67b761a422cb1fa75f30e62708a00117" title="Creates and initializes a Kinetic operation. " alt="" coords="595,59,845,90"/>
+</map>

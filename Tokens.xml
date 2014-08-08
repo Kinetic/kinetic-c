@@ -202,16 +202,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_EXCHANGE_INIT</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8h.html</Path>
-    <Anchor>aba436d2ad875cbe117ac9461ee4a0770</Anchor>
-    <DeclaredIn>kinetic_exchange.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>KineticExchange_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -322,6 +312,36 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>LOG_PROTO_INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>aa759dab3714df698270c4644b8559ed5</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>LOG_PROTO_LEVEL_START</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a28459a92b566c5a45aa7800392202c01</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>LOG_PROTO_LEVEL_END</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>ac3d221b143080cbf9b6abe41272c07b0</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticLogger_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -348,6 +368,26 @@
     </TokenIdentifier>
     <Path>kinetic__logger_8c.html</Path>
     <Anchor>a1c76a5e7dd9fdb81725953964d803449</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticLogger_LogHeader</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>aa165cca23a8303a430aaeb13843d2259</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticLogger_LogProtobuf</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a382d80f28dc772bd38ef93c01bd7150e</Anchor>
     <DeclaredIn>kinetic_logger.c</DeclaredIn>
   </Token>
   <Token>
@@ -422,6 +462,26 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticLogger_LogHeader</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8h.html</Path>
+    <Anchor>aa165cca23a8303a430aaeb13843d2259</Anchor>
+    <DeclaredIn>kinetic_logger.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticLogger_LogProtobuf</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8h.html</Path>
+    <Anchor>a382d80f28dc772bd38ef93c01bd7150e</Anchor>
+    <DeclaredIn>kinetic_logger.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticMessage_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -492,36 +552,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>LOG_PROTO_INIT</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__pdu_8c.html</Path>
-    <Anchor>aa759dab3714df698270c4644b8559ed5</Anchor>
-    <DeclaredIn>kinetic_pdu.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>LOG_PROTO_LEVEL_START</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__pdu_8c.html</Path>
-    <Anchor>a28459a92b566c5a45aa7800392202c01</Anchor>
-    <DeclaredIn>kinetic_pdu.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>LOG_PROTO_LEVEL_END</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__pdu_8c.html</Path>
-    <Anchor>ac3d221b143080cbf9b6abe41272c07b0</Anchor>
-    <DeclaredIn>kinetic_pdu.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>KineticPDU_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -549,46 +579,6 @@
     <Path>kinetic__pdu_8c.html</Path>
     <Anchor>acff84c8347b8df5df8d90364d990268a</Anchor>
     <DeclaredIn>kinetic_pdu.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>PDU_HEADER_LEN</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__pdu_8h.html</Path>
-    <Anchor>a5e8c36eaf4eeb49cfcecb646ffecbb0c</Anchor>
-    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>PDU_PROTO_MAX_LEN</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__pdu_8h.html</Path>
-    <Anchor>abf66a0acd5490ccc5c651a8767d4024d</Anchor>
-    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>PDU_VALUE_MAX_LEN</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__pdu_8h.html</Path>
-    <Anchor>ace420af0e9ec78ad303b9a5d6ac4af1d</Anchor>
-    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>PDU_MAX_LEN</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__pdu_8h.html</Path>
-    <Anchor>a7324ffb3ec713d1ec9f1b0b24d8a3977</Anchor>
-    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3332,6 +3322,76 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KINETIC_EXCHANGE_INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>aba436d2ad875cbe117ac9461ee4a0770</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>PDU_HEADER_LEN</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a5e8c36eaf4eeb49cfcecb646ffecbb0c</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>PDU_PROTO_MAX_LEN</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>abf66a0acd5490ccc5c651a8767d4024d</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>PDU_VALUE_MAX_LEN</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>ace420af0e9ec78ad303b9a5d6ac4af1d</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>PDU_MAX_LEN</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a7324ffb3ec713d1ec9f1b0b24d8a3977</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>__attribute__</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>acd4d1cefdb491a9369cf0176e6d3a6cc</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDUHeader</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>aeefc7ca996ea90f5703b1b8440092c5e</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>main</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -3339,6 +3399,28 @@
     <Path>main_8c.html</Path>
     <Anchor>a3c04138a5bfe5d72780bb7e82a18e627</Anchor>
     <DeclaredIn>main.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>NoOp</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>noop_8c.html</Path>
+    <Anchor>aa0917ddd64a002c8a0866681f0c9e6d5</Anchor>
+    <Abstract>Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ...</Abstract>
+    <DeclaredIn>noop.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>NoOp</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>noop_8h.html</Path>
+    <Anchor>aa0917ddd64a002c8a0866681f0c9e6d5</Anchor>
+    <Abstract>Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ...</Abstract>
+    <DeclaredIn>noop.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3458,7 +3540,7 @@
       <Scope>KineticExchange</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_exchange.html</Path>
-    <DeclaredIn>kinetic_exchange.h</DeclaredIn>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3558,7 +3640,7 @@
       <Scope>KineticHMAC</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_h_m_a_c.html</Path>
-    <DeclaredIn>kinetic_hmac.h</DeclaredIn>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3728,7 +3810,7 @@
       <Scope>KineticPDU</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
-    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3829,46 +3911,6 @@
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
     <Anchor>a2e33e714621fd2316d394048f4480f86</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticPDUHeader</Name>
-      <APILanguage>c</APILanguage>
-      <Type>cl</Type>
-      <Scope>KineticPDUHeader</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_p_d_u_header.html</Path>
-    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>versionPrefix</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticPDUHeader</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_p_d_u_header.html</Path>
-    <Anchor>a0993dcfa55a0e4342c20745d37a13a65</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>protobufLength</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticPDUHeader</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_p_d_u_header.html</Path>
-    <Anchor>ac10131898fbde74d86af498a85e0dc2f</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>valueLength</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticPDUHeader</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_p_d_u_header.html</Path>
-    <Anchor>a10f7b4b1ba3f91e9060010920247a365</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>

@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Thu Aug 7 2014" "Version v0.4.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Fri Aug 8 2014" "Version v0.4.2" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,10 +35,19 @@ kinetic_types.h \-
 
 .in +1c
 .ti -1c
+.RI "struct \fBKineticHMAC\fP"
+.br
+.ti -1c
 .RI "struct \fBKineticConnection\fP"
 .br
 .ti -1c
 .RI "struct \fBKineticMessage\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticExchange\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticPDU\fP"
 .br
 .in -1c
 .SS "Macros"
@@ -68,6 +77,35 @@ kinetic_types.h \-
 .ti -1c
 .RI "#define \fBKINETIC_MESSAGE_INIT\fP(msg)"
 .br
+.ti -1c
+.RI "#define \fBKINETIC_EXCHANGE_INIT\fP(exchg, id, k, klen, con)"
+.br
+.ti -1c
+.RI "#define \fBPDU_HEADER_LEN\fP   (1 + (2 * sizeof(int32_t)))"
+.br
+.ti -1c
+.RI "#define \fBPDU_PROTO_MAX_LEN\fP   (1024 * 1024)"
+.br
+.ti -1c
+.RI "#define \fBPDU_VALUE_MAX_LEN\fP   (1024 * 1024)"
+.br
+.ti -1c
+.RI "#define \fBPDU_MAX_LEN\fP   (\fBPDU_HEADER_LEN\fP + \fBPDU_PROTO_MAX_LEN\fP + \fBPDU_VALUE_MAX_LEN\fP)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fB__attribute__\fP ((__packed__)) _KineticPDUHeader"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticPDUHeader\fP"
+.br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
@@ -94,7 +132,7 @@ Definition at line 50 of file kinetic_types\&.h\&.
 .SS "#define HOST_NAME_MAX   256"
 
 .PP
-Definition at line 74 of file kinetic_types\&.h\&.
+Definition at line 76 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_CONNECTION_INIT(connection)"
 \fBValue:\fP
 .PP
@@ -106,7 +144,7 @@ Definition at line 74 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 91 of file kinetic_types\&.h\&.
+Definition at line 102 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_MESSAGE_INIT(msg)"
 \fBValue:\fP
 .PP
@@ -128,7 +166,55 @@ Definition at line 91 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 110 of file kinetic_types\&.h\&.
+Definition at line 121 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, con)"
+\fBValue:\fP
+.PP
+.nf
+{ \
+    memset((exchg), 0, sizeof(KineticExchange)); \
+    (exchg)->identity = id; \
+    if (k != NULL && klen > 0) \
+    { \
+        memcpy((exchg)->key, k, klen); \
+        (exchg)->key[klen] = '\0'; \
+        (exchg)->keyLength = klen; \
+        (exchg)->has_key = true; \
+    } \
+    (exchg)->connection = con; \
+    (exchg)->sequence = -1; \
+}
+.fi
+.PP
+Definition at line 179 of file kinetic_types\&.h\&.
+.SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int32_t)))"
+
+.PP
+Definition at line 196 of file kinetic_types\&.h\&.
+.SS "#define PDU_PROTO_MAX_LEN   (1024 * 1024)"
+
+.PP
+Definition at line 197 of file kinetic_types\&.h\&.
+.SS "#define PDU_VALUE_MAX_LEN   (1024 * 1024)"
+
+.PP
+Definition at line 198 of file kinetic_types\&.h\&.
+.SS "#define PDU_MAX_LEN   (\fBPDU_HEADER_LEN\fP + \fBPDU_PROTO_MAX_LEN\fP + \fBPDU_VALUE_MAX_LEN\fP)"
+
+.PP
+Definition at line 199 of file kinetic_types\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "struct __attribute__ ((__packed__))"
+
+.PP
+Definition at line 201 of file kinetic_types\&.h\&.
+.SH "Variable Documentation"
+.PP 
+.SS "KineticPDUHeader"
+
+.PP
+Definition at line 206 of file kinetic_types\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.
