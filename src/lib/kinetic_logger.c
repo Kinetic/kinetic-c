@@ -99,7 +99,6 @@ void KineticLogger_LogHeader(const KineticPDUHeader* header)
 #define LOG_PROTO_INIT() \
     unsigned int _i; \
     char _indent[32] = "  "; \
-    char _buf[1024]; \
     const char* _str_true = "true"; \
     const char* _str_false = "false";
 

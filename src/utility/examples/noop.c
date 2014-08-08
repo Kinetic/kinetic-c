@@ -53,7 +53,6 @@ int NoOp(const char* host, int port, int64_t clusterVersion, int64_t identity, c
         const KineticProto_Status* protoStatus = response.proto->command->status;
         const ProtobufCMessage* protoMessage = (ProtobufCMessage*)protoStatus;
         const ProtobufCMessageDescriptor* protoMessageDescriptor = protoMessage->descriptor;
-        const ProtobufCFieldDescriptor* protoMessageFields = protoMessageDescriptor->fields;
 
         // Output status code short name
         const ProtobufCFieldDescriptor* statusCodeDescriptor =
@@ -79,6 +78,7 @@ int NoOp(const char* host, int port, int64_t clusterVersion, int64_t identity, c
         // Output detailed message, if supplied
         if (protoStatus->has_detailedmessage)
         {
+            int i;
             char tmp[8], msg[256];
             const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
                 protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "detailedMessage");
@@ -86,7 +86,7 @@ int NoOp(const char* host, int port, int64_t clusterVersion, int64_t identity, c
                 (ProtobufCMessageDescriptor*)statusDetailedMsgFieldDescriptor->descriptor;
             
             sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
-            for (int i = 0; i < protoStatus->detailedmessage.len; i++)
+            for (i = 0; i < protoStatus->detailedmessage.len; i++)
             {
                 sprintf(tmp, "%02hhX", protoStatus->detailedmessage.data[i]);
                 strcat(msg, tmp);

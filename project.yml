@@ -87,8 +87,8 @@
       - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
       - -D"$": DEFINES_TEST_PREPROCESS
       - -DGNU_COMPILER
-      - -w
-      - -Wformat
+      - -std=c99
+      - -Wall
       - ${1}
   :test_linker:
     :executable: gcc
@@ -105,6 +105,17 @@
       - "-l crypto"
       - ${1}
       - -o ${2}
+  :release_compiler:
+    :executable: gcc
+    :arguments:
+      - -I"$": 'COLLECTION_PATHS_SOURCE_INCLUDE_VENDOR'
+      - -I"$": 'COLLECTION_PATHS_RELEASE_TOOLCHAIN_INCLUDE'
+      - -D"$": 'COLLECTION_DEFINES_RELEASE_AND_VENDOR'
+      - -DGNU_COMPILER
+      - -std=c99
+      - -Wall
+      - "-c \"${1}\""
+      - "-o \"${2}\""
   :release_linker:
     :executable: gcc
     :name: release_linker

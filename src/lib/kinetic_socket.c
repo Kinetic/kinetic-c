@@ -276,7 +276,6 @@ void KineticSocket_Close(int socketDescriptor)
 bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length)
 {
     size_t count;
-    uint8_t* data = (uint8_t*)buffer;
 
     for (count = 0; count < length; )
     {
@@ -369,7 +368,6 @@ bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length
 {
     int status;
     size_t count;
-    uint8_t* data = (uint8_t*)buffer;
     char msg[128];
 
     for (count = 0; count < length; )
@@ -404,7 +402,6 @@ bool KineticSocket_Write(int socketDescriptor, const void* buffer, size_t length
 
 bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticProto* proto)
 {
-    bool success = false;
     size_t len = KineticProto_get_packed_size(proto);
     size_t packedLen;
     char msg[64];

@@ -35,7 +35,6 @@ void KineticPDU_Init(
     uint8_t* const value,
     int32_t valueLength)
 {
-    size_t packedLength = 0;
     assert(pdu != NULL);
     assert(exchange != NULL);
 

@@ -272,6 +272,7 @@ task :test_all do
   java_sim_start
   Rake::Task['test:path'].reenable
   Rake::Task['test:path'].invoke('test/system')
+  Rake::Task['release'].invoke
   java_sim_shutdown
 
   report_banner "Finished executing all test suites"
