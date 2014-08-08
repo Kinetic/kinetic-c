@@ -130,6 +130,8 @@ namespace :java_sim do
 
     report_banner "Starting Kinetic Java Simulator"
 
+    java_sim_cleanup
+
     # Validate JAVA_HOME
     java_home = ENV.fetch('JAVA_HOME', '/usr')
     java = File.join(java_home, 'bin/java')
@@ -155,6 +157,16 @@ namespace :java_sim do
       Process.wait($java_sim)
       $java_sim = nil
       sleep 0.5
+      java_sim_cleanup
+    end
+  end
+
+  def java_sim_cleanup
+    # Ensure stray simulators are not still running
+    `ps -ef | grep kinetic-simulator`.each_line do |l|
+      next if l =~ /grep kinetic-simulator/
+      pid = l.match /^\w*\d+\w+(\d+)/
+      sh "kill -9 pid[1]" if pid
     end
   end
 
