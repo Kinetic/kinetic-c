@@ -7,9 +7,11 @@
   :build_root: build
   :release_build: true
   :test_file_prefix: test_
+  :options_paths:
+    - config/
 
 :release_build:
-  :output: kinetic-c-client
+  :output: kinetic-c
   # Uncomment the following to enable use of assembly files
   # :use_assembly: true
 
@@ -95,6 +97,14 @@
       - "\"${1}\""
       - "-l crypto"
       - "-o \"${2}\""
+  :gcov_linker:
+    :executable: gcc
+    :arguments:
+      - -fprofile-arcs
+      - -ftest-coverage
+      - "-l crypto"
+      - ${1}
+      - -o ${2}
   :release_linker:
     :executable: gcc
     :name: release_linker
@@ -109,4 +119,5 @@
   :enabled:
     - stdout_ide_tests_report
     - module_generator
+    - gcov
 ...

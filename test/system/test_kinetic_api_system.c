@@ -130,7 +130,7 @@ void test_NoOp_should_succeed(void)
 {
     const int64_t clusterVersion = 0;
     const int64_t identity = 1;
-    const char key[] = "asdfasdf";
+    const char* key = "asdfasdf";
 
     KineticExchange exchange;
     KineticOperation operation;
@@ -153,8 +153,6 @@ void test_NoOp_should_succeed(void)
     operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response);
 
     status = KineticApi_NoOp(&operation);
-
-    // TEST_IGNORE_MESSAGE("Need to track down why the Java simulator is not responding to NOOP request!");
     
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
 }

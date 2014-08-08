@@ -26,44 +26,6 @@
 #include "kinetic_message.h"
 #include "kinetic_hmac.h"
 
-#define PDU_HEADER_LEN      (1 + (2 * sizeof(int32_t)))
-#define PDU_PROTO_MAX_LEN   (1024 * 1024)
-#define PDU_VALUE_MAX_LEN   (1024 * 1024)
-#define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
-
-#pragma pack(push)  /* push current alignment to stack */
-#pragma pack(1)     /* set alignment to 1 byte boundary */
-typedef struct _KineticPDUHeader
-{
-    uint8_t     versionPrefix;
-    uint32_t    protobufLength;
-    uint32_t    valueLength;
-} KineticPDUHeader;
-#pragma pack(pop)   /* restore original alignment from stack */
-
-typedef struct _KineticPDU
-{
-    // Binary PDU header (binary packed in NBO)
-    KineticPDUHeader header;
-    uint8_t rawHeader[sizeof(KineticPDUHeader)];
-
-    // Message associated with this PDU instance
-    KineticMessage* message;
-    KineticProto* proto;
-    uint32_t protobufLength; // Embedded in header in NBO byte order (this is for reference)
-    uint8_t protobufScratch[1024*1024];
-
-    // Value data associated with PDU (if any)
-    uint8_t* value;
-    uint32_t valueLength; // Embedded in header in NBO byte order (this is for reference)
-
-    // Embedded HMAC instance
-    KineticHMAC hmac;
-
-    // Exchange associated with this PDU instance (info gets embedded in protobuf message)
-    KineticExchange* exchange;
-} KineticPDU;
-
 void KineticPDU_Init(
     KineticPDU* const pdu,
     KineticExchange* const exchange,

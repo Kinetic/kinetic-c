@@ -20,6 +20,13 @@
 
 #include "unity_helper.h"
 #include "kinetic_logger.h"
+#include "kinetic_proto.h"
+#include "kinetic_exchange.h"
+#include "kinetic_hmac.h"
+#include "kinetic_pdu.h"
+#include "kinetic_socket.h"
+#include "protobuf-c/protobuf-c.h"
+#include "socket99.h"
 
 extern bool LogToConsole;
 

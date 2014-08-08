@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef KINETIC_C_CLIENT_KINETIC_H_
-#define KINETIC_C_CLIENT_KINETIC_H_
+#ifndef KINETIC_H_
+#define KINETIC_H_
 
 #include "../../src/lib/kinetic_types.h"
 #include "../../src/lib/kinetic_api.h"
@@ -27,4 +27,4 @@
 #include "../../src/lib/kinetic_connection.h"
 #include <protobuf-c/protobuf-c.h>
 
-#endif /* KINETIC_C_CLIENT_KINETIC_H_ */
+#endif /* KINETIC_H_ */

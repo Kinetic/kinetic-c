@@ -75,7 +75,6 @@ bool KineticApi_ConfigureExchange(
  * @param request           KineticPDU instance to use for request
  * @param requestMsg        KineticMessage instance to use for request
  * @param response          KineticPDU instance to use for reponse
- * @param responseMsg       KineticMessage instance to use for reponse
  * @return                  Returns a configured operation instance
  */
 KineticOperation KineticApi_CreateOperation(

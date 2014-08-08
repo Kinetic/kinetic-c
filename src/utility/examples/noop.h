@@ -18,14 +18,27 @@
 *
 */
 
-#ifndef _KINETIC_HMAC_H
-#define _KINETIC_HMAC_H
+#ifndef _NOOP_H
+#define _NOOP_H
 
-#include "kinetic_types.h"
-#include "kinetic_message.h"
+#include "kinetic.h"
 
-void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm);
-void KineticHMAC_Populate(KineticHMAC* hmac, KineticProto* proto, const char* const key, size_t keyLen);
-bool KineticHMAC_Validate(const KineticProto* proto, const char* const key, size_t keyLen);
+/**
+ * @brief Connects to the specified Kinetic host/port and executes a NoOp (ping) operation
+ *
+ * @param host              Host name or IP address to connect to
+ * @param port              Port to establish socket connection on
+ * @param clusterVersion    Cluster version to use for the operation
+ * @param identity          Identity to use for the operation (Must have ACL setup on Kinetic Device)
+ * @param key               Shared secret key used for the identity for HMAC calculation
+ *
+ * @return                  Returns true if operation succeeded, false otherwise
+ */
+int NoOp(
+    const char* host,
+    int port,
+    int64_t clusterVersion,
+    int64_t identity,
+    const char* key);
 
-#endif  // _KINETIC_HMAC_H
+#endif // _NOOP_H

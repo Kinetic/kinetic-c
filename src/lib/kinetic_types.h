@@ -55,6 +55,8 @@
 #if defined(WIN32)
     #include <windows.h>
     #include <winsock2.h>
+
+    // Leave space for a NULL terminator in case a char string is memcpy'ed in
     #define HOST_NAME_MAX (MAX_COMPUTERNAME_LENGTH+1)
 #else
     #if defined(__APPLE__)
@@ -78,6 +80,15 @@
 #endif  // WIN32
 
 #include "kinetic_proto.h"
+
+// #include "kinetic_exchange.h"
+
+typedef struct _KineticHMAC
+{
+    KineticProto_Security_ACL_HMACAlgorithm algorithm;
+    unsigned int valueLength;
+    uint8_t value[KINETIC_HMAC_MAX_LEN];
+} KineticHMAC;
 
 typedef struct _KineticConnection
 {
@@ -122,5 +133,102 @@ typedef struct _KineticMessage
     /*(msg)->command.body = &(msg)->body;*/ \
     /*(msg)->command.status = &(msg)->status;*/ \
 }
+
+
+typedef struct _KineticExchange
+{
+    // Defaults to false, since clusterVersion is optional
+    // Set to true to enable clusterVersion for the exchange
+    bool has_clusterVersion;
+
+    // Optional field - default value is 0
+    // The version number of this cluster definition. If this is not equal to
+    // the value on the device, the request is rejected and will return a
+    // `VERSION_FAILURE` `statusCode` in the `Status` message.
+    int64_t clusterVersion;
+
+    // Required field
+    // The identity associated with this request. See the ACL discussion above.
+    // The Kinetic Device will use this identity value to lookup the
+    // HMAC key (shared secret) to verify the HMAC.
+    int64_t identity;
+
+    // Required field
+    // This is the identity's HMAC Key. This is a shared secret between the
+    // client and the device, used to sign requests.
+    bool has_key;
+    size_t keyLength;
+    char key[KINETIC_MAX_KEY_LEN+1];
+
+    // Required field
+    // A unique number for this connection between the source and target.
+    // On the first request to the drive, this should be the time of day in
+    // seconds since 1970. The drive can change this number and the client must
+    // continue to use the new number and the number must remain constant
+    // during the session
+    int64_t connectionID;
+
+    // Required field
+    // A monotonically increasing number for each request in a TCP connection.
+    int64_t sequence;
+
+    // Associated Kinetic connection
+    KineticConnection* connection;
+} KineticExchange;
+
+#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, con) { \
+    memset((exchg), 0, sizeof(KineticExchange)); \
+    (exchg)->identity = id; \
+    if (k != NULL && klen > 0) \
+    { \
+        memcpy((exchg)->key, k, klen); \
+        (exchg)->key[klen] = '\0'; \
+        (exchg)->keyLength = klen; \
+        (exchg)->has_key = true; \
+    } \
+    (exchg)->connection = con; \
+    (exchg)->sequence = -1; \
+}
+
+
+
+
+#define PDU_HEADER_LEN      (1 + (2 * sizeof(int32_t)))
+#define PDU_PROTO_MAX_LEN   (1024 * 1024)
+#define PDU_VALUE_MAX_LEN   (1024 * 1024)
+#define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
+
+#pragma pack(push)  /* push current alignment to stack */
+#pragma pack(1)     /* set alignment to 1 byte boundary */
+typedef struct _KineticPDUHeader
+{
+    uint8_t     versionPrefix;
+    uint32_t    protobufLength;
+    uint32_t    valueLength;
+} KineticPDUHeader;
+#pragma pack(pop)   /* restore original alignment from stack */
+
+typedef struct _KineticPDU
+{
+    // Binary PDU header (binary packed in NBO)
+    KineticPDUHeader header;
+    uint8_t rawHeader[sizeof(KineticPDUHeader)];
+
+    // Message associated with this PDU instance
+    KineticMessage* message;
+    KineticProto* proto;
+    uint32_t protobufLength; // Embedded in header in NBO byte order (this is for reference)
+    uint8_t protobufScratch[1024*1024];
+
+    // Value data associated with PDU (if any)
+    uint8_t* value;
+    uint32_t valueLength; // Embedded in header in NBO byte order (this is for reference)
+
+    // Embedded HMAC instance
+    KineticHMAC hmac;
+
+    // Exchange associated with this PDU instance (info gets embedded in protobuf message)
+    KineticExchange* exchange;
+} KineticPDU;
 
 #endif // _KINETIC_TYPES_H
