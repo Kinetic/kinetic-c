@@ -19,6 +19,7 @@
 */
 
 #include "unity_helper.h"
+#include "kinetic_types.h"
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -29,6 +30,7 @@
     #define _BSD_SOURCE
 #endif // _BSD_SOURCE
 #include <unistd.h>
+#include <sys/types.h>
 #include "socket99.h"
 
 #include <errno.h>

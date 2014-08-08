@@ -39,6 +39,7 @@
     #define _BSD_SOURCE
 #endif // _BSD_SOURCE
 #include <unistd.h>
+#include <sys/types.h>
 
 int KineticSocket_GetSocketError(int fd)
 {
