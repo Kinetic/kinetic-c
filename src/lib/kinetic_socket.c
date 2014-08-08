@@ -301,7 +301,8 @@ void KineticSocket_Close(int socketDescriptor)
     {
         sprintf(message, "Closing socket with fd=%d", socketDescriptor);
         LOG(message);
-        if (KineticSocket_CloseSocket(socketDescriptor))
+        // if (KineticSocket_CloseSocket(socketDescriptor))
+        if (close(socketDescriptor))
         {
             LOG("Socket closed successfully");
         }

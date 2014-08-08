@@ -21,21 +21,22 @@
     - +:test/**
     - -:test/support
     - src/**
-    - vendor/protobuf-c/*
   :support:
     - test/support/**
   :source:
     - src/lib/*
     - src/utility/*
     - vendor/protobuf-c/protobuf-c/*
-    - vendor/socket99/*
+    - vendor/socket99/socket99.c
   :include:
     - include/**
+    - vendor/socket99/
+    - vendor/protobuf-c/
   # Refactor release build once the Kinetic-C library is built, and link to it sepearately
   :release_toolchain_include:
     - include/**
-    - vendor/protobuf-c/*
-    - vendor/socket99/*
+    - vendor/protobuf-c/
+    - vendor/socket99/
 
 :defines:
   # in order to add common defines:
