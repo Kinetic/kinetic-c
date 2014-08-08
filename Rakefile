@@ -287,14 +287,12 @@ end
 desc "Build all and run test utility"
 task :all => [
   'cppcheck',
-  'travis:validate',
   'test_all',
 ]
 
 desc "Run full CI build"
 task :ci => [
   'clobber',
-  # 'verbose', # uncomment to enable verbose output for CI builds
   'all'
 ]
 
