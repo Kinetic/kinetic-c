@@ -5,7 +5,7 @@
   <filterSection>
     <filterAttribute>doxygen</filterAttribute>
     <toc>
-      <section title="protobuf-c v0.4.3" ref="index.html">
+      <section title="protobuf-c v0.5.0" ref="index.html">
         <section title="Data Structures">
           <section title="Data Structures" ref="annotated.html">
             <section title="_KineticProto" ref="struct___kinetic_proto.html">
