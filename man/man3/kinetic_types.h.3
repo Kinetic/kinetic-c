@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,8 @@ kinetic_types.h \-
 \fC#include <stdbool\&.h>\fP
 .br
 \fC#include <stdint\&.h>\fP
+.br
+\fC#include <inttypes\&.h>\fP
 .br
 \fC#include <stddef\&.h>\fP
 .br
@@ -55,6 +57,9 @@ kinetic_types.h \-
 .RI "#define \fBKINETIC_MAX_KEY_LEN\fP   128"
 .br
 .ti -1c
+.RI "#define \fB__func__\fP   '<unknown>'"
+.br
+.ti -1c
 .RI "#define \fBHOST_NAME_MAX\fP   256"
 .br
 .ti -1c
@@ -69,23 +74,27 @@ kinetic_types.h \-
 .SS "#define KINETIC_PORT   8123"
 
 .PP
-Definition at line 39 of file kinetic_types\&.h\&.
+Definition at line 40 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)"
 
 .PP
-Definition at line 40 of file kinetic_types\&.h\&.
+Definition at line 41 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_HMAC_MAX_LEN   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
 
 .PP
-Definition at line 41 of file kinetic_types\&.h\&.
+Definition at line 42 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_MAX_KEY_LEN   128"
 
 .PP
-Definition at line 42 of file kinetic_types\&.h\&.
+Definition at line 43 of file kinetic_types\&.h\&.
+.SS "#define __func__   '<unknown>'"
+
+.PP
+Definition at line 50 of file kinetic_types\&.h\&.
 .SS "#define HOST_NAME_MAX   256"
 
 .PP
-Definition at line 64 of file kinetic_types\&.h\&.
+Definition at line 74 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_CONNECTION_INIT(connection)"
 \fBValue:\fP
 .PP
@@ -97,7 +106,7 @@ Definition at line 64 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 81 of file kinetic_types\&.h\&.
+Definition at line 91 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_MESSAGE_INIT(msg)"
 \fBValue:\fP
 .PP
@@ -108,16 +117,18 @@ Definition at line 81 of file kinetic_types\&.h\&.
     KineticProto_header_init(&(msg)->header); \\
     KineticProto_body_init(&(msg)->body); \\
     KineticProto_status_init(&(msg)->status); \
-    (msg)->proto\&.hmac\&.data = (msg)->hmacData; \
-    (msg)->command\&.header = &(msg)->header; \
-    (msg)->command\&.body = &(msg)->body; \
-    (msg)->command\&.status = &(msg)->status; \
-    (msg)->proto\&.command = &(msg)->command; \
     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
+    (msg)->proto\&.hmac\&.data = (msg)->hmacData; \
+    (msg)->proto\&.hmac\&.len = KINETIC_HMAC_MAX_LEN; \
+    (msg)->proto\&.has_hmac = true; /* Enable HMAC to allow length calculation prior to population */ \
+    (msg)->command\&.header = &(msg)->header; \
+    (msg)->proto\&.command = &(msg)->command; \
+    /*(msg)->command\&.body = &(msg)->body;*/ \
+    /*(msg)->command\&.status = &(msg)->status;*/ \
 }
 .fi
 .PP
-Definition at line 100 of file kinetic_types\&.h\&.
+Definition at line 110 of file kinetic_types\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

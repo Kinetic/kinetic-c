@@ -1,4 +1,4 @@
-.TH "KineticExchange" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "KineticExchange" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,7 +27,7 @@ KineticExchange \-
 .RI "size_t \fBkeyLength\fP"
 .br
 .ti -1c
-.RI "uint8_t \fBkey\fP [128]"
+.RI "char \fBkey\fP [128+1]"
 .br
 .ti -1c
 .RI "int64_t \fBconnectionID\fP"
@@ -64,7 +64,7 @@ Definition at line 49 of file kinetic_exchange\&.h\&.
 
 .PP
 Definition at line 50 of file kinetic_exchange\&.h\&.
-.SS "uint8_t KineticExchange::key[128]"
+.SS "char KineticExchange::key[128+1]"
 
 .PP
 Definition at line 51 of file kinetic_exchange\&.h\&.

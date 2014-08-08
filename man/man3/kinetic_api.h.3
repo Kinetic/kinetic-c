@@ -1,4 +1,4 @@
-.TH "kinetic_api.h" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_api.h" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,11 +27,11 @@ kinetic_api.h \-
 .br
 .RI "\fIEstablishes a Kinetic protocol socket connection to a host\&. \fP"
 .ti -1c
-.RI "bool \fBKineticApi_ConfigureExchange\fP (\fBKineticExchange\fP *exchange, \fBKineticConnection\fP *connection, int64_t identity, uint8_t *key, size_t keyLength)"
+.RI "bool \fBKineticApi_ConfigureExchange\fP (\fBKineticExchange\fP *exchange, \fBKineticConnection\fP *connection, int64_t clusterVersion, int64_t identity, const char *key, size_t keyLength)"
 .br
 .RI "\fIInitializes and configures a Kinetic exchange\&. \fP"
 .ti -1c
-.RI "\fBKineticOperation\fP \fBKineticApi_CreateOperation\fP (\fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticMessage\fP *requestMsg, \fBKineticPDU\fP *response, \fBKineticMessage\fP *responseMsg)"
+.RI "\fBKineticOperation\fP \fBKineticApi_CreateOperation\fP (\fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticMessage\fP *requestMsg, \fBKineticPDU\fP *response)"
 .br
 .RI "\fICreates and initializes a Kinetic operation\&. \fP"
 .ti -1c
@@ -82,7 +82,7 @@ Returns true if connection succeeded
 Definition at line 32 of file kinetic_api\&.c\&.
 .PP
 References KineticConnection::connected, KineticConnection_Connect(), KineticConnection_Init(), LOG, and KineticConnection::socketDescriptor\&.
-.SS "bool KineticApi_ConfigureExchange (\fBKineticExchange\fP *exchange, \fBKineticConnection\fP *connection, int64_tidentity, uint8_t *key, size_tkeyLength)"
+.SS "bool KineticApi_ConfigureExchange (\fBKineticExchange\fP *exchange, \fBKineticConnection\fP *connection, int64_tclusterVersion, int64_tidentity, const char *key, size_tkeyLength)"
 
 .PP
 Initializes and configures a Kinetic exchange\&. 
@@ -92,6 +92,8 @@ Initializes and configures a Kinetic exchange\&.
 \fIexchange\fP \fBKineticExchange\fP instance to configure with exchange info 
 .br
 \fIconnection\fP \fBKineticConnection\fP to associate with exchange 
+.br
+\fIclusterVersion\fP Cluster version for the exchange 
 .br
 \fIidentity\fP Identity to use for the exchange 
 .br
@@ -109,8 +111,8 @@ Returns true if configuration succeeded
 .PP
 Definition at line 55 of file kinetic_api\&.c\&.
 .PP
-References KineticExchange_ConfigureConnectionID(), KineticExchange_Init(), and LOG\&.
-.SS "\fBKineticOperation\fP KineticApi_CreateOperation (\fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticMessage\fP *requestMsg, \fBKineticPDU\fP *response, \fBKineticMessage\fP *responseMsg)"
+References KineticExchange_ConfigureConnectionID(), KineticExchange_Init(), KineticExchange_SetClusterVersion(), and LOG\&.
+.SS "\fBKineticOperation\fP KineticApi_CreateOperation (\fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticMessage\fP *requestMsg, \fBKineticPDU\fP *response)"
 
 .PP
 Creates and initializes a Kinetic operation\&. 
@@ -135,9 +137,9 @@ Returns a configured operation instance
 .PP
 
 .PP
-Definition at line 86 of file kinetic_api\&.c\&.
+Definition at line 88 of file kinetic_api\&.c\&.
 .PP
-References KineticOperation::exchange, KineticMessage_Init(), KineticPDU_Init(), LOG, KineticPDU::protobuf, KineticOperation::request, and KineticOperation::response\&.
+References KineticOperation::exchange, KineticMessage_Init(), KineticPDU_Init(), LOG, KineticPDU::message, KineticPDU::proto, KineticOperation::request, and KineticOperation::response\&.
 .SS "\fBKineticProto_Status_StatusCode\fP KineticApi_NoOp (\fBKineticOperation\fP *operation)"
 
 .PP
@@ -155,9 +157,9 @@ Returns the resultant status code
 .PP
 
 .PP
-Definition at line 140 of file kinetic_api\&.c\&.
+Definition at line 136 of file kinetic_api\&.c\&.
 .PP
-References KineticMessage::command, KineticExchange::connection, KineticOperation::exchange, KineticPDU::exchange, KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KineticExchange_IncrementSequence(), KineticOperation_BuildNoop(), KineticPDU_Receive(), KineticPDU_Send(), KineticPDU::protobuf, KineticOperation::request, and KineticOperation::response\&.
+References KineticExchange::connection, KineticOperation::exchange, KineticPDU::exchange, KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KineticExchange_IncrementSequence(), KineticOperation_BuildNoop(), KineticPDU_Receive(), KineticPDU_Send(), KineticPDU::message, KineticPDU::proto, KineticOperation::request, and KineticOperation::response\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

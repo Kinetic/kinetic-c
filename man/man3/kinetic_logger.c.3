@@ -1,4 +1,4 @@
-.TH "kinetic_logger.c" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_logger.c" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -24,12 +24,15 @@ kinetic_logger.c \-
 .ti -1c
 .RI "void \fBKineticLogger_Log\fP (const char *message)"
 .br
+.ti -1c
+.RI "int \fBKineticLogger_LogPrintf\fP (const char *format,\&.\&.\&.)"
+.br
 .in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "bool \fBLogToStdErr\fP = true"
+.RI "bool \fBLogToConsole\fP = true"
 .br
 .in -1c
 .SH "Function Documentation"
@@ -39,16 +42,22 @@ kinetic_logger.c \-
 .PP
 Definition at line 29 of file kinetic_logger\&.c\&.
 .PP
-References LogToStdErr\&.
+References LogToConsole\&.
 .SS "void KineticLogger_Log (const char *message)"
 
 .PP
-Definition at line 45 of file kinetic_logger\&.c\&.
+Definition at line 50 of file kinetic_logger\&.c\&.
 .PP
-References LogToStdErr\&.
+References LogToConsole\&.
+.SS "int KineticLogger_LogPrintf (const char *format, \&.\&.\&.)"
+
+.PP
+Definition at line 72 of file kinetic_logger\&.c\&.
+.PP
+References KineticLogger_Log()\&.
 .SH "Variable Documentation"
 .PP 
-.SS "bool LogToStdErr = true"
+.SS "bool LogToConsole = true"
 
 .PP
 Definition at line 27 of file kinetic_logger\&.c\&.

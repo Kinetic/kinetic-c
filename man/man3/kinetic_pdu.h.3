@@ -1,4 +1,4 @@
-.TH "kinetic_pdu.h" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_pdu.h" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,7 +29,7 @@ kinetic_pdu.h \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBPDU_HEADER_LEN\fP   (1 + (2 * sizeof(int64_t)))"
+.RI "#define \fBPDU_HEADER_LEN\fP   (1 + (2 * sizeof(int32_t)))"
 .br
 .ti -1c
 .RI "#define \fBPDU_PROTO_MAX_LEN\fP   (1024 * 1024)"
@@ -56,7 +56,7 @@ kinetic_pdu.h \-
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int64_t)))"
+.SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int32_t)))"
 
 .PP
 Definition at line 29 of file kinetic_pdu\&.h\&.
@@ -77,21 +77,21 @@ Definition at line 32 of file kinetic_pdu\&.h\&.
 .SS "void KineticPDU_Init (\fBKineticPDU\fP *constpdu, \fBKineticExchange\fP *constexchange, \fBKineticMessage\fP *constmessage, uint8_t *constvalue, int32_tvalueLength)"
 
 .PP
-Definition at line 29 of file kinetic_pdu\&.c\&.
+Definition at line 33 of file kinetic_pdu\&.c\&.
 .PP
-References KineticPDU::exchange, KineticPDU::header, KineticMessage::header, KineticExchange_ConfigureHeader(), KineticProto_get_packed_size(), KineticMessage::proto, KineticPDUHeader::protobufLength, KineticPDU::protobufLength, KineticPDUHeader::valueLength, and KineticPDU::valueLength\&.
+References KineticPDU::exchange, KineticMessage::header, KineticExchange_ConfigureHeader(), and KineticMessage::proto\&.
 .SS "bool KineticPDU_Send (\fBKineticPDU\fP *constrequest)"
 
 .PP
-Definition at line 61 of file kinetic_pdu\&.c\&.
+Definition at line 63 of file kinetic_pdu\&.c\&.
 .PP
-References KineticExchange::connection, KineticPDU::exchange, KineticPDU::header, KineticPDU::hmac, KineticExchange::key, KineticExchange::keyLength, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC_Populate(), KineticSocket_Write(), KineticSocket_WriteProtobuf(), LOG, KineticPDU::protobuf, KineticConnection::socketDescriptor, KineticPDU::value, and KineticPDU::valueLength\&.
+References KineticExchange::connection, KineticPDU::exchange, KineticPDU::header, KineticPDU::hmac, KineticExchange::key, KineticExchange::keyLength, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC_Populate(), KineticProto_get_packed_size(), KineticSocket_Write(), KineticSocket_WriteProtobuf(), LOG, LOGF, KineticPDU::message, KineticMessage::proto, KineticPDUHeader::protobufLength, KineticPDU::protobufLength, KineticConnection::socketDescriptor, KineticPDU::value, KineticPDUHeader::valueLength, and KineticPDU::valueLength\&.
 .SS "bool KineticPDU_Receive (\fBKineticPDU\fP *constresponse)"
 
 .PP
-Definition at line 96 of file kinetic_pdu\&.c\&.
+Definition at line 110 of file kinetic_pdu\&.c\&.
 .PP
-References KineticExchange::connection, KineticPDU::exchange, KineticPDU::header, KineticExchange::key, KineticExchange::keyLength, KineticHMAC_Validate(), KineticSocket_Read(), KineticSocket_ReadProtobuf(), LOG, KineticMessage::proto, KineticPDU::protobuf, KineticPDUHeader::protobufLength, KineticPDU::protobufScratch, KineticConnection::socketDescriptor, KineticPDU::value, KineticPDUHeader::valueLength, and KineticPDU::valueLength\&.
+References KineticExchange::connection, KineticPDU::exchange, KineticPDU::header, KineticExchange::key, KineticExchange::keyLength, KineticHMAC_Validate(), KineticSocket_Read(), KineticSocket_ReadProtobuf(), LOG, LOGF, KineticPDU::proto, KineticPDUHeader::protobufLength, KineticPDU::protobufScratch, KineticPDU::rawHeader, KineticConnection::socketDescriptor, KineticPDU::value, KineticPDUHeader::valueLength, KineticPDU::valueLength, and KineticPDUHeader::versionPrefix\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

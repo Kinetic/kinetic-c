@@ -78,8 +78,8 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad7decdc92cfdbf0fdf5cfc96884f431f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__exchange_8h.html#ad7decdc92cfdbf0fdf5cfc96884f431f">KineticExchange_Init</a> (<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *const exchange, int64_t identity, uint8_t *key, size_t keyLength, <a class="el" href="struct_kinetic_connection.html">KineticConnection</a> *const connection)</td></tr>
-<tr class="separator:ad7decdc92cfdbf0fdf5cfc96884f431f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac70a003301820ad2e39787ec66363486"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__exchange_8h.html#ac70a003301820ad2e39787ec66363486">KineticExchange_Init</a> (<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *const exchange, int64_t identity, const char *key, size_t keyLength, <a class="el" href="struct_kinetic_connection.html">KineticConnection</a> *const connection)</td></tr>
+<tr class="separator:ac70a003301820ad2e39787ec66363486"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79f8df71d49e5853b85dbc04aea2dadf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__exchange_8h.html#a79f8df71d49e5853b85dbc04aea2dadf">KineticExchange_ConfigureConnectionID</a> (<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *const exchange)</td></tr>
 <tr class="separator:a79f8df71d49e5853b85dbc04aea2dadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a152138735516f7ea8304e6ac36047da1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__exchange_8h.html#a152138735516f7ea8304e6ac36047da1">KineticExchange_SetClusterVersion</a> (<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *const exchange, int64_t clusterVersion)</td></tr>
@@ -137,6 +137,7 @@ Functions</h2></td></tr>
 <div class="line">    if (k != NULL &amp;&amp; klen &gt; 0) \</div>
 <div class="line">    { \</div>
 <div class="line">        memcpy((exchg)-&gt;key, k, klen); \</div>
+<div class="line">        (exchg)-&gt;key[klen] = <span class="charliteral">&#39;\0&#39;</span>; \</div>
 <div class="line">        (exchg)-&gt;keyLength = klen; \</div>
 <div class="line">        (exchg)-&gt;has_key = <span class="keyword">true</span>; \</div>
 <div class="line">    } \</div>
@@ -150,7 +151,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ad7decdc92cfdbf0fdf5cfc96884f431f"></a>
+<a class="anchor" id="ac70a003301820ad2e39787ec66363486"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -169,7 +170,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>

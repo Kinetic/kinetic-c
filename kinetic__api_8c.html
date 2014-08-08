@@ -74,12 +74,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a8d9dd4011a9a09eae17c0d317d3f4225"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__api_8c.html#a8d9dd4011a9a09eae17c0d317d3f4225">KineticApi_Connect</a> (<a class="el" href="struct_kinetic_connection.html">KineticConnection</a> *connection, const char *host, int port, bool blocking)</td></tr>
 <tr class="memdesc:a8d9dd4011a9a09eae17c0d317d3f4225"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establishes a Kinetic protocol socket connection to a host.  <a href="#a8d9dd4011a9a09eae17c0d317d3f4225">More...</a><br/></td></tr>
 <tr class="separator:a8d9dd4011a9a09eae17c0d317d3f4225"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7da70d8da9bef7592285484ac21dd42e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__api_8c.html#a7da70d8da9bef7592285484ac21dd42e">KineticApi_ConfigureExchange</a> (<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *exchange, <a class="el" href="struct_kinetic_connection.html">KineticConnection</a> *connection, int64_t identity, uint8_t *key, size_t keyLength)</td></tr>
-<tr class="memdesc:a7da70d8da9bef7592285484ac21dd42e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes and configures a Kinetic exchange.  <a href="#a7da70d8da9bef7592285484ac21dd42e">More...</a><br/></td></tr>
-<tr class="separator:a7da70d8da9bef7592285484ac21dd42e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7883518d2454e5e84685475a348df532"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_operation.html">KineticOperation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__api_8c.html#a7883518d2454e5e84685475a348df532">KineticApi_CreateOperation</a> (<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *exchange, <a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *request, <a class="el" href="struct_kinetic_message.html">KineticMessage</a> *requestMsg, <a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *response, <a class="el" href="struct_kinetic_message.html">KineticMessage</a> *responseMsg)</td></tr>
-<tr class="memdesc:a7883518d2454e5e84685475a348df532"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and initializes a Kinetic operation.  <a href="#a7883518d2454e5e84685475a348df532">More...</a><br/></td></tr>
-<tr class="separator:a7883518d2454e5e84685475a348df532"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e039cf7d74c333802b2a1cd876cfc2c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__api_8c.html#a7e039cf7d74c333802b2a1cd876cfc2c">KineticApi_ConfigureExchange</a> (<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *exchange, <a class="el" href="struct_kinetic_connection.html">KineticConnection</a> *connection, int64_t clusterVersion, int64_t identity, const char *key, size_t keyLength)</td></tr>
+<tr class="memdesc:a7e039cf7d74c333802b2a1cd876cfc2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes and configures a Kinetic exchange.  <a href="#a7e039cf7d74c333802b2a1cd876cfc2c">More...</a><br/></td></tr>
+<tr class="separator:a7e039cf7d74c333802b2a1cd876cfc2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67b761a422cb1fa75f30e62708a00117"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_operation.html">KineticOperation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__api_8c.html#a67b761a422cb1fa75f30e62708a00117">KineticApi_CreateOperation</a> (<a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> *exchange, <a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *request, <a class="el" href="struct_kinetic_message.html">KineticMessage</a> *requestMsg, <a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *response)</td></tr>
+<tr class="memdesc:a67b761a422cb1fa75f30e62708a00117"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and initializes a Kinetic operation.  <a href="#a67b761a422cb1fa75f30e62708a00117">More...</a><br/></td></tr>
+<tr class="separator:a67b761a422cb1fa75f30e62708a00117"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8f3c3fa01178f9331949d774334f940"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73">KineticProto_Status_StatusCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__api_8c.html#ab8f3c3fa01178f9331949d774334f940">KineticApi_NoOp</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation)</td></tr>
 <tr class="memdesc:ab8f3c3fa01178f9331949d774334f940"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a NOOP command to test whether the Kinetic Device is operational.  <a href="#ab8f3c3fa01178f9331949d774334f940">More...</a><br/></td></tr>
 <tr class="separator:ab8f3c3fa01178f9331949d774334f940"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,11 +163,11 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__api_8c_source.html#l00032">32</a> of file <a class="el" href="kinetic__api_8c_source.html">kinetic_api.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00074">KineticConnection::connected</a>, <a class="el" href="kinetic__connection_8c_source.html#l00031">KineticConnection_Connect()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00026">KineticConnection_Init()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00031">LOG</a>, and <a class="el" href="kinetic__types_8h_source.html#l00077">KineticConnection::socketDescriptor</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00084">KineticConnection::connected</a>, <a class="el" href="kinetic__connection_8c_source.html#l00031">KineticConnection_Connect()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00026">KineticConnection_Init()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00033">LOG</a>, and <a class="el" href="kinetic__types_8h_source.html#l00087">KineticConnection::socketDescriptor</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a7da70d8da9bef7592285484ac21dd42e"></a>
+<a class="anchor" id="a7e039cf7d74c333802b2a1cd876cfc2c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -187,12 +187,18 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>clusterVersion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
           <td class="paramname"><em>identity</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
@@ -214,6 +220,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">exchange</td><td><a class="el" href="struct_kinetic_exchange.html">KineticExchange</a> instance to configure with exchange info </td></tr>
     <tr><td class="paramname">connection</td><td><a class="el" href="struct_kinetic_connection.html">KineticConnection</a> to associate with exchange </td></tr>
+    <tr><td class="paramname">clusterVersion</td><td>Cluster version for the exchange </td></tr>
     <tr><td class="paramname">identity</td><td>Identity to use for the exchange </td></tr>
     <tr><td class="paramname">key</td><td>Key to use for HMAC calculations </td></tr>
     <tr><td class="paramname">keyLength</td><td>Length of HMAC key </td></tr>
@@ -224,11 +231,11 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__api_8c_source.html#l00055">55</a> of file <a class="el" href="kinetic__api_8c_source.html">kinetic_api.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__exchange_8c_source.html#l00035">KineticExchange_ConfigureConnectionID()</a>, <a class="el" href="kinetic__exchange_8c_source.html#l00025">KineticExchange_Init()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00031">LOG</a>.</p>
+<p>References <a class="el" href="kinetic__exchange_8c_source.html#l00035">KineticExchange_ConfigureConnectionID()</a>, <a class="el" href="kinetic__exchange_8c_source.html#l00025">KineticExchange_Init()</a>, <a class="el" href="kinetic__exchange_8c_source.html#l00043">KineticExchange_SetClusterVersion()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00033">LOG</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a7883518d2454e5e84685475a348df532"></a>
+<a class="anchor" id="a67b761a422cb1fa75f30e62708a00117"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -254,13 +261,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *&#160;</td>
-          <td class="paramname"><em>response</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_message.html">KineticMessage</a> *&#160;</td>
-          <td class="paramname"><em>responseMsg</em>&#160;</td>
+          <td class="paramname"><em>response</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -283,9 +284,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a configured operation instance </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__api_8c_source.html#l00086">86</a> of file <a class="el" href="kinetic__api_8c_source.html">kinetic_api.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__api_8c_source.html#l00088">88</a> of file <a class="el" href="kinetic__api_8c_source.html">kinetic_api.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__operation_8h_source.html#l00030">KineticOperation::exchange</a>, <a class="el" href="kinetic__message_8c_source.html#l00023">KineticMessage_Init()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00029">KineticPDU_Init()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00031">LOG</a>, <a class="el" href="kinetic__pdu_8h_source.html#l00047">KineticPDU::protobuf</a>, <a class="el" href="kinetic__operation_8h_source.html#l00031">KineticOperation::request</a>, and <a class="el" href="kinetic__operation_8h_source.html#l00032">KineticOperation::response</a>.</p>
+<p>References <a class="el" href="kinetic__operation_8h_source.html#l00030">KineticOperation::exchange</a>, <a class="el" href="kinetic__message_8c_source.html#l00023">KineticMessage_Init()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00033">KineticPDU_Init()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00033">LOG</a>, <a class="el" href="kinetic__pdu_8h_source.html#l00051">KineticPDU::message</a>, <a class="el" href="kinetic__pdu_8h_source.html#l00052">KineticPDU::proto</a>, <a class="el" href="kinetic__operation_8h_source.html#l00031">KineticOperation::request</a>, and <a class="el" href="kinetic__operation_8h_source.html#l00032">KineticOperation::response</a>.</p>
 
 </div>
 </div>
@@ -312,9 +313,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resultant status code </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__api_8c_source.html#l00140">140</a> of file <a class="el" href="kinetic__api_8c_source.html">kinetic_api.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__api_8c_source.html#l00136">136</a> of file <a class="el" href="kinetic__api_8c_source.html">kinetic_api.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00091">KineticMessage::command</a>, <a class="el" href="kinetic__exchange_8h_source.html#l00066">KineticExchange::connection</a>, <a class="el" href="kinetic__operation_8h_source.html#l00030">KineticOperation::exchange</a>, <a class="el" href="kinetic__pdu_8h_source.html#l00059">KineticPDU::exchange</a>, <a class="el" href="kinetic__proto_8h_source.html#l00067">KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>, <a class="el" href="kinetic__exchange_8c_source.html#l00051">KineticExchange_IncrementSequence()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00032">KineticOperation_BuildNoop()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00096">KineticPDU_Receive()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00061">KineticPDU_Send()</a>, <a class="el" href="kinetic__pdu_8h_source.html#l00047">KineticPDU::protobuf</a>, <a class="el" href="kinetic__operation_8h_source.html#l00031">KineticOperation::request</a>, and <a class="el" href="kinetic__operation_8h_source.html#l00032">KineticOperation::response</a>.</p>
+<p>References <a class="el" href="kinetic__exchange_8h_source.html#l00066">KineticExchange::connection</a>, <a class="el" href="kinetic__operation_8h_source.html#l00030">KineticOperation::exchange</a>, <a class="el" href="kinetic__pdu_8h_source.html#l00064">KineticPDU::exchange</a>, <a class="el" href="kinetic__proto_8h_source.html#l00067">KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>, <a class="el" href="kinetic__exchange_8c_source.html#l00051">KineticExchange_IncrementSequence()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00032">KineticOperation_BuildNoop()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00110">KineticPDU_Receive()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00063">KineticPDU_Send()</a>, <a class="el" href="kinetic__pdu_8h_source.html#l00051">KineticPDU::message</a>, <a class="el" href="kinetic__pdu_8h_source.html#l00052">KineticPDU::proto</a>, <a class="el" href="kinetic__operation_8h_source.html#l00031">KineticOperation::request</a>, and <a class="el" href="kinetic__operation_8h_source.html#l00032">KineticOperation::response</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "kinetic_logger.h" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_logger.h" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,6 +8,8 @@ kinetic_logger.h \-
 .PP
 \fC#include 'kinetic_types\&.h'\fP
 .br
+\fC#include <stdarg\&.h>\fP
+.br
 
 .SS "Macros"
 
@@ -16,7 +18,10 @@ kinetic_logger.h \-
 .RI "#define \fBKINETIC_LOG_FILE\fP   'kinetic\&.log'"
 .br
 .ti -1c
-.RI "#define \fBLOG\fP(message)   \fBKineticLogger_Log\fP(message);"
+.RI "#define \fBLOG\fP(message)   \fBKineticLogger_Log\fP(message)"
+.br
+.ti -1c
+.RI "#define \fBLOGF\fP(message,\&.\&.\&.)   \fBKineticLogger_LogPrintf\fP(message, ##__VA_ARGS__)"
 .br
 .in -1c
 .SS "Functions"
@@ -28,17 +33,24 @@ kinetic_logger.h \-
 .ti -1c
 .RI "void \fBKineticLogger_Log\fP (const char *message)"
 .br
+.ti -1c
+.RI "int \fBKineticLogger_LogPrintf\fP (const char *format,\&.\&.\&.)"
+.br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
 .SS "#define KINETIC_LOG_FILE   'kinetic\&.log'"
 
 .PP
-Definition at line 26 of file kinetic_logger\&.h\&.
-.SS "#define LOG(message)   \fBKineticLogger_Log\fP(message);"
+Definition at line 27 of file kinetic_logger\&.h\&.
+.SS "#define LOG(message)   \fBKineticLogger_Log\fP(message)"
 
 .PP
-Definition at line 31 of file kinetic_logger\&.h\&.
+Definition at line 33 of file kinetic_logger\&.h\&.
+.SS "#define LOGF(message, \&.\&.\&.)   \fBKineticLogger_LogPrintf\fP(message, ##__VA_ARGS__)"
+
+.PP
+Definition at line 34 of file kinetic_logger\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "void KineticLogger_Init (const char *logFile)"
@@ -46,13 +58,19 @@ Definition at line 31 of file kinetic_logger\&.h\&.
 .PP
 Definition at line 29 of file kinetic_logger\&.c\&.
 .PP
-References LogToStdErr\&.
+References LogToConsole\&.
 .SS "void KineticLogger_Log (const char *message)"
 
 .PP
-Definition at line 45 of file kinetic_logger\&.c\&.
+Definition at line 50 of file kinetic_logger\&.c\&.
 .PP
-References LogToStdErr\&.
+References LogToConsole\&.
+.SS "int KineticLogger_LogPrintf (const char *format, \&.\&.\&.)"
+
+.PP
+Definition at line 72 of file kinetic_logger\&.c\&.
+.PP
+References KineticLogger_Log()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

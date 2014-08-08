@@ -1,4 +1,4 @@
-.TH "kinetic_hmac.c" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_hmac.c" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -24,10 +24,10 @@ kinetic_hmac.c \-
 .RI "void \fBKineticHMAC_Init\fP (\fBKineticHMAC\fP *hmac, \fBKineticProto_Security_ACL_HMACAlgorithm\fP algorithm)"
 .br
 .ti -1c
-.RI "void \fBKineticHMAC_Populate\fP (\fBKineticHMAC\fP *hmac, \fBKineticMessage\fP *message, const uint8_t *const key, size_t keyLen)"
+.RI "void \fBKineticHMAC_Populate\fP (\fBKineticHMAC\fP *hmac, \fBKineticProto\fP *proto, const char *const key, size_t keyLen)"
 .br
 .ti -1c
-.RI "bool \fBKineticHMAC_Validate\fP (const \fBKineticProto\fP *proto, const uint8_t *const key, size_t keyLen)"
+.RI "bool \fBKineticHMAC_Validate\fP (const \fBKineticProto\fP *proto, const char *const key, size_t keyLen)"
 .br
 .in -1c
 .SH "Function Documentation"
@@ -38,18 +38,18 @@ kinetic_hmac.c \-
 Definition at line 29 of file kinetic_hmac\&.c\&.
 .PP
 References KineticHMAC::algorithm, KINETIC_HMAC_MAX_LEN, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM, KineticHMAC::value, and KineticHMAC::valueLength\&.
-.SS "void KineticHMAC_Populate (\fBKineticHMAC\fP *hmac, \fBKineticMessage\fP *message, const uint8_t *constkey, size_tkeyLen)"
+.SS "void KineticHMAC_Populate (\fBKineticHMAC\fP *hmac, \fBKineticProto\fP *proto, const char *constkey, size_tkeyLen)"
 
 .PP
 Definition at line 43 of file kinetic_hmac\&.c\&.
 .PP
-References KineticHMAC::algorithm, KineticHMAC_Init(), KineticMessage::proto, KineticHMAC::value, and KineticHMAC::valueLength\&.
-.SS "bool KineticHMAC_Validate (const \fBKineticProto\fP *proto, const uint8_t *constkey, size_tkeyLen)"
+References KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC::value, and KineticHMAC::valueLength\&.
+.SS "bool KineticHMAC_Validate (const \fBKineticProto\fP *proto, const char *constkey, size_tkeyLen)"
 
 .PP
-Definition at line 58 of file kinetic_hmac\&.c\&.
+Definition at line 54 of file kinetic_hmac\&.c\&.
 .PP
-References KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM, KineticHMAC_Init(), KineticHMAC::value, and KineticHMAC::valueLength\&.
+References KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC::value, and KineticHMAC::valueLength\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

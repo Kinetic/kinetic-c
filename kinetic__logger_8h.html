@@ -60,6 +60,7 @@ $(document).ready(function(){initNavTree('kinetic__logger_8h.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>&quot;</code><br/>
+<code>#include &lt;stdarg.h&gt;</code><br/>
 </div>
 <p><a href="kinetic__logger_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -67,8 +68,10 @@ $(document).ready(function(){initNavTree('kinetic__logger_8h.html','');});
 Macros</h2></td></tr>
 <tr class="memitem:ae9edfec85940b30f258236a221b51057"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8h.html#ae9edfec85940b30f258236a221b51057">KINETIC_LOG_FILE</a>&#160;&#160;&#160;&quot;kinetic.log&quot;</td></tr>
 <tr class="separator:ae9edfec85940b30f258236a221b51057"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04a117a4d31fa8b12a406b1aa66864f3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(message)&#160;&#160;&#160;<a class="el" href="kinetic__logger_8h.html#a28134eaa6c6c82a2755d895573dc8201">KineticLogger_Log</a>(message);</td></tr>
+<tr class="memitem:a04a117a4d31fa8b12a406b1aa66864f3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(message)&#160;&#160;&#160;<a class="el" href="kinetic__logger_8h.html#a28134eaa6c6c82a2755d895573dc8201">KineticLogger_Log</a>(message)</td></tr>
 <tr class="separator:a04a117a4d31fa8b12a406b1aa66864f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e91ccd87aae13aca0a7f1d6518d93f7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">LOGF</a>(message,...)&#160;&#160;&#160;<a class="el" href="kinetic__logger_8h.html#a1c76a5e7dd9fdb81725953964d803449">KineticLogger_LogPrintf</a>(message, ##__VA_ARGS__)</td></tr>
+<tr class="separator:a4e91ccd87aae13aca0a7f1d6518d93f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -76,6 +79,8 @@ Functions</h2></td></tr>
 <tr class="separator:ae302c2ba2d4dcb526dd9efdec6264d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28134eaa6c6c82a2755d895573dc8201"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8h.html#a28134eaa6c6c82a2755d895573dc8201">KineticLogger_Log</a> (const char *message)</td></tr>
 <tr class="separator:a28134eaa6c6c82a2755d895573dc8201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c76a5e7dd9fdb81725953964d803449"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8h.html#a1c76a5e7dd9fdb81725953964d803449">KineticLogger_LogPrintf</a> (const char *format,...)</td></tr>
+<tr class="separator:a1c76a5e7dd9fdb81725953964d803449"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="ae9edfec85940b30f258236a221b51057"></a>
@@ -88,7 +93,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8h_source.html#l00026">26</a> of file <a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8h_source.html#l00027">27</a> of file <a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>.</p>
 
 </div>
 </div>
@@ -101,12 +106,40 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">message</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="kinetic__logger_8h.html#a28134eaa6c6c82a2755d895573dc8201">KineticLogger_Log</a>(message);</td>
+          <td>&#160;&#160;&#160;<a class="el" href="kinetic__logger_8h.html#a28134eaa6c6c82a2755d895573dc8201">KineticLogger_Log</a>(message)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8h_source.html#l00031">31</a> of file <a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8h_source.html#l00033">33</a> of file <a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4e91ccd87aae13aca0a7f1d6518d93f7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LOGF</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="kinetic__logger_8h.html#a1c76a5e7dd9fdb81725953964d803449">KineticLogger_LogPrintf</a>(message, ##__VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8h_source.html#l00034">34</a> of file <a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>.</p>
 
 </div>
 </div>
@@ -127,7 +160,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00029">29</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToStdErr</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToConsole</a>.</p>
 
 </div>
 </div>
@@ -145,9 +178,39 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00045">45</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00050">50</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToStdErr</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToConsole</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1c76a5e7dd9fdb81725953964d803449"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KineticLogger_LogPrintf </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00072">72</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00050">KineticLogger_Log()</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "KineticPDU" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "KineticPDU" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,7 +15,13 @@ KineticPDU \-
 .RI "\fBKineticPDUHeader\fP \fBheader\fP"
 .br
 .ti -1c
-.RI "\fBKineticMessage\fP * \fBprotobuf\fP"
+.RI "uint8_t \fBrawHeader\fP [sizeof(\fBKineticPDUHeader\fP)]"
+.br
+.ti -1c
+.RI "\fBKineticMessage\fP * \fBmessage\fP"
+.br
+.ti -1c
+.RI "\fBKineticProto\fP * \fBproto\fP"
 .br
 .ti -1c
 .RI "uint32_t \fBprotobufLength\fP"
@@ -38,41 +44,49 @@ KineticPDU \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 41 of file kinetic_pdu\&.h\&.
+Definition at line 44 of file kinetic_pdu\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticPDUHeader\fP KineticPDU::header"
 
 .PP
-Definition at line 44 of file kinetic_pdu\&.h\&.
-.SS "\fBKineticMessage\fP* KineticPDU::protobuf"
-
-.PP
 Definition at line 47 of file kinetic_pdu\&.h\&.
-.SS "uint32_t KineticPDU::protobufLength"
+.SS "uint8_t KineticPDU::rawHeader[sizeof(\fBKineticPDUHeader\fP)]"
 
 .PP
 Definition at line 48 of file kinetic_pdu\&.h\&.
-.SS "uint8_t KineticPDU::protobufScratch[1024 *1024]"
+.SS "\fBKineticMessage\fP* KineticPDU::message"
 
 .PP
-Definition at line 49 of file kinetic_pdu\&.h\&.
-.SS "uint8_t* KineticPDU::value"
+Definition at line 51 of file kinetic_pdu\&.h\&.
+.SS "\fBKineticProto\fP* KineticPDU::proto"
 
 .PP
 Definition at line 52 of file kinetic_pdu\&.h\&.
-.SS "uint32_t KineticPDU::valueLength"
+.SS "uint32_t KineticPDU::protobufLength"
 
 .PP
 Definition at line 53 of file kinetic_pdu\&.h\&.
+.SS "uint8_t KineticPDU::protobufScratch[1024 *1024]"
+
+.PP
+Definition at line 54 of file kinetic_pdu\&.h\&.
+.SS "uint8_t* KineticPDU::value"
+
+.PP
+Definition at line 57 of file kinetic_pdu\&.h\&.
+.SS "uint32_t KineticPDU::valueLength"
+
+.PP
+Definition at line 58 of file kinetic_pdu\&.h\&.
 .SS "\fBKineticHMAC\fP KineticPDU::hmac"
 
 .PP
-Definition at line 56 of file kinetic_pdu\&.h\&.
+Definition at line 61 of file kinetic_pdu\&.h\&.
 .SS "\fBKineticExchange\fP* KineticPDU::exchange"
 
 .PP
-Definition at line 59 of file kinetic_pdu\&.h\&.
+Definition at line 64 of file kinetic_pdu\&.h\&.
 
 .SH "Author"
 .PP 

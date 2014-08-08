@@ -72,11 +72,13 @@ Functions</h2></td></tr>
 <tr class="separator:ae302c2ba2d4dcb526dd9efdec6264d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28134eaa6c6c82a2755d895573dc8201"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a28134eaa6c6c82a2755d895573dc8201">KineticLogger_Log</a> (const char *message)</td></tr>
 <tr class="separator:a28134eaa6c6c82a2755d895573dc8201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c76a5e7dd9fdb81725953964d803449"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a1c76a5e7dd9fdb81725953964d803449">KineticLogger_LogPrintf</a> (const char *format,...)</td></tr>
+<tr class="separator:a1c76a5e7dd9fdb81725953964d803449"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a2a4a2b178ec7a8e595a29a2652acab5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a2a4a2b178ec7a8e595a29a2652acab5e">LogToStdErr</a> = true</td></tr>
-<tr class="separator:a2a4a2b178ec7a8e595a29a2652acab5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae60edc58511ed3e59de3c86cf749ae48"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#ae60edc58511ed3e59de3c86cf749ae48">LogToConsole</a> = true</td></tr>
+<tr class="separator:ae60edc58511ed3e59de3c86cf749ae48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ae302c2ba2d4dcb526dd9efdec6264d8d"></a>
@@ -95,7 +97,7 @@ Variables</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00029">29</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToStdErr</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToConsole</a>.</p>
 
 </div>
 </div>
@@ -113,19 +115,49 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00045">45</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00050">50</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToStdErr</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToConsole</a>.</p>
 
 </div>
 </div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="a2a4a2b178ec7a8e595a29a2652acab5e"></a>
+<a class="anchor" id="a1c76a5e7dd9fdb81725953964d803449"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool LogToStdErr = true</td>
+          <td class="memname">int KineticLogger_LogPrintf </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00072">72</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00050">KineticLogger_Log()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="ae60edc58511ed3e59de3c86cf749ae48"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LogToConsole = true</td>
         </tr>
       </table>
 </div><div class="memdoc">

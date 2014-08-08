@@ -1,4 +1,4 @@
-.TH "kinetic_pdu.c" 3 "Wed Jul 30 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_pdu.c" 3 "Thu Aug 7 2014" "Version v0.3.3" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,6 +6,8 @@ kinetic_pdu.c \-
 .SH SYNOPSIS
 .br
 .PP
+\fC#include 'kinetic_types\&.h'\fP
+.br
 \fC#include 'kinetic_pdu\&.h'\fP
 .br
 \fC#include 'kinetic_socket\&.h'\fP
@@ -14,7 +16,22 @@ kinetic_pdu.c \-
 .br
 \fC#include 'kinetic_logger\&.h'\fP
 .br
+\fC#include 'kinetic_proto\&.h'\fP
+.br
 
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBLOG_PROTO_INIT\fP()"
+.br
+.ti -1c
+.RI "#define \fBLOG_PROTO_LEVEL_START\fP(name)"
+.br
+.ti -1c
+.RI "#define \fBLOG_PROTO_LEVEL_END\fP()"
+.br
+.in -1c
 .SS "Functions"
 
 .in +1c
@@ -28,26 +45,58 @@ kinetic_pdu.c \-
 .RI "bool \fBKineticPDU_Receive\fP (\fBKineticPDU\fP *const response)"
 .br
 .in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define LOG_PROTO_INIT()"
+\fBValue:\fP
+.PP
+.nf
+unsigned int _i; \
+    char _indent[32] = "  "; \
+    char _buf[1024]; \
+    const char* _str_true = "true"; \
+    const char* _str_false = "false";
+.fi
+.PP
+Definition at line 206 of file kinetic_pdu\&.c\&.
+.SS "#define LOG_PROTO_LEVEL_START(name)"
+\fBValue:\fP
+.PP
+.nf
+LOGF("%s" name " {", _indent); \
+    strcat(_indent, "  ");
+.fi
+.PP
+Definition at line 213 of file kinetic_pdu\&.c\&.
+.SS "#define LOG_PROTO_LEVEL_END()"
+\fBValue:\fP
+.PP
+.nf
+_indent[strlen(_indent) - 2] = '\0'; \\
+    LOGF("%s}", _indent);
+.fi
+.PP
+Definition at line 217 of file kinetic_pdu\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "void KineticPDU_Init (\fBKineticPDU\fP *constpdu, \fBKineticExchange\fP *constexchange, \fBKineticMessage\fP *constmessage, uint8_t *constvalue, int32_tvalueLength)"
 
 .PP
-Definition at line 29 of file kinetic_pdu\&.c\&.
+Definition at line 33 of file kinetic_pdu\&.c\&.
 .PP
-References KineticPDU::exchange, KineticPDU::header, KineticMessage::header, KineticExchange_ConfigureHeader(), KineticProto_get_packed_size(), KineticMessage::proto, KineticPDUHeader::protobufLength, KineticPDU::protobufLength, KineticPDUHeader::valueLength, and KineticPDU::valueLength\&.
+References KineticPDU::exchange, KineticMessage::header, KineticExchange_ConfigureHeader(), and KineticMessage::proto\&.
 .SS "bool KineticPDU_Send (\fBKineticPDU\fP *constrequest)"
 
 .PP
-Definition at line 61 of file kinetic_pdu\&.c\&.
+Definition at line 63 of file kinetic_pdu\&.c\&.
 .PP
-References KineticExchange::connection, KineticPDU::exchange, KineticPDU::header, KineticPDU::hmac, KineticExchange::key, KineticExchange::keyLength, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC_Populate(), KineticSocket_Write(), KineticSocket_WriteProtobuf(), LOG, KineticPDU::protobuf, KineticConnection::socketDescriptor, KineticPDU::value, and KineticPDU::valueLength\&.
+References KineticExchange::connection, KineticPDU::exchange, KineticPDU::header, KineticPDU::hmac, KineticExchange::key, KineticExchange::keyLength, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC_Populate(), KineticProto_get_packed_size(), KineticSocket_Write(), KineticSocket_WriteProtobuf(), LOG, LOGF, KineticPDU::message, KineticMessage::proto, KineticPDUHeader::protobufLength, KineticPDU::protobufLength, KineticConnection::socketDescriptor, KineticPDU::value, KineticPDUHeader::valueLength, and KineticPDU::valueLength\&.
 .SS "bool KineticPDU_Receive (\fBKineticPDU\fP *constresponse)"
 
 .PP
-Definition at line 96 of file kinetic_pdu\&.c\&.
+Definition at line 110 of file kinetic_pdu\&.c\&.
 .PP
-References KineticExchange::connection, KineticPDU::exchange, KineticPDU::header, KineticExchange::key, KineticExchange::keyLength, KineticHMAC_Validate(), KineticSocket_Read(), KineticSocket_ReadProtobuf(), LOG, KineticMessage::proto, KineticPDU::protobuf, KineticPDUHeader::protobufLength, KineticPDU::protobufScratch, KineticConnection::socketDescriptor, KineticPDU::value, KineticPDUHeader::valueLength, and KineticPDU::valueLength\&.
+References KineticExchange::connection, KineticPDU::exchange, KineticPDU::header, KineticExchange::key, KineticExchange::keyLength, KineticHMAC_Validate(), KineticSocket_Read(), KineticSocket_ReadProtobuf(), LOG, LOGF, KineticPDU::proto, KineticPDUHeader::protobufLength, KineticPDU::protobufScratch, KineticPDU::rawHeader, KineticConnection::socketDescriptor, KineticPDU::value, KineticPDUHeader::valueLength, KineticPDU::valueLength, and KineticPDUHeader::versionPrefix\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

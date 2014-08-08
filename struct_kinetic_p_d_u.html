@@ -65,8 +65,12 @@ $(document).ready(function(){initNavTree('struct_kinetic_p_d_u.html','');});
 Data Fields</h2></td></tr>
 <tr class="memitem:a626673d332c72f6b188e9629b09cb2c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_p_d_u_header.html">KineticPDUHeader</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">header</a></td></tr>
 <tr class="separator:a626673d332c72f6b188e9629b09cb2c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a596d6cc864ccf02250c5fb03702cbd8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_message.html">KineticMessage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p_d_u.html#a596d6cc864ccf02250c5fb03702cbd8e">protobuf</a></td></tr>
-<tr class="separator:a596d6cc864ccf02250c5fb03702cbd8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60d774820ba7f01554f4f0863c447ac8"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p_d_u.html#a60d774820ba7f01554f4f0863c447ac8">rawHeader</a> [sizeof(<a class="el" href="struct_kinetic_p_d_u_header.html">KineticPDUHeader</a>)]</td></tr>
+<tr class="separator:a60d774820ba7f01554f4f0863c447ac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab62c4ab6fd196383931e87ff9de9ae85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_message.html">KineticMessage</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a></td></tr>
+<tr class="separator:ab62c4ab6fd196383931e87ff9de9ae85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8dadb5a4357e19bd22828df64f66be3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3">proto</a></td></tr>
+<tr class="separator:ab8dadb5a4357e19bd22828df64f66be3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cab72fb4d7f6536cc54cf74d6bcdebe"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p_d_u.html#a0cab72fb4d7f6536cc54cf74d6bcdebe">protobufLength</a></td></tr>
 <tr class="separator:a0cab72fb4d7f6536cc54cf74d6bcdebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7677322bce753465451ae3406e0d6897"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p_d_u.html#a7677322bce753465451ae3406e0d6897">protobufScratch</a> [1024 *1024]</td></tr>
@@ -82,7 +86,7 @@ Data Fields</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00041">41</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00044">44</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a626673d332c72f6b188e9629b09cb2c8"></a>
 <div class="memitem">
@@ -94,21 +98,49 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00044">44</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00047">47</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a596d6cc864ccf02250c5fb03702cbd8e"></a>
+<a class="anchor" id="a60d774820ba7f01554f4f0863c447ac8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_kinetic_message.html">KineticMessage</a>* KineticPDU::protobuf</td>
+          <td class="memname">uint8_t KineticPDU::rawHeader[sizeof(<a class="el" href="struct_kinetic_p_d_u_header.html">KineticPDUHeader</a>)]</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00047">47</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00048">48</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab62c4ab6fd196383931e87ff9de9ae85"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_kinetic_message.html">KineticMessage</a>* KineticPDU::message</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00051">51</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab8dadb5a4357e19bd22828df64f66be3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a>* KineticPDU::proto</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00052">52</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 
 </div>
 </div>
@@ -122,7 +154,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00048">48</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00053">53</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 
 </div>
 </div>
@@ -136,7 +168,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00049">49</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00054">54</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 
 </div>
 </div>
@@ -150,7 +182,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00052">52</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00057">57</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 
 </div>
 </div>
@@ -164,7 +196,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00053">53</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00058">58</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 
 </div>
 </div>
@@ -178,7 +210,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00056">56</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00061">61</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 
 </div>
 </div>
@@ -192,7 +224,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00059">59</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8h_source.html#l00064">64</a> of file <a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>.</p>
 
 </div>
 </div>
