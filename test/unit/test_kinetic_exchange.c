@@ -22,7 +22,7 @@
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
 #include "kinetic_exchange.h"
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c.h"
 #include <time.h>
 
 static KineticConnection Connection;

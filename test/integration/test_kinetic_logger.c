@@ -25,7 +25,7 @@
 #include "kinetic_hmac.h"
 #include "kinetic_pdu.h"
 #include "kinetic_socket.h"
-#include "protobuf-c/protobuf-c.h"
+#include "protobuf-c.h"
 #include "socket99.h"
 
 extern bool LogToConsole;
