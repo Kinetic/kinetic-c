@@ -52,13 +52,11 @@
 #endif
 
 // Define max host name length
-#if !defined(__APPLE__) && defined(__unix__)
-    // Some Linux environments require this, although not all, but it's benign.
-    #ifndef _BSD_SOURCE
-        #define _BSD_SOURCE
-    #endif // _BSD_SOURCE
-    #include <unistd.h>
-#endif  // __unix__
+// Some Linux environments require this, although not all, but it's benign.
+#ifndef _BSD_SOURCE
+    #define _BSD_SOURCE
+#endif // _BSD_SOURCE
+#include <unistd.h>
 #ifndef HOST_NAME_MAX
     #define HOST_NAME_MAX 256
 #endif // HOST_NAME_MAX
