@@ -25,6 +25,10 @@
 #include "kinetic_message.h"
 
 #include "protobuf-c/protobuf-c.h"
+#ifndef _BSD_SOURCE
+    #define _BSD_SOURCE
+#endif // _BSD_SOURCE
+#include <unistd.h>
 #include "socket99.h"
 
 #include <errno.h>
