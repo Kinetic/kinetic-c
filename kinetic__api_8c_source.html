@@ -77,166 +77,169 @@ $(document).ready(function(){initNavTree('kinetic__api_8c_source.html','');});
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__api_8h.html">kinetic_api.h</a>&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__connection_8h.html">kinetic_connection.h</a>&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__pdu_8h.html">kinetic_pdu.h</a>&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__logger_8h.html">kinetic_logger.h</a>&quot;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#a27b1217d8c965287f2f06009903507aa">   27</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__api_8c.html#a27b1217d8c965287f2f06009903507aa">KineticApi_Init</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* logFile)</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="kinetic__logger_8c.html#ae302c2ba2d4dcb526dd9efdec6264d8d">KineticLogger_Init</a>(logFile);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#a8d9dd4011a9a09eae17c0d317d3f4225">   32</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__api_8c.html#a8d9dd4011a9a09eae17c0d317d3f4225">KineticApi_Connect</a>(</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* connection,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* host,</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">int</span> port,</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">bool</span> blocking)</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="kinetic__connection_8c.html#a6524070218513d73d3bf8e02f50c75b3">KineticConnection_Init</a>(connection);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="kinetic__connection_8c.html#a067e3a232197b9d572244d40607ab24f">KineticConnection_Connect</a>(connection, host, port, blocking))</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a> = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> = -1;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">char</span> message[64];</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        sprintf(message, <span class="stringliteral">&quot;Failed creating connection to %s:%d&quot;</span>, host, port);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(message);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__exchange_8h.html">kinetic_exchange.h</a>&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__operation_8h.html">kinetic_operation.h</a>&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__connection_8h.html">kinetic_connection.h</a>&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__pdu_8h.html">kinetic_pdu.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__logger_8h.html">kinetic_logger.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#a27b1217d8c965287f2f06009903507aa">   29</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__api_8c.html#a27b1217d8c965287f2f06009903507aa">KineticApi_Init</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* logFile)</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="kinetic__logger_8c.html#ae302c2ba2d4dcb526dd9efdec6264d8d">KineticLogger_Init</a>(logFile);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;}</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#a8d9dd4011a9a09eae17c0d317d3f4225">   34</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__api_8c.html#a8d9dd4011a9a09eae17c0d317d3f4225">KineticApi_Connect</a>(</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* connection,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* host,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordtype">int</span> port,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordtype">bool</span> blocking)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="kinetic__connection_8c.html#a6524070218513d73d3bf8e02f50c75b3">KineticConnection_Init</a>(connection);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="kinetic__connection_8c.html#a067e3a232197b9d572244d40607ab24f">KineticConnection_Connect</a>(connection, host, port, blocking))</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> = -1;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">char</span> message[64];</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        sprintf(message, <span class="stringliteral">&quot;Failed creating connection to %s:%d&quot;</span>, host, port);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(message);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#a7e039cf7d74c333802b2a1cd876cfc2c">   55</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__api_8c.html#a7e039cf7d74c333802b2a1cd876cfc2c">KineticApi_ConfigureExchange</a>(</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="struct_kinetic_exchange.html">KineticExchange</a>* exchange,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* connection,</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    int64_t clusterVersion,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    int64_t identity,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* key,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">size_t</span> keyLength)</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;{</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">if</span> (exchange == NULL)</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified KineticExchange is NULL!&quot;</span>);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">if</span> (key == NULL)</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified Kinetic Protocol key is NULL!&quot;</span>);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">if</span> (keyLength == 0)</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    {</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified Kinetic Protocol key length is NULL!&quot;</span>);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="kinetic__exchange_8c.html#ac70a003301820ad2e39787ec66363486">KineticExchange_Init</a>(exchange, identity, key, keyLength, connection);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="kinetic__exchange_8c.html#a152138735516f7ea8304e6ac36047da1">KineticExchange_SetClusterVersion</a>(exchange, clusterVersion);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="kinetic__exchange_8c.html#a79f8df71d49e5853b85dbc04aea2dadf">KineticExchange_ConfigureConnectionID</a>(exchange);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#a67b761a422cb1fa75f30e62708a00117">   88</a></span>&#160;<a class="code" href="struct_kinetic_operation.html">KineticOperation</a> <a class="code" href="kinetic__api_8c.html#a67b761a422cb1fa75f30e62708a00117">KineticApi_CreateOperation</a>(</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="struct_kinetic_exchange.html">KineticExchange</a>* exchange,</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* request,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <a class="code" href="struct_kinetic_message.html">KineticMessage</a>* requestMsg,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* response)</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;{</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <a class="code" href="struct_kinetic_operation.html">KineticOperation</a> op;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">if</span> (exchange == NULL)</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    {</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified KineticExchange is NULL!&quot;</span>);</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        assert(exchange != NULL);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    }</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">if</span> (request == NULL)</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified request KineticPDU is NULL!&quot;</span>);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        assert(request != NULL);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">if</span> (requestMsg == NULL)</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    {</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified request KineticMessage is NULL!&quot;</span>);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        assert(requestMsg != NULL);</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordflow">if</span> (response == NULL)</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    {</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified response KineticPDU is NULL!&quot;</span>);</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        assert(response != NULL);</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <a class="code" href="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a>(requestMsg);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <a class="code" href="kinetic__pdu_8c.html#a036f988ac116a054a76fcc59cd2d6647">KineticPDU_Init</a>(request, exchange, requestMsg, NULL, 0);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="comment">// KineticMessage_Init(responseMsg);</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <a class="code" href="kinetic__pdu_8c.html#a036f988ac116a054a76fcc59cd2d6647">KineticPDU_Init</a>(response, exchange, NULL, NULL, 0);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">exchange</a> = exchange;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a> = request;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a> = requestMsg;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a> = response;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a> = NULL;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3">proto</a> = NULL;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordflow">return</span> op;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;}</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
-<div class="line"><a name="l00136"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#ab8f3c3fa01178f9331949d774334f940">  136</a></span>&#160;<a class="code" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73">KineticProto_Status_StatusCode</a> <a class="code" href="kinetic__api_8c.html#ab8f3c3fa01178f9331949d774334f940">KineticApi_NoOp</a>(<a class="code" href="struct_kinetic_operation.html">KineticOperation</a>* operation)</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;{</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <a class="code" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73">KineticProto_Status_StatusCode</a> status =</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <a class="code" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a2c896f8bfd0c8f6e7dc9c41bb249e9db">KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">exchange</a> != NULL);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">exchange</a>-&gt;<a class="code" href="struct_kinetic_exchange.html#aa419c48291fb6542e616e13c8a7d4701">connection</a> != NULL);</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a> != NULL);</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a> != NULL);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a> != NULL);</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a> == NULL);</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="comment">// Initialize request</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <a class="code" href="kinetic__exchange_8c.html#afb310a881d72cca38fe091cc0c0b2190">KineticExchange_IncrementSequence</a>(operation-&gt;<a class="code" href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">exchange</a>);</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <a class="code" href="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888">KineticOperation_BuildNoop</a>(operation);</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="comment">// Send the request</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <a class="code" href="kinetic__pdu_8c.html#ad853748c77a0a8505812449f85fa3f72">KineticPDU_Send</a>(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a>);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="comment">// Associate response with same exchange as request</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a2e33e714621fd2316d394048f4480f86">exchange</a> = operation-&gt;<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a2e33e714621fd2316d394048f4480f86">exchange</a>;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="comment">// Receive the response</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="kinetic__pdu_8c.html#acff84c8347b8df5df8d90364d990268a">KineticPDU_Receive</a>(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>))</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    {</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        status = operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3">proto</a>-&gt;command-&gt;status-&gt;code;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    }</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keywordflow">return</span> status;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;}</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#a7e039cf7d74c333802b2a1cd876cfc2c">   57</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__api_8c.html#a7e039cf7d74c333802b2a1cd876cfc2c">KineticApi_ConfigureExchange</a>(</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="struct_kinetic_exchange.html">KineticExchange</a>* exchange,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* connection,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    int64_t clusterVersion,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    int64_t identity,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* key,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">size_t</span> keyLength)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;{</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">if</span> (exchange == NULL)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified KineticExchange is NULL!&quot;</span>);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordflow">if</span> (key == NULL)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified Kinetic Protocol key is NULL!&quot;</span>);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">if</span> (keyLength == 0)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified Kinetic Protocol key length is NULL!&quot;</span>);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="kinetic__exchange_8c.html#ac70a003301820ad2e39787ec66363486">KineticExchange_Init</a>(exchange, identity, key, keyLength, connection);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <a class="code" href="kinetic__exchange_8c.html#a152138735516f7ea8304e6ac36047da1">KineticExchange_SetClusterVersion</a>(exchange, clusterVersion);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <a class="code" href="kinetic__exchange_8c.html#a79f8df71d49e5853b85dbc04aea2dadf">KineticExchange_ConfigureConnectionID</a>(exchange);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#a67b761a422cb1fa75f30e62708a00117">   90</a></span>&#160;<a class="code" href="struct_kinetic_operation.html">KineticOperation</a> <a class="code" href="kinetic__api_8c.html#a67b761a422cb1fa75f30e62708a00117">KineticApi_CreateOperation</a>(</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <a class="code" href="struct_kinetic_exchange.html">KineticExchange</a>* exchange,</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* request,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <a class="code" href="struct_kinetic_message.html">KineticMessage</a>* requestMsg,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* response)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;{</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="struct_kinetic_operation.html">KineticOperation</a> op;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordflow">if</span> (exchange == NULL)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    {</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified KineticExchange is NULL!&quot;</span>);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        assert(exchange != NULL);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordflow">if</span> (request == NULL)</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    {</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified request KineticPDU is NULL!&quot;</span>);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        assert(request != NULL);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordflow">if</span> (requestMsg == NULL)</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified request KineticMessage is NULL!&quot;</span>);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        assert(requestMsg != NULL);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordflow">if</span> (response == NULL)</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Specified response KineticPDU is NULL!&quot;</span>);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        assert(response != NULL);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    }</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <a class="code" href="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a>(requestMsg);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <a class="code" href="kinetic__pdu_8c.html#a036f988ac116a054a76fcc59cd2d6647">KineticPDU_Init</a>(request, exchange, requestMsg, NULL, 0);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="comment">// KineticMessage_Init(responseMsg);</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <a class="code" href="kinetic__pdu_8c.html#a036f988ac116a054a76fcc59cd2d6647">KineticPDU_Init</a>(response, exchange, NULL, NULL, 0);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">exchange</a> = exchange;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a> = request;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a> = requestMsg;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a> = response;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a> = NULL;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    op.<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3">proto</a> = NULL;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordflow">return</span> op;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;}</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="kinetic__api_8h.html#ab8f3c3fa01178f9331949d774334f940">  138</a></span>&#160;<a class="code" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73">KineticProto_Status_StatusCode</a> <a class="code" href="kinetic__api_8c.html#ab8f3c3fa01178f9331949d774334f940">KineticApi_NoOp</a>(<a class="code" href="struct_kinetic_operation.html">KineticOperation</a>* operation)</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;{</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <a class="code" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73">KineticProto_Status_StatusCode</a> status =</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <a class="code" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a2c896f8bfd0c8f6e7dc9c41bb249e9db">KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">exchange</a> != NULL);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">exchange</a>-&gt;<a class="code" href="struct_kinetic_exchange.html#aa419c48291fb6542e616e13c8a7d4701">connection</a> != NULL);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a> != NULL);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a> != NULL);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a> != NULL);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    assert(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab62c4ab6fd196383931e87ff9de9ae85">message</a> == NULL);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="comment">// Initialize request</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <a class="code" href="kinetic__exchange_8c.html#afb310a881d72cca38fe091cc0c0b2190">KineticExchange_IncrementSequence</a>(operation-&gt;<a class="code" href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">exchange</a>);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <a class="code" href="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888">KineticOperation_BuildNoop</a>(operation);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="comment">// Send the request</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <a class="code" href="kinetic__pdu_8c.html#ad853748c77a0a8505812449f85fa3f72">KineticPDU_Send</a>(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a>);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="comment">// Associate response with same exchange as request</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a2e33e714621fd2316d394048f4480f86">exchange</a> = operation-&gt;<a class="code" href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">request</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a2e33e714621fd2316d394048f4480f86">exchange</a>;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="comment">// Receive the response</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="kinetic__pdu_8c.html#acff84c8347b8df5df8d90364d990268a">KineticPDU_Receive</a>(operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>))</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    {</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        status = operation-&gt;<a class="code" href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">response</a>-&gt;<a class="code" href="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3">proto</a>-&gt;command-&gt;status-&gt;code;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="keywordflow">return</span> status;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;}</div>
 <div class="ttc" id="kinetic__operation_8c_html_a25c0d192edf098893390eb9236bb9888"><div class="ttname"><a href="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888">KineticOperation_BuildNoop</a></div><div class="ttdeci">void KineticOperation_BuildNoop(KineticOperation *operation)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8c_source.html#l00032">kinetic_operation.c:32</a></div></div>
 <div class="ttc" id="struct_kinetic_connection_html_a5701de64aa829b62f3bf5c410658ade6"><div class="ttname"><a href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">KineticConnection::socketDescriptor</a></div><div class="ttdeci">int socketDescriptor</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00079">kinetic_types.h:79</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html"><div class="ttname"><a href="kinetic__logger_8h.html">kinetic_logger.h</a></div></div>
-<div class="ttc" id="kinetic__api_8c_html_a27b1217d8c965287f2f06009903507aa"><div class="ttname"><a href="kinetic__api_8c.html#a27b1217d8c965287f2f06009903507aa">KineticApi_Init</a></div><div class="ttdeci">void KineticApi_Init(const char *logFile)</div><div class="ttdoc">Initializes the Kinetic API andcsonfigures logging destination. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00027">kinetic_api.c:27</a></div></div>
+<div class="ttc" id="kinetic__api_8c_html_a27b1217d8c965287f2f06009903507aa"><div class="ttname"><a href="kinetic__api_8c.html#a27b1217d8c965287f2f06009903507aa">KineticApi_Init</a></div><div class="ttdeci">void KineticApi_Init(const char *logFile)</div><div class="ttdoc">Initializes the Kinetic API andcsonfigures logging destination. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00029">kinetic_api.c:29</a></div></div>
 <div class="ttc" id="kinetic__message_8c_html_ac6ea752dfd491fffd99d4cad256f679d"><div class="ttname"><a href="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a></div><div class="ttdeci">void KineticMessage_Init(KineticMessage *const message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__message_8c_source.html#l00023">kinetic_message.c:23</a></div></div>
-<div class="ttc" id="kinetic__api_8c_html_a7e039cf7d74c333802b2a1cd876cfc2c"><div class="ttname"><a href="kinetic__api_8c.html#a7e039cf7d74c333802b2a1cd876cfc2c">KineticApi_ConfigureExchange</a></div><div class="ttdeci">bool KineticApi_ConfigureExchange(KineticExchange *exchange, KineticConnection *connection, int64_t clusterVersion, int64_t identity, const char *key, size_t keyLength)</div><div class="ttdoc">Initializes and configures a Kinetic exchange. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00055">kinetic_api.c:55</a></div></div>
-<div class="ttc" id="kinetic__api_8c_html_a67b761a422cb1fa75f30e62708a00117"><div class="ttname"><a href="kinetic__api_8c.html#a67b761a422cb1fa75f30e62708a00117">KineticApi_CreateOperation</a></div><div class="ttdeci">KineticOperation KineticApi_CreateOperation(KineticExchange *exchange, KineticPDU *request, KineticMessage *requestMsg, KineticPDU *response)</div><div class="ttdoc">Creates and initializes a Kinetic operation. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00088">kinetic_api.c:88</a></div></div>
+<div class="ttc" id="kinetic__api_8c_html_a7e039cf7d74c333802b2a1cd876cfc2c"><div class="ttname"><a href="kinetic__api_8c.html#a7e039cf7d74c333802b2a1cd876cfc2c">KineticApi_ConfigureExchange</a></div><div class="ttdeci">bool KineticApi_ConfigureExchange(KineticExchange *exchange, KineticConnection *connection, int64_t clusterVersion, int64_t identity, const char *key, size_t keyLength)</div><div class="ttdoc">Initializes and configures a Kinetic exchange. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00057">kinetic_api.c:57</a></div></div>
+<div class="ttc" id="kinetic__operation_8h_html"><div class="ttname"><a href="kinetic__operation_8h.html">kinetic_operation.h</a></div></div>
+<div class="ttc" id="kinetic__api_8c_html_a67b761a422cb1fa75f30e62708a00117"><div class="ttname"><a href="kinetic__api_8c.html#a67b761a422cb1fa75f30e62708a00117">KineticApi_CreateOperation</a></div><div class="ttdeci">KineticOperation KineticApi_CreateOperation(KineticExchange *exchange, KineticPDU *request, KineticMessage *requestMsg, KineticPDU *response)</div><div class="ttdoc">Creates and initializes a Kinetic operation. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00090">kinetic_api.c:90</a></div></div>
 <div class="ttc" id="kinetic__connection_8c_html_a6524070218513d73d3bf8e02f50c75b3"><div class="ttname"><a href="kinetic__connection_8c.html#a6524070218513d73d3bf8e02f50c75b3">KineticConnection_Init</a></div><div class="ttdeci">void KineticConnection_Init(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__connection_8c_source.html#l00026">kinetic_connection.c:26</a></div></div>
 <div class="ttc" id="struct_kinetic_p_d_u_html_ab8dadb5a4357e19bd22828df64f66be3"><div class="ttname"><a href="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3">KineticPDU::proto</a></div><div class="ttdeci">KineticProto * proto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00197">kinetic_types.h:197</a></div></div>
 <div class="ttc" id="kinetic__proto_8h_html_aadb300185305f2335d47042126f79d73"><div class="ttname"><a href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73">KineticProto_Status_StatusCode</a></div><div class="ttdeci">KineticProto_Status_StatusCode</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00065">kinetic_proto.h:65</a></div></div>
 <div class="ttc" id="struct_kinetic_exchange_html"><div class="ttname"><a href="struct_kinetic_exchange.html">KineticExchange</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00119">kinetic_types.h:119</a></div></div>
 <div class="ttc" id="struct_kinetic_operation_html"><div class="ttname"><a href="struct_kinetic_operation.html">KineticOperation</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8h_source.html#l00028">kinetic_operation.h:28</a></div></div>
 <div class="ttc" id="kinetic__pdu_8c_html_a036f988ac116a054a76fcc59cd2d6647"><div class="ttname"><a href="kinetic__pdu_8c.html#a036f988ac116a054a76fcc59cd2d6647">KineticPDU_Init</a></div><div class="ttdeci">void KineticPDU_Init(KineticPDU *const pdu, KineticExchange *const exchange, KineticMessage *const message, uint8_t *const value, int32_t valueLength)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00031">kinetic_pdu.c:31</a></div></div>
-<div class="ttc" id="kinetic__exchange_8c_html_ac70a003301820ad2e39787ec66363486"><div class="ttname"><a href="kinetic__exchange_8c.html#ac70a003301820ad2e39787ec66363486">KineticExchange_Init</a></div><div class="ttdeci">void KineticExchange_Init(KineticExchange *const exchange, int64_t identity, const char *key, size_t keyLength, KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__exchange_8c_source.html#l00025">kinetic_exchange.c:25</a></div></div>
+<div class="ttc" id="kinetic__exchange_8c_html_ac70a003301820ad2e39787ec66363486"><div class="ttname"><a href="kinetic__exchange_8c.html#ac70a003301820ad2e39787ec66363486">KineticExchange_Init</a></div><div class="ttdeci">void KineticExchange_Init(KineticExchange *const exchange, int64_t identity, const char *key, size_t keyLength, KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__exchange_8c_source.html#l00027">kinetic_exchange.c:27</a></div></div>
 <div class="ttc" id="kinetic__connection_8h_html"><div class="ttname"><a href="kinetic__connection_8h.html">kinetic_connection.h</a></div></div>
-<div class="ttc" id="kinetic__api_8c_html_ab8f3c3fa01178f9331949d774334f940"><div class="ttname"><a href="kinetic__api_8c.html#ab8f3c3fa01178f9331949d774334f940">KineticApi_NoOp</a></div><div class="ttdeci">KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation *operation)</div><div class="ttdoc">Executes a NOOP command to test whether the Kinetic Device is operational. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00136">kinetic_api.c:136</a></div></div>
+<div class="ttc" id="kinetic__api_8c_html_ab8f3c3fa01178f9331949d774334f940"><div class="ttname"><a href="kinetic__api_8c.html#ab8f3c3fa01178f9331949d774334f940">KineticApi_NoOp</a></div><div class="ttdeci">KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation *operation)</div><div class="ttdoc">Executes a NOOP command to test whether the Kinetic Device is operational. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00138">kinetic_api.c:138</a></div></div>
 <div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00074">kinetic_types.h:74</a></div></div>
 <div class="ttc" id="struct_kinetic_message_html"><div class="ttname"><a href="struct_kinetic_message.html">KineticMessage</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00089">kinetic_types.h:89</a></div></div>
 <div class="ttc" id="kinetic__logger_8c_html_ae302c2ba2d4dcb526dd9efdec6264d8d"><div class="ttname"><a href="kinetic__logger_8c.html#ae302c2ba2d4dcb526dd9efdec6264d8d">KineticLogger_Init</a></div><div class="ttdeci">void KineticLogger_Init(const char *logFile)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00030">kinetic_logger.c:30</a></div></div>
@@ -245,15 +248,16 @@ $(document).ready(function(){initNavTree('kinetic__api_8c_source.html','');});
 <div class="ttc" id="kinetic__api_8h_html"><div class="ttname"><a href="kinetic__api_8h.html">kinetic_api.h</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html_a04a117a4d31fa8b12a406b1aa66864f3"><div class="ttname"><a href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a></div><div class="ttdeci">#define LOG(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00037">kinetic_logger.h:37</a></div></div>
 <div class="ttc" id="struct_kinetic_exchange_html_aa419c48291fb6542e616e13c8a7d4701"><div class="ttname"><a href="struct_kinetic_exchange.html#aa419c48291fb6542e616e13c8a7d4701">KineticExchange::connection</a></div><div class="ttdeci">KineticConnection * connection</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00157">kinetic_types.h:157</a></div></div>
-<div class="ttc" id="kinetic__exchange_8c_html_a152138735516f7ea8304e6ac36047da1"><div class="ttname"><a href="kinetic__exchange_8c.html#a152138735516f7ea8304e6ac36047da1">KineticExchange_SetClusterVersion</a></div><div class="ttdeci">void KineticExchange_SetClusterVersion(KineticExchange *const exchange, int64_t clusterVersion)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__exchange_8c_source.html#l00043">kinetic_exchange.c:43</a></div></div>
+<div class="ttc" id="kinetic__exchange_8c_html_a152138735516f7ea8304e6ac36047da1"><div class="ttname"><a href="kinetic__exchange_8c.html#a152138735516f7ea8304e6ac36047da1">KineticExchange_SetClusterVersion</a></div><div class="ttdeci">void KineticExchange_SetClusterVersion(KineticExchange *const exchange, int64_t clusterVersion)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__exchange_8c_source.html#l00045">kinetic_exchange.c:45</a></div></div>
 <div class="ttc" id="struct_kinetic_operation_html_ae1cce2538150c9687cae5b0e9325ae9b"><div class="ttname"><a href="struct_kinetic_operation.html#ae1cce2538150c9687cae5b0e9325ae9b">KineticOperation::exchange</a></div><div class="ttdeci">KineticExchange * exchange</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8h_source.html#l00030">kinetic_operation.h:30</a></div></div>
 <div class="ttc" id="kinetic__proto_8h_html_aadb300185305f2335d47042126f79d73a2c896f8bfd0c8f6e7dc9c41bb249e9db"><div class="ttname"><a href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a2c896f8bfd0c8f6e7dc9c41bb249e9db">KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00067">kinetic_proto.h:67</a></div></div>
-<div class="ttc" id="kinetic__api_8c_html_a8d9dd4011a9a09eae17c0d317d3f4225"><div class="ttname"><a href="kinetic__api_8c.html#a8d9dd4011a9a09eae17c0d317d3f4225">KineticApi_Connect</a></div><div class="ttdeci">bool KineticApi_Connect(KineticConnection *connection, const char *host, int port, bool blocking)</div><div class="ttdoc">Establishes a Kinetic protocol socket connection to a host. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00032">kinetic_api.c:32</a></div></div>
+<div class="ttc" id="kinetic__api_8c_html_a8d9dd4011a9a09eae17c0d317d3f4225"><div class="ttname"><a href="kinetic__api_8c.html#a8d9dd4011a9a09eae17c0d317d3f4225">KineticApi_Connect</a></div><div class="ttdeci">bool KineticApi_Connect(KineticConnection *connection, const char *host, int port, bool blocking)</div><div class="ttdoc">Establishes a Kinetic protocol socket connection to a host. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__api_8c_source.html#l00034">kinetic_api.c:34</a></div></div>
 <div class="ttc" id="struct_kinetic_p_d_u_html_a2e33e714621fd2316d394048f4480f86"><div class="ttname"><a href="struct_kinetic_p_d_u.html#a2e33e714621fd2316d394048f4480f86">KineticPDU::exchange</a></div><div class="ttdeci">KineticExchange * exchange</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00209">kinetic_types.h:209</a></div></div>
 <div class="ttc" id="struct_kinetic_operation_html_a05327c0a8b795a748548255b736e4ebc"><div class="ttname"><a href="struct_kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">KineticOperation::request</a></div><div class="ttdeci">KineticPDU * request</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8h_source.html#l00031">kinetic_operation.h:31</a></div></div>
-<div class="ttc" id="kinetic__exchange_8c_html_a79f8df71d49e5853b85dbc04aea2dadf"><div class="ttname"><a href="kinetic__exchange_8c.html#a79f8df71d49e5853b85dbc04aea2dadf">KineticExchange_ConfigureConnectionID</a></div><div class="ttdeci">void KineticExchange_ConfigureConnectionID(KineticExchange *const exchange)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__exchange_8c_source.html#l00035">kinetic_exchange.c:35</a></div></div>
+<div class="ttc" id="kinetic__exchange_8c_html_a79f8df71d49e5853b85dbc04aea2dadf"><div class="ttname"><a href="kinetic__exchange_8c.html#a79f8df71d49e5853b85dbc04aea2dadf">KineticExchange_ConfigureConnectionID</a></div><div class="ttdeci">void KineticExchange_ConfigureConnectionID(KineticExchange *const exchange)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__exchange_8c_source.html#l00037">kinetic_exchange.c:37</a></div></div>
 <div class="ttc" id="kinetic__pdu_8c_html_ad853748c77a0a8505812449f85fa3f72"><div class="ttname"><a href="kinetic__pdu_8c.html#ad853748c77a0a8505812449f85fa3f72">KineticPDU_Send</a></div><div class="ttdeci">bool KineticPDU_Send(KineticPDU *const request)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00060">kinetic_pdu.c:60</a></div></div>
-<div class="ttc" id="kinetic__exchange_8c_html_afb310a881d72cca38fe091cc0c0b2190"><div class="ttname"><a href="kinetic__exchange_8c.html#afb310a881d72cca38fe091cc0c0b2190">KineticExchange_IncrementSequence</a></div><div class="ttdeci">void KineticExchange_IncrementSequence(KineticExchange *const exchange)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__exchange_8c_source.html#l00051">kinetic_exchange.c:51</a></div></div>
+<div class="ttc" id="kinetic__exchange_8h_html"><div class="ttname"><a href="kinetic__exchange_8h.html">kinetic_exchange.h</a></div></div>
+<div class="ttc" id="kinetic__exchange_8c_html_afb310a881d72cca38fe091cc0c0b2190"><div class="ttname"><a href="kinetic__exchange_8c.html#afb310a881d72cca38fe091cc0c0b2190">KineticExchange_IncrementSequence</a></div><div class="ttdeci">void KineticExchange_IncrementSequence(KineticExchange *const exchange)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__exchange_8c_source.html#l00053">kinetic_exchange.c:53</a></div></div>
 <div class="ttc" id="kinetic__pdu_8c_html_acff84c8347b8df5df8d90364d990268a"><div class="ttname"><a href="kinetic__pdu_8c.html#acff84c8347b8df5df8d90364d990268a">KineticPDU_Receive</a></div><div class="ttdeci">bool KineticPDU_Receive(KineticPDU *const response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00107">kinetic_pdu.c:107</a></div></div>
 <div class="ttc" id="struct_kinetic_operation_html_a9474f1811fbed7a7ac32e0f11f154d3c"><div class="ttname"><a href="struct_kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">KineticOperation::response</a></div><div class="ttdeci">KineticPDU * response</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8h_source.html#l00032">kinetic_operation.h:32</a></div></div>
 <div class="ttc" id="kinetic__pdu_8h_html"><div class="ttname"><a href="kinetic__pdu_8h.html">kinetic_pdu.h</a></div></div>

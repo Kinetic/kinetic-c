@@ -8,12 +8,6 @@ kinetic_api.h \-
 .PP
 \fC#include 'kinetic_types\&.h'\fP
 .br
-\fC#include 'kinetic_exchange\&.h'\fP
-.br
-\fC#include 'kinetic_pdu\&.h'\fP
-.br
-\fC#include 'kinetic_operation\&.h'\fP
-.br
 
 .SS "Functions"
 
@@ -53,7 +47,7 @@ Initializes the Kinetic API andcsonfigures logging destination\&.
 .PP
 
 .PP
-Definition at line 27 of file kinetic_api\&.c\&.
+Definition at line 29 of file kinetic_api\&.c\&.
 .PP
 References KineticLogger_Init()\&.
 .SS "bool KineticApi_Connect (\fBKineticConnection\fP *connection, const char *host, intport, boolblocking)"
@@ -79,7 +73,7 @@ Returns true if connection succeeded
 .PP
 
 .PP
-Definition at line 32 of file kinetic_api\&.c\&.
+Definition at line 34 of file kinetic_api\&.c\&.
 .PP
 References KineticConnection::connected, KineticConnection_Connect(), KineticConnection_Init(), LOG, and KineticConnection::socketDescriptor\&.
 .SS "bool KineticApi_ConfigureExchange (\fBKineticExchange\fP *exchange, \fBKineticConnection\fP *connection, int64_tclusterVersion, int64_tidentity, const char *key, size_tkeyLength)"
@@ -109,7 +103,7 @@ Returns true if configuration succeeded
 .PP
 
 .PP
-Definition at line 55 of file kinetic_api\&.c\&.
+Definition at line 57 of file kinetic_api\&.c\&.
 .PP
 References KineticExchange_ConfigureConnectionID(), KineticExchange_Init(), KineticExchange_SetClusterVersion(), and LOG\&.
 .SS "\fBKineticOperation\fP KineticApi_CreateOperation (\fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticMessage\fP *requestMsg, \fBKineticPDU\fP *response)"
@@ -135,7 +129,7 @@ Returns a configured operation instance
 .PP
 
 .PP
-Definition at line 88 of file kinetic_api\&.c\&.
+Definition at line 90 of file kinetic_api\&.c\&.
 .PP
 References KineticOperation::exchange, KineticMessage_Init(), KineticPDU_Init(), LOG, KineticPDU::message, KineticPDU::proto, KineticOperation::request, and KineticOperation::response\&.
 .SS "\fBKineticProto_Status_StatusCode\fP KineticApi_NoOp (\fBKineticOperation\fP *operation)"
@@ -155,7 +149,7 @@ Returns the resultant status code
 .PP
 
 .PP
-Definition at line 136 of file kinetic_api\&.c\&.
+Definition at line 138 of file kinetic_api\&.c\&.
 .PP
 References KineticExchange::connection, KineticOperation::exchange, KineticPDU::exchange, KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KineticExchange_IncrementSequence(), KineticOperation_BuildNoop(), KineticPDU_Receive(), KineticPDU_Send(), KineticPDU::message, KineticPDU::proto, KineticOperation::request, and KineticOperation::response\&.
 .SH "Author"

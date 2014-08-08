@@ -6,8 +6,6 @@ kinetic_hmac.c \-
 .SH SYNOPSIS
 .br
 .PP
-\fC#include 'kinetic_types\&.h'\fP
-.br
 \fC#include 'kinetic_hmac\&.h'\fP
 .br
 \fC#include <string\&.h>\fP
@@ -35,19 +33,19 @@ kinetic_hmac.c \-
 .SS "void KineticHMAC_Init (\fBKineticHMAC\fP *hmac, \fBKineticProto_Security_ACL_HMACAlgorithm\fPalgorithm)"
 
 .PP
-Definition at line 29 of file kinetic_hmac\&.c\&.
+Definition at line 28 of file kinetic_hmac\&.c\&.
 .PP
 References KineticHMAC::algorithm, KINETIC_HMAC_MAX_LEN, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM, KineticHMAC::value, and KineticHMAC::valueLength\&.
 .SS "void KineticHMAC_Populate (\fBKineticHMAC\fP *hmac, \fBKineticProto\fP *proto, const char *constkey, size_tkeyLen)"
 
 .PP
-Definition at line 43 of file kinetic_hmac\&.c\&.
+Definition at line 42 of file kinetic_hmac\&.c\&.
 .PP
 References KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC::value, and KineticHMAC::valueLength\&.
 .SS "bool KineticHMAC_Validate (const \fBKineticProto\fP *proto, const char *constkey, size_tkeyLen)"
 
 .PP
-Definition at line 54 of file kinetic_hmac\&.c\&.
+Definition at line 53 of file kinetic_hmac\&.c\&.
 .PP
 References KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC::value, and KineticHMAC::valueLength\&.
 .SH "Author"

@@ -1772,179 +1772,38 @@
       <file>noop_8h_source.html</file>
       <file>_r_e_a_d_m_e_8md_source.html</file>
       <file>kinetic_8h.html</file>
-      <file>kinetic_8h__incl.png</file>
-      <file>kinetic_8h__dep__incl.png</file>
       <file>kinetic__api_8c.html</file>
-      <file>kinetic__api_8c__incl.png</file>
-      <file>kinetic__api_8c_a27b1217d8c965287f2f06009903507aa_cgraph.png</file>
-      <file>kinetic__api_8c_a27b1217d8c965287f2f06009903507aa_icgraph.png</file>
-      <file>kinetic__api_8c_a8d9dd4011a9a09eae17c0d317d3f4225_cgraph.png</file>
-      <file>kinetic__api_8c_a8d9dd4011a9a09eae17c0d317d3f4225_icgraph.png</file>
-      <file>kinetic__api_8c_a7e039cf7d74c333802b2a1cd876cfc2c_cgraph.png</file>
-      <file>kinetic__api_8c_a7e039cf7d74c333802b2a1cd876cfc2c_icgraph.png</file>
-      <file>kinetic__api_8c_a67b761a422cb1fa75f30e62708a00117_cgraph.png</file>
-      <file>kinetic__api_8c_a67b761a422cb1fa75f30e62708a00117_icgraph.png</file>
-      <file>kinetic__api_8c_ab8f3c3fa01178f9331949d774334f940_cgraph.png</file>
-      <file>kinetic__api_8c_ab8f3c3fa01178f9331949d774334f940_icgraph.png</file>
       <file>kinetic__api_8h.html</file>
-      <file>kinetic__api_8h__incl.png</file>
-      <file>kinetic__api_8h__dep__incl.png</file>
-      <file>kinetic__api_8h_a27b1217d8c965287f2f06009903507aa_cgraph.png</file>
-      <file>kinetic__api_8h_a27b1217d8c965287f2f06009903507aa_icgraph.png</file>
-      <file>kinetic__api_8h_a8d9dd4011a9a09eae17c0d317d3f4225_cgraph.png</file>
-      <file>kinetic__api_8h_a8d9dd4011a9a09eae17c0d317d3f4225_icgraph.png</file>
-      <file>kinetic__api_8h_a7e039cf7d74c333802b2a1cd876cfc2c_cgraph.png</file>
-      <file>kinetic__api_8h_a7e039cf7d74c333802b2a1cd876cfc2c_icgraph.png</file>
-      <file>kinetic__api_8h_a67b761a422cb1fa75f30e62708a00117_cgraph.png</file>
-      <file>kinetic__api_8h_a67b761a422cb1fa75f30e62708a00117_icgraph.png</file>
-      <file>kinetic__api_8h_ab8f3c3fa01178f9331949d774334f940_cgraph.png</file>
-      <file>kinetic__api_8h_ab8f3c3fa01178f9331949d774334f940_icgraph.png</file>
       <file>kinetic__connection_8c.html</file>
-      <file>kinetic__connection_8c__incl.png</file>
-      <file>kinetic__connection_8c_a6524070218513d73d3bf8e02f50c75b3_icgraph.png</file>
-      <file>kinetic__connection_8c_a067e3a232197b9d572244d40607ab24f_cgraph.png</file>
-      <file>kinetic__connection_8c_a067e3a232197b9d572244d40607ab24f_icgraph.png</file>
       <file>kinetic__connection_8h.html</file>
-      <file>kinetic__connection_8h__incl.png</file>
-      <file>kinetic__connection_8h__dep__incl.png</file>
-      <file>kinetic__connection_8h_a6524070218513d73d3bf8e02f50c75b3_icgraph.png</file>
-      <file>kinetic__connection_8h_a067e3a232197b9d572244d40607ab24f_cgraph.png</file>
-      <file>kinetic__connection_8h_a067e3a232197b9d572244d40607ab24f_icgraph.png</file>
       <file>kinetic__exchange_8c.html</file>
-      <file>kinetic__exchange_8c__incl.png</file>
-      <file>kinetic__exchange_8c_ac70a003301820ad2e39787ec66363486_icgraph.png</file>
-      <file>kinetic__exchange_8c_a79f8df71d49e5853b85dbc04aea2dadf_icgraph.png</file>
-      <file>kinetic__exchange_8c_a152138735516f7ea8304e6ac36047da1_icgraph.png</file>
-      <file>kinetic__exchange_8c_afb310a881d72cca38fe091cc0c0b2190_icgraph.png</file>
-      <file>kinetic__exchange_8c_a58479324729294bdce5e4fd99c348fc7_icgraph.png</file>
       <file>kinetic__exchange_8h.html</file>
-      <file>kinetic__exchange_8h__incl.png</file>
-      <file>kinetic__exchange_8h__dep__incl.png</file>
-      <file>kinetic__exchange_8h_ac70a003301820ad2e39787ec66363486_icgraph.png</file>
-      <file>kinetic__exchange_8h_a79f8df71d49e5853b85dbc04aea2dadf_icgraph.png</file>
-      <file>kinetic__exchange_8h_a152138735516f7ea8304e6ac36047da1_icgraph.png</file>
-      <file>kinetic__exchange_8h_afb310a881d72cca38fe091cc0c0b2190_icgraph.png</file>
-      <file>kinetic__exchange_8h_a58479324729294bdce5e4fd99c348fc7_icgraph.png</file>
       <file>kinetic__hmac_8c.html</file>
-      <file>kinetic__hmac_8c__incl.png</file>
-      <file>kinetic__hmac_8c_af18bc978da74d29a03ef969007c5201f_icgraph.png</file>
-      <file>kinetic__hmac_8c_a20ce5d52c8e4948a46aac10458d205a1_cgraph.png</file>
-      <file>kinetic__hmac_8c_a20ce5d52c8e4948a46aac10458d205a1_icgraph.png</file>
-      <file>kinetic__hmac_8c_af0d312b6cffbe85d7bce6af3a1b8e742_cgraph.png</file>
-      <file>kinetic__hmac_8c_af0d312b6cffbe85d7bce6af3a1b8e742_icgraph.png</file>
       <file>kinetic__hmac_8h.html</file>
-      <file>kinetic__hmac_8h__incl.png</file>
-      <file>kinetic__hmac_8h__dep__incl.png</file>
-      <file>kinetic__hmac_8h_af18bc978da74d29a03ef969007c5201f_icgraph.png</file>
-      <file>kinetic__hmac_8h_a20ce5d52c8e4948a46aac10458d205a1_cgraph.png</file>
-      <file>kinetic__hmac_8h_a20ce5d52c8e4948a46aac10458d205a1_icgraph.png</file>
-      <file>kinetic__hmac_8h_af0d312b6cffbe85d7bce6af3a1b8e742_cgraph.png</file>
-      <file>kinetic__hmac_8h_af0d312b6cffbe85d7bce6af3a1b8e742_icgraph.png</file>
       <file>kinetic__logger_8c.html</file>
-      <file>kinetic__logger_8c__incl.png</file>
-      <file>kinetic__logger_8c_ae302c2ba2d4dcb526dd9efdec6264d8d_icgraph.png</file>
-      <file>kinetic__logger_8c_a28134eaa6c6c82a2755d895573dc8201_icgraph.png</file>
-      <file>kinetic__logger_8c_a1c76a5e7dd9fdb81725953964d803449_cgraph.png</file>
-      <file>kinetic__logger_8c_aa165cca23a8303a430aaeb13843d2259_icgraph.png</file>
-      <file>kinetic__logger_8c_a382d80f28dc772bd38ef93c01bd7150e_icgraph.png</file>
       <file>kinetic__logger_8h.html</file>
-      <file>kinetic__logger_8h__incl.png</file>
-      <file>kinetic__logger_8h__dep__incl.png</file>
-      <file>kinetic__logger_8h_ae302c2ba2d4dcb526dd9efdec6264d8d_icgraph.png</file>
-      <file>kinetic__logger_8h_a28134eaa6c6c82a2755d895573dc8201_icgraph.png</file>
-      <file>kinetic__logger_8h_a1c76a5e7dd9fdb81725953964d803449_cgraph.png</file>
-      <file>kinetic__logger_8h_aa165cca23a8303a430aaeb13843d2259_icgraph.png</file>
-      <file>kinetic__logger_8h_a382d80f28dc772bd38ef93c01bd7150e_icgraph.png</file>
       <file>kinetic__message_8c.html</file>
-      <file>kinetic__message_8c__incl.png</file>
-      <file>kinetic__message_8c_ac6ea752dfd491fffd99d4cad256f679d_icgraph.png</file>
       <file>kinetic__message_8h.html</file>
-      <file>kinetic__message_8h__incl.png</file>
-      <file>kinetic__message_8h__dep__incl.png</file>
-      <file>kinetic__message_8h_ac6ea752dfd491fffd99d4cad256f679d_icgraph.png</file>
       <file>kinetic__operation_8c.html</file>
-      <file>kinetic__operation_8c__incl.png</file>
-      <file>kinetic__operation_8c_a25c0d192edf098893390eb9236bb9888_cgraph.png</file>
-      <file>kinetic__operation_8c_a25c0d192edf098893390eb9236bb9888_icgraph.png</file>
       <file>kinetic__operation_8h.html</file>
-      <file>kinetic__operation_8h__incl.png</file>
-      <file>kinetic__operation_8h__dep__incl.png</file>
-      <file>kinetic__operation_8h_a25c0d192edf098893390eb9236bb9888_cgraph.png</file>
-      <file>kinetic__operation_8h_a25c0d192edf098893390eb9236bb9888_icgraph.png</file>
       <file>kinetic__pdu_8c.html</file>
-      <file>kinetic__pdu_8c__incl.png</file>
-      <file>kinetic__pdu_8c_a036f988ac116a054a76fcc59cd2d6647_cgraph.png</file>
-      <file>kinetic__pdu_8c_a036f988ac116a054a76fcc59cd2d6647_icgraph.png</file>
-      <file>kinetic__pdu_8c_ad853748c77a0a8505812449f85fa3f72_cgraph.png</file>
-      <file>kinetic__pdu_8c_ad853748c77a0a8505812449f85fa3f72_icgraph.png</file>
-      <file>kinetic__pdu_8c_acff84c8347b8df5df8d90364d990268a_cgraph.png</file>
-      <file>kinetic__pdu_8c_acff84c8347b8df5df8d90364d990268a_icgraph.png</file>
       <file>kinetic__pdu_8h.html</file>
-      <file>kinetic__pdu_8h__incl.png</file>
-      <file>kinetic__pdu_8h__dep__incl.png</file>
-      <file>kinetic__pdu_8h_a036f988ac116a054a76fcc59cd2d6647_cgraph.png</file>
-      <file>kinetic__pdu_8h_a036f988ac116a054a76fcc59cd2d6647_icgraph.png</file>
-      <file>kinetic__pdu_8h_ad853748c77a0a8505812449f85fa3f72_cgraph.png</file>
-      <file>kinetic__pdu_8h_ad853748c77a0a8505812449f85fa3f72_icgraph.png</file>
-      <file>kinetic__pdu_8h_acff84c8347b8df5df8d90364d990268a_cgraph.png</file>
-      <file>kinetic__pdu_8h_acff84c8347b8df5df8d90364d990268a_icgraph.png</file>
       <file>kinetic__proto_8c.html</file>
-      <file>kinetic__proto_8c__incl.png</file>
-      <file>kinetic__proto_8c_a535c41fa53e969b823c11492172e88da_icgraph.png</file>
-      <file>kinetic__proto_8c_a3b0b987f271840aa17c7bec9046eb77f_icgraph.png</file>
-      <file>kinetic__proto_8c_a0623fe40025b387b445cff513988f8fe_icgraph.png</file>
       <file>kinetic__proto_8h.html</file>
-      <file>kinetic__proto_8h__incl.png</file>
-      <file>kinetic__proto_8h__dep__incl.png</file>
-      <file>kinetic__proto_8h_a535c41fa53e969b823c11492172e88da_icgraph.png</file>
-      <file>kinetic__proto_8h_a3b0b987f271840aa17c7bec9046eb77f_icgraph.png</file>
-      <file>kinetic__proto_8h_a0623fe40025b387b445cff513988f8fe_icgraph.png</file>
       <file>kinetic__socket_8c.html</file>
-      <file>kinetic__socket_8c__incl.png</file>
-      <file>kinetic__socket_8c_a153be47ff8a2e21b5e55c15eba510dfe_icgraph.png</file>
-      <file>kinetic__socket_8c_aded36525a210d1e0eae8cdb820997e62_icgraph.png</file>
-      <file>kinetic__socket_8c_aac07ac642119c019651884f4e877c5a5_cgraph.png</file>
-      <file>kinetic__socket_8c_aac07ac642119c019651884f4e877c5a5_icgraph.png</file>
-      <file>kinetic__socket_8c_a044cc1d21dfda04611244b33521dc082_icgraph.png</file>
-      <file>kinetic__socket_8c_a1ddcb45abdc2da81160cabe1b9827c1f_cgraph.png</file>
-      <file>kinetic__socket_8c_a1ddcb45abdc2da81160cabe1b9827c1f_icgraph.png</file>
       <file>kinetic__socket_8h.html</file>
-      <file>kinetic__socket_8h__incl.png</file>
-      <file>kinetic__socket_8h__dep__incl.png</file>
-      <file>kinetic__socket_8h_a153be47ff8a2e21b5e55c15eba510dfe_icgraph.png</file>
-      <file>kinetic__socket_8h_aded36525a210d1e0eae8cdb820997e62_icgraph.png</file>
-      <file>kinetic__socket_8h_aac07ac642119c019651884f4e877c5a5_cgraph.png</file>
-      <file>kinetic__socket_8h_aac07ac642119c019651884f4e877c5a5_icgraph.png</file>
-      <file>kinetic__socket_8h_a044cc1d21dfda04611244b33521dc082_icgraph.png</file>
-      <file>kinetic__socket_8h_a1ddcb45abdc2da81160cabe1b9827c1f_cgraph.png</file>
-      <file>kinetic__socket_8h_a1ddcb45abdc2da81160cabe1b9827c1f_icgraph.png</file>
       <file>kinetic__types_8h.html</file>
-      <file>kinetic__types_8h__incl.png</file>
-      <file>kinetic__types_8h__dep__incl.png</file>
       <file>main_8c.html</file>
-      <file>main_8c__incl.png</file>
-      <file>main_8c_a3c04138a5bfe5d72780bb7e82a18e627_cgraph.png</file>
       <file>noop_8c.html</file>
-      <file>noop_8c__incl.png</file>
-      <file>noop_8c_aa0917ddd64a002c8a0866681f0c9e6d5_cgraph.png</file>
-      <file>noop_8c_aa0917ddd64a002c8a0866681f0c9e6d5_icgraph.png</file>
       <file>noop_8h.html</file>
-      <file>noop_8h__incl.png</file>
-      <file>noop_8h__dep__incl.png</file>
-      <file>noop_8h_aa0917ddd64a002c8a0866681f0c9e6d5_cgraph.png</file>
-      <file>noop_8h_aa0917ddd64a002c8a0866681f0c9e6d5_icgraph.png</file>
       <file>_r_e_a_d_m_e_8md.html</file>
       <file>struct___kinetic_proto.html</file>
       <file>struct_kinetic_connection.html</file>
       <file>struct_kinetic_exchange.html</file>
-      <file>struct_kinetic_exchange__coll__graph.png</file>
       <file>struct_kinetic_h_m_a_c.html</file>
       <file>struct_kinetic_message.html</file>
-      <file>struct_kinetic_message__coll__graph.png</file>
       <file>struct_kinetic_operation.html</file>
-      <file>struct_kinetic_operation__coll__graph.png</file>
       <file>struct_kinetic_p_d_u.html</file>
-      <file>struct_kinetic_p_d_u__coll__graph.png</file>
       <file>struct___kinetic_proto___body.html</file>
       <file>struct___kinetic_proto___command.html</file>
       <file>struct___kinetic_proto___get_log.html</file>
@@ -1966,26 +1825,12 @@
       <file>struct___kinetic_proto___security___a_c_l___scope.html</file>
       <file>struct___kinetic_proto___setup.html</file>
       <file>struct___kinetic_proto___status.html</file>
-      <file>graph_legend.png</file>
-      <file>graph_legend.html</file>
       <file>dir_4fd1cf74182c330d9c49e4bf16d09826.html</file>
-      <file>dir_4fd1cf74182c330d9c49e4bf16d09826_dep.png</file>
       <file>dir_d4ad0b9b374a726be0aa1173834aae30.html</file>
-      <file>dir_d4ad0b9b374a726be0aa1173834aae30_dep.png</file>
       <file>dir_4590d4b1e8522a19a1f4d8623e780326.html</file>
-      <file>dir_4590d4b1e8522a19a1f4d8623e780326_dep.png</file>
       <file>dir_8022d97437212dcef4d003f114d6167d.html</file>
-      <file>dir_8022d97437212dcef4d003f114d6167d_dep.png</file>
       <file>dir_d729c10c892d40b7e80e1d956ac94d74.html</file>
-      <file>dir_d729c10c892d40b7e80e1d956ac94d74_dep.png</file>
       <file>dir_9c7fb1738cdff91c352cb4ea706321d8.html</file>
-      <file>dir_9c7fb1738cdff91c352cb4ea706321d8_dep.png</file>
-      <file>dir_000005_000000.html</file>
-      <file>dir_000001_000002.html</file>
-      <file>dir_000002_000001.html</file>
-      <file>dir_000000_000003.html</file>
-      <file>dir_000004_000000.html</file>
-      <file>dir_000004_000005.html</file>
       <file>index.html</file>
       <file>annotated.html</file>
       <file>classes.html</file>

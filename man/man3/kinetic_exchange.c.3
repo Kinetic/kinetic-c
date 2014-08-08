@@ -8,6 +8,10 @@ kinetic_exchange.c \-
 .PP
 \fC#include 'kinetic_exchange\&.h'\fP
 .br
+\fC#include 'kinetic_proto\&.h'\fP
+.br
+\fC#include 'kinetic_connection\&.h'\fP
+.br
 \fC#include <string\&.h>\fP
 .br
 \fC#include <time\&.h>\fP
@@ -37,31 +41,31 @@ kinetic_exchange.c \-
 .SS "void KineticExchange_Init (\fBKineticExchange\fP *constexchange, int64_tidentity, const char *key, size_tkeyLength, \fBKineticConnection\fP *constconnection)"
 
 .PP
-Definition at line 25 of file kinetic_exchange\&.c\&.
+Definition at line 27 of file kinetic_exchange\&.c\&.
 .PP
 References KINETIC_EXCHANGE_INIT\&.
 .SS "void KineticExchange_ConfigureConnectionID (\fBKineticExchange\fP *constexchange)"
 
 .PP
-Definition at line 35 of file kinetic_exchange\&.c\&.
+Definition at line 37 of file kinetic_exchange\&.c\&.
 .PP
 References KineticExchange::connectionID\&.
 .SS "void KineticExchange_SetClusterVersion (\fBKineticExchange\fP *constexchange, int64_tclusterVersion)"
 
 .PP
-Definition at line 43 of file kinetic_exchange\&.c\&.
+Definition at line 45 of file kinetic_exchange\&.c\&.
 .PP
 References KineticExchange::clusterVersion, and KineticExchange::has_clusterVersion\&.
 .SS "void KineticExchange_IncrementSequence (\fBKineticExchange\fP *constexchange)"
 
 .PP
-Definition at line 51 of file kinetic_exchange\&.c\&.
+Definition at line 53 of file kinetic_exchange\&.c\&.
 .PP
 References KineticExchange::sequence\&.
 .SS "void KineticExchange_ConfigureHeader (const \fBKineticExchange\fP *constexchange, KineticProto_Header *constheader)"
 
 .PP
-Definition at line 57 of file kinetic_exchange\&.c\&.
+Definition at line 59 of file kinetic_exchange\&.c\&.
 .PP
 References KineticExchange::clusterVersion, KineticExchange::connectionID, KineticExchange::has_clusterVersion, KineticExchange::identity, and KineticExchange::sequence\&.
 .SH "Author"
