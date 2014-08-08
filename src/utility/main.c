@@ -27,16 +27,31 @@
 int main(int argc, char** argv)
 {
     int status = -1;
-    char* host = "localhost";
+    char host[HOST_NAME_MAX] = "localhost";
     int port = KINETIC_PORT;
     const int64_t clusterVersion = 0;
     const int64_t identity = 1;
     const char* key = "asdfasdf";
 
-    printf("\nExecuting NoOp w/configuration:"
-           "\n-------------------------------\n"
-           "\n  host: %s\n  port: %d"
-           "\n  clusterVersion: %lld\n  identity: %lld\n  key: '%s'\n", 
+    // Parse command line arguments, if supplied
+    if (argc >= 3)
+    {
+        // Simple parser for --host <ip/hostname> for now
+        if ((strcmp("--host", argv[1]) == 0) ||
+            (strcmp("--host", argv[1]) == 0))
+        {
+            strcpy(host, argv[2]);
+        }
+    }
+
+    printf("\n"
+           "Executing NoOp w/configuration:\n"
+           "-------------------------------\n"
+           "  host: %s\n"
+           "  port: %d\n"
+           "  clusterVersion: %lld\n"
+           "  identity: %lld\n"
+           "  key: '%s'\n", 
         host, port, (long long int)clusterVersion, (long long int)identity, key);
     status = NoOp(host, port, clusterVersion, identity, key);
     if (status == 0)
