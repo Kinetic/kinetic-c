@@ -28,12 +28,14 @@
     - src/lib/*
     - src/utility/*
     - vendor/protobuf-c/protobuf-c/*
+    - vendor/socket99/*
   :include:
     - include/**
   # Refactor release build once the Kinetic-C library is built, and link to it sepearately
   :release_toolchain_include:
     - include/**
     - vendor/protobuf-c/*
+    - vendor/socket99/*
 
 :defines:
   # in order to add common defines:

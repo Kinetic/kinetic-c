@@ -21,9 +21,11 @@
 #include "unity_helper.h"
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
-#include <protobuf-c/protobuf-c.h>
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
+
+#include "protobuf-c/protobuf-c.h"
+#include "socket99.h"
 
 #include <errno.h>
 #include <fcntl.h>

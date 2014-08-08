@@ -20,7 +20,8 @@
 
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c/protobuf-c.h"
+#include "socket99.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -166,35 +167,95 @@ bool KineticSocket_CloseSocket(int fd)
     return true;
 }
 
-int KineticSocket_Connect(const char* host, int port, bool blocking)
+int KineticSocket_Connect(char* host, int port, bool blocking)
 {
-    char message[256];
     char port_str[32];
-    struct addrinfo* result = NULL;
     struct addrinfo hints;
+    struct addrinfo* ai_result = NULL;
     struct addrinfo* ai = NULL;
-    int socket_fd;
-    int res;
+    socket99_result result;
 
-    sprintf(message, "\nConnecting to %s:%d", host, port);
-    LOG(message);
+    // Setup server address info
+    socket99_config cfg = {
+        .host = host,
+        .port = port,
+        .nonblocking = !blocking,
+    };
+    sprintf(port_str, "%d", port);
 
-    memset(&hints, 0, sizeof(struct addrinfo));
+    // Open socket
+    LOGF("\nConnecting to %s:%d", host, port);
+    if (!socket99_open(&cfg, &result))
+    {
+        LOGF("Failed to open socket connection with host: status %d, errno %d\n",
+            result.status, result.saved_errno);
+        return -1;
+    }
 
+    // Configure the socket
+    socket99_set_hints(&cfg, &hints);
+    if (getaddrinfo(cfg.host, port_str, &hints, &ai_result) != 0)
+    {
+        LOGF("Failed to get socket address info: errno %d\n", errno);
+        close(result.fd);
+        return -1;
+    }
+
+    for (ai = ai_result; ai != NULL; ai = ai->ai_next)
+    {
+        // OSX won't let us set close-on-exec when creating the socket, so set it separately
+        int current_fd_flags = fcntl(result.fd, F_GETFD);
+        if (current_fd_flags == -1)
+        {
+            LOG("Failed to get socket fd flags");
+            close(result.fd);
+            continue;
+        }
+        if (fcntl(result.fd, F_SETFD, current_fd_flags | FD_CLOEXEC) == -1)
+        {
+            LOG("Failed to set socket close-on-exit");
+            close(result.fd);
+            continue;
+        }
+
+        // On BSD-like systems we can set SO_NOSIGPIPE on the socket to prevent it from sending a
+        // PIPE signal and bringing down the whole application if the server closes the socket
+        // forcibly
+#if defined(SO_NOSIGPIPE) && !defined(__APPLE__)
+        {
+            int set = 1;
+            int setsockopt_result = setsockopt(socket_fd, SOL_SOCKET, SO_NOSIGPIPE, &set, sizeof(set));
+            // Allow ENOTSOCK because it allows tests to use pipes instead of real sockets
+            if (setsockopt_result != 0 && setsockopt_result != ENOTSOCK)
+            {
+                LOG("Failed to set SO_NOSIGPIPE on socket");
+                close(result.fd);
+                continue;
+            }
+        }
+#endif
+
+        break;
+    }
+
+    freeaddrinfo(ai_result);
+
+    if (ai == NULL)
+    {
+        // we went through all addresses without finding one we could bind to
+        sprintf(message, "Could not connect to %s:%d", host, port);
+        LOG(message);
+        return -1;
+    }
+
+    return result.fd;
+
+#if 0
     // could be inet or inet6
     hints.ai_family = PF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
     hints.ai_flags = AI_NUMERICSERV;
-
-    sprintf(port_str, "%d", port);
-
-    res = getaddrinfo(host, port_str, &hints, &result);
-    if (res != 0)
-    {
-        LOG("Could not resolve host");
-        return -1;
-    }
 
     for (ai = result; ai != NULL; ai = ai->ai_next)
     {
@@ -221,72 +282,13 @@ int KineticSocket_Connect(const char* host, int port, bool blocking)
             continue;
         }
 
-        // os x won't let us set close-on-exec when creating the socket, so set it separately
-        int current_fd_flags = fcntl(socket_fd, F_GETFD);
-        if (current_fd_flags == -1)
-        {
-            LOG("Failed to get socket fd flags");
-            close(socket_fd);
-            continue;
-        }
-        if (fcntl(socket_fd, F_SETFD, current_fd_flags | FD_CLOEXEC) == -1)
-        {
-            LOG("Failed to set socket close-on-exit");
-            close(socket_fd);
-            continue;
-        }
-
-// DISABLED FOR NOW, SINCE CLIENT CONNECTIONS ARE HANGING
-//
-//         // On BSD-like systems we can set SO_NOSIGPIPE on the socket to prevent it from sending a
-//         // PIPE signal and bringing down the whole application if the server closes the socket
-//         // forcibly
-// #if defined(SO_NOSIGPIPE) && !defined(__APPLE__)
-//         {
-//             int set = 1;
-//             int setsockopt_result = setsockopt(socket_fd, SOL_SOCKET, SO_NOSIGPIPE, &set, sizeof(set));
-//             // Allow ENOTSOCK because it allows tests to use pipes instead of real sockets
-//             if (setsockopt_result != 0 && setsockopt_result != ENOTSOCK)
-//             {
-//                 LOG("Failed to set SO_NOSIGPIPE on socket");
-//                 close(socket_fd);
-//                 continue;
-//             }
-//         }
-// #endif
-
-        if (connect(socket_fd, ai->ai_addr, ai->ai_addrlen) == -1)
-        {
-            LOG("Unable to connect");
-            close(socket_fd);
-            continue;
-        }
-        else
-        {
-            LOG("Connected to host!");
-        }
-
-        if (!blocking && fcntl(socket_fd, F_SETFL, O_NONBLOCK) != 0)
-        {
-            LOG("Failed to set socket nonblocking");
-            close(socket_fd);
-            continue;
-        }
+        ... connect ...
 
         break;
     }
 
-    freeaddrinfo(result);
-
-    if (ai == NULL)
-    {
-        // we went through all addresses without finding one we could bind to
-        sprintf(message, "Could not connect to %s:%d", host, port);
-        LOG(message);
-        return -1;
-    }
-
     return socket_fd;
+#endif
 }
 
 void KineticSocket_Close(int socketDescriptor)

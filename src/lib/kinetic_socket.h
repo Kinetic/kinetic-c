@@ -24,7 +24,7 @@
 #include "kinetic_types.h"
 #include "kinetic_message.h"
 
-int KineticSocket_Connect(const char* host, int port, bool blocking);
+int KineticSocket_Connect(char* host, int port, bool blocking);
 void KineticSocket_Close(int socketDescriptor);
 
 bool KineticSocket_Read(int socketDescriptor, void* buffer, size_t length);
