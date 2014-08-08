@@ -278,6 +278,7 @@ task :test_all do
   Rake::Task['test:path'].reenable
   Rake::Task['test:path'].invoke('test/system')
   Rake::Task['release'].invoke
+  Rake::Task['run'].invoke
   java_sim_shutdown
 
   report_banner "Finished executing all test suites"
@@ -286,10 +287,8 @@ end
 desc "Build all and run test utility"
 task :all => [
   'cppcheck',
+  'travis:validate',
   'test_all',
-  'release',
-  'run',
-  'travis:validate'
 ]
 
 desc "Run full CI build"
