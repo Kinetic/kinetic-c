@@ -248,46 +248,6 @@ int KineticSocket_Connect(char* host, int port, bool blocking)
     }
 
     return result.fd;
-
-#if 0
-    // could be inet or inet6
-    hints.ai_family = PF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
-    hints.ai_flags = AI_NUMERICSERV;
-
-    for (ai = result; ai != NULL; ai = ai->ai_next)
-    {
-        char host[NI_MAXHOST];
-        char service[NI_MAXSERV];
-        int res;
-
-        res = getnameinfo(ai->ai_addr, ai->ai_addrlen, host, strlen(host), service,
-                sizeof(service), NI_NUMERICHOST | NI_NUMERICSERV);
-        if (res != 0)
-        {
-            LOG("Could not get name info");
-            continue;
-        }
-        else
-        {
-            LOG("Trying to connect to host");
-        }
-
-        socket_fd = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
-        if (socket_fd == -1)
-        {
-            LOG("Could not create socket");
-            continue;
-        }
-
-        ... connect ...
-
-        break;
-    }
-
-    return socket_fd;
-#endif
 }
 
 void KineticSocket_Close(int socketDescriptor)
