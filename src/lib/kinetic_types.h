@@ -51,37 +51,9 @@
     #endif
 #endif
 
-// Windows doesn't use <unistd.h> nor does it define HOST_NAME_MAX.
-#if defined(WIN32)
-    #include <windows.h>
-    #include <winsock2.h>
-
-    // Leave space for a NULL terminator in case a char string is memcpy'ed in
-    #define HOST_NAME_MAX (MAX_COMPUTERNAME_LENGTH+1)
-#else
-    #if defined(__APPLE__)
-        // MacOS does not defined HOST_NAME_MAX so fall back to the POSIX value.
-        // We are supposed to use sysconf(_SC_HOST_NAME_MAX) but we use this value
-        // to size an automatic array and we can't portably use variables for that.
-        #define HOST_NAME_MAX _POSIX_HOST_NAME_MAX
-    #else
-        #if defined(__unix__)
-            // Some Linux environments require this, although not all, but it's benign.
-            #ifndef _BSD_SOURCE
-                #define _BSD_SOURCE
-            #endif // _BSD_SOURCE
-            #include <unistd.h>
-        #else
-            #if !defined(HOST_NAME_MAX)
-                #define HOST_NAME_MAX 256
-            #endif // HOST_NAME_MAX
-        #endif  // __unix__
-    #endif // __APPLE__
-#endif  // WIN32
+#define HOST_NAME_MAX 256
 
 #include "kinetic_proto.h"
-
-// #include "kinetic_exchange.h"
 
 typedef struct _KineticHMAC
 {
