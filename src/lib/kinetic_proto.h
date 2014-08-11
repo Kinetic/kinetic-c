@@ -27,7 +27,7 @@
 #ifndef _KINETIC_PROTO_H
 #define _KINETIC_PROTO_H
 
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c.h"
 
 PROTOBUF_C__BEGIN_DECLS
 

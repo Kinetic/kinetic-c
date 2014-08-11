@@ -20,7 +20,7 @@
 
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
-#include "protobuf-c/protobuf-c.h"
+#include "protobuf-c.h"
 #include "socket99.h"
 
 #include <errno.h>

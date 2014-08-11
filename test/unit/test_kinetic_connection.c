@@ -19,7 +19,7 @@
 */
 
 #include "kinetic_connection.h"
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c.h"
 #include "kinetic_proto.h"
 #include "unity_helper.h"
 #include "mock_kinetic_socket.h"

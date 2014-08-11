@@ -19,7 +19,7 @@
 */
 
 #include "unity.h"
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c.h"
 #include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"

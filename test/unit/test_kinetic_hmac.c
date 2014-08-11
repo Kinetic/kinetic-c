@@ -20,7 +20,7 @@
 
 #include "unity_helper.h"
 #include <string.h>
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c.h"
 #include <arpa/inet.h>
 #include <openssl/hmac.h>
 #include "kinetic_proto.h"

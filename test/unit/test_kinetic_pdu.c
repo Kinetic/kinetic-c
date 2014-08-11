@@ -22,7 +22,7 @@
 #include "unity_helper.h"
 #include "kinetic_types.h"
 #include "kinetic_pdu.h"
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
 #include "mock_kinetic_exchange.h"
