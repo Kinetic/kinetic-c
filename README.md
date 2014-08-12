@@ -9,11 +9,17 @@ This repo contains code for producing C Kinetic clients which use the Seagate Ki
 Getting Started
 ================
 
+**Clone the Repo**
     > git clone --recursive https://github.com/atomicobject/kinetic-c.git
-
     > cd kinetic-c
+
+**Update repo working copy to the latest (previously cloned)**
+    > git pull # Pulls the latest version locally
+    > git submodule update --init # Ensures all submodules are up-to-date
     > bundle install # Ensures you have all RubyGems needed
-    > bundle execute rake # Run all tests and build kinetic-c library and examples
+
+**Build and run all tests**
+    > bundle exec rake # Run all tests and build kinetic-c library and examples
 
 API Documentation
 =================
@@ -27,9 +33,6 @@ Dependencies
 * [RubyGems](http://rubygems.org) (installed w/ `bundle install)
     * [bundler](http://bundler.io) (v1.3.5 or higher) environment/dependency manager for Ruby projects
     * [rake](https://github.com/jimweirich/rake) (0.9.2.2 or higher) Ruby implementation of Make
-    * [require_all](https://github.com/jarmo/require_all)
-    * [constructor](https://github.com/atomicobject/constructor)
-    * [diy](https://github.com/atomicobject/diy)
     * [ceedling](https://github.com/ThrowTheSwitch/Ceedling) Ruby/Rake-based build/test system for C projects
         * Ceedling also includes the following tools for testing C code
         * [Unity](https://github.com/ThrowTheSwitch/Unity) lightweight assertion framework and test executor for C
@@ -60,51 +63,41 @@ NOTE: Prefix the following commands with `bundle exec` so that they execute in t
 * Build/install Google Protocol Buffers support for the Kinetic-Protocol
     * `rake proto`
 * Enable verbose output (for current Rake run)
-    * `rake verbose <task_A> <task_B>...`
+    * `rake verbose *<task_A>* *<task_B>*`
 
 Examples
 ========
 
-The following examples are provided for development reference and as utilities to aid development
+The following examples are provided for development reference and as utilities to aid development. In order to execute a given example, you must first do:
 
-In order to execute a given example, execute `kinetic-c` with a given example name and optional arguments (below), you must first
-`cd` into the `build/artifacts/release` folder, and then execute the desired command.
+```
+> cd build/artifacts/release`
+```
+
+You can then execute `kinetic-c` with a valid example name, optionally preceeded with any of the optional arguments.
 
 **Optional Arguments**
 * `--host [HostName/IP]` or `-h [HostName/IP]` - Set the Kinetic Device host
 * `--tls` - Use the TLS port to execute the specified operation(s)
 
-
+**Example Operation Listing**
 * `noop` - Execute a NoOp to see if the Kinetic Device is online
-	* `kinetic-c noop` - Execute the NoOp operation against default host: `localhost`:
-	* `kinetic-c --host my-kinetic-server.com noop` - Execute the NoOp operation against `my-kinetic-server.com`:
-
-`read_file_blocking` (incomplete!)
-
-`read_file_nonblocking` (incomplete!)
-
-`write_file_blocking` (incomplete!)
-
-`write_file_nonblocking` (incomplete!)
-
-`write_file_blocking_threads` (incomplete!)
-
-`delete_file_blocking` (incomplete!)
-
-`delete_file_nonblocking` (incomplete!)
-
-`instant_secure_erase` (incomplete!)
-
-`kinetic_stat` (incomplete!)
-
-`dump_keyspace` (incomplete!)
-
-`set_acls` (incomplete!)
-
-`set_pin` (incomplete!)
-
-`set_clusterversion` (incomplete!)
-
-`update_firmware` (incomplete!)
-
-`copy_drive` (incomplete!)
+    * `kinetic-c noop`
+        * Execute NoOp operation against default host: `localhost`
+    * `kinetic-c --host my-kinetic-server.com noop`
+        * Execute NoOp operation against `my-kinetic-server.com`
+* `read_file_blocking` (incomplete!)
+* `read_file_nonblocking` (incomplete!)
+* `write_file_blocking` (incomplete!)
+* `write_file_nonblocking` (incomplete!)
+* `write_file_blocking_threads` (incomplete!)
+* `delete_file_blocking` (incomplete!)
+* `delete_file_nonblocking` (incomplete!)
+* `instant_secure_erase` (incomplete!)
+* `kinetic_stat` (incomplete!)
+* `dump_keyspace` (incomplete!)
+* `set_acls` (incomplete!)
+* `set_pin` (incomplete!)
+* `set_clusterversion` (incomplete!)
+* `update_firmware` (incomplete!)
+* `copy_drive` (incomplete!)
