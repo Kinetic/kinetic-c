@@ -8,18 +8,18 @@ This repo contains code for producing C Kinetic clients which use the Seagate Ki
 
 Getting Started
 ================
-
-**Clone the Repo**
+**Clone the repo**
     > git clone --recursive https://github.com/atomicobject/kinetic-c.git
     > cd kinetic-c
+    > bundle install # Ensure you have all RubyGems at the proper versions
 
-**Update repo working copy to the latest (previously cloned)**
-    > git pull # Pulls the latest version locally
-    > git submodule update --init # Ensures all submodules are up-to-date
-    > bundle install # Ensures you have all RubyGems needed
+**Update to the latest version (previously cloned)**
+    > git pull
+    > git submodule update --init # Ensure submodules are up to date
+    > bundle install # Ensure you have all RubyGems at the proper versions
 
-**Build and run all tests**
-    > bundle exec rake # Run all tests and build kinetic-c library and examples
+**Build Kinetic-C and run all tests**
+    > bundle exec rake
 
 API Documentation
 =================
@@ -35,8 +35,8 @@ Dependencies
     * [rake](https://github.com/jimweirich/rake) (0.9.2.2 or higher) Ruby implementation of Make
     * [ceedling](https://github.com/ThrowTheSwitch/Ceedling) Ruby/Rake-based build/test system for C projects
         * Ceedling also includes the following tools for testing C code
-        * [Unity](https://github.com/ThrowTheSwitch/Unity) lightweight assertion framework and test executor for C
-        * [CMock](https://github.com/ThrowTheSwitch/CMock) mock/fake generator for C modules using only C header files as input (written in Ruby)
+            * [Unity](https://github.com/ThrowTheSwitch/Unity) lightweight assertion framework and test executor for C
+            * [CMock](https://github.com/ThrowTheSwitch/CMock) mock/fake generator for C modules using only C header files as input (written in Ruby)
 * [CppCheck](http://cppcheck.sourceforge.net/) for static analysis of source code
 * [Valgrind](http://valgrind.org/) for validation of memory usage/management
 * [Doxygen](https://github.com/doxygen) and [GraphViz](http://www.graphviz.org/) for generating API documentation
@@ -52,8 +52,8 @@ NOTE: Prefix the following commands with `bundle exec` so that they execute in t
     * `rake`
 * Build the library
     * `rake release`
-* Run all unit/integration tests
-    * `rake test:all`
+* Run all unit/integration/system/example tests
+    * `rake test_all`
 * Analyze code
     * `rake cppcheck`
 * Generate documentation
@@ -63,7 +63,7 @@ NOTE: Prefix the following commands with `bundle exec` so that they execute in t
 * Build/install Google Protocol Buffers support for the Kinetic-Protocol
     * `rake proto`
 * Enable verbose output (for current Rake run)
-    * `rake verbose *<task_A>* *<task_B>*`
+    * `rake verbose <task_A> <task_B>`
 
 Examples
 ========
@@ -76,16 +76,16 @@ The following examples are provided for development reference and as utilities t
 
 You can then execute `kinetic-c` with a valid example name, optionally preceeded with any of the optional arguments.
 
-**Optional Arguments**
+**Options**
 * `--host [HostName/IP]` or `-h [HostName/IP]` - Set the Kinetic Device host
 * `--tls` - Use the TLS port to execute the specified operation(s)
 
-**Example Operation Listing**
-* `noop` - Execute a NoOp to see if the Kinetic Device is online
+**Operations**
+* `kinetic-c [--hostname|-h hostname|123.253.253.23] noop`
     * `kinetic-c noop`
-        * Execute NoOp operation against default host: `localhost`
-    * `kinetic-c --host my-kinetic-server.com noop`
-        * Execute NoOp operation against `my-kinetic-server.com`
+        * Execute the NoOp operation against default host: `localhost`
+    * `kinetic-c noop --host my-kinetic-server.com`
+        * Execute the NoOp operation against `my-kinetic-server.com`
 * `read_file_blocking` (incomplete!)
 * `read_file_nonblocking` (incomplete!)
 * `write_file_blocking` (incomplete!)
