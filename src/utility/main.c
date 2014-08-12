@@ -64,7 +64,7 @@ int main(int argc, char** argv)
         {0, 0, 0, 0}
     };
 
-    while ((opt = getopt_long(argc, argv, "npgdh:z:", long_options, &optIndex)) != -1)
+    while ((opt = getopt_long(argc, argv, "h", long_options, &optIndex)) != -1)
     {
         // Parse options until we reach the end of the argument list
         if (opt != -1)
@@ -75,11 +75,6 @@ int main(int argc, char** argv)
                     // If this option set a flag, do nothing else now.
                     if (long_options[optIndex].flag != 0)
                         break;
-                    printf ("option %s", long_options[optIndex].name);
-                    if (optarg)
-                        printf (" with arg %s", optarg);
-                    printf ("\n");
-                    break;
                 case 'h':
                     strcpy(cfg.host, optarg);
                     break;
