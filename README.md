@@ -60,24 +60,36 @@ NOTE: Prefix the following commands with `bundle exec` so that they execute in t
 * Build/install Google Protocol Buffers support for the Kinetic-Protocol
     * `rake proto`
 * Enable verbose output (for current Rake run)
-    * `rake verbose <task_A> <task_B>...`
+    * `rake verbose *<task_A>* *<task_B>*`
 
 Examples
 ========
 
 The following examples are provided for development reference and as utilities to aid development
 
-In order to execute a given example, execute `kinetic-c` with a given example name and optional arguments (below), you must first
-`cd` into the `build/artifacts/release` folder, and then execute the desired command.
-
-**Optional Arguments**
-* `--host [HostName/IP]` or `-h [HostName/IP]` - Set the Kinetic Device host
-* `--tls` - Use the TLS port to execute the specified operation(s)
+In order to execute a given example, execute `kinetic-c` with a given example name and optional arguments (below)
 
 
-* `noop` - Execute a NoOp to see if the Kinetic Device is online
-	* `kinetic-c noop` - Execute the NoOp operation against default host: `localhost`:
-	* `kinetic-c --host my-kinetic-server.com noop` - Execute the NoOp operation against `my-kinetic-server.com`:
+First, `cd` into the `build/release` folder, and then execute the desired command.
+If no command is specified, kinetic-c will execute all of the example commands.
+
+
+**e.g.** - Execute the NoOp operation against default host: `localhost`:
+
+```
+cd build/release
+kinetic-c noop
+```
+
+**e.g.** - Execute the NoOp operation against `my-kinetic-server.com`:
+
+```
+cd build/release
+kinetic-c noop --host my-kinetic-server.com
+```
+
+
+`noop [--hostname|-h "some_host.com"|123.253.253.23]`
 
 `read_file_blocking` (incomplete!)
 
