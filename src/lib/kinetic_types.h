@@ -38,6 +38,7 @@
 #include <openssl/sha.h>
 
 #define KINETIC_PORT            8123
+#define KINETIC_TLS_PORT        8443
 #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
 #define KINETIC_MAX_KEY_LEN     128

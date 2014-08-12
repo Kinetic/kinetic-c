@@ -163,3 +163,25 @@ KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation* operation)
 
 	return status;
 }
+
+KineticProto_Status_StatusCode KineticApi_Put(
+    KineticOperation* operation,
+    uint8_t* value,
+    int64_t len)
+{
+    KineticProto_Status_StatusCode status =
+        KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+
+    assert(operation->exchange != NULL);
+    assert(operation->exchange->connection != NULL);
+    assert(operation->request != NULL);
+    assert(operation->request->message != NULL);
+    assert(operation->response != NULL);
+    assert(operation->response->message == NULL);
+    assert(value != NULL);
+    assert(len < 1024*1024);
+
+    // TODO: Make it happen!!!
+
+    return status;
+}

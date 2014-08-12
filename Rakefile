@@ -128,6 +128,8 @@ namespace :java_sim do
 
   def java_sim_start
 
+    return if $java_sim
+
     report_banner "Starting Kinetic Java Simulator"
 
     java_sim_cleanup
@@ -147,7 +149,7 @@ namespace :java_sim do
     $java_sim = spawn("#{java} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
     sleep 5 # wait for simulator to start up and server ready to receive connections
     # TODO: use netstat or something to just wait until the server opens the port
-    #       since it might take longer than the hardcoded sleep(x) above :-/ 
+    #       since it might take longer than the hardcoded sleep(x) above :-/
   end
 
   def java_sim_shutdown
@@ -188,6 +190,8 @@ end
 namespace :ruby_sim do
 
   def start_ruby_server
+    return if $kinetic_server
+
     port = KineticRuby::DEFAULT_KINETIC_PORT
     # port = KineticRuby::TEST_KINETIC_PORT
     $kinetic_server ||= KineticRuby::Server.new(port)
@@ -234,7 +238,7 @@ end
 
 desc "Run client test utility"
 task :run do
-  execute_command "./build/artifacts/release/kinetic-c", "Running client test utility"
+  execute_command "./build/artifacts/release/kinetic-c --noop", "Running client test utility"
 end
 
 desc "Prepend license to source files"
@@ -261,27 +265,52 @@ task :default => [
   'release'
 ]
 
-task :test_all do
 
-  report_banner "Running Unit Tests"
-  Rake::Task['test:path'].reenable
-  Rake::Task['test:path'].invoke('test/unit')
+namespace :test do
+  desc "Run unit tests"
+  task :unit do
+    report_banner "Running Unit Tests"
+    Rake::Task['test:path'].reenable
+    Rake::Task['test:path'].invoke('test/unit')
+  end
 
-  report_banner "Running Integration Tests"
-  start_ruby_server
-  Rake::Task['test:path'].reenable
-  Rake::Task['test:path'].invoke('test/integration')
-  shutdown_ruby_server
+  desc "Run integration tests"
+  task :integration => ['ruby_sim:start'] do
+    report_banner "Running Integration Tests"
+    java_sim_shutdown
+    start_ruby_server
+    Rake::Task['test:path'].reenable
+    Rake::Task['test:path'].invoke('test/integration')
+    shutdown_ruby_server
+  end
 
-  report_banner "Running System Tests"
-  java_sim_start
-  Rake::Task['test:path'].reenable
-  Rake::Task['test:path'].invoke('test/system')
-  Rake::Task['release'].invoke
-  Rake::Task['run'].invoke
-  java_sim_shutdown
+  desc "Run system tests"
+  task :system => ['java_sim:start'] do
+    report_banner "Running System Tests"
+    shutdown_ruby_server
+    java_sim_start
+    Rake::Task['test:path'].reenable
+    Rake::Task['test:path'].invoke('test/system')
+    java_sim_shutdown
+  end
 
-  report_banner "Finished executing all test suites"
+  desc "Run Kinetic Client Utility tests"
+  task :utility => ['ruby_sim:shutdown'] do
+    report_banner "Running Kinetic Client Utility Tests"
+    shutdown_ruby_server
+    java_sim_start
+    Rake::Task['release'].invoke
+    cd "./build/artifacts/release/" do
+      execute_command "./kinetic-c noop"
+      execute_command "./kinetic-c --host localhost noop"
+      execute_command "./kinetic-c --host 127.0.0.1 noop"
+      execute_command "./kinetic-c --blocking --host 127.0.0.1 noop"
+    end
+  end
+end
+
+task :test_all => ['test:unit', 'test:integration', 'test:system', 'test:utility'] do
+  report_banner "Finished executing all test suites!"
 end
 
 desc "Build all and run test utility"

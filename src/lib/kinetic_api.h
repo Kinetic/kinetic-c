@@ -41,6 +41,7 @@ void KineticApi_Init(
  * @param host              Host name or IP address to connect to
  * @param port              Port to establish socket connection on
  * @param blocking          Set to true for blocking or false for non-bloocking I/O
+ *
  * @return                  Returns true if connection succeeded
  */
 bool KineticApi_Connect(
@@ -58,6 +59,7 @@ bool KineticApi_Connect(
  * @param identity          Identity to use for the exchange
  * @param key               Key to use for HMAC calculations
  * @param keyLength         Length of HMAC key
+ *
  * @return                  Returns true if configuration succeeded
  */
 bool KineticApi_ConfigureExchange(
@@ -75,6 +77,7 @@ bool KineticApi_ConfigureExchange(
  * @param request           KineticPDU instance to use for request
  * @param requestMsg        KineticMessage instance to use for request
  * @param response          KineticPDU instance to use for reponse
+ *
  * @return                  Returns a configured operation instance
  */
 KineticOperation KineticApi_CreateOperation(
@@ -87,10 +90,26 @@ KineticOperation KineticApi_CreateOperation(
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational
  *
  * @param operation         KineticOperation instance to use for the operation
+ *
  * @return                  Returns the resultant status code
  */
 KineticProto_Status_StatusCode KineticApi_NoOp(
     KineticOperation* operation
+    );
+
+/**
+ * @brief Executes a PUT command to write data to the Kinetic Device
+ *
+ * @param operation         KineticOperation instance to use for the operation
+ * @param value             Value payload buffer
+ * @param valueLength       Value payload length (in bytes)
+ *
+ * @return                  Returns the resultant status code
+ */
+KineticProto_Status_StatusCode KineticApi_Put(
+    KineticOperation* operation,
+    uint8_t* value,
+    int64_t len
     );
 
 #endif // _KINETIC_API_H

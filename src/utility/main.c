@@ -21,83 +21,117 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <getopt.h>
+#include <stdbool.h>
+
 #include "kinetic.h"
 #include "noop.h"
+#include "put.h"
+
+typedef struct _Arguments {
+    char host[HOST_NAME_MAX];
+    int port;
+    int nonBlocking;
+    int useTls;
+    int64_t clusterVersion;
+    int64_t identity;
+    char key[KINETIC_MAX_KEY_LEN];
+} Arguments;
 
 int main(int argc, char** argv)
 {
     int status = -1;
-    char host[HOST_NAME_MAX] = "localhost";
-    int port = KINETIC_PORT;
-    const int64_t clusterVersion = 0;
-    const int64_t identity = 1;
-    const char* key = "asdfasdf";
-    bool doNoOp = false;
-    bool argumentError = true;
+    int opt;
+    int optIndex = 0;
 
-    // Parse command line arguments, if supplied
-    if (argc == 1)
+    // Create an ArgP processor to parse arguments
+    Arguments cfg = {
+        .host = "localhost",
+        .port = KINETIC_PORT,
+        .nonBlocking = false,
+        .useTls = false,
+        .clusterVersion = 0,
+        .identity = 1,
+        .key = "asdfasdf",
+    };
+
+    struct option long_options[] =
     {
-        doNoOp = true;
-        argumentError = false;
-    }
-    else if (argc == 2)
+        {"non-blocking", no_argument,      &cfg.nonBlocking, true},
+        {"blocking",    no_argument,       &cfg.nonBlocking, false},
+        {"tls",         no_argument,       &cfg.port,        KINETIC_TLS_PORT},
+        {"host",        required_argument, 0, 'h'},
+        {0, 0, 0, 0}
+    };
+
+    while ((opt = getopt_long(argc, argv, "npgdh:z:", long_options, &optIndex)) != -1)
     {
-        if (strcmp("noop", argv[1]) == 0)
+        // Parse options until we reach the end of the argument list
+        if (opt != -1)
         {
-            doNoOp = true;
-            argumentError = false;
+            switch (opt)
+            {
+                case 0:
+                    // If this option set a flag, do nothing else now.
+                    if (long_options[optIndex].flag != 0)
+                        break;
+                    printf ("option %s", long_options[optIndex].name);
+                    if (optarg)
+                        printf (" with arg %s", optarg);
+                    printf ("\n");
+                    break;
+                case 'h':
+                    strcpy(cfg.host, optarg);
+                    break;
+                case '?':
+                    // getopt_long already printed an error message.
+                    break;
+                default:
+                    abort ();
+            }
         }
     }
-    else if (argc == 3)
-    {
-        if ((strcmp("--host", argv[1]) == 0) || (strcmp("-h", argv[1]) == 0))
-        {
-            strcpy(host, argv[2]);
-            doNoOp = true;
-            argumentError = false;
-        }
-    }
-    else if (argc > 3)
-    {
-        // Simple parser for --host <ip/hostname> for now
-        if ((strcmp("noop", argv[1]) == 0) &&
-            ((strcmp("--host", argv[2]) == 0) || (strcmp("-h", argv[2]) == 0)))
-        {
-            strcpy(host, argv[3]);
-            doNoOp = true;
-            argumentError = false;
-        }
-    }
 
-    // Abort unless arguments were invalid!
-    if (argumentError)
+    // Execute all specified operations in order
+    for (;optind < argc; optind++)
     {
-        printf("\nInvalid arguments specified!\n");
-        return -1;
-    }
+        char* op = argv[optind];
 
-    if (doNoOp)
-    {
-        printf("\n"
-               "Executing NoOp w/configuration:\n"
-               "-------------------------------\n"
-               "  host: %s\n"
-               "  port: %d\n"
-               "  clusterVersion: %lld\n"
-               "  identity: %lld\n"
-               "  key: '%s'\n", 
-            host, port, (long long int)clusterVersion, (long long int)identity, key);
-        status = NoOp(host, port, clusterVersion, identity, key);
-        if (status == 0)
+        if (strcmp("noop", op) == 0)
         {
-            printf("\nNoOp executed successfully!\n\n");
+            printf("\n"
+                   "Executing NoOp w/configuration:\n"
+                   "-------------------------------\n"
+                   "  host: %s\n"
+                   "  port: %d\n"
+                   "  non-blocking: %s\n"
+                   "  clusterVersion: %lld\n"
+                   "  identity: %lld\n"
+                   "  key: '%s'\n",
+                cfg.host,
+                cfg.port,
+                cfg.nonBlocking ? "true" : "false",
+                (long long int)cfg.clusterVersion,
+                (long long int)cfg.identity,
+                cfg.key);
+            status = NoOp(cfg.host, cfg.port, cfg.clusterVersion, cfg.identity, cfg.key);
+            if (status == 0)
+            {
+                printf("\nNoOp executed successfully!\n\n");
+            }
+            else
+            {
+                printf("\nNoOp operation failed! status=%d\n\n", status);
+                return -1;
+            }
         }
         else
         {
-            printf("\nNoOp operation failed! status=%d\n\n", status);
+            printf("\nSpecified operation is invalid!\n");
+            return -1;
         }
+
     }
-    
+
     return status;
 }
