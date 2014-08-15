@@ -25,19 +25,6 @@
 #include "kinetic_exchange.h"
 #include "kinetic_pdu.h"
 
-typedef struct _KineticOperation
-{
-    KineticExchange* exchange;
-    KineticPDU* request;
-    KineticPDU* response;
-} KineticOperation;
-
-#define KINETIC_OPERATION_INIT(op, xchng, req, resp) { \
-    (op)->exchange = (xchng); \
-    (op)->request = (req); \
-    (op)->response = (resp); \
-}
-
 void KineticOperation_Init(
     KineticOperation* operation,
     KineticExchange* exchange,
@@ -45,5 +32,7 @@ void KineticOperation_Init(
     KineticPDU* response);
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
+
+void KineticOperation_BuildPut(KineticOperation* operation, uint8_t* value, int64_t valueLength);
 
 #endif // _KINETIC_OPERATION_H

@@ -44,3 +44,12 @@ bool KineticConnection_Connect(
 
     return connection->connected;
 }
+
+void KineticConnection_Disconnect(KineticConnection* connection)
+{
+    if (connection != NULL || connection->socketDescriptor >= 0)
+    {
+        close(connection->socketDescriptor);
+        connection->socketDescriptor = -1;
+    }
+}

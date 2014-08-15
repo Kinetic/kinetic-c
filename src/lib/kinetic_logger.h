@@ -33,6 +33,7 @@ void KineticLogger_Log(const char* message);
 int  KineticLogger_LogPrintf(const char* format, ...);
 void KineticLogger_LogHeader(const KineticPDUHeader* header);
 void KineticLogger_LogProtobuf(const KineticProto* proto);
+void KineticLogger_LogStatus(KineticProto_Status* status);
 
 #define LOG(message) KineticLogger_Log(message)
 #define LOGF(message, ...) KineticLogger_LogPrintf(message, ##__VA_ARGS__)

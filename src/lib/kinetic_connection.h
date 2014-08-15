@@ -31,4 +31,6 @@ bool KineticConnection_Connect(
     int port,
     bool blocking);
 
+void KineticConnection_Disconnect(KineticConnection* connection);
+
 #endif // _KINETIC_CONNECTION_H

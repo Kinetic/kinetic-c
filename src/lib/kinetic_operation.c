@@ -15,7 +15,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
+*
 */
 
 #include "kinetic_operation.h"
@@ -39,4 +39,19 @@ void KineticOperation_BuildNoop(KineticOperation* operation)
     KineticExchange_ConfigureHeader(operation->exchange, &operation->request->message->header);
     operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
     operation->request->message->header.has_messagetype = true;
+}
+
+void KineticOperation_BuildPut(KineticOperation* operation, uint8_t* value, int64_t valueLength)
+{
+    assert(operation != NULL);
+    assert(operation->exchange != NULL);
+    assert(operation->request != NULL);
+    assert(operation->response != NULL);
+
+    KineticExchange_ConfigureHeader(operation->exchange, &operation->request->message->header);
+    operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_PUT;
+    operation->request->message->header.has_messagetype = true;
+
+    operation->request->value = value;
+    operation->request->valueLength = valueLength;
 }

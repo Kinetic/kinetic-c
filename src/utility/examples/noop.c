@@ -30,70 +30,20 @@ int NoOp(const char* host, int port, int64_t clusterVersion, int64_t identity, c
     KineticProto_Status_StatusCode status;
     bool success;
 
-    KineticApi_Init(NULL);
-
-    success = KineticApi_Connect(&connection, host, port, true);
+    KineticClient_Init(NULL);
+    success = KineticClient_Connect(&connection, host, port, true);
     assert(success);
-    assert(connection.socketDescriptor >= 0);
-
-    success = KineticApi_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
+    success = KineticClient_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
     assert(success);
-
-    operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response);
-
-    status = KineticApi_NoOp(&operation);
+    operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
+    status = KineticClient_NoOp(&operation);
+    KineticClient_Disconnect(&connection);
 
     if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
     {
         printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
         return 0;
     }
-    else
-    {
-        const KineticProto_Status* protoStatus = response.proto->command->status;
-        const ProtobufCMessage* protoMessage = (ProtobufCMessage*)protoStatus;
-        const ProtobufCMessageDescriptor* protoMessageDescriptor = protoMessage->descriptor;
 
-        // Output status code short name
-        const ProtobufCFieldDescriptor* statusCodeDescriptor =
-            protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "code");
-        const ProtobufCEnumDescriptor* statusCodeEnumDescriptor =
-            (ProtobufCEnumDescriptor*)statusCodeDescriptor->descriptor;
-        const ProtobufCEnumValue* eStatusCodeVal =
-            protobuf_c_enum_descriptor_get_value(statusCodeEnumDescriptor, status);
-        printf("NoOp operation completed but failed w/error: %s=%d(%s)\n",
-            statusCodeDescriptor->name, status, eStatusCodeVal->name);
-
-        // Output status message, if supplied
-        if (protoStatus->statusmessage)
-        {
-            const ProtobufCFieldDescriptor* statusMsgFieldDescriptor =
-                protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "statusMessage");
-            const ProtobufCMessageDescriptor* statusMsgDescriptor =
-                (ProtobufCMessageDescriptor*)statusMsgFieldDescriptor->descriptor;
-
-            printf("  %s: '%s'", statusMsgDescriptor->name, protoStatus->statusmessage);
-        }
-
-        // Output detailed message, if supplied
-        if (protoStatus->has_detailedmessage)
-        {
-            int i;
-            char tmp[8], msg[256];
-            const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
-                protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "detailedMessage");
-            const ProtobufCMessageDescriptor* statusDetailedMsgDescriptor =
-                (ProtobufCMessageDescriptor*)statusDetailedMsgFieldDescriptor->descriptor;
-            
-            sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
-            for (i = 0; i < protoStatus->detailedmessage.len; i++)
-            {
-                sprintf(tmp, "%02hhX", protoStatus->detailedmessage.data[i]);
-                strcat(msg, tmp);
-            }
-            printf("  %s", msg);
-        }
-
-        return status;
-    }
+    return status;
 }

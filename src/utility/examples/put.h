@@ -18,8 +18,8 @@
 *
 */
 
-#ifndef _NOOP_H
-#define _NOOP_H
+#ifndef _PUT_H
+#define _PUT_H
 
 #include "kinetic.h"
 
@@ -36,7 +36,6 @@
  *
  * @return                  Returns true if operation succeeded, false otherwise
  */
-
 int Put(const char* host,
         int port,
         int64_t clusterVersion,
@@ -45,4 +44,4 @@ int Put(const char* host,
         const uint8_t* data,
         int64_t len);
 
-#endif // _NOOP_H
+#endif // _PUT_H

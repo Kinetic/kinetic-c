@@ -18,7 +18,7 @@
 *
 */
 
-#include "kinetic_api.h"
+#include "kinetic_client.h"
 #include "unity.h"
 #include "unity_helper.h"
 #include <stdio.h>
@@ -35,7 +35,7 @@
 
 void setUp(void)
 {
-    KineticApi_Init(NULL);
+    KineticClient_Init(NULL);
 }
 
 void tearDown(void)
@@ -84,17 +84,17 @@ void test_NoOp_should_succeed(void)
     // Establish connection
     KineticConnection_Init_Expect(&connection);
     KineticConnection_Connect_ExpectAndReturn(&connection, "localhost", 8999, true, true);
-    success = KineticApi_Connect(&connection, "localhost", 8999, true);
+    success = KineticClient_Connect(&connection, "localhost", 8999, true);
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
 
     // Configure the exchange
-    success = KineticApi_ConfigureExchange(&exchange, &connection,
+    success = KineticClient_ConfigureExchange(&exchange, &connection,
         clusterVersion, identity, key, strlen(key));
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed configuring exchange!");
 
     // Create the NOOP operation
-    operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
     TEST_ASSERT_EQUAL_PTR(&exchange, operation.exchange);
     TEST_ASSERT_EQUAL_PTR(&request, operation.request);
     TEST_ASSERT_EQUAL_PTR(&requestMsg, operation.request->message);
@@ -113,6 +113,6 @@ void test_NoOp_should_succeed(void)
     KineticSocket_WriteProtobuf_ExpectAndReturn(socketDesc, &requestMsg.proto, true);
     KineticSocket_Read_ExpectAndReturn(socketDesc, &response.rawHeader, sizeof(KineticPDUHeader), true);
     KineticSocket_ReadProtobuf_ExpectAndReturn(socketDesc, &response.proto, response.protobufScratch, 0, true);
-    statusCode = KineticApi_NoOp(&operation);
+    statusCode = KineticClient_NoOp(&operation);
     // TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, statusCode);
 }

@@ -97,6 +97,7 @@ typedef struct _KineticMessage
     KineticProto_Status         status;
     KineticProto_Security       security;
     KineticProto_Security_ACL   acl;
+    KineticProto_KeyValue       keyValue;
     uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
 } KineticMessage;
 
@@ -104,16 +105,15 @@ typedef struct _KineticMessage
     KineticProto_init(&(msg)->proto); \
     KineticProto_command_init(&(msg)->command); \
     KineticProto_header_init(&(msg)->header); \
-    KineticProto_body_init(&(msg)->body); \
     KineticProto_status_init(&(msg)->status); \
+    KineticProto_body_init(&(msg)->body); \
+    KineticProto_key_value_init(&(msg)->keyValue); \
     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
     (msg)->proto.hmac.data = (msg)->hmacData; \
     (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; \
     (msg)->proto.has_hmac = true; /* Enable HMAC to allow length calculation prior to population */ \
     (msg)->command.header = &(msg)->header; \
     (msg)->proto.command = &(msg)->command; \
-    /*(msg)->command.body = &(msg)->body;*/ \
-    /*(msg)->command.status = &(msg)->status;*/ \
 }
 
 
@@ -209,5 +209,18 @@ typedef struct _KineticPDU
     // Exchange associated with this PDU instance (info gets embedded in protobuf message)
     KineticExchange* exchange;
 } KineticPDU;
+
+typedef struct _KineticOperation
+{
+    KineticExchange* exchange;
+    KineticPDU* request;
+    KineticPDU* response;
+} KineticOperation;
+
+#define KINETIC_OPERATION_INIT(op, xchng, req, resp) { \
+    (op)->exchange = (xchng); \
+    (op)->request = (req); \
+    (op)->response = (resp); \
+}
 
 #endif // _KINETIC_TYPES_H

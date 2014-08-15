@@ -18,7 +18,7 @@
 *
 */
 
-#include "kinetic_api.h"
+#include "kinetic_client.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_exchange.h"
@@ -82,9 +82,9 @@ void tearDown(void)
 // -----------------------------------------------------------------------------
 // Jim: You can use the python code and turn client.debug on.
 //      You will get this from a noop.
-//      NOTE: The outer header is assumed correct. 
+//      NOTE: The outer header is assumed correct.
 // -----------------------------------------------------------------------------
-// Request from Kinetic-Python 
+// Request from Kinetic-Python
 // -----------------------------------------------------------------------------
 // command {
 //   header {
@@ -110,9 +110,9 @@ void tearDown(void)
 //   }
 // }
 // hmac: "\332\254\262@8\334\366G\344\323\227\323\366m^A<q\353|"
-// 
+//
 // -----------------------------------------------------------------------------
-// Response from the simulator. 
+// Response from the simulator.
 // -----------------------------------------------------------------------------
 // command {
 //   header {
@@ -140,19 +140,19 @@ void test_NoOp_should_succeed(void)
     KineticProto_Status_StatusCode status;
     bool success;
 
-    KineticApi_Init(NULL);
+    KineticClient_Init(NULL);
 
-    success = KineticApi_Connect(&connection, "localhost", KINETIC_PORT, true);
+    success = KineticClient_Connect(&connection, "localhost", KINETIC_PORT, true);
 
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT(connection.socketDescriptor >= 0);
 
-    success = KineticApi_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
+    success = KineticClient_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
     TEST_ASSERT_TRUE(success);
 
-    operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
 
-    status = KineticApi_NoOp(&operation);
-    
+    status = KineticClient_NoOp(&operation);
+
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
 }

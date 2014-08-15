@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_exchange.h"
+#include "kinetic_logger.h"
 #include <string.h>
 #include <time.h>
 
@@ -29,6 +30,7 @@ void KineticExchange_Init(
     size_t keyLength,
     KineticConnection* const connection)
 {
+    LOG("KineticExchange_Init()!!");
     KINETIC_EXCHANGE_INIT(exchange, identity, key, keyLength, connection);
 }
 
@@ -51,7 +53,9 @@ void KineticExchange_SetClusterVersion(
 void KineticExchange_IncrementSequence(
     KineticExchange* const exchange)
 {
+    LOGF("KineticExchange_IncrementSequence() seqOld=%d", exchange->sequence);
     exchange->sequence++;
+    LOGF("KineticExchange_IncrementSequence() seqNew=%d", exchange->sequence);
 }
 
 void KineticExchange_ConfigureHeader(

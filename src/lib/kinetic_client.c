@@ -18,18 +18,18 @@
 *
 */
 
-#include "kinetic_api.h"
+#include "kinetic_client.h"
 #include "kinetic_connection.h"
 #include "kinetic_pdu.h"
 #include "kinetic_logger.h"
 #include <stdio.h>
 
-void KineticApi_Init(const char* logFile)
+void KineticClient_Init(const char* logFile)
 {
     KineticLogger_Init(logFile);
 }
 
-bool KineticApi_Connect(
+bool KineticClient_Connect(
     KineticConnection* connection,
     const char* host,
     int port,
@@ -52,7 +52,13 @@ bool KineticApi_Connect(
     return true;
 }
 
-bool KineticApi_ConfigureExchange(
+void KineticClient_Disconnect(
+    KineticConnection* connection)
+{
+   KineticConnection_Disconnect(connection);
+}
+
+bool KineticClient_ConfigureExchange(
     KineticExchange* exchange,
     KineticConnection* connection,
     int64_t clusterVersion,
@@ -85,7 +91,7 @@ bool KineticApi_ConfigureExchange(
     return true;
 }
 
-KineticOperation KineticApi_CreateOperation(
+KineticOperation KineticClient_CreateOperation(
     KineticExchange* exchange,
     KineticPDU* request,
     KineticMessage* requestMsg,
@@ -133,7 +139,7 @@ KineticOperation KineticApi_CreateOperation(
     return op;
 }
 
-KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation* operation)
+KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation)
 {
     KineticProto_Status_StatusCode status =
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
@@ -164,8 +170,12 @@ KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation* operation)
 	return status;
 }
 
-KineticProto_Status_StatusCode KineticApi_Put(
+KineticProto_Status_StatusCode KineticClient_Put(
     KineticOperation* operation,
+    char* newVersion,
+    char* key,
+    char* dbVersion,
+    char* tag,
     uint8_t* value,
     int64_t len)
 {
@@ -179,9 +189,24 @@ KineticProto_Status_StatusCode KineticApi_Put(
     assert(operation->response != NULL);
     assert(operation->response->message == NULL);
     assert(value != NULL);
-    assert(len < 1024*1024);
+    assert(len <= 1024*1024);
 
-    // TODO: Make it happen!!!
+    // Initialize request
+    KineticExchange_IncrementSequence(operation->exchange);
+    KineticOperation_BuildPut(operation, value, len);
+    KineticMessage_ConfigureKeyValue(operation->request->message, newVersion, key, dbVersion, tag);
+
+    // Send the request
+    KineticPDU_Send(operation->request);
+
+    // Associate response with same exchange as request
+    operation->response->exchange = operation->request->exchange;
+
+    // Receive the response
+    if (KineticPDU_Receive(operation->response))
+    {
+        status = operation->response->proto->command->status->code;
+    }
 
     return status;
 }

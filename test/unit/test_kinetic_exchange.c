@@ -22,6 +22,7 @@
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
 #include "kinetic_exchange.h"
+#include "kinetic_logger.h"
 #include "protobuf-c.h"
 #include <time.h>
 

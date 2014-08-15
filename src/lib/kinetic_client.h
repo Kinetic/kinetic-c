@@ -18,8 +18,8 @@
 *
 */
 
-#ifndef _KINETIC_API_H
-#define _KINETIC_API_H
+#ifndef _KINETIC_CLIENT_H
+#define _KINETIC_CLIENT_H
 
 #include "kinetic_types.h"
 #include "kinetic_exchange.h"
@@ -31,8 +31,7 @@
  *
  * @param logFile Path to log file. Specify NULL to log to STDOUT.
  */
-void KineticApi_Init(
-    const char* logFile);
+void KineticClient_Init(const char* logFile);
 
 /**
  * @brief Establishes a Kinetic protocol socket connection to a host.
@@ -44,11 +43,18 @@ void KineticApi_Init(
  *
  * @return                  Returns true if connection succeeded
  */
-bool KineticApi_Connect(
+bool KineticClient_Connect(
     KineticConnection* connection,
     const char* host,
     int port,
     bool blocking);
+
+/**
+ * @brief Closes the socket connection to a host.
+ *
+ * @param connection        KineticConnection instance
+ */
+void KineticClient_Disconnect(KineticConnection* connection);
 
 /**
  * @brief Initializes and configures a Kinetic exchange.
@@ -62,7 +68,7 @@ bool KineticApi_Connect(
  *
  * @return                  Returns true if configuration succeeded
  */
-bool KineticApi_ConfigureExchange(
+bool KineticClient_ConfigureExchange(
     KineticExchange* exchange,
     KineticConnection* connection,
     int64_t clusterVersion,
@@ -80,7 +86,7 @@ bool KineticApi_ConfigureExchange(
  *
  * @return                  Returns a configured operation instance
  */
-KineticOperation KineticApi_CreateOperation(
+KineticOperation KineticClient_CreateOperation(
     KineticExchange* exchange,
     KineticPDU* request,
     KineticMessage* requestMsg,
@@ -93,7 +99,7 @@ KineticOperation KineticApi_CreateOperation(
  *
  * @return                  Returns the resultant status code
  */
-KineticProto_Status_StatusCode KineticApi_NoOp(
+KineticProto_Status_StatusCode KineticClient_NoOp(
     KineticOperation* operation
     );
 
@@ -106,10 +112,14 @@ KineticProto_Status_StatusCode KineticApi_NoOp(
  *
  * @return                  Returns the resultant status code
  */
-KineticProto_Status_StatusCode KineticApi_Put(
+KineticProto_Status_StatusCode KineticClient_Put(
     KineticOperation* operation,
+    char* newVersion,
+    char* key,
+    char* dbVersion,
+    char* tag,
     uint8_t* value,
     int64_t len
     );
 
-#endif // _KINETIC_API_H
+#endif // _KINETIC_CLIENT_H

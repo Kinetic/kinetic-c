@@ -97,6 +97,126 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     //   }
     // }
     // hmac: "..."
+    //
     TEST_ASSERT_TRUE(requestMsg.header.has_messagetype);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_NOOP, requestMsg.header.messagetype);
+}
+
+void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation(void)
+{
+    KineticExchange exchange;
+    KineticMessage requestMsg, responseMsg;
+    KineticPDU request, response;
+    KineticOperation op;
+
+    KINETIC_MESSAGE_INIT(&requestMsg);
+    KINETIC_MESSAGE_INIT(&responseMsg);
+    KINETIC_OPERATION_INIT(&op, &exchange, &request, &response);
+    request.message = &requestMsg;
+    request.proto = NULL;
+    response.message = NULL;
+    response.proto = NULL;
+    uint8_t value[1024*1024];
+
+    KineticExchange_ConfigureHeader_Expect(&exchange, &requestMsg.header);
+
+    KineticOperation_BuildPut(&op, value, sizeof(value));
+
+    // PUT
+    // The PUT operation sets the value and metadata for a given key. If a value
+    // already exists in the store for the given key, the client must pass a
+    // value for dbVersion which matches the stored version for this key to
+    // overwrite the value metadata. This behavior can be overridden (so that
+    // the version is ignored and the value and metadata are always written) by
+    // setting forced to true in the KeyValue option.
+    //
+    // Request Message:
+    //
+    // command {
+    //   // See top level cross cutting concerns for header details
+    //   header {
+    //     clusterVersion: ...
+    //     identity: ...
+    //     connectionID: ...
+    //     sequence: ...
+    //     messageType: PUT
+    //   }
+    //   body: {
+    //     keyValue {
+    //       // Required bytes
+    //       // The key for the value being set
+    //       key: "..."
+    //
+    //       // Required bytes
+    //       // Versions are set on objects to support optimistic locking.
+    //       // For operations that modify data, if the dbVersion sent in the
+    //       // request message does not match the version stored in the db, the
+    //       // request will fail.
+    //       dbVersion: "..."
+    //
+    //       // Required bytes
+    //       // Specifies what the next version of the data will be if this
+    //       // operation is successful.
+    //       newVersion: "..."
+    //
+    //       // Optional bool, default false
+    //       // Setting force to true ignores potential version mismatches
+    //       // and carries out the operation.
+    //       force: true
+    //
+    //       // Optional bytes
+    //       // The integrity value for the data. This value should be computed
+    //       // by the client application by applying the hash algorithm
+    //       // specified below to the value (and only to the value).
+    //       // The algorithm used should be specified in the algorithm field.
+    //       // The Kinetic Device will not do any processing on this value.
+    //       tag: "..."
+    //
+    //       // Optional enum
+    //       // The algorithm used by the client to compute the tag.
+    //       // The allowed values are: SHA1, SHA2, SHA3, CRC32, CRC64
+    //       algorithm: ...
+    //
+    //       // Optional Synchronization enum value, defaults to WRITETHROUGH
+    //       // Allows client to specify if the data must be written to disk
+    //       // immediately, or can be written in the future.
+    //       //
+    //       // WRITETHROUGH:  This request is made persistent before returning.
+    //       //                This does not effect any other pending operations.
+    //       // WRITEBACK:     They can be made persistent when the drive chooses,
+    //       //            or when a subsequent FLUSH is give to the drive.
+    //       // FLUSH:     All pending information that has not been written is
+    //       //        pushed to the disk and the command that specifies
+    //       //        FLUSH is written last and then returned. All WRITEBACK writes
+    //       //        that have received ending status will be guaranteed to be
+    //       //        written before the FLUSH operation is returned completed.
+    //       synchronization: ...
+    //     }
+    //   }
+    // }
+    // hmac: "..."
+    //
+    TEST_ASSERT_TRUE(requestMsg.header.has_messagetype);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_PUT, requestMsg.header.messagetype);
+
+    // Required bytes
+    // The key for the value being set
+    // key: "..."
+    TEST_ASSERT_TRUE(requestMsg.header.has_messagetype);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_PUT, requestMsg.header.messagetype);
+
+    // Required bytes
+    // Versions are set on objects to support optimistic locking.
+    // For operations that modify data, if the dbVersion sent in the
+    // request message does not match the version stored in the db, the
+    // request will fail.
+    // dbVersion: "..."
+
+    // Required bytes
+    // Specifies what the next version of the data will be if this
+    // operation is successful.
+    // newVersion: "..."
+
+    TEST_ASSERT_EQUAL_PTR(request.value, value);
+    TEST_ASSERT_EQUAL_INT64(sizeof(value), request.valueLength);
 }

@@ -36,6 +36,8 @@ typedef struct _Arguments {
     int64_t clusterVersion;
     int64_t identity;
     char key[KINETIC_MAX_KEY_LEN];
+    uint8_t value[1024*1024];
+    int64_t valueLength;
 } Arguments;
 
 int main(int argc, char** argv)
@@ -53,6 +55,8 @@ int main(int argc, char** argv)
         .clusterVersion = 0,
         .identity = 1,
         .key = "asdfasdf",
+        .value = {},
+        .valueLength = 0,
     };
 
     struct option long_options[] =
@@ -117,6 +121,44 @@ int main(int argc, char** argv)
             else
             {
                 printf("\nNoOp operation failed! status=%d\n\n", status);
+                return -1;
+            }
+        }
+
+        else if (strcmp("put", op) == 0)
+        {
+            unsigned int i;
+            for (i = 0; i < sizeof(cfg.value); i++)
+            {
+                cfg.value[i] = (uint8_t)(0x0ff & i);
+            }
+
+            printf("\n"
+                   "Executing Put w/configuration:\n"
+                   "-------------------------------\n"
+                   "  host: %s\n"
+                   "  port: %d\n"
+                   "  non-blocking: %s\n"
+                   "  clusterVersion: %lld\n"
+                   "  identity: %lld\n"
+                   "  key: '%s'\n"
+                   "  value: %zd bytes\n",
+                cfg.host,
+                cfg.port,
+                cfg.nonBlocking ? "true" : "false",
+                (long long int)cfg.clusterVersion,
+                (long long int)cfg.identity,
+                cfg.key,
+                sizeof(cfg.value));
+
+            status = Put(cfg.host, cfg.port, cfg.clusterVersion, cfg.identity, cfg.key, cfg.value, sizeof(cfg.value));
+            if (status == 0)
+            {
+                printf("\nPut executed successfully!\n\n");
+            }
+            else
+            {
+                printf("\nPut operation failed! status=%d\n\n", status);
                 return -1;
             }
         }
