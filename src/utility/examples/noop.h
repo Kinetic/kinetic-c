@@ -30,15 +30,15 @@
  * @param port              Port to establish socket connection on
  * @param clusterVersion    Cluster version to use for the operation
  * @param identity          Identity to use for the operation (Must have ACL setup on Kinetic Device)
- * @param key               Shared secret key used for the identity for HMAC calculation
+ * @param hmacKey           Shared secret key used for the identity for HMAC calculation
  *
  * @return                  Returns true if operation succeeded, false otherwise
  */
-int NoOp(
-    const char* host,
-    int port,
-    int64_t clusterVersion,
-    int64_t identity,
-    const char* key);
+int NoOp(const char* host,
+        int port,
+        bool nonBlocking,
+        int64_t clusterVersion,
+        int64_t identity,
+        const char* hmacKey);
 
 #endif // _NOOP_H

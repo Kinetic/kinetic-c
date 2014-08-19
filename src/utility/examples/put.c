@@ -18,89 +18,41 @@
 *
 */
 
-#include "noop.h"
+#include "put.h"
 
-int Put(const char* host, int port, int64_t clusterVersion, int64_t identity, const char* key, const uint8_t* data, int64_t length)
+int Put(const char* host,
+        int port,
+        bool nonBlocking,
+        int64_t clusterVersion,
+        int64_t identity,
+        char* hmacKey,
+        uint8_t* value,
+        int64_t valueLength,
+        char* valueKey,
+        char* valueTag,
+        char* version,
+        char* newVersion)
 {
-    KineticExchange exchange;
     KineticOperation operation;
     KineticPDU request, response;
     KineticConnection connection;
     KineticMessage requestMsg;
-    KineticProto_Status_StatusCode status;
+    KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
     bool success;
-    uint8_t value[1024*1024];
-    int i;
 
-    for (i = 0; i < sizeof(value); i++)
-    {
-        value[i] = (uint8_t)(0x0ff & i);
-    }
-
-    KineticApi_Init(NULL);
-
-    success = KineticApi_Connect(&connection, host, port, true);
+    KineticClient_Init(NULL);
+    success = KineticClient_Connect(&connection, host, port, nonBlocking,
+                                    clusterVersion, identity, hmacKey);
     assert(success);
-    assert(connection.socketDescriptor >= 0);
-
-    success = KineticApi_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
-    assert(success);
-
-    operation = KineticApi_CreateOperation(&exchange, &request, &requestMsg, &response);
-
-    status = KineticApi_Put(&operation, value, sizeof(value));
+    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    status = KineticClient_Put(&operation, newVersion, hmacKey, version, valueTag, value, sizeof(value));
 
     if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
     {
-        printf("Put operation completed successfully. Your data is now stored!\n");
+        printf("Put operation completed successfully. Your data has been stored!\n");
         return 0;
     }
-    else
-    {
-        const KineticProto_Status* protoStatus = response.proto->command->status;
-        const ProtobufCMessage* protoMessage = (ProtobufCMessage*)protoStatus;
-        const ProtobufCMessageDescriptor* protoMessageDescriptor = protoMessage->descriptor;
 
-        // Output status code short name
-        const ProtobufCFieldDescriptor* statusCodeDescriptor =
-            protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "code");
-        const ProtobufCEnumDescriptor* statusCodeEnumDescriptor =
-            (ProtobufCEnumDescriptor*)statusCodeDescriptor->descriptor;
-        const ProtobufCEnumValue* eStatusCodeVal =
-            protobuf_c_enum_descriptor_get_value(statusCodeEnumDescriptor, status);
-        printf("NoOp operation completed but failed w/error: %s=%d(%s)\n",
-            statusCodeDescriptor->name, status, eStatusCodeVal->name);
-
-        // Output status message, if supplied
-        if (protoStatus->statusmessage)
-        {
-            const ProtobufCFieldDescriptor* statusMsgFieldDescriptor =
-                protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "statusMessage");
-            const ProtobufCMessageDescriptor* statusMsgDescriptor =
-                (ProtobufCMessageDescriptor*)statusMsgFieldDescriptor->descriptor;
-
-            printf("  %s: '%s'", statusMsgDescriptor->name, protoStatus->statusmessage);
-        }
-
-        // Output detailed message, if supplied
-        if (protoStatus->has_detailedmessage)
-        {
-            int i;
-            char tmp[8], msg[256];
-            const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
-                protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "detailedMessage");
-            const ProtobufCMessageDescriptor* statusDetailedMsgDescriptor =
-                (ProtobufCMessageDescriptor*)statusDetailedMsgFieldDescriptor->descriptor;
-
-            sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
-            for (i = 0; i < protoStatus->detailedmessage.len; i++)
-            {
-                sprintf(tmp, "%02hhX", protoStatus->detailedmessage.data[i]);
-                strcat(msg, tmp);
-            }
-            printf("  %s", msg);
-        }
-
-        return status;
-    }
+    KineticClient_Disconnect(&connection);
+    return status;
 }

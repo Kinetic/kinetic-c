@@ -25,3 +25,40 @@ void KineticMessage_Init(KineticMessage* const message)
     // Initialize protobuf fields and ssemble the message
     KINETIC_MESSAGE_INIT(message);
 }
+
+void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
+    const char* newVersion, const char* key, const char* dbVersion, const char* tag)
+{
+    // Enable command body and keyValue fields by pointing at
+    // pre-allocated elements in message
+    message->command.body = &message->body;
+    message->proto.command->body = &message->body;
+    message->command.body->keyvalue = &message->keyValue;
+    message->proto.command->body->keyvalue = &message->keyValue;
+
+    // Set keyValue fields appropriately
+    if (newVersion)
+    {
+        message->keyValue.has_newversion = true;
+        message->keyValue.newversion.data = (uint8_t*)newVersion;
+        message->keyValue.newversion.len = strlen(newVersion);
+    }
+    if (key)
+    {
+        message->keyValue.has_key = true;
+        message->keyValue.key.data = (uint8_t*)key;
+        message->keyValue.key.len = strlen(key);
+    }
+    if (dbVersion)
+    {
+        message->keyValue.has_dbversion = true;
+        message->keyValue.dbversion.data = (uint8_t*)dbVersion;
+        message->keyValue.dbversion.len = strlen(dbVersion);
+    }
+    if (tag)
+    {
+        message->keyValue.has_tag = true;
+        message->keyValue.tag.data = (uint8_t*)tag;
+        message->keyValue.tag.len = strlen(tag);
+    }
+}

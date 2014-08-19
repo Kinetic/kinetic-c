@@ -163,26 +163,21 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                         proto->command->header->messagetype);
                     LOGF("%smessagetype: %s", _indent, eVal->name);
                 }
-                if (proto->command->header->has_identity)
-                {
-                    LOGF("%sidentity: %lld", _indent,
-                        proto->command->header->identity);
-                }
                 if (proto->command->header->has_timeout)
                 {
-                    LOGF("%stimeout: %s", _indent, 
-                        proto->command->header->timeout ? _str_true : _str_false);
+                    LOGF("%stimeout: %lld", _indent,
+                        proto->command->header->acksequence);
                 }
                 if (proto->command->header->has_earlyexit)
                 {
-                    LOGF("%searlyExit: %s", _indent, 
+                    LOGF("%searlyExit: %s", _indent,
                         proto->command->header->earlyexit ? _str_true : _str_false);
                 }
                 if (proto->command->header->has_backgroundscan)
                 {
-                    LOGF("%sbackgroundScan: %s", _indent, 
+                    LOGF("%sbackgroundScan: %s", _indent,
                         proto->command->header->backgroundscan ? _str_true : _str_false);
-                }      
+                }
             }
             LOG_PROTO_LEVEL_END();
         }
@@ -190,12 +185,38 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
         if (proto->command->body)
         {
             LOG_PROTO_LEVEL_START("body");
+            {
+                if (proto->command->body->keyvalue)
+                {
+                    LOG_PROTO_LEVEL_START("keyValue");
+                    {
+                        if (proto->command->body->keyvalue->has_key)
+                        {
+                            LOGF("%skey: '%s'", _indent, proto->command->body->keyvalue->key.data);
+                        }
+                        if (proto->command->body->keyvalue->has_dbversion)
+                        {
+                            LOGF("%sdbVersion: '%s'", _indent, proto->command->body->keyvalue->dbversion.data);
+                        }
+                        if (proto->command->body->keyvalue->has_newversion)
+                        {
+                            LOGF("%snewVersion: '%s'", _indent, proto->command->body->keyvalue->newversion.data);
+                        }
+                        if (proto->command->body->keyvalue->has_tag)
+                        {
+                            LOGF("%stag: '%s'", _indent, proto->command->body->keyvalue->tag.data);
+                        }
+                    }
+                    LOG_PROTO_LEVEL_END();
+                }
+            }
+
             LOG_PROTO_LEVEL_END();
         }
 
         if (proto->command->status)
         {
-            LOG_PROTO_LEVEL_START("body");
+            LOG_PROTO_LEVEL_START("status");
             {
                 if (proto->command->status->has_code)
                 {
@@ -208,8 +229,7 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
 
                 if (proto->command->status->statusmessage)
                 {
-                    LOGF("%sstatusMessage: '%s'",
-                        _indent, proto->command->status->statusmessage);
+                    LOGF("%sstatusMessage: '%s'", _indent, proto->command->status->statusmessage);
                 }
                 if (proto->command->status->has_detailedmessage)
                 {
@@ -226,7 +246,7 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
         }
         LOG_PROTO_LEVEL_END();
     }
-    
+
     if (proto->has_hmac)
     {
         char tmp[8], buf[64] = "hmac: ";
@@ -238,3 +258,62 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
         LOGF("%s%s", _indent, buf);
     }
 }
+
+void KineticLogger_LogStatus(KineticProto_Status* status)
+{
+    ProtobufCMessage* protoMessage = (ProtobufCMessage*)status;
+    KineticProto_Status_StatusCode code = status->code;
+
+    if (code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
+    {
+        printf("Operation completed successfully\n");
+    }
+    else if (code == KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE)
+    {
+        printf("Operation was aborted!\n");
+    }
+    else
+    {
+        // Output status code short name
+        const ProtobufCMessageDescriptor* protoMessageDescriptor = protoMessage->descriptor;
+        const ProtobufCFieldDescriptor* statusCodeDescriptor =
+            protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "code");
+        const ProtobufCEnumDescriptor* statusCodeEnumDescriptor =
+            (ProtobufCEnumDescriptor*)statusCodeDescriptor->descriptor;
+        const ProtobufCEnumValue* eStatusCodeVal =
+            protobuf_c_enum_descriptor_get_value(statusCodeEnumDescriptor, code);
+        KineticLogger_LogPrintf("Operation completed but failed w/error: %s=%d(%s)\n",
+            statusCodeDescriptor->name, code, eStatusCodeVal->name);
+
+        // Output status message, if supplied
+        if (status->statusmessage)
+        {
+            const ProtobufCFieldDescriptor* statusMsgFieldDescriptor =
+                protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "statusMessage");
+            const ProtobufCMessageDescriptor* statusMsgDescriptor =
+                (ProtobufCMessageDescriptor*)statusMsgFieldDescriptor->descriptor;
+
+            KineticLogger_LogPrintf("  %s: '%s'", statusMsgDescriptor->name, status->statusmessage);
+        }
+
+        // Output detailed message, if supplied
+        if (status->has_detailedmessage)
+        {
+            int i;
+            char tmp[8], msg[256];
+            const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
+                protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "detailedMessage");
+            const ProtobufCMessageDescriptor* statusDetailedMsgDescriptor =
+                (ProtobufCMessageDescriptor*)statusDetailedMsgFieldDescriptor->descriptor;
+
+            sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
+            for (i = 0; i < status->detailedmessage.len; i++)
+            {
+                sprintf(tmp, "%02hhX", status->detailedmessage.data[i]);
+                strcat(msg, tmp);
+            }
+            KineticLogger_LogPrintf("  %s", msg);
+        }
+    }
+}
+

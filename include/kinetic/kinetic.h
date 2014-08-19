@@ -21,10 +21,10 @@
 #ifndef KINETIC_H_
 #define KINETIC_H_
 
-#include "kinetic_types.h"
-#include "kinetic_api.h"
-#include "kinetic_proto.h"
-#include "kinetic_connection.h"
 #include "protobuf-c.h"
+#include "kinetic_proto.h"
+#include "kinetic_logger.h"
+#include "kinetic_connection.h"
+#include "kinetic_client.h"
 
 #endif /* KINETIC_H_ */

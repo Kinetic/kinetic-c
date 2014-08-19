@@ -18,7 +18,11 @@
 *
 */
 
+#ifndef _UNITY_HELPER
+#define _UNITY_HELPER
+
 #include "unity.h"
+#include "kinetic_types.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -101,4 +105,4 @@ if (expected != actual) { \
     TEST_ASSERT_EQUAL_MESSAGE(0, fclose(f), "Failed closing file: " #fname ); \
 }
 
-
+#endif // _UNITY_HELPER

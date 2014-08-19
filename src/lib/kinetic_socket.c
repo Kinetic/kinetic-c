@@ -21,7 +21,6 @@
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
 #include "protobuf-c.h"
-#include "socket99.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -40,8 +39,9 @@
 #endif // _BSD_SOURCE
 #include <unistd.h>
 #include <sys/types.h>
+#include "socket99.h"
 
-int KineticSocket_Connect(char* host, int port, bool blocking)
+int KineticSocket_Connect(char* host, int port, bool nonBlocking)
 {
     char port_str[32];
     struct addrinfo hints;
@@ -53,7 +53,7 @@ int KineticSocket_Connect(char* host, int port, bool blocking)
     socket99_config cfg = {
         .host = host,
         .port = port,
-        .nonblocking = !blocking,
+        .nonblocking = nonBlocking,
     };
     sprintf(port_str, "%d", port);
 
@@ -289,4 +289,6 @@ bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticProto* proto
     assert(packedLen == len);
 
     return KineticSocket_Write(socketDescriptor, packed, packedLen);
+
+    free(packed);
 }

@@ -182,7 +182,7 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
 {
     bool success = false;
     const char* readRequest = "readProto()";
-    uint8_t data[1024*1024];
+    uint8_t data[PDU_VALUE_MAX_LEN];
     size_t expectedLength = 125; // This would normally be extracted from the PDU header
     LOG(__func__);
 

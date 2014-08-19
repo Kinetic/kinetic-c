@@ -18,26 +18,53 @@
 *
 */
 
-#include "kinetic_api.h"
+#include "kinetic_client.h"
 #include "kinetic_connection.h"
+#include "kinetic_message.h"
 #include "kinetic_pdu.h"
 #include "kinetic_logger.h"
 #include <stdio.h>
 
-void KineticApi_Init(const char* logFile)
+void KineticClient_Init(const char* logFile)
 {
     KineticLogger_Init(logFile);
 }
 
-bool KineticApi_Connect(
+bool KineticClient_Connect(
     KineticConnection* connection,
     const char* host,
     int port,
-    bool blocking)
+    bool nonBlocking,
+    int64_t clusterVersion,
+    int64_t identity,
+    const char* key)
 {
-    KineticConnection_Init(connection);
+    if (connection == NULL)
+    {
+        LOG("Specified KineticConnection is NULL!");
+        return false;
+    }
 
-    if (!KineticConnection_Connect(connection, host, port, blocking))
+    if (host == NULL)
+    {
+        LOG("Specified host is NULL!");
+        return false;
+    }
+
+    if (key == NULL)
+    {
+        LOG("Specified HMAC key is NULL!");
+        return false;
+    }
+
+    if (strlen(key) < 1)
+    {
+        LOG("Specified HMAC key is empty!");
+        return false;
+    }
+
+    if (!KineticConnection_Connect(connection, host, port, nonBlocking,
+        clusterVersion, identity, key))
     {
         connection->connected = false;
         connection->socketDescriptor = -1;
@@ -52,78 +79,51 @@ bool KineticApi_Connect(
     return true;
 }
 
-bool KineticApi_ConfigureExchange(
-    KineticExchange* exchange,
-    KineticConnection* connection,
-    int64_t clusterVersion,
-    int64_t identity,
-    const char* key,
-    size_t keyLength)
+void KineticClient_Disconnect(
+    KineticConnection* connection)
 {
-    if (exchange == NULL)
-    {
-        LOG("Specified KineticExchange is NULL!");
-        return false;
-    }
-
-    if (key == NULL)
-    {
-        LOG("Specified Kinetic Protocol key is NULL!");
-        return false;
-    }
-
-    if (keyLength == 0)
-    {
-        LOG("Specified Kinetic Protocol key length is NULL!");
-        return false;
-    }
-
-    KineticExchange_Init(exchange, identity, key, keyLength, connection);
-    KineticExchange_SetClusterVersion(exchange, clusterVersion);
-    KineticExchange_ConfigureConnectionID(exchange);
-
-    return true;
+   KineticConnection_Disconnect(connection);
 }
 
-KineticOperation KineticApi_CreateOperation(
-    KineticExchange* exchange,
+KineticOperation KineticClient_CreateOperation(
+    KineticConnection* connection,
     KineticPDU* request,
     KineticMessage* requestMsg,
     KineticPDU* response)
 {
     KineticOperation op;
 
-    if (exchange == NULL)
+    if (connection == NULL)
     {
-        LOG("Specified KineticExchange is NULL!");
-        assert(exchange != NULL);
+        LOG("Specified KineticConnection is NULL!");
+        assert(connection != NULL);
     }
 
     if (request == NULL)
     {
-        LOG("Specified request KineticPDU is NULL!");
+        LOG("Specified KineticPDU request is NULL!");
         assert(request != NULL);
     }
 
     if (requestMsg == NULL)
     {
-        LOG("Specified request KineticMessage is NULL!");
+        LOG("Specified KineticMessage request is NULL!");
         assert(requestMsg != NULL);
     }
 
     if (response == NULL)
     {
-        LOG("Specified response KineticPDU is NULL!");
+        LOG("Specified KineticPDU response is NULL!");
         assert(response != NULL);
     }
 
     KineticMessage_Init(requestMsg);
-    KineticPDU_Init(request, exchange, requestMsg, NULL, 0);
+    KineticPDU_Init(request, connection, requestMsg, NULL, 0);
 
     // KineticMessage_Init(responseMsg);
-    KineticPDU_Init(response, exchange, NULL, NULL, 0);
+    KineticPDU_Init(response, connection, NULL, NULL, 0);
 
-    op.exchange = exchange;
+    op.connection = connection;
     op.request = request;
     op.request->message = requestMsg;
     op.response = response;
@@ -133,55 +133,71 @@ KineticOperation KineticApi_CreateOperation(
     return op;
 }
 
-KineticProto_Status_StatusCode KineticApi_NoOp(KineticOperation* operation)
+KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation)
 {
     KineticProto_Status_StatusCode status =
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
 
-    assert(operation->exchange != NULL);
-    assert(operation->exchange->connection != NULL);
+    assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->request->message != NULL);
     assert(operation->response != NULL);
     assert(operation->response->message == NULL);
 
     // Initialize request
-    KineticExchange_IncrementSequence(operation->exchange);
+    KineticConnection_IncrementSequence(operation->connection);
     KineticOperation_BuildNoop(operation);
 
     // Send the request
     KineticPDU_Send(operation->request);
 
     // Associate response with same exchange as request
-    operation->response->exchange = operation->request->exchange;
+    operation->response->connection = operation->request->connection;
 
     // Receive the response
     if (KineticPDU_Receive(operation->response))
     {
-        status = operation->response->proto->command->status->code;
+        status = KineticPDU_Status(operation->response);
     }
 
 	return status;
 }
 
-KineticProto_Status_StatusCode KineticApi_Put(
-    KineticOperation* operation,
+KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
+    char* newVersion,
+    char* key,
+    char* dbVersion,
+    char* tag,
     uint8_t* value,
     int64_t len)
 {
     KineticProto_Status_StatusCode status =
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
 
-    assert(operation->exchange != NULL);
-    assert(operation->exchange->connection != NULL);
+    assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->request->message != NULL);
     assert(operation->response != NULL);
     assert(operation->response->message == NULL);
     assert(value != NULL);
-    assert(len < 1024*1024);
+    assert(len <= PDU_VALUE_MAX_LEN);
 
-    // TODO: Make it happen!!!
+    // Initialize request
+    KineticConnection_IncrementSequence(operation->connection);
+    KineticOperation_BuildPut(operation, value, len);
+    KineticMessage_ConfigureKeyValue(operation->request->message, newVersion, key, dbVersion, tag);
+
+    // Send the request
+    KineticPDU_Send(operation->request);
+
+    // Associate response with same exchange as request
+    operation->response->connection = operation->request->connection;
+
+    // Receive the response
+    if (KineticPDU_Receive(operation->response))
+    {
+        status = KineticPDU_Status(operation->response);
+    }
 
     return status;
 }

@@ -64,64 +64,26 @@
 #endif // HOST_NAME_MAX
 
 #include "kinetic_proto.h"
+#include <time.h>
 
-typedef struct _KineticHMAC
+
+typedef struct _ByteArray
 {
-    KineticProto_Security_ACL_HMACAlgorithm algorithm;
-    unsigned int valueLength;
-    uint8_t value[KINETIC_HMAC_MAX_LEN];
-} KineticHMAC;
+    uint8_t* data;
+    size_t len;
+} ByteArray;
+#define BYTE_ARRAY_INIT(data, len) (ByteArray){.data = data, .len = len};
+#define BYTE_ARRAY_INIT_FROM_CSTRING(str) (ByteArray){.data = (uint8_t*)str, .len = strlen(str)};
 
+// Kinetic Device Client Connection
 typedef struct _KineticConnection
 {
     bool    connected;
-    bool    blocking;
+    bool    nonBlocking;
     int     port;
     int     socketDescriptor;
+    int64_t connectionID;
     char    host[HOST_NAME_MAX];
-} KineticConnection;
-
-#define KINETIC_CONNECTION_INIT(connection) { \
-    memset((connection), 0, sizeof(KineticConnection)); \
-    (connection)->blocking = true; \
-    (connection)->socketDescriptor = -1; \
-}
-
-typedef struct _KineticMessage
-{
-    // Kinetic Protocol Buffer Elements
-    KineticProto                proto;
-    KineticProto_Command        command;
-    KineticProto_Header         header;
-    KineticProto_Body           body;
-    KineticProto_Status         status;
-    KineticProto_Security       security;
-    KineticProto_Security_ACL   acl;
-    uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
-} KineticMessage;
-
-#define KINETIC_MESSAGE_INIT(msg) { \
-    KineticProto_init(&(msg)->proto); \
-    KineticProto_command_init(&(msg)->command); \
-    KineticProto_header_init(&(msg)->header); \
-    KineticProto_body_init(&(msg)->body); \
-    KineticProto_status_init(&(msg)->status); \
-    memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
-    (msg)->proto.hmac.data = (msg)->hmacData; \
-    (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; \
-    (msg)->proto.has_hmac = true; /* Enable HMAC to allow length calculation prior to population */ \
-    (msg)->command.header = &(msg)->header; \
-    (msg)->proto.command = &(msg)->command; \
-    /*(msg)->command.body = &(msg)->body;*/ \
-    /*(msg)->command.status = &(msg)->status;*/ \
-}
-
-
-typedef struct _KineticExchange
-{
-    // Defaults to false, since clusterVersion is optional
-    // Set to true to enable clusterVersion for the exchange
-    bool has_clusterVersion;
 
     // Optional field - default value is 0
     // The version number of this cluster definition. If this is not equal to
@@ -138,48 +100,28 @@ typedef struct _KineticExchange
     // Required field
     // This is the identity's HMAC Key. This is a shared secret between the
     // client and the device, used to sign requests.
-    bool has_key;
-    size_t keyLength;
     char key[KINETIC_MAX_KEY_LEN+1];
-
-    // Required field
-    // A unique number for this connection between the source and target.
-    // On the first request to the drive, this should be the time of day in
-    // seconds since 1970. The drive can change this number and the client must
-    // continue to use the new number and the number must remain constant
-    // during the session
-    int64_t connectionID;
 
     // Required field
     // A monotonically increasing number for each request in a TCP connection.
     int64_t sequence;
-
-    // Associated Kinetic connection
-    KineticConnection* connection;
-} KineticExchange;
-
-#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, con) { \
-    memset((exchg), 0, sizeof(KineticExchange)); \
-    (exchg)->identity = id; \
-    if (k != NULL && klen > 0) \
-    { \
-        memcpy((exchg)->key, k, klen); \
-        (exchg)->key[klen] = '\0'; \
-        (exchg)->keyLength = klen; \
-        (exchg)->has_key = true; \
-    } \
-    (exchg)->connection = con; \
-    (exchg)->sequence = -1; \
+} KineticConnection;
+#define KINETIC_CONNECTION_INIT(_con, _id, _key) { \
+    *_con = (KineticConnection) { \
+        .socketDescriptor = -1, \
+        .connectionID = time(NULL), \
+        .identity = _id, \
+        .sequence = -1, \
+    }; \
+    if (_key != NULL) { \
+        strcpy(*_con.key, _key); } \
 }
 
-
-
-
+// Kinetic PDU Header
 #define PDU_HEADER_LEN      (1 + (2 * sizeof(int32_t)))
 #define PDU_PROTO_MAX_LEN   (1024 * 1024)
 #define PDU_VALUE_MAX_LEN   (1024 * 1024)
 #define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
-
 typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
 {
     uint8_t     versionPrefix;
@@ -187,6 +129,47 @@ typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
     uint32_t    valueLength;
 } KineticPDUHeader;
 
+
+// Kinetic Message HMAC
+typedef struct _KineticHMAC
+{
+    KineticProto_Security_ACL_HMACAlgorithm algorithm;
+    unsigned int valueLength;
+    uint8_t value[KINETIC_HMAC_MAX_LEN];
+} KineticHMAC;
+
+
+// Kinetic Device Message Request
+typedef struct _KineticMessage
+{
+    // Kinetic Protocol Buffer Elements
+    KineticProto                proto;
+    KineticProto_Command        command;
+    KineticProto_Header         header;
+    KineticProto_Body           body;
+    KineticProto_Status         status;
+    KineticProto_Security       security;
+    KineticProto_Security_ACL   acl;
+    KineticProto_KeyValue       keyValue;
+    uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
+} KineticMessage;
+#define KINETIC_MESSAGE_INIT(msg) { \
+    KineticProto_init(&(msg)->proto); \
+    KineticProto_command_init(&(msg)->command); \
+    KineticProto_header_init(&(msg)->header); \
+    KineticProto_status_init(&(msg)->status); \
+    KineticProto_body_init(&(msg)->body); \
+    KineticProto_key_value_init(&(msg)->keyValue); \
+    memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
+    (msg)->proto.hmac.data = (msg)->hmacData; \
+    (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; \
+    (msg)->proto.has_hmac = true; /* Enable HMAC to allow length calculation prior to population */ \
+    (msg)->command.header = &(msg)->header; \
+    (msg)->proto.command = &(msg)->command; \
+}
+
+
+// Kinetic PDU
 typedef struct _KineticPDU
 {
     // Binary PDU header (binary packed in NBO)
@@ -197,7 +180,7 @@ typedef struct _KineticPDU
     KineticMessage* message;
     KineticProto* proto;
     uint32_t protobufLength; // Embedded in header in NBO byte order (this is for reference)
-    uint8_t protobufScratch[1024*1024];
+    uint8_t protobufScratch[PDU_PROTO_MAX_LEN];
 
     // Value data associated with PDU (if any)
     uint8_t* value;
@@ -207,7 +190,38 @@ typedef struct _KineticPDU
     KineticHMAC hmac;
 
     // Exchange associated with this PDU instance (info gets embedded in protobuf message)
-    KineticExchange* exchange;
+    KineticConnection* connection;
 } KineticPDU;
+
+
+#define KINETIC_PDU_INIT(pdu, connection, message, value, valueLength) { \
+    assert(pdu != NULL); \
+    assert(connection != NULL); \
+    pdu = { \
+        .connection = connection, \
+        .message = message, \
+        .proto = NULL, \
+        .protobufLength = 0, \
+        .value = value, \
+        .valueLength = valueLength, \
+        .header.versionPrefix = (uint8_t)'F', \
+    }; \
+    if (message != NULL) \
+    { \
+        KineticConnection_ConfigureHeader(connection, &message->header); \
+    } \
+}
+
+
+// Kinetic Operation
+typedef struct _KineticOperation
+{
+    KineticConnection* connection;
+    KineticPDU* request;
+    KineticPDU* response;
+    uint8_t* value;
+    size_t valueLength;
+} KineticOperation;
+
 
 #endif // _KINETIC_TYPES_H
