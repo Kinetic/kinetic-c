@@ -21,7 +21,6 @@
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
 #include "protobuf-c.h"
-#include "socket99.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -40,6 +39,7 @@
 #endif // _BSD_SOURCE
 #include <unistd.h>
 #include <sys/types.h>
+#include "socket99.h"
 
 int KineticSocket_Connect(char* host, int port, bool nonBlocking)
 {
