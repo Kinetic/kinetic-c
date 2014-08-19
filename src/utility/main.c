@@ -26,7 +26,7 @@
 
 #include "kinetic.h"
 #include "noop.h"
-// #include "put.h"
+#include "put.h"
 // #include "get.h"
 
 typedef struct _Arguments {
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
                 (long long int)cfg.clusterVersion,
                 (long long int)cfg.identity,
                 cfg.hmacKey);
-            status = NoOp(cfg.host, cfg.port, false, cfg.clusterVersion, cfg.identity, cfg.hmacKey);
+            status = NoOp(cfg.host, cfg.port, cfg.nonBlocking, cfg.clusterVersion, cfg.identity, cfg.hmacKey);
             if (status == 0)
             {
                 printf("\nNoOp executed successfully!\n\n");
@@ -132,43 +132,45 @@ int main(int argc, char** argv)
             }
         }
 
-        // else if (strcmp("put", op) == 0)
-        // {
-        //     unsigned int i;
-        //     for (i = 0; i < sizeof(cfg.value); i++)
-        //     {
-        //         cfg.value[i] = (uint8_t)(0x0ff & i);
-        //     }
+        else if (strcmp("put", op) == 0)
+        {
+            unsigned int i;
+            for (i = 0; i < sizeof(cfg.value); i++)
+            {
+                cfg.value[i] = (uint8_t)(0x0ff & i);
+            }
 
-        //     printf("\n"
-        //            "Executing Put w/configuration:\n"
-        //            "-------------------------------\n"
-        //            "  host: %s\n"
-        //            "  port: %d\n"
-        //            "  non-blocking: %s\n"
-        //            "  clusterVersion: %lld\n"
-        //            "  identity: %lld\n"
-        //            "  key: '%s'\n"
-        //            "  value: %zd bytes\n",
-        //         cfg.host,
-        //         cfg.port,
-        //         cfg.nonBlocking ? "true" : "false",
-        //         (long long int)cfg.clusterVersion,
-        //         (long long int)cfg.identity,
-        //         cfg.key,
-        //         sizeof(cfg.value));
+            printf("\n"
+                   "Executing Put w/configuration:\n"
+                   "-------------------------------\n"
+                   "  host: %s\n"
+                   "  port: %d\n"
+                   "  non-blocking: %s\n"
+                   "  clusterVersion: %lld\n"
+                   "  identity: %lld\n"
+                   "  key: '%s'\n"
+                   "  value: %zd bytes\n",
+                cfg.host,
+                cfg.port,
+                cfg.nonBlocking ? "true" : "false",
+                (long long int)cfg.clusterVersion,
+                (long long int)cfg.identity,
+                cfg.hmacKey,
+                sizeof(cfg.value));
 
-        //     status = Put(cfg.host, cfg.port, cfg.clusterVersion, cfg.identity, cfg.key, cfg.value, sizeof(cfg.value));
-        //     if (status == 0)
-        //     {
-        //         printf("\nPut executed successfully!\n\n");
-        //     }
-        //     else
-        //     {
-        //         printf("\nPut operation failed! status=%d\n\n", status);
-        //         return -1;
-        //     }
-        // }
+            status = Put(cfg.host, cfg.port, cfg.nonBlocking, cfg.clusterVersion, cfg.identity, cfg.hmacKey,
+                         cfg.value, sizeof(cfg.value),
+                         "some_value_key...", "some_value_tag...", NULL, "v1.0");
+            if (status == 0)
+            {
+                printf("\nPut executed successfully!\n\n");
+            }
+            else
+            {
+                printf("\nPut operation failed! status=%d\n\n", status);
+                return -1;
+            }
+        }
 
         // else if (strcmp("get", op) == 0)
         // {

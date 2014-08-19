@@ -20,39 +20,39 @@
 
 #include "put.h"
 
-int Put(
-    const char* host,
-    int port,
-    int64_t clusterVersion,
-    int64_t identity,
-    const char* hmacKey,
-    const uint8_t* value,
-    int64_t valueLength,
-    const char* valueKey,
-    const char* version,
-    const char* newVersion)
+int Put(const char* host,
+        int port,
+        bool nonBlocking,
+        int64_t clusterVersion,
+        int64_t identity,
+        char* hmacKey,
+        uint8_t* value,
+        int64_t valueLength,
+        char* valueKey,
+        char* valueTag,
+        char* version,
+        char* newVersion)
 {
-    // KineticOperation operation;
-    // KineticPDU request, response;
-    // KineticConnection connection;
-    // KineticMessage requestMsg;
+    KineticOperation operation;
+    KineticPDU request, response;
+    KineticConnection connection;
+    KineticMessage requestMsg;
     KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
-    // bool success;
-    // uint8_t value[PDU_VALUE_MAX_LEN];
+    bool success;
 
-    // KineticClient_Init(NULL);
-    // success = KineticClient_Connect(&connection, host, port, false, clusterVersion);
-    // assert(success);
-    // success = KineticClient_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
-    // assert(success);
-    // operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
-    // status = KineticClient_Put(&operation, value, sizeof(value));
+    KineticClient_Init(NULL);
+    success = KineticClient_Connect(&connection, host, port, nonBlocking,
+                                    clusterVersion, identity, hmacKey);
+    assert(success);
+    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    status = KineticClient_Put(&operation, newVersion, hmacKey, version, valueTag, value, sizeof(value));
 
-    // if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
-    // {
-    //     printf("Put operation completed successfully. Your data has been stored!\n");
-    // }
+    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
+    {
+        printf("Put operation completed successfully. Your data has been stored!\n");
+        return 0;
+    }
 
-    // KineticClient_Disconnect(&connection);
+    KineticClient_Disconnect(&connection);
     return status;
 }

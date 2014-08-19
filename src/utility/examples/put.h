@@ -38,13 +38,15 @@
  */
 int Put(const char* host,
         int port,
+        bool nonBlocking,
         int64_t clusterVersion,
         int64_t identity,
-        const char* hmacKey,
-        const uint8_t* value,
+        char* hmacKey,
+        uint8_t* value,
         int64_t valueLength,
-        const char* valueKey,
-        const char* version,
-        const char* newVersion);
+        char* valueKey,
+        char* valueTag,
+        char* version,
+        char* newVersion);
 
 #endif // _PUT_H

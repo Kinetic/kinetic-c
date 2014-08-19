@@ -48,5 +48,6 @@ int NoOp(const char* host,
         return 0;
     }
 
+    KineticClient_Disconnect(&connection);
     return status;
 }
