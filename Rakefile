@@ -276,7 +276,7 @@ task :default => [
 ]
 
 
-namespace :test do
+namespace :tests do
 
   desc "Run unit tests"
   task :unit do
@@ -330,8 +330,8 @@ namespace :test do
   task :utility => [
     'release',
     'ruby_sim:shutdown',
-    'test:utility:noop',
-    'test:utility:put',
+    'tests:utility:noop',
+    # 'tests:utility:put',
   ]
 
   namespace :utility do
@@ -365,10 +365,10 @@ namespace :test do
 end
 
 task :test_all => [
-  'test:unit',
-  'test:integration',
-  'test:system',
-  'test:utility'
+  'tests:unit',
+  'tests:integration',
+  'tests:system',
+  'tests:utility'
 ]
 
 desc "Build all and run test utility"

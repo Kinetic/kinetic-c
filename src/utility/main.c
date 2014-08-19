@@ -26,8 +26,8 @@
 
 #include "kinetic.h"
 #include "noop.h"
-#include "put.h"
-#include "get.h"
+// #include "put.h"
+// #include "get.h"
 
 typedef struct _Arguments {
     char host[HOST_NAME_MAX];
@@ -36,9 +36,12 @@ typedef struct _Arguments {
     int useTls;
     int64_t clusterVersion;
     int64_t identity;
-    char key[KINETIC_MAX_KEY_LEN];
+    char hmacKey[KINETIC_MAX_KEY_LEN];
     uint8_t value[PDU_VALUE_MAX_LEN];
     int64_t valueLength;
+    char valueKey[KINETIC_MAX_KEY_LEN];
+    char version[32];
+    char newVersion[32];
 } Arguments;
 
 int main(int argc, char** argv)
@@ -55,9 +58,12 @@ int main(int argc, char** argv)
         .useTls = false,
         .clusterVersion = 0,
         .identity = 1,
-        .key = "asdfasdf",
+        .hmacKey = "asdfasdf",
         .value = {},
         .valueLength = 0,
+        .valueKey = "some_value_key...",
+        .version = "v1.0",
+        .newVersion = "v1.0",
     };
 
     struct option long_options[] =
@@ -113,8 +119,8 @@ int main(int argc, char** argv)
                 cfg.nonBlocking ? "true" : "false",
                 (long long int)cfg.clusterVersion,
                 (long long int)cfg.identity,
-                cfg.key);
-            status = NoOp(cfg.host, cfg.port, cfg.clusterVersion, cfg.identity, cfg.key);
+                cfg.hmacKey);
+            status = NoOp(cfg.host, cfg.port, false, cfg.clusterVersion, cfg.identity, cfg.hmacKey);
             if (status == 0)
             {
                 printf("\nNoOp executed successfully!\n\n");
@@ -126,75 +132,82 @@ int main(int argc, char** argv)
             }
         }
 
-        else if (strcmp("put", op) == 0)
-        {
-            unsigned int i;
-            for (i = 0; i < sizeof(cfg.value); i++)
-            {
-                cfg.value[i] = (uint8_t)(0x0ff & i);
-            }
+        // else if (strcmp("put", op) == 0)
+        // {
+        //     unsigned int i;
+        //     for (i = 0; i < sizeof(cfg.value); i++)
+        //     {
+        //         cfg.value[i] = (uint8_t)(0x0ff & i);
+        //     }
 
-            printf("\n"
-                   "Executing Put w/configuration:\n"
-                   "-------------------------------\n"
-                   "  host: %s\n"
-                   "  port: %d\n"
-                   "  non-blocking: %s\n"
-                   "  clusterVersion: %lld\n"
-                   "  identity: %lld\n"
-                   "  key: '%s'\n"
-                   "  value: %zd bytes\n",
-                cfg.host,
-                cfg.port,
-                cfg.nonBlocking ? "true" : "false",
-                (long long int)cfg.clusterVersion,
-                (long long int)cfg.identity,
-                cfg.key,
-                sizeof(cfg.value));
+        //     printf("\n"
+        //            "Executing Put w/configuration:\n"
+        //            "-------------------------------\n"
+        //            "  host: %s\n"
+        //            "  port: %d\n"
+        //            "  non-blocking: %s\n"
+        //            "  clusterVersion: %lld\n"
+        //            "  identity: %lld\n"
+        //            "  key: '%s'\n"
+        //            "  value: %zd bytes\n",
+        //         cfg.host,
+        //         cfg.port,
+        //         cfg.nonBlocking ? "true" : "false",
+        //         (long long int)cfg.clusterVersion,
+        //         (long long int)cfg.identity,
+        //         cfg.key,
+        //         sizeof(cfg.value));
 
-            status = Put(cfg.host, cfg.port, cfg.clusterVersion, cfg.identity, cfg.key, cfg.value, sizeof(cfg.value));
-            if (status == 0)
-            {
-                printf("\nPut executed successfully!\n\n");
-            }
-            else
-            {
-                printf("\nPut operation failed! status=%d\n\n", status);
-                return -1;
-            }
-        }
+        //     status = Put(cfg.host, cfg.port, cfg.clusterVersion, cfg.identity, cfg.key, cfg.value, sizeof(cfg.value));
+        //     if (status == 0)
+        //     {
+        //         printf("\nPut executed successfully!\n\n");
+        //     }
+        //     else
+        //     {
+        //         printf("\nPut operation failed! status=%d\n\n", status);
+        //         return -1;
+        //     }
+        // }
 
-        else if (strcmp("get", op) == 0)
-        {
-            printf("\n"
-                   "Executing Get w/configuration:\n"
-                   "-------------------------------\n"
-                   "  host: %s\n"
-                   "  port: %d\n"
-                   "  non-blocking: %s\n"
-                   "  clusterVersion: %lld\n"
-                   "  identity: %lld\n"
-                   "  key: '%s'\n"
-                   "  value: %zd bytes\n",
-                cfg.host,
-                cfg.port,
-                cfg.nonBlocking ? "true" : "false",
-                (long long int)cfg.clusterVersion,
-                (long long int)cfg.identity,
-                cfg.key,
-                sizeof(cfg.value));
+        // else if (strcmp("get", op) == 0)
+        // {
+        //     const char* valueKey = "some_value_key...";
+        //     const char* version = "v1.0";
+        //     const char* newVersion = "v1.0";
 
-            status = Get(cfg.host, cfg.port, cfg.clusterVersion, cfg.identity, cfg.key, cfg.value, sizeof(cfg.value));
-            if (status == 0)
-            {
-                printf("\nGet executed successfully!\n\n");
-            }
-            else
-            {
-                printf("\nGet operation failed! status=%d\n\n", status);
-                return -1;
-            }
-        }
+        //     printf("\n"
+        //            "Executing Get w/configuration:\n"
+        //            "-------------------------------\n"
+        //            "  host: %s\n"
+        //            "  port: %d\n"
+        //            "  non-blocking: %s\n"
+        //            "  clusterVersion: %lld\n"
+        //            "  identity: %lld\n"
+        //            "  hmacKey: '%s'\n"
+        //            "  value: %zd bytes\n",
+        //         cfg.host,
+        //         cfg.port,
+        //         cfg.nonBlocking ? "true" : "false",
+        //         (long long int)cfg.clusterVersion,
+        //         (long long int)cfg.identity,
+        //         cfg.key,
+        //         sizeof(cfg.value));
+
+        //     status = Get(cfg.host, cfg.port,
+        //                  cfg.clusterVersion, cfg.identity, cfg.key,
+        //                  valueKey, version, newVersion,
+        //                  cfg.value, sizeof(cfg.value));
+        //     if (status == 0)
+        //     {
+        //         printf("\nGet executed successfully!\n\n");
+        //     }
+        //     else
+        //     {
+        //         printf("\nGet operation failed! status=%d\n\n", status);
+        //         return -1;
+        //     }
+        // }
 
         else
         {

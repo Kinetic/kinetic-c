@@ -38,10 +38,14 @@
  */
 int Get(const char* host,
         int port,
+        bool nonBlocking,
         int64_t clusterVersion,
         int64_t identity,
-        const char* key,
-        const uint8_t* data,
-        int64_t len);
+        const char* hmacKey,
+        const char* valueKey,
+        const char* version,
+        const char* newVersion,
+        const uint8_t* value,
+        int64_t length);
 
 #endif // _GET_H

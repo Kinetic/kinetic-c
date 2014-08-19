@@ -20,40 +20,38 @@
 
 #include "get.h"
 
-int Get(
-    const char* host,
-    int port,
-    int64_t clusterVersion,
-    int64_t identity,
-    const char* hmacKey,
-    const char* valueKey,
-    const char* version,
-    const char* newVersion,
-    const uint8_t* value,
-    int64_t length)
+int Get(const char* host,
+        int port,
+        bool nonBlocking,
+        int64_t clusterVersion,
+        int64_t identity,
+        const char* hmacKey,
+        const char* valueKey,
+        const char* version,
+        const char* newVersion,
+        const uint8_t* value,
+        int64_t length)
 {
-    KineticExchange exchange;
-    KineticOperation operation;
-    KineticPDU request, response;
-    KineticConnection connection;
-    KineticMessage requestMsg;
-    KineticProto_Status_StatusCode status;
-    bool success;
-    uint8_t value[PDU_VALUE_MAX_LEN];
+    // KineticOperation operation;
+    // KineticPDU request, response;
+    // KineticConnection connection;
+    // KineticMessage requestMsg;
+    KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+    // bool success;
 
-    KineticClient_Init(NULL);
-    success = KineticClient_Connect(&connection, host, port, true);
-    assert(success);
-    success = KineticClient_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
-    assert(success);
-    operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
-    status = KineticClient_Get(&operation, key, version, newVersion, value, sizeof(value));
+    // KineticClient_Init(NULL);
+    // success = KineticClient_Connect(&connection, host, port, false);
+    // assert(success);
+    // success = KineticClient_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
+    // assert(success);
+    // operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
+    // status = KineticClient_Get(&operation, key, version, newVersion, value, sizeof(value));
 
-    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
-    {
-        printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
-    }
+    // if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
+    // {
+    //     printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
+    // }
 
-    KineticClient_Disconnect(&connection);
+    // KineticClient_Disconnect(&connection);
     return status;
 }

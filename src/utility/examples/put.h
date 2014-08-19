@@ -40,8 +40,11 @@ int Put(const char* host,
         int port,
         int64_t clusterVersion,
         int64_t identity,
-        const char* key,
-        const uint8_t* data,
-        int64_t len);
+        const char* hmacKey,
+        const uint8_t* value,
+        int64_t valueLength,
+        const char* valueKey,
+        const char* version,
+        const char* newVersion);
 
 #endif // _PUT_H

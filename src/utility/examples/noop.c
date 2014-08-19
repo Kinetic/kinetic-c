@@ -20,9 +20,13 @@
 
 #include "noop.h"
 
-int NoOp(const char* host, int port, int64_t clusterVersion, int64_t identity, const char* key)
+int NoOp(const char* host,
+        int port,
+        bool nonBlocking,
+        int64_t clusterVersion,
+        int64_t identity,
+        const char* hmacKey)
 {
-    KineticExchange exchange;
     KineticOperation operation;
     KineticPDU request, response;
     KineticConnection connection;
@@ -31,11 +35,10 @@ int NoOp(const char* host, int port, int64_t clusterVersion, int64_t identity, c
     bool success;
 
     KineticClient_Init(NULL);
-    success = KineticClient_Connect(&connection, host, port, true);
+    success = KineticClient_Connect(&connection, host, port, nonBlocking,
+                                    clusterVersion, identity, hmacKey);
     assert(success);
-    success = KineticClient_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
-    assert(success);
-    operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
     status = KineticClient_NoOp(&operation);
     KineticClient_Disconnect(&connection);
 
