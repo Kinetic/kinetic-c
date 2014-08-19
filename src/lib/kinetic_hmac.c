@@ -24,7 +24,7 @@
 #include <arpa/inet.h>
 #include <openssl/hmac.h>
 
-static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, const char* const key, size_t keyLen);
+static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, const char* const key);
 
 void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm)
 {
@@ -40,10 +40,10 @@ void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorith
     }
 }
 
-void KineticHMAC_Populate(KineticHMAC* hmac, KineticProto* proto, const char* const key, size_t keyLen)
+void KineticHMAC_Populate(KineticHMAC* hmac, KineticProto* proto, const char* const key)
 {
     KineticHMAC_Init(hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Compute(hmac, proto, key, keyLen);
+    KineticHMAC_Compute(hmac, proto, key);
 
     // Copy computed HMAC into message
     memcpy(proto->hmac.data, hmac->value, hmac->valueLength);
@@ -51,7 +51,7 @@ void KineticHMAC_Populate(KineticHMAC* hmac, KineticProto* proto, const char* co
     proto->has_hmac = true;
 }
 
-bool KineticHMAC_Validate(const KineticProto* proto, const char* const key, size_t keyLen)
+bool KineticHMAC_Validate(const KineticProto* proto, const char* const key)
 {
     size_t i;
     int result = 0;
@@ -63,7 +63,7 @@ bool KineticHMAC_Validate(const KineticProto* proto, const char* const key, size
     }
 
     KineticHMAC_Init(&tempHMAC, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Compute(&tempHMAC, proto, key, keyLen);
+    KineticHMAC_Compute(&tempHMAC, proto, key);
 
     if (proto->hmac.len != tempHMAC.valueLength)
     {
@@ -78,7 +78,7 @@ bool KineticHMAC_Validate(const KineticProto* proto, const char* const key, size
     return (result == 0);
 }
 
-static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, const char* const key, size_t keyLen)
+static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, const char* const key)
 {
     HMAC_CTX ctx;
 
@@ -90,7 +90,7 @@ static void KineticHMAC_Compute(KineticHMAC* hmac, const KineticProto* proto, co
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     uint32_t messageLengthNBO = htonl(len);
     HMAC_CTX_init(&ctx);
-    HMAC_Init_ex(&ctx, key, keyLen, EVP_sha1(), NULL);
+    HMAC_Init_ex(&ctx, key, strlen(key), EVP_sha1(), NULL);
     HMAC_Update(&ctx, (uint8_t*)&messageLengthNBO, sizeof(uint32_t));
     HMAC_Update(&ctx, packed, len);
     HMAC_Final(&ctx, hmac->value, &hmac->valueLength);

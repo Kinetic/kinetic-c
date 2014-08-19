@@ -22,7 +22,6 @@
 #define _KINETIC_CLIENT_H
 
 #include "kinetic_types.h"
-#include "kinetic_exchange.h"
 #include "kinetic_pdu.h"
 #include "kinetic_operation.h"
 
@@ -34,20 +33,25 @@
 void KineticClient_Init(const char* logFile);
 
 /**
- * @brief Establishes a Kinetic protocol socket connection to a host.
+ * @brief Configures the session and establishes a socket connection to a Kinetic Device
  *
  * @param connection        KineticConnection instance to configure with connection info
  * @param host              Host name or IP address to connect to
  * @param port              Port to establish socket connection on
- * @param blocking          Set to true for blocking or false for non-bloocking I/O
+ * @param nonBlocking       Set to true for non-blocking or false for blocking I/O
+ * @param clusterVersion    Cluster version to use for the session
+ * @param identity          Identity to use for the session
+ * @param key               Key to use for HMAC calculations (NULL-terminated string)
  *
  * @return                  Returns true if connection succeeded
  */
-bool KineticClient_Connect(
-    KineticConnection* connection,
+bool KineticClient_Connect(KineticConnection* connection,
     const char* host,
     int port,
-    bool blocking);
+    bool nonBlocking,
+    int64_t clusterVersion,
+    int64_t identity,
+    const char* key);
 
 /**
  * @brief Closes the socket connection to a host.
@@ -57,29 +61,9 @@ bool KineticClient_Connect(
 void KineticClient_Disconnect(KineticConnection* connection);
 
 /**
- * @brief Initializes and configures a Kinetic exchange.
- *
- * @param exchange          KineticExchange instance to configure with exchange info
- * @param connection        KineticConnection to associate with exchange
- * @param clusterVersion    Cluster version for the exchange
- * @param identity          Identity to use for the exchange
- * @param key               Key to use for HMAC calculations
- * @param keyLength         Length of HMAC key
- *
- * @return                  Returns true if configuration succeeded
- */
-bool KineticClient_ConfigureExchange(
-    KineticExchange* exchange,
-    KineticConnection* connection,
-    int64_t clusterVersion,
-    int64_t identity,
-    const char* key,
-    size_t keyLength);
-
-/**
  * @brief Creates and initializes a Kinetic operation.
  *
- * @param exchange          KineticExchange instance to populate with exchange info
+ * @param connection        KineticConnection instance to associate with operation
  * @param request           KineticPDU instance to use for request
  * @param requestMsg        KineticMessage instance to use for request
  * @param response          KineticPDU instance to use for reponse
@@ -87,7 +71,7 @@ bool KineticClient_ConfigureExchange(
  * @return                  Returns a configured operation instance
  */
 KineticOperation KineticClient_CreateOperation(
-    KineticExchange* exchange,
+    KineticConnection* connection,
     KineticPDU* request,
     KineticMessage* requestMsg,
     KineticPDU* response);
@@ -99,27 +83,21 @@ KineticOperation KineticClient_CreateOperation(
  *
  * @return                  Returns the resultant status code
  */
-KineticProto_Status_StatusCode KineticClient_NoOp(
-    KineticOperation* operation
-    );
+KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation);
 
 /**
  * @brief Executes a PUT command to write data to the Kinetic Device
  *
  * @param operation         KineticOperation instance to use for the operation
- * @param value             Value payload buffer
- * @param valueLength       Value payload length (in bytes)
  *
  * @return                  Returns the resultant status code
  */
-KineticProto_Status_StatusCode KineticClient_Put(
-    KineticOperation* operation,
+KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
     char* newVersion,
     char* key,
     char* dbVersion,
     char* tag,
     uint8_t* value,
-    int64_t len
-    );
+    int64_t len);
 
 #endif // _KINETIC_CLIENT_H

@@ -27,6 +27,7 @@
 #include "kinetic.h"
 #include "noop.h"
 #include "put.h"
+#include "get.h"
 
 typedef struct _Arguments {
     char host[HOST_NAME_MAX];
@@ -36,7 +37,7 @@ typedef struct _Arguments {
     int64_t clusterVersion;
     int64_t identity;
     char key[KINETIC_MAX_KEY_LEN];
-    uint8_t value[1024*1024];
+    uint8_t value[PDU_VALUE_MAX_LEN];
     int64_t valueLength;
 } Arguments;
 
@@ -162,6 +163,39 @@ int main(int argc, char** argv)
                 return -1;
             }
         }
+
+        else if (strcmp("get", op) == 0)
+        {
+            printf("\n"
+                   "Executing Get w/configuration:\n"
+                   "-------------------------------\n"
+                   "  host: %s\n"
+                   "  port: %d\n"
+                   "  non-blocking: %s\n"
+                   "  clusterVersion: %lld\n"
+                   "  identity: %lld\n"
+                   "  key: '%s'\n"
+                   "  value: %zd bytes\n",
+                cfg.host,
+                cfg.port,
+                cfg.nonBlocking ? "true" : "false",
+                (long long int)cfg.clusterVersion,
+                (long long int)cfg.identity,
+                cfg.key,
+                sizeof(cfg.value));
+
+            status = Get(cfg.host, cfg.port, cfg.clusterVersion, cfg.identity, cfg.key, cfg.value, sizeof(cfg.value));
+            if (status == 0)
+            {
+                printf("\nGet executed successfully!\n\n");
+            }
+            else
+            {
+                printf("\nGet operation failed! status=%d\n\n", status);
+                return -1;
+            }
+        }
+
         else
         {
             printf("\nSpecified operation is invalid!\n");

@@ -26,7 +26,6 @@
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
-#include "mock_kinetic_exchange.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_logger.h"
 #include "mock_kinetic_operation.h"
@@ -42,7 +41,6 @@ void tearDown(void)
 void test_KineticClient_Put_should_execute_PUT_operation(void)
 {
     KineticConnection connection;
-    KineticExchange exchange;
     KineticOperation operation;
     KineticMessage requestMsg;
     KineticPDU request, response;
@@ -52,18 +50,17 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     KineticProto_Status_StatusCode status;
     int64_t identity = 1234;
     int64_t connectionID = 5678;
-    uint8_t value[1024*1024];
+
+    uint8_t value[PDU_VALUE_MAX_LEN];
     char* newVersion = "v2.0";
     char* key = "my_key_3.1415927";
     char* dbVersion = "v1.0";
     char* tag = "SomeTagValue";
 
-    exchange.connection = &connection;
-    request.exchange = &exchange;
+    request.connection = &connection;
     KINETIC_MESSAGE_INIT(&requestMsg);
     request.message = &requestMsg;
 
-    response.exchange = &exchange;
     response.message = NULL;
     response.proto = &responseProto;
     response.proto->command = &responseCommand;
@@ -71,17 +68,21 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     response.proto->command->status->has_code = true;
     response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
-    KINETIC_OPERATION_INIT(&operation, &exchange, &request, &response);
+    KINETIC_CONNECTION_INIT(&connection, 12, "some_key");
+    KineticMessage_Init_Expect(&requestMsg);
+    KineticPDU_Init_Expect(&request, &connection, &requestMsg, NULL, 0);
+    KineticPDU_Init_Expect(&response, &connection, NULL, NULL, 0);
+    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
 
-    KineticExchange_IncrementSequence_Expect(&exchange);
+    KineticConnection_IncrementSequence_Expect(&connection);
     KineticOperation_BuildPut_Expect(&operation, value, sizeof(value));
-    KineticMessage_ConfigureKeyValue_Expect(&requestMsg, newVersion, key, dbVersion, tag);
+    KineticMessage_ConfigureKeyValue_Expect(operation.request->message, newVersion, key, dbVersion, tag);
     KineticPDU_Send_ExpectAndReturn(&request, true);
     KineticPDU_Receive_ExpectAndReturn(&response, true);
+    KineticPDU_Status_ExpectAndReturn(&response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 
     status = KineticClient_Put(&operation, newVersion, key, dbVersion, tag, value, sizeof(value));
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-    TEST_ASSERT_EQUAL_PTR(&exchange, response.exchange);
+    TEST_ASSERT_EQUAL_PTR(&connection, response.connection);
 }

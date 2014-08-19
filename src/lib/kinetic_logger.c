@@ -209,17 +209,9 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                     }
                     LOG_PROTO_LEVEL_END();
                 }
-                else
-                {
-                    LOG("NO_KEYVALUE!!!!!!");
-                }
             }
 
             LOG_PROTO_LEVEL_END();
-        }
-        else
-        {
-            LOG("NO_BODY!!!!!!");
         }
 
         if (proto->command->status)

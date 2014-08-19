@@ -186,6 +186,7 @@ namespace :java_sim do
     java_sim_shutdown
   end
 
+  desc "Erase Java simulator contents"
   task :erase do
     java_sim_erase_drive
   end
@@ -222,7 +223,7 @@ Dir['test/integration/test_*.c'].each do |test_file|
   task test_file => ['java_sim:shutdown', 'ruby_sim:start']
 end
 Dir['test/system/test_*.c'].each do |test_file|
-  task test_file => ['ruby_sim:shutdown', 'java_sim:start']
+  task test_file => ['ruby_sim:shutdown', 'java_sim:erase', 'java_sim:start']
 end
 
 namespace :system do
@@ -304,10 +305,25 @@ namespace :test do
   task :system => ['java_sim:start'] do
     report_banner "Running System Tests"
     shutdown_ruby_server
+    java_sim_erase_drive
     java_sim_start
     Rake::Task['test:path'].reenable
     Rake::Task['test:path'].invoke('test/system')
     java_sim_shutdown
+  end
+
+  namespace :system do
+    FileList['test/system/test_*.c'].each do |test|
+      basename = File.basename(test, '.*')
+      desc "Run system test #{basename}"
+      task basename do
+        shutdown_ruby_server
+        java_sim_erase_drive
+        java_sim_start
+        Rake::Task[test].reenable
+        Rake::Task[test].invoke
+      end
+    end
   end
 
   desc "Run Kinetic Client Utility tests"

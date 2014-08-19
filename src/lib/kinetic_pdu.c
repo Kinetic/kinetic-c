@@ -18,8 +18,8 @@
 *
 */
 
-#include "kinetic_types.h"
 #include "kinetic_pdu.h"
+#include "kinetic_connection.h"
 #include "kinetic_socket.h"
 #include "kinetic_hmac.h"
 #include "kinetic_logger.h"
@@ -28,19 +28,18 @@
 static void KineticPDU_PackInt32(uint8_t* const buffer, int32_t value);
 static int32_t KineticPDU_UnpackInt32(const uint8_t* const buffer);
 
-void KineticPDU_Init(
-    KineticPDU* const pdu,
-    KineticExchange* const exchange,
+void KineticPDU_Init(KineticPDU* const pdu,
+    KineticConnection* const connection,
     KineticMessage* const message,
     uint8_t* const value,
     int32_t valueLength)
 {
     assert(pdu != NULL);
-    assert(exchange != NULL);
+    assert(connection != NULL);
 
     // Create properly initialized PDU and populate passed instance
     const KineticPDU tmpPDU = {
-        .exchange = exchange,
+        .connection = connection,
         .message = message,
         .proto = NULL,
         .protobufLength = 0,
@@ -53,20 +52,42 @@ void KineticPDU_Init(
     // Configure the protobuf header with exchange info
     if (message != NULL)
     {
-        KineticExchange_ConfigureHeader(exchange, &message->header);
+        KineticConnection_ConfigureHeader(pdu->connection, &message->header);
     }
+}
+
+KineticProto_Status_StatusCode KineticPDU_Status(KineticPDU* const pdu)
+{
+    assert(pdu != NULL);
+
+    KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+
+    if (pdu->proto)
+    {
+        if (pdu->proto->command && pdu->proto->command->status)
+        {
+            status = pdu->proto->command->status->code;
+        }
+    }
+    else if (&pdu->message->command && pdu->message->command.status)
+    {
+        status = pdu->message->command.status->code;
+    }
+
+    return status;
 }
 
 bool KineticPDU_Send(KineticPDU* const request)
 {
-    int fd = request->exchange->connection->socketDescriptor;
-
     assert(request != NULL);
+    assert(request->connection != NULL);
     assert(request->message != NULL);
+
+    int fd = request->connection->socketDescriptor;
 
     // Populate the HMAC for the protobuf
     KineticHMAC_Init(&request->hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&request->hmac, &request->message->proto, request->exchange->key, request->exchange->keyLength);
+    KineticHMAC_Populate(&request->hmac, &request->message->proto, request->connection->key);
 
     // Repack PDU header length fields
     request->protobufLength = KineticProto_get_packed_size(&request->message->proto);
@@ -106,7 +127,7 @@ bool KineticPDU_Send(KineticPDU* const request)
 
 bool KineticPDU_Receive(KineticPDU* const response)
 {
-    const int fd = response->exchange->connection->socketDescriptor;
+    const int fd = response->connection->socketDescriptor;
     LOGF("Attempting to receive PDU via fd=%d", fd);
     assert(fd >= 0);
 
@@ -141,8 +162,7 @@ bool KineticPDU_Receive(KineticPDU* const response)
     }
 
     // Validate the HMAC for the recevied protobuf message
-    if (!KineticHMAC_Validate(response->proto,
-            response->exchange->key, response->exchange->keyLength))
+    if (!KineticHMAC_Validate(response->proto, response->connection->key))
     {
         LOG("Received PDU protobuf message has invalid HMAC!");
         return false;

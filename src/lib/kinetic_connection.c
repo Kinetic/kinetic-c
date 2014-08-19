@@ -19,27 +19,26 @@
 */
 
 #include "kinetic_connection.h"
+#include "kinetic_proto.h"
 #include "kinetic_socket.h"
 #include "kinetic_pdu.h"
 #include <string.h>
 
-void KineticConnection_Init(KineticConnection* connection)
-{
-    KINETIC_CONNECTION_INIT(connection);
-}
-
-bool KineticConnection_Connect(
-    KineticConnection* const connection,
-    const char* host, int port, bool blocking)
+bool KineticConnection_Connect(KineticConnection* const connection,
+    const char* host, int port, bool nonBlocking,
+    int64_t clusterVersion, int64_t identity, const char* key)
 {
     connection->connected = false;
-    connection->blocking = blocking;
+    connection->nonBlocking = nonBlocking;
     connection->port = port;
     connection->socketDescriptor = -1;
+    connection->clusterVersion = clusterVersion;
+    connection->identity = identity;
     strcpy(connection->host, host);
+    strcpy(connection->key, key);
 
     connection->socketDescriptor = KineticSocket_Connect(
-        connection->host, connection->port, blocking);
+        connection->host, connection->port, nonBlocking);
     connection->connected = (connection->socketDescriptor >= 0);
 
     return connection->connected;
@@ -52,4 +51,22 @@ void KineticConnection_Disconnect(KineticConnection* connection)
         close(connection->socketDescriptor);
         connection->socketDescriptor = -1;
     }
+}
+
+void KineticConnection_IncrementSequence(KineticConnection* const connection)
+{
+    connection->sequence++;
+}
+
+void KineticConnection_ConfigureHeader(KineticConnection* const connection,
+    KineticProto_Header* const header)
+{
+    header->has_clusterversion = true;
+    header->clusterversion = connection->clusterVersion;
+    header->has_identity = true;
+    header->identity = connection->identity;
+    header->has_connectionid = true;
+    header->connectionid = connection->connectionID;
+    header->has_sequence = true;
+    header->sequence = connection->sequence;
 }

@@ -19,24 +19,15 @@
 */
 
 #include "kinetic_operation.h"
-
-void KineticOperation_Init(
-    KineticOperation* operation,
-    KineticExchange* exchange,
-    KineticPDU* request,
-    KineticPDU* response)
-{
-    KINETIC_OPERATION_INIT(operation, exchange, request, response);
-}
+#include "kinetic_connection.h"
 
 void KineticOperation_BuildNoop(KineticOperation* operation)
 {
     assert(operation != NULL);
-    assert(operation->exchange != NULL);
+    assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->response != NULL);
 
-    KineticExchange_ConfigureHeader(operation->exchange, &operation->request->message->header);
     operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
     operation->request->message->header.has_messagetype = true;
 }
@@ -44,11 +35,10 @@ void KineticOperation_BuildNoop(KineticOperation* operation)
 void KineticOperation_BuildPut(KineticOperation* operation, uint8_t* value, int64_t valueLength)
 {
     assert(operation != NULL);
-    assert(operation->exchange != NULL);
+    assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->response != NULL);
 
-    KineticExchange_ConfigureHeader(operation->exchange, &operation->request->message->header);
     operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_PUT;
     operation->request->message->header.has_messagetype = true;
 

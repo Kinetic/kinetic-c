@@ -22,17 +22,8 @@
 #define _KINETIC_OPERATION_H
 
 #include "kinetic_types.h"
-#include "kinetic_exchange.h"
-#include "kinetic_pdu.h"
-
-void KineticOperation_Init(
-    KineticOperation* operation,
-    KineticExchange* exchange,
-    KineticPDU* request,
-    KineticPDU* response);
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
-
 void KineticOperation_BuildPut(KineticOperation* operation, uint8_t* value, int64_t valueLength);
 
 #endif // _KINETIC_OPERATION_H

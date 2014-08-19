@@ -23,7 +23,6 @@
 #include "kinetic_types.h"
 #include "kinetic_operation.h"
 #include "kinetic_proto.h"
-#include "mock_kinetic_exchange.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -36,47 +35,49 @@ void tearDown(void)
 {
 }
 
-void test_KINETIC_OPERATION_INIT_should_initialize_a_KineticOperation(void)
+void test_KineticOperation_should_have_all_supported_fields(void)
 {
-    KineticOperation op;
-    KineticExchange exchange;
+    KineticConnection connection;
+    KINETIC_CONNECTION_INIT(&connection, 12, "some_hmac_key");
     KineticPDU request, response;
+    uint8_t value[] = {1,2,3,4,5,6,7,8};
+    const char* key = "SomeKey0123";
+    const char* tag = "some_tag_01";
+    const char* version = "v1.0";
+    const char* newVersion = "v2.0";
 
-    KINETIC_OPERATION_INIT(&op, &exchange, &request, &response);
+    KineticOperation op = {
+        .connection = &connection,
+        .request = &request,
+        .response = &response,
+        .value = value,
+        .valueLength = sizeof(value)
+    };
 
-    TEST_ASSERT_EQUAL_PTR(&exchange, op.exchange);
+    TEST_ASSERT_EQUAL_PTR(&connection, op.connection);
     TEST_ASSERT_EQUAL_PTR(&request, op.request);
     TEST_ASSERT_EQUAL_PTR(&response, op.response);
-}
-
-void test_KineticOperation_Init_should_initialize_a_KineticOperation(void)
-{
-    KineticOperation op;
-    KineticExchange exchange;
-    KineticPDU request, response;
-
-    KineticOperation_Init(&op, &exchange, &request, &response);
-
-    TEST_ASSERT_EQUAL_PTR(&exchange, op.exchange);
-    TEST_ASSERT_EQUAL_PTR(&request, op.request);
-    TEST_ASSERT_EQUAL_PTR(&response, op.response);
+    TEST_ASSERT_EQUAL_PTR(value, op.value);
+    TEST_ASSERT_EQUAL_INT64(sizeof(value), op.valueLength);
 }
 
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
-    KineticExchange exchange;
+    KineticConnection connection;
+    KINETIC_CONNECTION_INIT(&connection, 12, "some_hmac_key");
     KineticMessage requestMsg, responseMsg;
     KineticPDU request, response;
-    KineticOperation op;
     KINETIC_MESSAGE_INIT(&requestMsg);
     KINETIC_MESSAGE_INIT(&responseMsg);
-    KINETIC_OPERATION_INIT(&op, &exchange, &request, &response);
     request.message = &requestMsg;
     request.proto = NULL;
     response.message = NULL;
     response.proto = NULL;
-
-    KineticExchange_ConfigureHeader_Expect(&exchange, &requestMsg.header);
+    KineticOperation op = {
+        .connection = &connection,
+        .request = &request,
+        .response = &response
+    };
 
     KineticOperation_BuildNoop(&op);
 
@@ -102,23 +103,28 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_NOOP, requestMsg.header.messagetype);
 }
 
+
 void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation(void)
 {
-    KineticExchange exchange;
+    KineticConnection connection;
     KineticMessage requestMsg, responseMsg;
     KineticPDU request, response;
-    KineticOperation op;
 
     KINETIC_MESSAGE_INIT(&requestMsg);
     KINETIC_MESSAGE_INIT(&responseMsg);
-    KINETIC_OPERATION_INIT(&op, &exchange, &request, &response);
+    // KINETIC_OPERATION_INIT(&op, &exchange, &request, &response);
     request.message = &requestMsg;
     request.proto = NULL;
     response.message = NULL;
     response.proto = NULL;
-    uint8_t value[1024*1024];
-
-    KineticExchange_ConfigureHeader_Expect(&exchange, &requestMsg.header);
+    uint8_t value[PDU_VALUE_MAX_LEN];
+    KineticOperation op = {
+        .connection = &connection,
+        .request = &request,
+        .response = &response,
+        .value = value,
+        .valueLength = sizeof(value),
+    };
 
     KineticOperation_BuildPut(&op, value, sizeof(value));
 

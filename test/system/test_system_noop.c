@@ -21,7 +21,6 @@
 #include "kinetic_client.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
-#include "kinetic_exchange.h"
 #include "kinetic_pdu.h"
 #include "kinetic_logger.h"
 #include "kinetic_operation.h"
@@ -31,17 +30,28 @@
 
 #include "unity.h"
 #include "unity_helper.h"
+#include "system_test_fixture.h"
 #include "protobuf-c.h"
 #include "socket99.h"
 #include <string.h>
 #include <stdlib.h>
 
+static SystemTestFixture Fixture = {
+    .host = "localhost",
+    .port = KINETIC_PORT,
+    .clusterVersion = 0,
+    .identity =  1,
+    .hmacKey = "asdfasdf",
+};
+
 void setUp(void)
 {
+    SystemTestSetup(&Fixture);
 }
 
 void tearDown(void)
 {
+    SystemTestTearDown(&Fixture);
 }
 
 // -----------------------------------------------------------------------------
@@ -128,31 +138,14 @@ void tearDown(void)
 // -----------------------------------------------------------------------------
 void test_NoOp_should_succeed(void)
 {
-    const int64_t clusterVersion = 0;
-    const int64_t identity = 1;
-    const char* key = "asdfasdf";
+    KineticProto_Status_StatusCode status =
+        KineticClient_NoOp(&Fixture.instance.operation);
 
-    KineticExchange exchange;
-    KineticOperation operation;
-    KineticPDU request, response;
-    KineticConnection connection;
-    KineticMessage requestMsg, responseMsg;
-    KineticProto_Status_StatusCode status;
-    bool success;
-
-    KineticClient_Init(NULL);
-
-    success = KineticClient_Connect(&connection, "localhost", KINETIC_PORT, true);
-
-    TEST_ASSERT_TRUE(success);
-    TEST_ASSERT(connection.socketDescriptor >= 0);
-
-    success = KineticClient_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
-    TEST_ASSERT_TRUE(success);
-
-    operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
-
-    status = KineticClient_NoOp(&operation);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(
+        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
 }
+
+/*******************************************************************************
+* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
+*******************************************************************************/
+SYSTEM_TEST_SUITE_TEARDOWN(&Fixture);

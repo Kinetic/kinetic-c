@@ -23,14 +23,19 @@
 
 #include "kinetic_types.h"
 
-void KineticConnection_Init(KineticConnection* connection);
-
-bool KineticConnection_Connect(
-    KineticConnection* const connection,
+bool KineticConnection_Connect(KineticConnection* connection,
     const char* host,
     int port,
-    bool blocking);
+    bool nonBlocking,
+    int64_t clusterVersion,
+    int64_t identity,
+    const char* key);
 
-void KineticConnection_Disconnect(KineticConnection* connection);
+void KineticConnection_Disconnect(KineticConnection* const connection);
+
+void KineticConnection_IncrementSequence(KineticConnection* const connection);
+
+void KineticConnection_ConfigureHeader(KineticConnection* const connection,
+    KineticProto_Header* const header);
 
 #endif // _KINETIC_CONNECTION_H

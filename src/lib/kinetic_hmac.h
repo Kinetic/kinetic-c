@@ -25,7 +25,7 @@
 #include "kinetic_message.h"
 
 void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm);
-void KineticHMAC_Populate(KineticHMAC* hmac, KineticProto* proto, const char* const key, size_t keyLen);
-bool KineticHMAC_Validate(const KineticProto* proto, const char* const key, size_t keyLen);
+void KineticHMAC_Populate(KineticHMAC* hmac, KineticProto* proto, const char* const key);
+bool KineticHMAC_Validate(const KineticProto* proto, const char* const key);
 
 #endif  // _KINETIC_HMAC_H

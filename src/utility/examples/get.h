@@ -18,25 +18,25 @@
 *
 */
 
-#ifndef _PUT_H
-#define _PUT_H
+#ifndef _GET_H
+#define _GET_H
 
 #include "kinetic.h"
 
 /**
- * @brief Connects to the specified Kinetic host/port and executes a Put to write data to the Device
+ * @brief Connects to the specified Kinetic host/port and executes a Get to read data from the Device
  *
  * @param host              Host name or IP address to connect to
  * @param port              Port to establish socket connection on
  * @param clusterVersion    Cluster version to use for the operation
  * @param identity          Identity to use for the operation (Must have ACL setup on Kinetic Device)
  * @param key               Shared secret key used for the identity for HMAC calculation
- * @param data              Pointer to data buffer to write
- * @param len               Length of data buffer to write
+ * @param data              Pointer to data buffer to for data read
+ * @param len               Length of data to request from device
  *
  * @return                  Returns true if operation succeeded, false otherwise
  */
-int Put(const char* host,
+int Get(const char* host,
         int port,
         int64_t clusterVersion,
         int64_t identity,
@@ -44,4 +44,4 @@ int Put(const char* host,
         const uint8_t* data,
         int64_t len);
 
-#endif // _PUT_H
+#endif // _GET_H

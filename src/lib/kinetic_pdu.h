@@ -22,16 +22,13 @@
 #define _KINETIC_PDU_H
 
 #include "kinetic_types.h"
-#include "kinetic_exchange.h"
-#include "kinetic_message.h"
-#include "kinetic_hmac.h"
 
-void KineticPDU_Init(
-    KineticPDU* const pdu,
-    KineticExchange* const exchange,
+void KineticPDU_Init(KineticPDU* const pdu,
+    KineticConnection* const connection,
     KineticMessage* const message,
     uint8_t* const value,
     int32_t valueLength);
+KineticProto_Status_StatusCode KineticPDU_Status(KineticPDU* const pdu);
 
 bool KineticPDU_Send(KineticPDU* const request);
 bool KineticPDU_Receive(KineticPDU* const response);
