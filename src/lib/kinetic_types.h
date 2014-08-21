@@ -66,14 +66,14 @@
 #include "kinetic_proto.h"
 #include <time.h>
 
-
-typedef struct _ByteArray
-{
-    uint8_t* data;
-    size_t len;
-} ByteArray;
-#define BYTE_ARRAY_INIT(data, len) (ByteArray){.data = data, .len = len};
-#define BYTE_ARRAY_INIT_FROM_CSTRING(str) (ByteArray){.data = (uint8_t*)str, .len = strlen(str)};
+typedef ProtobufCBinaryData ByteArray;
+#define BYTE_ARRAY_NONE (ByteArray){}
+#define BYTE_ARRAY_INIT(_data) (ByteArray){.data = (uint8_t*)(_data), .len = sizeof(_data)};
+#define BYTE_ARRAY_INIT_WITH_LEN(_data, _len) (ByteArray){.data = (uint8_t*)(_data), .len = (_len)};
+#define BYTE_ARRAY_CREATE(name, len) uint8_t ( name ## _buf )[(len)]; ByteArray (name) = BYTE_ARRAY_INIT(( name ## _buf ));
+#define BYTE_ARRAY_CREATE_WITH_DATA(_name, _data) uint8_t ( _name ## _data )[sizeof(_data)]; ByteArray (_name) = {.data = (uint8_t*(_data)), .len = sizeof(data)};
+#define BYTE_ARRAY_CREATE_WITH_BUFFER(_name, _buf) ByteArray (_name) = {.data = (uint8_t*(_buf)), .len = 0};
+#define BYTE_ARRAY_INIT_FROM_CSTRING(str) (ByteArray){.data = (uint8_t*)(str), .len = strlen(str)}
 
 // Kinetic Device Client Connection
 typedef struct _KineticConnection
@@ -100,7 +100,8 @@ typedef struct _KineticConnection
     // Required field
     // This is the identity's HMAC Key. This is a shared secret between the
     // client and the device, used to sign requests.
-    char key[KINETIC_MAX_KEY_LEN+1];
+    uint8_t keyData[KINETIC_MAX_KEY_LEN];
+    ByteArray key;
 
     // Required field
     // A monotonically increasing number for each request in a TCP connection.
@@ -112,22 +113,9 @@ typedef struct _KineticConnection
         .connectionID = time(NULL), \
         .identity = _id, \
         .sequence = -1, \
+        .key = _key, \
     }; \
-    if (_key != NULL) { \
-        strcpy(*_con.key, _key); } \
 }
-
-// Kinetic PDU Header
-#define PDU_HEADER_LEN      (1 + (2 * sizeof(int32_t)))
-#define PDU_PROTO_MAX_LEN   (1024 * 1024)
-#define PDU_VALUE_MAX_LEN   (1024 * 1024)
-#define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
-typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
-{
-    uint8_t     versionPrefix;
-    uint32_t    protobufLength;
-    uint32_t    valueLength;
-} KineticPDUHeader;
 
 
 // Kinetic Message HMAC
@@ -169,6 +157,19 @@ typedef struct _KineticMessage
 }
 
 
+// Kinetic PDU Header
+#define PDU_HEADER_LEN      (1 + (2 * sizeof(int32_t)))
+#define PDU_PROTO_MAX_LEN   (1024 * 1024)
+#define PDU_VALUE_MAX_LEN   (1024 * 1024)
+#define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
+typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
+{
+    uint8_t     versionPrefix;
+    uint32_t    protobufLength;
+    uint32_t    valueLength;
+} KineticPDUHeader;
+
+
 // Kinetic PDU
 typedef struct _KineticPDU
 {
@@ -183,8 +184,7 @@ typedef struct _KineticPDU
     uint8_t protobufScratch[PDU_PROTO_MAX_LEN];
 
     // Value data associated with PDU (if any)
-    uint8_t* value;
-    uint32_t valueLength; // Embedded in header in NBO byte order (this is for reference)
+    ByteArray value; // Embedded in header in NBO byte order (this is native copy)
 
     // Embedded HMAC instance
     KineticHMAC hmac;
@@ -193,24 +193,24 @@ typedef struct _KineticPDU
     KineticConnection* connection;
 } KineticPDU;
 
-
-#define KINETIC_PDU_INIT(pdu, connection, message, value, valueLength) { \
-    assert(pdu != NULL); \
-    assert(connection != NULL); \
-    pdu = { \
-        .connection = connection, \
-        .message = message, \
-        .proto = NULL, \
-        .protobufLength = 0, \
-        .value = value, \
-        .valueLength = valueLength, \
-        .header.versionPrefix = (uint8_t)'F', \
-    }; \
-    if (message != NULL) \
-    { \
-        KineticConnection_ConfigureHeader(connection, &message->header); \
-    } \
-}
+// Disabled, since currently unused... TODO: delete me later?
+// #define KINETIC_PDU_INIT(pdu, connection, message, value, valueLength) { \
+//     assert(pdu != NULL); \
+//     assert(connection != NULL); \
+//     pdu = { \
+//         .connection = connection, \
+//         .message = message, \
+//         .proto = NULL, \
+//         .protobufLength = 0, \
+//         .value = value, \
+//         .valueLength = valueLength, \
+//         .header.versionPrefix = (uint8_t)'F', \
+//     }; \
+//     if (message != NULL) \
+//     { \
+//         KineticConnection_ConfigureHeader(connection, &message->header); \
+//     } \
+// }
 
 
 // Kinetic Operation
@@ -219,8 +219,7 @@ typedef struct _KineticOperation
     KineticConnection* connection;
     KineticPDU* request;
     KineticPDU* response;
-    uint8_t* value;
-    size_t valueLength;
+    ByteArray value;
 } KineticOperation;
 
 

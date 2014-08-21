@@ -27,7 +27,8 @@ void KineticMessage_Init(KineticMessage* const message)
 }
 
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-    const char* newVersion, const char* key, const char* dbVersion, const char* tag)
+    ByteArray key, ByteArray newVersion, ByteArray dbVersion, ByteArray tag,
+    bool metaDataOnly)
 {
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
@@ -37,28 +38,14 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->proto.command->body->keyvalue = &message->keyValue;
 
     // Set keyValue fields appropriately
-    if (newVersion)
-    {
-        message->keyValue.has_newversion = true;
-        message->keyValue.newversion.data = (uint8_t*)newVersion;
-        message->keyValue.newversion.len = strlen(newVersion);
-    }
-    if (key)
-    {
-        message->keyValue.has_key = true;
-        message->keyValue.key.data = (uint8_t*)key;
-        message->keyValue.key.len = strlen(key);
-    }
-    if (dbVersion)
-    {
-        message->keyValue.has_dbversion = true;
-        message->keyValue.dbversion.data = (uint8_t*)dbVersion;
-        message->keyValue.dbversion.len = strlen(dbVersion);
-    }
-    if (tag)
-    {
-        message->keyValue.has_tag = true;
-        message->keyValue.tag.data = (uint8_t*)tag;
-        message->keyValue.tag.len = strlen(tag);
-    }
+    message->keyValue.has_key = true;
+    message->keyValue.key = key;
+    message->keyValue.has_newversion = true;
+    message->keyValue.newversion = newVersion;
+    message->keyValue.has_dbversion = true;
+    message->keyValue.dbversion = dbVersion;
+    message->keyValue.has_tag = true;
+    message->keyValue.tag = tag;
+    message->keyValue.has_metadataonly = metaDataOnly;
+    message->keyValue.metadataonly = metaDataOnly;
 }

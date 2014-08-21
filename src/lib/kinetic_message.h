@@ -27,9 +27,10 @@
 void KineticMessage_Init(KineticMessage* const message);
 void KineticMessage_ConfigureKeyValue(
     KineticMessage* const message,
-    const char* newVersion,
-    const char* key,
-    const char* dbVersion,
-    const char* tag);
+    ByteArray key,
+    ByteArray newVersion,
+    ByteArray dbVersion,
+    ByteArray tag,
+    bool metaDataOnly);
 
 #endif // _KINETIC_MESSAGE_H

@@ -25,33 +25,33 @@ int Get(const char* host,
         bool nonBlocking,
         int64_t clusterVersion,
         int64_t identity,
-        const char* hmacKey,
-        const char* valueKey,
-        const char* version,
-        const char* newVersion,
-        const uint8_t* value,
-        int64_t length)
+        char* hmacKey,
+        bool metadataOnly,
+        uint8_t* value,
+        int64_t valueLength)
 {
-    // KineticOperation operation;
-    // KineticPDU request, response;
-    // KineticConnection connection;
-    // KineticMessage requestMsg;
+    KineticOperation operation;
+    KineticPDU request, response;
+    KineticConnection connection;
+    KineticMessage requestMsg;
     KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
-    // bool success;
+    bool success;
 
-    // KineticClient_Init(NULL);
-    // success = KineticClient_Connect(&connection, host, port, false);
-    // assert(success);
-    // success = KineticClient_ConfigureExchange(&exchange, &connection, clusterVersion, identity, key, strlen(key));
-    // assert(success);
-    // operation = KineticClient_CreateOperation(&exchange, &request, &requestMsg, &response);
-    // status = KineticClient_Get(&operation, key, version, newVersion, value, sizeof(value));
+    KineticClient_Init(NULL);
+    success = KineticClient_Connect(&connection, host, port, nonBlocking,
+                                    clusterVersion, identity, hmacKey);
+    assert(success);
 
-    // if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
-    // {
-    //     printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
-    // }
+    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
 
-    // KineticClient_Disconnect(&connection);
+    status = KineticClient_Get(&operation, hmacKey, metadataOnly, value, valueLength);
+
+    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
+    {
+        printf("Get operation completed successfully. Your data has been retrieved!\n");
+        status = 0;
+    }
+
+    KineticClient_Disconnect(&connection);
     return status;
 }

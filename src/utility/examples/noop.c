@@ -45,7 +45,7 @@ int NoOp(const char* host,
     if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
     {
         printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
-        return 0;
+        status = 0;
     }
 
     KineticClient_Disconnect(&connection);

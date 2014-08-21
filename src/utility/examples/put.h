@@ -41,12 +41,11 @@ int Put(const char* host,
         bool nonBlocking,
         int64_t clusterVersion,
         int64_t identity,
-        char* hmacKey,
-        uint8_t* value,
-        int64_t valueLength,
-        char* valueKey,
-        char* valueTag,
-        char* version,
-        char* newVersion);
+        const ByteArray hmacKey,
+        const ByteArray valueKey,
+        const ByteArray newVersion,
+        const ByteArray dbVersion,
+        const ByteArray tag,
+        const ByteArray value);
 
 #endif // _PUT_H

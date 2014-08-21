@@ -11,8 +11,7 @@ typedef struct _SystemTestInstance
     KineticPDU request;
     KineticPDU response;
     KineticMessage requestMsg;
-    uint8_t* value;
-    int64_t valueLength;
+    ByteArray value;
 } SystemTestInstance;
 
 typedef struct _SystemTestFixture
@@ -22,7 +21,7 @@ typedef struct _SystemTestFixture
     int64_t clusterVersion;
     int64_t identity;
     int64_t expectedSequence;
-    char hmacKey[KINETIC_HMAC_MAX_LEN];
+    ByteArray hmacKey;
     uint8_t data[PDU_VALUE_MAX_LEN];
     bool connected;
     KineticConnection connection;

@@ -26,8 +26,7 @@
 void KineticPDU_Init(KineticPDU* const pdu,
     KineticConnection* const connection,
     KineticMessage* const message,
-    uint8_t* const value,
-    int32_t valueLength);
+    const ByteArray value);
 KineticProto_Status_StatusCode KineticPDU_Status(KineticPDU* const pdu);
 
 bool KineticPDU_Send(KineticPDU* const request);

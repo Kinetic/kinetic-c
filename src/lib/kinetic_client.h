@@ -51,24 +51,24 @@ bool KineticClient_Connect(KineticConnection* connection,
     bool nonBlocking,
     int64_t clusterVersion,
     int64_t identity,
-    const char* key);
+    ByteArray key);
 
 /**
  * @brief Closes the socket connection to a host.
  *
- * @param connection        KineticConnection instance
+ * @param connection    KineticConnection instance
  */
 void KineticClient_Disconnect(KineticConnection* connection);
 
 /**
  * @brief Creates and initializes a Kinetic operation.
  *
- * @param connection        KineticConnection instance to associate with operation
- * @param request           KineticPDU instance to use for request
- * @param requestMsg        KineticMessage instance to use for request
- * @param response          KineticPDU instance to use for reponse
+ * @param connection    KineticConnection instance to associate with operation
+ * @param request       KineticPDU instance to use for request
+ * @param requestMsg    KineticMessage instance to use for request
+ * @param response      KineticPDU instance to use for reponse
  *
- * @return                  Returns a configured operation instance
+ * @return              Returns a configured operation instance
  */
 KineticOperation KineticClient_CreateOperation(
     KineticConnection* connection,
@@ -79,25 +79,36 @@ KineticOperation KineticClient_CreateOperation(
 /**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational
  *
- * @param operation         KineticOperation instance to use for the operation
+ * @param operation     KineticOperation instance to use for the operation
  *
- * @return                  Returns the resultant status code
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
  */
 KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation);
 
 /**
  * @brief Executes a PUT command to write data to the Kinetic Device
  *
- * @param operation         KineticOperation instance to use for the operation
+ * @param operation     KineticOperation instance to use for the operation
  *
- * @return                  Returns the resultant status code
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
  */
 KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
-    char* newVersion,
-    char* key,
-    char* dbVersion,
-    char* tag,
-    uint8_t* value,
-    int64_t len);
+    ByteArray key,
+    ByteArray newVersion,
+    ByteArray dbVersion,
+    ByteArray tag,
+    ByteArray value);
+
+/**
+ * @brief Executes a GET command to read data from the Kinetic Device
+ *
+ * @param operation     KineticOperation instance to use for the operation
+ *
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
+ */
+KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
+    const ByteArray key,
+    const ByteArray value,
+    bool metadataOnly);
 
 #endif // _KINETIC_CLIENT_H

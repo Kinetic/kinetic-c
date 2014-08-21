@@ -40,12 +40,12 @@ static SystemTestFixture Fixture = {
     .host = "localhost",
     .port = KINETIC_PORT,
     .clusterVersion = 0,
-    .identity = 1,
-    .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
+    .identity =  1,
+    .hmacKey = "asdfasdf",
 };
 
-static ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
-static ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+static char* valueKey = "my_key_3.1415927";
+static char* tag = "SomeTagValue";
 
 void setUp(void)
 {
@@ -65,47 +65,14 @@ void tearDown(void)
 //
 //  TBD!
 //
-void test_Put_should_create_new_object_on_device(void)
+void test_Get_should_retrieve_object_data_from_device(void)
 {
     KineticProto_Status_StatusCode status =
-        KineticClient_Put(&Fixture.instance.operation,
-            BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        KineticClient_Get(&Fixture.instance.operation,
             valueKey,
-            BYTE_ARRAY_NONE,
-            tag,
-            Fixture.instance.value);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-}
-
-void test_Put_should_update_object_data_on_device(void)
-{
-    KineticProto_Status_StatusCode status =
-        KineticClient_Put(&Fixture.instance.operation,
-            BYTE_ARRAY_NONE,
-            valueKey,
-            BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-            BYTE_ARRAY_INIT_FROM_CSTRING("SomeOtherTag"),
-            Fixture.instance.value);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-}
-
-void test_Put_should_update_object_data_on_device_and_update_version(void)
-{
-    KineticProto_Status_StatusCode status =
-        KineticClient_Put(&Fixture.instance.operation,
-            BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
-            valueKey,
-            BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-            tag,
-            Fixture.instance.value);
-
-    Fixture.instance.testIgnored = true;
-    TEST_IGNORE_MESSAGE("Java simulator is responding with VERSION_MISMATCH(8), "
-                        "but request should be valid and update dbVersion!");
+            false,
+            Fixture.instance.value,
+            Fixture.instance.valueLength);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);

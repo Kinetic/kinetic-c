@@ -105,4 +105,16 @@ if (expected != actual) { \
     TEST_ASSERT_EQUAL_MESSAGE(0, fclose(f), "Failed closing file: " #fname ); \
 }
 
+/** Custom Unity assertion for validating equality of ByteArrays */
+#define TEST_ASSERT_EQUAL_BYTE_ARRAY(expected, actual) \
+    TEST_ASSERT_EQUAL_INT((expected).len, (actual).len); \
+    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((expected).data, (actual).data, (expected).len, "ByteArrays are not equal");
+
+/** Custom Unity assertion for validating empty ByteArrays */
+#define TEST_ASSERT_BYTE_ARRAY_EMPTY(actual) \
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, (actual).len, "ByteArray length is non-zero!");
+#define TEST_ASSERT_BYTE_ARRAY_NONE(actual) \
+    TEST_ASSERT_BYTE_ARRAY_EMPTY(actual); \
+    TEST_ASSERT_NULL_MESSAGE((actual).data, "ByteArray has non-null buffer");
+
 #endif // _UNITY_HELPER

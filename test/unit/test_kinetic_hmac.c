@@ -81,7 +81,7 @@ void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the
     KineticProto proto = KINETIC_PROTO_INIT;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
     ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
-    const char *key = "1234567890ABCDEFGHIJK";
+    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("1234567890ABCDEFGHIJK");
 
     proto.command = &command;
     proto.hmac = hmac;
@@ -106,9 +106,8 @@ void test_KineticHMAC_Validate_should_return_true_if_the_HMAC_for_the_supplied_m
     KineticHMAC actual;
     KineticProto_Command command = KINETIC_PROTO_COMMAND_INIT;
     KineticProto proto = KINETIC_PROTO_INIT;
-    uint8_t data[64];
-    ProtobufCBinaryData hmac = {.len = 0, .data = data};
-    const char *key = "1234567890ABCDEFGHIJK";
+    ProtobufCBinaryData hmac = BYTE_ARRAY_NONE;
+    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("1234567890ABCDEFGHIJK");
 
     proto.command = &command;
     proto.hmac = hmac;
@@ -125,6 +124,8 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_value_of_the_supp
     KineticHMAC actual;
     KineticProto_Command command = KINETIC_PROTO_COMMAND_INIT;
     KineticProto proto = KINETIC_PROTO_INIT;
+    ProtobufCBinaryData hmac = BYTE_ARRAY_NONE;
+    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("1234567890ABCDEFGHIJK");
     uint8_t data[64];
     ProtobufCBinaryData hmac = {.len = 0, .data = data};
     const char *key = "1234567890ABCDEFGHIJK";

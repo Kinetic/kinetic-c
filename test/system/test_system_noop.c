@@ -41,7 +41,7 @@ static SystemTestFixture Fixture = {
     .port = KINETIC_PORT,
     .clusterVersion = 0,
     .identity =  1,
-    .hmacKey = "asdfasdf",
+    .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf")
 };
 
 void setUp(void)

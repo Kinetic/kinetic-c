@@ -31,8 +31,7 @@ static int32_t KineticPDU_UnpackInt32(const uint8_t* const buffer);
 void KineticPDU_Init(KineticPDU* const pdu,
     KineticConnection* const connection,
     KineticMessage* const message,
-    uint8_t* const value,
-    int32_t valueLength)
+    const ByteArray value)
 {
     assert(pdu != NULL);
     assert(connection != NULL);
@@ -44,7 +43,6 @@ void KineticPDU_Init(KineticPDU* const pdu,
         .proto = NULL,
         .protobufLength = 0,
         .value = value,
-        .valueLength = valueLength,
         .header.versionPrefix = (uint8_t)'F' // Set header version prefix appropriately
     };
     *pdu = tmpPDU; // Copy initial value into target PDU
@@ -93,11 +91,12 @@ bool KineticPDU_Send(KineticPDU* const request)
     request->protobufLength = KineticProto_get_packed_size(&request->message->proto);
     LOGF("Packing PDU with protobuf of %d bytes", request->protobufLength);
     KineticPDU_PackInt32((uint8_t*)&request->header.protobufLength, request->protobufLength);
-    LOGF("Packing PDU with value payload of %d bytes", request->valueLength);
-    KineticPDU_PackInt32((uint8_t*)&request->header.valueLength, request->valueLength);
+    LOGF("Packing PDU with value payload of %d bytes", request->value.len);
+    KineticPDU_PackInt32((uint8_t*)&request->header.valueLength, request->value.len);
 
     // Send the PDU header
-    if (!KineticSocket_Write(fd, &request->header, sizeof(KineticPDUHeader)))
+    ByteArray header = {.data = (uint8_t*)&request->header, .len = sizeof(KineticPDUHeader)};
+    if (!KineticSocket_Write(fd, header))
     {
         LOG("Failed to send PDU header!");
         return false;
@@ -113,9 +112,9 @@ bool KineticPDU_Send(KineticPDU* const request)
     }
 
     // Send the value/payload, if specified
-    if ((request->valueLength > 0) && (request->value != NULL))
+    if ((request->value.len > 0) && (request->value.data != NULL))
     {
-        if (!KineticSocket_Write(fd, request->value, request->valueLength))
+        if (!KineticSocket_Write(fd, request->value))
         {
             LOG("Failed to send PDU value payload!");
             return false;
@@ -130,9 +129,10 @@ bool KineticPDU_Receive(KineticPDU* const response)
     const int fd = response->connection->socketDescriptor;
     LOGF("Attempting to receive PDU via fd=%d", fd);
     assert(fd >= 0);
+    ByteArray header = {.data = (uint8_t*)&response->header, .len = sizeof(KineticPDUHeader)};
 
     // Receive the PDU header
-    if (!KineticSocket_Read(fd, response->rawHeader, sizeof(KineticPDUHeader)))
+    if (!KineticSocket_Read(fd, header))
     {
         LOG("Failed to receive PDU header!");
         return false;
@@ -147,10 +147,10 @@ bool KineticPDU_Receive(KineticPDU* const response)
     }
 
     // Receive the protobuf message
+    ByteArray protobuf = {.data = response->protobufScratch, .len = response->header.protobufLength};
     if (!KineticSocket_ReadProtobuf(fd,
             &response->proto,
-            (KineticProto*)response->protobufScratch,
-            response->header.protobufLength))
+            protobuf))
     {
         LOG("Failed to receive PDU protobuf message!");
         return false;
@@ -176,7 +176,7 @@ bool KineticPDU_Receive(KineticPDU* const response)
     if (response->header.valueLength > 0)
     {
         LOG("Attempting to receive value payload...");
-        if (!KineticSocket_Read(fd, response->value, response->valueLength))
+        if (!KineticSocket_Read(fd, response->value))
         {
             LOG("Failed to receive PDU value payload!");
             return false;

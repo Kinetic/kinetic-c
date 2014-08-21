@@ -20,28 +20,57 @@
 
 #include "kinetic_operation.h"
 #include "kinetic_connection.h"
+#include "kinetic_message.h"
 
-void KineticOperation_BuildNoop(KineticOperation* operation)
+void KineticOperation_ValidateOperation(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->response != NULL);
+}
+
+void KineticOperation_BuildNoop(KineticOperation* operation)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
     operation->request->message->header.has_messagetype = true;
 }
 
-void KineticOperation_BuildPut(KineticOperation* operation, uint8_t* value, int64_t valueLength)
+void KineticOperation_BuildPut(KineticOperation* operation,
+    const ByteArray key,
+    const ByteArray newVersion,
+    const ByteArray dbVersion,
+    const ByteArray tag,
+    const ByteArray value)
 {
-    assert(operation != NULL);
-    assert(operation->connection != NULL);
-    assert(operation->request != NULL);
-    assert(operation->response != NULL);
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_PUT;
     operation->request->message->header.has_messagetype = true;
 
-    operation->request->value = value;
-    operation->request->valueLength = valueLength;
+    operation->request->value = value.data;
+    operation->request->valueLength = value.len;
+
+    KineticMessage_ConfigureKeyValue(operation->request->message,
+        key, newVersion, dbVersion, tag, false);
+}
+
+void KineticOperation_BuildGet(KineticOperation* operation,
+    const ByteArray key, const ByteArray value, bool metadataOnly)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+
+    operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_GET;
+    operation->request->message->header.has_messagetype = true;
+
+    operation->request->value = NULL;
+    operation->request->valueLength = 0;
+
+    KineticMessage_ConfigureKeyValue(operation->request->message,
+        key, BYTE_ARRAY_NONE, BYTE_ARRAY_NONE, BYTE_ARRAY_NONE, metadataOnly);
 }

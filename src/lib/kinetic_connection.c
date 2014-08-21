@@ -26,7 +26,7 @@
 
 bool KineticConnection_Connect(KineticConnection* const connection,
     const char* host, int port, bool nonBlocking,
-    int64_t clusterVersion, int64_t identity, const char* key)
+    int64_t clusterVersion, int64_t identity, const ByteArray key)
 {
     connection->connected = false;
     connection->nonBlocking = nonBlocking;
@@ -35,7 +35,7 @@ bool KineticConnection_Connect(KineticConnection* const connection,
     connection->clusterVersion = clusterVersion;
     connection->identity = identity;
     strcpy(connection->host, host);
-    strcpy(connection->key, key);
+    memcpy(connection->key.data, key.data, key.len);
 
     connection->socketDescriptor = KineticSocket_Connect(
         connection->host, connection->port, nonBlocking);

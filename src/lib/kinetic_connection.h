@@ -29,7 +29,7 @@ bool KineticConnection_Connect(KineticConnection* connection,
     bool nonBlocking,
     int64_t clusterVersion,
     int64_t identity,
-    const char* key);
+    const ByteArray key);
 
 void KineticConnection_Disconnect(KineticConnection* const connection);
 

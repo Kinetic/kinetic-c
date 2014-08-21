@@ -41,11 +41,9 @@ int Get(const char* host,
         bool nonBlocking,
         int64_t clusterVersion,
         int64_t identity,
-        const char* hmacKey,
-        const char* valueKey,
-        const char* version,
-        const char* newVersion,
-        const uint8_t* value,
-        int64_t length);
+        char* hmacKey,
+        bool metadataOnly,
+        uint8_t* value,
+        int64_t valueLength);
 
 #endif // _GET_H

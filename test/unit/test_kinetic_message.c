@@ -19,6 +19,7 @@
 */
 
 #include "unity.h"
+#include "unity_helper.h"
 #include "protobuf-c.h"
 #include "kinetic_types.h"
 #include "kinetic_proto.h"
@@ -50,10 +51,10 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_add_to_message(void)
 {
     KineticMessage message;
-    char* newVersion = "v2.0";
-    char* key = "my_key_3.1415927";
-    char* dbVersion = "v1.0";
-    char* tag = "SomeTagValue";
+    ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
+    ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
+    ByteArray dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
+    ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
 
     KineticMessage_Init(&message);
 
@@ -78,7 +79,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
     //     KineticProto_Synchronization synchronization;
     // };
 
-    KineticMessage_ConfigureKeyValue(&message, newVersion, key, dbVersion, tag);
+    KineticMessage_ConfigureKeyValue(&message, key, newVersion, dbVersion, tag, false);
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
@@ -87,21 +88,74 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 
     // Validate keyValue fields
     TEST_ASSERT_TRUE(message.keyValue.has_newversion);
-    TEST_ASSERT_EQUAL_STRING(newVersion, message.keyValue.newversion.data);
-    TEST_ASSERT_EQUAL(strlen(newVersion), message.keyValue.newversion.len);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(newVersion, message.keyValue.newversion);
     TEST_ASSERT_TRUE(message.keyValue.has_key);
-    TEST_ASSERT_EQUAL_STRING(key, message.keyValue.key.data);
-    TEST_ASSERT_EQUAL(strlen(key), message.keyValue.key.len);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(key, message.keyValue.key);
     TEST_ASSERT_TRUE(message.keyValue.has_dbversion);
-    TEST_ASSERT_EQUAL_STRING(dbVersion, message.keyValue.dbversion.data);
-    TEST_ASSERT_EQUAL(strlen(dbVersion), message.keyValue.dbversion.len);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(dbVersion, message.keyValue.dbversion);
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
-    TEST_ASSERT_EQUAL_STRING(tag, message.keyValue.tag.data);
-    TEST_ASSERT_EQUAL(strlen(tag), message.keyValue.tag.len);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(tag, message.keyValue.tag);
+    TEST_ASSERT_FALSE(message.keyValue.has_metadataonly);
+    TEST_ASSERT_FALSE(message.keyValue.metadataonly);
 
     // Not implemented as of (8/13/2014)
     TEST_ASSERT_FALSE(message.keyValue.has_force);
     TEST_ASSERT_FALSE(message.keyValue.has_algorithm);
-    TEST_ASSERT_FALSE(message.keyValue.has_metadataonly);
+    TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
+}
+
+void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_metadata_only_and_add_to_message(void)
+{
+    KineticMessage message;
+    ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
+    ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
+    ByteArray dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
+    ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+
+    KineticMessage_Init(&message);
+
+    // struct _KineticProto_KeyValue
+    // {
+    //     ProtobufCMessage base;
+    //     protobuf_c_boolean has_newversion;
+    //     ProtobufCBinaryData newversion;
+    //     protobuf_c_boolean has_force;
+    //     protobuf_c_boolean force;
+    //     protobuf_c_boolean has_key;
+    //     ProtobufCBinaryData key;
+    //     protobuf_c_boolean has_dbversion;
+    //     ProtobufCBinaryData dbversion;
+    //     protobuf_c_boolean has_tag;
+    //     ProtobufCBinaryData tag;
+    //     protobuf_c_boolean has_algorithm;
+    //     KineticProto_Algorithm algorithm;
+    //     protobuf_c_boolean has_metadataonly;
+    //     protobuf_c_boolean metadataonly;
+    //     protobuf_c_boolean has_synchronization;
+    //     KineticProto_Synchronization synchronization;
+    // };
+
+    KineticMessage_ConfigureKeyValue(&message, key, newVersion, dbVersion, tag, true);
+
+    // Validate that message keyValue and body container are enabled in protobuf
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.proto.command->body);
+    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.proto.command->body->keyvalue);
+
+    // Validate keyValue fields
+    TEST_ASSERT_TRUE(message.keyValue.has_newversion);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(newVersion, message.keyValue.newversion);
+    TEST_ASSERT_TRUE(message.keyValue.has_key);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(key, message.keyValue.key);
+    TEST_ASSERT_TRUE(message.keyValue.has_dbversion);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(dbVersion, message.keyValue.dbversion);
+    TEST_ASSERT_TRUE(message.keyValue.has_tag);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(tag, message.keyValue.tag);
+    TEST_ASSERT_TRUE(message.keyValue.has_metadataonly);
+    TEST_ASSERT_TRUE(message.keyValue.metadataonly);
+
+    // Not implemented as of (8/13/2014)
+    TEST_ASSERT_FALSE(message.keyValue.has_force);
+    TEST_ASSERT_FALSE(message.keyValue.has_algorithm);
     TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
 }

@@ -25,6 +25,8 @@
 #include "kinetic_logger.h"
 #include <stdio.h>
 
+KineticProto_Status_StatusCode KineticClient_ExecuteOperation(KineticOperation* operation);
+
 void KineticClient_Init(const char* logFile)
 {
     KineticLogger_Init(logFile);
@@ -37,7 +39,7 @@ bool KineticClient_Connect(
     bool nonBlocking,
     int64_t clusterVersion,
     int64_t identity,
-    const char* key)
+    ByteArray key)
 {
     if (connection == NULL)
     {
@@ -51,15 +53,15 @@ bool KineticClient_Connect(
         return false;
     }
 
-    if (key == NULL)
+    if (key.len < 1)
     {
-        LOG("Specified HMAC key is NULL!");
+        LOG("Specified HMAC key is empty!");
         return false;
     }
 
-    if (strlen(key) < 1)
+    if (key.data == NULL)
     {
-        LOG("Specified HMAC key is empty!");
+        LOG("Specified HMAC key is NULL!");
         return false;
     }
 
@@ -118,10 +120,10 @@ KineticOperation KineticClient_CreateOperation(
     }
 
     KineticMessage_Init(requestMsg);
-    KineticPDU_Init(request, connection, requestMsg, NULL, 0);
+    KineticPDU_Init(request, connection, requestMsg, BYTE_ARRAY_NONE);
 
     // KineticMessage_Init(responseMsg);
-    KineticPDU_Init(response, connection, NULL, NULL, 0);
+    KineticPDU_Init(response, connection, NULL, BYTE_ARRAY_NONE);
 
     op.connection = connection;
     op.request = request;
@@ -135,9 +137,6 @@ KineticOperation KineticClient_CreateOperation(
 
 KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation)
 {
-    KineticProto_Status_StatusCode status =
-        KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
-
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->request->message != NULL);
@@ -145,59 +144,77 @@ KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation)
     assert(operation->response->message == NULL);
 
     // Initialize request
-    KineticConnection_IncrementSequence(operation->connection);
     KineticOperation_BuildNoop(operation);
 
-    // Send the request
-    KineticPDU_Send(operation->request);
-
-    // Associate response with same exchange as request
-    operation->response->connection = operation->request->connection;
-
-    // Receive the response
-    if (KineticPDU_Receive(operation->response))
-    {
-        status = KineticPDU_Status(operation->response);
-    }
-
-	return status;
+    // Execute the operation
+    return KineticClient_ExecuteOperation(operation);
 }
 
 KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
-    char* newVersion,
-    char* key,
-    char* dbVersion,
-    char* tag,
-    uint8_t* value,
-    int64_t len)
+    const ByteArray key,
+    const ByteArray newVersion,
+    const ByteArray dbVersion,
+    const ByteArray tag,
+    const ByteArray value)
+{
+    assert(operation->connection != NULL);
+    assert(operation->request != NULL);
+    assert(operation->request->message != NULL);
+    assert(operation->response != NULL);
+    assert(operation->response->message == NULL);
+    assert(value.data != NULL);
+    assert(value.len <= PDU_VALUE_MAX_LEN);
+
+    // Initialize request
+    KineticOperation_BuildPut(operation, key, newVersion, dbVersion, tag, value);
+
+    // Execute the operation
+    return KineticClient_ExecuteOperation(operation);
+}
+
+KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
+    const ByteArray key,
+    const ByteArray value,
+    bool metadataOnly)
+{
+    assert(operation->connection != NULL);
+    assert(operation->request != NULL);
+    assert(operation->request->message != NULL);
+    assert(operation->response != NULL);
+    assert(operation->response->message == NULL);
+    assert(key.data != NULL);
+    assert(key.len <= KINETIC_MAX_KEY_LEN);
+    if (!metadataOnly)
+    {
+        assert(value.data != NULL);
+        assert(value.len <= PDU_VALUE_MAX_LEN);
+    }
+
+    // Initialize request
+    KineticOperation_BuildGet(operation, key, value, metadataOnly);
+
+    // Execute the operation
+    return KineticClient_ExecuteOperation(operation);
+}
+
+KineticProto_Status_StatusCode KineticClient_ExecuteOperation(KineticOperation* operation)
 {
     KineticProto_Status_StatusCode status =
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
 
-    assert(operation->connection != NULL);
-    assert(operation->request != NULL);
-    assert(operation->request->message != NULL);
-    assert(operation->response != NULL);
-    assert(operation->response->message == NULL);
-    assert(value != NULL);
-    assert(len <= PDU_VALUE_MAX_LEN);
-
-    // Initialize request
-    KineticConnection_IncrementSequence(operation->connection);
-    KineticOperation_BuildPut(operation, value, len);
-    KineticMessage_ConfigureKeyValue(operation->request->message, newVersion, key, dbVersion, tag);
-
     // Send the request
-    KineticPDU_Send(operation->request);
-
-    // Associate response with same exchange as request
-    operation->response->connection = operation->request->connection;
-
-    // Receive the response
-    if (KineticPDU_Receive(operation->response))
+    if (KineticPDU_Send(operation->request))
     {
-        status = KineticPDU_Status(operation->response);
+        // Associate response with same exchange as request
+        operation->response->connection = operation->request->connection;
+
+        // Receive the response
+        if (KineticPDU_Receive(operation->response))
+        {
+            status = KineticPDU_Status(operation->response);
+        }
     }
 
     return status;
 }
+

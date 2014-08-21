@@ -24,6 +24,15 @@
 #include "kinetic_types.h"
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
-void KineticOperation_BuildPut(KineticOperation* operation, uint8_t* value, int64_t valueLength);
+void KineticOperation_BuildPut(KineticOperation* operation,
+    const ByteArray key,
+    const ByteArray newVersion,
+    const ByteArray dbVersion,
+    const ByteArray tag,
+    const ByteArray value);
+void KineticOperation_BuildGet(KineticOperation* operation,
+    const ByteArray key,
+    const ByteArray value,
+    bool metadataOnly);
 
 #endif // _KINETIC_OPERATION_H

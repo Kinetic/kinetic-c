@@ -18,7 +18,7 @@
 *
 */
 
-#include "unity.h"
+#include "unity_helper.h"
 #include "protobuf-c.h"
 #include "kinetic_types.h"
 #include "kinetic_operation.h"
@@ -40,25 +40,24 @@ void test_KineticOperation_should_have_all_supported_fields(void)
     KineticConnection connection;
     KINETIC_CONNECTION_INIT(&connection, 12, "some_hmac_key");
     KineticPDU request, response;
-    uint8_t value[] = {1,2,3,4,5,6,7,8};
-    const char* key = "SomeKey0123";
-    const char* tag = "some_tag_01";
-    const char* version = "v1.0";
-    const char* newVersion = "v2.0";
+    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("SomeKey0123");
+    const ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_tag_01");
+    const ByteArray version = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
+    const ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
+    const uint8_t dataVals[] = {1,2,3,4,5,6,7,8};
+    const ByteArray value = BYTE_ARRAY_INIT(dataVals);
 
     KineticOperation op = {
         .connection = &connection,
         .request = &request,
         .response = &response,
         .value = value,
-        .valueLength = sizeof(value)
     };
 
     TEST_ASSERT_EQUAL_PTR(&connection, op.connection);
     TEST_ASSERT_EQUAL_PTR(&request, op.request);
     TEST_ASSERT_EQUAL_PTR(&response, op.response);
-    TEST_ASSERT_EQUAL_PTR(value, op.value);
-    TEST_ASSERT_EQUAL_INT64(sizeof(value), op.valueLength);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(value, op.value);
 }
 
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
@@ -78,6 +77,8 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
         .request = &request,
         .response = &response
     };
+
+    KineticConnection_IncrementSequence_Expect(&connection);
 
     KineticOperation_BuildNoop(&op);
 
@@ -103,8 +104,7 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_NOOP, requestMsg.header.messagetype);
 }
 
-
-void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation(void)
+void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_create_a_new_object(void)
 {
     KineticConnection connection;
     KineticMessage requestMsg, responseMsg;
@@ -112,21 +112,23 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation(voi
 
     KINETIC_MESSAGE_INIT(&requestMsg);
     KINETIC_MESSAGE_INIT(&responseMsg);
-    // KINETIC_OPERATION_INIT(&op, &exchange, &request, &response);
     request.message = &requestMsg;
     request.proto = NULL;
     response.message = NULL;
     response.proto = NULL;
-    uint8_t value[PDU_VALUE_MAX_LEN];
+    const uint8_t valueData[] = {1,2,3,4,5,6,7,8};
+    const ByteArray value = BYTE_ARRAY_INIT(valueData);
     KineticOperation op = {
         .connection = &connection,
         .request = &request,
         .response = &response,
         .value = value,
-        .valueLength = sizeof(value),
     };
+    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
+    const ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
+    const ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_tag");
 
-    KineticOperation_BuildPut(&op, value, sizeof(value));
+    KineticConnection_IncrementSequence_Expect(&connection);
 
     // PUT
     // The PUT operation sets the value and metadata for a given key. If a value
@@ -198,31 +200,137 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation(voi
     //       //        written before the FLUSH operation is returned completed.
     //       synchronization: ...
     //     }
+    KineticMessage_ConfigureKeyValue_Expect(op.request->message, key, newVersion, BYTE_ARRAY_NONE, tag, false);
     //   }
     // }
     // hmac: "..."
     //
+
+    // Build the operation
+    KineticOperation_BuildPut(&op, key, newVersion, BYTE_ARRAY_NONE, tag, value);
+
+    // Ensure proper message type
     TEST_ASSERT_TRUE(requestMsg.header.has_messagetype);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_PUT, requestMsg.header.messagetype);
 
-    // Required bytes
-    // The key for the value being set
-    // key: "..."
+    // Ensure value payload populated approapriately
+    ByteArray requestValue = {.len = request.valueLength, .data = request.value};
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(value, requestValue);
+}
+
+
+void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
+{
+    KineticConnection connection;
+    KineticMessage requestMsg, responseMsg;
+    KineticPDU request, response;
+    const uint8_t valueData[] = {1,2,3,4,5,6,7,8};
+    const ByteArray value = BYTE_ARRAY_INIT(valueData);
+    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
+
+    KINETIC_MESSAGE_INIT(&requestMsg);
+    KINETIC_MESSAGE_INIT(&responseMsg);
+    request.message = &requestMsg;
+    request.proto = NULL;
+    response.message = NULL;
+    response.proto = NULL;
+    KineticOperation op = {
+        .connection = &connection,
+        .request = &request,
+        .response = &response,
+        .value = value,
+    };
+
+    KineticConnection_IncrementSequence_Expect(&connection);
+    KineticMessage_ConfigureKeyValue_Expect(op.request->message, key, BYTE_ARRAY_NONE, BYTE_ARRAY_NONE, BYTE_ARRAY_NONE, false);
+
+    KineticOperation_BuildGet(&op, key, value, false);
+
+    // GET
+    // The GET operation is used to retrieve the value and metadata for a given key.
+    //
+    // Request Message:
+    // command {
+    //   header {
+    //     // See above for descriptions of these fields
+    //     clusterVersion: ...
+    //     identity: ...
+    //     connectionID: ...
+    //     sequence: ...
+    //
+    //     // The mesageType should be GET
+    //     messageType: GET
     TEST_ASSERT_TRUE(requestMsg.header.has_messagetype);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_PUT, requestMsg.header.messagetype);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_GET, requestMsg.header.messagetype);
+    //   }
+    //   body {
+    //     keyValue {
+    //       // See above
+    //       key: "..."
+    //     }
+    //   }
+    // }
+    // // See above
+    // hmac: "..."
 
-    // Required bytes
-    // Versions are set on objects to support optimistic locking.
-    // For operations that modify data, if the dbVersion sent in the
-    // request message does not match the version stored in the db, the
-    // request will fail.
-    // dbVersion: "..."
+    TEST_ASSERT_EQUAL_PTR(NULL, request.value);
+    TEST_ASSERT_EQUAL_INT64(0, request.valueLength);
+}
 
-    // Required bytes
-    // Specifies what the next version of the data will be if this
-    // operation is successful.
-    // newVersion: "..."
+void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
+{
+    KineticConnection connection;
+    KineticMessage requestMsg, responseMsg;
+    KineticPDU request, response;
+    const uint8_t valueData[] = {1,2,3,4,5,6,7,8};
+    const ByteArray value = BYTE_ARRAY_INIT(valueData);
+    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
 
-    TEST_ASSERT_EQUAL_PTR(request.value, value);
-    TEST_ASSERT_EQUAL_INT64(sizeof(value), request.valueLength);
+    KINETIC_MESSAGE_INIT(&requestMsg);
+    KINETIC_MESSAGE_INIT(&responseMsg);
+    request.message = &requestMsg;
+    request.proto = NULL;
+    response.message = NULL;
+    response.proto = NULL;
+    KineticOperation op = {
+        .connection = &connection,
+        .request = &request,
+        .response = &response,
+        .value = value,
+    };
+
+    KineticConnection_IncrementSequence_Expect(&connection);
+    KineticMessage_ConfigureKeyValue_Expect(op.request->message, key, BYTE_ARRAY_NONE, BYTE_ARRAY_NONE, BYTE_ARRAY_NONE, true);
+
+    KineticOperation_BuildGet(&op, key, value, true);
+
+    // GET
+    // The GET operation is used to retrieve the value and metadata for a given key.
+    //
+    // Request Message:
+    // command {
+    //   header {
+    //     // See above for descriptions of these fields
+    //     clusterVersion: ...
+    //     identity: ...
+    //     connectionID: ...
+    //     sequence: ...
+    //
+    //     // The mesageType should be GET
+    //     messageType: GET
+    TEST_ASSERT_TRUE(requestMsg.header.has_messagetype);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_GET, requestMsg.header.messagetype);
+    //   }
+    //   body {
+    //     keyValue {
+    //       // See above
+    //       key: "..."
+    //     }
+    //   }
+    // }
+    // // See above
+    // hmac: "..."
+
+    TEST_ASSERT_EQUAL_PTR(NULL, request.value);
+    TEST_ASSERT_EQUAL_INT64(0, request.valueLength);
 }

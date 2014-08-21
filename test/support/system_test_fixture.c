@@ -7,14 +7,13 @@ void SystemTestSetup(SystemTestFixture* fixture)
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
 
     fixture->instance = (SystemTestInstance){
-        .value = fixture->data,
-        .valueLength = PDU_VALUE_MAX_LEN,
+        .value = {.data = fixture->data, .len = PDU_VALUE_MAX_LEN}
     };
     fixture->instance.request.message = &fixture->instance.requestMsg;
     KINETIC_MESSAGE_INIT(fixture->instance.request.message);
 
     int i;
-    for (i = 0; i < fixture->instance.valueLength; i++)
+    for (i = 0; i < fixture->instance.value.len; i++)
     {
         fixture->data[i] = (uint8_t)(0x0ff & i);
     }

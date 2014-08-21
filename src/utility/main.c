@@ -27,7 +27,7 @@
 #include "kinetic.h"
 #include "noop.h"
 #include "put.h"
-// #include "get.h"
+#include "get.h"
 
 typedef struct _Arguments {
     char host[HOST_NAME_MAX];
@@ -172,44 +172,38 @@ int main(int argc, char** argv)
             }
         }
 
-        // else if (strcmp("get", op) == 0)
-        // {
-        //     const char* valueKey = "some_value_key...";
-        //     const char* version = "v1.0";
-        //     const char* newVersion = "v1.0";
+        else if (strcmp("get", op) == 0)
+        {
+            printf("\n"
+                   "Executing Get w/configuration:\n"
+                   "-------------------------------\n"
+                   "  host: %s\n"
+                   "  port: %d\n"
+                   "  non-blocking: %s\n"
+                   "  clusterVersion: %lld\n"
+                   "  identity: %lld\n"
+                   "  hmacKey: '%s'\n"
+                   "  value: %zd bytes\n",
+                cfg.host,
+                cfg.port,
+                cfg.nonBlocking ? "true" : "false",
+                (long long int)cfg.clusterVersion,
+                (long long int)cfg.identity,
+                cfg.hmacKey,
+                sizeof(cfg.value));
 
-        //     printf("\n"
-        //            "Executing Get w/configuration:\n"
-        //            "-------------------------------\n"
-        //            "  host: %s\n"
-        //            "  port: %d\n"
-        //            "  non-blocking: %s\n"
-        //            "  clusterVersion: %lld\n"
-        //            "  identity: %lld\n"
-        //            "  hmacKey: '%s'\n"
-        //            "  value: %zd bytes\n",
-        //         cfg.host,
-        //         cfg.port,
-        //         cfg.nonBlocking ? "true" : "false",
-        //         (long long int)cfg.clusterVersion,
-        //         (long long int)cfg.identity,
-        //         cfg.key,
-        //         sizeof(cfg.value));
-
-        //     status = Get(cfg.host, cfg.port,
-        //                  cfg.clusterVersion, cfg.identity, cfg.key,
-        //                  valueKey, version, newVersion,
-        //                  cfg.value, sizeof(cfg.value));
-        //     if (status == 0)
-        //     {
-        //         printf("\nGet executed successfully!\n\n");
-        //     }
-        //     else
-        //     {
-        //         printf("\nGet operation failed! status=%d\n\n", status);
-        //         return -1;
-        //     }
-        // }
+            status = Get(cfg.host, cfg.port, cfg.nonBlocking, cfg.clusterVersion, cfg.identity, cfg.hmacKey,
+                         false, cfg.value, sizeof(cfg.value));
+            if (status == 0)
+            {
+                printf("\nGet executed successfully!\n\n");
+            }
+            else
+            {
+                printf("\nGet operation failed! status=%d\n\n", status);
+                return -1;
+            }
+        }
 
         else
         {
