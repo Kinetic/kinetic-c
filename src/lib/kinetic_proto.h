@@ -24,7 +24,7 @@
 #ifndef _KINETIC_PROTO
 #define _KINETIC_PROTO
 
-#include <protobuf-c/protobuf-c.h>
+#include "protobuf-c.h"
 #include <stdbool.h>
 
 PROTOBUF_C__BEGIN_DECLS
