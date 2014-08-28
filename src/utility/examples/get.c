@@ -25,10 +25,9 @@ int Get(const char* host,
         bool nonBlocking,
         int64_t clusterVersion,
         int64_t identity,
-        char* hmacKey,
-        bool metadataOnly,
-        uint8_t* value,
-        int64_t valueLength)
+        ByteArray hmacKey,
+        Kinetic_KeyValue* metadata,
+        ByteArray value)
 {
     KineticOperation operation;
     KineticPDU request, response;
@@ -44,7 +43,7 @@ int Get(const char* host,
 
     operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
 
-    status = KineticClient_Get(&operation, hmacKey, metadataOnly, value, valueLength);
+    status = KineticClient_Get(&operation, metadata, value);
 
     if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
     {

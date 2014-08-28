@@ -41,25 +41,28 @@ void tearDown(void)
 void test_KineticClient_Put_should_execute_PUT_operation(void)
 {
     KineticConnection connection;
-    KineticOperation operation;
-    KineticMessage requestMsg;
-    KineticPDU request, response;
-    KineticProto responseProto = KINETIC_PROTO_INIT;
-    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND_INIT;
-    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS_INIT;
+
+    KineticProto responseProto = KINETIC_PROTO__INIT;
+    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
+    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS__INIT;
+    ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
+
     KineticProto_Status_StatusCode status;
-    int64_t identity = 1234;
-    int64_t connectionID = 5678;
-
     BYTE_ARRAY_CREATE(value, PDU_VALUE_MAX_LEN);
-    const ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
-    const ByteArray dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
-    const ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+    const Kinetic_KeyValue const metadata = {
+        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
+        .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
+        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
+        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+    };
 
-    request.connection = &connection;
+    KineticMessage requestMsg;
     KINETIC_MESSAGE_INIT(&requestMsg);
-    request.message = &requestMsg;
+    KineticPDU request;
+    KINETIC_PDU_INIT(&request, &connection, &requestMsg);
+
+    KineticPDU response;
 
     response.message = NULL;
     response.proto = &responseProto;
@@ -68,18 +71,18 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     response.proto->command->status->has_code = true;
     response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
-    KINETIC_CONNECTION_INIT(&connection, 12, "some_key");
+    KINETIC_CONNECTION_INIT(&connection, 1234, hmacKey);
     KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg, NULL, 0);
-    KineticPDU_Init_Expect(&response, &connection, NULL, NULL, 0);
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
+    KineticPDU_Init_Expect(&response, &connection, NULL);
+    KineticOperation operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
 
-    KineticOperation_BuildPut_Expect(&operation, key, newVersion, dbVersion, tag, value);
+    KineticOperation_BuildPut_Expect(&operation, &metadata, value);
     KineticPDU_Send_ExpectAndReturn(&request, true);
     KineticPDU_Receive_ExpectAndReturn(&response, true);
     KineticPDU_Status_ExpectAndReturn(&response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 
-    status = KineticClient_Put(&operation, key, newVersion, dbVersion, tag, value);
+    status = KineticClient_Put(&operation, &metadata, value);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, response.connection);

@@ -25,14 +25,10 @@
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
 void KineticOperation_BuildPut(KineticOperation* operation,
-    const ByteArray key,
-    const ByteArray newVersion,
-    const ByteArray dbVersion,
-    const ByteArray tag,
+    const Kinetic_KeyValue* metadata,
     const ByteArray value);
 void KineticOperation_BuildGet(KineticOperation* operation,
-    const ByteArray key,
-    const ByteArray value,
-    bool metadataOnly);
+    const Kinetic_KeyValue* metadata,
+    const ByteArray value);
 
 #endif // _KINETIC_OPERATION_H

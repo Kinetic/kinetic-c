@@ -246,10 +246,8 @@ namespace :system do
   end
 end
 
-desc "Run client test utility"
-task :run do
-  execute_command "./build/artifacts/release/kinetic-c --noop", "Running client test utility"
-end
+desc "Test examples (test utility)"
+task :run => ['tests:utility']
 
 desc "Prepend license to source files"
 task :apply_license do
@@ -269,12 +267,6 @@ desc "Enable verbose output"
 task :verbose do
   Rake::Task[:verbosity].invoke(3) # Set verbosity to 3:semi-obnoxious for debugging
 end
-
-task :default => [
-  'test:delta',
-  'release'
-]
-
 
 namespace :tests do
 
@@ -393,6 +385,11 @@ desc "Run full CI build"
 task :ci => [
   'clobber',
   'all'
+]
+
+task :default => [
+  'test:delta',
+  'release'
 ]
 
 END {

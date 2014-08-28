@@ -18,14 +18,9 @@
 *
 */
 
-#ifndef _KINETIC_MESSAGE_H
-#define _KINETIC_MESSAGE_H
-
 #include "kinetic_types.h"
-#include "kinetic_hmac.h"
 
-void KineticMessage_Init(KineticMessage* const message);
-void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-    const Kinetic_KeyValue* metadata);
-
-#endif // _KINETIC_MESSAGE_H
+uint32_t KineticNBO_FromHostU32(uint32_t valueHost);
+uint32_t KineticNBO_ToHostU32(uint32_t valueNBO);
+uint64_t KineticNBO_FromHostU64(uint64_t valueHost);
+uint64_t KineticNBO_ToHostU64(uint64_t valueNBO);

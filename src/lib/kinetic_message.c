@@ -26,26 +26,40 @@ void KineticMessage_Init(KineticMessage* const message)
     KINETIC_MESSAGE_INIT(message);
 }
 
+// e.g. CONFIG_FIELD_BYTE_ARRAY(key, message->keyValue, metadata)
+#define CONFIG_FIELD_BYTE_ARRAY(_name, _field, _config) { \
+    if (_config->_name.data != NULL && _config->_name.len > 0) { \
+        _field._name = _config->_name; \
+        _field.has_ ## _name = true; \
+    } \
+}
+
+// #define CONFIG_OPTIONAL_FIELD_ENUM(name, field, message) { \
+//     message->keyValue.(name) = ((int)metadata->algorithm > 0); \
+//     if (message->keyValue.has_(name)) { \
+//         message->keyValue.algorithm = algorithm; } }
+
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-    ByteArray key, ByteArray newVersion, ByteArray dbVersion, ByteArray tag,
-    bool metaDataOnly)
+    const Kinetic_KeyValue* metadata)
 {
+    assert(metadata != NULL);
+
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
     message->command.body = &message->body;
     message->proto.command->body = &message->body;
-    message->command.body->keyvalue = &message->keyValue;
-    message->proto.command->body->keyvalue = &message->keyValue;
+    message->command.body->keyValue = &message->keyValue;
+    message->proto.command->body->keyValue = &message->keyValue;
 
     // Set keyValue fields appropriately
-    message->keyValue.has_key = true;
-    message->keyValue.key = key;
-    message->keyValue.has_newversion = true;
-    message->keyValue.newversion = newVersion;
-    message->keyValue.has_dbversion = true;
-    message->keyValue.dbversion = dbVersion;
-    message->keyValue.has_tag = true;
-    message->keyValue.tag = tag;
-    message->keyValue.has_metadataonly = metaDataOnly;
-    message->keyValue.metadataonly = metaDataOnly;
+    CONFIG_FIELD_BYTE_ARRAY(key, message->keyValue, metadata);
+    CONFIG_FIELD_BYTE_ARRAY(newVersion, message->keyValue, metadata);
+    CONFIG_FIELD_BYTE_ARRAY(dbVersion, message->keyValue, metadata);
+    CONFIG_FIELD_BYTE_ARRAY(tag, message->keyValue, metadata);
+    message->keyValue.has_algorithm = (bool)((int)metadata->algorithm > 0);
+    if (message->keyValue.has_algorithm) {
+        message->keyValue.algorithm = metadata->algorithm; }
+    message->keyValue.has_metadataOnly = metadata->metadataOnly;
+    if (message->keyValue.has_metadataOnly) {
+        message->keyValue.metadataOnly = metadata->metadataOnly; }
 }

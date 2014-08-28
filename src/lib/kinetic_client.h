@@ -93,10 +93,7 @@ KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation);
  * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
  */
 KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
-    ByteArray key,
-    ByteArray newVersion,
-    ByteArray dbVersion,
-    ByteArray tag,
+    const Kinetic_KeyValue* metadata,
     ByteArray value);
 
 /**
@@ -107,8 +104,7 @@ KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
  * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
  */
 KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
-    const ByteArray key,
-    const ByteArray value,
-    bool metadataOnly);
+    const Kinetic_KeyValue* metadata,
+    const ByteArray value);
 
 #endif // _KINETIC_CLIENT_H

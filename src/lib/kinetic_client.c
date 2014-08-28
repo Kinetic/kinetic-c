@@ -65,6 +65,8 @@ bool KineticClient_Connect(
         return false;
     }
 
+    // KINETIC_CONNECTION_INIT(connection, identity, key);
+
     if (!KineticConnection_Connect(connection, host, port, nonBlocking,
         clusterVersion, identity, key))
     {
@@ -120,10 +122,8 @@ KineticOperation KineticClient_CreateOperation(
     }
 
     KineticMessage_Init(requestMsg);
-    KineticPDU_Init(request, connection, requestMsg, BYTE_ARRAY_NONE);
-
-    // KineticMessage_Init(responseMsg);
-    KineticPDU_Init(response, connection, NULL, BYTE_ARRAY_NONE);
+    KineticPDU_Init(request, connection, requestMsg);
+    KineticPDU_Init(response, connection, NULL);
 
     op.connection = connection;
     op.request = request;
@@ -151,10 +151,7 @@ KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation)
 }
 
 KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
-    const ByteArray key,
-    const ByteArray newVersion,
-    const ByteArray dbVersion,
-    const ByteArray tag,
+    const Kinetic_KeyValue* metadata,
     const ByteArray value)
 {
     assert(operation->connection != NULL);
@@ -166,32 +163,40 @@ KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
     assert(value.len <= PDU_VALUE_MAX_LEN);
 
     // Initialize request
-    KineticOperation_BuildPut(operation, key, newVersion, dbVersion, tag, value);
+    KineticOperation_BuildPut(operation, metadata, value);
 
     // Execute the operation
     return KineticClient_ExecuteOperation(operation);
 }
 
 KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
-    const ByteArray key,
-    const ByteArray value,
-    bool metadataOnly)
+    const Kinetic_KeyValue* metadata,
+    const ByteArray value)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->request->message != NULL);
     assert(operation->response != NULL);
     assert(operation->response->message == NULL);
-    assert(key.data != NULL);
-    assert(key.len <= KINETIC_MAX_KEY_LEN);
-    if (!metadataOnly)
+    assert(metadata != NULL);
+    assert(metadata->key.data != NULL);
+    assert(metadata->key.len <= KINETIC_MAX_KEY_LEN);
+
+    ByteArray responseValue = BYTE_ARRAY_NONE;
+    if (!metadata->metadataOnly)
     {
-        assert(value.data != NULL);
-        assert(value.len <= PDU_VALUE_MAX_LEN);
+        if (value.data != NULL)
+        {
+            responseValue = value;
+        }
+        else
+        {
+            responseValue = (ByteArray){.data = operation->response->valueBuffer};
+        }
     }
 
     // Initialize request
-    KineticOperation_BuildGet(operation, key, value, metadataOnly);
+    KineticOperation_BuildGet(operation, metadata, responseValue);
 
     // Execute the operation
     return KineticClient_ExecuteOperation(operation);

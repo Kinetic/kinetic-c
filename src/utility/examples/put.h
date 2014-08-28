@@ -36,16 +36,14 @@
  *
  * @return                  Returns true if operation succeeded, false otherwise
  */
-int Put(const char* host,
-        int port,
-        bool nonBlocking,
-        int64_t clusterVersion,
-        int64_t identity,
-        const ByteArray hmacKey,
-        const ByteArray valueKey,
-        const ByteArray newVersion,
-        const ByteArray dbVersion,
-        const ByteArray tag,
-        const ByteArray value);
+int Put(
+    const char* host,
+    int port,
+    bool nonBlocking,
+    int64_t clusterVersion,
+    int64_t identity,
+    ByteArray hmacKey,
+    Kinetic_KeyValue* metadata,
+    const ByteArray value);
 
 #endif // _PUT_H

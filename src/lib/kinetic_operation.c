@@ -35,42 +35,44 @@ void KineticOperation_BuildNoop(KineticOperation* operation)
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
-    operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
-    operation->request->message->header.has_messagetype = true;
+    operation->request->message->header.messageType = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
+    operation->request->message->header.has_messageType = true;
 }
 
 void KineticOperation_BuildPut(KineticOperation* operation,
-    const ByteArray key,
-    const ByteArray newVersion,
-    const ByteArray dbVersion,
-    const ByteArray tag,
+    const Kinetic_KeyValue* metadata,
     const ByteArray value)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
-    operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_PUT;
-    operation->request->message->header.has_messagetype = true;
+    operation->request->message->header.messageType = KINETIC_PROTO_MESSAGE_TYPE_PUT;
+    operation->request->message->header.has_messageType = true;
 
-    operation->request->value = value.data;
-    operation->request->valueLength = value.len;
+    KineticMessage_ConfigureKeyValue(operation->request->message, metadata);
 
-    KineticMessage_ConfigureKeyValue(operation->request->message,
-        key, newVersion, dbVersion, tag, false);
+    operation->request->value = value;
 }
 
 void KineticOperation_BuildGet(KineticOperation* operation,
-    const ByteArray key, const ByteArray value, bool metadataOnly)
+    const Kinetic_KeyValue* metadata,
+    const ByteArray value)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
-    operation->request->message->header.messagetype = KINETIC_PROTO_MESSAGE_TYPE_GET;
-    operation->request->message->header.has_messagetype = true;
+    operation->request->message->header.messageType = KINETIC_PROTO_MESSAGE_TYPE_GET;
+    operation->request->message->header.has_messageType = true;
 
-    operation->request->value = NULL;
-    operation->request->valueLength = 0;
+    operation->request->value = BYTE_ARRAY_NONE;
+    if (value.data != NULL)
+    {
+        operation->response->value = value;
+    }
+    else
+    {
+        operation->response->value.data = operation->response->valueBuffer;
+    }
 
-    KineticMessage_ConfigureKeyValue(operation->request->message,
-        key, BYTE_ARRAY_NONE, BYTE_ARRAY_NONE, BYTE_ARRAY_NONE, metadataOnly);
+    KineticMessage_ConfigureKeyValue(operation->request->message, metadata);
 }

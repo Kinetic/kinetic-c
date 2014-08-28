@@ -27,6 +27,7 @@
 #include "kinetic_hmac.h"
 #include "kinetic_connection.h"
 #include "kinetic_socket.h"
+#include "kinetic_nbo.h"
 
 #include "unity.h"
 #include "unity_helper.h"

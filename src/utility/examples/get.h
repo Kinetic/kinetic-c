@@ -30,9 +30,9 @@
  * @param port              Port to establish socket connection on
  * @param clusterVersion    Cluster version to use for the operation
  * @param identity          Identity to use for the operation (Must have ACL setup on Kinetic Device)
- * @param key               Shared secret key used for the identity for HMAC calculation
- * @param data              Pointer to data buffer to for data read
- * @param len               Length of data to request from device
+ * @param hmacKey           Shared secret key used for the identity for HMAC calculation
+ * @param metadataOnly      Set to true to request only the meta-data for the stored object
+ * @param value             ByteArray with preallocated buffer to store the received data in
  *
  * @return                  Returns true if operation succeeded, false otherwise
  */
@@ -41,9 +41,8 @@ int Get(const char* host,
         bool nonBlocking,
         int64_t clusterVersion,
         int64_t identity,
-        char* hmacKey,
-        bool metadataOnly,
-        uint8_t* value,
-        int64_t valueLength);
+        ByteArray hmacKey,
+        Kinetic_KeyValue* metadata,
+        ByteArray value);
 
 #endif // _GET_H

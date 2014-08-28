@@ -51,111 +51,78 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_add_to_message(void)
 {
     KineticMessage message;
-    ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
-    ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
-    ByteArray dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
-    ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+    Kinetic_KeyValue metadata = {
+        .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
+        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
+        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
+        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+    };
 
     KineticMessage_Init(&message);
 
-    // struct _KineticProto_KeyValue
-    // {
-    //     ProtobufCMessage base;
-    //     protobuf_c_boolean has_newversion;
-    //     ProtobufCBinaryData newversion;
-    //     protobuf_c_boolean has_force;
-    //     protobuf_c_boolean force;
-    //     protobuf_c_boolean has_key;
-    //     ProtobufCBinaryData key;
-    //     protobuf_c_boolean has_dbversion;
-    //     ProtobufCBinaryData dbversion;
-    //     protobuf_c_boolean has_tag;
-    //     ProtobufCBinaryData tag;
-    //     protobuf_c_boolean has_algorithm;
-    //     KineticProto_Algorithm algorithm;
-    //     protobuf_c_boolean has_metadataonly;
-    //     protobuf_c_boolean metadataonly;
-    //     protobuf_c_boolean has_synchronization;
-    //     KineticProto_Synchronization synchronization;
-    // };
-
-    KineticMessage_ConfigureKeyValue(&message, key, newVersion, dbVersion, tag, false);
+    KineticMessage_ConfigureKeyValue(&message, &metadata);
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
     TEST_ASSERT_EQUAL_PTR(&message.body, message.proto.command->body);
-    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.proto.command->body->keyvalue);
+    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.proto.command->body->keyValue);
 
     // Validate keyValue fields
-    TEST_ASSERT_TRUE(message.keyValue.has_newversion);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(newVersion, message.keyValue.newversion);
+    TEST_ASSERT_TRUE(message.keyValue.has_newVersion);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.newVersion, message.keyValue.newVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_key);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(key, message.keyValue.key);
-    TEST_ASSERT_TRUE(message.keyValue.has_dbversion);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(dbVersion, message.keyValue.dbversion);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.key, message.keyValue.key);
+    TEST_ASSERT_TRUE(message.keyValue.has_dbVersion);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.dbVersion, message.keyValue.dbVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(tag, message.keyValue.tag);
-    TEST_ASSERT_FALSE(message.keyValue.has_metadataonly);
-    TEST_ASSERT_FALSE(message.keyValue.metadataonly);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.tag, message.keyValue.tag);
+    TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_ALGORITHM_SHA1, message.keyValue.algorithm);
+    TEST_ASSERT_FALSE(message.keyValue.has_metadataOnly);
+    TEST_ASSERT_FALSE(message.keyValue.metadataOnly);
 
     // Not implemented as of (8/13/2014)
     TEST_ASSERT_FALSE(message.keyValue.has_force);
-    TEST_ASSERT_FALSE(message.keyValue.has_algorithm);
-    TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
+    TEST_ASSERT_FALSE(message.keyValue.has_Synchronization);
 }
 
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_metadata_only_and_add_to_message(void)
 {
     KineticMessage message;
-    ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
-    ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
-    ByteArray dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
-    ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+    Kinetic_KeyValue metadata = {
+        .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
+        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
+        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
+        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .metadataOnly = true,
+    };
 
     KineticMessage_Init(&message);
 
-    // struct _KineticProto_KeyValue
-    // {
-    //     ProtobufCMessage base;
-    //     protobuf_c_boolean has_newversion;
-    //     ProtobufCBinaryData newversion;
-    //     protobuf_c_boolean has_force;
-    //     protobuf_c_boolean force;
-    //     protobuf_c_boolean has_key;
-    //     ProtobufCBinaryData key;
-    //     protobuf_c_boolean has_dbversion;
-    //     ProtobufCBinaryData dbversion;
-    //     protobuf_c_boolean has_tag;
-    //     ProtobufCBinaryData tag;
-    //     protobuf_c_boolean has_algorithm;
-    //     KineticProto_Algorithm algorithm;
-    //     protobuf_c_boolean has_metadataonly;
-    //     protobuf_c_boolean metadataonly;
-    //     protobuf_c_boolean has_synchronization;
-    //     KineticProto_Synchronization synchronization;
-    // };
-
-    KineticMessage_ConfigureKeyValue(&message, key, newVersion, dbVersion, tag, true);
+    KineticMessage_ConfigureKeyValue(&message, &metadata);
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
     TEST_ASSERT_EQUAL_PTR(&message.body, message.proto.command->body);
-    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.proto.command->body->keyvalue);
+    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.proto.command->body->keyValue);
 
     // Validate keyValue fields
-    TEST_ASSERT_TRUE(message.keyValue.has_newversion);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(newVersion, message.keyValue.newversion);
+    TEST_ASSERT_TRUE(message.keyValue.has_newVersion);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.newVersion, message.keyValue.newVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_key);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(key, message.keyValue.key);
-    TEST_ASSERT_TRUE(message.keyValue.has_dbversion);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(dbVersion, message.keyValue.dbversion);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.key, message.keyValue.key);
+    TEST_ASSERT_TRUE(message.keyValue.has_dbVersion);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.dbVersion, message.keyValue.dbVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(tag, message.keyValue.tag);
-    TEST_ASSERT_TRUE(message.keyValue.has_metadataonly);
-    TEST_ASSERT_TRUE(message.keyValue.metadataonly);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.tag, message.keyValue.tag);
+    TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_ALGORITHM_SHA1, message.keyValue.algorithm);
+    TEST_ASSERT_TRUE(message.keyValue.has_metadataOnly);
+    TEST_ASSERT_TRUE(message.keyValue.metadataOnly);
 
     // Not implemented as of (8/13/2014)
     TEST_ASSERT_FALSE(message.keyValue.has_force);
-    TEST_ASSERT_FALSE(message.keyValue.has_algorithm);
-    TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
+    TEST_ASSERT_FALSE(message.keyValue.has_Synchronization);
 }

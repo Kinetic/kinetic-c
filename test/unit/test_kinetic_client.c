@@ -135,8 +135,8 @@ void test_KineticClient_CreateOperation_should_create_configure_and_return_a_val
     KineticMessage requestMsg;
 
     KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg, BYTE_ARRAY_NONE);
-    KineticPDU_Init_Expect(&response, &connection, NULL, BYTE_ARRAY_NONE);
+    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
+    KineticPDU_Init_Expect(&response, &connection, NULL);
 
     op = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
 

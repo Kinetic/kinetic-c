@@ -34,11 +34,12 @@
  *
  * @return                  Returns true if operation succeeded, false otherwise
  */
-int NoOp(const char* host,
-        int port,
-        bool nonBlocking,
-        int64_t clusterVersion,
-        int64_t identity,
-        const char* hmacKey);
+int NoOp(
+    const char* host,
+    int port,
+    bool nonBlocking,
+    int64_t clusterVersion,
+    int64_t identity,
+    ByteArray hmacKey);
 
 #endif // _NOOP_H

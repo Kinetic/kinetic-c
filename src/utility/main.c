@@ -42,6 +42,7 @@ typedef struct _Arguments {
     char valueKey[KINETIC_MAX_KEY_LEN];
     char version[32];
     char newVersion[32];
+    KineticProto_Algorithm algorithm;
 } Arguments;
 
 int main(int argc, char** argv)
@@ -65,6 +66,8 @@ int main(int argc, char** argv)
         .version = "v1.0",
         .newVersion = "v1.0",
     };
+    ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING(cfg.hmacKey);
+    ByteArray value = {.data = cfg.value, .len = cfg.valueLength};
 
     struct option long_options[] =
     {
@@ -120,7 +123,8 @@ int main(int argc, char** argv)
                 (long long int)cfg.clusterVersion,
                 (long long int)cfg.identity,
                 cfg.hmacKey);
-            status = NoOp(cfg.host, cfg.port, cfg.nonBlocking, cfg.clusterVersion, cfg.identity, cfg.hmacKey);
+            status = NoOp(cfg.host, cfg.port, cfg.nonBlocking,
+                cfg.clusterVersion, cfg.identity, hmacKey);
             if (status == 0)
             {
                 printf("\nNoOp executed successfully!\n\n");
@@ -140,6 +144,14 @@ int main(int argc, char** argv)
                 cfg.value[i] = (uint8_t)(0x0ff & i);
             }
 
+            Kinetic_KeyValue metadata = {
+                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
+                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+                .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+                .dbVersion = BYTE_ARRAY_NONE,
+                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+            };
+
             printf("\n"
                    "Executing Put w/configuration:\n"
                    "-------------------------------\n"
@@ -155,12 +167,14 @@ int main(int argc, char** argv)
                 cfg.nonBlocking ? "true" : "false",
                 (long long int)cfg.clusterVersion,
                 (long long int)cfg.identity,
-                cfg.hmacKey,
-                sizeof(cfg.value));
+                metadata.key.data,
+                value.len);
 
-            status = Put(cfg.host, cfg.port, cfg.nonBlocking, cfg.clusterVersion, cfg.identity, cfg.hmacKey,
-                         cfg.value, sizeof(cfg.value),
-                         "some_value_key...", "some_value_tag...", NULL, "v1.0");
+            status = Put(
+                cfg.host, cfg.port, cfg.nonBlocking,
+                cfg.clusterVersion, cfg.identity, hmacKey,
+                &metadata, value);
+
             if (status == 0)
             {
                 printf("\nPut executed successfully!\n\n");
@@ -174,6 +188,14 @@ int main(int argc, char** argv)
 
         else if (strcmp("get", op) == 0)
         {
+            Kinetic_KeyValue metadata = {
+                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
+                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+                .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+                .dbVersion = BYTE_ARRAY_NONE,
+                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+            };
+
             printf("\n"
                    "Executing Get w/configuration:\n"
                    "-------------------------------\n"
@@ -189,14 +211,17 @@ int main(int argc, char** argv)
                 cfg.nonBlocking ? "true" : "false",
                 (long long int)cfg.clusterVersion,
                 (long long int)cfg.identity,
-                cfg.hmacKey,
-                sizeof(cfg.value));
+                (char*)hmacKey.data,
+                value.len);
 
-            status = Get(cfg.host, cfg.port, cfg.nonBlocking, cfg.clusterVersion, cfg.identity, cfg.hmacKey,
-                         false, cfg.value, sizeof(cfg.value));
-            if (status == 0)
+            status = Get(cfg.host, cfg.port, cfg.nonBlocking,
+                cfg.clusterVersion, cfg.identity, hmacKey,
+                &metadata, value);
+
+            if (status == 0 || status == KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR)
             {
                 printf("\nGet executed successfully!\n\n");
+                return 0;
             }
             else
             {

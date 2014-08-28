@@ -44,21 +44,17 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
     KineticOperation operation;
     KineticMessage requestMsg;
     KineticPDU request, response;
-    KineticProto responseProto = KINETIC_PROTO_INIT;
-    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND_INIT;
-    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS_INIT;
     KineticProto_Status_StatusCode status;
-    int64_t identity = 1234;
-    int64_t connectionID = 5678;
+    ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key");
 
     request.connection = &connection;
     KINETIC_MESSAGE_INIT(&requestMsg);
     request.message = &requestMsg;
 
-    KINETIC_CONNECTION_INIT(&connection, 12, "some_key");
+    KINETIC_CONNECTION_INIT(&connection, 12, key);
     KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg, NULL, 0);
-    KineticPDU_Init_Expect(&response, &connection, NULL, NULL, 0);
+    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
+    KineticPDU_Init_Expect(&response, &connection, NULL);
     operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
 
     KineticOperation_BuildNoop_Expect(&operation);

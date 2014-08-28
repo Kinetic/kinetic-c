@@ -35,7 +35,4 @@ void KineticConnection_Disconnect(KineticConnection* const connection);
 
 void KineticConnection_IncrementSequence(KineticConnection* const connection);
 
-void KineticConnection_ConfigureHeader(KineticConnection* const connection,
-    KineticProto_Header* const header);
-
 #endif // _KINETIC_CONNECTION_H

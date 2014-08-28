@@ -25,6 +25,7 @@
 #include "kinetic_pdu.h"
 #include "kinetic_socket.h"
 #include "kinetic_connection.h"
+#include "kinetic_nbo.h"
 #include "protobuf-c.h"
 #include "socket99.h"
 
@@ -62,7 +63,7 @@ void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_
 void test_KineticLogger_Log_should_write_log_message_to_file(void)
 {
     const char* msg = "Some really important message!";
-    char content[64], cwd[1024], test_file[1024];
+    char content[64];
     size_t length;
 
     sprintf(content, "%s\n", msg);

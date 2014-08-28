@@ -27,6 +27,7 @@
 #include "kinetic_hmac.h"
 #include "kinetic_connection.h"
 #include "kinetic_socket.h"
+#include "kinetic_nbo.h"
 
 #include "unity.h"
 #include "unity_helper.h"
@@ -46,6 +47,7 @@ static SystemTestFixture Fixture = {
 
 static ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
 static ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+static ByteArray testValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
 
 void setUp(void)
 {
@@ -67,12 +69,17 @@ void tearDown(void)
 //
 void test_Put_should_create_new_object_on_device(void)
 {
+    Kinetic_KeyValue metadata = {
+        .key = valueKey,
+        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .tag = tag,
+        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+    };
+    Fixture.instance.value = testValue;
+
     KineticProto_Status_StatusCode status =
         KineticClient_Put(&Fixture.instance.operation,
-            BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-            valueKey,
-            BYTE_ARRAY_NONE,
-            tag,
+            &metadata,
             Fixture.instance.value);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
@@ -81,12 +88,15 @@ void test_Put_should_create_new_object_on_device(void)
 
 void test_Put_should_update_object_data_on_device(void)
 {
+    Kinetic_KeyValue metadata = {
+        .key = valueKey,
+        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .tag = tag,
+        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+    };
     KineticProto_Status_StatusCode status =
         KineticClient_Put(&Fixture.instance.operation,
-            BYTE_ARRAY_NONE,
-            valueKey,
-            BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-            BYTE_ARRAY_INIT_FROM_CSTRING("SomeOtherTag"),
+            &metadata,
             Fixture.instance.value);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
@@ -95,20 +105,26 @@ void test_Put_should_update_object_data_on_device(void)
 
 void test_Put_should_update_object_data_on_device_and_update_version(void)
 {
+    Kinetic_KeyValue metadata = {
+        .key = valueKey,
+        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
+        .tag = tag,
+        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+    };
     KineticProto_Status_StatusCode status =
         KineticClient_Put(&Fixture.instance.operation,
-            BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
-            valueKey,
-            BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-            tag,
+            &metadata,
             Fixture.instance.value);
 
     Fixture.instance.testIgnored = true;
-    TEST_IGNORE_MESSAGE("Java simulator is responding with VERSION_MISMATCH(8), "
-                        "but request should be valid and update dbVersion!");
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+
+    TEST_IGNORE_MESSAGE(
+        "Java simulator is responding with VERSION_MISMATCH(8) if algorithm "
+        "un-specified on initial PUT and subsequent request updates dbVersion!");
 }
 
 /*******************************************************************************

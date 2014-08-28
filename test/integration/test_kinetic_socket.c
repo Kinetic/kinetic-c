@@ -69,7 +69,7 @@ void tearDown(void)
     if (pProto)
     {
         LOG("Freeing protobuf...");
-        KineticProto_free_unpacked(pProto, NULL);
+        KineticProto__free_unpacked(pProto, NULL);
     }
 
     if (FileDesc >= 0)
@@ -79,17 +79,14 @@ void tearDown(void)
         FileDesc = 0;
         sleep(2);
     }
+    LOG("--------------------------------------------------------------------------------");
 }
 
-void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
-{
-    LOG(__func__);
+void test_KineticSocket_KINETIC_PORT_should_be_8123(void) {LOG_LOCATION;
     TEST_ASSERT_EQUAL(8123, KINETIC_PORT);
 }
 
-void test_KineticSocket_Connect_should_create_a_socket_connection(void)
-{
-    LOG(__func__);
+void test_KineticSocket_Connect_should_create_a_socket_connection(void) {LOG_LOCATION;
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }
@@ -98,9 +95,7 @@ void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 // fail, but system test passes. Most likely an issue with KineticRuby server
 #if defined(__APPLE__)
 
-void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void)
-{
-    LOG(__func__);
+void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void) {LOG_LOCATION;
     bool success = false;
     uint8_t bufferData[40];
     ByteArray buffer = {.data = bufferData, .len = sizeof(bufferData)};
@@ -119,16 +114,15 @@ void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void
     KineticSocket_Read(FileDesc, buffer);
 }
 
-void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_specified_socket(void)
-{
-    LOG(__func__);
+
+void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_specified_socket(void) {LOG_LOCATION;
     bool success = false;
     uint8_t bufferData[5];
     ByteArray buffer = {.data = bufferData, .len = sizeof(bufferData)};
 
     KineticMessage_Init(&Msg);
-    Msg.header.clusterversion = 12345678;
-    Msg.header.has_clusterversion = true;
+    Msg.header.clusterVersion = 12345678;
+    Msg.header.has_clusterVersion = true;
     Msg.header.identity = -12345678;
     Msg.header.has_identity = true;
 
@@ -147,9 +141,9 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     KineticSocket_Read(FileDesc, buffer);
 }
 
-void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
-{
-    LOG(__func__);
+
+
+void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void) {LOG_LOCATION;
     bool success = false;
     ByteArray readRequest = BYTE_ARRAY_INIT_FROM_CSTRING("read(5)");
     uint8_t bufferData[5];
@@ -167,9 +161,7 @@ void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
     TEST_ASSERT_TRUE_MESSAGE(success, "Failed to read from socket!");
 }
 
-void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_within_configured_timeout(void)
-{
-    LOG(__func__);
+void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_within_configured_timeout(void) {LOG_LOCATION;
     bool success = false;
     uint8_t bufferData[64];
     ByteArray buffer = {.data = bufferData, .len = sizeof(bufferData)};
@@ -182,9 +174,7 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
     TEST_ASSERT_FALSE_MESSAGE(success, "Expected socket to timeout waiting on data!");
 }
 
-void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
-{
-    LOG(__func__);
+void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void) {LOG_LOCATION;
     bool success = false;
     const ByteArray readRequest = BYTE_ARRAY_INIT_FROM_CSTRING("readProto()");
     uint8_t bufferData[PDU_VALUE_MAX_LEN];
@@ -218,9 +208,7 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     LOG("Kinetic ProtoBuf read successfully!");
 }
 
-void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_specified_length_fails_to_be_read_within_timeout(void)
-{
-    LOG(__func__);
+void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_specified_length_fails_to_be_read_within_timeout(void) {LOG_LOCATION;
     bool success = false;
     ByteArray readRequest = BYTE_ARRAY_INIT_FROM_CSTRING("readProto()");
     uint8_t bufferData[256];

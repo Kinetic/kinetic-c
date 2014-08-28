@@ -27,33 +27,38 @@
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
-#include "mock_kinetic_logger.h"
+#include "kinetic_logger.h"
 #include "mock_kinetic_operation.h"
 
 void setUp(void)
 {
+    KineticLogger_Init(NULL);
 }
 
 void tearDown(void)
 {
 }
 
-void test_KineticClient_Get_should_execute_GET_operation(void)
+void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_buffer_with_value(void)
 {
     KineticConnection connection;
     KineticOperation operation;
     KineticMessage requestMsg;
     KineticPDU request, response;
-    KineticProto responseProto = KINETIC_PROTO_INIT;
-    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND_INIT;
-    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS_INIT;
+    KINETIC_PDU_INIT(&request, &connection, &requestMsg);
+    KINETIC_PDU_INIT(&response, &connection, NULL);
+    KineticProto responseProto = KINETIC_PROTO__INIT;
+    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
+    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS__INIT;
     KineticProto_Status_StatusCode status;
-    int64_t identity = 1234;
-    int64_t connectionID = 5678;
 
     ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key");
     ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
-    BYTE_ARRAY_CREATE(value, PDU_VALUE_MAX_LEN);
+    ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("How I wish... How I wish you were here...");
+    Kinetic_KeyValue metadata = {
+        .key = key,
+        .tag = tag,
+    };
 
     request.connection = &connection;
     KINETIC_MESSAGE_INIT(&requestMsg);
@@ -66,18 +71,66 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     response.proto->command->status->has_code = true;
     response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
-    KINETIC_CONNECTION_INIT(&connection, 12, "some_key");
+    KINETIC_CONNECTION_INIT(&connection, 12, key);
     KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg, NULL, 0);
-    KineticPDU_Init_Expect(&response, &connection, NULL, NULL, 0);
+    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
+    KineticPDU_Init_Expect(&response, &connection, NULL);
     operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
 
-    KineticOperation_BuildGet_Expect(&operation, key, value, false);
+    KineticOperation_BuildGet_Expect(&operation, &metadata, value);
     KineticPDU_Send_ExpectAndReturn(&request, true);
     KineticPDU_Receive_ExpectAndReturn(&response, true);
     KineticPDU_Status_ExpectAndReturn(&response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 
-    status = KineticClient_Get(&operation, key, value, false);
+    status = KineticClient_Get(&operation, &metadata, value);
+
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+    TEST_ASSERT_EQUAL_PTR(&connection, response.connection);
+}
+
+void test_KineticClient_Get_should_execute_GET_operation_and_populate_embedded_PDU_buffer_for_value_if_none_supplied(void)
+{
+    KineticConnection connection;
+    KineticOperation operation;
+    KineticMessage requestMsg;
+    KineticPDU request, response;
+    KineticProto responseProto = KINETIC_PROTO__INIT;
+    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
+    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS__INIT;
+    KineticProto_Status_StatusCode status;
+
+    ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key");
+    ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+    Kinetic_KeyValue metadata = {
+        .key = key,
+        .tag = tag,
+    };
+    request.connection = &connection;
+    KINETIC_MESSAGE_INIT(&requestMsg);
+    request.message = &requestMsg;
+
+    response.message = NULL;
+    response.proto = &responseProto;
+    response.proto->command = &responseCommand;
+    response.proto->command->status = &responseStatus;
+    response.proto->command->status->has_code = true;
+    response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+
+    KINETIC_CONNECTION_INIT(&connection, 12, key);
+    KineticMessage_Init_Expect(&requestMsg);
+    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
+    KineticPDU_Init_Expect(&response, &connection, NULL);
+    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+
+    ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("We're just 2 lost souls swimming in a fish bowl.. year after year...");
+    memcpy(response.valueBuffer, value.data, value.len);
+    ByteArray expectedValue = {.data = response.valueBuffer, .len = 0};
+    KineticOperation_BuildGet_Expect(&operation, &metadata, expectedValue);
+    KineticPDU_Send_ExpectAndReturn(&request, true);
+    KineticPDU_Receive_ExpectAndReturn(&response, true);
+    KineticPDU_Status_ExpectAndReturn(&response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+
+    status = KineticClient_Get(&operation, &metadata, BYTE_ARRAY_NONE);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, response.connection);
@@ -89,16 +142,18 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
     KineticOperation operation;
     KineticMessage requestMsg;
     KineticPDU request, response;
-    KineticProto responseProto = KINETIC_PROTO_INIT;
-    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND_INIT;
-    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS_INIT;
+    KineticProto responseProto = KINETIC_PROTO__INIT;
+    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
+    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS__INIT;
     KineticProto_Status_StatusCode status;
-    int64_t identity = 1234;
-    int64_t connectionID = 5678;
 
     ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key");
     ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
-    bool metadataOnly = false;
+    Kinetic_KeyValue metadata = {
+        .key = key,
+        .tag = tag,
+        .metadataOnly = true,
+    };
 
     request.connection = &connection;
     KINETIC_MESSAGE_INIT(&requestMsg);
@@ -111,18 +166,18 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
     response.proto->command->status->has_code = true;
     response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
-    KINETIC_CONNECTION_INIT(&connection, 12, "some_key");
+    KINETIC_CONNECTION_INIT(&connection, 12, key);
     KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg, NULL, 0);
-    KineticPDU_Init_Expect(&response, &connection, NULL, NULL, 0);
+    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
+    KineticPDU_Init_Expect(&response, &connection, NULL);
     operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
 
-    KineticOperation_BuildGet_Expect(&operation, key, BYTE_ARRAY_NONE, true);
+    KineticOperation_BuildGet_Expect(&operation, &metadata, BYTE_ARRAY_NONE);
     KineticPDU_Send_ExpectAndReturn(&request, true);
     KineticPDU_Receive_ExpectAndReturn(&response, true);
     KineticPDU_Status_ExpectAndReturn(&response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 
-    status = KineticClient_Get(&operation, key, BYTE_ARRAY_NONE, true);
+    status = KineticClient_Get(&operation, &metadata, BYTE_ARRAY_NONE);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, response.connection);

@@ -1,7 +1,7 @@
 ---
 
 :project:
-  :use_exceptions: false
+  :use_exceptions: true
   :use_test_preprocessor: true
   :use_deep_dependencies: true
   :build_root: build
@@ -74,6 +74,7 @@
     uint32_t:   UINT32
     int8_t:     INT8
     bool_t:     BOOL
+    size_t:     INT
 
 :tools:
   :test_includes_preprocessor:
@@ -87,9 +88,21 @@
       - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
       - -D"$": DEFINES_TEST_PREPROCESS
       - -DGNU_COMPILER
-      # - -std=c99
+      - -std=c99
       - -Wall
       - ${1}
+  :test_compiler:
+    :executable: gcc
+    :arguments:
+      - -I"$": COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR
+      - -I"$": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
+      - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
+      - -DGNU_COMPILER
+      - -std=c99
+      - -Wall
+      - -g
+      - -c ${1}
+      - -o ${2}
   :test_linker:
     :executable: gcc
     :name: test_linker
@@ -112,7 +125,7 @@
       - -I"$": 'COLLECTION_PATHS_RELEASE_TOOLCHAIN_INCLUDE'
       - -D"$": 'COLLECTION_DEFINES_RELEASE_AND_VENDOR'
       - -DGNU_COMPILER
-      # - -std=c99
+      - -std=c99
       - -Wall
       - "-c \"${1}\""
       - "-o \"${2}\""

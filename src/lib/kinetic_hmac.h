@@ -22,10 +22,16 @@
 #define _KINETIC_HMAC_H
 
 #include "kinetic_types.h"
-#include "kinetic_message.h"
+#include "kinetic_proto.h"
 
-void KineticHMAC_Init(KineticHMAC * hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm);
-void KineticHMAC_Populate(KineticHMAC* hmac, KineticProto* proto, const ByteArray key);
-bool KineticHMAC_Validate(const KineticProto* proto, const ByteArray key);
+void KineticHMAC_Init(KineticHMAC * hmac,
+    KineticProto_Security_ACL_HMACAlgorithm algorithm);
+
+void KineticHMAC_Populate(KineticHMAC* hmac,
+    KineticProto* proto,
+    const ByteArray key);
+
+bool KineticHMAC_Validate(const KineticProto* proto,
+    const ByteArray key);
 
 #endif  // _KINETIC_HMAC_H

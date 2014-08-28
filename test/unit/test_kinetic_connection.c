@@ -29,17 +29,15 @@
 #include "kinetic_hmac.h"
 #include "kinetic_logger.h"
 #include "kinetic_logger.h"
-#include "protobuf-c.h"
+#include "kinetic_nbo.h"
 #include <string.h>
 #include <time.h>
 
 static KineticConnection Connection, Expected;
 static const int64_t ClusterVersion = 12;
 static const int64_t Identity = 1234;
-static const char* Key = "12345678";
-static const int64_t ConnectionID = 1234;
+static const ByteArray Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
 static KineticMessage MessageOut, MessageIn;
-static KineticPDU PDUOut, PDUIn;
 
 void setUp(void)
 {
@@ -69,8 +67,8 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
     TEST_ASSERT_INT64_WITHIN(curTime, Connection.connectionID, 1);
     TEST_ASSERT_EQUAL_INT64(0, Connection.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(1234, Connection.identity);
-    TEST_ASSERT_EQUAL_STRING(Key, Connection.key);
-    TEST_ASSERT_EQUAL_INT64(-1, Connection.sequence);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(Key, Connection.key);
+    TEST_ASSERT_EQUAL_INT64(0, Connection.sequence);
 }
 
 void test_KineticConnection_Connect_should_report_a_failed_connection(void)
@@ -81,7 +79,7 @@ void test_KineticConnection_Connect_should_report_a_failed_connection(void)
         .port = 1234,
         .socketDescriptor = -1,
         .host = "invalid-host.com",
-        .key = "some_hmac_key",
+        .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key"),
         .identity = 456789,
     };
     Expected = Connection;
@@ -101,7 +99,7 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
     Connection = (KineticConnection){
         .host = "invalid-host.com",
         .nonBlocking = true,
-        .key = "invalid",
+        .key = BYTE_ARRAY_INIT_FROM_CSTRING("invalid"),
         .socketDescriptor = -1,
         .connected = false,
     };
@@ -112,7 +110,8 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
     Expected.identity = 12;
     Expected.socketDescriptor = 24;
     strcpy(Expected.host, "valid-host.com");
-    strcpy(Expected.key, "some_hmac_key");
+    // strcpy(Expected.key.data, "some_hmac_key");
+    // Expected.key.len =
 
     KineticSocket_Connect_ExpectAndReturn(Expected.host, Expected.port, false, Expected.socketDescriptor);
 
@@ -126,7 +125,7 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
     TEST_ASSERT_FALSE(Connection.nonBlocking);
     TEST_ASSERT_EQUAL_INT64(Expected.clusterVersion, Connection.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(Expected.identity, Connection.identity);
-    TEST_ASSERT_EQUAL_STRING(Expected.key, Connection.key);
+    TEST_ASSERT_EQUAL_BYTE_ARRAY(Expected.key, Connection.key);
     TEST_ASSERT_EQUAL(Expected.socketDescriptor, Connection.socketDescriptor);
 }
 
@@ -137,9 +136,9 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_
         .nonBlocking = false,
         .port = 1234,
         .socketDescriptor = -1 ,
-        .host = "invalid-host.com",
-        .key = "some_hmac_key",
-        .identity = 456789,
+        .host = "valid-host.com",
+        .key = Key,
+        .identity = Identity,
     };
     Expected = Connection;
 
@@ -169,26 +168,3 @@ void test_KineticConnection_IncrementSequence_should_increment_the_sequence_coun
 
     TEST_ASSERT_EQUAL_INT64(58, Connection.sequence);
 }
-
-void test_KineticConnection_ConfigureHeader_should_set_the_exchange_fields_in_the_specified_header(void)
-{
-    KineticProto_Header header = KINETIC_PROTO_HEADER_INIT;
-    Connection.identity = 12;
-    Connection.sequence = 24;
-    Connection.clusterVersion = 1122334455667788;
-    Connection.identity = 37;
-    Connection.connectionID = 8765432;
-
-    KineticConnection_ConfigureHeader(&Connection, &header);
-
-    TEST_ASSERT_TRUE(header.has_clusterversion);
-    TEST_ASSERT_EQUAL_INT64(1122334455667788, header.clusterversion);
-    TEST_ASSERT_TRUE(header.has_identity);
-    TEST_ASSERT_EQUAL_INT64(37, header.identity);
-    TEST_ASSERT_TRUE(header.has_connectionid);
-    TEST_ASSERT_EQUAL_INT64(8765432, header.connectionid);
-    TEST_ASSERT_TRUE(header.has_sequence);
-    TEST_ASSERT_EQUAL_INT64(24, header.sequence);
-}
-
-

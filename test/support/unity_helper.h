@@ -53,10 +53,10 @@ if (expected != actual) { \
     char err[128]; \
     sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
         protobuf_c_enum_descriptor_get_value( \
-            &KineticProto_status_status_code_descriptor, expected)->name, \
+            &KineticProto_status_status_code__descriptor, expected)->name, \
         expected, \
         protobuf_c_enum_descriptor_get_value( \
-            &KineticProto_status_status_code_descriptor, actual)->name, \
+            &KineticProto_status_status_code__descriptor, actual)->name, \
         actual); \
     TEST_FAIL_MESSAGE(err); \
 }
@@ -107,7 +107,7 @@ if (expected != actual) { \
 
 /** Custom Unity assertion for validating equality of ByteArrays */
 #define TEST_ASSERT_EQUAL_BYTE_ARRAY(expected, actual) \
-    TEST_ASSERT_EQUAL_INT((expected).len, (actual).len); \
+    TEST_ASSERT_EQUAL_INT_MESSAGE((expected).len, (actual).len, "ByteArray lengths do not match!"); \
     TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((expected).data, (actual).data, (expected).len, "ByteArrays are not equal");
 
 /** Custom Unity assertion for validating empty ByteArrays */

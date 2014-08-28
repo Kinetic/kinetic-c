@@ -67,13 +67,22 @@
 #include <time.h>
 
 typedef ProtobufCBinaryData ByteArray;
-#define BYTE_ARRAY_NONE (ByteArray){}
-#define BYTE_ARRAY_INIT(_data) (ByteArray){.data = (uint8_t*)(_data), .len = sizeof(_data)};
-#define BYTE_ARRAY_INIT_WITH_LEN(_data, _len) (ByteArray){.data = (uint8_t*)(_data), .len = (_len)};
-#define BYTE_ARRAY_CREATE(name, len) uint8_t ( name ## _buf )[(len)]; ByteArray (name) = BYTE_ARRAY_INIT(( name ## _buf ));
-#define BYTE_ARRAY_CREATE_WITH_DATA(_name, _data) uint8_t ( _name ## _data )[sizeof(_data)]; ByteArray (_name) = {.data = (uint8_t*(_data)), .len = sizeof(data)};
-#define BYTE_ARRAY_CREATE_WITH_BUFFER(_name, _buf) ByteArray (_name) = {.data = (uint8_t*(_buf)), .len = 0};
-#define BYTE_ARRAY_INIT_FROM_CSTRING(str) (ByteArray){.data = (uint8_t*)(str), .len = strlen(str)}
+#define BYTE_ARRAY_NONE \
+    (ByteArray){}
+#define BYTE_ARRAY_INIT(_data) (ByteArray) \
+    {.data = (uint8_t*)(_data), .len = sizeof(_data)};
+#define BYTE_ARRAY_INIT_WITH_LEN(_data, _len) \
+    (ByteArray){.data = (uint8_t*)(_data), .len = (_len)};
+#define BYTE_ARRAY_CREATE(name, len) \
+    uint8_t ( name ## _buf )[(len)]; ByteArray (name) = BYTE_ARRAY_INIT(( name ## _buf ));
+#define BYTE_ARRAY_CREATE_WITH_DATA(_name, _data) \
+    uint8_t ( _name ## _data )[sizeof(_data)]; ByteArray (_name) = {.data = (uint8_t*(_data)), .len = sizeof(data)};
+#define BYTE_ARRAY_CREATE_WITH_BUFFER(_name, _buf) \
+    ByteArray (_name) = {.data = (uint8_t*(_buf)), .len = 0};
+#define BYTE_ARRAY_INIT_FROM_CSTRING(str) \
+    (ByteArray){.data = (uint8_t*)(str), .len = strlen(str)}
+#define BYTE_ARRAY_FILL_WITH_DUMMY_DATA(_array) \
+    {int i=0; for(;i<(_array).len;++i){(_array).data[i] = (uint8_t)(i & 0xFFu);} }
 
 // Kinetic Device Client Connection
 typedef struct _KineticConnection
@@ -108,13 +117,15 @@ typedef struct _KineticConnection
     int64_t sequence;
 } KineticConnection;
 #define KINETIC_CONNECTION_INIT(_con, _id, _key) { \
-    *_con = (KineticConnection) { \
+    (*_con) = (KineticConnection) { \
         .socketDescriptor = -1, \
         .connectionID = time(NULL), \
-        .identity = _id, \
-        .sequence = -1, \
-        .key = _key, \
+        .identity = (_id), \
+        .sequence = 0, \
     }; \
+    (*_con).key = (ByteArray){.data = (*_con).keyData, .len = (_key).len}; \
+    if ((_key).data != NULL && (_key).len > 0) { \
+        memcpy((_con)->keyData, (_key).data, (_key).len); } \
 }
 
 
@@ -122,8 +133,8 @@ typedef struct _KineticConnection
 typedef struct _KineticHMAC
 {
     KineticProto_Security_ACL_HMACAlgorithm algorithm;
-    unsigned int valueLength;
-    uint8_t value[KINETIC_HMAC_MAX_LEN];
+    uint32_t len;
+    uint8_t data[KINETIC_HMAC_MAX_LEN];
 } KineticHMAC;
 
 
@@ -142,12 +153,12 @@ typedef struct _KineticMessage
     uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
 } KineticMessage;
 #define KINETIC_MESSAGE_INIT(msg) { \
-    KineticProto_init(&(msg)->proto); \
-    KineticProto_command_init(&(msg)->command); \
-    KineticProto_header_init(&(msg)->header); \
-    KineticProto_status_init(&(msg)->status); \
-    KineticProto_body_init(&(msg)->body); \
-    KineticProto_key_value_init(&(msg)->keyValue); \
+    KineticProto__init(&(msg)->proto); \
+    KineticProto_command__init(&(msg)->command); \
+    KineticProto_header__init(&(msg)->header); \
+    KineticProto_status__init(&(msg)->status); \
+    KineticProto_body__init(&(msg)->body); \
+    KineticProto_key_value__init(&(msg)->keyValue); \
     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
     (msg)->proto.hmac.data = (msg)->hmacData; \
     (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; \
@@ -155,6 +166,21 @@ typedef struct _KineticMessage
     (msg)->command.header = &(msg)->header; \
     (msg)->proto.command = &(msg)->command; \
 }
+
+
+// KeyValue meta-data
+typedef struct _Kinetic_KeyValue
+{
+    ByteArray key;
+    ByteArray newVersion;
+    ByteArray dbVersion;
+    ByteArray tag;
+    bool force;
+    KineticProto_Algorithm algorithm;
+    bool metadataOnly;
+    KineticProto_Synchronization synchronization;
+    ByteArray value;
+} Kinetic_KeyValue;
 
 
 // Kinetic PDU Header
@@ -173,9 +199,9 @@ typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
 // Kinetic PDU
 typedef struct _KineticPDU
 {
-    // Binary PDU header (binary packed in NBO)
-    KineticPDUHeader header;
-    uint8_t rawHeader[sizeof(KineticPDUHeader)];
+    // Binary PDU header
+    KineticPDUHeader header;    // Header struct in native byte order
+    KineticPDUHeader headerNBO; // Header struct in network-byte-order
 
     // Message associated with this PDU instance
     KineticMessage* message;
@@ -183,8 +209,12 @@ typedef struct _KineticPDU
     uint32_t protobufLength; // Embedded in header in NBO byte order (this is for reference)
     uint8_t protobufScratch[PDU_PROTO_MAX_LEN];
 
+    // Object meta-data to be used/populated if provided and pertinent to the opearation
+    Kinetic_KeyValue* metadata;
+
     // Value data associated with PDU (if any)
-    ByteArray value; // Embedded in header in NBO byte order (this is native copy)
+    uint8_t valueBuffer[PDU_VALUE_MAX_LEN];
+    ByteArray value;
 
     // Embedded HMAC instance
     KineticHMAC hmac;
@@ -193,25 +223,33 @@ typedef struct _KineticPDU
     KineticConnection* connection;
 } KineticPDU;
 
-// Disabled, since currently unused... TODO: delete me later?
-// #define KINETIC_PDU_INIT(pdu, connection, message, value, valueLength) { \
-//     assert(pdu != NULL); \
-//     assert(connection != NULL); \
-//     pdu = { \
-//         .connection = connection, \
-//         .message = message, \
-//         .proto = NULL, \
-//         .protobufLength = 0, \
-//         .value = value, \
-//         .valueLength = valueLength, \
-//         .header.versionPrefix = (uint8_t)'F', \
-//     }; \
-//     if (message != NULL) \
-//     { \
-//         KineticConnection_ConfigureHeader(connection, &message->header); \
-//     } \
-// }
+#define KINETIC_HEADER_INIT(_con, _msg) { \
+    assert((_con) != NULL); \
+    KineticMessage* pmsg = (_msg); \
+    if ((pmsg) != NULL) { \
+        pmsg->header.has_clusterVersion = true; \
+        pmsg->header.clusterVersion = (_con)->clusterVersion; \
+        pmsg->header.has_identity = true; \
+        pmsg->header.identity = (_con)->identity; \
+        pmsg->header.has_connectionID = true; \
+        pmsg->header.connectionID = (_con)->connectionID; \
+        pmsg->header.has_sequence = true; \
+        pmsg->header.sequence = (_con)->sequence; \
+    } \
+}
 
+#define KINETIC_PDU_INIT(_pdu, _con, _msg) { \
+    assert((_pdu) != NULL); \
+    assert((_con) != NULL); \
+    KineticMessage* pmsg = (_msg); \
+    (_pdu)->connection = (_con); \
+    (_pdu)->message = pmsg; \
+    (_pdu)->proto = NULL; \
+    (_pdu)->protobufLength = 0; \
+    (_pdu)->value = BYTE_ARRAY_NONE; \
+    (_pdu)->header.versionPrefix = (uint8_t)'F'; \
+    KINETIC_HEADER_INIT((_con), (_msg)); \
+}
 
 // Kinetic Operation
 typedef struct _KineticOperation
@@ -219,7 +257,6 @@ typedef struct _KineticOperation
     KineticConnection* connection;
     KineticPDU* request;
     KineticPDU* response;
-    ByteArray value;
 } KineticOperation;
 
 

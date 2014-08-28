@@ -19,9 +19,7 @@
 */
 
 #include "kinetic_connection.h"
-#include "kinetic_proto.h"
 #include "kinetic_socket.h"
-#include "kinetic_pdu.h"
 #include <string.h>
 
 bool KineticConnection_Connect(KineticConnection* const connection,
@@ -34,8 +32,11 @@ bool KineticConnection_Connect(KineticConnection* const connection,
     connection->socketDescriptor = -1;
     connection->clusterVersion = clusterVersion;
     connection->identity = identity;
+
     strcpy(connection->host, host);
+    connection->key.data = connection->keyData;
     memcpy(connection->key.data, key.data, key.len);
+    connection->key.len = key.len;
 
     connection->socketDescriptor = KineticSocket_Connect(
         connection->host, connection->port, nonBlocking);
@@ -56,17 +57,4 @@ void KineticConnection_Disconnect(KineticConnection* connection)
 void KineticConnection_IncrementSequence(KineticConnection* const connection)
 {
     connection->sequence++;
-}
-
-void KineticConnection_ConfigureHeader(KineticConnection* const connection,
-    KineticProto_Header* const header)
-{
-    header->has_clusterversion = true;
-    header->clusterversion = connection->clusterVersion;
-    header->has_identity = true;
-    header->identity = connection->identity;
-    header->has_connectionid = true;
-    header->connectionid = connection->connectionID;
-    header->has_sequence = true;
-    header->sequence = connection->sequence;
 }
