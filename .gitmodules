@@ -1,6 +1,6 @@
 [submodule "vendor/protobuf-c"]
 	path = vendor/protobuf-c
-	url = https://github.com/protobuf-c/protobuf-c
+	url = https://github.com/atomicobject/protobuf-c
 	branch = master
 [submodule "vendor/kinetic-protocol"]
 	path = vendor/kinetic-protocol
