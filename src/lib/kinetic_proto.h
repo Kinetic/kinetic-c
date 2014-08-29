@@ -338,7 +338,8 @@ struct  _KineticProto_GetLog_Utilization
   bool has_value;
   float value;
 };
-#define KINETIC_PROTO_GET_LOG_UTILIZATION__INIT (KineticProto_GetLog_Utilization){PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log_utilization__descriptor)}
+#define KINETIC_PROTO_GET_LOG_UTILIZATION__INIT \
+ {PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log_utilization__descriptor)}
 
 struct  _KineticProto_GetLog_Temperature
 {
