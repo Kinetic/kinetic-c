@@ -285,7 +285,9 @@ struct  _KineticProto_Setup
   bool has_firmwareDownload;
   bool firmwareDownload;
 };
-#define KINETIC_PROTO_SETUP__INIT (KineticProto_Setup){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_setup__descriptor)}
+#define KINETIC_PROTO_SETUP__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_setup__descriptor) \
+    , 0,0, 0,0, 0,{0,NULL}, 0,{0,NULL}, 0,0 }
 
 struct  _KineticProto_P2POperation_Operation
 {
