@@ -168,7 +168,9 @@ struct  _KineticProto_Command
   KineticProto_Body *body;
   KineticProto_Status *status;
 };
-#define KINETIC_PROTO_COMMAND__INIT (KineticProto_Command){.base = PROTOBUF_C_MESSAGE_INIT (&KineticProto_command__descriptor)}
+#define KINETIC_PROTO_COMMAND__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_command__descriptor) \
+    , NULL, NULL, NULL }
 
 struct  _KineticProto_Header
 {
@@ -192,8 +194,9 @@ struct  _KineticProto_Header
   bool has_backgroundScan;
   bool backgroundScan;
 };
-#define KINETIC_PROTO_HEADER__INIT (KineticProto_Header){.base = PROTOBUF_C_MESSAGE_INIT (&KineticProto_header__descriptor)}
-
+#define KINETIC_PROTO_HEADER__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_header__descriptor) \
+    , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
 
 struct  _KineticProto_Body
 {
@@ -205,8 +208,9 @@ struct  _KineticProto_Body
   KineticProto_GetLog *getLog;
   KineticProto_Security *security;
 };
-#define KINETIC_PROTO_BODY__INIT (KineticProto_Body){.base = PROTOBUF_C_MESSAGE_INIT (&KineticProto_body__descriptor)};
-
+#define KINETIC_PROTO_BODY__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_body__descriptor) \
+    , NULL, NULL, NULL, NULL, NULL, NULL }
 
 struct  _KineticProto_Status
 {
@@ -217,8 +221,9 @@ struct  _KineticProto_Status
   bool has_detailedMessage;
   ProtobufCBinaryData detailedMessage;
 };
-#define KINETIC_PROTO_STATUS__INIT (KineticProto_Status){.base = PROTOBUF_C_MESSAGE_INIT (&KineticProto_status__descriptor),}
-
+#define KINETIC_PROTO_STATUS__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_status__descriptor) \
+    , 0,0, NULL, 0,{0,NULL} }
 
 struct  _KineticProto_KeyValue
 {
@@ -240,8 +245,9 @@ struct  _KineticProto_KeyValue
   bool has_Synchronization;
   KineticProto_Synchronization synchronization;
 };
-#define KINETIC_PROTO_KEY_VALUE__INIT (KineticProto_KeyValue){.base = PROTOBUF_C_MESSAGE_INIT (&KineticProto_key_value__descriptor)}
-
+#define KINETIC_PROTO_KEY_VALUE__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_key_value__descriptor) \
+    , 0,{0,NULL}, 0,0, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,0, 0,0, 0,0 }
 
 struct  _KineticProto_Range
 {
@@ -261,8 +267,9 @@ struct  _KineticProto_Range
   size_t n_key;
   ProtobufCBinaryData *key;
 };
-#define KINETIC_PROTO_RANGE__INIT (KineticProto_Range){.base = PROTOBUF_C_MESSAGE_INIT (&KineticProto_range__descriptor)}
-
+#define KINETIC_PROTO_RANGE__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_range__descriptor) \
+    , 0,{0,NULL}, 0,{0,NULL}, 0,0, 0,0, 0,0, 0,0, 0,NULL }
 
 struct  _KineticProto_Setup
 {
@@ -294,8 +301,9 @@ struct  _KineticProto_P2POperation_Operation
   KineticProto_Status *status;
   KineticProto_P2POperation *p2pop;
 };
-#define KINETIC_PROTO_P2_POPERATION_OPERATION__INIT (KineticProto_P2POperation_Operation){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_p2_poperation_operation__descriptor)}
-
+#define KINETIC_PROTO_P2_POPERATION_OPERATION__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_operation__descriptor) \
+    , 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,0, NULL, NULL }
 
 struct  _KineticProto_P2POperation_Peer
 {
@@ -306,7 +314,9 @@ struct  _KineticProto_P2POperation_Peer
   bool has_tls;
   bool tls;
 };
-#define KINETIC_PROTO_P2_POPERATION_PEER__INIT (KineticProto_P2POperation_Peer){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_p2_poperation_peer__descriptor)}
+#define KINETIC_PROTO_P2_POPERATION_PEER__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_peer__descriptor) \
+    , NULL, 0,0, 0,0 }
 
 struct  _KineticProto_P2POperation
 {
@@ -317,7 +327,9 @@ struct  _KineticProto_P2POperation
   bool has_allChildOperationsSucceeded;
   bool allChildOperationsSucceeded;
 };
-#define KINETIC_PROTO_P2_POPERATION__INIT (KineticProto_P2POperation){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_p2_poperation__descriptor)}
+#define KINETIC_PROTO_P2_POPERATION__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation__descriptor) \
+    , NULL, 0,NULL, 0,0 }
 
 struct  _KineticProto_GetLog_Utilization
 {
@@ -341,7 +353,9 @@ struct  _KineticProto_GetLog_Temperature
   bool has_target;
   float target;
 };
-#define KINETIC_PROTO_GET_LOG_TEMPERATURE__INIT (KineticProto_GetLog_Temperature){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log_temperature__descriptor)}
+#define KINETIC_PROTO_GET_LOG_TEMPERATURE__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_temperature__descriptor) \
+    , NULL, 0,0, 0,0, 0,0, 0,0 }
 
 struct  _KineticProto_GetLog_Capacity
 {
@@ -351,7 +365,9 @@ struct  _KineticProto_GetLog_Capacity
   bool has_portionFull;
   float portionFull;
 };
-#define KINETIC_PROTO_GET_LOG_CAPACITY__INIT (KineticProto_GetLog_Capacity){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log_capacity__descriptor)}
+#define KINETIC_PROTO_GET_LOG_CAPACITY__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_capacity__descriptor) \
+    , 0,0, 0,0 }
 
 struct  _KineticProto_GetLog_Configuration_Interface
 {
@@ -364,7 +380,9 @@ struct  _KineticProto_GetLog_Configuration_Interface
   bool has_ipv6Address;
   ProtobufCBinaryData ipv6Address;
 };
-#define KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE__INIT (KineticProto_GetLog_Configuration_Interface){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log_configuration_interface__descriptor)}
+#define KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_configuration_interface__descriptor) \
+    , NULL, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL} }
 
 struct  _KineticProto_GetLog_Configuration
 {
@@ -388,7 +406,9 @@ struct  _KineticProto_GetLog_Configuration
   bool has_tlsPort;
   int32_t tlsPort;
 };
-#define KINETIC_PROTO_GET_LOG_CONFIGURATION__INIT (KineticProto_GetLog_Configuration){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log_configuration__descriptor)}
+#define KINETIC_PROTO_GET_LOG_CONFIGURATION__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_configuration__descriptor) \
+    , NULL, NULL, 0,{0,NULL}, 0,{0,NULL}, NULL, NULL, NULL, NULL, NULL, NULL, 0,NULL, 0,0, 0,0 }
 
 struct  _KineticProto_GetLog_Statistics
 {
@@ -400,7 +420,9 @@ struct  _KineticProto_GetLog_Statistics
   bool has_bytes;
   uint64_t bytes;
 };
-#define KINETIC_PROTO_GET_LOG_STATISTICS__INIT (KineticProto_GetLog_Statistics){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log_statistics__descriptor)}
+#define KINETIC_PROTO_GET_LOG_STATISTICS__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_statistics__descriptor) \
+    , 0,0, 0,0, 0,0 }
 
 struct  _KineticProto_GetLog_Limits
 {
@@ -424,7 +446,9 @@ struct  _KineticProto_GetLog_Limits
   bool has_maxKeyRangeCount;
   uint32_t maxKeyRangeCount;
 };
-#define KINETIC_PROTO_GET_LOG_LIMITS__INIT (KineticProto_GetLog_Limits){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log_limits__descriptor)}
+#define KINETIC_PROTO_GET_LOG_LIMITS__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_limits__descriptor) \
+    , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
 
 struct  _KineticProto_GetLog
 {
@@ -443,7 +467,9 @@ struct  _KineticProto_GetLog
   ProtobufCBinaryData messages;
   KineticProto_GetLog_Limits *limits;
 };
-#define KINETIC_PROTO_GET_LOG__INIT (KineticProto_GetLog){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_get_log__descriptor)}
+#define KINETIC_PROTO_GET_LOG__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__descriptor) \
+    , 0,NULL, 0,NULL, 0,NULL, NULL, NULL, 0,NULL, 0,{0,NULL}, NULL }
 
 struct  _KineticProto_Security_ACL_Scope
 {
@@ -457,7 +483,9 @@ struct  _KineticProto_Security_ACL_Scope
   bool has_TlsRequired;
   bool TlsRequired;
 };
-#define KINETIC_PROTO_SECURITY_ACL_SCOPE__INIT (KineticProto_Security_ACL_Scope){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_security_acl_scope__descriptor)}
+#define KINETIC_PROTO_SECURITY_ACL_SCOPE__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl_scope__descriptor) \
+    , 0,0, 0,{0,NULL}, 0,NULL, 0,0 }
 
 struct  _KineticProto_Security_ACL
 {
@@ -471,7 +499,9 @@ struct  _KineticProto_Security_ACL
   size_t n_scope;
   KineticProto_Security_ACL_Scope **scope;
 };
-#define KINETIC_PROTO_SECURITY_ACL__INIT (KineticProto_Security_ACL){.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_security_acl__descriptor)}
+#define KINETIC_PROTO_SECURITY_ACL__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl__descriptor) \
+    , 0,0, 0,{0,NULL}, 0,0, 0,NULL }
 
 struct  _KineticProto_Security
 {
@@ -479,7 +509,9 @@ struct  _KineticProto_Security
   size_t n_acl;
   KineticProto_Security_ACL **acl;
 };
-#define KINETIC_PROTO_SECURITY__INIT (KineticProto_Security){.base = PROTOBUF_C_MESSAGE_INIT (&KineticProto_security__descriptor)}
+#define KINETIC_PROTO_SECURITY__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security__descriptor) \
+    , 0,NULL }
 
 struct  _KineticProto
 {
@@ -488,7 +520,9 @@ struct  _KineticProto
   bool has_hmac;
   ProtobufCBinaryData hmac;
 };
-#define KINETIC_PROTO__INIT (KineticProto){.base = PROTOBUF_C_MESSAGE_INIT (&KineticProto__descriptor)}
+#define KINETIC_PROTO__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&KineticProto__descriptor) \
+    , NULL, 0,{0,NULL} }
 
 /* KineticProto_Command methods */
 void KineticProto_command__init
