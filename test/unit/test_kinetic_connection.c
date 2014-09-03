@@ -18,20 +18,23 @@
 *
 */
 
-#include "unity.h"
 #include "kinetic_connection.h"
-#include "protobuf-c.h"
 #include "kinetic_proto.h"
-#include "unity_helper.h"
-#include "mock_kinetic_socket.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
 #include "kinetic_hmac.h"
 #include "kinetic_logger.h"
 #include "kinetic_logger.h"
 #include "kinetic_nbo.h"
+
+#include "mock_kinetic_socket.h"
+#include "protobuf-c/protobuf-c.h"
 #include <string.h>
 #include <time.h>
+
+
+#include "unity.h"
+#include "unity_helper.h"
 
 static KineticConnection Connection, Expected;
 static const int64_t ClusterVersion = 12;
@@ -67,7 +70,7 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
     TEST_ASSERT_INT64_WITHIN(curTime, Connection.connectionID, 1);
     TEST_ASSERT_EQUAL_INT64(0, Connection.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(1234, Connection.identity);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(Key, Connection.key);
+    TEST_ASSERT_EQUAL_ByteArray(Key, Connection.key);
     TEST_ASSERT_EQUAL_INT64(0, Connection.sequence);
 }
 
@@ -110,8 +113,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
     Expected.identity = 12;
     Expected.socketDescriptor = 24;
     strcpy(Expected.host, "valid-host.com");
-    // strcpy(Expected.key.data, "some_hmac_key");
-    // Expected.key.len =
 
     KineticSocket_Connect_ExpectAndReturn(Expected.host, Expected.port, false, Expected.socketDescriptor);
 
@@ -125,7 +126,7 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
     TEST_ASSERT_FALSE(Connection.nonBlocking);
     TEST_ASSERT_EQUAL_INT64(Expected.clusterVersion, Connection.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(Expected.identity, Connection.identity);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(Expected.key, Connection.key);
+    TEST_ASSERT_EQUAL_ByteArray(Expected.key, Connection.key);
     TEST_ASSERT_EQUAL(Expected.socketDescriptor, Connection.socketDescriptor);
 }
 

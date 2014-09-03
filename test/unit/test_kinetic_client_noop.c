@@ -19,16 +19,16 @@
 */
 
 #include "kinetic_client.h"
-#include "unity.h"
-#include "unity_helper.h"
 #include <stdio.h>
-#include "protobuf-c.h"
+#include "protobuf-c/protobuf-c.h"
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_logger.h"
 #include "mock_kinetic_operation.h"
+#include "unity.h"
+#include "unity_helper.h"
 
 void setUp(void)
 {
@@ -55,7 +55,7 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
     KineticMessage_Init_Expect(&requestMsg);
     KineticPDU_Init_Expect(&request, &connection, &requestMsg);
     KineticPDU_Init_Expect(&response, &connection, NULL);
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
 
     KineticOperation_BuildNoop_Expect(&operation);
     KineticPDU_Send_ExpectAndReturn(&request, true);

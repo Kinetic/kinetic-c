@@ -22,7 +22,7 @@
 
 void KineticMessage_Init(KineticMessage* const message)
 {
-    // Initialize protobuf fields and ssemble the message
+    assert(message != NULL);
     KINETIC_MESSAGE_INIT(message);
 }
 
@@ -42,6 +42,7 @@ void KineticMessage_Init(KineticMessage* const message)
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     const Kinetic_KeyValue* metadata)
 {
+    assert(message != NULL);
     assert(metadata != NULL);
 
     // Enable command body and keyValue fields by pointing at

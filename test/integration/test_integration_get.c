@@ -22,7 +22,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include <stdio.h>
-#include "protobuf-c.h"
+#include "protobuf-c/protobuf-c.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
@@ -64,7 +64,7 @@ void test_Get_should_retrieve_an_object_from_the_device_and_store_in_supplied_by
     TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
 
     // Create the operation
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
 
     KineticProto responseProto = KINETIC_PROTO__INIT;
     KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
@@ -103,15 +103,20 @@ void test_Get_should_retrieve_an_object_from_the_device_and_store_in_supplied_by
     KineticSocket_WriteProtobuf_ExpectAndReturn(socketDesc, &requestMsg.proto, true);
 
     // Fake value/payload length
-    ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum...");
-    response.header.protobufLength = 123;
+    const char* valueData = "lorem ipsum...";
+    ByteArray value = {.data = (uint8_t*)valueData, .len = strlen(valueData)};
+    response.header = (KineticPDUHeader) {
+        .versionPrefix = (uint8_t)'F',
+        .protobufLength = response.header.protobufLength,
+        .valueLength = value.len,
+    };
     response.headerNBO = (KineticPDUHeader) {
         .versionPrefix = (uint8_t)'F',
         .protobufLength = KineticNBO_FromHostU32(response.header.protobufLength),
-        .valueLength = value.len,
+        .valueLength = KineticNBO_FromHostU32(value.len),
     };
     ByteArray responseProtobuf = {
-        .data = response.protobufScratch,
+        .data = response.protobufRaw,
         .len = response.header.protobufLength
     };
     KineticPDU_AttachValuePayload(&response, value);
@@ -121,17 +126,17 @@ void test_Get_should_retrieve_an_object_from_the_device_and_store_in_supplied_by
     KineticSocket_Read_ExpectAndReturn(socketDesc, responseHeaderRaw, true);
     KineticSocket_ReadProtobuf_ExpectAndReturn(socketDesc, &response.proto, responseProtobuf, true);
     ByteArray expectedValueArray = value;
-    KineticSocket_Read_ExpectAndReturn(socketDesc, expectedValueArray, true);
+    KineticSocket_Read_ExpectAndReturn(socketDesc, value, true);
 
-    TEST_IGNORE_MESSAGE("FIXME: Buffer reference issue in the GET integration test");
+    LOG_LOCATION;
+    KineticLogger_LogByteArray("expectedValueArray", expectedValueArray);
+    KineticLogger_LogByteArray("value", value);
 
     // Execute the operation
     KineticProto_Status_StatusCode status =
         KineticClient_Get(&operation, &metadata, value);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-
-    // ByteArray expectedValue = {.data = };
     TEST_ASSERT_EQUAL_PTR(value.data, response.value.data);
 }
 
@@ -145,8 +150,6 @@ void test_Get_should_create_retrieve_an_object_from_the_device_and_store_in_embe
     const int64_t identity = 1234;
     const ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("123abcXYZ");
     const int socketDesc = 783;
-    ByteArray requestHeader = {.data = (uint8_t*)&request.header, .len = sizeof(KineticPDUHeader)};
-    ByteArray responseHeaderRaw = {.data = (uint8_t*)&response.headerNBO, .len = sizeof(KineticPDUHeader)};
     KineticConnection connection;
     KineticMessage requestMsg;
 
@@ -159,7 +162,7 @@ void test_Get_should_create_retrieve_an_object_from_the_device_and_store_in_embe
     TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
 
     // Create the operation
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
 
     KineticProto responseProto = KINETIC_PROTO__INIT;
     KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
@@ -193,37 +196,47 @@ void test_Get_should_create_retrieve_an_object_from_the_device_and_store_in_embe
 
     // Send the request
     KineticConnection_IncrementSequence_Expect(&connection);
+    ByteArray requestHeader = {.data = (uint8_t*)&request.header, .len = sizeof(KineticPDUHeader)};
     KineticSocket_Write_ExpectAndReturn(socketDesc, requestHeader, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(socketDesc, &requestMsg.proto, true);
 
     // Fake value/payload length
-    ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum...");
-    response.header.protobufLength = 123;
+    const char* valueData = "hoop de do... blah blah blah";
+    ByteArray value = {.data = (uint8_t*)valueData, .len = strlen(valueData)};
+    response.header = (KineticPDUHeader) {
+        .versionPrefix = (uint8_t)'F',
+        .protobufLength = response.header.protobufLength,
+        .valueLength = value.len,
+    };
     response.headerNBO = (KineticPDUHeader) {
         .versionPrefix = (uint8_t)'F',
         .protobufLength = KineticNBO_FromHostU32(response.header.protobufLength),
-        .valueLength = value.len,
+        .valueLength = KineticNBO_FromHostU32(value.len),
     };
     ByteArray responseProtobuf = {
-        .data = response.protobufScratch,
+        .data = response.protobufRaw,
         .len = response.header.protobufLength
     };
-    KineticPDU_AttachValuePayload(&response, value);
+
+    // Copy the dummy value data into the response buffer
+    KineticPDU_EnableValueBufferWithLength(&response, value.len);
+    memcpy(&response, valueData, strlen(valueData));
 
     // Receive the response
+    ByteArray responseHeaderRaw = {.data = (uint8_t*)&response.headerNBO, .len = sizeof(KineticPDUHeader)};
     KineticSocket_Read_ExpectAndReturn(socketDesc, responseHeaderRaw, true);
     KineticSocket_ReadProtobuf_ExpectAndReturn(socketDesc, &response.proto, responseProtobuf, true);
+    ByteArray expectedValueArray = value;
+    KineticSocket_Read_ExpectAndReturn(socketDesc, value, true);
 
-    ByteArray expectedValueArray = {.data = response.valueBuffer};
-    KineticSocket_Read_ExpectAndReturn(socketDesc, expectedValueArray, true);
-
-    TEST_IGNORE_MESSAGE("FIXME: Buffer reference issue in the GET integration test");
+    LOG_LOCATION;
+    KineticLogger_LogByteArray("expectedValueArray", expectedValueArray);
+    KineticLogger_LogByteArray("value", value);
 
     // Execute the operation
     KineticProto_Status_StatusCode status =
-        KineticClient_Get(&operation, &metadata, BYTE_ARRAY_NONE);
+        KineticClient_Get(&operation, &metadata, value);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-
-    TEST_ASSERT_EQUAL_PTR(response.valueBuffer, response.value.data);
+    TEST_ASSERT_EQUAL_PTR(value.data, response.value.data);    
 }

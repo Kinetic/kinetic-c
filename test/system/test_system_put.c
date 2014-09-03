@@ -32,8 +32,8 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include "system_test_fixture.h"
-#include "protobuf-c.h"
-#include "socket99.h"
+#include "protobuf-c/protobuf-c.h"
+#include "socket99/socket99.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -122,9 +122,9 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
 
-    TEST_IGNORE_MESSAGE(
-        "Java simulator is responding with VERSION_MISMATCH(8) if algorithm "
-        "un-specified on initial PUT and subsequent request updates dbVersion!");
+    // TEST_IGNORE_MESSAGE(
+    //     "Java simulator is responding with VERSION_MISMATCH(8) if algorithm "
+    //     "un-specified on initial PUT and subsequent request updates dbVersion!");
 }
 
 /*******************************************************************************

@@ -23,12 +23,12 @@
 
 #include "kinetic_types.h"
 #include "kinetic_proto.h"
-#include "kinetic_pdu.h"
 #include <stdarg.h>
 
 #define KINETIC_LOG_FILE "kinetic.log"
 
 void KineticLogger_Init(const char* logFile);
+void KineticLogger_Close(void);
 void KineticLogger_Log(const char* message);
 int  KineticLogger_LogPrintf(const char* format, ...);
 void KineticLogger_LogHeader(const KineticPDUHeader* header);

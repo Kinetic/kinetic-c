@@ -21,15 +21,11 @@
 #include "unity_helper.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
-#include "kinetic_hmac.h"
-#include "kinetic_pdu.h"
-#include "kinetic_socket.h"
-#include "kinetic_connection.h"
-#include "kinetic_nbo.h"
-#include "protobuf-c.h"
-#include "socket99.h"
+#include "protobuf-c/protobuf-c.h"
+// #include "zlog/zlog.h"
 
 extern bool LogToConsole;
+extern FILE* FileDesc;
 
 void setUp(void)
 {
@@ -38,6 +34,7 @@ void setUp(void)
 
 void tearDown(void)
 {
+    KineticLogger_Close();
     DELETE_FILE(TEST_LOG_FILE);
 }
 
@@ -49,7 +46,9 @@ void test_KineticLogger_KINETIC_LOG_FILE_should_be_defined_properly(void)
 void test_KineticLogger_Init_should_log_to_STDOUT_by_default(void)
 {
     KineticLogger_Init(NULL);
+
     TEST_ASSERT_TRUE(LogToConsole);
+    TEST_ASSERT_NULL(FileDesc);
 }
 
 void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_file(void)
@@ -58,6 +57,7 @@ void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_
 
     TEST_ASSERT_FALSE(LogToConsole);
     TEST_ASSERT_FILE_EXISTS(TEST_LOG_FILE);
+
 }
 
 void test_KineticLogger_Log_should_write_log_message_to_file(void)
@@ -74,9 +74,4 @@ void test_KineticLogger_Log_should_write_log_message_to_file(void)
     KineticLogger_Log(msg);
 
     TEST_ASSERT_EQUAL_FILE_CONTENT(TEST_LOG_FILE, content, length);
-}
-
-void test_KineticLogger_should_handle_logging_to_file(void)
-{
-    TEST_IGNORE_MESSAGE("Need fix deadlock when logging to a file!");
 }

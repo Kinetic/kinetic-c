@@ -22,7 +22,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include <stdio.h>
-#include "protobuf-c.h"
+#include "protobuf-c/protobuf-c.h"
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
@@ -135,15 +135,14 @@ void test_KineticClient_CreateOperation_should_create_configure_and_return_a_val
     KineticMessage requestMsg;
 
     KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
-    KineticPDU_Init_Expect(&response, &connection, NULL);
+    KineticPDU_Init_Expect(&request, &connection);
+    KineticPDU_Init_Expect(&response, &connection);
 
-    op = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    op = KineticClient_CreateOperation(&connection, &request, &response);
 
     TEST_ASSERT_EQUAL_PTR(&connection, op.connection);
     TEST_ASSERT_EQUAL_PTR(&request, op.request);
-    TEST_ASSERT_EQUAL_PTR(&requestMsg, op.request->message);
+    TEST_ASSERT_EQUAL_PTR(&request.message, &op.request->message);
     TEST_ASSERT_EQUAL_PTR(&response, op.response);
-    TEST_ASSERT_NULL(op.response->message);
-    TEST_ASSERT_NULL(op.response->proto);
+    TEST_ASSERT_EQUAL_PTR(&response.message, &op.response->message);
 }

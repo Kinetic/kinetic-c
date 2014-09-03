@@ -73,7 +73,6 @@ void KineticClient_Disconnect(KineticConnection* connection);
 KineticOperation KineticClient_CreateOperation(
     KineticConnection* connection,
     KineticPDU* request,
-    KineticMessage* requestMsg,
     KineticPDU* response);
 
 /**

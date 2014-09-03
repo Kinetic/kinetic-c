@@ -96,17 +96,14 @@ static void KineticHMAC_Compute(KineticHMAC* hmac,
     const KineticProto* proto,
     const ByteArray key)
 {
-    LOG_LOCATION;
     assert(proto->command);
     uint32_t len = protobuf_c_message_get_packed_size((ProtobufCMessage*)proto->command);
-    LOGF("  packedLen=%zu", len);
     uint32_t lenNBO = KineticNBO_FromHostU32(len);
     uint8_t* packed = malloc(len);
     assert(packed);
     uint32_t lenPacked = protobuf_c_message_pack((ProtobufCMessage*)proto->command, packed);
     assert(lenPacked == len);
 
-#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     HMAC_CTX ctx;
     HMAC_CTX_init(&ctx);
@@ -115,7 +112,6 @@ static void KineticHMAC_Compute(KineticHMAC* hmac,
     HMAC_Update(&ctx, packed, len);
     HMAC_Final(&ctx, hmac->data, &hmac->len);
     HMAC_CTX_cleanup(&ctx);
-#pragma GCC diagnostic pop
 
     free(packed);
 }

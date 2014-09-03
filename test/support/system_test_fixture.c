@@ -44,7 +44,6 @@ void SystemTestSetup(SystemTestFixture* fixture)
         KineticClient_CreateOperation(
             &fixture->connection,
             &fixture->instance.request,
-            &fixture->instance.requestMsg,
             &fixture->instance.response);
 
     if (!fixture->instance.testIgnored)

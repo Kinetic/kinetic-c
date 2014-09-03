@@ -84,6 +84,26 @@ typedef ProtobufCBinaryData ByteArray;
 #define BYTE_ARRAY_FILL_WITH_DUMMY_DATA(_array) \
     {int i=0; for(;i<(_array).len;++i){(_array).data[i] = (uint8_t)(i & 0xFFu);} }
 
+
+// // Structure for defining a custom memory allocator.
+// typedef struct 
+// {
+//     void        *(*alloc)(void *allocator_data, size_t size);
+//     void        (*free)(void *allocator_data, void *pointer);
+//     // Opaque pointer passed to `alloc` and `free` functions
+//     void        *allocator_data;
+// } ProtobufCAllocator;
+
+typedef struct
+{
+    ByteArray   buffer;
+    size_t      maxLen;
+} ByteBuffer;
+#define BYTE_BUFFER_INIT(_buf, _max) (ByteBuffer) { \
+    .buffer = {.data = (_buf), .len = 0}, \
+    .maxLen = sizeof(_buf) }
+
+
 // Kinetic Device Client Connection
 typedef struct _KineticConnection
 {
@@ -152,6 +172,21 @@ typedef struct _KineticMessage
     KineticProto_KeyValue       keyValue;
     uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
 } KineticMessage;
+#define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) { \
+    assert((_hdr) != NULL); \
+    assert((_con) != NULL); \
+    *(_hdr) = (KineticProto_Header) { \
+        .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_header__descriptor), \
+        .has_clusterVersion = true, \
+        .clusterVersion = (_con)->clusterVersion, \
+        .has_identity = true, \
+        .identity = (_con)->identity, \
+        .has_connectionID = true, \
+        .connectionID = (_con)->connectionID, \
+        .has_sequence = true, \
+        .sequence = (_con)->sequence, \
+    }; \
+}
 #define KINETIC_MESSAGE_INIT(msg) { \
     KineticProto__init(&(msg)->proto); \
     KineticProto_command__init(&(msg)->command); \
@@ -162,7 +197,7 @@ typedef struct _KineticMessage
     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
     (msg)->proto.hmac.data = (msg)->hmacData; \
     (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; \
-    (msg)->proto.has_hmac = true; /* Enable HMAC to allow length calculation prior to population */ \
+    (msg)->proto.has_hmac = true; \
     (msg)->command.header = &(msg)->header; \
     (msg)->proto.command = &(msg)->command; \
 }
@@ -184,10 +219,12 @@ typedef struct _Kinetic_KeyValue
 
 
 // Kinetic PDU Header
-#define PDU_HEADER_LEN      (1 + (2 * sizeof(int32_t)))
-#define PDU_PROTO_MAX_LEN   (1024 * 1024)
-#define PDU_VALUE_MAX_LEN   (1024 * 1024)
-#define PDU_MAX_LEN         (PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
+#define PDU_HEADER_LEN              (1 + (2 * sizeof(int32_t)))
+#define PDU_PROTO_MAX_LEN           (1024 * 1024)
+#define PDU_PROTO_MAX_UNPACKED_LEN  (PDU_PROTO_MAX_LEN * 2)
+#define PDU_VALUE_MAX_LEN           (1024 * 1024)
+#define PDU_MAX_LEN                 (PDU_HEADER_LEN + \
+                                    PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
 typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
 {
     uint8_t     versionPrefix;
@@ -204,10 +241,12 @@ typedef struct _KineticPDU
     KineticPDUHeader headerNBO; // Header struct in network-byte-order
 
     // Message associated with this PDU instance
-    KineticMessage* message;
-    KineticProto* proto;
-    uint32_t protobufLength; // Embedded in header in NBO byte order (this is for reference)
-    uint8_t protobufScratch[PDU_PROTO_MAX_LEN];
+    union {
+        KineticMessage message;
+        uint8_t protoData[PDU_PROTO_MAX_UNPACKED_LEN];
+    };
+    // bool rawProtoEnabled;
+    uint8_t protobufRaw[PDU_PROTO_MAX_LEN];
 
     // Object meta-data to be used/populated if provided and pertinent to the opearation
     Kinetic_KeyValue* metadata;
@@ -223,32 +262,15 @@ typedef struct _KineticPDU
     KineticConnection* connection;
 } KineticPDU;
 
-#define KINETIC_HEADER_INIT(_con, _msg) { \
-    assert((_con) != NULL); \
-    KineticMessage* pmsg = (_msg); \
-    if ((pmsg) != NULL) { \
-        pmsg->header.has_clusterVersion = true; \
-        pmsg->header.clusterVersion = (_con)->clusterVersion; \
-        pmsg->header.has_identity = true; \
-        pmsg->header.identity = (_con)->identity; \
-        pmsg->header.has_connectionID = true; \
-        pmsg->header.connectionID = (_con)->connectionID; \
-        pmsg->header.has_sequence = true; \
-        pmsg->header.sequence = (_con)->sequence; \
-    } \
-}
-
-#define KINETIC_PDU_INIT(_pdu, _con, _msg) { \
+#define KINETIC_PDU_INIT(_pdu, _con) { \
     assert((_pdu) != NULL); \
     assert((_con) != NULL); \
-    KineticMessage* pmsg = (_msg); \
-    (_pdu)->connection = (_con); \
-    (_pdu)->message = pmsg; \
-    (_pdu)->proto = NULL; \
-    (_pdu)->protobufLength = 0; \
-    (_pdu)->value = BYTE_ARRAY_NONE; \
-    (_pdu)->header.versionPrefix = (uint8_t)'F'; \
-    KINETIC_HEADER_INIT((_con), (_msg)); \
+    *(_pdu) = (KineticPDU) { \
+        .connection = (_con), \
+        .rawProtoEnabled = false, \
+        .value = BYTE_ARRAY_NONE, \
+    }; \
+    KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->message.header), (_con)); \
 }
 
 // Kinetic Operation

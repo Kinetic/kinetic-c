@@ -20,8 +20,14 @@
 
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
-#include "protobuf-c.h"
-
+#include "protobuf-c/protobuf-c.h"
+#ifndef _BSD_SOURCE
+    #define _BSD_SOURCE
+#endif // _BSD_SOURCE
+#include <unistd.h>
+#include "socket99/socket99.h"
+#include <sys/types.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -33,13 +39,26 @@
 #include <string.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#ifndef _BSD_SOURCE
-    #define _BSD_SOURCE
-#endif // _BSD_SOURCE
-#include <unistd.h>
-#include <sys/types.h>
-#include "socket99.h"
+
+static void* KineticProto_Alloc(void* buf, size_t size)
+{
+    void *res = NULL;
+    ByteBuffer* p = (ByteBuffer*)buf;
+    if ((size > 0) && (p->buffer.len + size <= PDU_PROTO_MAX_UNPACKED_LEN))
+    {
+        res = (void*)&p->buffer.data[p->buffer.len];
+        p->buffer.len += (size + 31) & ~31; // Align to next 32-byte sector
+    }
+    return res;
+}
+ 
+static void KineticProto_Free(void* buf, void* ignored)
+{
+    ByteBuffer* p = (ByteBuffer*)buf;
+    p->buffer.len = 0;
+}
+
+
 
 int KineticSocket_Connect(char* host, int port, bool nonBlocking)
 {
@@ -58,7 +77,7 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
     sprintf(port_str, "%d", port);
 
     // Open socket
-    LOGF("\nConnecting to %s:%d", host, port);
+    LOGF("Connecting to %s:%d", host, port);
     if (!socket99_open(&cfg, &result))
     {
         LOGF("Failed to open socket connection with host: status %d, errno %d",
@@ -77,7 +96,8 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
 
     for (ai = ai_result; ai != NULL; ai = ai->ai_next)
     {
-        // OSX won't let us set close-on-exec when creating the socket, so set it separately
+        // OSX won't let us set close-on-exec when creating the socket,
+        // so set it separately
         int current_fd_flags = fcntl(result.fd, F_GETFD);
         if (current_fd_flags == -1)
         {
@@ -93,13 +113,15 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
         }
 
         #if defined(SO_NOSIGPIPE) && !defined(__APPLE__)
-        // On BSD-like systems we can set SO_NOSIGPIPE on the socket to prevent it from sending a
-        // PIPE signal and bringing down the whole application if the server closes the socket
-        // forcibly
+        // On BSD-like systems we can set SO_NOSIGPIPE on the socket to
+        // prevent it from sending a PIPE signal and bringing down the whole
+        // application if the server closes the socket forcibly
         {
             int set = 1;
-            int setsockopt_result = setsockopt(socket_fd, SOL_SOCKET, SO_NOSIGPIPE, &set, sizeof(set));
-            // Allow ENOTSOCK because it allows tests to use pipes instead of real sockets
+            int setsockopt_result = setsockopt(result.fd,
+                SOL_SOCKET, SO_NOSIGPIPE, &set, sizeof(set));
+            // Allow ENOTSOCK because it allows tests to use pipes instead of
+            // real sockets
             if (setsockopt_result != 0 && setsockopt_result != ENOTSOCK)
             {
                 LOG("Failed to set SO_NOSIGPIPE on socket");
@@ -120,6 +142,10 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
         LOGF("Could not connect to %s:%d", host, port);
         return -1;
     }
+    else
+    {
+        LOGF("Successfully connected to %s:%d (fd=%d)", host, port, result.fd);
+    }
 
     return result.fd;
 }
@@ -133,20 +159,24 @@ void KineticSocket_Close(int socketDescriptor)
     else
     {
         LOGF("Closing socket with fd=%d", socketDescriptor);
-        if (close(socketDescriptor))
+        if (close(socketDescriptor) == 0)
         {
             LOG("Socket closed successfully");
         }
         else
         {
-            LOG("Error closing socket file descriptor!");
+            LOGF("Error closing socket file descriptor!"
+                " (fd=%d, errno=%d, desc='%s')",
+                socketDescriptor, errno, strerror(errno));
         }
     }
 }
 
-bool KineticSocket_Read(int socketDescriptor, ByteArray buffer)
+bool KineticSocket_Read(int socketDescriptor,
+    ByteArray buffer)
 {
-    LOGF("Reading %zd bytes into buffer @ 0x%zX from fd=%d", buffer.len, (size_t)buffer.data, socketDescriptor);
+    LOGF("Reading %zd bytes into buffer @ 0x%zX from fd=%d",
+        buffer.len, (size_t)buffer.data, socketDescriptor);
 
     size_t count;
 
@@ -166,7 +196,8 @@ bool KineticSocket_Read(int socketDescriptor, ByteArray buffer)
 
         if (status < 0) // Error occurred
         {
-            LOGF("Failed waiting to read from socket! status=%d, errno=%d, desc='%s'",
+            LOGF("Failed waiting to read from socket!"
+                " status=%d, errno=%d, desc='%s'",
                 status, errno, strerror(errno));
             return false;
         }
@@ -178,21 +209,24 @@ bool KineticSocket_Read(int socketDescriptor, ByteArray buffer)
         else if (status > 0) // Data available to read
         {
             // The socket is ready for reading
-            status = read(socketDescriptor, &buffer.data[count], buffer.len - count);
+            status = read(socketDescriptor, &buffer.data[count],
+                buffer.len - count);
             if (status == -1 && errno == EINTR)
             {
                 continue;
             }
             else if (status <= 0)
             {
-                LOGF("Failed to read from socket! status=%d, errno=%d, desc='%s'",
-                status, errno, strerror(errno));
+                LOGF("Failed to read from socket!"
+                    " status=%d, errno=%d, desc='%s'",
+                    status, errno, strerror(errno));
                 return false;
             }
             else
             {
                 count += status;
-                LOGF("Received %d bytes (%zd of %zd)", status, count, buffer.len);
+                LOGF("Received %d bytes (%zd of %zd)",
+                    status, count, buffer.len);
             }
         }
     }
@@ -200,36 +234,57 @@ bool KineticSocket_Read(int socketDescriptor, ByteArray buffer)
     return true;
 }
 
-bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticProto** message, const ByteArray buffer)
+bool KineticSocket_ReadProtobuf(int socketDescriptor,
+    KineticPDU* pdu)
 {
-    LOGF("Reading %zd bytes of protobuf", buffer.len);
+    LOGF("Reading %zd bytes of protobuf", pdu->header.protobufLength);
+    ByteBuffer recvBuffer = BYTE_BUFFER_INIT(
+        pdu->protobufRaw,
+        pdu->header.protobufLength);
     bool success = false;
-    KineticProto* unpacked = NULL;
 
-    if (KineticSocket_Read(socketDescriptor, buffer))
+    if (KineticSocket_Read(socketDescriptor, recvBuffer.buffer))
     {
         LOG("Read completed!");
-        unpacked = KineticProto__unpack(NULL, buffer.len, buffer.data);
+
+        // Protobuf-C allocator to use for received data
+        ProtobufCAllocator serialAllocator = {
+            KineticProto_Alloc,
+            KineticProto_Free,
+            NULL,
+            PDU_PROTO_MAX_UNPACKED_LEN,
+            pdu->protoData
+        };
+
+        KineticProto* unpacked = KineticProto__unpack(
+            &serialAllocator, buffer.len, buffer.data);
         if (unpacked == NULL)
         {
             LOG("Error unpacking incoming Kinetic protobuf message!");
-            *message = NULL;
         }
         else
         {
-            // LOG("Protobuf unpacked successfully!");
-            *message = unpacked;
-            success = true;
+            LOG("Protobuf unpacked successfully!");
+            return true;
         }
     }
-    else
-    {
-        *message = NULL;
-    }
-    return success;
+
+    return false;
 }
 
-bool KineticSocket_Write(int socketDescriptor, const ByteArray buffer)
+FakeAllocatorData allocator_data;
+allocator_data.index = 0;
+
+ProtobufCAllocator perf_allocator = {
+    perf_system_alloc,
+    perf_system_free,
+    NULL,
+    65535,
+    &allocator_data
+};
+
+bool KineticSocket_Write(int socketDescriptor,
+    const ByteArray buffer)
 {
     size_t count;
 
@@ -237,7 +292,8 @@ bool KineticSocket_Write(int socketDescriptor, const ByteArray buffer)
     for (count = 0; count < buffer.len; )
     {
         int status;
-        status = write(socketDescriptor, &buffer.data[count], buffer.len - count);
+        status = write(socketDescriptor,
+            &buffer.data[count], buffer.len - count);
         if (status == -1 && errno == EINTR)
         {
             LOG("Write interrupted. retrying...");
@@ -245,13 +301,15 @@ bool KineticSocket_Write(int socketDescriptor, const ByteArray buffer)
         }
         else if (status <= 0)
         {
-            LOGF("Failed to write to socket! status=%d, errno=%d\n", status, errno);
+            LOGF("Failed to write to socket! status=%d, errno=%d\n",
+                status, errno);
             return false;
         }
         else
         {
             count += status;
-            LOGF("Wrote %d bytes (%zu of %zu sent)", status, count, buffer.len);
+            LOGF("Wrote %d bytes (%zu of %zu sent)",
+                status, count, buffer.len);
         }
     }
     LOG("Write complete");
@@ -259,17 +317,19 @@ bool KineticSocket_Write(int socketDescriptor, const ByteArray buffer)
     return true;
 }
 
-bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticProto* proto)
+bool KineticSocket_WriteProtobuf(int socketDescriptor,
+    const KineticPDU* pdu)
 {
-    size_t len = KineticProto__get_packed_size(proto);
-    LOGF("Writing protobuf (%zd bytes)...", len);
-    uint8_t* packed = malloc(len);
-    assert(packed);
-    size_t packedLen = KineticProto__pack(proto, packed);
+    assert(pdu != NULL);
+    assert(pdu->message != NULL);
+    assert(pdu->message->proto != NULL);
+    size_t len = KineticProto__get_packed_size(pdu->message->proto);
+    LOGF("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
+    size_t packedLen = KineticProto__pack(proto, pdu->protobufRaw);
     assert(packedLen == len);
-    ByteArray buffer = {.data = packed, .len = packedLen};
+    ByteArray buffer = {.data = pdu->protobufRaw, .len = packedLen};
 
-    bool success = KineticSocket_Write(socketDescriptor, buffer);
+    bool success = KineticSocket_Write(socketDescriptor, pdu->protobufRaw);
     free(packed);
 
     return success;

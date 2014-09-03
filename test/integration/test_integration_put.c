@@ -19,10 +19,6 @@
 */
 
 #include "kinetic_client.h"
-#include "unity.h"
-#include "unity_helper.h"
-#include <stdio.h>
-#include "protobuf-c.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
@@ -32,6 +28,10 @@
 #include "kinetic_nbo.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_socket.h"
+#include "protobuf-c/protobuf-c.h"
+#include "unity.h"
+#include "unity_helper.h"
+#include <stdio.h>
 
 void setUp(void)
 {
@@ -65,7 +65,7 @@ void test_Put_should_create_new_object_on_device(void)
     TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
 
     // Create the operation
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
     TEST_ASSERT_EQUAL_PTR(&connection, operation.connection);
     TEST_ASSERT_EQUAL_PTR(&request, operation.request);
     TEST_ASSERT_EQUAL_PTR(&requestMsg, operation.request->message);
@@ -123,7 +123,7 @@ void test_Put_should_create_new_object_on_device(void)
         .data = (uint8_t*)&response.headerNBO,
         .len = sizeof(KineticPDUHeader) };
     KineticSocket_Read_ExpectAndReturn(socketDesc, responseHeaderRaw, true);
-    ByteArray responseProtobuf = {.data = response.protobufScratch, .len = 0};
+    ByteArray responseProtobuf = {.data = response.protobufRaw, .len = 0};
     KineticSocket_ReadProtobuf_ExpectAndReturn(socketDesc, &response.proto, responseProtobuf, true);
 
     // Execute the operation
@@ -160,7 +160,7 @@ void test_Put_should_update_object_data_on_device(void)
     TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
 
     // Create the operation
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
     TEST_ASSERT_EQUAL_PTR(&connection, operation.connection);
     TEST_ASSERT_EQUAL_PTR(&request, operation.request);
     TEST_ASSERT_EQUAL_PTR(&requestMsg, operation.request->message);
@@ -220,7 +220,7 @@ void test_Put_should_update_object_data_on_device(void)
         .data = (uint8_t*)&response.headerNBO,
         .len = sizeof(KineticPDUHeader) };
     KineticSocket_Read_ExpectAndReturn(socketDesc, responseHeaderRaw, true);
-    ByteArray responseProtobuf = {.data = response.protobufScratch, .len = 0};
+    ByteArray responseProtobuf = {.data = response.protobufRaw, .len = 0};
     KineticSocket_ReadProtobuf_ExpectAndReturn(socketDesc, &response.proto, responseProtobuf, true);
 
     // Execute the operation
@@ -255,7 +255,7 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
 
     // Create the operation
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
     TEST_ASSERT_EQUAL_PTR(&connection, operation.connection);
     TEST_ASSERT_EQUAL_PTR(&request, operation.request);
     TEST_ASSERT_EQUAL_PTR(&requestMsg, operation.request->message);
@@ -318,7 +318,7 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
         .data = (uint8_t*)&response.headerNBO,
         .len = sizeof(KineticPDUHeader) };
     KineticSocket_Read_ExpectAndReturn(socketDesc, responseHeaderRaw, true);
-    ByteArray responseProtobuf = {.data = response.protobufScratch};
+    ByteArray responseProtobuf = {.data = response.protobufRaw};
     KineticSocket_ReadProtobuf_ExpectAndReturn(socketDesc, &response.proto, responseProtobuf, true);
 
     // Execute the operation

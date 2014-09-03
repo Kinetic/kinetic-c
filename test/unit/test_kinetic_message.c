@@ -20,7 +20,7 @@
 
 #include "unity.h"
 #include "unity_helper.h"
-#include "protobuf-c.h"
+#include "protobuf-c/protobuf-c.h"
 #include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
@@ -70,13 +70,13 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 
     // Validate keyValue fields
     TEST_ASSERT_TRUE(message.keyValue.has_newVersion);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.newVersion, message.keyValue.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(metadata.newVersion, message.keyValue.newVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_key);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.key, message.keyValue.key);
+    TEST_ASSERT_EQUAL_ByteArray(metadata.key, message.keyValue.key);
     TEST_ASSERT_TRUE(message.keyValue.has_dbVersion);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.dbVersion, message.keyValue.dbVersion);
+    TEST_ASSERT_EQUAL_ByteArray(metadata.dbVersion, message.keyValue.dbVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.tag, message.keyValue.tag);
+    TEST_ASSERT_EQUAL_ByteArray(metadata.tag, message.keyValue.tag);
     TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_ALGORITHM_SHA1, message.keyValue.algorithm);
     TEST_ASSERT_FALSE(message.keyValue.has_metadataOnly);
@@ -110,13 +110,13 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_me
 
     // Validate keyValue fields
     TEST_ASSERT_TRUE(message.keyValue.has_newVersion);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.newVersion, message.keyValue.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(metadata.newVersion, message.keyValue.newVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_key);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.key, message.keyValue.key);
+    TEST_ASSERT_EQUAL_ByteArray(metadata.key, message.keyValue.key);
     TEST_ASSERT_TRUE(message.keyValue.has_dbVersion);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.dbVersion, message.keyValue.dbVersion);
+    TEST_ASSERT_EQUAL_ByteArray(metadata.dbVersion, message.keyValue.dbVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(metadata.tag, message.keyValue.tag);
+    TEST_ASSERT_EQUAL_ByteArray(metadata.tag, message.keyValue.tag);
     TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_ALGORITHM_SHA1, message.keyValue.algorithm);
     TEST_ASSERT_TRUE(message.keyValue.has_metadataOnly);

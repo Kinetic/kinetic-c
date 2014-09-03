@@ -92,7 +92,6 @@ void KineticClient_Disconnect(
 KineticOperation KineticClient_CreateOperation(
     KineticConnection* connection,
     KineticPDU* request,
-    KineticMessage* requestMsg,
     KineticPDU* response)
 {
     KineticOperation op;
@@ -109,28 +108,20 @@ KineticOperation KineticClient_CreateOperation(
         assert(request != NULL);
     }
 
-    if (requestMsg == NULL)
-    {
-        LOG("Specified KineticMessage request is NULL!");
-        assert(requestMsg != NULL);
-    }
-
     if (response == NULL)
     {
         LOG("Specified KineticPDU response is NULL!");
         assert(response != NULL);
     }
 
-    KineticMessage_Init(requestMsg);
-    KineticPDU_Init(request, connection, requestMsg);
-    KineticPDU_Init(response, connection, NULL);
+    KineticPDU_Init(request, connection);
+    KineticPDU_Init(response, connection);
 
     op.connection = connection;
     op.request = request;
-    op.request->message = requestMsg;
+    // op.request->message = requestMsg;
     op.response = response;
-    op.response->message = NULL;
-    op.response->proto = NULL;
+    // op.response->message = NULL;
 
     return op;
 }
@@ -139,9 +130,7 @@ KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
-    assert(operation->request->message != NULL);
     assert(operation->response != NULL);
-    assert(operation->response->message == NULL);
 
     // Initialize request
     KineticOperation_BuildNoop(operation);
@@ -156,9 +145,7 @@ KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
-    assert(operation->request->message != NULL);
     assert(operation->response != NULL);
-    assert(operation->response->message == NULL);
     assert(value.data != NULL);
     assert(value.len <= PDU_VALUE_MAX_LEN);
 
@@ -175,9 +162,7 @@ KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
-    assert(operation->request->message != NULL);
     assert(operation->response != NULL);
-    assert(operation->response->message == NULL);
     assert(metadata != NULL);
     assert(metadata->key.data != NULL);
     assert(metadata->key.len <= KINETIC_MAX_KEY_LEN);

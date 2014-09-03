@@ -22,23 +22,23 @@
   :test:
     - +:test/**
     - -:test/support
-    - src/**
   :support:
     - test/support/**
   :source:
-    - src/lib/*
-    - src/utility/*
-    - vendor/protobuf-c/protobuf-c/*
+    - src/**/*.c
+    - vendor/protobuf-c/protobuf-c/protobuf-c.c
     - vendor/socket99/socket99.c
   :include:
+    - src/**
     - include/**
-    - vendor/socket99/
-    - vendor/protobuf-c/protobuf-c/
+    - vendor/
+    - vendor/protobuf-c/
   # Refactor release build once the Kinetic-C library is built, and link to it sepearately
   :release_toolchain_include:
+    - src/*
     - include/**
-    - vendor/protobuf-c/protobuf-c/
-    - vendor/socket99/
+    - vendor/
+    - vendor/protobuf-c/
 
 :defines:
   # in order to add common defines:
@@ -64,10 +64,19 @@
 
 :cmock:
   :mock_prefix: mock_
-  :when_no_prototypes: :warn
+  :when_no_prototypes: :error
   :enforce_strict_ordering: true
   :plugins:
     - :ignore
+    # - :ignore_args
+    - :array
+    - :cexception
+    - :callback
+    - :return_thru_ptr
+  :unity_helper_path: test/support/unity_helper.h
+  :includes_h_post_orig_header:
+    - "unity.h"
+    - "unity_helper.h"
   :treat_as:
     uint8_t:    HEX8
     uint16_t:   HEX16
@@ -75,6 +84,7 @@
     int8_t:     INT8
     bool_t:     BOOL
     size_t:     INT
+  :callback_include_count: true
 
 :tools:
   :test_includes_preprocessor:
@@ -142,6 +152,8 @@
     - "#{Ceedling.load_path}"
   :enabled:
     - stdout_ide_tests_report
+    - xml_tests_report
+    # - warnings_report
     - module_generator
     - gcov
 ...

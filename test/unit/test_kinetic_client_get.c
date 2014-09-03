@@ -22,7 +22,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include <stdio.h>
-#include "protobuf-c.h"
+#include "protobuf-c/protobuf-c.h"
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
@@ -73,9 +73,9 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
 
     KINETIC_CONNECTION_INIT(&connection, 12, key);
     KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
-    KineticPDU_Init_Expect(&response, &connection, NULL);
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    KineticPDU_Init_Expect(&request, &connection);
+    KineticPDU_Init_Expect(&response, &connection);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
 
     KineticOperation_BuildGet_Expect(&operation, &metadata, value);
     KineticPDU_Send_ExpectAndReturn(&request, true);
@@ -120,7 +120,7 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_embedded_P
     KineticMessage_Init_Expect(&requestMsg);
     KineticPDU_Init_Expect(&request, &connection, &requestMsg);
     KineticPDU_Init_Expect(&response, &connection, NULL);
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
 
     ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("We're just 2 lost souls swimming in a fish bowl.. year after year...");
     memcpy(response.valueBuffer, value.data, value.len);
@@ -170,7 +170,7 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
     KineticMessage_Init_Expect(&requestMsg);
     KineticPDU_Init_Expect(&request, &connection, &requestMsg);
     KineticPDU_Init_Expect(&response, &connection, NULL);
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
 
     KineticOperation_BuildGet_Expect(&operation, &metadata, BYTE_ARRAY_NONE);
     KineticPDU_Send_ExpectAndReturn(&request, true);

@@ -1,12 +1,16 @@
-[submodule "vendor/protobuf-c"]
+[submodule "protobuf-c"]
 	path = vendor/protobuf-c
 	url = https://github.com/atomicobject/protobuf-c
 	branch = master
-[submodule "vendor/kinetic-protocol"]
+[submodule "kinetic-protocol"]
 	path = vendor/kinetic-protocol
 	url = https://github.com/Seagate/kinetic-protocol.git
 	branch = 2.0.4
-[submodule "vendor/socket99"]
+[submodule "socket99"]
 	path = vendor/socket99
 	url = https://github.com/silentbicycle/socket99.git
+	branch = master
+[submodule "zlog"]
+	path = vendor/zlog
+	url = https://github.com/zma/zlog.git
 	branch = master

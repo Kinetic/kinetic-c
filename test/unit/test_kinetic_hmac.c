@@ -24,7 +24,7 @@
 #include "kinetic_nbo.h"
 #include "kinetic_message.h"
 #include "kinetic_logger.h"
-#include "protobuf-c.h"
+#include "protobuf-c/protobuf-c.h"
 #include <string.h>
 #include <openssl/hmac.h>
 

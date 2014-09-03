@@ -19,7 +19,7 @@
 */
 
 #include "unity_helper.h"
-#include "protobuf-c.h"
+#include "protobuf-c/protobuf-c.h"
 #include "kinetic_types.h"
 #include "kinetic_operation.h"
 #include "kinetic_proto.h"
@@ -212,7 +212,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     TEST_ASSERT_TRUE(requestMsg.header.has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_PUT, requestMsg.header.messageType);
 
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(value, op.request->value);
+    TEST_ASSERT_EQUAL_ByteArray(value, op.request->value);
 }
 
 
@@ -271,7 +271,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_supplied_v
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_EQUAL_BYTE_ARRAY(value, response.value);
+    TEST_ASSERT_EQUAL_ByteArray(value, response.value);
 }
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_embedded_value_ByteArray(void)
@@ -330,7 +330,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_embedded_v
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_BYTE_ARRAY_NONE(request.value);
+    TEST_ASSERT_ByteArray_NONE(request.value);
     TEST_ASSERT_EQUAL_PTR(response.valueBuffer, response.value.data);
 }
 
@@ -391,5 +391,5 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_BYTE_ARRAY_NONE(request.value);
+    TEST_ASSERT_ByteArray_NONE(request.value);
 }

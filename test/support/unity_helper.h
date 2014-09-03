@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TEST_LOG_FILE "build/artifacts/test/test.log"
+#define TEST_LOG_FILE "./build/artifacts/test/test.log"
 
 // Load file access library to get cross-platform ability to delete a file
 #ifdef WIN32
@@ -40,6 +40,33 @@
         #error Failed to find required file IO library with file access() method
     #endif
 #endif // WIN32
+
+
+
+// // Make a FOREACH macro
+// #define FE_1(WHAT, X) WHAT(X) 
+// #define FE_2(WHAT, X, ...) WHAT(X)FE_1(WHAT, __VA_ARGS__)
+// #define FE_3(WHAT, X, ...) WHAT(X)FE_2(WHAT, __VA_ARGS__)
+// #define FE_4(WHAT, X, ...) WHAT(X)FE_3(WHAT, __VA_ARGS__)
+// #define FE_5(WHAT, X, ...) WHAT(X)FE_4(WHAT, __VA_ARGS__)
+// //... repeat as needed
+
+// #define GET_MACRO(_1,_2,_3,_4,_5,NAME,...) NAME 
+// #define FOR_EACH(action,...) \
+//   GET_MACRO(__VA_ARGS__,FE_5,FE_4,FE_3,FE_2,FE_1)(action,__VA_ARGS__)
+
+// #define _APPEND_UNDERSCORE(X) _X
+// // Helper function
+// #define _UNDERSCORE(_first,...) \
+//   _first ## _ ## FOR_EACH(_APPEND_UNDERSCORE,__VA_ARGS__)
+
+
+
+// /** Macro to define start of a Unity test method */
+// #define CONCAT(a,b) a_ ## b
+// #define void test_desc(void)
+// { void test_ ## desc ## _CASE(void) {LOG_LOCATION;
+
 
 /** Custom Unity assertion which validates a size_t value */
 #define TEST_ASSERT_EQUAL_SIZET_MESSAGE(expected, actual, msg) \
@@ -63,12 +90,30 @@ if (expected != actual) { \
 
 /** Custom Unity assertion which validates the expected int64_t value is
     packed properly into a buffer in Network Byte-Order (big endian) */
-#define TEST_ASSERT_EQUAL_NBO_INT32(expected, buf) { \
+#define TEST_ASSERT_EQUAL_uint32_nbo_t(expected, buf) { \
     int i; int32_t val = 0; char err[64]; uint8_t* p = (uint8_t*)&buf;\
     for(i = 0; i < sizeof(int32_t); i++) {val <<= 8; val += p[i]; } \
     sprintf(err, "@ index %d", i); \
     TEST_ASSERT_EQUAL_INT32_MESSAGE(expected, val, err); \
 }
+
+
+
+/** Custom Unity/CMock equality assertion for validating equality of ByteArrays */
+#define TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, msg) \
+    TEST_ASSERT_EQUAL_INT_MESSAGE((expected).len, (actual).len, msg); \
+    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((expected).data, (actual).data, (expected).len, msg);
+#define TEST_ASSERT_EQUAL_ByteArray(expected, actual) \
+    TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, "ByteArrays are not equal!");
+
+/** Custom Unity assertion for validating empty ByteArrays */
+#define TEST_ASSERT_ByteArray_EMPTY(actual) \
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, (actual).len, "ByteArray length is non-zero!");
+#define TEST_ASSERT_ByteArray_NONE(actual) \
+    TEST_ASSERT_ByteArray_EMPTY(actual); \
+    TEST_ASSERT_NULL_MESSAGE((actual).data, "ByteArray has non-null buffer");
+
+
 
 #define GET_CWD(cwd) \
     TEST_ASSERT_NOT_NULL_MESSAGE(getcwd(cwd, sizeof(cwd)), "Failed getting current working directory");
@@ -104,17 +149,5 @@ if (expected != actual) { \
     TEST_ASSERT_EQUAL_STRING_MESSAGE(content, buff, "File contents did not match!"); \
     TEST_ASSERT_EQUAL_MESSAGE(0, fclose(f), "Failed closing file: " #fname ); \
 }
-
-/** Custom Unity assertion for validating equality of ByteArrays */
-#define TEST_ASSERT_EQUAL_BYTE_ARRAY(expected, actual) \
-    TEST_ASSERT_EQUAL_INT_MESSAGE((expected).len, (actual).len, "ByteArray lengths do not match!"); \
-    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((expected).data, (actual).data, (expected).len, "ByteArrays are not equal");
-
-/** Custom Unity assertion for validating empty ByteArrays */
-#define TEST_ASSERT_BYTE_ARRAY_EMPTY(actual) \
-    TEST_ASSERT_EQUAL_INT_MESSAGE(0, (actual).len, "ByteArray length is non-zero!");
-#define TEST_ASSERT_BYTE_ARRAY_NONE(actual) \
-    TEST_ASSERT_BYTE_ARRAY_EMPTY(actual); \
-    TEST_ASSERT_NULL_MESSAGE((actual).data, "ByteArray has non-null buffer");
 
 #endif // _UNITY_HELPER

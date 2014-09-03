@@ -21,8 +21,6 @@
 #include "kinetic_client.h"
 #include "unity.h"
 #include "unity_helper.h"
-#include <stdio.h>
-#include "protobuf-c.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
@@ -32,6 +30,8 @@
 #include "kinetic_nbo.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_socket.h"
+#include "protobuf-c/protobuf-c.h"
+#include <stdio.h>
 
 void setUp(void)
 {
@@ -63,7 +63,7 @@ void test_NoOp_should_succeed(void)
         .data = (uint8_t*)&response.headerNBO,
         .len = sizeof(KineticPDUHeader) };
     ByteArray responseProtobuf = {
-        .data = response.protobufScratch };
+        .data = response.protobufRaw };
 
     // Establish connection
     KINETIC_CONNECTION_INIT(&connection, identity, key);
@@ -74,7 +74,7 @@ void test_NoOp_should_succeed(void)
     TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
 
     // Create the operation
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &request, &response);
     TEST_ASSERT_EQUAL_PTR(&connection, operation.connection);
     TEST_ASSERT_EQUAL_PTR(&request, operation.request);
     TEST_ASSERT_EQUAL_PTR(&requestMsg, operation.request->message);

@@ -19,54 +19,58 @@
 */
 
 #include "kinetic_logger.h"
-#include "kinetic_types.h"
-#include "kinetic_proto.h"
+// #include "zlog/zlog.h"
 #include <stdio.h>
 #include <string.h>
 
 static char LogFile[256] = "";
 bool LogToConsole = true;
+FILE* FileDesc = NULL;
 
 void KineticLogger_Init(const char* logFile)
 {
     LogToConsole = true;
+    FileDesc = NULL;
     if (logFile != NULL)
     {
-        FILE* fd;
         strcpy(LogFile, logFile);
-        fd = fopen(LogFile, "w");
-        if (fd != stdout && fd != stderr && fd != stdin)
+        FileDesc = fopen(LogFile, "w");
+        if (FileDesc == NULL)
         {
-            fclose(fd);
-            LogToConsole = false;
+            fprintf(stderr,
+                "Failed to initialize logger with file: "
+                "fopen('%s') => FileDesc=%zd",
+                logFile, (size_t)FileDesc);
         }
         else
         {
-            fprintf(stderr, "Failed to initialize logger with file: fopen('%s') => fd=%zd", logFile, (size_t)fd);
-            fflush(fd);
+            LogToConsole = false;
         }
+    }
+}
+
+void KineticLogger_Close(void)
+{
+    // Don't close std/already-opened streams
+    if (LogFile != NULL &&
+        FileDesc != stdout && FileDesc != stderr && FileDesc != stdin)
+    {
+        fclose(FileDesc);
     }
 }
 
 void KineticLogger_Log(const char* message)
 {
-    FILE* fd = NULL;
     if (message == NULL)
     {
         return;
     }
 
-    fd = LogToConsole ? stderr : fopen(LogFile, "a");
-    if (fd >= 0)
+    FileDesc = LogToConsole ? stderr : fopen(LogFile, "a");
+    if (FileDesc >= 0)
     {
-        fprintf(fd, "%s\n", message);
-        fflush(fd);
-
-        // Don't close std/already-opened streams
-        if (LogFile != NULL && fd != stdout && fd != stderr && fd != stdin)
-        {
-            fclose(fd);
-        }
+        fprintf(FileDesc, "%s\n", message);
+        fflush(FileDesc);
     }
 }
 
@@ -324,9 +328,11 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
             int i;
             char tmp[8], msg[256];
             const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
-                protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "detailedMessage");
+                protobuf_c_message_descriptor_get_field_by_name(
+                    protoMessageDescriptor, "detailedMessage");
             const ProtobufCMessageDescriptor* statusDetailedMsgDescriptor =
-                (ProtobufCMessageDescriptor*)statusDetailedMsgFieldDescriptor->descriptor;
+                (ProtobufCMessageDescriptor*)
+                statusDetailedMsgFieldDescriptor->descriptor;
 
             sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
             for (i = 0; i < status->detailedMessage.len; i++)
