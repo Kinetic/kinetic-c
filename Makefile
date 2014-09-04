@@ -1,8 +1,8 @@
 OUT_DIR = obj
 BIN_DIR = bin
-OBJS = $(OUT_DIR)/protobuf-c.o $(OUT_DIR)/KineticProto.o $(OUT_DIR)/kinetic-c-client.o
-INCS = -I"./include" -I"./src/main" -I"./src/vendor"
-BIN = $(BIN_DIR)/kinetic-c-client
+OBJS = $(OUT_DIR)/protobuf-c.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_client.o
+INCS = -I"./include" -I"./src/lib" -I"./vendor/protobuf=c" -I"./vendor"
+BIN = $(BIN_DIR)/kinetic_client
 CC = gcc
 CFLAGS = $(INCS) -g -Wall
 LFLAGS = -Wall
@@ -26,14 +26,14 @@ $(BIN_DIR):
 clean:
 	$(RM_ALL) $(OBJS) $(OUT_DIR) $(BIN)
 
-$(OUT_DIR)/protobuf-c.o: directories ./src/vendor/protobuf-c/protobuf-c.h ./src/vendor/protobuf-c/protobuf-c.c
+$(OUT_DIR)/protobuf-c.o: directories ./vendor/protobuf-c/protobuf-c.c
 	$(CC) $(CFLAGS) -c ./src/vendor/protobuf-c/protobuf-c.c -o $@
 
-$(OUT_DIR)/KineticProto.o: directories ./src/main/KineticProto.h ./src/main/KineticProto.c ./src/vendor/protobuf-c/protobuf-c.h ./src/vendor/protobuf-c/protobuf-c.c
-	$(CC) $(CFLAGS) -c ./src/main/KineticProto.c -o $@
+$(OUT_DIR)/kinetic_proto.o: directories /src/lib/kinetic_proto.c ./vendor/protobuf-c/protobuf-c.c
+	$(CC) $(CFLAGS) -c ./src/lib/kinetic_proto.c -o $@
 
-$(OUT_DIR)/kinetic-c-client.o: directories ./src/main/main.c ./src/main/KineticProto.h ./src/main/KineticProto.c ./src/vendor/protobuf-c/protobuf-c.h ./src/vendor/protobuf-c/protobuf-c.c
-	$(CC) $(CFLAGS) -c ./src/main/main.c -o $@
+$(OUT_DIR)/kinetic_client.o: directories ./src/lib/kinetic_client.c /src/lib/kinetic_proto.c ./vendor/protobuf-c/protobuf-c.c
+	$(CC) $(CFLAGS) -c ./src/lib/kinetic_client.c -o $@
 
 $(BIN): $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o $(BIN)

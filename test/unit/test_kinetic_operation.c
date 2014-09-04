@@ -29,7 +29,7 @@
 #include "mock_kinetic_pdu.h"
 
 static KineticConnection Connection;
-static const ByteArray HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
+static ByteArray HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
 static KineticPDU Request, Response;
 static KineticOperation Operation;
 

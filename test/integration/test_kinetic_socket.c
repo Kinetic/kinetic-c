@@ -46,7 +46,7 @@
 
 static int FileDesc;
 static int KineticTestPort = KINETIC_PORT /*8999*/;
-static const ByteArray TestData =
+static ByteArray TestData =
     BYTE_ARRAY_INIT_FROM_CSTRING("Some like it hot!");
 // static KineticPDU PDU;
 static bool LogInitialized = false;

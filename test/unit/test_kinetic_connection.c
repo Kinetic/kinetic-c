@@ -39,7 +39,7 @@
 static KineticConnection Connection, Expected;
 static const int64_t ClusterVersion = 12;
 static const int64_t Identity = 1234;
-static const ByteArray Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
+static ByteArray Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
 static KineticMessage MessageOut, MessageIn;
 
 void setUp(void)

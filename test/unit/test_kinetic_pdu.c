@@ -35,9 +35,9 @@
 static KineticPDU PDU;
 static KineticConnection Connection;
 static int64_t Identity = 1234;
-static const ByteArray Key = BYTE_ARRAY_INIT_FROM_CSTRING("some valid HMAC key...");
+static ByteArray Key = BYTE_ARRAY_INIT_FROM_CSTRING("some valid HMAC key...");
 static uint8_t ValueBuffer[PDU_VALUE_MAX_LEN];
-static const ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
+static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 
 void setUp(void)
 {

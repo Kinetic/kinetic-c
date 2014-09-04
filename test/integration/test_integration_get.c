@@ -40,7 +40,7 @@ static KineticOperation Operation;
 static ByteArray RequestHeader;
 static ByteArray ResponseHeaderRaw;
 static ByteArray ResponseProtobuf;
-static const ByteArray HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
+static ByteArray HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
 
 void setUp(void)
 {

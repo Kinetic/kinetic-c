@@ -22,8 +22,6 @@
 #define _KINETIC_CLIENT_H
 
 #include "kinetic_types.h"
-#include "kinetic_pdu.h"
-#include "kinetic_operation.h"
 
 /**
  * Initializes the Kinetic API andcsonfigures logging destination.

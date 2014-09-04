@@ -19,6 +19,8 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_pdu.h"
+#include "kinetic_operation.h"
 #include "kinetic_connection.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
