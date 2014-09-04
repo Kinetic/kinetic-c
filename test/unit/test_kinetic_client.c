@@ -30,6 +30,8 @@
 #include "mock_kinetic_logger.h"
 #include "mock_kinetic_operation.h"
 
+KineticPDU Request, Response;
+
 void setUp(void)
 {
     KineticLogger_Init_Expect("some/file.log");
@@ -125,24 +127,20 @@ void test_KineticClient_Connect_should_log_a_failed_connection_and_return_false(
     TEST_ASSERT_EQUAL(-1, connection.socketDescriptor);
 }
 
+
 void test_KineticClient_CreateOperation_should_create_configure_and_return_a_valid_operation_instance(void)
 {
     KineticConnection connection;
     ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key");
     KINETIC_CONNECTION_INIT(&connection, 12, key);
     KineticOperation op;
-    KineticPDU request, response;
-    KineticMessage requestMsg;
 
-    KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection);
-    KineticPDU_Init_Expect(&response, &connection);
+    KineticPDU_Init_Expect(&Request, &connection);
+    KineticPDU_Init_Expect(&Response, &connection);
 
-    op = KineticClient_CreateOperation(&connection, &request, &response);
+    op = KineticClient_CreateOperation(&connection, &Request, &Response);
 
     TEST_ASSERT_EQUAL_PTR(&connection, op.connection);
-    TEST_ASSERT_EQUAL_PTR(&request, op.request);
-    TEST_ASSERT_EQUAL_PTR(&request.message, &op.request->message);
-    TEST_ASSERT_EQUAL_PTR(&response, op.response);
-    TEST_ASSERT_EQUAL_PTR(&response.message, &op.response->message);
+    TEST_ASSERT_EQUAL_PTR(&Request, op.request);
+    TEST_ASSERT_EQUAL_PTR(&Response, op.response);
 }

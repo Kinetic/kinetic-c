@@ -6,12 +6,7 @@
 typedef struct _SystemTestInstance
 {
     bool testIgnored;
-    bool nonBlocking;
     KineticOperation operation;
-    KineticPDU request;
-    KineticPDU response;
-    KineticMessage requestMsg;
-    ByteArray value;
 } SystemTestInstance;
 
 typedef struct _SystemTestFixture
@@ -20,11 +15,13 @@ typedef struct _SystemTestFixture
     int port;
     int64_t clusterVersion;
     int64_t identity;
+    bool nonBlocking;
     int64_t expectedSequence;
     ByteArray hmacKey;
-    uint8_t data[PDU_VALUE_MAX_LEN];
     bool connected;
     KineticConnection connection;
+    KineticPDU request;
+    KineticPDU response;
     SystemTestInstance instance;
 } SystemTestFixture;
 

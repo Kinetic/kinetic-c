@@ -33,9 +33,56 @@
 #include "protobuf-c/protobuf-c.h"
 #include <stdio.h>
 
+
+static KineticConnection Connection;
+static KineticPDU Request, Response;
+static KineticOperation Operation;
+static ByteArray RequestHeader;
+static ByteArray ResponseHeaderRaw;
+static ByteArray ResponseProtobuf;
+static const ByteArray HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
+
 void setUp(void)
 {
+    const char* host = "localhost";
+    const int port = 8899;
+    const int64_t clusterVersion = 9876;
+    const int64_t identity = 1234;
+    const int socketDesc = 783;
+
     KineticClient_Init(NULL);
+
+    // Establish Connection
+    KINETIC_CONNECTION_INIT(&Connection, identity, HMACKey);
+    Connection.socketDescriptor = socketDesc;
+    KineticConnection_Connect_ExpectAndReturn(&Connection,
+        host, port, false, clusterVersion, identity, HMACKey, true);
+    
+    bool success = KineticClient_Connect(&Connection,
+        host, port, false, clusterVersion, identity, HMACKey);
+    
+    TEST_ASSERT_TRUE(success);
+    TEST_ASSERT_EQUAL_INT(socketDesc, Connection.socketDescriptor);
+
+    // Create the operation
+    Operation = KineticClient_CreateOperation(&Connection, &Request, &Response);
+    KINETIC_PDU_INIT_WITH_MESSAGE(&Request, &Connection);
+    KineticLogger_LogProtobuf(Request.proto);
+    KINETIC_PDU_INIT_WITH_MESSAGE(&Response, &Connection);
+    KineticLogger_LogProtobuf(Response.proto);
+
+    RequestHeader = (ByteArray){
+        .data = (uint8_t*)&Request.headerNBO,
+        .len = sizeof(KineticPDUHeader) };
+    Response.headerNBO = KINETIC_PDU_HEADER_INIT;
+    Response.headerNBO.protobufLength = KineticNBO_FromHostU32(17);
+    Response.headerNBO.valueLength = KineticNBO_FromHostU32(0);
+    ResponseHeaderRaw = (ByteArray){
+        .data = (uint8_t*)&Response.headerNBO,
+        .len = sizeof(KineticPDUHeader) };
+    ResponseProtobuf = (ByteArray){
+        .data = Response.protobufRaw,
+        .len = 0};
 }
 
 void tearDown(void)
@@ -44,83 +91,29 @@ void tearDown(void)
 
 void test_NoOp_should_succeed(void)
 {
-    bool success;
-    KineticOperation operation;
-    KineticPDU request, response;
-    const char* host = "localhost";
-    const int port = 8899;
-    const int64_t clusterVersion = 9876;
-    const int64_t identity = 1234;
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("123abcXYZ");
-    const int socketDesc = 783;
-    KineticConnection connection;
-    KineticMessage requestMsg;
+    LOG_LOCATION;
+    Response.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.message.command.status = &Response.message.status;
+    Response.message.status.has_code = true;
 
-    ByteArray requestHeader = {
-        .data = (uint8_t*)&request.header,
-        .len = sizeof(KineticPDUHeader) };
-    ByteArray responseHeaderRaw = {
-        .data = (uint8_t*)&response.headerNBO,
-        .len = sizeof(KineticPDUHeader) };
-    ByteArray responseProtobuf = {
-        .data = response.protobufRaw };
-
-    // Establish connection
-    KINETIC_CONNECTION_INIT(&connection, identity, key);
-    connection.socketDescriptor = socketDesc; // configure dummy socket descriptor
-    KineticConnection_Connect_ExpectAndReturn(&connection, host, port, false, clusterVersion, identity, key, true);
-    success = KineticClient_Connect(&connection, host, port, false, clusterVersion, identity, key);
-    TEST_ASSERT_TRUE(success);
-    TEST_ASSERT_EQUAL_INT(socketDesc, connection.socketDescriptor); // Ensure socket descriptor still intact!
-
-    // Create the operation
-    operation = KineticClient_CreateOperation(&connection, &request, &response);
-    TEST_ASSERT_EQUAL_PTR(&connection, operation.connection);
-    TEST_ASSERT_EQUAL_PTR(&request, operation.request);
-    TEST_ASSERT_EQUAL_PTR(&requestMsg, operation.request->message);
-    TEST_ASSERT_EQUAL_PTR(&response, operation.response);
-    TEST_ASSERT_NULL(operation.response->message);
-    TEST_ASSERT_NULL(operation.response->proto);
-
-    KineticProto responseProto = KINETIC_PROTO__INIT;
-    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
-    response.proto = &responseProto;
-    response.proto->command = &responseCommand;
-
-    KineticProto_Header responseHeader = KINETIC_PROTO_HEADER__INIT;
-    response.proto->command->header = &responseHeader;
-    response.header.valueLength = 0;
-    response.header.protobufLength = 123;
-
-    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS__INIT;
-    response.proto->command->status = &responseStatus;
-    response.proto->command->status->has_code = true;
-    response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-
-    // Fake the response, since kinetic_socket is mocked
-    operation.response->proto = &responseProto;
-    responseProto.command = &responseCommand;
-    responseCommand.status = &responseStatus;
-    responseStatus.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-
-    // Initialize response message status and HMAC, since receipt of packed protobuf is mocked out
+    // Initialize response message status and HMAC
     uint8_t hmacData[64];
-    responseProto.has_hmac = true;
-    responseProto.hmac.data = hmacData;
+    Response.message.proto.has_hmac = true;
+    Response.message.proto.hmac.data = hmacData;
     KineticHMAC respTempHMAC;
-    KineticHMAC_Populate(&respTempHMAC, &responseProto, key);
+    KineticHMAC_Populate(&respTempHMAC, &Response.message.proto, HMACKey);
 
     // Send the request
-    KineticConnection_IncrementSequence_Expect(&connection);
-    KineticSocket_Write_ExpectAndReturn(socketDesc, requestHeader, true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(socketDesc, &requestMsg.proto, true);
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, RequestHeader, true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &Request, true);
 
     // Receive the response
-    KineticSocket_Read_ExpectAndReturn(socketDesc, responseHeaderRaw, true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(socketDesc, &response.proto, responseProtobuf, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, ResponseHeaderRaw, true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &Response, true);
 
-    // Execute the operation
-    KineticProto_Status_StatusCode status =
-        KineticClient_NoOp(&operation);
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+    // // Execute the operation
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(
+        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
+        KineticClient_NoOp(&Operation));
 }

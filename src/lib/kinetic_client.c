@@ -119,9 +119,7 @@ KineticOperation KineticClient_CreateOperation(
 
     op.connection = connection;
     op.request = request;
-    // op.request->message = requestMsg;
     op.response = response;
-    // op.response->message = NULL;
 
     return op;
 }

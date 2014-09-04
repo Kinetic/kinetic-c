@@ -84,7 +84,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 
     // Not implemented as of (8/13/2014)
     TEST_ASSERT_FALSE(message.keyValue.has_force);
-    TEST_ASSERT_FALSE(message.keyValue.has_Synchronization);
+    TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
 }
 
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_metadata_only_and_add_to_message(void)
@@ -124,5 +124,5 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_me
 
     // Not implemented as of (8/13/2014)
     TEST_ASSERT_FALSE(message.keyValue.has_force);
-    TEST_ASSERT_FALSE(message.keyValue.has_Synchronization);
+    TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
 }

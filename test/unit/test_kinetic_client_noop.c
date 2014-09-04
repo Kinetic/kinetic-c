@@ -30,6 +30,8 @@
 #include "unity.h"
 #include "unity_helper.h"
 
+KineticPDU Request, Response;
+
 void setUp(void)
 {
 }
@@ -42,28 +44,23 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
 {
     KineticConnection connection;
     KineticOperation operation;
-    KineticMessage requestMsg;
-    KineticPDU request, response;
     KineticProto_Status_StatusCode status;
     ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key");
-
-    request.connection = &connection;
-    KINETIC_MESSAGE_INIT(&requestMsg);
-    request.message = &requestMsg;
+    Request.connection = &connection;
 
     KINETIC_CONNECTION_INIT(&connection, 12, key);
-    KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
-    KineticPDU_Init_Expect(&response, &connection, NULL);
-    operation = KineticClient_CreateOperation(&connection, &request, &response);
+    KineticPDU_Init_Expect(&Request, &connection);
+    KineticPDU_Init_Expect(&Response, &connection);
+    operation = KineticClient_CreateOperation(&connection,
+        &Request, &Response);
 
     KineticOperation_BuildNoop_Expect(&operation);
-    KineticPDU_Send_ExpectAndReturn(&request, true);
-    KineticPDU_Receive_ExpectAndReturn(&response, true);
-    KineticPDU_Status_ExpectAndReturn(&response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    KineticPDU_Send_ExpectAndReturn(&Request, true);
+    KineticPDU_Receive_ExpectAndReturn(&Response, true);
+    KineticPDU_Status_ExpectAndReturn(&Response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 
     status = KineticClient_NoOp(&operation);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-    TEST_ASSERT_EQUAL_PTR(&connection, response.connection);
+    TEST_ASSERT_EQUAL_PTR(&connection, Response.connection);
 }

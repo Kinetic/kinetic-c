@@ -20,6 +20,8 @@
 
 #include "noop.h"
 
+KineticPDU Request, Response;
+
 int NoOp(
     const char* host,
     int port,
@@ -29,9 +31,7 @@ int NoOp(
     ByteArray hmacKey)
 {
     KineticOperation operation;
-    KineticPDU request, response;
     KineticConnection connection;
-    KineticMessage requestMsg;
     KineticProto_Status_StatusCode status;
     bool success;
 
@@ -39,7 +39,7 @@ int NoOp(
     success = KineticClient_Connect(&connection, host, port, nonBlocking,
                                     clusterVersion, identity, hmacKey);
     assert(success);
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &Request, &Response);
     status = KineticClient_NoOp(&operation);
     KineticClient_Disconnect(&connection);
 

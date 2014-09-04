@@ -37,12 +37,14 @@ void KineticPDU_AttachValuePayload(KineticPDU* const pdu,
 {
     assert(pdu != NULL);
     pdu->value = payload;
+    pdu->header.valueLength = payload.len;
+    pdu->headerNBO.valueLength = KineticNBO_FromHostU32(payload.len);
 }
 
 void KineticPDU_EnableValueBuffer(KineticPDU* const pdu)
 {
     assert(pdu != NULL);
-    pdu->value = {.data = pdu->valueBuffer};
+    pdu->value = (ByteArray){.data = pdu->valueBuffer};
 }
 
 void KineticPDU_EnableValueBufferWithLength(KineticPDU* const pdu,
@@ -51,46 +53,41 @@ void KineticPDU_EnableValueBufferWithLength(KineticPDU* const pdu,
     assert(pdu != NULL);
     assert(length <= sizeof(pdu->valueBuffer));
     pdu->value = (ByteArray){.data = pdu->valueBuffer, .len = length};
+    pdu->header.valueLength = length;
+    pdu->headerNBO.valueLength = KineticNBO_FromHostU32(length);
 }
 
 KineticProto_Status_StatusCode KineticPDU_Status(KineticPDU* const pdu)
 {
-    assert(pdu != NULL);
-
-    KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
-
-    if (pdu->proto)
+    if (pdu != NULL &&
+        pdu->proto != NULL &&
+        pdu->proto->command != NULL &&
+        pdu->proto->command->status != NULL)
     {
-        if (pdu->proto->command && pdu->proto->command->status)
-        {
-            status = pdu->proto->command->status->code;
-        }
+        return pdu->proto->command->status->code;
     }
-    else if (&pdu->message->command && pdu->message->command.status)
+    else
     {
-        status = pdu->message->command.status->code;
+        return KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
     }
-
-    return status;
 }
 
-bool KineticPDU_Send(KineticPDU* const request)
+bool KineticPDU_Send(KineticPDU* request)
 {
     assert(request != NULL);
     assert(request->connection != NULL);
-    assert(request->message != NULL);
-
-    int fd = request->connection->socketDescriptor;
+    LOGF("Attempting to receive PDU via fd=%d",
+        request->connection->socketDescriptor);
 
     // Populate the HMAC for the protobuf
     KineticHMAC_Init(&request->hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate(&request->hmac,
-        &request->message->proto, request->connection->key);
+        &request->message.proto, request->connection->key);
 
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
     request->header.protobufLength =
-        KineticProto__get_packed_size(&request->message->proto);
+        KineticProto__get_packed_size(&request->message.proto);
     request->header.valueLength = request->value.len;
     KineticLogger_LogHeader(&request->header);
 
@@ -115,9 +112,9 @@ bool KineticPDU_Send(KineticPDU* const request)
 
     // Send the protobuf message
     LOG("Sending PDU Protobuf:");
-    KineticLogger_LogProtobuf(&request->message->proto);
+    KineticLogger_LogProtobuf(&request->message.proto);
     if (!KineticSocket_WriteProtobuf(request->connection->socketDescriptor,
-        &request->message->proto))
+        request))
     {
         LOG("Failed to send PDU protobuf message!");
         return false;
@@ -143,6 +140,7 @@ bool KineticPDU_Receive(KineticPDU* const response)
     LOGF("Attempting to receive PDU via fd=%d", fd);
     assert(fd >= 0);
     assert(response != NULL);
+    assert(response->proto != NULL);
     ByteArray rawHeader = {
         .data = (uint8_t*)&response->headerNBO,
         .len = sizeof(KineticPDUHeader) };
@@ -167,17 +165,12 @@ bool KineticPDU_Receive(KineticPDU* const response)
         response->value.len = response->header.valueLength;
         KineticLogger_LogHeader(&response->header);
     }
+    
+    LOG_LOCATION; LOGF("response->header.protobufLength=%u",
+        response->header.protobufLength);
 
     // Receive the protobuf message
-    ByteArray protobuf = {
-        .data = response->protobufRaw,
-        .len = response->header.protobufLength
-    };
-    response->proto = (KineticProto*)protobuf.data;
-    response->protobufLength = protobuf.len;
-    if (!KineticSocket_ReadProtobuf(fd,
-            &response->proto,
-            protobuf))
+    if (!KineticSocket_ReadProtobuf(fd, response))
     {
         LOG("Failed to receive PDU protobuf message!");
         return false;
@@ -185,26 +178,32 @@ bool KineticPDU_Receive(KineticPDU* const response)
     else
     {
         LOG("Received PDU protobuf");
-        KineticLogger_LogProtobuf(response->proto);
+        KineticLogger_LogProtobuf(&response->message.proto);
     }
 
     // Validate the HMAC for the recevied protobuf message
     if (!KineticHMAC_Validate(response->proto, response->connection->key))
     {
         LOG("Received PDU protobuf message has invalid HMAC!");
-        response->proto->command->status->code =
+        response->message.proto.command = &response->message.command;
+        response->message.command.status = &response->message.status;
+        response->message.status.code = 
             KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR;
 
-        // FIXME!! success = false;
+        // FIXME!!
+        return false;
         // .. but allow HMAC validation to report the error
         // return false;
         // Return true for now until HMAC validation is fixed!
-        return true;
+        // return true;
     }
     else
     {
         LOG("Received protobuf HMAC validation succeeded");
     }
+
+     LOG_LOCATION; LOGF("response->header.valueLength=%u",
+        response->header.valueLength);
 
     // Receive the value payload, if specified
     if (response->header.valueLength > 0)

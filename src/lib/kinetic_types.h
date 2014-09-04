@@ -231,6 +231,8 @@ typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
     uint32_t    protobufLength;
     uint32_t    valueLength;
 } KineticPDUHeader;
+#define KINETIC_PDU_HEADER_INIT \
+    (KineticPDUHeader) {.versionPrefix = 'F'}
 
 
 // Kinetic PDU
@@ -242,9 +244,14 @@ typedef struct _KineticPDU
 
     // Message associated with this PDU instance
     union {
+        // Pre-structured message w/command
         KineticMessage message;
+        KineticProto protoBase;
+
+        // Pad protobuf to remaining fields
         uint8_t protoData[PDU_PROTO_MAX_UNPACKED_LEN];
-    };
+    };        // Proto will always be first
+    KineticProto* proto;
     // bool rawProtoEnabled;
     uint8_t protobufRaw[PDU_PROTO_MAX_LEN];
 
@@ -265,12 +272,18 @@ typedef struct _KineticPDU
 #define KINETIC_PDU_INIT(_pdu, _con) { \
     assert((_pdu) != NULL); \
     assert((_con) != NULL); \
-    *(_pdu) = (KineticPDU) { \
-        .connection = (_con), \
-        .rawProtoEnabled = false, \
-        .value = BYTE_ARRAY_NONE, \
-    }; \
+    (_pdu)->connection = (_con); \
+    (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
+    (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
+    (_pdu)->value = BYTE_ARRAY_NONE; \
+    (_pdu)->proto = &(_pdu)->message.proto; \
     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->message.header), (_con)); \
+}
+#define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) { \
+    KINETIC_PDU_INIT((_pdu), (_con)) \
+    KINETIC_MESSAGE_INIT(&((_pdu)->message)); \
+    (_pdu)->proto->command->header = &(_pdu)->message.header; \
+    KINETIC_MESSAGE_HEADER_INIT(&(_pdu)->message.header, (_con)); \
 }
 
 // Kinetic Operation
@@ -280,6 +293,12 @@ typedef struct _KineticOperation
     KineticPDU* request;
     KineticPDU* response;
 } KineticOperation;
+#define KINETIC_OPERATION_INIT(_op, _con, _req, _resp) \
+*(_op) = (KineticOperation) { \
+    .connection = (_con), \
+    .request = (_req), \
+    .response = (_resp), \
+}
 
 
 #endif // _KINETIC_TYPES_H

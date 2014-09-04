@@ -226,7 +226,7 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                             LOGF("%smetadataOnly: %s", _indent,
                                 proto->command->body->keyValue->metadataOnly ? _str_true : _str_false);
                         }
-                        if (proto->command->body->keyValue->has_Synchronization)
+                        if (proto->command->body->keyValue->has_synchronization)
                         {
                             const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
                                 &KineticProto_synchronization__descriptor,

@@ -30,6 +30,8 @@
 #include "protobuf-c/protobuf-c.h"
 #include <stdio.h>
 
+KineticPDU Request, Response;
+
 void setUp(void)
 {
 }
@@ -41,8 +43,6 @@ void tearDown(void)
 void test_KineticClient_Put_should_execute_PUT_operation(void)
 {
     KineticConnection connection;
-
-    KineticProto responseProto = KINETIC_PROTO__INIT;
     KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
     KineticProto_Status responseStatus = KINETIC_PROTO_STATUS__INIT;
     ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
@@ -57,33 +57,26 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
         .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
     };
 
-    KineticMessage requestMsg;
-    KINETIC_MESSAGE_INIT(&requestMsg);
-    KineticPDU request;
-    KINETIC_PDU_INIT(&request, &connection, &requestMsg);
+    KINETIC_PDU_INIT(&Request, &connection);
 
-    KineticPDU response;
-
-    response.message = NULL;
-    response.proto = &responseProto;
-    response.proto->command = &responseCommand;
-    response.proto->command->status = &responseStatus;
-    response.proto->command->status->has_code = true;
-    response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.message.proto.command = &responseCommand;
+    Response.message.proto.command->status = &responseStatus;
+    Response.message.proto.command->status->has_code = true;
+    Response.message.proto.command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
     KINETIC_CONNECTION_INIT(&connection, 1234, hmacKey);
-    KineticMessage_Init_Expect(&requestMsg);
-    KineticPDU_Init_Expect(&request, &connection, &requestMsg);
-    KineticPDU_Init_Expect(&response, &connection, NULL);
-    KineticOperation operation = KineticClient_CreateOperation(&connection, &request, &response);
+    KineticPDU_Init_Expect(&Request, &connection);
+    KineticPDU_Init_Expect(&Response, &connection);
+    KineticOperation operation = KineticClient_CreateOperation(&connection,
+        &Request, &Response);
 
     KineticOperation_BuildPut_Expect(&operation, &metadata, value);
-    KineticPDU_Send_ExpectAndReturn(&request, true);
-    KineticPDU_Receive_ExpectAndReturn(&response, true);
-    KineticPDU_Status_ExpectAndReturn(&response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    KineticPDU_Send_ExpectAndReturn(&Request, true);
+    KineticPDU_Receive_ExpectAndReturn(&Response, true);
+    KineticPDU_Status_ExpectAndReturn(&Response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
 
     status = KineticClient_Put(&operation, &metadata, value);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
-    TEST_ASSERT_EQUAL_PTR(&connection, response.connection);
+    TEST_ASSERT_EQUAL_PTR(&connection, Response.connection);
 }

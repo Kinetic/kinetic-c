@@ -92,6 +92,8 @@ bool KineticHMAC_Validate(const KineticProto* proto,
     return success;
 }
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 static void KineticHMAC_Compute(KineticHMAC* hmac,
     const KineticProto* proto,
     const ByteArray key)
@@ -104,7 +106,6 @@ static void KineticHMAC_Compute(KineticHMAC* hmac,
     uint32_t lenPacked = protobuf_c_message_pack((ProtobufCMessage*)proto->command, packed);
     assert(lenPacked == len);
 
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     HMAC_CTX ctx;
     HMAC_CTX_init(&ctx);
     HMAC_Init_ex(&ctx, key.data, key.len, EVP_sha1(), NULL);

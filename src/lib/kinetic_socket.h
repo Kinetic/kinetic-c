@@ -30,7 +30,7 @@ void KineticSocket_Close(int socketDescriptor);
 bool KineticSocket_Read(int socketDescriptor, ByteArray buffer);
 bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticPDU* pdu);
 
-bool KineticSocket_Write(int socketDescriptor, const ByteArray buffer);
-bool KineticSocket_WriteProtobuf(int socketDescriptor, const KineticPDU* pdu);
+bool KineticSocket_Write(int socketDescriptor, ByteArray buffer);
+bool KineticSocket_WriteProtobuf(int socketDescriptor, KineticPDU* pdu);
 
 #endif // _KINETIC_SOCKET_H

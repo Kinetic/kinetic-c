@@ -20,6 +20,8 @@
 
 #include "get.h"
 
+KineticPDU Request, Response;
+
 int Get(const char* host,
         int port,
         bool nonBlocking,
@@ -30,9 +32,7 @@ int Get(const char* host,
         ByteArray value)
 {
     KineticOperation operation;
-    KineticPDU request, response;
     KineticConnection connection;
-    KineticMessage requestMsg;
     KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
     bool success;
 
@@ -41,7 +41,7 @@ int Get(const char* host,
                                     clusterVersion, identity, hmacKey);
     assert(success);
 
-    operation = KineticClient_CreateOperation(&connection, &request, &requestMsg, &response);
+    operation = KineticClient_CreateOperation(&connection, &Request, &Response);
 
     status = KineticClient_Get(&operation, metadata, value);
 

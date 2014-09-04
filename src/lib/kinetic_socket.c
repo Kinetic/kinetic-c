@@ -42,12 +42,14 @@
 
 static void* KineticProto_Alloc(void* buf, size_t size)
 {
+    // LOG_LOCATION; LOGF(">>>> Allocating %zu bytes...", size);
     void *res = NULL;
     ByteBuffer* p = (ByteBuffer*)buf;
     if ((size > 0) && (p->buffer.len + size <= PDU_PROTO_MAX_UNPACKED_LEN))
     {
         res = (void*)&p->buffer.data[p->buffer.len];
-        p->buffer.len += (size + 31) & ~31; // Align to next 32-byte sector
+        p->buffer.data[p->buffer.len + size] = '\0';
+        p->buffer.len += (size + 1 + sizeof(long) - 1) & ~(sizeof(long) - 1); // Align to next long boundary
     }
     return res;
 }
@@ -238,26 +240,27 @@ bool KineticSocket_ReadProtobuf(int socketDescriptor,
     KineticPDU* pdu)
 {
     LOGF("Reading %zd bytes of protobuf", pdu->header.protobufLength);
-    ByteBuffer recvBuffer = BYTE_BUFFER_INIT(
-        pdu->protobufRaw,
-        pdu->header.protobufLength);
-    bool success = false;
+    ByteArray recvArray = {
+        .data = pdu->protobufRaw,
+        .len = pdu->header.protobufLength
+    };
 
-    if (KineticSocket_Read(socketDescriptor, recvBuffer.buffer))
+    if (KineticSocket_Read(socketDescriptor, recvArray))
     {
         LOG("Read completed!");
+
+        ByteBuffer recvBuffer = BYTE_BUFFER_INIT(pdu->protoData,
+            PDU_PROTO_MAX_UNPACKED_LEN);
 
         // Protobuf-C allocator to use for received data
         ProtobufCAllocator serialAllocator = {
             KineticProto_Alloc,
             KineticProto_Free,
-            NULL,
-            PDU_PROTO_MAX_UNPACKED_LEN,
-            pdu->protoData
+            (void*)&recvBuffer
         };
 
-        KineticProto* unpacked = KineticProto__unpack(
-            &serialAllocator, buffer.len, buffer.data);
+        KineticProto* unpacked = KineticProto__unpack(&serialAllocator,
+            recvArray.len, recvArray.data);
         if (unpacked == NULL)
         {
             LOG("Error unpacking incoming Kinetic protobuf message!");
@@ -272,27 +275,13 @@ bool KineticSocket_ReadProtobuf(int socketDescriptor,
     return false;
 }
 
-FakeAllocatorData allocator_data;
-allocator_data.index = 0;
-
-ProtobufCAllocator perf_allocator = {
-    perf_system_alloc,
-    perf_system_free,
-    NULL,
-    65535,
-    &allocator_data
-};
-
 bool KineticSocket_Write(int socketDescriptor,
-    const ByteArray buffer)
+    ByteArray buffer)
 {
-    size_t count;
-
     LOGF("Writing %zu bytes to socket...", buffer.len);
-    for (count = 0; count < buffer.len; )
+    for (int count = 0; count < buffer.len; )
     {
-        int status;
-        status = write(socketDescriptor,
+        int status = write(socketDescriptor,
             &buffer.data[count], buffer.len - count);
         if (status == -1 && errno == EINTR)
         {
@@ -318,19 +307,14 @@ bool KineticSocket_Write(int socketDescriptor,
 }
 
 bool KineticSocket_WriteProtobuf(int socketDescriptor,
-    const KineticPDU* pdu)
+    KineticPDU* pdu)
 {
     assert(pdu != NULL);
-    assert(pdu->message != NULL);
-    assert(pdu->message->proto != NULL);
-    size_t len = KineticProto__get_packed_size(pdu->message->proto);
     LOGF("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
-    size_t packedLen = KineticProto__pack(proto, pdu->protobufRaw);
-    assert(packedLen == len);
-    ByteArray buffer = {.data = pdu->protobufRaw, .len = packedLen};
+    size_t len = KineticProto__pack(&pdu->message.proto,
+        pdu->protobufRaw);
+    assert(len == pdu->header.protobufLength);
+    ByteArray buffer = {.data = pdu->protobufRaw, .len = len};
 
-    bool success = KineticSocket_Write(socketDescriptor, pdu->protobufRaw);
-    free(packed);
-
-    return success;
+    return KineticSocket_Write(socketDescriptor, buffer);
 }

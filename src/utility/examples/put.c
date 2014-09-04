@@ -20,6 +20,8 @@
 
 #include "put.h"
 
+KineticPDU request, response;
+
 int Put(
     const char* host,
     int port,
@@ -31,9 +33,7 @@ int Put(
     const ByteArray value)
 {
     KineticOperation operation;
-    KineticPDU request, response;
     KineticConnection connection;
-    KineticMessage requestMsg;
     KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
     bool success;
 
@@ -43,7 +43,7 @@ int Put(
     assert(success);
 
     operation = KineticClient_CreateOperation(
-        &connection, &request, &requestMsg, &response);
+        &connection, &request, &response);
 
     status = KineticClient_Put(&operation, metadata, value);
 
