@@ -57,7 +57,7 @@ void setUp(void)
         KineticLogger_Init(NULL);//"test_kinetic_socket.log");
         LogInitialized = true;
     }
-    TestData = BYTE_ARRAY_INIT_FROM_CSTRING("Some like it hot!")
+    TestData = BYTE_ARRAY_INIT_FROM_CSTRING("Some like it hot!");
 }
 
 void tearDown(void)
