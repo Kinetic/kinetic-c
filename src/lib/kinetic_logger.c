@@ -114,9 +114,53 @@ void KineticLogger_LogHeader(const KineticPDUHeader* header)
     _indent[strlen(_indent) - 2] = '\0'; \
     LOGF("%s}", _indent);
 
+int KineticLogger_u8toa(char* p_buf, uint8_t val)
+{
+    LOGF("Converting byte=%02u", val);
+    const int width = 2;
+    int i = width;
+    const uint8_t base = 16;
+    char c = 0;
+    
+    p_buf += width - 1;
+    do {
+        c = val % base;
+        val /= base;
+        if(c >= 10) c += 'A'-'0'-10;
+        c += '0';
+        LOGF("CH: %c @ %d to 0x%llX", c, i, (long long)(p_buf));
+        *p_buf-- = c;
+    } while (--i);
+    return width;
+}
+
+int KineticLogger_ByteArraySliceToCString(char* p_buf,
+    const ByteArray bytes, const int start, const int count)
+{
+    LOGF("Converting ByteArray (count=%u)", count);
+    int len = 0;
+    for(int i = 0; i < count; i++)
+    {
+        LOGF("BYTE to 0x%llX (prepending '\\')", (long long)(&p_buf[len]));
+        p_buf[len++] = '\\';
+        LOGF("BYTE digits to 0x%llX", (long long)(&p_buf[len]));
+        len += KineticLogger_u8toa(&p_buf[len], bytes.data[start + i]);
+        LOGF("BYTE next @ 0x%llX", (long long)(&p_buf[len]));
+    }
+    p_buf[len] = '\0';
+    LOGF("BYTE string terminated @ 0x%llX", (long long)(&p_buf[len]));
+    return len;
+}
+
+#define BYTES_TO_CSTRING(_buf_start, _array, _array_start, _count) { \
+    char* p_buf = (_buf_start); \
+    KineticLogger_ByteArraySliceToCString(p_buf, (_array), 0, _array.len); \
+}
+
 void KineticLogger_LogProtobuf(const KineticProto* proto)
 {
     LOG_PROTO_INIT();
+    char tmpBuf[1024];
 
     if (proto == NULL)
     {
@@ -195,7 +239,10 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                     {
                         if (proto->command->body->keyValue->has_key)
                         {
-                            LOGF("%skey: '%s'", _indent, proto->command->body->keyValue->key.data);
+                            BYTES_TO_CSTRING(tmpBuf,
+                                proto->command->body->keyValue->key,
+                                0, proto->command->body->keyValue->key.len);
+                            LOGF("%skey: '%s'", _indent, tmpBuf);
                         }
                         if (proto->command->body->keyValue->has_newVersion)
                         {
