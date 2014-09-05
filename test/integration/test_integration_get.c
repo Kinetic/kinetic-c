@@ -40,7 +40,7 @@ static KineticOperation Operation;
 static ByteArray RequestHeader;
 static ByteArray ResponseHeaderRaw;
 static ByteArray ResponseProtobuf;
-static ByteArray HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
+static ByteArray HMACKey;
 
 void setUp(void)
 {
@@ -49,6 +49,7 @@ void setUp(void)
     const int64_t clusterVersion = 9876;
     const int64_t identity = 1234;
     const int socketDesc = 783;
+    HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
 
     KineticClient_Init(NULL);
 

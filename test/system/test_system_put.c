@@ -46,13 +46,16 @@ static SystemTestFixture Fixture = {
     .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
 };
 
-static ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
-static ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
-static ByteArray testValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
+static ByteArray valueKey;
+static ByteArray tag;
+static ByteArray testValue;
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
+    valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
+    tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+    testValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
 }
 
 void tearDown(void)

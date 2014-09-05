@@ -189,13 +189,8 @@ bool KineticPDU_Receive(KineticPDU* const response)
         response->message.command.status = &response->message.status;
         response->message.status.code = 
             KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR;
-
-        // FIXME!!
+            
         return false;
-        // .. but allow HMAC validation to report the error
-        // return false;
-        // Return true for now until HMAC validation is fixed!
-        // return true;
     }
     else
     {

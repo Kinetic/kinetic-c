@@ -35,7 +35,7 @@
 static KineticPDU PDU;
 static KineticConnection Connection;
 static int64_t Identity = 1234;
-static ByteArray Key = BYTE_ARRAY_INIT_FROM_CSTRING("some valid HMAC key...");
+static ByteArray Key;
 static uint8_t ValueBuffer[PDU_VALUE_MAX_LEN];
 static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 
@@ -51,6 +51,7 @@ void setUp(void)
     KINETIC_PDU_INIT(&PDU, &Connection);
     BYTE_ARRAY_FILL_WITH_DUMMY_DATA(Value);
     KineticLogger_Init(NULL);
+    Key = BYTE_ARRAY_INIT_FROM_CSTRING("some valid HMAC key...");
 }
 
 void tearDown(void)
@@ -225,8 +226,6 @@ void test_KineticPDU_Status_should_return_invalid_status_from_protobuf_if_none_a
 
     PDU.proto = &PDU.message.proto;
     PDU.proto->command = NULL;
-    // PDU.proto->command = &PDU.message.command;
-    // PDU.proto->command->status = &PDU.message.status;
     PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
@@ -497,13 +496,7 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
 
     bool status = KineticPDU_Receive(&PDU);
 
-    LOG("HERE!!!");
-
-    // FIXME!! HMAC validation on incoming messages is failing
     TEST_ASSERT_FALSE(status);
-    // TEST_ASSERT_TRUE(status);
-    // TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR, PDU.message.status.code);
-    // TEST_IGNORE_MESSAGE("Allowing HMAC validation to report KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR as successful until fixed.");
 }
 
 void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_return_false_upon_value_field_receive_failure(void)

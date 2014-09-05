@@ -39,11 +39,12 @@
 static KineticConnection Connection, Expected;
 static const int64_t ClusterVersion = 12;
 static const int64_t Identity = 1234;
-static ByteArray Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
+static ByteArray Key;
 static KineticMessage MessageOut, MessageIn;
 
 void setUp(void)
 {
+    Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
     KINETIC_CONNECTION_INIT(&Connection, Identity, Key);
     Expected = Connection;
     KINETIC_MESSAGE_INIT(&MessageOut);
@@ -58,6 +59,7 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 {
     KineticConnection connection;
     time_t curTime = time(NULL);
+    Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
     KINETIC_CONNECTION_INIT(&connection, Identity, Key);
 
     TEST_ASSERT_FALSE(connection.connected);

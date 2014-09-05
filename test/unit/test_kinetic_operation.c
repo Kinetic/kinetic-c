@@ -29,12 +29,13 @@
 #include "mock_kinetic_pdu.h"
 
 static KineticConnection Connection;
-static ByteArray HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
+static ByteArray HMACKey;
 static KineticPDU Request, Response;
 static KineticOperation Operation;
 
 void setUp(void)
 {
+    HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
     KINETIC_CONNECTION_INIT(&Connection, 12, HMACKey);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Request, &Connection);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Response, &Connection);

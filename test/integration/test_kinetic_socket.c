@@ -45,10 +45,8 @@
 #include <stdio.h>
 
 static int FileDesc;
-static int KineticTestPort = KINETIC_PORT /*8999*/;
-static ByteArray TestData =
-    BYTE_ARRAY_INIT_FROM_CSTRING("Some like it hot!");
-// static KineticPDU PDU;
+static int KineticTestPort = KINETIC_PORT;
+static ByteArray TestData;
 static bool LogInitialized = false;
 
 void setUp(void)
@@ -59,6 +57,7 @@ void setUp(void)
         KineticLogger_Init(NULL);//"test_kinetic_socket.log");
         LogInitialized = true;
     }
+    TestData = BYTE_ARRAY_INIT_FROM_CSTRING("Some like it hot!")
 }
 
 void tearDown(void)

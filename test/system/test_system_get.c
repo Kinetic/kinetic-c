@@ -45,14 +45,18 @@ static SystemTestFixture Fixture = {
     .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
 };
 
-static ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("GET system test blob");
-static ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeOtherTagValue");
-static ByteArray testValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah blah blah... etc.");
+static ByteArray valueKey;
+static ByteArray tag;
+static ByteArray testValue;
 static bool testDataWritten = false;
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
+
+    valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("GET system test blob");
+    tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeOtherTagValue");
+    testValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah blah blah... etc.");
 
     // Setup to write some test data
     Fixture.request.value = testValue;
