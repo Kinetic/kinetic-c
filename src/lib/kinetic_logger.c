@@ -101,7 +101,6 @@ void KineticLogger_LogHeader(const KineticPDUHeader* header)
 }
 
 #define LOG_PROTO_INIT() \
-    unsigned int _i; \
     char _indent[32] = "  "; \
     const char* _str_true = "true"; \
     const char* _str_false = "false";
@@ -116,7 +115,7 @@ void KineticLogger_LogHeader(const KineticPDUHeader* header)
 
 int KineticLogger_u8toa(char* p_buf, uint8_t val)
 {
-    LOGF("Converting byte=%02u", val);
+    // LOGF("Converting byte=%02u", val);
     const int width = 2;
     int i = width;
     const uint8_t base = 16;
@@ -128,7 +127,7 @@ int KineticLogger_u8toa(char* p_buf, uint8_t val)
         val /= base;
         if(c >= 10) c += 'A'-'0'-10;
         c += '0';
-        LOGF("CH: %c @ %d to 0x%llX", c, i, (long long)(p_buf));
+        // LOGF("CH: %c @ %d to 0x%llX", c, i, (long long)(p_buf));
         *p_buf-- = c;
     } while (--i);
     return width;
@@ -137,18 +136,18 @@ int KineticLogger_u8toa(char* p_buf, uint8_t val)
 int KineticLogger_ByteArraySliceToCString(char* p_buf,
     const ByteArray bytes, const int start, const int count)
 {
-    LOGF("Converting ByteArray (count=%u)", count);
+    // LOGF("Converting ByteArray (count=%u)", count);
     int len = 0;
     for(int i = 0; i < count; i++)
     {
-        LOGF("BYTE to 0x%llX (prepending '\\')", (long long)(&p_buf[len]));
+        // LOGF("BYTE to 0x%llX (prepending '\\')", (long long)(&p_buf[len]));
         p_buf[len++] = '\\';
-        LOGF("BYTE digits to 0x%llX", (long long)(&p_buf[len]));
+        // LOGF("BYTE digits to 0x%llX", (long long)(&p_buf[len]));
         len += KineticLogger_u8toa(&p_buf[len], bytes.data[start + i]);
-        LOGF("BYTE next @ 0x%llX", (long long)(&p_buf[len]));
+        // LOGF("BYTE next @ 0x%llX", (long long)(&p_buf[len]));
     }
     p_buf[len] = '\0';
-    LOGF("BYTE string terminated @ 0x%llX", (long long)(&p_buf[len]));
+    // LOGF("BYTE string terminated @ 0x%llX", (long long)(&p_buf[len]));
     return len;
 }
 
@@ -168,8 +167,6 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
     }
 
     LOG("Kinetic Protobuf:");
-
-    // KineticProto_Command* command;
     if (proto->command)
     {
         LOG_PROTO_LEVEL_START("command");
@@ -246,15 +243,24 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                         }
                         if (proto->command->body->keyValue->has_newVersion)
                         {
-                            LOGF("%snewVersion: '%s'", _indent, proto->command->body->keyValue->newVersion.data);
+                            BYTES_TO_CSTRING(tmpBuf,
+                                proto->command->body->keyValue->newVersion,
+                                0, proto->command->body->keyValue->newVersion.len);
+                            LOGF("%snewVersion: '%s'", _indent, tmpBuf);
                         }
                         if (proto->command->body->keyValue->has_dbVersion)
                         {
-                            LOGF("%sdbVersion: '%s'", _indent, proto->command->body->keyValue->dbVersion.data);
+                            BYTES_TO_CSTRING(tmpBuf,
+                                proto->command->body->keyValue->dbVersion,
+                                0, proto->command->body->keyValue->dbVersion.len);
+                            LOGF("%sdbVersion: '%s'", _indent, tmpBuf);
                         }
                         if (proto->command->body->keyValue->has_tag)
                         {
-                            LOGF("%stag: '%s'", _indent, proto->command->body->keyValue->tag.data);
+                            BYTES_TO_CSTRING(tmpBuf,
+                                proto->command->body->keyValue->tag,
+                                0, proto->command->body->keyValue->tag.len);
+                            LOGF("%stag: '%s'", _indent, tmpBuf);
                         }
                         if (proto->command->body->keyValue->has_force)
                         {
@@ -306,13 +312,10 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                 }
                 if (proto->command->status->has_detailedMessage)
                 {
-                    char tmp[8], buf[64] = "detailedMessage: ";
-                    for (_i = 0; _i < proto->command->status->detailedMessage.len; _i++)
-                    {
-                        sprintf(tmp, "%02hhX", proto->command->status->detailedMessage.data[_i]);
-                        strcat(buf, tmp);
-                    }
-                    LOGF("%s%s", _indent, buf);
+                    BYTES_TO_CSTRING(tmpBuf,
+                        proto->command->status->detailedMessage,
+                        0, proto->command->status->detailedMessage.len);
+                    LOGF("%detailedMessage: '%s'", _indent, tmpBuf);
                 }
             }
             LOG_PROTO_LEVEL_END();
@@ -322,13 +325,10 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
 
     if (proto->has_hmac)
     {
-        char tmp[8], buf[64] = "hmac: ";
-        for (_i = 0; _i < proto->hmac.len; _i++)
-        {
-            sprintf(tmp, "%02hhX", proto->hmac.data[_i]);
-            strcat(buf, tmp);
-        }
-        LOGF("%s%s", _indent, buf);
+        BYTES_TO_CSTRING(tmpBuf,
+            proto->hmac,
+            0, proto->hmac->key.len);
+        LOGF("%shmac: '%s'", _indent, tmpBuf);
     }
 }
 
