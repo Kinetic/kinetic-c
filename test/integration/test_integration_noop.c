@@ -93,16 +93,16 @@ void tearDown(void)
 void test_NoOp_should_succeed(void)
 {
     LOG_LOCATION;
-    Response.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-    Response.message.command.status = &Response.message.status;
-    Response.message.status.has_code = true;
+    Response.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.protoData.message.command.status = &Response.protoData.message.status;
+    Response.protoData.message.status.has_code = true;
 
     // Initialize response message status and HMAC
     uint8_t hmacData[64];
-    Response.message.proto.has_hmac = true;
-    Response.message.proto.hmac.data = hmacData;
+    Response.protoData.message.proto.has_hmac = true;
+    Response.protoData.message.proto.hmac.data = hmacData;
     KineticHMAC respTempHMAC;
-    KineticHMAC_Populate(&respTempHMAC, &Response.message.proto, HMACKey);
+    KineticHMAC_Populate(&respTempHMAC, &Response.protoData.message.proto, HMACKey);
 
     // Send the request
     KineticConnection_IncrementSequence_Expect(&Connection);

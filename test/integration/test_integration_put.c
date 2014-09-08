@@ -93,9 +93,9 @@ void tearDown(void)
 void test_Put_should_create_new_object_on_device(void)
 {
     LOG_LOCATION;
-    Response.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-    Response.message.command.status = &Response.message.status;
-    Response.message.status.has_code = true;
+    Response.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.protoData.message.command.status = &Response.protoData.message.status;
+    Response.protoData.message.status.has_code = true;
 
     // Create operation-specific data and paylod
     ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
@@ -110,10 +110,10 @@ void test_Put_should_create_new_object_on_device(void)
     
     // Initialize response message status and HMAC
     uint8_t hmacData[64];
-    Response.message.proto.has_hmac = true;
-    Response.message.proto.hmac.data = hmacData;
+    Response.protoData.message.proto.has_hmac = true;
+    Response.protoData.message.proto.hmac.data = hmacData;
     KineticHMAC respTempHMAC;
-    KineticHMAC_Populate(&respTempHMAC, &Response.message.proto, HMACKey);
+    KineticHMAC_Populate(&respTempHMAC, &Response.protoData.message.proto, HMACKey);
 
     // Send the request
     KineticConnection_IncrementSequence_Expect(&Connection);
@@ -139,9 +139,9 @@ void test_Put_should_create_new_object_on_device(void)
 void test_Put_should_update_object_data_on_device(void)
 {
     LOG_LOCATION;
-    Response.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-    Response.message.command.status = &Response.message.status;
-    Response.message.status.has_code = true;
+    Response.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.protoData.message.command.status = &Response.protoData.message.status;
+    Response.protoData.message.status.has_code = true;
 
     // Create operation-specific data and paylod
     ByteArray dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
@@ -156,10 +156,10 @@ void test_Put_should_update_object_data_on_device(void)
     
     // Initialize response message status and HMAC
     uint8_t hmacData[64];
-    Response.message.proto.has_hmac = true;
-    Response.message.proto.hmac.data = hmacData;
+    Response.protoData.message.proto.has_hmac = true;
+    Response.protoData.message.proto.hmac.data = hmacData;
     KineticHMAC respTempHMAC;
-    KineticHMAC_Populate(&respTempHMAC, &Response.message.proto, HMACKey);
+    KineticHMAC_Populate(&respTempHMAC, &Response.protoData.message.proto, HMACKey);
 
     // Send the request
     KineticConnection_IncrementSequence_Expect(&Connection);
@@ -185,9 +185,9 @@ void test_Put_should_update_object_data_on_device(void)
 void test_Put_should_update_object_data_on_device_and_update_version(void)
 {
     LOG_LOCATION;
-    Response.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-    Response.message.command.status = &Response.message.status;
-    Response.message.status.has_code = true;
+    Response.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.protoData.message.command.status = &Response.protoData.message.status;
+    Response.protoData.message.status.has_code = true;
 
     // Create operation-specific data and paylod
     ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
@@ -204,10 +204,10 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     
     // Initialize response message status and HMAC
     uint8_t hmacData[64];
-    Response.message.proto.has_hmac = true;
-    Response.message.proto.hmac.data = hmacData;
+    Response.protoData.message.proto.has_hmac = true;
+    Response.protoData.message.proto.hmac.data = hmacData;
     KineticHMAC respTempHMAC;
-    KineticHMAC_Populate(&respTempHMAC, &Response.message.proto, HMACKey);
+    KineticHMAC_Populate(&respTempHMAC, &Response.protoData.message.proto, HMACKey);
 
     // Send the request
     KineticConnection_IncrementSequence_Expect(&Connection);

@@ -68,7 +68,7 @@
 
 typedef ProtobufCBinaryData ByteArray;
 #define BYTE_ARRAY_NONE \
-    (ByteArray){}
+    (ByteArray){.len = 0, .data = NULL}
 #define BYTE_ARRAY_INIT(_data) (ByteArray) \
     {.data = (uint8_t*)(_data), .len = sizeof(_data)};
 #define BYTE_ARRAY_INIT_WITH_LEN(_data, _len) \
@@ -82,7 +82,7 @@ typedef ProtobufCBinaryData ByteArray;
 #define BYTE_ARRAY_INIT_FROM_CSTRING(str) \
     (ByteArray){.data = (uint8_t*)(str), .len = strlen(str)}
 #define BYTE_ARRAY_FILL_WITH_DUMMY_DATA(_array) \
-    {int i=0; for(;i<(_array).len;++i){(_array).data[i] = (uint8_t)(i & 0xFFu);} }
+    {size_t i=0; for(;i<(_array).len;++i){(_array).data[i] = (uint8_t)(i & 0xFFu);} }
 
 
 // // Structure for defining a custom memory allocator.
@@ -100,7 +100,7 @@ typedef struct
     size_t      maxLen;
 } ByteBuffer;
 #define BYTE_BUFFER_INIT(_buf, _max) (ByteBuffer) { \
-    .buffer = {.data = (_buf), .len = 0}, \
+    .buffer = {.data = (uint8_t*)(_buf), .len = 0}, \
     .maxLen = sizeof(_buf) }
 
 
@@ -244,13 +244,14 @@ typedef struct _KineticPDU
 
     // Message associated with this PDU instance
     union {
-        // Pre-structured message w/command
-        KineticMessage message;
         KineticProto protoBase;
 
-        // Pad protobuf to remaining fields
-        uint8_t protoData[PDU_PROTO_MAX_UNPACKED_LEN];
-    };        // Proto will always be first
+        // Pre-structured message w/command
+        KineticMessage message;
+
+        // Pad protobuf to max size for extraction of arbitrary packed proto
+        uint8_t buffer[PDU_PROTO_MAX_UNPACKED_LEN];
+    } protoData;        // Proto will always be first
     KineticProto* proto;
     // bool rawProtoEnabled;
     uint8_t protobufRaw[PDU_PROTO_MAX_LEN];
@@ -276,14 +277,14 @@ typedef struct _KineticPDU
     (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
     (_pdu)->value = BYTE_ARRAY_NONE; \
-    (_pdu)->proto = &(_pdu)->message.proto; \
-    KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->message.header), (_con)); \
+    (_pdu)->proto = &(_pdu)->protoData.message.proto; \
+    KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
 }
 #define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) { \
     KINETIC_PDU_INIT((_pdu), (_con)) \
-    KINETIC_MESSAGE_INIT(&((_pdu)->message)); \
-    (_pdu)->proto->command->header = &(_pdu)->message.header; \
-    KINETIC_MESSAGE_HEADER_INIT(&(_pdu)->message.header, (_con)); \
+    KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
+    (_pdu)->proto->command->header = &(_pdu)->protoData.message.header; \
+    KINETIC_MESSAGE_HEADER_INIT(&(_pdu)->protoData.message.header, (_con)); \
 }
 
 // Kinetic Operation

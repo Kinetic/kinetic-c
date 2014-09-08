@@ -21,7 +21,7 @@
 #ifndef _GET_H
 #define _GET_H
 
-#include "kinetic.h"
+#include "kinetic_client.h"
 
 /**
  * @brief Connects to the specified Kinetic host/port and executes a Get to read data from the Device

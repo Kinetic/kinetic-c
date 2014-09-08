@@ -59,8 +59,8 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
 
     Request.connection = &connection;
 
-    Response.message.status.has_code = true;
-    Response.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.protoData.message.status.has_code = true;
+    Response.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
     KINETIC_CONNECTION_INIT(&connection, 12, key);
     KineticPDU_Init_Expect(&Request, &connection);
@@ -94,8 +94,8 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_embedded_P
     };
     Request.connection = &connection;
 
-    Response.message.status.has_code = true;
-    Response.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.protoData.message.status.has_code = true;
+    Response.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
     KINETIC_CONNECTION_INIT(&connection, 12, key);
     KineticPDU_Init_Expect(&Request, &connection);
@@ -132,8 +132,8 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
 
     Request.connection = &connection;
     
-    Response.message.status.has_code = true;
-    Response.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.protoData.message.status.has_code = true;
+    Response.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
     KINETIC_CONNECTION_INIT(&connection, 12, key);
     KineticPDU_Init_Expect(&Request, &connection);

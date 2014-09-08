@@ -136,4 +136,4 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
 /*******************************************************************************
 * ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
 *******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture);
+SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

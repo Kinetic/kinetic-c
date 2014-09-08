@@ -21,7 +21,7 @@
 #ifndef _PUT_H
 #define _PUT_H
 
-#include "kinetic.h"
+#include "kinetic_client.h"
 
 /**
  * @brief Connects to the specified Kinetic host/port and executes a Put to write data to the Device

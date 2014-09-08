@@ -32,9 +32,11 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <signal.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
@@ -56,6 +58,7 @@ static void* KineticProto_Alloc(void* buf, size_t size)
  
 static void KineticProto_Free(void* buf, void* ignored)
 {
+    (void)ignored; // to eliminate unused parameter warning
     ByteBuffer* p = (ByteBuffer*)buf;
     p->buffer.len = 0;
 }
@@ -249,7 +252,7 @@ bool KineticSocket_ReadProtobuf(int socketDescriptor,
     {
         LOG("Read completed!");
 
-        ByteBuffer recvBuffer = BYTE_BUFFER_INIT(pdu->protoData,
+        ByteBuffer recvBuffer = BYTE_BUFFER_INIT(pdu->protoData.buffer,
             PDU_PROTO_MAX_UNPACKED_LEN);
 
         // Protobuf-C allocator to use for received data
@@ -279,7 +282,7 @@ bool KineticSocket_Write(int socketDescriptor,
     ByteArray buffer)
 {
     LOGF("Writing %zu bytes to socket...", buffer.len);
-    for (int count = 0; count < buffer.len; )
+    for (size_t count = 0; count < buffer.len; )
     {
         int status = write(socketDescriptor,
             &buffer.data[count], buffer.len - count);
@@ -311,7 +314,7 @@ bool KineticSocket_WriteProtobuf(int socketDescriptor,
 {
     assert(pdu != NULL);
     LOGF("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
-    size_t len = KineticProto__pack(&pdu->message.proto,
+    size_t len = KineticProto__pack(&pdu->protoData.message.proto,
         pdu->protobufRaw);
     assert(len == pdu->header.protobufLength);
     ByteArray buffer = {.data = pdu->protobufRaw, .len = len};

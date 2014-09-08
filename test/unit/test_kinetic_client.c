@@ -142,5 +142,6 @@ void test_KineticClient_CreateOperation_should_create_configure_and_return_a_val
 
     TEST_ASSERT_EQUAL_PTR(&connection, op.connection);
     TEST_ASSERT_EQUAL_PTR(&Request, op.request);
+    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message, op.request->proto);
     TEST_ASSERT_EQUAL_PTR(&Response, op.response);
 }

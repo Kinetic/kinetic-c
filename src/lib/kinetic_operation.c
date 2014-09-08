@@ -53,7 +53,7 @@ void KineticOperation_BuildPut(KineticOperation* operation,
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_PUT;
     operation->request->proto->command->header->has_messageType = true;
 
-    KineticMessage_ConfigureKeyValue(&operation->request->message, metadata);
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
 
     operation->request->value = value;
 }
@@ -78,5 +78,5 @@ void KineticOperation_BuildGet(KineticOperation* operation,
         operation->response->value.data = operation->response->valueBuffer;
     }
 
-    KineticMessage_ConfigureKeyValue(&operation->request->message, metadata);
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
 }

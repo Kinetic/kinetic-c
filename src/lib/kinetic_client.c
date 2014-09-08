@@ -117,10 +117,12 @@ KineticOperation KineticClient_CreateOperation(
     }
 
     KineticPDU_Init(request, connection);
+    KINETIC_PDU_INIT_WITH_MESSAGE(request, connection);
     KineticPDU_Init(response, connection);
 
     op.connection = connection;
     op.request = request;
+    op.request->proto = &op.request->protoData.message.proto;
     op.response = response;
 
     return op;

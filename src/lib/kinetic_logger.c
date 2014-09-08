@@ -67,7 +67,7 @@ void KineticLogger_Log(const char* message)
     }
 
     FileDesc = LogToConsole ? stderr : fopen(LogFile, "a");
-    if (FileDesc >= 0)
+    if (FileDesc != NULL)
     {
         fprintf(FileDesc, "%s\n", message);
         fflush(FileDesc);
@@ -372,7 +372,6 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
         // Output detailed message, if supplied
         if (status->has_detailedMessage)
         {
-            int i;
             char tmp[8], msg[256];
             const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
                 protobuf_c_message_descriptor_get_field_by_name(
@@ -382,7 +381,7 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
                 statusDetailedMsgFieldDescriptor->descriptor;
 
             sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
-            for (i = 0; i < status->detailedMessage.len; i++)
+            for (size_t i = 0; i < status->detailedMessage.len; i++)
             {
                 sprintf(tmp, "%02hhX", status->detailedMessage.data[i]);
                 strcat(msg, tmp);
@@ -400,7 +399,7 @@ void KineticLogger_LogByteArray(const char* title, ByteArray bytes)
     const int lineLen = 4 + (bytesPerLine * byteChars);
     char hex[lineLen+1];
     char ascii[lineLen+1];
-    for (int i = 0; i < bytes.len;)
+    for (size_t i = 0; i < bytes.len;)
     {
         hex[0] = '\0';
         ascii[0] = '\0';

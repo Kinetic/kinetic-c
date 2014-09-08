@@ -82,12 +82,12 @@ bool KineticPDU_Send(KineticPDU* request)
     // Populate the HMAC for the protobuf
     KineticHMAC_Init(&request->hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate(&request->hmac,
-        &request->message.proto, request->connection->key);
+        &request->protoData.message.proto, request->connection->key);
 
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
     request->header.protobufLength =
-        KineticProto__get_packed_size(&request->message.proto);
+        KineticProto__get_packed_size(&request->protoData.message.proto);
     request->header.valueLength = request->value.len;
     KineticLogger_LogHeader(&request->header);
 
@@ -112,7 +112,7 @@ bool KineticPDU_Send(KineticPDU* request)
 
     // Send the protobuf message
     LOG("Sending PDU Protobuf:");
-    KineticLogger_LogProtobuf(&request->message.proto);
+    KineticLogger_LogProtobuf(&request->protoData.message.proto);
     if (!KineticSocket_WriteProtobuf(request->connection->socketDescriptor,
         request))
     {
@@ -178,16 +178,16 @@ bool KineticPDU_Receive(KineticPDU* const response)
     else
     {
         LOG("Received PDU protobuf");
-        KineticLogger_LogProtobuf(&response->message.proto);
+        KineticLogger_LogProtobuf(&response->protoData.message.proto);
     }
 
     // Validate the HMAC for the recevied protobuf message
     if (!KineticHMAC_Validate(response->proto, response->connection->key))
     {
         LOG("Received PDU protobuf message has invalid HMAC!");
-        response->message.proto.command = &response->message.command;
-        response->message.command.status = &response->message.status;
-        response->message.status.code = 
+        response->protoData.message.proto.command = &response->protoData.message.command;
+        response->protoData.message.command.status = &response->protoData.message.status;
+        response->protoData.message.status.code = 
             KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR;
             
         return false;

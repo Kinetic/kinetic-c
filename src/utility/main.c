@@ -24,7 +24,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 
-#include "kinetic.h"
+#include "kinetic_client.h"
 #include "noop.h"
 #include "put.h"
 #include "get.h"
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = "asdfasdf",
-        .value = {},
+        .value = {0},
         .valueLength = 0,
         .valueKey = "some_value_key...",
         .version = "v1.0",

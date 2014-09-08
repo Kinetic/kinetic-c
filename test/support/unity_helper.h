@@ -91,9 +91,9 @@ if (expected != actual) { \
 /** Custom Unity assertion which validates the expected int64_t value is
     packed properly into a buffer in Network Byte-Order (big endian) */
 #define TEST_ASSERT_EQUAL_uint32_nbo_t(expected, buf) { \
-    int i; int32_t val = 0; char err[64]; uint8_t* p = (uint8_t*)&buf;\
-    for(i = 0; i < sizeof(int32_t); i++) {val <<= 8; val += p[i]; } \
-    sprintf(err, "@ index %d", i); \
+    size_t i = 0; int32_t val = 0; char err[64]; uint8_t* p = (uint8_t*)&buf;\
+    for(; i < sizeof(int32_t); i++) {val <<= 8; val += p[i]; } \
+    sprintf(err, "@ index %zu", i); \
     TEST_ASSERT_EQUAL_INT32_MESSAGE(expected, val, err); \
 }
 

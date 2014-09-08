@@ -180,7 +180,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
         .tag = tag,
         .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
     };
-    KineticMessage_ConfigureKeyValue_Expect(&Operation.request->message, &metadata);
+    KineticMessage_ConfigureKeyValue_Expect(&Operation.request->protoData.message, &metadata);
     //   }
     // }
     // hmac: "..."
@@ -205,7 +205,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_supplied_v
     const ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("One ring to rule them all!");
 
     KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &metadata);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
 
     KineticOperation_BuildGet(&Operation, &metadata, value);
 
@@ -248,7 +248,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_embedded_v
     };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &metadata);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
 
     KineticOperation_BuildGet(&Operation, &metadata, BYTE_ARRAY_NONE);
 
@@ -293,7 +293,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &metadata);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
 
     KineticOperation_BuildGet(&Operation, &metadata, BYTE_ARRAY_NONE);
 

@@ -25,7 +25,8 @@
   :support:
     - test/support/**
   :source:
-    - src/lib/*.c
+    - src/lib/**
+    - src/utility/**
     - vendor/protobuf-c/protobuf-c/protobuf-c.c
     - vendor/socket99/socket99.c
   :include:
@@ -99,7 +100,11 @@
       - -D"$": DEFINES_TEST_PREPROCESS
       - -DGNU_COMPILER
       - -std=c99
+      - -g
       - -Wall
+      - -Wextra
+      - -pedantic
+      - -D_POSIX_C_SOURCE=1
       - ${1}
   :test_compiler:
     :executable: gcc
@@ -109,8 +114,11 @@
       - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
       - -DGNU_COMPILER
       - -std=c99
-      - -Wall
       - -g
+      - -Wall
+      - -Wextra
+      - -pedantic
+      - -D_POSIX_C_SOURCE=1
       - -c ${1}
       - -o ${2}
   :test_linker:
@@ -136,7 +144,11 @@
       - -D"$": 'COLLECTION_DEFINES_RELEASE_AND_VENDOR'
       - -DGNU_COMPILER
       - -std=c99
+      - -g
       - -Wall
+      - -Wextra
+      - -pedantic
+      - -D_POSIX_C_SOURCE=1
       - "-c \"${1}\""
       - "-o \"${2}\""
   :release_linker:

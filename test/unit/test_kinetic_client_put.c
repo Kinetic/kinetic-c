@@ -59,10 +59,10 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
 
     KINETIC_PDU_INIT(&Request, &connection);
 
-    Response.message.proto.command = &responseCommand;
-    Response.message.proto.command->status = &responseStatus;
-    Response.message.proto.command->status->has_code = true;
-    Response.message.proto.command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    Response.protoData.message.proto.command = &responseCommand;
+    Response.protoData.message.proto.command->status = &responseStatus;
+    Response.protoData.message.proto.command->status->has_code = true;
+    Response.protoData.message.proto.command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
     KINETIC_CONNECTION_INIT(&connection, 1234, hmacKey);
     KineticPDU_Init_Expect(&Request, &connection);

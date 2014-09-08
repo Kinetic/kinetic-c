@@ -21,7 +21,7 @@
 #ifndef _NOOP_H
 #define _NOOP_H
 
-#include "kinetic.h"
+#include "kinetic_client.h"
 
 /**
  * @brief Connects to the specified Kinetic host/port and executes a NoOp (ping) operation

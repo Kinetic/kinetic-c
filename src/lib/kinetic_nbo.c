@@ -23,7 +23,7 @@
 static uint64_t KineticNBO_SwapByteOrder(uint8_t* pByte, size_t len)
 {
     uint64_t swapped = 0u;
-    for (int i = 0; i < len; i++)
+    for (size_t i = 0; i < len; i++)
     {
         swapped = (swapped << 8) | pByte[i];
     }

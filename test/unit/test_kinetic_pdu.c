@@ -105,15 +105,15 @@ void test_KineticPDU_Init_should_set_the_exchange_fields_in_the_embedded_protobu
     Connection.connectionID = 8765432;
     KINETIC_PDU_INIT(&PDU, &Connection);
 
-    TEST_ASSERT_TRUE(PDU.message.header.has_clusterVersion);
+    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_clusterVersion);
     TEST_ASSERT_EQUAL_INT64(1122334455667788,
-        PDU.message.header.clusterVersion);
-    TEST_ASSERT_TRUE(PDU.message.header.has_identity);
-    TEST_ASSERT_EQUAL_INT64(37, PDU.message.header.identity);
-    TEST_ASSERT_TRUE(PDU.message.header.has_connectionID);
-    TEST_ASSERT_EQUAL_INT64(8765432, PDU.message.header.connectionID);
-    TEST_ASSERT_TRUE(PDU.message.header.has_sequence);
-    TEST_ASSERT_EQUAL_INT64(24, PDU.message.header.sequence);
+        PDU.protoData.message.header.clusterVersion);
+    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_identity);
+    TEST_ASSERT_EQUAL_INT64(37, PDU.protoData.message.header.identity);
+    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_connectionID);
+    TEST_ASSERT_EQUAL_INT64(8765432, PDU.protoData.message.header.connectionID);
+    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_sequence);
+    TEST_ASSERT_EQUAL_INT64(24, PDU.protoData.message.header.sequence);
 }
 
 
@@ -191,8 +191,8 @@ void test_KINETIC_PDU_INIT_WITH_MESSAGE_should_initialize_PDU_and_protobuf_messa
     memset(&PDU, 0, sizeof(KineticPDU));
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
 
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY;
-    PDU.message.command.status = &PDU.message.status;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY;
+    PDU.protoData.message.command.status = &PDU.protoData.message.status;
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY,
@@ -203,10 +203,10 @@ void test_KineticPDU_Status_should_return_status_from_protobuf_if_available(void
 {
     LOG_LOCATION;
     KINETIC_PDU_INIT(&PDU, &Connection);
-    PDU.proto = &PDU.message.proto;
-    PDU.proto->command = &PDU.message.command;
-    PDU.proto->command->status = &PDU.message.status;
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
+    PDU.proto = &PDU.protoData.message.proto;
+    PDU.proto->command = &PDU.protoData.message.command;
+    PDU.proto->command->status = &PDU.protoData.message.status;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH,
@@ -218,32 +218,32 @@ void test_KineticPDU_Status_should_return_invalid_status_from_protobuf_if_none_a
     LOG_LOCATION;
     KINETIC_PDU_INIT(&PDU, &Connection);
     PDU.proto = NULL;
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE,
         KineticPDU_Status(&PDU));
 
-    PDU.proto = &PDU.message.proto;
+    PDU.proto = &PDU.protoData.message.proto;
     PDU.proto->command = NULL;
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE,
         KineticPDU_Status(&PDU));
 
-    PDU.proto->command = &PDU.message.command;
+    PDU.proto->command = &PDU.protoData.message.command;
     PDU.proto->command->status = NULL;
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE,
         KineticPDU_Status(&PDU));
 
-    PDU.proto = &PDU.message.proto;
-    PDU.proto->command = &PDU.message.command;
-    PDU.proto->command->status = &PDU.message.status;
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
+    PDU.proto = &PDU.protoData.message.proto;
+    PDU.proto->command = &PDU.protoData.message.command;
+    PDU.proto->command->status = &PDU.protoData.message.status;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH,
@@ -258,7 +258,7 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
     ByteArray headerNBO = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.message.proto, PDU.connection->key);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
 
@@ -279,7 +279,7 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
     KineticPDU_AttachValuePayload(&PDU, value);
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.message.proto, PDU.connection->key);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, PDU.value, true);
@@ -303,7 +303,7 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
     ByteArray expectedValue = {.data = PDU.value.data, .len = 3};
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.message.proto, PDU.connection->key);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, expectedValue, true);
@@ -323,7 +323,7 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_upo
     KineticPDU_Init(&PDU, &Connection);
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.message.proto, PDU.connection->key);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, false);
 
     status = KineticPDU_Send(&PDU);
@@ -338,7 +338,7 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_upo
     ByteArray headerNBO = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.message.proto, PDU.connection->key);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, false);
 
@@ -358,7 +358,7 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_if_
     KineticPDU_AttachValuePayload(&PDU, value);
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.message.proto, PDU.connection->key);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, value, false);
@@ -374,8 +374,8 @@ void test_KineticPDU_Receive_should_receive_a_message_with_value_payload_and_ret
 {
     LOG_LOCATION;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-    PDU.message.status.has_code = true;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    PDU.protoData.message.status.has_code = true;
     ByteArray expectedPDUHeaderArray = {
         .data = (uint8_t*)&PDU.headerNBO,
         .len = sizeof(KineticPDUHeader),
@@ -400,15 +400,15 @@ void test_KineticPDU_Receive_should_receive_a_message_with_value_payload_and_ret
 
     TEST_ASSERT_TRUE(status);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, PDU.message.status.code);
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, PDU.protoData.message.status.code);
 }
 
 void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_return_true_upon_successful_receipt_of_valid_PDU(void)
 {
     LOG_LOCATION;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-    PDU.message.status.has_code = true;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    PDU.protoData.message.status.has_code = true;
     ByteArray header = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
     KineticPDU_AttachValuePayload(&PDU, BYTE_ARRAY_NONE);
 
@@ -420,7 +420,7 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_
 
     TEST_ASSERT_TRUE(status);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
-        PDU.message.status.code);
+        PDU.protoData.message.status.code);
     TEST_ASSERT_ByteArray_NONE(PDU.value);
 }
 
@@ -428,8 +428,8 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_
 {
     LOG_LOCATION;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
-    PDU.message.status.has_code = true;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
+    PDU.protoData.message.status.has_code = true;
     ByteArray header = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
     KineticPDU_AttachValuePayload(&PDU, BYTE_ARRAY_NONE);
 
@@ -442,7 +442,7 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_
     TEST_ASSERT_TRUE(status);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR,
-        PDU.message.status.code);
+        PDU.protoData.message.status.code);
 }
 
 void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_return_false_upon_failure_to_read_header(void)
@@ -464,8 +464,8 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     bool status;
 
     KineticPDU_Init(&PDU, &Connection);
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
-    PDU.message.status.has_code = true;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
+    PDU.protoData.message.status.has_code = true;
 
     ByteArray header = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
     ByteArray protobuf = {.data = PDU.protobufRaw, .len = 12};
@@ -503,8 +503,8 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
 {
     LOG_LOCATION;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
-    PDU.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
-    PDU.message.status.has_code = true;
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    PDU.protoData.message.status.has_code = true;
     ByteArray header = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
     PDU.headerNBO = (KineticPDUHeader){
         .versionPrefix = 'F',
