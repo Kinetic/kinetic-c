@@ -37,23 +37,20 @@
 #include <string.h>
 #include <stdlib.h>
 
+static ByteArray valueKey;
+static ByteArray tag;
+static ByteArray testValue;
+static bool testDataWritten = false;
 static SystemTestFixture Fixture = {
     .host = "localhost",
     .port = KINETIC_PORT,
     .clusterVersion = 0,
     .identity =  1,
-    .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
 };
-
-static ByteArray valueKey;
-static ByteArray tag;
-static ByteArray testValue;
-static bool testDataWritten = false;
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-
     valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("GET system test blob");
     tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeOtherTagValue");
     testValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah blah blah... etc.");

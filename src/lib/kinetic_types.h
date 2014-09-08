@@ -173,8 +173,8 @@ typedef struct _KineticMessage
     uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
 } KineticMessage;
 #define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) { \
-    assert((_hdr) != NULL); \
-    assert((_con) != NULL); \
+    assert((void *)(_hdr) != NULL); \
+    assert((void *)(_con) != NULL); \
     *(_hdr) = (KineticProto_Header) { \
         .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_header__descriptor), \
         .has_clusterVersion = true, \
@@ -271,8 +271,8 @@ typedef struct _KineticPDU
 } KineticPDU;
 
 #define KINETIC_PDU_INIT(_pdu, _con) { \
-    assert((_pdu) != NULL); \
-    assert((_con) != NULL); \
+    assert((void *)(_pdu) != NULL); \
+    assert((void *)(_con) != NULL); \
     (_pdu)->connection = (_con); \
     (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \

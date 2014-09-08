@@ -39,11 +39,14 @@ void KineticLogger_Init(const char* logFile)
         {
             fprintf(stderr,
                 "Failed to initialize logger with file: "
-                "fopen('%s') => FileDesc=%zd",
+                "fopen('%s') => FileDesc=%zd\n",
                 logFile, (size_t)FileDesc);
         }
         else
         {
+            fprintf(stderr,
+                "Logging output to %s\n",
+                logFile);
             LogToConsole = false;
         }
     }
@@ -52,7 +55,7 @@ void KineticLogger_Init(const char* logFile)
 void KineticLogger_Close(void)
 {
     // Don't close std/already-opened streams
-    if (LogFile != NULL &&
+    if (!LogToConsole && strlen(LogFile) > 0 &&
         FileDesc != stdout && FileDesc != stderr && FileDesc != stdin)
     {
         fclose(FileDesc);

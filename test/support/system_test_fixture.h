@@ -32,7 +32,7 @@ void SystemTestSuiteTearDown(SystemTestFixture* fixture);
 #define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) \
 void test_Suite_TearDown(void) \
 { \
-    TEST_ASSERT_NOT_NULL_MESSAGE((_fixture), "System test fixture passed to 'SYSTEM_TEST_SUITE_TEARDOWN' is NULL!"); \
+    /*TEST_ASSERT_NOT_NULL_MESSAGE((_fixture), "System test fixture passed to 'SYSTEM_TEST_SUITE_TEARDOWN' is NULL!");*/ \
     if ((_fixture)->connected) \
         KineticClient_Disconnect(&(_fixture)->connection); \
     (_fixture)->connected = false; \

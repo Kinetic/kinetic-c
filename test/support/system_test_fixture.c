@@ -10,6 +10,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
 {
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
     fixture->instance.testIgnored = false;
+    fixture->hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf");
 
     if (!fixture->connected)
     {

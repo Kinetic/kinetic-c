@@ -21,16 +21,19 @@
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
 #include "protobuf-c/protobuf-c.h"
+
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include <stdio.h>
+#include <string.h>
+
 #ifndef _BSD_SOURCE
     #define _BSD_SOURCE
 #endif // _BSD_SOURCE
+#include <sys/types.h>
 #include <unistd.h>
-#include "socket99/socket99.h"
-#include <sys/types.h>
-#include <stdlib.h>
-#include <errno.h>
 #include <fcntl.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <netinet/in.h>
@@ -41,6 +44,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "socket99/socket99.h"
 
 static void* KineticProto_Alloc(void* buf, size_t size)
 {

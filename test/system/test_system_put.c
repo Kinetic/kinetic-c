@@ -41,9 +41,7 @@ static SystemTestFixture Fixture = {
     .host = "localhost",
     .port = KINETIC_PORT,
     .clusterVersion = 0,
-    .identity = 1,
-    .nonBlocking = false,
-    .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
+    .identity =  1,
 };
 
 static ByteArray valueKey;
