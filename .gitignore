@@ -27,6 +27,7 @@
 
 # Temp folders
 bin/
+obj/
 build/
 docs/
 
