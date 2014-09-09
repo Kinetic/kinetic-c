@@ -25,9 +25,9 @@
 #include <stdbool.h>
 
 #include "kinetic_client.h"
-#include "noop.h"
-#include "put.h"
-#include "get.h"
+#include "examples/noop.h"
+#include "examples/put.h"
+#include "examples/get.h"
 
 typedef struct _Arguments {
     char host[HOST_NAME_MAX];

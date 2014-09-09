@@ -246,9 +246,6 @@ namespace :system do
   end
 end
 
-desc "Test examples (test utility)"
-task :run => ['tests:utility']
-
 desc "Prepend license to source files"
 task :apply_license do
   Dir['include/**/*.h', 'src/**/*.h', 'src/**/*.c', 'test/**/*.h', 'test/**/*.c'].each do |f|
@@ -368,17 +365,36 @@ namespace :tests do
 
 end
 
+desc "Build kinetic-c library"
+task :lib do
+  sh "make clean"
+  sh "make"
+  sh "sudo make install"
+end
+
+desc "Build example utility"
+task :utility do
+  sh "make utility"
+end
+
+desc "Test examples (test utility)"
+task :run => ['utility'] do
+  sh "make run" 
+end
+
 task :test_all => [
   'tests:unit',
   'tests:integration',
   'tests:system',
-  'tests:utility'
 ]
 
 desc "Build all and run test utility"
 task :all => [
   'cppcheck',
   'test_all',
+  'lib',
+  'utility',
+  'run'
 ]
 
 desc "Run full CI build"
