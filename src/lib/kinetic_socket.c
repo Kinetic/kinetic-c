@@ -41,9 +41,6 @@
 #include <netdb.h>
 #include <signal.h>
 #include <unistd.h>
-#include <string.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "socket99/socket99.h"
 

@@ -30,9 +30,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/socket.h>
-#include <netdb.h>
+#include <sys/select.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <signal.h>
 
 #include "socket99/socket99.h"

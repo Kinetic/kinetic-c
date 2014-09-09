@@ -19,7 +19,9 @@ UTIL_EXEC = $(BIN_DIR)/$(PROJECT)-util
 CC = gcc
 OPTIMIZE = -O3
 WARN = -Wall -Wextra -pedantic
-#CDEFS += 
+# This is necessary because the library depends on
+# both C99 _and_ POSIX (for the BSD sockets API).
+CDEFS += -D_POSIX_C_SOURCE=1
 CFLAGS += -std=c99 -g ${WARN} ${CDEFS} ${OPTIMIZE}
 
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PBC_INC) -I$(VND_INC)
