@@ -165,9 +165,6 @@ bool KineticPDU_Receive(KineticPDU* const response)
         response->value.len = response->header.valueLength;
         KineticLogger_LogHeader(&response->header);
     }
-    
-    LOG_LOCATION; LOGF("response->header.protobufLength=%u",
-        response->header.protobufLength);
 
     // Receive the protobuf message
     if (!KineticSocket_ReadProtobuf(fd, response))
@@ -196,9 +193,6 @@ bool KineticPDU_Receive(KineticPDU* const response)
     {
         LOG("Received protobuf HMAC validation succeeded");
     }
-
-     LOG_LOCATION; LOGF("response->header.valueLength=%u",
-        response->header.valueLength);
 
     // Receive the value payload, if specified
     if (response->header.valueLength > 0)
