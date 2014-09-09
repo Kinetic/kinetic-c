@@ -150,6 +150,7 @@ int main(int argc, char** argv)
                 .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
                 .dbVersion = BYTE_ARRAY_NONE,
                 .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+                .metadataOnly = false,
             };
 
             printf("\n"
@@ -194,6 +195,7 @@ int main(int argc, char** argv)
                 .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
                 .dbVersion = BYTE_ARRAY_NONE,
                 .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+                .metadataOnly = false,
             };
 
             printf("\n"

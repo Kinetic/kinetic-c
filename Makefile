@@ -28,8 +28,9 @@ LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PBC_INC) -I$(VND_INC)
 LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
 LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
+LDFLAGS += -lm -lkinetic-c-client -lssl -lcrypto 
 
-default: $(KINETIC_LIB)
+default: $(KINETIC_LIB) $(UTIL_EXEC)
 
 test: Rakefile $(LIB_OBJS)
 	bundle install
@@ -73,7 +74,6 @@ $(KINETIC_LIB): $(LIB_OBJS)
 UTIL_OBJS = $(OUT_DIR)/noop.o $(OUT_DIR)/put.o $(OUT_DIR)/get.o
 UTIL_INCS = -I$(UTIL_DIR) -I/usr/local/include
 # TODO: Delete LIB_DIR dep after kinetic_proto is yanked out of public API
-LDFLAGS += -lm -l crypto -l ssl -l kinetic-c-client 
 
 $(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
@@ -81,13 +81,13 @@ $(OUT_DIR)/put.o: $(UTIL_EX)/put.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
 $(OUT_DIR)/get.o: $(UTIL_EX)/get.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
-$(UTIL_EXEC): $(UTIL_DIR)/main.c $(UTIL_OBJS)
-	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS} -l kinetic-c-client
-
-utility: ${UTIL_EXEC}
+$(OUT_DIR)/main.o: $(UTIL_DIR)/main.c $(UTIL_OBJS)
+	${CC} -c -o $@ $< $(UTIL_INCS) ${UTIL_CFLAGS}
+$(UTIL_EXEC): $(OUT_DIR)/main.o $(UTIL_OBJS)
+	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
+utility: $(UTIL_EXEC)
 
 # Configure to launch java simulator
-# JAVA=${JAVA_HOME}/bin/java
 SIM_JARS_PREFIX = vendor/kinetic-java/kinetic-simulator-0.7.0.2-kinetic-proto-2.0.6-SNAPSHOT
 CLASSPATH = ${JAVA_HOME}/lib/tools.jar:$(SIM_JARS_PREFIX)-jar-with-dependencies.jar:$(SIM_JARS_PREFIX)-sources.jar:$(SIM_JARS_PREFIX).jar
 SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
@@ -95,12 +95,7 @@ SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
 
 run: ${UTIL_EXEC}
 	echo Running Executable ${UTIL_EXEC}:
-	exec java -classpath "${CLASSPATH}" ${SIM_RUNNER} "$@" & > ./sim.log
-	sleep 5
-	exec java -classpath "${CLASSPATH}" ${SIM_ADMIN} -setup -erase true > ./erase.log
-	${UTIL_EXEC} noop
-	${UTIL_EXEC} put
-	${UTIL_EXEC} get
+	exec ./vendor/kinetic-java/runExampleTests.sh
 
 all: clean test default install run
 
@@ -118,12 +113,15 @@ install: ${KINETIC_LIB}
 	${INSTALL} -c ./include/${LIB_NAME}.h ${PREFIX}/include/
 	${INSTALL} -c ./include/kinetic_types.h ${PREFIX}/include/
 	${INSTALL} -c ./src/lib/kinetic_proto.h ${PREFIX}/include/
+	${INSTALL} -d ${PREFIX}/include/protobuf-c/
+	${INSTALL} -c ./vendor/protobuf-c/protobuf-c/protobuf-c.h ${PREFIX}/include/protobuf-c/
 
 uninstall:
 	${RM} -f ${PREFIX}/lib/lib${PROJECT}.a
 	${RM} -f ${PREFIX}/include/${LIB_NAME}.h
 	${RM} -f ${PREFIX}/include/kinetic_types.h
 	${RM} -f ${PREFIX}/include/kinetic_proto.h
+	${RM} -f ${PREFIX}/include/protobuf-c/protobuf-c.h
 
 
 # Other dependencies

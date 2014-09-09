@@ -23,6 +23,10 @@
 #include "kinetic_logger.h"
 #include <string.h>
 #include <openssl/hmac.h>
+//#include <openssl/kssl.h>
+//#include <openssl/safestack.h>
+//#include <openssl/symhacks.h>
+//#include <openssl/md5.h>
 
 static void KineticHMAC_Compute(KineticHMAC* hmac,
     const KineticProto* proto,
