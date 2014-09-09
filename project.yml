@@ -128,14 +128,14 @@
     :name: test_linker
     :arguments:
       - "\"${1}\""
-      - "-l crypto"
+      - -l crypto
       - "-o \"${2}\""
   :gcov_linker:
     :executable: gcc
     :arguments:
       - -fprofile-arcs
       - -ftest-coverage
-      - "-l crypto"
+      - -l crypto
       - ${1}
       - -o ${2}
   :release_compiler:
@@ -151,6 +151,8 @@
       - -Wextra
       - -pedantic
       - -D_POSIX_C_SOURCE=1
+      - -l crypto
+      - -l ssl
       - "-c \"${1}\""
       - "-o \"${2}\""
   :release_linker:
@@ -158,7 +160,8 @@
     :name: release_linker
     :arguments:
       - "\"${1}\""
-      - "-l crypto"
+      - -l crypto
+      - -l ssl
       - "-o \"${2}\""
 
 :plugins:

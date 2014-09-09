@@ -73,7 +73,7 @@ $(KINETIC_LIB): $(LIB_OBJS)
 UTIL_OBJS = $(OUT_DIR)/noop.o $(OUT_DIR)/put.o $(OUT_DIR)/get.o
 UTIL_INCS = -I$(UTIL_DIR) -I/usr/local/include
 # TODO: Delete LIB_DIR dep after kinetic_proto is yanked out of public API
-LDFLAGS += -lm -l crypto -l kinetic-c-client
+LDFLAGS += -lm -l crypto -l ssl -l kinetic-c-client 
 
 $(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
