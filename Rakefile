@@ -91,7 +91,7 @@ namespace :doxygen do
   VERSION = File.read('VERSION').strip
 
   task :checkout_github_pages => ['clobber', DOCS_PATH] do
-    git "clone git@github.com:atomicobject/kinetic-c.git -b gh-pages #{DOCS_PATH}"
+    git "clone git@github.com:seagate/kinetic-c.git -b gh-pages #{DOCS_PATH}"
   end
 
   desc "Generate API docs"
