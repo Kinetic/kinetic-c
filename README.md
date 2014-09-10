@@ -40,14 +40,14 @@ Getting Started
     > make
     > sudo make install
 
-**You can all clean and uninstall old version**
+**You can all clean and uninstall old versions**
 
     > make clean
     > sudo uninstall
 
 **Build example utility and run tests against Kinetic Device simulator**
 
-    > make run
+    > make all # this is what Travis-CI build does to ensure it all keeps working
 
 API Documentation
 =================
