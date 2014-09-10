@@ -3,9 +3,11 @@
 Kinetic C Client Library
 ========================
 
-This repo contains code for producing Kinetic C clients which use the Seagate Kinetic protocol. Code examples are included for reference as part of a utility (`kinetic-c-client-utility`) that builds and links against an installed Kinetic C static library.
+The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
 
-The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.
+[Code examples](https://github.com/Seagate/kinetic-c/tree/master/src/utility/examples) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-client-utility`)](https://github.com/Seagate/kinetic-c/tree/master/src/utility), which builds and links against the installed `kinetic-c-client` static library.
+
+The [project Makefile](https://github.com/Seagate/kinetic-c/blob/master/Makefile) can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.
 
 [Kinetic-C build status](http://travis-ci.org/atomicobject/kinetic-c) is provided via [Travis CI](http://travis-ci.org)
 
@@ -37,6 +39,11 @@ Getting Started
 
     > make
     > sudo make install
+
+**You can all clean and uninstall old version**
+
+    > make clean
+    > sudo uninstall
 
 **Build example utility and run tests against Kinetic Device simulator**
 
