@@ -1,6 +1,6 @@
 Kinetic C Client Library
 ========================
-![http://travis-ci.org/atomicobject/kinetic-c.png?branch=master](http://travis-ci.org/atomicobject/kinetic-c)
+[![Build Status]([http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](http://travis-ci.org/atomicobject/kinetic-c)
 
 This repo contains code for producing Kinetic C clients which use the Seagate Kinetic protocol. Code examples are included for reference as part of a utility (`kinetic-c-client-utility`) that builds and links against an installed Kinetic C static library.
 
