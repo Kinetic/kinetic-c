@@ -56,69 +56,74 @@ $(document).ready(function(){initNavTree('_r_e_a_d_m_e_8md.html','');});
 <div class="title">README.md</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="_r_e_a_d_m_e_8md.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;Kinetic-C Client Library</div>
+<a href="_r_e_a_d_m_e_8md.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;Kinetic C Client Library</div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;========================</div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;![](http:<span class="comment">//travis-ci.org/atomicobject/kinetic-c.png?branch=master)</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;This repo contains code <span class="keywordflow">for</span> producing C Kinetic clients which use the Seagate Kinetic protocol. Code examples/utilities that use the Kinetic C library are included <span class="keywordflow">for</span> reference and usage during development.</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;This repo contains code <span class="keywordflow">for</span> producing Kinetic C clients which use the Seagate Kinetic protocol. Code examples are included <span class="keywordflow">for</span> reference as part of a utility (`kinetic-c-client-utility`) that builds and links against an installed Kinetic C static library.</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;[Kinetic-C build status](http:<span class="comment">//travis-ci.org/atomicobject/kinetic-c) is provided via [Travis CI](http://travis-ci.org)</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;Prerequisites</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;-------------</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;* [Open SSL](https:<span class="comment">//www.openssl.org/) for security and encryption</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;Getting Started</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;---------------</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;**Clone the repo**</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    &gt; git clone --recursive https:<span class="comment">//github.com/atomicobject/kinetic-c.git</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    &gt; cd kinetic-c</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    &gt; bundle install # Ensure you have all RubyGems at the proper versions</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;**Update to the latest version (previously cloned)**</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    &gt; git pull</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    &gt; git submodule update --init # Ensure submodules are up to date</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    &gt; bundle install # Ensure you have all RubyGems at the proper versions</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;**Build and install <span class="keyword">static</span> library**</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    &gt; make</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    &gt; sudo make install</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;**Build example utility and run tests against Kinetic Device simulator**</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;[Kinetic-C build status](http:<span class="comment">//travis-ci.org/atomicobject/kinetic-c) is provided via [Travis CI](http://travis-ci.org)</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;Prerequisites</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;-------------</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;* [Open SSL](https:<span class="comment">//www.openssl.org/) for security and encryption</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    * Installation (if you don&#39;t already have OpenSSL installed)</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        * Linux (using apt-get)</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            * `&gt; sudo apt-get install openssl`</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        * OSX (using [Homebrew](http:<span class="comment">//brew.sh/))</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            * `&gt; brew install openssl`</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;Getting Started</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;---------------</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;**Clone the repo**</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    &gt; git clone --recursive https:<span class="comment">//github.com/atomicobject/kinetic-c.git</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    &gt; cd kinetic-c</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    &gt; bundle install <span class="preprocessor"># Ensure you have all RubyGems at the proper versions</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;**Update to the latest version (previously cloned)**</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    &gt; git pull</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    &gt; git submodule update --init # Ensure submodules are up to date</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    &gt; bundle install # Ensure you have all RubyGems at the proper versions</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    &gt; make run</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;**Build and install <span class="keyword">static</span> library**</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;API Documentation</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;=================</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;[Kinetic-C API](http:<span class="comment">//atomicobject.github.io/kinetic-c/kinetic__api_8h.html) (generated with Doxygen)</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;Examples</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;========</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    &gt; make</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    &gt; sudo make install</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;**Build example utility and run tests against Kinetic Device simulator**</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    &gt; make run</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;The following examples are provided <span class="keywordflow">for</span> development reference and as utilities to aid development. In order to execute a given example, you must first <span class="keywordflow">do</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;```</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;&gt; cd build/artifacts/release</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;```</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;You can then execute `kinetic-c` with a valid example name, optionally preceeded with any of the optional arguments.</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;**Options**</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;* `--host [HostName/IP]` or `-h [HostName/IP]` - Set the Kinetic Device host</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;* `--tls` - Use the TLS port to execute the specified operation(s)</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;**Operations**</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;* `kinetic-c-client [--hostname|-h hostname|123.253.253.23] noop put <span class="keyword">get</span>`</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    * `kinetic-c noop`</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        * Execute a <a class="code" href="noop_8c.html#a54134f0309024f11ce0cf25c26a22934">NoOp</a> (ping) operation to verify the Kinetic Device is ready</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    * `kinetic-c put`</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        * Execute a <a class="code" href="put_8c.html#ad2fb023662a16a8dc70fda8eb4f38d3e">Put</a> operation to store a key/value</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    * `kinetic-c get`</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        * Execute a <a class="code" href="get_8c.html#aa3a86ce5b3301619f3a3946b657a3150">Get</a> operation to retrieve a key/value</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;API Documentation</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;=================</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;[Kinetic-C API](http:<span class="comment">//seagate.github.io/kinetic-c/kinetic__api_8h.html) (generated with Doxygen)</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;Examples</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;========</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;The following examples are provided <span class="keywordflow">for</span> development reference and as utilities to aid development. In order to execute a given example, you must first <span class="keywordflow">do</span>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    &gt; cd build/artifacts/release</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;You can then execute `kinetic-c-client-util` with a valid example name, optionally preceeded with any of the optional arguments.</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;**Options**</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;* `--host [HostName/IP]` or `-h [HostName/IP]` - Set the Kinetic Device host</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;* `--tls` - Use the TLS port to execute the specified operation(s)</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;**Operations**</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;* `kinetic-c-client [--host|-h hostname|123.253.253.23] noop put <span class="keyword">get</span>`</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    * `kinetic-c-client-util noop`</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        * Execute a <a class="code" href="noop_8c.html#a54134f0309024f11ce0cf25c26a22934">NoOp</a> (ping) operation to verify the Kinetic Device is ready</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    * `kinetic-c-client-util put`</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        * Execute a <a class="code" href="put_8c.html#ad2fb023662a16a8dc70fda8eb4f38d3e">Put</a> operation to store a key/value</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    * `kinetic-c-client-util get`</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        * Execute a <a class="code" href="get_8c.html#aa3a86ce5b3301619f3a3946b657a3150">Get</a> operation to retrieve a key/value</div>
 <div class="ttc" id="put_8c_html_ad2fb023662a16a8dc70fda8eb4f38d3e"><div class="ttname"><a href="put_8c.html#ad2fb023662a16a8dc70fda8eb4f38d3e">Put</a></div><div class="ttdeci">int Put(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey, Kinetic_KeyValue *metadata)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a Put to store an object on the Device...</div><div class="ttdef"><b>Definition:</b> <a href="put_8c_source.html#l00025">put.c:25</a></div></div>
 <div class="ttc" id="get_8c_html_aa3a86ce5b3301619f3a3946b657a3150"><div class="ttname"><a href="get_8c.html#aa3a86ce5b3301619f3a3946b657a3150">Get</a></div><div class="ttdeci">int Get(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey, Kinetic_KeyValue *metadata)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device...</div><div class="ttdef"><b>Definition:</b> <a href="get_8c_source.html#l00025">get.c:25</a></div></div>
 <div class="ttc" id="noop_8c_html_a54134f0309024f11ce0cf25c26a22934"><div class="ttname"><a href="noop_8c.html#a54134f0309024f11ce0cf25c26a22934">NoOp</a></div><div class="ttdeci">int NoOp(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ...</div><div class="ttdef"><b>Definition:</b> <a href="noop_8c_source.html#l00025">noop.c:25</a></div></div>
