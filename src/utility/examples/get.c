@@ -28,8 +28,7 @@ int Get(const char* host,
         int64_t clusterVersion,
         int64_t identity,
         ByteArray hmacKey,
-        Kinetic_KeyValue* metadata,
-        ByteArray value)
+        Kinetic_KeyValue* metadata)
 {
     KineticOperation operation;
     KineticConnection connection;
@@ -43,7 +42,7 @@ int Get(const char* host,
 
     operation = KineticClient_CreateOperation(&connection, &Request, &Response);
 
-    status = KineticClient_Get(&operation, metadata, value);
+    status = KineticClient_Get(&operation, metadata);
 
     if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
     {

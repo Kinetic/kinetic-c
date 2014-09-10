@@ -34,14 +34,13 @@ void KineticClient_Init(const char* logFile)
     KineticLogger_Init(logFile);
 }
 
-bool KineticClient_Connect(
-    KineticConnection* connection,
+bool KineticClient_Connect(KineticConnection* connection,
     const char* host,
     int port,
     bool nonBlocking,
     int64_t clusterVersion,
     int64_t identity,
-    ByteArray key)
+    ByteArray hmacKey)
 {
     if (connection == NULL)
     {
@@ -67,8 +66,6 @@ bool KineticClient_Connect(
         return false;
     }
 
-    // KINETIC_CONNECTION_INIT(connection, identity, key);
-
     if (!KineticConnection_Connect(connection, host, port, nonBlocking,
         clusterVersion, identity, key))
     {
@@ -85,14 +82,12 @@ bool KineticClient_Connect(
     return true;
 }
 
-void KineticClient_Disconnect(
-    KineticConnection* connection)
+void KineticClient_Disconnect(KineticConnection* connection)
 {
    KineticConnection_Disconnect(connection);
 }
 
-KineticOperation KineticClient_CreateOperation(
-    KineticConnection* connection,
+KineticOperation KineticClient_CreateOperation(KineticConnection* connection,
     KineticPDU* request,
     KineticPDU* response)
 {

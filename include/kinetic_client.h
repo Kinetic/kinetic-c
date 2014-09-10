@@ -39,7 +39,7 @@ void KineticClient_Init(const char* logFile);
  * @param nonBlocking       Set to true for non-blocking or false for blocking I/O
  * @param clusterVersion    Cluster version to use for the session
  * @param identity          Identity to use for the session
- * @param key               Key to use for HMAC calculations (NULL-terminated string)
+ * @param hmacKey           Key to use for HMAC calculations
  *
  * @return                  Returns true if connection succeeded
  */
@@ -49,7 +49,7 @@ bool KineticClient_Connect(KineticConnection* connection,
     bool nonBlocking,
     int64_t clusterVersion,
     int64_t identity,
-    ByteArray key);
+    ByteArray hmacKey);
 
 /**
  * @brief Closes the socket connection to a host.
@@ -63,7 +63,6 @@ void KineticClient_Disconnect(KineticConnection* connection);
  *
  * @param connection    KineticConnection instance to associate with operation
  * @param request       KineticPDU instance to use for request
- * @param requestMsg    KineticMessage instance to use for request
  * @param response      KineticPDU instance to use for reponse
  *
  * @return              Returns a configured operation instance
@@ -78,7 +77,8 @@ KineticOperation KineticClient_CreateOperation(
  *
  * @param operation     KineticOperation instance to use for the operation
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ *                      upon failure
  */
 KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation);
 
@@ -86,22 +86,26 @@ KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation);
  * @brief Executes a PUT command to write data to the Kinetic Device
  *
  * @param operation     KineticOperation instance to use for the operation
+ * @param metadata      Key/value metadata for object to store. 'value' must
+ *                      specify the data to be stored.
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ *                      upon failure
  */
 KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata,
-    ByteArray value);
+    const Kinetic_KeyValue* metadata);
 
 /**
  * @brief Executes a GET command to read data from the Kinetic Device
  *
  * @param operation     KineticOperation instance to use for the operation
+ * @param metadata      Key/value metadata for object to retrieve. 'value' will
+ *                      be populated unless 'metadataOnly' is set to 'true'
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ *                      upon failure
  */
 KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata,
-    const ByteArray value);
+    const Kinetic_KeyValue* metadata);
 
 #endif // _KINETIC_CLIENT_H

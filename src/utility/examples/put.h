@@ -24,17 +24,21 @@
 #include "kinetic_client.h"
 
 /**
- * @brief Connects to the specified Kinetic host/port and executes a Put to write data to the Device
+ * @brief Connects to the specified Kinetic host/port and executes a Put to store an object on the Device
  *
  * @param host              Host name or IP address to connect to
  * @param port              Port to establish socket connection on
+ * @param nonBlocking       Set to true for non-blocking or false for blocking I/O
  * @param clusterVersion    Cluster version to use for the operation
- * @param identity          Identity to use for the operation (Must have ACL setup on Kinetic Device)
- * @param key               Shared secret key used for the identity for HMAC calculation
- * @param data              Pointer to data buffer to write
- * @param len               Length of data buffer to write
+ * @param identity          Identity to use for the operation (Must have ACL
+ *                          setup on Kinetic Device)
+ * @param hmacKey           Shared secret key used for the identity for HMAC
+ *                          calculation
+ * @param metadata          Key/value metadata for object to store. 'value' must
+ *                          specify the data to be stored.
  *
- * @return                  Returns true if operation succeeded, false otherwise
+ * @return                  Returns 0 upon succes, -1 or the Kinetic status code
+ *                          upon failure
  */
 int Put(
     const char* host,
@@ -43,7 +47,6 @@ int Put(
     int64_t clusterVersion,
     int64_t identity,
     ByteArray hmacKey,
-    Kinetic_KeyValue* metadata,
-    const ByteArray value);
+    Kinetic_KeyValue* metadata);
 
 #endif // _PUT_H

@@ -24,17 +24,22 @@
 #include "kinetic_client.h"
 
 /**
- * @brief Connects to the specified Kinetic host/port and executes a Get to read data from the Device
+ * @brief Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device
  *
  * @param host              Host name or IP address to connect to
  * @param port              Port to establish socket connection on
+ * @param nonBlocking       Set to true for non-blocking or false for blocking I/O
  * @param clusterVersion    Cluster version to use for the operation
- * @param identity          Identity to use for the operation (Must have ACL setup on Kinetic Device)
- * @param hmacKey           Shared secret key used for the identity for HMAC calculation
- * @param metadataOnly      Set to true to request only the meta-data for the stored object
- * @param value             ByteArray with preallocated buffer to store the received data in
+ * @param identity          Identity to use for the operation (Must have ACL
+ *                          setup on Kinetic Device)
+ * @param hmacKey           Shared secret key used for the identity for HMAC
+ *                          calculation
+ * @param metadata          Key/value metadata for object to retrieve.
+ *                          'value' will be populated unless 'metadataOnly' is
+ *                          set to 'true'
  *
- * @return                  Returns true if operation succeeded, false otherwise
+ * @return                  Returns 0 upon succes, -1 or the Kinetic status code
+ *                          upon failure
  */
 int Get(const char* host,
         int port,
@@ -42,7 +47,6 @@ int Get(const char* host,
         int64_t clusterVersion,
         int64_t identity,
         ByteArray hmacKey,
-        Kinetic_KeyValue* metadata,
-        ByteArray value);
+        Kinetic_KeyValue* metadata);
 
 #endif // _GET_H

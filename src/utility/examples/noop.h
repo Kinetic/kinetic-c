@@ -28,11 +28,13 @@
  *
  * @param host              Host name or IP address to connect to
  * @param port              Port to establish socket connection on
+ * @param nonBlocking       Set to true for non-blocking or false for blocking I/O
  * @param clusterVersion    Cluster version to use for the operation
  * @param identity          Identity to use for the operation (Must have ACL setup on Kinetic Device)
  * @param hmacKey           Shared secret key used for the identity for HMAC calculation
  *
- * @return                  Returns true if operation succeeded, false otherwise
+ * @return                  Returns 0 upon succes, -1 or the Kinetic status code
+ *                          upon failure
  */
 int NoOp(
     const char* host,
