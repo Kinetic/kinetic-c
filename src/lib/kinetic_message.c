@@ -34,9 +34,9 @@ void KineticMessage_Init(KineticMessage* const message)
     } \
 }
 
-// #define CONFIG_OPTIONAL_FIELD_ENUM(name, field, message) { \
-//     message->keyValue.(name) = ((int)metadata->algorithm > 0); \
-//     if (message->keyValue.has_(name)) { \
+// #define CONFIG_OPTIONAL_FIELD_ENUM(name, field, message) { 
+//     message->keyValue.(name) = ((int)metadata->algorithm > 0); 
+//     if (message->keyValue.has_(name)) { 
 //         message->keyValue.algorithm = algorithm; } }
 
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
