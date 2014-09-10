@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.5.0</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -79,18 +79,20 @@ $(document).ready(function(){initNavTree('noop_8h_source.html','');});
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef _NOOP_H</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define _NOOP_H</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic_8h.html">kinetic.h</a>&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__client_8h.html">kinetic_client.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keywordtype">int</span> <a class="code" href="noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5">NoOp</a>(</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* host,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">int</span> port,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    int64_t clusterVersion,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    int64_t identity,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* key);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#endif // _NOOP_H</span></div>
-<div class="ttc" id="kinetic_8h_html"><div class="ttname"><a href="kinetic_8h.html">kinetic.h</a></div></div>
-<div class="ttc" id="noop_8h_html_aa0917ddd64a002c8a0866681f0c9e6d5"><div class="ttname"><a href="noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5">NoOp</a></div><div class="ttdeci">int NoOp(const char *host, int port, int64_t clusterVersion, int64_t identity, const char *key)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ...</div><div class="ttdef"><b>Definition:</b> <a href="noop_8c_source.html#l00023">noop.c:23</a></div></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">int</span> <a class="code" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934">NoOp</a>(</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* host,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">int</span> port,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">bool</span> nonBlocking,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    int64_t clusterVersion,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    int64_t identity,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> hmacKey);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif // _NOOP_H</span></div>
+<div class="ttc" id="kinetic__client_8h_html"><div class="ttname"><a href="kinetic__client_8h.html">kinetic_client.h</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a22e72ec9fae2d1ed7d950fb49da5777f"><div class="ttname"><a href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></div><div class="ttdeci">ProtobufCBinaryData ByteArray</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00069">kinetic_types.h:69</a></div></div>
+<div class="ttc" id="noop_8h_html_a54134f0309024f11ce0cf25c26a22934"><div class="ttname"><a href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934">NoOp</a></div><div class="ttdeci">int NoOp(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ...</div><div class="ttdef"><b>Definition:</b> <a href="noop_8c_source.html#l00025">noop.c:25</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -1,0 +1,10 @@
+<map id="KineticSocket_Read" name="KineticSocket_Read">
+<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" title="KineticPDU_Receive" alt="" coords="509,60,681,91"/>
+<area shape="rect" id="node9" href="$kinetic__socket_8h.html#a66ab9acaa76c5f9763fbf712ec5a82e6" title="KineticSocket_ReadProtobuf" alt="" coords="224,87,461,118"/>
+<area shape="rect" id="node3" href="$kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="729,60,993,91"/>
+<area shape="rect" id="node4" href="$kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="1041,5,1212,36"/>
+<area shape="rect" id="node7" href="$kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="1051,60,1202,91"/>
+<area shape="rect" id="node8" href="$kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="1050,115,1203,146"/>
+<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1260,5,1326,36"/>
+<area shape="rect" id="node6" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1374,5,1433,36"/>
+</map>

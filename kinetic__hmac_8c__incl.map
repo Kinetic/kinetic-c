@@ -1,6 +1,7 @@
 <map id="kinetic_hmac.c" name="kinetic_hmac.c">
-<area shape="rect" id="node2" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="675,246,828,277"/>
-<area shape="rect" id="node18" href="$kinetic__hmac_8h.html" title="kinetic_hmac.h" alt="" coords="618,86,763,117"/>
-<area shape="rect" id="node16" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1515,326,1668,357"/>
-<area shape="rect" id="node19" href="$kinetic__message_8h.html" title="kinetic_message.h" alt="" coords="605,166,776,197"/>
+<area shape="rect" id="node2" href="$kinetic__hmac_8h.html" title="kinetic_hmac.h" alt="" coords="958,84,1096,115"/>
+<area shape="rect" id="node20" href="$kinetic__nbo_8h.html" title="kinetic_nbo.h" alt="" coords="808,84,934,115"/>
+<area shape="rect" id="node21" href="$kinetic__logger_8h.html" title="kinetic_logger.h" alt="" coords="1120,84,1265,115"/>
+<area shape="rect" id="node3" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="838,163,974,194"/>
+<area shape="rect" id="node17" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1607,242,1745,273"/>
 </map>

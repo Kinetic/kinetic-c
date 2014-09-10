@@ -1,6 +1,6 @@
 var struct_kinetic_h_m_a_c =
 [
     [ "algorithm", "struct_kinetic_h_m_a_c.html#a8b00d3368fc08fba9b41370568dc6d11", null ],
-    [ "valueLength", "struct_kinetic_h_m_a_c.html#ac80f549084bc5a7c204795f30badc7a3", null ],
-    [ "value", "struct_kinetic_h_m_a_c.html#acfe6f39a380b645cdc582c473797cdea", null ]
+    [ "len", "struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b", null ],
+    [ "data", "struct_kinetic_h_m_a_c.html#a0b92122284d74da8ff67fd54da30c57f", null ]
 ];

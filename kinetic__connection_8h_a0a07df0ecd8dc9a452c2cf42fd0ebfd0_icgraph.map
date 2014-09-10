@@ -1,0 +1,7 @@
+<map id="KineticConnection_Disconnect" name="KineticConnection_Disconnect">
+<area shape="rect" id="node2" href="$kinetic__client_8c.html#ae4b4f1c08bcb4fc76a792c216d5b0822" title="Closes the socket connection to a host. " alt="" coords="308,60,520,91"/>
+<area shape="rect" id="node3" href="$get_8h.html#aa3a86ce5b3301619f3a3946b657a3150" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="577,5,625,36"/>
+<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="568,60,634,91"/>
+<area shape="rect" id="node6" href="$put_8h.html#ad2fb023662a16a8dc70fda8eb4f38d3e" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="578,115,624,146"/>
+<area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="682,60,742,91"/>
+</map>

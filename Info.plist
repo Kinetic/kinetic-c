@@ -8,7 +8,7 @@
      <key>CFBundleIdentifier</key>
      <string>com.seagate.kinetic-c</string>
      <key>CFBundleVersion</key>
-     <string>v0.5.0</string>
+     <string>v0.6.0</string>
      <key>DocSetFeedName</key>
      <string>Seagate Kinetic Docs</string>
      <key>DocSetPublisherIdentifier</key>

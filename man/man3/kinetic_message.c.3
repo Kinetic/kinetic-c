@@ -1,4 +1,4 @@
-.TH "kinetic_message.c" 3 "Fri Aug 8 2014" "Version v0.5.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_message.c" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,13 +9,38 @@ kinetic_message.c \-
 \fC#include 'kinetic_message\&.h'\fP
 .br
 
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBCONFIG_FIELD_BYTE_ARRAY\fP(_name, _field, _config)"
+.br
+.in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
 .RI "void \fBKineticMessage_Init\fP (\fBKineticMessage\fP *const message)"
 .br
+.ti -1c
+.RI "void \fBKineticMessage_ConfigureKeyValue\fP (\fBKineticMessage\fP *const message, const \fBKinetic_KeyValue\fP *metadata)"
+.br
 .in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define CONFIG_FIELD_BYTE_ARRAY(_name, _field, _config)"
+\fBValue:\fP
+.PP
+.nf
+{ \
+    if (_config->_name\&.data != NULL && _config->_name\&.len > 0) { \
+        _field\&._name = _config->_name; \
+        _field\&.has_ ## _name = true; \
+    } \
+}
+.fi
+.PP
+Definition at line 30 of file kinetic_message\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "void KineticMessage_Init (\fBKineticMessage\fP *constmessage)"
@@ -24,6 +49,12 @@ kinetic_message.c \-
 Definition at line 23 of file kinetic_message\&.c\&.
 .PP
 References KINETIC_MESSAGE_INIT\&.
+.SS "void KineticMessage_ConfigureKeyValue (\fBKineticMessage\fP *constmessage, const \fBKinetic_KeyValue\fP *metadata)"
+
+.PP
+Definition at line 42 of file kinetic_message\&.c\&.
+.PP
+References Kinetic_KeyValue::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_ARRAY, KineticMessage::keyValue, Kinetic_KeyValue::metadataOnly, and KineticMessage::proto\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

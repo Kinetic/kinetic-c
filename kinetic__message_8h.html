@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.5.0</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,6 +60,20 @@ $(document).ready(function(){initNavTree('kinetic__message_8h.html','');});
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__hmac_8h_source.html">kinetic_hmac.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for kinetic_message.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__message_8h__incl.png" border="0" usemap="#kinetic__message_8h" alt=""/></div>
+<map name="kinetic__message_8h" id="kinetic__message_8h">
+<area shape="rect" id="node2" href="kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="796,163,933,194"/><area shape="rect" id="node19" href="kinetic__hmac_8h.html" title="kinetic_hmac.h" alt="" coords="902,84,1040,115"/><area shape="rect" id="node16" href="kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1606,242,1744,273"/></map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__message_8h__dep__incl.png" border="0" usemap="#kinetic__message_8hdep" alt=""/></div>
+<map name="kinetic__message_8hdep" id="kinetic__message_8hdep">
+<area shape="rect" id="node2" href="kinetic__client_8c.html" title="kinetic_client.c" alt="" coords="38,84,174,115"/><area shape="rect" id="node3" href="kinetic__socket_8h.html" title="kinetic_socket.h" alt="" coords="198,84,344,115"/><area shape="rect" id="node7" href="kinetic__message_8c.html" title="kinetic_message.c" alt="" coords="368,84,529,115"/><area shape="rect" id="node8" href="kinetic__operation_8c.html" title="kinetic_operation.c" alt="" coords="552,84,721,115"/><area shape="rect" id="node4" href="kinetic__connection_8c.html" title="kinetic_connection.c" alt="" coords="5,163,185,194"/><area shape="rect" id="node5" href="kinetic__pdu_8c.html" title="kinetic_pdu.c" alt="" coords="209,163,333,194"/><area shape="rect" id="node6" href="kinetic__socket_8c.html" title="kinetic_socket.c" alt="" coords="357,163,500,194"/></map>
+</div>
 </div>
 <p><a href="kinetic__message_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -67,6 +81,8 @@ $(document).ready(function(){initNavTree('kinetic__message_8h.html','');});
 Functions</h2></td></tr>
 <tr class="memitem:ac6ea752dfd491fffd99d4cad256f679d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8h.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const message)</td></tr>
 <tr class="separator:ac6ea752dfd491fffd99d4cad256f679d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a888cdaf07002f7a7b6ab6263c49ebb12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8h.html#a888cdaf07002f7a7b6ab6263c49ebb12">KineticMessage_ConfigureKeyValue</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const message, const <a class="el" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a> *metadata)</td></tr>
+<tr class="separator:a888cdaf07002f7a7b6ab6263c49ebb12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ac6ea752dfd491fffd99d4cad256f679d"></a>
@@ -85,7 +101,46 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00023">23</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00102">KINETIC_MESSAGE_INIT</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00190">KINETIC_MESSAGE_INIT</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a888cdaf07002f7a7b6ab6263c49ebb12"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticMessage_ConfigureKeyValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const&#160;</td>
+          <td class="paramname"><em>message</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a> *&#160;</td>
+          <td class="paramname"><em>metadata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00042">42</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00214">Kinetic_KeyValue::algorithm</a>, <a class="el" href="kinetic__types_8h_source.html#l00168">KineticMessage::body</a>, <a class="el" href="kinetic__types_8h_source.html#l00166">KineticMessage::command</a>, <a class="el" href="kinetic__message_8c_source.html#l00030">CONFIG_FIELD_BYTE_ARRAY</a>, <a class="el" href="kinetic__types_8h_source.html#l00172">KineticMessage::keyValue</a>, <a class="el" href="kinetic__types_8h_source.html#l00215">Kinetic_KeyValue::metadataOnly</a>, and <a class="el" href="kinetic__types_8h_source.html#l00165">KineticMessage::proto</a>.</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__message_8h_a888cdaf07002f7a7b6ab6263c49ebb12_icgraph.png" border="0" usemap="#kinetic__message_8h_a888cdaf07002f7a7b6ab6263c49ebb12_icgraph" alt=""/></div>
+<map name="kinetic__message_8h_a888cdaf07002f7a7b6ab6263c49ebb12_icgraph" id="kinetic__message_8h_a888cdaf07002f7a7b6ab6263c49ebb12_icgraph">
+<area shape="rect" id="node2" href="kinetic__operation_8h.html#a2700aabef8796b1896a53b0f9a1a3d13" title="KineticOperation_BuildPut" alt="" coords="278,5,500,36"/><area shape="rect" id="node4" href="kinetic__operation_8h.html#ab74d2f2a39115bb5757112f57c147b71" title="KineticOperation_BuildGet" alt="" coords="277,60,501,91"/><area shape="rect" id="node3" href="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="550,5,701,36"/><area shape="rect" id="node5" href="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="549,60,702,91"/></map>
+</div>
+</p>
 
 </div>
 </div>

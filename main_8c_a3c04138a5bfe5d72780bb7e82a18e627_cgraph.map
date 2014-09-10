@@ -1,34 +1,39 @@
 <map id="main" name="main">
-<area shape="rect" id="node2" href="$noop_8c.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="109,242,166,273"/>
-<area shape="rect" id="node3" href="$kinetic__api_8c.html#a27b1217d8c965287f2f06009903507aa" title="Initializes the Kinetic API andcsonfigures logging destination. " alt="" coords="271,33,425,63"/>
-<area shape="rect" id="node5" href="$kinetic__api_8c.html#a8d9dd4011a9a09eae17c0d317d3f4225" title="Establishes a Kinetic protocol socket connection to a host. " alt="" coords="258,114,438,145"/>
-<area shape="rect" id="node9" href="$kinetic__api_8c.html#a7e039cf7d74c333802b2a1cd876cfc2c" title="Initializes and configures a Kinetic exchange. " alt="" coords="214,242,482,273"/>
-<area shape="rect" id="node13" href="$kinetic__api_8c.html#a67b761a422cb1fa75f30e62708a00117" title="Creates and initializes a Kinetic operation. " alt="" coords="223,370,473,401"/>
-<area shape="rect" id="node17" href="$kinetic__api_8c.html#ab8f3c3fa01178f9331949d774334f940" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="271,553,425,583"/>
-<area shape="rect" id="node4" href="$kinetic__logger_8c.html#ae302c2ba2d4dcb526dd9efdec6264d8d" title="KineticLogger_Init" alt="" coords="566,5,746,35"/>
-<area shape="rect" id="node6" href="$kinetic__connection_8c.html#a067e3a232197b9d572244d40607ab24f" title="KineticConnection_Connect" alt="" coords="535,59,777,90"/>
-<area shape="rect" id="node8" href="$kinetic__connection_8c.html#a6524070218513d73d3bf8e02f50c75b3" title="KineticConnection_Init" alt="" coords="549,114,763,145"/>
-<area shape="rect" id="node7" href="$kinetic__socket_8c.html#a153be47ff8a2e21b5e55c15eba510dfe" title="KineticSocket_Connect" alt="" coords="856,59,1062,90"/>
-<area shape="rect" id="node10" href="$kinetic__exchange_8c.html#a79f8df71d49e5853b85dbc04aea2dadf" title="KineticExchange_Configure\lConnectionID" alt="" coords="535,169,777,218"/>
-<area shape="rect" id="node11" href="$kinetic__exchange_8c.html#ac70a003301820ad2e39787ec66363486" title="KineticExchange_Init" alt="" coords="557,242,755,273"/>
-<area shape="rect" id="node12" href="$kinetic__exchange_8c.html#a152138735516f7ea8304e6ac36047da1" title="KineticExchange_SetCluster\lVersion" alt="" coords="531,297,781,346"/>
-<area shape="rect" id="node14" href="$kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d" title="KineticMessage_Init" alt="" coords="562,370,750,401"/>
-<area shape="rect" id="node15" href="$kinetic__pdu_8c.html#a036f988ac116a054a76fcc59cd2d6647" title="KineticPDU_Init" alt="" coords="579,425,733,455"/>
-<area shape="rect" id="node16" href="$kinetic__exchange_8c.html#a58479324729294bdce5e4fd99c348fc7" title="KineticExchange_Configure\lHeader" alt="" coords="838,418,1079,467"/>
-<area shape="rect" id="node18" href="$kinetic__exchange_8c.html#afb310a881d72cca38fe091cc0c0b2190" title="KineticExchange_Increment\lSequence" alt="" coords="535,479,777,529"/>
-<area shape="rect" id="node19" href="$kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888" title="KineticOperation_BuildNoop" alt="" coords="531,553,781,583"/>
-<area shape="rect" id="node20" href="$kinetic__pdu_8c.html#acff84c8347b8df5df8d90364d990268a" title="KineticPDU_Receive" alt="" coords="566,607,746,638"/>
-<area shape="rect" id="node28" href="$kinetic__pdu_8c.html#ad853748c77a0a8505812449f85fa3f72" title="KineticPDU_Send" alt="" coords="579,821,733,851"/>
-<area shape="rect" id="node21" href="$kinetic__hmac_8c.html#af0d312b6cffbe85d7bce6af3a1b8e742" title="KineticHMAC_Validate" alt="" coords="860,658,1057,689"/>
-<area shape="rect" id="node23" href="$kinetic__logger_8c.html#aa165cca23a8303a430aaeb13843d2259" title="KineticLogger_LogHeader" alt="" coords="847,549,1070,579"/>
-<area shape="rect" id="node24" href="$kinetic__logger_8c.html#a382d80f28dc772bd38ef93c01bd7150e" title="KineticLogger_LogProtobuf" alt="" coords="838,713,1079,743"/>
-<area shape="rect" id="node25" href="$kinetic__socket_8c.html#aded36525a210d1e0eae8cdb820997e62" title="KineticSocket_Read" alt="" coords="1181,522,1361,553"/>
-<area shape="rect" id="node26" href="$kinetic__socket_8c.html#aac07ac642119c019651884f4e877c5a5" title="KineticSocket_ReadProtobuf" alt="" coords="834,603,1084,634"/>
-<area shape="rect" id="node22" href="$kinetic__hmac_8c.html#af18bc978da74d29a03ef969007c5201f" title="KineticHMAC_Init" alt="" coords="1190,767,1352,798"/>
-<area shape="rect" id="node27" href="$kinetic__proto_8c.html#a0623fe40025b387b445cff513988f8fe" title="KineticProto_unpack" alt="" coords="1176,603,1365,634"/>
-<area shape="rect" id="node29" href="$kinetic__hmac_8c.html#a20ce5d52c8e4948a46aac10458d205a1" title="KineticHMAC_Populate" alt="" coords="860,767,1057,798"/>
-<area shape="rect" id="node30" href="$kinetic__proto_8c.html#a535c41fa53e969b823c11492172e88da" title="KineticProto_get_packed_size" alt="" coords="1137,979,1404,1010"/>
-<area shape="rect" id="node31" href="$kinetic__socket_8c.html#a044cc1d21dfda04611244b33521dc082" title="KineticSocket_Write" alt="" coords="1176,870,1365,901"/>
-<area shape="rect" id="node32" href="$kinetic__socket_8c.html#a1ddcb45abdc2da81160cabe1b9827c1f" title="KineticSocket_WriteProtobuf" alt="" coords="829,925,1088,955"/>
-<area shape="rect" id="node33" href="$kinetic__proto_8c.html#a3b0b987f271840aa17c7bec9046eb77f" title="KineticProto_pack" alt="" coords="1185,925,1356,955"/>
+<area shape="rect" id="node2" href="$get_8c.html#aa3a86ce5b3301619f3a3946b657a3150" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="122,380,170,411"/>
+<area shape="rect" id="node13" href="$noop_8c.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="113,435,178,466"/>
+<area shape="rect" id="node37" href="$put_8c.html#ad2fb023662a16a8dc70fda8eb4f38d3e" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="123,489,169,520"/>
+<area shape="rect" id="node3" href="$kinetic__client_8h.html#a5448ecfd9eef429ea2679610e5cfd6cf" title="Configures the session and establishes a socket connection to a Kinetic Device. " alt="" coords="258,544,449,575"/>
+<area shape="rect" id="node6" href="$kinetic__client_8h.html#a8c2d9f8e7d2046d8fef3294c645e4c96" title="Creates and initializes a Kinetic operation. " alt="" coords="226,325,481,356"/>
+<area shape="rect" id="node8" href="$kinetic__client_8h.html#ae4b4f1c08bcb4fc76a792c216d5b0822" title="Closes the socket connection to a host. " alt="" coords="248,380,460,411"/>
+<area shape="rect" id="node10" href="$kinetic__client_8h.html#ac5381f9a7772f8c64eb4087c17d0fbe4" title="Executes a GET command to read data from the Kinetic Device. " alt="" coords="277,271,430,302"/>
+<area shape="rect" id="node11" href="$kinetic__client_8h.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" title="Initializes the Kinetic API andcsonfigures logging destination. " alt="" coords="278,435,430,466"/>
+<area shape="rect" id="node4" href="$kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76" title="KineticConnection_Connect" alt="" coords="544,649,778,680"/>
+<area shape="rect" id="node5" href="$kinetic__socket_8c.html#a8b16e4d74b50c80aa8836671471f7970" title="KineticSocket_Connect" alt="" coords="866,691,1063,722"/>
+<area shape="rect" id="node7" href="$kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda" title="KineticPDU_Init" alt="" coords="591,325,730,356"/>
+<area shape="rect" id="node9" href="$kinetic__connection_8c.html#ac098de6abde0c838914a846829d51ac5" title="KineticConnection_Disconnect" alt="" coords="533,380,788,411"/>
+<area shape="rect" id="node12" href="$kinetic__logger_8c.html#ae302c2ba2d4dcb526dd9efdec6264d8d" title="KineticLogger_Init" alt="" coords="580,435,741,466"/>
+<area shape="rect" id="node14" href="$kinetic__client_8h.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="268,489,439,520"/>
+<area shape="rect" id="node15" href="$kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="529,489,793,520"/>
+<area shape="rect" id="node34" href="$kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888" title="KineticOperation_BuildNoop" alt="" coords="541,553,780,584"/>
+<area shape="rect" id="node16" href="$kinetic__pdu_8c.html#acff84c8347b8df5df8d90364d990268a" title="KineticPDU_Receive" alt="" coords="879,191,1051,222"/>
+<area shape="rect" id="node26" href="$kinetic__pdu_8c.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="889,435,1040,466"/>
+<area shape="rect" id="node33" href="$kinetic__pdu_8c.html#ac8c3d890312eab07970a86ec9b075e33" title="KineticPDU_Status" alt="" coords="884,489,1045,520"/>
+<area shape="rect" id="node17" href="$kinetic__hmac_8c.html#ac38b2071b2c9425be6a8eac68e0fb27e" title="KineticHMAC_Validate" alt="" coords="1170,219,1361,250"/>
+<area shape="rect" id="node19" href="$kinetic__logger_8c.html#a1833be5893222cc3650250726623f93c" title="KineticLogger_LogByteArray" alt="" coords="1442,167,1679,198"/>
+<area shape="rect" id="node20" href="$kinetic__logger_8c.html#aa165cca23a8303a430aaeb13843d2259" title="KineticLogger_LogHeader" alt="" coords="1156,328,1375,359"/>
+<area shape="rect" id="node21" href="$kinetic__logger_8c.html#a382d80f28dc772bd38ef93c01bd7150e" title="KineticLogger_LogProtobuf" alt="" coords="1150,273,1381,304"/>
+<area shape="rect" id="node22" href="$kinetic__nbo_8c.html#a82d5bae248ec3e63c7fd40b55a9293ca" title="KineticNBO_ToHostU32" alt="" coords="1165,164,1366,195"/>
+<area shape="rect" id="node23" href="$kinetic__socket_8c.html#a1e57c03634e1ce7391aba8a82ad6040e" title="KineticSocket_Read" alt="" coords="1475,60,1646,91"/>
+<area shape="rect" id="node24" href="$kinetic__socket_8c.html#a66ab9acaa76c5f9763fbf712ec5a82e6" title="KineticSocket_ReadProtobuf" alt="" coords="1147,7,1384,38"/>
+<area shape="rect" id="node18" href="$kinetic__hmac_8c.html#af18bc978da74d29a03ef969007c5201f" title="KineticHMAC_Init" alt="" coords="1483,381,1638,412"/>
+<area shape="rect" id="node25" href="$kinetic__proto_8c.html#ac74c443d4eb0ab34e845673f1fc70523" title="KineticProto__unpack" alt="" coords="1467,5,1654,36"/>
+<area shape="rect" id="node27" href="$kinetic__hmac_8c.html#a5dd91c42c8cc41c324c917f3d463ef7f" title="KineticHMAC_Populate" alt="" coords="1167,435,1364,466"/>
+<area shape="rect" id="node28" href="$kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad" title="KineticNBO_FromHostU32" alt="" coords="1155,596,1376,627"/>
+<area shape="rect" id="node29" href="$kinetic__proto_8c.html#a44e75fcc84248743e80444abfcda131e" title="KineticProto__get_packed_size" alt="" coords="1137,651,1394,682"/>
+<area shape="rect" id="node30" href="$kinetic__socket_8c.html#a1a8ae7ce63273b6d2cea899e0e5a0043" title="KineticSocket_Write" alt="" coords="1474,488,1647,519"/>
+<area shape="rect" id="node31" href="$kinetic__socket_8c.html#a3851320ed4ef5e518ca1ff9fefccffcb" title="KineticSocket_WriteProtobuf" alt="" coords="1146,541,1385,572"/>
+<area shape="rect" id="node32" href="$kinetic__proto_8c.html#a3d8d1e9a1eca89c51de9a3ed218c649b" title="KineticProto__pack" alt="" coords="1477,543,1644,574"/>
+<area shape="rect" id="node35" href="$kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d" title="KineticConnection_Increment\lSequence" alt="" coords="841,544,1089,594"/>
+<area shape="rect" id="node36" href="$kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac" title="KineticOperation_Validate\lOperation" alt="" coords="854,617,1075,667"/>
+<area shape="rect" id="node38" href="$kinetic__client_8h.html#a2705464e0a90ee21c4f851950bdd4590" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="278,599,430,630"/>
 </map>

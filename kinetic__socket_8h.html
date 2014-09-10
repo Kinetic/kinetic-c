@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.5.0</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,26 +60,40 @@ $(document).ready(function(){initNavTree('kinetic__socket_8h.html','');});
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__message_8h_source.html">kinetic_message.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for kinetic_socket.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h__incl.png" border="0" usemap="#kinetic__socket_8h" alt=""/></div>
+<map name="kinetic__socket_8h" id="kinetic__socket_8h">
+<area shape="rect" id="node2" href="kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="796,242,933,273"/><area shape="rect" id="node19" href="kinetic__message_8h.html" title="kinetic_message.h" alt="" coords="877,84,1039,115"/><area shape="rect" id="node16" href="kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1606,321,1744,352"/><area shape="rect" id="node20" href="kinetic__hmac_8h.html" title="kinetic_hmac.h" alt="" coords="928,163,1065,194"/></map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h__dep__incl.png" border="0" usemap="#kinetic__socket_8hdep" alt=""/></div>
+<map name="kinetic__socket_8hdep" id="kinetic__socket_8hdep">
+<area shape="rect" id="node2" href="kinetic__connection_8c.html" title="kinetic_connection.c" alt="" coords="4,86,200,117"/><area shape="rect" id="node3" href="kinetic__pdu_8c.html" title="kinetic_pdu.c" alt="" coords="225,86,360,117"/><area shape="rect" id="node4" href="kinetic__socket_8c.html" title="kinetic_socket.c" alt="" coords="386,86,547,117"/></map>
+</div>
 </div>
 <p><a href="kinetic__socket_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a153be47ff8a2e21b5e55c15eba510dfe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a153be47ff8a2e21b5e55c15eba510dfe">KineticSocket_Connect</a> (char *host, int port, bool blocking)</td></tr>
-<tr class="separator:a153be47ff8a2e21b5e55c15eba510dfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b16e4d74b50c80aa8836671471f7970"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a8b16e4d74b50c80aa8836671471f7970">KineticSocket_Connect</a> (char *host, int port, bool nonBlocking)</td></tr>
+<tr class="separator:a8b16e4d74b50c80aa8836671471f7970"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cc4074d34235650f7975f6b7765948e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a7cc4074d34235650f7975f6b7765948e">KineticSocket_Close</a> (int socketDescriptor)</td></tr>
 <tr class="separator:a7cc4074d34235650f7975f6b7765948e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aded36525a210d1e0eae8cdb820997e62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#aded36525a210d1e0eae8cdb820997e62">KineticSocket_Read</a> (int socketDescriptor, void *buffer, size_t length)</td></tr>
-<tr class="separator:aded36525a210d1e0eae8cdb820997e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac07ac642119c019651884f4e877c5a5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#aac07ac642119c019651884f4e877c5a5">KineticSocket_ReadProtobuf</a> (int socketDescriptor, <a class="el" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a> **message, void *buffer, size_t length)</td></tr>
-<tr class="separator:aac07ac642119c019651884f4e877c5a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a044cc1d21dfda04611244b33521dc082"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a044cc1d21dfda04611244b33521dc082">KineticSocket_Write</a> (int socketDescriptor, const void *buffer, size_t length)</td></tr>
-<tr class="separator:a044cc1d21dfda04611244b33521dc082"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ddcb45abdc2da81160cabe1b9827c1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a1ddcb45abdc2da81160cabe1b9827c1f">KineticSocket_WriteProtobuf</a> (int socketDescriptor, const <a class="el" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a> *proto)</td></tr>
-<tr class="separator:a1ddcb45abdc2da81160cabe1b9827c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e57c03634e1ce7391aba8a82ad6040e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a1e57c03634e1ce7391aba8a82ad6040e">KineticSocket_Read</a> (int socketDescriptor, <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> buffer)</td></tr>
+<tr class="separator:a1e57c03634e1ce7391aba8a82ad6040e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66ab9acaa76c5f9763fbf712ec5a82e6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a66ab9acaa76c5f9763fbf712ec5a82e6">KineticSocket_ReadProtobuf</a> (int socketDescriptor, <a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *pdu)</td></tr>
+<tr class="separator:a66ab9acaa76c5f9763fbf712ec5a82e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a8ae7ce63273b6d2cea899e0e5a0043"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a1a8ae7ce63273b6d2cea899e0e5a0043">KineticSocket_Write</a> (int socketDescriptor, <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> buffer)</td></tr>
+<tr class="separator:a1a8ae7ce63273b6d2cea899e0e5a0043"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3851320ed4ef5e518ca1ff9fefccffcb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a3851320ed4ef5e518ca1ff9fefccffcb">KineticSocket_WriteProtobuf</a> (int socketDescriptor, <a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *pdu)</td></tr>
+<tr class="separator:a3851320ed4ef5e518ca1ff9fefccffcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a153be47ff8a2e21b5e55c15eba510dfe"></a>
+<a class="anchor" id="a8b16e4d74b50c80aa8836671471f7970"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -99,7 +113,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>blocking</em>&#160;</td>
+          <td class="paramname"><em>nonBlocking</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -109,9 +123,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00044">44</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00070">70</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8h_source.html#l00037">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00038">LOGF</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00039">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00040">LOGF</a>.</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h_a8b16e4d74b50c80aa8836671471f7970_icgraph.png" border="0" usemap="#kinetic__socket_8h_a8b16e4d74b50c80aa8836671471f7970_icgraph" alt=""/></div>
+<map name="kinetic__socket_8h_a8b16e4d74b50c80aa8836671471f7970_icgraph" id="kinetic__socket_8h_a8b16e4d74b50c80aa8836671471f7970_icgraph">
+<area shape="rect" id="node2" href="kinetic__connection_8h.html#ad009656b3513c413099526e03fbc437e" title="KineticConnection_Connect" alt="" coords="250,60,484,91"/><area shape="rect" id="node3" href="kinetic__client_8c.html#a5448ecfd9eef429ea2679610e5cfd6cf" title="Configures the session and establishes a socket connection to a Kinetic Device. " alt="" coords="532,60,723,91"/><area shape="rect" id="node4" href="get_8h.html#aa3a86ce5b3301619f3a3946b657a3150" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="779,5,827,36"/><area shape="rect" id="node6" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="771,60,836,91"/><area shape="rect" id="node7" href="put_8h.html#ad2fb023662a16a8dc70fda8eb4f38d3e" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="780,115,826,146"/><area shape="rect" id="node5" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="884,60,944,91"/></map>
+</div>
+</p>
 
 </div>
 </div>
@@ -129,13 +152,13 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00127">127</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00160">160</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8h_source.html#l00037">LOG</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00039">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00040">LOGF</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aded36525a210d1e0eae8cdb820997e62"></a>
+<a class="anchor" id="a1e57c03634e1ce7391aba8a82ad6040e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -148,14 +171,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>&#160;</td>
+          <td class="paramname"><em>buffer</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -165,13 +182,22 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00149">149</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00182">182</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8h_source.html#l00037">LOG</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00039">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00040">LOGF</a>.</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h_a1e57c03634e1ce7391aba8a82ad6040e_icgraph.png" border="0" usemap="#kinetic__socket_8h_a1e57c03634e1ce7391aba8a82ad6040e_icgraph" alt=""/></div>
+<map name="kinetic__socket_8h_a1e57c03634e1ce7391aba8a82ad6040e_icgraph" id="kinetic__socket_8h_a1e57c03634e1ce7391aba8a82ad6040e_icgraph">
+<area shape="rect" id="node2" href="kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" title="KineticPDU_Receive" alt="" coords="509,60,681,91"/><area shape="rect" id="node9" href="kinetic__socket_8h.html#a66ab9acaa76c5f9763fbf712ec5a82e6" title="KineticSocket_ReadProtobuf" alt="" coords="224,87,461,118"/><area shape="rect" id="node3" href="kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="729,60,993,91"/><area shape="rect" id="node4" href="kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="1041,5,1212,36"/><area shape="rect" id="node7" href="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="1051,60,1202,91"/><area shape="rect" id="node8" href="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="1050,115,1203,146"/><area shape="rect" id="node5" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1260,5,1326,36"/><area shape="rect" id="node6" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1374,5,1433,36"/></map>
+</div>
+</p>
 
 </div>
 </div>
-<a class="anchor" id="aac07ac642119c019651884f4e877c5a5"></a>
+<a class="anchor" id="a66ab9acaa76c5f9763fbf712ec5a82e6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -184,20 +210,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a> **&#160;</td>
-          <td class="paramname"><em>message</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *&#160;</td>
+          <td class="paramname"><em>pdu</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -207,13 +221,31 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00204">204</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00244">244</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8c_source.html#l00185">KineticProto_unpack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00149">KineticSocket_Read()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00037">LOG</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00253">KineticPDU::buffer</a>, <a class="el" href="kinetic__types_8h_source.html#l00102">BYTE_BUFFER_INIT</a>, <a class="el" href="kinetic__types_8h_source.html#l00242">KineticPDU::header</a>, <a class="el" href="kinetic__proto_8c_source.html#l00164">KineticProto__unpack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00182">KineticSocket_Read()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00039">LOG</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOGF</a>, <a class="el" href="kinetic__types_8h_source.html#l00224">PDU_PROTO_MAX_UNPACKED_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00257">KineticPDU::protobufRaw</a>, and <a class="el" href="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f">KineticPDU::protoData</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h_a66ab9acaa76c5f9763fbf712ec5a82e6_cgraph.png" border="0" usemap="#kinetic__socket_8h_a66ab9acaa76c5f9763fbf712ec5a82e6_cgraph" alt=""/></div>
+<map name="kinetic__socket_8h_a66ab9acaa76c5f9763fbf712ec5a82e6_cgraph" id="kinetic__socket_8h_a66ab9acaa76c5f9763fbf712ec5a82e6_cgraph">
+<area shape="rect" id="node2" href="kinetic__proto_8c.html#ac74c443d4eb0ab34e845673f1fc70523" title="KineticProto__unpack" alt="" coords="291,5,478,36"/><area shape="rect" id="node3" href="kinetic__socket_8c.html#a1e57c03634e1ce7391aba8a82ad6040e" title="KineticSocket_Read" alt="" coords="299,60,470,91"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h_a66ab9acaa76c5f9763fbf712ec5a82e6_icgraph.png" border="0" usemap="#kinetic__socket_8h_a66ab9acaa76c5f9763fbf712ec5a82e6_icgraph" alt=""/></div>
+<map name="kinetic__socket_8h_a66ab9acaa76c5f9763fbf712ec5a82e6_icgraph" id="kinetic__socket_8h_a66ab9acaa76c5f9763fbf712ec5a82e6_icgraph">
+<area shape="rect" id="node2" href="kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" title="KineticPDU_Receive" alt="" coords="291,60,463,91"/><area shape="rect" id="node3" href="kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="511,60,774,91"/><area shape="rect" id="node4" href="kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="822,5,993,36"/><area shape="rect" id="node7" href="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="832,60,984,91"/><area shape="rect" id="node8" href="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="831,115,985,146"/><area shape="rect" id="node5" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1041,5,1107,36"/><area shape="rect" id="node6" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1155,5,1215,36"/></map>
+</div>
+</p>
 
 </div>
 </div>
-<a class="anchor" id="a044cc1d21dfda04611244b33521dc082"></a>
+<a class="anchor" id="a1a8ae7ce63273b6d2cea899e0e5a0043"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -226,14 +258,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const void *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>&#160;</td>
+          <td class="paramname"><em>buffer</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -243,13 +269,22 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00240">240</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00283">283</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8h_source.html#l00037">LOG</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00039">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00040">LOGF</a>.</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h_a1a8ae7ce63273b6d2cea899e0e5a0043_icgraph.png" border="0" usemap="#kinetic__socket_8h_a1a8ae7ce63273b6d2cea899e0e5a0043_icgraph" alt=""/></div>
+<map name="kinetic__socket_8h_a1a8ae7ce63273b6d2cea899e0e5a0043_icgraph" id="kinetic__socket_8h_a1a8ae7ce63273b6d2cea899e0e5a0043_icgraph">
+<area shape="rect" id="node2" href="kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="513,60,665,91"/><area shape="rect" id="node9" href="kinetic__socket_8h.html#a3851320ed4ef5e518ca1ff9fefccffcb" title="KineticSocket_WriteProtobuf" alt="" coords="226,87,465,118"/><area shape="rect" id="node3" href="kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="713,60,976,91"/><area shape="rect" id="node4" href="kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="1024,5,1195,36"/><area shape="rect" id="node7" href="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="1034,60,1186,91"/><area shape="rect" id="node8" href="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="1033,115,1187,146"/><area shape="rect" id="node5" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1243,5,1309,36"/><area shape="rect" id="node6" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1357,5,1417,36"/></map>
+</div>
+</p>
 
 </div>
 </div>
-<a class="anchor" id="a1ddcb45abdc2da81160cabe1b9827c1f"></a>
+<a class="anchor" id="a3851320ed4ef5e518ca1ff9fefccffcb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -262,8 +297,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a> *&#160;</td>
-          <td class="paramname"><em>proto</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a> *&#160;</td>
+          <td class="paramname"><em>pdu</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -273,9 +308,27 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00276">276</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00314">314</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8c_source.html#l00167">KineticProto_get_packed_size()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00173">KineticProto_pack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00240">KineticSocket_Write()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00037">LOG</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00242">KineticPDU::header</a>, <a class="el" href="kinetic__proto_8c_source.html#l00152">KineticProto__pack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00283">KineticSocket_Write()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOGF</a>, <a class="el" href="kinetic__types_8h_source.html#l00250">KineticPDU::message</a>, <a class="el" href="kinetic__types_8h_source.html#l00165">KineticMessage::proto</a>, <a class="el" href="kinetic__types_8h_source.html#l00257">KineticPDU::protobufRaw</a>, and <a class="el" href="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f">KineticPDU::protoData</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_cgraph.png" border="0" usemap="#kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_cgraph" alt=""/></div>
+<map name="kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_cgraph" id="kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_cgraph">
+<area shape="rect" id="node2" href="kinetic__proto_8c.html#a3d8d1e9a1eca89c51de9a3ed218c649b" title="KineticProto__pack" alt="" coords="295,5,463,36"/><area shape="rect" id="node3" href="kinetic__socket_8c.html#a1a8ae7ce63273b6d2cea899e0e5a0043" title="KineticSocket_Write" alt="" coords="293,60,465,91"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_icgraph.png" border="0" usemap="#kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_icgraph" alt=""/></div>
+<map name="kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_icgraph" id="kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_icgraph">
+<area shape="rect" id="node2" href="kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="293,60,444,91"/><area shape="rect" id="node3" href="kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="492,60,756,91"/><area shape="rect" id="node4" href="kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="804,5,975,36"/><area shape="rect" id="node7" href="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="814,60,965,91"/><area shape="rect" id="node8" href="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="813,115,966,146"/><area shape="rect" id="node5" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1023,5,1088,36"/><area shape="rect" id="node6" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1136,5,1196,36"/></map>
+</div>
+</p>
 
 </div>
 </div>

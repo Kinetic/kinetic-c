@@ -1,4 +1,4 @@
-.TH "kinetic_proto.h" 3 "Fri Aug 8 2014" "Version v0.5.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_proto.h" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ kinetic_proto.h \-
 .SH SYNOPSIS
 .br
 .PP
-\fC#include 'protobuf-c\&.h'\fP
+\fC#include 'protobuf-c/protobuf-c\&.h'\fP
 .br
 
 .SS "Data Structures"
@@ -64,6 +64,9 @@ kinetic_proto.h \-
 .RI "struct \fBKineticProto_GetLog_Limits\fP"
 .br
 .ti -1c
+.RI "struct \fBKineticProto_GetLog_Device\fP"
+.br
+.ti -1c
 .RI "struct \fBKineticProto_GetLog\fP"
 .br
 .ti -1c
@@ -83,70 +86,73 @@ kinetic_proto.h \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_COMMAND_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_COMMAND__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_HEADER_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_HEADER__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_BODY_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_BODY__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_STATUS_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_STATUS__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_KEY_VALUE_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_KEY_VALUE__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_RANGE_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_RANGE__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_SETUP_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_SETUP__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_P2_POPERATION_OPERATION_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_P2_POPERATION_OPERATION__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_P2_POPERATION_PEER_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_P2_POPERATION_PEER__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_P2_POPERATION_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_P2_POPERATION__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_GET_LOG_UTILIZATION_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG_UTILIZATION__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_GET_LOG_TEMPERATURE_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG_TEMPERATURE__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_GET_LOG_CAPACITY_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG_CAPACITY__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_GET_LOG_CONFIGURATION_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG_CONFIGURATION__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_GET_LOG_STATISTICS_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG_STATISTICS__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_GET_LOG_LIMITS_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG_LIMITS__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_GET_LOG_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG_DEVICE__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_SECURITY_ACL_SCOPE_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_GET_LOG__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_SECURITY_ACL_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_SECURITY_ACL_SCOPE__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_SECURITY_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_SECURITY_ACL__INIT\fP"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_PROTO_INIT\fP"
+.RI "#define \fBKINETIC_PROTO_SECURITY__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_PROTO__INIT\fP"
 .br
 .in -1c
 .SS "Typedefs"
@@ -211,6 +217,9 @@ struct \fB_KineticProto\fP \fBKineticProto\fP"
 .RI "typedef void(* \fBKineticProto_GetLog_Limits_Closure\fP )(const KineticProto_GetLog_Limits *message, void *closure_data)"
 .br
 .ti -1c
+.RI "typedef void(* \fBKineticProto_GetLog_Device_Closure\fP )(const KineticProto_GetLog_Device *message, void *closure_data)"
+.br
+.ti -1c
 .RI "typedef void(* \fBKineticProto_GetLog_Closure\fP )(const KineticProto_GetLog *message, void *closure_data)"
 .br
 .ti -1c
@@ -255,472 +264,491 @@ struct \fB_KineticProto\fP \fBKineticProto\fP"
 
 .in +1c
 .ti -1c
-.RI "void \fBKineticProto_command_init\fP (KineticProto_Command *message)"
+.RI "void \fBKineticProto_command__init\fP (KineticProto_Command *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_header_init\fP (KineticProto_Header *message)"
+.RI "void \fBKineticProto_header__init\fP (KineticProto_Header *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_body_init\fP (KineticProto_Body *message)"
+.RI "void \fBKineticProto_body__init\fP (KineticProto_Body *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_status_init\fP (KineticProto_Status *message)"
+.RI "void \fBKineticProto_status__init\fP (KineticProto_Status *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_key_value_init\fP (KineticProto_KeyValue *message)"
+.RI "void \fBKineticProto_key_value__init\fP (KineticProto_KeyValue *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_range_init\fP (KineticProto_Range *message)"
+.RI "void \fBKineticProto_range__init\fP (KineticProto_Range *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_setup_init\fP (KineticProto_Setup *message)"
+.RI "void \fBKineticProto_setup__init\fP (KineticProto_Setup *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_p2_poperation_operation_init\fP (KineticProto_P2POperation_Operation *message)"
+.RI "void \fBKineticProto_p2_poperation_operation__init\fP (KineticProto_P2POperation_Operation *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_p2_poperation_peer_init\fP (KineticProto_P2POperation_Peer *message)"
+.RI "void \fBKineticProto_p2_poperation_peer__init\fP (KineticProto_P2POperation_Peer *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_p2_poperation_init\fP (KineticProto_P2POperation *message)"
+.RI "void \fBKineticProto_p2_poperation__init\fP (KineticProto_P2POperation *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_get_log_utilization_init\fP (KineticProto_GetLog_Utilization *message)"
+.RI "void \fBKineticProto_get_log_utilization__init\fP (KineticProto_GetLog_Utilization *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_get_log_temperature_init\fP (KineticProto_GetLog_Temperature *message)"
+.RI "void \fBKineticProto_get_log_temperature__init\fP (KineticProto_GetLog_Temperature *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_get_log_capacity_init\fP (KineticProto_GetLog_Capacity *message)"
+.RI "void \fBKineticProto_get_log_capacity__init\fP (KineticProto_GetLog_Capacity *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_get_log_configuration_interface_init\fP (KineticProto_GetLog_Configuration_Interface *message)"
+.RI "void \fBKineticProto_get_log_configuration_interface__init\fP (KineticProto_GetLog_Configuration_Interface *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_get_log_configuration_init\fP (KineticProto_GetLog_Configuration *message)"
+.RI "void \fBKineticProto_get_log_configuration__init\fP (KineticProto_GetLog_Configuration *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_get_log_statistics_init\fP (KineticProto_GetLog_Statistics *message)"
+.RI "void \fBKineticProto_get_log_statistics__init\fP (KineticProto_GetLog_Statistics *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_get_log_limits_init\fP (KineticProto_GetLog_Limits *message)"
+.RI "void \fBKineticProto_get_log_limits__init\fP (KineticProto_GetLog_Limits *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_get_log_init\fP (KineticProto_GetLog *message)"
+.RI "void \fBKineticProto_get_log_device__init\fP (KineticProto_GetLog_Device *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_security_acl_scope_init\fP (KineticProto_Security_ACL_Scope *message)"
+.RI "void \fBKineticProto_get_log__init\fP (KineticProto_GetLog *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_security_acl_init\fP (KineticProto_Security_ACL *message)"
+.RI "void \fBKineticProto_security_acl_scope__init\fP (KineticProto_Security_ACL_Scope *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_security_init\fP (KineticProto_Security *message)"
+.RI "void \fBKineticProto_security_acl__init\fP (KineticProto_Security_ACL *message)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_init\fP (\fBKineticProto\fP *message)"
+.RI "void \fBKineticProto_security__init\fP (KineticProto_Security *message)"
 .br
 .ti -1c
-.RI "size_t \fBKineticProto_get_packed_size\fP (const \fBKineticProto\fP *message)"
+.RI "void \fBKineticProto__init\fP (\fBKineticProto\fP *message)"
 .br
 .ti -1c
-.RI "size_t \fBKineticProto_pack\fP (const \fBKineticProto\fP *message, uint8_t *out)"
+.RI "size_t \fBKineticProto__get_packed_size\fP (const \fBKineticProto\fP *message)"
 .br
 .ti -1c
-.RI "size_t \fBKineticProto_pack_to_buffer\fP (const \fBKineticProto\fP *message, ProtobufCBuffer *buffer)"
+.RI "size_t \fBKineticProto__pack\fP (const \fBKineticProto\fP *message, uint8_t *out)"
 .br
 .ti -1c
-.RI "\fBKineticProto\fP * \fBKineticProto_unpack\fP (ProtobufCAllocator *allocator, size_t len, const uint8_t *data)"
+.RI "size_t \fBKineticProto__pack_to_buffer\fP (const \fBKineticProto\fP *message, ProtobufCBuffer *buffer)"
 .br
 .ti -1c
-.RI "void \fBKineticProto_free_unpacked\fP (\fBKineticProto\fP *message, ProtobufCAllocator *allocator)"
+.RI "\fBKineticProto\fP * \fBKineticProto__unpack\fP (ProtobufCAllocator *allocator, size_t len, const uint8_t *data)"
+.br
+.ti -1c
+.RI "void \fBKineticProto__free_unpacked\fP (\fBKineticProto\fP *message, ProtobufCAllocator *allocator)"
 .br
 .in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_command_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_command__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_header_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_header__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_body_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_body__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_status_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_status__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCEnumDescriptor \fBKineticProto_status_status_code_descriptor\fP"
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_status_status_code__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_key_value_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_key_value__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_range_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_range__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_setup_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_setup__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation_operation_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation_operation__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation_peer_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_p2_poperation_peer__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_utilization_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_utilization__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_temperature_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_temperature__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_capacity_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_capacity__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_configuration_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_configuration__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_configuration_interface_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_configuration_interface__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_statistics_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_statistics__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_limits_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_limits__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCEnumDescriptor \fBKineticProto_get_log_type_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_get_log_device__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_security_descriptor\fP"
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_get_log_type__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_security_acl_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_security__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCMessageDescriptor \fBKineticProto_security_acl_scope_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_security_acl__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCEnumDescriptor \fBKineticProto_security_acl_hmacalgorithm_descriptor\fP"
+.RI "const ProtobufCMessageDescriptor \fBKineticProto_security_acl_scope__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCEnumDescriptor \fBKineticProto_security_acl_permission_descriptor\fP"
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_security_acl_hmacalgorithm__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCEnumDescriptor \fBKineticProto_synchronization_descriptor\fP"
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_security_acl_permission__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCEnumDescriptor \fBKineticProto_algorithm_descriptor\fP"
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_synchronization__descriptor\fP"
 .br
 .ti -1c
-.RI "const ProtobufCEnumDescriptor \fBKineticProto_message_type_descriptor\fP"
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_algorithm__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBKineticProto_message_type__descriptor\fP"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define KINETIC_PROTO_COMMAND_INIT"
+.SS "#define KINETIC_PROTO_COMMAND__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_command_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_command__descriptor) \
     , NULL, NULL, NULL }
 .fi
 .PP
-Definition at line 178 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_HEADER_INIT"
+Definition at line 172 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_HEADER__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_header_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_header__descriptor) \
     , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
 .fi
 .PP
-Definition at line 204 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_BODY_INIT"
+Definition at line 199 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_BODY__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_body_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_body__descriptor) \
     , NULL, NULL, NULL, NULL, NULL, NULL }
 .fi
 .PP
-Definition at line 218 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_STATUS_INIT"
+Definition at line 214 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_STATUS__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_status_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_status__descriptor) \
     , 0,0, NULL, 0,{0,NULL} }
 .fi
 .PP
-Definition at line 231 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_KEY_VALUE_INIT"
+Definition at line 228 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_KEY_VALUE__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_key_value_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_key_value__descriptor) \
     , 0,{0,NULL}, 0,0, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,0, 0,0, 0,0 }
 .fi
 .PP
-Definition at line 255 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_RANGE_INIT"
+Definition at line 253 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_RANGE__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_range_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_range__descriptor) \
     , 0,{0,NULL}, 0,{0,NULL}, 0,0, 0,0, 0,0, 0,0, 0,NULL }
 .fi
 .PP
-Definition at line 277 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_SETUP_INIT"
+Definition at line 276 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_SETUP__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_setup_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_setup__descriptor) \
     , 0,0, 0,0, 0,{0,NULL}, 0,{0,NULL}, 0,0 }
 .fi
 .PP
 Definition at line 295 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_P2_POPERATION_OPERATION_INIT"
+.SS "#define KINETIC_PROTO_P2_POPERATION_OPERATION__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_operation_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_operation__descriptor) \
     , 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,0, NULL, NULL }
 .fi
 .PP
-Definition at line 313 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_P2_POPERATION_PEER_INIT"
+Definition at line 314 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_P2_POPERATION_PEER__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_peer_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_peer__descriptor) \
     , NULL, 0,0, 0,0 }
 .fi
 .PP
-Definition at line 326 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_P2_POPERATION_INIT"
+Definition at line 328 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_P2_POPERATION__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation__descriptor) \
     , NULL, 0,NULL, 0,0 }
 .fi
 .PP
-Definition at line 339 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_GET_LOG_UTILIZATION_INIT"
+Definition at line 342 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG_UTILIZATION__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_utilization_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_utilization__descriptor) \
     , NULL, 0,0 }
 .fi
 .PP
-Definition at line 350 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_GET_LOG_TEMPERATURE_INIT"
+Definition at line 354 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG_TEMPERATURE__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_temperature_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_temperature__descriptor) \
     , NULL, 0,0, 0,0, 0,0, 0,0 }
 .fi
 .PP
-Definition at line 367 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_GET_LOG_CAPACITY_INIT"
+Definition at line 372 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG_CAPACITY__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_capacity_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_capacity__descriptor) \
     , 0,0, 0,0 }
 .fi
 .PP
-Definition at line 379 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE_INIT"
+Definition at line 385 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_configuration_interface_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_configuration_interface__descriptor) \
     , NULL, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL} }
 .fi
 .PP
-Definition at line 394 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_GET_LOG_CONFIGURATION_INIT"
+Definition at line 401 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG_CONFIGURATION__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_configuration_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_configuration__descriptor) \
     , NULL, NULL, 0,{0,NULL}, 0,{0,NULL}, NULL, NULL, NULL, NULL, NULL, NULL, 0,NULL, 0,0, 0,0 }
 .fi
 .PP
-Definition at line 420 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_GET_LOG_STATISTICS_INIT"
+Definition at line 428 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG_STATISTICS__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_statistics_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_statistics__descriptor) \
     , 0,0, 0,0, 0,0 }
 .fi
 .PP
-Definition at line 434 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_GET_LOG_LIMITS_INIT"
+Definition at line 443 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG_LIMITS__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_limits_descriptor) \
-    , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_limits__descriptor) \
+    , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
 .fi
 .PP
-Definition at line 460 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_GET_LOG_INIT"
+Definition at line 472 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG_DEVICE__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_descriptor) \
-    , 0,NULL, 0,NULL, 0,NULL, NULL, NULL, 0,NULL, 0,{0,NULL}, NULL }
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log_device__descriptor) \
+    , 0,{0,NULL} }
 .fi
 .PP
-Definition at line 481 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_SECURITY_ACL_SCOPE_INIT"
+Definition at line 483 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_GET_LOG__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl_scope_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__descriptor) \
+    , 0,NULL, 0,NULL, 0,NULL, NULL, NULL, 0,NULL, 0,{0,NULL}, NULL, NULL }
+.fi
+.PP
+Definition at line 506 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_SECURITY_ACL_SCOPE__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl_scope__descriptor) \
     , 0,0, 0,{0,NULL}, 0,NULL, 0,0 }
 .fi
 .PP
-Definition at line 497 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_SECURITY_ACL_INIT"
+Definition at line 523 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_SECURITY_ACL__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl__descriptor) \
     , 0,0, 0,{0,NULL}, 0,0, 0,NULL }
 .fi
 .PP
-Definition at line 513 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_SECURITY_INIT"
+Definition at line 540 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO_SECURITY__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_security__descriptor) \
     , 0,NULL }
 .fi
 .PP
-Definition at line 523 of file kinetic_proto\&.h\&.
-.SS "#define KINETIC_PROTO_INIT"
+Definition at line 551 of file kinetic_proto\&.h\&.
+.SS "#define KINETIC_PROTO__INIT"
 \fBValue:\fP
 .PP
 .nf
-{ PROTOBUF_C_MESSAGE_INIT (&KineticProto_descriptor) \
+{ PROTOBUF_C_MESSAGE_INIT (&KineticProto__descriptor) \
     , NULL, 0,{0,NULL} }
 .fi
 .PP
-Definition at line 534 of file kinetic_proto\&.h\&.
+Definition at line 563 of file kinetic_proto\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef typedefPROTOBUF_C__BEGIN_DECLS struct \fB_KineticProto\fP \fBKineticProto\fP"
 
 .PP
-Definition at line 40 of file kinetic_proto\&.h\&.
+Definition at line 38 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Command_Closure)(const KineticProto_Command *message, void *closure_data)"
 
 .PP
-Definition at line 589 of file kinetic_proto\&.h\&.
+Definition at line 654 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Header_Closure)(const KineticProto_Header *message, void *closure_data)"
 
 .PP
-Definition at line 590 of file kinetic_proto\&.h\&.
+Definition at line 657 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Body_Closure)(const KineticProto_Body *message, void *closure_data)"
 
 .PP
-Definition at line 591 of file kinetic_proto\&.h\&.
+Definition at line 660 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Status_Closure)(const KineticProto_Status *message, void *closure_data)"
 
 .PP
-Definition at line 592 of file kinetic_proto\&.h\&.
+Definition at line 663 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_KeyValue_Closure)(const KineticProto_KeyValue *message, void *closure_data)"
 
 .PP
-Definition at line 593 of file kinetic_proto\&.h\&.
+Definition at line 666 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Range_Closure)(const KineticProto_Range *message, void *closure_data)"
 
 .PP
-Definition at line 594 of file kinetic_proto\&.h\&.
+Definition at line 669 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Setup_Closure)(const KineticProto_Setup *message, void *closure_data)"
 
 .PP
-Definition at line 595 of file kinetic_proto\&.h\&.
+Definition at line 672 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_P2POperation_Operation_Closure)(const KineticProto_P2POperation_Operation *message, void *closure_data)"
 
 .PP
-Definition at line 596 of file kinetic_proto\&.h\&.
+Definition at line 675 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_P2POperation_Peer_Closure)(const KineticProto_P2POperation_Peer *message, void *closure_data)"
 
 .PP
-Definition at line 597 of file kinetic_proto\&.h\&.
+Definition at line 678 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_P2POperation_Closure)(const KineticProto_P2POperation *message, void *closure_data)"
 
 .PP
-Definition at line 598 of file kinetic_proto\&.h\&.
+Definition at line 681 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_GetLog_Utilization_Closure)(const KineticProto_GetLog_Utilization *message, void *closure_data)"
 
 .PP
-Definition at line 599 of file kinetic_proto\&.h\&.
+Definition at line 684 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_GetLog_Temperature_Closure)(const KineticProto_GetLog_Temperature *message, void *closure_data)"
 
 .PP
-Definition at line 600 of file kinetic_proto\&.h\&.
+Definition at line 687 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_GetLog_Capacity_Closure)(const KineticProto_GetLog_Capacity *message, void *closure_data)"
 
 .PP
-Definition at line 601 of file kinetic_proto\&.h\&.
+Definition at line 690 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_GetLog_Configuration_Interface_Closure)(const KineticProto_GetLog_Configuration_Interface *message, void *closure_data)"
 
 .PP
-Definition at line 602 of file kinetic_proto\&.h\&.
+Definition at line 693 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_GetLog_Configuration_Closure)(const KineticProto_GetLog_Configuration *message, void *closure_data)"
 
 .PP
-Definition at line 603 of file kinetic_proto\&.h\&.
+Definition at line 696 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_GetLog_Statistics_Closure)(const KineticProto_GetLog_Statistics *message, void *closure_data)"
 
 .PP
-Definition at line 604 of file kinetic_proto\&.h\&.
+Definition at line 699 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_GetLog_Limits_Closure)(const KineticProto_GetLog_Limits *message, void *closure_data)"
 
 .PP
-Definition at line 605 of file kinetic_proto\&.h\&.
+Definition at line 702 of file kinetic_proto\&.h\&.
+.SS "typedef void(* KineticProto_GetLog_Device_Closure)(const KineticProto_GetLog_Device *message, void *closure_data)"
+
+.PP
+Definition at line 705 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_GetLog_Closure)(const KineticProto_GetLog *message, void *closure_data)"
 
 .PP
-Definition at line 606 of file kinetic_proto\&.h\&.
+Definition at line 708 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Security_ACL_Scope_Closure)(const KineticProto_Security_ACL_Scope *message, void *closure_data)"
 
 .PP
-Definition at line 607 of file kinetic_proto\&.h\&.
+Definition at line 711 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Security_ACL_Closure)(const KineticProto_Security_ACL *message, void *closure_data)"
 
 .PP
-Definition at line 608 of file kinetic_proto\&.h\&.
+Definition at line 714 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Security_Closure)(const KineticProto_Security *message, void *closure_data)"
 
 .PP
-Definition at line 609 of file kinetic_proto\&.h\&.
+Definition at line 717 of file kinetic_proto\&.h\&.
 .SS "typedef void(* KineticProto_Closure)(const \fBKineticProto\fP *message, void *closure_data)"
 
 .PP
-Definition at line 610 of file kinetic_proto\&.h\&.
+Definition at line 720 of file kinetic_proto\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBKineticProto_Status_StatusCode\fP"
@@ -789,8 +817,10 @@ Definition at line 65 of file kinetic_proto\&.h\&.
 \fB\fIKINETIC_PROTO_GET_LOG_TYPE_MESSAGES \fP\fP
 .TP
 \fB\fIKINETIC_PROTO_GET_LOG_TYPE_LIMITS \fP\fP
+.TP
+\fB\fIKINETIC_PROTO_GET_LOG_TYPE_DEVICE \fP\fP
 .PP
-Definition at line 88 of file kinetic_proto\&.h\&.
+Definition at line 87 of file kinetic_proto\&.h\&.
 .SS "enum \fBKineticProto_Security_ACL_HMACAlgorithm\fP"
 
 .PP
@@ -801,7 +831,7 @@ Definition at line 88 of file kinetic_proto\&.h\&.
 .TP
 \fB\fIKINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1 \fP\fP
 .PP
-Definition at line 100 of file kinetic_proto\&.h\&.
+Definition at line 99 of file kinetic_proto\&.h\&.
 .SS "enum \fBKineticProto_Security_ACL_Permission\fP"
 
 .PP
@@ -826,7 +856,7 @@ Definition at line 100 of file kinetic_proto\&.h\&.
 .TP
 \fB\fIKINETIC_PROTO_SECURITY_ACL_PERMISSION_SECURITY \fP\fP
 .PP
-Definition at line 106 of file kinetic_proto\&.h\&.
+Definition at line 104 of file kinetic_proto\&.h\&.
 .SS "enum \fBKineticProto_Synchronization\fP"
 
 .PP
@@ -841,7 +871,7 @@ Definition at line 106 of file kinetic_proto\&.h\&.
 .TP
 \fB\fIKINETIC_PROTO_SYNCHRONIZATION_FLUSH \fP\fP
 .PP
-Definition at line 119 of file kinetic_proto\&.h\&.
+Definition at line 116 of file kinetic_proto\&.h\&.
 .SS "enum \fBKineticProto_Algorithm\fP"
 
 .PP
@@ -860,7 +890,7 @@ Definition at line 119 of file kinetic_proto\&.h\&.
 .TP
 \fB\fIKINETIC_PROTO_ALGORITHM_CRC64 \fP\fP
 .PP
-Definition at line 127 of file kinetic_proto\&.h\&.
+Definition at line 123 of file kinetic_proto\&.h\&.
 .SS "enum \fBKineticProto_MessageType\fP"
 
 .PP
@@ -921,289 +951,299 @@ Definition at line 127 of file kinetic_proto\&.h\&.
 .TP
 \fB\fIKINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE \fP\fP
 .PP
-Definition at line 137 of file kinetic_proto\&.h\&.
+Definition at line 132 of file kinetic_proto\&.h\&.
 .SH "Function Documentation"
 .PP 
-.SS "void KineticProto_command_init (KineticProto_Command *message)"
+.SS "void KineticProto_command__init (KineticProto_Command *message)"
 
 .PP
-Definition at line 35 of file kinetic_proto\&.c\&.
+Definition at line 32 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_INIT\&.
-.SS "void KineticProto_header_init (KineticProto_Header *message)"
+References KINETIC_PROTO_COMMAND__INIT\&.
+.SS "void KineticProto_header__init (KineticProto_Header *message)"
 
 .PP
-Definition at line 41 of file kinetic_proto\&.c\&.
+Definition at line 37 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_HEADER_INIT\&.
-.SS "void KineticProto_body_init (KineticProto_Body *message)"
+References KINETIC_PROTO_HEADER__INIT\&.
+.SS "void KineticProto_body__init (KineticProto_Body *message)"
+
+.PP
+Definition at line 42 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_BODY__INIT\&.
+.SS "void KineticProto_status__init (KineticProto_Status *message)"
 
 .PP
 Definition at line 47 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_BODY_INIT\&.
-.SS "void KineticProto_status_init (KineticProto_Status *message)"
+References KINETIC_PROTO_STATUS__INIT\&.
+.SS "void KineticProto_key_value__init (KineticProto_KeyValue *message)"
 
 .PP
-Definition at line 53 of file kinetic_proto\&.c\&.
+Definition at line 52 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_STATUS_INIT\&.
-.SS "void KineticProto_key_value_init (KineticProto_KeyValue *message)"
+References KINETIC_PROTO_KEY_VALUE__INIT\&.
+.SS "void KineticProto_range__init (KineticProto_Range *message)"
 
 .PP
-Definition at line 59 of file kinetic_proto\&.c\&.
+Definition at line 57 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_KEY_VALUE_INIT\&.
-.SS "void KineticProto_range_init (KineticProto_Range *message)"
+References KINETIC_PROTO_RANGE__INIT\&.
+.SS "void KineticProto_setup__init (KineticProto_Setup *message)"
 
 .PP
-Definition at line 65 of file kinetic_proto\&.c\&.
+Definition at line 62 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_RANGE_INIT\&.
-.SS "void KineticProto_setup_init (KineticProto_Setup *message)"
+References KINETIC_PROTO_SETUP__INIT\&.
+.SS "void KineticProto_p2_poperation_operation__init (KineticProto_P2POperation_Operation *message)"
 
 .PP
-Definition at line 71 of file kinetic_proto\&.c\&.
+Definition at line 67 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_SETUP_INIT\&.
-.SS "void KineticProto_p2_poperation_operation_init (KineticProto_P2POperation_Operation *message)"
+References KINETIC_PROTO_P2_POPERATION_OPERATION__INIT\&.
+.SS "void KineticProto_p2_poperation_peer__init (KineticProto_P2POperation_Peer *message)"
+
+.PP
+Definition at line 72 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_P2_POPERATION_PEER__INIT\&.
+.SS "void KineticProto_p2_poperation__init (KineticProto_P2POperation *message)"
 
 .PP
 Definition at line 77 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_P2_POPERATION_OPERATION_INIT\&.
-.SS "void KineticProto_p2_poperation_peer_init (KineticProto_P2POperation_Peer *message)"
+References KINETIC_PROTO_P2_POPERATION__INIT\&.
+.SS "void KineticProto_get_log_utilization__init (KineticProto_GetLog_Utilization *message)"
 
 .PP
-Definition at line 83 of file kinetic_proto\&.c\&.
+Definition at line 82 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_P2_POPERATION_PEER_INIT\&.
-.SS "void KineticProto_p2_poperation_init (KineticProto_P2POperation *message)"
+References KINETIC_PROTO_GET_LOG_UTILIZATION__INIT\&.
+.SS "void KineticProto_get_log_temperature__init (KineticProto_GetLog_Temperature *message)"
 
 .PP
-Definition at line 89 of file kinetic_proto\&.c\&.
+Definition at line 87 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_P2_POPERATION_INIT\&.
-.SS "void KineticProto_get_log_utilization_init (KineticProto_GetLog_Utilization *message)"
+References KINETIC_PROTO_GET_LOG_TEMPERATURE__INIT\&.
+.SS "void KineticProto_get_log_capacity__init (KineticProto_GetLog_Capacity *message)"
 
 .PP
-Definition at line 95 of file kinetic_proto\&.c\&.
+Definition at line 92 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_GET_LOG_UTILIZATION_INIT\&.
-.SS "void KineticProto_get_log_temperature_init (KineticProto_GetLog_Temperature *message)"
+References KINETIC_PROTO_GET_LOG_CAPACITY__INIT\&.
+.SS "void KineticProto_get_log_configuration_interface__init (KineticProto_GetLog_Configuration_Interface *message)"
 
 .PP
-Definition at line 101 of file kinetic_proto\&.c\&.
+Definition at line 97 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_GET_LOG_TEMPERATURE_INIT\&.
-.SS "void KineticProto_get_log_capacity_init (KineticProto_GetLog_Capacity *message)"
+References KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE__INIT\&.
+.SS "void KineticProto_get_log_configuration__init (KineticProto_GetLog_Configuration *message)"
+
+.PP
+Definition at line 102 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_GET_LOG_CONFIGURATION__INIT\&.
+.SS "void KineticProto_get_log_statistics__init (KineticProto_GetLog_Statistics *message)"
 
 .PP
 Definition at line 107 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_GET_LOG_CAPACITY_INIT\&.
-.SS "void KineticProto_get_log_configuration_interface_init (KineticProto_GetLog_Configuration_Interface *message)"
+References KINETIC_PROTO_GET_LOG_STATISTICS__INIT\&.
+.SS "void KineticProto_get_log_limits__init (KineticProto_GetLog_Limits *message)"
 
 .PP
-Definition at line 113 of file kinetic_proto\&.c\&.
+Definition at line 112 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE_INIT\&.
-.SS "void KineticProto_get_log_configuration_init (KineticProto_GetLog_Configuration *message)"
+References KINETIC_PROTO_GET_LOG_LIMITS__INIT\&.
+.SS "void KineticProto_get_log_device__init (KineticProto_GetLog_Device *message)"
 
 .PP
-Definition at line 119 of file kinetic_proto\&.c\&.
+Definition at line 117 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_GET_LOG_CONFIGURATION_INIT\&.
-.SS "void KineticProto_get_log_statistics_init (KineticProto_GetLog_Statistics *message)"
+References KINETIC_PROTO_GET_LOG_DEVICE__INIT\&.
+.SS "void KineticProto_get_log__init (KineticProto_GetLog *message)"
 
 .PP
-Definition at line 125 of file kinetic_proto\&.c\&.
+Definition at line 122 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_GET_LOG_STATISTICS_INIT\&.
-.SS "void KineticProto_get_log_limits_init (KineticProto_GetLog_Limits *message)"
+References KINETIC_PROTO_GET_LOG__INIT\&.
+.SS "void KineticProto_security_acl_scope__init (KineticProto_Security_ACL_Scope *message)"
 
 .PP
-Definition at line 131 of file kinetic_proto\&.c\&.
+Definition at line 127 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_GET_LOG_LIMITS_INIT\&.
-.SS "void KineticProto_get_log_init (KineticProto_GetLog *message)"
+References KINETIC_PROTO_SECURITY_ACL_SCOPE__INIT\&.
+.SS "void KineticProto_security_acl__init (KineticProto_Security_ACL *message)"
+
+.PP
+Definition at line 132 of file kinetic_proto\&.c\&.
+.PP
+References KINETIC_PROTO_SECURITY_ACL__INIT\&.
+.SS "void KineticProto_security__init (KineticProto_Security *message)"
 
 .PP
 Definition at line 137 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_GET_LOG_INIT\&.
-.SS "void KineticProto_security_acl_scope_init (KineticProto_Security_ACL_Scope *message)"
+References KINETIC_PROTO_SECURITY__INIT\&.
+.SS "void KineticProto__init (\fBKineticProto\fP *message)"
 
 .PP
-Definition at line 143 of file kinetic_proto\&.c\&.
+Definition at line 142 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_SECURITY_ACL_SCOPE_INIT\&.
-.SS "void KineticProto_security_acl_init (KineticProto_Security_ACL *message)"
+References KINETIC_PROTO__INIT\&.
+.SS "size_t KineticProto__get_packed_size (const \fBKineticProto\fP *message)"
 
 .PP
-Definition at line 149 of file kinetic_proto\&.c\&.
+Definition at line 147 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_SECURITY_ACL_INIT\&.
-.SS "void KineticProto_security_init (KineticProto_Security *message)"
+References KineticProto__descriptor\&.
+.SS "size_t KineticProto__pack (const \fBKineticProto\fP *message, uint8_t *out)"
 
 .PP
-Definition at line 155 of file kinetic_proto\&.c\&.
+Definition at line 152 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_SECURITY_INIT\&.
-.SS "void KineticProto_init (\fBKineticProto\fP *message)"
+References KineticProto__descriptor\&.
+.SS "size_t KineticProto__pack_to_buffer (const \fBKineticProto\fP *message, ProtobufCBuffer *buffer)"
 
 .PP
-Definition at line 161 of file kinetic_proto\&.c\&.
+Definition at line 158 of file kinetic_proto\&.c\&.
 .PP
-References KINETIC_PROTO_INIT\&.
-.SS "size_t KineticProto_get_packed_size (const \fBKineticProto\fP *message)"
+References KineticProto__descriptor\&.
+.SS "\fBKineticProto\fP* KineticProto__unpack (ProtobufCAllocator *allocator, size_tlen, const uint8_t *data)"
 
 .PP
-Definition at line 167 of file kinetic_proto\&.c\&.
+Definition at line 164 of file kinetic_proto\&.c\&.
 .PP
-References KineticProto_descriptor\&.
-.SS "size_t KineticProto_pack (const \fBKineticProto\fP *message, uint8_t *out)"
+References KineticProto__descriptor\&.
+.SS "void KineticProto__free_unpacked (\fBKineticProto\fP *message, ProtobufCAllocator *allocator)"
 
 .PP
-Definition at line 173 of file kinetic_proto\&.c\&.
+Definition at line 171 of file kinetic_proto\&.c\&.
 .PP
-References KineticProto_descriptor\&.
-.SS "size_t KineticProto_pack_to_buffer (const \fBKineticProto\fP *message, ProtobufCBuffer *buffer)"
-
-.PP
-Definition at line 179 of file kinetic_proto\&.c\&.
-.PP
-References KineticProto_descriptor\&.
-.SS "\fBKineticProto\fP* KineticProto_unpack (ProtobufCAllocator *allocator, size_tlen, const uint8_t *data)"
-
-.PP
-Definition at line 185 of file kinetic_proto\&.c\&.
-.PP
-References KineticProto_descriptor\&.
-.SS "void KineticProto_free_unpacked (\fBKineticProto\fP *message, ProtobufCAllocator *allocator)"
-
-.PP
-Definition at line 190 of file kinetic_proto\&.c\&.
-.PP
-References KineticProto_descriptor\&.
+References KineticProto__descriptor\&.
 .SH "Variable Documentation"
 .PP 
-.SS "const ProtobufCMessageDescriptor KineticProto_descriptor"
+.SS "const ProtobufCMessageDescriptor KineticProto__descriptor"
 
 .PP
-Definition at line 2629 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_command_descriptor"
+Definition at line 2532 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_command__descriptor"
 
 .PP
-Definition at line 249 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_header_descriptor"
+Definition at line 226 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_header__descriptor"
 
 .PP
-Definition at line 398 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_body_descriptor"
+Definition at line 370 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_body__descriptor"
 
 .PP
-Definition at line 507 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_status_descriptor"
+Definition at line 474 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_status__descriptor"
 
 .PP
-Definition at line 643 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCEnumDescriptor KineticProto_status_status_code_descriptor"
+Definition at line 600 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_status_status_code__descriptor"
 
 .PP
-Definition at line 574 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_key_value_descriptor"
+Definition at line 536 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_key_value__descriptor"
 
 .PP
-Definition at line 777 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_range_descriptor"
+Definition at line 729 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_range__descriptor"
 
 .PP
-Definition at line 899 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_setup_descriptor"
+Definition at line 846 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_setup__descriptor"
 
 .PP
-Definition at line 994 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation_descriptor"
+Definition at line 936 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation__descriptor"
 
 .PP
-Definition at line 1240 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation_operation_descriptor"
+Definition at line 1167 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation_operation__descriptor"
 
 .PP
-Definition at line 1102 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation_peer_descriptor"
+Definition at line 1039 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_p2_poperation_peer__descriptor"
 
 .PP
-Definition at line 1171 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_get_log_descriptor"
+Definition at line 1103 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log__descriptor"
 
 .PP
-Definition at line 2124 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_get_log_utilization_descriptor"
+Definition at line 2072 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_utilization__descriptor"
 
 .PP
-Definition at line 1296 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_get_log_temperature_descriptor"
+Definition at line 1218 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_temperature__descriptor"
 
 .PP
-Definition at line 1391 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_get_log_capacity_descriptor"
+Definition at line 1308 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_capacity__descriptor"
 
 .PP
-Definition at line 1447 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_get_log_configuration_descriptor"
+Definition at line 1359 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_configuration__descriptor"
 
 .PP
-Definition at line 1728 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_get_log_configuration_interface_descriptor"
+Definition at line 1630 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_configuration_interface__descriptor"
 
 .PP
-Definition at line 1529 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_get_log_statistics_descriptor"
+Definition at line 1436 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_statistics__descriptor"
 
 .PP
-Definition at line 1798 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_get_log_limits_descriptor"
+Definition at line 1695 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_limits__descriptor"
 
 .PP
-Definition at line 1945 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCEnumDescriptor KineticProto_get_log_type_descriptor"
+Definition at line 1850 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_get_log_device__descriptor"
 
 .PP
-Definition at line 1990 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_security_descriptor"
+Definition at line 1888 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_get_log_type__descriptor"
 
 .PP
-Definition at line 2411 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_security_acl_descriptor"
+Definition at line 1930 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_security__descriptor"
 
 .PP
-Definition at line 2368 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCMessageDescriptor KineticProto_security_acl_scope_descriptor"
+Definition at line 2334 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_security_acl__descriptor"
 
 .PP
-Definition at line 2206 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCEnumDescriptor KineticProto_security_acl_hmacalgorithm_descriptor"
+Definition at line 2296 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCMessageDescriptor KineticProto_security_acl_scope__descriptor"
 
 .PP
-Definition at line 2239 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCEnumDescriptor KineticProto_security_acl_permission_descriptor"
+Definition at line 2149 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_security_acl_hmacalgorithm__descriptor"
 
 .PP
-Definition at line 2286 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCEnumDescriptor KineticProto_synchronization_descriptor"
+Definition at line 2177 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_security_acl_permission__descriptor"
 
 .PP
-Definition at line 2448 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCEnumDescriptor KineticProto_algorithm_descriptor"
+Definition at line 2219 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_synchronization__descriptor"
 
 .PP
-Definition at line 2489 of file kinetic_proto\&.c\&.
-.SS "const ProtobufCEnumDescriptor KineticProto_message_type_descriptor"
+Definition at line 2366 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_algorithm__descriptor"
 
 .PP
-Definition at line 2572 of file kinetic_proto\&.c\&.
+Definition at line 2402 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCEnumDescriptor KineticProto_message_type__descriptor"
+
+.PP
+Definition at line 2480 of file kinetic_proto\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

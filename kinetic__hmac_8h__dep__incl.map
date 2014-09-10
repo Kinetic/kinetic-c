@@ -1,20 +1,11 @@
 <map id="kinetic_hmac.h" name="kinetic_hmac.h">
-<area shape="rect" id="node2" href="$kinetic__message_8h.html" title="kinetic_message.h" alt="" coords="765,86,936,117"/>
-<area shape="rect" id="node3" href="$kinetic__pdu_8h.html" title="kinetic_pdu.h" alt="" coords="512,166,647,197"/>
-<area shape="rect" id="node14" href="$kinetic__pdu_8c.html" title="kinetic_pdu.c" alt="" coords="905,326,1040,357"/>
-<area shape="rect" id="node19" href="$kinetic__hmac_8c.html" title="kinetic_hmac.c" alt="" coords="1106,86,1251,117"/>
-<area shape="rect" id="node17" href="$kinetic__socket_8h.html" title="kinetic_socket.h" alt="" coords="675,166,836,197"/>
-<area shape="rect" id="node18" href="$kinetic__message_8c.html" title="kinetic_message.c" alt="" coords="861,166,1032,197"/>
-<area shape="rect" id="node4" href="$kinetic__api_8h.html" title="kinetic_api.h" alt="" coords="35,326,169,357"/>
-<area shape="rect" id="node9" href="$kinetic__api_8c.html" title="kinetic_api.c" alt="" coords="353,406,488,437"/>
-<area shape="rect" id="node10" href="$kinetic__operation_8h.html" title="kinetic_operation.h" alt="" coords="195,246,383,277"/>
-<area shape="rect" id="node12" href="$kinetic__logger_8h.html" title="kinetic_logger.h" alt="" coords="459,246,620,277"/>
-<area shape="rect" id="node16" href="$kinetic__connection_8c.html" title="kinetic_connection.c" alt="" coords="696,246,892,277"/>
-<area shape="rect" id="node5" href="$kinetic_8h.html" title="kinetic.h" alt="" coords="52,406,152,437"/>
-<area shape="rect" id="node6" href="$noop_8h.html" title="noop.h" alt="" coords="28,486,101,517"/>
-<area shape="rect" id="node8" href="$main_8c.html" title="main.c" alt="" coords="103,566,176,597"/>
-<area shape="rect" id="node7" href="$noop_8c.html" title="noop.c" alt="" coords="4,566,77,597"/>
-<area shape="rect" id="node11" href="$kinetic__operation_8c.html" title="kinetic_operation.c" alt="" coords="195,326,383,357"/>
-<area shape="rect" id="node13" href="$kinetic__logger_8c.html" title="kinetic_logger.c" alt="" coords="510,326,671,357"/>
-<area shape="rect" id="node15" href="$kinetic__socket_8c.html" title="kinetic_socket.c" alt="" coords="711,326,872,357"/>
+<area shape="rect" id="node2" href="$kinetic__message_8h.html" title="kinetic_message.h" alt="" coords="335,84,497,115"/>
+<area shape="rect" id="node6" href="$kinetic__pdu_8c.html" title="kinetic_pdu.c" alt="" coords="545,242,669,273"/>
+<area shape="rect" id="node10" href="$kinetic__hmac_8c.html" title="kinetic_hmac.c" alt="" coords="763,84,899,115"/>
+<area shape="rect" id="node3" href="$kinetic__client_8c.html" title="kinetic_client.c" alt="" coords="5,163,142,194"/>
+<area shape="rect" id="node4" href="$kinetic__socket_8h.html" title="kinetic_socket.h" alt="" coords="166,163,312,194"/>
+<area shape="rect" id="node8" href="$kinetic__message_8c.html" title="kinetic_message.c" alt="" coords="336,163,496,194"/>
+<area shape="rect" id="node9" href="$kinetic__operation_8c.html" title="kinetic_operation.c" alt="" coords="520,163,689,194"/>
+<area shape="rect" id="node5" href="$kinetic__connection_8c.html" title="kinetic_connection.c" alt="" coords="57,242,237,273"/>
+<area shape="rect" id="node7" href="$kinetic__socket_8c.html" title="kinetic_socket.c" alt="" coords="260,242,404,273"/>
 </map>

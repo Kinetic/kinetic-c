@@ -7,6 +7,6 @@ var struct___kinetic_proto___security___a_c_l___scope =
     [ "value", "struct___kinetic_proto___security___a_c_l___scope.html#a0f4b4bb25cc568c92e09a018a6ce5aa0", null ],
     [ "n_permission", "struct___kinetic_proto___security___a_c_l___scope.html#a5a6cf7eb44595cca0ebd0887c3cb8ea0", null ],
     [ "permission", "struct___kinetic_proto___security___a_c_l___scope.html#ac755521a99b20a0062fbaacc86a6711a", null ],
-    [ "has_tlsrequired", "struct___kinetic_proto___security___a_c_l___scope.html#a1536d6cfafb38b324a83668460f95f1e", null ],
-    [ "tlsrequired", "struct___kinetic_proto___security___a_c_l___scope.html#a7455f50567bff6fad6bfe59db6b225f7", null ]
+    [ "has_TlsRequired", "struct___kinetic_proto___security___a_c_l___scope.html#ad157aaf7b6afd60fd09f9582a4da1d21", null ],
+    [ "TlsRequired", "struct___kinetic_proto___security___a_c_l___scope.html#afab3caa7807c49a08908580edb409cbd", null ]
 ];

@@ -1,4 +1,4 @@
-.TH "KineticConnection" 3 "Fri Aug 8 2014" "Version v0.5.0" "protobuf-c" \" -*- nroff -*-
+.TH "KineticConnection" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,7 +15,7 @@ KineticConnection \-
 .RI "bool \fBconnected\fP"
 .br
 .ti -1c
-.RI "bool \fBblocking\fP"
+.RI "bool \fBnonBlocking\fP"
 .br
 .ti -1c
 .RI "int \fBport\fP"
@@ -24,34 +24,76 @@ KineticConnection \-
 .RI "int \fBsocketDescriptor\fP"
 .br
 .ti -1c
+.RI "int64_t \fBconnectionID\fP"
+.br
+.ti -1c
 .RI "char \fBhost\fP [256]"
+.br
+.ti -1c
+.RI "int64_t \fBclusterVersion\fP"
+.br
+.ti -1c
+.RI "int64_t \fBidentity\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBkeyData\fP [128]"
+.br
+.ti -1c
+.RI "\fBByteArray\fP \fBkey\fP"
+.br
+.ti -1c
+.RI "int64_t \fBsequence\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 74 of file kinetic_types\&.h\&.
+Definition at line 108 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "bool KineticConnection::connected"
 
 .PP
-Definition at line 76 of file kinetic_types\&.h\&.
-.SS "bool KineticConnection::blocking"
+Definition at line 110 of file kinetic_types\&.h\&.
+.SS "bool KineticConnection::nonBlocking"
 
 .PP
-Definition at line 77 of file kinetic_types\&.h\&.
+Definition at line 111 of file kinetic_types\&.h\&.
 .SS "int KineticConnection::port"
 
 .PP
-Definition at line 78 of file kinetic_types\&.h\&.
+Definition at line 112 of file kinetic_types\&.h\&.
 .SS "int KineticConnection::socketDescriptor"
 
 .PP
-Definition at line 79 of file kinetic_types\&.h\&.
+Definition at line 113 of file kinetic_types\&.h\&.
+.SS "int64_t KineticConnection::connectionID"
+
+.PP
+Definition at line 114 of file kinetic_types\&.h\&.
 .SS "char KineticConnection::host[256]"
 
 .PP
-Definition at line 80 of file kinetic_types\&.h\&.
+Definition at line 115 of file kinetic_types\&.h\&.
+.SS "int64_t KineticConnection::clusterVersion"
+
+.PP
+Definition at line 121 of file kinetic_types\&.h\&.
+.SS "int64_t KineticConnection::identity"
+
+.PP
+Definition at line 127 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticConnection::keyData[128]"
+
+.PP
+Definition at line 132 of file kinetic_types\&.h\&.
+.SS "\fBByteArray\fP KineticConnection::key"
+
+.PP
+Definition at line 133 of file kinetic_types\&.h\&.
+.SS "int64_t KineticConnection::sequence"
+
+.PP
+Definition at line 137 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

@@ -1,7 +1,10 @@
 <map id="KineticLogger_LogProtobuf" name="KineticLogger_LogProtobuf">
-<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#ad853748c77a0a8505812449f85fa3f72" title="KineticPDU_Send" alt="" coords="310,5,463,35"/>
-<area shape="rect" id="node6" href="$kinetic__pdu_8h.html#acff84c8347b8df5df8d90364d990268a" title="KineticPDU_Receive" alt="" coords="297,59,477,90"/>
-<area shape="rect" id="node3" href="$kinetic__api_8h.html#ab8f3c3fa01178f9331949d774334f940" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="526,33,679,63"/>
-<area shape="rect" id="node4" href="$noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="728,33,784,63"/>
-<area shape="rect" id="node5" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="832,33,888,63"/>
+<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="294,32,445,63"/>
+<area shape="rect" id="node9" href="$kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" title="KineticPDU_Receive" alt="" coords="284,87,456,118"/>
+<area shape="rect" id="node3" href="$kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="504,60,767,91"/>
+<area shape="rect" id="node4" href="$kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="815,5,987,36"/>
+<area shape="rect" id="node7" href="$kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="825,60,977,91"/>
+<area shape="rect" id="node8" href="$kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="824,115,978,146"/>
+<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1035,5,1100,36"/>
+<area shape="rect" id="node6" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1148,5,1208,36"/>
 </map>

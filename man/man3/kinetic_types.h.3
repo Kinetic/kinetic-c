@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Fri Aug 8 2014" "Version v0.5.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -34,24 +34,32 @@ kinetic_types.h \-
 .br
 \fC#include 'kinetic_proto\&.h'\fP
 .br
+\fC#include <time\&.h>\fP
+.br
 
 .SS "Data Structures"
 
 .in +1c
 .ti -1c
-.RI "struct \fBKineticHMAC\fP"
+.RI "struct \fBByteBuffer\fP"
 .br
 .ti -1c
 .RI "struct \fBKineticConnection\fP"
 .br
 .ti -1c
+.RI "struct \fBKineticHMAC\fP"
+.br
+.ti -1c
 .RI "struct \fBKineticMessage\fP"
 .br
 .ti -1c
-.RI "struct \fBKineticExchange\fP"
+.RI "struct \fBKinetic_KeyValue\fP"
 .br
 .ti -1c
 .RI "struct \fBKineticPDU\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticOperation\fP"
 .br
 .in -1c
 .SS "Macros"
@@ -59,6 +67,9 @@ kinetic_types.h \-
 .in +1c
 .ti -1c
 .RI "#define \fBKINETIC_PORT\fP   8123"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_TLS_PORT\fP   8443"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_HMAC_SHA1_LEN\fP   (SHA_DIGEST_LENGTH)"
@@ -79,13 +90,40 @@ kinetic_types.h \-
 .RI "#define \fBHOST_NAME_MAX\fP   256"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_CONNECTION_INIT\fP(connection)"
+.RI "#define \fBBYTE_ARRAY_NONE\fP   (\fBByteArray\fP){\&.len = 0, \&.data = NULL}"
+.br
+.ti -1c
+.RI "#define \fBBYTE_ARRAY_INIT\fP(_data)"
+.br
+.ti -1c
+.RI "#define \fBBYTE_ARRAY_INIT_WITH_LEN\fP(_data, _len)   (\fBByteArray\fP){\&.data = (uint8_t*)(_data), \&.len = (_len)};"
+.br
+.ti -1c
+.RI "#define \fBBYTE_ARRAY_CREATE\fP(name, len)   uint8_t ( name ## _buf )[(len)]; \fBByteArray\fP (name) = \fBBYTE_ARRAY_INIT\fP(( name ## _buf ));"
+.br
+.ti -1c
+.RI "#define \fBBYTE_ARRAY_CREATE_WITH_DATA\fP(_name, _data)   uint8_t ( _name ## _data )[sizeof(_data)]; \fBByteArray\fP (_name) = {\&.data = (uint8_t*(_data)), \&.len = sizeof(data)};"
+.br
+.ti -1c
+.RI "#define \fBBYTE_ARRAY_CREATE_WITH_BUFFER\fP(_name, _buf)   \fBByteArray\fP (_name) = {\&.data = (uint8_t*(_buf)), \&.len = 0};"
+.br
+.ti -1c
+.RI "#define \fBBYTE_ARRAY_INIT_FROM_CSTRING\fP(str)   (\fBByteArray\fP){\&.data = (uint8_t*)(str), \&.len = strlen(str)}"
+.br
+.ti -1c
+.RI "#define \fBBYTE_ARRAY_FILL_WITH_DUMMY_DATA\fP(_array)   {size_t i=0; for(;i<(_array)\&.len;++i){(_array)\&.data[i] = (uint8_t)(i & 0xFFu);} }"
+.br
+.ti -1c
+.RI "#define \fBBYTE_BUFFER_INIT\fP(_buf, _max)"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_CONNECTION_INIT\fP(_con, _id, _key)"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_MESSAGE_HEADER_INIT\fP(_hdr, _con)"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_MESSAGE_INIT\fP(msg)"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_EXCHANGE_INIT\fP(exchg, id, k, klen, con)"
 .br
 .ti -1c
 .RI "#define \fBPDU_HEADER_LEN\fP   (1 + (2 * sizeof(int32_t)))"
@@ -94,10 +132,32 @@ kinetic_types.h \-
 .RI "#define \fBPDU_PROTO_MAX_LEN\fP   (1024 * 1024)"
 .br
 .ti -1c
+.RI "#define \fBPDU_PROTO_MAX_UNPACKED_LEN\fP   (\fBPDU_PROTO_MAX_LEN\fP * 2)"
+.br
+.ti -1c
 .RI "#define \fBPDU_VALUE_MAX_LEN\fP   (1024 * 1024)"
 .br
 .ti -1c
-.RI "#define \fBPDU_MAX_LEN\fP   (\fBPDU_HEADER_LEN\fP + \fBPDU_PROTO_MAX_LEN\fP + \fBPDU_VALUE_MAX_LEN\fP)"
+.RI "#define \fBPDU_MAX_LEN\fP"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_PDU_HEADER_INIT\fP   (\fBKineticPDUHeader\fP) {\&.versionPrefix = 'F'}"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_PDU_INIT\fP(_pdu, _con)"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_PDU_INIT_WITH_MESSAGE\fP(_pdu, _con)"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_OPERATION_INIT\fP(_op, _con, _req, _resp)"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef ProtobufCBinaryData \fBByteArray\fP"
 .br
 .in -1c
 .SS "Functions"
@@ -120,112 +180,231 @@ kinetic_types.h \-
 
 .PP
 Definition at line 40 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)"
+.SS "#define KINETIC_TLS_PORT   8443"
 
 .PP
 Definition at line 41 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_HMAC_MAX_LEN   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
+.SS "#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)"
 
 .PP
 Definition at line 42 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_MAX_KEY_LEN   128"
+.SS "#define KINETIC_HMAC_MAX_LEN   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
 
 .PP
 Definition at line 43 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_MAX_KEY_LEN   128"
+
+.PP
+Definition at line 44 of file kinetic_types\&.h\&.
 .SS "#define __func__   '<unknown>'"
 
 .PP
-Definition at line 50 of file kinetic_types\&.h\&.
+Definition at line 51 of file kinetic_types\&.h\&.
 .SS "#define _BSD_SOURCE"
 
 .PP
-Definition at line 57 of file kinetic_types\&.h\&.
+Definition at line 58 of file kinetic_types\&.h\&.
 .SS "#define HOST_NAME_MAX   256"
 
 .PP
-Definition at line 62 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_CONNECTION_INIT(connection)"
+Definition at line 63 of file kinetic_types\&.h\&.
+.SS "#define BYTE_ARRAY_NONE   (\fBByteArray\fP){\&.len = 0, \&.data = NULL}"
+
+.PP
+Definition at line 70 of file kinetic_types\&.h\&.
+.SS "#define BYTE_ARRAY_INIT(_data)"
+\fBValue:\fP
+.PP
+.nf
+(ByteArray) \
+    {\&.data = (uint8_t*)(_data), \&.len = sizeof(_data)};
+.fi
+.PP
+Definition at line 72 of file kinetic_types\&.h\&.
+.SS "#define BYTE_ARRAY_INIT_WITH_LEN(_data, _len)   (\fBByteArray\fP){\&.data = (uint8_t*)(_data), \&.len = (_len)};"
+
+.PP
+Definition at line 74 of file kinetic_types\&.h\&.
+.SS "#define BYTE_ARRAY_CREATE(name, len)   uint8_t ( name ## _buf )[(len)]; \fBByteArray\fP (name) = \fBBYTE_ARRAY_INIT\fP(( name ## _buf ));"
+
+.PP
+Definition at line 76 of file kinetic_types\&.h\&.
+.SS "#define BYTE_ARRAY_CREATE_WITH_DATA(_name, _data)   uint8_t ( _name ## _data )[sizeof(_data)]; \fBByteArray\fP (_name) = {\&.data = (uint8_t*(_data)), \&.len = sizeof(data)};"
+
+.PP
+Definition at line 78 of file kinetic_types\&.h\&.
+.SS "#define BYTE_ARRAY_CREATE_WITH_BUFFER(_name, _buf)   \fBByteArray\fP (_name) = {\&.data = (uint8_t*(_buf)), \&.len = 0};"
+
+.PP
+Definition at line 80 of file kinetic_types\&.h\&.
+.SS "#define BYTE_ARRAY_INIT_FROM_CSTRING(str)   (\fBByteArray\fP){\&.data = (uint8_t*)(str), \&.len = strlen(str)}"
+
+.PP
+Definition at line 82 of file kinetic_types\&.h\&.
+.SS "#define BYTE_ARRAY_FILL_WITH_DUMMY_DATA(_array)   {size_t i=0; for(;i<(_array)\&.len;++i){(_array)\&.data[i] = (uint8_t)(i & 0xFFu);} }"
+
+.PP
+Definition at line 84 of file kinetic_types\&.h\&.
+.SS "#define BYTE_BUFFER_INIT(_buf, _max)"
+\fBValue:\fP
+.PP
+.nf
+(ByteBuffer) { \
+    \&.buffer = {\&.data = (uint8_t*)(_buf), \&.len = 0}, \
+    \&.maxLen = sizeof(_buf) }
+.fi
+.PP
+Definition at line 102 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_CONNECTION_INIT(_con, _id, _key)"
 \fBValue:\fP
 .PP
 .nf
 { \
-    memset((connection), 0, sizeof(KineticConnection)); \
-    (connection)->blocking = true; \
-    (connection)->socketDescriptor = -1; \
+    (*_con) = (KineticConnection) { \
+        \&.socketDescriptor = -1, \
+        \&.connectionID = time(NULL), \
+        \&.identity = (_id), \
+        \&.sequence = 0, \
+    }; \
+    (*_con)\&.key = (ByteArray){\&.data = (*_con)\&.keyData, \&.len = (_key)\&.len}; \
+    if ((_key)\&.data != NULL && (_key)\&.len > 0) { \
+        memcpy((_con)->keyData, (_key)\&.data, (_key)\&.len); } \
 }
 .fi
 .PP
-Definition at line 83 of file kinetic_types\&.h\&.
+Definition at line 139 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con)"
+\fBValue:\fP
+.PP
+.nf
+{ \
+    assert((void *)(_hdr) != NULL); \
+    assert((void *)(_con) != NULL); \
+    *(_hdr) = (KineticProto_Header) { \
+        \&.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_header__descriptor), \
+        \&.has_clusterVersion = true, \
+        \&.clusterVersion = (_con)->clusterVersion, \
+        \&.has_identity = true, \
+        \&.identity = (_con)->identity, \
+        \&.has_connectionID = true, \
+        \&.connectionID = (_con)->connectionID, \
+        \&.has_sequence = true, \
+        \&.sequence = (_con)->sequence, \
+    }; \
+}
+.fi
+.PP
+Definition at line 175 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_MESSAGE_INIT(msg)"
 \fBValue:\fP
 .PP
 .nf
 { \\
-    KineticProto_init(&(msg)->proto); \\
-    KineticProto_command_init(&(msg)->command); \\
-    KineticProto_header_init(&(msg)->header); \\
-    KineticProto_body_init(&(msg)->body); \\
-    KineticProto_status_init(&(msg)->status); \
+    KineticProto__init(&(msg)->proto); \\
+    KineticProto_command__init(&(msg)->command); \\
+    KineticProto_header__init(&(msg)->header); \\
+    KineticProto_status__init(&(msg)->status); \\
+    KineticProto_body__init(&(msg)->body); \\
+    KineticProto_key_value__init(&(msg)->keyValue); \
     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
     (msg)->proto\&.hmac\&.data = (msg)->hmacData; \
     (msg)->proto\&.hmac\&.len = KINETIC_HMAC_MAX_LEN; \
-    (msg)->proto\&.has_hmac = true; /* Enable HMAC to allow length calculation prior to population */ \
+    (msg)->proto\&.has_hmac = true; \
     (msg)->command\&.header = &(msg)->header; \
     (msg)->proto\&.command = &(msg)->command; \
-    /*(msg)->command\&.body = &(msg)->body;*/ \
-    /*(msg)->command\&.status = &(msg)->status;*/ \
 }
 .fi
 .PP
-Definition at line 102 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_EXCHANGE_INIT(exchg, id, k, klen, con)"
+Definition at line 190 of file kinetic_types\&.h\&.
+.SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int32_t)))"
+
+.PP
+Definition at line 222 of file kinetic_types\&.h\&.
+.SS "#define PDU_PROTO_MAX_LEN   (1024 * 1024)"
+
+.PP
+Definition at line 223 of file kinetic_types\&.h\&.
+.SS "#define PDU_PROTO_MAX_UNPACKED_LEN   (\fBPDU_PROTO_MAX_LEN\fP * 2)"
+
+.PP
+Definition at line 224 of file kinetic_types\&.h\&.
+.SS "#define PDU_VALUE_MAX_LEN   (1024 * 1024)"
+
+.PP
+Definition at line 225 of file kinetic_types\&.h\&.
+.SS "#define PDU_MAX_LEN"
+\fBValue:\fP
+.PP
+.nf
+(PDU_HEADER_LEN + \\
+                                    PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
+.fi
+.PP
+Definition at line 226 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_PDU_HEADER_INIT   (\fBKineticPDUHeader\fP) {\&.versionPrefix = 'F'}"
+
+.PP
+Definition at line 234 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_PDU_INIT(_pdu, _con)"
 \fBValue:\fP
 .PP
 .nf
 { \
-    memset((exchg), 0, sizeof(KineticExchange)); \
-    (exchg)->identity = id; \
-    if (k != NULL && klen > 0) \
-    { \
-        memcpy((exchg)->key, k, klen); \
-        (exchg)->key[klen] = '\0'; \
-        (exchg)->keyLength = klen; \
-        (exchg)->has_key = true; \
-    } \
-    (exchg)->connection = con; \
-    (exchg)->sequence = -1; \
+    assert((void *)(_pdu) != NULL); \
+    assert((void *)(_con) != NULL); \
+    (_pdu)->connection = (_con); \
+    (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
+    (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
+    (_pdu)->value = BYTE_ARRAY_NONE; \
+    (_pdu)->proto = &(_pdu)->protoData\&.message\&.proto; \\
+    KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData\&.message\&.header), (_con)); \
 }
 .fi
 .PP
-Definition at line 160 of file kinetic_types\&.h\&.
-.SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int32_t)))"
+Definition at line 273 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con)"
+\fBValue:\fP
+.PP
+.nf
+{ \\
+    KINETIC_PDU_INIT((_pdu), (_con)) \\
+    KINETIC_MESSAGE_INIT(&((_pdu)->protoData\&.message)); \
+    (_pdu)->proto->command->header = &(_pdu)->protoData\&.message\&.header; \\
+    KINETIC_MESSAGE_HEADER_INIT(&(_pdu)->protoData\&.message\&.header, (_con)); \
+}
+.fi
+.PP
+Definition at line 283 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_OPERATION_INIT(_op, _con, _req, _resp)"
+\fBValue:\fP
+.PP
+.nf
+*(_op) = (KineticOperation) { \
+    \&.connection = (_con), \
+    \&.request = (_req), \
+    \&.response = (_resp), \
+}
+.fi
+.PP
+Definition at line 297 of file kinetic_types\&.h\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef ProtobufCBinaryData \fBByteArray\fP"
 
 .PP
-Definition at line 177 of file kinetic_types\&.h\&.
-.SS "#define PDU_PROTO_MAX_LEN   (1024 * 1024)"
-
-.PP
-Definition at line 178 of file kinetic_types\&.h\&.
-.SS "#define PDU_VALUE_MAX_LEN   (1024 * 1024)"
-
-.PP
-Definition at line 179 of file kinetic_types\&.h\&.
-.SS "#define PDU_MAX_LEN   (\fBPDU_HEADER_LEN\fP + \fBPDU_PROTO_MAX_LEN\fP + \fBPDU_VALUE_MAX_LEN\fP)"
-
-.PP
-Definition at line 180 of file kinetic_types\&.h\&.
+Definition at line 69 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "struct __attribute__ ((__packed__))"
 
 .PP
-Definition at line 182 of file kinetic_types\&.h\&.
+Definition at line 228 of file kinetic_types\&.h\&.
 .SH "Variable Documentation"
 .PP 
 .SS "KineticPDUHeader"
 
 .PP
-Definition at line 187 of file kinetic_types\&.h\&.
+Definition at line 233 of file kinetic_types\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

@@ -1,6 +1,10 @@
 <map id="KineticLogger_LogHeader" name="KineticLogger_LogHeader">
-<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#acff84c8347b8df5df8d90364d990268a" title="KineticPDU_Receive" alt="" coords="278,5,458,35"/>
-<area shape="rect" id="node3" href="$kinetic__api_8h.html#ab8f3c3fa01178f9331949d774334f940" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="507,5,661,35"/>
-<area shape="rect" id="node4" href="$noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="709,5,766,35"/>
-<area shape="rect" id="node5" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="813,5,870,35"/>
+<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="282,32,434,63"/>
+<area shape="rect" id="node9" href="$kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" title="KineticPDU_Receive" alt="" coords="272,87,444,118"/>
+<area shape="rect" id="node3" href="$kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="492,60,755,91"/>
+<area shape="rect" id="node4" href="$kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="803,5,975,36"/>
+<area shape="rect" id="node7" href="$kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="813,60,965,91"/>
+<area shape="rect" id="node8" href="$kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="812,115,966,146"/>
+<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1023,5,1088,36"/>
+<area shape="rect" id="node6" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1136,5,1196,36"/>
 </map>

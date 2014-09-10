@@ -2,123 +2,207 @@
 <Tokens version="1.0">
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_Init</Name>
+      <Name>Get</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8c.html</Path>
-    <Anchor>a27b1217d8c965287f2f06009903507aa</Anchor>
+    <Path>get_8c.html</Path>
+    <Anchor>aa3a86ce5b3301619f3a3946b657a3150</Anchor>
+    <Abstract>Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device...</Abstract>
+    <DeclaredIn>get.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Request</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>get_8c.html</Path>
+    <Anchor>a72c86c9657e34f663c24b7f6d836e590</Anchor>
+    <DeclaredIn>get.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>get_8c.html</Path>
+    <Anchor>a8826d3341bd8bfbeb86db92d69b2e5c1</Anchor>
+    <DeclaredIn>get.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Get</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>get_8h.html</Path>
+    <Anchor>aa3a86ce5b3301619f3a3946b657a3150</Anchor>
+    <Abstract>Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device...</Abstract>
+    <DeclaredIn>get.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_ExecuteOperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a587d8092bb875aba8341a0cf7ce5d1bd</Anchor>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_Init</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>ad3ba9980559b44b3bcb3d7aabe2afd2d</Anchor>
     <Abstract>Initializes the Kinetic API andcsonfigures logging destination. </Abstract>
-    <DeclaredIn>kinetic_api.c</DeclaredIn>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_Connect</Name>
+      <Name>KineticClient_Connect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8c.html</Path>
-    <Anchor>a8d9dd4011a9a09eae17c0d317d3f4225</Anchor>
-    <Abstract>Establishes a Kinetic protocol socket connection to a host. </Abstract>
-    <DeclaredIn>kinetic_api.c</DeclaredIn>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a5448ecfd9eef429ea2679610e5cfd6cf</Anchor>
+    <Abstract>Configures the session and establishes a socket connection to a Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_ConfigureExchange</Name>
+      <Name>KineticClient_Disconnect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8c.html</Path>
-    <Anchor>a7e039cf7d74c333802b2a1cd876cfc2c</Anchor>
-    <Abstract>Initializes and configures a Kinetic exchange. </Abstract>
-    <DeclaredIn>kinetic_api.c</DeclaredIn>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>ae4b4f1c08bcb4fc76a792c216d5b0822</Anchor>
+    <Abstract>Closes the socket connection to a host. </Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_CreateOperation</Name>
+      <Name>KineticClient_CreateOperation</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8c.html</Path>
-    <Anchor>a67b761a422cb1fa75f30e62708a00117</Anchor>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a8c2d9f8e7d2046d8fef3294c645e4c96</Anchor>
     <Abstract>Creates and initializes a Kinetic operation. </Abstract>
-    <DeclaredIn>kinetic_api.c</DeclaredIn>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_NoOp</Name>
+      <Name>KineticClient_NoOp</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8c.html</Path>
-    <Anchor>ab8f3c3fa01178f9331949d774334f940</Anchor>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a10e53ad454fa3caa0323ad2ccf18ece8</Anchor>
     <Abstract>Executes a NOOP command to test whether the Kinetic Device is operational. </Abstract>
-    <DeclaredIn>kinetic_api.c</DeclaredIn>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_Init</Name>
+      <Name>KineticClient_Put</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8h.html</Path>
-    <Anchor>a27b1217d8c965287f2f06009903507aa</Anchor>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a991e741b094c0a74ef5b0ed66e1c88d8</Anchor>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_Get</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a27619674ccf197317001a9f215d377cc</Anchor>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_Init</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>ad3ba9980559b44b3bcb3d7aabe2afd2d</Anchor>
     <Abstract>Initializes the Kinetic API andcsonfigures logging destination. </Abstract>
-    <DeclaredIn>kinetic_api.h</DeclaredIn>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_Connect</Name>
+      <Name>KineticClient_Connect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8h.html</Path>
-    <Anchor>a8d9dd4011a9a09eae17c0d317d3f4225</Anchor>
-    <Abstract>Establishes a Kinetic protocol socket connection to a host. </Abstract>
-    <DeclaredIn>kinetic_api.h</DeclaredIn>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>a5448ecfd9eef429ea2679610e5cfd6cf</Anchor>
+    <Abstract>Configures the session and establishes a socket connection to a Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_ConfigureExchange</Name>
+      <Name>KineticClient_Disconnect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8h.html</Path>
-    <Anchor>a7e039cf7d74c333802b2a1cd876cfc2c</Anchor>
-    <Abstract>Initializes and configures a Kinetic exchange. </Abstract>
-    <DeclaredIn>kinetic_api.h</DeclaredIn>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>ae4b4f1c08bcb4fc76a792c216d5b0822</Anchor>
+    <Abstract>Closes the socket connection to a host. </Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_CreateOperation</Name>
+      <Name>KineticClient_CreateOperation</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8h.html</Path>
-    <Anchor>a67b761a422cb1fa75f30e62708a00117</Anchor>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>a8c2d9f8e7d2046d8fef3294c645e4c96</Anchor>
     <Abstract>Creates and initializes a Kinetic operation. </Abstract>
-    <DeclaredIn>kinetic_api.h</DeclaredIn>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticApi_NoOp</Name>
+      <Name>KineticClient_NoOp</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__api_8h.html</Path>
-    <Anchor>ab8f3c3fa01178f9331949d774334f940</Anchor>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>a10e53ad454fa3caa0323ad2ccf18ece8</Anchor>
     <Abstract>Executes a NOOP command to test whether the Kinetic Device is operational. </Abstract>
-    <DeclaredIn>kinetic_api.h</DeclaredIn>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_Init</Name>
+      <Name>KineticClient_Put</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__connection_8c.html</Path>
-    <Anchor>a6524070218513d73d3bf8e02f50c75b3</Anchor>
-    <DeclaredIn>kinetic_connection.c</DeclaredIn>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>a2705464e0a90ee21c4f851950bdd4590</Anchor>
+    <Abstract>Executes a PUT command to write data to the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_Get</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>ac5381f9a7772f8c64eb4087c17d0fbe4</Anchor>
+    <Abstract>Executes a GET command to read data from the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -127,18 +211,28 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8c.html</Path>
-    <Anchor>a067e3a232197b9d572244d40607ab24f</Anchor>
+    <Anchor>a86b6c409a8ad8699ce3edd857f669f76</Anchor>
     <DeclaredIn>kinetic_connection.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_Init</Name>
+      <Name>KineticConnection_Disconnect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__connection_8h.html</Path>
-    <Anchor>a6524070218513d73d3bf8e02f50c75b3</Anchor>
-    <DeclaredIn>kinetic_connection.h</DeclaredIn>
+    <Path>kinetic__connection_8c.html</Path>
+    <Anchor>ac098de6abde0c838914a846829d51ac5</Anchor>
+    <DeclaredIn>kinetic_connection.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticConnection_IncrementSequence</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__connection_8c.html</Path>
+    <Anchor>ab3cd8fa23a61ea1c982a50e13d6dac5d</Anchor>
+    <DeclaredIn>kinetic_connection.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -147,108 +241,28 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8h.html</Path>
-    <Anchor>a067e3a232197b9d572244d40607ab24f</Anchor>
+    <Anchor>ad009656b3513c413099526e03fbc437e</Anchor>
     <DeclaredIn>kinetic_connection.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticExchange_Init</Name>
+      <Name>KineticConnection_Disconnect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__exchange_8c.html</Path>
-    <Anchor>ac70a003301820ad2e39787ec66363486</Anchor>
-    <DeclaredIn>kinetic_exchange.c</DeclaredIn>
+    <Path>kinetic__connection_8h.html</Path>
+    <Anchor>a0a07df0ecd8dc9a452c2cf42fd0ebfd0</Anchor>
+    <DeclaredIn>kinetic_connection.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticExchange_ConfigureConnectionID</Name>
+      <Name>KineticConnection_IncrementSequence</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__exchange_8c.html</Path>
-    <Anchor>a79f8df71d49e5853b85dbc04aea2dadf</Anchor>
-    <DeclaredIn>kinetic_exchange.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticExchange_SetClusterVersion</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8c.html</Path>
-    <Anchor>a152138735516f7ea8304e6ac36047da1</Anchor>
-    <DeclaredIn>kinetic_exchange.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticExchange_IncrementSequence</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8c.html</Path>
-    <Anchor>afb310a881d72cca38fe091cc0c0b2190</Anchor>
-    <DeclaredIn>kinetic_exchange.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticExchange_ConfigureHeader</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8c.html</Path>
-    <Anchor>a58479324729294bdce5e4fd99c348fc7</Anchor>
-    <DeclaredIn>kinetic_exchange.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticExchange_Init</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8h.html</Path>
-    <Anchor>ac70a003301820ad2e39787ec66363486</Anchor>
-    <DeclaredIn>kinetic_exchange.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticExchange_ConfigureConnectionID</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8h.html</Path>
-    <Anchor>a79f8df71d49e5853b85dbc04aea2dadf</Anchor>
-    <DeclaredIn>kinetic_exchange.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticExchange_SetClusterVersion</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8h.html</Path>
-    <Anchor>a152138735516f7ea8304e6ac36047da1</Anchor>
-    <DeclaredIn>kinetic_exchange.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticExchange_IncrementSequence</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8h.html</Path>
-    <Anchor>afb310a881d72cca38fe091cc0c0b2190</Anchor>
-    <DeclaredIn>kinetic_exchange.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticExchange_ConfigureHeader</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__exchange_8h.html</Path>
-    <Anchor>a58479324729294bdce5e4fd99c348fc7</Anchor>
-    <DeclaredIn>kinetic_exchange.h</DeclaredIn>
+    <Path>kinetic__connection_8h.html</Path>
+    <Anchor>ab3cd8fa23a61ea1c982a50e13d6dac5d</Anchor>
+    <DeclaredIn>kinetic_connection.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -267,7 +281,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__hmac_8c.html</Path>
-    <Anchor>a20ce5d52c8e4948a46aac10458d205a1</Anchor>
+    <Anchor>a5dd91c42c8cc41c324c917f3d463ef7f</Anchor>
     <DeclaredIn>kinetic_hmac.c</DeclaredIn>
   </Token>
   <Token>
@@ -277,7 +291,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__hmac_8c.html</Path>
-    <Anchor>af0d312b6cffbe85d7bce6af3a1b8e742</Anchor>
+    <Anchor>ac38b2071b2c9425be6a8eac68e0fb27e</Anchor>
     <DeclaredIn>kinetic_hmac.c</DeclaredIn>
   </Token>
   <Token>
@@ -297,7 +311,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__hmac_8h.html</Path>
-    <Anchor>a20ce5d52c8e4948a46aac10458d205a1</Anchor>
+    <Anchor>a5dd91c42c8cc41c324c917f3d463ef7f</Anchor>
     <DeclaredIn>kinetic_hmac.h</DeclaredIn>
   </Token>
   <Token>
@@ -307,7 +321,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__hmac_8h.html</Path>
-    <Anchor>af0d312b6cffbe85d7bce6af3a1b8e742</Anchor>
+    <Anchor>ac38b2071b2c9425be6a8eac68e0fb27e</Anchor>
     <DeclaredIn>kinetic_hmac.h</DeclaredIn>
   </Token>
   <Token>
@@ -342,12 +356,32 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>BYTES_TO_CSTRING</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a1f53a109345e468584a1fd3510ed7a20</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticLogger_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__logger_8c.html</Path>
     <Anchor>ae302c2ba2d4dcb526dd9efdec6264d8d</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticLogger_Close</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a10716dedde03111fb55d990993a3c031</Anchor>
     <DeclaredIn>kinetic_logger.c</DeclaredIn>
   </Token>
   <Token>
@@ -382,6 +416,26 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticLogger_u8toa</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a35347e7ed4f565357f944c2d7bf2af19</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticLogger_ByteArraySliceToCString</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a7f04a2ee23e533260754ce515744063f</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticLogger_LogProtobuf</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -392,12 +446,42 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticLogger_LogStatus</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a1aa59417bd3189bfb42fc380fea468aa</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticLogger_LogByteArray</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a1833be5893222cc3650250726623f93c</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>LogToConsole</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__logger_8c.html</Path>
     <Anchor>ae60edc58511ed3e59de3c86cf749ae48</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>FileDesc</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a81d619ddb9f03da2ef4f4419e61b7ba5</Anchor>
     <DeclaredIn>kinetic_logger.c</DeclaredIn>
   </Token>
   <Token>
@@ -432,12 +516,32 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>LOG_LOCATION</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8h.html</Path>
+    <Anchor>ad7b252887c17c035e5591c68848cce61</Anchor>
+    <DeclaredIn>kinetic_logger.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticLogger_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__logger_8h.html</Path>
     <Anchor>ae302c2ba2d4dcb526dd9efdec6264d8d</Anchor>
+    <DeclaredIn>kinetic_logger.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticLogger_Close</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8h.html</Path>
+    <Anchor>a10716dedde03111fb55d990993a3c031</Anchor>
     <DeclaredIn>kinetic_logger.h</DeclaredIn>
   </Token>
   <Token>
@@ -482,12 +586,52 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticLogger_LogStatus</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8h.html</Path>
+    <Anchor>a1aa59417bd3189bfb42fc380fea468aa</Anchor>
+    <DeclaredIn>kinetic_logger.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticLogger_LogByteArray</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8h.html</Path>
+    <Anchor>a1833be5893222cc3650250726623f93c</Anchor>
+    <DeclaredIn>kinetic_logger.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>CONFIG_FIELD_BYTE_ARRAY</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__message_8c.html</Path>
+    <Anchor>a8739ecef99201e2b2f486401f783792f</Anchor>
+    <DeclaredIn>kinetic_message.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticMessage_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__message_8c.html</Path>
     <Anchor>ac6ea752dfd491fffd99d4cad256f679d</Anchor>
+    <DeclaredIn>kinetic_message.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticMessage_ConfigureKeyValue</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__message_8c.html</Path>
+    <Anchor>a888cdaf07002f7a7b6ab6263c49ebb12</Anchor>
     <DeclaredIn>kinetic_message.c</DeclaredIn>
   </Token>
   <Token>
@@ -502,12 +646,102 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticOperation_Init</Name>
+      <Name>KineticMessage_ConfigureKeyValue</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__message_8h.html</Path>
+    <Anchor>a888cdaf07002f7a7b6ab6263c49ebb12</Anchor>
+    <DeclaredIn>kinetic_message.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticNBO_FromHostU32</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__nbo_8c.html</Path>
+    <Anchor>ab29859f82a05cd469391e003b4aac3ad</Anchor>
+    <DeclaredIn>kinetic_nbo.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticNBO_ToHostU32</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__nbo_8c.html</Path>
+    <Anchor>a82d5bae248ec3e63c7fd40b55a9293ca</Anchor>
+    <DeclaredIn>kinetic_nbo.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticNBO_FromHostU64</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__nbo_8c.html</Path>
+    <Anchor>a6d46a35964958e880f5acb8674fa79ea</Anchor>
+    <DeclaredIn>kinetic_nbo.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticNBO_ToHostU64</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__nbo_8c.html</Path>
+    <Anchor>a8fb11d2dd5ed25e5563bc7af2aeb7ebb</Anchor>
+    <DeclaredIn>kinetic_nbo.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticNBO_FromHostU32</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__nbo_8h.html</Path>
+    <Anchor>ab29859f82a05cd469391e003b4aac3ad</Anchor>
+    <DeclaredIn>kinetic_nbo.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticNBO_ToHostU32</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__nbo_8h.html</Path>
+    <Anchor>a82d5bae248ec3e63c7fd40b55a9293ca</Anchor>
+    <DeclaredIn>kinetic_nbo.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticNBO_FromHostU64</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__nbo_8h.html</Path>
+    <Anchor>a6d46a35964958e880f5acb8674fa79ea</Anchor>
+    <DeclaredIn>kinetic_nbo.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticNBO_ToHostU64</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__nbo_8h.html</Path>
+    <Anchor>a8fb11d2dd5ed25e5563bc7af2aeb7ebb</Anchor>
+    <DeclaredIn>kinetic_nbo.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_ValidateOperation</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8c.html</Path>
-    <Anchor>af73998d63f2b3f6c695fb1eca92403c5</Anchor>
+    <Anchor>a38b174bd1c6c7814745ee323a0c46aac</Anchor>
     <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
@@ -522,23 +756,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_OPERATION_INIT</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__operation_8h.html</Path>
-    <Anchor>a73d25f6c5f92478eab3143552f737835</Anchor>
-    <DeclaredIn>kinetic_operation.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticOperation_Init</Name>
+      <Name>KineticOperation_BuildPut</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>kinetic__operation_8h.html</Path>
-    <Anchor>af73998d63f2b3f6c695fb1eca92403c5</Anchor>
-    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>a2700aabef8796b1896a53b0f9a1a3d13</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildGet</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>ab74d2f2a39115bb5757112f57c147b71</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -548,6 +782,26 @@
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
     <Anchor>a25c0d192edf098893390eb9236bb9888</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildPut</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a2700aabef8796b1896a53b0f9a1a3d13</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildGet</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>ab74d2f2a39115bb5757112f57c147b71</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -557,7 +811,47 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__pdu_8c.html</Path>
-    <Anchor>a036f988ac116a054a76fcc59cd2d6647</Anchor>
+    <Anchor>ac2b45fc01853688e458920a95bf12dda</Anchor>
+    <DeclaredIn>kinetic_pdu.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDU_AttachValuePayload</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__pdu_8c.html</Path>
+    <Anchor>ad29d8f808b47e72f33d8a9ce09c478f4</Anchor>
+    <DeclaredIn>kinetic_pdu.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDU_EnableValueBuffer</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__pdu_8c.html</Path>
+    <Anchor>a73fb6bffccab39055afb05c99d6fdf39</Anchor>
+    <DeclaredIn>kinetic_pdu.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDU_EnableValueBufferWithLength</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__pdu_8c.html</Path>
+    <Anchor>a151c58f636193815a70a05ea8b1e289c</Anchor>
+    <DeclaredIn>kinetic_pdu.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDU_Status</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__pdu_8c.html</Path>
+    <Anchor>ac8c3d890312eab07970a86ec9b075e33</Anchor>
     <DeclaredIn>kinetic_pdu.c</DeclaredIn>
   </Token>
   <Token>
@@ -567,7 +861,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__pdu_8c.html</Path>
-    <Anchor>ad853748c77a0a8505812449f85fa3f72</Anchor>
+    <Anchor>a9b83efba84b9ea49ae6fca07f026e77f</Anchor>
     <DeclaredIn>kinetic_pdu.c</DeclaredIn>
   </Token>
   <Token>
@@ -587,7 +881,47 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__pdu_8h.html</Path>
-    <Anchor>a036f988ac116a054a76fcc59cd2d6647</Anchor>
+    <Anchor>ac2b45fc01853688e458920a95bf12dda</Anchor>
+    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDU_AttachValuePayload</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__pdu_8h.html</Path>
+    <Anchor>ad29d8f808b47e72f33d8a9ce09c478f4</Anchor>
+    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDU_EnableValueBuffer</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__pdu_8h.html</Path>
+    <Anchor>a73fb6bffccab39055afb05c99d6fdf39</Anchor>
+    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDU_EnableValueBufferWithLength</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__pdu_8h.html</Path>
+    <Anchor>a151c58f636193815a70a05ea8b1e289c</Anchor>
+    <DeclaredIn>kinetic_pdu.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticPDU_Status</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__pdu_8h.html</Path>
+    <Anchor>ac8c3d890312eab07970a86ec9b075e33</Anchor>
     <DeclaredIn>kinetic_pdu.h</DeclaredIn>
   </Token>
   <Token>
@@ -597,7 +931,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__pdu_8h.html</Path>
-    <Anchor>ad853748c77a0a8505812449f85fa3f72</Anchor>
+    <Anchor>a9b83efba84b9ea49ae6fca07f026e77f</Anchor>
     <DeclaredIn>kinetic_pdu.h</DeclaredIn>
   </Token>
   <Token>
@@ -607,7 +941,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__pdu_8h.html</Path>
-    <Anchor>acff84c8347b8df5df8d90364d990268a</Anchor>
+    <Anchor>a4f32128bd0732ca9cea7662391db71f7</Anchor>
     <DeclaredIn>kinetic_pdu.h</DeclaredIn>
   </Token>
   <Token>
@@ -622,922 +956,952 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_command_init</Name>
+      <Name>KineticProto_command__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ad67706b010e4cd1ff94a9321bfb587c1</Anchor>
+    <Anchor>a33d9bc6620e867c10438be07bc83a94b</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_header_init</Name>
+      <Name>KineticProto_header__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a8175b2f96741b397533df6eec5fe3271</Anchor>
+    <Anchor>af6f7ce7dad8451f0b37b5c5d43cd29f2</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_body_init</Name>
+      <Name>KineticProto_body__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>abb627d71e73b93865460ff4370a3ea76</Anchor>
+    <Anchor>ae407b24ef3c128c0f5df5652de10a5af</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_status_init</Name>
+      <Name>KineticProto_status__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>af7f6c311343948030cff7d6dfedd0c2f</Anchor>
+    <Anchor>af67a33da55c684cc0f993e8c8411e6dc</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_key_value_init</Name>
+      <Name>KineticProto_key_value__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a9aefc00a5d784c8316ce3df187146f88</Anchor>
+    <Anchor>a844bcbc56fa5db033b533b2436599225</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_range_init</Name>
+      <Name>KineticProto_range__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a147279b527d3b3afea70ac1b448b0166</Anchor>
+    <Anchor>ad617221b02ffb10bddde6df135b08a8c</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_setup_init</Name>
+      <Name>KineticProto_setup__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ab819880ba1e071b46266aa76500cbdf2</Anchor>
+    <Anchor>a86ca817c6f2d3cf490101c0fc0ad5a1d</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_operation_init</Name>
+      <Name>KineticProto_p2_poperation_operation__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a41ff0e98fc434735eff09155e95d6492</Anchor>
+    <Anchor>a946245ee318c22316b452073f6a1c0f4</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_peer_init</Name>
+      <Name>KineticProto_p2_poperation_peer__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ab39e6ffaf4954e56a137f64c3c36fd20</Anchor>
+    <Anchor>ade86fc8a562e62822817621684bdf600</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_init</Name>
+      <Name>KineticProto_p2_poperation__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a50eaf59c3474600f4d084b03d9cbab74</Anchor>
+    <Anchor>ad2e313f79e10889b5a0a0d4e0ed8e98f</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_utilization_init</Name>
+      <Name>KineticProto_get_log_utilization__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>abfc199a32a1764904b371b30edc38f52</Anchor>
+    <Anchor>ae8943048001fcb315c49bb19c72bd41f</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_temperature_init</Name>
+      <Name>KineticProto_get_log_temperature__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>aa70c7d2310801af0e8b32337b4d0aab4</Anchor>
+    <Anchor>a9c94bd97c946edc843fbd4afa0516ff9</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_capacity_init</Name>
+      <Name>KineticProto_get_log_capacity__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a49aa60a90bdcef5ac2b19feca95ba7f5</Anchor>
+    <Anchor>ae1d7e68e9a2b70caa8434675534db14c</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_configuration_interface_init</Name>
+      <Name>KineticProto_get_log_configuration_interface__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ac2164fef2d7af05600dfe500eea95f47</Anchor>
+    <Anchor>ab1b99a43ac37711971ad3ff8c2c8e595</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_configuration_init</Name>
+      <Name>KineticProto_get_log_configuration__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>aa49caf12350aa6008f203c175e18258d</Anchor>
+    <Anchor>ae886654b46b5aff804847b9a69d9e712</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_statistics_init</Name>
+      <Name>KineticProto_get_log_statistics__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>abf1b38db5cf80c6b792e2b804d90b854</Anchor>
+    <Anchor>ac58e50b7f284325cb5f51b81995ed754</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_limits_init</Name>
+      <Name>KineticProto_get_log_limits__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>abe7a77d079938ffd1b3bc86d2f9ef339</Anchor>
+    <Anchor>a8a82117545fa621bd5cb22fae3aae2c4</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_init</Name>
+      <Name>KineticProto_get_log_device__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>aeeda7c465c998bbc56b2fc12a90933c0</Anchor>
+    <Anchor>a23e56f79f944c633d5c80973c3c97dfe</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_scope_init</Name>
+      <Name>KineticProto_get_log__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a4fc0567b569df1b3fd3826f6d3166512</Anchor>
+    <Anchor>a905fe2e14813ed0caf2c332fcae018cb</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_init</Name>
+      <Name>KineticProto_security_acl_scope__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a8f363b043ae8aedfccbc12e415150ca3</Anchor>
+    <Anchor>ab229c0487c9ec3275122f1aad81fe766</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_init</Name>
+      <Name>KineticProto_security_acl__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ab9c03777671e912cad7a2d9f9e83481d</Anchor>
+    <Anchor>a246cb1b5493236ca5fbbce8ebb82f275</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_init</Name>
+      <Name>KineticProto_security__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a22266e0b2008357e1a61faff0f1056f8</Anchor>
+    <Anchor>ae923bbcc9ac0a5928c42454b919ce4d6</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_packed_size</Name>
+      <Name>KineticProto__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a535c41fa53e969b823c11492172e88da</Anchor>
+    <Anchor>a271dc8ddebe0c16173c23a4b1af20630</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_pack</Name>
+      <Name>KineticProto__get_packed_size</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a3b0b987f271840aa17c7bec9046eb77f</Anchor>
+    <Anchor>a44e75fcc84248743e80444abfcda131e</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_pack_to_buffer</Name>
+      <Name>KineticProto__pack</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a04c944dbeeae270bd8303f0f0ccc12b1</Anchor>
+    <Anchor>a3d8d1e9a1eca89c51de9a3ed218c649b</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_unpack</Name>
+      <Name>KineticProto__pack_to_buffer</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a0623fe40025b387b445cff513988f8fe</Anchor>
+    <Anchor>ae88823d37dede8792c5215b45f398a42</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_free_unpacked</Name>
+      <Name>KineticProto__unpack</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a9e2103604490393f727e9019e3e89340</Anchor>
+    <Anchor>ac74c443d4eb0ab34e845673f1fc70523</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_command_descriptor</Name>
+      <Name>KineticProto__free_unpacked</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__proto_8c.html</Path>
+    <Anchor>a97c0ba3aecef1b9e127deb523e9e1bdb</Anchor>
+    <DeclaredIn>kinetic_proto.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticProto_command__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a79347b03e0d337f9324ef54285bba556</Anchor>
+    <Anchor>afe895a62c806efd640da0e6cca0d79ed</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_header_descriptor</Name>
+      <Name>KineticProto_header__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a9f2665e6bda69642597794be9ec0e12d</Anchor>
+    <Anchor>a82e70aeba64502c544f618c647a58cf1</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_body_descriptor</Name>
+      <Name>KineticProto_body__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a16844cef09ff85a4866a60caabf88374</Anchor>
+    <Anchor>a8b29407bdeef69fef16d7b08dcd2bb55</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_status_status_code_enum_values_by_number</Name>
+      <Name>KineticProto_status_status_code__enum_values_by_number</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ac320d73ce2e142c3d417664ad90e1535</Anchor>
+    <Anchor>a24fc83249eaa103d7b1cf8e6857654e5</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_status_status_code_enum_values_by_name</Name>
+      <Name>KineticProto_status_status_code__enum_values_by_name</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a9e11a51a1a79338bccb3e387240f4b61</Anchor>
+    <Anchor>ae55b330e6b7fd54e0d5a5fb4e3f00ecc</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_status_status_code_descriptor</Name>
+      <Name>KineticProto_status_status_code__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a6cace1bbe1caf8461378607bc1c24043</Anchor>
+    <Anchor>a80bc240446514a14605f34d560768aec</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_status_descriptor</Name>
+      <Name>KineticProto_status__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ac3077845745754ee8b52260740a37cd4</Anchor>
+    <Anchor>ae0f83daa212207352ca6b3ae2692f82b</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_key_value_descriptor</Name>
+      <Name>KineticProto_key_value__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a212c18d847aadcc0825193b3ae4a81ed</Anchor>
+    <Anchor>ac429f978827cc06b85b97363f7d96321</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_range_descriptor</Name>
+      <Name>KineticProto_range__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ac3ea0c229769f0f2bf57bf86c04b11ad</Anchor>
+    <Anchor>a8715de51845e817fab1f47e139830be7</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_setup_descriptor</Name>
+      <Name>KineticProto_setup__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a9d94cefee7b6fe251549aec5a32a91da</Anchor>
+    <Anchor>aed8e242844e118bfe0062b4c046e3b10</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_operation_descriptor</Name>
+      <Name>KineticProto_p2_poperation_operation__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>af826a4359bfe3fdaf8620c570a539267</Anchor>
+    <Anchor>ae891e87dcff0502249c52f1cfbf7993d</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_peer_descriptor</Name>
+      <Name>KineticProto_p2_poperation_peer__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ab248b6f2bd6ab17e505c11f2e29be978</Anchor>
+    <Anchor>aaa60776beb83d1eebded2fcc3d27da49</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_descriptor</Name>
+      <Name>KineticProto_p2_poperation__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>aa3f17c4e857c4f896a1cf22e2dbd411e</Anchor>
+    <Anchor>a077bc303eb0eb7e9d536c10b9b5019ae</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_utilization_descriptor</Name>
+      <Name>KineticProto_get_log_utilization__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>adf62e4ef860a85bdc399a24af9ea706c</Anchor>
+    <Anchor>adc700291a5f8434facf7589336ff0963</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_temperature_descriptor</Name>
+      <Name>KineticProto_get_log_temperature__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>affb81ee78306b708a3d6497e47d61b3a</Anchor>
+    <Anchor>a2573998e173eccd1fcc489f46e02f82e</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_capacity_descriptor</Name>
+      <Name>KineticProto_get_log_capacity__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ac16c920a5f195496f6de4921e61cc421</Anchor>
+    <Anchor>a56eafc33342b86e0459fc44963fad76b</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_configuration_interface_descriptor</Name>
+      <Name>KineticProto_get_log_configuration_interface__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a554c6d435e9af014691d36fabb409b5e</Anchor>
+    <Anchor>a5704b4ee08322a6b65d98953837f525f</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_configuration_descriptor</Name>
+      <Name>KineticProto_get_log_configuration__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>aa4d886a4221749513d6281b7d9a99d11</Anchor>
+    <Anchor>a4687d0ca653fe9a3c27f7d979ab7d76d</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_statistics_descriptor</Name>
+      <Name>KineticProto_get_log_statistics__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a9b5a366b6ae79393606dd589be80c8ea</Anchor>
+    <Anchor>ae68704616b9b94d56fc6a8b131aaafbb</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_limits_descriptor</Name>
+      <Name>KineticProto_get_log_limits__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a9f2f69b7aecea183d2f5089fa70cd206</Anchor>
+    <Anchor>a47ab3a144c6e91bf4e16f0a78ec24bf9</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_type_enum_values_by_number</Name>
+      <Name>KineticProto_get_log_device__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ac0f64b847903108be900c27eb02e8093</Anchor>
+    <Anchor>a6535fbce21da5af1f65eeac45015ed8a</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_type_enum_values_by_name</Name>
+      <Name>KineticProto_get_log_type__enum_values_by_number</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a9ff8bf124b8af444c8bdefc9e88e6eb5</Anchor>
+    <Anchor>a2f0e85a3acc3db2378b177444cc1a5f8</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_type_descriptor</Name>
+      <Name>KineticProto_get_log_type__enum_values_by_name</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>af895386c0522dfc8c991e451ee3527cf</Anchor>
+    <Anchor>ac67026fbfccbf0777f4af92ac17e4d6b</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_descriptor</Name>
+      <Name>KineticProto_get_log_type__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a0894efa60e5d9d9609dadc5ede85536e</Anchor>
+    <Anchor>a540b54a4249efc3ca97b7c8c9b5787bc</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_scope_descriptor</Name>
+      <Name>KineticProto_get_log__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ad561dc4ed8c543e5625d384d8f6874ce</Anchor>
+    <Anchor>aa0ff4a9809ed01fcc36ca08df0ef2809</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_hmacalgorithm_enum_values_by_number</Name>
+      <Name>KineticProto_security_acl_scope__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a8243c96ae57b61e3c08369aeb31bd89b</Anchor>
+    <Anchor>af9d031c7b50c7634e0a54bca1d325bf1</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_hmacalgorithm_enum_values_by_name</Name>
+      <Name>KineticProto_security_acl_hmacalgorithm__enum_values_by_number</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>aa1091e69144ca1abfefdbb30186713c3</Anchor>
+    <Anchor>a0e54c7da03098de4cac6e2df49dde4c3</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_hmacalgorithm_descriptor</Name>
+      <Name>KineticProto_security_acl_hmacalgorithm__enum_values_by_name</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a7b38ce3f987b32f50fa71c935dce32d4</Anchor>
+    <Anchor>a0b71dc18efbec7b2eb50f7a5adb79cc9</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_permission_enum_values_by_number</Name>
+      <Name>KineticProto_security_acl_hmacalgorithm__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a4bdcca0e9e9ec1a9d0ec492006eb4e1d</Anchor>
+    <Anchor>a9b920058a293aabf7354ef9a30887d37</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_permission_enum_values_by_name</Name>
+      <Name>KineticProto_security_acl_permission__enum_values_by_number</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ad8739cbd6ab133cd3ea175b99f73a0f4</Anchor>
+    <Anchor>a177858279c5b00767db1c2036931cc80</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_permission_descriptor</Name>
+      <Name>KineticProto_security_acl_permission__enum_values_by_name</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a526d5482eed4848609e3f90cef2dd4fa</Anchor>
+    <Anchor>aee92d85109a2b745325da611f369d0f9</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_descriptor</Name>
+      <Name>KineticProto_security_acl_permission__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a1b9d753eac446e2e21453c245d38c359</Anchor>
+    <Anchor>a3be2f8fada4fea2a6097ca27efe4d58c</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_descriptor</Name>
+      <Name>KineticProto_security_acl__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>acd8fb64001b1b2633ebab5cac0be4d46</Anchor>
+    <Anchor>acfe268ef0c6234bb5e7b43857365a47c</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_synchronization_enum_values_by_number</Name>
+      <Name>KineticProto_security__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>aff46fc4ddbfb09f3e7675b4f81cfbb90</Anchor>
+    <Anchor>affaf1e6445b3d70d3ad852832155990d</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_synchronization_enum_values_by_name</Name>
+      <Name>KineticProto_synchronization__enum_values_by_number</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a608b27797d4923e180871c28f3d614f6</Anchor>
+    <Anchor>a3f41c11441f1b6c44b3c512ff252155c</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_synchronization_descriptor</Name>
+      <Name>KineticProto_synchronization__enum_values_by_name</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a76790d6177e5bed13efbfc32c4f17e92</Anchor>
+    <Anchor>a4f4e6249d5d3e2f4e3fb3bcfca01e0f0</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_algorithm_enum_values_by_number</Name>
+      <Name>KineticProto_synchronization__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a2784faeab1c34fa16620f2b4c68316da</Anchor>
+    <Anchor>a267bf11f2efdb572cdcbc19218f9e7fc</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_algorithm_enum_values_by_name</Name>
+      <Name>KineticProto_algorithm__enum_values_by_number</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ad4437f935ca3be2956938c3a9af14783</Anchor>
+    <Anchor>a3c9a6efb5ed2cbbd9e3c478ef34452d7</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_algorithm_descriptor</Name>
+      <Name>KineticProto_algorithm__enum_values_by_name</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ad90e392980ec5c76010c8a9f066bfd19</Anchor>
+    <Anchor>ab30e2a91beec45a4efc25be3fbd302b8</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_message_type_enum_values_by_number</Name>
+      <Name>KineticProto_algorithm__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>ae95ce4ce1689f46652ad1786195eca42</Anchor>
+    <Anchor>a8310405c021492891fc84707eb37d128</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_message_type_enum_values_by_name</Name>
+      <Name>KineticProto_message_type__enum_values_by_number</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a6d6b2731e3ca349630a8ca65674e042d</Anchor>
+    <Anchor>aea7bd9663caa0a7ec6faa06f81984ab0</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_message_type_descriptor</Name>
+      <Name>KineticProto_message_type__enum_values_by_name</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>adeb076a05cae7e63c37289f89e6c78eb</Anchor>
+    <Anchor>a490aa9d26df7fb0af4f6fc2b3d924023</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_descriptor</Name>
+      <Name>KineticProto_message_type__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8c.html</Path>
-    <Anchor>a313371cd82050306bcc84d99f902f289</Anchor>
+    <Anchor>a6ba1f751247a9eb007ee82f9555eb63d</Anchor>
     <DeclaredIn>kinetic_proto.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_COMMAND_INIT</Name>
+      <Name>KineticProto__descriptor</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>kinetic__proto_8c.html</Path>
+    <Anchor>ac55a757b93b8c0dfb059337bef08482d</Anchor>
+    <DeclaredIn>kinetic_proto.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_PROTO_COMMAND__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ab8fc5e15ccd15686f2df4107036656fa</Anchor>
+    <Anchor>ad3cd1388f250eaeab4c8edccaf39ebf1</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_HEADER_INIT</Name>
+      <Name>KINETIC_PROTO_HEADER__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a2444ec429c7df8627cc62b743595397d</Anchor>
+    <Anchor>af7219a5e3399cba818913e22b0001e81</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_BODY_INIT</Name>
+      <Name>KINETIC_PROTO_BODY__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a5e1cb3424a2a2bf9c972eafb6e87bf92</Anchor>
+    <Anchor>a306965686d95579977bd933a183e9396</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_STATUS_INIT</Name>
+      <Name>KINETIC_PROTO_STATUS__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>acaed86c1003114bf5bd4d2a50693a8cb</Anchor>
+    <Anchor>af8f7ef8bfac868f72aca3b210f3f0058</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_KEY_VALUE_INIT</Name>
+      <Name>KINETIC_PROTO_KEY_VALUE__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a8619ad790863b13c2aa6d09da6260eeb</Anchor>
+    <Anchor>a88e8c0f41bbd8466121a61480c9a984d</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_RANGE_INIT</Name>
+      <Name>KINETIC_PROTO_RANGE__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>af1ad7e62f550aac32d5b563d80bc3120</Anchor>
+    <Anchor>ab8d6c768c6ff18a6d7cd5d581331878c</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_SETUP_INIT</Name>
+      <Name>KINETIC_PROTO_SETUP__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a1dddef39b1b00ab6b58ffd6342b32a17</Anchor>
+    <Anchor>a3b5b6d6305cda7a696350631798bff49</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_P2_POPERATION_OPERATION_INIT</Name>
+      <Name>KINETIC_PROTO_P2_POPERATION_OPERATION__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>acaf4e48c6c82da715d1883ae298d123a</Anchor>
+    <Anchor>acd553cd11bfc05eb455b550678bd31ca</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_P2_POPERATION_PEER_INIT</Name>
+      <Name>KINETIC_PROTO_P2_POPERATION_PEER__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>afeb00a940c198cd1098ec1113d496fad</Anchor>
+    <Anchor>a107a01bd64dad35f2a679faa90fb6781</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_P2_POPERATION_INIT</Name>
+      <Name>KINETIC_PROTO_P2_POPERATION__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>afc43dfe381925612a457183872bb1ea4</Anchor>
+    <Anchor>a8d9eb9cda184ba62e69662da2d355f2b</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_GET_LOG_UTILIZATION_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG_UTILIZATION__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a235ed7f5d35e6a99940a11e3656e99ce</Anchor>
+    <Anchor>a2632dade133e1bf632569e9c5783d0e2</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_GET_LOG_TEMPERATURE_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG_TEMPERATURE__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9165f71992a968672c86954e5d7d6988</Anchor>
+    <Anchor>a98b6268596ffd7bfe78bfd9258189b34</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_GET_LOG_CAPACITY_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG_CAPACITY__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9d7301048f3527c12f6c568012c67afc</Anchor>
+    <Anchor>a186a66206c40807a76b152be939772de</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG_CONFIGURATION_INTERFACE__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a6b47cf1223ede441e36eb7c1b6cabcca</Anchor>
+    <Anchor>a1706240aeaeed96526a8ee00484bd7f3</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_GET_LOG_CONFIGURATION_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG_CONFIGURATION__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>aff693fcdc1d4fde4762586e03f792216</Anchor>
+    <Anchor>afd48ec2734695072f8a2c92c3f85bcad</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_GET_LOG_STATISTICS_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG_STATISTICS__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>acd1ee26145c51e13d41579efea85e3f1</Anchor>
+    <Anchor>a704c7182bd3dd8c41062ab7d76a38431</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_GET_LOG_LIMITS_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG_LIMITS__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>af0177ba92739ab7521689c9dcd8d1ccd</Anchor>
+    <Anchor>a99298468fd52828942f8dacf8d4c66ff</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_GET_LOG_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG_DEVICE__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9ef9f11af03a0912e6fe74f5f0db3ccf</Anchor>
+    <Anchor>a3e15e3c1f9e3628b6d849aa3e5458098</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_SECURITY_ACL_SCOPE_INIT</Name>
+      <Name>KINETIC_PROTO_GET_LOG__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a1fbee03b7ed45db70d8142aa45e5544a</Anchor>
+    <Anchor>a7b9c394a4b9e138abd816d6d419aec48</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_SECURITY_ACL_INIT</Name>
+      <Name>KINETIC_PROTO_SECURITY_ACL_SCOPE__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ad68fd6a4cde340372a7ab758b6a868e0</Anchor>
+    <Anchor>aa52ffd2b92b857541dfd7fb03759f794</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_SECURITY_INIT</Name>
+      <Name>KINETIC_PROTO_SECURITY_ACL__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ad92ee410731b639252db9352e75a7a3e</Anchor>
+    <Anchor>aa630e81b274e1fc661b7f7eec34300f6</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_PROTO_INIT</Name>
+      <Name>KINETIC_PROTO_SECURITY__INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>af5059bfd2eda584662ecb56caba8366d</Anchor>
+    <Anchor>aa8734d29de21353f8dcb995d8a9043fe</Anchor>
+    <DeclaredIn>kinetic_proto.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_PROTO__INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__proto_8h.html</Path>
+    <Anchor>a542ef79303abf24e37e3de8701c4adc4</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
@@ -1722,6 +2086,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticProto_GetLog_Device_Closure</Name>
+      <APILanguage>c</APILanguage>
+      <Type>tdef</Type>
+    </TokenIdentifier>
+    <Path>kinetic__proto_8h.html</Path>
+    <Anchor>a2c680bd85776345f9f96997acb1fafa6</Anchor>
+    <DeclaredIn>kinetic_proto.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticProto_GetLog_Closure</Name>
       <APILanguage>c</APILanguage>
       <Type>tdef</Type>
@@ -1772,562 +2146,582 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_command_init</Name>
+      <Name>KineticProto_command__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ad67706b010e4cd1ff94a9321bfb587c1</Anchor>
+    <Anchor>a33d9bc6620e867c10438be07bc83a94b</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_header_init</Name>
+      <Name>KineticProto_header__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a8175b2f96741b397533df6eec5fe3271</Anchor>
+    <Anchor>af6f7ce7dad8451f0b37b5c5d43cd29f2</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_body_init</Name>
+      <Name>KineticProto_body__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>abb627d71e73b93865460ff4370a3ea76</Anchor>
+    <Anchor>ae407b24ef3c128c0f5df5652de10a5af</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_status_init</Name>
+      <Name>KineticProto_status__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>af7f6c311343948030cff7d6dfedd0c2f</Anchor>
+    <Anchor>af67a33da55c684cc0f993e8c8411e6dc</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_key_value_init</Name>
+      <Name>KineticProto_key_value__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9aefc00a5d784c8316ce3df187146f88</Anchor>
+    <Anchor>a844bcbc56fa5db033b533b2436599225</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_range_init</Name>
+      <Name>KineticProto_range__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a147279b527d3b3afea70ac1b448b0166</Anchor>
+    <Anchor>ad617221b02ffb10bddde6df135b08a8c</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_setup_init</Name>
+      <Name>KineticProto_setup__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ab819880ba1e071b46266aa76500cbdf2</Anchor>
+    <Anchor>a86ca817c6f2d3cf490101c0fc0ad5a1d</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_operation_init</Name>
+      <Name>KineticProto_p2_poperation_operation__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a41ff0e98fc434735eff09155e95d6492</Anchor>
+    <Anchor>a946245ee318c22316b452073f6a1c0f4</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_peer_init</Name>
+      <Name>KineticProto_p2_poperation_peer__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ab39e6ffaf4954e56a137f64c3c36fd20</Anchor>
+    <Anchor>ade86fc8a562e62822817621684bdf600</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_init</Name>
+      <Name>KineticProto_p2_poperation__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a50eaf59c3474600f4d084b03d9cbab74</Anchor>
+    <Anchor>ad2e313f79e10889b5a0a0d4e0ed8e98f</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_utilization_init</Name>
+      <Name>KineticProto_get_log_utilization__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>abfc199a32a1764904b371b30edc38f52</Anchor>
+    <Anchor>ae8943048001fcb315c49bb19c72bd41f</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_temperature_init</Name>
+      <Name>KineticProto_get_log_temperature__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>aa70c7d2310801af0e8b32337b4d0aab4</Anchor>
+    <Anchor>a9c94bd97c946edc843fbd4afa0516ff9</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_capacity_init</Name>
+      <Name>KineticProto_get_log_capacity__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a49aa60a90bdcef5ac2b19feca95ba7f5</Anchor>
+    <Anchor>ae1d7e68e9a2b70caa8434675534db14c</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_configuration_interface_init</Name>
+      <Name>KineticProto_get_log_configuration_interface__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ac2164fef2d7af05600dfe500eea95f47</Anchor>
+    <Anchor>ab1b99a43ac37711971ad3ff8c2c8e595</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_configuration_init</Name>
+      <Name>KineticProto_get_log_configuration__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>aa49caf12350aa6008f203c175e18258d</Anchor>
+    <Anchor>ae886654b46b5aff804847b9a69d9e712</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_statistics_init</Name>
+      <Name>KineticProto_get_log_statistics__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>abf1b38db5cf80c6b792e2b804d90b854</Anchor>
+    <Anchor>ac58e50b7f284325cb5f51b81995ed754</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_limits_init</Name>
+      <Name>KineticProto_get_log_limits__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>abe7a77d079938ffd1b3bc86d2f9ef339</Anchor>
+    <Anchor>a8a82117545fa621bd5cb22fae3aae2c4</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_init</Name>
+      <Name>KineticProto_get_log_device__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>aeeda7c465c998bbc56b2fc12a90933c0</Anchor>
+    <Anchor>a23e56f79f944c633d5c80973c3c97dfe</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_scope_init</Name>
+      <Name>KineticProto_get_log__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a4fc0567b569df1b3fd3826f6d3166512</Anchor>
+    <Anchor>a905fe2e14813ed0caf2c332fcae018cb</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_init</Name>
+      <Name>KineticProto_security_acl_scope__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a8f363b043ae8aedfccbc12e415150ca3</Anchor>
+    <Anchor>ab229c0487c9ec3275122f1aad81fe766</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_init</Name>
+      <Name>KineticProto_security_acl__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ab9c03777671e912cad7a2d9f9e83481d</Anchor>
+    <Anchor>a246cb1b5493236ca5fbbce8ebb82f275</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_init</Name>
+      <Name>KineticProto_security__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a22266e0b2008357e1a61faff0f1056f8</Anchor>
+    <Anchor>ae923bbcc9ac0a5928c42454b919ce4d6</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_packed_size</Name>
+      <Name>KineticProto__init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a535c41fa53e969b823c11492172e88da</Anchor>
+    <Anchor>a271dc8ddebe0c16173c23a4b1af20630</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_pack</Name>
+      <Name>KineticProto__get_packed_size</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a3b0b987f271840aa17c7bec9046eb77f</Anchor>
+    <Anchor>a44e75fcc84248743e80444abfcda131e</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_pack_to_buffer</Name>
+      <Name>KineticProto__pack</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a04c944dbeeae270bd8303f0f0ccc12b1</Anchor>
+    <Anchor>a3d8d1e9a1eca89c51de9a3ed218c649b</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_unpack</Name>
+      <Name>KineticProto__pack_to_buffer</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a0623fe40025b387b445cff513988f8fe</Anchor>
+    <Anchor>ae88823d37dede8792c5215b45f398a42</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_free_unpacked</Name>
+      <Name>KineticProto__unpack</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9e2103604490393f727e9019e3e89340</Anchor>
+    <Anchor>ac74c443d4eb0ab34e845673f1fc70523</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_descriptor</Name>
+      <Name>KineticProto__free_unpacked</Name>
       <APILanguage>c</APILanguage>
-      <Type>data</Type>
+      <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a313371cd82050306bcc84d99f902f289</Anchor>
+    <Anchor>a97c0ba3aecef1b9e127deb523e9e1bdb</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_command_descriptor</Name>
+      <Name>KineticProto__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a79347b03e0d337f9324ef54285bba556</Anchor>
+    <Anchor>ac55a757b93b8c0dfb059337bef08482d</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_header_descriptor</Name>
+      <Name>KineticProto_command__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9f2665e6bda69642597794be9ec0e12d</Anchor>
+    <Anchor>afe895a62c806efd640da0e6cca0d79ed</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_body_descriptor</Name>
+      <Name>KineticProto_header__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a16844cef09ff85a4866a60caabf88374</Anchor>
+    <Anchor>a82e70aeba64502c544f618c647a58cf1</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_status_descriptor</Name>
+      <Name>KineticProto_body__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ac3077845745754ee8b52260740a37cd4</Anchor>
+    <Anchor>a8b29407bdeef69fef16d7b08dcd2bb55</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_status_status_code_descriptor</Name>
+      <Name>KineticProto_status__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a6cace1bbe1caf8461378607bc1c24043</Anchor>
+    <Anchor>ae0f83daa212207352ca6b3ae2692f82b</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_key_value_descriptor</Name>
+      <Name>KineticProto_status_status_code__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a212c18d847aadcc0825193b3ae4a81ed</Anchor>
+    <Anchor>a80bc240446514a14605f34d560768aec</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_range_descriptor</Name>
+      <Name>KineticProto_key_value__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ac3ea0c229769f0f2bf57bf86c04b11ad</Anchor>
+    <Anchor>ac429f978827cc06b85b97363f7d96321</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_setup_descriptor</Name>
+      <Name>KineticProto_range__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9d94cefee7b6fe251549aec5a32a91da</Anchor>
+    <Anchor>a8715de51845e817fab1f47e139830be7</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_descriptor</Name>
+      <Name>KineticProto_setup__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>aa3f17c4e857c4f896a1cf22e2dbd411e</Anchor>
+    <Anchor>aed8e242844e118bfe0062b4c046e3b10</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_operation_descriptor</Name>
+      <Name>KineticProto_p2_poperation__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>af826a4359bfe3fdaf8620c570a539267</Anchor>
+    <Anchor>a077bc303eb0eb7e9d536c10b9b5019ae</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_p2_poperation_peer_descriptor</Name>
+      <Name>KineticProto_p2_poperation_operation__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ab248b6f2bd6ab17e505c11f2e29be978</Anchor>
+    <Anchor>ae891e87dcff0502249c52f1cfbf7993d</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_descriptor</Name>
+      <Name>KineticProto_p2_poperation_peer__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a0894efa60e5d9d9609dadc5ede85536e</Anchor>
+    <Anchor>aaa60776beb83d1eebded2fcc3d27da49</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_utilization_descriptor</Name>
+      <Name>KineticProto_get_log__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>adf62e4ef860a85bdc399a24af9ea706c</Anchor>
+    <Anchor>aa0ff4a9809ed01fcc36ca08df0ef2809</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_temperature_descriptor</Name>
+      <Name>KineticProto_get_log_utilization__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>affb81ee78306b708a3d6497e47d61b3a</Anchor>
+    <Anchor>adc700291a5f8434facf7589336ff0963</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_capacity_descriptor</Name>
+      <Name>KineticProto_get_log_temperature__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ac16c920a5f195496f6de4921e61cc421</Anchor>
+    <Anchor>a2573998e173eccd1fcc489f46e02f82e</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_configuration_descriptor</Name>
+      <Name>KineticProto_get_log_capacity__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>aa4d886a4221749513d6281b7d9a99d11</Anchor>
+    <Anchor>a56eafc33342b86e0459fc44963fad76b</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_configuration_interface_descriptor</Name>
+      <Name>KineticProto_get_log_configuration__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a554c6d435e9af014691d36fabb409b5e</Anchor>
+    <Anchor>a4687d0ca653fe9a3c27f7d979ab7d76d</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_statistics_descriptor</Name>
+      <Name>KineticProto_get_log_configuration_interface__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9b5a366b6ae79393606dd589be80c8ea</Anchor>
+    <Anchor>a5704b4ee08322a6b65d98953837f525f</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_limits_descriptor</Name>
+      <Name>KineticProto_get_log_statistics__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a9f2f69b7aecea183d2f5089fa70cd206</Anchor>
+    <Anchor>ae68704616b9b94d56fc6a8b131aaafbb</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_get_log_type_descriptor</Name>
+      <Name>KineticProto_get_log_limits__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>af895386c0522dfc8c991e451ee3527cf</Anchor>
+    <Anchor>a47ab3a144c6e91bf4e16f0a78ec24bf9</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_descriptor</Name>
+      <Name>KineticProto_get_log_device__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>acd8fb64001b1b2633ebab5cac0be4d46</Anchor>
+    <Anchor>a6535fbce21da5af1f65eeac45015ed8a</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_descriptor</Name>
+      <Name>KineticProto_get_log_type__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a1b9d753eac446e2e21453c245d38c359</Anchor>
+    <Anchor>a540b54a4249efc3ca97b7c8c9b5787bc</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_scope_descriptor</Name>
+      <Name>KineticProto_security__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ad561dc4ed8c543e5625d384d8f6874ce</Anchor>
+    <Anchor>affaf1e6445b3d70d3ad852832155990d</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_hmacalgorithm_descriptor</Name>
+      <Name>KineticProto_security_acl__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a7b38ce3f987b32f50fa71c935dce32d4</Anchor>
+    <Anchor>acfe268ef0c6234bb5e7b43857365a47c</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_security_acl_permission_descriptor</Name>
+      <Name>KineticProto_security_acl_scope__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a526d5482eed4848609e3f90cef2dd4fa</Anchor>
+    <Anchor>af9d031c7b50c7634e0a54bca1d325bf1</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_synchronization_descriptor</Name>
+      <Name>KineticProto_security_acl_hmacalgorithm__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>a76790d6177e5bed13efbfc32c4f17e92</Anchor>
+    <Anchor>a9b920058a293aabf7354ef9a30887d37</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_algorithm_descriptor</Name>
+      <Name>KineticProto_security_acl_permission__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>ad90e392980ec5c76010c8a9f066bfd19</Anchor>
+    <Anchor>a3be2f8fada4fea2a6097ca27efe4d58c</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticProto_message_type_descriptor</Name>
+      <Name>KineticProto_synchronization__descriptor</Name>
       <APILanguage>c</APILanguage>
       <Type>data</Type>
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
-    <Anchor>adeb076a05cae7e63c37289f89e6c78eb</Anchor>
+    <Anchor>a267bf11f2efdb572cdcbc19218f9e7fc</Anchor>
+    <DeclaredIn>kinetic_proto.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticProto_algorithm__descriptor</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>kinetic__proto_8h.html</Path>
+    <Anchor>a8310405c021492891fc84707eb37d128</Anchor>
+    <DeclaredIn>kinetic_proto.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticProto_message_type__descriptor</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>kinetic__proto_8h.html</Path>
+    <Anchor>a6ba1f751247a9eb007ee82f9555eb63d</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
@@ -2598,6 +2992,16 @@
     </TokenIdentifier>
     <Path>kinetic__proto_8h.html</Path>
     <Anchor>ac77905b416e536036928d001298600d6a5057e9e7b1c45cfab739ec5268fd98e3</Anchor>
+    <DeclaredIn>kinetic_proto.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_PROTO_GET_LOG_TYPE_DEVICE</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__proto_8h.html</Path>
+    <Anchor>ac77905b416e536036928d001298600d6ab770bda3b394e9fc4c8382887c8a0537</Anchor>
     <DeclaredIn>kinetic_proto.h</DeclaredIn>
   </Token>
   <Token>
@@ -3082,12 +3486,22 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>_BSD_SOURCE</Name>
+      <APILanguage>c</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__socket_8c.html</Path>
+    <Anchor>ad3d8a3bd0c0b677acef144f2c2ef6d73</Anchor>
+    <DeclaredIn>kinetic_socket.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticSocket_Connect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8c.html</Path>
-    <Anchor>a153be47ff8a2e21b5e55c15eba510dfe</Anchor>
+    <Anchor>a8b16e4d74b50c80aa8836671471f7970</Anchor>
     <DeclaredIn>kinetic_socket.c</DeclaredIn>
   </Token>
   <Token>
@@ -3107,7 +3521,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8c.html</Path>
-    <Anchor>aded36525a210d1e0eae8cdb820997e62</Anchor>
+    <Anchor>a1e57c03634e1ce7391aba8a82ad6040e</Anchor>
     <DeclaredIn>kinetic_socket.c</DeclaredIn>
   </Token>
   <Token>
@@ -3117,7 +3531,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8c.html</Path>
-    <Anchor>aac07ac642119c019651884f4e877c5a5</Anchor>
+    <Anchor>a66ab9acaa76c5f9763fbf712ec5a82e6</Anchor>
     <DeclaredIn>kinetic_socket.c</DeclaredIn>
   </Token>
   <Token>
@@ -3127,7 +3541,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8c.html</Path>
-    <Anchor>a044cc1d21dfda04611244b33521dc082</Anchor>
+    <Anchor>a1a8ae7ce63273b6d2cea899e0e5a0043</Anchor>
     <DeclaredIn>kinetic_socket.c</DeclaredIn>
   </Token>
   <Token>
@@ -3137,7 +3551,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8c.html</Path>
-    <Anchor>a1ddcb45abdc2da81160cabe1b9827c1f</Anchor>
+    <Anchor>a3851320ed4ef5e518ca1ff9fefccffcb</Anchor>
     <DeclaredIn>kinetic_socket.c</DeclaredIn>
   </Token>
   <Token>
@@ -3147,7 +3561,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8h.html</Path>
-    <Anchor>a153be47ff8a2e21b5e55c15eba510dfe</Anchor>
+    <Anchor>a8b16e4d74b50c80aa8836671471f7970</Anchor>
     <DeclaredIn>kinetic_socket.h</DeclaredIn>
   </Token>
   <Token>
@@ -3167,7 +3581,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8h.html</Path>
-    <Anchor>aded36525a210d1e0eae8cdb820997e62</Anchor>
+    <Anchor>a1e57c03634e1ce7391aba8a82ad6040e</Anchor>
     <DeclaredIn>kinetic_socket.h</DeclaredIn>
   </Token>
   <Token>
@@ -3177,7 +3591,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8h.html</Path>
-    <Anchor>aac07ac642119c019651884f4e877c5a5</Anchor>
+    <Anchor>a66ab9acaa76c5f9763fbf712ec5a82e6</Anchor>
     <DeclaredIn>kinetic_socket.h</DeclaredIn>
   </Token>
   <Token>
@@ -3187,7 +3601,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8h.html</Path>
-    <Anchor>a044cc1d21dfda04611244b33521dc082</Anchor>
+    <Anchor>a1a8ae7ce63273b6d2cea899e0e5a0043</Anchor>
     <DeclaredIn>kinetic_socket.h</DeclaredIn>
   </Token>
   <Token>
@@ -3197,7 +3611,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8h.html</Path>
-    <Anchor>a1ddcb45abdc2da81160cabe1b9827c1f</Anchor>
+    <Anchor>a3851320ed4ef5e518ca1ff9fefccffcb</Anchor>
     <DeclaredIn>kinetic_socket.h</DeclaredIn>
   </Token>
   <Token>
@@ -3208,6 +3622,16 @@
     </TokenIdentifier>
     <Path>kinetic__types_8h.html</Path>
     <Anchor>add9d47513f5472c08a593999978f8018</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_TLS_PORT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a43b41ecab84ae37ab03051451c0aedc9</Anchor>
     <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -3253,7 +3677,7 @@
   <Token>
     <TokenIdentifier>
       <Name>_BSD_SOURCE</Name>
-      <APILanguage>unknown</APILanguage>
+      <APILanguage>c</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__types_8h.html</Path>
@@ -3272,12 +3696,112 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>BYTE_ARRAY_NONE</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a284b2fa610ec1be5d86406563d8107ce</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BYTE_ARRAY_INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a1a80cef8d1ba96d7a8e0bdcd6ca37e58</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BYTE_ARRAY_INIT_WITH_LEN</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>aecf1d52c0c83787245437de8e8e98454</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BYTE_ARRAY_CREATE</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>ab9683cd4b754c409b4d3c9e2b52e1ad2</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BYTE_ARRAY_CREATE_WITH_DATA</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>ac0005d10e0401a14ea734cbab88cf258</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BYTE_ARRAY_CREATE_WITH_BUFFER</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>ae8416494f157df3824d335b169b4705e</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BYTE_ARRAY_INIT_FROM_CSTRING</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a670876b8b94ff794501137747307f0df</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BYTE_ARRAY_FILL_WITH_DUMMY_DATA</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a607c451dbf6707500f6fe03a55935394</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BYTE_BUFFER_INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a9695960e61fe691ab4b6536088064db4</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KINETIC_CONNECTION_INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__types_8h.html</Path>
-    <Anchor>a86d1cc89037e1edabea474dbeff715ef</Anchor>
+    <Anchor>a7e1eaf5908eceee5e98f0f399fc43e8d</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_MESSAGE_HEADER_INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a8b294889cc0f006c00b54ec528933988</Anchor>
     <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -3288,16 +3812,6 @@
     </TokenIdentifier>
     <Path>kinetic__types_8h.html</Path>
     <Anchor>a89cdffed422dfae0e8a4d3f25dce276f</Anchor>
-    <DeclaredIn>kinetic_types.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KINETIC_EXCHANGE_INIT</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__types_8h.html</Path>
-    <Anchor>aba436d2ad875cbe117ac9461ee4a0770</Anchor>
     <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -3322,6 +3836,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>PDU_PROTO_MAX_UNPACKED_LEN</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a26291b5b35c086465b3ce6a1cc3bc734</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>PDU_VALUE_MAX_LEN</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
@@ -3338,6 +3862,56 @@
     </TokenIdentifier>
     <Path>kinetic__types_8h.html</Path>
     <Anchor>a7324ffb3ec713d1ec9f1b0b24d8a3977</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_PDU_HEADER_INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>aadb3b50142303f07107c0dccd980d2cd</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_PDU_INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a6dcbf11d2ca311f7edff940de2bab28b</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_PDU_INIT_WITH_MESSAGE</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a75f768b35723de9834d28d6c229503d4</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_OPERATION_INIT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>aea7521ddc30f84e971ec31ede1ef527a</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteArray</Name>
+      <APILanguage>c</APILanguage>
+      <Type>tdef</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a22e72ec9fae2d1ed7d950fb49da5777f</Anchor>
     <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -3377,8 +3951,28 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>noop_8c.html</Path>
-    <Anchor>aa0917ddd64a002c8a0866681f0c9e6d5</Anchor>
+    <Anchor>a54134f0309024f11ce0cf25c26a22934</Anchor>
     <Abstract>Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ...</Abstract>
+    <DeclaredIn>noop.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Request</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>noop_8c.html</Path>
+    <Anchor>a72c86c9657e34f663c24b7f6d836e590</Anchor>
+    <DeclaredIn>noop.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>noop_8c.html</Path>
+    <Anchor>a8826d3341bd8bfbeb86db92d69b2e5c1</Anchor>
     <DeclaredIn>noop.c</DeclaredIn>
   </Token>
   <Token>
@@ -3388,9 +3982,51 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>noop_8h.html</Path>
-    <Anchor>aa0917ddd64a002c8a0866681f0c9e6d5</Anchor>
+    <Anchor>a54134f0309024f11ce0cf25c26a22934</Anchor>
     <Abstract>Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ...</Abstract>
     <DeclaredIn>noop.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Put</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>put_8c.html</Path>
+    <Anchor>ad2fb023662a16a8dc70fda8eb4f38d3e</Anchor>
+    <Abstract>Connects to the specified Kinetic host/port and executes a Put to store an object on the Device...</Abstract>
+    <DeclaredIn>put.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>request</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>put_8c.html</Path>
+    <Anchor>aa7a5f7da6c35f80db2b9bd7a681034e3</Anchor>
+    <DeclaredIn>put.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>put_8c.html</Path>
+    <Anchor>a7b09f3348dc407c7c3313f6d4454022e</Anchor>
+    <DeclaredIn>put.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Put</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>put_8h.html</Path>
+    <Anchor>ad2fb023662a16a8dc70fda8eb4f38d3e</Anchor>
+    <Abstract>Connects to the specified Kinetic host/port and executes a Put to store an object on the Device...</Abstract>
+    <DeclaredIn>put.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3444,6 +4080,136 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>ByteBuffer</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>ByteBuffer</Scope>
+    </TokenIdentifier>
+    <Path>struct_byte_buffer.html</Path>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>buffer</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>ByteBuffer</Scope>
+    </TokenIdentifier>
+    <Path>struct_byte_buffer.html</Path>
+    <Anchor>a30bf93b8c9fd109c92afc66b1cb9886a</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>maxLen</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>ByteBuffer</Scope>
+    </TokenIdentifier>
+    <Path>struct_byte_buffer.html</Path>
+    <Anchor>a4fee9e08b1d179dfce37f3534217d7f7</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Kinetic_KeyValue</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>key</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>a5b11e6d46c0477a56e17f806b61ee1fd</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>newVersion</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>a760ab187e961072772c5b3424b4920e4</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>dbVersion</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>a042db4e4913fdd9537a757b68eed3ab8</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>tag</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>a70d473aef8e8f84d22b95ed38d7ff356</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>force</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>a4c9b9448d8961723c21f260d238e678b</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>algorithm</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>a360a666fdb64def39b8ae3ef4331b718</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>metadataOnly</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>ae56159cc0aa9d64ad7d7e77cfc5602af</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>synchronization</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>af27d1bb8f1f65105a6a40817752955a3</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>value</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>Kinetic_KeyValue</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic___key_value.html</Path>
+    <Anchor>a5942f952e21955ada96e3a81844698a5</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticConnection</Name>
       <APILanguage>c</APILanguage>
       <Type>cl</Type>
@@ -3464,13 +4230,13 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>blocking</Name>
+      <Name>nonBlocking</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticConnection</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_connection.html</Path>
-    <Anchor>a228abfe2450ff0e613d7a8d5e3ba38fc</Anchor>
+    <Anchor>aac893b5dcd2609178b4b7312ed499db2</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3494,6 +4260,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>connectionID</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticConnection</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_connection.html</Path>
+    <Anchor>a559c2a2ceffdd95af1462d7a7e0ebc3c</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>host</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
@@ -3504,103 +4280,53 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticExchange</Name>
-      <APILanguage>c</APILanguage>
-      <Type>cl</Type>
-      <Scope>KineticExchange</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <DeclaredIn>kinetic_types.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>has_clusterVersion</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticExchange</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>adc316ea8e8b894ff842cbc10bcfe915e</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>clusterVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticExchange</Scope>
+      <Scope>KineticConnection</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>a5cf7e39edf70d73512c0a769847dcf10</Anchor>
+    <Path>struct_kinetic_connection.html</Path>
+    <Anchor>a2495f6d6a10ec21582e1bde441a771d2</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
       <Name>identity</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticExchange</Scope>
+      <Scope>KineticConnection</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>a855522d7c0f9662c27c7df4381286b3c</Anchor>
+    <Path>struct_kinetic_connection.html</Path>
+    <Anchor>a880419508209b15e4d8869ff9396b7c4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_key</Name>
+      <Name>keyData</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticExchange</Scope>
+      <Scope>KineticConnection</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>a8a5f4178d5c1e939808c67d9f3fa282a</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>keyLength</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticExchange</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>a4ffdb052e01304f936d94ecd38b3f4f1</Anchor>
+    <Path>struct_kinetic_connection.html</Path>
+    <Anchor>adffd61f32db16bfd6f6dfccde45dbfe4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
       <Name>key</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticExchange</Scope>
+      <Scope>KineticConnection</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>aa26f752db27c12bf227b2da13beac589</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>connectionID</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticExchange</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>ac04664033ff7f79717d60fa9b5d11fa5</Anchor>
+    <Path>struct_kinetic_connection.html</Path>
+    <Anchor>ab20ffb18d9ac8d257ccf7bb0a6e13f80</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
       <Name>sequence</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticExchange</Scope>
+      <Scope>KineticConnection</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>af6fe080c0557282b43680baf9bd1c600</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>connection</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticExchange</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_exchange.html</Path>
-    <Anchor>aa419c48291fb6542e616e13c8a7d4701</Anchor>
+    <Path>struct_kinetic_connection.html</Path>
+    <Anchor>a9c112933e5183b7b9fde38b012c77d0f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3624,23 +4350,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>valueLength</Name>
+      <Name>len</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticHMAC</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_h_m_a_c.html</Path>
-    <Anchor>ac80f549084bc5a7c204795f30badc7a3</Anchor>
+    <Anchor>a411426228f4c23527f5a48158a46500b</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>value</Name>
+      <Name>data</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticHMAC</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_h_m_a_c.html</Path>
-    <Anchor>acfe6f39a380b645cdc582c473797cdea</Anchor>
+    <Anchor>a0b92122284d74da8ff67fd54da30c57f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3724,6 +4450,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>keyValue</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticMessage</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_message.html</Path>
+    <Anchor>a488a17004a3c26e41a042643bd20a9c0</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>hmacData</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
@@ -3740,17 +4476,17 @@
       <Scope>KineticOperation</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_operation.html</Path>
-    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>exchange</Name>
+      <Name>connection</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticOperation</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_operation.html</Path>
-    <Anchor>ae1cce2538150c9687cae5b0e9325ae9b</Anchor>
+    <Anchor>a9501bcc7cf72e4886300e5eeedb79a0c</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3794,23 +4530,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>rawHeader</Name>
+      <Name>headerNBO</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticPDU</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
-    <Anchor>a60d774820ba7f01554f4f0863c447ac8</Anchor>
+    <Anchor>aef50cc92053fc481336a68363584ef4d</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>message</Name>
+      <Name>protoData</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticPDU</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
-    <Anchor>ab62c4ab6fd196383931e87ff9de9ae85</Anchor>
+    <Anchor>a87c1af451d64df5cdafbe1bb7de9925f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3824,23 +4560,33 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>protobufLength</Name>
+      <Name>protobufRaw</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticPDU</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
-    <Anchor>a0cab72fb4d7f6536cc54cf74d6bcdebe</Anchor>
+    <Anchor>ae1be03d2c09460a701920868d5262fc2</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>protobufScratch</Name>
+      <Name>metadata</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticPDU</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
-    <Anchor>a7677322bce753465451ae3406e0d6897</Anchor>
+    <Anchor>a64b0ee9fe3e141f639707f375e2731a6</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>valueBuffer</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticPDU</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p_d_u.html</Path>
+    <Anchor>aa7e9e0c4303ea554660f93d5dc2173d4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3850,17 +4596,7 @@
       <Scope>KineticPDU</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
-    <Anchor>ab84f745a1b9aad99b4fc42c02a25f1f3</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>valueLength</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticPDU</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_p_d_u.html</Path>
-    <Anchor>aa5a8d53cd8b1202b600ebfac26800100</Anchor>
+    <Anchor>a6fe4d60770998d856732f78b54e0444f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3874,13 +4610,13 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>exchange</Name>
+      <Name>connection</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>KineticPDU</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_p_d_u.html</Path>
-    <Anchor>a2e33e714621fd2316d394048f4480f86</Anchor>
+    <Anchor>a56c111da6a2d877ef9ca0f669c5944d8</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3904,13 +4640,13 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>keyvalue</Name>
+      <Name>keyValue</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Body</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___body.html</Path>
-    <Anchor>abbc6921e4aeeb5760da3ac6e6646fe70</Anchor>
+    <Anchor>ad8892e57fe0e527a2bcb6fdf05cf17e2</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -3934,23 +4670,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>p2poperation</Name>
+      <Name>p2pOperation</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Body</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___body.html</Path>
-    <Anchor>a16134465822938ee6599d048d0feccd7</Anchor>
+    <Anchor>a20c8f35bbb845e97ca91b210475343a1</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>getlog</Name>
+      <Name>getLog</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Body</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___body.html</Path>
-    <Anchor>af2c62f35e75f045b446c7e351ef9c2b9</Anchor>
+    <Anchor>a8620023240262a8f6d4ebc64af6d446d</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -4164,6 +4900,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>device</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>_KineticProto_GetLog</Scope>
+    </TokenIdentifier>
+    <Path>struct___kinetic_proto___get_log.html</Path>
+    <Anchor>afe0732ef035df3e0fac33cbda1f42ee9</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>_KineticProto_GetLog_Capacity</Name>
       <APILanguage>c</APILanguage>
       <Type>cl</Type>
@@ -4184,43 +4930,43 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_nominalcapacityinbytes</Name>
+      <Name>has_nominalCapacityInBytes</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Capacity</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___capacity.html</Path>
-    <Anchor>ad1e8358e2332b3854332b5aca3b7f8af</Anchor>
+    <Anchor>afbc427e3c2c47449a77776906158859f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>nominalcapacityinbytes</Name>
+      <Name>nominalCapacityInBytes</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Capacity</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___capacity.html</Path>
-    <Anchor>ad7807df0b683ec6393b8362c9034f177</Anchor>
+    <Anchor>a39a1ead1a3cf99c4ad06edbf19939dff</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_portionfull</Name>
+      <Name>has_portionFull</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Capacity</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___capacity.html</Path>
-    <Anchor>a12a663e992771105cc3c8539352ed818</Anchor>
+    <Anchor>a594e5be115615a7483f4c5bc8d75d56e</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>portionfull</Name>
+      <Name>portionFull</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Capacity</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___capacity.html</Path>
-    <Anchor>ac638151469c524cd3ada9668e90f06ed</Anchor>
+    <Anchor>aef3b59f26345e93472fecabc4a1d7e98</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -4264,43 +5010,43 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_serialnumber</Name>
+      <Name>has_serialNumber</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>a168827737bf01d31f22f80a8f20c5b6c</Anchor>
+    <Anchor>a0830f3c184a52497c47e09343328ceb0</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>serialnumber</Name>
+      <Name>serialNumber</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>a7f025c1dbbf4b46ebe13cf16664496ae</Anchor>
+    <Anchor>a86c46a65205f3d30a4835b071208fa11</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_worldwidename</Name>
+      <Name>has_worldWideName</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>a345c15be057bf4f596f21c47074e2a9e</Anchor>
+    <Anchor>a3a37203145ed4ba457f5faabae556733</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>worldwidename</Name>
+      <Name>worldWideName</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>a5c59d7c27e441454ea2eb1a2b24db33d</Anchor>
+    <Anchor>a8c5a63c95fa125702fb2a220b46f91bf</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -4314,53 +5060,53 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>compilationdate</Name>
+      <Name>compilationDate</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>a662b5a81f65bf77e4a6565a7dea05529</Anchor>
+    <Anchor>ae80b30d10d0e43849624f6f66f596ad2</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>sourcehash</Name>
+      <Name>sourceHash</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>a19889d9c89ea1b2b5a17c0708c6e866c</Anchor>
+    <Anchor>a2418edee0fd1eb735e6eb5b09de10b9f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>protocolversion</Name>
+      <Name>protocolVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>a9e122544f254a4b493c80f6c03224568</Anchor>
+    <Anchor>ab5584fc2275a9004e0c5e98421cb551f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>protocolcompilationdate</Name>
+      <Name>protocolCompilationDate</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>af159345c1f2f546c6ea2e5c0fdbc8475</Anchor>
+    <Anchor>a42f33b1f1499dae3e15d344436442f30</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>protocolsourcehash</Name>
+      <Name>protocolSourceHash</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>a097fb86a5e7ca424d46860ac10fa1a0e</Anchor>
+    <Anchor>a7bb5ea3a2c694240ce44524cdf3342c4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -4404,23 +5150,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_tlsport</Name>
+      <Name>has_tlsPort</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>ab1b113fc47f9c337ab51cf503934baaa</Anchor>
+    <Anchor>a4928b174b0eae6f4809b2ce1fad02e4f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>tlsport</Name>
+      <Name>tlsPort</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration.html</Path>
-    <Anchor>aca1fddaeeea4b40be9ebd8a148a97ced</Anchor>
+    <Anchor>ad4464772550386f408e2487229ba9f95</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -4454,63 +5200,103 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_mac</Name>
+      <Name>has_MAC</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration_Interface</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration___interface.html</Path>
-    <Anchor>a3abd5a4a6515397a5dad3c5b1e1eeaa2</Anchor>
+    <Anchor>a8727bf40f7970d98e9870446af6d3a5c</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>mac</Name>
+      <Name>MAC</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration_Interface</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration___interface.html</Path>
-    <Anchor>a693f9ea817e46d902aca5e8940b77fe4</Anchor>
+    <Anchor>a25a054d026a1b30f63bb7b339085aea5</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_ipv4address</Name>
+      <Name>has_ipv4Address</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration_Interface</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration___interface.html</Path>
-    <Anchor>af63dd649d0f1801e99511df1e719f2b1</Anchor>
+    <Anchor>a9fae9e85512ad6a8bb2f154f696d6c64</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>ipv4address</Name>
+      <Name>ipv4Address</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration_Interface</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration___interface.html</Path>
-    <Anchor>a12065f1b6236d16b518cc37eafb59f6f</Anchor>
+    <Anchor>a245bfa8c750a8c30b7d494cf4c0af555</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_ipv6address</Name>
+      <Name>has_ipv6Address</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration_Interface</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration___interface.html</Path>
-    <Anchor>ac9ca5133e5124939045714aa7573dfc0</Anchor>
+    <Anchor>aa88dc2d6b662a4f3fe38343f795fe63a</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>ipv6address</Name>
+      <Name>ipv6Address</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Configuration_Interface</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___configuration___interface.html</Path>
-    <Anchor>a848af61d2c0cb9e5f735d15f44601972</Anchor>
+    <Anchor>a1cb24815cd70df2ee88f087b8a846264</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>_KineticProto_GetLog_Device</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>_KineticProto_GetLog_Device</Scope>
+    </TokenIdentifier>
+    <Path>struct___kinetic_proto___get_log___device.html</Path>
+    <DeclaredIn>kinetic_proto.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>base</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>_KineticProto_GetLog_Device</Scope>
+    </TokenIdentifier>
+    <Path>struct___kinetic_proto___get_log___device.html</Path>
+    <Anchor>a128de83c4ce9ea27f01f9858f141db87</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>has_name</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>_KineticProto_GetLog_Device</Scope>
+    </TokenIdentifier>
+    <Path>struct___kinetic_proto___get_log___device.html</Path>
+    <Anchor>ac2fa73d6a871f37578a1900340dc595a</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>name</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>_KineticProto_GetLog_Device</Scope>
+    </TokenIdentifier>
+    <Path>struct___kinetic_proto___get_log___device.html</Path>
+    <Anchor>ab0270c26f24cbf7bd8f4bb55ee41854a</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -4534,183 +5320,203 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxkeysize</Name>
+      <Name>has_maxKeySize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>aff5f073987a9d9f826231e29471fdb52</Anchor>
+    <Anchor>a4a5e9a041dbf1a1efa45a20e42032b75</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxkeysize</Name>
+      <Name>maxKeySize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>ab14786f3f676bc7858809d4a4d8494f2</Anchor>
+    <Anchor>ac980404bbc33ac93db73e1f6ebb8626d</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxvaluesize</Name>
+      <Name>has_maxValueSize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a25edbb1237d8bdf75125286783be47e4</Anchor>
+    <Anchor>aad13e001893d44a0f0f1ec3ef998859b</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxvaluesize</Name>
+      <Name>maxValueSize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>ace25ef61bd44e63e4613cc1444deece7</Anchor>
+    <Anchor>ac393e628d3566a90d3758c83e8a689f0</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxversionsize</Name>
+      <Name>has_maxVersionSize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a74e188c9a6f43046ffb470bc8ae5c693</Anchor>
+    <Anchor>aa74f626a25af9bc0cb4610bef4b4305c</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxversionsize</Name>
+      <Name>maxVersionSize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a5b7ec932d1ada094a7f5676f61a81aa9</Anchor>
+    <Anchor>a7a4ed12f35e7b724be16e92c2423041e</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxtagsize</Name>
+      <Name>has_maxTagSize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a2c644e8c05bf26299b0821f66dae52a2</Anchor>
+    <Anchor>a8638f4071bfa416f6bd37e0a2275e52c</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxtagsize</Name>
+      <Name>maxTagSize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>ac1de96f39017f432aa2a0b3ca3b50b29</Anchor>
+    <Anchor>aab5f63b159d67c5234881e0b48935bf7</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxconnections</Name>
+      <Name>has_maxConnections</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>aa9e45bc318769beb8c3f5d1f8b8ed56b</Anchor>
+    <Anchor>ae08be2a22dbf38dd5e772b77cb9b3142</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxconnections</Name>
+      <Name>maxConnections</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>adf0c16cedb335ab8f5d35cec78e6032e</Anchor>
+    <Anchor>a19e0595fccdd833e51132fb5eecb23ce</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxoutstandingreadrequests</Name>
+      <Name>has_maxOutstandingReadRequests</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>af053fb5824db94077cd268b60fad60f6</Anchor>
+    <Anchor>a184a3fb88a9802f2387fa9570e65b34d</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxoutstandingreadrequests</Name>
+      <Name>maxOutstandingReadRequests</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a3e84934c7c447e22f6ad269099050418</Anchor>
+    <Anchor>aa0d92d7faad7b72a966a86645e848c5c</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxoutstandingwriterequests</Name>
+      <Name>has_maxOutstandingWriteRequests</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a673ba67def4ddbee7bc02a99626c5967</Anchor>
+    <Anchor>a632d318d9a03114bc7a1fd6257ccbeb9</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxoutstandingwriterequests</Name>
+      <Name>maxOutstandingWriteRequests</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a8eb313304df2ee32a54b40376010f29d</Anchor>
+    <Anchor>ad1430a73942c44297e7aa3daa645025d</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxmessagesize</Name>
+      <Name>has_maxMessageSize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a88e1dd022d9d05b171ea98fe961413a2</Anchor>
+    <Anchor>a095fdb3791249289381893d459ad7fb7</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxmessagesize</Name>
+      <Name>maxMessageSize</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>acfe4970330f1b3b7cbef8452f6f9f632</Anchor>
+    <Anchor>a3476e75f7d31ff443add54dbb0e83b57</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxkeyrangecount</Name>
+      <Name>has_maxKeyRangeCount</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>a945fe99e1b4c76f2969d355076d5025e</Anchor>
+    <Anchor>a9c2cc59ee1de90f0babcc5641d17e882</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxkeyrangecount</Name>
+      <Name>maxKeyRangeCount</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Limits</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___limits.html</Path>
-    <Anchor>af43e170dcbc2453ffd8cf877cb358d11</Anchor>
+    <Anchor>aba019b96b039a9c972575252b5347075</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>has_maxIdentityCount</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>_KineticProto_GetLog_Limits</Scope>
+    </TokenIdentifier>
+    <Path>struct___kinetic_proto___get_log___limits.html</Path>
+    <Anchor>a948445db28db193583ec61a8dd4168e0</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>maxIdentityCount</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>_KineticProto_GetLog_Limits</Scope>
+    </TokenIdentifier>
+    <Path>struct___kinetic_proto___get_log___limits.html</Path>
+    <Anchor>acc44e6786fb2c5f7bef4b11778f56c9e</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -4734,23 +5540,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_messagetype</Name>
+      <Name>has_messageType</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Statistics</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___statistics.html</Path>
-    <Anchor>ab5a27418d4fddb48f618723b7266d727</Anchor>
+    <Anchor>af4e9b5220dab0519a736a2ef6227402c</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>messagetype</Name>
+      <Name>messageType</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_GetLog_Statistics</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___get_log___statistics.html</Path>
-    <Anchor>ad8493f7ee83cb03c885e469e4f6956c2</Anchor>
+    <Anchor>a260ae5a77981033ddc0b8cf57fe9a7a7</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -4974,23 +5780,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_clusterversion</Name>
+      <Name>has_clusterVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>a3a860d5b4eb8ccf479125e0851d608e2</Anchor>
+    <Anchor>aaea802befdcbcc69dd9d43e66042fc77</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>clusterversion</Name>
+      <Name>clusterVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>ae9eb0aff852520d663aa66797eddbb56</Anchor>
+    <Anchor>a22a1b62129584054bd6ee7a5858107e0</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5014,23 +5820,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_connectionid</Name>
+      <Name>has_connectionID</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>a774496bd3804f1e05949c106fc4630d8</Anchor>
+    <Anchor>a02936d955d687260b041dac56f3dada1</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>connectionid</Name>
+      <Name>connectionID</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>a9b5cca40f8f2ff4f3ffb3e48d4eecf20</Anchor>
+    <Anchor>a6be7df052e4fa0f45ad22b49e6d28332</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5054,43 +5860,43 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_acksequence</Name>
+      <Name>has_ackSequence</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>a14dd48ae51d4aec460f1a1824aa5eb5e</Anchor>
+    <Anchor>ae2ad81e5c8736b59660f896fa46e74a9</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>acksequence</Name>
+      <Name>ackSequence</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>a25626d7f0f78b628250a184bda1b9f1e</Anchor>
+    <Anchor>a14df41cd2db3d27ace175aa44ef44740</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_messagetype</Name>
+      <Name>has_messageType</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>a587d9e388c0e2baddd29097ec33d28e5</Anchor>
+    <Anchor>a2acd7a49a623e6915a359d4f4a376395</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>messagetype</Name>
+      <Name>messageType</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>ad4911faf858731be2e684c2358f8fca4</Anchor>
+    <Anchor>a4ef95007d60a9ba44ea1bd75f9678706</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5114,43 +5920,43 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_earlyexit</Name>
+      <Name>has_earlyExit</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>afd82cd05c58257c3d65d77cd6161d0d4</Anchor>
+    <Anchor>ae19a3e55e05f66b160396b04c48efdb4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>earlyexit</Name>
+      <Name>earlyExit</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>af4aeb9479498d9fa0d55b73b42441434</Anchor>
+    <Anchor>aa1dffb0a476a183a962db4a9c9498008</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_backgroundscan</Name>
+      <Name>has_backgroundScan</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>ac85ad43e5ccba2228da83b2538e55aad</Anchor>
+    <Anchor>a613090bca8af4b2e63b6905265b78f8b</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>backgroundscan</Name>
+      <Name>backgroundScan</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Header</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___header.html</Path>
-    <Anchor>af0c234ac1907f4c45efe1cdfbc955e5f</Anchor>
+    <Anchor>a358de099d7efb939dbcd0d1dbbf01cdf</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5174,23 +5980,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_newversion</Name>
+      <Name>has_newVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_KeyValue</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___key_value.html</Path>
-    <Anchor>abab819b70930bbf38aae67fe68078e5c</Anchor>
+    <Anchor>a7c648a2280d5af0c245340d103cd4839</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>newversion</Name>
+      <Name>newVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_KeyValue</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___key_value.html</Path>
-    <Anchor>a548db39bd6f8a8b2f1f1d709cefa61ad</Anchor>
+    <Anchor>a15813b2d159ba0e4e47f87fdb0968e90</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5234,23 +6040,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_dbversion</Name>
+      <Name>has_dbVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_KeyValue</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___key_value.html</Path>
-    <Anchor>a3532b299962cb707def081a3bfc6bde9</Anchor>
+    <Anchor>abe8cadda54f14f3f9a293f8667ec6c65</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>dbversion</Name>
+      <Name>dbVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_KeyValue</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___key_value.html</Path>
-    <Anchor>a37b6ba29ee1e5519f708a07d3ec957ee</Anchor>
+    <Anchor>adb2c184dd924465d56f35842273fdbf4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5294,23 +6100,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_metadataonly</Name>
+      <Name>has_metadataOnly</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_KeyValue</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___key_value.html</Path>
-    <Anchor>a72a6383d1477a8751211e9ea2a3b4022</Anchor>
+    <Anchor>a6358ddb256a3130a559cca3f07d40fb0</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>metadataonly</Name>
+      <Name>metadataOnly</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_KeyValue</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___key_value.html</Path>
-    <Anchor>a37d35d318333c905548b0d7219d86d67</Anchor>
+    <Anchor>a1c01a8ace4e2ffedc6f09e0e87425664</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5384,23 +6190,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_allchildoperationssucceeded</Name>
+      <Name>has_allChildOperationsSucceeded</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_P2POperation</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___p2_p_operation.html</Path>
-    <Anchor>a78f0e640298bfabe40e75d6924ddfdcf</Anchor>
+    <Anchor>a014152415490114dc1f479bd5ad3eb04</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>allchildoperationssucceeded</Name>
+      <Name>allChildOperationsSucceeded</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_P2POperation</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___p2_p_operation.html</Path>
-    <Anchor>a736d04c33d26695cdb1a7962cbaa58d6</Anchor>
+    <Anchor>a89966e40d4cb0551bf085b0daed71e49</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5464,23 +6270,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_newkey</Name>
+      <Name>has_newKey</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_P2POperation_Operation</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___p2_p_operation___operation.html</Path>
-    <Anchor>ab9315b4434ffd5d310c3069c7da3bf4f</Anchor>
+    <Anchor>acbb6c0512012f3a16a67c99fdd9d7e6f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>newkey</Name>
+      <Name>newKey</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_P2POperation_Operation</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___p2_p_operation___operation.html</Path>
-    <Anchor>ab19934c7745082c8f2e8125dde7f62cf</Anchor>
+    <Anchor>ac5a6b77fe205359358092e009f5b9724</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5614,103 +6420,103 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_startkey</Name>
+      <Name>has_startKey</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>abfe1dc940b8abd8d4dd4284eb309919d</Anchor>
+    <Anchor>aa76402b121edc2da9b156fd047470cee</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>startkey</Name>
+      <Name>startKey</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>ae26b0242bde2eed638d02494f27f6d71</Anchor>
+    <Anchor>a9274d96a1bac8cce5ee1f20e9e925801</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_endkey</Name>
+      <Name>has_endKey</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>acaadb6cc9b6706b6b1c1c24687505232</Anchor>
+    <Anchor>aa59f6ee7ee5d3984aed260eda6ba89ac</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>endkey</Name>
+      <Name>endKey</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>a3f22bebadc5cf5890ac7575b5b7f6861</Anchor>
+    <Anchor>aca81f1146d0a11dfc0074312fa58fc7c</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_startkeyinclusive</Name>
+      <Name>has_startKeyInclusive</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>a0a29dadbd59230c2f685a4efc848550b</Anchor>
+    <Anchor>ab2a1f3a7329e56592dff6605540e068d</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>startkeyinclusive</Name>
+      <Name>startKeyInclusive</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>a185cbe7e48e4dc71b3ceed5f3b9f8b30</Anchor>
+    <Anchor>ae87504c015d66d95177531b563e1edaa</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_endkeyinclusive</Name>
+      <Name>has_endKeyInclusive</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>a1d3c469ad5d6fc0fa4c5a97e84d2c53c</Anchor>
+    <Anchor>a2be2849280fecf7e8fbc03e763ac72f0</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>endkeyinclusive</Name>
+      <Name>endKeyInclusive</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>a5bcdc5339fa20be75d1ac12034d89c05</Anchor>
+    <Anchor>aea6c77b6ea6a6062f95983713a7cff6a</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_maxreturned</Name>
+      <Name>has_maxReturned</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>aa46c5fe918daeb66f317f36cd3679189</Anchor>
+    <Anchor>af115c40e50a1b19c2b6c6e3418d403d3</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>maxreturned</Name>
+      <Name>maxReturned</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Range</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___range.html</Path>
-    <Anchor>ac77a85cce4927f2c1c5c69851833f617</Anchor>
+    <Anchor>a64d4ed1ebc0374bf5ee97977bb387006</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5854,23 +6660,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_hmacalgorithm</Name>
+      <Name>has_hmacAlgorithm</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Security_ACL</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___security___a_c_l.html</Path>
-    <Anchor>a235872af83370039c15255449be37a8b</Anchor>
+    <Anchor>acf10379095cf6276faaaf625450c88a0</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>hmacalgorithm</Name>
+      <Name>hmacAlgorithm</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Security_ACL</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___security___a_c_l.html</Path>
-    <Anchor>abbc27fc389f2c3cdf1ca777a051a62c8</Anchor>
+    <Anchor>abf5b0e91812fecc11d85af69009f920f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -5974,23 +6780,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_tlsrequired</Name>
+      <Name>has_TlsRequired</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Security_ACL_Scope</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___security___a_c_l___scope.html</Path>
-    <Anchor>a1536d6cfafb38b324a83668460f95f1e</Anchor>
+    <Anchor>ad157aaf7b6afd60fd09f9582a4da1d21</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>tlsrequired</Name>
+      <Name>TlsRequired</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Security_ACL_Scope</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___security___a_c_l___scope.html</Path>
-    <Anchor>a7455f50567bff6fad6bfe59db6b225f7</Anchor>
+    <Anchor>afab3caa7807c49a08908580edb409cbd</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -6014,63 +6820,63 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_newclusterversion</Name>
+      <Name>has_newClusterVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Setup</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___setup.html</Path>
-    <Anchor>ab1f23984d930959cc6170f093fd4ed1c</Anchor>
+    <Anchor>a6dd267489ff2d44332bb4ba69aac161a</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>newclusterversion</Name>
+      <Name>newClusterVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Setup</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___setup.html</Path>
-    <Anchor>a9b85f350eedfbf3a8d19d278b4cc2a71</Anchor>
+    <Anchor>a3fc60a5ad7a85caabef4dfe59b771811</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_instantsecureerase</Name>
+      <Name>has_instantSecureErase</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Setup</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___setup.html</Path>
-    <Anchor>a29edb8bdfd31463e13d3d917aa26939b</Anchor>
+    <Anchor>a746519056bb5d59f2fd68da187a4fc1e</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>instantsecureerase</Name>
+      <Name>instantSecureErase</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Setup</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___setup.html</Path>
-    <Anchor>a95d9864d50a6ac14390aa77d2f362a0c</Anchor>
+    <Anchor>a7fe3f7631044e3ed56f63fb61be49de4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_setpin</Name>
+      <Name>has_setPin</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Setup</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___setup.html</Path>
-    <Anchor>aca551e9088ba2635797ec41d45643e30</Anchor>
+    <Anchor>a0cc5d0d7a30a311a42bbe29c6e18add7</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>setpin</Name>
+      <Name>setPin</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Setup</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___setup.html</Path>
-    <Anchor>a4a66c2d4fcbe61b59da969fc08a5a536</Anchor>
+    <Anchor>a3674234f732132c9bba63f60f4c4fe1a</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -6094,23 +6900,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_firmwaredownload</Name>
+      <Name>has_firmwareDownload</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Setup</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___setup.html</Path>
-    <Anchor>a8883ff5d6489f6c43720d4b2945653a0</Anchor>
+    <Anchor>a0c80207c8d510b724a3c5d388cd0f246</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>firmwaredownload</Name>
+      <Name>firmwareDownload</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Setup</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___setup.html</Path>
-    <Anchor>ae5fc15ea0700073eb7791e076bf95898</Anchor>
+    <Anchor>acea65218ce4e9befd7bd2a390c24d43f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -6154,32 +6960,32 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>statusmessage</Name>
+      <Name>statusMessage</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Status</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___status.html</Path>
-    <Anchor>ac301361593f5eeaa6dcf39529368c94e</Anchor>
+    <Anchor>a463ee1b1b22247d1f8396c8c68e8b0da</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>has_detailedmessage</Name>
+      <Name>has_detailedMessage</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Status</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___status.html</Path>
-    <Anchor>a1c8133a7a533c61246fe5ef949db555b</Anchor>
+    <Anchor>a2616de3102f83f18f5b575a70cb796be</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>detailedmessage</Name>
+      <Name>detailedMessage</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>_KineticProto_Status</Scope>
     </TokenIdentifier>
     <Path>struct___kinetic_proto___status.html</Path>
-    <Anchor>af1c5b05f6e5abeffab423c62b0522e3b</Anchor>
+    <Anchor>a41966d0328bf81a9d55bd4a94334c369</Anchor>
   </Token>
 </Tokens>

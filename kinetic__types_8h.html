@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.5.0</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,6 +55,7 @@ $(document).ready(function(){initNavTree('kinetic__types_8h.html','');});
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
 <a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -75,26 +76,47 @@ $(document).ready(function(){initNavTree('kinetic__types_8h.html','');});
 <code>#include &lt;unistd.h&gt;</code><br />
 <code>#include &lt;sys/types.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__proto_8h_source.html">kinetic_proto.h</a>&quot;</code><br />
+<code>#include &lt;time.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for kinetic_types.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__types_8h__incl.png" border="0" usemap="#kinetic__types_8h" alt=""/></div>
+<map name="kinetic__types_8h" id="kinetic__types_8h">
+<area shape="rect" id="node15" href="kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1511,84,1649,115"/></map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__types_8h__dep__incl.png" border="0" usemap="#kinetic__types_8hdep" alt=""/></div>
+<map name="kinetic__types_8hdep" id="kinetic__types_8hdep">
+<area shape="rect" id="node2" href="kinetic__client_8h.html" title="kinetic_client.h" alt="" coords="178,84,316,115"/><area shape="rect" id="node11" href="kinetic__pdu_8h.html" title="kinetic_pdu.h" alt="" coords="553,163,679,194"/><area shape="rect" id="node13" href="kinetic__operation_8h.html" title="kinetic_operation.h" alt="" coords="754,163,924,194"/><area shape="rect" id="node15" href="kinetic__connection_8h.html" title="kinetic_connection.h" alt="" coords="348,163,530,194"/><area shape="rect" id="node17" href="kinetic__message_8h.html" title="kinetic_message.h" alt="" coords="949,163,1111,194"/><area shape="rect" id="node18" href="kinetic__socket_8h.html" title="kinetic_socket.h" alt="" coords="1082,242,1228,273"/><area shape="rect" id="node21" href="kinetic__hmac_8h.html" title="kinetic_hmac.h" alt="" coords="1192,84,1329,115"/><area shape="rect" id="node23" href="kinetic__logger_8h.html" title="kinetic_logger.h" alt="" coords="1304,163,1449,194"/><area shape="rect" id="node25" href="kinetic__nbo_8h.html" title="kinetic_nbo.h" alt="" coords="1630,163,1755,194"/><area shape="rect" id="node3" href="kinetic__client_8c.html" title="kinetic_client.c" alt="" coords="546,242,682,273"/><area shape="rect" id="node4" href="get_8h.html" title="get.h" alt="" coords="27,163,88,194"/><area shape="rect" id="node6" href="main_8c.html" title="main.c" alt="" coords="89,242,162,273"/><area shape="rect" id="node7" href="noop_8h.html" title="noop.h" alt="" coords="162,163,238,194"/><area shape="rect" id="node9" href="put_8h.html" title="put.h" alt="" coords="263,163,325,194"/><area shape="rect" id="node5" href="get_8c.html" title="get.c" alt="" coords="5,242,65,273"/><area shape="rect" id="node8" href="noop_8c.html" title="noop.c" alt="" coords="186,242,260,273"/><area shape="rect" id="node10" href="put_8c.html" title="put.c" alt="" coords="285,242,345,273"/><area shape="rect" id="node12" href="kinetic__pdu_8c.html" title="kinetic_pdu.c" alt="" coords="1148,321,1272,352"/><area shape="rect" id="node14" href="kinetic__operation_8c.html" title="kinetic_operation.c" alt="" coords="705,242,874,273"/><area shape="rect" id="node16" href="kinetic__connection_8c.html" title="kinetic_connection.c" alt="" coords="659,321,838,352"/><area shape="rect" id="node20" href="kinetic__message_8c.html" title="kinetic_message.c" alt="" coords="897,242,1058,273"/><area shape="rect" id="node19" href="kinetic__socket_8c.html" title="kinetic_socket.c" alt="" coords="1406,321,1550,352"/><area shape="rect" id="node22" href="kinetic__hmac_8c.html" title="kinetic_hmac.c" alt="" coords="1572,242,1708,273"/><area shape="rect" id="node24" href="kinetic__logger_8c.html" title="kinetic_logger.c" alt="" coords="1303,242,1447,273"/><area shape="rect" id="node26" href="kinetic__nbo_8c.html" title="kinetic_nbo.c" alt="" coords="1782,242,1906,273"/></map>
+</div>
 </div>
 <p><a href="kinetic__types_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_connection.html">KineticConnection</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_message.html">KineticMessage</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_exchange.html">KineticExchange</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p_d_u.html">KineticPDU</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_operation.html">KineticOperation</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:add9d47513f5472c08a593999978f8018"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#add9d47513f5472c08a593999978f8018">KINETIC_PORT</a>&#160;&#160;&#160;8123</td></tr>
 <tr class="separator:add9d47513f5472c08a593999978f8018"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43b41ecab84ae37ab03051451c0aedc9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a43b41ecab84ae37ab03051451c0aedc9">KINETIC_TLS_PORT</a>&#160;&#160;&#160;8443</td></tr>
+<tr class="separator:a43b41ecab84ae37ab03051451c0aedc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a634c0f8d37b8f5980e51d9c7cf5e90e5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a634c0f8d37b8f5980e51d9c7cf5e90e5">KINETIC_HMAC_SHA1_LEN</a>&#160;&#160;&#160;(SHA_DIGEST_LENGTH)</td></tr>
 <tr class="separator:a634c0f8d37b8f5980e51d9c7cf5e90e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab25f5f599fde5352c70e529ebba7a6da"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a>&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a634c0f8d37b8f5980e51d9c7cf5e90e5">KINETIC_HMAC_SHA1_LEN</a>)</td></tr>
@@ -107,20 +129,53 @@ Macros</h2></td></tr>
 <tr class="separator:ad3d8a3bd0c0b677acef144f2c2ef6d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac956117a90023ec0971b8f9fce9dec75"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75">HOST_NAME_MAX</a>&#160;&#160;&#160;256</td></tr>
 <tr class="separator:ac956117a90023ec0971b8f9fce9dec75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86d1cc89037e1edabea474dbeff715ef"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a86d1cc89037e1edabea474dbeff715ef">KINETIC_CONNECTION_INIT</a>(connection)</td></tr>
-<tr class="separator:a86d1cc89037e1edabea474dbeff715ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a284b2fa610ec1be5d86406563d8107ce"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a284b2fa610ec1be5d86406563d8107ce">BYTE_ARRAY_NONE</a>&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>){.len = 0, .data = NULL}</td></tr>
+<tr class="separator:a284b2fa610ec1be5d86406563d8107ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a80cef8d1ba96d7a8e0bdcd6ca37e58"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a1a80cef8d1ba96d7a8e0bdcd6ca37e58">BYTE_ARRAY_INIT</a>(_data)</td></tr>
+<tr class="separator:a1a80cef8d1ba96d7a8e0bdcd6ca37e58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecf1d52c0c83787245437de8e8e98454"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#aecf1d52c0c83787245437de8e8e98454">BYTE_ARRAY_INIT_WITH_LEN</a>(_data, _len)&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>){.data = (uint8_t*)(_data), .len = (_len)};</td></tr>
+<tr class="separator:aecf1d52c0c83787245437de8e8e98454"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9683cd4b754c409b4d3c9e2b52e1ad2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ab9683cd4b754c409b4d3c9e2b52e1ad2">BYTE_ARRAY_CREATE</a>(name, len)&#160;&#160;&#160;uint8_t ( name ## _buf )[(len)]; <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> (name) = <a class="el" href="kinetic__types_8h.html#a1a80cef8d1ba96d7a8e0bdcd6ca37e58">BYTE_ARRAY_INIT</a>(( name ## _buf ));</td></tr>
+<tr class="separator:ab9683cd4b754c409b4d3c9e2b52e1ad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0005d10e0401a14ea734cbab88cf258"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ac0005d10e0401a14ea734cbab88cf258">BYTE_ARRAY_CREATE_WITH_DATA</a>(_name, _data)&#160;&#160;&#160;uint8_t ( _name ## _data )[sizeof(_data)]; <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> (_name) = {.data = (uint8_t*(_data)), .len = sizeof(data)};</td></tr>
+<tr class="separator:ac0005d10e0401a14ea734cbab88cf258"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8416494f157df3824d335b169b4705e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ae8416494f157df3824d335b169b4705e">BYTE_ARRAY_CREATE_WITH_BUFFER</a>(_name, _buf)&#160;&#160;&#160;<a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> (_name) = {.data = (uint8_t*(_buf)), .len = 0};</td></tr>
+<tr class="separator:ae8416494f157df3824d335b169b4705e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a670876b8b94ff794501137747307f0df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(str)&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>){.data = (uint8_t*)(str), .len = strlen(str)}</td></tr>
+<tr class="separator:a670876b8b94ff794501137747307f0df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a607c451dbf6707500f6fe03a55935394"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a607c451dbf6707500f6fe03a55935394">BYTE_ARRAY_FILL_WITH_DUMMY_DATA</a>(_array)&#160;&#160;&#160;{size_t i=0; for(;i&lt;(_array).len;++i){(_array).data[i] = (uint8_t)(i &amp; 0xFFu);} }</td></tr>
+<tr class="separator:a607c451dbf6707500f6fe03a55935394"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9695960e61fe691ab4b6536088064db4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a9695960e61fe691ab4b6536088064db4">BYTE_BUFFER_INIT</a>(_buf, _max)</td></tr>
+<tr class="separator:a9695960e61fe691ab4b6536088064db4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e1eaf5908eceee5e98f0f399fc43e8d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a7e1eaf5908eceee5e98f0f399fc43e8d">KINETIC_CONNECTION_INIT</a>(_con, _id, _key)</td></tr>
+<tr class="separator:a7e1eaf5908eceee5e98f0f399fc43e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b294889cc0f006c00b54ec528933988"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a8b294889cc0f006c00b54ec528933988">KINETIC_MESSAGE_HEADER_INIT</a>(_hdr, _con)</td></tr>
+<tr class="separator:a8b294889cc0f006c00b54ec528933988"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89cdffed422dfae0e8a4d3f25dce276f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">KINETIC_MESSAGE_INIT</a>(msg)</td></tr>
 <tr class="separator:a89cdffed422dfae0e8a4d3f25dce276f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba436d2ad875cbe117ac9461ee4a0770"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#aba436d2ad875cbe117ac9461ee4a0770">KINETIC_EXCHANGE_INIT</a>(exchg, id, k, klen, con)</td></tr>
-<tr class="separator:aba436d2ad875cbe117ac9461ee4a0770"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e8c36eaf4eeb49cfcecb646ffecbb0c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a5e8c36eaf4eeb49cfcecb646ffecbb0c">PDU_HEADER_LEN</a>&#160;&#160;&#160;(1 + (2 * sizeof(int32_t)))</td></tr>
 <tr class="separator:a5e8c36eaf4eeb49cfcecb646ffecbb0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf66a0acd5490ccc5c651a8767d4024d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">PDU_PROTO_MAX_LEN</a>&#160;&#160;&#160;(1024 * 1024)</td></tr>
 <tr class="separator:abf66a0acd5490ccc5c651a8767d4024d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26291b5b35c086465b3ce6a1cc3bc734"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a26291b5b35c086465b3ce6a1cc3bc734">PDU_PROTO_MAX_UNPACKED_LEN</a>&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">PDU_PROTO_MAX_LEN</a> * 2)</td></tr>
+<tr class="separator:a26291b5b35c086465b3ce6a1cc3bc734"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace420af0e9ec78ad303b9a5d6ac4af1d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ace420af0e9ec78ad303b9a5d6ac4af1d">PDU_VALUE_MAX_LEN</a>&#160;&#160;&#160;(1024 * 1024)</td></tr>
 <tr class="separator:ace420af0e9ec78ad303b9a5d6ac4af1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7324ffb3ec713d1ec9f1b0b24d8a3977"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a7324ffb3ec713d1ec9f1b0b24d8a3977">PDU_MAX_LEN</a>&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a5e8c36eaf4eeb49cfcecb646ffecbb0c">PDU_HEADER_LEN</a> + <a class="el" href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">PDU_PROTO_MAX_LEN</a> + <a class="el" href="kinetic__types_8h.html#ace420af0e9ec78ad303b9a5d6ac4af1d">PDU_VALUE_MAX_LEN</a>)</td></tr>
+<tr class="memitem:a7324ffb3ec713d1ec9f1b0b24d8a3977"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a7324ffb3ec713d1ec9f1b0b24d8a3977">PDU_MAX_LEN</a></td></tr>
 <tr class="separator:a7324ffb3ec713d1ec9f1b0b24d8a3977"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadb3b50142303f07107c0dccd980d2cd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#aadb3b50142303f07107c0dccd980d2cd">KINETIC_PDU_HEADER_INIT</a>&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#aeefc7ca996ea90f5703b1b8440092c5e">KineticPDUHeader</a>) {.versionPrefix = 'F'}</td></tr>
+<tr class="separator:aadb3b50142303f07107c0dccd980d2cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dcbf11d2ca311f7edff940de2bab28b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a6dcbf11d2ca311f7edff940de2bab28b">KINETIC_PDU_INIT</a>(_pdu, _con)</td></tr>
+<tr class="separator:a6dcbf11d2ca311f7edff940de2bab28b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f768b35723de9834d28d6c229503d4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a75f768b35723de9834d28d6c229503d4">KINETIC_PDU_INIT_WITH_MESSAGE</a>(_pdu, _con)</td></tr>
+<tr class="separator:a75f768b35723de9834d28d6c229503d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea7521ddc30f84e971ec31ede1ef527a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#aea7521ddc30f84e971ec31ede1ef527a">KINETIC_OPERATION_INIT</a>(_op, _con, _req, _resp)</td></tr>
+<tr class="separator:aea7521ddc30f84e971ec31ede1ef527a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a22e72ec9fae2d1ed7d950fb49da5777f"><td class="memItemLeft" align="right" valign="top">typedef ProtobufCBinaryData&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></td></tr>
+<tr class="separator:a22e72ec9fae2d1ed7d950fb49da5777f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -147,6 +202,20 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a43b41ecab84ae37ab03051451c0aedc9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_TLS_PORT&#160;&#160;&#160;8443</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00041">41</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a634c0f8d37b8f5980e51d9c7cf5e90e5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -157,7 +226,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00041">41</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00042">42</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -171,7 +240,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00042">42</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00043">43</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -185,7 +254,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00043">43</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00044">44</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -199,7 +268,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00050">50</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00051">51</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -213,7 +282,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00057">57</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00058">58</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -227,11 +296,226 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00062">62</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00063">63</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a86d1cc89037e1edabea474dbeff715ef"></a>
+<a class="anchor" id="a284b2fa610ec1be5d86406563d8107ce"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_ARRAY_NONE&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>){.len = 0, .data = NULL}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00070">70</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1a80cef8d1ba96d7a8e0bdcd6ca37e58"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_ARRAY_INIT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_data</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">(<a class="code" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>) \</div>
+<div class="line">    {.data = (uint8_t*)(_data), .len = <span class="keyword">sizeof</span>(_data)};</div>
+<div class="ttc" id="kinetic__types_8h_html_a22e72ec9fae2d1ed7d950fb49da5777f"><div class="ttname"><a href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></div><div class="ttdeci">ProtobufCBinaryData ByteArray</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00069">kinetic_types.h:69</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00072">72</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aecf1d52c0c83787245437de8e8e98454"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_ARRAY_INIT_WITH_LEN</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_data, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_len&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>){.data = (uint8_t*)(_data), .len = (_len)};</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00074">74</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab9683cd4b754c409b4d3c9e2b52e1ad2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_ARRAY_CREATE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">len&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;uint8_t ( name ## _buf )[(len)]; <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> (name) = <a class="el" href="kinetic__types_8h.html#a1a80cef8d1ba96d7a8e0bdcd6ca37e58">BYTE_ARRAY_INIT</a>(( name ## _buf ));</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00076">76</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac0005d10e0401a14ea734cbab88cf258"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_ARRAY_CREATE_WITH_DATA</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_data&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;uint8_t ( _name ## _data )[sizeof(_data)]; <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> (_name) = {.data = (uint8_t*(_data)), .len = sizeof(data)};</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00078">78</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae8416494f157df3824d335b169b4705e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_ARRAY_CREATE_WITH_BUFFER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_buf&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> (_name) = {.data = (uint8_t*(_buf)), .len = 0};</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00080">80</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a670876b8b94ff794501137747307f0df"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_ARRAY_INIT_FROM_CSTRING</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">str</td><td>)</td>
+          <td>&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>){.data = (uint8_t*)(str), .len = strlen(str)}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00082">82</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a607c451dbf6707500f6fe03a55935394"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_ARRAY_FILL_WITH_DUMMY_DATA</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_array</td><td>)</td>
+          <td>&#160;&#160;&#160;{size_t i=0; for(;i&lt;(_array).len;++i){(_array).data[i] = (uint8_t)(i &amp; 0xFFu);} }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00084">84</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9695960e61fe691ab4b6536088064db4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BYTE_BUFFER_INIT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_buf, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_max&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">(<a class="code" href="struct_byte_buffer.html">ByteBuffer</a>) { \</div>
+<div class="line">    .buffer = {.data = (uint8_t*)(_buf), .len = 0}, \</div>
+<div class="line">    .maxLen = <span class="keyword">sizeof</span>(_buf) }</div>
+<div class="ttc" id="struct_byte_buffer_html"><div class="ttname"><a href="struct_byte_buffer.html">ByteBuffer</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00097">kinetic_types.h:97</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00102">102</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7e1eaf5908eceee5e98f0f399fc43e8d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -239,19 +523,86 @@ Variables</h2></td></tr>
           <td class="memname">#define KINETIC_CONNECTION_INIT</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">connection</td><td>)</td>
+          <td class="paramname">_con, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_id, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_key&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">{ \</div>
-<div class="line">    memset((connection), 0, <span class="keyword">sizeof</span>(<a class="code" href="struct_kinetic_connection.html">KineticConnection</a>)); \</div>
-<div class="line">    (connection)-&gt;blocking = <span class="keyword">true</span>; \</div>
-<div class="line">    (connection)-&gt;socketDescriptor = -1; \</div>
+<div class="line">    (*_con) = (<a class="code" href="struct_kinetic_connection.html">KineticConnection</a>) { \</div>
+<div class="line">        .socketDescriptor = -1, \</div>
+<div class="line">        .connectionID = time(NULL), \</div>
+<div class="line">        .identity = (_id), \</div>
+<div class="line">        .sequence = 0, \</div>
+<div class="line">    }; \</div>
+<div class="line">    (*_con).key = (<a class="code" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>){.data = (*_con).keyData, .len = (_key).len}; \</div>
+<div class="line">    if ((_key).data != NULL &amp;&amp; (_key).len &gt; 0) { \</div>
+<div class="line">        memcpy((_con)-&gt;keyData, (_key).data, (_key).len); } \</div>
 <div class="line">}</div>
-<div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00074">kinetic_types.h:74</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00108">kinetic_types.h:108</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a22e72ec9fae2d1ed7d950fb49da5777f"><div class="ttname"><a href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></div><div class="ttdeci">ProtobufCBinaryData ByteArray</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00069">kinetic_types.h:69</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00083">83</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00139">139</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8b294889cc0f006c00b54ec528933988"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_MESSAGE_HEADER_INIT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_hdr, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_con&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">{ \</div>
+<div class="line">    assert((<span class="keywordtype">void</span> *)(_hdr) != NULL); \</div>
+<div class="line">    assert((<span class="keywordtype">void</span> *)(_con) != NULL); \</div>
+<div class="line">    *(_hdr) = (KineticProto_Header) { \</div>
+<div class="line">        .base = PROTOBUF_C_MESSAGE_INIT(&amp;<a class="code" href="kinetic__proto_8c.html#a82e70aeba64502c544f618c647a58cf1">KineticProto_header__descriptor</a>), \</div>
+<div class="line">        .has_clusterVersion = <span class="keyword">true</span>, \</div>
+<div class="line">        .clusterVersion = (_con)-&gt;clusterVersion, \</div>
+<div class="line">        .has_identity = <span class="keyword">true</span>, \</div>
+<div class="line">        .identity = (_con)-&gt;identity, \</div>
+<div class="line">        .has_connectionID = <span class="keyword">true</span>, \</div>
+<div class="line">        .connectionID = (_con)-&gt;connectionID, \</div>
+<div class="line">        .has_sequence = <span class="keyword">true</span>, \</div>
+<div class="line">        .sequence = (_con)-&gt;sequence, \</div>
+<div class="line">    }; \</div>
+<div class="line">}</div>
+<div class="ttc" id="kinetic__proto_8c_html_a82e70aeba64502c544f618c647a58cf1"><div class="ttname"><a href="kinetic__proto_8c.html#a82e70aeba64502c544f618c647a58cf1">KineticProto_header__descriptor</a></div><div class="ttdeci">const ProtobufCMessageDescriptor KineticProto_header__descriptor</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00370">kinetic_proto.c:370</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00175">175</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -268,89 +619,29 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">{ <a class="code" href="kinetic__proto_8c.html#a22266e0b2008357e1a61faff0f1056f8">\</a></div>
-<div class="line"><a class="code" href="kinetic__proto_8c.html#a22266e0b2008357e1a61faff0f1056f8">    KineticProto_init</a>(&amp;(msg)-&gt;proto); <a class="code" href="kinetic__proto_8c.html#ad67706b010e4cd1ff94a9321bfb587c1">\</a></div>
-<div class="line"><a class="code" href="kinetic__proto_8c.html#ad67706b010e4cd1ff94a9321bfb587c1">    KineticProto_command_init</a>(&amp;(msg)-&gt;command); <a class="code" href="kinetic__proto_8c.html#a8175b2f96741b397533df6eec5fe3271">\</a></div>
-<div class="line"><a class="code" href="kinetic__proto_8c.html#a8175b2f96741b397533df6eec5fe3271">    KineticProto_header_init</a>(&amp;(msg)-&gt;header); <a class="code" href="kinetic__proto_8c.html#abb627d71e73b93865460ff4370a3ea76">\</a></div>
-<div class="line"><a class="code" href="kinetic__proto_8c.html#abb627d71e73b93865460ff4370a3ea76">    KineticProto_body_init</a>(&amp;(msg)-&gt;body); <a class="code" href="kinetic__proto_8c.html#af7f6c311343948030cff7d6dfedd0c2f">\</a></div>
-<div class="line"><a class="code" href="kinetic__proto_8c.html#af7f6c311343948030cff7d6dfedd0c2f">    KineticProto_status_init</a>(&amp;(msg)-&gt;status); \</div>
+<b>Value:</b><div class="fragment"><div class="line">{ <a class="code" href="kinetic__proto_8c.html#a271dc8ddebe0c16173c23a4b1af20630">\</a></div>
+<div class="line"><a class="code" href="kinetic__proto_8c.html#a271dc8ddebe0c16173c23a4b1af20630">    KineticProto__init</a>(&amp;(msg)-&gt;proto); <a class="code" href="kinetic__proto_8c.html#a33d9bc6620e867c10438be07bc83a94b">\</a></div>
+<div class="line"><a class="code" href="kinetic__proto_8c.html#a33d9bc6620e867c10438be07bc83a94b">    KineticProto_command__init</a>(&amp;(msg)-&gt;command); <a class="code" href="kinetic__proto_8c.html#af6f7ce7dad8451f0b37b5c5d43cd29f2">\</a></div>
+<div class="line"><a class="code" href="kinetic__proto_8c.html#af6f7ce7dad8451f0b37b5c5d43cd29f2">    KineticProto_header__init</a>(&amp;(msg)-&gt;header); <a class="code" href="kinetic__proto_8c.html#af67a33da55c684cc0f993e8c8411e6dc">\</a></div>
+<div class="line"><a class="code" href="kinetic__proto_8c.html#af67a33da55c684cc0f993e8c8411e6dc">    KineticProto_status__init</a>(&amp;(msg)-&gt;status); <a class="code" href="kinetic__proto_8c.html#ae407b24ef3c128c0f5df5652de10a5af">\</a></div>
+<div class="line"><a class="code" href="kinetic__proto_8c.html#ae407b24ef3c128c0f5df5652de10a5af">    KineticProto_body__init</a>(&amp;(msg)-&gt;body); <a class="code" href="kinetic__proto_8c.html#a844bcbc56fa5db033b533b2436599225">\</a></div>
+<div class="line"><a class="code" href="kinetic__proto_8c.html#a844bcbc56fa5db033b533b2436599225">    KineticProto_key_value__init</a>(&amp;(msg)-&gt;keyValue); \</div>
 <div class="line">    memset((msg)-&gt;hmacData, 0, SHA_DIGEST_LENGTH); \</div>
 <div class="line">    (msg)-&gt;proto.hmac.data = (msg)-&gt;hmacData; \</div>
 <div class="line">    (msg)-&gt;proto.hmac.len = <a class="code" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a>; \</div>
-<div class="line">    (msg)-&gt;proto.has_hmac = <span class="keyword">true</span>; <span class="comment">/* Enable HMAC to allow length calculation prior to population */</span> \</div>
+<div class="line">    (msg)-&gt;proto.has_hmac = <span class="keyword">true</span>; \</div>
 <div class="line">    (msg)-&gt;command.header = &amp;(msg)-&gt;header; \</div>
 <div class="line">    (msg)-&gt;proto.command = &amp;(msg)-&gt;command; \</div>
-<div class="line">    <span class="comment">/*(msg)-&gt;command.body = &amp;(msg)-&gt;body;*/</span> \</div>
-<div class="line">    <span class="comment">/*(msg)-&gt;command.status = &amp;(msg)-&gt;status;*/</span> \</div>
 <div class="line">}</div>
-<div class="ttc" id="kinetic__proto_8c_html_a22266e0b2008357e1a61faff0f1056f8"><div class="ttname"><a href="kinetic__proto_8c.html#a22266e0b2008357e1a61faff0f1056f8">KineticProto_init</a></div><div class="ttdeci">void KineticProto_init(KineticProto *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00161">kinetic_proto.c:161</a></div></div>
-<div class="ttc" id="kinetic__proto_8c_html_ad67706b010e4cd1ff94a9321bfb587c1"><div class="ttname"><a href="kinetic__proto_8c.html#ad67706b010e4cd1ff94a9321bfb587c1">KineticProto_command_init</a></div><div class="ttdeci">void KineticProto_command_init(KineticProto_Command *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00035">kinetic_proto.c:35</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_ab25f5f599fde5352c70e529ebba7a6da"><div class="ttname"><a href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a></div><div class="ttdeci">#define KINETIC_HMAC_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00042">kinetic_types.h:42</a></div></div>
-<div class="ttc" id="kinetic__proto_8c_html_af7f6c311343948030cff7d6dfedd0c2f"><div class="ttname"><a href="kinetic__proto_8c.html#af7f6c311343948030cff7d6dfedd0c2f">KineticProto_status_init</a></div><div class="ttdeci">void KineticProto_status_init(KineticProto_Status *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00053">kinetic_proto.c:53</a></div></div>
-<div class="ttc" id="kinetic__proto_8c_html_abb627d71e73b93865460ff4370a3ea76"><div class="ttname"><a href="kinetic__proto_8c.html#abb627d71e73b93865460ff4370a3ea76">KineticProto_body_init</a></div><div class="ttdeci">void KineticProto_body_init(KineticProto_Body *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00047">kinetic_proto.c:47</a></div></div>
-<div class="ttc" id="kinetic__proto_8c_html_a8175b2f96741b397533df6eec5fe3271"><div class="ttname"><a href="kinetic__proto_8c.html#a8175b2f96741b397533df6eec5fe3271">KineticProto_header_init</a></div><div class="ttdeci">void KineticProto_header_init(KineticProto_Header *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00041">kinetic_proto.c:41</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_ab25f5f599fde5352c70e529ebba7a6da"><div class="ttname"><a href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a></div><div class="ttdeci">#define KINETIC_HMAC_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00043">kinetic_types.h:43</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a844bcbc56fa5db033b533b2436599225"><div class="ttname"><a href="kinetic__proto_8c.html#a844bcbc56fa5db033b533b2436599225">KineticProto_key_value__init</a></div><div class="ttdeci">void KineticProto_key_value__init(KineticProto_KeyValue *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00052">kinetic_proto.c:52</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_ae407b24ef3c128c0f5df5652de10a5af"><div class="ttname"><a href="kinetic__proto_8c.html#ae407b24ef3c128c0f5df5652de10a5af">KineticProto_body__init</a></div><div class="ttdeci">void KineticProto_body__init(KineticProto_Body *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00042">kinetic_proto.c:42</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a33d9bc6620e867c10438be07bc83a94b"><div class="ttname"><a href="kinetic__proto_8c.html#a33d9bc6620e867c10438be07bc83a94b">KineticProto_command__init</a></div><div class="ttdeci">void KineticProto_command__init(KineticProto_Command *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00032">kinetic_proto.c:32</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_af67a33da55c684cc0f993e8c8411e6dc"><div class="ttname"><a href="kinetic__proto_8c.html#af67a33da55c684cc0f993e8c8411e6dc">KineticProto_status__init</a></div><div class="ttdeci">void KineticProto_status__init(KineticProto_Status *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00047">kinetic_proto.c:47</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_af6f7ce7dad8451f0b37b5c5d43cd29f2"><div class="ttname"><a href="kinetic__proto_8c.html#af6f7ce7dad8451f0b37b5c5d43cd29f2">KineticProto_header__init</a></div><div class="ttdeci">void KineticProto_header__init(KineticProto_Header *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00037">kinetic_proto.c:37</a></div></div>
+<div class="ttc" id="kinetic__proto_8c_html_a271dc8ddebe0c16173c23a4b1af20630"><div class="ttname"><a href="kinetic__proto_8c.html#a271dc8ddebe0c16173c23a4b1af20630">KineticProto__init</a></div><div class="ttdeci">void KineticProto__init(KineticProto *message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00142">kinetic_proto.c:142</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00102">102</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aba436d2ad875cbe117ac9461ee4a0770"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define KINETIC_EXCHANGE_INIT</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">exchg, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">id, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">k, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">klen, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">con&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">{ \</div>
-<div class="line">    memset((exchg), 0, <span class="keyword">sizeof</span>(<a class="code" href="struct_kinetic_exchange.html">KineticExchange</a>)); \</div>
-<div class="line">    (exchg)-&gt;identity = <span class="keywordtype">id</span>; \</div>
-<div class="line">    if (k != NULL &amp;&amp; klen &gt; 0) \</div>
-<div class="line">    { \</div>
-<div class="line">        memcpy((exchg)-&gt;key, k, klen); \</div>
-<div class="line">        (exchg)-&gt;key[klen] = <span class="charliteral">&#39;\0&#39;</span>; \</div>
-<div class="line">        (exchg)-&gt;keyLength = klen; \</div>
-<div class="line">        (exchg)-&gt;has_key = <span class="keyword">true</span>; \</div>
-<div class="line">    } \</div>
-<div class="line">    (exchg)-&gt;connection = con; \</div>
-<div class="line">    (exchg)-&gt;sequence = -1; \</div>
-<div class="line">}</div>
-<div class="ttc" id="struct_kinetic_exchange_html"><div class="ttname"><a href="struct_kinetic_exchange.html">KineticExchange</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00119">kinetic_types.h:119</a></div></div>
-</div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00160">160</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00190">190</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -364,7 +655,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00177">177</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00222">222</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -378,7 +669,21 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00178">178</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00223">223</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a26291b5b35c086465b3ce6a1cc3bc734"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PDU_PROTO_MAX_UNPACKED_LEN&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">PDU_PROTO_MAX_LEN</a> * 2)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00224">224</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -392,7 +697,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00179">179</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00225">225</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -401,12 +706,171 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define PDU_MAX_LEN&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#a5e8c36eaf4eeb49cfcecb646ffecbb0c">PDU_HEADER_LEN</a> + <a class="el" href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">PDU_PROTO_MAX_LEN</a> + <a class="el" href="kinetic__types_8h.html#ace420af0e9ec78ad303b9a5d6ac4af1d">PDU_VALUE_MAX_LEN</a>)</td>
+          <td class="memname">#define PDU_MAX_LEN</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">(<a class="code" href="kinetic__types_8h.html#a5e8c36eaf4eeb49cfcecb646ffecbb0c">PDU_HEADER_LEN</a> + <a class="code" href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">\</a></div>
+<div class="line"><a class="code" href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">                                    PDU_PROTO_MAX_LEN</a> + <a class="code" href="kinetic__types_8h.html#ace420af0e9ec78ad303b9a5d6ac4af1d">PDU_VALUE_MAX_LEN</a>)</div>
+<div class="ttc" id="kinetic__types_8h_html_a5e8c36eaf4eeb49cfcecb646ffecbb0c"><div class="ttname"><a href="kinetic__types_8h.html#a5e8c36eaf4eeb49cfcecb646ffecbb0c">PDU_HEADER_LEN</a></div><div class="ttdeci">#define PDU_HEADER_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00222">kinetic_types.h:222</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_ace420af0e9ec78ad303b9a5d6ac4af1d"><div class="ttname"><a href="kinetic__types_8h.html#ace420af0e9ec78ad303b9a5d6ac4af1d">PDU_VALUE_MAX_LEN</a></div><div class="ttdeci">#define PDU_VALUE_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00225">kinetic_types.h:225</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_abf66a0acd5490ccc5c651a8767d4024d"><div class="ttname"><a href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">PDU_PROTO_MAX_LEN</a></div><div class="ttdeci">#define PDU_PROTO_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00223">kinetic_types.h:223</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00226">226</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aadb3b50142303f07107c0dccd980d2cd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_PDU_HEADER_INIT&#160;&#160;&#160;(<a class="el" href="kinetic__types_8h.html#aeefc7ca996ea90f5703b1b8440092c5e">KineticPDUHeader</a>) {.versionPrefix = 'F'}</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00180">180</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00234">234</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6dcbf11d2ca311f7edff940de2bab28b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_PDU_INIT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_pdu, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_con&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">{ \</div>
+<div class="line">    assert((<span class="keywordtype">void</span> *)(_pdu) != NULL); \</div>
+<div class="line">    assert((<span class="keywordtype">void</span> *)(_con) != NULL); \</div>
+<div class="line">    (_pdu)-&gt;connection = (_con); \</div>
+<div class="line">    (_pdu)-&gt;header = <a class="code" href="kinetic__types_8h.html#aadb3b50142303f07107c0dccd980d2cd">KINETIC_PDU_HEADER_INIT</a>; \</div>
+<div class="line">    (_pdu)-&gt;headerNBO = <a class="code" href="kinetic__types_8h.html#aadb3b50142303f07107c0dccd980d2cd">KINETIC_PDU_HEADER_INIT</a>; \</div>
+<div class="line">    (_pdu)-&gt;value = <a class="code" href="kinetic__types_8h.html#a284b2fa610ec1be5d86406563d8107ce">BYTE_ARRAY_NONE</a>; \</div>
+<div class="line">    (_pdu)-&gt;proto = &amp;(_pdu)-&gt;protoData.message.proto; <a class="code" href="kinetic__types_8h.html#a8b294889cc0f006c00b54ec528933988">\</a></div>
+<div class="line"><a class="code" href="kinetic__types_8h.html#a8b294889cc0f006c00b54ec528933988">    KINETIC_MESSAGE_HEADER_INIT</a>(&amp;((_pdu)-&gt;protoData.message.header), (_con)); \</div>
+<div class="line">}</div>
+<div class="ttc" id="kinetic__types_8h_html_a8b294889cc0f006c00b54ec528933988"><div class="ttname"><a href="kinetic__types_8h.html#a8b294889cc0f006c00b54ec528933988">KINETIC_MESSAGE_HEADER_INIT</a></div><div class="ttdeci">#define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00175">kinetic_types.h:175</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a284b2fa610ec1be5d86406563d8107ce"><div class="ttname"><a href="kinetic__types_8h.html#a284b2fa610ec1be5d86406563d8107ce">BYTE_ARRAY_NONE</a></div><div class="ttdeci">#define BYTE_ARRAY_NONE</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00070">kinetic_types.h:70</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_aadb3b50142303f07107c0dccd980d2cd"><div class="ttname"><a href="kinetic__types_8h.html#aadb3b50142303f07107c0dccd980d2cd">KINETIC_PDU_HEADER_INIT</a></div><div class="ttdeci">#define KINETIC_PDU_HEADER_INIT</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00234">kinetic_types.h:234</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00273">273</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a75f768b35723de9834d28d6c229503d4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_PDU_INIT_WITH_MESSAGE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_pdu, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_con&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">{ <a class="code" href="kinetic__types_8h.html#a6dcbf11d2ca311f7edff940de2bab28b">\</a></div>
+<div class="line"><a class="code" href="kinetic__types_8h.html#a6dcbf11d2ca311f7edff940de2bab28b">    KINETIC_PDU_INIT</a>((_pdu), (_con)) <a class="code" href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">\</a></div>
+<div class="line"><a class="code" href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">    KINETIC_MESSAGE_INIT</a>(&amp;((_pdu)-&gt;protoData.message)); \</div>
+<div class="line">    (_pdu)-&gt;proto-&gt;command-&gt;header = &amp;(_pdu)-&gt;protoData.message.header; <a class="code" href="kinetic__types_8h.html#a8b294889cc0f006c00b54ec528933988">\</a></div>
+<div class="line"><a class="code" href="kinetic__types_8h.html#a8b294889cc0f006c00b54ec528933988">    KINETIC_MESSAGE_HEADER_INIT</a>(&amp;(_pdu)-&gt;protoData.message.header, (_con)); \</div>
+<div class="line">}</div>
+<div class="ttc" id="kinetic__types_8h_html_a8b294889cc0f006c00b54ec528933988"><div class="ttname"><a href="kinetic__types_8h.html#a8b294889cc0f006c00b54ec528933988">KINETIC_MESSAGE_HEADER_INIT</a></div><div class="ttdeci">#define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00175">kinetic_types.h:175</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a89cdffed422dfae0e8a4d3f25dce276f"><div class="ttname"><a href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">KINETIC_MESSAGE_INIT</a></div><div class="ttdeci">#define KINETIC_MESSAGE_INIT(msg)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00190">kinetic_types.h:190</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a6dcbf11d2ca311f7edff940de2bab28b"><div class="ttname"><a href="kinetic__types_8h.html#a6dcbf11d2ca311f7edff940de2bab28b">KINETIC_PDU_INIT</a></div><div class="ttdeci">#define KINETIC_PDU_INIT(_pdu, _con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00273">kinetic_types.h:273</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00283">283</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aea7521ddc30f84e971ec31ede1ef527a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_OPERATION_INIT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_op, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_con, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_req, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_resp&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">*(_op) = (<a class="code" href="struct_kinetic_operation.html">KineticOperation</a>) { \</div>
+<div class="line">    .connection = (_con), \</div>
+<div class="line">    .<a class="code" href="put_8c.html#aa7a5f7da6c35f80db2b9bd7a681034e3">request</a> = (_req), \</div>
+<div class="line">    .response = (_resp), \</div>
+<div class="line">}</div>
+<div class="ttc" id="put_8c_html_aa7a5f7da6c35f80db2b9bd7a681034e3"><div class="ttname"><a href="put_8c.html#aa7a5f7da6c35f80db2b9bd7a681034e3">request</a></div><div class="ttdeci">KineticPDU request</div><div class="ttdef"><b>Definition:</b> <a href="put_8c_source.html#l00023">put.c:23</a></div></div>
+<div class="ttc" id="struct_kinetic_operation_html"><div class="ttname"><a href="struct_kinetic_operation.html">KineticOperation</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00291">kinetic_types.h:291</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00297">297</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="a22e72ec9fae2d1ed7d950fb49da5777f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef ProtobufCBinaryData <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00069">69</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -425,7 +889,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00182">182</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00228">228</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -440,7 +904,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00187">187</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00233">233</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -449,7 +913,7 @@ Variables</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d729c10c892d40b7e80e1d956ac94d74.html">src</a></li><li class="navelem"><a class="el" href="dir_8022d97437212dcef4d003f114d6167d.html">lib</a></li><li class="navelem"><a class="el" href="kinetic__types_8h.html">kinetic_types.h</a></li>
+    <li class="navelem"><a class="el" href="dir_d4ad0b9b374a726be0aa1173834aae30.html">include</a></li><li class="navelem"><a class="el" href="kinetic__types_8h.html">kinetic_types.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.7 </li>

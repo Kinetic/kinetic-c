@@ -1,8 +1,9 @@
 var annotated =
 [
     [ "_KineticProto", "struct___kinetic_proto.html", "struct___kinetic_proto" ],
+    [ "ByteBuffer", "struct_byte_buffer.html", "struct_byte_buffer" ],
+    [ "Kinetic_KeyValue", "struct_kinetic___key_value.html", "struct_kinetic___key_value" ],
     [ "KineticConnection", "struct_kinetic_connection.html", "struct_kinetic_connection" ],
-    [ "KineticExchange", "struct_kinetic_exchange.html", "struct_kinetic_exchange" ],
     [ "KineticHMAC", "struct_kinetic_h_m_a_c.html", "struct_kinetic_h_m_a_c" ],
     [ "KineticMessage", "struct_kinetic_message.html", "struct_kinetic_message" ],
     [ "KineticOperation", "struct_kinetic_operation.html", "struct_kinetic_operation" ],
@@ -13,6 +14,7 @@ var annotated =
     [ "KineticProto_GetLog_Capacity", "struct___kinetic_proto___get_log___capacity.html", "struct___kinetic_proto___get_log___capacity" ],
     [ "KineticProto_GetLog_Configuration", "struct___kinetic_proto___get_log___configuration.html", "struct___kinetic_proto___get_log___configuration" ],
     [ "KineticProto_GetLog_Configuration_Interface", "struct___kinetic_proto___get_log___configuration___interface.html", "struct___kinetic_proto___get_log___configuration___interface" ],
+    [ "KineticProto_GetLog_Device", "struct___kinetic_proto___get_log___device.html", "struct___kinetic_proto___get_log___device" ],
     [ "KineticProto_GetLog_Limits", "struct___kinetic_proto___get_log___limits.html", "struct___kinetic_proto___get_log___limits" ],
     [ "KineticProto_GetLog_Statistics", "struct___kinetic_proto___get_log___statistics.html", "struct___kinetic_proto___get_log___statistics" ],
     [ "KineticProto_GetLog_Temperature", "struct___kinetic_proto___get_log___temperature.html", "struct___kinetic_proto___get_log___temperature" ],

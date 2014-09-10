@@ -1,0 +1,4 @@
+<map id="KineticClient_Get" name="KineticClient_Get">
+<area shape="rect" id="node2" href="$get_8h.html#aa3a86ce5b3301619f3a3946b657a3150" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="207,5,255,36"/>
+<area shape="rect" id="node3" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="303,5,362,36"/>
+</map>

@@ -1,6 +1,8 @@
 <map id="kinetic_logger.h" name="kinetic_logger.h">
-<area shape="rect" id="node2" href="$kinetic__api_8c.html" title="kinetic_api.c" alt="" coords="4,86,139,117"/>
-<area shape="rect" id="node3" href="$kinetic__logger_8c.html" title="kinetic_logger.c" alt="" coords="164,86,325,117"/>
-<area shape="rect" id="node4" href="$kinetic__pdu_8c.html" title="kinetic_pdu.c" alt="" coords="351,86,485,117"/>
-<area shape="rect" id="node5" href="$kinetic__socket_8c.html" title="kinetic_socket.c" alt="" coords="511,86,672,117"/>
+<area shape="rect" id="node2" href="$kinetic__client_8c.html" title="kinetic_client.c" alt="" coords="5,84,142,115"/>
+<area shape="rect" id="node3" href="$kinetic__hmac_8c.html" title="kinetic_hmac.c" alt="" coords="166,84,302,115"/>
+<area shape="rect" id="node4" href="$kinetic__logger_8c.html" title="kinetic_logger.c" alt="" coords="326,84,470,115"/>
+<area shape="rect" id="node5" href="$kinetic__operation_8c.html" title="kinetic_operation.c" alt="" coords="493,84,662,115"/>
+<area shape="rect" id="node6" href="$kinetic__pdu_8c.html" title="kinetic_pdu.c" alt="" coords="686,84,810,115"/>
+<area shape="rect" id="node7" href="$kinetic__socket_8c.html" title="kinetic_socket.c" alt="" coords="834,84,977,115"/>
 </map>

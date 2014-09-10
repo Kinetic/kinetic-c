@@ -1,4 +1,4 @@
-.TH "kinetic_operation.c" 3 "Fri Aug 8 2014" "Version v0.5.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_operation.c" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,31 +8,55 @@ kinetic_operation.c \-
 .PP
 \fC#include 'kinetic_operation\&.h'\fP
 .br
+\fC#include 'kinetic_connection\&.h'\fP
+.br
+\fC#include 'kinetic_message\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
 
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "void \fBKineticOperation_Init\fP (\fBKineticOperation\fP *operation, \fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticPDU\fP *response)"
+.RI "void \fBKineticOperation_ValidateOperation\fP (\fBKineticOperation\fP *operation)"
 .br
 .ti -1c
 .RI "void \fBKineticOperation_BuildNoop\fP (\fBKineticOperation\fP *operation)"
 .br
+.ti -1c
+.RI "void \fBKineticOperation_BuildPut\fP (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fP value)"
+.br
+.ti -1c
+.RI "void \fBKineticOperation_BuildGet\fP (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fP value)"
+.br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "void KineticOperation_Init (\fBKineticOperation\fP *operation, \fBKineticExchange\fP *exchange, \fBKineticPDU\fP *request, \fBKineticPDU\fP *response)"
+.SS "void KineticOperation_ValidateOperation (\fBKineticOperation\fP *operation)"
 
 .PP
-Definition at line 23 of file kinetic_operation\&.c\&.
+Definition at line 26 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_OPERATION_INIT\&.
+References KineticOperation::connection, KineticPDU::proto, KineticOperation::request, and KineticOperation::response\&.
 .SS "void KineticOperation_BuildNoop (\fBKineticOperation\fP *operation)"
 
 .PP
-Definition at line 32 of file kinetic_operation\&.c\&.
+Definition at line 37 of file kinetic_operation\&.c\&.
 .PP
-References KineticOperation::exchange, KineticMessage::header, KINETIC_PROTO_MESSAGE_TYPE_NOOP, KineticExchange_ConfigureHeader(), KineticPDU::message, KineticOperation::request, and KineticOperation::response\&.
+References KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_NOOP, KineticConnection_IncrementSequence(), KineticOperation_ValidateOperation(), KineticPDU::proto, and KineticOperation::request\&.
+.SS "void KineticOperation_BuildPut (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fPvalue)"
+
+.PP
+Definition at line 46 of file kinetic_operation\&.c\&.
+.PP
+References KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_PUT, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), KineticPDU::message, KineticPDU::proto, KineticPDU::protoData, KineticOperation::request, and KineticPDU::value\&.
+.SS "void KineticOperation_BuildGet (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fPvalue)"
+
+.PP
+Definition at line 61 of file kinetic_operation\&.c\&.
+.PP
+References BYTE_ARRAY_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_GET, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), KineticPDU::message, KineticPDU::proto, KineticPDU::protoData, KineticOperation::request, KineticOperation::response, KineticPDU::value, and KineticPDU::valueBuffer\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

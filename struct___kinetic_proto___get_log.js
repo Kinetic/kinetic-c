@@ -13,5 +13,6 @@ var struct___kinetic_proto___get_log =
     [ "statistics", "struct___kinetic_proto___get_log.html#a9e775a8ee7fd1d5853f31682d58baa77", null ],
     [ "has_messages", "struct___kinetic_proto___get_log.html#ad1691bf979bc8d547f852cbc5d19ad05", null ],
     [ "messages", "struct___kinetic_proto___get_log.html#a84d3f57b4ce0bedd1de6eb7ca4227e65", null ],
-    [ "limits", "struct___kinetic_proto___get_log.html#a8be74b5dfc8b6897027046a1375e108c", null ]
+    [ "limits", "struct___kinetic_proto___get_log.html#a8be74b5dfc8b6897027046a1375e108c", null ],
+    [ "device", "struct___kinetic_proto___get_log.html#afe0732ef035df3e0fac33cbda1f42ee9", null ]
 ];

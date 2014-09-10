@@ -1,4 +1,4 @@
-.TH "KineticPDU" 3 "Fri Aug 8 2014" "Version v0.5.0" "protobuf-c" \" -*- nroff -*-
+.TH "KineticPDU" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,78 +15,100 @@ KineticPDU \-
 .RI "\fBKineticPDUHeader\fP \fBheader\fP"
 .br
 .ti -1c
-.RI "uint8_t \fBrawHeader\fP [sizeof(\fBKineticPDUHeader\fP)]"
+.RI "\fBKineticPDUHeader\fP \fBheaderNBO\fP"
 .br
 .ti -1c
-.RI "\fBKineticMessage\fP * \fBmessage\fP"
+.RI "union {"
+.br
+.ti -1c
+.RI "   \fBKineticProto\fP \fBprotoBase\fP"
+.br
+.ti -1c
+.RI "   \fBKineticMessage\fP \fBmessage\fP"
+.br
+.ti -1c
+.RI "   uint8_t \fBbuffer\fP [((1024 *1024)*2)]"
+.br
+.ti -1c
+.RI "} \fBprotoData\fP"
 .br
 .ti -1c
 .RI "\fBKineticProto\fP * \fBproto\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBprotobufLength\fP"
+.RI "uint8_t \fBprotobufRaw\fP [(1024 *1024)]"
 .br
 .ti -1c
-.RI "uint8_t \fBprotobufScratch\fP [1024 *1024]"
+.RI "\fBKinetic_KeyValue\fP * \fBmetadata\fP"
 .br
 .ti -1c
-.RI "uint8_t * \fBvalue\fP"
+.RI "uint8_t \fBvalueBuffer\fP [(1024 *1024)]"
 .br
 .ti -1c
-.RI "uint32_t \fBvalueLength\fP"
+.RI "\fBByteArray\fP \fBvalue\fP"
 .br
 .ti -1c
 .RI "\fBKineticHMAC\fP \fBhmac\fP"
 .br
 .ti -1c
-.RI "\fBKineticExchange\fP * \fBexchange\fP"
+.RI "\fBKineticConnection\fP * \fBconnection\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 189 of file kinetic_types\&.h\&.
+Definition at line 239 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticPDUHeader\fP KineticPDU::header"
 
 .PP
-Definition at line 192 of file kinetic_types\&.h\&.
-.SS "uint8_t KineticPDU::rawHeader[sizeof(\fBKineticPDUHeader\fP)]"
+Definition at line 242 of file kinetic_types\&.h\&.
+.SS "\fBKineticPDUHeader\fP KineticPDU::headerNBO"
 
 .PP
-Definition at line 193 of file kinetic_types\&.h\&.
-.SS "\fBKineticMessage\fP* KineticPDU::message"
+Definition at line 243 of file kinetic_types\&.h\&.
+.SS "\fBKineticProto\fP KineticPDU::protoBase"
 
 .PP
-Definition at line 196 of file kinetic_types\&.h\&.
+Definition at line 247 of file kinetic_types\&.h\&.
+.SS "\fBKineticMessage\fP KineticPDU::message"
+
+.PP
+Definition at line 250 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticPDU::buffer[((1024 *1024)*2)]"
+
+.PP
+Definition at line 253 of file kinetic_types\&.h\&.
+.SS "union { \&.\&.\&. }   KineticPDU::protoData"
+
 .SS "\fBKineticProto\fP* KineticPDU::proto"
 
 .PP
-Definition at line 197 of file kinetic_types\&.h\&.
-.SS "uint32_t KineticPDU::protobufLength"
+Definition at line 255 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticPDU::protobufRaw[(1024 *1024)]"
 
 .PP
-Definition at line 198 of file kinetic_types\&.h\&.
-.SS "uint8_t KineticPDU::protobufScratch[1024 *1024]"
+Definition at line 257 of file kinetic_types\&.h\&.
+.SS "\fBKinetic_KeyValue\fP* KineticPDU::metadata"
 
 .PP
-Definition at line 199 of file kinetic_types\&.h\&.
-.SS "uint8_t* KineticPDU::value"
+Definition at line 260 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticPDU::valueBuffer[(1024 *1024)]"
 
 .PP
-Definition at line 202 of file kinetic_types\&.h\&.
-.SS "uint32_t KineticPDU::valueLength"
+Definition at line 263 of file kinetic_types\&.h\&.
+.SS "\fBByteArray\fP KineticPDU::value"
 
 .PP
-Definition at line 203 of file kinetic_types\&.h\&.
+Definition at line 264 of file kinetic_types\&.h\&.
 .SS "\fBKineticHMAC\fP KineticPDU::hmac"
 
 .PP
-Definition at line 206 of file kinetic_types\&.h\&.
-.SS "\fBKineticExchange\fP* KineticPDU::exchange"
+Definition at line 267 of file kinetic_types\&.h\&.
+.SS "\fBKineticConnection\fP* KineticPDU::connection"
 
 .PP
-Definition at line 209 of file kinetic_types\&.h\&.
+Definition at line 270 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

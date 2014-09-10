@@ -1,4 +1,4 @@
-.TH "KineticProto_GetLog_Limits" 3 "Fri Aug 8 2014" "Version v0.5.0" "protobuf-c" \" -*- nroff -*-
+.TH "KineticProto_GetLog_Limits" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,141 +15,155 @@ KineticProto_GetLog_Limits \-
 .RI "ProtobufCMessage \fBbase\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxkeysize\fP"
+.RI "protobuf_c_boolean \fBhas_maxKeySize\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxkeysize\fP"
+.RI "uint32_t \fBmaxKeySize\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxvaluesize\fP"
+.RI "protobuf_c_boolean \fBhas_maxValueSize\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxvaluesize\fP"
+.RI "uint32_t \fBmaxValueSize\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxversionsize\fP"
+.RI "protobuf_c_boolean \fBhas_maxVersionSize\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxversionsize\fP"
+.RI "uint32_t \fBmaxVersionSize\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxtagsize\fP"
+.RI "protobuf_c_boolean \fBhas_maxTagSize\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxtagsize\fP"
+.RI "uint32_t \fBmaxTagSize\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxconnections\fP"
+.RI "protobuf_c_boolean \fBhas_maxConnections\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxconnections\fP"
+.RI "uint32_t \fBmaxConnections\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxoutstandingreadrequests\fP"
+.RI "protobuf_c_boolean \fBhas_maxOutstandingReadRequests\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxoutstandingreadrequests\fP"
+.RI "uint32_t \fBmaxOutstandingReadRequests\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxoutstandingwriterequests\fP"
+.RI "protobuf_c_boolean \fBhas_maxOutstandingWriteRequests\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxoutstandingwriterequests\fP"
+.RI "uint32_t \fBmaxOutstandingWriteRequests\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxmessagesize\fP"
+.RI "protobuf_c_boolean \fBhas_maxMessageSize\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxmessagesize\fP"
+.RI "uint32_t \fBmaxMessageSize\fP"
 .br
 .ti -1c
-.RI "protobuf_c_boolean \fBhas_maxkeyrangecount\fP"
+.RI "protobuf_c_boolean \fBhas_maxKeyRangeCount\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBmaxkeyrangecount\fP"
+.RI "uint32_t \fBmaxKeyRangeCount\fP"
+.br
+.ti -1c
+.RI "protobuf_c_boolean \fBhas_maxIdentityCount\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBmaxIdentityCount\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 438 of file kinetic_proto\&.h\&.
+Definition at line 448 of file kinetic_proto\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "ProtobufCMessage KineticProto_GetLog_Limits::base"
 
 .PP
-Definition at line 440 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxkeysize"
-
-.PP
-Definition at line 441 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxkeysize"
-
-.PP
-Definition at line 442 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxvaluesize"
-
-.PP
-Definition at line 443 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxvaluesize"
-
-.PP
-Definition at line 444 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxversionsize"
-
-.PP
-Definition at line 445 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxversionsize"
-
-.PP
-Definition at line 446 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxtagsize"
-
-.PP
-Definition at line 447 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxtagsize"
-
-.PP
-Definition at line 448 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxconnections"
-
-.PP
-Definition at line 449 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxconnections"
-
-.PP
 Definition at line 450 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxoutstandingreadrequests"
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxKeySize"
 
 .PP
 Definition at line 451 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxoutstandingreadrequests"
+.SS "uint32_t KineticProto_GetLog_Limits::maxKeySize"
 
 .PP
 Definition at line 452 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxoutstandingwriterequests"
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxValueSize"
 
 .PP
 Definition at line 453 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxoutstandingwriterequests"
+.SS "uint32_t KineticProto_GetLog_Limits::maxValueSize"
 
 .PP
 Definition at line 454 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxmessagesize"
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxVersionSize"
 
 .PP
 Definition at line 455 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxmessagesize"
+.SS "uint32_t KineticProto_GetLog_Limits::maxVersionSize"
 
 .PP
 Definition at line 456 of file kinetic_proto\&.h\&.
-.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxkeyrangecount"
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxTagSize"
 
 .PP
 Definition at line 457 of file kinetic_proto\&.h\&.
-.SS "uint32_t KineticProto_GetLog_Limits::maxkeyrangecount"
+.SS "uint32_t KineticProto_GetLog_Limits::maxTagSize"
 
 .PP
 Definition at line 458 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxConnections"
+
+.PP
+Definition at line 459 of file kinetic_proto\&.h\&.
+.SS "uint32_t KineticProto_GetLog_Limits::maxConnections"
+
+.PP
+Definition at line 460 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxOutstandingReadRequests"
+
+.PP
+Definition at line 461 of file kinetic_proto\&.h\&.
+.SS "uint32_t KineticProto_GetLog_Limits::maxOutstandingReadRequests"
+
+.PP
+Definition at line 462 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxOutstandingWriteRequests"
+
+.PP
+Definition at line 463 of file kinetic_proto\&.h\&.
+.SS "uint32_t KineticProto_GetLog_Limits::maxOutstandingWriteRequests"
+
+.PP
+Definition at line 464 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxMessageSize"
+
+.PP
+Definition at line 465 of file kinetic_proto\&.h\&.
+.SS "uint32_t KineticProto_GetLog_Limits::maxMessageSize"
+
+.PP
+Definition at line 466 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxKeyRangeCount"
+
+.PP
+Definition at line 467 of file kinetic_proto\&.h\&.
+.SS "uint32_t KineticProto_GetLog_Limits::maxKeyRangeCount"
+
+.PP
+Definition at line 468 of file kinetic_proto\&.h\&.
+.SS "protobuf_c_boolean KineticProto_GetLog_Limits::has_maxIdentityCount"
+
+.PP
+Definition at line 469 of file kinetic_proto\&.h\&.
+.SS "uint32_t KineticProto_GetLog_Limits::maxIdentityCount"
+
+.PP
+Definition at line 470 of file kinetic_proto\&.h\&.
 
 .SH "Author"
 .PP 

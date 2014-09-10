@@ -1,4 +1,4 @@
-.TH "main.c" 3 "Fri Aug 8 2014" "Version v0.5.0" "protobuf-c" \" -*- nroff -*-
+.TH "main.c" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,9 +12,17 @@ main.c \-
 .br
 \fC#include <stdlib\&.h>\fP
 .br
-\fC#include 'kinetic\&.h'\fP
+\fC#include <getopt\&.h>\fP
 .br
-\fC#include 'noop\&.h'\fP
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include 'kinetic_client\&.h'\fP
+.br
+\fC#include 'examples/noop\&.h'\fP
+.br
+\fC#include 'examples/put\&.h'\fP
+.br
+\fC#include 'examples/get\&.h'\fP
 .br
 
 .SS "Functions"
@@ -29,9 +37,9 @@ main.c \-
 .SS "int main (intargc, char **argv)"
 
 .PP
-Definition at line 27 of file main\&.c\&.
+Definition at line 48 of file main\&.c\&.
 .PP
-References HOST_NAME_MAX, KINETIC_PORT, and NoOp()\&.
+References BYTE_ARRAY_INIT_FROM_CSTRING, BYTE_ARRAY_NONE, Get(), Kinetic_KeyValue::key, KINETIC_PORT, KINETIC_PROTO_ALGORITHM_SHA1, KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR, KINETIC_TLS_PORT, NoOp(), and Put()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

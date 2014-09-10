@@ -1,0 +1,10 @@
+<map id="kinetic_client.h" name="kinetic_client.h">
+<area shape="rect" id="node2" href="$kinetic__client_8c.html" title="kinetic_client.c" alt="" coords="5,84,142,115"/>
+<area shape="rect" id="node3" href="$get_8h.html" title="get.h" alt="" coords="166,84,227,115"/>
+<area shape="rect" id="node5" href="$main_8c.html" title="main.c" alt="" coords="228,163,301,194"/>
+<area shape="rect" id="node6" href="$noop_8h.html" title="noop.h" alt="" coords="301,84,377,115"/>
+<area shape="rect" id="node8" href="$put_8h.html" title="put.h" alt="" coords="401,84,463,115"/>
+<area shape="rect" id="node4" href="$get_8c.html" title="get.c" alt="" coords="144,163,203,194"/>
+<area shape="rect" id="node7" href="$noop_8c.html" title="noop.c" alt="" coords="324,163,399,194"/>
+<area shape="rect" id="node9" href="$put_8c.html" title="put.c" alt="" coords="423,163,484,194"/>
+</map>

@@ -1,0 +1,185 @@
+.TH "kinetic_client.c" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_client.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_client\&.h'\fP
+.br
+\fC#include 'kinetic_pdu\&.h'\fP
+.br
+\fC#include 'kinetic_operation\&.h'\fP
+.br
+\fC#include 'kinetic_connection\&.h'\fP
+.br
+\fC#include 'kinetic_message\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticProto_Status_StatusCode\fP \fBKineticClient_ExecuteOperation\fP (\fBKineticOperation\fP *operation)"
+.br
+.ti -1c
+.RI "void \fBKineticClient_Init\fP (const char *logFile)"
+.br
+.RI "\fIInitializes the Kinetic API andcsonfigures logging destination\&. \fP"
+.ti -1c
+.RI "bool \fBKineticClient_Connect\fP (\fBKineticConnection\fP *connection, const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, \fBByteArray\fP hmacKey)"
+.br
+.RI "\fIConfigures the session and establishes a socket connection to a Kinetic Device\&. \fP"
+.ti -1c
+.RI "void \fBKineticClient_Disconnect\fP (\fBKineticConnection\fP *connection)"
+.br
+.RI "\fICloses the socket connection to a host\&. \fP"
+.ti -1c
+.RI "\fBKineticOperation\fP \fBKineticClient_CreateOperation\fP (\fBKineticConnection\fP *connection, \fBKineticPDU\fP *\fBrequest\fP, \fBKineticPDU\fP *\fBresponse\fP)"
+.br
+.RI "\fICreates and initializes a Kinetic operation\&. \fP"
+.ti -1c
+.RI "\fBKineticProto_Status_StatusCode\fP \fBKineticClient_NoOp\fP (\fBKineticOperation\fP *operation)"
+.br
+.RI "\fIExecutes a NOOP command to test whether the Kinetic Device is operational\&. \fP"
+.ti -1c
+.RI "\fBKineticProto_Status_StatusCode\fP \fBKineticClient_Put\fP (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fP value)"
+.br
+.ti -1c
+.RI "\fBKineticProto_Status_StatusCode\fP \fBKineticClient_Get\fP (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fP value)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticProto_Status_StatusCode\fP KineticClient_ExecuteOperation (\fBKineticOperation\fP *operation)"
+
+.PP
+Definition at line 187 of file kinetic_client\&.c\&.
+.PP
+References KineticPDU::connection, KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KineticPDU_Receive(), KineticPDU_Send(), KineticPDU_Status(), KineticOperation::request, and KineticOperation::response\&.
+.SS "void KineticClient_Init (const char *logFile)"
+
+.PP
+Initializes the Kinetic API andcsonfigures logging destination\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlogFile\fP Path to log file\&. Specify NULL to log to STDOUT\&. 
+.RE
+.PP
+
+.PP
+Definition at line 32 of file kinetic_client\&.c\&.
+.PP
+References KineticLogger_Init()\&.
+.SS "bool KineticClient_Connect (\fBKineticConnection\fP *connection, const char *host, intport, boolnonBlocking, int64_tclusterVersion, int64_tidentity, \fBByteArray\fPhmacKey)"
+
+.PP
+Configures the session and establishes a socket connection to a Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIconnection\fP \fBKineticConnection\fP instance to configure with connection info 
+.br
+\fIhost\fP Host name or IP address to connect to 
+.br
+\fIport\fP Port to establish socket connection on 
+.br
+\fInonBlocking\fP Set to true for non-blocking or false for blocking I/O 
+.br
+\fIclusterVersion\fP Cluster version to use for the session 
+.br
+\fIidentity\fP Identity to use for the session 
+.br
+\fIhmacKey\fP Key to use for HMAC calculations
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns true if connection succeeded 
+.RE
+.PP
+
+.PP
+Definition at line 37 of file kinetic_client\&.c\&.
+.PP
+References KineticConnection::connected, KineticConnection_Connect(), LOG, and KineticConnection::socketDescriptor\&.
+.SS "void KineticClient_Disconnect (\fBKineticConnection\fP *connection)"
+
+.PP
+Closes the socket connection to a host\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIconnection\fP \fBKineticConnection\fP instance 
+.RE
+.PP
+
+.PP
+Definition at line 85 of file kinetic_client\&.c\&.
+.PP
+References KineticConnection_Disconnect()\&.
+.SS "\fBKineticOperation\fP KineticClient_CreateOperation (\fBKineticConnection\fP *connection, \fBKineticPDU\fP *request, \fBKineticPDU\fP *response)"
+
+.PP
+Creates and initializes a Kinetic operation\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIconnection\fP \fBKineticConnection\fP instance to associate with operation 
+.br
+\fIrequest\fP \fBKineticPDU\fP instance to use for request 
+.br
+\fIresponse\fP \fBKineticPDU\fP instance to use for reponse
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns a configured operation instance 
+.RE
+.PP
+
+.PP
+Definition at line 90 of file kinetic_client\&.c\&.
+.PP
+References KineticOperation::connection, KINETIC_PDU_INIT_WITH_MESSAGE, KineticPDU_Init(), LOG, KineticPDU::message, KineticMessage::proto, KineticPDU::proto, KineticPDU::protoData, request, KineticOperation::request, response, and KineticOperation::response\&.
+.SS "\fBKineticProto_Status_StatusCode\fP KineticClient_NoOp (\fBKineticOperation\fP *operation)"
+
+.PP
+Executes a NOOP command to test whether the Kinetic Device is operational\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIoperation\fP \fBKineticOperation\fP instance to use for the operation
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns 0 upon succes, -1 or the Kinetic status code upon failure 
+.RE
+.PP
+
+.PP
+Definition at line 126 of file kinetic_client\&.c\&.
+.PP
+References KineticOperation::connection, KineticClient_ExecuteOperation(), KineticOperation_BuildNoop(), KineticOperation::request, and KineticOperation::response\&.
+.SS "\fBKineticProto_Status_StatusCode\fP KineticClient_Put (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fPvalue)"
+
+.PP
+Definition at line 139 of file kinetic_client\&.c\&.
+.PP
+References KineticOperation::connection, KineticClient_ExecuteOperation(), KineticOperation_BuildPut(), PDU_VALUE_MAX_LEN, KineticOperation::request, and KineticOperation::response\&.
+.SS "\fBKineticProto_Status_StatusCode\fP KineticClient_Get (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fPvalue)"
+
+.PP
+Definition at line 156 of file kinetic_client\&.c\&.
+.PP
+References BYTE_ARRAY_NONE, KineticOperation::connection, Kinetic_KeyValue::key, KINETIC_MAX_KEY_LEN, KineticClient_ExecuteOperation(), KineticOperation_BuildGet(), Kinetic_KeyValue::metadataOnly, KineticOperation::request, KineticOperation::response, and KineticPDU::valueBuffer\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.
