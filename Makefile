@@ -82,7 +82,7 @@ $(OUT_DIR)/put.o: $(UTIL_EX)/put.c
 $(OUT_DIR)/get.o: $(UTIL_EX)/get.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
 $(UTIL_EXEC): $(UTIL_DIR)/main.c $(UTIL_OBJS)
-	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS} -l kinetic-c-client
+	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
 
 utility: ${UTIL_EXEC}
 
