@@ -1,4 +1,5 @@
 <map id="kinetic_nbo.h" name="kinetic_nbo.h">
-<area shape="rect" id="node2" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="736,84,873,115"/>
-<area shape="rect" id="node16" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1511,163,1649,194"/>
+<area shape="rect" id="node2" href="$kinetic__types__internal_8h.html" title="kinetic_types_internal.h" alt="" coords="702,84,906,115"/>
+<area shape="rect" id="node3" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="736,163,873,194"/>
+<area shape="rect" id="node17" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1511,242,1649,273"/>
 </map>

@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0</span>
+   &#160;<span id="projectnumber">v0.6.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -388,6 +388,30 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 <li>KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH
 : <a class="el" href="kinetic__proto_8h.html#a8e45b19c26d1b29d31c5ab67e6ae6a5ea6ce7077e37a981574c2866e4edec8d68">kinetic_proto.h</a>
 </li>
+<li>KINETIC_STATUS_CONNECTION_ERROR
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_DATA_ERROR
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a880da6938443e4f357d12a22e4d51aef">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_DEVICE_BUSY
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a6c1bab895a12cbc908fc4ac3c912f2af">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_INVALID
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_INVALID_REQUEST
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0910418168ab52290184d28436cd1499">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_OPERATION_FAILED
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_SUCCESS
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_VERSION_FAILURE
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a83075fb61e6fdff87354313fbf37d830">kinetic_types.h</a>
+</li>
 <li>KINETIC_TLS_PORT
 : <a class="el" href="kinetic__types_8h.html#a43b41ecab84ae37ab03051451c0aedc9">kinetic_types.h</a>
 </li>
@@ -404,23 +428,23 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 , <a class="el" href="kinetic__client_8c.html#ae4b4f1c08bcb4fc76a792c216d5b0822">kinetic_client.c</a>
 </li>
 <li>KineticClient_ExecuteOperation()
-: <a class="el" href="kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd">kinetic_client.c</a>
+: <a class="el" href="kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9">kinetic_client.c</a>
 </li>
 <li>KineticClient_Get()
-: <a class="el" href="kinetic__client_8h.html#ac5381f9a7772f8c64eb4087c17d0fbe4">kinetic_client.h</a>
-, <a class="el" href="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc">kinetic_client.c</a>
+: <a class="el" href="kinetic__client_8h.html#a17a5f97cb86609ee9f3ad7082370a7b8">kinetic_client.h</a>
+, <a class="el" href="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8">kinetic_client.c</a>
 </li>
 <li>KineticClient_Init()
 : <a class="el" href="kinetic__client_8h.html#ad3ba9980559b44b3bcb3d7aabe2afd2d">kinetic_client.h</a>
 , <a class="el" href="kinetic__client_8c.html#ad3ba9980559b44b3bcb3d7aabe2afd2d">kinetic_client.c</a>
 </li>
 <li>KineticClient_NoOp()
-: <a class="el" href="kinetic__client_8h.html#a10e53ad454fa3caa0323ad2ccf18ece8">kinetic_client.h</a>
-, <a class="el" href="kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8">kinetic_client.c</a>
+: <a class="el" href="kinetic__client_8h.html#aa265de3c65a20a8b7454a06cd80792d8">kinetic_client.h</a>
+, <a class="el" href="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8">kinetic_client.c</a>
 </li>
 <li>KineticClient_Put()
-: <a class="el" href="kinetic__client_8h.html#a2705464e0a90ee21c4f851950bdd4590">kinetic_client.h</a>
-, <a class="el" href="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8">kinetic_client.c</a>
+: <a class="el" href="kinetic__client_8h.html#a9b9b330e205d5a627f9f08739da4369a">kinetic_client.h</a>
+, <a class="el" href="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a">kinetic_client.c</a>
 </li>
 <li>KineticConnection_Connect()
 : <a class="el" href="kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76">kinetic_connection.c</a>
@@ -485,8 +509,8 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 : <a class="el" href="kinetic__logger_8c.html#a35347e7ed4f565357f944c2d7bf2af19">kinetic_logger.c</a>
 </li>
 <li>KineticMessage_ConfigureKeyValue()
-: <a class="el" href="kinetic__message_8c.html#a888cdaf07002f7a7b6ab6263c49ebb12">kinetic_message.c</a>
-, <a class="el" href="kinetic__message_8h.html#a888cdaf07002f7a7b6ab6263c49ebb12">kinetic_message.h</a>
+: <a class="el" href="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b">kinetic_message.c</a>
+, <a class="el" href="kinetic__message_8h.html#a4149617eb669e1bb58c70c40a2df2c7b">kinetic_message.h</a>
 </li>
 <li>KineticMessage_Init()
 : <a class="el" href="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d">kinetic_message.c</a>
@@ -509,16 +533,20 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 , <a class="el" href="kinetic__nbo_8h.html#a8fb11d2dd5ed25e5563bc7af2aeb7ebb">kinetic_nbo.h</a>
 </li>
 <li>KineticOperation_BuildGet()
-: <a class="el" href="kinetic__operation_8c.html#ab74d2f2a39115bb5757112f57c147b71">kinetic_operation.c</a>
-, <a class="el" href="kinetic__operation_8h.html#ab74d2f2a39115bb5757112f57c147b71">kinetic_operation.h</a>
+: <a class="el" href="kinetic__operation_8c.html#ae451136b154b2d002cde03c0f8d203e5">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5">kinetic_operation.h</a>
 </li>
 <li>KineticOperation_BuildNoop()
 : <a class="el" href="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888">kinetic_operation.c</a>
 , <a class="el" href="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888">kinetic_operation.h</a>
 </li>
 <li>KineticOperation_BuildPut()
-: <a class="el" href="kinetic__operation_8c.html#a2700aabef8796b1896a53b0f9a1a3d13">kinetic_operation.c</a>
-, <a class="el" href="kinetic__operation_8h.html#a2700aabef8796b1896a53b0f9a1a3d13">kinetic_operation.h</a>
+: <a class="el" href="kinetic__operation_8c.html#a433a47a0a88bdae7e8539767478231ab">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab">kinetic_operation.h</a>
+</li>
+<li>KineticOperation_GetStatus()
+: <a class="el" href="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0">kinetic_operation.h</a>
 </li>
 <li>KineticOperation_ValidateOperation()
 : <a class="el" href="kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac">kinetic_operation.c</a>
@@ -546,10 +574,6 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 <li>KineticPDU_Send()
 : <a class="el" href="kinetic__pdu_8c.html#a9b83efba84b9ea49ae6fca07f026e77f">kinetic_pdu.c</a>
 , <a class="el" href="kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f">kinetic_pdu.h</a>
-</li>
-<li>KineticPDU_Status()
-: <a class="el" href="kinetic__pdu_8c.html#ac8c3d890312eab07970a86ec9b075e33">kinetic_pdu.c</a>
-, <a class="el" href="kinetic__pdu_8h.html#ac8c3d890312eab07970a86ec9b075e33">kinetic_pdu.h</a>
 </li>
 <li>KineticPDUHeader
 : <a class="el" href="kinetic__types_8h.html#aeefc7ca996ea90f5703b1b8440092c5e">kinetic_types.h</a>
@@ -613,8 +637,8 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 : <a class="el" href="kinetic__proto_8h.html#adb463f20c2ee476b09616ca9a009ce59">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command__descriptor
-: <a class="el" href="kinetic__proto_8h.html#afe895a62c806efd640da0e6cca0d79ed">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#afe895a62c806efd640da0e6cca0d79ed">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#afe895a62c806efd640da0e6cca0d79ed">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#afe895a62c806efd640da0e6cca0d79ed">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command__init()
 : <a class="el" href="kinetic__proto_8c.html#a33d9bc6620e867c10438be07bc83a94b">kinetic_proto.c</a>
@@ -664,28 +688,28 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 , <a class="el" href="kinetic__proto_8h.html#a23e56f79f944c633d5c80973c3c97dfe">kinetic_proto.h</a>
 </li>
 <li>KineticProto_get_log_limits__descriptor
-: <a class="el" href="kinetic__proto_8h.html#a47ab3a144c6e91bf4e16f0a78ec24bf9">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a47ab3a144c6e91bf4e16f0a78ec24bf9">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a47ab3a144c6e91bf4e16f0a78ec24bf9">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a47ab3a144c6e91bf4e16f0a78ec24bf9">kinetic_proto.h</a>
 </li>
 <li>KineticProto_get_log_limits__init()
 : <a class="el" href="kinetic__proto_8c.html#a8a82117545fa621bd5cb22fae3aae2c4">kinetic_proto.c</a>
 , <a class="el" href="kinetic__proto_8h.html#a8a82117545fa621bd5cb22fae3aae2c4">kinetic_proto.h</a>
 </li>
 <li>KineticProto_get_log_statistics__descriptor
-: <a class="el" href="kinetic__proto_8c.html#ae68704616b9b94d56fc6a8b131aaafbb">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#ae68704616b9b94d56fc6a8b131aaafbb">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#ae68704616b9b94d56fc6a8b131aaafbb">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#ae68704616b9b94d56fc6a8b131aaafbb">kinetic_proto.c</a>
 </li>
 <li>KineticProto_get_log_statistics__init()
 : <a class="el" href="kinetic__proto_8c.html#ac58e50b7f284325cb5f51b81995ed754">kinetic_proto.c</a>
 , <a class="el" href="kinetic__proto_8h.html#ac58e50b7f284325cb5f51b81995ed754">kinetic_proto.h</a>
 </li>
 <li>KineticProto_get_log_temperature__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a2573998e173eccd1fcc489f46e02f82e">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a2573998e173eccd1fcc489f46e02f82e">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a2573998e173eccd1fcc489f46e02f82e">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a2573998e173eccd1fcc489f46e02f82e">kinetic_proto.c</a>
 </li>
 <li>KineticProto_get_log_temperature__init()
-: <a class="el" href="kinetic__proto_8h.html#a9c94bd97c946edc843fbd4afa0516ff9">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a9c94bd97c946edc843fbd4afa0516ff9">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a9c94bd97c946edc843fbd4afa0516ff9">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a9c94bd97c946edc843fbd4afa0516ff9">kinetic_proto.h</a>
 </li>
 <li>KineticProto_get_log_type__descriptor
 : <a class="el" href="kinetic__proto_8h.html#a540b54a4249efc3ca97b7c8c9b5787bc">kinetic_proto.h</a>
@@ -736,8 +760,8 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 : <a class="el" href="kinetic__proto_8h.html#ab88aa79f0331a55452345bcf62ca981d">kinetic_proto.h</a>
 </li>
 <li>KineticProto_header__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a82e70aeba64502c544f618c647a58cf1">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a82e70aeba64502c544f618c647a58cf1">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a82e70aeba64502c544f618c647a58cf1">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a82e70aeba64502c544f618c647a58cf1">kinetic_proto.c</a>
 </li>
 <li>KineticProto_header__init()
 : <a class="el" href="kinetic__proto_8h.html#af6f7ce7dad8451f0b37b5c5d43cd29f2">kinetic_proto.h</a>
@@ -791,8 +815,8 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 , <a class="el" href="kinetic__proto_8h.html#aaa60776beb83d1eebded2fcc3d27da49">kinetic_proto.h</a>
 </li>
 <li>KineticProto_p2_poperation_peer__init()
-: <a class="el" href="kinetic__proto_8h.html#ade86fc8a562e62822817621684bdf600">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#ade86fc8a562e62822817621684bdf600">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#ade86fc8a562e62822817621684bdf600">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#ade86fc8a562e62822817621684bdf600">kinetic_proto.h</a>
 </li>
 <li>KineticProto_P2POperation_Closure
 : <a class="el" href="kinetic__proto_8h.html#a9a65c4fe4635ae7017bb324c820e7aae">kinetic_proto.h</a>
@@ -804,27 +828,27 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 : <a class="el" href="kinetic__proto_8h.html#a2c7b6930b1509895a394208b7f5fd01e">kinetic_proto.h</a>
 </li>
 <li>KineticProto_range__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a8715de51845e817fab1f47e139830be7">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a8715de51845e817fab1f47e139830be7">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a8715de51845e817fab1f47e139830be7">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a8715de51845e817fab1f47e139830be7">kinetic_proto.c</a>
 </li>
 <li>KineticProto_range__init()
-: <a class="el" href="kinetic__proto_8h.html#ad617221b02ffb10bddde6df135b08a8c">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#ad617221b02ffb10bddde6df135b08a8c">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#ad617221b02ffb10bddde6df135b08a8c">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#ad617221b02ffb10bddde6df135b08a8c">kinetic_proto.h</a>
 </li>
 <li>KineticProto_Range_Closure
 : <a class="el" href="kinetic__proto_8h.html#a23e57a84fbc42ab3a2382184b8bd24c8">kinetic_proto.h</a>
 </li>
 <li>KineticProto_security__descriptor
-: <a class="el" href="kinetic__proto_8c.html#affaf1e6445b3d70d3ad852832155990d">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#affaf1e6445b3d70d3ad852832155990d">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#affaf1e6445b3d70d3ad852832155990d">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#affaf1e6445b3d70d3ad852832155990d">kinetic_proto.c</a>
 </li>
 <li>KineticProto_security__init()
-: <a class="el" href="kinetic__proto_8h.html#ae923bbcc9ac0a5928c42454b919ce4d6">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#ae923bbcc9ac0a5928c42454b919ce4d6">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#ae923bbcc9ac0a5928c42454b919ce4d6">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#ae923bbcc9ac0a5928c42454b919ce4d6">kinetic_proto.h</a>
 </li>
 <li>KineticProto_security_acl__descriptor
-: <a class="el" href="kinetic__proto_8h.html#acfe268ef0c6234bb5e7b43857365a47c">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#acfe268ef0c6234bb5e7b43857365a47c">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#acfe268ef0c6234bb5e7b43857365a47c">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#acfe268ef0c6234bb5e7b43857365a47c">kinetic_proto.h</a>
 </li>
 <li>KineticProto_security_acl__init()
 : <a class="el" href="kinetic__proto_8c.html#a246cb1b5493236ca5fbbce8ebb82f275">kinetic_proto.c</a>
@@ -850,8 +874,8 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 : <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525">kinetic_proto.h</a>
 </li>
 <li>KineticProto_security_acl_permission__descriptor
-: <a class="el" href="kinetic__proto_8h.html#a3be2f8fada4fea2a6097ca27efe4d58c">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a3be2f8fada4fea2a6097ca27efe4d58c">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a3be2f8fada4fea2a6097ca27efe4d58c">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a3be2f8fada4fea2a6097ca27efe4d58c">kinetic_proto.h</a>
 </li>
 <li>KineticProto_security_acl_permission__enum_values_by_name
 : <a class="el" href="kinetic__proto_8c.html#aee92d85109a2b745325da611f369d0f9">kinetic_proto.c</a>
@@ -860,8 +884,8 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 : <a class="el" href="kinetic__proto_8c.html#a177858279c5b00767db1c2036931cc80">kinetic_proto.c</a>
 </li>
 <li>KineticProto_security_acl_scope__descriptor
-: <a class="el" href="kinetic__proto_8c.html#af9d031c7b50c7634e0a54bca1d325bf1">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#af9d031c7b50c7634e0a54bca1d325bf1">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#af9d031c7b50c7634e0a54bca1d325bf1">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#af9d031c7b50c7634e0a54bca1d325bf1">kinetic_proto.c</a>
 </li>
 <li>KineticProto_security_acl_scope__init()
 : <a class="el" href="kinetic__proto_8c.html#ab229c0487c9ec3275122f1aad81fe766">kinetic_proto.c</a>
@@ -885,8 +909,8 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 : <a class="el" href="kinetic__proto_8h.html#a723eda5dd7fc159af6646b13595693f0">kinetic_proto.h</a>
 </li>
 <li>KineticProto_status__descriptor
-: <a class="el" href="kinetic__proto_8c.html#ae0f83daa212207352ca6b3ae2692f82b">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#ae0f83daa212207352ca6b3ae2692f82b">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#ae0f83daa212207352ca6b3ae2692f82b">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#ae0f83daa212207352ca6b3ae2692f82b">kinetic_proto.c</a>
 </li>
 <li>KineticProto_status__init()
 : <a class="el" href="kinetic__proto_8c.html#af67a33da55c684cc0f993e8c8411e6dc">kinetic_proto.c</a>
@@ -944,6 +968,17 @@ $(document).ready(function(){initNavTree('globals_k.html','');});
 <li>KineticSocket_WriteProtobuf()
 : <a class="el" href="kinetic__socket_8c.html#a3851320ed4ef5e518ca1ff9fefccffcb">kinetic_socket.c</a>
 , <a class="el" href="kinetic__socket_8h.html#a3851320ed4ef5e518ca1ff9fefccffcb">kinetic_socket.h</a>
+</li>
+<li>KineticStatus
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">kinetic_types.h</a>
+</li>
+<li>KineticStatusDescriptor
+: <a class="el" href="kinetic__types_8c.html#a38ab76ae6e26bfb79a8ead99577c26b8">kinetic_types.c</a>
+, <a class="el" href="kinetic__types_8h.html#a38ab76ae6e26bfb79a8ead99577c26b8">kinetic_types.h</a>
+</li>
+<li>KineticStatusDescriptorCount
+: <a class="el" href="kinetic__types_8c.html#a588e558705ad77f8f0b5c3f58cdec6fc">kinetic_types.c</a>
+, <a class="el" href="kinetic__types_8h.html#a588e558705ad77f8f0b5c3f58cdec6fc">kinetic_types.h</a>
 </li>
 </ul>
 </div><!-- contents -->

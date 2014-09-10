@@ -27,8 +27,8 @@ var NAVTREEINDEX =
 [
 "annotated.html",
 "kinetic__proto_8c.html#ade86fc8a562e62822817621684bdf600",
-"kinetic__types_8h.html#ac0005d10e0401a14ea734cbab88cf258",
-"struct___kinetic_proto___security___a_c_l___scope.html#aa24d3b4a97ade79074f3b5a8726324b4"
+"kinetic__types_8h.html#a634c0f8d37b8f5980e51d9c7cf5e90e5",
+"struct___kinetic_proto___security.html#a856d296ff070c812c513361e7cabc3ec"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,4 +1,4 @@
-.TH "put.h" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
+.TH "put.h" 3 "Wed Sep 10 2014" "Version v0.6.0-beta" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,13 +13,13 @@ put.h \-
 
 .in +1c
 .ti -1c
-.RI "int \fBPut\fP (const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, \fBByteArray\fP hmacKey, \fBKinetic_KeyValue\fP *metadata)"
+.RI "int \fBPut\fP (const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, \fBByteArray\fP hmacKey, \fBKineticKeyValue\fP *metadata)"
 .br
 .RI "\fIConnects to the specified Kinetic host/port and executes a Put to store an object on the Device\&. \fP"
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "int Put (const char *host, intport, boolnonBlocking, int64_tclusterVersion, int64_tidentity, \fBByteArray\fPhmacKey, \fBKinetic_KeyValue\fP *metadata)"
+.SS "int Put (const char *host, intport, boolnonBlocking, int64_tclusterVersion, int64_tidentity, \fBByteArray\fPhmacKey, \fBKineticKeyValue\fP *metadata)"
 
 .PP
 Connects to the specified Kinetic host/port and executes a Put to store an object on the Device\&. 
@@ -50,7 +50,7 @@ Returns 0 upon succes, -1 or the Kinetic status code upon failure
 .PP
 Definition at line 25 of file put\&.c\&.
 .PP
-References KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, KineticClient_Connect(), KineticClient_CreateOperation(), KineticClient_Disconnect(), KineticClient_Init(), and KineticClient_Put()\&.
+References KINETIC_STATUS_SUCCESS, KineticClient_Connect(), KineticClient_CreateOperation(), KineticClient_Disconnect(), KineticClient_Init(), and KineticClient_Put()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

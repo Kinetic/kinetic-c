@@ -8,7 +8,7 @@ var struct_kinetic_p_d_u =
     [ "protoData", "struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f", null ],
     [ "proto", "struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3", null ],
     [ "protobufRaw", "struct_kinetic_p_d_u.html#ae1be03d2c09460a701920868d5262fc2", null ],
-    [ "metadata", "struct_kinetic_p_d_u.html#a64b0ee9fe3e141f639707f375e2731a6", null ],
+    [ "metadata", "struct_kinetic_p_d_u.html#a719e15ea62e718454aea66285d5df794", null ],
     [ "valueBuffer", "struct_kinetic_p_d_u.html#aa7e9e0c4303ea554660f93d5dc2173d4", null ],
     [ "value", "struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f", null ],
     [ "hmac", "struct_kinetic_p_d_u.html#a24cd6071d964ac66ddca742c6023ab85", null ],

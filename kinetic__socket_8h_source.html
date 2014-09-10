@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0</span>
+   &#160;<span id="projectnumber">v0.6.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -79,7 +79,7 @@ $(document).ready(function(){initNavTree('kinetic__socket_8h_source.html','');})
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef _KINETIC_SOCKET_H</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define _KINETIC_SOCKET_H</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__types_8h.html">kinetic_types.h</a>&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__message_8h.html">kinetic_message.h</a>&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">int</span> <a class="code" href="kinetic__socket_8h.html#a8b16e4d74b50c80aa8836671471f7970">KineticSocket_Connect</a>(<span class="keywordtype">char</span>* host, <span class="keywordtype">int</span> port, <span class="keywordtype">bool</span> nonBlocking);</div>
@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('kinetic__socket_8h_source.html','');})
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__socket_8h.html#a3851320ed4ef5e518ca1ff9fefccffcb">KineticSocket_WriteProtobuf</a>(<span class="keywordtype">int</span> socketDescriptor, <a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* pdu);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif // _KINETIC_SOCKET_H</span></div>
-<div class="ttc" id="kinetic__types_8h_html"><div class="ttname"><a href="kinetic__types_8h.html">kinetic_types.h</a></div></div>
+<div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
 <div class="ttc" id="kinetic__socket_8h_html_a3851320ed4ef5e518ca1ff9fefccffcb"><div class="ttname"><a href="kinetic__socket_8h.html#a3851320ed4ef5e518ca1ff9fefccffcb">KineticSocket_WriteProtobuf</a></div><div class="ttdeci">bool KineticSocket_WriteProtobuf(int socketDescriptor, KineticPDU *pdu)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00314">kinetic_socket.c:314</a></div></div>
 <div class="ttc" id="kinetic__socket_8h_html_a8b16e4d74b50c80aa8836671471f7970"><div class="ttname"><a href="kinetic__socket_8h.html#a8b16e4d74b50c80aa8836671471f7970">KineticSocket_Connect</a></div><div class="ttdeci">int KineticSocket_Connect(char *host, int port, bool nonBlocking)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00070">kinetic_socket.c:70</a></div></div>
 <div class="ttc" id="kinetic__socket_8h_html_a1a8ae7ce63273b6d2cea899e0e5a0043"><div class="ttname"><a href="kinetic__socket_8h.html#a1a8ae7ce63273b6d2cea899e0e5a0043">KineticSocket_Write</a></div><div class="ttdeci">bool KineticSocket_Write(int socketDescriptor, ByteArray buffer)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00283">kinetic_socket.c:283</a></div></div>
@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('kinetic__socket_8h_source.html','');})
 <div class="ttc" id="kinetic__types_8h_html_a22e72ec9fae2d1ed7d950fb49da5777f"><div class="ttname"><a href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></div><div class="ttdeci">ProtobufCBinaryData ByteArray</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00069">kinetic_types.h:69</a></div></div>
 <div class="ttc" id="kinetic__socket_8h_html_a1e57c03634e1ce7391aba8a82ad6040e"><div class="ttname"><a href="kinetic__socket_8h.html#a1e57c03634e1ce7391aba8a82ad6040e">KineticSocket_Read</a></div><div class="ttdeci">bool KineticSocket_Read(int socketDescriptor, ByteArray buffer)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00182">kinetic_socket.c:182</a></div></div>
 <div class="ttc" id="kinetic__socket_8h_html_a7cc4074d34235650f7975f6b7765948e"><div class="ttname"><a href="kinetic__socket_8h.html#a7cc4074d34235650f7975f6b7765948e">KineticSocket_Close</a></div><div class="ttdeci">void KineticSocket_Close(int socketDescriptor)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00160">kinetic_socket.c:160</a></div></div>
-<div class="ttc" id="struct_kinetic_p_d_u_html"><div class="ttname"><a href="struct_kinetic_p_d_u.html">KineticPDU</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00239">kinetic_types.h:239</a></div></div>
+<div class="ttc" id="struct_kinetic_p_d_u_html"><div class="ttname"><a href="struct_kinetic_p_d_u.html">KineticPDU</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00255">kinetic_types.h:255</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

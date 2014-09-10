@@ -1,8 +1,10 @@
 <map id="KineticPDU_Send" name="KineticPDU_Send">
-<area shape="rect" id="node2" href="$kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" title="KineticClient_ExecuteOperation" alt="" coords="205,60,468,91"/>
-<area shape="rect" id="node3" href="$kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="516,5,688,36"/>
-<area shape="rect" id="node6" href="$kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="526,60,678,91"/>
-<area shape="rect" id="node7" href="$kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="525,115,679,146"/>
+<area shape="rect" id="node2" href="$kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" title="KineticClient_ExecuteOperation" alt="" coords="205,60,468,91"/>
+<area shape="rect" id="node3" href="$kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="516,5,688,36"/>
+<area shape="rect" id="node6" href="$kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="526,60,678,91"/>
+<area shape="rect" id="node8" href="$kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to read data from the Kinetic Device. " alt="" coords="525,115,679,146"/>
 <area shape="rect" id="node4" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="736,5,801,36"/>
-<area shape="rect" id="node5" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="849,5,909,36"/>
+<area shape="rect" id="node5" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="849,60,909,91"/>
+<area shape="rect" id="node7" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="745,60,791,91"/>
+<area shape="rect" id="node9" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="744,115,792,146"/>
 </map>

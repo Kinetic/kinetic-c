@@ -1,0 +1,9 @@
+<map id="KineticMessage_ConfigureKeyValue" name="KineticMessage_ConfigureKeyValue">
+<area shape="rect" id="node2" href="$kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab" title="KineticOperation_BuildPut" alt="" coords="278,5,500,36"/>
+<area shape="rect" id="node6" href="$kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5" title="KineticOperation_BuildGet" alt="" coords="277,60,501,91"/>
+<area shape="rect" id="node3" href="$kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="550,5,701,36"/>
+<area shape="rect" id="node4" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="751,5,797,36"/>
+<area shape="rect" id="node5" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="846,33,906,64"/>
+<area shape="rect" id="node7" href="$kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to read data from the Kinetic Device. " alt="" coords="549,60,702,91"/>
+<area shape="rect" id="node8" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="750,60,798,91"/>
+</map>

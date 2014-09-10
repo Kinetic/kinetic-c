@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0</span>
+   &#160;<span id="projectnumber">v0.6.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -56,11 +56,11 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="title">protobuf-c Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div class="image">
-<img src="http://travis-ci.org/atomicobject/kinetic-c.png?branch=master" />
-</div>
-<p>This repo contains code for producing Kinetic C clients which use the Seagate Kinetic protocol. Code examples are included for reference as part of a utility (<code>kinetic-c-client-utility</code>) that builds and links against an installed Kinetic C static library.</p>
-<p>The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.</p>
+<div class="textblock"><p><a href="http://travis-ci.org/atomicobject/kinetic-c">![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)</a></p>
+<h1>Kinetic C Client Library </h1>
+<p>The <a href="https://github.com/Seagate/kinetic-c">Github kinetic-c Git repository</a> contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.</p>
+<p><a href="https://github.com/Seagate/kinetic-c/tree/master/src/utility/examples">Code examples</a> are included for reference as part of the <a href="https://github.com/Seagate/kinetic-c/tree/master/src/utility">kinetic-c client library test utility (`kinetic-c-client-utility`)</a>, which builds and links against the installed <code>kinetic-c-client</code> static library.</p>
+<p>The <a href="https://github.com/Seagate/kinetic-c/blob/master/Makefile">project Makefile</a> can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.</p>
 <p><a href="http://travis-ci.org/atomicobject/kinetic-c">Kinetic-C build status</a> is provided via <a href="http://travis-ci.org">Travis CI</a></p>
 <h2>Prerequisites </h2>
 <ul>
@@ -88,6 +88,8 @@ $(document).ready(function(){initNavTree('index.html','');});
 &gt; bundle install # Ensure you have all RubyGems at the proper versions
 </pre><p><b>Build and install static library</b> </p><pre class="fragment">&gt; make
 &gt; sudo make install
+</pre><p><b>You can all clean and uninstall old version</b> </p><pre class="fragment">&gt; make clean
+&gt; sudo uninstall
 </pre><p><b>Build example utility and run tests against Kinetic Device simulator</b> </p><pre class="fragment">&gt; make run
 </pre><h1>API Documentation </h1>
 <p><a href="http://seagate.github.io/kinetic-c/kinetic__api_8h.html">Kinetic-C API</a> (generated with Doxygen)</p>

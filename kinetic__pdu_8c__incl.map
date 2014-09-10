@@ -1,11 +1,12 @@
 <map id="kinetic_pdu.c" name="kinetic_pdu.c">
-<area shape="rect" id="node2" href="$kinetic__pdu_8h.html" title="kinetic_pdu.h" alt="" coords="714,163,840,194"/>
-<area shape="rect" id="node17" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1606,400,1744,430"/>
-<area shape="rect" id="node20" href="$kinetic__nbo_8h.html" title="kinetic_nbo.h" alt="" coords="863,163,989,194"/>
-<area shape="rect" id="node21" href="$kinetic__connection_8h.html" title="kinetic_connection.h" alt="" coords="935,84,1117,115"/>
-<area shape="rect" id="node22" href="$kinetic__socket_8h.html" title="kinetic_socket.h" alt="" coords="1140,84,1285,115"/>
-<area shape="rect" id="node24" href="$kinetic__hmac_8h.html" title="kinetic_hmac.h" alt="" coords="1165,242,1303,273"/>
-<area shape="rect" id="node25" href="$kinetic__logger_8h.html" title="kinetic_logger.h" alt="" coords="1327,242,1472,273"/>
-<area shape="rect" id="node3" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="919,321,1056,352"/>
-<area shape="rect" id="node23" href="$kinetic__message_8h.html" title="kinetic_message.h" alt="" coords="1124,163,1286,194"/>
+<area shape="rect" id="node2" href="$kinetic__pdu_8h.html" title="kinetic_pdu.h" alt="" coords="904,163,1030,194"/>
+<area shape="rect" id="node18" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1606,478,1744,509"/>
+<area shape="rect" id="node21" href="$kinetic__nbo_8h.html" title="kinetic_nbo.h" alt="" coords="1054,163,1180,194"/>
+<area shape="rect" id="node22" href="$kinetic__connection_8h.html" title="kinetic_connection.h" alt="" coords="1126,84,1307,115"/>
+<area shape="rect" id="node23" href="$kinetic__socket_8h.html" title="kinetic_socket.h" alt="" coords="1331,84,1476,115"/>
+<area shape="rect" id="node25" href="$kinetic__hmac_8h.html" title="kinetic_hmac.h" alt="" coords="1356,242,1494,273"/>
+<area shape="rect" id="node26" href="$kinetic__logger_8h.html" title="kinetic_logger.h" alt="" coords="1517,242,1663,273"/>
+<area shape="rect" id="node3" href="$kinetic__types__internal_8h.html" title="kinetic_types_internal.h" alt="" coords="1140,321,1344,352"/>
+<area shape="rect" id="node4" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="826,400,962,430"/>
+<area shape="rect" id="node24" href="$kinetic__message_8h.html" title="kinetic_message.h" alt="" coords="1314,163,1477,194"/>
 </map>

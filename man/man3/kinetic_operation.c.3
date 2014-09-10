@@ -1,4 +1,4 @@
-.TH "kinetic_operation.c" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_operation.c" 3 "Wed Sep 10 2014" "Version v0.6.0-beta" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,44 +19,53 @@ kinetic_operation.c \-
 
 .in +1c
 .ti -1c
+.RI "\fBKineticStatus\fP \fBKineticOperation_GetStatus\fP (const \fBKineticOperation\fP *const operation)"
+.br
+.ti -1c
 .RI "void \fBKineticOperation_ValidateOperation\fP (\fBKineticOperation\fP *operation)"
 .br
 .ti -1c
 .RI "void \fBKineticOperation_BuildNoop\fP (\fBKineticOperation\fP *operation)"
 .br
 .ti -1c
-.RI "void \fBKineticOperation_BuildPut\fP (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fP value)"
+.RI "void \fBKineticOperation_BuildPut\fP (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
 .br
 .ti -1c
-.RI "void \fBKineticOperation_BuildGet\fP (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fP value)"
+.RI "void \fBKineticOperation_BuildGet\fP (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "void KineticOperation_ValidateOperation (\fBKineticOperation\fP *operation)"
+.SS "\fBKineticStatus\fP KineticOperation_GetStatus (const \fBKineticOperation\fP *constoperation)"
 
 .PP
 Definition at line 26 of file kinetic_operation\&.c\&.
+.PP
+References KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR, KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED, KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED, KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE, KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR, KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST, KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS, KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE, KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM, KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED, KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED, KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND, KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR, KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR, KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE, KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_DATA_ERROR, KINETIC_STATUS_DEVICE_BUSY, KINETIC_STATUS_INVALID, KINETIC_STATUS_INVALID_REQUEST, KINETIC_STATUS_OPERATION_FAILED, KINETIC_STATUS_SUCCESS, KINETIC_STATUS_VERSION_FAILURE, KineticPDU::proto, and KineticOperation::response\&.
+.SS "void KineticOperation_ValidateOperation (\fBKineticOperation\fP *operation)"
+
+.PP
+Definition at line 82 of file kinetic_operation\&.c\&.
 .PP
 References KineticOperation::connection, KineticPDU::proto, KineticOperation::request, and KineticOperation::response\&.
 .SS "void KineticOperation_BuildNoop (\fBKineticOperation\fP *operation)"
 
 .PP
-Definition at line 37 of file kinetic_operation\&.c\&.
+Definition at line 93 of file kinetic_operation\&.c\&.
 .PP
 References KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_NOOP, KineticConnection_IncrementSequence(), KineticOperation_ValidateOperation(), KineticPDU::proto, and KineticOperation::request\&.
-.SS "void KineticOperation_BuildPut (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fPvalue)"
+.SS "void KineticOperation_BuildPut (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
 
 .PP
-Definition at line 46 of file kinetic_operation\&.c\&.
+Definition at line 102 of file kinetic_operation\&.c\&.
 .PP
-References KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_PUT, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), KineticPDU::message, KineticPDU::proto, KineticPDU::protoData, KineticOperation::request, and KineticPDU::value\&.
-.SS "void KineticOperation_BuildGet (\fBKineticOperation\fP *operation, const \fBKinetic_KeyValue\fP *metadata, const \fBByteArray\fPvalue)"
+References KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_PUT, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), KineticPDU::message, KineticPDU::proto, KineticPDU::protoData, KineticOperation::request, KineticKeyValue::value, and KineticPDU::value\&.
+.SS "void KineticOperation_BuildGet (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
 
 .PP
-Definition at line 61 of file kinetic_operation\&.c\&.
+Definition at line 116 of file kinetic_operation\&.c\&.
 .PP
-References BYTE_ARRAY_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_GET, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), KineticPDU::message, KineticPDU::proto, KineticPDU::protoData, KineticOperation::request, KineticOperation::response, KineticPDU::value, and KineticPDU::valueBuffer\&.
+References BYTE_ARRAY_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_GET, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), KineticPDU::message, PDU_VALUE_MAX_LEN, KineticPDU::proto, KineticPDU::protoData, KineticOperation::request, KineticOperation::response, KineticKeyValue::value, KineticPDU::value, and KineticPDU::valueBuffer\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

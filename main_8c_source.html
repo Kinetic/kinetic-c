@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0</span>
+   &#160;<span id="projectnumber">v0.6.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -202,123 +202,124 @@ $(document).ready(function(){initNavTree('main_8c_source.html','');});
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                cfg.value[i] = (uint8_t)(0x0ff &amp; i);</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            }</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <a class="code" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a> metadata = {</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                .<a class="code" href="struct_kinetic___key_value.html#a5b11e6d46c0477a56e17f806b61ee1fd">key</a> = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;some_value_key...&quot;</span>),</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <a class="code" href="struct_kinetic_key_value.html">KineticKeyValue</a> metadata = {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                .<a class="code" href="struct_kinetic_key_value.html#a270f2ce888c44d72789cb7f86140b933">key</a> = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;some_value_key...&quot;</span>),</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                .algorithm = <a class="code" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304ea170808bf8a3da70f86022eb4835c9a2b">KINETIC_PROTO_ALGORITHM_SHA1</a>,</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                .newVersion = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;v1.0&quot;</span>),</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                .dbVersion = <a class="code" href="kinetic__types_8h.html#a284b2fa610ec1be5d86406563d8107ce">BYTE_ARRAY_NONE</a>,</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                .tag = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;some_value_tag...&quot;</span>),</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                .metadataOnly = <span class="keyword">false</span>,</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            };</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            printf(<span class="stringliteral">&quot;\n&quot;</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                   <span class="stringliteral">&quot;Executing Put w/configuration:\n&quot;</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                   <span class="stringliteral">&quot;-------------------------------\n&quot;</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                   <span class="stringliteral">&quot;  host: %s\n&quot;</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                   <span class="stringliteral">&quot;  port: %d\n&quot;</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                   <span class="stringliteral">&quot;  non-blocking: %s\n&quot;</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                   <span class="stringliteral">&quot;  clusterVersion: %lld\n&quot;</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                   <span class="stringliteral">&quot;  identity: %lld\n&quot;</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                   <span class="stringliteral">&quot;  key: &#39;%s&#39;\n&quot;</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                   <span class="stringliteral">&quot;  value: %zd bytes\n&quot;</span>,</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                cfg.host,</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                cfg.port,</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                cfg.nonBlocking ? <span class="stringliteral">&quot;true&quot;</span> : <span class="stringliteral">&quot;false&quot;</span>,</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                (<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span>)cfg.clusterVersion,</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                (<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span>)cfg.identity,</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                metadata.<a class="code" href="struct_kinetic___key_value.html#a5b11e6d46c0477a56e17f806b61ee1fd">key</a>.data,</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                value.len);</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            status = <a class="code" href="put_8c.html#ad2fb023662a16a8dc70fda8eb4f38d3e">Put</a>(</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                cfg.host, cfg.port, cfg.nonBlocking,</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                cfg.clusterVersion, cfg.identity, hmacKey,</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                &amp;metadata, value);</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            <span class="keywordflow">if</span> (status == 0)</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            {</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                printf(<span class="stringliteral">&quot;\nPut executed successfully!\n\n&quot;</span>);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            }</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            {</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                printf(<span class="stringliteral">&quot;\nPut operation failed! status=%d\n\n&quot;</span>, status);</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            }</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        }</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (strcmp(<span class="stringliteral">&quot;get&quot;</span>, op) == 0)</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        {</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            <a class="code" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a> metadata = {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                .<a class="code" href="struct_kinetic___key_value.html#a5b11e6d46c0477a56e17f806b61ee1fd">key</a> = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;some_value_key...&quot;</span>),</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                .algorithm = <a class="code" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304ea170808bf8a3da70f86022eb4835c9a2b">KINETIC_PROTO_ALGORITHM_SHA1</a>,</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                .newVersion = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;v1.0&quot;</span>),</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                .dbVersion = <a class="code" href="kinetic__types_8h.html#a284b2fa610ec1be5d86406563d8107ce">BYTE_ARRAY_NONE</a>,</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                .tag = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;some_value_tag...&quot;</span>),</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                .metadataOnly = <span class="keyword">false</span>,</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            };</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            printf(<span class="stringliteral">&quot;\n&quot;</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                   <span class="stringliteral">&quot;Executing Get w/configuration:\n&quot;</span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                   <span class="stringliteral">&quot;-------------------------------\n&quot;</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                   <span class="stringliteral">&quot;  host: %s\n&quot;</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                   <span class="stringliteral">&quot;  port: %d\n&quot;</span></div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                   <span class="stringliteral">&quot;  non-blocking: %s\n&quot;</span></div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                   <span class="stringliteral">&quot;  clusterVersion: %lld\n&quot;</span></div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                   <span class="stringliteral">&quot;  identity: %lld\n&quot;</span></div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                   <span class="stringliteral">&quot;  hmacKey: &#39;%s&#39;\n&quot;</span></div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                   <span class="stringliteral">&quot;  value: %zd bytes\n&quot;</span>,</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                cfg.host,</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                cfg.port,</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                cfg.nonBlocking ? <span class="stringliteral">&quot;true&quot;</span> : <span class="stringliteral">&quot;false&quot;</span>,</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                (<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span>)cfg.clusterVersion,</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                (<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span>)cfg.identity,</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                (<span class="keywordtype">char</span>*)hmacKey.data,</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                value.len);</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;            status = <a class="code" href="get_8c.html#aa3a86ce5b3301619f3a3946b657a3150">Get</a>(cfg.host, cfg.port, cfg.nonBlocking,</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                cfg.clusterVersion, cfg.identity, hmacKey,</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                &amp;metadata, value);</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <span class="keywordflow">if</span> (status == 0 || status == <a class="code" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73ab075e29725ba8bdd358b0cdf937abc6b">KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR</a>)</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                printf(<span class="stringliteral">&quot;\nGet executed successfully!\n\n&quot;</span>);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            }</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            {</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                printf(<span class="stringliteral">&quot;\nGet operation failed! status=%d\n\n&quot;</span>, status);</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            }</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        }</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        {</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            printf(<span class="stringliteral">&quot;\nSpecified operation is invalid!\n&quot;</span>);</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        }</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    }</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="keywordflow">return</span> status;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;}</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                .value = value,</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            };</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            printf(<span class="stringliteral">&quot;\n&quot;</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                   <span class="stringliteral">&quot;Executing Put w/configuration:\n&quot;</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                   <span class="stringliteral">&quot;-------------------------------\n&quot;</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                   <span class="stringliteral">&quot;  host: %s\n&quot;</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                   <span class="stringliteral">&quot;  port: %d\n&quot;</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                   <span class="stringliteral">&quot;  non-blocking: %s\n&quot;</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                   <span class="stringliteral">&quot;  clusterVersion: %lld\n&quot;</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                   <span class="stringliteral">&quot;  identity: %lld\n&quot;</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                   <span class="stringliteral">&quot;  key: &#39;%s&#39;\n&quot;</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                   <span class="stringliteral">&quot;  value: %zd bytes\n&quot;</span>,</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                cfg.host,</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                cfg.port,</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                cfg.nonBlocking ? <span class="stringliteral">&quot;true&quot;</span> : <span class="stringliteral">&quot;false&quot;</span>,</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                (<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span>)cfg.clusterVersion,</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                (<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span>)cfg.identity,</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                metadata.<a class="code" href="struct_kinetic_key_value.html#a270f2ce888c44d72789cb7f86140b933">key</a>.data,</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                value.len);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            status = <a class="code" href="put_8c.html#a7024809d629cd8d8a61af20ad5b1a660">Put</a>(</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                cfg.host, cfg.port, cfg.nonBlocking,</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                cfg.clusterVersion, cfg.identity, hmacKey,</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                &amp;metadata);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            <span class="keywordflow">if</span> (status == 0)</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                printf(<span class="stringliteral">&quot;\nPut executed successfully!\n\n&quot;</span>);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            }</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            {</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                printf(<span class="stringliteral">&quot;\nPut operation failed! status=%d\n\n&quot;</span>, status);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            }</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        }</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (strcmp(<span class="stringliteral">&quot;get&quot;</span>, op) == 0)</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        {</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            <a class="code" href="struct_kinetic_key_value.html">KineticKeyValue</a> metadata = {</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                .<a class="code" href="struct_kinetic_key_value.html#a270f2ce888c44d72789cb7f86140b933">key</a> = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;some_value_key...&quot;</span>),</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                .algorithm = <a class="code" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304ea170808bf8a3da70f86022eb4835c9a2b">KINETIC_PROTO_ALGORITHM_SHA1</a>,</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                .newVersion = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;v1.0&quot;</span>),</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                .dbVersion = <a class="code" href="kinetic__types_8h.html#a284b2fa610ec1be5d86406563d8107ce">BYTE_ARRAY_NONE</a>,</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                .tag = <a class="code" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a>(<span class="stringliteral">&quot;some_value_tag...&quot;</span>),</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                .metadataOnly = <span class="keyword">false</span>,</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            };</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            printf(<span class="stringliteral">&quot;\n&quot;</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                   <span class="stringliteral">&quot;Executing Get w/configuration:\n&quot;</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                   <span class="stringliteral">&quot;-------------------------------\n&quot;</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                   <span class="stringliteral">&quot;  host: %s\n&quot;</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                   <span class="stringliteral">&quot;  port: %d\n&quot;</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                   <span class="stringliteral">&quot;  non-blocking: %s\n&quot;</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                   <span class="stringliteral">&quot;  clusterVersion: %lld\n&quot;</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                   <span class="stringliteral">&quot;  identity: %lld\n&quot;</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                   <span class="stringliteral">&quot;  hmacKey: &#39;%s&#39;\n&quot;</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                   <span class="stringliteral">&quot;  value: %zd bytes\n&quot;</span>,</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                cfg.host,</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                cfg.port,</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                cfg.nonBlocking ? <span class="stringliteral">&quot;true&quot;</span> : <span class="stringliteral">&quot;false&quot;</span>,</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                (<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span>)cfg.clusterVersion,</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                (<span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span>)cfg.identity,</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                (<span class="keywordtype">char</span>*)hmacKey.data,</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                value.len);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            status = <a class="code" href="get_8c.html#a4eac921bed546f39bed8e83d9606b347">Get</a>(cfg.host, cfg.port, cfg.nonBlocking,</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                cfg.clusterVersion, cfg.identity, hmacKey,</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                &amp;metadata);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            <span class="keywordflow">if</span> (status == 0 || status == <a class="code" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73ab075e29725ba8bdd358b0cdf937abc6b">KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR</a>)</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            {</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                printf(<span class="stringliteral">&quot;\nGet executed successfully!\n\n&quot;</span>);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            }</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            {</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                printf(<span class="stringliteral">&quot;\nGet operation failed! status=%d\n\n&quot;</span>, status);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            }</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        }</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        {</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            printf(<span class="stringliteral">&quot;\nSpecified operation is invalid!\n&quot;</span>);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        }</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    }</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordflow">return</span> status;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;}</div>
 <div class="ttc" id="kinetic__proto_8h_html_acdc9c77aa72442cc9b7b5f4af84e304e"><div class="ttname"><a href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304e">KineticProto_Algorithm</a></div><div class="ttdeci">KineticProto_Algorithm</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00123">kinetic_proto.h:123</a></div></div>
-<div class="ttc" id="put_8c_html_ad2fb023662a16a8dc70fda8eb4f38d3e"><div class="ttname"><a href="put_8c.html#ad2fb023662a16a8dc70fda8eb4f38d3e">Put</a></div><div class="ttdeci">int Put(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey, Kinetic_KeyValue *metadata)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a Put to store an object on the Device...</div><div class="ttdef"><b>Definition:</b> <a href="put_8c_source.html#l00025">put.c:25</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_a7f225a5911212081b2f7c8d9c4b81c90"><div class="ttname"><a href="kinetic__types_8h.html#a7f225a5911212081b2f7c8d9c4b81c90">KINETIC_MAX_KEY_LEN</a></div><div class="ttdeci">#define KINETIC_MAX_KEY_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00044">kinetic_types.h:44</a></div></div>
 <div class="ttc" id="kinetic__proto_8h_html_acdc9c77aa72442cc9b7b5f4af84e304ea170808bf8a3da70f86022eb4835c9a2b"><div class="ttname"><a href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304ea170808bf8a3da70f86022eb4835c9a2b">KINETIC_PROTO_ALGORITHM_SHA1</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00125">kinetic_proto.h:125</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_a284b2fa610ec1be5d86406563d8107ce"><div class="ttname"><a href="kinetic__types_8h.html#a284b2fa610ec1be5d86406563d8107ce">BYTE_ARRAY_NONE</a></div><div class="ttdeci">#define BYTE_ARRAY_NONE</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00070">kinetic_types.h:70</a></div></div>
+<div class="ttc" id="get_8c_html_a4eac921bed546f39bed8e83d9606b347"><div class="ttname"><a href="get_8c.html#a4eac921bed546f39bed8e83d9606b347">Get</a></div><div class="ttdeci">int Get(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey, KineticKeyValue *metadata)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device...</div><div class="ttdef"><b>Definition:</b> <a href="get_8c_source.html#l00025">get.c:25</a></div></div>
 <div class="ttc" id="kinetic__client_8h_html"><div class="ttname"><a href="kinetic__client_8h.html">kinetic_client.h</a></div></div>
+<div class="ttc" id="put_8c_html_a7024809d629cd8d8a61af20ad5b1a660"><div class="ttname"><a href="put_8c.html#a7024809d629cd8d8a61af20ad5b1a660">Put</a></div><div class="ttdeci">int Put(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey, KineticKeyValue *metadata)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a Put to store an object on the Device...</div><div class="ttdef"><b>Definition:</b> <a href="put_8c_source.html#l00025">put.c:25</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_a22e72ec9fae2d1ed7d950fb49da5777f"><div class="ttname"><a href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></div><div class="ttdeci">ProtobufCBinaryData ByteArray</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00069">kinetic_types.h:69</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_add9d47513f5472c08a593999978f8018"><div class="ttname"><a href="kinetic__types_8h.html#add9d47513f5472c08a593999978f8018">KINETIC_PORT</a></div><div class="ttdeci">#define KINETIC_PORT</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00040">kinetic_types.h:40</a></div></div>
+<div class="ttc" id="struct_kinetic_key_value_html"><div class="ttname"><a href="struct_kinetic_key_value.html">KineticKeyValue</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00223">kinetic_types.h:223</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_a670876b8b94ff794501137747307f0df"><div class="ttname"><a href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">BYTE_ARRAY_INIT_FROM_CSTRING</a></div><div class="ttdeci">#define BYTE_ARRAY_INIT_FROM_CSTRING(str)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00082">kinetic_types.h:82</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_a43b41ecab84ae37ab03051451c0aedc9"><div class="ttname"><a href="kinetic__types_8h.html#a43b41ecab84ae37ab03051451c0aedc9">KINETIC_TLS_PORT</a></div><div class="ttdeci">#define KINETIC_TLS_PORT</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00041">kinetic_types.h:41</a></div></div>
 <div class="ttc" id="put_8h_html"><div class="ttname"><a href="put_8h.html">put.h</a></div></div>
 <div class="ttc" id="noop_8h_html"><div class="ttname"><a href="noop_8h.html">noop.h</a></div></div>
-<div class="ttc" id="struct_kinetic___key_value_html_a5b11e6d46c0477a56e17f806b61ee1fd"><div class="ttname"><a href="struct_kinetic___key_value.html#a5b11e6d46c0477a56e17f806b61ee1fd">Kinetic_KeyValue::key</a></div><div class="ttdeci">ByteArray key</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00209">kinetic_types.h:209</a></div></div>
-<div class="ttc" id="struct_kinetic___key_value_html"><div class="ttname"><a href="struct_kinetic___key_value.html">Kinetic_KeyValue</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00207">kinetic_types.h:207</a></div></div>
 <div class="ttc" id="get_8h_html"><div class="ttname"><a href="get_8h.html">get.h</a></div></div>
 <div class="ttc" id="kinetic__proto_8h_html_aadb300185305f2335d47042126f79d73ab075e29725ba8bdd358b0cdf937abc6b"><div class="ttname"><a href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73ab075e29725ba8bdd358b0cdf937abc6b">KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00078">kinetic_proto.h:78</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_ac956117a90023ec0971b8f9fce9dec75"><div class="ttname"><a href="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75">HOST_NAME_MAX</a></div><div class="ttdeci">#define HOST_NAME_MAX</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00063">kinetic_types.h:63</a></div></div>
-<div class="ttc" id="get_8c_html_aa3a86ce5b3301619f3a3946b657a3150"><div class="ttname"><a href="get_8c.html#aa3a86ce5b3301619f3a3946b657a3150">Get</a></div><div class="ttdeci">int Get(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey, Kinetic_KeyValue *metadata)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device...</div><div class="ttdef"><b>Definition:</b> <a href="get_8c_source.html#l00025">get.c:25</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_ace420af0e9ec78ad303b9a5d6ac4af1d"><div class="ttname"><a href="kinetic__types_8h.html#ace420af0e9ec78ad303b9a5d6ac4af1d">PDU_VALUE_MAX_LEN</a></div><div class="ttdeci">#define PDU_VALUE_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00225">kinetic_types.h:225</a></div></div>
+<div class="ttc" id="struct_kinetic_key_value_html_a270f2ce888c44d72789cb7f86140b933"><div class="ttname"><a href="struct_kinetic_key_value.html#a270f2ce888c44d72789cb7f86140b933">KineticKeyValue::key</a></div><div class="ttdeci">ByteArray key</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00225">kinetic_types.h:225</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_ace420af0e9ec78ad303b9a5d6ac4af1d"><div class="ttname"><a href="kinetic__types_8h.html#ace420af0e9ec78ad303b9a5d6ac4af1d">PDU_VALUE_MAX_LEN</a></div><div class="ttdeci">#define PDU_VALUE_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00241">kinetic_types.h:241</a></div></div>
 <div class="ttc" id="noop_8c_html_a54134f0309024f11ce0cf25c26a22934"><div class="ttname"><a href="noop_8c.html#a54134f0309024f11ce0cf25c26a22934">NoOp</a></div><div class="ttdeci">int NoOp(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ...</div><div class="ttdef"><b>Definition:</b> <a href="noop_8c_source.html#l00025">noop.c:25</a></div></div>
 <div class="ttc" id="main_8c_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="main_8c_source.html#l00048">main.c:48</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

@@ -1,5 +1,6 @@
 <map id="kinetic_logger.c" name="kinetic_logger.c">
-<area shape="rect" id="node2" href="$kinetic__logger_8h.html" title="kinetic_logger.h" alt="" coords="833,84,979,115"/>
-<area shape="rect" id="node3" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="786,163,922,194"/>
-<area shape="rect" id="node17" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1606,242,1744,273"/>
+<area shape="rect" id="node2" href="$kinetic__logger_8h.html" title="kinetic_logger.h" alt="" coords="850,84,996,115"/>
+<area shape="rect" id="node3" href="$kinetic__types__internal_8h.html" title="kinetic_types_internal.h" alt="" coords="752,163,956,194"/>
+<area shape="rect" id="node18" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1606,321,1744,352"/>
+<area shape="rect" id="node4" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="786,242,922,273"/>
 </map>

@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0</span>
+   &#160;<span id="projectnumber">v0.6.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -81,20 +81,20 @@ $(document).ready(function(){initNavTree('put_8h_source.html','');});
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__client_8h.html">kinetic_client.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keywordtype">int</span> <a class="code" href="put_8h.html#ad2fb023662a16a8dc70fda8eb4f38d3e">Put</a>(</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keywordtype">int</span> <a class="code" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660">Put</a>(</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* host,</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">int</span> port,</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">bool</span> nonBlocking,</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    int64_t clusterVersion,</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    int64_t identity,</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> hmacKey,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a>* metadata);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="struct_kinetic_key_value.html">KineticKeyValue</a>* metadata);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif // _PUT_H</span></div>
 <div class="ttc" id="kinetic__client_8h_html"><div class="ttname"><a href="kinetic__client_8h.html">kinetic_client.h</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_a22e72ec9fae2d1ed7d950fb49da5777f"><div class="ttname"><a href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></div><div class="ttdeci">ProtobufCBinaryData ByteArray</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00069">kinetic_types.h:69</a></div></div>
-<div class="ttc" id="put_8h_html_ad2fb023662a16a8dc70fda8eb4f38d3e"><div class="ttname"><a href="put_8h.html#ad2fb023662a16a8dc70fda8eb4f38d3e">Put</a></div><div class="ttdeci">int Put(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey, Kinetic_KeyValue *metadata)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a Put to store an object on the Device...</div><div class="ttdef"><b>Definition:</b> <a href="put_8c_source.html#l00025">put.c:25</a></div></div>
-<div class="ttc" id="struct_kinetic___key_value_html"><div class="ttname"><a href="struct_kinetic___key_value.html">Kinetic_KeyValue</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00207">kinetic_types.h:207</a></div></div>
+<div class="ttc" id="struct_kinetic_key_value_html"><div class="ttname"><a href="struct_kinetic_key_value.html">KineticKeyValue</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00223">kinetic_types.h:223</a></div></div>
+<div class="ttc" id="put_8h_html_a7024809d629cd8d8a61af20ad5b1a660"><div class="ttname"><a href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660">Put</a></div><div class="ttdeci">int Put(const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, ByteArray hmacKey, KineticKeyValue *metadata)</div><div class="ttdoc">Connects to the specified Kinetic host/port and executes a Put to store an object on the Device...</div><div class="ttdef"><b>Definition:</b> <a href="put_8c_source.html#l00025">put.c:25</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

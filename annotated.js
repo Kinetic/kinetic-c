@@ -2,9 +2,9 @@ var annotated =
 [
     [ "_KineticProto", "struct___kinetic_proto.html", "struct___kinetic_proto" ],
     [ "ByteBuffer", "struct_byte_buffer.html", "struct_byte_buffer" ],
-    [ "Kinetic_KeyValue", "struct_kinetic___key_value.html", "struct_kinetic___key_value" ],
     [ "KineticConnection", "struct_kinetic_connection.html", "struct_kinetic_connection" ],
     [ "KineticHMAC", "struct_kinetic_h_m_a_c.html", "struct_kinetic_h_m_a_c" ],
+    [ "KineticKeyValue", "struct_kinetic_key_value.html", "struct_kinetic_key_value" ],
     [ "KineticMessage", "struct_kinetic_message.html", "struct_kinetic_message" ],
     [ "KineticOperation", "struct_kinetic_operation.html", "struct_kinetic_operation" ],
     [ "KineticPDU", "struct_kinetic_p_d_u.html", "struct_kinetic_p_d_u" ],

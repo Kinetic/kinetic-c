@@ -1,7 +1,7 @@
 <map id="KineticPDU" name="KineticPDU">
-<area shape="rect" id="node2" href="$struct_kinetic___key_value.html" title="Kinetic_KeyValue" alt="" coords="5,103,157,134"/>
-<area shape="rect" id="node3" href="$struct_kinetic_message.html" title="KineticMessage" alt="" coords="310,103,449,134"/>
-<area shape="rect" id="node4" href="$struct___kinetic_proto.html" title="_KineticProto" alt="" coords="198,5,321,36"/>
-<area shape="rect" id="node5" href="$struct_kinetic_h_m_a_c.html" title="KineticHMAC" alt="" coords="474,103,595,134"/>
-<area shape="rect" id="node6" href="$struct_kinetic_connection.html" title="KineticConnection" alt="" coords="619,103,781,134"/>
+<area shape="rect" id="node2" href="$struct_kinetic_message.html" title="KineticMessage" alt="" coords="117,103,256,134"/>
+<area shape="rect" id="node3" href="$struct___kinetic_proto.html" title="_KineticProto" alt="" coords="5,5,128,36"/>
+<area shape="rect" id="node4" href="$struct_kinetic_h_m_a_c.html" title="KineticHMAC" alt="" coords="281,103,402,134"/>
+<area shape="rect" id="node5" href="$struct_kinetic_connection.html" title="KineticConnection" alt="" coords="426,103,588,134"/>
+<area shape="rect" id="node6" href="$struct_kinetic_key_value.html" title="KineticKeyValue" alt="" coords="612,103,756,134"/>
 </map>

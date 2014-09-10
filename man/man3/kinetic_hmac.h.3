@@ -1,4 +1,4 @@
-.TH "kinetic_hmac.h" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_hmac.h" 3 "Wed Sep 10 2014" "Version v0.6.0-beta" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ kinetic_hmac.h \-
 .SH SYNOPSIS
 .br
 .PP
-\fC#include 'kinetic_types\&.h'\fP
+\fC#include 'kinetic_types_internal\&.h'\fP
 .br
 \fC#include 'kinetic_proto\&.h'\fP
 .br
@@ -29,19 +29,19 @@ kinetic_hmac.h \-
 .SS "void KineticHMAC_Init (\fBKineticHMAC\fP *hmac, \fBKineticProto_Security_ACL_HMACAlgorithm\fPalgorithm)"
 
 .PP
-Definition at line 35 of file kinetic_hmac\&.c\&.
+Definition at line 31 of file kinetic_hmac\&.c\&.
 .PP
 References KineticHMAC::algorithm, KINETIC_HMAC_MAX_LEN, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, and KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM\&.
 .SS "void KineticHMAC_Populate (\fBKineticHMAC\fP *hmac, \fBKineticProto\fP *proto, const \fBByteArray\fPkey)"
 
 .PP
-Definition at line 53 of file kinetic_hmac\&.c\&.
+Definition at line 49 of file kinetic_hmac\&.c\&.
 .PP
 References KineticHMAC::data, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), and KineticHMAC::len\&.
 .SS "bool KineticHMAC_Validate (const \fBKineticProto\fP *proto, const \fBByteArray\fPkey)"
 
 .PP
-Definition at line 66 of file kinetic_hmac\&.c\&.
+Definition at line 62 of file kinetic_hmac\&.c\&.
 .PP
 References KineticHMAC::data, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticLogger_LogByteArray(), KineticHMAC::len, and LOG\&.
 .SH "Author"

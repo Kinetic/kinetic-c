@@ -1,4 +1,4 @@
-.TH "KineticPDU" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
+.TH "KineticPDU" 3 "Wed Sep 10 2014" "Version v0.6.0-beta" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -39,7 +39,7 @@ KineticPDU \-
 .RI "uint8_t \fBprotobufRaw\fP [(1024 *1024)]"
 .br
 .ti -1c
-.RI "\fBKinetic_KeyValue\fP * \fBmetadata\fP"
+.RI "\fBKineticKeyValue\fP * \fBmetadata\fP"
 .br
 .ti -1c
 .RI "uint8_t \fBvalueBuffer\fP [(1024 *1024)]"
@@ -56,59 +56,59 @@ KineticPDU \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 239 of file kinetic_types\&.h\&.
+Definition at line 255 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticPDUHeader\fP KineticPDU::header"
 
 .PP
-Definition at line 242 of file kinetic_types\&.h\&.
+Definition at line 258 of file kinetic_types\&.h\&.
 .SS "\fBKineticPDUHeader\fP KineticPDU::headerNBO"
 
 .PP
-Definition at line 243 of file kinetic_types\&.h\&.
+Definition at line 259 of file kinetic_types\&.h\&.
 .SS "\fBKineticProto\fP KineticPDU::protoBase"
 
 .PP
-Definition at line 247 of file kinetic_types\&.h\&.
+Definition at line 263 of file kinetic_types\&.h\&.
 .SS "\fBKineticMessage\fP KineticPDU::message"
 
 .PP
-Definition at line 250 of file kinetic_types\&.h\&.
+Definition at line 266 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticPDU::buffer[((1024 *1024)*2)]"
 
 .PP
-Definition at line 253 of file kinetic_types\&.h\&.
+Definition at line 269 of file kinetic_types\&.h\&.
 .SS "union { \&.\&.\&. }   KineticPDU::protoData"
 
 .SS "\fBKineticProto\fP* KineticPDU::proto"
 
 .PP
-Definition at line 255 of file kinetic_types\&.h\&.
+Definition at line 271 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticPDU::protobufRaw[(1024 *1024)]"
 
 .PP
-Definition at line 257 of file kinetic_types\&.h\&.
-.SS "\fBKinetic_KeyValue\fP* KineticPDU::metadata"
+Definition at line 273 of file kinetic_types\&.h\&.
+.SS "\fBKineticKeyValue\fP* KineticPDU::metadata"
 
 .PP
-Definition at line 260 of file kinetic_types\&.h\&.
+Definition at line 276 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticPDU::valueBuffer[(1024 *1024)]"
 
 .PP
-Definition at line 263 of file kinetic_types\&.h\&.
+Definition at line 279 of file kinetic_types\&.h\&.
 .SS "\fBByteArray\fP KineticPDU::value"
 
 .PP
-Definition at line 264 of file kinetic_types\&.h\&.
+Definition at line 280 of file kinetic_types\&.h\&.
 .SS "\fBKineticHMAC\fP KineticPDU::hmac"
 
 .PP
-Definition at line 267 of file kinetic_types\&.h\&.
+Definition at line 283 of file kinetic_types\&.h\&.
 .SS "\fBKineticConnection\fP* KineticPDU::connection"
 
 .PP
-Definition at line 270 of file kinetic_types\&.h\&.
+Definition at line 286 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

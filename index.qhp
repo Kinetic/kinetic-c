@@ -5,7 +5,7 @@
   <filterSection>
     <filterAttribute>doxygen</filterAttribute>
     <toc>
-      <section title="protobuf-c v0.6.0" ref="index.html">
+      <section title="protobuf-c v0.6.0-beta" ref="index.html">
         <section title="Data Structures">
           <section title="Data Structures" ref="annotated.html">
             <section title="_KineticProto" ref="struct___kinetic_proto.html">
@@ -17,17 +17,6 @@
             <section title="ByteBuffer" ref="struct_byte_buffer.html">
               <section title="buffer" ref="struct_byte_buffer.html#a30bf93b8c9fd109c92afc66b1cb9886a" />
               <section title="maxLen" ref="struct_byte_buffer.html#a4fee9e08b1d179dfce37f3534217d7f7" />
-            </section>
-            <section title="Kinetic_KeyValue" ref="struct_kinetic___key_value.html">
-              <section title="key" ref="struct_kinetic___key_value.html#a5b11e6d46c0477a56e17f806b61ee1fd" />
-              <section title="newVersion" ref="struct_kinetic___key_value.html#a760ab187e961072772c5b3424b4920e4" />
-              <section title="dbVersion" ref="struct_kinetic___key_value.html#a042db4e4913fdd9537a757b68eed3ab8" />
-              <section title="tag" ref="struct_kinetic___key_value.html#a70d473aef8e8f84d22b95ed38d7ff356" />
-              <section title="force" ref="struct_kinetic___key_value.html#a4c9b9448d8961723c21f260d238e678b" />
-              <section title="algorithm" ref="struct_kinetic___key_value.html#a360a666fdb64def39b8ae3ef4331b718" />
-              <section title="metadataOnly" ref="struct_kinetic___key_value.html#ae56159cc0aa9d64ad7d7e77cfc5602af" />
-              <section title="synchronization" ref="struct_kinetic___key_value.html#af27d1bb8f1f65105a6a40817752955a3" />
-              <section title="value" ref="struct_kinetic___key_value.html#a5942f952e21955ada96e3a81844698a5" />
             </section>
             <section title="KineticConnection" ref="struct_kinetic_connection.html">
               <section title="connected" ref="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53" />
@@ -46,6 +35,17 @@
               <section title="algorithm" ref="struct_kinetic_h_m_a_c.html#a8b00d3368fc08fba9b41370568dc6d11" />
               <section title="len" ref="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b" />
               <section title="data" ref="struct_kinetic_h_m_a_c.html#a0b92122284d74da8ff67fd54da30c57f" />
+            </section>
+            <section title="KineticKeyValue" ref="struct_kinetic_key_value.html">
+              <section title="key" ref="struct_kinetic_key_value.html#a270f2ce888c44d72789cb7f86140b933" />
+              <section title="newVersion" ref="struct_kinetic_key_value.html#a0c2b3d3b35cf6c0ac90480c5152b927b" />
+              <section title="dbVersion" ref="struct_kinetic_key_value.html#af549b1c587062fc1e918ad14fc1284ed" />
+              <section title="tag" ref="struct_kinetic_key_value.html#a9e1b4e1695e4b9ad697e2f3b6cb7b2a6" />
+              <section title="force" ref="struct_kinetic_key_value.html#a01828e3292c4fc5a32c570a0a8aa536b" />
+              <section title="algorithm" ref="struct_kinetic_key_value.html#ae8d744bb357cc30bf4a508aa1ce6fe60" />
+              <section title="metadataOnly" ref="struct_kinetic_key_value.html#a24b8496d304d7db60d0e268ffe2f63fd" />
+              <section title="synchronization" ref="struct_kinetic_key_value.html#a8cf19dcb682cfab5d72108bc020ec30c" />
+              <section title="value" ref="struct_kinetic_key_value.html#a6651c4b6773eade55bf9bc15da33b098" />
             </section>
             <section title="KineticMessage" ref="struct_kinetic_message.html">
               <section title="proto" ref="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757" />
@@ -72,7 +72,7 @@
               <section title="protoData" ref="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f" />
               <section title="proto" ref="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3" />
               <section title="protobufRaw" ref="struct_kinetic_p_d_u.html#ae1be03d2c09460a701920868d5262fc2" />
-              <section title="metadata" ref="struct_kinetic_p_d_u.html#a64b0ee9fe3e141f639707f375e2731a6" />
+              <section title="metadata" ref="struct_kinetic_p_d_u.html#a719e15ea62e718454aea66285d5df794" />
               <section title="valueBuffer" ref="struct_kinetic_p_d_u.html#aa7e9e0c4303ea554660f93d5dc2173d4" />
               <section title="value" ref="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f" />
               <section title="hmac" ref="struct_kinetic_p_d_u.html#a24cd6071d964ac66ddca742c6023ab85" />
@@ -390,31 +390,31 @@
         <section title="Files">
           <section title="File List" ref="files.html">
             <section title="get.c" ref="get_8c.html">
-              <section title="Get" ref="get_8c.html#aa3a86ce5b3301619f3a3946b657a3150" />
+              <section title="Get" ref="get_8c.html#a4eac921bed546f39bed8e83d9606b347" />
               <section title="Request" ref="get_8c.html#a72c86c9657e34f663c24b7f6d836e590" />
               <section title="Response" ref="get_8c.html#a8826d3341bd8bfbeb86db92d69b2e5c1" />
             </section>
             <section title="get.h" ref="get_8h.html">
-              <section title="Get" ref="get_8h.html#aa3a86ce5b3301619f3a3946b657a3150" />
+              <section title="Get" ref="get_8h.html#a4eac921bed546f39bed8e83d9606b347" />
             </section>
             <section title="kinetic_client.c" ref="kinetic__client_8c.html">
-              <section title="KineticClient_ExecuteOperation" ref="kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" />
+              <section title="KineticClient_ExecuteOperation" ref="kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" />
               <section title="KineticClient_Init" ref="kinetic__client_8c.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" />
               <section title="KineticClient_Connect" ref="kinetic__client_8c.html#a5448ecfd9eef429ea2679610e5cfd6cf" />
               <section title="KineticClient_Disconnect" ref="kinetic__client_8c.html#ae4b4f1c08bcb4fc76a792c216d5b0822" />
               <section title="KineticClient_CreateOperation" ref="kinetic__client_8c.html#a8c2d9f8e7d2046d8fef3294c645e4c96" />
-              <section title="KineticClient_NoOp" ref="kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" />
-              <section title="KineticClient_Put" ref="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" />
-              <section title="KineticClient_Get" ref="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" />
+              <section title="KineticClient_NoOp" ref="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" />
+              <section title="KineticClient_Put" ref="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" />
+              <section title="KineticClient_Get" ref="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" />
             </section>
             <section title="kinetic_client.h" ref="kinetic__client_8h.html">
               <section title="KineticClient_Init" ref="kinetic__client_8h.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" />
               <section title="KineticClient_Connect" ref="kinetic__client_8h.html#a5448ecfd9eef429ea2679610e5cfd6cf" />
               <section title="KineticClient_Disconnect" ref="kinetic__client_8h.html#ae4b4f1c08bcb4fc76a792c216d5b0822" />
               <section title="KineticClient_CreateOperation" ref="kinetic__client_8h.html#a8c2d9f8e7d2046d8fef3294c645e4c96" />
-              <section title="KineticClient_NoOp" ref="kinetic__client_8h.html#a10e53ad454fa3caa0323ad2ccf18ece8" />
-              <section title="KineticClient_Put" ref="kinetic__client_8h.html#a2705464e0a90ee21c4f851950bdd4590" />
-              <section title="KineticClient_Get" ref="kinetic__client_8h.html#ac5381f9a7772f8c64eb4087c17d0fbe4" />
+              <section title="KineticClient_NoOp" ref="kinetic__client_8h.html#aa265de3c65a20a8b7454a06cd80792d8" />
+              <section title="KineticClient_Put" ref="kinetic__client_8h.html#a9b9b330e205d5a627f9f08739da4369a" />
+              <section title="KineticClient_Get" ref="kinetic__client_8h.html#a17a5f97cb86609ee9f3ad7082370a7b8" />
             </section>
             <section title="kinetic_connection.c" ref="kinetic__connection_8c.html">
               <section title="KineticConnection_Connect" ref="kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76" />
@@ -471,11 +471,11 @@
             <section title="kinetic_message.c" ref="kinetic__message_8c.html">
               <section title="CONFIG_FIELD_BYTE_ARRAY" ref="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f" />
               <section title="KineticMessage_Init" ref="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d" />
-              <section title="KineticMessage_ConfigureKeyValue" ref="kinetic__message_8c.html#a888cdaf07002f7a7b6ab6263c49ebb12" />
+              <section title="KineticMessage_ConfigureKeyValue" ref="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b" />
             </section>
             <section title="kinetic_message.h" ref="kinetic__message_8h.html">
               <section title="KineticMessage_Init" ref="kinetic__message_8h.html#ac6ea752dfd491fffd99d4cad256f679d" />
-              <section title="KineticMessage_ConfigureKeyValue" ref="kinetic__message_8h.html#a888cdaf07002f7a7b6ab6263c49ebb12" />
+              <section title="KineticMessage_ConfigureKeyValue" ref="kinetic__message_8h.html#a4149617eb669e1bb58c70c40a2df2c7b" />
             </section>
             <section title="kinetic_nbo.c" ref="kinetic__nbo_8c.html">
               <section title="KineticNBO_FromHostU32" ref="kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad" />
@@ -490,22 +490,23 @@
               <section title="KineticNBO_ToHostU64" ref="kinetic__nbo_8h.html#a8fb11d2dd5ed25e5563bc7af2aeb7ebb" />
             </section>
             <section title="kinetic_operation.c" ref="kinetic__operation_8c.html">
+              <section title="KineticOperation_GetStatus" ref="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
               <section title="KineticOperation_ValidateOperation" ref="kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac" />
               <section title="KineticOperation_BuildNoop" ref="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888" />
-              <section title="KineticOperation_BuildPut" ref="kinetic__operation_8c.html#a2700aabef8796b1896a53b0f9a1a3d13" />
-              <section title="KineticOperation_BuildGet" ref="kinetic__operation_8c.html#ab74d2f2a39115bb5757112f57c147b71" />
+              <section title="KineticOperation_BuildPut" ref="kinetic__operation_8c.html#a433a47a0a88bdae7e8539767478231ab" />
+              <section title="KineticOperation_BuildGet" ref="kinetic__operation_8c.html#ae451136b154b2d002cde03c0f8d203e5" />
             </section>
             <section title="kinetic_operation.h" ref="kinetic__operation_8h.html">
+              <section title="KineticOperation_GetStatus" ref="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
               <section title="KineticOperation_BuildNoop" ref="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888" />
-              <section title="KineticOperation_BuildPut" ref="kinetic__operation_8h.html#a2700aabef8796b1896a53b0f9a1a3d13" />
-              <section title="KineticOperation_BuildGet" ref="kinetic__operation_8h.html#ab74d2f2a39115bb5757112f57c147b71" />
+              <section title="KineticOperation_BuildPut" ref="kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab" />
+              <section title="KineticOperation_BuildGet" ref="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5" />
             </section>
             <section title="kinetic_pdu.c" ref="kinetic__pdu_8c.html">
               <section title="KineticPDU_Init" ref="kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda" />
               <section title="KineticPDU_AttachValuePayload" ref="kinetic__pdu_8c.html#ad29d8f808b47e72f33d8a9ce09c478f4" />
               <section title="KineticPDU_EnableValueBuffer" ref="kinetic__pdu_8c.html#a73fb6bffccab39055afb05c99d6fdf39" />
               <section title="KineticPDU_EnableValueBufferWithLength" ref="kinetic__pdu_8c.html#a151c58f636193815a70a05ea8b1e289c" />
-              <section title="KineticPDU_Status" ref="kinetic__pdu_8c.html#ac8c3d890312eab07970a86ec9b075e33" />
               <section title="KineticPDU_Send" ref="kinetic__pdu_8c.html#a9b83efba84b9ea49ae6fca07f026e77f" />
               <section title="KineticPDU_Receive" ref="kinetic__pdu_8c.html#acff84c8347b8df5df8d90364d990268a" />
             </section>
@@ -514,7 +515,6 @@
               <section title="KineticPDU_AttachValuePayload" ref="kinetic__pdu_8h.html#ad29d8f808b47e72f33d8a9ce09c478f4" />
               <section title="KineticPDU_EnableValueBuffer" ref="kinetic__pdu_8h.html#a73fb6bffccab39055afb05c99d6fdf39" />
               <section title="KineticPDU_EnableValueBufferWithLength" ref="kinetic__pdu_8h.html#a151c58f636193815a70a05ea8b1e289c" />
-              <section title="KineticPDU_Status" ref="kinetic__pdu_8h.html#ac8c3d890312eab07970a86ec9b075e33" />
               <section title="KineticPDU_Send" ref="kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" />
               <section title="KineticPDU_Receive" ref="kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" />
             </section>
@@ -1072,6 +1072,10 @@
               <section title="KineticSocket_Write" ref="kinetic__socket_8h.html#a1a8ae7ce63273b6d2cea899e0e5a0043" />
               <section title="KineticSocket_WriteProtobuf" ref="kinetic__socket_8h.html#a3851320ed4ef5e518ca1ff9fefccffcb" />
             </section>
+            <section title="kinetic_types.c" ref="kinetic__types_8c.html">
+              <section title="KineticStatusDescriptor" ref="kinetic__types_8c.html#a38ab76ae6e26bfb79a8ead99577c26b8" />
+              <section title="KineticStatusDescriptorCount" ref="kinetic__types_8c.html#a588e558705ad77f8f0b5c3f58cdec6fc" />
+            </section>
             <section title="kinetic_types.h" ref="kinetic__types_8h.html">
               <section title="ByteBuffer" ref="struct_byte_buffer.html">
                 <section title="buffer" ref="struct_byte_buffer.html#a30bf93b8c9fd109c92afc66b1cb9886a" />
@@ -1106,16 +1110,16 @@
                 <section title="keyValue" ref="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0" />
                 <section title="hmacData" ref="struct_kinetic_message.html#a5882b07af169a28bba89ed60a51fae10" />
               </section>
-              <section title="Kinetic_KeyValue" ref="struct_kinetic___key_value.html">
-                <section title="key" ref="struct_kinetic___key_value.html#a5b11e6d46c0477a56e17f806b61ee1fd" />
-                <section title="newVersion" ref="struct_kinetic___key_value.html#a760ab187e961072772c5b3424b4920e4" />
-                <section title="dbVersion" ref="struct_kinetic___key_value.html#a042db4e4913fdd9537a757b68eed3ab8" />
-                <section title="tag" ref="struct_kinetic___key_value.html#a70d473aef8e8f84d22b95ed38d7ff356" />
-                <section title="force" ref="struct_kinetic___key_value.html#a4c9b9448d8961723c21f260d238e678b" />
-                <section title="algorithm" ref="struct_kinetic___key_value.html#a360a666fdb64def39b8ae3ef4331b718" />
-                <section title="metadataOnly" ref="struct_kinetic___key_value.html#ae56159cc0aa9d64ad7d7e77cfc5602af" />
-                <section title="synchronization" ref="struct_kinetic___key_value.html#af27d1bb8f1f65105a6a40817752955a3" />
-                <section title="value" ref="struct_kinetic___key_value.html#a5942f952e21955ada96e3a81844698a5" />
+              <section title="KineticKeyValue" ref="struct_kinetic_key_value.html">
+                <section title="key" ref="struct_kinetic_key_value.html#a270f2ce888c44d72789cb7f86140b933" />
+                <section title="newVersion" ref="struct_kinetic_key_value.html#a0c2b3d3b35cf6c0ac90480c5152b927b" />
+                <section title="dbVersion" ref="struct_kinetic_key_value.html#af549b1c587062fc1e918ad14fc1284ed" />
+                <section title="tag" ref="struct_kinetic_key_value.html#a9e1b4e1695e4b9ad697e2f3b6cb7b2a6" />
+                <section title="force" ref="struct_kinetic_key_value.html#a01828e3292c4fc5a32c570a0a8aa536b" />
+                <section title="algorithm" ref="struct_kinetic_key_value.html#ae8d744bb357cc30bf4a508aa1ce6fe60" />
+                <section title="metadataOnly" ref="struct_kinetic_key_value.html#a24b8496d304d7db60d0e268ffe2f63fd" />
+                <section title="synchronization" ref="struct_kinetic_key_value.html#a8cf19dcb682cfab5d72108bc020ec30c" />
+                <section title="value" ref="struct_kinetic_key_value.html#a6651c4b6773eade55bf9bc15da33b098" />
               </section>
               <section title="KineticPDU" ref="struct_kinetic_p_d_u.html">
                 <section title="header" ref="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8" />
@@ -1126,7 +1130,7 @@
                 <section title="protoData" ref="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f" />
                 <section title="proto" ref="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3" />
                 <section title="protobufRaw" ref="struct_kinetic_p_d_u.html#ae1be03d2c09460a701920868d5262fc2" />
-                <section title="metadata" ref="struct_kinetic_p_d_u.html#a64b0ee9fe3e141f639707f375e2731a6" />
+                <section title="metadata" ref="struct_kinetic_p_d_u.html#a719e15ea62e718454aea66285d5df794" />
                 <section title="valueBuffer" ref="struct_kinetic_p_d_u.html#aa7e9e0c4303ea554660f93d5dc2173d4" />
                 <section title="value" ref="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f" />
                 <section title="hmac" ref="struct_kinetic_p_d_u.html#a24cd6071d964ac66ddca742c6023ab85" />
@@ -1167,9 +1171,22 @@
               <section title="KINETIC_PDU_INIT_WITH_MESSAGE" ref="kinetic__types_8h.html#a75f768b35723de9834d28d6c229503d4" />
               <section title="KINETIC_OPERATION_INIT" ref="kinetic__types_8h.html#aea7521ddc30f84e971ec31ede1ef527a" />
               <section title="ByteArray" ref="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f" />
+              <section title="KineticStatus" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">
+                <section title="KINETIC_STATUS_INVALID" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f" />
+                <section title="KINETIC_STATUS_SUCCESS" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e" />
+                <section title="KINETIC_STATUS_DEVICE_BUSY" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a6c1bab895a12cbc908fc4ac3c912f2af" />
+                <section title="KINETIC_STATUS_CONNECTION_ERROR" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018" />
+                <section title="KINETIC_STATUS_INVALID_REQUEST" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0910418168ab52290184d28436cd1499" />
+                <section title="KINETIC_STATUS_OPERATION_FAILED" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285" />
+                <section title="KINETIC_STATUS_VERSION_FAILURE" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a83075fb61e6fdff87354313fbf37d830" />
+                <section title="KINETIC_STATUS_DATA_ERROR" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a880da6938443e4f357d12a22e4d51aef" />
+              </section>
               <section title="__attribute__" ref="kinetic__types_8h.html#acd4d1cefdb491a9369cf0176e6d3a6cc" />
+              <section title="KineticStatusDescriptorCount" ref="kinetic__types_8h.html#a588e558705ad77f8f0b5c3f58cdec6fc" />
+              <section title="KineticStatusDescriptor" ref="kinetic__types_8h.html#a38ab76ae6e26bfb79a8ead99577c26b8" />
               <section title="KineticPDUHeader" ref="kinetic__types_8h.html#aeefc7ca996ea90f5703b1b8440092c5e" />
             </section>
+            <section title="kinetic_types_internal.h" ref="kinetic__types__internal_8h.html" />
             <section title="main.c" ref="main_8c.html">
               <section title="main" ref="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
             </section>
@@ -1182,12 +1199,12 @@
               <section title="NoOp" ref="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" />
             </section>
             <section title="put.c" ref="put_8c.html">
-              <section title="Put" ref="put_8c.html#ad2fb023662a16a8dc70fda8eb4f38d3e" />
+              <section title="Put" ref="put_8c.html#a7024809d629cd8d8a61af20ad5b1a660" />
               <section title="request" ref="put_8c.html#aa7a5f7da6c35f80db2b9bd7a681034e3" />
               <section title="response" ref="put_8c.html#a7b09f3348dc407c7c3313f6d4454022e" />
             </section>
             <section title="put.h" ref="put_8h.html">
-              <section title="Put" ref="put_8h.html#ad2fb023662a16a8dc70fda8eb4f38d3e" />
+              <section title="Put" ref="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" />
             </section>
           </section>
           <section title="Globals" ref="globals.html">
@@ -1216,25 +1233,25 @@
       </section>
     </toc>
     <keywords>
-      <keyword name="Get" id="get.c::Get" ref="get_8c.html#aa3a86ce5b3301619f3a3946b657a3150" />
+      <keyword name="Get" id="get.c::Get" ref="get_8c.html#a4eac921bed546f39bed8e83d9606b347" />
       <keyword name="Request" id="get.c::Request" ref="get_8c.html#a72c86c9657e34f663c24b7f6d836e590" />
       <keyword name="Response" id="get.c::Response" ref="get_8c.html#a8826d3341bd8bfbeb86db92d69b2e5c1" />
-      <keyword name="Get" id="get.h::Get" ref="get_8h.html#aa3a86ce5b3301619f3a3946b657a3150" />
-      <keyword name="KineticClient_ExecuteOperation" id="kinetic_client.c::KineticClient_ExecuteOperation" ref="kinetic__client_8c.html#a587d8092bb875aba8341a0cf7ce5d1bd" />
+      <keyword name="Get" id="get.h::Get" ref="get_8h.html#a4eac921bed546f39bed8e83d9606b347" />
+      <keyword name="KineticClient_ExecuteOperation" id="kinetic_client.c::KineticClient_ExecuteOperation" ref="kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" />
       <keyword name="KineticClient_Init" id="kinetic_client.c::KineticClient_Init" ref="kinetic__client_8c.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" />
       <keyword name="KineticClient_Connect" id="kinetic_client.c::KineticClient_Connect" ref="kinetic__client_8c.html#a5448ecfd9eef429ea2679610e5cfd6cf" />
       <keyword name="KineticClient_Disconnect" id="kinetic_client.c::KineticClient_Disconnect" ref="kinetic__client_8c.html#ae4b4f1c08bcb4fc76a792c216d5b0822" />
       <keyword name="KineticClient_CreateOperation" id="kinetic_client.c::KineticClient_CreateOperation" ref="kinetic__client_8c.html#a8c2d9f8e7d2046d8fef3294c645e4c96" />
-      <keyword name="KineticClient_NoOp" id="kinetic_client.c::KineticClient_NoOp" ref="kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" />
-      <keyword name="KineticClient_Put" id="kinetic_client.c::KineticClient_Put" ref="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" />
-      <keyword name="KineticClient_Get" id="kinetic_client.c::KineticClient_Get" ref="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" />
+      <keyword name="KineticClient_NoOp" id="kinetic_client.c::KineticClient_NoOp" ref="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" />
+      <keyword name="KineticClient_Put" id="kinetic_client.c::KineticClient_Put" ref="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" />
+      <keyword name="KineticClient_Get" id="kinetic_client.c::KineticClient_Get" ref="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" />
       <keyword name="KineticClient_Init" id="kinetic_client.h::KineticClient_Init" ref="kinetic__client_8h.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" />
       <keyword name="KineticClient_Connect" id="kinetic_client.h::KineticClient_Connect" ref="kinetic__client_8h.html#a5448ecfd9eef429ea2679610e5cfd6cf" />
       <keyword name="KineticClient_Disconnect" id="kinetic_client.h::KineticClient_Disconnect" ref="kinetic__client_8h.html#ae4b4f1c08bcb4fc76a792c216d5b0822" />
       <keyword name="KineticClient_CreateOperation" id="kinetic_client.h::KineticClient_CreateOperation" ref="kinetic__client_8h.html#a8c2d9f8e7d2046d8fef3294c645e4c96" />
-      <keyword name="KineticClient_NoOp" id="kinetic_client.h::KineticClient_NoOp" ref="kinetic__client_8h.html#a10e53ad454fa3caa0323ad2ccf18ece8" />
-      <keyword name="KineticClient_Put" id="kinetic_client.h::KineticClient_Put" ref="kinetic__client_8h.html#a2705464e0a90ee21c4f851950bdd4590" />
-      <keyword name="KineticClient_Get" id="kinetic_client.h::KineticClient_Get" ref="kinetic__client_8h.html#ac5381f9a7772f8c64eb4087c17d0fbe4" />
+      <keyword name="KineticClient_NoOp" id="kinetic_client.h::KineticClient_NoOp" ref="kinetic__client_8h.html#aa265de3c65a20a8b7454a06cd80792d8" />
+      <keyword name="KineticClient_Put" id="kinetic_client.h::KineticClient_Put" ref="kinetic__client_8h.html#a9b9b330e205d5a627f9f08739da4369a" />
+      <keyword name="KineticClient_Get" id="kinetic_client.h::KineticClient_Get" ref="kinetic__client_8h.html#a17a5f97cb86609ee9f3ad7082370a7b8" />
       <keyword name="KineticConnection_Connect" id="kinetic_connection.c::KineticConnection_Connect" ref="kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76" />
       <keyword name="KineticConnection_Disconnect" id="kinetic_connection.c::KineticConnection_Disconnect" ref="kinetic__connection_8c.html#ac098de6abde0c838914a846829d51ac5" />
       <keyword name="KineticConnection_IncrementSequence" id="kinetic_connection.c::KineticConnection_IncrementSequence" ref="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d" />
@@ -1277,9 +1294,9 @@
       <keyword name="KineticLogger_LogByteArray" id="kinetic_logger.h::KineticLogger_LogByteArray" ref="kinetic__logger_8h.html#a1833be5893222cc3650250726623f93c" />
       <keyword name="CONFIG_FIELD_BYTE_ARRAY" id="kinetic_message.c::CONFIG_FIELD_BYTE_ARRAY" ref="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f" />
       <keyword name="KineticMessage_Init" id="kinetic_message.c::KineticMessage_Init" ref="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d" />
-      <keyword name="KineticMessage_ConfigureKeyValue" id="kinetic_message.c::KineticMessage_ConfigureKeyValue" ref="kinetic__message_8c.html#a888cdaf07002f7a7b6ab6263c49ebb12" />
+      <keyword name="KineticMessage_ConfigureKeyValue" id="kinetic_message.c::KineticMessage_ConfigureKeyValue" ref="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b" />
       <keyword name="KineticMessage_Init" id="kinetic_message.h::KineticMessage_Init" ref="kinetic__message_8h.html#ac6ea752dfd491fffd99d4cad256f679d" />
-      <keyword name="KineticMessage_ConfigureKeyValue" id="kinetic_message.h::KineticMessage_ConfigureKeyValue" ref="kinetic__message_8h.html#a888cdaf07002f7a7b6ab6263c49ebb12" />
+      <keyword name="KineticMessage_ConfigureKeyValue" id="kinetic_message.h::KineticMessage_ConfigureKeyValue" ref="kinetic__message_8h.html#a4149617eb669e1bb58c70c40a2df2c7b" />
       <keyword name="KineticNBO_FromHostU32" id="kinetic_nbo.c::KineticNBO_FromHostU32" ref="kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad" />
       <keyword name="KineticNBO_ToHostU32" id="kinetic_nbo.c::KineticNBO_ToHostU32" ref="kinetic__nbo_8c.html#a82d5bae248ec3e63c7fd40b55a9293ca" />
       <keyword name="KineticNBO_FromHostU64" id="kinetic_nbo.c::KineticNBO_FromHostU64" ref="kinetic__nbo_8c.html#a6d46a35964958e880f5acb8674fa79ea" />
@@ -1288,25 +1305,25 @@
       <keyword name="KineticNBO_ToHostU32" id="kinetic_nbo.h::KineticNBO_ToHostU32" ref="kinetic__nbo_8h.html#a82d5bae248ec3e63c7fd40b55a9293ca" />
       <keyword name="KineticNBO_FromHostU64" id="kinetic_nbo.h::KineticNBO_FromHostU64" ref="kinetic__nbo_8h.html#a6d46a35964958e880f5acb8674fa79ea" />
       <keyword name="KineticNBO_ToHostU64" id="kinetic_nbo.h::KineticNBO_ToHostU64" ref="kinetic__nbo_8h.html#a8fb11d2dd5ed25e5563bc7af2aeb7ebb" />
+      <keyword name="KineticOperation_GetStatus" id="kinetic_operation.c::KineticOperation_GetStatus" ref="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
       <keyword name="KineticOperation_ValidateOperation" id="kinetic_operation.c::KineticOperation_ValidateOperation" ref="kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac" />
       <keyword name="KineticOperation_BuildNoop" id="kinetic_operation.c::KineticOperation_BuildNoop" ref="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888" />
-      <keyword name="KineticOperation_BuildPut" id="kinetic_operation.c::KineticOperation_BuildPut" ref="kinetic__operation_8c.html#a2700aabef8796b1896a53b0f9a1a3d13" />
-      <keyword name="KineticOperation_BuildGet" id="kinetic_operation.c::KineticOperation_BuildGet" ref="kinetic__operation_8c.html#ab74d2f2a39115bb5757112f57c147b71" />
+      <keyword name="KineticOperation_BuildPut" id="kinetic_operation.c::KineticOperation_BuildPut" ref="kinetic__operation_8c.html#a433a47a0a88bdae7e8539767478231ab" />
+      <keyword name="KineticOperation_BuildGet" id="kinetic_operation.c::KineticOperation_BuildGet" ref="kinetic__operation_8c.html#ae451136b154b2d002cde03c0f8d203e5" />
+      <keyword name="KineticOperation_GetStatus" id="kinetic_operation.h::KineticOperation_GetStatus" ref="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
       <keyword name="KineticOperation_BuildNoop" id="kinetic_operation.h::KineticOperation_BuildNoop" ref="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888" />
-      <keyword name="KineticOperation_BuildPut" id="kinetic_operation.h::KineticOperation_BuildPut" ref="kinetic__operation_8h.html#a2700aabef8796b1896a53b0f9a1a3d13" />
-      <keyword name="KineticOperation_BuildGet" id="kinetic_operation.h::KineticOperation_BuildGet" ref="kinetic__operation_8h.html#ab74d2f2a39115bb5757112f57c147b71" />
+      <keyword name="KineticOperation_BuildPut" id="kinetic_operation.h::KineticOperation_BuildPut" ref="kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab" />
+      <keyword name="KineticOperation_BuildGet" id="kinetic_operation.h::KineticOperation_BuildGet" ref="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5" />
       <keyword name="KineticPDU_Init" id="kinetic_pdu.c::KineticPDU_Init" ref="kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda" />
       <keyword name="KineticPDU_AttachValuePayload" id="kinetic_pdu.c::KineticPDU_AttachValuePayload" ref="kinetic__pdu_8c.html#ad29d8f808b47e72f33d8a9ce09c478f4" />
       <keyword name="KineticPDU_EnableValueBuffer" id="kinetic_pdu.c::KineticPDU_EnableValueBuffer" ref="kinetic__pdu_8c.html#a73fb6bffccab39055afb05c99d6fdf39" />
       <keyword name="KineticPDU_EnableValueBufferWithLength" id="kinetic_pdu.c::KineticPDU_EnableValueBufferWithLength" ref="kinetic__pdu_8c.html#a151c58f636193815a70a05ea8b1e289c" />
-      <keyword name="KineticPDU_Status" id="kinetic_pdu.c::KineticPDU_Status" ref="kinetic__pdu_8c.html#ac8c3d890312eab07970a86ec9b075e33" />
       <keyword name="KineticPDU_Send" id="kinetic_pdu.c::KineticPDU_Send" ref="kinetic__pdu_8c.html#a9b83efba84b9ea49ae6fca07f026e77f" />
       <keyword name="KineticPDU_Receive" id="kinetic_pdu.c::KineticPDU_Receive" ref="kinetic__pdu_8c.html#acff84c8347b8df5df8d90364d990268a" />
       <keyword name="KineticPDU_Init" id="kinetic_pdu.h::KineticPDU_Init" ref="kinetic__pdu_8h.html#ac2b45fc01853688e458920a95bf12dda" />
       <keyword name="KineticPDU_AttachValuePayload" id="kinetic_pdu.h::KineticPDU_AttachValuePayload" ref="kinetic__pdu_8h.html#ad29d8f808b47e72f33d8a9ce09c478f4" />
       <keyword name="KineticPDU_EnableValueBuffer" id="kinetic_pdu.h::KineticPDU_EnableValueBuffer" ref="kinetic__pdu_8h.html#a73fb6bffccab39055afb05c99d6fdf39" />
       <keyword name="KineticPDU_EnableValueBufferWithLength" id="kinetic_pdu.h::KineticPDU_EnableValueBufferWithLength" ref="kinetic__pdu_8h.html#a151c58f636193815a70a05ea8b1e289c" />
-      <keyword name="KineticPDU_Status" id="kinetic_pdu.h::KineticPDU_Status" ref="kinetic__pdu_8h.html#ac8c3d890312eab07970a86ec9b075e33" />
       <keyword name="KineticPDU_Send" id="kinetic_pdu.h::KineticPDU_Send" ref="kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" />
       <keyword name="KineticPDU_Receive" id="kinetic_pdu.h::KineticPDU_Receive" ref="kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" />
       <keyword name="PROTOBUF_C__NO_DEPRECATED" id="kinetic_proto.c::PROTOBUF_C__NO_DEPRECATED" ref="kinetic__proto_8c.html#ad9480935c25b5155174487b631af52f5" />
@@ -1576,6 +1593,8 @@
       <keyword name="KineticSocket_ReadProtobuf" id="kinetic_socket.h::KineticSocket_ReadProtobuf" ref="kinetic__socket_8h.html#a66ab9acaa76c5f9763fbf712ec5a82e6" />
       <keyword name="KineticSocket_Write" id="kinetic_socket.h::KineticSocket_Write" ref="kinetic__socket_8h.html#a1a8ae7ce63273b6d2cea899e0e5a0043" />
       <keyword name="KineticSocket_WriteProtobuf" id="kinetic_socket.h::KineticSocket_WriteProtobuf" ref="kinetic__socket_8h.html#a3851320ed4ef5e518ca1ff9fefccffcb" />
+      <keyword name="KineticStatusDescriptor" id="kinetic_types.c::KineticStatusDescriptor" ref="kinetic__types_8c.html#a38ab76ae6e26bfb79a8ead99577c26b8" />
+      <keyword name="KineticStatusDescriptorCount" id="kinetic_types.c::KineticStatusDescriptorCount" ref="kinetic__types_8c.html#a588e558705ad77f8f0b5c3f58cdec6fc" />
       <keyword name="KINETIC_PORT" id="kinetic_types.h::KINETIC_PORT" ref="kinetic__types_8h.html#add9d47513f5472c08a593999978f8018" />
       <keyword name="KINETIC_TLS_PORT" id="kinetic_types.h::KINETIC_TLS_PORT" ref="kinetic__types_8h.html#a43b41ecab84ae37ab03051451c0aedc9" />
       <keyword name="KINETIC_HMAC_SHA1_LEN" id="kinetic_types.h::KINETIC_HMAC_SHA1_LEN" ref="kinetic__types_8h.html#a634c0f8d37b8f5980e51d9c7cf5e90e5" />
@@ -1607,16 +1626,26 @@
       <keyword name="KINETIC_OPERATION_INIT" id="kinetic_types.h::KINETIC_OPERATION_INIT" ref="kinetic__types_8h.html#aea7521ddc30f84e971ec31ede1ef527a" />
       <keyword name="ByteArray" id="kinetic_types.h::ByteArray" ref="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f" />
       <keyword name="__attribute__" id="kinetic_types.h::__attribute__" ref="kinetic__types_8h.html#acd4d1cefdb491a9369cf0176e6d3a6cc" />
+      <keyword name="KineticStatusDescriptorCount" id="kinetic_types.h::KineticStatusDescriptorCount" ref="kinetic__types_8h.html#a588e558705ad77f8f0b5c3f58cdec6fc" />
+      <keyword name="KineticStatusDescriptor" id="kinetic_types.h::KineticStatusDescriptor" ref="kinetic__types_8h.html#a38ab76ae6e26bfb79a8ead99577c26b8" />
       <keyword name="KineticPDUHeader" id="kinetic_types.h::KineticPDUHeader" ref="kinetic__types_8h.html#aeefc7ca996ea90f5703b1b8440092c5e" />
+      <keyword name="KINETIC_STATUS_INVALID" id="kinetic_types.h::KINETIC_STATUS_INVALID" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f" />
+      <keyword name="KINETIC_STATUS_SUCCESS" id="kinetic_types.h::KINETIC_STATUS_SUCCESS" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e" />
+      <keyword name="KINETIC_STATUS_DEVICE_BUSY" id="kinetic_types.h::KINETIC_STATUS_DEVICE_BUSY" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a6c1bab895a12cbc908fc4ac3c912f2af" />
+      <keyword name="KINETIC_STATUS_CONNECTION_ERROR" id="kinetic_types.h::KINETIC_STATUS_CONNECTION_ERROR" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018" />
+      <keyword name="KINETIC_STATUS_INVALID_REQUEST" id="kinetic_types.h::KINETIC_STATUS_INVALID_REQUEST" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0910418168ab52290184d28436cd1499" />
+      <keyword name="KINETIC_STATUS_OPERATION_FAILED" id="kinetic_types.h::KINETIC_STATUS_OPERATION_FAILED" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285" />
+      <keyword name="KINETIC_STATUS_VERSION_FAILURE" id="kinetic_types.h::KINETIC_STATUS_VERSION_FAILURE" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a83075fb61e6fdff87354313fbf37d830" />
+      <keyword name="KINETIC_STATUS_DATA_ERROR" id="kinetic_types.h::KINETIC_STATUS_DATA_ERROR" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a880da6938443e4f357d12a22e4d51aef" />
       <keyword name="main" id="main.c::main" ref="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
       <keyword name="NoOp" id="noop.c::NoOp" ref="noop_8c.html#a54134f0309024f11ce0cf25c26a22934" />
       <keyword name="Request" id="noop.c::Request" ref="noop_8c.html#a72c86c9657e34f663c24b7f6d836e590" />
       <keyword name="Response" id="noop.c::Response" ref="noop_8c.html#a8826d3341bd8bfbeb86db92d69b2e5c1" />
       <keyword name="NoOp" id="noop.h::NoOp" ref="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" />
-      <keyword name="Put" id="put.c::Put" ref="put_8c.html#ad2fb023662a16a8dc70fda8eb4f38d3e" />
+      <keyword name="Put" id="put.c::Put" ref="put_8c.html#a7024809d629cd8d8a61af20ad5b1a660" />
       <keyword name="request" id="put.c::request" ref="put_8c.html#aa7a5f7da6c35f80db2b9bd7a681034e3" />
       <keyword name="response" id="put.c::response" ref="put_8c.html#a7b09f3348dc407c7c3313f6d4454022e" />
-      <keyword name="Put" id="put.h::Put" ref="put_8h.html#ad2fb023662a16a8dc70fda8eb4f38d3e" />
+      <keyword name="Put" id="put.h::Put" ref="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" />
       <keyword name="_KineticProto" id="_KineticProto" ref="struct___kinetic_proto.html" />
       <keyword name="base" id="_KineticProto::base" ref="struct___kinetic_proto.html#a2eeaecc27f3dda9d8769147fb34d6f96" />
       <keyword name="command" id="_KineticProto::command" ref="struct___kinetic_proto.html#aa925e77301819d0902f65bc98195ed15" />
@@ -1625,16 +1654,6 @@
       <keyword name="ByteBuffer" id="ByteBuffer" ref="struct_byte_buffer.html" />
       <keyword name="buffer" id="ByteBuffer::buffer" ref="struct_byte_buffer.html#a30bf93b8c9fd109c92afc66b1cb9886a" />
       <keyword name="maxLen" id="ByteBuffer::maxLen" ref="struct_byte_buffer.html#a4fee9e08b1d179dfce37f3534217d7f7" />
-      <keyword name="Kinetic_KeyValue" id="Kinetic_KeyValue" ref="struct_kinetic___key_value.html" />
-      <keyword name="key" id="Kinetic_KeyValue::key" ref="struct_kinetic___key_value.html#a5b11e6d46c0477a56e17f806b61ee1fd" />
-      <keyword name="newVersion" id="Kinetic_KeyValue::newVersion" ref="struct_kinetic___key_value.html#a760ab187e961072772c5b3424b4920e4" />
-      <keyword name="dbVersion" id="Kinetic_KeyValue::dbVersion" ref="struct_kinetic___key_value.html#a042db4e4913fdd9537a757b68eed3ab8" />
-      <keyword name="tag" id="Kinetic_KeyValue::tag" ref="struct_kinetic___key_value.html#a70d473aef8e8f84d22b95ed38d7ff356" />
-      <keyword name="force" id="Kinetic_KeyValue::force" ref="struct_kinetic___key_value.html#a4c9b9448d8961723c21f260d238e678b" />
-      <keyword name="algorithm" id="Kinetic_KeyValue::algorithm" ref="struct_kinetic___key_value.html#a360a666fdb64def39b8ae3ef4331b718" />
-      <keyword name="metadataOnly" id="Kinetic_KeyValue::metadataOnly" ref="struct_kinetic___key_value.html#ae56159cc0aa9d64ad7d7e77cfc5602af" />
-      <keyword name="synchronization" id="Kinetic_KeyValue::synchronization" ref="struct_kinetic___key_value.html#af27d1bb8f1f65105a6a40817752955a3" />
-      <keyword name="value" id="Kinetic_KeyValue::value" ref="struct_kinetic___key_value.html#a5942f952e21955ada96e3a81844698a5" />
       <keyword name="KineticConnection" id="KineticConnection" ref="struct_kinetic_connection.html" />
       <keyword name="connected" id="KineticConnection::connected" ref="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53" />
       <keyword name="nonBlocking" id="KineticConnection::nonBlocking" ref="struct_kinetic_connection.html#aac893b5dcd2609178b4b7312ed499db2" />
@@ -1651,6 +1670,16 @@
       <keyword name="algorithm" id="KineticHMAC::algorithm" ref="struct_kinetic_h_m_a_c.html#a8b00d3368fc08fba9b41370568dc6d11" />
       <keyword name="len" id="KineticHMAC::len" ref="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b" />
       <keyword name="data" id="KineticHMAC::data" ref="struct_kinetic_h_m_a_c.html#a0b92122284d74da8ff67fd54da30c57f" />
+      <keyword name="KineticKeyValue" id="KineticKeyValue" ref="struct_kinetic_key_value.html" />
+      <keyword name="key" id="KineticKeyValue::key" ref="struct_kinetic_key_value.html#a270f2ce888c44d72789cb7f86140b933" />
+      <keyword name="newVersion" id="KineticKeyValue::newVersion" ref="struct_kinetic_key_value.html#a0c2b3d3b35cf6c0ac90480c5152b927b" />
+      <keyword name="dbVersion" id="KineticKeyValue::dbVersion" ref="struct_kinetic_key_value.html#af549b1c587062fc1e918ad14fc1284ed" />
+      <keyword name="tag" id="KineticKeyValue::tag" ref="struct_kinetic_key_value.html#a9e1b4e1695e4b9ad697e2f3b6cb7b2a6" />
+      <keyword name="force" id="KineticKeyValue::force" ref="struct_kinetic_key_value.html#a01828e3292c4fc5a32c570a0a8aa536b" />
+      <keyword name="algorithm" id="KineticKeyValue::algorithm" ref="struct_kinetic_key_value.html#ae8d744bb357cc30bf4a508aa1ce6fe60" />
+      <keyword name="metadataOnly" id="KineticKeyValue::metadataOnly" ref="struct_kinetic_key_value.html#a24b8496d304d7db60d0e268ffe2f63fd" />
+      <keyword name="synchronization" id="KineticKeyValue::synchronization" ref="struct_kinetic_key_value.html#a8cf19dcb682cfab5d72108bc020ec30c" />
+      <keyword name="value" id="KineticKeyValue::value" ref="struct_kinetic_key_value.html#a6651c4b6773eade55bf9bc15da33b098" />
       <keyword name="KineticMessage" id="KineticMessage" ref="struct_kinetic_message.html" />
       <keyword name="proto" id="KineticMessage::proto" ref="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757" />
       <keyword name="command" id="KineticMessage::command" ref="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36" />
@@ -1674,7 +1703,7 @@
       <keyword name="protoData" id="KineticPDU::protoData" ref="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f" />
       <keyword name="proto" id="KineticPDU::proto" ref="struct_kinetic_p_d_u.html#ab8dadb5a4357e19bd22828df64f66be3" />
       <keyword name="protobufRaw" id="KineticPDU::protobufRaw" ref="struct_kinetic_p_d_u.html#ae1be03d2c09460a701920868d5262fc2" />
-      <keyword name="metadata" id="KineticPDU::metadata" ref="struct_kinetic_p_d_u.html#a64b0ee9fe3e141f639707f375e2731a6" />
+      <keyword name="metadata" id="KineticPDU::metadata" ref="struct_kinetic_p_d_u.html#a719e15ea62e718454aea66285d5df794" />
       <keyword name="valueBuffer" id="KineticPDU::valueBuffer" ref="struct_kinetic_p_d_u.html#aa7e9e0c4303ea554660f93d5dc2173d4" />
       <keyword name="value" id="KineticPDU::value" ref="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f" />
       <keyword name="hmac" id="KineticPDU::hmac" ref="struct_kinetic_p_d_u.html#a24cd6071d964ac66ddca742c6023ab85" />
@@ -1969,7 +1998,9 @@
       <file>kinetic__proto_8h_source.html</file>
       <file>kinetic__socket_8c_source.html</file>
       <file>kinetic__socket_8h_source.html</file>
+      <file>kinetic__types_8c_source.html</file>
       <file>kinetic__types_8h_source.html</file>
+      <file>kinetic__types__internal_8h_source.html</file>
       <file>main_8c_source.html</file>
       <file>noop_8c_source.html</file>
       <file>noop_8h_source.html</file>
@@ -1978,17 +2009,17 @@
       <file>_r_e_a_d_m_e_8md_source.html</file>
       <file>get_8c.html</file>
       <file>get_8c__incl.png</file>
-      <file>get_8c_aa3a86ce5b3301619f3a3946b657a3150_cgraph.png</file>
-      <file>get_8c_aa3a86ce5b3301619f3a3946b657a3150_icgraph.png</file>
+      <file>get_8c_a4eac921bed546f39bed8e83d9606b347_cgraph.png</file>
+      <file>get_8c_a4eac921bed546f39bed8e83d9606b347_icgraph.png</file>
       <file>get_8h.html</file>
       <file>get_8h__incl.png</file>
       <file>get_8h__dep__incl.png</file>
-      <file>get_8h_aa3a86ce5b3301619f3a3946b657a3150_cgraph.png</file>
-      <file>get_8h_aa3a86ce5b3301619f3a3946b657a3150_icgraph.png</file>
+      <file>get_8h_a4eac921bed546f39bed8e83d9606b347_cgraph.png</file>
+      <file>get_8h_a4eac921bed546f39bed8e83d9606b347_icgraph.png</file>
       <file>kinetic__client_8c.html</file>
       <file>kinetic__client_8c__incl.png</file>
-      <file>kinetic__client_8c_a587d8092bb875aba8341a0cf7ce5d1bd_cgraph.png</file>
-      <file>kinetic__client_8c_a587d8092bb875aba8341a0cf7ce5d1bd_icgraph.png</file>
+      <file>kinetic__client_8c_a330d0594baf0643fc75aea0755c1bdc9_cgraph.png</file>
+      <file>kinetic__client_8c_a330d0594baf0643fc75aea0755c1bdc9_icgraph.png</file>
       <file>kinetic__client_8c_ad3ba9980559b44b3bcb3d7aabe2afd2d_cgraph.png</file>
       <file>kinetic__client_8c_ad3ba9980559b44b3bcb3d7aabe2afd2d_icgraph.png</file>
       <file>kinetic__client_8c_a5448ecfd9eef429ea2679610e5cfd6cf_cgraph.png</file>
@@ -1997,10 +2028,12 @@
       <file>kinetic__client_8c_ae4b4f1c08bcb4fc76a792c216d5b0822_icgraph.png</file>
       <file>kinetic__client_8c_a8c2d9f8e7d2046d8fef3294c645e4c96_cgraph.png</file>
       <file>kinetic__client_8c_a8c2d9f8e7d2046d8fef3294c645e4c96_icgraph.png</file>
-      <file>kinetic__client_8c_a10e53ad454fa3caa0323ad2ccf18ece8_cgraph.png</file>
-      <file>kinetic__client_8c_a10e53ad454fa3caa0323ad2ccf18ece8_icgraph.png</file>
-      <file>kinetic__client_8c_a991e741b094c0a74ef5b0ed66e1c88d8_cgraph.png</file>
-      <file>kinetic__client_8c_a27619674ccf197317001a9f215d377cc_cgraph.png</file>
+      <file>kinetic__client_8c_aa265de3c65a20a8b7454a06cd80792d8_cgraph.png</file>
+      <file>kinetic__client_8c_aa265de3c65a20a8b7454a06cd80792d8_icgraph.png</file>
+      <file>kinetic__client_8c_a9b9b330e205d5a627f9f08739da4369a_cgraph.png</file>
+      <file>kinetic__client_8c_a9b9b330e205d5a627f9f08739da4369a_icgraph.png</file>
+      <file>kinetic__client_8c_a17a5f97cb86609ee9f3ad7082370a7b8_cgraph.png</file>
+      <file>kinetic__client_8c_a17a5f97cb86609ee9f3ad7082370a7b8_icgraph.png</file>
       <file>kinetic__client_8h.html</file>
       <file>kinetic__client_8h__incl.png</file>
       <file>kinetic__client_8h__dep__incl.png</file>
@@ -2012,10 +2045,12 @@
       <file>kinetic__client_8h_ae4b4f1c08bcb4fc76a792c216d5b0822_icgraph.png</file>
       <file>kinetic__client_8h_a8c2d9f8e7d2046d8fef3294c645e4c96_cgraph.png</file>
       <file>kinetic__client_8h_a8c2d9f8e7d2046d8fef3294c645e4c96_icgraph.png</file>
-      <file>kinetic__client_8h_a10e53ad454fa3caa0323ad2ccf18ece8_cgraph.png</file>
-      <file>kinetic__client_8h_a10e53ad454fa3caa0323ad2ccf18ece8_icgraph.png</file>
-      <file>kinetic__client_8h_a2705464e0a90ee21c4f851950bdd4590_icgraph.png</file>
-      <file>kinetic__client_8h_ac5381f9a7772f8c64eb4087c17d0fbe4_icgraph.png</file>
+      <file>kinetic__client_8h_aa265de3c65a20a8b7454a06cd80792d8_cgraph.png</file>
+      <file>kinetic__client_8h_aa265de3c65a20a8b7454a06cd80792d8_icgraph.png</file>
+      <file>kinetic__client_8h_a9b9b330e205d5a627f9f08739da4369a_cgraph.png</file>
+      <file>kinetic__client_8h_a9b9b330e205d5a627f9f08739da4369a_icgraph.png</file>
+      <file>kinetic__client_8h_a17a5f97cb86609ee9f3ad7082370a7b8_cgraph.png</file>
+      <file>kinetic__client_8h_a17a5f97cb86609ee9f3ad7082370a7b8_icgraph.png</file>
       <file>kinetic__connection_8c.html</file>
       <file>kinetic__connection_8c__incl.png</file>
       <file>kinetic__connection_8c_a86b6c409a8ad8699ce3edd857f669f76_cgraph.png</file>
@@ -2069,11 +2104,11 @@
       <file>kinetic__logger_8h_a1833be5893222cc3650250726623f93c_icgraph.png</file>
       <file>kinetic__message_8c.html</file>
       <file>kinetic__message_8c__incl.png</file>
-      <file>kinetic__message_8c_a888cdaf07002f7a7b6ab6263c49ebb12_icgraph.png</file>
+      <file>kinetic__message_8c_a4149617eb669e1bb58c70c40a2df2c7b_icgraph.png</file>
       <file>kinetic__message_8h.html</file>
       <file>kinetic__message_8h__incl.png</file>
       <file>kinetic__message_8h__dep__incl.png</file>
-      <file>kinetic__message_8h_a888cdaf07002f7a7b6ab6263c49ebb12_icgraph.png</file>
+      <file>kinetic__message_8h_a4149617eb669e1bb58c70c40a2df2c7b_icgraph.png</file>
       <file>kinetic__nbo_8c.html</file>
       <file>kinetic__nbo_8c__incl.png</file>
       <file>kinetic__nbo_8c_ab29859f82a05cd469391e003b4aac3ad_icgraph.png</file>
@@ -2085,28 +2120,28 @@
       <file>kinetic__nbo_8h_a82d5bae248ec3e63c7fd40b55a9293ca_icgraph.png</file>
       <file>kinetic__operation_8c.html</file>
       <file>kinetic__operation_8c__incl.png</file>
+      <file>kinetic__operation_8c_adbf3eeef54dcdb65dfaf75f2e0312cd0_icgraph.png</file>
       <file>kinetic__operation_8c_a38b174bd1c6c7814745ee323a0c46aac_icgraph.png</file>
       <file>kinetic__operation_8c_a25c0d192edf098893390eb9236bb9888_cgraph.png</file>
       <file>kinetic__operation_8c_a25c0d192edf098893390eb9236bb9888_icgraph.png</file>
-      <file>kinetic__operation_8c_a2700aabef8796b1896a53b0f9a1a3d13_cgraph.png</file>
-      <file>kinetic__operation_8c_a2700aabef8796b1896a53b0f9a1a3d13_icgraph.png</file>
-      <file>kinetic__operation_8c_ab74d2f2a39115bb5757112f57c147b71_cgraph.png</file>
-      <file>kinetic__operation_8c_ab74d2f2a39115bb5757112f57c147b71_icgraph.png</file>
+      <file>kinetic__operation_8c_a433a47a0a88bdae7e8539767478231ab_cgraph.png</file>
+      <file>kinetic__operation_8c_a433a47a0a88bdae7e8539767478231ab_icgraph.png</file>
+      <file>kinetic__operation_8c_ae451136b154b2d002cde03c0f8d203e5_cgraph.png</file>
+      <file>kinetic__operation_8c_ae451136b154b2d002cde03c0f8d203e5_icgraph.png</file>
       <file>kinetic__operation_8h.html</file>
       <file>kinetic__operation_8h__incl.png</file>
       <file>kinetic__operation_8h__dep__incl.png</file>
+      <file>kinetic__operation_8h_adbf3eeef54dcdb65dfaf75f2e0312cd0_icgraph.png</file>
       <file>kinetic__operation_8h_a25c0d192edf098893390eb9236bb9888_cgraph.png</file>
       <file>kinetic__operation_8h_a25c0d192edf098893390eb9236bb9888_icgraph.png</file>
-      <file>kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_cgraph.png</file>
-      <file>kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_icgraph.png</file>
-      <file>kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_cgraph.png</file>
-      <file>kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_icgraph.png</file>
+      <file>kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_cgraph.png</file>
+      <file>kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_icgraph.png</file>
+      <file>kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_cgraph.png</file>
+      <file>kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_icgraph.png</file>
       <file>kinetic__pdu_8c.html</file>
       <file>kinetic__pdu_8c__incl.png</file>
       <file>kinetic__pdu_8c_ac2b45fc01853688e458920a95bf12dda_icgraph.png</file>
-      <file>kinetic__pdu_8c_ad29d8f808b47e72f33d8a9ce09c478f4_cgraph.png</file>
       <file>kinetic__pdu_8c_a151c58f636193815a70a05ea8b1e289c_cgraph.png</file>
-      <file>kinetic__pdu_8c_ac8c3d890312eab07970a86ec9b075e33_icgraph.png</file>
       <file>kinetic__pdu_8c_a9b83efba84b9ea49ae6fca07f026e77f_cgraph.png</file>
       <file>kinetic__pdu_8c_a9b83efba84b9ea49ae6fca07f026e77f_icgraph.png</file>
       <file>kinetic__pdu_8c_acff84c8347b8df5df8d90364d990268a_cgraph.png</file>
@@ -2115,9 +2150,7 @@
       <file>kinetic__pdu_8h__incl.png</file>
       <file>kinetic__pdu_8h__dep__incl.png</file>
       <file>kinetic__pdu_8h_ac2b45fc01853688e458920a95bf12dda_icgraph.png</file>
-      <file>kinetic__pdu_8h_ad29d8f808b47e72f33d8a9ce09c478f4_cgraph.png</file>
       <file>kinetic__pdu_8h_a151c58f636193815a70a05ea8b1e289c_cgraph.png</file>
-      <file>kinetic__pdu_8h_ac8c3d890312eab07970a86ec9b075e33_icgraph.png</file>
       <file>kinetic__pdu_8h_a9b83efba84b9ea49ae6fca07f026e77f_cgraph.png</file>
       <file>kinetic__pdu_8h_a9b83efba84b9ea49ae6fca07f026e77f_icgraph.png</file>
       <file>kinetic__pdu_8h_a4f32128bd0732ca9cea7662391db71f7_cgraph.png</file>
@@ -2152,9 +2185,14 @@
       <file>kinetic__socket_8h_a1a8ae7ce63273b6d2cea899e0e5a0043_icgraph.png</file>
       <file>kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_cgraph.png</file>
       <file>kinetic__socket_8h_a3851320ed4ef5e518ca1ff9fefccffcb_icgraph.png</file>
+      <file>kinetic__types_8c.html</file>
+      <file>kinetic__types_8c__incl.png</file>
       <file>kinetic__types_8h.html</file>
       <file>kinetic__types_8h__incl.png</file>
       <file>kinetic__types_8h__dep__incl.png</file>
+      <file>kinetic__types__internal_8h.html</file>
+      <file>kinetic__types__internal_8h__incl.png</file>
+      <file>kinetic__types__internal_8h__dep__incl.png</file>
       <file>main_8c.html</file>
       <file>main_8c__incl.png</file>
       <file>main_8c_a3c04138a5bfe5d72780bb7e82a18e627_cgraph.png</file>
@@ -2169,19 +2207,19 @@
       <file>noop_8h_a54134f0309024f11ce0cf25c26a22934_icgraph.png</file>
       <file>put_8c.html</file>
       <file>put_8c__incl.png</file>
-      <file>put_8c_ad2fb023662a16a8dc70fda8eb4f38d3e_cgraph.png</file>
-      <file>put_8c_ad2fb023662a16a8dc70fda8eb4f38d3e_icgraph.png</file>
+      <file>put_8c_a7024809d629cd8d8a61af20ad5b1a660_cgraph.png</file>
+      <file>put_8c_a7024809d629cd8d8a61af20ad5b1a660_icgraph.png</file>
       <file>put_8h.html</file>
       <file>put_8h__incl.png</file>
       <file>put_8h__dep__incl.png</file>
-      <file>put_8h_ad2fb023662a16a8dc70fda8eb4f38d3e_cgraph.png</file>
-      <file>put_8h_ad2fb023662a16a8dc70fda8eb4f38d3e_icgraph.png</file>
+      <file>put_8h_a7024809d629cd8d8a61af20ad5b1a660_cgraph.png</file>
+      <file>put_8h_a7024809d629cd8d8a61af20ad5b1a660_icgraph.png</file>
       <file>_r_e_a_d_m_e_8md.html</file>
       <file>struct___kinetic_proto.html</file>
       <file>struct_byte_buffer.html</file>
-      <file>struct_kinetic___key_value.html</file>
       <file>struct_kinetic_connection.html</file>
       <file>struct_kinetic_h_m_a_c.html</file>
+      <file>struct_kinetic_key_value.html</file>
       <file>struct_kinetic_message.html</file>
       <file>struct_kinetic_message__coll__graph.png</file>
       <file>struct_kinetic_operation.html</file>

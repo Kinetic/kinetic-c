@@ -1,6 +1,7 @@
 var kinetic__operation_8h =
 [
+    [ "KineticOperation_GetStatus", "kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0", null ],
     [ "KineticOperation_BuildNoop", "kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888", null ],
-    [ "KineticOperation_BuildPut", "kinetic__operation_8h.html#a2700aabef8796b1896a53b0f9a1a3d13", null ],
-    [ "KineticOperation_BuildGet", "kinetic__operation_8h.html#ab74d2f2a39115bb5757112f57c147b71", null ]
+    [ "KineticOperation_BuildPut", "kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab", null ],
+    [ "KineticOperation_BuildGet", "kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5", null ]
 ];

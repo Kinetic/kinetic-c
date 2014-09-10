@@ -4,7 +4,7 @@ var kinetic__types_8h =
     [ "KineticConnection", "struct_kinetic_connection.html", "struct_kinetic_connection" ],
     [ "KineticHMAC", "struct_kinetic_h_m_a_c.html", "struct_kinetic_h_m_a_c" ],
     [ "KineticMessage", "struct_kinetic_message.html", "struct_kinetic_message" ],
-    [ "Kinetic_KeyValue", "struct_kinetic___key_value.html", "struct_kinetic___key_value" ],
+    [ "KineticKeyValue", "struct_kinetic_key_value.html", "struct_kinetic_key_value" ],
     [ "KineticPDU", "struct_kinetic_p_d_u.html", "struct_kinetic_p_d_u" ],
     [ "KineticOperation", "struct_kinetic_operation.html", "struct_kinetic_operation" ],
     [ "KINETIC_PORT", "kinetic__types_8h.html#add9d47513f5472c08a593999978f8018", null ],
@@ -37,6 +37,18 @@ var kinetic__types_8h =
     [ "KINETIC_PDU_INIT_WITH_MESSAGE", "kinetic__types_8h.html#a75f768b35723de9834d28d6c229503d4", null ],
     [ "KINETIC_OPERATION_INIT", "kinetic__types_8h.html#aea7521ddc30f84e971ec31ede1ef527a", null ],
     [ "ByteArray", "kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f", null ],
+    [ "KineticStatus", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57", [
+      [ "KINETIC_STATUS_INVALID", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f", null ],
+      [ "KINETIC_STATUS_SUCCESS", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e", null ],
+      [ "KINETIC_STATUS_DEVICE_BUSY", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a6c1bab895a12cbc908fc4ac3c912f2af", null ],
+      [ "KINETIC_STATUS_CONNECTION_ERROR", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018", null ],
+      [ "KINETIC_STATUS_INVALID_REQUEST", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0910418168ab52290184d28436cd1499", null ],
+      [ "KINETIC_STATUS_OPERATION_FAILED", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285", null ],
+      [ "KINETIC_STATUS_VERSION_FAILURE", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a83075fb61e6fdff87354313fbf37d830", null ],
+      [ "KINETIC_STATUS_DATA_ERROR", "kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a880da6938443e4f357d12a22e4d51aef", null ]
+    ] ],
     [ "__attribute__", "kinetic__types_8h.html#acd4d1cefdb491a9369cf0176e6d3a6cc", null ],
+    [ "KineticStatusDescriptorCount", "kinetic__types_8h.html#a588e558705ad77f8f0b5c3f58cdec6fc", null ],
+    [ "KineticStatusDescriptor", "kinetic__types_8h.html#a38ab76ae6e26bfb79a8ead99577c26b8", null ],
     [ "KineticPDUHeader", "kinetic__types_8h.html#aeefc7ca996ea90f5703b1b8440092c5e", null ]
 ];

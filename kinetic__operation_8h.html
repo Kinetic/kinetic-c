@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0</span>
+   &#160;<span id="projectnumber">v0.6.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -58,13 +58,13 @@ $(document).ready(function(){initNavTree('kinetic__operation_8h.html','');});
 <div class="title">kinetic_operation.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for kinetic_operation.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="kinetic__operation_8h__incl.png" border="0" usemap="#kinetic__operation_8h" alt=""/></div>
 <map name="kinetic__operation_8h" id="kinetic__operation_8h">
-<area shape="rect" id="node2" href="kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="736,84,873,115"/><area shape="rect" id="node16" href="kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1511,163,1649,194"/></map>
+<area shape="rect" id="node2" href="kinetic__types__internal_8h.html" title="kinetic_types_internal.h" alt="" coords="702,84,906,115"/><area shape="rect" id="node3" href="kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="736,163,873,194"/><area shape="rect" id="node17" href="kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1511,242,1649,273"/></map>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -78,14 +78,45 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:adbf3eeef54dcdb65dfaf75f2e0312cd0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0">KineticOperation_GetStatus</a> (const <a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *const operation)</td></tr>
+<tr class="separator:adbf3eeef54dcdb65dfaf75f2e0312cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25c0d192edf098893390eb9236bb9888"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888">KineticOperation_BuildNoop</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation)</td></tr>
 <tr class="separator:a25c0d192edf098893390eb9236bb9888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2700aabef8796b1896a53b0f9a1a3d13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8h.html#a2700aabef8796b1896a53b0f9a1a3d13">KineticOperation_BuildPut</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation, const <a class="el" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a> *metadata, const <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> value)</td></tr>
-<tr class="separator:a2700aabef8796b1896a53b0f9a1a3d13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab74d2f2a39115bb5757112f57c147b71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8h.html#ab74d2f2a39115bb5757112f57c147b71">KineticOperation_BuildGet</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation, const <a class="el" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a> *metadata, const <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> value)</td></tr>
-<tr class="separator:ab74d2f2a39115bb5757112f57c147b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a433a47a0a88bdae7e8539767478231ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab">KineticOperation_BuildPut</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation, const <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *metadata)</td></tr>
+<tr class="separator:a433a47a0a88bdae7e8539767478231ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae451136b154b2d002cde03c0f8d203e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5">KineticOperation_BuildGet</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation, const <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *metadata)</td></tr>
+<tr class="separator:ae451136b154b2d002cde03c0f8d203e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="adbf3eeef54dcdb65dfaf75f2e0312cd0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticOperation_GetStatus </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *const&#160;</td>
+          <td class="paramname"><em>operation</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00026">26</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00078">KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00077">KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00073">KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00069">KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00072">KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00083">KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST</a>, <a class="el" href="kinetic__proto_8h_source.html#l00066">KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00084">KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00081">KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00082">KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM</a>, <a class="el" href="kinetic__proto_8h_source.html#l00067">KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00070">KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00074">KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND</a>, <a class="el" href="kinetic__proto_8h_source.html#l00079">KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00080">KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00076">KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY</a>, <a class="el" href="kinetic__proto_8h_source.html#l00068">KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00071">KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00075">KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH</a>, <a class="el" href="kinetic__types_8h_source.html#l00212">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00216">KINETIC_STATUS_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00211">KINETIC_STATUS_DEVICE_BUSY</a>, <a class="el" href="kinetic__types_8h_source.html#l00209">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00213">KINETIC_STATUS_INVALID_REQUEST</a>, <a class="el" href="kinetic__types_8h_source.html#l00214">KINETIC_STATUS_OPERATION_FAILED</a>, <a class="el" href="kinetic__types_8h_source.html#l00210">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__types_8h_source.html#l00215">KINETIC_STATUS_VERSION_FAILURE</a>, <a class="el" href="kinetic__types_8h_source.html#l00271">KineticPDU::proto</a>, and <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>.</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__operation_8h_adbf3eeef54dcdb65dfaf75f2e0312cd0_icgraph.png" border="0" usemap="#kinetic__operation_8h_adbf3eeef54dcdb65dfaf75f2e0312cd0_icgraph" alt=""/></div>
+<map name="kinetic__operation_8h_adbf3eeef54dcdb65dfaf75f2e0312cd0_icgraph" id="kinetic__operation_8h_adbf3eeef54dcdb65dfaf75f2e0312cd0_icgraph">
+<area shape="rect" id="node2" href="kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" title="KineticClient_ExecuteOperation" alt="" coords="286,60,549,91"/><area shape="rect" id="node3" href="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="597,5,768,36"/><area shape="rect" id="node6" href="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="607,60,759,91"/><area shape="rect" id="node8" href="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to read data from the Kinetic Device. " alt="" coords="606,115,760,146"/><area shape="rect" id="node4" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="816,5,882,36"/><area shape="rect" id="node5" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="930,60,990,91"/><area shape="rect" id="node7" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="826,60,872,91"/><area shape="rect" id="node9" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="825,115,873,146"/></map>
+</div>
+</p>
+
+</div>
+</div>
 <a class="anchor" id="a25c0d192edf098893390eb9236bb9888"></a>
 <div class="memitem">
 <div class="memproto">
@@ -100,9 +131,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00037">37</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00093">93</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00293">KineticOperation::connection</a>, <a class="el" href="kinetic__proto_8h_source.html#l00156">KINETIC_PROTO_MESSAGE_TYPE_NOOP</a>, <a class="el" href="kinetic__connection_8c_source.html#l00057">KineticConnection_IncrementSequence()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00026">KineticOperation_ValidateOperation()</a>, <a class="el" href="kinetic__types_8h_source.html#l00255">KineticPDU::proto</a>, and <a class="el" href="kinetic__types_8h_source.html#l00294">KineticOperation::request</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__proto_8h_source.html#l00156">KINETIC_PROTO_MESSAGE_TYPE_NOOP</a>, <a class="el" href="kinetic__connection_8c_source.html#l00057">KineticConnection_IncrementSequence()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00082">KineticOperation_ValidateOperation()</a>, <a class="el" href="kinetic__types_8h_source.html#l00271">KineticPDU::proto</a>, and <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -118,13 +149,13 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="kinetic__operation_8h_a25c0d192edf098893390eb9236bb9888_icgraph.png" border="0" usemap="#kinetic__operation_8h_a25c0d192edf098893390eb9236bb9888_icgraph" alt=""/></div>
 <map name="kinetic__operation_8h_a25c0d192edf098893390eb9236bb9888_icgraph" id="kinetic__operation_8h_a25c0d192edf098893390eb9236bb9888_icgraph">
-<area shape="rect" id="node2" href="kinetic__client_8c.html#a10e53ad454fa3caa0323ad2ccf18ece8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="292,5,464,36"/><area shape="rect" id="node3" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="512,5,577,36"/><area shape="rect" id="node4" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="625,5,685,36"/></map>
+<area shape="rect" id="node2" href="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="292,5,464,36"/><area shape="rect" id="node3" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="512,5,577,36"/><area shape="rect" id="node4" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="625,5,685,36"/></map>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="a2700aabef8796b1896a53b0f9a1a3d13"></a>
+<a class="anchor" id="a433a47a0a88bdae7e8539767478231ab"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -137,14 +168,8 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a> *&#160;</td>
-          <td class="paramname"><em>metadata</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *&#160;</td>
+          <td class="paramname"><em>metadata</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -154,31 +179,31 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00046">46</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00102">102</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00293">KineticOperation::connection</a>, <a class="el" href="kinetic__proto_8h_source.html#l00136">KINETIC_PROTO_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__connection_8c_source.html#l00057">KineticConnection_IncrementSequence()</a>, <a class="el" href="kinetic__message_8c_source.html#l00042">KineticMessage_ConfigureKeyValue()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00026">KineticOperation_ValidateOperation()</a>, <a class="el" href="kinetic__types_8h_source.html#l00250">KineticPDU::message</a>, <a class="el" href="kinetic__types_8h_source.html#l00255">KineticPDU::proto</a>, <a class="el" href="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f">KineticPDU::protoData</a>, <a class="el" href="kinetic__types_8h_source.html#l00294">KineticOperation::request</a>, and <a class="el" href="kinetic__types_8h_source.html#l00264">KineticPDU::value</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__proto_8h_source.html#l00136">KINETIC_PROTO_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__connection_8c_source.html#l00057">KineticConnection_IncrementSequence()</a>, <a class="el" href="kinetic__message_8c_source.html#l00042">KineticMessage_ConfigureKeyValue()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00082">KineticOperation_ValidateOperation()</a>, <a class="el" href="kinetic__types_8h_source.html#l00266">KineticPDU::message</a>, <a class="el" href="kinetic__types_8h_source.html#l00271">KineticPDU::proto</a>, <a class="el" href="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f">KineticPDU::protoData</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, <a class="el" href="kinetic__types_8h_source.html#l00233">KineticKeyValue::value</a>, and <a class="el" href="kinetic__types_8h_source.html#l00280">KineticPDU::value</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_cgraph.png" border="0" usemap="#kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_cgraph" alt=""/></div>
-<map name="kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_cgraph" id="kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_cgraph">
-<area shape="rect" id="node2" href="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d" title="KineticConnection_Increment\lSequence" alt="" coords="276,5,524,55"/><area shape="rect" id="node3" href="kinetic__message_8c.html#a888cdaf07002f7a7b6ab6263c49ebb12" title="KineticMessage_Configure\lKeyValue" alt="" coords="288,79,511,128"/><area shape="rect" id="node4" href="kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac" title="KineticOperation_Validate\lOperation" alt="" coords="289,152,510,202"/></map>
+<div class="center"><img src="kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_cgraph.png" border="0" usemap="#kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_cgraph" alt=""/></div>
+<map name="kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_cgraph" id="kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_cgraph">
+<area shape="rect" id="node2" href="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d" title="KineticConnection_Increment\lSequence" alt="" coords="276,5,524,55"/><area shape="rect" id="node3" href="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b" title="KineticMessage_Configure\lKeyValue" alt="" coords="288,79,511,128"/><area shape="rect" id="node4" href="kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac" title="KineticOperation_Validate\lOperation" alt="" coords="289,152,510,202"/></map>
 </div>
 </p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_icgraph.png" border="0" usemap="#kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_icgraph" alt=""/></div>
-<map name="kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_icgraph" id="kinetic__operation_8h_a2700aabef8796b1896a53b0f9a1a3d13_icgraph">
-<area shape="rect" id="node2" href="kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="276,5,427,36"/></map>
+<div class="center"><img src="kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_icgraph.png" border="0" usemap="#kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_icgraph" alt=""/></div>
+<map name="kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_icgraph" id="kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_icgraph">
+<area shape="rect" id="node2" href="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="276,5,427,36"/><area shape="rect" id="node3" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="475,5,521,36"/><area shape="rect" id="node4" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="569,5,629,36"/></map>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="ab74d2f2a39115bb5757112f57c147b71"></a>
+<a class="anchor" id="ae451136b154b2d002cde03c0f8d203e5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -191,14 +216,8 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_kinetic___key_value.html">Kinetic_KeyValue</a> *&#160;</td>
-          <td class="paramname"><em>metadata</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a>&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *&#160;</td>
+          <td class="paramname"><em>metadata</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -208,25 +227,25 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00061">61</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00116">116</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00070">BYTE_ARRAY_NONE</a>, <a class="el" href="kinetic__types_8h_source.html#l00293">KineticOperation::connection</a>, <a class="el" href="kinetic__proto_8h_source.html#l00134">KINETIC_PROTO_MESSAGE_TYPE_GET</a>, <a class="el" href="kinetic__connection_8c_source.html#l00057">KineticConnection_IncrementSequence()</a>, <a class="el" href="kinetic__message_8c_source.html#l00042">KineticMessage_ConfigureKeyValue()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00026">KineticOperation_ValidateOperation()</a>, <a class="el" href="kinetic__types_8h_source.html#l00250">KineticPDU::message</a>, <a class="el" href="kinetic__types_8h_source.html#l00255">KineticPDU::proto</a>, <a class="el" href="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f">KineticPDU::protoData</a>, <a class="el" href="kinetic__types_8h_source.html#l00294">KineticOperation::request</a>, <a class="el" href="kinetic__types_8h_source.html#l00295">KineticOperation::response</a>, <a class="el" href="kinetic__types_8h_source.html#l00264">KineticPDU::value</a>, and <a class="el" href="kinetic__types_8h_source.html#l00263">KineticPDU::valueBuffer</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00070">BYTE_ARRAY_NONE</a>, <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__proto_8h_source.html#l00134">KINETIC_PROTO_MESSAGE_TYPE_GET</a>, <a class="el" href="kinetic__connection_8c_source.html#l00057">KineticConnection_IncrementSequence()</a>, <a class="el" href="kinetic__message_8c_source.html#l00042">KineticMessage_ConfigureKeyValue()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00082">KineticOperation_ValidateOperation()</a>, <a class="el" href="kinetic__types_8h_source.html#l00266">KineticPDU::message</a>, <a class="el" href="kinetic__types_8h_source.html#l00241">PDU_VALUE_MAX_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00271">KineticPDU::proto</a>, <a class="el" href="struct_kinetic_p_d_u.html#a87c1af451d64df5cdafbe1bb7de9925f">KineticPDU::protoData</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>, <a class="el" href="kinetic__types_8h_source.html#l00233">KineticKeyValue::value</a>, <a class="el" href="kinetic__types_8h_source.html#l00280">KineticPDU::value</a>, and <a class="el" href="kinetic__types_8h_source.html#l00279">KineticPDU::valueBuffer</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_cgraph.png" border="0" usemap="#kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_cgraph" alt=""/></div>
-<map name="kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_cgraph" id="kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_cgraph">
-<area shape="rect" id="node2" href="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d" title="KineticConnection_Increment\lSequence" alt="" coords="277,5,525,55"/><area shape="rect" id="node3" href="kinetic__message_8c.html#a888cdaf07002f7a7b6ab6263c49ebb12" title="KineticMessage_Configure\lKeyValue" alt="" coords="290,79,513,128"/><area shape="rect" id="node4" href="kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac" title="KineticOperation_Validate\lOperation" alt="" coords="291,152,512,202"/></map>
+<div class="center"><img src="kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_cgraph.png" border="0" usemap="#kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_cgraph" alt=""/></div>
+<map name="kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_cgraph" id="kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_cgraph">
+<area shape="rect" id="node2" href="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d" title="KineticConnection_Increment\lSequence" alt="" coords="277,5,525,55"/><area shape="rect" id="node3" href="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b" title="KineticMessage_Configure\lKeyValue" alt="" coords="290,79,513,128"/><area shape="rect" id="node4" href="kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac" title="KineticOperation_Validate\lOperation" alt="" coords="291,152,512,202"/></map>
 </div>
 </p>
 
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_icgraph.png" border="0" usemap="#kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_icgraph" alt=""/></div>
-<map name="kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_icgraph" id="kinetic__operation_8h_ab74d2f2a39115bb5757112f57c147b71_icgraph">
-<area shape="rect" id="node2" href="kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="277,5,431,36"/></map>
+<div class="center"><img src="kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_icgraph.png" border="0" usemap="#kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_icgraph" alt=""/></div>
+<map name="kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_icgraph" id="kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_icgraph">
+<area shape="rect" id="node2" href="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to read data from the Kinetic Device. " alt="" coords="277,5,431,36"/><area shape="rect" id="node3" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="479,5,527,36"/><area shape="rect" id="node4" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="575,5,634,36"/></map>
 </div>
 </p>
 

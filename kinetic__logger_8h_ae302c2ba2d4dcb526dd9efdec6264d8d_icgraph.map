@@ -1,7 +1,7 @@
 <map id="KineticLogger_Init" name="KineticLogger_Init">
 <area shape="rect" id="node2" href="$kinetic__client_8c.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" title="Initializes the Kinetic API andcsonfigures logging destination. " alt="" coords="214,60,366,91"/>
-<area shape="rect" id="node3" href="$get_8h.html#aa3a86ce5b3301619f3a3946b657a3150" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="423,5,471,36"/>
+<area shape="rect" id="node3" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="423,5,471,36"/>
 <area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="414,60,480,91"/>
-<area shape="rect" id="node6" href="$put_8h.html#ad2fb023662a16a8dc70fda8eb4f38d3e" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="424,115,470,146"/>
+<area shape="rect" id="node6" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="424,115,470,146"/>
 <area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="528,60,587,91"/>
 </map>

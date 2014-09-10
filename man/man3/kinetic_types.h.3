@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Wed Sep 10 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Wed Sep 10 2014" "Version v0.6.0-beta" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -53,7 +53,7 @@ kinetic_types.h \-
 .RI "struct \fBKineticMessage\fP"
 .br
 .ti -1c
-.RI "struct \fBKinetic_KeyValue\fP"
+.RI "struct \fBKineticKeyValue\fP"
 .br
 .ti -1c
 .RI "struct \fBKineticPDU\fP"
@@ -160,6 +160,13 @@ kinetic_types.h \-
 .RI "typedef ProtobufCBinaryData \fBByteArray\fP"
 .br
 .in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBKineticStatus\fP "
+.br
+.in -1c
 .SS "Functions"
 
 .in +1c
@@ -170,6 +177,12 @@ kinetic_types.h \-
 .SS "Variables"
 
 .in +1c
+.ti -1c
+.RI "const int \fBKineticStatusDescriptorCount\fP"
+.br
+.ti -1c
+.RI "const char * \fBKineticStatusDescriptor\fP []"
+.br
 .ti -1c
 .RI "\fBKineticPDUHeader\fP"
 .br
@@ -319,19 +332,19 @@ Definition at line 190 of file kinetic_types\&.h\&.
 .SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int32_t)))"
 
 .PP
-Definition at line 222 of file kinetic_types\&.h\&.
+Definition at line 238 of file kinetic_types\&.h\&.
 .SS "#define PDU_PROTO_MAX_LEN   (1024 * 1024)"
 
 .PP
-Definition at line 223 of file kinetic_types\&.h\&.
+Definition at line 239 of file kinetic_types\&.h\&.
 .SS "#define PDU_PROTO_MAX_UNPACKED_LEN   (\fBPDU_PROTO_MAX_LEN\fP * 2)"
 
 .PP
-Definition at line 224 of file kinetic_types\&.h\&.
+Definition at line 240 of file kinetic_types\&.h\&.
 .SS "#define PDU_VALUE_MAX_LEN   (1024 * 1024)"
 
 .PP
-Definition at line 225 of file kinetic_types\&.h\&.
+Definition at line 241 of file kinetic_types\&.h\&.
 .SS "#define PDU_MAX_LEN"
 \fBValue:\fP
 .PP
@@ -340,11 +353,11 @@ Definition at line 225 of file kinetic_types\&.h\&.
                                     PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
 .fi
 .PP
-Definition at line 226 of file kinetic_types\&.h\&.
+Definition at line 242 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_PDU_HEADER_INIT   (\fBKineticPDUHeader\fP) {\&.versionPrefix = 'F'}"
 
 .PP
-Definition at line 234 of file kinetic_types\&.h\&.
+Definition at line 250 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_PDU_INIT(_pdu, _con)"
 \fBValue:\fP
 .PP
@@ -361,7 +374,7 @@ Definition at line 234 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 273 of file kinetic_types\&.h\&.
+Definition at line 289 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con)"
 \fBValue:\fP
 .PP
@@ -374,7 +387,7 @@ Definition at line 273 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 283 of file kinetic_types\&.h\&.
+Definition at line 299 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_OPERATION_INIT(_op, _con, _req, _resp)"
 \fBValue:\fP
 .PP
@@ -386,25 +399,58 @@ Definition at line 283 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 297 of file kinetic_types\&.h\&.
+Definition at line 313 of file kinetic_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef ProtobufCBinaryData \fBByteArray\fP"
 
 .PP
 Definition at line 69 of file kinetic_types\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBKineticStatus\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIKINETIC_STATUS_INVALID \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_SUCCESS \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_DEVICE_BUSY \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_CONNECTION_ERROR \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_INVALID_REQUEST \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_OPERATION_FAILED \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_VERSION_FAILURE \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_DATA_ERROR \fP\fP
+.PP
+Definition at line 207 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "struct __attribute__ ((__packed__))"
 
 .PP
-Definition at line 228 of file kinetic_types\&.h\&.
+Definition at line 244 of file kinetic_types\&.h\&.
 .SH "Variable Documentation"
 .PP 
+.SS "const int KineticStatusDescriptorCount"
+
+.PP
+Definition at line 34 of file kinetic_types\&.c\&.
+.SS "const char* KineticStatusDescriptor[]"
+
+.PP
+Definition at line 24 of file kinetic_types\&.c\&.
 .SS "KineticPDUHeader"
 
 .PP
-Definition at line 233 of file kinetic_types\&.h\&.
+Definition at line 249 of file kinetic_types\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.
