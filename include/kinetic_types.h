@@ -203,8 +203,24 @@ typedef struct _KineticMessage
 }
 
 
+// Kinetic Status Codes
+typedef enum
+{
+    KINETIC_STATUS_INVALID = -1,     // Status not available (no reponse/status available)
+    KINETIC_STATUS_SUCCESS = 0,      // Operation successful
+    KINETIC_STATUS_DEVICE_BUSY,      // Device busy (retry later)
+    KINETIC_STATUS_CONNECTION_ERROR, // No connection/disconnected
+    KINETIC_STATUS_INVALID_REQUEST,  // Something about the request is invalid
+    KINETIC_STATUS_OPERATION_FAILED, // Device reported an operation error
+    KINETIC_STATUS_VERSION_FAILURE,  // Basically a VERSION_MISMATCH error for a PUT
+    KINETIC_STATUS_DATA_ERROR,       // Device reported data error, no spaces, HMAC failure
+} KineticStatus;
+extern const int KineticStatusDescriptorCount;
+extern const char* KineticStatusDescriptor[];
+
+
 // KeyValue meta-data
-typedef struct _Kinetic_KeyValue
+typedef struct _KineticKeyValue
 {
     ByteArray key;
     ByteArray newVersion;
@@ -215,7 +231,7 @@ typedef struct _Kinetic_KeyValue
     bool metadataOnly;
     KineticProto_Synchronization synchronization;
     ByteArray value;
-} Kinetic_KeyValue;
+} KineticKeyValue;
 
 
 // Kinetic PDU Header
@@ -257,7 +273,7 @@ typedef struct _KineticPDU
     uint8_t protobufRaw[PDU_PROTO_MAX_LEN];
 
     // Object meta-data to be used/populated if provided and pertinent to the opearation
-    Kinetic_KeyValue* metadata;
+    KineticKeyValue* metadata;
 
     // Value data associated with PDU (if any)
     uint8_t valueBuffer[PDU_VALUE_MAX_LEN];

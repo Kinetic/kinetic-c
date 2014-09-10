@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_pdu.h"
 #include "kinetic_operation.h"
 #include "kinetic_connection.h"
@@ -27,7 +28,7 @@
 #include "kinetic_logger.h"
 #include <stdio.h>
 
-KineticProto_Status_StatusCode KineticClient_ExecuteOperation(KineticOperation* operation);
+KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation);
 
 void KineticClient_Init(const char* logFile)
 {
@@ -54,20 +55,20 @@ bool KineticClient_Connect(KineticConnection* connection,
         return false;
     }
 
-    if (key.len < 1)
+    if (hmacKey.len < 1)
     {
         LOG("Specified HMAC key is empty!");
         return false;
     }
 
-    if (key.data == NULL)
+    if (hmacKey.data == NULL)
     {
         LOG("Specified HMAC key is NULL!");
         return false;
     }
 
     if (!KineticConnection_Connect(connection, host, port, nonBlocking,
-        clusterVersion, identity, key))
+        clusterVersion, identity, hmacKey))
     {
         connection->connected = false;
         connection->socketDescriptor = -1;
@@ -123,7 +124,7 @@ KineticOperation KineticClient_CreateOperation(KineticConnection* connection,
     return op;
 }
 
-KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation)
+KineticStatus KineticClient_NoOp(KineticOperation* operation)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
@@ -136,26 +137,25 @@ KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation)
     return KineticClient_ExecuteOperation(operation);
 }
 
-KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata,
-    const ByteArray value)
+KineticStatus KineticClient_Put(KineticOperation* operation,
+    const KineticKeyValue* metadata)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->response != NULL);
-    assert(value.data != NULL);
-    assert(value.len <= PDU_VALUE_MAX_LEN);
+    assert(metadata != NULL);
+    assert(metadata->value.data != NULL);
+    assert(metadata->value.len <= PDU_VALUE_MAX_LEN);
 
     // Initialize request
-    KineticOperation_BuildPut(operation, metadata, value);
+    KineticOperation_BuildPut(operation, metadata);
 
     // Execute the operation
     return KineticClient_ExecuteOperation(operation);
 }
 
-KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata,
-    const ByteArray value)
+KineticStatus KineticClient_Get(KineticOperation* operation,
+    KineticKeyValue* metadata)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
@@ -164,30 +164,38 @@ KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
     assert(metadata->key.data != NULL);
     assert(metadata->key.len <= KINETIC_MAX_KEY_LEN);
 
-    ByteArray responseValue = BYTE_ARRAY_NONE;
     if (!metadata->metadataOnly)
     {
-        if (value.data != NULL)
+        if (metadata->value.data == NULL)
         {
-            responseValue = value;
-        }
-        else
-        {
-            responseValue = (ByteArray){.data = operation->response->valueBuffer};
+             metadata->value = (ByteArray){
+                .data = operation->response->valueBuffer,
+                .len = PDU_VALUE_MAX_LEN};
         }
     }
 
     // Initialize request
-    KineticOperation_BuildGet(operation, metadata, responseValue);
+    KineticOperation_BuildGet(operation, metadata);
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    KineticStatus status = KineticClient_ExecuteOperation(operation);
+
+    // Update the metadata with the received value length upon success
+    if (status == KINETIC_STATUS_SUCCESS)
+    {
+        metadata->value.len = operation->response->value.len;
+    }
+    else
+    {
+        metadata->value.len = 0;
+    }
+
+    return status;
 }
 
-KineticProto_Status_StatusCode KineticClient_ExecuteOperation(KineticOperation* operation)
+KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 {
-    KineticProto_Status_StatusCode status =
-        KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+    KineticStatus status = KINETIC_STATUS_INVALID;
 
     // Send the request
     if (KineticPDU_Send(operation->request))
@@ -198,7 +206,7 @@ KineticProto_Status_StatusCode KineticClient_ExecuteOperation(KineticOperation* 
         // Receive the response
         if (KineticPDU_Receive(operation->response))
         {
-            status = KineticPDU_Status(operation->response);
+            status = KineticOperation_GetStatus(operation);
         }
     }
 

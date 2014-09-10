@@ -29,11 +29,10 @@ int Put(
     int64_t clusterVersion,
     int64_t identity,
     ByteArray hmacKey,
-    Kinetic_KeyValue* metadata)
+    KineticKeyValue* metadata)
 {
     KineticOperation operation;
     KineticConnection connection;
-    KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
     bool success;
 
     KineticClient_Init(NULL);
@@ -44,13 +43,13 @@ int Put(
     operation = KineticClient_CreateOperation(
         &connection, &request, &response);
 
-    status = KineticClient_Put(&operation, metadata);
+    KineticStatus status = KineticClient_Put(&operation, metadata);
 
-    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS) {
+    if (status == KINETIC_STATUS_SUCCESS) {
         printf("Put operation completed successfully. Your data has been stored!\n");
-        status = 0;
+        return 0;
     }
 
     KineticClient_Disconnect(&connection);
-    return status;
+    return (int)status;
 }

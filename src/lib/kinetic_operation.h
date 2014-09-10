@@ -21,14 +21,14 @@
 #ifndef _KINETIC_OPERATION_H
 #define _KINETIC_OPERATION_H
 
-#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
+
+KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
 void KineticOperation_BuildPut(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata,
-    const ByteArray value);
+    const KineticKeyValue* metadata);
 void KineticOperation_BuildGet(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata,
-    const ByteArray value);
+    const KineticKeyValue* metadata);
 
 #endif // _KINETIC_OPERATION_H

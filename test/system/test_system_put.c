@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
@@ -71,56 +72,56 @@ void tearDown(void)
 //
 void test_Put_should_create_new_object_on_device(void)
 {
-    Kinetic_KeyValue metadata = {
+    KineticKeyValue metadata = {
         .key = valueKey,
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
         .tag = tag,
         .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .value = testValue,
     };
 
-    KineticProto_Status_StatusCode status =
+    KineticStatus status =
         KineticClient_Put(&Fixture.instance.operation,
-            &metadata,
-            testValue);
+            &metadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+        KINETIC_STATUS_SUCCESS, status);
 }
 
 void test_Put_should_update_object_data_on_device(void)
 {
-    Kinetic_KeyValue metadata = {
+    KineticKeyValue metadata = {
         .key = valueKey,
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
         .tag = tag,
         .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .value = testValue,
     };
-    KineticProto_Status_StatusCode status =
+    KineticStatus status =
         KineticClient_Put(&Fixture.instance.operation,
-            &metadata,
-            testValue);
+            &metadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+        KINETIC_STATUS_SUCCESS, status);
 }
 
 void test_Put_should_update_object_data_on_device_and_update_version(void)
 {
-    Kinetic_KeyValue metadata = {
+    KineticKeyValue metadata = {
         .key = valueKey,
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
         .tag = tag,
         .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .value = testValue,
     };
-    KineticProto_Status_StatusCode status =
+    KineticStatus status =
         KineticClient_Put(&Fixture.instance.operation,
-            &metadata,
-            testValue);
+            &metadata);
 
     Fixture.instance.testIgnored = true;
 
-    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH)
+    if (status == KINETIC_STATUS_VERSION_FAILURE)
     {
         TEST_IGNORE_MESSAGE(
             "Java simulator is responding with VERSION_MISMATCH(8) if algorithm "
@@ -128,7 +129,7 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     }
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+        KINETIC_STATUS_SUCCESS, status);
 }
 
 /*******************************************************************************

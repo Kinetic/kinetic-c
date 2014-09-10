@@ -21,7 +21,7 @@
 #ifndef _KINETIC_LOGGER_H
 #define _KINETIC_LOGGER_H
 
-#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 #include <stdarg.h>
 

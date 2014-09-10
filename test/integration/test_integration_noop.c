@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_types.h"
 #include "unity.h"
 #include "unity_helper.h"
 #include "kinetic_proto.h"
@@ -115,6 +116,6 @@ void test_NoOp_should_succeed(void)
 
     // // Execute the operation
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
+        KINETIC_STATUS_SUCCESS,
         KineticClient_NoOp(&Operation));
 }

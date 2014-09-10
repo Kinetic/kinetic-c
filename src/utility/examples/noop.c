@@ -32,7 +32,6 @@ int NoOp(
 {
     KineticOperation operation;
     KineticConnection connection;
-    KineticProto_Status_StatusCode status;
     bool success;
 
     KineticClient_Init(NULL);
@@ -40,15 +39,15 @@ int NoOp(
                                     clusterVersion, identity, hmacKey);
     assert(success);
     operation = KineticClient_CreateOperation(&connection, &Request, &Response);
-    status = KineticClient_NoOp(&operation);
+    KineticStatus status = KineticClient_NoOp(&operation);
     KineticClient_Disconnect(&connection);
 
-    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
+    if (status == KINETIC_STATUS_SUCCESS)
     {
         printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
-        status = 0;
+        return 0;
     }
 
     KineticClient_Disconnect(&connection);
-    return status;
+    return (int)status;
 }

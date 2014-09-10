@@ -23,6 +23,62 @@
 #include "kinetic_message.h"
 #include "kinetic_logger.h"
 
+KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation)
+{
+    KineticStatus status = KINETIC_STATUS_INVALID;
+
+    if (operation != NULL &&
+        operation->response != NULL &&
+        operation->response->proto != NULL &&
+        operation->response->proto->command != NULL &&
+        operation->response->proto->command->status != NULL &&
+        operation->response->proto->command->status->has_code != false &&
+        operation->response->proto->command->status->code != 
+            KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE)
+    {
+        switch(operation->response->proto->command->status->code)
+        {
+        case KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS:
+            status = KINETIC_STATUS_SUCCESS; break;
+
+        case KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR:
+            status = KINETIC_STATUS_CONNECTION_ERROR; break;
+        
+        case KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY:
+            status = KINETIC_STATUS_DEVICE_BUSY; break;
+        
+        case KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM:
+            status = KINETIC_STATUS_INVALID_REQUEST; break;
+
+        case KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE:
+            status = KINETIC_STATUS_VERSION_FAILURE; break;
+        
+        case KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND:
+            status = KINETIC_STATUS_DATA_ERROR; break;
+        
+        case KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS:
+            status = KINETIC_STATUS_OPERATION_FAILED; break;
+
+        default:
+        case KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE:
+        case _KINETIC_PROTO_STATUS_STATUS_CODE_IS_INT_SIZE:
+            status = KINETIC_STATUS_INVALID; break;
+        }
+    }
+    return status;
+}
+
 void KineticOperation_ValidateOperation(KineticOperation* operation)
 {
     assert(operation != NULL);
@@ -44,8 +100,7 @@ void KineticOperation_BuildNoop(KineticOperation* operation)
 }
 
 void KineticOperation_BuildPut(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata,
-    const ByteArray value)
+    const KineticKeyValue* metadata)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -55,12 +110,11 @@ void KineticOperation_BuildPut(KineticOperation* operation,
 
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
 
-    operation->request->value = value;
+    operation->request->value = metadata->value;
 }
 
 void KineticOperation_BuildGet(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata,
-    const ByteArray value)
+    const KineticKeyValue* metadata)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -69,14 +123,15 @@ void KineticOperation_BuildGet(KineticOperation* operation,
     operation->request->proto->command->header->has_messageType = true;
 
     operation->request->value = BYTE_ARRAY_NONE;
-    if (value.data != NULL)
+    if (metadata->value.data != NULL)
     {
-        operation->response->value = value;
+        operation->response->value.data = metadata->value.data;
     }
     else
     {
         operation->response->value.data = operation->response->valueBuffer;
     }
+    operation->response->value.len = PDU_VALUE_MAX_LEN;
 
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
 }

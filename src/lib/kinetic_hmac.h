@@ -21,7 +21,7 @@
 #ifndef _KINETIC_HMAC_H
 #define _KINETIC_HMAC_H
 
-#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 
 void KineticHMAC_Init(KineticHMAC * hmac,

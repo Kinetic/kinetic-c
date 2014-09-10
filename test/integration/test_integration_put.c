@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
@@ -102,11 +103,11 @@ void test_Put_should_create_new_object_on_device(void)
     ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
     ByteArray valueTag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
     ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("This is some data...");
-    const Kinetic_KeyValue metadata = {
+    const KineticKeyValue metadata = {
         .key = valueKey,
         .newVersion = newVersion,
-        .tag = valueTag };
-    LOG_LOCATION; LOGF("value data=0x%zX, len=%zu", value.data, value.len);
+        .tag = valueTag,
+        .value = value };
     
     // Initialize response message status and HMAC
     uint8_t hmacData[64];
@@ -132,8 +133,8 @@ void test_Put_should_create_new_object_on_device(void)
 
     // Execute the operation
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
-        KineticClient_Put(&Operation, &metadata, value));
+        KINETIC_STATUS_SUCCESS,
+        KineticClient_Put(&Operation, &metadata));
 }
 
 void test_Put_should_update_object_data_on_device(void)
@@ -148,10 +149,11 @@ void test_Put_should_update_object_data_on_device(void)
     ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
     ByteArray valueTag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
     ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("This is some other data...");
-    const Kinetic_KeyValue metadata = {
+    const KineticKeyValue metadata = {
         .key = valueKey,
         .dbVersion = dbVersion,
-        .tag = valueTag
+        .tag = valueTag,
+        .value = value,
     };
     
     // Initialize response message status and HMAC
@@ -178,8 +180,8 @@ void test_Put_should_update_object_data_on_device(void)
 
     // Execute the operation
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
-        KineticClient_Put(&Operation, &metadata, value));
+        KINETIC_STATUS_SUCCESS,
+        KineticClient_Put(&Operation, &metadata));
 }
 
 void test_Put_should_update_object_data_on_device_and_update_version(void)
@@ -195,11 +197,12 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     ByteArray dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
     ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
     ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("This is the best data ever!");
-    const Kinetic_KeyValue metadata = {
+    const KineticKeyValue metadata = {
         .key = valueKey,
         .dbVersion = dbVersion,
         .newVersion = newVersion,
-        .tag = valueTag
+        .tag = valueTag,
+        .value = value,
     };
     
     // Initialize response message status and HMAC
@@ -226,6 +229,6 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
 
     // Execute the operation
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
-        KineticClient_Put(&Operation, &metadata, value));
+        KINETIC_STATUS_SUCCESS,
+        KineticClient_Put(&Operation, &metadata));
 }

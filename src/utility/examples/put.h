@@ -47,6 +47,6 @@ int Put(
     int64_t clusterVersion,
     int64_t identity,
     ByteArray hmacKey,
-    Kinetic_KeyValue* metadata);
+    KineticKeyValue* metadata);
 
 #endif // _PUT_H

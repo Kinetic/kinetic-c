@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_types.h"
 #include <stdio.h>
 #include "protobuf-c/protobuf-c.h"
 #include "kinetic_proto.h"
@@ -44,7 +45,6 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
 {
     KineticConnection connection;
     KineticOperation operation;
-    KineticProto_Status_StatusCode status;
     ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key");
     Request.connection = &connection;
 
@@ -57,10 +57,10 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
     KineticOperation_BuildNoop_Expect(&operation);
     KineticPDU_Send_ExpectAndReturn(&Request, true);
     KineticPDU_Receive_ExpectAndReturn(&Response, true);
-    KineticPDU_Status_ExpectAndReturn(&Response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
 
-    status = KineticClient_NoOp(&operation);
+    KineticStatus status = KineticClient_NoOp(&operation);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, Response.connection);
 }

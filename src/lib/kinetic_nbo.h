@@ -18,7 +18,7 @@
 *
 */
 
-#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 
 uint32_t KineticNBO_FromHostU32(uint32_t valueHost);
 uint32_t KineticNBO_ToHostU32(uint32_t valueNBO);

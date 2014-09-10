@@ -62,6 +62,162 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
     TEST_ASSERT_EQUAL_PTR(&Response, op.response);
 }
 
+void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_KineticProto_Status_StatusCode_in_response(void)
+{
+    KineticStatus status;
+
+    status = KineticOperation_GetStatus(NULL);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    KineticPDU* req = Operation.response;
+    TEST_ASSERT_NOT_NULL(req);
+    Operation.response = NULL;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+    Operation.response = req;
+
+    // Build a valid NOOP to facilitate testing protobuf structure and status extraction
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticOperation_BuildNoop(&Operation);
+
+    KineticProto* proto = Response.proto;
+    Response.proto = NULL;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+    Response.proto = proto;
+
+    KineticProto_Command* cmd = Response.proto->command;
+    TEST_ASSERT_NOT_NULL(cmd);
+    Response.proto->command = NULL;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+    Response.proto->command = cmd;
+
+    Response.proto->command->status = NULL;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    Response.proto->command->status = &Response.protoData.message.status;
+    Response.proto->command->status->has_code = false;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    Response.proto->command->status->has_code = true;
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+}
+
+void test_KineticOperation_GetStatus_should_return_appropriate_KineticStatus_based_on_KineticProto_Status_StatusCode_in_response(void)
+{
+    KineticStatus status;
+
+    // Build a valid NOOP to facilitate testing protobuf structure and status extraction
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticOperation_BuildNoop(&Operation);
+
+    Response.proto = &Response.protoData.message.proto;
+    Response.proto->command = &Response.protoData.message.command;
+    Response.proto->command->status = &Response.protoData.message.status;
+    Response.proto->command->status->has_code = true;
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
+
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_DEVICE_BUSY, status);
+
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
+
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
+    
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
+
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_VERSION_FAILURE, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_VERSION_FAILURE, status);
+
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
+
+
+    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    Response.proto->command->status->code = _KINETIC_PROTO_STATUS_STATUS_CODE_IS_INT_SIZE;
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    Response.proto->command->status->code = (KineticProto_Status_StatusCode)
+        (KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 10);
+    status = KineticOperation_GetStatus(&Operation);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+}
+
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
     LOG_LOCATION;
@@ -173,12 +329,13 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     //       //        written before the FLUSH operation is returned completed.
     //       synchronization: ...
     //     }
-    const Kinetic_KeyValue metadata = {
+    const KineticKeyValue metadata = {
         .key = key,
         .newVersion = newVersion,
         .dbVersion = BYTE_ARRAY_NONE,
         .tag = tag,
         .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .value = value,
     };
     KineticMessage_ConfigureKeyValue_Expect(&Operation.request->protoData.message, &metadata);
     //   }
@@ -187,7 +344,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     //
 
     // Build the operation
-    KineticOperation_BuildPut(&Operation, &metadata, value);
+    KineticOperation_BuildPut(&Operation, &metadata);
 
     // Ensure proper message type
     TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
@@ -196,18 +353,20 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     TEST_ASSERT_EQUAL_ByteArray(value, Operation.request->value);
 }
 
+uint8_t ValueData[PDU_VALUE_MAX_LEN];
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_supplied_value_ByteArray(void)
 {
     LOG_LOCATION;
     const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
-    const Kinetic_KeyValue metadata = {.key = key};
-    const ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("One ring to rule them all!");
+    ByteArray value = {.data = ValueData};
+    ByteArray expectedValue = {.data = value.data, .len = PDU_VALUE_MAX_LEN};
+    const KineticKeyValue metadata = {.key = key, .value = (ByteArray){.len = PDU_VALUE_MAX_LEN, .data = value.data}};
 
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
 
-    KineticOperation_BuildGet(&Operation, &metadata, value);
+    KineticOperation_BuildGet(&Operation, &metadata);
 
     // GET
     // The GET operation is used to retrieve the value and metadata for a given key.
@@ -236,21 +395,21 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_supplied_v
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_EQUAL_ByteArray(value, Response.value);
+    TEST_ASSERT_EQUAL_ByteArray(expectedValue, Response.value);
 }
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_embedded_value_ByteArray(void)
 {
     LOG_LOCATION;
     const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
-    const Kinetic_KeyValue metadata = {
+    const KineticKeyValue metadata = {
         .key = key,
     };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
 
-    KineticOperation_BuildGet(&Operation, &metadata, BYTE_ARRAY_NONE);
+    KineticOperation_BuildGet(&Operation, &metadata);
 
     // GET
     // The GET operation is used to retrieve the value and metadata for a given key.
@@ -287,7 +446,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
 {
     LOG_LOCATION;
     const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
-    const Kinetic_KeyValue metadata = {
+    const KineticKeyValue metadata = {
         .key = key,
         .metadataOnly = true,
     };
@@ -295,7 +454,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
 
-    KineticOperation_BuildGet(&Operation, &metadata, BYTE_ARRAY_NONE);
+    KineticOperation_BuildGet(&Operation, &metadata);
 
     // GET
     // The GET operation is used to retrieve the value and metadata for a given key.

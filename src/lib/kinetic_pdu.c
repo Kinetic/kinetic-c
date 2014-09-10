@@ -37,14 +37,12 @@ void KineticPDU_AttachValuePayload(KineticPDU* const pdu,
 {
     assert(pdu != NULL);
     pdu->value = payload;
-    pdu->header.valueLength = payload.len;
-    pdu->headerNBO.valueLength = KineticNBO_FromHostU32(payload.len);
 }
 
 void KineticPDU_EnableValueBuffer(KineticPDU* const pdu)
 {
     assert(pdu != NULL);
-    pdu->value = (ByteArray){.data = pdu->valueBuffer};
+    pdu->value = (ByteArray){.data = pdu->valueBuffer, .len = PDU_VALUE_MAX_LEN};
 }
 
 void KineticPDU_EnableValueBufferWithLength(KineticPDU* const pdu,
@@ -55,21 +53,6 @@ void KineticPDU_EnableValueBufferWithLength(KineticPDU* const pdu,
     pdu->value = (ByteArray){.data = pdu->valueBuffer, .len = length};
     pdu->header.valueLength = length;
     pdu->headerNBO.valueLength = KineticNBO_FromHostU32(length);
-}
-
-KineticProto_Status_StatusCode KineticPDU_Status(KineticPDU* const pdu)
-{
-    if (pdu != NULL &&
-        pdu->proto != NULL &&
-        pdu->proto->command != NULL &&
-        pdu->proto->command->status != NULL)
-    {
-        return pdu->proto->command->status->code;
-    }
-    else
-    {
-        return KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
-    }
 }
 
 bool KineticPDU_Send(KineticPDU* request)
@@ -205,6 +188,8 @@ bool KineticPDU_Receive(KineticPDU* const response)
         LOGF("Attempting to receive value payload (%lld bytes)...",
             (long long)response->header.valueLength);
 
+        LOG_LOCATION; LOGF("value.len=%u, value.data=0x%zu", response->value.len, response->value.data);
+
         if (!KineticSocket_Read(fd, response->value))
         {
             LOG("Failed to receive PDU value payload!");
@@ -213,6 +198,7 @@ bool KineticPDU_Receive(KineticPDU* const response)
         else
         {
             LOG("Received value payload successfully");
+            response->value.len = response->header.valueLength;
             KineticLogger_LogByteArray("Value Payload", response->value);
         }
     }

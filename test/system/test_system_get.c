@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
@@ -58,22 +59,22 @@ void setUp(void)
     // Setup to write some test data
     Fixture.request.value = testValue;
 
-    Kinetic_KeyValue metadata = {
+    KineticKeyValue metadata = {
         .key = valueKey,
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
         .tag = tag,
         .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .value = testValue,
     };
 
     if (!testDataWritten)
     {
-        KineticProto_Status_StatusCode status =
+        KineticStatus status =
             KineticClient_Put(&Fixture.instance.operation,
-                &metadata,
-                testValue);
+                &metadata);
 
         TEST_ASSERT_EQUAL_KINETIC_STATUS(
-            KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+            KINETIC_STATUS_SUCCESS, status);
 
         Fixture.expectedSequence++;
         TEST_ASSERT_EQUAL_MESSAGE(
@@ -100,40 +101,34 @@ void tearDown(void)
 //
 void test_Get_should_retrieve_object_and_metadata_from_device(void)
 {
-    Kinetic_KeyValue metadata = {.key = valueKey};
-    ByteArray value = {.data = Fixture.response.valueBuffer};
+    KineticKeyValue metadata = {.key = valueKey};
+    ByteArray value = {.data = Fixture.response.valueBuffer, .len = testValue.len};
 
-    KineticProto_Status_StatusCode status =
+    KineticStatus status =
         KineticClient_Get(&Fixture.instance.operation,
-            &metadata,
-            value);
-
-    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR)
-    {
-        TEST_IGNORE_MESSAGE("FIXME: GET is failing to validate HMAC");
-    }
+            &metadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+        KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteArray(value, metadata.value);
 }
 
 void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
 {
-    Kinetic_KeyValue metadata = {.key = valueKey};
-    ByteArray value = {.data = Fixture.response.valueBuffer};
+    sleep(1);
 
-    KineticProto_Status_StatusCode status =
+    KineticKeyValue metadata = {.key = valueKey};
+    ByteArray value = {.data = Fixture.response.valueBuffer, .len = testValue.len};
+
+    KineticStatus status =
         KineticClient_Get(&Fixture.instance.operation,
-            &metadata,
-            value);
-
-    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR)
-    {
-        TEST_IGNORE_MESSAGE("FIXME: GET is failing to validate HMAC");
-    }
+            &metadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+        KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteArray(value, metadata.value);
 }
 
 /*******************************************************************************

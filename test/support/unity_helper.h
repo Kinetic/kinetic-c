@@ -76,15 +76,17 @@
 
 /** Custom Unity assertion which validates a the value of a Kinetic protocol status code */
 #define TEST_ASSERT_EQUAL_KINETIC_STATUS(expected, actual) \
-if (expected != actual) { \
+if ((expected) != (actual)) { \
     char err[128]; \
+    const char* invalidStatus = "INVALID_STATUS"; \
+    const char* statusDescExpected = invalidStatus; \
+    if ((expected) >= 0 && (expected) < KineticStatusDescriptorCount) { \
+        statusDescExpected = KineticStatusDescriptor[(expected)]; } \
+    const char* statusDescActual = invalidStatus; \
+    if ((actual) >= 0 && (actual) < KineticStatusDescriptorCount) { \
+        statusDescActual = KineticStatusDescriptor[(actual)]; } \
     sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
-        protobuf_c_enum_descriptor_get_value( \
-            &KineticProto_status_status_code__descriptor, expected)->name, \
-        expected, \
-        protobuf_c_enum_descriptor_get_value( \
-            &KineticProto_status_status_code__descriptor, actual)->name, \
-        actual); \
+        statusDescExpected, (expected), statusDescActual, (actual));\
     TEST_FAIL_MESSAGE(err); \
 }
 
@@ -101,10 +103,10 @@ if (expected != actual) { \
 
 /** Custom Unity/CMock equality assertion for validating equality of ByteArrays */
 #define TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, msg) \
-    TEST_ASSERT_EQUAL_INT_MESSAGE((expected).len, (actual).len, msg); \
-    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((expected).data, (actual).data, (expected).len, msg);
+    TEST_ASSERT_EQUAL_INT_MESSAGE((expected).len, (actual).len, "Lengths do not match!"); \
+    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((expected).data, (actual).data, (expected).len, "Data does not match!");
 #define TEST_ASSERT_EQUAL_ByteArray(expected, actual) \
-    TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, "ByteArrays are not equal!");
+    TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, NULL);
 
 /** Custom Unity assertion for validating empty ByteArrays */
 #define TEST_ASSERT_ByteArray_EMPTY(actual) \

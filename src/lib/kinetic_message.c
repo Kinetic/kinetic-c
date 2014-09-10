@@ -40,7 +40,7 @@ void KineticMessage_Init(KineticMessage* const message)
 //         message->keyValue.algorithm = algorithm; } }
 
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-    const Kinetic_KeyValue* metadata)
+    const KineticKeyValue* metadata)
 {
     assert(message != NULL);
     assert(metadata != NULL);

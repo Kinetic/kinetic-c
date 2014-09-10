@@ -51,7 +51,7 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_add_to_message(void)
 {
     KineticMessage message;
-    Kinetic_KeyValue metadata = {
+    KineticKeyValue metadata = {
         .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
@@ -90,7 +90,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_metadata_only_and_add_to_message(void)
 {
     KineticMessage message;
-    Kinetic_KeyValue metadata = {
+    KineticKeyValue metadata = {
         .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),

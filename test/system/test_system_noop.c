@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
@@ -138,11 +139,11 @@ void tearDown(void)
 // -----------------------------------------------------------------------------
 void test_NoOp_should_succeed(void)
 {
-    KineticProto_Status_StatusCode status =
+    KineticStatus status =
         KineticClient_NoOp(&Fixture.instance.operation);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+        KINETIC_STATUS_SUCCESS, status);
 }
 
 /*******************************************************************************

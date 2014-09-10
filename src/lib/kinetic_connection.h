@@ -21,7 +21,7 @@
 #ifndef _KINETIC_CONNECTION_H
 #define _KINETIC_CONNECTION_H
 
-#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 
 bool KineticConnection_Connect(KineticConnection* connection,
     const char* host,

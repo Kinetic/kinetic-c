@@ -21,11 +21,11 @@
 #ifndef _KINETIC_MESSAGE_H
 #define _KINETIC_MESSAGE_H
 
-#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_hmac.h"
 
 void KineticMessage_Init(KineticMessage* const message);
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-    const Kinetic_KeyValue* metadata);
+    const KineticKeyValue* metadata);
 
 #endif // _KINETIC_MESSAGE_H

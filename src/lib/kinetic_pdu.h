@@ -21,7 +21,7 @@
 #ifndef _KINETIC_PDU_H
 #define _KINETIC_PDU_H
 
-#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 
 void KineticPDU_Init(KineticPDU* const pdu,
     KineticConnection* const connection);
@@ -31,8 +31,6 @@ void KineticPDU_AttachValuePayload(KineticPDU* const pdu,
 void KineticPDU_EnableValueBuffer(KineticPDU* const pdu);
 void KineticPDU_EnableValueBufferWithLength(KineticPDU* const pdu,
     size_t length);
-
-KineticProto_Status_StatusCode KineticPDU_Status(KineticPDU* const pdu);
 
 bool KineticPDU_Send(KineticPDU* request);
 bool KineticPDU_Receive(KineticPDU* response);

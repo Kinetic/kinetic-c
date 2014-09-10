@@ -80,7 +80,7 @@ KineticOperation KineticClient_CreateOperation(
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
-KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation);
+KineticStatus KineticClient_NoOp(KineticOperation* operation);
 
 /**
  * @brief Executes a PUT command to write data to the Kinetic Device
@@ -92,8 +92,8 @@ KineticProto_Status_StatusCode KineticClient_NoOp(KineticOperation* operation);
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
-KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata);
+KineticStatus KineticClient_Put(KineticOperation* operation,
+    const KineticKeyValue* metadata);
 
 /**
  * @brief Executes a GET command to read data from the Kinetic Device
@@ -105,7 +105,7 @@ KineticProto_Status_StatusCode KineticClient_Put(KineticOperation* operation,
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
-KineticProto_Status_StatusCode KineticClient_Get(KineticOperation* operation,
-    const Kinetic_KeyValue* metadata);
+KineticStatus KineticClient_Get(KineticOperation* operation,
+    KineticKeyValue* metadata);
 
 #endif // _KINETIC_CLIENT_H

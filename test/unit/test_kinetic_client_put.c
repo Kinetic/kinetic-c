@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
@@ -44,25 +45,21 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
 {
     KineticConnection connection;
     KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto_Status responseStatus = KINETIC_PROTO_STATUS__INIT;
     ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
 
-    KineticProto_Status_StatusCode status;
     BYTE_ARRAY_CREATE(value, PDU_VALUE_MAX_LEN);
-    const Kinetic_KeyValue const metadata = {
+    const KineticKeyValue const metadata = {
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
         .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
         .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
         .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .value = value,
     };
 
     KINETIC_PDU_INIT(&Request, &connection);
 
     Response.protoData.message.proto.command = &responseCommand;
-    Response.protoData.message.proto.command->status = &responseStatus;
-    Response.protoData.message.proto.command->status->has_code = true;
-    Response.protoData.message.proto.command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
 
     KINETIC_CONNECTION_INIT(&connection, 1234, hmacKey);
     KineticPDU_Init_Expect(&Request, &connection);
@@ -70,13 +67,13 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     KineticOperation operation = KineticClient_CreateOperation(&connection,
         &Request, &Response);
 
-    KineticOperation_BuildPut_Expect(&operation, &metadata, value);
+    KineticOperation_BuildPut_Expect(&operation, &metadata);
     KineticPDU_Send_ExpectAndReturn(&Request, true);
     KineticPDU_Receive_ExpectAndReturn(&Response, true);
-    KineticPDU_Status_ExpectAndReturn(&Response, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS);
+    KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
 
-    status = KineticClient_Put(&operation, &metadata, value);
+    KineticStatus status = KineticClient_Put(&operation, &metadata);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, Response.connection);
 }

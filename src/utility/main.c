@@ -144,13 +144,14 @@ int main(int argc, char** argv)
                 cfg.value[i] = (uint8_t)(0x0ff & i);
             }
 
-            Kinetic_KeyValue metadata = {
+            KineticKeyValue metadata = {
                 .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
                 .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
                 .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
                 .dbVersion = BYTE_ARRAY_NONE,
                 .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
                 .metadataOnly = false,
+                .value = value,
             };
 
             printf("\n"
@@ -174,7 +175,7 @@ int main(int argc, char** argv)
             status = Put(
                 cfg.host, cfg.port, cfg.nonBlocking,
                 cfg.clusterVersion, cfg.identity, hmacKey,
-                &metadata, value);
+                &metadata);
 
             if (status == 0)
             {
@@ -189,7 +190,7 @@ int main(int argc, char** argv)
 
         else if (strcmp("get", op) == 0)
         {
-            Kinetic_KeyValue metadata = {
+            KineticKeyValue metadata = {
                 .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
                 .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
                 .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
@@ -218,7 +219,7 @@ int main(int argc, char** argv)
 
             status = Get(cfg.host, cfg.port, cfg.nonBlocking,
                 cfg.clusterVersion, cfg.identity, hmacKey,
-                &metadata, value);
+                &metadata);
 
             if (status == 0 || status == KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR)
             {

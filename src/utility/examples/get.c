@@ -28,11 +28,10 @@ int Get(const char* host,
         int64_t clusterVersion,
         int64_t identity,
         ByteArray hmacKey,
-        Kinetic_KeyValue* metadata)
+        KineticKeyValue* metadata)
 {
     KineticOperation operation;
     KineticConnection connection;
-    KineticProto_Status_StatusCode status = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
     bool success;
 
     KineticClient_Init(NULL);
@@ -42,14 +41,14 @@ int Get(const char* host,
 
     operation = KineticClient_CreateOperation(&connection, &Request, &Response);
 
-    status = KineticClient_Get(&operation, metadata);
+    KineticStatus status = KineticClient_Get(&operation, metadata);
 
-    if (status == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
+    if (status == KINETIC_STATUS_SUCCESS)
     {
         printf("Get operation completed successfully. Your data has been retrieved!\n");
-        status = 0;
+        return 0;
     }
 
     KineticClient_Disconnect(&connection);
-    return status;
+    return (int)status;
 }
