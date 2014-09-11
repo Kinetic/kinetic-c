@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -88,12 +88,15 @@ $(document).ready(function(){initNavTree('kinetic__operation_8h_source.html','')
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">const</span> <a class="code" href="struct_kinetic_key_value.html">KineticKeyValue</a>* metadata);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5">KineticOperation_BuildGet</a>(<a class="code" href="struct_kinetic_operation.html">KineticOperation</a>* operation,</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">const</span> <a class="code" href="struct_kinetic_key_value.html">KineticKeyValue</a>* metadata);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#endif // _KINETIC_OPERATION_H</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__operation_8h.html#a5624ba424971283af2fe105918a9bc21">KineticOperation_BuildDelete</a>(<a class="code" href="struct_kinetic_operation.html">KineticOperation</a>* operation,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">const</span> <a class="code" href="struct_kinetic_key_value.html">KineticKeyValue</a>* metadata);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif // _KINETIC_OPERATION_H</span></div>
 <div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
 <div class="ttc" id="kinetic__operation_8h_html_a433a47a0a88bdae7e8539767478231ab"><div class="ttname"><a href="kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab">KineticOperation_BuildPut</a></div><div class="ttdeci">void KineticOperation_BuildPut(KineticOperation *operation, const KineticKeyValue *metadata)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8c_source.html#l00102">kinetic_operation.c:102</a></div></div>
 <div class="ttc" id="struct_kinetic_operation_html"><div class="ttname"><a href="struct_kinetic_operation.html">KineticOperation</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00307">kinetic_types.h:307</a></div></div>
 <div class="ttc" id="kinetic__operation_8h_html_ae451136b154b2d002cde03c0f8d203e5"><div class="ttname"><a href="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5">KineticOperation_BuildGet</a></div><div class="ttdeci">void KineticOperation_BuildGet(KineticOperation *operation, const KineticKeyValue *metadata)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8c_source.html#l00116">kinetic_operation.c:116</a></div></div>
+<div class="ttc" id="kinetic__operation_8h_html_a5624ba424971283af2fe105918a9bc21"><div class="ttname"><a href="kinetic__operation_8h.html#a5624ba424971283af2fe105918a9bc21">KineticOperation_BuildDelete</a></div><div class="ttdeci">void KineticOperation_BuildDelete(KineticOperation *operation, const KineticKeyValue *metadata)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8c_source.html#l00139">kinetic_operation.c:139</a></div></div>
 <div class="ttc" id="struct_kinetic_key_value_html"><div class="ttname"><a href="struct_kinetic_key_value.html">KineticKeyValue</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00223">kinetic_types.h:223</a></div></div>
 <div class="ttc" id="kinetic__operation_8h_html_a25c0d192edf098893390eb9236bb9888"><div class="ttname"><a href="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888">KineticOperation_BuildNoop</a></div><div class="ttdeci">void KineticOperation_BuildNoop(KineticOperation *operation)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8c_source.html#l00093">kinetic_operation.c:93</a></div></div>
 <div class="ttc" id="kinetic__operation_8h_html_adbf3eeef54dcdb65dfaf75f2e0312cd0"><div class="ttname"><a href="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0">KineticOperation_GetStatus</a></div><div class="ttdeci">KineticStatus KineticOperation_GetStatus(const KineticOperation *const operation)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__operation_8c_source.html#l00026">kinetic_operation.c:26</a></div></div>

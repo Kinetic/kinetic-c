@@ -7,5 +7,6 @@ var kinetic__client_8c =
     [ "KineticClient_CreateOperation", "kinetic__client_8c.html#a8c2d9f8e7d2046d8fef3294c645e4c96", null ],
     [ "KineticClient_NoOp", "kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8", null ],
     [ "KineticClient_Put", "kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a", null ],
-    [ "KineticClient_Get", "kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8", null ]
+    [ "KineticClient_Get", "kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8", null ],
+    [ "KineticClient_Delete", "kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc", null ]
 ];

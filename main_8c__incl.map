@@ -1,8 +1,9 @@
 <map id="main.c" name="main.c">
-<area shape="rect" id="node7" href="$kinetic__client_8h.html" title="kinetic_client.h" alt="" coords="1035,163,1173,194"/>
-<area shape="rect" id="node22" href="$noop_8h.html" title="examples/noop.h" alt="" coords="1141,84,1298,115"/>
-<area shape="rect" id="node23" href="$put_8h.html" title="examples/put.h" alt="" coords="1323,84,1466,115"/>
-<area shape="rect" id="node24" href="$get_8h.html" title="examples/get.h" alt="" coords="925,84,1067,115"/>
-<area shape="rect" id="node8" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="896,242,1032,273"/>
+<area shape="rect" id="node7" href="$kinetic__client_8h.html" title="kinetic_client.h" alt="" coords="999,163,1137,194"/>
+<area shape="rect" id="node22" href="$noop_8h.html" title="examples/noop.h" alt="" coords="841,84,998,115"/>
+<area shape="rect" id="node23" href="$put_8h.html" title="examples/put.h" alt="" coords="1023,84,1166,115"/>
+<area shape="rect" id="node24" href="$get_8h.html" title="examples/get.h" alt="" coords="1190,84,1332,115"/>
+<area shape="rect" id="node25" href="$delete_8h.html" title="examples/delete.h" alt="" coords="1356,84,1521,115"/>
+<area shape="rect" id="node8" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="892,242,1028,273"/>
 <area shape="rect" id="node19" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="496,321,634,352"/>
 </map>

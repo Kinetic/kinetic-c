@@ -3,7 +3,7 @@
 <area shape="rect" id="node5" href="$kinetic__client_8h.html#a8c2d9f8e7d2046d8fef3294c645e4c96" title="Creates and initializes a Kinetic operation. " alt="" coords="99,219,354,250"/>
 <area shape="rect" id="node7" href="$kinetic__client_8h.html#ae4b4f1c08bcb4fc76a792c216d5b0822" title="Closes the socket connection to a host. " alt="" coords="121,273,333,304"/>
 <area shape="rect" id="node9" href="$kinetic__client_8h.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" title="Initializes the Kinetic API andcsonfigures logging destination. " alt="" coords="150,328,303,359"/>
-<area shape="rect" id="node11" href="$kinetic__client_8h.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="151,383,302,414"/>
+<area shape="rect" id="node11" href="$kinetic__client_8h.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to store/update an entry on the Kinetic Device. " alt="" coords="151,383,302,414"/>
 <area shape="rect" id="node3" href="$kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76" title="KineticConnection_Connect" alt="" coords="417,164,651,195"/>
 <area shape="rect" id="node4" href="$kinetic__socket_8c.html#a8b16e4d74b50c80aa8836671471f7970" title="KineticSocket_Connect" alt="" coords="739,164,936,195"/>
 <area shape="rect" id="node6" href="$kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda" title="KineticPDU_Init" alt="" coords="464,219,603,250"/>

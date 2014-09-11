@@ -1,0 +1,56 @@
+.TH "delete.h" 3 "Thu Sep 11 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+delete.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_client\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBDelete\fP (const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, \fBByteArray\fP hmacKey, \fBKineticKeyValue\fP *metadata)"
+.br
+.RI "\fIExecutes a Delete to delete an object from the Device\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int Delete (const char *host, intport, boolnonBlocking, int64_tclusterVersion, int64_tidentity, \fBByteArray\fPhmacKey, \fBKineticKeyValue\fP *metadata)"
+
+.PP
+Executes a Delete to delete an object from the Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIhost\fP Host name or IP address to connect to 
+.br
+\fIport\fP Port to establish socket connection on 
+.br
+\fInonBlocking\fP Set to true for non-blocking or false for blocking I/O 
+.br
+\fIclusterVersion\fP Cluster version to use for the operation 
+.br
+\fIidentity\fP Identity to use for the operation (Must have ACL setup on Kinetic Device) 
+.br
+\fIhmacKey\fP Shared secret key used for the identity for HMAC calculation 
+.br
+\fImetadata\fP Key/value metadata for object to retrieve\&. 'value' will be populated unless 'metadataOnly' is set to 'true'
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns 0 upon succes, -1 or the Kinetic status code upon failure 
+.RE
+.PP
+
+.PP
+Definition at line 25 of file delete\&.c\&.
+.PP
+References KINETIC_STATUS_SUCCESS, KineticClient_Connect(), KineticClient_CreateOperation(), KineticClient_Delete(), KineticClient_Disconnect(), and KineticClient_Init()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

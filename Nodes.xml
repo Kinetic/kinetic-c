@@ -1737,6 +1737,38 @@
           <Path>files.html</Path>
           <Subnodes>
            <Node>
+            <Name>delete.c</Name>
+            <Path>delete_8c.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>Delete</Name>
+              <Path>delete_8c.html</Path>
+              <Anchor>abeddadd7d67bb9d2e1de229dda939065</Anchor>
+             </Node>
+             <Node>
+              <Name>Request</Name>
+              <Path>delete_8c.html</Path>
+              <Anchor>a72c86c9657e34f663c24b7f6d836e590</Anchor>
+             </Node>
+             <Node>
+              <Name>Response</Name>
+              <Path>delete_8c.html</Path>
+              <Anchor>a8826d3341bd8bfbeb86db92d69b2e5c1</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>delete.h</Name>
+            <Path>delete_8h.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>Delete</Name>
+              <Path>delete_8h.html</Path>
+              <Anchor>abeddadd7d67bb9d2e1de229dda939065</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
             <Name>get.c</Name>
             <Path>get_8c.html</Path>
             <Subnodes>
@@ -1812,6 +1844,11 @@
               <Path>kinetic__client_8c.html</Path>
               <Anchor>a17a5f97cb86609ee9f3ad7082370a7b8</Anchor>
              </Node>
+             <Node>
+              <Name>KineticClient_Delete</Name>
+              <Path>kinetic__client_8c.html</Path>
+              <Anchor>a6627404cdac9da3990a67df8ada0d8cc</Anchor>
+             </Node>
             </Subnodes>
            </Node>
            <Node>
@@ -1852,6 +1889,11 @@
               <Name>KineticClient_Get</Name>
               <Path>kinetic__client_8h.html</Path>
               <Anchor>a17a5f97cb86609ee9f3ad7082370a7b8</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticClient_Delete</Name>
+              <Path>kinetic__client_8h.html</Path>
+              <Anchor>a6627404cdac9da3990a67df8ada0d8cc</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -2209,6 +2251,11 @@
               <Path>kinetic__operation_8c.html</Path>
               <Anchor>ae451136b154b2d002cde03c0f8d203e5</Anchor>
              </Node>
+             <Node>
+              <Name>KineticOperation_BuildDelete</Name>
+              <Path>kinetic__operation_8c.html</Path>
+              <Anchor>a5624ba424971283af2fe105918a9bc21</Anchor>
+             </Node>
             </Subnodes>
            </Node>
            <Node>
@@ -2234,6 +2281,11 @@
               <Name>KineticOperation_BuildGet</Name>
               <Path>kinetic__operation_8h.html</Path>
               <Anchor>ae451136b154b2d002cde03c0f8d203e5</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_BuildDelete</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a5624ba424971283af2fe105918a9bc21</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -5581,6 +5633,10 @@
              <Node>
               <Name>c</Name>
               <Path>globals_c.html</Path>
+             </Node>
+             <Node>
+              <Name>d</Name>
+              <Path>globals_d.html</Path>
              </Node>
              <Node>
               <Name>f</Name>

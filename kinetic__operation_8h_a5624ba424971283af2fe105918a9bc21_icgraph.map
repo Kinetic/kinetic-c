@@ -1,0 +1,5 @@
+<map id="KineticOperation_BuildDelete" name="KineticOperation_BuildDelete">
+<area shape="rect" id="node2" href="$kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc" title="Executes a DELETE command to delete an entry from the Kinetic Device. " alt="" coords="300,5,477,36"/>
+<area shape="rect" id="node3" href="$delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="525,5,595,36"/>
+<area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="643,5,703,36"/>
+</map>

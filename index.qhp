@@ -5,7 +5,7 @@
   <filterSection>
     <filterAttribute>doxygen</filterAttribute>
     <toc>
-      <section title="protobuf-c v0.6.0-beta" ref="index.html">
+      <section title="protobuf-c v0.6.0" ref="index.html">
         <section title="Data Structures">
           <section title="Data Structures" ref="annotated.html">
             <section title="_KineticProto" ref="struct___kinetic_proto.html">
@@ -389,6 +389,14 @@
         </section>
         <section title="Files">
           <section title="File List" ref="files.html">
+            <section title="delete.c" ref="delete_8c.html">
+              <section title="Delete" ref="delete_8c.html#abeddadd7d67bb9d2e1de229dda939065" />
+              <section title="Request" ref="delete_8c.html#a72c86c9657e34f663c24b7f6d836e590" />
+              <section title="Response" ref="delete_8c.html#a8826d3341bd8bfbeb86db92d69b2e5c1" />
+            </section>
+            <section title="delete.h" ref="delete_8h.html">
+              <section title="Delete" ref="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" />
+            </section>
             <section title="get.c" ref="get_8c.html">
               <section title="Get" ref="get_8c.html#a4eac921bed546f39bed8e83d9606b347" />
               <section title="Request" ref="get_8c.html#a72c86c9657e34f663c24b7f6d836e590" />
@@ -406,6 +414,7 @@
               <section title="KineticClient_NoOp" ref="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" />
               <section title="KineticClient_Put" ref="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" />
               <section title="KineticClient_Get" ref="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" />
+              <section title="KineticClient_Delete" ref="kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc" />
             </section>
             <section title="kinetic_client.h" ref="kinetic__client_8h.html">
               <section title="KineticClient_Init" ref="kinetic__client_8h.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" />
@@ -415,6 +424,7 @@
               <section title="KineticClient_NoOp" ref="kinetic__client_8h.html#aa265de3c65a20a8b7454a06cd80792d8" />
               <section title="KineticClient_Put" ref="kinetic__client_8h.html#a9b9b330e205d5a627f9f08739da4369a" />
               <section title="KineticClient_Get" ref="kinetic__client_8h.html#a17a5f97cb86609ee9f3ad7082370a7b8" />
+              <section title="KineticClient_Delete" ref="kinetic__client_8h.html#a6627404cdac9da3990a67df8ada0d8cc" />
             </section>
             <section title="kinetic_connection.c" ref="kinetic__connection_8c.html">
               <section title="KineticConnection_Connect" ref="kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76" />
@@ -495,12 +505,14 @@
               <section title="KineticOperation_BuildNoop" ref="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888" />
               <section title="KineticOperation_BuildPut" ref="kinetic__operation_8c.html#a433a47a0a88bdae7e8539767478231ab" />
               <section title="KineticOperation_BuildGet" ref="kinetic__operation_8c.html#ae451136b154b2d002cde03c0f8d203e5" />
+              <section title="KineticOperation_BuildDelete" ref="kinetic__operation_8c.html#a5624ba424971283af2fe105918a9bc21" />
             </section>
             <section title="kinetic_operation.h" ref="kinetic__operation_8h.html">
               <section title="KineticOperation_GetStatus" ref="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
               <section title="KineticOperation_BuildNoop" ref="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888" />
               <section title="KineticOperation_BuildPut" ref="kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab" />
               <section title="KineticOperation_BuildGet" ref="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5" />
+              <section title="KineticOperation_BuildDelete" ref="kinetic__operation_8h.html#a5624ba424971283af2fe105918a9bc21" />
             </section>
             <section title="kinetic_pdu.c" ref="kinetic__pdu_8c.html">
               <section title="KineticPDU_Init" ref="kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda" />
@@ -1212,6 +1224,7 @@
               <section title="_" ref="globals.html" />
               <section title="b" ref="globals_b.html" />
               <section title="c" ref="globals_c.html" />
+              <section title="d" ref="globals_d.html" />
               <section title="f" ref="globals_f.html" />
               <section title="g" ref="globals_g.html" />
               <section title="h" ref="globals_h.html" />
@@ -1233,6 +1246,10 @@
       </section>
     </toc>
     <keywords>
+      <keyword name="Delete" id="delete.c::Delete" ref="delete_8c.html#abeddadd7d67bb9d2e1de229dda939065" />
+      <keyword name="Request" id="delete.c::Request" ref="delete_8c.html#a72c86c9657e34f663c24b7f6d836e590" />
+      <keyword name="Response" id="delete.c::Response" ref="delete_8c.html#a8826d3341bd8bfbeb86db92d69b2e5c1" />
+      <keyword name="Delete" id="delete.h::Delete" ref="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" />
       <keyword name="Get" id="get.c::Get" ref="get_8c.html#a4eac921bed546f39bed8e83d9606b347" />
       <keyword name="Request" id="get.c::Request" ref="get_8c.html#a72c86c9657e34f663c24b7f6d836e590" />
       <keyword name="Response" id="get.c::Response" ref="get_8c.html#a8826d3341bd8bfbeb86db92d69b2e5c1" />
@@ -1245,6 +1262,7 @@
       <keyword name="KineticClient_NoOp" id="kinetic_client.c::KineticClient_NoOp" ref="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" />
       <keyword name="KineticClient_Put" id="kinetic_client.c::KineticClient_Put" ref="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" />
       <keyword name="KineticClient_Get" id="kinetic_client.c::KineticClient_Get" ref="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" />
+      <keyword name="KineticClient_Delete" id="kinetic_client.c::KineticClient_Delete" ref="kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc" />
       <keyword name="KineticClient_Init" id="kinetic_client.h::KineticClient_Init" ref="kinetic__client_8h.html#ad3ba9980559b44b3bcb3d7aabe2afd2d" />
       <keyword name="KineticClient_Connect" id="kinetic_client.h::KineticClient_Connect" ref="kinetic__client_8h.html#a5448ecfd9eef429ea2679610e5cfd6cf" />
       <keyword name="KineticClient_Disconnect" id="kinetic_client.h::KineticClient_Disconnect" ref="kinetic__client_8h.html#ae4b4f1c08bcb4fc76a792c216d5b0822" />
@@ -1252,6 +1270,7 @@
       <keyword name="KineticClient_NoOp" id="kinetic_client.h::KineticClient_NoOp" ref="kinetic__client_8h.html#aa265de3c65a20a8b7454a06cd80792d8" />
       <keyword name="KineticClient_Put" id="kinetic_client.h::KineticClient_Put" ref="kinetic__client_8h.html#a9b9b330e205d5a627f9f08739da4369a" />
       <keyword name="KineticClient_Get" id="kinetic_client.h::KineticClient_Get" ref="kinetic__client_8h.html#a17a5f97cb86609ee9f3ad7082370a7b8" />
+      <keyword name="KineticClient_Delete" id="kinetic_client.h::KineticClient_Delete" ref="kinetic__client_8h.html#a6627404cdac9da3990a67df8ada0d8cc" />
       <keyword name="KineticConnection_Connect" id="kinetic_connection.c::KineticConnection_Connect" ref="kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76" />
       <keyword name="KineticConnection_Disconnect" id="kinetic_connection.c::KineticConnection_Disconnect" ref="kinetic__connection_8c.html#ac098de6abde0c838914a846829d51ac5" />
       <keyword name="KineticConnection_IncrementSequence" id="kinetic_connection.c::KineticConnection_IncrementSequence" ref="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d" />
@@ -1310,10 +1329,12 @@
       <keyword name="KineticOperation_BuildNoop" id="kinetic_operation.c::KineticOperation_BuildNoop" ref="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888" />
       <keyword name="KineticOperation_BuildPut" id="kinetic_operation.c::KineticOperation_BuildPut" ref="kinetic__operation_8c.html#a433a47a0a88bdae7e8539767478231ab" />
       <keyword name="KineticOperation_BuildGet" id="kinetic_operation.c::KineticOperation_BuildGet" ref="kinetic__operation_8c.html#ae451136b154b2d002cde03c0f8d203e5" />
+      <keyword name="KineticOperation_BuildDelete" id="kinetic_operation.c::KineticOperation_BuildDelete" ref="kinetic__operation_8c.html#a5624ba424971283af2fe105918a9bc21" />
       <keyword name="KineticOperation_GetStatus" id="kinetic_operation.h::KineticOperation_GetStatus" ref="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
       <keyword name="KineticOperation_BuildNoop" id="kinetic_operation.h::KineticOperation_BuildNoop" ref="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888" />
       <keyword name="KineticOperation_BuildPut" id="kinetic_operation.h::KineticOperation_BuildPut" ref="kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab" />
       <keyword name="KineticOperation_BuildGet" id="kinetic_operation.h::KineticOperation_BuildGet" ref="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5" />
+      <keyword name="KineticOperation_BuildDelete" id="kinetic_operation.h::KineticOperation_BuildDelete" ref="kinetic__operation_8h.html#a5624ba424971283af2fe105918a9bc21" />
       <keyword name="KineticPDU_Init" id="kinetic_pdu.c::KineticPDU_Init" ref="kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda" />
       <keyword name="KineticPDU_AttachValuePayload" id="kinetic_pdu.c::KineticPDU_AttachValuePayload" ref="kinetic__pdu_8c.html#ad29d8f808b47e72f33d8a9ce09c478f4" />
       <keyword name="KineticPDU_EnableValueBuffer" id="kinetic_pdu.c::KineticPDU_EnableValueBuffer" ref="kinetic__pdu_8c.html#a73fb6bffccab39055afb05c99d6fdf39" />
@@ -1976,6 +1997,8 @@
       <file>ftv2vertline.png</file>
       <file>ftv2splitbar.png</file>
       <file>doxygen.css</file>
+      <file>delete_8c_source.html</file>
+      <file>delete_8h_source.html</file>
       <file>get_8c_source.html</file>
       <file>get_8h_source.html</file>
       <file>kinetic__client_8c_source.html</file>
@@ -2007,6 +2030,15 @@
       <file>put_8c_source.html</file>
       <file>put_8h_source.html</file>
       <file>_r_e_a_d_m_e_8md_source.html</file>
+      <file>delete_8c.html</file>
+      <file>delete_8c__incl.png</file>
+      <file>delete_8c_abeddadd7d67bb9d2e1de229dda939065_cgraph.png</file>
+      <file>delete_8c_abeddadd7d67bb9d2e1de229dda939065_icgraph.png</file>
+      <file>delete_8h.html</file>
+      <file>delete_8h__incl.png</file>
+      <file>delete_8h__dep__incl.png</file>
+      <file>delete_8h_abeddadd7d67bb9d2e1de229dda939065_cgraph.png</file>
+      <file>delete_8h_abeddadd7d67bb9d2e1de229dda939065_icgraph.png</file>
       <file>get_8c.html</file>
       <file>get_8c__incl.png</file>
       <file>get_8c_a4eac921bed546f39bed8e83d9606b347_cgraph.png</file>
@@ -2034,6 +2066,8 @@
       <file>kinetic__client_8c_a9b9b330e205d5a627f9f08739da4369a_icgraph.png</file>
       <file>kinetic__client_8c_a17a5f97cb86609ee9f3ad7082370a7b8_cgraph.png</file>
       <file>kinetic__client_8c_a17a5f97cb86609ee9f3ad7082370a7b8_icgraph.png</file>
+      <file>kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_cgraph.png</file>
+      <file>kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_icgraph.png</file>
       <file>kinetic__client_8h.html</file>
       <file>kinetic__client_8h__incl.png</file>
       <file>kinetic__client_8h__dep__incl.png</file>
@@ -2051,6 +2085,8 @@
       <file>kinetic__client_8h_a9b9b330e205d5a627f9f08739da4369a_icgraph.png</file>
       <file>kinetic__client_8h_a17a5f97cb86609ee9f3ad7082370a7b8_cgraph.png</file>
       <file>kinetic__client_8h_a17a5f97cb86609ee9f3ad7082370a7b8_icgraph.png</file>
+      <file>kinetic__client_8h_a6627404cdac9da3990a67df8ada0d8cc_cgraph.png</file>
+      <file>kinetic__client_8h_a6627404cdac9da3990a67df8ada0d8cc_icgraph.png</file>
       <file>kinetic__connection_8c.html</file>
       <file>kinetic__connection_8c__incl.png</file>
       <file>kinetic__connection_8c_a86b6c409a8ad8699ce3edd857f669f76_cgraph.png</file>
@@ -2128,6 +2164,8 @@
       <file>kinetic__operation_8c_a433a47a0a88bdae7e8539767478231ab_icgraph.png</file>
       <file>kinetic__operation_8c_ae451136b154b2d002cde03c0f8d203e5_cgraph.png</file>
       <file>kinetic__operation_8c_ae451136b154b2d002cde03c0f8d203e5_icgraph.png</file>
+      <file>kinetic__operation_8c_a5624ba424971283af2fe105918a9bc21_cgraph.png</file>
+      <file>kinetic__operation_8c_a5624ba424971283af2fe105918a9bc21_icgraph.png</file>
       <file>kinetic__operation_8h.html</file>
       <file>kinetic__operation_8h__incl.png</file>
       <file>kinetic__operation_8h__dep__incl.png</file>
@@ -2138,6 +2176,8 @@
       <file>kinetic__operation_8h_a433a47a0a88bdae7e8539767478231ab_icgraph.png</file>
       <file>kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_cgraph.png</file>
       <file>kinetic__operation_8h_ae451136b154b2d002cde03c0f8d203e5_icgraph.png</file>
+      <file>kinetic__operation_8h_a5624ba424971283af2fe105918a9bc21_cgraph.png</file>
+      <file>kinetic__operation_8h_a5624ba424971283af2fe105918a9bc21_icgraph.png</file>
       <file>kinetic__pdu_8c.html</file>
       <file>kinetic__pdu_8c__incl.png</file>
       <file>kinetic__pdu_8c_ac2b45fc01853688e458920a95bf12dda_icgraph.png</file>
@@ -2315,6 +2355,7 @@
       <file>globals.html</file>
       <file>globals_b.html</file>
       <file>globals_c.html</file>
+      <file>globals_d.html</file>
       <file>globals_f.html</file>
       <file>globals_g.html</file>
       <file>globals_h.html</file>
@@ -2324,6 +2365,7 @@
       <file>globals_n.html</file>
       <file>globals_p.html</file>
       <file>globals_r.html</file>
+      <file>globals_func.html</file>
       <file>globals_func.html</file>
       <file>globals_func.html</file>
       <file>globals_func.html</file>

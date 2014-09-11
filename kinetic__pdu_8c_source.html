@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -239,30 +239,31 @@ $(document).ready(function(){initNavTree('kinetic__pdu_8c_source.html','');});
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    }</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="comment">// Receive the value payload, if specified</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordflow">if</span> (response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">header</a>.valueLength &gt; 0)</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    {</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        assert(response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.data != NULL);</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">LOGF</a>(<span class="stringliteral">&quot;Attempting to receive value payload (%lld bytes)...&quot;</span>,</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            (<span class="keywordtype">long</span> <span class="keywordtype">long</span>)response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">header</a>.valueLength);</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <a class="code" href="kinetic__logger_8h.html#ad7b252887c17c035e5591c68848cce61">LOG_LOCATION</a>; <a class="code" href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">LOGF</a>(<span class="stringliteral">&quot;value.len=%u, value.data=0x%zu&quot;</span>, response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.len, response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.data);</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="kinetic__socket_8c.html#a1e57c03634e1ce7391aba8a82ad6040e">KineticSocket_Read</a>(fd, response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>))</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        {</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Failed to receive PDU value payload!&quot;</span>);</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        }</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        {</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Received value payload successfully&quot;</span>);</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.len = response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">header</a>.valueLength;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <a class="code" href="kinetic__logger_8c.html#a1833be5893222cc3650250726623f93c">KineticLogger_LogByteArray</a>(<span class="stringliteral">&quot;Value Payload&quot;</span>, response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>);</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        }</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    }</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;}</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.len = response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">header</a>.valueLength;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keywordflow">if</span> (response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">header</a>.valueLength &gt; 0)</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    {</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        assert(response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.data != NULL);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">LOGF</a>(<span class="stringliteral">&quot;Attempting to receive value payload (%lld bytes)...&quot;</span>,</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            (<span class="keywordtype">long</span> <span class="keywordtype">long</span>)response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">header</a>.valueLength);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <a class="code" href="kinetic__logger_8h.html#ad7b252887c17c035e5591c68848cce61">LOG_LOCATION</a>; <a class="code" href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">LOGF</a>(<span class="stringliteral">&quot;value.len=%u, value.data=0x%zu&quot;</span>, response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.len, response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.data);</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="kinetic__socket_8c.html#a1e57c03634e1ce7391aba8a82ad6040e">KineticSocket_Read</a>(fd, response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>))</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        {</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Failed to receive PDU value payload!&quot;</span>);</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        }</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        {</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;Received value payload successfully&quot;</span>);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>.len = response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">header</a>.valueLength;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <a class="code" href="kinetic__logger_8c.html#a1833be5893222cc3650250726623f93c">KineticLogger_LogByteArray</a>(<span class="stringliteral">&quot;Value Payload&quot;</span>, response-&gt;<a class="code" href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">value</a>);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        }</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    }</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;}</div>
 <div class="ttc" id="struct_kinetic_p_d_u_html_a6fe4d60770998d856732f78b54e0444f"><div class="ttname"><a href="struct_kinetic_p_d_u.html#a6fe4d60770998d856732f78b54e0444f">KineticPDU::value</a></div><div class="ttdeci">ByteArray value</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00280">kinetic_types.h:280</a></div></div>
 <div class="ttc" id="kinetic__socket_8c_html_a66ab9acaa76c5f9763fbf712ec5a82e6"><div class="ttname"><a href="kinetic__socket_8c.html#a66ab9acaa76c5f9763fbf712ec5a82e6">KineticSocket_ReadProtobuf</a></div><div class="ttdeci">bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticPDU *pdu)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00244">kinetic_socket.c:244</a></div></div>
 <div class="ttc" id="struct_kinetic_p_d_u_html_ae8bb33f5b2e2cbd0031ff505a98d6e07"><div class="ttname"><a href="struct_kinetic_p_d_u.html#ae8bb33f5b2e2cbd0031ff505a98d6e07">KineticPDU::message</a></div><div class="ttdeci">KineticMessage message</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00266">kinetic_types.h:266</a></div></div>

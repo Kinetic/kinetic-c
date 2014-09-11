@@ -1,11 +1,13 @@
 <map id="KineticSocket_WriteProtobuf" name="KineticSocket_WriteProtobuf">
-<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="293,60,444,91"/>
-<area shape="rect" id="node3" href="$kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" title="KineticClient_ExecuteOperation" alt="" coords="492,60,756,91"/>
-<area shape="rect" id="node4" href="$kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="804,5,975,36"/>
-<area shape="rect" id="node7" href="$kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="814,60,965,91"/>
-<area shape="rect" id="node9" href="$kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to read data from the Kinetic Device. " alt="" coords="813,115,966,146"/>
-<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1023,5,1088,36"/>
-<area shape="rect" id="node6" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1136,60,1196,91"/>
-<area shape="rect" id="node8" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="1033,60,1079,91"/>
-<area shape="rect" id="node10" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="1032,115,1080,146"/>
+<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="293,88,444,119"/>
+<area shape="rect" id="node3" href="$kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" title="KineticClient_ExecuteOperation" alt="" coords="492,88,756,119"/>
+<area shape="rect" id="node4" href="$kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="806,5,978,36"/>
+<area shape="rect" id="node7" href="$kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to store/update an entry on the Kinetic Device. " alt="" coords="816,60,968,91"/>
+<area shape="rect" id="node9" href="$kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to retrieve and entry from the Kinetic Device. " alt="" coords="815,115,969,146"/>
+<area shape="rect" id="node11" href="$kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc" title="Executes a DELETE command to delete an entry from the Kinetic Device. " alt="" coords="804,169,980,200"/>
+<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1031,5,1096,36"/>
+<area shape="rect" id="node6" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1147,88,1206,119"/>
+<area shape="rect" id="node8" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="1040,60,1086,91"/>
+<area shape="rect" id="node10" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="1040,115,1087,146"/>
+<area shape="rect" id="node12" href="$delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="1028,169,1099,200"/>
 </map>

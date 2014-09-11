@@ -1,4 +1,4 @@
-.TH "kinetic_client.h" 3 "Wed Sep 10 2014" "Version v0.6.0-beta" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_client.h" 3 "Thu Sep 11 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,11 +35,15 @@ kinetic_client.h \-
 .ti -1c
 .RI "\fBKineticStatus\fP \fBKineticClient_Put\fP (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
 .br
-.RI "\fIExecutes a PUT command to write data to the Kinetic Device\&. \fP"
+.RI "\fIExecutes a PUT command to store/update an entry on the Kinetic Device\&. \fP"
 .ti -1c
 .RI "\fBKineticStatus\fP \fBKineticClient_Get\fP (\fBKineticOperation\fP *operation, \fBKineticKeyValue\fP *metadata)"
 .br
-.RI "\fIExecutes a GET command to read data from the Kinetic Device\&. \fP"
+.RI "\fIExecutes a GET command to retrieve and entry from the Kinetic Device\&. \fP"
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticClient_Delete\fP (\fBKineticOperation\fP *operation, \fBKineticKeyValue\fP *metadata)"
+.br
+.RI "\fIExecutes a DELETE command to delete an entry from the Kinetic Device\&. \fP"
 .in -1c
 .SH "Function Documentation"
 .PP 
@@ -152,7 +156,7 @@ References KineticOperation::connection, KineticClient_ExecuteOperation(), Kinet
 .SS "\fBKineticStatus\fP KineticClient_Put (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
 
 .PP
-Executes a PUT command to write data to the Kinetic Device\&. 
+Executes a PUT command to store/update an entry on the Kinetic Device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -174,7 +178,7 @@ References KineticOperation::connection, KineticClient_ExecuteOperation(), Kinet
 .SS "\fBKineticStatus\fP KineticClient_Get (\fBKineticOperation\fP *operation, \fBKineticKeyValue\fP *metadata)"
 
 .PP
-Executes a GET command to read data from the Kinetic Device\&. 
+Executes a GET command to retrieve and entry from the Kinetic Device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -193,6 +197,28 @@ Returns 0 upon succes, -1 or the Kinetic status code upon failure
 Definition at line 157 of file kinetic_client\&.c\&.
 .PP
 References KineticOperation::connection, KineticKeyValue::key, KINETIC_MAX_KEY_LEN, KINETIC_STATUS_SUCCESS, KineticClient_ExecuteOperation(), KineticOperation_BuildGet(), KineticKeyValue::metadataOnly, PDU_VALUE_MAX_LEN, KineticOperation::request, KineticOperation::response, KineticKeyValue::value, KineticPDU::value, and KineticPDU::valueBuffer\&.
+.SS "\fBKineticStatus\fP KineticClient_Delete (\fBKineticOperation\fP *operation, \fBKineticKeyValue\fP *metadata)"
+
+.PP
+Executes a DELETE command to delete an entry from the Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIoperation\fP \fBKineticOperation\fP instance to use for the operation 
+.br
+\fImetadata\fP Key/value metadata for object to delete\&. 'value' is not used for this operation\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns 0 upon succes, -1 or the Kinetic status code upon failure 
+.RE
+.PP
+
+.PP
+Definition at line 196 of file kinetic_client\&.c\&.
+.PP
+References KineticOperation::connection, KineticKeyValue::key, KineticClient_ExecuteOperation(), KineticOperation_BuildDelete(), KineticOperation::request, KineticOperation::response, KineticKeyValue::value, and KineticPDU::value\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

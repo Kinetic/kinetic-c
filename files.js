@@ -1,5 +1,7 @@
 var files =
 [
+    [ "delete.c", "delete_8c.html", "delete_8c" ],
+    [ "delete.h", "delete_8h.html", "delete_8h" ],
     [ "get.c", "get_8c.html", "get_8c" ],
     [ "get.h", "get_8h.html", "get_8h" ],
     [ "kinetic_client.c", "kinetic__client_8c.html", "kinetic__client_8c" ],

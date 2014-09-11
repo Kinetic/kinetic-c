@@ -1,6 +1,7 @@
 <map id="KineticClient_Init" name="KineticClient_Init">
-<area shape="rect" id="node2" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="214,5,262,36"/>
-<area shape="rect" id="node4" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="206,60,271,91"/>
-<area shape="rect" id="node5" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="215,115,261,146"/>
-<area shape="rect" id="node3" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="319,60,379,91"/>
+<area shape="rect" id="node2" href="$delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="206,5,276,36"/>
+<area shape="rect" id="node4" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="217,60,265,91"/>
+<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="208,115,274,146"/>
+<area shape="rect" id="node6" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="218,169,264,200"/>
+<area shape="rect" id="node3" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="324,88,384,119"/>
 </map>

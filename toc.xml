@@ -382,6 +382,14 @@
   </topic>
   <topic label="Files">
     <topic label="File List" href="files.html">
+      <topic label="delete.c" href="delete_8c.html">
+        <topic label="Delete" href="delete_8c.html#abeddadd7d67bb9d2e1de229dda939065"/>
+        <topic label="Request" href="delete_8c.html#a72c86c9657e34f663c24b7f6d836e590"/>
+        <topic label="Response" href="delete_8c.html#a8826d3341bd8bfbeb86db92d69b2e5c1"/>
+      </topic>
+      <topic label="delete.h" href="delete_8h.html">
+        <topic label="Delete" href="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065"/>
+      </topic>
       <topic label="get.c" href="get_8c.html">
         <topic label="Get" href="get_8c.html#a4eac921bed546f39bed8e83d9606b347"/>
         <topic label="Request" href="get_8c.html#a72c86c9657e34f663c24b7f6d836e590"/>
@@ -399,6 +407,7 @@
         <topic label="KineticClient_NoOp" href="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8"/>
         <topic label="KineticClient_Put" href="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a"/>
         <topic label="KineticClient_Get" href="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8"/>
+        <topic label="KineticClient_Delete" href="kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc"/>
       </topic>
       <topic label="kinetic_client.h" href="kinetic__client_8h.html">
         <topic label="KineticClient_Init" href="kinetic__client_8h.html#ad3ba9980559b44b3bcb3d7aabe2afd2d"/>
@@ -408,6 +417,7 @@
         <topic label="KineticClient_NoOp" href="kinetic__client_8h.html#aa265de3c65a20a8b7454a06cd80792d8"/>
         <topic label="KineticClient_Put" href="kinetic__client_8h.html#a9b9b330e205d5a627f9f08739da4369a"/>
         <topic label="KineticClient_Get" href="kinetic__client_8h.html#a17a5f97cb86609ee9f3ad7082370a7b8"/>
+        <topic label="KineticClient_Delete" href="kinetic__client_8h.html#a6627404cdac9da3990a67df8ada0d8cc"/>
       </topic>
       <topic label="kinetic_connection.c" href="kinetic__connection_8c.html">
         <topic label="KineticConnection_Connect" href="kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76"/>
@@ -488,12 +498,14 @@
         <topic label="KineticOperation_BuildNoop" href="kinetic__operation_8c.html#a25c0d192edf098893390eb9236bb9888"/>
         <topic label="KineticOperation_BuildPut" href="kinetic__operation_8c.html#a433a47a0a88bdae7e8539767478231ab"/>
         <topic label="KineticOperation_BuildGet" href="kinetic__operation_8c.html#ae451136b154b2d002cde03c0f8d203e5"/>
+        <topic label="KineticOperation_BuildDelete" href="kinetic__operation_8c.html#a5624ba424971283af2fe105918a9bc21"/>
       </topic>
       <topic label="kinetic_operation.h" href="kinetic__operation_8h.html">
         <topic label="KineticOperation_GetStatus" href="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0"/>
         <topic label="KineticOperation_BuildNoop" href="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888"/>
         <topic label="KineticOperation_BuildPut" href="kinetic__operation_8h.html#a433a47a0a88bdae7e8539767478231ab"/>
         <topic label="KineticOperation_BuildGet" href="kinetic__operation_8h.html#ae451136b154b2d002cde03c0f8d203e5"/>
+        <topic label="KineticOperation_BuildDelete" href="kinetic__operation_8h.html#a5624ba424971283af2fe105918a9bc21"/>
       </topic>
       <topic label="kinetic_pdu.c" href="kinetic__pdu_8c.html">
         <topic label="KineticPDU_Init" href="kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda"/>
@@ -1205,6 +1217,7 @@
         <topic label="_" href="globals.html"/>
         <topic label="b" href="globals_b.html"/>
         <topic label="c" href="globals_c.html"/>
+        <topic label="d" href="globals_d.html"/>
         <topic label="f" href="globals_f.html"/>
         <topic label="g" href="globals_g.html"/>
         <topic label="h" href="globals_h.html"/>

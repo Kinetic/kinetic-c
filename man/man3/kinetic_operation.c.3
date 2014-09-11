@@ -1,4 +1,4 @@
-.TH "kinetic_operation.c" 3 "Wed Sep 10 2014" "Version v0.6.0-beta" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_operation.c" 3 "Thu Sep 11 2014" "Version v0.6.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -33,6 +33,9 @@ kinetic_operation.c \-
 .ti -1c
 .RI "void \fBKineticOperation_BuildGet\fP (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
 .br
+.ti -1c
+.RI "void \fBKineticOperation_BuildDelete\fP (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
+.br
 .in -1c
 .SH "Function Documentation"
 .PP 
@@ -66,6 +69,12 @@ References KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_PUT, Kinetic
 Definition at line 116 of file kinetic_operation\&.c\&.
 .PP
 References BYTE_ARRAY_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_GET, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), KineticPDU::message, PDU_VALUE_MAX_LEN, KineticPDU::proto, KineticPDU::protoData, KineticOperation::request, KineticOperation::response, KineticKeyValue::value, KineticPDU::value, and KineticPDU::valueBuffer\&.
+.SS "void KineticOperation_BuildDelete (\fBKineticOperation\fP *operation, const \fBKineticKeyValue\fP *metadata)"
+
+.PP
+Definition at line 139 of file kinetic_operation\&.c\&.
+.PP
+References BYTE_ARRAY_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_DELETE, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), KineticPDU::message, KineticPDU::proto, KineticPDU::protoData, KineticOperation::request, KineticOperation::response, and KineticPDU::value\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

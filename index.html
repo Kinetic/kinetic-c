@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -56,12 +56,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="title">protobuf-c Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a href="http://travis-ci.org/atomicobject/kinetic-c">![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)</a></p>
-<h1>Kinetic C Client Library </h1>
-<p>The <a href="https://github.com/Seagate/kinetic-c">Github kinetic-c Git repository</a> contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.</p>
-<p><a href="https://github.com/Seagate/kinetic-c/tree/master/src/utility/examples">Code examples</a> are included for reference as part of the <a href="https://github.com/Seagate/kinetic-c/tree/master/src/utility">kinetic-c client library test utility (`kinetic-c-client-utility`)</a>, which builds and links against the installed <code>kinetic-c-client</code> static library.</p>
-<p>The <a href="https://github.com/Seagate/kinetic-c/blob/master/Makefile">project Makefile</a> can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.</p>
-<p><a href="http://travis-ci.org/atomicobject/kinetic-c">Kinetic-C build status</a> is provided via <a href="http://travis-ci.org">Travis CI</a></p>
+<div class="textblock"><p>This repo contains code for producing Kinetic C clients which use the Seagate Kinetic protocol.</p>
 <h2>Prerequisites </h2>
 <ul>
 <li><a href="https://www.openssl.org/">Open SSL</a> for security and encryption<ul>
@@ -82,36 +77,52 @@ $(document).ready(function(){initNavTree('index.html','');});
 <h2>Getting Started </h2>
 <p><b>Clone the repo</b> </p><pre class="fragment">&gt; git clone --recursive https://github.com/atomicobject/kinetic-c.git
 &gt; cd kinetic-c
-&gt; bundle install # Ensure you have all RubyGems at the proper versions
+&gt; bundle install # ensure you have all RubyGems at the proper versions
 </pre><p><b>Update to the latest version (previously cloned)</b> </p><pre class="fragment">&gt; git pull
 &gt; git submodule update --init # Ensure submodules are up to date
 &gt; bundle install # Ensure you have all RubyGems at the proper versions
 </pre><p><b>Build and install static library</b> </p><pre class="fragment">&gt; make
 &gt; sudo make install
-</pre><p><b>You can all clean and uninstall old version</b> </p><pre class="fragment">&gt; make clean
+</pre><p><b>You can all clean and uninstall old versions</b> </p><pre class="fragment">&gt; make clean
 &gt; sudo uninstall
 </pre><p><b>Build example utility and run tests against Kinetic Device simulator</b> </p><pre class="fragment">&gt; make run
+</pre><p><b>Uninstall, perform a full clean build with test, and validate with utility</b> </p><pre class="fragment">&gt; make all # this is what Travis CI does
 </pre><h1>API Documentation </h1>
-<p><a href="http://seagate.github.io/kinetic-c/kinetic__api_8h.html">Kinetic-C API</a> (generated with Doxygen)</p>
-<h1>Examples </h1>
-<p>The following examples are provided for development reference and as utilities to aid development. In order to execute a given example, you must first do: </p><pre class="fragment">&gt; cd build/artifacts/release
+<p><a href="http://seagate.github.io/kinetic-c">Kinetic-C API Documentation</a> (generated with Doxygen)</p><ul>
+<li><a href="http://seagate.github.io/kinetic-c/kinetic__api_8h.html">Kinetic-C API</a></li>
+<li><a href="http://seagate.github.io/kinetic-c/kinetic__api_8h.html">Kinetic-C types</a></li>
+</ul>
+<h1>Example Client/Test Utility </h1>
+<p>Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.</p>
+<ul>
+<li>'kinetic-c-util' builds/links against installed Kinetic C static library (.a)</li>
+<li>'kinetic-c-util.x.y.z' builds/links against installed Kinetic C dynamic library (.so)</li>
+</ul>
+<p>The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.</p>
+<p>In order to execute a given example, after building it, you must first do: </p><pre class="fragment">&gt; cd bin
 </pre><p>You can then execute <code>kinetic-c-client-util</code> with a valid example name, optionally preceeded with any of the optional arguments.</p>
-<p><b>Options</b></p><ul>
+<h2>Options </h2>
+<ul>
 <li><code>--host [HostName/IP]</code> or <code>-h [HostName/IP]</code> - Set the Kinetic Device host</li>
 <li><code>--tls</code> - Use the TLS port to execute the specified operation(s)</li>
 </ul>
-<p><b>Operations</b></p><ul>
+<h2>Operations </h2>
+<ul>
 <li><code>kinetic-c-client [--host|-h hostname|123.253.253.23] noop put get</code><ul>
 <li><code>kinetic-c-client-util noop</code><ul>
 <li>Execute a NoOp (ping) operation to verify the Kinetic Device is ready</li>
 </ul>
 </li>
 <li><code>kinetic-c-client-util put</code><ul>
-<li>Execute a Put operation to store a key/value</li>
+<li>Execute a Put operation to store a key/value entry</li>
 </ul>
 </li>
 <li><code>kinetic-c-client-util get</code><ul>
-<li>Execute a Get operation to retrieve a key/value </li>
+<li>Execute a Get operation to retrieve a key/value entry</li>
+</ul>
+</li>
+<li><code>kinetic-c-client-util delete</code><ul>
+<li>Execute a Delete operation to destroy a key/value entry </li>
 </ul>
 </li>
 </ul>

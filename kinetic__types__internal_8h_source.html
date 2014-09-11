@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -111,47 +111,47 @@ $(document).ready(function(){initNavTree('kinetic__types__internal_8h_source.htm
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">// // } ProtobufCAllocator;</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">// #define KINETIC_CONNECTION_INIT(_con, _id, _key) { \</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">//     (*_con) = (KineticConnection) { \</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">//         .socketDescriptor = -1, \</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">//         .connectionID = time(NULL), \</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">//         .identity = (_id), \</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">//         .sequence = 0, \</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">//     }; \</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">//     (*_con).key = (ByteArray){.data = (*_con).keyData, .len = (_key).len}; \</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">//     if ((_key).data != NULL &amp;&amp; (_key).len &gt; 0) { \</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">//         memcpy((_con)-&gt;keyData, (_key).data, (_key).len); } \</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">// #define KINETIC_CONNECTION_INIT(_con, _id, _key) {</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">//     (*_con) = (KineticConnection) {</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">//         .socketDescriptor = -1,</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">//         .connectionID = time(NULL),</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">//         .identity = (_id),</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">//         .sequence = 0,</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">//     };</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">//     (*_con).key = (ByteArray){.data = (*_con).keyData, .len = (_key).len};</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">//     if ((_key).data != NULL &amp;&amp; (_key).len &gt; 0) {</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">//         memcpy((_con)-&gt;keyData, (_key).data, (_key).len); }</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">// }</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">// #define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) { \</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">//     assert((void *)(_hdr) != NULL); \</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">//     assert((void *)(_con) != NULL); \</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">//     *(_hdr) = (KineticProto_Header) { \</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">//         .base = PROTOBUF_C_MESSAGE_INIT(&amp;KineticProto_header__descriptor), \</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">//         .has_clusterVersion = true, \</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">//         .clusterVersion = (_con)-&gt;clusterVersion, \</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">//         .has_identity = true, \</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">//         .identity = (_con)-&gt;identity, \</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">//         .has_connectionID = true, \</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">//         .connectionID = (_con)-&gt;connectionID, \</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">//         .has_sequence = true, \</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">//         .sequence = (_con)-&gt;sequence, \</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">//     }; \</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">// #define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) {</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">//     assert((void *)(_hdr) != NULL);</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">//     assert((void *)(_con) != NULL);</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">//     *(_hdr) = (KineticProto_Header) {</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">//         .base = PROTOBUF_C_MESSAGE_INIT(&amp;KineticProto_header__descriptor),</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">//         .has_clusterVersion = true,</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">//         .clusterVersion = (_con)-&gt;clusterVersion,</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">//         .has_identity = true,</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">//         .identity = (_con)-&gt;identity,</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">//         .has_connectionID = true,</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">//         .connectionID = (_con)-&gt;connectionID,</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">//         .has_sequence = true,</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">//         .sequence = (_con)-&gt;sequence,</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">//     };</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">// }</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">// #define KINETIC_MESSAGE_INIT(msg) { \</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">//     KineticProto__init(&amp;(msg)-&gt;proto); \</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">//     KineticProto_command__init(&amp;(msg)-&gt;command); \</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">//     KineticProto_header__init(&amp;(msg)-&gt;header); \</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">//     KineticProto_status__init(&amp;(msg)-&gt;status); \</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">//     KineticProto_body__init(&amp;(msg)-&gt;body); \</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">//     KineticProto_key_value__init(&amp;(msg)-&gt;keyValue); \</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">//     memset((msg)-&gt;hmacData, 0, SHA_DIGEST_LENGTH); \</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">//     (msg)-&gt;proto.hmac.data = (msg)-&gt;hmacData; \</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">//     (msg)-&gt;proto.hmac.len = KINETIC_HMAC_MAX_LEN; \</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">//     (msg)-&gt;proto.has_hmac = true; \</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment">//     (msg)-&gt;command.header = &amp;(msg)-&gt;header; \</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">//     (msg)-&gt;proto.command = &amp;(msg)-&gt;command; \</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">// #define KINETIC_MESSAGE_INIT(msg) { </span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">//     KineticProto__init(&amp;(msg)-&gt;proto); </span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">//     KineticProto_command__init(&amp;(msg)-&gt;command); </span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">//     KineticProto_header__init(&amp;(msg)-&gt;header); </span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">//     KineticProto_status__init(&amp;(msg)-&gt;status); </span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">//     KineticProto_body__init(&amp;(msg)-&gt;body); </span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">//     KineticProto_key_value__init(&amp;(msg)-&gt;keyValue); </span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">//     memset((msg)-&gt;hmacData, 0, SHA_DIGEST_LENGTH); </span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">//     (msg)-&gt;proto.hmac.data = (msg)-&gt;hmacData; </span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">//     (msg)-&gt;proto.hmac.len = KINETIC_HMAC_MAX_LEN; </span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">//     (msg)-&gt;proto.has_hmac = true; </span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment">//     (msg)-&gt;command.header = &amp;(msg)-&gt;header; </span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">//     (msg)-&gt;proto.command = &amp;(msg)-&gt;command; </span></div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment">// }</span></div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
@@ -159,29 +159,29 @@ $(document).ready(function(){initNavTree('kinetic__types__internal_8h_source.htm
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="comment">//     (KineticPDUHeader) {.versionPrefix = &#39;F&#39;}</span></div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment">// #define KINETIC_PDU_INIT(_pdu, _con) { \</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">//     assert((void *)(_pdu) != NULL); \</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">//     assert((void *)(_con) != NULL); \</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">//     (_pdu)-&gt;connection = (_con); \</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">//     (_pdu)-&gt;header = KINETIC_PDU_HEADER_INIT; \</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">//     (_pdu)-&gt;headerNBO = KINETIC_PDU_HEADER_INIT; \</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment">//     (_pdu)-&gt;value = BYTE_ARRAY_NONE; \</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">//     (_pdu)-&gt;proto = &amp;(_pdu)-&gt;protoData.message.proto; \</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">//     KINETIC_MESSAGE_HEADER_INIT(&amp;((_pdu)-&gt;protoData.message.header), (_con)); \</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment">// #define KINETIC_PDU_INIT(_pdu, _con) {</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">//     assert((void *)(_pdu) != NULL);</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">//     assert((void *)(_con) != NULL);</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">//     (_pdu)-&gt;connection = (_con);</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">//     (_pdu)-&gt;header = KINETIC_PDU_HEADER_INIT;</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">//     (_pdu)-&gt;headerNBO = KINETIC_PDU_HEADER_INIT;</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment">//     (_pdu)-&gt;value = BYTE_ARRAY_NONE;</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">//     (_pdu)-&gt;proto = &amp;(_pdu)-&gt;protoData.message.proto;</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">//     KINETIC_MESSAGE_HEADER_INIT(&amp;((_pdu)-&gt;protoData.message.header), (_con));</span></div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment">// }</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">// #define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) { \</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">//     KINETIC_PDU_INIT((_pdu), (_con)) \</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">//     KINETIC_MESSAGE_INIT(&amp;((_pdu)-&gt;protoData.message)); \</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">//     (_pdu)-&gt;proto-&gt;command-&gt;header = &amp;(_pdu)-&gt;protoData.message.header; \</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment">//     KINETIC_MESSAGE_HEADER_INIT(&amp;(_pdu)-&gt;protoData.message.header, (_con)); \</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">// #define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) {</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">//     KINETIC_PDU_INIT((_pdu), (_con))</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">//     KINETIC_MESSAGE_INIT(&amp;((_pdu)-&gt;protoData.message));</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">//     (_pdu)-&gt;proto-&gt;command-&gt;header = &amp;(_pdu)-&gt;protoData.message.header;</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment">//     KINETIC_MESSAGE_HEADER_INIT(&amp;(_pdu)-&gt;protoData.message.header, (_con));</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">// }</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">// #define KINETIC_OPERATION_INIT(_op, _con, _req, _resp) \</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">// *(_op) = (KineticOperation) { \</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment">//     .connection = (_con), \</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment">//     .request = (_req), \</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">//     .response = (_resp), \</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">// #define KINETIC_OPERATION_INIT(_op, _con, _req, _resp)</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">// *(_op) = (KineticOperation) {</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment">//     .connection = (_con),</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment">//     .request = (_req),</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">//     .response = (_resp),</span></div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment">// }</span></div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>

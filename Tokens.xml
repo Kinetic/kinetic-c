@@ -2,6 +2,48 @@
 <Tokens version="1.0">
   <Token>
     <TokenIdentifier>
+      <Name>Delete</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>delete_8c.html</Path>
+    <Anchor>abeddadd7d67bb9d2e1de229dda939065</Anchor>
+    <Abstract>Executes a Delete to delete an object from the Device. </Abstract>
+    <DeclaredIn>delete.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Request</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>delete_8c.html</Path>
+    <Anchor>a72c86c9657e34f663c24b7f6d836e590</Anchor>
+    <DeclaredIn>delete.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>data</Type>
+    </TokenIdentifier>
+    <Path>delete_8c.html</Path>
+    <Anchor>a8826d3341bd8bfbeb86db92d69b2e5c1</Anchor>
+    <DeclaredIn>delete.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>Delete</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>delete_8h.html</Path>
+    <Anchor>abeddadd7d67bb9d2e1de229dda939065</Anchor>
+    <Abstract>Executes a Delete to delete an object from the Device. </Abstract>
+    <DeclaredIn>delete.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>Get</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -115,7 +157,7 @@
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
     <Anchor>a9b9b330e205d5a627f9f08739da4369a</Anchor>
-    <Abstract>Executes a PUT command to write data to the Kinetic Device. </Abstract>
+    <Abstract>Executes a PUT command to store/update an entry on the Kinetic Device. </Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
@@ -126,7 +168,18 @@
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
     <Anchor>a17a5f97cb86609ee9f3ad7082370a7b8</Anchor>
-    <Abstract>Executes a GET command to read data from the Kinetic Device. </Abstract>
+    <Abstract>Executes a GET command to retrieve and entry from the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_Delete</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a6627404cdac9da3990a67df8ada0d8cc</Anchor>
+    <Abstract>Executes a DELETE command to delete an entry from the Kinetic Device. </Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
@@ -192,7 +245,7 @@
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
     <Anchor>a9b9b330e205d5a627f9f08739da4369a</Anchor>
-    <Abstract>Executes a PUT command to write data to the Kinetic Device. </Abstract>
+    <Abstract>Executes a PUT command to store/update an entry on the Kinetic Device. </Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
@@ -203,7 +256,18 @@
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
     <Anchor>a17a5f97cb86609ee9f3ad7082370a7b8</Anchor>
-    <Abstract>Executes a GET command to read data from the Kinetic Device. </Abstract>
+    <Abstract>Executes a GET command to retrieve and entry from the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_Delete</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>a6627404cdac9da3990a67df8ada0d8cc</Anchor>
+    <Abstract>Executes a DELETE command to delete an entry from the Kinetic Device. </Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
@@ -788,6 +852,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticOperation_BuildDelete</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>a5624ba424971283af2fe105918a9bc21</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticOperation_GetStatus</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -824,6 +898,16 @@
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
     <Anchor>ae451136b154b2d002cde03c0f8d203e5</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildDelete</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a5624ba424971283af2fe105918a9bc21</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>

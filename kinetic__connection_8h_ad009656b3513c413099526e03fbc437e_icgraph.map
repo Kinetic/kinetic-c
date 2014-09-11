@@ -1,7 +1,8 @@
 <map id="KineticConnection_Connect" name="KineticConnection_Connect">
-<area shape="rect" id="node2" href="$kinetic__client_8c.html#a5448ecfd9eef429ea2679610e5cfd6cf" title="Configures the session and establishes a socket connection to a Kinetic Device. " alt="" coords="287,60,478,91"/>
-<area shape="rect" id="node3" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="535,5,583,36"/>
-<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="526,60,592,91"/>
-<area shape="rect" id="node6" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="536,115,582,146"/>
-<area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="640,60,699,91"/>
+<area shape="rect" id="node2" href="$kinetic__client_8c.html#a5448ecfd9eef429ea2679610e5cfd6cf" title="Configures the session and establishes a socket connection to a Kinetic Device. " alt="" coords="287,88,478,119"/>
+<area shape="rect" id="node3" href="$delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="526,5,597,36"/>
+<area shape="rect" id="node5" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="538,60,585,91"/>
+<area shape="rect" id="node6" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="529,115,594,146"/>
+<area shape="rect" id="node7" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="538,169,584,200"/>
+<area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="645,88,704,119"/>
 </map>

@@ -26,7 +26,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta</span>
+   &#160;<span id="projectnumber">v0.6.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -96,11 +96,14 @@ Functions</h2></td></tr>
 <tr class="memdesc:aa265de3c65a20a8b7454a06cd80792d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a NOOP command to test whether the Kinetic Device is operational.  <a href="#aa265de3c65a20a8b7454a06cd80792d8">More...</a><br /></td></tr>
 <tr class="separator:aa265de3c65a20a8b7454a06cd80792d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b9b330e205d5a627f9f08739da4369a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a">KineticClient_Put</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation, const <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *metadata)</td></tr>
-<tr class="memdesc:a9b9b330e205d5a627f9f08739da4369a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a PUT command to write data to the Kinetic Device.  <a href="#a9b9b330e205d5a627f9f08739da4369a">More...</a><br /></td></tr>
+<tr class="memdesc:a9b9b330e205d5a627f9f08739da4369a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a PUT command to store/update an entry on the Kinetic Device.  <a href="#a9b9b330e205d5a627f9f08739da4369a">More...</a><br /></td></tr>
 <tr class="separator:a9b9b330e205d5a627f9f08739da4369a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17a5f97cb86609ee9f3ad7082370a7b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8">KineticClient_Get</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation, <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *metadata)</td></tr>
-<tr class="memdesc:a17a5f97cb86609ee9f3ad7082370a7b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GET command to read data from the Kinetic Device.  <a href="#a17a5f97cb86609ee9f3ad7082370a7b8">More...</a><br /></td></tr>
+<tr class="memdesc:a17a5f97cb86609ee9f3ad7082370a7b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GET command to retrieve and entry from the Kinetic Device.  <a href="#a17a5f97cb86609ee9f3ad7082370a7b8">More...</a><br /></td></tr>
 <tr class="separator:a17a5f97cb86609ee9f3ad7082370a7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6627404cdac9da3990a67df8ada0d8cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc">KineticClient_Delete</a> (<a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *operation, <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *metadata)</td></tr>
+<tr class="memdesc:a6627404cdac9da3990a67df8ada0d8cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a DELETE command to delete an entry from the Kinetic Device.  <a href="#a6627404cdac9da3990a67df8ada0d8cc">More...</a><br /></td></tr>
+<tr class="separator:a6627404cdac9da3990a67df8ada0d8cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a330d0594baf0643fc75aea0755c1bdc9"></a>
@@ -117,7 +120,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00196">196</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00219">219</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__types_8h_source.html#l00286">KineticPDU::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00209">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__operation_8c_source.html#l00026">KineticOperation_GetStatus()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00121">KineticPDU_Receive()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00058">KineticPDU_Send()</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, and <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>.</p>
 
@@ -135,7 +138,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="kinetic__client_8c_a330d0594baf0643fc75aea0755c1bdc9_icgraph.png" border="0" usemap="#kinetic__client_8c_a330d0594baf0643fc75aea0755c1bdc9_icgraph" alt=""/></div>
 <map name="kinetic__client_8c_a330d0594baf0643fc75aea0755c1bdc9_icgraph" id="kinetic__client_8c_a330d0594baf0643fc75aea0755c1bdc9_icgraph">
-<area shape="rect" id="node2" href="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="317,5,488,36"/><area shape="rect" id="node5" href="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="327,60,479,91"/><area shape="rect" id="node7" href="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to read data from the Kinetic Device. " alt="" coords="326,115,479,146"/><area shape="rect" id="node3" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="536,5,602,36"/><area shape="rect" id="node4" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="650,60,709,91"/><area shape="rect" id="node6" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="546,60,592,91"/><area shape="rect" id="node8" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="545,115,593,146"/></map>
+<area shape="rect" id="node2" href="kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="320,5,491,36"/><area shape="rect" id="node5" href="kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to store/update an entry on the Kinetic Device. " alt="" coords="329,60,481,91"/><area shape="rect" id="node7" href="kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to retrieve and entry from the Kinetic Device. " alt="" coords="328,115,482,146"/><area shape="rect" id="node9" href="kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc" title="Executes a DELETE command to delete an entry from the Kinetic Device. " alt="" coords="317,169,493,200"/><area shape="rect" id="node3" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="544,5,609,36"/><area shape="rect" id="node4" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="660,88,720,119"/><area shape="rect" id="node6" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="554,60,600,91"/><area shape="rect" id="node8" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="553,115,601,146"/><area shape="rect" id="node10" href="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="541,169,612,200"/></map>
 </div>
 </p>
 
@@ -181,7 +184,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="kinetic__client_8c_ad3ba9980559b44b3bcb3d7aabe2afd2d_icgraph.png" border="0" usemap="#kinetic__client_8c_ad3ba9980559b44b3bcb3d7aabe2afd2d_icgraph" alt=""/></div>
 <map name="kinetic__client_8c_ad3ba9980559b44b3bcb3d7aabe2afd2d_icgraph" id="kinetic__client_8c_ad3ba9980559b44b3bcb3d7aabe2afd2d_icgraph">
-<area shape="rect" id="node2" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="214,5,262,36"/><area shape="rect" id="node4" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="206,60,271,91"/><area shape="rect" id="node5" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="215,115,261,146"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="319,60,379,91"/></map>
+<area shape="rect" id="node2" href="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="206,5,276,36"/><area shape="rect" id="node4" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="217,60,265,91"/><area shape="rect" id="node5" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="208,115,274,146"/><area shape="rect" id="node6" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="218,169,264,200"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="324,88,384,119"/></map>
 </div>
 </p>
 
@@ -274,7 +277,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="kinetic__client_8c_a5448ecfd9eef429ea2679610e5cfd6cf_icgraph.png" border="0" usemap="#kinetic__client_8c_a5448ecfd9eef429ea2679610e5cfd6cf_icgraph" alt=""/></div>
 <map name="kinetic__client_8c_a5448ecfd9eef429ea2679610e5cfd6cf_icgraph" id="kinetic__client_8c_a5448ecfd9eef429ea2679610e5cfd6cf_icgraph">
-<area shape="rect" id="node2" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="253,5,301,36"/><area shape="rect" id="node4" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="244,60,310,91"/><area shape="rect" id="node5" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="254,115,300,146"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="358,60,417,91"/></map>
+<area shape="rect" id="node2" href="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="244,5,315,36"/><area shape="rect" id="node4" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="256,60,303,91"/><area shape="rect" id="node5" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="247,115,312,146"/><area shape="rect" id="node6" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="257,169,303,200"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="363,88,423,119"/></map>
 </div>
 </p>
 
@@ -320,7 +323,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="kinetic__client_8c_ae4b4f1c08bcb4fc76a792c216d5b0822_icgraph.png" border="0" usemap="#kinetic__client_8c_ae4b4f1c08bcb4fc76a792c216d5b0822_icgraph" alt=""/></div>
 <map name="kinetic__client_8c_ae4b4f1c08bcb4fc76a792c216d5b0822_icgraph" id="kinetic__client_8c_ae4b4f1c08bcb4fc76a792c216d5b0822_icgraph">
-<area shape="rect" id="node2" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="274,5,322,36"/><area shape="rect" id="node4" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="265,60,331,91"/><area shape="rect" id="node5" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="275,115,321,146"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="379,60,438,91"/></map>
+<area shape="rect" id="node2" href="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="265,5,336,36"/><area shape="rect" id="node4" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="277,60,325,91"/><area shape="rect" id="node5" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="268,115,333,146"/><area shape="rect" id="node6" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="278,169,324,200"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="384,88,444,119"/></map>
 </div>
 </p>
 
@@ -385,7 +388,7 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="kinetic__client_8c_a8c2d9f8e7d2046d8fef3294c645e4c96_icgraph.png" border="0" usemap="#kinetic__client_8c_a8c2d9f8e7d2046d8fef3294c645e4c96_icgraph" alt=""/></div>
 <map name="kinetic__client_8c_a8c2d9f8e7d2046d8fef3294c645e4c96_icgraph" id="kinetic__client_8c_a8c2d9f8e7d2046d8fef3294c645e4c96_icgraph">
-<area shape="rect" id="node2" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="317,5,364,36"/><area shape="rect" id="node4" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="308,60,373,91"/><area shape="rect" id="node5" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="318,115,364,146"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="421,60,481,91"/></map>
+<area shape="rect" id="node2" href="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="308,5,378,36"/><area shape="rect" id="node4" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="319,60,367,91"/><area shape="rect" id="node5" href="noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="310,115,376,146"/><area shape="rect" id="node6" href="put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="320,169,366,200"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="426,88,486,119"/></map>
 </div>
 </p>
 
@@ -416,7 +419,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00127">127</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__client_8c_source.html#l00196">KineticClient_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00093">KineticOperation_BuildNoop()</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, and <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__client_8c_source.html#l00219">KineticClient_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00093">KineticOperation_BuildNoop()</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, and <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -462,7 +465,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Executes a PUT command to write data to the Kinetic Device. </p>
+<p>Executes a PUT command to store/update an entry on the Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">operation</td><td><a class="el" href="struct_kinetic_operation.html">KineticOperation</a> instance to use for the operation </td></tr>
@@ -474,7 +477,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00140">140</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__client_8c_source.html#l00196">KineticClient_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00102">KineticOperation_BuildPut()</a>, <a class="el" href="kinetic__types_8h_source.html#l00241">PDU_VALUE_MAX_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>, and <a class="el" href="kinetic__types_8h_source.html#l00233">KineticKeyValue::value</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__client_8c_source.html#l00219">KineticClient_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00102">KineticOperation_BuildPut()</a>, <a class="el" href="kinetic__types_8h_source.html#l00241">PDU_VALUE_MAX_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>, and <a class="el" href="kinetic__types_8h_source.html#l00233">KineticKeyValue::value</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -520,7 +523,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Executes a GET command to read data from the Kinetic Device. </p>
+<p>Executes a GET command to retrieve and entry from the Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">operation</td><td><a class="el" href="struct_kinetic_operation.html">KineticOperation</a> instance to use for the operation </td></tr>
@@ -532,7 +535,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00157">157</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00225">KineticKeyValue::key</a>, <a class="el" href="kinetic__types_8h_source.html#l00044">KINETIC_MAX_KEY_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00210">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00196">KineticClient_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00116">KineticOperation_BuildGet()</a>, <a class="el" href="kinetic__types_8h_source.html#l00231">KineticKeyValue::metadataOnly</a>, <a class="el" href="kinetic__types_8h_source.html#l00241">PDU_VALUE_MAX_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>, <a class="el" href="kinetic__types_8h_source.html#l00233">KineticKeyValue::value</a>, <a class="el" href="kinetic__types_8h_source.html#l00280">KineticPDU::value</a>, and <a class="el" href="kinetic__types_8h_source.html#l00279">KineticPDU::valueBuffer</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00225">KineticKeyValue::key</a>, <a class="el" href="kinetic__types_8h_source.html#l00044">KINETIC_MAX_KEY_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00210">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00219">KineticClient_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00116">KineticOperation_BuildGet()</a>, <a class="el" href="kinetic__types_8h_source.html#l00231">KineticKeyValue::metadataOnly</a>, <a class="el" href="kinetic__types_8h_source.html#l00241">PDU_VALUE_MAX_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>, <a class="el" href="kinetic__types_8h_source.html#l00233">KineticKeyValue::value</a>, <a class="el" href="kinetic__types_8h_source.html#l00280">KineticPDU::value</a>, and <a class="el" href="kinetic__types_8h_source.html#l00279">KineticPDU::valueBuffer</a>.</p>
 
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -549,6 +552,64 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="kinetic__client_8c_a17a5f97cb86609ee9f3ad7082370a7b8_icgraph.png" border="0" usemap="#kinetic__client_8c_a17a5f97cb86609ee9f3ad7082370a7b8_icgraph" alt=""/></div>
 <map name="kinetic__client_8c_a17a5f97cb86609ee9f3ad7082370a7b8_icgraph" id="kinetic__client_8c_a17a5f97cb86609ee9f3ad7082370a7b8_icgraph">
 <area shape="rect" id="node2" href="get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="207,5,255,36"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="303,5,362,36"/></map>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a6627404cdac9da3990a67df8ada0d8cc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_Delete </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_operation.html">KineticOperation</a> *&#160;</td>
+          <td class="paramname"><em>operation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *&#160;</td>
+          <td class="paramname"><em>metadata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Executes a DELETE command to delete an entry from the Kinetic Device. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">operation</td><td><a class="el" href="struct_kinetic_operation.html">KineticOperation</a> instance to use for the operation </td></tr>
+    <tr><td class="paramname">metadata</td><td>Key/value metadata for object to delete. 'value' is not used for this operation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns 0 upon succes, -1 or the Kinetic status code upon failure </dd></dl>
+
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00196">196</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00309">KineticOperation::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00225">KineticKeyValue::key</a>, <a class="el" href="kinetic__client_8c_source.html#l00219">KineticClient_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00139">KineticOperation_BuildDelete()</a>, <a class="el" href="kinetic__types_8h_source.html#l00310">KineticOperation::request</a>, <a class="el" href="kinetic__types_8h_source.html#l00311">KineticOperation::response</a>, <a class="el" href="kinetic__types_8h_source.html#l00233">KineticKeyValue::value</a>, and <a class="el" href="kinetic__types_8h_source.html#l00280">KineticPDU::value</a>.</p>
+
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_cgraph.png" border="0" usemap="#kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_cgraph" alt=""/></div>
+<map name="kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_cgraph" id="kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_cgraph">
+<area shape="rect" id="node2" href="kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" title="KineticClient_ExecuteOperation" alt="" coords="230,300,493,331"/><area shape="rect" id="node21" href="kinetic__operation_8c.html#a5624ba424971283af2fe105918a9bc21" title="KineticOperation_BuildDelete" alt="" coords="238,509,485,540"/><area shape="rect" id="node3" href="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" title="KineticOperation_GetStatus" alt="" coords="549,164,782,195"/><area shape="rect" id="node4" href="kinetic__pdu_8c.html#acff84c8347b8df5df8d90364d990268a" title="KineticPDU_Receive" alt="" coords="580,219,751,250"/><area shape="rect" id="node14" href="kinetic__pdu_8c.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="590,408,741,439"/><area shape="rect" id="node5" href="kinetic__socket_8c.html#a1e57c03634e1ce7391aba8a82ad6040e" title="KineticSocket_Read" alt="" coords="1176,60,1347,91"/><area shape="rect" id="node6" href="kinetic__nbo_8c.html#a82d5bae248ec3e63c7fd40b55a9293ca" title="KineticNBO_ToHostU32" alt="" coords="866,164,1066,195"/><area shape="rect" id="node7" href="kinetic__logger_8c.html#aa165cca23a8303a430aaeb13843d2259" title="KineticLogger_LogHeader" alt="" coords="857,273,1075,304"/><area shape="rect" id="node8" href="kinetic__socket_8c.html#a66ab9acaa76c5f9763fbf712ec5a82e6" title="KineticSocket_ReadProtobuf" alt="" coords="847,7,1085,38"/><area shape="rect" id="node10" href="kinetic__logger_8c.html#a382d80f28dc772bd38ef93c01bd7150e" title="KineticLogger_LogProtobuf" alt="" coords="851,328,1081,359"/><area shape="rect" id="node11" href="kinetic__hmac_8c.html#ac38b2071b2c9425be6a8eac68e0fb27e" title="KineticHMAC_Validate" alt="" coords="870,219,1062,250"/><area shape="rect" id="node13" href="kinetic__logger_8c.html#a1833be5893222cc3650250726623f93c" title="KineticLogger_LogByteArray" alt="" coords="1143,167,1380,198"/><area shape="rect" id="node9" href="kinetic__proto_8c.html#ac74c443d4eb0ab34e845673f1fc70523" title="KineticProto__unpack" alt="" coords="1168,5,1355,36"/><area shape="rect" id="node12" href="kinetic__hmac_8c.html#af18bc978da74d29a03ef969007c5201f" title="KineticHMAC_Init" alt="" coords="1184,381,1339,412"/><area shape="rect" id="node15" href="kinetic__hmac_8c.html#a5dd91c42c8cc41c324c917f3d463ef7f" title="KineticHMAC_Populate" alt="" coords="868,435,1064,466"/><area shape="rect" id="node16" href="kinetic__proto_8c.html#a44e75fcc84248743e80444abfcda131e" title="KineticProto__get_packed_size" alt="" coords="837,596,1095,627"/><area shape="rect" id="node17" href="kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad" title="KineticNBO_FromHostU32" alt="" coords="855,651,1077,682"/><area shape="rect" id="node18" href="kinetic__socket_8c.html#a1a8ae7ce63273b6d2cea899e0e5a0043" title="KineticSocket_Write" alt="" coords="1175,488,1348,519"/><area shape="rect" id="node19" href="kinetic__socket_8c.html#a3851320ed4ef5e518ca1ff9fefccffcb" title="KineticSocket_WriteProtobuf" alt="" coords="846,541,1086,572"/><area shape="rect" id="node20" href="kinetic__proto_8c.html#a3d8d1e9a1eca89c51de9a3ed218c649b" title="KineticProto__pack" alt="" coords="1178,543,1345,574"/><area shape="rect" id="node22" href="kinetic__operation_8c.html#a38b174bd1c6c7814745ee323a0c46aac" title="KineticOperation_Validate\lOperation" alt="" coords="555,463,776,512"/><area shape="rect" id="node23" href="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d" title="KineticConnection_Increment\lSequence" alt="" coords="541,536,789,586"/><area shape="rect" id="node24" href="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b" title="KineticMessage_Configure\lKeyValue" alt="" coords="554,609,777,659"/></map>
+</div>
+</p>
+
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_icgraph.png" border="0" usemap="#kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_icgraph" alt=""/></div>
+<map name="kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_icgraph" id="kinetic__client_8c_a6627404cdac9da3990a67df8ada0d8cc_icgraph">
+<area shape="rect" id="node2" href="delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="230,5,300,36"/><area shape="rect" id="node3" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="348,5,408,36"/></map>
 </div>
 </p>
 

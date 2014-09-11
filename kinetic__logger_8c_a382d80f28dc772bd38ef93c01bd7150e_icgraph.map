@@ -1,12 +1,14 @@
 <map id="KineticLogger_LogProtobuf" name="KineticLogger_LogProtobuf">
-<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="294,32,445,63"/>
-<area shape="rect" id="node11" href="$kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" title="KineticPDU_Receive" alt="" coords="284,87,456,118"/>
-<area shape="rect" id="node3" href="$kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" title="KineticClient_ExecuteOperation" alt="" coords="504,60,767,91"/>
-<area shape="rect" id="node4" href="$kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="815,5,987,36"/>
-<area shape="rect" id="node7" href="$kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to write data to the Kinetic Device. " alt="" coords="825,60,977,91"/>
-<area shape="rect" id="node9" href="$kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to read data from the Kinetic Device. " alt="" coords="824,115,978,146"/>
-<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1035,5,1100,36"/>
-<area shape="rect" id="node6" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1148,60,1208,91"/>
-<area shape="rect" id="node8" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="1044,60,1090,91"/>
-<area shape="rect" id="node10" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="1043,115,1091,146"/>
+<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f" title="KineticPDU_Send" alt="" coords="294,60,445,91"/>
+<area shape="rect" id="node13" href="$kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7" title="KineticPDU_Receive" alt="" coords="284,115,456,146"/>
+<area shape="rect" id="node3" href="$kinetic__client_8c.html#a330d0594baf0643fc75aea0755c1bdc9" title="KineticClient_ExecuteOperation" alt="" coords="504,88,767,119"/>
+<area shape="rect" id="node4" href="$kinetic__client_8c.html#aa265de3c65a20a8b7454a06cd80792d8" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="818,5,989,36"/>
+<area shape="rect" id="node7" href="$kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to store/update an entry on the Kinetic Device. " alt="" coords="828,60,979,91"/>
+<area shape="rect" id="node9" href="$kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to retrieve and entry from the Kinetic Device. " alt="" coords="827,115,980,146"/>
+<area shape="rect" id="node11" href="$kinetic__client_8c.html#a6627404cdac9da3990a67df8ada0d8cc" title="Executes a DELETE command to delete an entry from the Kinetic Device. " alt="" coords="815,169,992,200"/>
+<area shape="rect" id="node5" href="$noop_8h.html#a54134f0309024f11ce0cf25c26a22934" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="1042,5,1108,36"/>
+<area shape="rect" id="node6" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1158,88,1218,119"/>
+<area shape="rect" id="node8" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="1052,60,1098,91"/>
+<area shape="rect" id="node10" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="1051,115,1099,146"/>
+<area shape="rect" id="node12" href="$delete_8h.html#abeddadd7d67bb9d2e1de229dda939065" title="Executes a Delete to delete an object from the Device. " alt="" coords="1040,169,1110,200"/>
 </map>
