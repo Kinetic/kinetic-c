@@ -1,7 +1,0 @@
-.DS_Store
-.rake_t_cache
-bin/
-obj/
-src/
-test/
-vendor/

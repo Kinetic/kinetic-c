@@ -33,12 +33,14 @@
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
 <div id="nav-path" class="navpath">
@@ -51,7 +53,7 @@
 <div class="title">kinetic_connection.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<a href="kinetic__connection_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
@@ -71,46 +73,64 @@
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;kinetic_connection.h&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;kinetic_socket.h&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__connection_8h.html">kinetic_connection.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__socket_8h.html">kinetic_socket.h</a>&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;string.h&gt;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">bool</span> KineticConnection_Connect(KineticConnection* <span class="keyword">const</span> connection,</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="kinetic__connection_8h.html#ad009656b3513c413099526e03fbc437e">   25</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76">KineticConnection_Connect</a>(<a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* <span class="keyword">const</span> connection,</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* host, <span class="keywordtype">int</span> port, <span class="keywordtype">bool</span> nonBlocking,</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    int64_t clusterVersion, int64_t identity, <span class="keyword">const</span> ByteArray key)</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    int64_t clusterVersion, int64_t identity, <span class="keyword">const</span> <a class="code" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> key)</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    connection-&gt;connected = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    connection-&gt;nonBlocking = nonBlocking;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    connection-&gt;port = port;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    connection-&gt;socketDescriptor = -1;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    connection-&gt;clusterVersion = clusterVersion;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    connection-&gt;identity = identity;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#aac893b5dcd2609178b4b7312ed499db2">nonBlocking</a> = nonBlocking;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">port</a> = port;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> = -1;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a2495f6d6a10ec21582e1bde441a771d2">clusterVersion</a> = clusterVersion;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a880419508209b15e4d8869ff9396b7c4">identity</a> = identity;</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    strcpy(connection-&gt;host, host);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    connection-&gt;key.data = connection-&gt;keyData;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    memcpy(connection-&gt;key.data, key.data, key.len);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    connection-&gt;key.len = key.len;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    strcpy(connection-&gt;<a class="code" href="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6">host</a>, host);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#ab20ffb18d9ac8d257ccf7bb0a6e13f80">key</a>.data = connection-&gt;<a class="code" href="struct_kinetic_connection.html#adffd61f32db16bfd6f6dfccde45dbfe4">keyData</a>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    memcpy(connection-&gt;<a class="code" href="struct_kinetic_connection.html#ab20ffb18d9ac8d257ccf7bb0a6e13f80">key</a>.data, key.data, key.len);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#ab20ffb18d9ac8d257ccf7bb0a6e13f80">key</a>.len = key.len;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    connection-&gt;socketDescriptor = KineticSocket_Connect(</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        connection-&gt;host, connection-&gt;port, nonBlocking);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    connection-&gt;connected = (connection-&gt;socketDescriptor &gt;= 0);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> = <a class="code" href="kinetic__socket_8c.html#a8b16e4d74b50c80aa8836671471f7970">KineticSocket_Connect</a>(</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        connection-&gt;<a class="code" href="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6">host</a>, connection-&gt;<a class="code" href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">port</a>, nonBlocking);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a> = (connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> &gt;= 0);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> connection-&gt;connected;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">connected</a>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keywordtype">void</span> KineticConnection_Disconnect(KineticConnection* connection)</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="kinetic__connection_8h.html#a0a07df0ecd8dc9a452c2cf42fd0ebfd0">   48</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__connection_8c.html#ac098de6abde0c838914a846829d51ac5">KineticConnection_Disconnect</a>(<a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* connection)</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordflow">if</span> (connection != NULL || connection-&gt;socketDescriptor &gt;= 0)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordflow">if</span> (connection != NULL || connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> &gt;= 0)</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        close(connection-&gt;socketDescriptor);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        connection-&gt;socketDescriptor = -1;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        close(connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a>);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        connection-&gt;<a class="code" href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">socketDescriptor</a> = -1;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keywordtype">void</span> KineticConnection_IncrementSequence(KineticConnection* <span class="keyword">const</span> connection)</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="kinetic__connection_8h.html#ab3cd8fa23a61ea1c982a50e13d6dac5d">   57</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d">KineticConnection_IncrementSequence</a>(<a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* <span class="keyword">const</span> connection)</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;{</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    connection-&gt;sequence++;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    connection-&gt;<a class="code" href="struct_kinetic_connection.html#a9c112933e5183b7b9fde38b012c77d0f">sequence</a>++;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="ttc" id="struct_kinetic_connection_html_a5701de64aa829b62f3bf5c410658ade6"><div class="ttname"><a href="struct_kinetic_connection.html#a5701de64aa829b62f3bf5c410658ade6">KineticConnection::socketDescriptor</a></div><div class="ttdeci">int socketDescriptor</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00113">kinetic_types.h:113</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a9d1d59a120924fdc2a5cd6a6915c1023"><div class="ttname"><a href="struct_kinetic_connection.html#a9d1d59a120924fdc2a5cd6a6915c1023">KineticConnection::port</a></div><div class="ttdeci">int port</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00112">kinetic_types.h:112</a></div></div>
+<div class="ttc" id="kinetic__connection_8h_html"><div class="ttname"><a href="kinetic__connection_8h.html">kinetic_connection.h</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00108">kinetic_types.h:108</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a5bdd709737de27e845262d7b291bcc53"><div class="ttname"><a href="struct_kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53">KineticConnection::connected</a></div><div class="ttdeci">bool connected</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00110">kinetic_types.h:110</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_adffd61f32db16bfd6f6dfccde45dbfe4"><div class="ttname"><a href="struct_kinetic_connection.html#adffd61f32db16bfd6f6dfccde45dbfe4">KineticConnection::keyData</a></div><div class="ttdeci">uint8_t keyData[128]</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00132">kinetic_types.h:132</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a22e72ec9fae2d1ed7d950fb49da5777f"><div class="ttname"><a href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></div><div class="ttdeci">ProtobufCBinaryData ByteArray</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00069">kinetic_types.h:69</a></div></div>
+<div class="ttc" id="kinetic__connection_8c_html_ab3cd8fa23a61ea1c982a50e13d6dac5d"><div class="ttname"><a href="kinetic__connection_8c.html#ab3cd8fa23a61ea1c982a50e13d6dac5d">KineticConnection_IncrementSequence</a></div><div class="ttdeci">void KineticConnection_IncrementSequence(KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__connection_8c_source.html#l00057">kinetic_connection.c:57</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a880419508209b15e4d8869ff9396b7c4"><div class="ttname"><a href="struct_kinetic_connection.html#a880419508209b15e4d8869ff9396b7c4">KineticConnection::identity</a></div><div class="ttdeci">int64_t identity</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00127">kinetic_types.h:127</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a9c112933e5183b7b9fde38b012c77d0f"><div class="ttname"><a href="struct_kinetic_connection.html#a9c112933e5183b7b9fde38b012c77d0f">KineticConnection::sequence</a></div><div class="ttdeci">int64_t sequence</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00137">kinetic_types.h:137</a></div></div>
+<div class="ttc" id="kinetic__socket_8c_html_a8b16e4d74b50c80aa8836671471f7970"><div class="ttname"><a href="kinetic__socket_8c.html#a8b16e4d74b50c80aa8836671471f7970">KineticSocket_Connect</a></div><div class="ttdeci">int KineticSocket_Connect(char *host, int port, bool nonBlocking)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00070">kinetic_socket.c:70</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_aac893b5dcd2609178b4b7312ed499db2"><div class="ttname"><a href="struct_kinetic_connection.html#aac893b5dcd2609178b4b7312ed499db2">KineticConnection::nonBlocking</a></div><div class="ttdeci">bool nonBlocking</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00111">kinetic_types.h:111</a></div></div>
+<div class="ttc" id="kinetic__connection_8c_html_a86b6c409a8ad8699ce3edd857f669f76"><div class="ttname"><a href="kinetic__connection_8c.html#a86b6c409a8ad8699ce3edd857f669f76">KineticConnection_Connect</a></div><div class="ttdeci">bool KineticConnection_Connect(KineticConnection *const connection, const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__connection_8c_source.html#l00025">kinetic_connection.c:25</a></div></div>
+<div class="ttc" id="kinetic__connection_8c_html_ac098de6abde0c838914a846829d51ac5"><div class="ttname"><a href="kinetic__connection_8c.html#ac098de6abde0c838914a846829d51ac5">KineticConnection_Disconnect</a></div><div class="ttdeci">void KineticConnection_Disconnect(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__connection_8c_source.html#l00048">kinetic_connection.c:48</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_a2495f6d6a10ec21582e1bde441a771d2"><div class="ttname"><a href="struct_kinetic_connection.html#a2495f6d6a10ec21582e1bde441a771d2">KineticConnection::clusterVersion</a></div><div class="ttdeci">int64_t clusterVersion</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00121">kinetic_types.h:121</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_ab20ffb18d9ac8d257ccf7bb0a6e13f80"><div class="ttname"><a href="struct_kinetic_connection.html#ab20ffb18d9ac8d257ccf7bb0a6e13f80">KineticConnection::key</a></div><div class="ttdeci">ByteArray key</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00133">kinetic_types.h:133</a></div></div>
+<div class="ttc" id="kinetic__socket_8h_html"><div class="ttname"><a href="kinetic__socket_8h.html">kinetic_socket.h</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html_abfa40cc2ff08010634a92f4d951cd5f6"><div class="ttname"><a href="struct_kinetic_connection.html#abfa40cc2ff08010634a92f4d951cd5f6">KineticConnection::host</a></div><div class="ttdeci">char host[256]</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00115">kinetic_types.h:115</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

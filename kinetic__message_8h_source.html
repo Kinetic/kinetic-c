@@ -33,12 +33,14 @@
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
 <div id="nav-path" class="navpath">
@@ -51,7 +53,7 @@
 <div class="title">kinetic_message.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<a href="kinetic__message_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
@@ -74,14 +76,20 @@
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef _KINETIC_MESSAGE_H</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define _KINETIC_MESSAGE_H</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;kinetic_types_internal.h&quot;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;kinetic_hmac.h&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a>&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__hmac_8h.html">kinetic_hmac.h</a>&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> KineticMessage_Init(KineticMessage* <span class="keyword">const</span> message);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">void</span> KineticMessage_ConfigureKeyValue(KineticMessage* <span class="keyword">const</span> message,</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">const</span> KineticKeyValue* metadata);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__message_8h.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a>(<a class="code" href="struct_kinetic_message.html">KineticMessage</a>* <span class="keyword">const</span> message);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__message_8h.html#a4149617eb669e1bb58c70c40a2df2c7b">KineticMessage_ConfigureKeyValue</a>(<a class="code" href="struct_kinetic_message.html">KineticMessage</a>* <span class="keyword">const</span> message,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">const</span> <a class="code" href="struct_kinetic_key_value.html">KineticKeyValue</a>* metadata);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#endif // _KINETIC_MESSAGE_H</span></div>
+<div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html"><div class="ttname"><a href="struct_kinetic_message.html">KineticMessage</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00162">kinetic_types.h:162</a></div></div>
+<div class="ttc" id="struct_kinetic_key_value_html"><div class="ttname"><a href="struct_kinetic_key_value.html">KineticKeyValue</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00223">kinetic_types.h:223</a></div></div>
+<div class="ttc" id="kinetic__message_8h_html_a4149617eb669e1bb58c70c40a2df2c7b"><div class="ttname"><a href="kinetic__message_8h.html#a4149617eb669e1bb58c70c40a2df2c7b">KineticMessage_ConfigureKeyValue</a></div><div class="ttdeci">void KineticMessage_ConfigureKeyValue(KineticMessage *const message, const KineticKeyValue *metadata)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__message_8c_source.html#l00042">kinetic_message.c:42</a></div></div>
+<div class="ttc" id="kinetic__message_8h_html_ac6ea752dfd491fffd99d4cad256f679d"><div class="ttname"><a href="kinetic__message_8h.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a></div><div class="ttdeci">void KineticMessage_Init(KineticMessage *const message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__message_8c_source.html#l00023">kinetic_message.c:23</a></div></div>
+<div class="ttc" id="kinetic__hmac_8h_html"><div class="ttname"><a href="kinetic__hmac_8h.html">kinetic_hmac.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

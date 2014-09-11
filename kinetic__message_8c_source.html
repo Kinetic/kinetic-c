@@ -33,12 +33,14 @@
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
 <div id="nav-path" class="navpath">
@@ -51,7 +53,7 @@
 <div class="title">kinetic_message.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<a href="kinetic__message_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
@@ -71,16 +73,16 @@
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"></span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;kinetic_message.h&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__message_8h.html">kinetic_message.h</a>&quot;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">void</span> KineticMessage_Init(KineticMessage* <span class="keyword">const</span> message)</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="kinetic__message_8h.html#ac6ea752dfd491fffd99d4cad256f679d">   23</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a>(<a class="code" href="struct_kinetic_message.html">KineticMessage</a>* <span class="keyword">const</span> message)</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;{</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    assert(message != NULL);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    KINETIC_MESSAGE_INIT(message);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">KINETIC_MESSAGE_INIT</a>(message);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">// e.g. CONFIG_FIELD_BYTE_ARRAY(key, message-&gt;keyValue, metadata)</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#define CONFIG_FIELD_BYTE_ARRAY(_name, _field, _config) { \</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f">   30</a></span>&#160;<span class="preprocessor">#define CONFIG_FIELD_BYTE_ARRAY(_name, _field, _config) { \</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">    if (_config-&gt;_name.data != NULL &amp;&amp; _config-&gt;_name.len &gt; 0) { \</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">        _field._name = _config-&gt;_name; \</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">        _field.has_ ## _name = true; \</span></div>
@@ -92,31 +94,44 @@
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">//     if (message-&gt;keyValue.has_(name)) { </span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">//         message-&gt;keyValue.algorithm = algorithm; } }</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">void</span> KineticMessage_ConfigureKeyValue(KineticMessage* <span class="keyword">const</span> message,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">const</span> KineticKeyValue* metadata)</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="kinetic__message_8h.html#a4149617eb669e1bb58c70c40a2df2c7b">   42</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b">KineticMessage_ConfigureKeyValue</a>(<a class="code" href="struct_kinetic_message.html">KineticMessage</a>* <span class="keyword">const</span> message,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">const</span> <a class="code" href="struct_kinetic_key_value.html">KineticKeyValue</a>* metadata)</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    assert(message != NULL);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    assert(metadata != NULL);</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="comment">// Enable command body and keyValue fields by pointing at</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment">// pre-allocated elements in message</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    message-&gt;command.body = &amp;message-&gt;body;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    message-&gt;proto.command-&gt;body = &amp;message-&gt;body;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    message-&gt;command.body-&gt;keyValue = &amp;message-&gt;keyValue;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    message-&gt;proto.command-&gt;body-&gt;keyValue = &amp;message-&gt;keyValue;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    message-&gt;<a class="code" href="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36">command</a>.body = &amp;message-&gt;<a class="code" href="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763">body</a>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    message-&gt;<a class="code" href="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757">proto</a>.command-&gt;body = &amp;message-&gt;<a class="code" href="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763">body</a>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    message-&gt;<a class="code" href="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36">command</a>.body-&gt;keyValue = &amp;message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    message-&gt;<a class="code" href="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757">proto</a>.command-&gt;body-&gt;keyValue = &amp;message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// Set keyValue fields appropriately</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    CONFIG_FIELD_BYTE_ARRAY(key, message-&gt;keyValue, metadata);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    CONFIG_FIELD_BYTE_ARRAY(newVersion, message-&gt;keyValue, metadata);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    CONFIG_FIELD_BYTE_ARRAY(dbVersion, message-&gt;keyValue, metadata);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    CONFIG_FIELD_BYTE_ARRAY(tag, message-&gt;keyValue, metadata);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    message-&gt;keyValue.has_algorithm = (bool)((<span class="keywordtype">int</span>)metadata-&gt;algorithm &gt; 0);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">if</span> (message-&gt;keyValue.has_algorithm) {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        message-&gt;keyValue.algorithm = metadata-&gt;algorithm; }</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    message-&gt;keyValue.has_metadataOnly = metadata-&gt;metadataOnly;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">if</span> (message-&gt;keyValue.has_metadataOnly) {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        message-&gt;keyValue.metadataOnly = metadata-&gt;metadataOnly; }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f">CONFIG_FIELD_BYTE_ARRAY</a>(key, message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>, metadata);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f">CONFIG_FIELD_BYTE_ARRAY</a>(newVersion, message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>, metadata);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f">CONFIG_FIELD_BYTE_ARRAY</a>(dbVersion, message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>, metadata);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f">CONFIG_FIELD_BYTE_ARRAY</a>(tag, message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>, metadata);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>.has_algorithm = (bool)((<span class="keywordtype">int</span>)metadata-&gt;<a class="code" href="struct_kinetic_key_value.html#ae8d744bb357cc30bf4a508aa1ce6fe60">algorithm</a> &gt; 0);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">if</span> (message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>.has_algorithm) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>.algorithm = metadata-&gt;<a class="code" href="struct_kinetic_key_value.html#ae8d744bb357cc30bf4a508aa1ce6fe60">algorithm</a>; }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>.has_metadataOnly = metadata-&gt;<a class="code" href="struct_kinetic_key_value.html#a24b8496d304d7db60d0e268ffe2f63fd">metadataOnly</a>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">if</span> (message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>.has_metadataOnly) {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        message-&gt;<a class="code" href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">keyValue</a>.metadataOnly = metadata-&gt;<a class="code" href="struct_kinetic_key_value.html#a24b8496d304d7db60d0e268ffe2f63fd">metadataOnly</a>; }</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
+<div class="ttc" id="kinetic__message_8c_html_ac6ea752dfd491fffd99d4cad256f679d"><div class="ttname"><a href="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a></div><div class="ttdeci">void KineticMessage_Init(KineticMessage *const message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__message_8c_source.html#l00023">kinetic_message.c:23</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a262532fd0f7f4361327ca17511204763"><div class="ttname"><a href="struct_kinetic_message.html#a262532fd0f7f4361327ca17511204763">KineticMessage::body</a></div><div class="ttdeci">KineticProto_Body body</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00168">kinetic_types.h:168</a></div></div>
+<div class="ttc" id="kinetic__message_8c_html_a4149617eb669e1bb58c70c40a2df2c7b"><div class="ttname"><a href="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b">KineticMessage_ConfigureKeyValue</a></div><div class="ttdeci">void KineticMessage_ConfigureKeyValue(KineticMessage *const message, const KineticKeyValue *metadata)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__message_8c_source.html#l00042">kinetic_message.c:42</a></div></div>
+<div class="ttc" id="kinetic__message_8h_html"><div class="ttname"><a href="kinetic__message_8h.html">kinetic_message.h</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html"><div class="ttname"><a href="struct_kinetic_message.html">KineticMessage</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00162">kinetic_types.h:162</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a760d787dc11866d5e8b3bcc8c7117b36"><div class="ttname"><a href="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36">KineticMessage::command</a></div><div class="ttdeci">KineticProto_Command command</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00166">kinetic_types.h:166</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a89cdffed422dfae0e8a4d3f25dce276f"><div class="ttname"><a href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">KINETIC_MESSAGE_INIT</a></div><div class="ttdeci">#define KINETIC_MESSAGE_INIT(msg)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00190">kinetic_types.h:190</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a362c035c73ee232ca93ff9a6994ff757"><div class="ttname"><a href="struct_kinetic_message.html#a362c035c73ee232ca93ff9a6994ff757">KineticMessage::proto</a></div><div class="ttdeci">KineticProto proto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00165">kinetic_types.h:165</a></div></div>
+<div class="ttc" id="struct_kinetic_key_value_html"><div class="ttname"><a href="struct_kinetic_key_value.html">KineticKeyValue</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00223">kinetic_types.h:223</a></div></div>
+<div class="ttc" id="struct_kinetic_key_value_html_ae8d744bb357cc30bf4a508aa1ce6fe60"><div class="ttname"><a href="struct_kinetic_key_value.html#ae8d744bb357cc30bf4a508aa1ce6fe60">KineticKeyValue::algorithm</a></div><div class="ttdeci">KineticProto_Algorithm algorithm</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00230">kinetic_types.h:230</a></div></div>
+<div class="ttc" id="struct_kinetic_key_value_html_a24b8496d304d7db60d0e268ffe2f63fd"><div class="ttname"><a href="struct_kinetic_key_value.html#a24b8496d304d7db60d0e268ffe2f63fd">KineticKeyValue::metadataOnly</a></div><div class="ttdeci">bool metadataOnly</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00231">kinetic_types.h:231</a></div></div>
+<div class="ttc" id="kinetic__message_8c_html_a8739ecef99201e2b2f486401f783792f"><div class="ttname"><a href="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f">CONFIG_FIELD_BYTE_ARRAY</a></div><div class="ttdeci">#define CONFIG_FIELD_BYTE_ARRAY(_name, _field, _config)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__message_8c_source.html#l00030">kinetic_message.c:30</a></div></div>
+<div class="ttc" id="struct_kinetic_message_html_a488a17004a3c26e41a042643bd20a9c0"><div class="ttname"><a href="struct_kinetic_message.html#a488a17004a3c26e41a042643bd20a9c0">KineticMessage::keyValue</a></div><div class="ttdeci">KineticProto_KeyValue keyValue</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00172">kinetic_types.h:172</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
