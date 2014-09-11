@@ -100,6 +100,7 @@ void test_Delete_should_delete_an_object_from_the_device(void)
     ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
     KineticKeyValue metadata = {
         .key = valueKey,
+        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v4.2.3"),
     };
 
     // Initialize response message status and HMAC

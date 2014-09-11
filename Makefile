@@ -12,8 +12,11 @@ PBC_INC = ./vendor/protobuf-c
 SOCKET99 = ./vendor/socket99
 VND_INC = ./vendor
 BIN = $(BIN_DIR)/kinetic_client
+LDFLAGS += -lm -l crypto -l ssl
 
 KINETIC_LIB = $(BIN_DIR)/lib${PROJECT}.a
+VERSION = `head -n1 VERSION`
+KINETIC_SO = $(BIN_DIR)/lib${PROJECT}.${VERSION}.so
 UTIL_EXEC = $(BIN_DIR)/$(PROJECT)-util
 
 CC = gcc
@@ -22,14 +25,14 @@ WARN = -Wall -Wextra -pedantic
 # This is necessary because the library depends on
 # both C99 _and_ POSIX (for the BSD sockets API).
 CDEFS += -D_POSIX_C_SOURCE=1
-CFLAGS += -std=c99 -g ${WARN} ${CDEFS} ${OPTIMIZE}
+CFLAGS += -std=c99 -fPIC -g ${WARN} ${CDEFS} ${OPTIMIZE}
 
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PBC_INC) -I$(VND_INC)
 LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
-LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
+LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
 
-default: $(KINETIC_LIB)
+default: $(KINETIC_SO)
 
 test: Rakefile $(LIB_OBJS)
 	bundle install
@@ -72,10 +75,14 @@ $(KINETIC_LIB): $(LIB_OBJS)
 	ar -rcs $@ $(LIB_OBJS)
 	ar -t $@
 
+$(KINETIC_SO): $(KINETIC_LIB)
+	$(CC) $(LIB_OBJS) -shared ${LDFLAGS} -o ${KINETIC_SO}
+
+libso: $(KINETIC_SO)
+
 UTIL_OBJS = $(OUT_DIR)/noop.o $(OUT_DIR)/put.o $(OUT_DIR)/get.o $(OUT_DIR)/delete.o
 UTIL_INCS = -I/usr/local/include -I$(UTIL_DIR)
 # TODO: Delete LIB_DIR dep after kinetic_proto is yanked out of public API
-LDFLAGS += -lm -l kinetic-c-client -l crypto -l ssl
 
 $(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
@@ -86,7 +93,7 @@ $(OUT_DIR)/get.o: $(UTIL_EX)/get.c
 $(OUT_DIR)/delete.o: $(UTIL_EX)/delete.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
 $(UTIL_EXEC): $(UTIL_DIR)/main.c $(UTIL_OBJS)
-	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
+	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS}  -l kinetic-c-client ${LDFLAGS}
 
 utility: ${UTIL_EXEC}
 
@@ -118,9 +125,10 @@ PREFIX ?= /usr/local
 INSTALL ?= install
 RM ?= rm
 
-install: ${KINETIC_LIB}
+install: ${KINETIC_LIB} ${KINETIC_SO} VERSION
 	${INSTALL} -d ${PREFIX}/lib/
 	${INSTALL} -c ${KINETIC_LIB} ${PREFIX}/lib/
+	${INSTALL} -c ${KINETIC_SO} ${PREFIX}/lib/
 	${INSTALL} -d ${PREFIX}/include/
 	${INSTALL} -c ./include/${LIB_NAME}.h ${PREFIX}/include/
 	${INSTALL} -c ./include/kinetic_types.h ${PREFIX}/include/
@@ -129,7 +137,8 @@ install: ${KINETIC_LIB}
 	${INSTALL} -c ./vendor/protobuf-c/protobuf-c/protobuf-c.h ${PREFIX}/include/protobuf-c/
 
 uninstall:
-	${RM} -f ${PREFIX}/lib/lib${PROJECT}.a
+	${RM} -f ${PREFIX}/lib/lib${PROJECT}*.a
+	${RM} -f ${PREFIX}/lib/lib${PROJECT}*.so
 	${RM} -f ${PREFIX}/include/${LIB_NAME}.h
 	${RM} -f ${PREFIX}/include/kinetic_types.h
 	${RM} -f ${PREFIX}/include/kinetic_proto.h
