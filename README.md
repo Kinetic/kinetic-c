@@ -38,6 +38,11 @@ Getting Started
     > make
     > sudo make install
 
+**You can all clean and uninstall old versions**
+
+    > make clean
+    > sudo uninstall
+
 **Build example utility and run tests against Kinetic Device simulator**
 
     > make run

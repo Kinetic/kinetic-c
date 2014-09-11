@@ -135,3 +135,17 @@ void KineticOperation_BuildGet(KineticOperation* operation,
 
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
 }
+
+void KineticOperation_BuildDelete(KineticOperation* operation,
+    const KineticKeyValue* metadata)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+
+    operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_DELETE;
+    operation->request->proto->command->header->has_messageType = true;
+    operation->request->value = BYTE_ARRAY_NONE;
+    operation->response->value = BYTE_ARRAY_NONE;
+
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
+}

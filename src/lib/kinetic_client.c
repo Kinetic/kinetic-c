@@ -193,6 +193,29 @@ KineticStatus KineticClient_Get(KineticOperation* operation,
     return status;
 }
 
+KineticStatus KineticClient_Delete(KineticOperation* operation,
+    KineticKeyValue* metadata)
+{
+    assert(operation->connection != NULL);
+    assert(operation->request != NULL);
+    assert(operation->response != NULL);
+    assert(metadata != NULL);
+    assert(metadata->key.data != NULL);
+    assert(metadata->key.len > 0);
+
+    // Initialize request
+    KineticOperation_BuildDelete(operation, metadata);
+
+    // Execute the operation
+    KineticStatus status = KineticClient_ExecuteOperation(operation);
+
+    // Zero out value length for all DELETE operations
+    operation->response->value.len = 0;
+    metadata->value.len = 0;
+
+    return status;
+}
+
 KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;

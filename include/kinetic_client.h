@@ -83,7 +83,7 @@ KineticOperation KineticClient_CreateOperation(
 KineticStatus KineticClient_NoOp(KineticOperation* operation);
 
 /**
- * @brief Executes a PUT command to write data to the Kinetic Device
+ * @brief Executes a PUT command to store/update an entry on the Kinetic Device
  *
  * @param operation     KineticOperation instance to use for the operation
  * @param metadata      Key/value metadata for object to store. 'value' must
@@ -96,7 +96,7 @@ KineticStatus KineticClient_Put(KineticOperation* operation,
     const KineticKeyValue* metadata);
 
 /**
- * @brief Executes a GET command to read data from the Kinetic Device
+ * @brief Executes a GET command to retrieve and entry from the Kinetic Device
  *
  * @param operation     KineticOperation instance to use for the operation
  * @param metadata      Key/value metadata for object to retrieve. 'value' will
@@ -106,6 +106,19 @@ KineticStatus KineticClient_Put(KineticOperation* operation,
  *                      upon failure
  */
 KineticStatus KineticClient_Get(KineticOperation* operation,
+    KineticKeyValue* metadata);
+
+/**
+ * @brief Executes a DELETE command to delete an entry from the Kinetic Device
+ *
+ * @param operation     KineticOperation instance to use for the operation
+ * @param metadata      Key/value metadata for object to delete. 'value' is
+ *                      not used for this operation.
+ *
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ *                      upon failure
+ */
+KineticStatus KineticClient_Delete(KineticOperation* operation,
     KineticKeyValue* metadata);
 
 #endif // _KINETIC_CLIENT_H

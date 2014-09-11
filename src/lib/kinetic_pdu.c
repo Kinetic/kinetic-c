@@ -181,6 +181,7 @@ bool KineticPDU_Receive(KineticPDU* const response)
     }
 
     // Receive the value payload, if specified
+    response->value.len = response->header.valueLength;
     if (response->header.valueLength > 0)
     {
         assert(response->value.data != NULL);

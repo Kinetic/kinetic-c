@@ -30,5 +30,7 @@ void KineticOperation_BuildPut(KineticOperation* operation,
     const KineticKeyValue* metadata);
 void KineticOperation_BuildGet(KineticOperation* operation,
     const KineticKeyValue* metadata);
+void KineticOperation_BuildDelete(KineticOperation* operation,
+    const KineticKeyValue* metadata);
 
 #endif // _KINETIC_OPERATION_H
