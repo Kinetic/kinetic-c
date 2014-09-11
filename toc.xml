@@ -1,4 +1,5 @@
 <toc label="protobuf-c" topic="index.html">
+  <topic label="Kinetic-C Library Developer Reference" href="md__d_e_v_e_l_o_p.html"/>
   <topic label="Files">
     <topic label="File List" href="files.html">
       <topic label="delete.c" href="delete_8c_source.html"/>

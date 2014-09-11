@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
+  <Token>
+    <TokenIdentifier>
+      <Name>md_DEVELOP</Name>
+      <APILanguage>markdown</APILanguage>
+    </TokenIdentifier>
+    <Path>md__d_e_v_e_l_o_p.html</Path>
+  </Token>
 </Tokens>

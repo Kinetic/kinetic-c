@@ -1,9 +1,0 @@
-<map id="kinetic_message.h" name="kinetic_message.h">
-<area shape="rect" id="node2" href="$kinetic__client_8c.html" title="kinetic_client.c" alt="" coords="38,84,174,115"/>
-<area shape="rect" id="node3" href="$kinetic__socket_8h.html" title="kinetic_socket.h" alt="" coords="198,84,344,115"/>
-<area shape="rect" id="node7" href="$kinetic__message_8c.html" title="kinetic_message.c" alt="" coords="368,84,529,115"/>
-<area shape="rect" id="node8" href="$kinetic__operation_8c.html" title="kinetic_operation.c" alt="" coords="552,84,721,115"/>
-<area shape="rect" id="node4" href="$kinetic__connection_8c.html" title="kinetic_connection.c" alt="" coords="5,163,185,194"/>
-<area shape="rect" id="node5" href="$kinetic__pdu_8c.html" title="kinetic_pdu.c" alt="" coords="209,163,333,194"/>
-<area shape="rect" id="node6" href="$kinetic__socket_8c.html" title="kinetic_socket.c" alt="" coords="357,163,500,194"/>
-</map>

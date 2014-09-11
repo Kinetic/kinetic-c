@@ -1,0 +1,89 @@
+.TH "md__d_e_v_e_l_o_p" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md__d_e_v_e_l_o_p \- Kinetic-C Library Developer Reference 
+
+.SS "Prerequisites "
+.PP
+.IP "\(bu" 2
+\fCRuby\fP (v1\&.9\&.3 or higher) scripting language
+.IP "\(bu" 2
+\fCRubyGems\fP (installed w/ `bundle install)
+.IP "  \(bu" 4
+\fCbundler\fP (v1\&.3\&.5 or higher) environment/dependency manager for Ruby projects
+.PP
+
+.IP "\(bu" 2
+\fCCppCheck\fP for static analysis of source code
+.IP "\(bu" 2
+\fCValgrind\fP for validation of memory usage/management
+.IP "\(bu" 2
+\fCDoxygen\fP and \fCGraphViz\fP for generating API documentation
+.PP
+.PP
+.SH "API Documentation "
+.PP
+.PP
+\fCKinetic-C API\fP (generated with Doxygen)
+.PP
+.SS "Common Developer Tasks "
+.PP
+\fBNOTE: Prefix the following commands with \fCbundle exec\fP so that they execute in the context of the bundle environment setup via \fCbundle install\fP\&.\fP
+.PP
+.IP "\(bu" 2
+List available Rake tasks w/descriptions
+.IP "  \(bu" 4
+\fCrake -T\fP
+.PP
+
+.IP "\(bu" 2
+Run all tests and build the library and examples
+.IP "  \(bu" 4
+\fCrake\fP
+.PP
+
+.IP "\(bu" 2
+Build the library
+.IP "  \(bu" 4
+\fCrake release\fP
+.PP
+
+.IP "\(bu" 2
+Run all unit/integration/system/example tests
+.IP "  \(bu" 4
+\fCrake test_all\fP
+.PP
+
+.IP "\(bu" 2
+Analyze code
+.IP "  \(bu" 4
+\fCrake cppcheck\fP
+.PP
+
+.IP "\(bu" 2
+Generate documentation
+.IP "  \(bu" 4
+\fCrake doxygen:gen\fP
+.PP
+
+.IP "\(bu" 2
+Apply license to source files (skips already licensed files)
+.IP "  \(bu" 4
+\fCrake apply_license\fP
+.PP
+
+.IP "\(bu" 2
+Build/install Google Protocol Buffers support for the Kinetic-Protocol
+.IP "  \(bu" 4
+\fCrake proto\fP
+.PP
+
+.IP "\(bu" 2
+Enable verbose output (for current Rake run)
+.IP "  \(bu" 4
+\fCrake verbose <task_A> <task_B>\fP 
+.PP
+
+.PP
+

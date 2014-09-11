@@ -6,6 +6,10 @@
       <Path>index.html</Path>
       <Subnodes>
        <Node>
+        <Name>Kinetic-C Library Developer Reference</Name>
+        <Path>md__d_e_v_e_l_o_p.html</Path>
+       </Node>
+       <Node>
         <Name>Files</Name>
         <Path></Path>
         <Subnodes>

@@ -1,6 +1,0 @@
-<map id="KineticHMAC_Populate" name="KineticHMAC_Populate">
-<area shape="rect" id="node2" href="$kinetic__pdu_8h.html#ad853748c77a0a8505812449f85fa3f72" title="KineticPDU_Send" alt="" coords="251,5,405,35"/>
-<area shape="rect" id="node3" href="$kinetic__api_8h.html#ab8f3c3fa01178f9331949d774334f940" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="454,5,607,35"/>
-<area shape="rect" id="node4" href="$noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="656,5,712,35"/>
-<area shape="rect" id="node5" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="760,5,816,35"/>
-</map>

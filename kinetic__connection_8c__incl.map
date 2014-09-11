@@ -1,9 +1,0 @@
-<map id="kinetic_connection.c" name="kinetic_connection.c">
-<area shape="rect" id="node2" href="$kinetic__connection_8h.html" title="kinetic_connection.h" alt="" coords="575,163,756,194"/>
-<area shape="rect" id="node21" href="$kinetic__socket_8h.html" title="kinetic_socket.h" alt="" coords="721,84,866,115"/>
-<area shape="rect" id="node3" href="$kinetic__types__internal_8h.html" title="kinetic_types_internal.h" alt="" coords="726,321,930,352"/>
-<area shape="rect" id="node4" href="$kinetic__types_8h.html" title="kinetic_types.h" alt="" coords="760,400,897,430"/>
-<area shape="rect" id="node18" href="$kinetic__proto_8h.html" title="kinetic_proto.h" alt="" coords="1607,478,1745,509"/>
-<area shape="rect" id="node22" href="$kinetic__message_8h.html" title="kinetic_message.h" alt="" coords="831,163,993,194"/>
-<area shape="rect" id="node23" href="$kinetic__hmac_8h.html" title="kinetic_hmac.h" alt="" coords="882,242,1020,273"/>
-</map>

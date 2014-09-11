@@ -1,7 +1,0 @@
-<map id="KineticProto_unpack" name="KineticProto_unpack">
-<area shape="rect" id="node2" href="$kinetic__socket_8h.html#aac07ac642119c019651884f4e877c5a5" title="KineticSocket_ReadProtobuf" alt="" coords="243,5,493,35"/>
-<area shape="rect" id="node3" href="$kinetic__pdu_8h.html#acff84c8347b8df5df8d90364d990268a" title="KineticPDU_Receive" alt="" coords="542,5,722,35"/>
-<area shape="rect" id="node4" href="$kinetic__api_8h.html#ab8f3c3fa01178f9331949d774334f940" title="Executes a NOOP command to test whether the Kinetic Device is operational. " alt="" coords="771,5,925,35"/>
-<area shape="rect" id="node5" href="$noop_8h.html#aa0917ddd64a002c8a0866681f0c9e6d5" title="Connects to the specified Kinetic host/port and executes a NoOp (ping) operation. ..." alt="" coords="973,5,1030,35"/>
-<area shape="rect" id="node6" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1077,5,1134,35"/>
-</map>

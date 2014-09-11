@@ -1,6 +1,0 @@
-<map id="KineticMessage_ConfigureKeyValue" name="KineticMessage_ConfigureKeyValue">
-<area shape="rect" id="node2" href="$kinetic__operation_8h.html#a2700aabef8796b1896a53b0f9a1a3d13" title="KineticOperation_BuildPut" alt="" coords="278,5,500,36"/>
-<area shape="rect" id="node4" href="$kinetic__operation_8h.html#ab74d2f2a39115bb5757112f57c147b71" title="KineticOperation_BuildGet" alt="" coords="277,60,501,91"/>
-<area shape="rect" id="node3" href="$kinetic__client_8c.html#a991e741b094c0a74ef5b0ed66e1c88d8" title="KineticClient_Put" alt="" coords="550,5,701,36"/>
-<area shape="rect" id="node5" href="$kinetic__client_8c.html#a27619674ccf197317001a9f215d377cc" title="KineticClient_Get" alt="" coords="549,60,702,91"/>
-</map>

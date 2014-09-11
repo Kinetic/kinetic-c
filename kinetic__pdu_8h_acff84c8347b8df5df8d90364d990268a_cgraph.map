@@ -1,9 +1,0 @@
-<map id="KineticPDU_Receive" name="KineticPDU_Receive">
-<area shape="rect" id="node2" href="$kinetic__hmac_8c.html#af0d312b6cffbe85d7bce6af3a1b8e742" title="KineticHMAC_Validate" alt="" coords="261,5,459,35"/>
-<area shape="rect" id="node4" href="$kinetic__logger_8c.html#aa165cca23a8303a430aaeb13843d2259" title="KineticLogger_LogHeader" alt="" coords="248,59,472,90"/>
-<area shape="rect" id="node5" href="$kinetic__logger_8c.html#a382d80f28dc772bd38ef93c01bd7150e" title="KineticLogger_LogProtobuf" alt="" coords="239,114,481,145"/>
-<area shape="rect" id="node6" href="$kinetic__socket_8c.html#aded36525a210d1e0eae8cdb820997e62" title="KineticSocket_Read" alt="" coords="538,167,718,198"/>
-<area shape="rect" id="node7" href="$kinetic__socket_8c.html#aac07ac642119c019651884f4e877c5a5" title="KineticSocket_ReadProtobuf" alt="" coords="235,221,485,251"/>
-<area shape="rect" id="node3" href="$kinetic__hmac_8c.html#af18bc978da74d29a03ef969007c5201f" title="KineticHMAC_Init" alt="" coords="547,5,709,35"/>
-<area shape="rect" id="node8" href="$kinetic__proto_8c.html#a0623fe40025b387b445cff513988f8fe" title="KineticProto_unpack" alt="" coords="534,222,722,253"/>
-</map>

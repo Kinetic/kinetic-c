@@ -1,5 +1,0 @@
-<map id="KineticApi_CreateOperation" name="KineticApi_CreateOperation">
-<area shape="rect" id="node2" href="$kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d" title="KineticMessage_Init" alt="" coords="304,5,493,35"/>
-<area shape="rect" id="node3" href="$kinetic__pdu_8c.html#a036f988ac116a054a76fcc59cd2d6647" title="KineticPDU_Init" alt="" coords="322,59,475,90"/>
-<area shape="rect" id="node4" href="$kinetic__exchange_8c.html#a58479324729294bdce5e4fd99c348fc7" title="KineticExchange_Configure\lHeader" alt="" coords="542,50,783,99"/>
-</map>

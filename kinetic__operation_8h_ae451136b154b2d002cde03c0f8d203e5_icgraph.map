@@ -1,5 +1,0 @@
-<map id="KineticOperation_BuildGet" name="KineticOperation_BuildGet">
-<area shape="rect" id="node2" href="$kinetic__client_8c.html#a17a5f97cb86609ee9f3ad7082370a7b8" title="Executes a GET command to retrieve and entry from the Kinetic Device. " alt="" coords="277,5,431,36"/>
-<area shape="rect" id="node3" href="$get_8h.html#a4eac921bed546f39bed8e83d9606b347" title="Connects to the specified Kinetic host/port and executes a Get to retrieve an object from the Device..." alt="" coords="479,5,527,36"/>
-<area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="575,5,634,36"/>
-</map>

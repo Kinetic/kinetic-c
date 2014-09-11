@@ -6,6 +6,7 @@
     <filterAttribute>doxygen</filterAttribute>
     <toc>
       <section title="protobuf-c v0.6.0-beta-2" ref="index.html">
+        <section title="Kinetic-C Library Developer Reference" ref="md__d_e_v_e_l_o_p.html" />
         <section title="Files">
           <section title="File List" ref="files.html">
             <section title="delete.c" ref="delete_8c_source.html" />
@@ -45,6 +46,7 @@
       </section>
     </toc>
     <keywords>
+      <keyword name="Kinetic-C Library Developer Reference" id="Kinetic-C Library Developer Reference" ref="md__d_e_v_e_l_o_p.html" />
     </keywords>
     <files>
       <file>tabs.css</file>
@@ -78,6 +80,7 @@
       <file>doxygen.css</file>
       <file>delete_8c_source.html</file>
       <file>delete_8h_source.html</file>
+      <file>_d_e_v_e_l_o_p_8md_source.html</file>
       <file>get_8c_source.html</file>
       <file>get_8h_source.html</file>
       <file>kinetic__client_8c_source.html</file>
@@ -109,12 +112,14 @@
       <file>put_8c_source.html</file>
       <file>put_8h_source.html</file>
       <file>_r_e_a_d_m_e_8md_source.html</file>
+      <file>md__d_e_v_e_l_o_p.html</file>
       <file>dir_4fd1cf74182c330d9c49e4bf16d09826.html</file>
       <file>dir_d4ad0b9b374a726be0aa1173834aae30.html</file>
       <file>dir_8022d97437212dcef4d003f114d6167d.html</file>
       <file>dir_d729c10c892d40b7e80e1d956ac94d74.html</file>
       <file>dir_9c7fb1738cdff91c352cb4ea706321d8.html</file>
       <file>index.html</file>
+      <file>pages.html</file>
       <file>files.html</file>
     </files>
   </filterSection>

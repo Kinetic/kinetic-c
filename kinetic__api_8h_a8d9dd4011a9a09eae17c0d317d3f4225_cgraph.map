@@ -1,5 +1,0 @@
-<map id="KineticApi_Connect" name="KineticApi_Connect">
-<area shape="rect" id="node2" href="$kinetic__connection_8c.html#a067e3a232197b9d572244d40607ab24f" title="KineticConnection_Connect" alt="" coords="235,5,477,35"/>
-<area shape="rect" id="node4" href="$kinetic__connection_8c.html#a6524070218513d73d3bf8e02f50c75b3" title="KineticConnection_Init" alt="" coords="249,59,463,90"/>
-<area shape="rect" id="node3" href="$kinetic__socket_8c.html#a153be47ff8a2e21b5e55c15eba510dfe" title="KineticSocket_Connect" alt="" coords="526,5,732,35"/>
-</map>

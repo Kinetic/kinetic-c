@@ -1,5 +1,0 @@
-<map id="KineticOperation_BuildPut" name="KineticOperation_BuildPut">
-<area shape="rect" id="node2" href="$kinetic__client_8c.html#a9b9b330e205d5a627f9f08739da4369a" title="Executes a PUT command to store/update an entry on the Kinetic Device. " alt="" coords="276,5,427,36"/>
-<area shape="rect" id="node3" href="$put_8h.html#a7024809d629cd8d8a61af20ad5b1a660" title="Connects to the specified Kinetic host/port and executes a Put to store an object on the Device..." alt="" coords="475,5,521,36"/>
-<area shape="rect" id="node4" href="$main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="569,5,629,36"/>
-</map>
