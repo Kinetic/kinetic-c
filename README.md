@@ -1,5 +1,3 @@
-[![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](http://travis-ci.org/atomicobject/kinetic-c)
-
 Kinetic C Client Library
 ========================
 
