@@ -8,7 +8,12 @@ SIM_ADMIN=com.seagate.kinetic.admin.cli.KineticAdminCLI
 BASE_DIR=`dirname "$0"`/../..
 BASE_DIR=`cd "$BASE_DIR"; pwd`
 
-echo BASE ${BASE_DIR}
+echo STARTSTART
+
+# kill any stale simulators
+pkill -f 'java.*kinetic-simulator'
+# allow for cleanup
+sleep 1
 
 #Set the classpath
 if [ "$CLASSPATH" != "" ]; then
@@ -32,4 +37,5 @@ ${UTIL} noop
 ${UTIL} put
 ${UTIL} get
 
-cat pid.log | xargs kill $1
+# kill the simulator we started
+pkill -f 'java.*kinetic-simulator'

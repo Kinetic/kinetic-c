@@ -44,18 +44,20 @@ static SystemTestFixture Fixture = {
     .clusterVersion = 0,
     .identity =  1,
 };
-static const ByteArray Version = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
-static const ByteArray ValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("DELETE system test blob");
-static const ByteArray Tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeOTagValue");
-static const ByteArray TestValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah blah blah... etc.");
-static const KineticProto_Algorithm Algorithm = KINETIC_PROTO_ALGORITHM_SHA1;
+static ByteArray Version;
+static ByteArray ValueKey;
+static ByteArray Tag;
+static ByteArray TestValue;
+static KineticProto_Algorithm Algorithm = KINETIC_PROTO_ALGORITHM_SHA1;
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
 
-    // Setup to write some test data
-    // Fixture.request.value = TestValue;
+    Version = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
+    ValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("DELETE system test blob");
+    Tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeOTagValue");
+    TestValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah blah blah... etc.");
 
     KineticKeyValue metadata = {
         .key = ValueKey,

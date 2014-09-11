@@ -107,6 +107,7 @@ run: ${UTIL_EXEC}
 	${UTIL_EXEC} put
 	${UTIL_EXEC} get
 	${UTIL_EXEC} delete
+	exec pkill -f 'java.*kinetic-simulator'
 
 all: clean test default install run
 
