@@ -1,10 +1,10 @@
-LIB_NAME = kinetic_client
 PROJECT = kinetic-c-client
+UTILITY = kinetic-c-util
 
 OUT_DIR = ./obj
 BIN_DIR = ./bin
 PUB_INC = ./include
-PUB_API = $(PUB_INC)/$(LIB_NAME).h
+API_NAME = kinetic_client
 LIB_DIR = ./src/lib
 UTIL_DIR = ./src/utility
 UTIL_EX = $(UTIL_DIR)/examples
@@ -14,10 +14,17 @@ VND_INC = ./vendor
 BIN = $(BIN_DIR)/kinetic_client
 LDFLAGS += -lm -l crypto -l ssl
 
+PREFIX ?= /usr/local
+INSTALL ?= install
+RM ?= rm
+
 KINETIC_LIB = $(BIN_DIR)/lib${PROJECT}.a
-VERSION = `head -n1 VERSION`
+VERSION = $(shell head -n1 ./VERSION)
 KINETIC_SO = $(BIN_DIR)/lib${PROJECT}.${VERSION}.so
-UTIL_EXEC = $(BIN_DIR)/$(PROJECT)-util
+UTIL_EXEC_NAME = $(UTILITY).$(VERSION)
+UTIL_EXEC = $(BIN_DIR)/$(UTIL_EXEC_NAME)
+UTIL_EXEC_DYN_NAME = $(UTILITY)
+UTIL_EXEC_DYN = $(BIN_DIR)/$(UTIL_EXEC_DYN_NAME)
 
 CC = gcc
 OPTIMIZE = -O3
@@ -35,11 +42,17 @@ LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/ki
 default: $(KINETIC_SO)
 
 test: Rakefile $(LIB_OBJS)
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Testing $(PROJECT)
+	@echo --------------------------------------------------------------------------------
 	bundle install
 	bundle exec rake ci
 
 clean:
 	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
+
+.PHONY: clean
 
 # $(OUT_DIR)/%.o: %.c $(DEPS)
 # 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -72,17 +85,24 @@ $(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 
 $(KINETIC_LIB): $(LIB_OBJS)
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Building $(KINETIC_LIB) static library
+	@echo --------------------------------------------------------------------------------
 	ar -rcs $@ $(LIB_OBJS)
 	ar -t $@
 
 $(KINETIC_SO): $(KINETIC_LIB)
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Building $(KINETIC_SO) dynamic library
+	@echo --------------------------------------------------------------------------------
 	$(CC) $(LIB_OBJS) -shared ${LDFLAGS} -o ${KINETIC_SO}
 
 libso: $(KINETIC_SO)
 
 UTIL_OBJS = $(OUT_DIR)/noop.o $(OUT_DIR)/put.o $(OUT_DIR)/get.o $(OUT_DIR)/delete.o
 UTIL_INCS = -I/usr/local/include -I$(UTIL_DIR)
-# TODO: Delete LIB_DIR dep after kinetic_proto is yanked out of public API
 
 $(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
@@ -93,9 +113,19 @@ $(OUT_DIR)/get.o: $(UTIL_EX)/get.c
 $(OUT_DIR)/delete.o: $(UTIL_EX)/delete.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
 $(UTIL_EXEC): $(UTIL_DIR)/main.c $(UTIL_OBJS)
-	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS}  -l kinetic-c-client ${LDFLAGS}
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Building $(UTIL_EXEC) $(PROJECT) test utility \(statically linked\)
+	@echo --------------------------------------------------------------------------------
+	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} -l $(PROJECT) ${LDFLAGS}
+$(UTIL_EXEC_DYN): $(UTIL_DIR)/main.c $(UTIL_OBJS)
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Building $(UTIL_EXEC) $(PROJECT) test utility \(dynamically linked\)
+	@echo --------------------------------------------------------------------------------
+	${CC} -o $@ -L$(PREFIX) -l $(PROJECT).$(VERSION) $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
 
-utility: ${UTIL_EXEC}
+utility: ${UTIL_EXEC} ${UTIL_EXEC_DYN}
 
 # Configure to launch java simulator
 # JAVA=${JAVA_HOME}/bin/java
@@ -105,50 +135,78 @@ SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
 SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
 
 run: ${UTIL_EXEC}
-	sleep 2
-	echo Running Executable ${UTIL_EXEC}:
-	exec java -classpath "${CLASSPATH}" ${SIM_RUNNER} "$@" & > ./sim.log
-	sleep 5
-	exec java -classpath "${CLASSPATH}" ${SIM_ADMIN} -setup -erase true > ./erase.log
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Running $(UTIL_EXEC) $(PROJECT) test utility \(statically linked\)
+	@echo --------------------------------------------------------------------------------
+	@sleep 2
+	exec java -classpath "${CLASSPATH}" ${SIM_RUNNER} "$@" &
+	@sleep 5
+	exec java -classpath "${CLASSPATH}" ${SIM_ADMIN} -setup -erase true
 	${UTIL_EXEC} noop
 	${UTIL_EXEC} put
 	${UTIL_EXEC} get
 	${UTIL_EXEC} delete
 	exec pkill -f 'java.*kinetic-simulator'
 
-all: clean test default install run
-
-.PHONY: clean
+rund: ${UTIL_EXEC_DYN}
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Running $(UTIL_EXEC) $(PROJECT) test utility \(dynamically linked\)
+	@echo --------------------------------------------------------------------------------
+	@sleep 2
+	exec java -classpath "${CLASSPATH}" ${SIM_RUNNER} "$@" &
+	@sleep 5
+	exec java -classpath "${CLASSPATH}" ${SIM_ADMIN} -setup -erase true
+	${UTIL_EXEC_DYN} noop
+	${UTIL_EXEC_DYN} put
+	${UTIL_EXEC_DYN} get
+	${UTIL_EXEC_DYN} delete
+	exec pkill -f 'java.*kinetic-simulator'
 
 # Installation
-PREFIX ?= /usr/local
-INSTALL ?= install
-RM ?= rm
-
 install: ${KINETIC_LIB} ${KINETIC_SO} VERSION
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
+	@echo --------------------------------------------------------------------------------
+	@echo
+	@echo You may be prompted for your password in order to proceed.
+	@echo
 	${INSTALL} -d ${PREFIX}/lib/
 	${INSTALL} -c ${KINETIC_LIB} ${PREFIX}/lib/
 	${INSTALL} -c ${KINETIC_SO} ${PREFIX}/lib/
 	${INSTALL} -d ${PREFIX}/include/
-	${INSTALL} -c ./include/${LIB_NAME}.h ${PREFIX}/include/
+	${INSTALL} -c ./include/${API_NAME}.h ${PREFIX}/include/
 	${INSTALL} -c ./include/kinetic_types.h ${PREFIX}/include/
 	${INSTALL} -c ./src/lib/kinetic_proto.h ${PREFIX}/include/
 	${INSTALL} -d ${PREFIX}/include/protobuf-c
 	${INSTALL} -c ./vendor/protobuf-c/protobuf-c/protobuf-c.h ${PREFIX}/include/protobuf-c/
 
 uninstall:
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Uninstalling $(PROJECT) from $(PREFIX)
+	@echo --------------------------------------------------------------------------------
+	@echo
+	@echo You may be prompted for your password in order to proceed.
+	@echo
 	${RM} -f ${PREFIX}/lib/lib${PROJECT}*.a
 	${RM} -f ${PREFIX}/lib/lib${PROJECT}*.so
-	${RM} -f ${PREFIX}/include/${LIB_NAME}.h
+	${RM} -f ${PREFIX}/include/${PUBLIC_API}.h
 	${RM} -f ${PREFIX}/include/kinetic_types.h
 	${RM} -f ${PREFIX}/include/kinetic_proto.h
 	${RM} -f ${PREFIX}/include/protobuf-c/protobuf-c.h
 	${RM} -f ${PREFIX}/include/protobuf-c.h
 
+all: uninstall clean test default install run rund
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo $(PROJECT) build completed successfully!
+	@echo --------------------------------------------------------------------------------
+	@echo $(PROJECT) v$(VERSION) is in working order
+	@echo
 
 # Other dependencies
-$(BIN_DIR)/lib${PROJECT}.a: Makefile
+$(BIN_DIR)/lib${PROJECT}.a: Makefile Rakefile VERSION
 # kinetic-lib.o: kinetic_client.h kinetic_connection.h kinetic_hmac.h kinetic_logger.h kinetic_message.h kinetic_nbo.h kinetic_operation.h kinetic_pdu.h kinetic_proto.h kinetic_socket.h protobuf-c.h socket99.h
-
-
-
