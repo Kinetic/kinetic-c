@@ -1,3 +1,5 @@
+[![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](http://travis-ci.org/atomicobject/kinetic-c)
+
 Kinetic C Client Library
 ========================
 
@@ -11,8 +13,6 @@ Prerequisites
             * `> sudo apt-get install openssl`
         * OSX (using [Homebrew](http://brew.sh/))
             * `> brew install openssl`
-
-[![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](http://travis-ci.org/atomicobject/kinetic-c)
 
 Getting Started
 ---------------
