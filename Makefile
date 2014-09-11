@@ -78,7 +78,7 @@ $(OUT_DIR)/kinetic_operation.o: $(LIB_DIR)/kinetic_operation.c $(LIB_DEPS)
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PBC_INC)/protobuf-c/protobuf-c.c $(PBC_INC)/protobuf-c/protobuf-c.h
-	$(CC) -c -o $@ $< -std=c99 -g -Wall ${OPTIMIZE} -I$(PBC_INC)
+	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall ${OPTIMIZE} -I$(PBC_INC)
 $(OUT_DIR)/kinetic_types.o: $(LIB_DIR)/kinetic_types.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
