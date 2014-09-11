@@ -12,6 +12,8 @@ Prerequisites
         * OSX (using [Homebrew](http://brew.sh/))
             * `> brew install openssl`
 
+[![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](http://travis-ci.org/atomicobject/kinetic-c)
+
 Getting Started
 ---------------
 
