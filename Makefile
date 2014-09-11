@@ -72,7 +72,7 @@ $(KINETIC_LIB): $(LIB_OBJS)
 	ar -rcs $@ $(LIB_OBJS)
 	ar -t $@
 
-UTIL_OBJS = $(OUT_DIR)/noop.o $(OUT_DIR)/put.o $(OUT_DIR)/get.o
+UTIL_OBJS = $(OUT_DIR)/noop.o $(OUT_DIR)/put.o $(OUT_DIR)/get.o $(OUT_DIR)/delete.o
 UTIL_INCS = -I/usr/local/include -I$(UTIL_DIR)
 # TODO: Delete LIB_DIR dep after kinetic_proto is yanked out of public API
 LDFLAGS += -lm -l kinetic-c-client -l crypto -l ssl
@@ -82,6 +82,8 @@ $(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c
 $(OUT_DIR)/put.o: $(UTIL_EX)/put.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
 $(OUT_DIR)/get.o: $(UTIL_EX)/get.c
+	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
+$(OUT_DIR)/delete.o: $(UTIL_EX)/delete.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
 $(UTIL_EXEC): $(UTIL_DIR)/main.c $(UTIL_OBJS)
 	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
@@ -96,6 +98,7 @@ SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
 SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
 
 run: ${UTIL_EXEC}
+	sleep 2
 	echo Running Executable ${UTIL_EXEC}:
 	exec java -classpath "${CLASSPATH}" ${SIM_RUNNER} "$@" & > ./sim.log
 	sleep 5
@@ -103,6 +106,8 @@ run: ${UTIL_EXEC}
 	${UTIL_EXEC} noop
 	${UTIL_EXEC} put
 	${UTIL_EXEC} get
+	${UTIL_EXEC} delete
+	exec pkill -f 'java.*kinetic-simulator'
 
 all: clean test default install run
 

@@ -53,47 +53,47 @@
 // // } ProtobufCAllocator;
 
 
-// #define KINETIC_CONNECTION_INIT(_con, _id, _key) { \
-//     (*_con) = (KineticConnection) { \
-//         .socketDescriptor = -1, \
-//         .connectionID = time(NULL), \
-//         .identity = (_id), \
-//         .sequence = 0, \
-//     }; \
-//     (*_con).key = (ByteArray){.data = (*_con).keyData, .len = (_key).len}; \
-//     if ((_key).data != NULL && (_key).len > 0) { \
-//         memcpy((_con)->keyData, (_key).data, (_key).len); } \
+// #define KINETIC_CONNECTION_INIT(_con, _id, _key) {
+//     (*_con) = (KineticConnection) {
+//         .socketDescriptor = -1,
+//         .connectionID = time(NULL),
+//         .identity = (_id),
+//         .sequence = 0,
+//     };
+//     (*_con).key = (ByteArray){.data = (*_con).keyData, .len = (_key).len};
+//     if ((_key).data != NULL && (_key).len > 0) {
+//         memcpy((_con)->keyData, (_key).data, (_key).len); }
 // }
 
 
-// #define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) { \
-//     assert((void *)(_hdr) != NULL); \
-//     assert((void *)(_con) != NULL); \
-//     *(_hdr) = (KineticProto_Header) { \
-//         .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_header__descriptor), \
-//         .has_clusterVersion = true, \
-//         .clusterVersion = (_con)->clusterVersion, \
-//         .has_identity = true, \
-//         .identity = (_con)->identity, \
-//         .has_connectionID = true, \
-//         .connectionID = (_con)->connectionID, \
-//         .has_sequence = true, \
-//         .sequence = (_con)->sequence, \
-//     }; \
+// #define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) {
+//     assert((void *)(_hdr) != NULL);
+//     assert((void *)(_con) != NULL);
+//     *(_hdr) = (KineticProto_Header) {
+//         .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_header__descriptor),
+//         .has_clusterVersion = true,
+//         .clusterVersion = (_con)->clusterVersion,
+//         .has_identity = true,
+//         .identity = (_con)->identity,
+//         .has_connectionID = true,
+//         .connectionID = (_con)->connectionID,
+//         .has_sequence = true,
+//         .sequence = (_con)->sequence,
+//     };
 // }
-// #define KINETIC_MESSAGE_INIT(msg) { \
-//     KineticProto__init(&(msg)->proto); \
-//     KineticProto_command__init(&(msg)->command); \
-//     KineticProto_header__init(&(msg)->header); \
-//     KineticProto_status__init(&(msg)->status); \
-//     KineticProto_body__init(&(msg)->body); \
-//     KineticProto_key_value__init(&(msg)->keyValue); \
-//     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
-//     (msg)->proto.hmac.data = (msg)->hmacData; \
-//     (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; \
-//     (msg)->proto.has_hmac = true; \
-//     (msg)->command.header = &(msg)->header; \
-//     (msg)->proto.command = &(msg)->command; \
+// #define KINETIC_MESSAGE_INIT(msg) { 
+//     KineticProto__init(&(msg)->proto); 
+//     KineticProto_command__init(&(msg)->command); 
+//     KineticProto_header__init(&(msg)->header); 
+//     KineticProto_status__init(&(msg)->status); 
+//     KineticProto_body__init(&(msg)->body); 
+//     KineticProto_key_value__init(&(msg)->keyValue); 
+//     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); 
+//     (msg)->proto.hmac.data = (msg)->hmacData; 
+//     (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; 
+//     (msg)->proto.has_hmac = true; 
+//     (msg)->command.header = &(msg)->header; 
+//     (msg)->proto.command = &(msg)->command; 
 // }
 
 
@@ -101,29 +101,29 @@
 //     (KineticPDUHeader) {.versionPrefix = 'F'}
 
 
-// #define KINETIC_PDU_INIT(_pdu, _con) { \
-//     assert((void *)(_pdu) != NULL); \
-//     assert((void *)(_con) != NULL); \
-//     (_pdu)->connection = (_con); \
-//     (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
-//     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
-//     (_pdu)->value = BYTE_ARRAY_NONE; \
-//     (_pdu)->proto = &(_pdu)->protoData.message.proto; \
-//     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
+// #define KINETIC_PDU_INIT(_pdu, _con) {
+//     assert((void *)(_pdu) != NULL);
+//     assert((void *)(_con) != NULL);
+//     (_pdu)->connection = (_con);
+//     (_pdu)->header = KINETIC_PDU_HEADER_INIT;
+//     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT;
+//     (_pdu)->value = BYTE_ARRAY_NONE;
+//     (_pdu)->proto = &(_pdu)->protoData.message.proto;
+//     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con));
 // }
-// #define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) { \
-//     KINETIC_PDU_INIT((_pdu), (_con)) \
-//     KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
-//     (_pdu)->proto->command->header = &(_pdu)->protoData.message.header; \
-//     KINETIC_MESSAGE_HEADER_INIT(&(_pdu)->protoData.message.header, (_con)); \
+// #define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) {
+//     KINETIC_PDU_INIT((_pdu), (_con))
+//     KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message));
+//     (_pdu)->proto->command->header = &(_pdu)->protoData.message.header;
+//     KINETIC_MESSAGE_HEADER_INIT(&(_pdu)->protoData.message.header, (_con));
 // }
 
 
-// #define KINETIC_OPERATION_INIT(_op, _con, _req, _resp) \
-// *(_op) = (KineticOperation) { \
-//     .connection = (_con), \
-//     .request = (_req), \
-//     .response = (_resp), \
+// #define KINETIC_OPERATION_INIT(_op, _con, _req, _resp)
+// *(_op) = (KineticOperation) {
+//     .connection = (_con),
+//     .request = (_req),
+//     .response = (_resp),
 // }
 
 

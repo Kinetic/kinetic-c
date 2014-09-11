@@ -485,3 +485,48 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
 
     TEST_ASSERT_ByteArray_NONE(Request.value);
 }
+
+
+void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
+{
+    LOG_LOCATION;
+    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
+    const KineticKeyValue metadata = {
+        .key = key,
+    };
+
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
+
+    KineticOperation_BuildDelete(&Operation, &metadata);
+
+    // The `DELETE` operation removes the entry for a given key. It respects the 
+    // same locking behavior around `dbVersion` and `force` as described in the previous sections.
+    // The following request will remove a key value pair to the store.
+    //
+    // ```
+    // command {
+    //   // See top level cross cutting concerns for header details
+    //   header {
+    //     clusterVersion: ...
+    //     identity: ...
+    //     connectionID: ...
+    //     sequence: ...
+    //     // messageType should be DELETE
+    //     messageType: DELETE
+    TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_DELETE, Request.proto->command->header->messageType);
+    //   }
+    //   body {
+    //     keyValue {
+    //       key: "..."
+    //       // See write operation cross cutting concerns
+    //       synchronization: ...
+    //     }
+    //   }
+    // }
+    // hmac: "..."
+
+    TEST_ASSERT_ByteArray_NONE(Request.value);
+    TEST_ASSERT_ByteArray_NONE(Response.value);
+}

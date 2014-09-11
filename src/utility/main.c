@@ -28,6 +28,7 @@
 #include "examples/noop.h"
 #include "examples/put.h"
 #include "examples/get.h"
+#include "examples/delete.h"
 
 typedef struct _Arguments {
     char host[HOST_NAME_MAX];
@@ -229,6 +230,47 @@ int main(int argc, char** argv)
             else
             {
                 printf("\nGet operation failed! status=%d\n\n", status);
+                return -1;
+            }
+        }
+
+        else if (strcmp("delete", op) == 0)
+        {
+            KineticKeyValue metadata = {
+                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
+                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+                .dbVersion =  BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+            };
+
+            printf("\n"
+                   "Executing Delete w/configuration:\n"
+                   "-------------------------------\n"
+                   "  host: %s\n"
+                   "  port: %d\n"
+                   "  non-blocking: %s\n"
+                   "  clusterVersion: %lld\n"
+                   "  identity: %lld\n"
+                   "  hmacKey: '%s'\n",
+                cfg.host,
+                cfg.port,
+                cfg.nonBlocking ? "true" : "false",
+                (long long int)cfg.clusterVersion,
+                (long long int)cfg.identity,
+                (char*)hmacKey.data);
+
+            status = Delete(cfg.host, cfg.port, cfg.nonBlocking,
+                cfg.clusterVersion, cfg.identity, hmacKey,
+                &metadata);
+
+            if (status == 0)
+            {
+                printf("\nDelete executed successfully!\n\n");
+                return 0;
+            }
+            else
+            {
+                printf("\nDelete operation failed! status=%d\n\n", status);
                 return -1;
             }
         }

@@ -322,6 +322,7 @@ namespace :tests do
     'tests:utility:noop',
     'tests:utility:put',
     'tests:utility:get',
+    'tests:utility:delete',
   ]
 
   namespace :utility do
@@ -358,6 +359,15 @@ namespace :tests do
         execute_command "./kinetic-c put"
         execute_command "./kinetic-c get"
         execute_command "./kinetic-c --host localhost get"
+      end
+    end
+
+    task :delete => ['release', 'ruby_sim:shutdown'] do
+      java_sim_erase_drive
+      with_test_server("Testing Get operation") do
+        execute_command "./kinetic-c put"
+        execute_command "./kinetic-c get"
+        execute_command "./kinetic-c delete"
       end
     end
 
