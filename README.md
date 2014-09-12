@@ -1,7 +1,6 @@
 [![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](http://travis-ci.org/atomicobject/kinetic-c)
 Kinetic C Client Library
 ========================
-
 The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
 
 [Code examples](https://github.com/Seagate/kinetic-c/tree/master/src/utility/examples) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-client-utility`)](https://github.com/Seagate/kinetic-c/tree/master/src/utility), which builds and links against the installed `kinetic-c-client` static library.
@@ -19,7 +18,6 @@ Prerequisites
 
 Getting Started
 ---------------
-
 **Clone the repo**
     > git clone --recursive https://github.com/atomicobject/kinetic-c.git
     > cd kinetic-c
@@ -39,14 +37,12 @@ Getting Started
 
 API Documentation
 =================
-
 [Kinetic-C API Documentation](http://seagate.github.io/kinetic-c) (generated with Doxygen)
 * [Kinetic-C API](http://seagate.github.io/kinetic-c/kinetic__client_8h.html)
 * [Kinetic-C types](http://seagate.github.io/kinetic-c/kinetic__types_8h.html)
 
 Example Client/Test Utility
 ===========================
-
 Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.
 
 * 'kinetic-c-util' builds/links against installed Kinetic C static library (.a)
