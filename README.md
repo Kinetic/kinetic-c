@@ -1,5 +1,4 @@
 [![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](http://travis-ci.org/atomicobject/kinetic-c)
-
 Kinetic C Client Library
 ========================
 
@@ -8,8 +7,6 @@ The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) cont
 [Code examples](https://github.com/Seagate/kinetic-c/tree/master/src/utility/examples) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-client-utility`)](https://github.com/Seagate/kinetic-c/tree/master/src/utility), which builds and links against the installed `kinetic-c-client` static library.
 
 The [project Makefile](https://github.com/Seagate/kinetic-c/blob/master/Makefile) can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.
-
-[Kinetic-C build status](http://travis-ci.org/atomicobject/kinetic-c) is provided via [Travis CI](http://travis-ci.org)
 
 Prerequisites
 -------------
@@ -24,34 +21,21 @@ Getting Started
 ---------------
 
 **Clone the repo**
-
     > git clone --recursive https://github.com/atomicobject/kinetic-c.git
     > cd kinetic-c
     > bundle install # ensure you have all RubyGems at the proper versions
-
 **Update to the latest version (previously cloned)**
-
     > git pull
     > git submodule update --init # Ensure submodules are up to date
     > bundle install # Ensure you have all RubyGems at the proper versions
-
 **Build and install static library**
-
     > make
     > sudo make install
-
-**You can all clean and uninstall old versions**
-
+**Clean and uninstall old versions**
     > make clean
     > sudo uninstall
-
 **Build example utility and run tests against Kinetic Device simulator**
-
     > make all # this is what Travis-CI build does to ensure it all keeps working
-
-**Uninstall, perform a full clean build with test, and validate with utility**
-
-    > make all # this is what Travis CI does
 
 API Documentation
 =================
