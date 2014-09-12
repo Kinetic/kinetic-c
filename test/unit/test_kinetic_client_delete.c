@@ -76,6 +76,7 @@ void test_KineticClient_Delete_should_execute_DELETE_operation(void)
     ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
     KineticKeyValue metadata = {
         .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
+        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.3")
     };
     KINETIC_PDU_INIT(&Request, &connection);
     Response.protoData.message.proto.command = &responseCommand;
