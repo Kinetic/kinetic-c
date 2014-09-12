@@ -125,7 +125,8 @@ $(UTIL_EXEC_DYN): $(UTIL_DIR)/main.c $(UTIL_OBJS)
 	@echo --------------------------------------------------------------------------------
 	${CC} -o $@ -L$(PREFIX) -l $(PROJECT).$(VERSION) $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
 
-utility: ${UTIL_EXEC} ${UTIL_EXEC_DYN}
+# utility: ${UTIL_EXEC} ${UTIL_EXEC_DYN}
+utility: ${UTIL_EXEC}
 
 # Configure to launch java simulator
 # JAVA=${JAVA_HOME}/bin/java
