@@ -23,16 +23,10 @@
 
 #include "kinetic_types_internal.h"
 
-bool KineticConnection_Connect(KineticConnection* connection,
-    const char* host,
-    int port,
-    bool nonBlocking,
-    int64_t clusterVersion,
-    int64_t identity,
-    const ByteArray key);
-
+KineticConnection* KineticConnection_NewConnection(KineticSession* session);
+void KineticConnection_FreeConnection(KineticSession* session);
+bool KineticConnection_Connect(KineticConnection* const connection);
 void KineticConnection_Disconnect(KineticConnection* const connection);
-
 void KineticConnection_IncrementSequence(KineticConnection* const connection);
 
 #endif // _KINETIC_CONNECTION_H

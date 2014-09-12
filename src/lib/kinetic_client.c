@@ -28,43 +28,50 @@
 #include "kinetic_logger.h"
 #include <stdio.h>
 
-KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation);
-
-void KineticClient_Init(const char* logFile)
+static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 {
-    KineticLogger_Init(logFile);
+    KineticStatus status = KINETIC_STATUS_INVALID;
+
+    // Send the request
+    if (KineticPDU_Send(operation->request))
+    {
+        // Associate response with same exchange as request
+        operation->response->connection = operation->request->connection;
+
+        // Receive the response
+        if (KineticPDU_Receive(operation->response))
+        {
+            status = KineticOperation_GetStatus(operation);
+        }
+    }
+
+    return status;
 }
 
-bool KineticClient_Connect(KineticConnection* connection,
-    const char* host,
-    int port,
-    bool nonBlocking,
-    int64_t clusterVersion,
-    int64_t identity,
-    ByteArray hmacKey)
+int KineticClient_Connect(KineticSession* session)
 {
-    if (connection == NULL)
+    if (session == NULL)
     {
-        LOG("Specified KineticConnection is NULL!");
-        return false;
+        LOG("Specified KineticSession is NULL!");
+        return -1;
     }
 
-    if (host == NULL)
+    if (strlen(session.host) == 0)
     {
-        LOG("Specified host is NULL!");
-        return false;
+        LOG("Session host is empty!");
+        return -1;
     }
 
-    if (hmacKey.len < 1)
+    if (session.hmacKey.len < 1)
     {
         LOG("Specified HMAC key is empty!");
-        return false;
+        return -1;
     }
 
-    if (hmacKey.data == NULL)
+    if (session.hmacKey.data == NULL)
     {
         LOG("Specified HMAC key is NULL!");
-        return false;
+        return -1;
     }
 
     if (!KineticConnection_Connect(connection, host, port, nonBlocking,
@@ -75,7 +82,7 @@ bool KineticClient_Connect(KineticConnection* connection,
         char message[64];
         sprintf(message, "Failed creating connection to %s:%d", host, port);
         LOG(message);
-        return false;
+        return -1;
     }
 
     connection->connected = true;
@@ -212,26 +219,6 @@ KineticStatus KineticClient_Delete(KineticOperation* operation,
     // Zero out value length for all DELETE operations
     operation->response->value.len = 0;
     metadata->value.len = 0;
-
-    return status;
-}
-
-KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
-{
-    KineticStatus status = KINETIC_STATUS_INVALID;
-
-    // Send the request
-    if (KineticPDU_Send(operation->request))
-    {
-        // Associate response with same exchange as request
-        operation->response->connection = operation->request->connection;
-
-        // Receive the response
-        if (KineticPDU_Receive(operation->response))
-        {
-            status = KineticOperation_GetStatus(operation);
-        }
-    }
 
     return status;
 }

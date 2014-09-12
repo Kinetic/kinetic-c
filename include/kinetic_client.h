@@ -24,63 +24,37 @@
 #include "kinetic_types.h"
 
 /**
- * Initializes the Kinetic API andcsonfigures logging destination.
+ * Initializes the Kinetic API, configures logging destination, establishes a
+ * connection to the specified Kinetic Device, and establishes a session.
  *
- * @param logFile Path to log file. Specify NULL to log to STDOUT.
+ * @session Session instance to configure with connection info
+ *  .host           Host name or IP address to connect to
+ *  .port           Port to establish socket connection on
+ *  .nonBlocking    Set to true for non-blocking or false for blocking I/O
+ *  .clusterVersion Cluster version to use for the session
+ *  .identity       Identity to use for the session
+ *  .hmacKey        Key to use for HMAC calculations (NULL-terminated string)
+ *  .logFile        Path to log file. Defaults to STDOUT if unspecified
+ *
+ * @return          Returns 0 upon succes, -1 or Kinetic status upon failure
  */
-void KineticClient_Init(const char* logFile);
+int KineticClient_Connect(KineticSession* session);
 
 /**
- * @brief Configures the session and establishes a socket connection to a Kinetic Device
+ * @brief Closes the connection to a host.
  *
- * @param connection        KineticConnection instance to configure with connection info
- * @param host              Host name or IP address to connect to
- * @param port              Port to establish socket connection on
- * @param nonBlocking       Set to true for non-blocking or false for blocking I/O
- * @param clusterVersion    Cluster version to use for the session
- * @param identity          Identity to use for the session
- * @param hmacKey           Key to use for HMAC calculations
- *
- * @return                  Returns true if connection succeeded
+ * @param session   KineticSession instance to terminate
  */
-bool KineticClient_Connect(KineticConnection* connection,
-    const char* host,
-    int port,
-    bool nonBlocking,
-    int64_t clusterVersion,
-    int64_t identity,
-    ByteArray hmacKey);
-
-/**
- * @brief Closes the socket connection to a host.
- *
- * @param connection    KineticConnection instance
- */
-void KineticClient_Disconnect(KineticConnection* connection);
-
-/**
- * @brief Creates and initializes a Kinetic operation.
- *
- * @param connection    KineticConnection instance to associate with operation
- * @param request       KineticPDU instance to use for request
- * @param response      KineticPDU instance to use for reponse
- *
- * @return              Returns a configured operation instance
- */
-KineticOperation KineticClient_CreateOperation(
-    KineticConnection* connection,
-    KineticPDU* request,
-    KineticPDU* response);
+void KineticClient_Disconnect(KineticSession* session);
 
 /**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational
  *
  * @param operation     KineticOperation instance to use for the operation
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code
- *                      upon failure
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
  */
-KineticStatus KineticClient_NoOp(KineticOperation* operation);
+Kinetic_Status KineticClient_NoOp(KineticSession* session);
 
 /**
  * @brief Executes a PUT command to store/update an entry on the Kinetic Device
@@ -92,21 +66,8 @@ KineticStatus KineticClient_NoOp(KineticOperation* operation);
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
-KineticStatus KineticClient_Put(KineticOperation* operation,
-    const KineticKeyValue* metadata);
-
-/**
- * @brief Executes a GET command to retrieve and entry from the Kinetic Device
- *
- * @param operation     KineticOperation instance to use for the operation
- * @param metadata      Key/value metadata for object to retrieve. 'value' will
- *                      be populated unless 'metadataOnly' is set to 'true'
- *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code
- *                      upon failure
- */
-KineticStatus KineticClient_Get(KineticOperation* operation,
-    KineticKeyValue* metadata);
+Kinetic_Status KineticClient_Put(KineticSession* session,
+    const Kinetic_KeyValue* metadata);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
@@ -118,7 +79,7 @@ KineticStatus KineticClient_Get(KineticOperation* operation,
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
-KineticStatus KineticClient_Delete(KineticOperation* operation,
+KineticStatus KineticClient_Delete(KineticSession* session,
     KineticKeyValue* metadata);
 
 #endif // _KINETIC_CLIENT_H

@@ -22,9 +22,43 @@
 #include "kinetic_socket.h"
 #include <string.h>
 
-bool KineticConnection_Connect(KineticConnection* const connection,
-    const char* host, int port, bool nonBlocking,
-    int64_t clusterVersion, int64_t identity, const ByteArray key)
+
+static KineticConnection ConnectionInstances[KINETIC_SESSIONS_MAX];
+static KineticConnection* Connections[KINETIC_SESSIONS_MAX];
+
+
+KineticConnection* KineticConnection_NewConnection(KineticSession* session)
+{
+    assert(session);
+    session->handle = KINETIC_SESSION_INVALID;
+    for (int handle = 1; handle <= KINETIC_SESSIONS_MAX; handle++)
+    {
+        if (Connections[handle-1] == NULL)
+        {
+            Connections[handle-1] = &ConnectionInstances[handle-1];
+            session->handle = handle;
+            *Connections[handle-1] = (KineticConnection){.session = session};
+            return Connections[handle-1];
+        }
+    }
+    return NULL;
+}
+
+void KineticConnection_FreeConnection(KineticSession* session)
+{
+    assert(session);
+    assert(session->handle > KINETIC_SESSION_INVALID);
+    assert(session->handle <= KINETIC_SESSIONS_MAX);
+    if (Connections[session->handle-1] != NULL)
+    {
+        *Connections[handle-1] = {.session = KINETIC_SESSION_INVALID};
+        Connections[handle-1] = NULL;
+    }
+    session->handle = KINETIC_SESSION_INVALID;
+}
+
+
+bool KineticConnection_Connect(KineticConnection* const connection)
 {
     connection->connected = false;
     connection->nonBlocking = nonBlocking;
