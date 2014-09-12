@@ -175,7 +175,7 @@ install: ${KINETIC_LIB} ${KINETIC_SO} VERSION
 	@echo
 	${INSTALL} -d ${PREFIX}/lib/
 	${INSTALL} -c ${KINETIC_LIB} ${PREFIX}/lib/
-	${INSTALL} -c ${KINETIC_SO} ${PREFIX}/lib/
+	# ${INSTALL} -c ${KINETIC_SO} ${PREFIX}/lib/
 	${INSTALL} -d ${PREFIX}/include/
 	${INSTALL} -c ./include/${API_NAME}.h ${PREFIX}/include/
 	${INSTALL} -c ./include/kinetic_types.h ${PREFIX}/include/
@@ -199,7 +199,8 @@ uninstall:
 	${RM} -f ${PREFIX}/include/protobuf-c/protobuf-c.h
 	${RM} -f ${PREFIX}/include/protobuf-c.h
 
-all: uninstall clean test default install run rund
+# all: uninstall clean test default install run rund
+all: uninstall clean test default install run
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!

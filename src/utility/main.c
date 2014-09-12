@@ -241,6 +241,7 @@ int main(int argc, char** argv)
                 .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
                 .dbVersion =  BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
                 .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+                .metadataOnly = false,
             };
 
             printf("\n"

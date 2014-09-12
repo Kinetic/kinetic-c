@@ -97,7 +97,7 @@
 // }
 
 
-// #define KINETIC_PDU_HEADER_INIT \
+// #define KINETIC_PDU_HEADER_INIT
 //     (KineticPDUHeader) {.versionPrefix = 'F'}
 
 
