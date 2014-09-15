@@ -51,6 +51,7 @@ static int FileDesc;
 static int KineticTestPort = KINETIC_PORT;
 static ByteArray TestData;
 static bool LogInitialized = false;
+static KineticPDU PDU;
 
 void setUp(void)
 {
@@ -74,6 +75,7 @@ void tearDown(void)
 }
 
 
+#if 0
 void test_KineticSocket_KINETIC_PORT_should_be_8123(void) {LOG_LOCATION;
     TEST_ASSERT_EQUAL(8123, KINETIC_PORT);
 }
@@ -83,12 +85,14 @@ void test_KineticSocket_Connect_should_create_a_socket_connection(void) {LOG_LOC
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }
+#endif
 
 
 // Disabling socket read/write tests in not OSX, since Linux TravisCI builds
 // fail, but system test passes. Most likely an issue with KineticRuby server
 #if defined(__APPLE__)
 
+#if 0
 void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void)
 {   LOG_LOCATION;
     bool success = false;
@@ -109,9 +113,6 @@ void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void
     KineticSocket_Read(FileDesc, buffer);
 }
 
-
-
-static KineticPDU PDU;
 
 void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_specified_socket(void)
 {
@@ -184,6 +185,7 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
     TEST_ASSERT_FALSE_MESSAGE(success,
         "Expected socket to timeout waiting on data!");
 }
+#endif
 
 void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
 {
@@ -198,12 +200,8 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     connection.session = &session;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &connection);
     KineticMessage_Init(&PDU.protoData.message);
-    PDU.header.protobufLength = KineticProto__get_packed_size(PDU.proto);
 
     const ByteArray readRequest = BYTE_ARRAY_INIT_FROM_CSTRING("readProto()");
-    // uint8_t bufferData[PDU_VALUE_MAX_LEN];
-    // size_t expectedLength = 125; // This would normally be extracted from the PDU header
-    // ByteArray buffer = {.data = bufferData, .len = expectedLength};
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
@@ -213,9 +211,10 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     TEST_ASSERT_TRUE(success);
 
     // Receive the response
+    PDU.header.protobufLength = 125;
     success = KineticSocket_ReadProtobuf(FileDesc, &PDU);
 
-    TEST_IGNORE_MESSAGE("Need to figure out why unpacking dummy protobuf is failing.");
+    TEST_IGNORE_MESSAGE("Need to figure out why unpack is failing for this test.");
 
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT_NOT_NULL_MESSAGE(PDU.proto,
@@ -232,6 +231,7 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     LOG("Kinetic ProtoBuf read successfully!");
 }
 
+#if 0
 void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_specified_length_fails_to_be_read_within_timeout(void)
 {
     LOG_LOCATION;
@@ -245,12 +245,8 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     connection.session = &session;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &connection);
     KineticMessage_Init(&PDU.protoData.message);
-    PDU.header.protobufLength = KineticProto__get_packed_size(PDU.proto);
 
     ByteArray readRequest = BYTE_ARRAY_INIT_FROM_CSTRING("readProto()");
-    uint8_t bufferData[256];
-    size_t expectedLength = 150;
-    // ByteArray buffer = {.data = bufferData, .len = expectedLength};
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
@@ -259,28 +255,12 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     success = KineticSocket_Write(FileDesc, readRequest);
     TEST_ASSERT_TRUE(success);
 
-    // Receive the dummy protobuf response
+    // Receive the dummy protobuf response, but expect too much data
+    // to force timeout
+    PDU.header.protobufLength = 1000;
     success = KineticSocket_ReadProtobuf(FileDesc, &PDU);
     TEST_ASSERT_FALSE_MESSAGE(success, "Expected timeout!");
-    TEST_ASSERT_NULL_MESSAGE(PDU.proto,
-        "Protobuf pointer should not have gotten set, "
-        "since no memory allocated.");
-
-    // TEST_IGNORE_MESSAGE("Need to figure out why unpacking dummy protobuf is failing.");
-
-    TEST_ASSERT_TRUE(success);
-    TEST_ASSERT_NOT_NULL_MESSAGE(PDU.proto,
-        "Protobuf pointer was NULL, but expected dynamic memory allocation!");
-    LOG( "Received Kinetic protobuf:");
-    LOGF("  command: (0x%zX)", (size_t)PDU.proto->command);
-    LOGF("    header: (0x%zX)", (size_t)PDU.proto->command->header);
-    LOGF("      identity: %016llX",
-        (unsigned long long)PDU.proto->command->header->identity);
-    ByteArray hmacArray = {
-        .data = PDU.proto->hmac.data, .len = PDU.proto->hmac.len};
-    KineticLogger_LogByteArray("  hmac", hmacArray);
-
-    LOG("Kinetic ProtoBuf read successfully!");
 }
+#endif
 
 #endif // defined(__APPLE__)

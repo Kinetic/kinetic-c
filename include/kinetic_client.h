@@ -54,7 +54,7 @@ void KineticClient_Disconnect(KineticSession* session);
  *
  * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
  */
-Kinetic_Status KineticClient_NoOp(KineticSession* session);
+KineticStatus KineticClient_NoOp(KineticSession* session);
 
 /**
  * @brief Executes a PUT command to store/update an entry on the Kinetic Device
@@ -66,8 +66,8 @@ Kinetic_Status KineticClient_NoOp(KineticSession* session);
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
-Kinetic_Status KineticClient_Put(KineticSession* session,
-    const Kinetic_KeyValue* metadata);
+KineticStatus KineticClient_Put(KineticSession* session,
+    const KineticKeyValue* metadata);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device

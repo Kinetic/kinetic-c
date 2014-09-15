@@ -46,9 +46,11 @@
 
 static void* KineticProto_Alloc(void* buf, size_t size)
 {
-    // LOG_LOCATION; LOGF(">>>> Allocating %zu bytes...", size);
-    void *res = NULL;
+    LOG_LOCATION;
     ByteBuffer* p = (ByteBuffer*)buf;
+    LOGF(">>>> Allocating %zu bytes; used=%zu, len=%zu",
+        size, p->bytesUsed, p->array.len);
+    void *res = NULL;
     if ((size > 0) && (p->bytesUsed + size <= p->array.len))
     {
         // Allocate from the end of the buffer
@@ -60,6 +62,12 @@ static void* KineticProto_Alloc(void* buf, size_t size)
         // Align to next long boundary after requested size + NULL terminator
         p->bytesUsed += (size + 1 + sizeof(long)) & ~(sizeof(long) - 1);
     }
+    else
+    {
+        LOGF("Failed allocating protobuf element! used=%zu, len=%zu",
+            p->bytesUsed, p->array.len);
+    }
+    LOGF(">>>>>>>>addr: 0x%llX", (unsigned long long)res);
     return res;
 }
  
@@ -258,7 +266,13 @@ bool KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
         LOG("Read completed!");
 
         // Protobuf-C allocator to use for received data
-        ByteBuffer recvBuffer = BYTE_BUFFER_INIT(recvArray);
+        ByteBuffer recvBuffer = {
+            .array = (ByteArray) {
+                .data = pdu->protobufRaw,
+                .len = PDU_VALUE_MAX_LEN,
+            },
+            .bytesUsed = 0,
+        };
         ProtobufCAllocator serialAllocator = {
             KineticProto_Alloc,
             KineticProto_Free,

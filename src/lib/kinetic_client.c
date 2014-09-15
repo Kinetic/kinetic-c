@@ -28,8 +28,7 @@
 #include "kinetic_logger.h"
 #include <stdio.h>
 
-
-
+#if 0
 static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
@@ -49,6 +48,7 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 
     return status;
 }
+#endif
 
 int KineticClient_Connect(KineticSession* session)
 {
@@ -58,25 +58,25 @@ int KineticClient_Connect(KineticSession* session)
         return -1;
     }
 
-    if (strlen(session.host) == 0)
+    if (strlen(session->host) == 0)
     {
         LOG("Session host is empty!");
         return -1;
     }
 
-    if (session.hmacKey.len < 1)
+    if (session->hmacKey.len < 1)
     {
         LOG("Specified HMAC key is empty!");
         return -1;
     }
 
-    if (session.hmacKey.data == NULL)
+    if (session->hmacKey.data == NULL)
     {
         LOG("Specified HMAC key is NULL!");
         return -1;
     }
 
-    KineticConnection connection = KineticConnection_NewConnection(session);
+    KineticConnection* connection = KineticConnection_NewConnection(session);
     if (connection == NULL)
     {
         LOG("Failed connecting to device (connection is NULL)!");
@@ -93,10 +93,11 @@ int KineticClient_Connect(KineticSession* session)
     return 0;
 }
 
-void KineticClient_Disconnect(KineticConnection* connection)
+void KineticClient_Disconnect(KineticSession* session)
 {
-   KineticConnection_Disconnect(connection);
-   KineticConnection_FreeConnection(connection->session);
+    (void)session;
+    // KineticConnection_Disconnect(connection);
+    // KineticConnection_FreeConnection(connection->session);
 }
 
 /**
@@ -144,7 +145,8 @@ KineticOperation KineticClient_CreateOperation(KineticConnection* connection,
     return op;
 }
 
-KineticStatus KineticClient_NoOp(KineticOperation* operation)
+#if 0
+KineticStatus KineticClient_NoOp(KineticOperation* session)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
@@ -235,4 +237,5 @@ KineticStatus KineticClient_Delete(KineticOperation* operation,
 
     return status;
 }
+#endif
 
