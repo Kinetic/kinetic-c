@@ -155,8 +155,8 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
 }
 
 #define BYTES_TO_CSTRING(_buf_start, _array, _array_start, _count) { \
-    char* p_buf = (_buf_start); \
-    KineticLogger_ByteArraySliceToCString(p_buf, (_array), 0, _array.len); \
+    ByteArray key = {.data = _array.data, .len = _array.len}; \
+    KineticLogger_ByteArraySliceToCString((char*)(_buf_start), key, 0, key.len); \
 }
 
 void KineticLogger_LogProtobuf(const KineticProto* proto)
@@ -240,8 +240,8 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                         if (proto->command->body->keyValue->has_key)
                         {
                             BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->key,
-                                0, proto->command->body->keyValue->key.len);
+                                proto->command->body->keyValue->key, 0,
+                                proto->command->body->keyValue->key.len);
                             LOGF("%skey: '%s'", _indent, tmpBuf);
                         }
                         if (proto->command->body->keyValue->has_newVersion)

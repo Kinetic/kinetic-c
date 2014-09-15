@@ -25,12 +25,12 @@
 #include "kinetic_message.h"
 
 int KineticSocket_Connect(char* host, int port, bool nonBlocking);
-void KineticSocket_Close(int socketDescriptor);
+void KineticSocket_Close(int socket);
 
-bool KineticSocket_Read(int socketDescriptor, ByteArray buffer);
-bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticPDU* pdu);
+bool KineticSocket_Read(int socket, ByteArray dest);
+bool KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu);
 
-bool KineticSocket_Write(int socketDescriptor, ByteArray buffer);
-bool KineticSocket_WriteProtobuf(int socketDescriptor, KineticPDU* pdu);
+bool KineticSocket_Write(int socket, ByteArray src);
+bool KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu);
 
 #endif // _KINETIC_SOCKET_H

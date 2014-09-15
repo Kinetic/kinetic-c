@@ -49,11 +49,16 @@ static void* KineticProto_Alloc(void* buf, size_t size)
     // LOG_LOCATION; LOGF(">>>> Allocating %zu bytes...", size);
     void *res = NULL;
     ByteBuffer* p = (ByteBuffer*)buf;
-    if ((size > 0) && (p->buffer.len + size <= PDU_PROTO_MAX_UNPACKED_LEN))
+    if ((size > 0) && (p->bytesUsed + size <= p->array.len))
     {
-        res = (void*)&p->buffer.data[p->buffer.len];
-        p->buffer.data[p->buffer.len + size] = '\0';
-        p->buffer.len += (size + 1 + sizeof(long) - 1) & ~(sizeof(long) - 1); // Align to next long boundary
+        // Allocate from the end of the buffer
+        res = (void*)&p->array.data[p->bytesUsed];
+
+        // Append NULL terminator to protect from access violation if abused as a string
+        p->array.data[p->bytesUsed + size] = '\0';
+
+        // Align to next long boundary after requested size + NULL terminator
+        p->bytesUsed += (size + 1 + sizeof(long)) & ~(sizeof(long) - 1);
     }
     return res;
 }
@@ -62,9 +67,8 @@ static void KineticProto_Free(void* buf, void* ignored)
 {
     (void)ignored; // to eliminate unused parameter warning
     ByteBuffer* p = (ByteBuffer*)buf;
-    p->buffer.len = 0;
+    p->bytesUsed = 0;
 }
-
 
 
 int KineticSocket_Connect(char* host, int port, bool nonBlocking)
@@ -157,16 +161,16 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
     return result.fd;
 }
 
-void KineticSocket_Close(int socketDescriptor)
+void KineticSocket_Close(int socket)
 {
-    if (socketDescriptor == -1)
+    if (socket == -1)
     {
         LOG("Not connected so no cleanup needed");
     }
     else
     {
-        LOGF("Closing socket with fd=%d", socketDescriptor);
-        if (close(socketDescriptor) == 0)
+        LOGF("Closing socket with fd=%d", socket);
+        if (close(socket) == 0)
         {
             LOG("Socket closed successfully");
         }
@@ -174,20 +178,19 @@ void KineticSocket_Close(int socketDescriptor)
         {
             LOGF("Error closing socket file descriptor!"
                 " (fd=%d, errno=%d, desc='%s')",
-                socketDescriptor, errno, strerror(errno));
+                socket, errno, strerror(errno));
         }
     }
 }
 
-bool KineticSocket_Read(int socketDescriptor,
-    ByteArray buffer)
+bool KineticSocket_Read(int socket, ByteArray dest)
 {
+    ByteBuffer buff = BYTE_BUFFER_INIT(dest);
+
     LOGF("Reading %zd bytes into buffer @ 0x%zX from fd=%d",
-        buffer.len, (size_t)buffer.data, socketDescriptor);
+        buff.array.len, (size_t)buff.array.data, socket);
 
-    size_t count;
-
-    for (count = 0; count < buffer.len; )
+    while(buff.bytesUsed < buff.array.len)
     {
         int status;
         fd_set readSet;
@@ -198,8 +201,8 @@ bool KineticSocket_Read(int socketDescriptor,
         timeout.tv_usec = 0;
 
         FD_ZERO(&readSet);
-        FD_SET(socketDescriptor, &readSet);
-        status = select(socketDescriptor+1, &readSet, NULL, NULL, &timeout);
+        FD_SET(socket, &readSet);
+        status = select(socket+1, &readSet, NULL, NULL, &timeout);
 
         if (status < 0) // Error occurred
         {
@@ -216,8 +219,9 @@ bool KineticSocket_Read(int socketDescriptor,
         else if (status > 0) // Data available to read
         {
             // The socket is ready for reading
-            status = read(socketDescriptor, &buffer.data[count],
-                buffer.len - count);
+            status = read(socket,
+                &buff.array.data[buff.bytesUsed],
+                buff.array.len - buff.bytesUsed);
             if (status == -1 && errno == EINTR)
             {
                 continue;
@@ -231,18 +235,17 @@ bool KineticSocket_Read(int socketDescriptor,
             }
             else
             {
-                count += status;
+                buff.bytesUsed += status;
                 LOGF("Received %d bytes (%zd of %zd)",
-                    status, count, buffer.len);
+                    status, buff.bytesUsed, buff.array.len);
             }
         }
     }
-    LOGF("Received %zd of %zd bytes requested", count, buffer.len);
+    LOGF("Received %zd of %zd bytes requested", buff.bytesUsed, buff.array.len);
     return true;
 }
 
-bool KineticSocket_ReadProtobuf(int socketDescriptor,
-    KineticPDU* pdu)
+bool KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
 {
     LOGF("Reading %zd bytes of protobuf", pdu->header.protobufLength);
     ByteArray recvArray = {
@@ -250,14 +253,12 @@ bool KineticSocket_ReadProtobuf(int socketDescriptor,
         .len = pdu->header.protobufLength
     };
 
-    if (KineticSocket_Read(socketDescriptor, recvArray))
+    if (KineticSocket_Read(socket, recvArray))
     {
         LOG("Read completed!");
 
-        ByteBuffer recvBuffer = BYTE_BUFFER_INIT(pdu->protoData.buffer,
-            PDU_PROTO_MAX_UNPACKED_LEN);
-
         // Protobuf-C allocator to use for received data
+        ByteBuffer recvBuffer = BYTE_BUFFER_INIT(recvArray);
         ProtobufCAllocator serialAllocator = {
             KineticProto_Alloc,
             KineticProto_Free,
@@ -265,7 +266,7 @@ bool KineticSocket_ReadProtobuf(int socketDescriptor,
         };
 
         KineticProto* unpacked = KineticProto__unpack(&serialAllocator,
-            recvArray.len, recvArray.data);
+            recvBuffer.array.len, recvBuffer.array.data);
         if (unpacked == NULL)
         {
             LOG("Error unpacking incoming Kinetic protobuf message!");
@@ -280,14 +281,13 @@ bool KineticSocket_ReadProtobuf(int socketDescriptor,
     return false;
 }
 
-bool KineticSocket_Write(int socketDescriptor,
-    ByteArray buffer)
+bool KineticSocket_Write(int socket, ByteArray src)
 {
-    LOGF("Writing %zu bytes to socket...", buffer.len);
-    for (size_t count = 0; count < buffer.len; )
+    LOGF("Writing %zu bytes to socket...", src.len);
+    for (size_t count = 0; count < src.len; )
     {
-        int status = write(socketDescriptor,
-            &buffer.data[count], buffer.len - count);
+        int status = write(socket,
+            &src.data[count], src.len - count);
         if (status == -1 && errno == EINTR)
         {
             LOG("Write interrupted. retrying...");
@@ -303,7 +303,7 @@ bool KineticSocket_Write(int socketDescriptor,
         {
             count += status;
             LOGF("Wrote %d bytes (%zu of %zu sent)",
-                status, count, buffer.len);
+                status, count, src.len);
         }
     }
     LOG("Write complete");
@@ -311,8 +311,7 @@ bool KineticSocket_Write(int socketDescriptor,
     return true;
 }
 
-bool KineticSocket_WriteProtobuf(int socketDescriptor,
-    KineticPDU* pdu)
+bool KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
 {
     assert(pdu != NULL);
     LOGF("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
@@ -321,5 +320,5 @@ bool KineticSocket_WriteProtobuf(int socketDescriptor,
     assert(len == pdu->header.protobufLength);
     ByteArray buffer = {.data = pdu->protobufRaw, .len = len};
 
-    return KineticSocket_Write(socketDescriptor, buffer);
+    return KineticSocket_Write(socket, buffer);
 }

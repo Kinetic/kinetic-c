@@ -53,9 +53,24 @@
     #define HOST_NAME_MAX 256
 #endif // HOST_NAME_MAX
 
+#ifndef LOG_FILE_NAME_MAX
+#define LOG_FILE_NAME_MAX (HOST_NAME_MAX)
+#endif
+
 #include <time.h>
 
-typedef ProtobufCBinaryData ByteArray;
+/**
+ * @brief Structure for handling generic arrays of bytes
+ *
+ * The data contained in a `ByteArray` is an arbitrary sequence of
+ * bytes. It may contain embedded `NULL` characters and is not required to be
+ * `NULL`-terminated.
+ */
+typedef struct _ByteArray {
+    size_t  len;    /**< Number of bytes in the `data` field. */
+    uint8_t *data;  /**< Pointer to an allocated array of data bytes. */
+} ByteArray;
+
 #define BYTE_ARRAY_NONE \
     (ByteArray){.len = 0, .data = NULL}
 #define BYTE_ARRAY_INIT(_data) (ByteArray) \
@@ -75,12 +90,15 @@ typedef ProtobufCBinaryData ByteArray;
 
 typedef struct
 {
-    ByteArray   buffer;
-    size_t      maxLen;
+    ByteArray   array;
+    size_t      bytesUsed;
 } ByteBuffer;
-#define BYTE_BUFFER_INIT(_buf, _max) (ByteBuffer) { \
-    .buffer = {.data = (uint8_t*)(_buf), .len = 0}, \
-    .maxLen = sizeof(_buf) }
+#define BYTE_BUFFER_INIT(_array) (ByteBuffer) { \
+    .array = (ByteArray) { \
+        .data = (_array).data, \
+        .len = (_array).len }, \
+    .bytesUsed = 0, \
+}
 
 
 typedef enum _KineticAlgorithm {
@@ -105,15 +123,21 @@ typedef enum _KineticSynchronization {
 #define SESSION_HANDLE_INVALID (0)
 typedef struct _KineticSession
 {
-    int     handle;
+    // Log file name (uses stdout if empty)
+    char    logFile[LOG_FILE_NAME_MAX];
+
+    // Set to true to enable non-blocking/asynchronous I/O
     bool    nonBlocking;
+
+    // Port for Kinetic Device session
     int     port;
+
+    // Host name/IP address of Kinetic Device
     char    host[HOST_NAME_MAX];
-    char    logFile[LOG_FILE_NAME_MAX],
 
     // The version number of this cluster definition. If this is not equal to
-    // the value on the device, the request is rejected and will return a
-    // `VERSION_FAILURE` `statusCode` in the `Status` message.
+    // the value on the Kinetic Device, the request is rejected and will return
+    // `KINETIC_STATUS_VERSION_FAILURE`
     int64_t clusterVersion;
 
     // The identity associated with this request. See the ACL discussion above.
@@ -125,6 +149,9 @@ typedef struct _KineticSession
     // client and the device, used to sign requests.
     uint8_t keyData[KINETIC_MAX_KEY_LEN];
     ByteArray hmacKey;
+
+    // Session instance handle (0 = none/invalid session)
+    int     handle;
 } KineticSession;
 
 

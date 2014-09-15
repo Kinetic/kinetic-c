@@ -29,7 +29,8 @@ void KineticMessage_Init(KineticMessage* const message)
 // e.g. CONFIG_FIELD_BYTE_ARRAY(key, message->keyValue, metadata)
 #define CONFIG_FIELD_BYTE_ARRAY(_name, _field, _config) { \
     if (_config->_name.data != NULL && _config->_name.len > 0) { \
-        _field._name = _config->_name; \
+        _field._name.data = _config->_name.data; \
+        _field._name.len = _config->_name.len; \
         _field.has_ ## _name = true; \
     } \
 }
@@ -58,9 +59,14 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     CONFIG_FIELD_BYTE_ARRAY(dbVersion, message->keyValue, metadata);
     CONFIG_FIELD_BYTE_ARRAY(tag, message->keyValue, metadata);
     message->keyValue.has_algorithm = (bool)((int)metadata->algorithm > 0);
-    if (message->keyValue.has_algorithm) {
-        message->keyValue.algorithm = metadata->algorithm; }
+    if (message->keyValue.has_algorithm)
+    {
+        message->keyValue.algorithm = (KineticProto_Algorithm)
+            metadata->algorithm;
+    }
     message->keyValue.has_metadataOnly = metadata->metadataOnly;
-    if (message->keyValue.has_metadataOnly) {
-        message->keyValue.metadataOnly = metadata->metadataOnly; }
+    if (message->keyValue.has_metadataOnly)
+    {
+        message->keyValue.metadataOnly = metadata->metadataOnly;
+    }
 }

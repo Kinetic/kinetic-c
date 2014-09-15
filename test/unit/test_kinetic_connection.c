@@ -18,6 +18,8 @@
 *
 */
 
+#include "unity.h"
+#include "unity_helper.h"
 #include "kinetic_connection.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
@@ -26,35 +28,39 @@
 #include "kinetic_logger.h"
 #include "kinetic_logger.h"
 #include "kinetic_nbo.h"
-
 #include "mock_kinetic_socket.h"
 #include "protobuf-c/protobuf-c.h"
 #include <string.h>
 #include <time.h>
 
-
-#include "unity.h"
-#include "unity_helper.h"
-
 static KineticConnection Connection, Expected;
 static const int64_t ClusterVersion = 12;
 static const int64_t Identity = 1234;
 static ByteArray Key;
-static KineticMessage MessageOut, MessageIn;
 
 void setUp(void)
 {
     Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
-    KINETIC_CONNECTION_INIT(&Connection, Identity, Key);
+    KINETIC_CONNECTION_INIT(&Connection);
+    // .. , Identity, Key
     Expected = Connection;
-    KINETIC_MESSAGE_INIT(&MessageOut);
-    MessageIn = MessageOut;
 }
 
 void tearDown(void)
 {
 }
 
+void test_KineticConnection_NewConnection_should_return_NULL_if_session_NULL(void)
+{
+    TEST_ASSERT_NULL(KineticConnection_NewConnection(NULL));
+}
+
+void test_KineticConnection_NewConnection_should_allocate_a_new_KineticConnection(void)
+{
+
+}
+
+#if 0
 void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 {
     KineticConnection connection;
@@ -171,3 +177,4 @@ void test_KineticConnection_IncrementSequence_should_increment_the_sequence_coun
 
     TEST_ASSERT_EQUAL_INT64(58, Connection.sequence);
 }
+#endif

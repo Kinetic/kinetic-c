@@ -28,6 +28,8 @@
 #include "kinetic_logger.h"
 #include <stdio.h>
 
+
+
 static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
@@ -74,27 +76,38 @@ int KineticClient_Connect(KineticSession* session)
         return -1;
     }
 
-    if (!KineticConnection_Connect(connection, host, port, nonBlocking,
-        clusterVersion, identity, hmacKey))
+    KineticConnection connection = KineticConnection_NewConnection(session);
+    if (connection == NULL)
     {
-        connection->connected = false;
-        connection->socketDescriptor = -1;
-        char message[64];
-        sprintf(message, "Failed creating connection to %s:%d", host, port);
-        LOG(message);
+        LOG("Failed connecting to device (connection is NULL)!");
         return -1;
     }
 
-    connection->connected = true;
+    if (!KineticConnection_Connect(connection))
+    {
+        LOGF("Failed creating connection to %s:%d",
+            session->host, session->port);
+        return -1;
+    }
 
-    return true;
+    return 0;
 }
 
 void KineticClient_Disconnect(KineticConnection* connection)
 {
    KineticConnection_Disconnect(connection);
+   KineticConnection_FreeConnection(connection->session);
 }
 
+/**
+ * @brief Creates and initializes a Kinetic operation.
+ *
+ * @param connection    KineticConnection instance to associate with operation
+ * @param request       KineticPDU instance to use for request
+ * @param response      KineticPDU instance to use for reponse
+ *
+ * @return              Returns a configured operation instance
+ */
 KineticOperation KineticClient_CreateOperation(KineticConnection* connection,
     KineticPDU* request,
     KineticPDU* response)

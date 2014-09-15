@@ -34,7 +34,7 @@
 
 static KineticPDU PDU;
 static KineticConnection Connection;
-static int64_t Identity = 1234;
+static KineticSession Session;
 static ByteArray Key;
 static uint8_t ValueBuffer[PDU_VALUE_MAX_LEN];
 static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
@@ -42,16 +42,23 @@ static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 void setUp(void)
 {
     // Create and configure a new Kinetic protocol instance
-    KINETIC_CONNECTION_INIT(&Connection, Identity, Key);
+    Key = BYTE_ARRAY_INIT_FROM_CSTRING("some valid HMAC key...");
+    Session = (KineticSession) {
+        .nonBlocking = false,
+        .port = 1234,
+        .host = "valid-host.com",
+        .hmacKey = (ByteArray){.data = &Session.keyData[0], .len = Key.len},
+    };
+    memcpy(Session.hmacKey.data, Key.data, Key.len);
+
+    KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = true;
-    Connection.nonBlocking = false;
-    Connection.port = 1234;
-    Connection.socketDescriptor = 456;
-    strcpy(Connection.host, "valid-host.com");
+    Connection.socket = 456;
+    Connection.session = &Session;
+    
     KINETIC_PDU_INIT(&PDU, &Connection);
     BYTE_ARRAY_FILL_WITH_DUMMY_DATA(Value);
     KineticLogger_Init(NULL);
-    Key = BYTE_ARRAY_INIT_FROM_CSTRING("some valid HMAC key...");
 }
 
 void tearDown(void)
@@ -83,6 +90,7 @@ void test_KineticPDU_PDU_VALUE_MAX_LEN_should_be_the_sum_of_header_protobuf_and_
     TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN, PDU_MAX_LEN);
 }
 
+
 void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer(void)
 {
     LOG_LOCATION;
@@ -97,12 +105,14 @@ void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_
 void test_KineticPDU_Init_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
 {
     LOG_LOCATION;
-    KINETIC_CONNECTION_INIT(&Connection, 12, BYTE_ARRAY_NONE);
-    Connection.identity = 12;
+    KINETIC_CONNECTION_INIT(&Connection);
     Connection.sequence = 24;
-    Connection.clusterVersion = 1122334455667788;
-    Connection.identity = 37;
     Connection.connectionID = 8765432;
+    Session = (KineticSession) {
+        .clusterVersion = 1122334455667788,
+        .identity = 37,
+    };
+    Connection.session = &Session;
     KINETIC_PDU_INIT(&PDU, &Connection);
 
     TEST_ASSERT_TRUE(PDU.protoData.message.header.has_clusterVersion);
@@ -115,7 +125,6 @@ void test_KineticPDU_Init_should_set_the_exchange_fields_in_the_embedded_protobu
     TEST_ASSERT_TRUE(PDU.protoData.message.header.has_sequence);
     TEST_ASSERT_EQUAL_INT64(24, PDU.protoData.message.header.sequence);
 }
-
 
 
 void test_KineticPDU_AttachValuePayload_should_attach_specified_ByteArray(void)
@@ -132,7 +141,6 @@ void test_KineticPDU_AttachValuePayload_should_attach_specified_ByteArray(void)
     TEST_ASSERT_EQUAL_PTR(data, PDU.value.data);
     TEST_ASSERT_EQUAL(sizeof(data), PDU.value.len);
 }
-
 
 
 void test_KineticPDU_EnableValueBuffer_should_attach_builtin_buffer(void)
@@ -200,12 +208,15 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
 {
     LOG_LOCATION;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
-    ByteArray headerNBO = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
+    ByteArray headerNBO =
+        {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
 
-    KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
+    KineticHMAC_Init_Expect(&PDU.hmac,
+        KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Populate_Expect(&PDU.hmac,
+        &PDU.protoData.message.proto, PDU.connection->session->hmacKey);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, headerNBO, true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
 
     bool status = KineticPDU_Send(&PDU);
 
@@ -224,10 +235,11 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
     KineticPDU_AttachValuePayload(&PDU, value);
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, PDU.value, true);
+    KineticHMAC_Populate_Expect(&PDU.hmac,
+        &PDU.protoData.message.proto, PDU.connection->session->hmacKey);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, headerNBO, true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, PDU.value, true);
 
     status = KineticPDU_Send(&PDU);
 
@@ -248,10 +260,10 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
     ByteArray expectedValue = {.data = PDU.value.data, .len = 3};
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, expectedValue, true);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->session->hmacKey);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, headerNBO, true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, expectedValue, true);
 
     status = KineticPDU_Send(&PDU);
 
@@ -268,8 +280,8 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_upo
     KineticPDU_Init(&PDU, &Connection);
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, false);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->session->hmacKey);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, headerNBO, false);
 
     status = KineticPDU_Send(&PDU);
 
@@ -283,9 +295,9 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_upo
     ByteArray headerNBO = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, false);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->session->hmacKey);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, headerNBO, true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &PDU, false);
 
     bool status = KineticPDU_Send(&PDU);
 
@@ -303,10 +315,10 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_if_
     KineticPDU_AttachValuePayload(&PDU, value);
 
     KineticHMAC_Init_Expect(&PDU.hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->key);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, headerNBO, true);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
-    KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor, value, false);
+    KineticHMAC_Populate_Expect(&PDU.hmac, &PDU.protoData.message.proto, PDU.connection->session->hmacKey);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, headerNBO, true);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, value, false);
 
     bool status = KineticPDU_Send(&PDU);
 
@@ -332,12 +344,12 @@ void test_KineticPDU_Receive_should_receive_a_message_with_value_payload_and_ret
     BYTE_ARRAY_FILL_WITH_DUMMY_DATA(expectedValue);
     KineticPDU_AttachValuePayload(&PDU, expectedValue);
 
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor,
+    KineticSocket_Read_ExpectAndReturn(Connection.socket,
         expectedPDUHeaderArray, true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor,
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket,
         &PDU, true);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->key, true);
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor,
+    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->hmacKey, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket,
         expectedValue, true);
 
     PDU.headerNBO.valueLength = KineticNBO_FromHostU32(expectedValue.len);
@@ -358,9 +370,9 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_
     ByteArray header = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
     KineticPDU_AttachValuePayload(&PDU, BYTE_ARRAY_NONE);
 
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, header, true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->key, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket, header, true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
+    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->hmacKey, true);
 
     bool status = KineticPDU_Receive(&PDU);
 
@@ -382,9 +394,9 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_
     TEST_ASSERT_EQUAL_ByteArray(enabledValue, PDU.value);
 
     PDU.headerNBO.valueLength = KineticNBO_FromHostU32(0);
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, header, true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->key, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket, header, true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
+    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->hmacKey, true);
 
     bool status = KineticPDU_Receive(&PDU);
 
@@ -409,9 +421,9 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_
     TEST_ASSERT_EQUAL_ByteArray(attachedValue, PDU.value);
 
     PDU.headerNBO.valueLength = KineticNBO_FromHostU32(0);
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, header, true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->key, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket, header, true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
+    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->hmacKey, true);
 
     bool status = KineticPDU_Receive(&PDU);
 
@@ -429,7 +441,7 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
     ByteArray header = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
 
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, header, false);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket, header, false);
 
     bool status = KineticPDU_Receive(&PDU);
 
@@ -453,8 +465,8 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
         .valueLength = 0
     };
 
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, header, true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, false);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket, header, true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, false);
 
     status = KineticPDU_Receive(&PDU);
 
@@ -468,9 +480,9 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     ByteArray header = {.data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
     KineticPDU_AttachValuePayload(&PDU, BYTE_ARRAY_NONE);
 
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, header, true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->key, false);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket, header, true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
+    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->hmacKey, false);
 
     bool status = KineticPDU_Receive(&PDU);
 
@@ -496,10 +508,10 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     BYTE_ARRAY_FILL_WITH_DUMMY_DATA(expectedValue);
     KineticPDU_AttachValuePayload(&PDU, expectedValue);
 
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, header, true);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor, &PDU, true);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->key, true);
-    KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor, expectedValue, false);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket, header, true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
+    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->hmacKey, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket, expectedValue, false);
 
     bool status = KineticPDU_Receive(&PDU);
 

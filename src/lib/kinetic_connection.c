@@ -21,24 +21,32 @@
 #include "kinetic_connection.h"
 #include "kinetic_socket.h"
 #include <string.h>
-
+#include <stdlib.h>
 
 static KineticConnection ConnectionInstances[KINETIC_SESSIONS_MAX];
 static KineticConnection* Connections[KINETIC_SESSIONS_MAX];
-
+static int PDUsPerSession = KINETIC_PDUS_PER_SESSION_DEFAULT;
 
 KineticConnection* KineticConnection_NewConnection(KineticSession* session)
 {
-    assert(session);
-    session->handle = KINETIC_SESSION_INVALID;
+    if (session == NULL)
+    {
+        return NULL;
+    }
+    session->handle = SESSION_HANDLE_INVALID;
     for (int handle = 1; handle <= KINETIC_SESSIONS_MAX; handle++)
     {
-        if (Connections[handle-1] == NULL)
+        int idx = session->handle - 1;
+        if (Connections[idx] == NULL)
         {
-            Connections[handle-1] = &ConnectionInstances[handle-1];
+            Connections[idx] = &ConnectionInstances[idx];
             session->handle = handle;
-            *Connections[handle-1] = (KineticConnection){.session = session};
-            return Connections[handle-1];
+            *Connections[idx] = (KineticConnection){.session = session};
+            for (int i = 0; i < PDUsPerSession; i++)
+            {
+                Connections[idx]->pdus[i] = malloc(sizeof(KineticPDU));
+            }
+            return Connections[idx];
         }
     }
     return NULL;
@@ -47,44 +55,49 @@ KineticConnection* KineticConnection_NewConnection(KineticSession* session)
 void KineticConnection_FreeConnection(KineticSession* session)
 {
     assert(session);
-    assert(session->handle > KINETIC_SESSION_INVALID);
+    assert(session->handle > SESSION_HANDLE_INVALID);
     assert(session->handle <= KINETIC_SESSIONS_MAX);
-    if (Connections[session->handle-1] != NULL)
+    int idx = session->handle - 1;
+    if (Connections[idx] != NULL)
     {
-        *Connections[handle-1] = {.session = KINETIC_SESSION_INVALID};
-        Connections[handle-1] = NULL;
+        *Connections[idx] =
+            (KineticConnection) {.session = SESSION_HANDLE_INVALID};
+        for (int i = 0; i < KINETIC_PDUS_PER_SESSION_MAX; i++)
+        {
+            if (Connections[idx]->pdus[i] != NULL)
+            {
+                free(Connections[idx]->pdus[i]);
+                Connections[idx]->pdus[i] = NULL;
+            }
+        }
+        Connections[idx] = NULL;
     }
-    session->handle = KINETIC_SESSION_INVALID;
+    session->handle = SESSION_HANDLE_INVALID;
 }
 
 
 bool KineticConnection_Connect(KineticConnection* const connection)
 {
+    assert(connection != NULL);
+    assert(connection->session != NULL);
     connection->connected = false;
-    connection->nonBlocking = nonBlocking;
-    connection->port = port;
-    connection->socketDescriptor = -1;
-    connection->clusterVersion = clusterVersion;
-    connection->identity = identity;
+    connection->socket = -1;
 
-    strcpy(connection->host, host);
-    connection->key.data = connection->keyData;
-    memcpy(connection->key.data, key.data, key.len);
-    connection->key.len = key.len;
-
-    connection->socketDescriptor = KineticSocket_Connect(
-        connection->host, connection->port, nonBlocking);
-    connection->connected = (connection->socketDescriptor >= 0);
+    connection->socket = KineticSocket_Connect(
+        connection->session->host,
+        connection->session->port,
+        connection->session->nonBlocking);
+    connection->connected = (connection->socket >= 0);
 
     return connection->connected;
 }
 
 void KineticConnection_Disconnect(KineticConnection* connection)
 {
-    if (connection != NULL || connection->socketDescriptor >= 0)
+    if (connection != NULL || connection->socket >= 0)
     {
-        close(connection->socketDescriptor);
-        connection->socketDescriptor = -1;
+        close(connection->socket);
+        connection->socket = -1;
     }
 }
 
