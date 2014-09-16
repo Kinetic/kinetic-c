@@ -36,50 +36,59 @@
  *  .hmacKey        Key to use for HMAC calculations (NULL-terminated string)
  *  .logFile        Path to log file. Defaults to STDOUT if unspecified
  *
- * @return          Returns 0 upon succes, -1 or Kinetic status upon failure
+ * @return          Returns the resulting KineticStatus
  */
-int KineticClient_Connect(KineticSession* session);
+KineticStatus KineticClient_Connect(const KineticSession* session);
 
 /**
  * @brief Closes the connection to a host.
  *
- * @param session   KineticSession instance to terminate
+ * @param session   KineticSession instance
+ *
+ * @return              Returns the resulting KineticStatus
  */
-void KineticClient_Disconnect(KineticSession* session);
+KineticStatus KineticClient_Disconnect(const KineticSession* session);
 
 /**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational
  *
- * @param operation     KineticOperation instance to use for the operation
+ * @param operation     KineticOperation to use for the operation.
+ *                      If operation is already allocated, it will be reused
+ *                      If operation is empty, one will be allocated, if available.
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code upon failure
+ * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_NoOp(KineticSession* session);
+KineticStatus KineticClient_NoOp(const KineticSession* session,
+    const KineticOperation* operation);
 
 /**
  * @brief Executes a PUT command to store/update an entry on the Kinetic Device
  *
- * @param operation     KineticOperation instance to use for the operation
+ * @param operation     KineticOperation to use for the operation.
+ *                      If operation is already allocated, it will be reused
+ *                      If operation is empty, one will be allocated, if available.
  * @param metadata      Key/value metadata for object to store. 'value' must
  *                      specify the data to be stored.
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code
- *                      upon failure
+ * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Put(KineticSession* session,
+    const KineticOperation* operation,
     const KineticKeyValue* metadata);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
  *
- * @param operation     KineticOperation instance to use for the operation
+ * @param operation     KineticOperation to use for the operation.
+ *                      If operation is already allocated, it will be reused
+ *                      If operation is empty, one will be allocated, if available.
  * @param metadata      Key/value metadata for object to delete. 'value' is
  *                      not used for this operation.
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code
- *                      upon failure
+ * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Delete(KineticSession* session,
-    KineticKeyValue* metadata);
+KineticStatus KineticClient_Delete(const KineticSession* session,
+    const KineticOperation* operation,
+    const KineticKeyValue* metadata);
 
 #endif // _KINETIC_CLIENT_H

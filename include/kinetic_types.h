@@ -153,25 +153,51 @@ typedef struct _KineticSession
     // Session instance handle (0 = none/invalid session)
     int     handle;
 } KineticSession;
+#define KINETIC_SESSION_INIT(_session, \
+    _host, _clusterVersion, _identity, _hmacKey) { \
+    *(_session) = (KineticSession) { \
+        .logFile = "", \
+        .port = KINETIC_PORT, \
+        .clusterVersion = (_clusterVersion), \
+        .identity = (_identity), \
+        .hmacKey = {.data = (_session)->keyData, .len = (_hmacKey).len}, \
+    }; \
+    memcpy((_session)->hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
+}
+
+
+// Kinetic Operation
+typedef struct _KineticOperation
+{
+    KineticConnection* session; // Associated KineticSession
+    int requestHandle;          // Handle to allocated request
+    int responseHandle;         // Handle to allocated response
+} KineticOperation;
 
 
 // Kinetic Status Codes
 typedef enum
 {
-    KINETIC_STATUS_INVALID = -1,     // Status not available (no reponse/status available)
-    KINETIC_STATUS_SUCCESS = 0,      // Operation successful
-    KINETIC_STATUS_DEVICE_BUSY,      // Device busy (retry later)
-    KINETIC_STATUS_CONNECTION_ERROR, // No connection/disconnected
-    KINETIC_STATUS_INVALID_REQUEST,  // Something about the request is invalid
-    KINETIC_STATUS_OPERATION_FAILED, // Device reported an operation error
-    KINETIC_STATUS_VERSION_FAILURE,  // Basically a VERSION_MISMATCH error for a PUT
-    KINETIC_STATUS_DATA_ERROR,       // Device reported data error, no spaces, HMAC failure
+    KINETIC_STATUS_INVALID = -1,        // Status not available (no reponse/status available)
+    KINETIC_STATUS_SUCCESS = 0,         // Operation successful
+    KINETIC_STATUS_SESSION_EMPTY,       // Session was NULL in request
+    KINETIC_STATUS_SESSION_INVALID,     // Session configuration was invalid or NULL
+    KINETIC_STATUS_HOST_EMPTY,          // Host was empty in request
+    KINETIC_STATUS_HMAC_EMPTY,          // HMAC key is empty or NULL
+    KINETIC_STATUS_NO_PDUS_AVAVILABLE   // All PDUs for the session have been allocated
+    KINETIC_STATUS_DEVICE_BUSY,         // Device busy (retry later)
+    KINETIC_STATUS_CONNECTION_ERROR,    // No connection/disconnected
+    KINETIC_STATUS_INVALID_REQUEST,     // Something about the request is invalid
+    KINETIC_STATUS_OPERATION_INVALID,   // Operation was invalid
+    KINETIC_STATUS_OPERATION_FAILED,    // Device reported an operation error
+    KINETIC_STATUS_VERSION_FAILURE,     // Basically a VERSION_MISMATCH error for a PUT
+    KINETIC_STATUS_DATA_ERROR,          // Device reported data error, no space or HMAC failure
 } KineticStatus;
 extern const int KineticStatusDescriptorCount;
 extern const char* KineticStatusDescriptor[];
 
 
-// KeyValue meta-data
+// KeyValue data
 typedef struct _KineticKeyValue
 {
     ByteArray key;

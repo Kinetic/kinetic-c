@@ -75,6 +75,13 @@ void KineticConnection_FreeConnection(KineticSession* session)
     session->handle = SESSION_HANDLE_INVALID;
 }
 
+KineticConnection* KineticConnection_GetFromSession(KineticSession* session)
+{
+    assert(session);
+    assert(session->handle > SESSION_HANDLE_INVALID);
+    assert(session->handle <= KINETIC_SESSIONS_MAX);
+    return Connections[session->handle];
+}
 
 bool KineticConnection_Connect(KineticConnection* const connection)
 {

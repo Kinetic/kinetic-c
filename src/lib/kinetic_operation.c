@@ -23,6 +23,38 @@
 #include "kinetic_message.h"
 #include "kinetic_logger.h"
 
+KineticStatus KineticOperation_Create(const KineticOperation* operation,
+    const KineticSession* session)
+{
+    if (operation == NULL)
+    {
+        return KINETIC_STATUS_OPERATION_INVALID;
+    }
+    if (session == NULL)
+    {
+        return KINETIC_STATUS_SESSION_EMPTY;
+    }
+
+    if (operation->request == NULL)
+    {
+        operation->request = KineticConnection_AllocatePDU(session);
+        if (operation->request == NULL)
+        {
+            LOG("Request PDU could not be allocated! Try reusing or freeing a PDU.");
+            return KINETIC_STATUS_NO_PDUS_AVAVILABLE;
+        }
+    }
+    if (operation->response == NULL)
+    {
+        operation->response = KineticConnection_AllocatePDU(session);
+        if (operation->response == NULL)
+        {
+            LOG("Response PDU could not be allocated! Try reusing or freeing a PDU.");
+            return KINETIC_STATUS_NO_PDUS_AVAVILABLE;
+        }
+    }
+}
+
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;

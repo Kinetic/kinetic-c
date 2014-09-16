@@ -191,18 +191,12 @@ struct _KineticPDU
 
 
 // Kinetic Operation
-typedef struct _KineticOperation
-{
-    KineticConnection* connection;
-    KineticPDU* request;
-    KineticPDU* response;
-} KineticOperation;
-#define KINETIC_OPERATION_INIT(_op, _con, _req, _resp) \
-*(_op) = (KineticOperation) { \
-    .connection = (_con), \
-    .request = (_req), \
-    .response = (_resp), \
-}
+#define KINETIC_OPERATION_INIT(_op, _session) \
+    assert((_op) != NULL); \
+    assert((_session) != NULL); \
+    *(_op) = (KineticOperation) { \
+        .session = (_session), \
+    }
 
 // // Structure for defining a custom memory allocator.
 // typedef struct 

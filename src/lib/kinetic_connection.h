@@ -24,7 +24,10 @@
 #include "kinetic_types_internal.h"
 
 KineticConnection* KineticConnection_NewConnection(KineticSession* session);
+KineticConnection* KineticConnection_GetFromSession(KineticSession* session);
 void KineticConnection_FreeConnection(KineticSession* session);
+KineticPDU* KineticConnection_AllocatePDU(KineticSession* session);
+void KineticConnection_FreePDU(KineticSession* session, KineticPDU* pdu);
 bool KineticConnection_Connect(KineticConnection* const connection);
 void KineticConnection_Disconnect(KineticConnection* const connection);
 void KineticConnection_IncrementSequence(KineticConnection* const connection);
