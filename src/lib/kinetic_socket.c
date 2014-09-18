@@ -20,6 +20,8 @@
 
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
+#include "kinetic_types_internal.h"
+#include "kinetic_proto.h"
 #include "protobuf-c/protobuf-c.h"
 
 #include <stdlib.h>
@@ -79,7 +81,7 @@ static void KineticProto_Free(void* buf, void* ignored)
 }
 
 
-int KineticSocket_Connect(char* host, int port, bool nonBlocking)
+int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
 {
     char port_str[32];
     struct addrinfo hints;
@@ -89,7 +91,7 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
 
     // Setup server address info
     socket99_config cfg = {
-        .host = host,
+        .host = (char*)host,
         .port = port,
         .nonblocking = nonBlocking,
     };
@@ -101,7 +103,7 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
     {
         LOGF("Failed to open socket connection with host: status %d, errno %d",
             result.status, result.saved_errno);
-        return -1;
+        return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
 
     // Configure the socket
@@ -110,19 +112,19 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
     {
         LOGF("Failed to get socket address info: errno %d", errno);
         close(result.fd);
-        return -1;
+        return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
 
     for (ai = ai_result; ai != NULL; ai = ai->ai_next)
     {
         int setsockopt_result;
-        int enable = 1;
         int buffer_size = PDU_VALUE_MAX_LEN;
 
         #if defined(SO_NOSIGPIPE) && !defined(__APPLE__)
         // On BSD-like systems we can set SO_NOSIGPIPE on the socket to
         // prevent it from sending a PIPE signal and bringing down the whole
         // application if the server closes the socket forcibly
+        int enable = 1;
         setsockopt_result = setsockopt(result.fd,
             SOL_SOCKET, SO_NOSIGPIPE,
             &enable, sizeof(enable));
@@ -131,7 +133,6 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
         if (setsockopt_result != 0 && setsockopt_result != ENOTSOCK)
         {
             LOG("Failed to set SO_NOSIGPIPE on socket");
-            close(result.fd);
             continue;
         }
         #endif
@@ -144,7 +145,6 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
         if (setsockopt_result == -1)
         {
             LOG("Error setting socket send buffer size");
-            close(result.fd);
             continue;
         }
 
@@ -156,7 +156,6 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
         if (setsockopt_result == -1)
         {
             LOG("Error setting socket receive buffer size");
-            close(result.fd);
             continue;
         }
 
@@ -165,18 +164,17 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
 
     freeaddrinfo(ai_result);
 
-    if (ai == NULL)
+    if (ai == NULL || result.fd == KINETIC_SOCKET_DESCRIPTOR_INVALID)
     {
         // we went through all addresses without finding one we could bind to
         LOGF("Could not connect to %s:%d", host, port);
-        return -1;
+        return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
     else
     {
         LOGF("Successfully connected to %s:%d (fd=%d)", host, port, result.fd);
+        return result.fd;
     }
-
-    return result.fd;
 }
 
 void KineticSocket_Close(int socket)

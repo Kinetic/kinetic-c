@@ -18,18 +18,14 @@
 *
 */
 
-#ifndef _KINETIC_CONNECTION_H
-#define _KINETIC_CONNECTION_H
+#ifndef _KINETIC_ALLOCATOR_H
+#define _KINETIC_ALLOCATOR_H
 
 #include "kinetic_types_internal.h"
 
-KineticSessionHandle KineticConnection_NewConnection(const KineticSession* const config);
-void KineticConnection_FreeConnection(KineticSessionHandle* const handle);
-KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle);
-KineticPDU* KineticConnection_AllocatePDU(KineticConnection* const connection);
-void KineticConnection_FreePDU(KineticConnection* const connection, KineticPDU* pdu);
-KineticStatus KineticConnection_Connect(KineticConnection* const connection);
-KineticStatus KineticConnection_Disconnect(KineticConnection* const connection);
-void KineticConnection_IncrementSequence(KineticConnection* const connection);
+KineticPDU* KineticAllocator_NewPDU(void);
+void KineticAllocator_FreePDU(KineticPDU** pdu);
+void KineticAllocator_FreeAllPDUs(void);
+bool KineticAllocator_ValidateAllMemoryFreed(void);
 
-#endif // _KINETIC_CONNECTION_H
+#endif // _KINETIC_ALLOCATOR

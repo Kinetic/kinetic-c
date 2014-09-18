@@ -24,6 +24,7 @@
 #include "kinetic_operation.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
+#include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -36,10 +37,12 @@ static KineticOperation Operation;
 void setUp(void)
 {
     HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
-    KINETIC_CONNECTION_INIT(&Connection, 12, HMACKey);
+    KINETIC_CONNECTION_INIT(&Connection);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Request, &Connection);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Response, &Connection);
-    KINETIC_OPERATION_INIT(&Operation, &Connection, &Request, &Response);
+    KINETIC_OPERATION_INIT(&Operation, &Connection);
+    Operation.request = &Request;
+    Operation.response = &Response;
 }
 
 void tearDown(void)
@@ -55,28 +58,50 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
         .response = NULL,
     };
 
-    KINETIC_OPERATION_INIT(&op, &Connection, &Request, &Response);
+    KINETIC_OPERATION_INIT(&op, &Connection);
 
     TEST_ASSERT_EQUAL_PTR(&Connection, op.connection);
-    TEST_ASSERT_EQUAL_PTR(&Request, op.request);
-    TEST_ASSERT_EQUAL_PTR(&Response, op.response);
+    TEST_ASSERT_NULL(op.request);
+    TEST_ASSERT_NULL(op.response);
 }
+
+
+void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_PDUs(void)
+{
+    KineticOperation op = {
+        .connection = NULL,
+        .request = NULL,
+        .response = NULL,
+    };
+
+    KineticAllocator_NewPDU_ExpectAndReturn(&Request);
+    KineticPDU_Init_Expect(&Request, &Connection);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Response);
+    KineticPDU_Init_Expect(&Response, &Connection);
+
+    KineticStatus status = KineticOperation_Create(&op, &Connection);
+
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_NOT_NULL(op.request);
+    TEST_ASSERT_NOT_NULL(op.response);
+}
+
 
 void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_KineticProto_Status_StatusCode_in_response(void)
 {
+    LOG_LOCATION;
     KineticStatus status;
 
     status = KineticOperation_GetStatus(NULL);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
 
-    KineticPDU* req = Operation.response;
-    TEST_ASSERT_NOT_NULL(req);
     Operation.response = NULL;
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-    Operation.response = req;
 
     // Build a valid NOOP to facilitate testing protobuf structure and status extraction
+    Operation.request = &Request;
+    Operation.response = &Response;
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticOperation_BuildNoop(&Operation);
 
@@ -110,6 +135,7 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
 
 void test_KineticOperation_GetStatus_should_return_appropriate_KineticStatus_based_on_KineticProto_Status_StatusCode_in_response(void)
 {
+    LOG_LOCATION;
     KineticStatus status;
 
     // Build a valid NOOP to facilitate testing protobuf structure and status extraction
@@ -334,7 +360,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
         .newVersion = newVersion,
         .dbVersion = BYTE_ARRAY_NONE,
         .tag = tag,
-        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = value,
     };
     KineticMessage_ConfigureKeyValue_Expect(&Operation.request->protoData.message, &metadata);

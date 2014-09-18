@@ -75,7 +75,6 @@ void tearDown(void)
 }
 
 
-#if 0
 void test_KineticSocket_KINETIC_PORT_should_be_8123(void) {LOG_LOCATION;
     TEST_ASSERT_EQUAL(8123, KINETIC_PORT);
 }
@@ -85,14 +84,12 @@ void test_KineticSocket_Connect_should_create_a_socket_connection(void) {LOG_LOC
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }
-#endif
 
 
 // Disabling socket read/write tests in not OSX, since Linux TravisCI builds
 // fail, but system test passes. Most likely an issue with KineticRuby server
 #if defined(__APPLE__)
 
-#if 0
 void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void)
 {   LOG_LOCATION;
     bool success = false;
@@ -124,7 +121,7 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     };
     KineticConnection connection;
     KINETIC_CONNECTION_INIT(&connection);
-    connection.session = &session;
+    connection.session = session;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &connection);
     KineticMessage_Init(&PDU.protoData.message);
     PDU.header.protobufLength = KineticProto__get_packed_size(PDU.proto);
@@ -185,7 +182,6 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
     TEST_ASSERT_FALSE_MESSAGE(success,
         "Expected socket to timeout waiting on data!");
 }
-#endif
 
 void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
 {
@@ -197,7 +193,7 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     };
     KineticConnection connection;
     KINETIC_CONNECTION_INIT(&connection);
-    connection.session = &session;
+    connection.session = session;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &connection);
     KineticMessage_Init(&PDU.protoData.message);
 
@@ -231,7 +227,6 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     LOG("Kinetic ProtoBuf read successfully!");
 }
 
-#if 0
 void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_specified_length_fails_to_be_read_within_timeout(void)
 {
     LOG_LOCATION;
@@ -242,7 +237,7 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     };
     KineticConnection connection;
     KINETIC_CONNECTION_INIT(&connection);
-    connection.session = &session;
+    connection.session = session;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &connection);
     KineticMessage_Init(&PDU.protoData.message);
 
@@ -261,6 +256,5 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     success = KineticSocket_ReadProtobuf(FileDesc, &PDU);
     TEST_ASSERT_FALSE_MESSAGE(success, "Expected timeout!");
 }
-#endif
 
 #endif // defined(__APPLE__)

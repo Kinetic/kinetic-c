@@ -19,96 +19,97 @@
 */
 
 #include "kinetic_connection.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_socket.h"
+#include "kinetic_logger.h"
 #include <string.h>
 #include <stdlib.h>
 
-static KineticConnection ConnectionInstances[KINETIC_SESSIONS_MAX];
-static KineticConnection* Connections[KINETIC_SESSIONS_MAX];
-static int PDUsPerSession = KINETIC_PDUS_PER_SESSION_DEFAULT;
+STATIC KineticConnection ConnectionInstances[KINETIC_SESSIONS_MAX];
+STATIC KineticConnection* Connections[KINETIC_SESSIONS_MAX];
 
-KineticConnection* KineticConnection_NewConnection(KineticSession* session)
+KineticSessionHandle KineticConnection_NewConnection(
+    const KineticSession* const config)
 {
-    if (session == NULL)
+    KineticSessionHandle handle = KINETIC_HANDLE_INVALID;
+    if (config == NULL)
     {
-        return NULL;
+        return KINETIC_HANDLE_INVALID;
     }
-    session->handle = SESSION_HANDLE_INVALID;
-    for (int handle = 1; handle <= KINETIC_SESSIONS_MAX; handle++)
+    for (int idx = 0; idx < KINETIC_SESSIONS_MAX; idx++)
     {
-        int idx = session->handle - 1;
         if (Connections[idx] == NULL)
         {
-            Connections[idx] = &ConnectionInstances[idx];
-            session->handle = handle;
-            *Connections[idx] = (KineticConnection){.session = session};
-            for (int i = 0; i < PDUsPerSession; i++)
-            {
-                Connections[idx]->pdus[i] = malloc(sizeof(KineticPDU));
-            }
-            return Connections[idx];
+            KineticConnection* connection = &ConnectionInstances[idx];
+            LOG_LOCATION; LOGF("idx=%d, addr=0x%0llX",
+                idx, (long long)connection);
+            *connection = (KineticConnection){.session = *config};
+            Connections[idx] = connection;
+            handle = (KineticSessionHandle)(idx + 1);
+            // Connections[idx] = (KineticConnection){.session = *config};
+            return handle;
         }
     }
-    return NULL;
+    return KINETIC_HANDLE_INVALID;
 }
 
-void KineticConnection_FreeConnection(KineticSession* session)
+void KineticConnection_FreeConnection(KineticSessionHandle* const handle)
 {
-    assert(session);
-    assert(session->handle > SESSION_HANDLE_INVALID);
-    assert(session->handle <= KINETIC_SESSIONS_MAX);
-    int idx = session->handle - 1;
-    if (Connections[idx] != NULL)
-    {
-        *Connections[idx] =
-            (KineticConnection) {.session = SESSION_HANDLE_INVALID};
-        for (int i = 0; i < KINETIC_PDUS_PER_SESSION_MAX; i++)
-        {
-            if (Connections[idx]->pdus[i] != NULL)
-            {
-                free(Connections[idx]->pdus[i]);
-                Connections[idx]->pdus[i] = NULL;
-            }
-        }
-        Connections[idx] = NULL;
-    }
-    session->handle = SESSION_HANDLE_INVALID;
-}
-
-KineticConnection* KineticConnection_GetFromSession(KineticSession* session)
-{
-    assert(session);
-    assert(session->handle > SESSION_HANDLE_INVALID);
-    assert(session->handle <= KINETIC_SESSIONS_MAX);
-    return Connections[session->handle];
-}
-
-bool KineticConnection_Connect(KineticConnection* const connection)
-{
+    assert(handle != NULL);
+    assert(*handle != KINETIC_HANDLE_INVALID);
+    KineticConnection* connection = KineticConnection_FromHandle(*handle);
     assert(connection != NULL);
-    assert(connection->session != NULL);
+    *connection = (KineticConnection) {.connected = false};
+    Connections[(int)*handle - 1] = NULL;
+}
+
+KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle)
+{
+    assert(handle > KINETIC_HANDLE_INVALID);
+    assert(handle <= KINETIC_SESSIONS_MAX);
+    return Connections[(int)handle - 1];
+}
+
+KineticStatus KineticConnection_Connect(KineticConnection* const connection)
+{
+    if (connection == NULL)
+    {
+        return KINETIC_STATUS_SESSION_EMPTY;
+    }
+
     connection->connected = false;
-    connection->socket = -1;
 
     connection->socket = KineticSocket_Connect(
-        connection->session->host,
-        connection->session->port,
-        connection->session->nonBlocking);
+        connection->session.host,
+        connection->session.port,
+        connection->session.nonBlocking);
+    
     connection->connected = (connection->socket >= 0);
 
-    return connection->connected;
+    if (!connection->connected)
+    {
+        LOG("Session connection failed!");
+        connection->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
+        return KINETIC_STATUS_CONNECTION_ERROR;
+    }
+
+    return KINETIC_STATUS_SUCCESS;
 }
 
-void KineticConnection_Disconnect(KineticConnection* connection)
+KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
 {
-    if (connection != NULL || connection->socket >= 0)
+    if (connection == NULL || connection->socket < 0)
     {
-        close(connection->socket);
-        connection->socket = -1;
+        return KINETIC_STATUS_SESSION_INVALID;
     }
+
+    close(connection->socket);
+    connection->socket = KINETIC_HANDLE_INVALID;
+    return KINETIC_STATUS_SUCCESS;
 }
 
 void KineticConnection_IncrementSequence(KineticConnection* const connection)
 {
+    assert(connection != NULL);
     connection->sequence++;
 }

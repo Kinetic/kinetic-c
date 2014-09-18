@@ -90,6 +90,22 @@ if ((expected) != (actual)) { \
     TEST_FAIL_MESSAGE(err); \
 }
 
+/** Custom Unity assertion which validates a the value of a Kinetic status code */
+#define TEST_ASSERT_EQUAL_STATUS(expected, actual) \
+if ((expected) != (actual)) { \
+    char err[128]; \
+    const char* invalidStatus = "INVALID_STATUS"; \
+    const char* statusDescExpected = invalidStatus; \
+    if ((expected) >= 0 && (expected) < KINETIC_STATUS_COUNT) { \
+        statusDescExpected = KineticStatusDescriptor[(expected)]; } \
+    const char* statusDescActual = invalidStatus; \
+    if ((actual) >= 0 && (actual) < KINETIC_STATUS_COUNT) { \
+        statusDescActual = KineticStatusDescriptor[(actual)]; } \
+    sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
+        statusDescExpected, (expected), statusDescActual, (actual));\
+    TEST_FAIL_MESSAGE(err); \
+}
+
 /** Custom Unity assertion which validates the expected int64_t value is
     packed properly into a buffer in Network Byte-Order (big endian) */
 #define TEST_ASSERT_EQUAL_uint32_nbo_t(expected, buf) { \

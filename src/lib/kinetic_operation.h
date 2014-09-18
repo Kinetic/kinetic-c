@@ -23,16 +23,18 @@
 
 #include "kinetic_types_internal.h"
 
-bool KineticOperation_Create(const KineticOperation* operation,
-    const KineticSession* session);
+KineticStatus KineticOperation_Create(KineticOperation* const operation,
+    const KineticConnection* const connection);
+KineticStatus KineticOperation_Free(KineticOperation* const operation);
+
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
-void KineticOperation_BuildNoop(const KineticOperation* operation);
-void KineticOperation_BuildPut(const KineticOperation* operation,
-    const KineticKeyValue* metadata);
-void KineticOperation_BuildGet(const KineticOperation* operation,
-    const KineticKeyValue* metadata);
-void KineticOperation_BuildDelete(const KineticOperation* operation,
-    const KineticKeyValue* metadata);
+void KineticOperation_BuildNoop(KineticOperation* const operation);
+void KineticOperation_BuildPut(KineticOperation* const operation,
+    const KineticKeyValue* const metadata);
+void KineticOperation_BuildGet(KineticOperation* const operation,
+    const KineticKeyValue* const metadata);
+void KineticOperation_BuildDelete(KineticOperation* const operation,
+    const KineticKeyValue* const metadata);
 
 #endif // _KINETIC_OPERATION_H

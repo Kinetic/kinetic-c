@@ -32,15 +32,18 @@
 #include <stdio.h>
 #include <assert.h>
 #include <limits.h>
+
 // #include <netinet/in.h>
 // #include <ifaddrs.h>
 
 
-#define KINETIC_PORT            8123
-#define KINETIC_TLS_PORT        8443
+#define KINETIC_HANDLE_INVALID  (0)
+#define KINETIC_PORT            (8123)
+#define KINETIC_TLS_PORT        (8443)
 #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
-#define KINETIC_MAX_KEY_LEN     128
+#define KINETIC_MAX_KEY_LEN     (128)
+#define PDU_VALUE_MAX_LEN       (1024 * 1024)
 
 // Define max host name length
 // Some Linux environments require this, although not all, but it's benign.
@@ -56,8 +59,6 @@
 #ifndef LOG_FILE_NAME_MAX
 #define LOG_FILE_NAME_MAX (HOST_NAME_MAX)
 #endif
-
-#include <time.h>
 
 /**
  * @brief Structure for handling generic arrays of bytes
@@ -88,6 +89,13 @@ typedef struct _ByteArray {
 #define BYTE_ARRAY_FILL_WITH_DUMMY_DATA(_array) \
     {size_t i=0; for(;i<(_array).len;++i){(_array).data[i] = (uint8_t)(i & 0xFFu);} }
 
+
+/**
+ * @brief Structure for an embedded ByteArray as a buffer
+ *
+ * The `bytesUsed` field is initialized to zero, and is to incremented as each
+ * byte is consumed, but shall not exceed the `array` length
+ */
 typedef struct
 {
     ByteArray   array;
@@ -100,17 +108,22 @@ typedef struct
     .bytesUsed = 0, \
 }
 
-
+/**
+ * @brief Enumeration of encryption/checksum key algorithms
+ */
 typedef enum _KineticAlgorithm {
     KINETIC_ALGORITHM_INVALID = -1,
-    KINETIC_ALGORITHM_SHA1 = 1,
-    KINETIC_ALGORITHM_SHA2 = 2,
-    KINETIC_ALGORITHM_SHA3 = 3,
-    KINETIC_ALGORITHM_CRC32 = 4,
-    KINETIC_ALGORITHM_CRC64 = 5
+    KINETIC_ALGORITHM_SHA1 = 2,
+    KINETIC_ALGORITHM_SHA2,
+    KINETIC_ALGORITHM_SHA3,
+    KINETIC_ALGORITHM_CRC32,
+    KINETIC_ALGORITHM_CRC64
 } KineticAlgorithm;
 
 
+/**
+ * @brief Enumeration of synchronization types for an operation.
+ */
 typedef enum _KineticSynchronization {
   KINETIC_SYNCHRONIZATION_INVALID = -1,
   KINETIC_SYNCHRONIZATION_WRITETHROUGH = 1,
@@ -119,21 +132,25 @@ typedef enum _KineticSynchronization {
 } KineticSynchronization;
 
 
-// Kinetic session
-#define SESSION_HANDLE_INVALID (0)
+/**
+ * @brief Handle for a session instance
+ */
+typedef int KineticSessionHandle;
+
+
+/**
+ * @brief Structure used to specify the configuration of a session.
+ */
 typedef struct _KineticSession
 {
-    // Log file name (uses stdout if empty)
-    char    logFile[LOG_FILE_NAME_MAX];
-
-    // Set to true to enable non-blocking/asynchronous I/O
-    bool    nonBlocking;
+    // Host name/IP address of Kinetic Device
+    char    host[HOST_NAME_MAX];
 
     // Port for Kinetic Device session
     int     port;
 
-    // Host name/IP address of Kinetic Device
-    char    host[HOST_NAME_MAX];
+    // Set to true to enable non-blocking/asynchronous I/O
+    bool    nonBlocking;
 
     // The version number of this cluster definition. If this is not equal to
     // the value on the Kinetic Device, the request is rejected and will return
@@ -150,9 +167,10 @@ typedef struct _KineticSession
     uint8_t keyData[KINETIC_MAX_KEY_LEN];
     ByteArray hmacKey;
 
-    // Session instance handle (0 = none/invalid session)
-    int     handle;
+    // Log file name (uses stdout if empty)
+    char    logFile[LOG_FILE_NAME_MAX];
 } KineticSession;
+
 #define KINETIC_SESSION_INIT(_session, \
     _host, _clusterVersion, _identity, _hmacKey) { \
     *(_session) = (KineticSession) { \
@@ -162,18 +180,12 @@ typedef struct _KineticSession
         .identity = (_identity), \
         .hmacKey = {.data = (_session)->keyData, .len = (_hmacKey).len}, \
     }; \
+    strcpy((_session)->host, (_host)); \
     memcpy((_session)->hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
 }
 
-
-// Kinetic Operation
-typedef struct _KineticOperation
-{
-    KineticConnection* session; // Associated KineticSession
-    int requestHandle;          // Handle to allocated request
-    int responseHandle;         // Handle to allocated response
-} KineticOperation;
-
+// Operation handle
+typedef int KineticOperationHandle;
 
 // Kinetic Status Codes
 typedef enum
@@ -184,7 +196,7 @@ typedef enum
     KINETIC_STATUS_SESSION_INVALID,     // Session configuration was invalid or NULL
     KINETIC_STATUS_HOST_EMPTY,          // Host was empty in request
     KINETIC_STATUS_HMAC_EMPTY,          // HMAC key is empty or NULL
-    KINETIC_STATUS_NO_PDUS_AVAVILABLE   // All PDUs for the session have been allocated
+    KINETIC_STATUS_NO_PDUS_AVAVILABLE,  // All PDUs for the session have been allocated
     KINETIC_STATUS_DEVICE_BUSY,         // Device busy (retry later)
     KINETIC_STATUS_CONNECTION_ERROR,    // No connection/disconnected
     KINETIC_STATUS_INVALID_REQUEST,     // Something about the request is invalid
@@ -192,8 +204,8 @@ typedef enum
     KINETIC_STATUS_OPERATION_FAILED,    // Device reported an operation error
     KINETIC_STATUS_VERSION_FAILURE,     // Basically a VERSION_MISMATCH error for a PUT
     KINETIC_STATUS_DATA_ERROR,          // Device reported data error, no space or HMAC failure
+    KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;
-extern const int KineticStatusDescriptorCount;
 extern const char* KineticStatusDescriptor[];
 
 
@@ -210,6 +222,13 @@ typedef struct _KineticKeyValue
     KineticSynchronization synchronization;
     ByteArray value;
 } KineticKeyValue;
+
+// Expose normally private data for test builds to allow inspection
+#ifdef TEST
+#define STATIC
+#else
+#define STATIC static
+#endif
 
 
 #endif // _KINETIC_TYPES_H

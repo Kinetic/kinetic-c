@@ -21,38 +21,82 @@
 #include "kinetic_operation.h"
 #include "kinetic_connection.h"
 #include "kinetic_message.h"
+#include "kinetic_pdu.h"
+#include "kinetic_allocator.h"
 #include "kinetic_logger.h"
+#include <stdlib.h>
 
-KineticStatus KineticOperation_Create(const KineticOperation* operation,
-    const KineticSession* session)
+static void KineticOperation_ValidateOperation(KineticOperation* operation)
+{
+    assert(operation != NULL);
+    assert(operation->connection != NULL);
+    assert(operation->request != NULL);
+    assert(operation->request->proto != NULL);
+    assert(operation->request->proto->command != NULL);
+    assert(operation->request->proto->command->header != NULL);
+    assert(operation->response != NULL);
+}
+
+
+KineticStatus KineticOperation_Create(KineticOperation* const operation,
+    const KineticConnection* const connection)
 {
     if (operation == NULL)
     {
         return KINETIC_STATUS_OPERATION_INVALID;
     }
-    if (session == NULL)
-    {
-        return KINETIC_STATUS_SESSION_EMPTY;
-    }
 
     if (operation->request == NULL)
     {
-        operation->request = KineticConnection_AllocatePDU(session);
+        operation->request = KineticAllocator_NewPDU();
         if (operation->request == NULL)
         {
-            LOG("Request PDU could not be allocated! Try reusing or freeing a PDU.");
+            LOG("Request PDU could not be allocated!"
+                " Try reusing or freeing a PDU.");
             return KINETIC_STATUS_NO_PDUS_AVAVILABLE;
         }
     }
+    KineticPDU_Init(operation->request, connection);
+    KINETIC_PDU_INIT_WITH_MESSAGE(operation->request, connection);
+    operation->request->proto = &operation->request->protoData.message.proto;
+
     if (operation->response == NULL)
     {
-        operation->response = KineticConnection_AllocatePDU(session);
+        operation->response = KineticAllocator_NewPDU();
         if (operation->response == NULL)
         {
-            LOG("Response PDU could not be allocated! Try reusing or freeing a PDU.");
+            LOG("Response PDU could not be allocated!"
+                "Try reusing or freeing a PDU.");
             return KINETIC_STATUS_NO_PDUS_AVAVILABLE;
         }
     }
+
+    KineticPDU_Init(operation->response, connection);
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticOperation_Free(KineticOperation* const operation)
+{
+    if (operation == NULL)
+    {
+        LOG("Specified operation is NULL so nothing to free");
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
+
+    if (operation->request != NULL)
+    {
+        free(operation->request);
+        operation->request = NULL;
+    }
+
+    if (operation->response != NULL)
+    {
+        free(operation->response);
+        operation->response = NULL;
+    }
+
+    return KINETIC_STATUS_SUCCESS;
 }
 
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation)
@@ -111,18 +155,7 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
     return status;
 }
 
-void KineticOperation_ValidateOperation(KineticOperation* operation)
-{
-    assert(operation != NULL);
-    assert(operation->connection != NULL);
-    assert(operation->request != NULL);
-    assert(operation->request->proto != NULL);
-    assert(operation->request->proto->command != NULL);
-    assert(operation->request->proto->command->header != NULL);
-    assert(operation->response != NULL);
-}
-
-void KineticOperation_BuildNoop(KineticOperation* operation)
+void KineticOperation_BuildNoop(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -131,8 +164,8 @@ void KineticOperation_BuildNoop(KineticOperation* operation)
     operation->request->proto->command->header->has_messageType = true;
 }
 
-void KineticOperation_BuildPut(KineticOperation* operation,
-    const KineticKeyValue* metadata)
+void KineticOperation_BuildPut(KineticOperation* const operation,
+    const KineticKeyValue* const metadata)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -145,8 +178,8 @@ void KineticOperation_BuildPut(KineticOperation* operation,
     operation->request->value = metadata->value;
 }
 
-void KineticOperation_BuildGet(KineticOperation* operation,
-    const KineticKeyValue* metadata)
+void KineticOperation_BuildGet(KineticOperation* const operation,
+    const KineticKeyValue* const metadata)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -168,8 +201,8 @@ void KineticOperation_BuildGet(KineticOperation* operation,
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
 }
 
-void KineticOperation_BuildDelete(KineticOperation* operation,
-    const KineticKeyValue* metadata)
+void KineticOperation_BuildDelete(KineticOperation* const operation,
+    const KineticKeyValue* const metadata)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);

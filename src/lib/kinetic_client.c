@@ -26,43 +26,7 @@
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
 #include "kinetic_logger.h"
-
-static KineticOperation KineticClient_CreateOperation(
-    KineticConnection* connection,
-    KineticPDU* request,
-    KineticPDU* response)
-{
-    KineticOperation op;
-
-    if (connection == NULL)
-    {
-        LOG("Specified KineticConnection is NULL!");
-        assert(connection != NULL);
-    }
-
-    if (request == NULL)
-    {
-        LOG("Specified KineticPDU request is NULL!");
-        assert(request != NULL);
-    }
-
-    if (response == NULL)
-    {
-        LOG("Specified KineticPDU response is NULL!");
-        assert(response != NULL);
-    }
-
-    KineticPDU_Init(request, connection);
-    KINETIC_PDU_INIT_WITH_MESSAGE(request, connection);
-    KineticPDU_Init(response, connection);
-
-    op.connection = connection;
-    op.request = request;
-    op.request->proto = &op.request->protoData.message.proto;
-    op.response = response;
-
-    return op;
-}
+#include <stdlib.h>
 
 static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 {
@@ -84,89 +48,98 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     return status;
 }
 
-KineticStatus KineticClient_Connect(KineticSession* session)
+KineticStatus KineticClient_Connect(const KineticSession* config,
+    KineticSessionHandle* const handle)
 {
-    if (session == NULL)
+    if (config == NULL)
     {
-        LOG("Specified KineticSession is NULL!");
+        LOG("KineticSession is NULL!");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
-    if (strlen(session->host) == 0)
+    if (strlen(config->host) == 0)
     {
-        LOG("Session host is empty!");
+        LOG("Host is empty!");
         return KINETIC_STATUS_HOST_EMPTY;
     }
 
-    if (session->hmacKey.len < 1 || session->hmacKey.data == NULL)
+    if (config->hmacKey.len < 1 || config->hmacKey.data == NULL)
     {
         LOG("HMAC key is NULL or empty!");
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
-    KineticConnection* connection = KineticConnection_NewConnection(session);
-    if (connection == NULL)
+    *handle = KineticConnection_NewConnection(config);
+    if (handle == KINETIC_HANDLE_INVALID)
     {
-        LOG("Failed connecting to device (connection is NULL)!");
+        LOG("Failed connecting to device!");
         return KINETIC_STATUS_SESSION_INVALID;
     }
 
+    KineticConnection* connection = KineticConnection_FromHandle(*handle);
     if (!KineticConnection_Connect(connection))
     {
         LOGF("Failed creating connection to %s:%d",
-            session->host, session->port);
+            config->host, config->port);
+        KineticConnection_FreeConnection(handle);
+        *handle = KINETIC_HANDLE_INVALID;
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticClient_Disconnect(KineticSession* session)
+KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)
 {
-    if (session == NULL)
+    if (*handle == KINETIC_HANDLE_INVALID)
     {
-        LOG("Specified KineticSession is NULL!");
-        return KINETIC_STATUS_SESSION_EMPTY;
+        LOG("Invalid KineticSessionHandle specified!");
+        return KINETIC_STATUS_SESSION_INVALID;
     }
-    KineticConnection* connection = KineticConnection_GetFromSession(session);
+
+    KineticConnection* connection = KineticConnection_FromHandle(*handle);
     if (connection == NULL)
     {
         return KINETIC_STATUS_SESSION_INVALID;
     }
+
     KineticConnection_Disconnect(connection);
-    KineticConnection_FreeConnection(session);
+    KineticConnection_FreeConnection(handle);
+    
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticOperation KineticClient_NewOperation(KineticSession* session)
+KineticStatus KineticClient_NoOp(KineticSessionHandle session)
 {
-    KineticOperation operation;
-    if (session == NULL)
+    if (session == KINETIC_HANDLE_INVALID)
     {
-        operation = (KineticOperation) {.session = NULL};
+        LOG("Specified session has invalid handle value");
+        return KINETIC_STATUS_SESSION_EMPTY;
     }
-    else
-    {
-        KINETIC_OPERATION_INIT(&operation, session);
-        KineticOperation_Create(&operation, session);
-    }
-    return operation;
-}
 
-KineticStatus KineticClient_NoOp(const KineticOperation* operation)
-{
-    assert(operation->connection != NULL);
-    assert(operation->request != NULL);
-    assert(operation->response != NULL);
+    KineticConnection* connection = KineticConnection_FromHandle(session);
+    if (connection == NULL)
+    {
+        LOG("Specified session is not associated with a connection");
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
+
+    KineticOperation operation;
+    KineticStatus status = KineticOperation_Create(&operation, connection);
+    if (status != KINETIC_STATUS_SUCCESS)
+    {
+        return status;
+    }
 
     // Initialize request
-    KineticOperation_BuildNoop(operation);
+    KineticOperation_BuildNoop(&operation);
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticClient_ExecuteOperation(&operation);
 }
 
-KineticStatus KineticClient_Put(const KineticOperation* operation,
+#if 0
+KineticStatus KineticClient_Put(KineticSessionHandle session,
     const KineticKeyValue* const metadata)
 {
     assert(operation->connection != NULL);
@@ -183,7 +156,7 @@ KineticStatus KineticClient_Put(const KineticOperation* operation,
     return KineticClient_ExecuteOperation(operation);
 }
 
-KineticStatus KineticClient_Get(const KineticOperation* operation,
+KineticStatus KineticClient_Get(KineticSessionHandle session,
     const KineticKeyValue* metadata)
 {
     assert(operation->connection != NULL);
@@ -222,7 +195,7 @@ KineticStatus KineticClient_Get(const KineticOperation* operation,
     return status;
 }
 
-KineticStatus KineticClient_Delete(KineticOperation* operation,
+KineticStatus KineticClient_Delete(KineticSessionHandle session,
     const KineticKeyValue* const metadata)
 {
     assert(operation->connection != NULL);
@@ -244,3 +217,4 @@ KineticStatus KineticClient_Delete(KineticOperation* operation,
 
     return status;
 }
+#endif

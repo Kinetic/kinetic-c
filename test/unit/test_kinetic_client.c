@@ -21,30 +21,35 @@
 #include "kinetic_client.h"
 #include "unity.h"
 #include "unity_helper.h"
-#include <stdio.h>
-#include "protobuf-c/protobuf-c.h"
 #include "kinetic_proto.h"
+#include "kinetic_logger.h"
+#include "kinetic_types.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
-#include "mock_kinetic_logger.h"
 #include "mock_kinetic_operation.h"
+#include "protobuf-c/protobuf-c.h"
+#include <stdio.h>
 
 static KineticSession Session;
 static KineticConnection Connection;
 static const int64_t ClusterVersion = 1234;
 static const int64_t Identity = 47;
 static ByteArray HmacKey;
+static const KineticSessionHandle DummyHandle = 1;
+static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
 
 void setUp(void)
 {
+
 }
 
 void tearDown(void)
 {
-    if (Connection.connected)
+    if (SessionHandle != KINETIC_HANDLE_INVALID)
     {
-        KineticClient_Disconnect(&Session);
+        KineticClient_Disconnect(&SessionHandle);
+        TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
     }
 }
 
@@ -55,13 +60,14 @@ static void ConnectSession(void)
     HmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
-    KineticConnection_NewConnection_ExpectAndReturn(&Session, &Connection);
-    Connection.session = &Session;
-    KineticConnection_Connect_ExpectAndReturn(&Connection, true);
+    KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
+    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
-    int status = KineticClient_Connect(&Session);
-    TEST_ASSERT_EQUAL(0, status);
-    TEST_ASSERT_TRUE(Connection.connected);
+    SessionHandle = KINETIC_HANDLE_INVALID;
+    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS,
+        KineticClient_Connect(&Session, &SessionHandle));
+    TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
+    TEST_ASSERT_TRUE(KineticConnection_FromHandle(SessionHandle)->connected);
 }
 
 void test_KineticClient_Connect_should_configure_a_session_and_connect_to_specified_host(void)

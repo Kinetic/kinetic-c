@@ -19,21 +19,32 @@
 */
 
 #include "kinetic_types.h"
+#include "unity.h"
+#include "unity_helper.h"
 
-const char* KineticStatusDescriptor[] = {
-    "SUCCESS",
-    "SESSION_EMPTY",
-    "SESSION_INVALID",
-    "HOST_EMPTY",
-    "HMAC_EMPTY",
-    "NO_PDUS_AVAVILABLE",
-    "DEVICE_BUSY",
-    "CONNECTION_ERROR",
-    "INVALID_REQUEST",
-    "OPERATION_INVALID",
-    "OPERATION_FAILED",
-    "VERSION_FAILURE",
-    "DATA_ERROR",
-};
+extern const int KineticStatusDescriptorCount;
 
-const int KineticStatusDescriptorCount = sizeof(KineticStatusDescriptor)/sizeof(char*);
+void setUp(void)
+{
+}
+
+void tearDown(void)
+{
+}
+
+void test_kinetic_types_should_be_defined(void)
+{
+    ByteArray array; (void)array;
+    ByteBuffer buffer; (void)buffer;
+    KineticAlgorithm algorithm; (void)algorithm;
+    KineticSynchronization synchronization; (void)synchronization;
+    KineticSessionHandle sessionHandle; (void)sessionHandle;
+    KineticSession sessionConfig; (void)sessionConfig;
+    KineticOperationHandle operationHandle; (void)operationHandle;
+    KineticStatus status; (void)status;
+}
+
+void test_KineticStatus_should_have_mapped_descriptors(void)
+{
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_COUNT, KineticStatusDescriptorCount);
+}

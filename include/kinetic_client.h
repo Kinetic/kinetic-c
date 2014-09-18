@@ -24,71 +24,76 @@
 #include "kinetic_types.h"
 
 /**
- * Initializes the Kinetic API, configures logging destination, establishes a
+ * @brief Initializes the Kinetic API, configures logging destination, establishes a
  * connection to the specified Kinetic Device, and establishes a session.
  *
- * @session Session instance to configure with connection info
- *  .host           Host name or IP address to connect to
- *  .port           Port to establish socket connection on
- *  .nonBlocking    Set to true for non-blocking or false for blocking I/O
- *  .clusterVersion Cluster version to use for the session
- *  .identity       Identity to use for the session
- *  .hmacKey        Key to use for HMAC calculations (NULL-terminated string)
- *  .logFile        Path to log file. Defaults to STDOUT if unspecified
+ * @config          Session configuration
+ *  .host               Host name or IP address to connect to
+ *  .port               Port to establish socket connection on
+ *  .nonBlocking        Set to true for non-blocking or false for blocking I/O
+ *  .clusterVersion     Cluster version to use for the session
+ *  .identity           Identity to use for the session
+ *  .hmacKey            Key to use for HMAC calculations (NULL-terminated string)
+ *  .logFile            Path to log file. Defaults to STDOUT if unspecified
+ * @handle          Pointer to KineticSessionHandle (populated upon successful connection)
  *
  * @return          Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Connect(const KineticSession* session);
+KineticStatus KineticClient_Connect(const KineticSession* config,
+    KineticSessionHandle* const handle);
 
 /**
  * @brief Closes the connection to a host.
  *
- * @param session   KineticSession instance
+ * @param handle    KineticSessionHandle for a connected session.
+ *
+ * @return          Returns the resulting KineticStatus
+ */
+KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle);
+
+/**
+ * @brief Executes a NOOP command to test whether the Kinetic Device is operational.
+ *
+ * @param handle        KineticSessionHandle for a connected session.
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Disconnect(const KineticSession* session);
+KineticStatus KineticClient_NoOp(KineticSessionHandle session);
 
 /**
- * @brief Executes a NOOP command to test whether the Kinetic Device is operational
+ * @brief Executes a PUT command to store/update an entry on the Kinetic Device.
  *
- * @param operation     KineticOperation to use for the operation.
- *                      If operation is already allocated, it will be reused
- *                      If operation is empty, one will be allocated, if available.
- *
- * @return              Returns the resulting KineticStatus
- */
-KineticStatus KineticClient_NoOp(const KineticSession* session,
-    const KineticOperation* operation);
-
-/**
- * @brief Executes a PUT command to store/update an entry on the Kinetic Device
- *
- * @param operation     KineticOperation to use for the operation.
- *                      If operation is already allocated, it will be reused
- *                      If operation is empty, one will be allocated, if available.
+ * @param handle        KineticSessionHandle for a connected session.
  * @param metadata      Key/value metadata for object to store. 'value' must
  *                      specify the data to be stored.
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Put(KineticSession* session,
-    const KineticOperation* operation,
-    const KineticKeyValue* metadata);
+KineticStatus KineticClient_Put(KineticSessionHandle session,
+    KineticKeyValue* const metadata);
+
+/**
+ * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
+ *
+ * @param handle        KineticSessionHandle for a connected session.
+ * @param metadata      Key/value metadata for object to retrieve. 'value' will
+ *                      be populated unless 'metadataOnly' is set to 'true'
+ *
+ * @return              Returns the resulting KineticStatus
+ */
+KineticStatus KineticClient_Get(KineticSessionHandle session,
+    KineticKeyValue* const metadata);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
  *
- * @param operation     KineticOperation to use for the operation.
- *                      If operation is already allocated, it will be reused
- *                      If operation is empty, one will be allocated, if available.
+ * @param handle        KineticSessionHandle for a connected session.
  * @param metadata      Key/value metadata for object to delete. 'value' is
  *                      not used for this operation.
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Delete(const KineticSession* session,
-    const KineticOperation* operation,
-    const KineticKeyValue* metadata);
+KineticStatus KineticClient_Delete(KineticSessionHandle session,
+    KineticKeyValue* const metadata);
 
 #endif // _KINETIC_CLIENT_H

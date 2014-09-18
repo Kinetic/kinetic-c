@@ -61,8 +61,8 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_algorithm = (bool)((int)metadata->algorithm > 0);
     if (message->keyValue.has_algorithm)
     {
-        message->keyValue.algorithm = (KineticProto_Algorithm)
-            metadata->algorithm;
+        message->keyValue.algorithm =
+            KineticProto_Algorithm_from_KineticAlgorithm(metadata->algorithm);
     }
     message->keyValue.has_metadataOnly = metadata->metadataOnly;
     if (message->keyValue.has_metadataOnly)

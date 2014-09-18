@@ -22,6 +22,7 @@
 #include "unity_helper.h"
 #include "protobuf-c/protobuf-c.h"
 #include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 
@@ -56,7 +57,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
         .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
-        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
     };
 
     KineticMessage_Init(&message);
@@ -95,7 +96,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_me
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
         .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
-        .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
         .metadataOnly = true,
     };
 
