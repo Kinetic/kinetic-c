@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -43,42 +43,7 @@
 #include <netdb.h>
 #include <signal.h>
 #include <unistd.h>
-
 #include "socket99/socket99.h"
-
-static void* KineticProto_Alloc(void* buf, size_t size)
-{
-    LOG_LOCATION;
-    ByteBuffer* p = (ByteBuffer*)buf;
-    LOGF(">>>> Allocating %zu bytes; used=%zu, len=%zu",
-        size, p->bytesUsed, p->array.len);
-    void *res = NULL;
-    if ((size > 0) && (p->bytesUsed + size <= p->array.len))
-    {
-        // Allocate from the end of the buffer
-        res = (void*)&p->array.data[p->bytesUsed];
-
-        // Append NULL terminator to protect from access violation if abused as a string
-        p->array.data[p->bytesUsed + size] = '\0';
-
-        // Align to next long boundary after requested size + NULL terminator
-        p->bytesUsed += (size + 1 + sizeof(long)) & ~(sizeof(long) - 1);
-    }
-    else
-    {
-        LOGF("Failed allocating protobuf element! used=%zu, len=%zu",
-            p->bytesUsed, p->array.len);
-    }
-    LOGF(">>>>>>>>addr: 0x%llX", (unsigned long long)res);
-    return res;
-}
- 
-static void KineticProto_Free(void* buf, void* ignored)
-{
-    (void)ignored; // to eliminate unused parameter warning
-    ByteBuffer* p = (ByteBuffer*)buf;
-    p->bytesUsed = 0;
-}
 
 
 int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
@@ -101,7 +66,8 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
     LOGF("Connecting to %s:%d", host, port);
     if (!socket99_open(&cfg, &result))
     {
-        LOGF("Failed to open socket connection with host: status %d, errno %d",
+        LOGF("Failed to open socket connection"
+            "with host: status %d, errno %d",
             result.status, result.saved_errno);
         return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
@@ -240,10 +206,10 @@ bool KineticSocket_Read(int socket, ByteArray dest)
                 buff.array.len - buff.bytesUsed);
             // Retry if no data yet...
             if (status == -1 && 
-                    (   (errno == EINTR) ||
-                        (errno == EAGAIN) ||
-                        (errno == EWOULDBLOCK)
-                    ) )
+                (   (errno == EINTR) ||
+                    (errno == EAGAIN) ||
+                    (errno == EWOULDBLOCK)
+                ) )
             {
                 continue;
             }
@@ -277,29 +243,16 @@ bool KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
     if (KineticSocket_Read(socket, recvArray))
     {
         LOG("Read completed!");
-
-        // Protobuf-C allocator to use for received data
-        ByteBuffer recvBuffer = {
-            .array = (ByteArray) {
-                .data = pdu->protobufRaw,
-                .len = PDU_VALUE_MAX_LEN,
-            },
-            .bytesUsed = 0,
-        };
-        ProtobufCAllocator serialAllocator = {
-            KineticProto_Alloc,
-            KineticProto_Free,
-            (void*)&recvBuffer
-        };
-
-        KineticProto* unpacked = KineticProto__unpack(&serialAllocator,
-            recvBuffer.array.len, recvBuffer.array.data);
-        if (unpacked == NULL)
+        pdu->proto = KineticProto__unpack(NULL,
+            recvArray.len, recvArray.data);
+        if (pdu->proto == NULL)
         {
+            pdu->protobufDynamicallyExtracted = false;
             LOG("Error unpacking incoming Kinetic protobuf message!");
         }
         else
         {
+            pdu->protobufDynamicallyExtracted = true;
             LOG("Protobuf unpacked successfully!");
             return true;
         }
@@ -315,7 +268,11 @@ bool KineticSocket_Write(int socket, ByteArray src)
     {
         int status = write(socket,
             &src.data[count], src.len - count);
-        if (status == -1 && errno == EINTR)
+        if (status == -1 && 
+            (   (errno == EINTR) ||
+                (errno == EAGAIN) ||
+                (errno == EWOULDBLOCK)
+            ) )
         {
             LOG("Write interrupted. retrying...");
             continue;

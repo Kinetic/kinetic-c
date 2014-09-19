@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -112,6 +112,13 @@ void KineticAllocator_FreePDU(KineticPDU** pdu)
                 PDUListLast = cur->previous;
             }
         }
+
+        if ((cur->pdu.proto != NULL) && cur->pdu.protobufDynamicallyExtracted)
+        {
+            KineticProto__free_unpacked(cur->pdu.proto, NULL);
+            cur->pdu.proto = NULL;
+            cur->pdu.protobufDynamicallyExtracted = false;
+        };
 
         LOGF("  Freeing item @ 0x%0llX, pdu @ 0x%0llX",
             (long long)cur, (long long)&cur->pdu);

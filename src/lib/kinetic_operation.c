@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -37,43 +37,32 @@ static void KineticOperation_ValidateOperation(KineticOperation* operation)
     assert(operation->response != NULL);
 }
 
-
-KineticStatus KineticOperation_Create(KineticOperation* const operation,
-    const KineticConnection* const connection)
+KineticOperation KineticOperation_Create(KineticConnection* const connection)
 {
-    if (operation == NULL)
+    KineticOperation operation = {
+        .connection = connection,
+        .request = KineticAllocator_NewPDU(),
+        .response =  KineticAllocator_NewPDU(),
+    };
+
+    if (operation.request == NULL)
     {
-        return KINETIC_STATUS_OPERATION_INVALID;
+        LOG("Request PDU could not be allocated! Try reusing or freeing a PDU.");
+        return (KineticOperation) {.request = NULL, .response = NULL};
+    }
+    KineticPDU_Init(operation.request, connection);
+    KINETIC_PDU_INIT_WITH_MESSAGE(operation.request, connection);
+    operation.request->proto = &operation.request->protoData.message.proto;
+
+    if (operation.response == NULL)
+    {
+        LOG("Response PDU could not be allocated! Try reusing or freeing a PDU.");
+        return (KineticOperation) {.request = NULL, .response = NULL};
     }
 
-    if (operation->request == NULL)
-    {
-        operation->request = KineticAllocator_NewPDU();
-        if (operation->request == NULL)
-        {
-            LOG("Request PDU could not be allocated!"
-                " Try reusing or freeing a PDU.");
-            return KINETIC_STATUS_NO_PDUS_AVAVILABLE;
-        }
-    }
-    KineticPDU_Init(operation->request, connection);
-    KINETIC_PDU_INIT_WITH_MESSAGE(operation->request, connection);
-    operation->request->proto = &operation->request->protoData.message.proto;
+    KineticPDU_Init(operation.response, connection);
 
-    if (operation->response == NULL)
-    {
-        operation->response = KineticAllocator_NewPDU();
-        if (operation->response == NULL)
-        {
-            LOG("Response PDU could not be allocated!"
-                "Try reusing or freeing a PDU.");
-            return KINETIC_STATUS_NO_PDUS_AVAVILABLE;
-        }
-    }
-
-    KineticPDU_Init(operation->response, connection);
-
-    return KINETIC_STATUS_SUCCESS;
+    return operation;
 }
 
 KineticStatus KineticOperation_Free(KineticOperation* const operation)
@@ -86,13 +75,13 @@ KineticStatus KineticOperation_Free(KineticOperation* const operation)
 
     if (operation->request != NULL)
     {
-        free(operation->request);
+        KineticAllocator_FreePDU(&operation->request);
         operation->request = NULL;
     }
 
     if (operation->response != NULL)
     {
-        free(operation->response);
+        KineticAllocator_FreePDU(&operation->response);
         operation->response = NULL;
     }
 
@@ -173,9 +162,21 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_PUT;
     operation->request->proto->command->header->has_messageType = true;
 
-    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
-
-    operation->request->value = metadata->value;
+    KineticMessage_ConfigureKeyValue(
+        &operation->request->protoData.message, metadata);
+    operation->request->metadata = (KineticKeyValue*)metadata;
+    if (metadata->value.data != NULL && metadata->value.len > 0)
+    {
+        LOG_LOCATION; KineticLogger_LogByteArray("PUT Value", metadata->value);
+        operation->request->value = metadata->value;
+        operation->request->header.valueLength = metadata->value.len;
+    }
+    else
+    {
+        operation->request->value = BYTE_ARRAY_NONE;
+        operation->request->header.valueLength = 0;
+    }
+    operation->response->value = BYTE_ARRAY_NONE;
 }
 
 void KineticOperation_BuildGet(KineticOperation* const operation,

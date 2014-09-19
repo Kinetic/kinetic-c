@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -41,12 +41,10 @@ KineticSessionHandle KineticConnection_NewConnection(
         if (Connections[idx] == NULL)
         {
             KineticConnection* connection = &ConnectionInstances[idx];
-            LOG_LOCATION; LOGF("idx=%d, addr=0x%0llX",
-                idx, (long long)connection);
-            *connection = (KineticConnection){.session = *config};
             Connections[idx] = connection;
+            KINETIC_CONNECTION_INIT(connection);
+            connection->session = *config;
             handle = (KineticSessionHandle)(idx + 1);
-            // Connections[idx] = (KineticConnection){.session = *config};
             return handle;
         }
     }
@@ -78,12 +76,10 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
     }
 
     connection->connected = false;
-
     connection->socket = KineticSocket_Connect(
         connection->session.host,
         connection->session.port,
         connection->session.nonBlocking);
-    
     connection->connected = (connection->socket >= 0);
 
     if (!connection->connected)

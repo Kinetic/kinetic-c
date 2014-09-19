@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -100,6 +100,7 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 
 void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 {
+    LOG_LOCATION;
     KineticSocket_Connect_ExpectAndReturn(SessionConfig.host,
         SessionConfig.port, SessionConfig.nonBlocking, -1);
 

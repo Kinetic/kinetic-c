@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -80,10 +80,10 @@ if ((expected) != (actual)) { \
     char err[128]; \
     const char* invalidStatus = "INVALID_STATUS"; \
     const char* statusDescExpected = invalidStatus; \
-    if ((expected) >= 0 && (expected) < KineticStatusDescriptorCount) { \
+    if ((expected) >= 0 && (expected) < KINETIC_STATUS_COUNT) { \
         statusDescExpected = KineticStatusDescriptor[(expected)]; } \
     const char* statusDescActual = invalidStatus; \
-    if ((actual) >= 0 && (actual) < KineticStatusDescriptorCount) { \
+    if ((actual) >= 0 && (actual) < KINETIC_STATUS_COUNT) { \
         statusDescActual = KineticStatusDescriptor[(actual)]; } \
     sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
         statusDescExpected, (expected), statusDescActual, (actual));\

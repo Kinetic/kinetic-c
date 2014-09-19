@@ -14,13 +14,15 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
 #include "kinetic_client.h"
 #include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
+#include "kinetic_allocator.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
 #include "kinetic_logger.h"
@@ -39,10 +41,14 @@
 #include <stdlib.h>
 
 static SystemTestFixture Fixture = {
-    .host = "localhost",
-    .port = KINETIC_PORT,
-    .clusterVersion = 0,
-    .identity =  1,
+    .config = (KineticSession) {
+        .host = "localhost",
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity =  1,
+        .nonBlocking = false,
+        .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
+    }
 };
 
 void setUp(void)
@@ -139,11 +145,8 @@ void tearDown(void)
 // -----------------------------------------------------------------------------
 void test_NoOp_should_succeed(void)
 {
-    KineticStatus status =
-        KineticClient_NoOp(&Fixture.instance.operation);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(
-        KINETIC_STATUS_SUCCESS, status);
+    KineticStatus status = KineticClient_NoOp(Fixture.handle);
+    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
 }
 
 /*******************************************************************************

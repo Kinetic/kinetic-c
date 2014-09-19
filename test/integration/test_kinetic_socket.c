@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -41,6 +41,7 @@
 
 #include "unity_helper.h"
 #include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -71,6 +72,11 @@ void tearDown(void)
         LOG("Shutting down socket...");
         KineticSocket_Close(FileDesc);
         FileDesc = 0;
+    }
+
+    if (PDU.proto != NULL && PDU.protobufDynamicallyExtracted)
+    {
+        KineticProto__free_unpacked(PDU.proto, NULL);
     }
 }
 
@@ -146,7 +152,6 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
 }
 
 
-
 void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
 {
     LOG_LOCATION;
@@ -183,6 +188,7 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
         "Expected socket to timeout waiting on data!");
 }
 
+
 void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
 {
     LOG_LOCATION;
@@ -209,8 +215,6 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     // Receive the response
     PDU.header.protobufLength = 125;
     success = KineticSocket_ReadProtobuf(FileDesc, &PDU);
-
-    TEST_IGNORE_MESSAGE("Need to figure out why unpack is failing for this test.");
 
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT_NOT_NULL_MESSAGE(PDU.proto,

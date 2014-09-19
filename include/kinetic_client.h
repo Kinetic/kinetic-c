@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -40,7 +40,7 @@
  * @return          Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Connect(const KineticSession* config,
-    KineticSessionHandle* const handle);
+    KineticSessionHandle* handle);
 
 /**
  * @brief Closes the connection to a host.
@@ -58,7 +58,7 @@ KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle);
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_NoOp(KineticSessionHandle session);
+KineticStatus KineticClient_NoOp(KineticSessionHandle handle);
 
 /**
  * @brief Executes a PUT command to store/update an entry on the Kinetic Device.
@@ -69,8 +69,8 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle session);
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Put(KineticSessionHandle session,
-    KineticKeyValue* const metadata);
+KineticStatus KineticClient_Put(KineticSessionHandle handle,
+    const KineticKeyValue* const metadata);
 
 /**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
@@ -81,7 +81,7 @@ KineticStatus KineticClient_Put(KineticSessionHandle session,
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Get(KineticSessionHandle session,
+KineticStatus KineticClient_Get(KineticSessionHandle handle,
     KineticKeyValue* const metadata);
 
 /**
@@ -93,7 +93,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle session,
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Delete(KineticSessionHandle session,
-    KineticKeyValue* const metadata);
+KineticStatus KineticClient_Delete(KineticSessionHandle handle,
+    const KineticKeyValue* const metadata);
 
 #endif // _KINETIC_CLIENT_H

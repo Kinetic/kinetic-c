@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -24,6 +24,8 @@
 #include "kinetic_nbo.h"
 #include "kinetic_message.h"
 #include "kinetic_logger.h"
+#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "protobuf-c/protobuf-c.h"
 #include <string.h>
 #include <openssl/hmac.h>

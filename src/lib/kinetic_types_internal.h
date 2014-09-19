@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -150,6 +150,7 @@ struct _KineticPDU
         uint8_t buffer[PDU_PROTO_MAX_UNPACKED_LEN];
     } protoData;        // Proto will always be first
     KineticProto* proto;
+    bool protobufDynamicallyExtracted;
     // bool rawProtoEnabled;
     uint8_t protobufRaw[PDU_PROTO_MAX_LEN];
 
@@ -218,8 +219,6 @@ typedef struct _KineticOperation
 // } ProtobufCAllocator;
 
 KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(KineticAlgorithm kinteicAlgorithm);
-
-void* KineticAllocate(size_t size);
 
 
 #endif // _KINETIC_TYPES_INTERNAL_H

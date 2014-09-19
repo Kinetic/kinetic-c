@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -26,8 +26,6 @@
 KineticSessionHandle KineticConnection_NewConnection(const KineticSession* const config);
 void KineticConnection_FreeConnection(KineticSessionHandle* const handle);
 KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle);
-KineticPDU* KineticConnection_AllocatePDU(KineticConnection* const connection);
-void KineticConnection_FreePDU(KineticConnection* const connection, KineticPDU* pdu);
 KineticStatus KineticConnection_Connect(KineticConnection* const connection);
 KineticStatus KineticConnection_Disconnect(KineticConnection* const connection);
 void KineticConnection_IncrementSequence(KineticConnection* const connection);

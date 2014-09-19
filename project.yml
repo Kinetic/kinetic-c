@@ -72,10 +72,10 @@
   :plugins:
     - :ignore
     # - :ignore_args
-    - :array
-    - :cexception
-    - :callback
-    - :return_thru_ptr
+    # - :array
+    # - :cexception
+    # - :callback
+    # - :return_thru_ptr
   :unity_helper_path: test/support/unity_helper.h
   :includes_h_post_orig_header:
     - "unity.h"
@@ -87,6 +87,8 @@
     int8_t:     INT8
     bool_t:     BOOL
     size_t:     INT
+    KineticSessionHandle: INT
+    KineticOperationHandle: INT
   :callback_include_count: true
 
 :tools:

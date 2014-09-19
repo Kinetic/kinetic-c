@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -53,13 +53,21 @@ void test_KineticProto_should_pack_and_unpack_protocol_buffers(void)
 
     expectedLen = KineticProto__get_packed_size(&proto);
     packed = malloc(KineticProto__get_packed_size(&proto));
-    TEST_ASSERT_NOT_NULL_MESSAGE(packed, "Failed dynamically allocating buffer");
-    TEST_ASSERT_EQUAL_MESSAGE(expectedLen, KineticProto__pack(&proto, packed), "Packed size invalid");
-    TEST_ASSERT_EQUAL_MESSAGE(expectedLen, KineticProto__get_packed_size(&proto), "Inspected packed size invalid");
-    TEST_ASSERT_EQUAL_MESSAGE(expectedLen, KineticProto__pack_to_buffer(&proto, &bs.base), "Packed BufferSimple size invalid");
+    TEST_ASSERT_NOT_NULL_MESSAGE(packed,
+        "Failed dynamically allocating buffer");
+    TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
+        KineticProto__pack(&proto, packed),
+        "Packed size invalid");
+    TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
+        KineticProto__get_packed_size(&proto),
+        "Inspected packed size invalid");
+    TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
+        KineticProto__pack_to_buffer(&proto, &bs.base),
+        "Packed BufferSimple size invalid");
 
     // Validate the both packed buffers are equal
-    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE(bs.data, packed, expectedLen, "Packed proto buffers do not match");
+    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE(bs.data, packed, expectedLen,
+        "Packed proto buffers do not match");
     PROTOBUF_C_BUFFER_SIMPLE_CLEAR (&bs);
 
     // Free dynamically allocated memory
@@ -89,12 +97,20 @@ void test_KineticProto_should_pass_data_accurately_through_raw_buffers(void)
     KineticProto__pack(&proto, packed);
 
     // Unpack and verify the raw buffer results
-    unpacked = KineticProto__unpack(NULL, KineticProto__get_packed_size(&proto), packed);
-    TEST_ASSERT_NOT_NULL_MESSAGE(unpacked, "Unpack method returned NULL");
-    TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_identity, "Command header identity reported as unavailable");
-    TEST_ASSERT_EQUAL_INT64_MESSAGE(-12345678ul, unpacked->command->header->identity, "Command header identity invalid");
-    TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_clusterVersion, "Command header cluster version reported as unavailable");
-    TEST_ASSERT_EQUAL_INT64_MESSAGE(12345678ul, unpacked->command->header->clusterVersion, "Command header cluster version invalid");
+    unpacked = KineticProto__unpack(NULL,
+        KineticProto__get_packed_size(&proto), packed);
+    TEST_ASSERT_NOT_NULL_MESSAGE(unpacked,
+        "Unpack method returned NULL");
+    TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_identity,
+        "Command header identity reported as unavailable");
+    TEST_ASSERT_EQUAL_INT64_MESSAGE(-12345678ul,
+        unpacked->command->header->identity,
+        "Command header identity invalid");
+    TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_clusterVersion,
+        "Command header cluster version reported as unavailable");
+    TEST_ASSERT_EQUAL_INT64_MESSAGE(12345678ul,
+        unpacked->command->header->clusterVersion,
+        "Command header cluster version invalid");
 
     // Free dynamically allocated memory
     KineticProto__free_unpacked(unpacked, NULL);
@@ -124,12 +140,19 @@ void test_KineticProto_should_pass_data_accurately_through_BufferSimple(void)
     KineticProto__pack_to_buffer(&proto, &bs.base);
 
     // Unpack and verify the simple buffer results
-    unpacked = KineticProto__unpack(NULL, KineticProto__get_packed_size(&proto), bs.data);
+    unpacked = KineticProto__unpack(NULL,
+        KineticProto__get_packed_size(&proto), bs.data);
     TEST_ASSERT_NOT_NULL_MESSAGE(unpacked, "Unpack method returned NULL");
-    TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_identity, "Command header identity reported as unavailable");
-    TEST_ASSERT_EQUAL_INT64_MESSAGE(-12345678ul, unpacked->command->header->identity, "Command header identity invalid");
-    TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_clusterVersion, "Command header cluster version reported as unavailable");
-    TEST_ASSERT_EQUAL_INT64_MESSAGE(12345678ul, unpacked->command->header->clusterVersion, "Command header cluster version invalid");
+    TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_identity,
+        "Command header identity reported as unavailable");
+    TEST_ASSERT_EQUAL_INT64_MESSAGE(-12345678ul,
+        unpacked->command->header->identity,
+        "Command header identity invalid");
+    TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_clusterVersion,
+        "Command header cluster version reported as unavailable");
+    TEST_ASSERT_EQUAL_INT64_MESSAGE(12345678ul,
+        unpacked->command->header->clusterVersion,
+        "Command header cluster version invalid");
 
     // Free dynamically allocated memory
     KineticProto__free_unpacked(unpacked, NULL);

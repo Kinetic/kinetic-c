@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -59,8 +59,7 @@ bool KineticPDU_Send(KineticPDU* request)
 {
     assert(request != NULL);
     assert(request->connection != NULL);
-    LOGF("Attempting to receive PDU via fd=%d",
-        request->connection->socket);
+    LOGF("Attempting to send PDU via fd=%d", request->connection->socket);
 
     // Populate the HMAC for the protobuf
     KineticHMAC_Init(&request->hmac,
@@ -70,13 +69,22 @@ bool KineticPDU_Send(KineticPDU* request)
 
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
-    request->header.protobufLength =
-        KineticProto__get_packed_size(&request->protoData.message.proto);
-    request->header.valueLength = request->value.len;
+    request->header.protobufLength = KineticProto__get_packed_size(
+        &request->protoData.message.proto);
+    if (request->metadata != NULL)
+    {
+        LOG_LOCATION; KineticLogger_LogByteArray("PDU Send Value", request->metadata->value);
+        request->header.valueLength = request->metadata->value.len;
+    }
+    else
+    {
+        LOG_LOCATION; LOG("Empty Value payload for this request");
+        request->header.valueLength = 0;
+    }
     KineticLogger_LogHeader(&request->header);
 
     // Create NBO copy of header for sending
-    request->headerNBO.versionPrefix = request->header.versionPrefix;
+    request->headerNBO.versionPrefix = 'F';
     request->headerNBO.protobufLength =
         KineticNBO_FromHostU32(request->header.protobufLength);
     request->headerNBO.valueLength =
@@ -87,8 +95,8 @@ bool KineticPDU_Send(KineticPDU* request)
         .data = (uint8_t*)&request->headerNBO,
         .len = sizeof(KineticPDUHeader)
     };
-    if (!KineticSocket_Write(request->connection->socket,
-        headerNBO))
+    KineticLogger_LogByteArray("Request PDU Header (NBO)", headerNBO);
+    if (!KineticSocket_Write(request->connection->socket, headerNBO))
     {
         LOG("Failed to send PDU header!");
         return false;
@@ -120,11 +128,11 @@ bool KineticPDU_Send(KineticPDU* request)
 
 bool KineticPDU_Receive(KineticPDU* const response)
 {
-    const int fd = response->connection->socket;
-    LOGF("Attempting to receive PDU via fd=%d", fd);
-    assert(fd >= 0);
     assert(response != NULL);
     assert(response->proto != NULL);
+    const int fd = response->connection->socket;
+    assert(fd >= 0);
+    LOGF("Attempting to receive PDU via fd=%d", fd);
     ByteArray rawHeader = {
         .data = (uint8_t*)&response->headerNBO,
         .len = sizeof(KineticPDUHeader) };
@@ -159,7 +167,7 @@ bool KineticPDU_Receive(KineticPDU* const response)
     else
     {
         LOG("Received PDU protobuf");
-        KineticLogger_LogProtobuf(&response->protoData.message.proto);
+        KineticLogger_LogProtobuf(response->proto);
     }
 
     // Validate the HMAC for the recevied protobuf message
@@ -187,10 +195,8 @@ bool KineticPDU_Receive(KineticPDU* const response)
     {
         assert(response->value.data != NULL);
 
-        LOGF("Attempting to receive value payload (%lld bytes)...",
+        LOGF("Receiving value payload (%lld bytes)...",
             (long long)response->header.valueLength);
-
-        LOG_LOCATION; LOGF("value.len=%u, value.data=0x%zu", response->value.len, response->value.data);
 
         if (!KineticSocket_Read(fd, response->value))
         {
@@ -204,6 +210,7 @@ bool KineticPDU_Receive(KineticPDU* const response)
             KineticLogger_LogByteArray("Value Payload", response->value);
         }
     }
+
 
     return true;
 }
