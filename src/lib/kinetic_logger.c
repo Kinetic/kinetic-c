@@ -237,58 +237,58 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                 {
                     LOG_PROTO_LEVEL_START("keyValue");
                     {
-                        if (proto->command->body->keyValue->has_key)
-                        {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->key, 0,
-                                proto->command->body->keyValue->key.len);
-                            LOGF("%skey: '%s'", _indent, tmpBuf);
-                        }
-                        if (proto->command->body->keyValue->has_newVersion)
-                        {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->newVersion,
-                                0, proto->command->body->keyValue->newVersion.len);
-                            LOGF("%snewVersion: '%s'", _indent, tmpBuf);
-                        }
-                        if (proto->command->body->keyValue->has_dbVersion)
-                        {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->dbVersion,
-                                0, proto->command->body->keyValue->dbVersion.len);
-                            LOGF("%sdbVersion: '%s'", _indent, tmpBuf);
-                        }
-                        if (proto->command->body->keyValue->has_tag)
-                        {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->tag,
-                                0, proto->command->body->keyValue->tag.len);
-                            LOGF("%stag: '%s'", _indent, tmpBuf);
-                        }
-                        if (proto->command->body->keyValue->has_force)
-                        {
-                            LOGF("%sforce: %s", _indent,
-                                proto->command->body->keyValue->force ? _str_true : _str_false);
-                        }
-                        if (proto->command->body->keyValue->has_algorithm)
-                        {
-                            const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                &KineticProto_algorithm__descriptor,
-                                proto->command->body->keyValue->algorithm);
-                            LOGF("%salgorithm: %s", _indent, eVal->name);
-                        }
-                        if (proto->command->body->keyValue->has_metadataOnly)
-                        {
-                            LOGF("%smetadataOnly: %s", _indent,
-                                proto->command->body->keyValue->metadataOnly ? _str_true : _str_false);
-                        }
-                        if (proto->command->body->keyValue->has_synchronization)
-                        {
-                            const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                &KineticProto_synchronization__descriptor,
-                                proto->command->body->keyValue->synchronization);
-                            LOGF("%ssynchronization: %s", _indent, eVal->name);
-                        }
+                        // if (proto->command->body->keyValue->has_key)
+                        // {
+                        //     BYTES_TO_CSTRING(tmpBuf,
+                        //         proto->command->body->keyValue->key, 0,
+                        //         proto->command->body->keyValue->key.len);
+                        //     LOGF("%skey: '%s'", _indent, tmpBuf);
+                        // }
+                        // if (proto->command->body->keyValue->has_newVersion)
+                        // {
+                        //     BYTES_TO_CSTRING(tmpBuf,
+                        //         proto->command->body->keyValue->newVersion,
+                        //         0, proto->command->body->keyValue->newVersion.len);
+                        //     LOGF("%snewVersion: '%s'", _indent, tmpBuf);
+                        // }
+                        // if (proto->command->body->keyValue->has_dbVersion)
+                        // {
+                        //     BYTES_TO_CSTRING(tmpBuf,
+                        //         proto->command->body->keyValue->dbVersion,
+                        //         0, proto->command->body->keyValue->dbVersion.len);
+                        //     LOGF("%sdbVersion: '%s'", _indent, tmpBuf);
+                        // }
+                        // if (proto->command->body->keyValue->has_tag)
+                        // {
+                        //     BYTES_TO_CSTRING(tmpBuf,
+                        //         proto->command->body->keyValue->tag,
+                        //         0, proto->command->body->keyValue->tag.len);
+                        //     LOGF("%stag: '%s'", _indent, tmpBuf);
+                        // }
+                        // if (proto->command->body->keyValue->has_force)
+                        // {
+                        //     LOGF("%sforce: %s", _indent,
+                        //         proto->command->body->keyValue->force ? _str_true : _str_false);
+                        // }
+                        // if (proto->command->body->keyValue->has_algorithm)
+                        // {
+                        //     const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
+                        //         &KineticProto_algorithm__descriptor,
+                        //         proto->command->body->keyValue->algorithm);
+                        //     LOGF("%salgorithm: %s", _indent, eVal->name);
+                        // }
+                        // if (proto->command->body->keyValue->has_metadataOnly)
+                        // {
+                        //     LOGF("%smetadataOnly: %s", _indent,
+                        //         proto->command->body->keyValue->metadataOnly ? _str_true : _str_false);
+                        // }
+                        // if (proto->command->body->keyValue->has_synchronization)
+                        // {
+                        //     const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
+                        //         &KineticProto_synchronization__descriptor,
+                        //         proto->command->body->keyValue->synchronization);
+                        //     LOGF("%ssynchronization: %s", _indent, eVal->name);
+                        // }
                     }
                     LOG_PROTO_LEVEL_END();
                 }

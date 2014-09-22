@@ -53,16 +53,16 @@ void *kinetic_put(void *kinetic_arg)
 		memset(key, 0, sizeof(key));
 		sprintf((char*)key, "%s_%02d", arg->oid, objIndex);
 		metaData->key = (ByteArray){.data = key, .len = sizeof(key)};
-		int objectLen = arg->data.array.len - arg->data.bytesUsed;
+		int bytesRemaining = arg->data.array.len - arg->data.bytesUsed;
 		metaData->value = (ByteArray) {
 			.data = &(arg->data.array.data[objIndex * KINETIC_OBJ_SIZE]),
-			.len = (objectLen > KINETIC_OBJ_SIZE) ? KINETIC_OBJ_SIZE : objectLen,
+			.len = (bytesRemaining > KINETIC_OBJ_SIZE) ? KINETIC_OBJ_SIZE : bytesRemaining,
 		};
 		arg->data.bytesUsed += metaData->value.len;
 
 		// Store the data slice
+		LOGF("Storing a data slice (%u bytes)", metaData->value.len);
 		KineticStatus status = KineticClient_Put(arg->sessionHandle, metaData);
-		// sprintf(message, "KineticClient put to disk failed, ip:%s", arg->ip);
 		TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
 		LOGF("KineticClient put to disk success, ip:%s", arg->ip);
 
@@ -87,7 +87,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
 	for (int iteration = 0; iteration < maxIterations; iteration++) {
 
-		LOGF("Overlapped PUT operations (iteration %d of %d)", iteration, maxIterations);
+		LOGF("Overlapped PUT operations (iteration %d of %d)", iteration+1, maxIterations);
 		const int numCopiesToStore = 1;
 		int fd, dataLen, i;
 
@@ -140,7 +140,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 			int err_ret = pthread_join(thread_id[i], NULL);
 			TEST_ASSERT_EQUAL_MESSAGE(0, err_ret, "pthread join failed");
 			KineticClient_Disconnect(&kinetic_client[i]);
-			free(&kinetic_client[i]);
 		}
 
 		// Cleanup the rest of the reources
