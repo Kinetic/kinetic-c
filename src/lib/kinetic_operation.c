@@ -39,6 +39,10 @@ static void KineticOperation_ValidateOperation(KineticOperation* operation)
 
 KineticOperation KineticOperation_Create(KineticConnection* const connection)
 {
+    LOGF("\n"
+        "--------------------------------------------------\n"
+        "Building new operation on connection @ 0x%llX", connection);
+
     KineticOperation operation = {
         .connection = connection,
         .request = KineticAllocator_NewPDU(),
@@ -47,16 +51,20 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
 
     if (operation.request == NULL)
     {
-        LOG("Request PDU could not be allocated! Try reusing or freeing a PDU.");
+        LOG("Request PDU could not be allocated!"
+            " Try reusing or freeing a PDU.");
         return (KineticOperation) {.request = NULL, .response = NULL};
     }
     KineticPDU_Init(operation.request, connection);
     KINETIC_PDU_INIT_WITH_MESSAGE(operation.request, connection);
     operation.request->proto = &operation.request->protoData.message.proto;
+    // operation.request->proto->command->header->connectionID =
+    //     connection->connectionID;
 
     if (operation.response == NULL)
     {
-        LOG("Response PDU could not be allocated! Try reusing or freeing a PDU.");
+        LOG("Response PDU could not be allocated!"
+            " Try reusing or freeing a PDU.");
         return (KineticOperation) {.request = NULL, .response = NULL};
     }
 
@@ -167,7 +175,6 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
     operation->request->metadata = (KineticKeyValue*)metadata;
     if (metadata->value.data != NULL && metadata->value.len > 0)
     {
-        LOG_LOCATION; KineticLogger_LogByteArray("PUT Value", metadata->value);
         operation->request->value = metadata->value;
         operation->request->header.valueLength = metadata->value.len;
     }
@@ -189,17 +196,16 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
     operation->request->proto->command->header->has_messageType = true;
 
     operation->request->value = BYTE_ARRAY_NONE;
-    if (metadata->value.data != NULL)
-    {
+    if (metadata->value.data != NULL) {
         operation->response->value.data = metadata->value.data;
     }
-    else
-    {
+    else {
         operation->response->value.data = operation->response->valueBuffer;
     }
     operation->response->value.len = PDU_VALUE_MAX_LEN;
 
-    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
+    KineticMessage_ConfigureKeyValue(
+        &operation->request->protoData.message, metadata);
 }
 
 void KineticOperation_BuildDelete(KineticOperation* const operation,
@@ -213,5 +219,6 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
     operation->request->value = BYTE_ARRAY_NONE;
     operation->response->value = BYTE_ARRAY_NONE;
 
-    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
+    KineticMessage_ConfigureKeyValue(
+        &operation->request->protoData.message, metadata);
 }

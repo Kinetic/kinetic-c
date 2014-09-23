@@ -69,18 +69,10 @@ bool KineticPDU_Send(KineticPDU* request)
 
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
-    request->header.protobufLength = KineticProto__get_packed_size(
-        &request->protoData.message.proto);
-    if (request->metadata != NULL)
-    {
-        LOG_LOCATION; KineticLogger_LogByteArray("PDU Send Value", request->metadata->value);
-        request->header.valueLength = request->metadata->value.len;
-    }
-    else
-    {
-        LOG_LOCATION; LOG("Empty Value payload for this request");
-        request->header.valueLength = 0;
-    }
+    request->header.protobufLength = 
+        KineticProto__get_packed_size(&request->protoData.message.proto);
+    request->header.valueLength =
+        (request->metadata == NULL) ? 0 : request->metadata->value.len;
     KineticLogger_LogHeader(&request->header);
 
     // Create NBO copy of header for sending
@@ -95,7 +87,6 @@ bool KineticPDU_Send(KineticPDU* request)
         .data = (uint8_t*)&request->headerNBO,
         .len = sizeof(KineticPDUHeader)
     };
-    KineticLogger_LogByteArray("Request PDU Header (NBO)", headerNBO);
     if (!KineticSocket_Write(request->connection->socket, headerNBO))
     {
         LOG("Failed to send PDU header!");
@@ -207,8 +198,17 @@ bool KineticPDU_Receive(KineticPDU* const response)
         {
             LOG("Received value payload successfully");
             response->value.len = response->header.valueLength;
-            KineticLogger_LogByteArray("Value Payload", response->value);
+            // KineticLogger_LogByteArray("Value Payload", response->value);
         }
+    }
+
+    // Update connectionID to match value returned from device, if provided
+    if (response->proto->command != NULL &&
+        response->proto->command->header != NULL &&
+        response->proto->command->header->has_connectionID)
+    {
+        response->connection->connectionID =
+            response->proto->command->header->connectionID;
     }
 
 

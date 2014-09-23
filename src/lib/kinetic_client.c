@@ -58,6 +58,16 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
 
+    LOG_LOCATION; LOGF("Executing operation: 0x%llX", operation);
+    if (operation->request->metadata != NULL) {
+        KineticLogger_LogByteArray("  Sending PDU w/metadata:",
+            operation->request->metadata->value);
+    }
+    else {
+        LOG_LOCATION; LOG("  Sending PDU w/o metadata");
+    }
+    // KineticLogger_LogByteArray(" .value", operation->request->value);
+
     // Send the request
     if (KineticPDU_Send(operation->request))
     {
@@ -201,8 +211,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
     KineticOperation operation;
 
     status = KineticClient_CreateOperation(&operation, handle);
-    if (status != KINETIC_STATUS_SUCCESS)
-    {
+    if (status != KINETIC_STATUS_SUCCESS) {
         return status;
     }
 
@@ -238,14 +247,18 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
     KineticStatus status;
     KineticOperation operation;
 
+LOG("Creating new operation!");
     status = KineticClient_CreateOperation(&operation, handle);
     if (status != KINETIC_STATUS_SUCCESS)
     {
+        LOG("BOOM");
         return status;
     }
 
     // Initialize request
     KineticOperation_BuildDelete(&operation, metadata);
+    LOG_LOCATION; KineticLogger_LogByteArray(
+    "  DELETE REQUEST (post)", operation.request->value);
 
     // Execute the operation
     return KineticClient_ExecuteOperation(&operation);

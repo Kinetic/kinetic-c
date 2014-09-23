@@ -25,11 +25,20 @@
 #include "socket99/socket99.h"
 
 #define KINETIC_OBJ_SIZE (PDU_VALUE_MAX_LEN)
-#define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
+// #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
+#define BUFSIZE  (4 * KINETIC_OBJ_SIZE)
 #define KINETIC_KEY_SIZE (1000)
 #define KINETIC_MAX_THREADS (10)
 
 KineticSessionHandle *kinetic_client;
+
+void setUp(void)
+{
+}
+
+void tearDown(void)
+{
+}
 
 struct kinetic_thread_arg {
 	char ip[16];
@@ -83,9 +92,12 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 		.clusterVersion = 0,
 		.identity = 1,
 		.hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
+		.logFile = "NONE",
 	};
 
 	for (int iteration = 0; iteration < maxIterations; iteration++) {
+
+printf("Iteration = %d", iteration);
 
 		LOGF("Overlapped PUT operations (iteration %d of %d)", iteration+1, maxIterations);
 		const int numCopiesToStore = 1;

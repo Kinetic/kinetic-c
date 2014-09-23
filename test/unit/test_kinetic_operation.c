@@ -30,6 +30,7 @@
 #include "mock_kinetic_pdu.h"
 
 static KineticConnection Connection;
+static int64_t ConnectionID = 12345;
 static ByteArray HMACKey;
 static KineticPDU Request, Response;
 static KineticOperation Operation;
@@ -38,6 +39,7 @@ void setUp(void)
 {
     HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
     KINETIC_CONNECTION_INIT(&Connection);
+    Connection.connectionID = ConnectionID;
     KINETIC_PDU_INIT_WITH_MESSAGE(&Request, &Connection);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Response, &Connection);
     KINETIC_OPERATION_INIT(&Operation, &Connection);
@@ -76,6 +78,8 @@ void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_P
     KineticOperation operation = KineticOperation_Create(&Connection);
 
     TEST_ASSERT_EQUAL_PTR(&Connection, operation.connection);
+    TEST_ASSERT_EQUAL_INT64(ConnectionID, Connection.connectionID);
+    TEST_ASSERT_EQUAL_INT64(ConnectionID, operation.request->proto->command->header->connectionID);
     TEST_ASSERT_NOT_NULL(operation.request);
     TEST_ASSERT_NOT_NULL(operation.response);
 }

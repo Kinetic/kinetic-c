@@ -25,31 +25,43 @@
 
 static char LogFile[256] = "";
 bool LogToConsole = true;
+int LogLevel = 0;
 FILE* FileDesc = NULL;
 
 void KineticLogger_Init(const char* logFile)
 {
     LogToConsole = true;
     FileDesc = NULL;
-    if (logFile != NULL)
-    {
-        strcpy(LogFile, logFile);
-        FileDesc = fopen(LogFile, "w");
-        if (FileDesc == NULL)
-        {
-            fprintf(stderr,
-                "Failed to initialize logger with file: "
-                "fopen('%s') => FileDesc=%zd\n",
-                logFile, (size_t)FileDesc);
-        }
-        else
-        {
-            fprintf(stderr,
-                "Logging output to %s\n",
-                logFile);
-            LogToConsole = false;
-        }
-    }
+    LogLevel = -1;
+
+    return;
+
+    // if (logFile != NULL)
+    // {
+    //     strcpy(LogFile, logFile);
+    //     if (strcmp(logFile, "NONE") == 0)
+    //     {
+    //         LogLevel = -1;
+    //         LogToConsole = false;
+    //         return;
+    //     }
+
+    //     FileDesc = fopen(LogFile, "w");
+    //     if (FileDesc == NULL)
+    //     {
+    //         fprintf(stderr,
+    //             "Failed to initialize logger with file: "
+    //             "fopen('%s') => FileDesc=%zd\n",
+    //             logFile, (size_t)FileDesc);
+    //     }
+    //     else
+    //     {
+    //         fprintf(stderr,
+    //             "Logging output to %s\n",
+    //             logFile);
+    //         LogToConsole = false;
+    //     }
+    // }
 }
 
 void KineticLogger_Close(void)
@@ -64,7 +76,7 @@ void KineticLogger_Close(void)
 
 void KineticLogger_Log(const char* message)
 {
-    if (message == NULL)
+    if (message == NULL || LogLevel < 0)
     {
         return;
     }
@@ -81,14 +93,17 @@ int KineticLogger_LogPrintf(const char* format, ...)
 {
     int result = -1;
 
-    if (format != NULL)
+    if (LogLevel >= 0)
     {
-        va_list arg_ptr;
-        char buffer[1024];
-        va_start(arg_ptr, format);
-        result = vsprintf(buffer, format, arg_ptr);
-        KineticLogger_Log(buffer);
-        va_end(arg_ptr);
+        if (format != NULL)
+        {
+            va_list arg_ptr;
+            char buffer[1024];
+            va_start(arg_ptr, format);
+            result = vsprintf(buffer, format, arg_ptr);
+            KineticLogger_Log(buffer);
+            va_end(arg_ptr);
+        }
     }
 
    return(result);
@@ -97,6 +112,8 @@ int KineticLogger_LogPrintf(const char* format, ...)
 
 void KineticLogger_LogHeader(const KineticPDUHeader* header)
 {
+    if (LogLevel < 0) {return;}
+
     LOG("PDU Header:");
     LOGF("  versionPrefix: %c", header->versionPrefix);
     LOGF("  protobufLength: %d", header->protobufLength);
@@ -161,6 +178,8 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
 
 void KineticLogger_LogProtobuf(const KineticProto* proto)
 {
+    if (LogLevel < 0) {return;}
+
     LOG_PROTO_INIT();
     char tmpBuf[1024];
 
@@ -237,58 +256,58 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                 {
                     LOG_PROTO_LEVEL_START("keyValue");
                     {
-                        // if (proto->command->body->keyValue->has_key)
-                        // {
-                        //     BYTES_TO_CSTRING(tmpBuf,
-                        //         proto->command->body->keyValue->key, 0,
-                        //         proto->command->body->keyValue->key.len);
-                        //     LOGF("%skey: '%s'", _indent, tmpBuf);
-                        // }
-                        // if (proto->command->body->keyValue->has_newVersion)
-                        // {
-                        //     BYTES_TO_CSTRING(tmpBuf,
-                        //         proto->command->body->keyValue->newVersion,
-                        //         0, proto->command->body->keyValue->newVersion.len);
-                        //     LOGF("%snewVersion: '%s'", _indent, tmpBuf);
-                        // }
-                        // if (proto->command->body->keyValue->has_dbVersion)
-                        // {
-                        //     BYTES_TO_CSTRING(tmpBuf,
-                        //         proto->command->body->keyValue->dbVersion,
-                        //         0, proto->command->body->keyValue->dbVersion.len);
-                        //     LOGF("%sdbVersion: '%s'", _indent, tmpBuf);
-                        // }
-                        // if (proto->command->body->keyValue->has_tag)
-                        // {
-                        //     BYTES_TO_CSTRING(tmpBuf,
-                        //         proto->command->body->keyValue->tag,
-                        //         0, proto->command->body->keyValue->tag.len);
-                        //     LOGF("%stag: '%s'", _indent, tmpBuf);
-                        // }
-                        // if (proto->command->body->keyValue->has_force)
-                        // {
-                        //     LOGF("%sforce: %s", _indent,
-                        //         proto->command->body->keyValue->force ? _str_true : _str_false);
-                        // }
-                        // if (proto->command->body->keyValue->has_algorithm)
-                        // {
-                        //     const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                        //         &KineticProto_algorithm__descriptor,
-                        //         proto->command->body->keyValue->algorithm);
-                        //     LOGF("%salgorithm: %s", _indent, eVal->name);
-                        // }
-                        // if (proto->command->body->keyValue->has_metadataOnly)
-                        // {
-                        //     LOGF("%smetadataOnly: %s", _indent,
-                        //         proto->command->body->keyValue->metadataOnly ? _str_true : _str_false);
-                        // }
-                        // if (proto->command->body->keyValue->has_synchronization)
-                        // {
-                        //     const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                        //         &KineticProto_synchronization__descriptor,
-                        //         proto->command->body->keyValue->synchronization);
-                        //     LOGF("%ssynchronization: %s", _indent, eVal->name);
-                        // }
+                        if (proto->command->body->keyValue->has_key)
+                        {
+                            BYTES_TO_CSTRING(tmpBuf,
+                                proto->command->body->keyValue->key, 0,
+                                proto->command->body->keyValue->key.len);
+                            LOGF("%skey: '%s'", _indent, tmpBuf);
+                        }
+                        if (proto->command->body->keyValue->has_newVersion)
+                        {
+                            BYTES_TO_CSTRING(tmpBuf,
+                                proto->command->body->keyValue->newVersion,
+                                0, proto->command->body->keyValue->newVersion.len);
+                            LOGF("%snewVersion: '%s'", _indent, tmpBuf);
+                        }
+                        if (proto->command->body->keyValue->has_dbVersion)
+                        {
+                            BYTES_TO_CSTRING(tmpBuf,
+                                proto->command->body->keyValue->dbVersion,
+                                0, proto->command->body->keyValue->dbVersion.len);
+                            LOGF("%sdbVersion: '%s'", _indent, tmpBuf);
+                        }
+                        if (proto->command->body->keyValue->has_tag)
+                        {
+                            BYTES_TO_CSTRING(tmpBuf,
+                                proto->command->body->keyValue->tag,
+                                0, proto->command->body->keyValue->tag.len);
+                            LOGF("%stag: '%s'", _indent, tmpBuf);
+                        }
+                        if (proto->command->body->keyValue->has_force)
+                        {
+                            LOGF("%sforce: %s", _indent,
+                                proto->command->body->keyValue->force ? _str_true : _str_false);
+                        }
+                        if (proto->command->body->keyValue->has_algorithm)
+                        {
+                            const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
+                                &KineticProto_algorithm__descriptor,
+                                proto->command->body->keyValue->algorithm);
+                            LOGF("%salgorithm: %s", _indent, eVal->name);
+                        }
+                        if (proto->command->body->keyValue->has_metadataOnly)
+                        {
+                            LOGF("%smetadataOnly: %s", _indent,
+                                proto->command->body->keyValue->metadataOnly ? _str_true : _str_false);
+                        }
+                        if (proto->command->body->keyValue->has_synchronization)
+                        {
+                            const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
+                                &KineticProto_synchronization__descriptor,
+                                proto->command->body->keyValue->synchronization);
+                            LOGF("%ssynchronization: %s", _indent, eVal->name);
+                        }
                     }
                     LOG_PROTO_LEVEL_END();
                 }
@@ -337,6 +356,8 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
 
 void KineticLogger_LogStatus(KineticProto_Status* status)
 {
+    if (LogLevel < 0) {return;}
+
     ProtobufCMessage* protoMessage = (ProtobufCMessage*)status;
     KineticProto_Status_StatusCode code = status->code;
 
@@ -396,6 +417,15 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
 
 void KineticLogger_LogByteArray(const char* title, ByteArray bytes)
 {
+    if (LogLevel < 0) {return;}
+
+    assert(title != NULL);
+    if (bytes.data == NULL) {
+        LOGF("%s: (??? bytes : buffer is NULL)", title); return;
+    }
+    if (bytes.data == NULL) {
+        LOGF("%s: (0 bytes)", title); return;
+    }
     LOGF("%s: (%zd bytes)", title, bytes.len);
     const int byteChars = 4;
     const int bytesPerLine = 16;

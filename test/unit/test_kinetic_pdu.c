@@ -331,6 +331,7 @@ void test_KineticPDU_Send_should_send_the_specified_message_and_return_false_if_
 void test_KineticPDU_Receive_should_receive_a_message_with_value_payload_and_return_true_upon_receipt_of_valid_PDU(void)
 {
     LOG_LOCATION;
+    Connection.connectionID = 98765;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
     PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
     PDU.protoData.message.status.has_code = true;
@@ -354,17 +355,21 @@ void test_KineticPDU_Receive_should_receive_a_message_with_value_payload_and_ret
         expectedValue, true);
 
     PDU.headerNBO.valueLength = KineticNBO_FromHostU32(expectedValue.len);
+    PDU.protoData.message.header.connectionID = 12345;
 
     bool status = KineticPDU_Receive(&PDU);
 
     TEST_ASSERT_TRUE(status);
 
     TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, PDU.protoData.message.status.code);
+    TEST_ASSERT_EQUAL(12345, PDU.proto->command->header->connectionID);
+    TEST_ASSERT_EQUAL(12345, PDU.connection->connectionID);
 }
 
 void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_return_true_upon_successful_receipt_of_valid_PDU(void)
 {
     LOG_LOCATION;
+    Connection.connectionID = 98765;
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
     PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
     PDU.protoData.message.status.has_code = true;
@@ -374,6 +379,7 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_
     KineticSocket_Read_ExpectAndReturn(Connection.socket, header, true);
     KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
     KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session.hmacKey, true);
+    PDU.protoData.message.header.connectionID = 12345;
 
     bool status = KineticPDU_Receive(&PDU);
 
@@ -381,6 +387,8 @@ void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_
     TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS,
         PDU.protoData.message.status.code);
     TEST_ASSERT_ByteArray_NONE(PDU.value);
+    TEST_ASSERT_EQUAL(12345, PDU.proto->command->header->connectionID);
+    TEST_ASSERT_EQUAL(12345, PDU.connection->connectionID);
 }
 
 void test_KineticPDU_Receive_should_receive_a_message_with_no_value_payload_and_return_true_upon_receipt_of_valid_PDU_with_non_successful_status(void)
@@ -520,3 +528,42 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     TEST_ASSERT_EQUAL(17, PDU.header.protobufLength);
     TEST_ASSERT_EQUAL(expectedValue.len, PDU.header.valueLength);
 }
+
+void test_KineticPDU_Receive_should_receive_a_message_and_NOT_update_the_ConnectionID_for_the_connection_if_not_provided(void)
+{
+    LOG_LOCATION;
+    Connection.connectionID = 98765;
+    KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
+    PDU.protoData.message.status.code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    PDU.protoData.message.status.has_code = true;
+    ByteArray expectedPDUHeaderArray = {
+        .data = (uint8_t*)&PDU.headerNBO,
+        .len = sizeof(KineticPDUHeader),
+    };
+
+    // Fake value/payload length
+    KineticPDU_EnableValueBuffer(&PDU);
+    ByteArray expectedValue = {.data = PDU.valueBuffer, .len = 124};
+    BYTE_ARRAY_FILL_WITH_DUMMY_DATA(expectedValue);
+    KineticPDU_AttachValuePayload(&PDU, expectedValue);
+
+    KineticSocket_Read_ExpectAndReturn(Connection.socket,
+        expectedPDUHeaderArray, true);
+    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket,
+        &PDU, true);
+    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session.hmacKey, true);
+    KineticSocket_Read_ExpectAndReturn(Connection.socket,
+        expectedValue, true);
+
+    PDU.headerNBO.valueLength = KineticNBO_FromHostU32(expectedValue.len);
+    PDU.protoData.message.header.connectionID = 12345;
+
+    bool status = KineticPDU_Receive(&PDU);
+
+    TEST_ASSERT_TRUE(status);
+
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, PDU.protoData.message.status.code);
+    TEST_ASSERT_EQUAL(12345, PDU.proto->command->header->connectionID);
+    TEST_ASSERT_EQUAL(12345, PDU.connection->connectionID);
+}
+

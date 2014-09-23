@@ -219,6 +219,6 @@ typedef struct _KineticOperation
 // } ProtobufCAllocator;
 
 KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(KineticAlgorithm kinteicAlgorithm);
-
+KineticStatus KineticStatus_from_KineticProto(KineticProto_Status protoStatus);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

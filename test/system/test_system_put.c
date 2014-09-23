@@ -50,16 +50,16 @@ static SystemTestFixture Fixture = {
         .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
     }
 };
-static ByteArray valueKey;
-static ByteArray tag;
-static ByteArray testValue;
+static ByteArray ValueKey;
+static ByteArray Tag;
+static ByteArray TestValue;
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-    valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
-    tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
-    testValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
+    ValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
+    Tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+    TestValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
 }
 
 void tearDown(void)
@@ -78,11 +78,11 @@ void tearDown(void)
 void test_Put_should_create_new_object_on_device(void)
 {   LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
-        .key = valueKey,
+        .key = ValueKey,
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-        .tag = tag,
+        .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = testValue,
+        .value = TestValue,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &metadata);
@@ -94,24 +94,23 @@ void test_Put_should_create_new_object_on_device_again(void)
     KineticKeyValue metadata = {
         .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927_0"),
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-        .tag = tag,
+        .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = testValue,
+        .value = TestValue,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &metadata);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
 }
 
-#if 0
 void test_Put_should_update_object_data_on_device(void)
 {   LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
-        .key = valueKey,
+        .key = ValueKey,
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-        .tag = tag,
+        .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = testValue,
+        .value = TestValue,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &metadata);
@@ -121,30 +120,27 @@ void test_Put_should_update_object_data_on_device(void)
 void test_Put_should_update_object_data_on_device_and_update_version(void)
 {   LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
-        .key = valueKey,
+        .key = ValueKey,
         .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
         .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
-        .tag = tag,
+        .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = testValue,
+        .value = TestValue,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &metadata);
+
+    Fixture.testIgnored = true;
+
+    if (status == KINETIC_STATUS_VERSION_FAILURE)
+    {
+        TEST_IGNORE_MESSAGE(
+            "Java simulator is responding with VERSION_MISMATCH(8) if algorithm "
+            "un-specified on initial PUT and subsequent request updates dbVersion!");
+    }
+
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
-
-    // Fixture.instance.testIgnored = true;
-
-    // if (status == KINETIC_STATUS_VERSION_FAILURE)
-    // {
-    //     TEST_IGNORE_MESSAGE(
-    //         "Java simulator is responding with VERSION_MISMATCH(8) if algorithm "
-    //         "un-specified on initial PUT and subsequent request updates dbVersion!");
-    // }
-
-    // TEST_ASSERT_EQUAL_KINETIC_STATUS(
-    //     KINETIC_STATUS_SUCCESS, status);
 }
-#endif
 
 /*******************************************************************************
 * ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
