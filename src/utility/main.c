@@ -70,8 +70,7 @@ int main(int argc, char** argv)
     ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING(cfg.hmacKey);
     ByteArray value = {.data = cfg.value, .len = cfg.valueLength};
 
-    struct option long_options[] =
-    {
+    struct option long_options[] = {
         {"non-blocking", no_argument,      &cfg.nonBlocking, true},
         {"blocking",    no_argument,       &cfg.nonBlocking, false},
         {"tls",         no_argument,       &cfg.port,        KINETIC_TLS_PORT},
@@ -79,36 +78,31 @@ int main(int argc, char** argv)
         {0, 0, 0, 0}
     };
 
-    while ((opt = getopt_long(argc, argv, "h", long_options, &optIndex)) != -1)
-    {
+    while ((opt = getopt_long(argc, argv, "h", long_options, &optIndex)) != -1) {
         // Parse options until we reach the end of the argument list
-        if (opt != -1)
-        {
-            switch (opt)
-            {
-                case 0:
-                    // If this option set a flag, do nothing else now.
-                    if (long_options[optIndex].flag != 0)
-                        break;
-                case 'h':
-                    strcpy(cfg.host, optarg);
+        if (opt != -1) {
+            switch (opt) {
+            case 0:
+                // If this option set a flag, do nothing else now.
+                if (long_options[optIndex].flag != 0)
                     break;
-                case '?':
-                    // getopt_long already printed an error message.
-                    break;
-                default:
-                    abort ();
+            case 'h':
+                strcpy(cfg.host, optarg);
+                break;
+            case '?':
+                // getopt_long already printed an error message.
+                break;
+            default:
+                abort();
             }
         }
     }
 
     // Execute all specified operations in order
-    for (;optind < argc; optind++)
-    {
+    for (; optind < argc; optind++) {
         char* op = argv[optind];
 
-        if (strcmp("noop", op) == 0)
-        {
+        if (strcmp("noop", op) == 0) {
             printf("\n"
                    "Executing NoOp w/configuration:\n"
                    "-------------------------------\n"
@@ -118,30 +112,26 @@ int main(int argc, char** argv)
                    "  clusterVersion: %lld\n"
                    "  identity: %lld\n"
                    "  key: '%s'\n",
-                cfg.host,
-                cfg.port,
-                cfg.nonBlocking ? "true" : "false",
-                (long long int)cfg.clusterVersion,
-                (long long int)cfg.identity,
-                cfg.hmacKey);
+                   cfg.host,
+                   cfg.port,
+                   cfg.nonBlocking ? "true" : "false",
+                   (long long int)cfg.clusterVersion,
+                   (long long int)cfg.identity,
+                   cfg.hmacKey);
             status = NoOp(cfg.host, cfg.port, cfg.nonBlocking,
-                cfg.clusterVersion, cfg.identity, hmacKey);
-            if (status == 0)
-            {
+                          cfg.clusterVersion, cfg.identity, hmacKey);
+            if (status == 0) {
                 printf("\nNoOp executed successfully!\n\n");
             }
-            else
-            {
+            else {
                 printf("\nNoOp operation failed! status=%d\n\n", status);
                 return -1;
             }
         }
 
-        else if (strcmp("put", op) == 0)
-        {
+        else if (strcmp("put", op) == 0) {
             unsigned int i;
-            for (i = 0; i < sizeof(cfg.value); i++)
-            {
+            for (i = 0; i < sizeof(cfg.value); i++) {
                 cfg.value[i] = (uint8_t)(0x0ff & i);
             }
 
@@ -165,32 +155,29 @@ int main(int argc, char** argv)
                    "  identity: %lld\n"
                    "  key: '%s'\n"
                    "  value: %zd bytes\n",
-                cfg.host,
-                cfg.port,
-                cfg.nonBlocking ? "true" : "false",
-                (long long int)cfg.clusterVersion,
-                (long long int)cfg.identity,
-                metadata.key.data,
-                value.len);
+                   cfg.host,
+                   cfg.port,
+                   cfg.nonBlocking ? "true" : "false",
+                   (long long int)cfg.clusterVersion,
+                   (long long int)cfg.identity,
+                   metadata.key.data,
+                   value.len);
 
             status = Put(
-                cfg.host, cfg.port, cfg.nonBlocking,
-                cfg.clusterVersion, cfg.identity, hmacKey,
-                &metadata);
+                         cfg.host, cfg.port, cfg.nonBlocking,
+                         cfg.clusterVersion, cfg.identity, hmacKey,
+                         &metadata);
 
-            if (status == 0)
-            {
+            if (status == 0) {
                 printf("\nPut executed successfully!\n\n");
             }
-            else
-            {
+            else {
                 printf("\nPut operation failed! status=%d\n\n", status);
                 return -1;
             }
         }
 
-        else if (strcmp("get", op) == 0)
-        {
+        else if (strcmp("get", op) == 0) {
             KineticKeyValue metadata = {
                 .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
                 .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
@@ -210,32 +197,29 @@ int main(int argc, char** argv)
                    "  identity: %lld\n"
                    "  hmacKey: '%s'\n"
                    "  value: %zd bytes\n",
-                cfg.host,
-                cfg.port,
-                cfg.nonBlocking ? "true" : "false",
-                (long long int)cfg.clusterVersion,
-                (long long int)cfg.identity,
-                (char*)hmacKey.data,
-                value.len);
+                   cfg.host,
+                   cfg.port,
+                   cfg.nonBlocking ? "true" : "false",
+                   (long long int)cfg.clusterVersion,
+                   (long long int)cfg.identity,
+                   (char*)hmacKey.data,
+                   value.len);
 
             status = Get(cfg.host, cfg.port, cfg.nonBlocking,
-                cfg.clusterVersion, cfg.identity, hmacKey,
-                &metadata);
+                         cfg.clusterVersion, cfg.identity, hmacKey,
+                         &metadata);
 
-            if (status == 0 || status == KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR)
-            {
+            if (status == 0 || status == KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR) {
                 printf("\nGet executed successfully!\n\n");
                 return 0;
             }
-            else
-            {
+            else {
                 printf("\nGet operation failed! status=%d\n\n", status);
                 return -1;
             }
         }
 
-        else if (strcmp("delete", op) == 0)
-        {
+        else if (strcmp("delete", op) == 0) {
             KineticKeyValue metadata = {
                 .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
                 .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
@@ -253,31 +237,28 @@ int main(int argc, char** argv)
                    "  clusterVersion: %lld\n"
                    "  identity: %lld\n"
                    "  hmacKey: '%s'\n",
-                cfg.host,
-                cfg.port,
-                cfg.nonBlocking ? "true" : "false",
-                (long long int)cfg.clusterVersion,
-                (long long int)cfg.identity,
-                (char*)hmacKey.data);
+                   cfg.host,
+                   cfg.port,
+                   cfg.nonBlocking ? "true" : "false",
+                   (long long int)cfg.clusterVersion,
+                   (long long int)cfg.identity,
+                   (char*)hmacKey.data);
 
             status = Delete(cfg.host, cfg.port, cfg.nonBlocking,
-                cfg.clusterVersion, cfg.identity, hmacKey,
-                &metadata);
+                            cfg.clusterVersion, cfg.identity, hmacKey,
+                            &metadata);
 
-            if (status == 0)
-            {
+            if (status == 0) {
                 printf("\nDelete executed successfully!\n\n");
                 return 0;
             }
-            else
-            {
+            else {
                 printf("\nDelete operation failed! status=%d\n\n", status);
                 return -1;
             }
         }
 
-        else
-        {
+        else {
             printf("\nSpecified operation is invalid!\n");
             return -1;
         }

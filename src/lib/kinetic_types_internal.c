@@ -26,22 +26,51 @@ KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(
 {
     KineticProto_Algorithm protoAlgorithm;
     {
-        switch(kinteicAlgorithm)
-        {
+        switch (kinteicAlgorithm) {
         case KINETIC_ALGORITHM_SHA1:
-            protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA1; break;
+            protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA1;
+            break;
         case KINETIC_ALGORITHM_SHA2:
-            protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA2; break;
+            protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA2;
+            break;
         case KINETIC_ALGORITHM_SHA3:
-            protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA3; break;
+            protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA3;
+            break;
         case KINETIC_ALGORITHM_CRC32:
-            protoAlgorithm = KINETIC_PROTO_ALGORITHM_CRC32; break;
+            protoAlgorithm = KINETIC_PROTO_ALGORITHM_CRC32;
+            break;
         case KINETIC_ALGORITHM_CRC64:
-            protoAlgorithm = KINETIC_PROTO_ALGORITHM_CRC64; break;
+            protoAlgorithm = KINETIC_PROTO_ALGORITHM_CRC64;
+            break;
         case KINETIC_ALGORITHM_INVALID:
         default:
-            protoAlgorithm = KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM; break;
-        }; 
+            protoAlgorithm = KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM;
+            break;
+        };
     }
     return protoAlgorithm;
+}
+
+ByteArray ByteArray_from_ProtobufCBinaryData(
+    ProtobufCBinaryData protoData)
+{
+    return (ByteArray) {.data = protoData.data, .len = protoData.len};
+}
+
+bool Copy_ProtobufCBinaryData_to_ByteArray(ByteArray dest,
+    ProtobufCBinaryData src)
+{
+    if (src.data == NULL || src.len == 0) {
+        return false;
+    }
+    if (dest.data == NULL || dest.len < src.len) {
+        return false;
+    }
+
+    bool success = (memcpy(dest.data, src.data, src.len) == dest.data);
+    if (success) {
+        dest.len = src.len;
+    }
+    
+    return success;
 }

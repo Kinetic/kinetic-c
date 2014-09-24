@@ -27,22 +27,24 @@
 #include "unity_helper.h"
 #include <stdlib.h>
 
-extern KineticPDUListItem* PDUList;
-extern KineticPDUListItem* PDUListLast;
+KineticSession Session;
+
+extern KineticList PDUList;
+extern KineticList EntryList;
 
 void setUp(void)
 {
-    TEST_ASSERT_NULL(PDUList);
-    TEST_ASSERT_NULL(PDUListLast);
+    TEST_ASSERT_NULL(PDUList.start);
+    TEST_ASSERT_NULL(PDUList.last);
 }
 
 void tearDown(void)
 {
     bool allFreed = KineticAllocator_ValidateAllMemoryFreed();
     KineticAllocator_FreeAllPDUs();
-    TEST_ASSERT_NULL(PDUList);
-    TEST_ASSERT_NULL(PDUListLast);
-    TEST_ASSERT_TRUE_MESSAGE(allFreed, "Dynamically allocated PDUs were not freed!");
+    TEST_ASSERT_NULL(PDUList.start);
+    TEST_ASSERT_NULL(PDUList.last);
+    TEST_ASSERT_TRUE_MESSAGE(allFreed, "Dynamically allocated things were not freed!");
 }
 
 
@@ -50,12 +52,14 @@ void test_KineticAllocator_FreeAllPDUs_should_free_full_list_of_PDUs(void)
 {
     LOG_LOCATION;
     const int count = 3;
-    KineticPDUListItem* list[count];
+    KineticListItem* list[count];
+    KineticPDU* pdus[count];
 
     // Allocate some PDUs and list items to hold them
     for (int i = 0; i < count; i++)
     {
-        list[i] = (KineticPDUListItem*)malloc(sizeof(KineticPDUListItem));
+        list[i] = (KineticListItem*)malloc(sizeof(KineticListItem));
+        pdus[i] = (KineticPDU*)malloc(sizeof(KineticPDU));
         LOGF("ALLOCATED item[%d]: 0x%0llX", i, (long long)list[i]);
     }
 
@@ -63,8 +67,8 @@ void test_KineticAllocator_FreeAllPDUs_should_free_full_list_of_PDUs(void)
     list[0]->previous = NULL;       list[0]->next = list[1];
     list[1]->previous = list[0];    list[1]->next = list[2];
     list[2]->previous = list[1];    list[2]->next = NULL;
-    PDUList = list[0];
-    PDUListLast = list[2];
+    PDUList.start = list[0];
+    PDUList.last  = list[2];
 
     TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed());
 
@@ -82,7 +86,6 @@ void test_KineticAllocator_ValidateAllMemoryFreed_should_return_true_if_all_PDUs
     TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed());
 }
 
-
 void test_KineticAllocator_NewPDU_should_allocate_new_PDUs_and_store_references(void)
 {
     LOG_LOCATION;
@@ -92,21 +95,21 @@ void test_KineticAllocator_NewPDU_should_allocate_new_PDUs_and_store_references(
     pdu = KineticAllocator_NewPDU();
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
-    TEST_ASSERT_NOT_NULL(PDUList);
-    TEST_ASSERT_NULL(PDUList->previous);
-    TEST_ASSERT_NULL(PDUList->next);
-    TEST_ASSERT_NULL(PDUListLast->next);
-    TEST_ASSERT_NULL(PDUListLast->previous);
+    TEST_ASSERT_NOT_NULL(PDUList.start);
+    TEST_ASSERT_NULL(PDUList.start->previous);
+    TEST_ASSERT_NULL(PDUList.start->next);
+    TEST_ASSERT_NULL(PDUList.last->next);
+    TEST_ASSERT_NULL(PDUList.last->previous);
 
     pdu = KineticAllocator_NewPDU();
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
-    TEST_ASSERT_NOT_NULL(PDUList->next);
+    TEST_ASSERT_NOT_NULL(PDUList.start->next);
 
     pdu = KineticAllocator_NewPDU();
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
-    TEST_ASSERT_NOT_NULL(PDUList->next);
+    TEST_ASSERT_NOT_NULL(PDUList.start->next);
 
     KineticAllocator_FreeAllPDUs();
 }
@@ -265,4 +268,20 @@ void test_KineticAllocator_should_allocate_and_free_multiple_PDU_list_items_in_r
     TEST_ASSERT_TRUE(allFreed);
 
     LOG("PASSED!");
+}
+
+
+void test_KineticAllocator_NewEntry_should_allocate_a_new_entry_from_the_connection(void)
+{
+    TEST_IGNORE_MESSAGE("Implement me!")
+}
+
+void test_KineticAllocator_FreeEntry_should_free_the_entry_from_the_connection(void)
+{
+    TEST_IGNORE_MESSAGE("Implement me!")
+}
+
+void test_KineticAllocator_FreeAllEntries_should_free_all_entries_from_the_connection(void)
+{
+    TEST_IGNORE_MESSAGE("Implement me!")
 }

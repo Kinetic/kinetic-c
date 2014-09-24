@@ -23,10 +23,10 @@
 #include <stdio.h>
 #include "protobuf-c/protobuf-c.h"
 #include "kinetic_proto.h"
+#include "kinetic_logger.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
-#include "mock_kinetic_logger.h"
 #include "mock_kinetic_operation.h"
 #include "unity.h"
 #include "unity_helper.h"
@@ -86,67 +86,3 @@ void test_KineticClient_Delete_should_execute_DELETE_operation(void)
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
 }
-
-
-// The `DELETE` operation removes the entry for a given key. It respects the 
-// same locking behavior around `dbVersion` and `force` as described in the previous sections.
-//
-// **Request Message**
-//
-// The following request will remove a key value pair to the store.
-//
-// ```
-// command {
-//   // See top level cross cutting concerns for header details
-//   header {
-//     clusterVersion: ...
-//     identity: ...
-//     connectionID: ...
-//     sequence: ...
-//     // messageType should be DELETE
-//     messageType: DELETE
-//   }
-//   body {
-//     keyValue {
-//       key: "..."
-//       // See write operation cross cutting concerns
-//       synchronization: ...
-//     }
-//   }
-// }
-// hmac: "..."
-#if 0
-void test_KineticClient_Delete_should_execute_DELETE_operation(void)
-{
-    KineticConnection connection;
-    KineticProto_Command responseCommand = KINETIC_PROTO_COMMAND__INIT;
-    ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
-    KineticKeyValue metadata = {
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
-        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.3")
-    };
-    KINETIC_PDU_INIT(&Request, &connection);
-    Response.protoData.message.proto.command = &responseCommand;
-    Response.header.valueLength = 0; // Simulate no data payload in response
-    Response.value.len = 1234;
-
-    KINETIC_CONNECTION_INIT(&connection, 1234, hmacKey);
-    KineticPDU_Init_Expect(&Request, &connection);
-    KineticPDU_Init_Expect(&Response, &connection);
-    KineticOperation operation = KineticClient_CreateOperation(&connection,
-        &Request, &Response);
-
-    KineticOperation_BuildDelete_Expect(&operation, &metadata);
-    KineticPDU_Send_ExpectAndReturn(&Request, true);
-    KineticPDU_Receive_ExpectAndReturn(&Response, true);
-    KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
-
-    KineticStatus status = KineticClient_Delete(&operation, &metadata);
-
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_PTR(&connection, Response.connection);
-    TEST_ASSERT_EQUAL(0, Response.header.valueLength);
-    TEST_ASSERT_EQUAL(0, metadata.value.len);
-    TEST_ASSERT_EQUAL(0, Response.value.len);
-}
-#endif

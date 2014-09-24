@@ -43,8 +43,7 @@ int Get(const char* host,
 
     KineticStatus status = KineticClient_Get(&operation, metadata);
 
-    if (status == KINETIC_STATUS_SUCCESS)
-    {
+    if (status == KINETIC_STATUS_SUCCESS) {
         printf("Get operation completed successfully. Your data has been retrieved!\n");
         return 0;
     }

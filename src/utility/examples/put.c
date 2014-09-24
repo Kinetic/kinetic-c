@@ -41,7 +41,7 @@ int Put(
     assert(success);
 
     operation = KineticClient_CreateOperation(
-        &connection, &request, &response);
+                    &connection, &request, &response);
 
     KineticStatus status = KineticClient_Put(&operation, metadata);
 

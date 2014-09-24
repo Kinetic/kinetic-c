@@ -50,10 +50,23 @@ static SystemTestFixture Fixture = {
         .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
     }
 };
+static ByteArray ValueKey;
+static ByteArray Tag;
+static ByteArray TestValue;
+static ByteArray Version;
+static ByteArray NewVersion;
+static ByteArray TestValue;
+static uint8_t ValueBuffer[PDU_VALUE_MAX_LEN];
+static ByteArray ValueIn = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
+    ValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("DELETE test key");
+    Version = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
+    NewVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
+    Tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
+    TestValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
 }
 
 void tearDown(void)
@@ -75,38 +88,54 @@ void test_Delete_should_delete_an_object_from_device(void)
 
     // Create an object so that we have something to delete
     KineticKeyValue putMetadata = {
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("DELETE test key"),
-        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
+        .key = ValueKey,
+        .newVersion = Version,
+        .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah blah blah... etc."),
+        .value = TestValue,
     };
     status = KineticClient_Put(Fixture.handle, &putMetadata);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_ByteArray(Version, putMetadata.dbVersion);
+    TEST_ASSERT_ByteArray_NONE(putMetadata.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(ValueKey, putMetadata.key);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, putMetadata.tag);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putMetadata.algorithm);
 
     // Validate the object exists initially
     KineticKeyValue getMetadata = {
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("DELETE test key"),
+        .key = ValueKey,
+        .value = ValueIn,
     };
     status = KineticClient_Get(Fixture.handle, &getMetadata);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_ByteArray(putMetadata.key, getMetadata.key);
+    TEST_ASSERT_ByteArray_NONE(putMetadata.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(putMetadata.tag, getMetadata.tag);
+    TEST_ASSERT_EQUAL(putMetadata.algorithm, getMetadata.algorithm);
+    TEST_ASSERT_EQUAL_ByteArray(putMetadata.value, getMetadata.value);
 
     // Delete the object
-    KineticKeyValue metadata = {
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("DELETE test key"),
-        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
-        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+    KineticKeyValue deleteMetadata = {
+        .key = ValueKey,
+        .tag = Tag,
+        .dbVersion = Version,
         .algorithm = KINETIC_ALGORITHM_SHA1,
     };
-    status = KineticClient_Delete(Fixture.handle, &metadata);
+    status = KineticClient_Delete(Fixture.handle, &deleteMetadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL(0, metadata.value.len);
+    TEST_ASSERT_EQUAL(0, deleteMetadata.value.len);
 
     // Validate the object no longer exists
-    status = KineticClient_Get(Fixture.handle, &getMetadata);
+    KineticKeyValue regetMetadata = {
+        .key = ValueKey,
+        .value = ValueIn,
+    };
+    status = KineticClient_Get(Fixture.handle, &regetMetadata);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_DATA_ERROR, status);
-    TEST_ASSERT_EQUAL(0, getMetadata.value.len);
+    TEST_ASSERT_EQUAL(0, regetMetadata.value.len);
+    TEST_ASSERT_ByteArray_EMPTY(regetMetadata.value);
 }
 
 /*******************************************************************************

@@ -36,4 +36,4 @@ const char* KineticStatusDescriptor[] = {
     "DATA_ERROR",
 };
 
-const int KineticStatusDescriptorCount = sizeof(KineticStatusDescriptor)/sizeof(char*);
+const int KineticStatusDescriptorCount = sizeof(KineticStatusDescriptor) / sizeof(char*);

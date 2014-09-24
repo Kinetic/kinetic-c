@@ -32,58 +32,45 @@ void KineticLogger_Init(const char* logFile)
 {
     LogToConsole = true;
     FileDesc = NULL;
-    LogLevel = -1;
+    LogLevel = 0;
 
-    return;
+    if (logFile != NULL) {
+        strcpy(LogFile, logFile);
+        if (strcmp(logFile, "NONE") == 0) {
+            LogLevel = -1;
+            LogToConsole = false;
+            return;
+        }
 
-    // if (logFile != NULL)
-    // {
-    //     strcpy(LogFile, logFile);
-    //     if (strcmp(logFile, "NONE") == 0)
-    //     {
-    //         LogLevel = -1;
-    //         LogToConsole = false;
-    //         return;
-    //     }
-
-    //     FileDesc = fopen(LogFile, "w");
-    //     if (FileDesc == NULL)
-    //     {
-    //         fprintf(stderr,
-    //             "Failed to initialize logger with file: "
-    //             "fopen('%s') => FileDesc=%zd\n",
-    //             logFile, (size_t)FileDesc);
-    //     }
-    //     else
-    //     {
-    //         fprintf(stderr,
-    //             "Logging output to %s\n",
-    //             logFile);
-    //         LogToConsole = false;
-    //     }
-    // }
+        FileDesc = fopen(LogFile, "w");
+        if (FileDesc == NULL) {
+            fprintf(stderr, "Failed to initialize logger with file: "
+                    "fopen('%s') => FileDesc=%zd\n", logFile, (size_t)FileDesc);
+        }
+        else {
+            fprintf(stderr, "Logging output to %s\n", logFile);
+            LogToConsole = false;
+        }
+    }
 }
 
 void KineticLogger_Close(void)
 {
     // Don't close std/already-opened streams
     if (!LogToConsole && strlen(LogFile) > 0 &&
-        FileDesc != stdout && FileDesc != stderr && FileDesc != stdin)
-    {
+            FileDesc != stdout && FileDesc != stderr && FileDesc != stdin) {
         fclose(FileDesc);
     }
 }
 
 void KineticLogger_Log(const char* message)
 {
-    if (message == NULL || LogLevel < 0)
-    {
+    if (message == NULL || LogLevel < 0) {
         return;
     }
 
     FileDesc = LogToConsole ? stderr : fopen(LogFile, "a");
-    if (FileDesc != NULL)
-    {
+    if (FileDesc != NULL) {
         fprintf(FileDesc, "%s\n", message);
         fflush(FileDesc);
     }
@@ -93,10 +80,8 @@ int KineticLogger_LogPrintf(const char* format, ...)
 {
     int result = -1;
 
-    if (LogLevel >= 0)
-    {
-        if (format != NULL)
-        {
+    if (LogLevel >= 0) {
+        if (format != NULL) {
             va_list arg_ptr;
             char buffer[1024];
             va_start(arg_ptr, format);
@@ -106,13 +91,15 @@ int KineticLogger_LogPrintf(const char* format, ...)
         }
     }
 
-   return(result);
+    return (result);
 }
 
 
 void KineticLogger_LogHeader(const KineticPDUHeader* header)
 {
-    if (LogLevel < 0) {return;}
+    if (LogLevel < 0) {
+        return;
+    }
 
     LOG("PDU Header:");
     LOGF("  versionPrefix: %c", header->versionPrefix);
@@ -140,26 +127,26 @@ int KineticLogger_u8toa(char* p_buf, uint8_t val)
     int i = width;
     const uint8_t base = 16;
     char c = 0;
-    
+
     p_buf += width - 1;
     do {
         c = val % base;
         val /= base;
-        if(c >= 10) c += 'A'-'0'-10;
+        if (c >= 10) c += 'A' - '0' - 10;
         c += '0';
         // LOGF("CH: %c @ %d to 0x%llX", c, i, (long long)(p_buf));
         *p_buf-- = c;
-    } while (--i);
+    }
+    while (--i);
     return width;
 }
 
 int KineticLogger_ByteArraySliceToCString(char* p_buf,
-    const ByteArray bytes, const int start, const int count)
+        const ByteArray bytes, const int start, const int count)
 {
     // LOGF("Converting ByteArray (count=%u)", count);
     int len = 0;
-    for(int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         // LOGF("BYTE to 0x%llX (prepending '\\')", (long long)(&p_buf[len]));
         p_buf[len++] = '\\';
         // LOGF("BYTE digits to 0x%llX", (long long)(&p_buf[len]));
@@ -178,134 +165,114 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
 
 void KineticLogger_LogProtobuf(const KineticProto* proto)
 {
-    if (LogLevel < 0) {return;}
+    if (LogLevel < 0) {
+        return;
+    }
 
     LOG_PROTO_INIT();
     char tmpBuf[1024];
 
-    if (proto == NULL)
-    {
+    if (proto == NULL) {
         return;
     }
 
     LOG("Kinetic Protobuf:");
-    if (proto->command)
-    {
+    if (proto->command) {
         LOG_PROTO_LEVEL_START("command");
 
-        if (proto->command->header)
-        {
+        if (proto->command->header) {
             LOG_PROTO_LEVEL_START("header");
             {
-                if (proto->command->header->has_clusterVersion)
-                {
+                if (proto->command->header->has_clusterVersion) {
                     LOGF("%sclusterVersion: %lld", _indent,
-                        proto->command->header->clusterVersion);
+                         proto->command->header->clusterVersion);
                 }
-                if (proto->command->header->has_identity)
-                {
+                if (proto->command->header->has_identity) {
                     LOGF("%sidentity: %lld", _indent,
-                        proto->command->header->identity);
+                         proto->command->header->identity);
                 }
-                if (proto->command->header->has_connectionID)
-                {
+                if (proto->command->header->has_connectionID) {
                     LOGF("%sconnectionID: %lld", _indent,
-                        proto->command->header->connectionID);
+                         proto->command->header->connectionID);
                 }
-                if (proto->command->header->has_sequence)
-                {
+                if (proto->command->header->has_sequence) {
                     LOGF("%ssequence: %lld", _indent,
-                        proto->command->header->sequence);
+                         proto->command->header->sequence);
                 }
-                if (proto->command->header->has_ackSequence)
-                {
+                if (proto->command->header->has_ackSequence) {
                     LOGF("%sackSequence: %lld", _indent,
-                        proto->command->header->ackSequence);
+                         proto->command->header->ackSequence);
                 }
-                if (proto->command->header->has_messageType)
-                {
+                if (proto->command->header->has_messageType) {
                     const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                        &KineticProto_message_type__descriptor,
-                        proto->command->header->messageType);
+                                                         &KineticProto_message_type__descriptor,
+                                                         proto->command->header->messageType);
                     LOGF("%smessageType: %s", _indent, eVal->name);
                 }
-                if (proto->command->header->has_timeout)
-                {
+                if (proto->command->header->has_timeout) {
                     LOGF("%stimeout: %lld", _indent,
-                        proto->command->header->ackSequence);
+                         proto->command->header->ackSequence);
                 }
-                if (proto->command->header->has_earlyExit)
-                {
+                if (proto->command->header->has_earlyExit) {
                     LOGF("%searlyExit: %s", _indent,
-                        proto->command->header->earlyExit ? _str_true : _str_false);
+                         proto->command->header->earlyExit ? _str_true : _str_false);
                 }
-                if (proto->command->header->has_backgroundScan)
-                {
+                if (proto->command->header->has_backgroundScan) {
                     LOGF("%sbackgroundScan: %s", _indent,
-                        proto->command->header->backgroundScan ? _str_true : _str_false);
+                         proto->command->header->backgroundScan ? _str_true : _str_false);
                 }
             }
             LOG_PROTO_LEVEL_END();
         }
 
-        if (proto->command->body)
-        {
+        if (proto->command->body) {
             LOG_PROTO_LEVEL_START("body");
             {
-                if (proto->command->body->keyValue)
-                {
+                if (proto->command->body->keyValue) {
                     LOG_PROTO_LEVEL_START("keyValue");
                     {
-                        if (proto->command->body->keyValue->has_key)
-                        {
+                        if (proto->command->body->keyValue->has_key) {
                             BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->key, 0,
-                                proto->command->body->keyValue->key.len);
+                                             proto->command->body->keyValue->key, 0,
+                                             proto->command->body->keyValue->key.len);
                             LOGF("%skey: '%s'", _indent, tmpBuf);
                         }
-                        if (proto->command->body->keyValue->has_newVersion)
-                        {
+                        if (proto->command->body->keyValue->has_newVersion) {
                             BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->newVersion,
-                                0, proto->command->body->keyValue->newVersion.len);
+                                             proto->command->body->keyValue->newVersion,
+                                             0, proto->command->body->keyValue->newVersion.len);
                             LOGF("%snewVersion: '%s'", _indent, tmpBuf);
                         }
-                        if (proto->command->body->keyValue->has_dbVersion)
-                        {
+                        if (proto->command->body->keyValue->has_dbVersion) {
                             BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->dbVersion,
-                                0, proto->command->body->keyValue->dbVersion.len);
+                                             proto->command->body->keyValue->dbVersion,
+                                             0, proto->command->body->keyValue->dbVersion.len);
                             LOGF("%sdbVersion: '%s'", _indent, tmpBuf);
                         }
-                        if (proto->command->body->keyValue->has_tag)
-                        {
+                        if (proto->command->body->keyValue->has_tag) {
                             BYTES_TO_CSTRING(tmpBuf,
-                                proto->command->body->keyValue->tag,
-                                0, proto->command->body->keyValue->tag.len);
+                                             proto->command->body->keyValue->tag,
+                                             0, proto->command->body->keyValue->tag.len);
                             LOGF("%stag: '%s'", _indent, tmpBuf);
                         }
-                        if (proto->command->body->keyValue->has_force)
-                        {
+                        if (proto->command->body->keyValue->has_force) {
                             LOGF("%sforce: %s", _indent,
-                                proto->command->body->keyValue->force ? _str_true : _str_false);
+                                 proto->command->body->keyValue->force ? _str_true : _str_false);
                         }
-                        if (proto->command->body->keyValue->has_algorithm)
-                        {
+                        if (proto->command->body->keyValue->has_algorithm) {
                             const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                &KineticProto_algorithm__descriptor,
-                                proto->command->body->keyValue->algorithm);
+                                                                 &KineticProto_algorithm__descriptor,
+                                                                 proto->command->body->keyValue->algorithm);
                             LOGF("%salgorithm: %s", _indent, eVal->name);
                         }
-                        if (proto->command->body->keyValue->has_metadataOnly)
-                        {
+                        if (proto->command->body->keyValue->has_metadataOnly) {
                             LOGF("%smetadataOnly: %s", _indent,
-                                proto->command->body->keyValue->metadataOnly ? _str_true : _str_false);
+                                 proto->command->body->keyValue->metadataOnly ? _str_true : _str_false);
                         }
-                        if (proto->command->body->keyValue->has_synchronization)
-                        {
+                        if (proto->command->body->keyValue->has_synchronization) {
                             const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                &KineticProto_synchronization__descriptor,
-                                proto->command->body->keyValue->synchronization);
+                                                                 &KineticProto_synchronization__descriptor,
+                                                                 proto->command->body->keyValue->synchronization);
                             LOGF("%ssynchronization: %s", _indent, eVal->name);
                         }
                     }
@@ -316,27 +283,23 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
             LOG_PROTO_LEVEL_END();
         }
 
-        if (proto->command->status)
-        {
+        if (proto->command->status) {
             LOG_PROTO_LEVEL_START("status");
             {
-                if (proto->command->status->has_code)
-                {
+                if (proto->command->status->has_code) {
                     const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                        &KineticProto_status_status_code__descriptor,
-                        proto->command->status->code);
+                                                         &KineticProto_status_status_code__descriptor,
+                                                         proto->command->status->code);
                     LOGF("%scode: %s", _indent, eVal->name);
                 }
 
-                if (proto->command->status->statusMessage)
-                {
+                if (proto->command->status->statusMessage) {
                     LOGF("%sstatusMessage: '%s'", _indent, proto->command->status->statusMessage);
                 }
-                if (proto->command->status->has_detailedMessage)
-                {
+                if (proto->command->status->has_detailedMessage) {
                     BYTES_TO_CSTRING(tmpBuf,
-                        proto->command->status->detailedMessage,
-                        0, proto->command->status->detailedMessage.len);
+                                     proto->command->status->detailedMessage,
+                                     0, proto->command->status->detailedMessage.len);
                     LOGF("%detailedMessage: '%s'", _indent, tmpBuf);
                 }
             }
@@ -345,32 +308,30 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
         LOG_PROTO_LEVEL_END();
     }
 
-    if (proto->has_hmac)
-    {
+    if (proto->has_hmac) {
         BYTES_TO_CSTRING(tmpBuf,
-            proto->hmac,
-            0, proto->hmac->key.len);
+                         proto->hmac,
+                         0, proto->hmac->key.len);
         LOGF("%shmac: '%s'", _indent, tmpBuf);
     }
 }
 
 void KineticLogger_LogStatus(KineticProto_Status* status)
 {
-    if (LogLevel < 0) {return;}
+    if (LogLevel < 0) {
+        return;
+    }
 
     ProtobufCMessage* protoMessage = (ProtobufCMessage*)status;
     KineticProto_Status_StatusCode code = status->code;
 
-    if (code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS)
-    {
+    if (code == KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS) {
         printf("Operation completed successfully\n");
     }
-    else if (code == KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE)
-    {
+    else if (code == KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE) {
         printf("Operation was aborted!\n");
     }
-    else
-    {
+    else {
         // Output status code short name
         const ProtobufCMessageDescriptor* protoMessageDescriptor = protoMessage->descriptor;
         const ProtobufCFieldDescriptor* statusCodeDescriptor =
@@ -380,11 +341,10 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
         const ProtobufCEnumValue* eStatusCodeVal =
             protobuf_c_enum_descriptor_get_value(statusCodeEnumDescriptor, code);
         KineticLogger_LogPrintf("Operation completed but failed w/error: %s=%d(%s)\n",
-            statusCodeDescriptor->name, code, eStatusCodeVal->name);
+                                statusCodeDescriptor->name, code, eStatusCodeVal->name);
 
         // Output status message, if supplied
-        if (status->statusMessage)
-        {
+        if (status->statusMessage) {
             const ProtobufCFieldDescriptor* statusMsgFieldDescriptor =
                 protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "statusMessage");
             const ProtobufCMessageDescriptor* statusMsgDescriptor =
@@ -394,8 +354,7 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
         }
 
         // Output detailed message, if supplied
-        if (status->has_detailedMessage)
-        {
+        if (status->has_detailedMessage) {
             char tmp[8], msg[256];
             const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
                 protobuf_c_message_descriptor_get_field_by_name(
@@ -405,8 +364,7 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
                 statusDetailedMsgFieldDescriptor->descriptor;
 
             sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
-            for (size_t i = 0; i < status->detailedMessage.len; i++)
-            {
+            for (size_t i = 0; i < status->detailedMessage.len; i++) {
                 sprintf(tmp, "%02hhX", status->detailedMessage.data[i]);
                 strcat(msg, tmp);
             }
@@ -417,40 +375,40 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
 
 void KineticLogger_LogByteArray(const char* title, ByteArray bytes)
 {
-    if (LogLevel < 0) {return;}
+    if (LogLevel < 0) {
+        return;
+    }
 
     assert(title != NULL);
     if (bytes.data == NULL) {
-        LOGF("%s: (??? bytes : buffer is NULL)", title); return;
+        LOGF("%s: (??? bytes : buffer is NULL)", title);
+        return;
     }
     if (bytes.data == NULL) {
-        LOGF("%s: (0 bytes)", title); return;
+        LOGF("%s: (0 bytes)", title);
+        return;
     }
     LOGF("%s: (%zd bytes)", title, bytes.len);
     const int byteChars = 4;
     const int bytesPerLine = 16;
     const int lineLen = 4 + (bytesPerLine * byteChars);
-    char hex[lineLen+1];
-    char ascii[lineLen+1];
-    for (size_t i = 0; i < bytes.len;)
-    {
+    char hex[lineLen + 1];
+    char ascii[lineLen + 1];
+    for (size_t i = 0; i < bytes.len;) {
         hex[0] = '\0';
         ascii[0] = '\0';
         for (int j = 0;
-            j < bytesPerLine && i < bytes.len;
-            j++, i++)
-        {
+                j < bytesPerLine && i < bytes.len;
+                j++, i++) {
             char byHex[8];
             sprintf(byHex, "%02hhX", bytes.data[i]);
             strcat(hex, byHex);
             char byAscii[8];
             int ch = (int)bytes.data[i];
-            if (ch >= 32 && ch <= 126)
-            {
+            if (ch >= 32 && ch <= 126) {
                 sprintf(byAscii, "%c", bytes.data[i]);
             }
-            else
-            {
+            else {
                 byAscii[0] = '.';
                 byAscii[1] = '\0';
             }

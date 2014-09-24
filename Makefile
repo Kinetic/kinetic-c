@@ -22,7 +22,6 @@ KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 KINETIC_SO_DEV = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).so
 KINETIC_SO_RELEASE = $(PREFIX)/lib$(KINETIC_LIB_NAME).so
-
 CC = gcc
 OPTIMIZE = -O3
 WARN = -Wall -Wextra -pedantic
@@ -36,7 +35,7 @@ LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kin
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
 LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
 
-default: $(KINETIC_SO)
+default: $(KINETIC_LIB)
 
 test: Rakefile $(LIB_OBJS)
 	@echo

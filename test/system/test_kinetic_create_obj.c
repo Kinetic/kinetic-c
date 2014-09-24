@@ -25,8 +25,7 @@
 #include "socket99/socket99.h"
 
 #define KINETIC_OBJ_SIZE (PDU_VALUE_MAX_LEN)
-// #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
-#define BUFSIZE  (4 * KINETIC_OBJ_SIZE)
+#define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_KEY_SIZE (1000)
 #define KINETIC_MAX_THREADS (10)
 
@@ -83,7 +82,8 @@ void *kinetic_put(void *kinetic_arg)
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
 {
-	const int maxIterations = 1;
+	const int maxIterations = 4;
+	const int numCopiesToStore = 4;
 	const char* keyPrefix = "some_prefix";
 	const KineticSession sessionConfig = {
 		.host = "localhost",
@@ -97,10 +97,9 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
 	for (int iteration = 0; iteration < maxIterations; iteration++) {
 
-printf("Iteration = %d", iteration);
+		printf("Overlapped PUT operation (iteration %d of %d)\n",
+			iteration+1, maxIterations);
 
-		LOGF("Overlapped PUT operations (iteration %d of %d)", iteration+1, maxIterations);
-		const int numCopiesToStore = 1;
 		int fd, dataLen, i;
 
 		char *buf = malloc(sizeof(char)*BUFSIZE);
@@ -128,8 +127,10 @@ printf("Iteration = %d", iteration);
 
 		for (i = 0; i < numCopiesToStore; i++) {
 
+			printf("    Overlapped PUT operations (writing copy %d of %d) on IP:%s\n",
+				i+1, numCopiesToStore, sessionConfig.host);
+
 			// Establish connection
-			LOGF("ip:%s\n", sessionConfig.host);
 			TEST_ASSERT_EQUAL_STATUS(
 				KINETIC_STATUS_SUCCESS,
 				KineticClient_Connect(&sessionConfig, &kinetic_client[i]));
@@ -148,6 +149,7 @@ printf("Iteration = %d", iteration);
 		}
 
 		// Wait for each overlapped PUT operations to complete and cleanup 
+		printf("  Waiting for PUT threads to exit...\n");
 		for (i = 0; i < numCopiesToStore; i++) {
 			int err_ret = pthread_join(thread_id[i], NULL);
 			TEST_ASSERT_EQUAL_MESSAGE(0, err_ret, "pthread join failed");
@@ -158,5 +160,9 @@ printf("Iteration = %d", iteration);
 		free(kinetic_client);
 		free(kt_arg);
 		free(buf);
+
+		printf("  Iteration complete!\n");
 	}
+
+	printf("Overlapped PUT operation test complete!\n");
 }

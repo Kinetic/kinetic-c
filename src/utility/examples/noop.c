@@ -42,8 +42,7 @@ int NoOp(
     KineticStatus status = KineticClient_NoOp(&operation);
     KineticClient_Disconnect(&connection);
 
-    if (status == KINETIC_STATUS_SUCCESS)
-    {
+    if (status == KINETIC_STATUS_SUCCESS) {
         printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
         return 0;
     }

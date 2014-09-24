@@ -32,14 +32,11 @@ KineticSessionHandle KineticConnection_NewConnection(
     const KineticSession* const config)
 {
     KineticSessionHandle handle = KINETIC_HANDLE_INVALID;
-    if (config == NULL)
-    {
+    if (config == NULL) {
         return KINETIC_HANDLE_INVALID;
     }
-    for (int idx = 0; idx < KINETIC_SESSIONS_MAX; idx++)
-    {
-        if (Connections[idx] == NULL)
-        {
+    for (int idx = 0; idx < KINETIC_SESSIONS_MAX; idx++) {
+        if (Connections[idx] == NULL) {
             KineticConnection* connection = &ConnectionInstances[idx];
             Connections[idx] = connection;
             KINETIC_CONNECTION_INIT(connection);
@@ -57,7 +54,9 @@ void KineticConnection_FreeConnection(KineticSessionHandle* const handle)
     assert(*handle != KINETIC_HANDLE_INVALID);
     KineticConnection* connection = KineticConnection_FromHandle(*handle);
     assert(connection != NULL);
-    *connection = (KineticConnection) {.connected = false};
+    *connection = (KineticConnection) {
+        .connected = false
+    };
     Connections[(int)*handle - 1] = NULL;
 }
 
@@ -70,20 +69,18 @@ KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle)
 
 KineticStatus KineticConnection_Connect(KineticConnection* const connection)
 {
-    if (connection == NULL)
-    {
+    if (connection == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
     connection->connected = false;
     connection->socket = KineticSocket_Connect(
-        connection->session.host,
-        connection->session.port,
-        connection->session.nonBlocking);
+                             connection->session.host,
+                             connection->session.port,
+                             connection->session.nonBlocking);
     connection->connected = (connection->socket >= 0);
 
-    if (!connection->connected)
-    {
+    if (!connection->connected) {
         LOG("Session connection failed!");
         connection->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
         return KINETIC_STATUS_CONNECTION_ERROR;
@@ -94,8 +91,7 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
 
 KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
 {
-    if (connection == NULL || connection->socket < 0)
-    {
+    if (connection == NULL || connection->socket < 0) {
         return KINETIC_STATUS_SESSION_INVALID;
     }
 

@@ -42,7 +42,8 @@
 #define KINETIC_TLS_PORT        (8443)
 #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
-#define KINETIC_MAX_KEY_LEN     (128)
+#define KINETIC_MAX_KEY_LEN     (4096)
+#define KINETIC_MAX_VERSION_LEN (256)
 #define PDU_VALUE_MAX_LEN       (1024 * 1024)
 
 // Define max host name length
@@ -222,6 +223,37 @@ typedef struct _KineticKeyValue
     KineticSynchronization synchronization;
     ByteArray value;
 } KineticKeyValue;
+#define KINETIC_KEY_VALUE_INIT(_keyValue) \
+    memset((_keyValue), 0, sizeof(KineticKeyValue));
+
+typedef struct _KineticEntry {
+    KineticKeyValue keyValue;
+    KineticSessionHandle sessionHandle;
+    uint8_t keyData[KINETIC_MAX_KEY_LEN];
+    uint8_t newVersionData[KINETIC_MAX_VERSION_LEN];
+    uint8_t dbVersionData[KINETIC_MAX_VERSION_LEN];
+    uint8_t tagData[KINETIC_MAX_VERSION_LEN];
+    bool force;
+    KineticAlgorithm algorithm;
+    bool metadataOnly;
+    KineticSynchronization synchronization;
+    uint8_t valueData[PDU_VALUE_MAX_LEN];
+} KineticEntry;
+#define KINTEIC_ENTRY_INIT(_entry, _sessionHandle) \
+{ \
+    KINETIC_KEY_VALUE_INIT(&(_entry)->keyValue); \
+    (_entry)->sessionHandle = (_sessionHandle); \
+    (_entry)->keyValue.key = (ByteArray){ \
+        .data = (_entry)->keyData, .len = sizeof((_entry)->keyData) }; \
+    (_entry)->keyValue.newVersion = (ByteArray){ \
+        .data = (_entry)->newVersionData, .len = sizeof((_entry)->newVersionData) }; \
+    (_entry)->keyValue.dbVersion = (ByteArray){ \
+        .data = (_entry)->dbVersionData, .len = sizeof((_entry)->dbVersionData) }; \
+    (_entry)->keyValue.tag = (ByteArray){ \
+        .data = (_entry)->tagData, .len = sizeof((_entry)->tagData) }; \
+    (_entry)->keyValue.value = (ByteArray){ \
+        .data = (_entry)->valueData, .len = sizeof((_entry)->valueData) }; \
+}
 
 // Expose normally private data for test builds to allow inspection
 #ifdef TEST

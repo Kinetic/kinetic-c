@@ -23,12 +23,12 @@
 KineticPDU Request, Response;
 
 int Delete(const char* host,
-        int port,
-        bool nonBlocking,
-        int64_t clusterVersion,
-        int64_t identity,
-        ByteArray hmacKey,
-        KineticKeyValue* metadata)
+           int port,
+           bool nonBlocking,
+           int64_t clusterVersion,
+           int64_t identity,
+           ByteArray hmacKey,
+           KineticKeyValue* metadata)
 {
     KineticOperation operation;
     KineticConnection connection;
@@ -43,8 +43,7 @@ int Delete(const char* host,
 
     KineticStatus status = KineticClient_Delete(&operation, metadata);
 
-    if (status == KINETIC_STATUS_SUCCESS)
-    {
+    if (status == KINETIC_STATUS_SUCCESS) {
         printf("Delete operation completed successfully. Your data has been deleted!\n");
         return 0;
     }

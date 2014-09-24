@@ -35,18 +35,32 @@
 
 // Ensure __func__ is defined (for debugging)
 #if !defined __func__
-    #define __func__ __FUNCTION__
+#define __func__ __FUNCTION__
 #endif
+
+
+// Kinetic generic double-linked list item
+typedef struct _KineticListItem KineticListItem;
+struct _KineticListItem {
+    KineticListItem* next;
+    KineticListItem* previous;
+    void* data;
+};
+typedef struct _KineticList {
+    KineticListItem* start;
+    KineticListItem* last;
+} KineticList;
 
 typedef struct _KineticPDU KineticPDU;
 
 // Kinetic Device Client Connection
-typedef struct _KineticConnection
-{
+typedef struct _KineticConnection {
     bool    connected;       // state of connection
     int     socket;          // socket file descriptor
     int64_t connectionID;    // initialized to seconds since epoch
     int64_t sequence;        // increments for each request in a session
+    KineticList pdus;        // list of dynamically allocated PDUs
+    KineticList entries;     // list of dynamically allocated key/value entries
     KineticSession session;  // session configuration
 } KineticConnection;
 #define KINETIC_CONNECTION_INIT(_con) { \
@@ -63,8 +77,7 @@ typedef struct _KineticConnection
 
 
 // Kinetic Message HMAC
-typedef struct _KineticHMAC
-{
+typedef struct _KineticHMAC {
     KineticProto_Security_ACL_HMACAlgorithm algorithm;
     uint32_t len;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
@@ -72,8 +85,7 @@ typedef struct _KineticHMAC
 
 
 // Kinetic Device Message Request
-typedef struct _KineticMessage
-{
+typedef struct _KineticMessage {
     // Kinetic Protocol Buffer Elements
     KineticProto                proto;
     KineticProto_Command        command;
@@ -122,8 +134,7 @@ typedef struct _KineticMessage
 #define PDU_PROTO_MAX_UNPACKED_LEN  (PDU_PROTO_MAX_LEN * 2)
 #define PDU_MAX_LEN                 (PDU_HEADER_LEN + \
                                     PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
-typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
-{
+typedef struct __attribute__((__packed__)) _KineticPDUHeader {
     uint8_t     versionPrefix;
     uint32_t    protobufLength;
     uint32_t    valueLength;
@@ -133,8 +144,7 @@ typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
 
 
 // Kinetic PDU
-struct _KineticPDU
-{
+struct _KineticPDU {
     // Binary PDU header
     KineticPDUHeader header;    // Header struct in native byte order
     KineticPDUHeader headerNBO; // Header struct in network-byte-order
@@ -185,19 +195,9 @@ struct _KineticPDU
     KINETIC_MESSAGE_HEADER_INIT(&(_pdu)->protoData.message.header, (_con)); \
 }
 
-// Kinetic PDU Linked List Item
-typedef struct _KineticPDUListItem KineticPDUListItem;
-struct _KineticPDUListItem
-{
-    KineticPDUListItem* next;
-    KineticPDUListItem* previous;
-    KineticPDU pdu;
-};
-
 
 // Kinetic Operation
-typedef struct _KineticOperation
-{
+typedef struct _KineticOperation {
     KineticConnection* connection;  // Associated KineticSession
     KineticPDU* request;
     KineticPDU* response;
@@ -210,7 +210,7 @@ typedef struct _KineticOperation
     }
 
 // // Structure for defining a custom memory allocator.
-// typedef struct 
+// typedef struct
 // {
 //     void        *(*alloc)(void *allocator_data, size_t size);
 //     void        (*free)(void *allocator_data, void *pointer);
@@ -220,5 +220,7 @@ typedef struct _KineticOperation
 
 KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(KineticAlgorithm kinteicAlgorithm);
 KineticStatus KineticStatus_from_KineticProto(KineticProto_Status protoStatus);
+ByteArray ByteArray_from_ProtobufCBinaryData(ProtobufCBinaryData protoData);
+bool Copy_ProtobufCBinaryData_to_ByteArray(ByteArray dest, ProtobufCBinaryData src);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

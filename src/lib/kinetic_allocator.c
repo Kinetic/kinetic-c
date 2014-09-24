@@ -22,69 +22,70 @@
 #include "kinetic_logger.h"
 #include <stdlib.h>
 
-STATIC KineticPDUListItem* PDUList = NULL;
-STATIC KineticPDUListItem* PDUListLast = NULL;
+STATIC KineticList PDUList = {.start = NULL, .last = NULL};
+STATIC KineticList EntryList = {.start = NULL, .last = NULL};
 
-KineticPDU* KineticAllocator_NewPDU(void)
+void* KineticAllocator_NewItem(KineticList* list, size_t size)
 {
-    KineticPDUListItem* newItem = (KineticPDUListItem*)malloc(sizeof(KineticPDUListItem));
+    KineticListItem* newItem = (KineticListItem*)malloc(sizeof(KineticListItem));
     if (newItem == NULL) {
-        LOG("Failed allocating new PDU!");
+        LOG("Failed allocating new list item!");
         return NULL;
     }
+    memset(newItem, 0, sizeof(KineticListItem));
+    newItem->data = malloc(size);
+    memset(newItem->data, 0, size);
 
-    // Zero-out the new PDU and add it to the list
-    memset(newItem, 0, sizeof(KineticPDUListItem));
-    if (PDUList == NULL) {
-        PDUList = newItem;
+    // Add the new item to the list
+    if (list->start == NULL) {
+        list->start = newItem;
     }
     else {
-        newItem->previous = PDUListLast;
-        PDUListLast->next = newItem;
+        newItem->previous = list->last;
+        list->last->next = newItem;
     }
-    PDUListLast = newItem;
+    list->last = newItem;
 
-    LOGF("Allocated new PDU list item @ 0x%0llX w/PDU @ 0x%0llX",
-         (long long)newItem, (long long)&newItem->pdu);
+    LOGF("Allocated new list item @ 0x%0llX w/data @ 0x%0llX",
+         (long long)newItem, (long long)&newItem->data);
 
-    return &newItem->pdu;
+    return newItem->data;
 }
 
-void KineticAllocator_FreePDU(KineticPDU** pdu)
+void KineticAllocator_FreeItem(KineticList* list, void** item)
 {
-    KineticPDUListItem* cur = PDUList;
-    while (&cur->pdu != *pdu) {
+    KineticListItem* cur = list->start;
+    while (cur->data != *item) {
         if (cur->next == NULL) {
-            LOG("  Reached end of list before finding PDU to free!");
+            LOG("  Reached end of list before finding item to free!");
             return;
         }
         else {
-            LOG("  next..");
             cur = cur->next;
         }
     }
-    LOG("  Done searching for PDU list item");
+    LOG("  Done searching for item list item");
 
-    if ((cur != NULL) && (&cur->pdu == *pdu)) {
-        LOG("  PDU found! freeing it.");
+    if ((cur != NULL) && (cur->data == *item)) {
+        LOG("  item found! freeing it.");
 
         // Handle PDU list emptied
         if (cur->previous == NULL) {
             LOG("  At start of list.");
             if (cur->next == NULL) {
                 LOG("  Making it empty, since all deallocated!");
-                PDUList = NULL;
-                PDUListLast = NULL;
+                list->start = NULL;
+                list->last = NULL;
             }
             else {
                 LOG("  Moving current item to head, since head deallocated!");
-                PDUList = cur->next;
-                PDUList->previous = NULL;
+                list->start = cur->next;
+                list->start->previous = NULL;
             }
         }
         else {
             // Relink from previous to next, if avaliable
-            LOG("  Not at list start, so relinking list to free PDU.");
+            LOG("  Not at list start, so relinking list to free item.");
             if (cur->previous->next != NULL) {
                 LOG("  Relinking previous to next");
                 if (cur->next != NULL) {
@@ -92,39 +93,35 @@ void KineticAllocator_FreePDU(KineticPDU** pdu)
                     cur->previous->next = cur->next;
                 }
                 else {
-                    PDUListLast = cur->previous;
-                    PDUListLast->next = NULL;
+                    list->last = cur->previous;
+                    list->last->next = NULL;
                     LOGF("    next is NULL. End of list now @ 0x%0llX",
-                         (long long)PDUListLast);
+                         (long long)list->last);
                 }
             }
             else {
                 LOG("  This shouldn't happen!");
-                PDUListLast = cur->previous;
+                list->last = cur->previous;
             }
         }
 
-        if ((cur->pdu.proto != NULL) && cur->pdu.protobufDynamicallyExtracted) {
-            KineticProto__free_unpacked(cur->pdu.proto, NULL);
-            cur->pdu.proto = NULL;
-            cur->pdu.protobufDynamicallyExtracted = false;
-        };
-
-        LOGF("  Freeing item @ 0x%0llX, pdu @ 0x%0llX",
-             (long long)cur, (long long)&cur->pdu);
+        LOGF("  Freeing item @ 0x%0llX, item @ 0x%0llX",
+             (long long)cur, (long long)&cur->data);
+        free(cur->data);
+        cur->data = NULL;
         free(cur);
         cur = NULL;
     }
 
-    *pdu = NULL;
+    *item = NULL;
 }
 
-void KineticAllocator_FreeAllPDUs(void)
+void KineticAllocator_FreeList(KineticList* list)
 {
     LOG_LOCATION;
-    if (PDUList != NULL) {
-        LOG("Freeing list of PDUs...");
-        KineticPDUListItem* current = PDUList;
+    if (list != NULL) {
+        LOG("Freeing list of all items...");
+        KineticListItem* current = list->start;
 
         while (current->next != NULL) {
             LOG("Advancing to next list item...");
@@ -133,12 +130,15 @@ void KineticAllocator_FreeAllPDUs(void)
 
         while (current != NULL) {
             LOG("  Current item not freed!");
-            LOGF("  DEALLOCATING item: 0x%0llX, pdu: 0x%llX, prev: 0x%0llX",
-                 (long long)current, (long long)&current->pdu, (long long)current->previous);
-            KineticPDUListItem* curItem = current;
-            KineticPDUListItem* prevItem = current->previous;
+            LOGF("  DEALLOCATING item: 0x%0llX, data: 0x%llX, prev: 0x%0llX",
+                 (long long)current, (long long)&current->data, (long long)current->previous);
+            KineticListItem* curItem = current;
+            KineticListItem* prevItem = current->previous;
             if (curItem != NULL) {
                 LOG("  Freeing list item");
+                if (curItem->data != NULL) {
+                    free(curItem->data);
+                }
                 free(curItem);
             }
             current = prevItem;
@@ -148,15 +148,82 @@ void KineticAllocator_FreeAllPDUs(void)
     else {
         LOG("  Nothing to free!");
     }
-    PDUList = NULL;
-    PDUListLast = NULL;
+
+    *list = (KineticList){.start = NULL, .last = NULL};
 }
+
+
+
+KineticPDU* KineticAllocator_NewPDU(void)
+{
+    KineticPDU* newPDU = (KineticPDU*)KineticAllocator_NewItem(
+        &PDUList, sizeof(KineticPDU));
+    if (newPDU == NULL) {
+        LOG("Failed allocating new PDU!");
+        return NULL;
+    }
+
+    assert(newPDU->proto == NULL);
+
+    LOGF("Allocated new PDU @ 0x%0llX", (long long)newPDU);
+
+    return newPDU;
+}
+
+void KineticAllocator_FreePDU(KineticPDU** pdu)
+{
+    if (((*pdu)->proto != NULL) && (*pdu)->protobufDynamicallyExtracted) {
+        LOG("Freeing dynamically allocated protobuf");
+        KineticProto__free_unpacked((*pdu)->proto, NULL);
+    };
+    KineticAllocator_FreeItem(&PDUList, (void**)pdu);
+}
+
+
+
+void KineticAllocator_FreeAllPDUs(void)
+{
+    LOG_LOCATION;
+    if (PDUList.start != NULL) {
+        LOG("Freeing all PDUs...");
+        KineticListItem* current = PDUList.start;
+        while (current != NULL) {
+            KineticPDU* pdu = (KineticPDU*)current->data;
+            if (pdu != NULL && pdu->proto != NULL
+                && pdu->protobufDynamicallyExtracted) {
+                KineticProto__free_unpacked(pdu->proto, NULL);
+            }
+            current = current->next;
+        }
+        KineticAllocator_FreeList(&PDUList);
+    }
+    else {
+        LOG("  Nothing to free!");
+    }
+}
+
+
+KineticEntry* KineticAllocator_NewEntry(KineticConnection* connection)
+{
+    return NULL;
+}
+
+void KineticAllocator_FreeEntry(KineticConnection* connection, KineticEntry* entry)
+{
+}
+
+void KineticAllocator_FreeAllEntries(KineticConnection* connection)
+{
+}
+
+
+
 
 bool KineticAllocator_ValidateAllMemoryFreed(void)
 {
-    bool empty = (PDUList == NULL);
+    bool empty = (PDUList.start == NULL);
     LOG_LOCATION;
     LOGF("  PDUList: 0x%0llX, empty=%s",
-        (long long)PDUList, empty ? "true" : "false");
+        (long long)PDUList.start, empty ? "true":"false");
     return empty;
 }

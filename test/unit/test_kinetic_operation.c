@@ -399,7 +399,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
 
 uint8_t ValueData[PDU_VALUE_MAX_LEN];
 
-void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_supplied_value_ByteArray(void)
+void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 {
     LOG_LOCATION;
     const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
@@ -440,50 +440,6 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_supplied_v
     // hmac: "..."
 
     TEST_ASSERT_EQUAL_ByteArray(expectedValue, Response.value);
-}
-
-void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_embedded_value_ByteArray(void)
-{
-    LOG_LOCATION;
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
-    const KineticKeyValue metadata = {
-        .key = key,
-    };
-
-    KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
-
-    KineticOperation_BuildGet(&Operation, &metadata);
-
-    // GET
-    // The GET operation is used to retrieve the value and metadata for a given key.
-    //
-    // Request Message:
-    // command {
-    //   header {
-    //     // See above for descriptions of these fields
-    //     clusterVersion: ...
-    //     identity: ...
-    //     connectionID: ...
-    //     sequence: ...
-    //
-    //     // The mesageType should be GET
-    //     messageType: GET
-    TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_GET, Request.proto->command->header->messageType);
-    //   }
-    //   body {
-    //     keyValue {
-    //       // See above
-    //       key: "..."
-    //     }
-    //   }
-    // }
-    // // See above
-    // hmac: "..."
-
-    TEST_ASSERT_ByteArray_NONE(Request.value);
-    TEST_ASSERT_EQUAL_PTR(Response.valueBuffer, Response.value.data);
 }
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)

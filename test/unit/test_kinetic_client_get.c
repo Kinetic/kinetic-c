@@ -26,7 +26,7 @@
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
-#include "mock_kinetic_logger.h"
+#include "kinetic_logger.h"
 #include "mock_kinetic_operation.h"
 #include "unity.h"
 #include "unity_helper.h"

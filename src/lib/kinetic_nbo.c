@@ -23,8 +23,7 @@
 static uint64_t KineticNBO_SwapByteOrder(uint8_t* pByte, size_t len)
 {
     uint64_t swapped = 0u;
-    for (size_t i = 0; i < len; i++)
-    {
+    for (size_t i = 0; i < len; i++) {
         swapped = (swapped << 8) | pByte[i];
     }
     return swapped;
@@ -33,23 +32,23 @@ static uint64_t KineticNBO_SwapByteOrder(uint8_t* pByte, size_t len)
 uint32_t KineticNBO_FromHostU32(uint32_t valueHost)
 {
     return (uint32_t)KineticNBO_SwapByteOrder(
-        (uint8_t*)&valueHost, sizeof(uint32_t));
+               (uint8_t*)&valueHost, sizeof(uint32_t));
 }
 
 uint32_t KineticNBO_ToHostU32(uint32_t valueNBO)
 {
     return (uint32_t)KineticNBO_SwapByteOrder(
-        (uint8_t*)&valueNBO, sizeof(uint32_t));
+               (uint8_t*)&valueNBO, sizeof(uint32_t));
 }
 
 uint64_t KineticNBO_FromHostU64(uint64_t valueHost)
 {
     return KineticNBO_SwapByteOrder(
-        (uint8_t*)&valueHost, sizeof(uint64_t));
+               (uint8_t*)&valueHost, sizeof(uint64_t));
 }
 
 uint64_t KineticNBO_ToHostU64(uint64_t valueNBO)
 {
     return KineticNBO_SwapByteOrder(
-        (uint8_t*)&valueNBO, sizeof(uint64_t));
+               (uint8_t*)&valueNBO, sizeof(uint64_t));
 }

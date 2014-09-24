@@ -51,15 +51,21 @@ static SystemTestFixture Fixture = {
     }
 };
 static ByteArray ValueKey;
+static ByteArray OtherValueKey;
 static ByteArray Tag;
 static ByteArray TestValue;
+static ByteArray Version;
+static ByteArray NewVersion;
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
     ValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
+    OtherValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927_0");
     Tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
     TestValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
+    Version = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
+    NewVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
 }
 
 void tearDown(void)
@@ -67,19 +73,12 @@ void tearDown(void)
     SystemTestTearDown(&Fixture);
 }
 
-// -----------------------------------------------------------------------------
-// Put Command - Write a blob of data to a Kinetic Device
-//
-// Inspected Request: (m/d/y)
-// -----------------------------------------------------------------------------
-//
-//  TBD!
-//
+
 void test_Put_should_create_new_object_on_device(void)
 {   LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
         .key = ValueKey,
-        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .newVersion = Version,
         .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = TestValue,
@@ -87,13 +86,19 @@ void test_Put_should_create_new_object_on_device(void)
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &metadata);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteArray(Version, metadata.dbVersion);
+    TEST_ASSERT_ByteArray_NONE(metadata.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(ValueKey, metadata.key);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, metadata.tag);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, metadata.algorithm);
 }
 
-void test_Put_should_create_new_object_on_device_again(void)
+void test_Put_should_create_another_new_object_on_device(void)
 {   LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927_0"),
-        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .key = OtherValueKey,
+        .newVersion = Version,
         .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = TestValue,
@@ -101,13 +106,19 @@ void test_Put_should_create_new_object_on_device_again(void)
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &metadata);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteArray(Version, metadata.dbVersion);
+    TEST_ASSERT_ByteArray_NONE(metadata.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(OtherValueKey, metadata.key);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, metadata.tag);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, metadata.algorithm);
 }
 
 void test_Put_should_update_object_data_on_device(void)
 {   LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
         .key = ValueKey,
-        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
+        .dbVersion = Version,
         .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = TestValue,
@@ -115,14 +126,20 @@ void test_Put_should_update_object_data_on_device(void)
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &metadata);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteArray(Version, metadata.dbVersion);
+    TEST_ASSERT_ByteArray_NONE(metadata.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(ValueKey, metadata.key);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, metadata.tag);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, metadata.algorithm);
 }
 
 void test_Put_should_update_object_data_on_device_and_update_version(void)
 {   LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
         .key = ValueKey,
-        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
+        .dbVersion = Version,
+        .newVersion = NewVersion,
         .tag = Tag,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = TestValue,
@@ -140,6 +157,12 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     }
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteArray(NewVersion, metadata.dbVersion);
+    TEST_ASSERT_ByteArray_NONE(metadata.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(ValueKey, metadata.key);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, metadata.tag);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, metadata.algorithm);
 }
 
 /*******************************************************************************
