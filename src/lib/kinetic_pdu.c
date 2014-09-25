@@ -39,26 +39,6 @@ void KineticPDU_AttachValuePayload(KineticPDU* const pdu,
     pdu->value = payload;
 }
 
-void KineticPDU_EnableValueBuffer(KineticPDU* const pdu)
-{
-    assert(pdu != NULL);
-    pdu->value = (ByteArray) {
-        .data = pdu->valueBuffer, .len = PDU_VALUE_MAX_LEN
-    };
-}
-
-void KineticPDU_EnableValueBufferWithLength(KineticPDU* const pdu,
-        size_t length)
-{
-    assert(pdu != NULL);
-    assert(length <= sizeof(pdu->valueBuffer));
-    pdu->value = (ByteArray) {
-        .data = pdu->valueBuffer, .len = length
-    };
-    pdu->header.valueLength = length;
-    pdu->headerNBO.valueLength = KineticNBO_FromHostU32(length);
-}
-
 bool KineticPDU_Send(KineticPDU* request)
 {
     assert(request != NULL);
@@ -200,7 +180,6 @@ bool KineticPDU_Receive(KineticPDU* const response)
         response->connection->connectionID =
             response->proto->command->header->connectionID;
     }
-
 
     return true;
 }

@@ -42,7 +42,7 @@ static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 void setUp(void)
 {
     // Create and configure a new Kinetic protocol instance
-    Key = BYTE_ARRAY_INIT_FROM_CSTRING("some valid HMAC key...");
+    Key = ByteArray_CreateWithCString("some valid HMAC key...");
     Session = (KineticSession) {
         .nonBlocking = false,
         .port = 1234,
@@ -143,19 +143,6 @@ void test_KineticPDU_AttachValuePayload_should_attach_specified_ByteArray(void)
 }
 
 
-void test_KineticPDU_EnableValueBuffer_should_attach_builtin_buffer(void)
-{
-    LOG_LOCATION;
-    KineticPDU_Init(&PDU, &Connection);
-
-    KineticPDU_EnableValueBuffer(&PDU);
-
-    TEST_ASSERT_EQUAL_PTR(PDU.valueBuffer, PDU.value.data);
-    TEST_ASSERT_EQUAL(PDU_VALUE_MAX_LEN, PDU.value.len);
-}
-
-
-
 void test_KineticPDU_EnableValueBuffer_should_attach_builtin_buffer_and_set_length(void)
 {
     LOG_LOCATION;
@@ -175,18 +162,6 @@ void test_KineticPDU_EnableValueBuffer_should_attach_builtin_buffer_and_set_leng
     TEST_ASSERT_EQUAL_HEX8(0xBB, PDU.value.data[1]);
     TEST_ASSERT_EQUAL_HEX8(0xCC, PDU.value.data[2]);
 }
-
-// Disabled, since uses an assert() instead. Re-enable test if asserts are converted to exceptions!
-// void test_KineticPDU_EnableValueBuffer_should_attach_builtin_buffer_and_reject_lengths_that_are_too_long(void)
-// {
-//     LOG_LOCATION;
-//     KineticPDU_Init(&PDU, &Connection);
-
-//     size_t actualLength = KineticPDU_EnableValueBufferWithLength(&PDU, PDU_VALUE_MAX_LEN+1);
-
-//     TEST_ASSERT_EQUAL(0, actualLength);
-//     TEST_ASSERT_ByteArray_NONE(PDU.value);
-// }
 
 
 void test_KINETIC_PDU_INIT_WITH_MESSAGE_should_initialize_PDU_and_protobuf_message(void)
@@ -230,7 +205,7 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
     KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
     ByteArray headerNBO = {
         .data = (uint8_t*)&PDU.headerNBO, .len = sizeof(KineticPDUHeader)};
-    ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("Some arbitrary value");
+    ByteArray value = ByteArray_CreateWithCString("Some arbitrary value");
 
     KineticPDU_Init(&PDU, &Connection);
     KineticPDU_AttachValuePayload(&PDU, value);

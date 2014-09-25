@@ -23,7 +23,6 @@
 #include <stdlib.h>
 
 STATIC KineticList PDUList = {.start = NULL, .last = NULL};
-STATIC KineticList EntryList = {.start = NULL, .last = NULL};
 
 void* KineticAllocator_NewItem(KineticList* list, size_t size)
 {
@@ -179,8 +178,6 @@ void KineticAllocator_FreePDU(KineticPDU** pdu)
     KineticAllocator_FreeItem(&PDUList, (void**)pdu);
 }
 
-
-
 void KineticAllocator_FreeAllPDUs(void)
 {
     LOG_LOCATION;
@@ -201,23 +198,6 @@ void KineticAllocator_FreeAllPDUs(void)
         LOG("  Nothing to free!");
     }
 }
-
-
-KineticEntry* KineticAllocator_NewEntry(KineticConnection* connection)
-{
-    return NULL;
-}
-
-void KineticAllocator_FreeEntry(KineticConnection* connection, KineticEntry* entry)
-{
-}
-
-void KineticAllocator_FreeAllEntries(KineticConnection* connection)
-{
-}
-
-
-
 
 bool KineticAllocator_ValidateAllMemoryFreed(void)
 {

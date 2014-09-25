@@ -38,6 +38,13 @@
 #define __func__ __FUNCTION__
 #endif
 
+// Expose normally private data for test builds to allow inspection
+#ifdef TEST
+#define STATIC
+#else
+#define STATIC static
+#endif
+
 
 // Kinetic generic double-linked list item
 typedef struct _KineticListItem KineticListItem;
@@ -60,7 +67,6 @@ typedef struct _KineticConnection {
     int64_t connectionID;    // initialized to seconds since epoch
     int64_t sequence;        // increments for each request in a session
     KineticList pdus;        // list of dynamically allocated PDUs
-    KineticList entries;     // list of dynamically allocated key/value entries
     KineticSession session;  // session configuration
 } KineticConnection;
 #define KINETIC_CONNECTION_INIT(_con) { \
@@ -165,10 +171,10 @@ struct _KineticPDU {
     uint8_t protobufRaw[PDU_PROTO_MAX_LEN];
 
     // Object meta-data to be used/populated if provided and pertinent to the opearation
-    KineticKeyValue* metadata;
+    KineticEntry* entry;
 
     // Value data associated with PDU (if any)
-    uint8_t valueBuffer[PDU_VALUE_MAX_LEN];
+    // uint8_t valueBuffer[PDU_VALUE_MAX_LEN];
     ByteArray value;
 
     // Embedded HMAC instance

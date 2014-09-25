@@ -67,8 +67,11 @@ int main(int argc, char** argv)
         .version = "v1.0",
         .newVersion = "v1.0",
     };
-    ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING(cfg.hmacKey);
+    ByteArray hmacKey = ByteArray_CreateWithCString(cfg.hmacKey);
     ByteArray value = {.data = cfg.value, .len = cfg.valueLength};
+    ByteArray key = ByteArray_CreateWithCString("some_value_key...");
+    ByteArray newVersion = ByteBuffer_CreateWithArray(newVersion);
+    ByteArray tag = ByteArray_CreateWithCString("some_value_tag...");
 
     struct option long_options[] = {
         {"non-blocking", no_argument,      &cfg.nonBlocking, true},
@@ -135,12 +138,11 @@ int main(int argc, char** argv)
                 cfg.value[i] = (uint8_t)(0x0ff & i);
             }
 
-            KineticKeyValue metadata = {
-                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
+            KineticEntry entry = {
+                .key = ByteBuffer_CreateWithArray(key),
                 .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
-                .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-                .dbVersion = BYTE_ARRAY_NONE,
-                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+                .newVersion = ByteBuffer_CreateWithArray(newVersion),
+                .tag = ByteBuffer_CreateWithArray(tag),
                 .metadataOnly = false,
                 .value = value,
             };
@@ -178,12 +180,11 @@ int main(int argc, char** argv)
         }
 
         else if (strcmp("get", op) == 0) {
-            KineticKeyValue metadata = {
-                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
+            KineticEntry entry = {
+                .key = ByteBuffer_CreateWithArray(key),
                 .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
-                .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-                .dbVersion = BYTE_ARRAY_NONE,
-                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+                .newVersion = ByteBuffer_CreateWithArray(newVersion),
+                .tag = ByteBuffer_CreateWithArray(tag),
                 .metadataOnly = false,
             };
 
@@ -220,11 +221,11 @@ int main(int argc, char** argv)
         }
 
         else if (strcmp("delete", op) == 0) {
-            KineticKeyValue metadata = {
-                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
+            KineticEntry entry = {
+                .key = ByteBuffer_CreateWithArray(key),
                 .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
-                .dbVersion =  BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
+                .dbVersion =  ByteBuffer_CreateWithArray(newVersion),
+                .tag = ByteBuffer_CreateWithArray(tag),
                 .metadataOnly = false,
             };
 

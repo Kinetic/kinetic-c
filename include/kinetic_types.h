@@ -32,9 +32,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <limits.h>
-
-// #include <netinet/in.h>
-// #include <ifaddrs.h>
+#include "byte_array.h"
 
 
 #define KINETIC_HANDLE_INVALID  (0)
@@ -60,55 +58,6 @@
 #ifndef LOG_FILE_NAME_MAX
 #define LOG_FILE_NAME_MAX (HOST_NAME_MAX)
 #endif
-
-/**
- * @brief Structure for handling generic arrays of bytes
- *
- * The data contained in a `ByteArray` is an arbitrary sequence of
- * bytes. It may contain embedded `NULL` characters and is not required to be
- * `NULL`-terminated.
- */
-typedef struct _ByteArray {
-    size_t  len;    /**< Number of bytes in the `data` field. */
-    uint8_t *data;  /**< Pointer to an allocated array of data bytes. */
-} ByteArray;
-
-#define BYTE_ARRAY_NONE \
-    (ByteArray){.len = 0, .data = NULL}
-#define BYTE_ARRAY_INIT(_data) (ByteArray) \
-    {.data = (uint8_t*)(_data), .len = sizeof(_data)};
-#define BYTE_ARRAY_INIT_WITH_LEN(_data, _len) \
-    (ByteArray){.data = (uint8_t*)(_data), .len = (_len)};
-#define BYTE_ARRAY_CREATE(name, len) \
-    uint8_t ( name ## _buf )[(len)]; ByteArray (name) = BYTE_ARRAY_INIT(( name ## _buf ));
-#define BYTE_ARRAY_CREATE_WITH_DATA(_name, _data) \
-    uint8_t ( _name ## _data )[sizeof(_data)]; ByteArray (_name) = {.data = (uint8_t*(_data)), .len = sizeof(data)};
-#define BYTE_ARRAY_CREATE_WITH_BUFFER(_name, _buf) \
-    ByteArray (_name) = {.data = (uint8_t*(_buf)), .len = 0};
-#define BYTE_ARRAY_INIT_FROM_CSTRING(str) \
-    (ByteArray){.data = (uint8_t*)(str), .len = strlen(str)}
-#define BYTE_ARRAY_FILL_WITH_DUMMY_DATA(_array) \
-    {size_t i=0; for(;i<(_array).len;++i){(_array).data[i] = (uint8_t)(i & 0xFFu);} }
-
-
-/**
- * @brief Structure for an embedded ByteArray as a buffer
- *
- * The `bytesUsed` field is initialized to zero, and is to incremented as each
- * byte is consumed, but shall not exceed the `array` length
- */
-typedef struct
-{
-    ByteArray   array;
-    size_t      bytesUsed;
-} ByteBuffer;
-#define BYTE_BUFFER_INIT(_array) (ByteBuffer) { \
-    .array = (ByteArray) { \
-        .data = (_array).data, \
-        .len = (_array).len }, \
-    .bytesUsed = 0, \
-}
-
 /**
  * @brief Enumeration of encryption/checksum key algorithms
  */
@@ -210,57 +159,18 @@ typedef enum
 extern const char* KineticStatusDescriptor[];
 
 
-// KeyValue data
-typedef struct _KineticKeyValue
-{
-    ByteArray key;
-    ByteArray newVersion;
-    ByteArray dbVersion;
-    ByteArray tag;
-    bool force;
-    KineticAlgorithm algorithm;
-    bool metadataOnly;
-    KineticSynchronization synchronization;
-    ByteArray value;
-} KineticKeyValue;
-#define KINETIC_KEY_VALUE_INIT(_keyValue) \
-    memset((_keyValue), 0, sizeof(KineticKeyValue));
-
+// KineticEntry - byte arrays need to be preallocated by the client
 typedef struct _KineticEntry {
-    KineticKeyValue keyValue;
-    KineticSessionHandle sessionHandle;
-    uint8_t keyData[KINETIC_MAX_KEY_LEN];
-    uint8_t newVersionData[KINETIC_MAX_VERSION_LEN];
-    uint8_t dbVersionData[KINETIC_MAX_VERSION_LEN];
-    uint8_t tagData[KINETIC_MAX_VERSION_LEN];
+    ByteBuffer key;
+    ByteBuffer newVersion;
+    ByteBuffer dbVersion;
+    ByteBuffer tag;
     bool force;
     KineticAlgorithm algorithm;
     bool metadataOnly;
     KineticSynchronization synchronization;
-    uint8_t valueData[PDU_VALUE_MAX_LEN];
+    ByteBuffer value;
 } KineticEntry;
-#define KINTEIC_ENTRY_INIT(_entry, _sessionHandle) \
-{ \
-    KINETIC_KEY_VALUE_INIT(&(_entry)->keyValue); \
-    (_entry)->sessionHandle = (_sessionHandle); \
-    (_entry)->keyValue.key = (ByteArray){ \
-        .data = (_entry)->keyData, .len = sizeof((_entry)->keyData) }; \
-    (_entry)->keyValue.newVersion = (ByteArray){ \
-        .data = (_entry)->newVersionData, .len = sizeof((_entry)->newVersionData) }; \
-    (_entry)->keyValue.dbVersion = (ByteArray){ \
-        .data = (_entry)->dbVersionData, .len = sizeof((_entry)->dbVersionData) }; \
-    (_entry)->keyValue.tag = (ByteArray){ \
-        .data = (_entry)->tagData, .len = sizeof((_entry)->tagData) }; \
-    (_entry)->keyValue.value = (ByteArray){ \
-        .data = (_entry)->valueData, .len = sizeof((_entry)->valueData) }; \
-}
-
-// Expose normally private data for test builds to allow inspection
-#ifdef TEST
-#define STATIC
-#else
-#define STATIC static
-#endif
 
 
 #endif // _KINETIC_TYPES_H

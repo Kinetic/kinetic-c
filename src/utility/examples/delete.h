@@ -47,6 +47,6 @@ int Delete(const char* host,
            int64_t clusterVersion,
            int64_t identity,
            ByteArray hmacKey,
-           KineticKeyValue* metadata);
+           KineticEntry* entry);
 
 #endif // _DELETE_H

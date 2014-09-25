@@ -52,20 +52,6 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
 KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle);
 
 /**
- * @brief Creates a new key/value entry with preallocated ByteArrays for
- *        pertinent metadata fields. 'value' and its memory are owned by
- *        the caller.
- *
- * @param handle    KineticSessionHandle for a connected session.
- * @param value     Payload ByteArray w/ caller-allocated buffer to embed in
- *                  entry.
- *
- * @return          Returns the resulting KineticStatus
- */
-KineticStatus KineticClient_CreateEntry(KineticSessionHandle handle,
-    ByteArray value);
-
-/**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational.
  *
  * @param handle        KineticSessionHandle for a connected session.
@@ -84,7 +70,7 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle handle);
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Put(KineticSessionHandle handle,
-    KineticKeyValue* const metadata);
+    KineticEntry* const metadata);
 
 /**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
@@ -96,7 +82,7 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Get(KineticSessionHandle handle,
-    KineticKeyValue* const metadata);
+    KineticEntry* const metadata);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
@@ -108,6 +94,6 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
-    KineticKeyValue* const metadata);
+    KineticEntry* const metadata);
 
 #endif // _KINETIC_CLIENT_H

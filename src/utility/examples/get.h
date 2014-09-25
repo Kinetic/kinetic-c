@@ -47,6 +47,6 @@ int Get(const char* host,
         int64_t clusterVersion,
         int64_t identity,
         ByteArray hmacKey,
-        KineticKeyValue* metadata);
+        KineticEntry* entry);
 
 #endif // _GET_H

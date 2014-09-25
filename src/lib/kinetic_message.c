@@ -26,25 +26,20 @@ void KineticMessage_Init(KineticMessage* const message)
     KINETIC_MESSAGE_INIT(message);
 }
 
-// e.g. CONFIG_FIELD_BYTE_ARRAY(key, message->keyValue, metadata)
-#define CONFIG_FIELD_BYTE_ARRAY(_name, _field, _config) { \
-    if (_config->_name.data != NULL && _config->_name.len > 0) { \
-        _field._name.data = _config->_name.data; \
-        _field._name.len = _config->_name.len; \
+// e.g. CONFIG_FIELD_BYTE_BUFFER(key, message->keyValue, entry)
+#define CONFIG_FIELD_BYTE_BUFFER(_name, _field, _entry) { \
+    if ((_entry)->_name.array.data != NULL && (_entry)->_name.array.len > 0) { \
+        _field._name.data = (_entry)->_name.array.data; \
+        _field._name.len = (_entry)->_name.array.len; \
         _field.has_ ## _name = true; \
     } \
 }
 
-// #define CONFIG_OPTIONAL_FIELD_ENUM(name, field, message) {
-//     message->keyValue.(name) = ((int)metadata->algorithm > 0);
-//     if (message->keyValue.has_(name)) {
-//         message->keyValue.algorithm = algorithm; } }
-
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-                                      const KineticKeyValue* metadata)
+                                      const KineticEntry* entry)
 {
     assert(message != NULL);
-    assert(metadata != NULL);
+    assert(entry != NULL);
 
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
@@ -54,17 +49,17 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->proto.command->body->keyValue = &message->keyValue;
 
     // Set keyValue fields appropriately
-    CONFIG_FIELD_BYTE_ARRAY(key, message->keyValue, metadata);
-    CONFIG_FIELD_BYTE_ARRAY(newVersion, message->keyValue, metadata);
-    CONFIG_FIELD_BYTE_ARRAY(dbVersion, message->keyValue, metadata);
-    CONFIG_FIELD_BYTE_ARRAY(tag, message->keyValue, metadata);
-    message->keyValue.has_algorithm = (bool)((int)metadata->algorithm > 0);
+    CONFIG_FIELD_BYTE_BUFFER(key, message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(newVersion, message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(dbVersion, message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(tag, message->keyValue, entry);
+    message->keyValue.has_algorithm = (bool)((int)entry->algorithm > 0);
     if (message->keyValue.has_algorithm) {
         message->keyValue.algorithm =
-            KineticProto_Algorithm_from_KineticAlgorithm(metadata->algorithm);
+            KineticProto_Algorithm_from_KineticAlgorithm(entry->algorithm);
     }
-    message->keyValue.has_metadataOnly = metadata->metadataOnly;
+    message->keyValue.has_metadataOnly = entry->metadataOnly;
     if (message->keyValue.has_metadataOnly) {
-        message->keyValue.metadataOnly = metadata->metadataOnly;
+        message->keyValue.metadataOnly = entry->metadataOnly;
     }
 }

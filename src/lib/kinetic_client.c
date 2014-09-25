@@ -57,9 +57,9 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 
     LOG_LOCATION;
     LOGF("Executing operation: 0x%llX", operation);
-    if (operation->request->metadata != NULL) {
+    if (operation->request->entry != NULL) {
         KineticLogger_LogByteArray("  Sending PDU w/metadata:",
-                                   operation->request->metadata->value);
+            operation->request->entry->value.array);
     }
     else {
         LOG_LOCATION;
@@ -185,16 +185,16 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
     }
 
     // Initialize request
-    KineticOperation_BuildPut(&operation, metadata);
+    KineticOperation_BuildPut(&operation, entry);
 
     // Execute the operation
     status = KineticClient_ExecuteOperation(&operation);
 
     if (status == KINETIC_STATUS_SUCCESS) {
         // Propagate newVersion to dbVersion in metadata, if newVersion specified
-        if (metadata->newVersion.data != NULL && metadata->newVersion.len > 0) {
-            metadata->dbVersion = metadata->newVersion;
-            metadata->newVersion = BYTE_ARRAY_NONE;
+        if (entry->newVersion.array.data != NULL && entry->newVersion.array.len > 0) {
+            entry->dbVersion.array = entry->newVersion.array;
+            entry->newVersion.array = BYTE_ARRAY_NONE;
         }
     }
 
@@ -221,7 +221,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
     status = KineticClient_ExecuteOperation(&operation);
 
     // Update the entry upon success
-    entry->value.len = 0;
+    entry->value.array.len = 0;
     if (status == KINETIC_STATUS_SUCCESS)
     {
         if (operation.response->proto->command->body->keyValue != NULL)
@@ -237,10 +237,10 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
             // entry->key = 
             //     operation.response->proto->command->body->keyValue->key;
 
-            if (entry->dbVersion.data != NULL)
+            if (entry->dbVersion.array.data != NULL)
             {
                 Copy_ProtobufCBinaryData_to_ByteArray(
-                    entry->dbVersion, keyValue->dbVersion);
+                    entry->dbVersion.array, keyValue->dbVersion);
             }
 
             // entry->tag = 
@@ -254,7 +254,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
 
         }
 
-        entry->value.len = operation.response->value.len;
+        entry->value.array.len = operation.response->value.len;
     }
 
     KineticOperation_Free(&operation);

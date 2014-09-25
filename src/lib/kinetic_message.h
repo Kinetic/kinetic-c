@@ -26,6 +26,6 @@
 
 void KineticMessage_Init(KineticMessage* const message);
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-                                      const KineticKeyValue* metadata);
+                                      const KineticEntry* entry);
 
 #endif // _KINETIC_MESSAGE_H

@@ -24,6 +24,8 @@
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
 #include "kinetic_types.h"
+#include "kinetic_types_internal.h"
+#include "byte_array.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -53,7 +55,7 @@ static void ConnectSession(void)
 {
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
-    HmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some hmac key");
+    HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
@@ -81,7 +83,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_
 
 void test_KineticClient_Connect_should_return_KINETIC_STATUS_HOST_EMPTY_upon_NULL_host(void)
 {
-    ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key");
+    ByteArray key = ByteArray_CreateWithCString("some_key");
     KineticSession config = {
         .host = "",
         .hmacKey = key,
@@ -126,7 +128,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_
 {
     KineticSession config = {
         .host = "somehost.com",
-        .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_key"),
+        .hmacKey = ByteArray_CreateWithCString("some_key"),
     };
     SessionHandle = 17;
     
@@ -138,7 +140,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_INVALID_if_
 {
     KineticSession config = {
         .host = "somehost.com",
-        .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_key"),
+        .hmacKey = ByteArray_CreateWithCString("some_key"),
     };
     SessionHandle = 17;
 
@@ -153,7 +155,7 @@ void test_KineticClient_Connect_should_return_status_from_a_failed_connection(vo
 {
     KineticSession config = {
         .host = "somehost.com",
-        .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_key"),
+        .hmacKey = ByteArray_CreateWithCString("some_key"),
     };
     SessionHandle = 17;
 

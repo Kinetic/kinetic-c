@@ -25,13 +25,8 @@
 
 void KineticPDU_Init(KineticPDU* const pdu,
                      KineticConnection* const connection);
-
 void KineticPDU_AttachValuePayload(KineticPDU* const pdu,
                                    ByteArray payload);
-void KineticPDU_EnableValueBuffer(KineticPDU* const pdu);
-void KineticPDU_EnableValueBufferWithLength(KineticPDU* const pdu,
-        size_t length);
-
 bool KineticPDU_Send(KineticPDU* request);
 bool KineticPDU_Receive(KineticPDU* response);
 

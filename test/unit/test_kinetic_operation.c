@@ -20,6 +20,7 @@
 
 #include "unity_helper.h"
 #include "protobuf-c/protobuf-c.h"
+#include "byte_array.h"
 #include "kinetic_types.h"
 #include "kinetic_operation.h"
 #include "kinetic_proto.h"
@@ -37,7 +38,7 @@ static KineticOperation Operation;
 
 void setUp(void)
 {
-    HMACKey = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key");
+    HMACKey = ByteArray_CreateWithCString("some_hmac_key");
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connectionID = ConnectionID;
     KINETIC_PDU_INIT_WITH_MESSAGE(&Request, &Connection);
@@ -295,11 +296,11 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
 void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_create_a_new_object(void)
 {
     LOG_LOCATION;
-    ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("Luke, I am your father");
+    ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
 
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
-    const ByteArray newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
-    const ByteArray tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_tag");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
+    const ByteArray tag = ByteArray_CreateWithCString("some_tag");
 
     KineticConnection_IncrementSequence_Expect(&Connection);
 
@@ -373,22 +374,22 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     //       //        written before the FLUSH operation is returned completed.
     //       synchronization: ...
     //     }
-    const KineticKeyValue metadata = {
-        .key = key,
-        .newVersion = newVersion,
-        .dbVersion = BYTE_ARRAY_NONE,
-        .tag = tag,
+    const KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .newVersion = ByteBuffer_CreateWithArray(newVersion),
+        // .dbVersion = ByteBuffer_CreateWithArray(BYTE_ARRAY_NONE),
+        .tag = ByteBuffer_CreateWithArray(tag),
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = value,
+        .value = ByteBuffer_CreateWithArray(value),
     };
-    KineticMessage_ConfigureKeyValue_Expect(&Operation.request->protoData.message, &metadata);
+    KineticMessage_ConfigureKeyValue_Expect(&Operation.request->protoData.message, &entry);
     //   }
     // }
     // hmac: "..."
     //
 
     // Build the operation
-    KineticOperation_BuildPut(&Operation, &metadata);
+    KineticOperation_BuildPut(&Operation, &entry);
 
     // Ensure proper message type
     TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
@@ -402,15 +403,18 @@ uint8_t ValueData[PDU_VALUE_MAX_LEN];
 void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 {
     LOG_LOCATION;
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = {.data = ValueData};
     ByteArray expectedValue = {.data = value.data, .len = PDU_VALUE_MAX_LEN};
-    const KineticKeyValue metadata = {.key = key, .value = (ByteArray){.len = PDU_VALUE_MAX_LEN, .data = value.data}};
+    const KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .value = ByteBuffer_Create(value.data, PDU_VALUE_MAX_LEN),
+    };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
 
-    KineticOperation_BuildGet(&Operation, &metadata);
+    KineticOperation_BuildGet(&Operation, &entry);
 
     // GET
     // The GET operation is used to retrieve the value and metadata for a given key.
@@ -445,16 +449,16 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
 {
     LOG_LOCATION;
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
-    const KineticKeyValue metadata = {
-        .key = key,
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
         .metadataOnly = true,
     };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
 
-    KineticOperation_BuildGet(&Operation, &metadata);
+    KineticOperation_BuildGet(&Operation, &entry);
 
     // GET
     // The GET operation is used to retrieve the value and metadata for a given key.
@@ -490,15 +494,15 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
 void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 {
     LOG_LOCATION;
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
-    const KineticKeyValue metadata = {
-        .key = key,
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
     };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
 
-    KineticOperation_BuildDelete(&Operation, &metadata);
+    KineticOperation_BuildDelete(&Operation, &entry);
 
     // The `DELETE` operation removes the entry for a given key. It respects the 
     // same locking behavior around `dbVersion` and `force` as described in the previous sections.

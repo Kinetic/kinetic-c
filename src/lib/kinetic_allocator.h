@@ -26,11 +26,6 @@
 KineticPDU* KineticAllocator_NewPDU(void);
 void KineticAllocator_FreePDU(KineticPDU** pdu);
 void KineticAllocator_FreeAllPDUs(void);
-
-KineticEntry* KineticAllocator_NewEntry(KineticConnection* connection);
-void KineticAllocator_FreeEntry(KineticConnection* connection, KineticEntry* entry);
-void KineticAllocator_FreeAllEntries(KineticConnection* connection);
-
 bool KineticAllocator_ValidateAllMemoryFreed(void);
 
 #endif // _KINETIC_ALLOCATOR

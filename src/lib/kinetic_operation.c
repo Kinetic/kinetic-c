@@ -167,7 +167,7 @@ void KineticOperation_BuildNoop(KineticOperation* const operation)
 }
 
 void KineticOperation_BuildPut(KineticOperation* const operation,
-                               const KineticKeyValue* const metadata)
+                               const KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -176,11 +176,11 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
     operation->request->proto->command->header->has_messageType = true;
 
     KineticMessage_ConfigureKeyValue(
-        &operation->request->protoData.message, metadata);
-    operation->request->metadata = (KineticKeyValue*)metadata;
-    if (metadata->value.data != NULL && metadata->value.len > 0) {
-        operation->request->value = metadata->value;
-        operation->request->header.valueLength = metadata->value.len;
+        &operation->request->protoData.message, entry);
+    operation->request->entry = (KineticEntry*)entry;
+    if (entry->value.array.data != NULL && entry->value.array.len > 0) {
+        operation->request->value = entry->value.array;
+        operation->request->header.valueLength = entry->value.array.len;
     }
     else {
         operation->request->value = BYTE_ARRAY_NONE;
@@ -190,7 +190,7 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
 }
 
 void KineticOperation_BuildGet(KineticOperation* const operation,
-                               const KineticKeyValue* const metadata)
+                               const KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -199,20 +199,17 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
     operation->request->proto->command->header->has_messageType = true;
 
     operation->request->value = BYTE_ARRAY_NONE;
-    if (metadata->value.data != NULL) {
-        operation->response->value.data = metadata->value.data;
-    }
-    else {
-        operation->response->value.data = operation->response->valueBuffer;
+    if (entry->value.array.data != NULL) {
+        operation->response->value.data = entry->value.array.data;
     }
     operation->response->value.len = PDU_VALUE_MAX_LEN;
 
     KineticMessage_ConfigureKeyValue(
-        &operation->request->protoData.message, metadata);
+        &operation->request->protoData.message, entry);
 }
 
 void KineticOperation_BuildDelete(KineticOperation* const operation,
-                                  const KineticKeyValue* const metadata)
+                                  const KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -223,5 +220,5 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
     operation->response->value = BYTE_ARRAY_NONE;
 
     KineticMessage_ConfigureKeyValue(
-        &operation->request->protoData.message, metadata);
+        &operation->request->protoData.message, entry);
 }

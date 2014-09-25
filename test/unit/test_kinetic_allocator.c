@@ -269,19 +269,3 @@ void test_KineticAllocator_should_allocate_and_free_multiple_PDU_list_items_in_r
 
     LOG("PASSED!");
 }
-
-
-void test_KineticAllocator_NewEntry_should_allocate_a_new_entry_from_the_connection(void)
-{
-    TEST_IGNORE_MESSAGE("Implement me!")
-}
-
-void test_KineticAllocator_FreeEntry_should_free_the_entry_from_the_connection(void)
-{
-    TEST_IGNORE_MESSAGE("Implement me!")
-}
-
-void test_KineticAllocator_FreeAllEntries_should_free_all_entries_from_the_connection(void)
-{
-    TEST_IGNORE_MESSAGE("Implement me!")
-}

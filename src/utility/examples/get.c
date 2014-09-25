@@ -28,7 +28,7 @@ int Get(const char* host,
         int64_t clusterVersion,
         int64_t identity,
         ByteArray hmacKey,
-        KineticKeyValue* metadata)
+        KineticEntry* entry)
 {
     KineticOperation operation;
     KineticConnection connection;
@@ -41,7 +41,7 @@ int Get(const char* host,
 
     operation = KineticClient_CreateOperation(&connection, &Request, &Response);
 
-    KineticStatus status = KineticClient_Get(&operation, metadata);
+    KineticStatus status = KineticClient_Get(&operation, entry);
 
     if (status == KINETIC_STATUS_SUCCESS) {
         printf("Get operation completed successfully. Your data has been retrieved!\n");

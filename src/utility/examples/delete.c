@@ -28,7 +28,7 @@ int Delete(const char* host,
            int64_t clusterVersion,
            int64_t identity,
            ByteArray hmacKey,
-           KineticKeyValue* metadata)
+           KineticEntry* entry)
 {
     KineticOperation operation;
     KineticConnection connection;
@@ -41,7 +41,7 @@ int Delete(const char* host,
 
     operation = KineticClient_CreateOperation(&connection, &Request, &Response);
 
-    KineticStatus status = KineticClient_Delete(&operation, metadata);
+    KineticStatus status = KineticClient_Delete(&operation, entry);
 
     if (status == KINETIC_STATUS_SUCCESS) {
         printf("Delete operation completed successfully. Your data has been deleted!\n");

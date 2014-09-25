@@ -21,13 +21,23 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include "protobuf-c/protobuf-c.h"
+#include "byte_array.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 
+ByteArray Key;
+ByteArray NewVersion;
+ByteArray Version;
+ByteArray Tag;
+
 void setUp(void)
 {
+    Key = ByteArray_CreateWithCString("my_key_3.1415927");
+    NewVersion = ByteArray_CreateWithCString("v2.0");
+    Version = ByteArray_CreateWithCString("v1.0");
+    Tag = ByteArray_CreateWithCString("SomeTagValue");
 }
 
 void tearDown(void)
@@ -52,17 +62,17 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_add_to_message(void)
 {
     KineticMessage message;
-    KineticKeyValue metadata = {
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
-        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
-        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(Key),
+        .newVersion = ByteBuffer_CreateWithArray(NewVersion),
+        .dbVersion = ByteBuffer_CreateWithArray(Version),
+        .tag = ByteBuffer_CreateWithArray(Tag),
         .algorithm = KINETIC_ALGORITHM_SHA1,
     };
 
     KineticMessage_Init(&message);
 
-    KineticMessage_ConfigureKeyValue(&message, &metadata);
+    KineticMessage_ConfigureKeyValue(&message, &entry);
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
@@ -71,13 +81,13 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 
     // Validate keyValue fields
     TEST_ASSERT_TRUE(message.keyValue.has_newVersion);
-    TEST_ASSERT_EQUAL_ByteArray(metadata.newVersion, message.keyValue.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(entry.newVersion.array, message.keyValue.newVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_key);
-    TEST_ASSERT_EQUAL_ByteArray(metadata.key, message.keyValue.key);
+    TEST_ASSERT_EQUAL_ByteArray(entry.key.array, message.keyValue.key);
     TEST_ASSERT_TRUE(message.keyValue.has_dbVersion);
-    TEST_ASSERT_EQUAL_ByteArray(metadata.dbVersion, message.keyValue.dbVersion);
+    TEST_ASSERT_EQUAL_ByteArray(entry.dbVersion.array, message.keyValue.dbVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
-    TEST_ASSERT_EQUAL_ByteArray(metadata.tag, message.keyValue.tag);
+    TEST_ASSERT_EQUAL_ByteArray(entry.tag.array, message.keyValue.tag);
     TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_ALGORITHM_SHA1, message.keyValue.algorithm);
     TEST_ASSERT_FALSE(message.keyValue.has_metadataOnly);
@@ -91,18 +101,18 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_metadata_only_and_add_to_message(void)
 {
     KineticMessage message;
-    KineticKeyValue metadata = {
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
-        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
-        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(Key),
+        .newVersion = ByteBuffer_CreateWithArray(NewVersion),
+        .dbVersion = ByteBuffer_CreateWithArray(Version),
+        .tag = ByteBuffer_CreateWithArray(Tag),
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .metadataOnly = true,
     };
 
     KineticMessage_Init(&message);
 
-    KineticMessage_ConfigureKeyValue(&message, &metadata);
+    KineticMessage_ConfigureKeyValue(&message, &entry);
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
@@ -111,13 +121,13 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_for_me
 
     // Validate keyValue fields
     TEST_ASSERT_TRUE(message.keyValue.has_newVersion);
-    TEST_ASSERT_EQUAL_ByteArray(metadata.newVersion, message.keyValue.newVersion);
+    TEST_ASSERT_EQUAL_ByteArray(entry.newVersion.array, message.keyValue.newVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_key);
-    TEST_ASSERT_EQUAL_ByteArray(metadata.key, message.keyValue.key);
+    TEST_ASSERT_EQUAL_ByteArray(entry.key.array, message.keyValue.key);
     TEST_ASSERT_TRUE(message.keyValue.has_dbVersion);
-    TEST_ASSERT_EQUAL_ByteArray(metadata.dbVersion, message.keyValue.dbVersion);
+    TEST_ASSERT_EQUAL_ByteArray(entry.dbVersion.array, message.keyValue.dbVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
-    TEST_ASSERT_EQUAL_ByteArray(metadata.tag, message.keyValue.tag);
+    TEST_ASSERT_EQUAL_ByteArray(entry.tag.array, message.keyValue.tag);
     TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_ALGORITHM_SHA1, message.keyValue.algorithm);
     TEST_ASSERT_TRUE(message.keyValue.has_metadataOnly);

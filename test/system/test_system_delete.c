@@ -35,6 +35,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include "system_test_fixture.h"
+#include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
 #include <string.h>
@@ -47,7 +48,6 @@ static SystemTestFixture Fixture = {
         .clusterVersion = 0,
         .identity =  1,
         .nonBlocking = false,
-        .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
     }
 };
 static ByteArray ValueKey;
@@ -62,11 +62,12 @@ static ByteArray ValueIn = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-    ValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("DELETE test key");
-    Version = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
-    NewVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
-    Tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
-    TestValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
+    Fixture.config.hmacKey = ByteArray_CreateWithCString("asdfasdf");
+    ValueKey = ByteArray_CreateWithCString("DELETE test key");
+    Version = ByteArray_CreateWithCString("v1.0");
+    NewVersion = ByteArray_CreateWithCString("v2.0");
+    Tag = ByteArray_CreateWithCString("SomeTagValue");
+    TestValue = ByteArray_CreateWithCString("lorem ipsum... blah... etc...");
 }
 
 void tearDown(void)
@@ -87,55 +88,54 @@ void test_Delete_should_delete_an_object_from_device(void)
     KineticStatus status;
 
     // Create an object so that we have something to delete
-    KineticKeyValue putMetadata = {
-        .key = ValueKey,
-        .newVersion = Version,
-        .tag = Tag,
+    KineticEntry putEntry = {
+        .key = ByteBuffer_CreateWithArray(ValueKey),
+        .newVersion = ByteBuffer_CreateWithArray(Version),
+        .tag = ByteBuffer_CreateWithArray(Tag),
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = TestValue,
+        .value = ByteBuffer_CreateWithArray(TestValue),
     };
-    status = KineticClient_Put(Fixture.handle, &putMetadata);
+    status = KineticClient_Put(Fixture.handle, &putEntry);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(Version, putMetadata.dbVersion);
-    TEST_ASSERT_ByteArray_NONE(putMetadata.newVersion);
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, putMetadata.key);
-    TEST_ASSERT_EQUAL_ByteArray(Tag, putMetadata.tag);
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putMetadata.algorithm);
+    TEST_ASSERT_EQUAL_ByteArray(Version, putEntry.dbVersion.array);
+    TEST_ASSERT_ByteArray_NONE(putEntry.newVersion.array);
+    TEST_ASSERT_EQUAL_ByteArray(ValueKey, putEntry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, putEntry.tag.array);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
 
     // Validate the object exists initially
-    KineticKeyValue getMetadata = {
-        .key = ValueKey,
-        .value = ValueIn,
+    KineticEntry getEntry = {
+        .key = ByteBuffer_CreateWithArray(ValueKey),
+        .value = ByteBuffer_CreateWithArray(ValueIn),
     };
-    status = KineticClient_Get(Fixture.handle, &getMetadata);
+    status = KineticClient_Get(Fixture.handle, &getEntry);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(putMetadata.key, getMetadata.key);
-    TEST_ASSERT_ByteArray_NONE(putMetadata.newVersion);
-    TEST_ASSERT_EQUAL_ByteArray(putMetadata.tag, getMetadata.tag);
-    TEST_ASSERT_EQUAL(putMetadata.algorithm, getMetadata.algorithm);
-    TEST_ASSERT_EQUAL_ByteArray(putMetadata.value, getMetadata.value);
+    TEST_ASSERT_EQUAL_ByteArray(putEntry.key.array, getEntry.key.array);
+    TEST_ASSERT_ByteArray_NONE(putEntry.newVersion.array);
+    TEST_ASSERT_EQUAL_ByteArray(putEntry.tag.array, getEntry.tag.array);
+    TEST_ASSERT_EQUAL(putEntry.algorithm, getEntry.algorithm);
+    TEST_ASSERT_EQUAL_ByteArray(putEntry.value.array, getEntry.value.array);
 
     // Delete the object
-    KineticKeyValue deleteMetadata = {
-        .key = ValueKey,
-        .tag = Tag,
-        .dbVersion = Version,
+    KineticEntry deleteEntry = {
+        .key = ByteBuffer_CreateWithArray(ValueKey),
+        .tag = ByteBuffer_CreateWithArray(Tag),
+        .dbVersion = ByteBuffer_CreateWithArray(Version),
         .algorithm = KINETIC_ALGORITHM_SHA1,
     };
-    status = KineticClient_Delete(Fixture.handle, &deleteMetadata);
+    status = KineticClient_Delete(Fixture.handle, &deleteEntry);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL(0, deleteMetadata.value.len);
+    TEST_ASSERT_EQUAL(0, deleteEntry.value.array.len);
 
     // Validate the object no longer exists
-    KineticKeyValue regetMetadata = {
-        .key = ValueKey,
-        .value = ValueIn,
+    KineticEntry regetEntry = {
+        .key = ByteBuffer_CreateWithArray(ValueKey),
+        .value = ByteBuffer_CreateWithArray(ValueIn),
     };
-    status = KineticClient_Get(Fixture.handle, &regetMetadata);
+    status = KineticClient_Get(Fixture.handle, &regetEntry);
     TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_DATA_ERROR, status);
-    TEST_ASSERT_EQUAL(0, regetMetadata.value.len);
-    TEST_ASSERT_ByteArray_EMPTY(regetMetadata.value);
+    TEST_ASSERT_ByteArray_EMPTY(regetEntry.value.array);
 }
 
 /*******************************************************************************

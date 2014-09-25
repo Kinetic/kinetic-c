@@ -29,7 +29,7 @@ int Put(
     int64_t clusterVersion,
     int64_t identity,
     ByteArray hmacKey,
-    KineticKeyValue* metadata)
+    KineticEntry* entry)
 {
     KineticOperation operation;
     KineticConnection connection;
@@ -43,7 +43,7 @@ int Put(
     operation = KineticClient_CreateOperation(
                     &connection, &request, &response);
 
-    KineticStatus status = KineticClient_Put(&operation, metadata);
+    KineticStatus status = KineticClient_Put(&operation, entry);
 
     if (status == KINETIC_STATUS_SUCCESS) {
         printf("Put operation completed successfully. Your data has been stored!\n");
