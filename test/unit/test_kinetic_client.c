@@ -75,7 +75,7 @@ void test_KineticClient_Connect_should_configure_a_session_and_connect_to_specif
 void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_session_config(void)
 {
     SessionHandle = 17;
-    
+
     KineticStatus status = KineticClient_Connect(NULL, &SessionHandle);
     TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SESSION_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
@@ -103,7 +103,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_HMAC_EMPTY_upon_NUL
         .hmacKey = key,
     };
     SessionHandle = 17;
-    
+
     KineticStatus status = KineticClient_Connect(&config, &SessionHandle);
     TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_HMAC_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
@@ -111,14 +111,14 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_HMAC_EMPTY_upon_NUL
 
 void test_KineticClient_Connect_should_return_false_upon_empty_HMAC_key(void)
 {
-    uint8_t keyData[] = {0,1,2,3};
+    uint8_t keyData[] = {0, 1, 2, 3};
     ByteArray key = {.len = 0, .data = keyData};
     KineticSession config = {
         .host = "somehost.com",
         .hmacKey = key,
     };
     SessionHandle = 17;
-    
+
     KineticStatus status = KineticClient_Connect(&config, &SessionHandle);
     TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_HMAC_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
@@ -131,7 +131,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_
         .hmacKey = ByteArray_CreateWithCString("some_key"),
     };
     SessionHandle = 17;
-    
+
     KineticStatus status = KineticClient_Connect(&config, NULL);
     TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SESSION_EMPTY, status);
 }
@@ -170,7 +170,7 @@ void test_KineticClient_Connect_should_return_status_from_a_failed_connection(vo
 }
 
 void test_KineticClient_Disconnect_should_return_KINETIC_STATUS_CONNECTION_ERROR_upon_failure_to_get_connection_from_handle(void)
-{   
+{
     SessionHandle = DummyHandle;
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, NULL);
     KineticStatus status = KineticClient_Disconnect(&SessionHandle);
@@ -178,7 +178,7 @@ void test_KineticClient_Disconnect_should_return_KINETIC_STATUS_CONNECTION_ERROR
 }
 
 void test_KineticClient_Disconnect_should_disconnect_and_free_the_connection_associated_with_handle(void)
-{   
+{
     SessionHandle = DummyHandle;
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Disconnect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
@@ -189,7 +189,7 @@ void test_KineticClient_Disconnect_should_disconnect_and_free_the_connection_ass
 }
 
 void test_KineticClient_Disconnect_should_return_status_from_KineticConnection_upon_faileure(void)
-{   
+{
     SessionHandle = DummyHandle;
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Disconnect_ExpectAndReturn(&Connection, KINETIC_STATUS_SESSION_INVALID);

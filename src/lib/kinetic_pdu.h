@@ -23,10 +23,8 @@
 
 #include "kinetic_types_internal.h"
 
-void KineticPDU_Init(KineticPDU* const pdu,
-                     KineticConnection* const connection);
-void KineticPDU_AttachValuePayload(KineticPDU* const pdu,
-                                   ByteArray payload);
+void KineticPDU_Init(KineticPDU* const pdu, KineticConnection* const connection);
+void KineticPDU_AttachEntry(KineticPDU* const pdu, KineticEntry* const entry);
 bool KineticPDU_Send(KineticPDU* request);
 bool KineticPDU_Receive(KineticPDU* response);
 

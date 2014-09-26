@@ -6,18 +6,18 @@
 void test_BYTE_ARRAY_NONE_should_reflect_an_empty_array_with_non_allocated_data(void)
 {
     ByteArray array = BYTE_ARRAY_NONE;
-    
+
     TEST_ASSERT_EQUAL(0, array.len);
     TEST_ASSERT_NULL(array.data);
 }
 
 void test_ByteArray_Create_should_create_a_byte_array(void)
 {
-    uint8_t data[] = {0x1u,0x2u,0x3u,0x4u};
+    uint8_t data[] = {0x1u, 0x2u, 0x3u, 0x4u};
     size_t len = sizeof(data);
-    
+
     ByteArray array = ByteArray_Create(data, len);
-    
+
     TEST_ASSERT_EQUAL_PTR(data, array.data);
     TEST_ASSERT_EQUAL(len, array.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(data, array.data, len);
@@ -29,7 +29,7 @@ void test_ByteArray_CreateWithCString_should_create_ByteArray_using_C_string(voi
     size_t len = strlen(str);
 
     ByteArray array = ByteArray_CreateWithCString(str);
-    
+
     TEST_ASSERT_EQUAL_PTR(str, array.data);
     TEST_ASSERT_EQUAL(len, array.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(str, array.data, len);
@@ -41,16 +41,16 @@ void test_ByteArray_FillWithDummyData_should_fill_an_array_with_dummy_data(void)
     const size_t len = sizeof(data);
     memset(data, 0xFFu, len);
     ByteArray array = {.data = data, .len = len};
-    uint8_t expected[] = {0x00, 0x01, 0x02, 0x03}; 
+    uint8_t expected[] = {0x00, 0x01, 0x02, 0x03};
 
     ByteArray_FillWithDummyData(array);
-    
+
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected, array.data, len);
 }
 
 void test_ByteArray_GetSlice_should_return_a_subarray_of_the_ByteArray(void)
 {
-    uint8_t data[] = {0x1u,0x2u,0x3u,0x4u};
+    uint8_t data[] = {0x1u, 0x2u, 0x3u, 0x4u};
     size_t len = sizeof(data);
     ByteArray array = {.data = data, .len = len};
     ByteArray slice = BYTE_ARRAY_NONE;
@@ -86,7 +86,7 @@ void test_ByteArray_GetSlice_should_return_a_subarray_of_the_ByteArray(void)
 
 void test_ByteBuffer_Create_should_create_an_empty_ByteBuffer_with_specified_array_and_max_length(void)
 {
-    uint8_t data[] = {0x1u,0x2u,0x3u,0x4u};
+    uint8_t data[] = {0x1u, 0x2u, 0x3u, 0x4u};
     size_t len = sizeof(data);
 
     ByteBuffer buffer = ByteBuffer_Create(data, len);
@@ -99,7 +99,7 @@ void test_ByteBuffer_Create_should_create_an_empty_ByteBuffer_with_specified_arr
 
 void test_ByteBuffer_CreateWithArray_should_create_an_empty_ByteBuffer_with_specified_ByteArray(void)
 {
-    uint8_t data[] = {0x1u,0x2u,0x3u,0x4u};
+    uint8_t data[] = {0x1u, 0x2u, 0x3u, 0x4u};
     size_t len = sizeof(data);
     ByteArray array = {.data = data, .len = len};
 
@@ -115,7 +115,7 @@ void test_ByteBuffer_CreateWithArray_should_create_an_empty_ByteBuffer_with_spec
 
 void test_ByteBuffer_BytesRemaining_should_return_lenth_of_unconsumed_bytes(void)
 {
-    uint8_t data[] = {0x1u,0x2u,0x3u,0x4u};
+    uint8_t data[] = {0x1u, 0x2u, 0x3u, 0x4u};
     size_t len = sizeof(data);
     ByteArray array = {.data = data, .len = len};
 
@@ -132,7 +132,7 @@ void test_ByteBuffer_BytesRemaining_should_return_lenth_of_unconsumed_bytes(void
 
 void test_ByteBuffer_Consume(void)
 {
-    uint8_t data[] = {0x1u,0x2u,0x3u,0x4u,0x5u};
+    uint8_t data[] = {0x1u, 0x2u, 0x3u, 0x4u, 0x5u};
     size_t len = sizeof(data);
     size_t totalConsumed = 0;
     size_t lenToConsume;
@@ -208,14 +208,18 @@ void test_ByteBuffer_AppendArray_should_append_an_array_to_the_buffer(void)
     ByteArray appendArray;
 
     appendData[0] = 0xFCu;
-    appendArray = (ByteArray) {.data = appendData, .len = 1};
+    appendArray = (ByteArray) {
+        .data = appendData, .len = 1
+    };
     TEST_ASSERT_TRUE(ByteBuffer_AppendArray(&buffer, appendArray));
     TEST_ASSERT_EQUAL(1, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(appendData, buffer.array.data, 1);
 
     appendData[1] = 0xABu;
     appendData[2] = 0x8Cu;
-    appendArray = (ByteArray) {.data = &appendData[1], .len = 2};
+    appendArray = (ByteArray) {
+        .data = &appendData[1], .len = 2
+    };
     TEST_ASSERT_TRUE(ByteBuffer_Append(&buffer, &appendData[1], 2));
     TEST_ASSERT_EQUAL(3, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(appendData, buffer.array.data, 3);

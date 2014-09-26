@@ -54,11 +54,13 @@ KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(
 ByteArray ByteArray_from_ProtobufCBinaryData(
     ProtobufCBinaryData protoData)
 {
-    return (ByteArray) {.data = protoData.data, .len = protoData.len};
+    return (ByteArray) {
+        .data = protoData.data, .len = protoData.len
+    };
 }
 
 bool Copy_ProtobufCBinaryData_to_ByteArray(ByteArray dest,
-    ProtobufCBinaryData src)
+        ProtobufCBinaryData src)
 {
     if (src.data == NULL || src.len == 0) {
         return false;
@@ -71,6 +73,24 @@ bool Copy_ProtobufCBinaryData_to_ByteArray(ByteArray dest,
     if (success) {
         dest.len = src.len;
     }
-    
+
+    return success;
+}
+
+
+bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData src)
+{
+    if (src.data == NULL || src.len == 0) {
+        return false;
+    }
+    if (dest.array.data == NULL || dest.array.len < src.len) {
+        return false;
+    }
+
+    bool success = (memcpy(dest.array.data, src.data, src.len) == dest.array.data);
+    if (success) {
+        dest.bytesUsed = src.len;
+    }
+
     return success;
 }

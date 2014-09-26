@@ -58,7 +58,7 @@ void KineticLogger_Close(void)
 {
     // Don't close std/already-opened streams
     if (!LogToConsole && strlen(LogFile) > 0 &&
-            FileDesc != stdout && FileDesc != stderr && FileDesc != stdin) {
+        FileDesc != stdout && FileDesc != stderr && FileDesc != stdin) {
         fclose(FileDesc);
     }
 }
@@ -398,8 +398,8 @@ void KineticLogger_LogByteArray(const char* title, ByteArray bytes)
         hex[0] = '\0';
         ascii[0] = '\0';
         for (int j = 0;
-                j < bytesPerLine && i < bytes.len;
-                j++, i++) {
+             j < bytesPerLine && i < bytes.len;
+             j++, i++) {
             char byHex[8];
             sprintf(byHex, "%02hhX", bytes.data[i]);
             strcat(hex, byHex);

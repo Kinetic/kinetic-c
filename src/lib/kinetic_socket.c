@@ -153,14 +153,12 @@ void KineticSocket_Close(int socket)
     }
 }
 
-bool KineticSocket_Read(int socket, ByteArray dest)
+bool KineticSocket_Read(int socket, ByteBuffer* dest)
 {
-    ByteBuffer buff = BYTE_BUFFER_INIT(dest);
-
     LOGF("Reading %zd bytes into buffer @ 0x%zX from fd=%d",
-         buff.array.len, (size_t)buff.array.data, socket);
+         dest->array.len, (size_t)dest->array.data, socket);
 
-    while (buff.bytesUsed < buff.array.len) {
+    while (dest->bytesUsed < dest->array.len) {
         int status;
         fd_set readSet;
         struct timeval timeout;
@@ -186,14 +184,14 @@ bool KineticSocket_Read(int socket, ByteArray dest)
         else if (status > 0) { // Data available to read
             // The socket is ready for reading
             status = read(socket,
-                          &buff.array.data[buff.bytesUsed],
-                          buff.array.len - buff.bytesUsed);
+                          &dest->array.data[dest->bytesUsed],
+                          dest->array.len - dest->bytesUsed);
             // Retry if no data yet...
             if (status == -1 &&
-                    ((errno == EINTR) ||
-                     (errno == EAGAIN) ||
-                     (errno == EWOULDBLOCK)
-                    )) {
+                ((errno == EINTR) ||
+                 (errno == EAGAIN) ||
+                 (errno == EWOULDBLOCK)
+                )) {
                 continue;
             }
             else if (status <= 0) {
@@ -203,13 +201,15 @@ bool KineticSocket_Read(int socket, ByteArray dest)
                 return false;
             }
             else {
-                buff.bytesUsed += status;
+                dest->bytesUsed += status;
                 LOGF("Received %d bytes (%zd of %zd)",
-                     status, buff.bytesUsed, buff.array.len);
+                     status, dest->bytesUsed, dest->array.len);
             }
         }
     }
-    LOGF("Received %zd of %zd bytes requested", buff.bytesUsed, buff.array.len);
+
+    LOGF("Received %zd of %zd bytes requested", dest->bytesUsed, dest->array.len);
+
     return true;
 }
 
@@ -220,11 +220,12 @@ bool KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
         .data = pdu->protobufRaw,
         .len = pdu->header.protobufLength
     };
+    ByteBuffer recvBuffer = ByteBuffer_CreateWithArray(recvArray);
 
-    if (KineticSocket_Read(socket, recvArray)) {
+    if (KineticSocket_Read(socket, &recvBuffer)) {
         LOG("Read completed!");
         pdu->proto = KineticProto__unpack(NULL,
-                                          recvArray.len, recvArray.data);
+                                          recvBuffer.bytesUsed, recvBuffer.array.data);
         if (pdu->proto == NULL) {
             pdu->protobufDynamicallyExtracted = false;
             LOG("Error unpacking incoming Kinetic protobuf message!");
@@ -239,29 +240,27 @@ bool KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
     return false;
 }
 
-bool KineticSocket_Write(int socket, ByteArray src)
+bool KineticSocket_Write(int socket, ByteBuffer* src)
 {
-    LOGF("Writing %zu bytes to socket...", src.len);
-    for (size_t count = 0; count < src.len;) {
-        int status = write(socket,
-                           &src.data[count], src.len - count);
+    LOGF("Writing %zu bytes to socket...", src->array.len);
+    for (src->bytesUsed = 0; src->bytesUsed < src->array.len;) {
+        int status = write(socket, &src->array.data[src->bytesUsed],
+                           src->array.len - src->bytesUsed);
         if (status == -1 &&
-                ((errno == EINTR) ||
-                 (errno == EAGAIN) ||
-                 (errno == EWOULDBLOCK)
-                )) {
+            ((errno == EINTR) ||
+             (errno == EAGAIN) ||
+             (errno == EWOULDBLOCK)
+            )) {
             LOG("Write interrupted. retrying...");
             continue;
         }
         else if (status <= 0) {
-            LOGF("Failed to write to socket! status=%d, errno=%d\n",
-                 status, errno);
+            LOGF("Failed to write to socket! status=%d, errno=%d\n", status, errno);
             return false;
         }
         else {
-            count += status;
-            LOGF("Wrote %d bytes (%zu of %zu sent)",
-                 status, count, src.len);
+            src->bytesUsed += status;
+            LOGF("Wrote %d bytes (%zu of %zu sent)", status, src->bytesUsed, src->array.len);
         }
     }
     LOG("Write complete");
@@ -276,7 +275,8 @@ bool KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
     size_t len = KineticProto__pack(&pdu->protoData.message.proto,
                                     pdu->protobufRaw);
     assert(len == pdu->header.protobufLength);
-    ByteArray buffer = {.data = pdu->protobufRaw, .len = len};
 
-    return KineticSocket_Write(socket, buffer);
+    ByteBuffer buffer = ByteBuffer_Create(pdu->protobufRaw, len);
+
+    return KineticSocket_Write(socket, &buffer);
 }

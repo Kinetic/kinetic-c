@@ -42,7 +42,8 @@
 #include <stdlib.h>
 
 static SystemTestFixture Fixture = {
-    .config = (KineticSession) {
+    .config = (KineticSession)
+    {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,

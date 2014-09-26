@@ -47,12 +47,12 @@
 // Define max host name length
 // Some Linux environments require this, although not all, but it's benign.
 #ifndef _BSD_SOURCE
-    #define _BSD_SOURCE
+#define _BSD_SOURCE
 #endif // _BSD_SOURCE
 #include <unistd.h>
 #include <sys/types.h>
 #ifndef HOST_NAME_MAX
-    #define HOST_NAME_MAX 256
+#define HOST_NAME_MAX 256
 #endif // HOST_NAME_MAX
 
 #ifndef LOG_FILE_NAME_MAX
@@ -75,10 +75,10 @@ typedef enum _KineticAlgorithm {
  * @brief Enumeration of synchronization types for an operation.
  */
 typedef enum _KineticSynchronization {
-  KINETIC_SYNCHRONIZATION_INVALID = -1,
-  KINETIC_SYNCHRONIZATION_WRITETHROUGH = 1,
-  KINETIC_SYNCHRONIZATION_WRITEBACK = 2,
-  KINETIC_SYNCHRONIZATION_FLUSH = 3
+    KINETIC_SYNCHRONIZATION_INVALID = -1,
+    KINETIC_SYNCHRONIZATION_WRITETHROUGH = 1,
+    KINETIC_SYNCHRONIZATION_WRITEBACK = 2,
+    KINETIC_SYNCHRONIZATION_FLUSH = 3
 } KineticSynchronization;
 
 
@@ -91,8 +91,7 @@ typedef int KineticSessionHandle;
 /**
  * @brief Structure used to specify the configuration of a session.
  */
-typedef struct _KineticSession
-{
+typedef struct _KineticSession {
     // Host name/IP address of Kinetic Device
     char    host[HOST_NAME_MAX];
 
@@ -138,8 +137,7 @@ typedef struct _KineticSession
 typedef int KineticOperationHandle;
 
 // Kinetic Status Codes
-typedef enum
-{
+typedef enum {
     KINETIC_STATUS_INVALID = -1,        // Status not available (no reponse/status available)
     KINETIC_STATUS_SUCCESS = 0,         // Operation successful
     KINETIC_STATUS_SESSION_EMPTY,       // Session was NULL in request

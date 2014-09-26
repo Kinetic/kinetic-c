@@ -100,13 +100,13 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     if (operation != NULL &&
-            operation->response != NULL &&
-            operation->response->proto != NULL &&
-            operation->response->proto->command != NULL &&
-            operation->response->proto->command->status != NULL &&
-            operation->response->proto->command->status->has_code != false &&
-            operation->response->proto->command->status->code !=
-            KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE) {
+        operation->response != NULL &&
+        operation->response->proto != NULL &&
+        operation->response->proto->command != NULL &&
+        operation->response->proto->command->status != NULL &&
+        operation->response->proto->command->status->has_code != false &&
+        operation->response->proto->command->status->code !=
+        KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE) {
         switch (operation->response->proto->command->status->code) {
         case KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS:
             status = KINETIC_STATUS_SUCCESS;
@@ -167,58 +167,43 @@ void KineticOperation_BuildNoop(KineticOperation* const operation)
 }
 
 void KineticOperation_BuildPut(KineticOperation* const operation,
-                               const KineticEntry* const entry)
+                               KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_PUT;
     operation->request->proto->command->header->has_messageType = true;
+    operation->request->entry = entry;
+    operation->response->entry = entry;
 
-    KineticMessage_ConfigureKeyValue(
-        &operation->request->protoData.message, entry);
-    operation->request->entry = (KineticEntry*)entry;
-    if (entry->value.array.data != NULL && entry->value.array.len > 0) {
-        operation->request->value = entry->value.array;
-        operation->request->header.valueLength = entry->value.array.len;
-    }
-    else {
-        operation->request->value = BYTE_ARRAY_NONE;
-        operation->request->header.valueLength = 0;
-    }
-    operation->response->value = BYTE_ARRAY_NONE;
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 }
 
 void KineticOperation_BuildGet(KineticOperation* const operation,
-                               const KineticEntry* const entry)
+                               KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_GET;
     operation->request->proto->command->header->has_messageType = true;
+    operation->request->entry = entry;
+    operation->response->entry = entry;
 
-    operation->request->value = BYTE_ARRAY_NONE;
-    if (entry->value.array.data != NULL) {
-        operation->response->value.data = entry->value.array.data;
-    }
-    operation->response->value.len = PDU_VALUE_MAX_LEN;
-
-    KineticMessage_ConfigureKeyValue(
-        &operation->request->protoData.message, entry);
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 }
 
 void KineticOperation_BuildDelete(KineticOperation* const operation,
-                                  const KineticEntry* const entry)
+                                  KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_DELETE;
     operation->request->proto->command->header->has_messageType = true;
-    operation->request->value = BYTE_ARRAY_NONE;
-    operation->response->value = BYTE_ARRAY_NONE;
+    operation->request->entry = entry;
+    operation->response->entry = entry;
 
-    KineticMessage_ConfigureKeyValue(
-        &operation->request->protoData.message, entry);
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 }

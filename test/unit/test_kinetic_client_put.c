@@ -45,7 +45,7 @@ void setUp(void)
 {
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
-    HmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some hmac key");
+    HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
@@ -71,10 +71,10 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     BYTE_ARRAY_CREATE(value, PDU_VALUE_MAX_LEN);
 
     const KineticKeyValue const metadata = {
-        .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0"),
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927"),
-        .dbVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
+        .newVersion = ByteArray_CreateWithCString("v2.0"),
+        .key = ByteArray_CreateWithCString("my_key_3.1415927"),
+        .dbVersion = ByteArray_CreateWithCString("v1.0"),
+        .tag = ByteArray_CreateWithCString("SomeTagValue"),
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = value,
     };

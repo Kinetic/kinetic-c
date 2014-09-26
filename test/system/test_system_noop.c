@@ -41,13 +41,14 @@
 #include <stdlib.h>
 
 static SystemTestFixture Fixture = {
-    .config = (KineticSession) {
+    .config = (KineticSession)
+    {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity =  1,
         .nonBlocking = false,
-        .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
+        .hmacKey = ByteArray_CreateWithCString("asdfasdf"),
     }
 };
 

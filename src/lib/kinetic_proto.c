@@ -144,32 +144,32 @@ void KineticProto__init(KineticProto* message)
     static KineticProto init_value = KINETIC_PROTO__INIT;
     *message = init_value;
 }
-size_t KineticProto__get_packed_size(const KineticProto *message)
+size_t KineticProto__get_packed_size(const KineticProto* message)
 {
     assert(message->base.descriptor == &KineticProto__descriptor);
     return protobuf_c_message_get_packed_size((const ProtobufCMessage*)(message));
 }
-size_t KineticProto__pack(const KineticProto *message,
+size_t KineticProto__pack(const KineticProto* message,
                           uint8_t* out)
 {
     assert(message->base.descriptor == &KineticProto__descriptor);
     return protobuf_c_message_pack((const ProtobufCMessage*)message, out);
 }
-size_t KineticProto__pack_to_buffer(const KineticProto *message,
-                                    ProtobufCBuffer *buffer)
+size_t KineticProto__pack_to_buffer(const KineticProto* message,
+                                    ProtobufCBuffer* buffer)
 {
     assert(message->base.descriptor == &KineticProto__descriptor);
     return protobuf_c_message_pack_to_buffer((const ProtobufCMessage*)message, buffer);
 }
-KineticProto* KineticProto__unpack(ProtobufCAllocator *allocator,
+KineticProto* KineticProto__unpack(ProtobufCAllocator* allocator,
                                    size_t len,
-                                   const uint8_t *data)
+                                   const uint8_t* data)
 {
-    return (KineticProto *)protobuf_c_message_unpack(&KineticProto__descriptor,
+    return (KineticProto*)protobuf_c_message_unpack(&KineticProto__descriptor,
             allocator, len, data);
 }
-void KineticProto__free_unpacked(KineticProto *message,
-                                 ProtobufCAllocator *allocator)
+void KineticProto__free_unpacked(KineticProto* message,
+                                 ProtobufCAllocator* allocator)
 {
     assert(message->base.descriptor == &KineticProto__descriptor);
     protobuf_c_message_free_unpacked((ProtobufCMessage*)message, allocator);

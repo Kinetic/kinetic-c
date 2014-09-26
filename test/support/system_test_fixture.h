@@ -23,8 +23,7 @@
 
 #include "kinetic_types.h"
 
-typedef struct _SystemTestFixture
-{
+typedef struct _SystemTestFixture {
     KineticSession config;
     KineticSessionHandle handle;
     bool testIgnored;

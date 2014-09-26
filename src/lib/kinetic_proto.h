@@ -164,9 +164,9 @@ typedef enum _KineticProto_MessageType {
 
 struct  _KineticProto_Command {
     ProtobufCMessage base;
-    KineticProto_Header *header;
-    KineticProto_Body *body;
-    KineticProto_Status *status;
+    KineticProto_Header* header;
+    KineticProto_Body* body;
+    KineticProto_Status* status;
 };
 #define KINETIC_PROTO_COMMAND__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&KineticProto_command__descriptor) \
@@ -201,12 +201,12 @@ struct  _KineticProto_Header {
 
 struct  _KineticProto_Body {
     ProtobufCMessage base;
-    KineticProto_KeyValue *keyValue;
-    KineticProto_Range *range;
-    KineticProto_Setup *setup;
-    KineticProto_P2POperation *p2pOperation;
-    KineticProto_GetLog *getLog;
-    KineticProto_Security *security;
+    KineticProto_KeyValue* keyValue;
+    KineticProto_Range* range;
+    KineticProto_Setup* setup;
+    KineticProto_P2POperation* p2pOperation;
+    KineticProto_GetLog* getLog;
+    KineticProto_Security* security;
 };
 #define KINETIC_PROTO_BODY__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&KineticProto_body__descriptor) \
@@ -265,7 +265,7 @@ struct  _KineticProto_Range {
     protobuf_c_boolean has_reverse;
     protobuf_c_boolean reverse;
     size_t n_key;
-    ProtobufCBinaryData *key;
+    ProtobufCBinaryData* key;
 };
 #define KINETIC_PROTO_RANGE__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&KineticProto_range__descriptor) \
@@ -300,8 +300,8 @@ struct  _KineticProto_P2POperation_Operation {
     ProtobufCBinaryData newKey;
     protobuf_c_boolean has_force;
     protobuf_c_boolean force;
-    KineticProto_Status *status;
-    KineticProto_P2POperation *p2pop;
+    KineticProto_Status* status;
+    KineticProto_P2POperation* p2pop;
 };
 #define KINETIC_PROTO_P2_POPERATION_OPERATION__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&KineticProto_p2_poperation_operation__descriptor) \
@@ -323,9 +323,9 @@ struct  _KineticProto_P2POperation_Peer {
 
 struct  _KineticProto_P2POperation {
     ProtobufCMessage base;
-    KineticProto_P2POperation_Peer *peer;
+    KineticProto_P2POperation_Peer* peer;
     size_t n_operation;
-    KineticProto_P2POperation_Operation **operation;
+    KineticProto_P2POperation_Operation** operation;
     protobuf_c_boolean has_allChildOperationsSucceeded;
     protobuf_c_boolean allChildOperationsSucceeded;
 };
@@ -404,7 +404,7 @@ struct  _KineticProto_GetLog_Configuration {
     char* protocolCompilationDate;
     char* protocolSourceHash;
     size_t n_interface;
-    KineticProto_GetLog_Configuration_Interface **interface;
+    KineticProto_GetLog_Configuration_Interface** interface;
     protobuf_c_boolean has_port;
     int32_t port;
     protobuf_c_boolean has_tlsPort;
@@ -470,19 +470,19 @@ struct  _KineticProto_GetLog_Device {
 struct  _KineticProto_GetLog {
     ProtobufCMessage base;
     size_t n_type;
-    KineticProto_GetLog_Type *type;
+    KineticProto_GetLog_Type* type;
     size_t n_utilization;
-    KineticProto_GetLog_Utilization **utilization;
+    KineticProto_GetLog_Utilization** utilization;
     size_t n_temperature;
-    KineticProto_GetLog_Temperature **temperature;
-    KineticProto_GetLog_Capacity *capacity;
-    KineticProto_GetLog_Configuration *configuration;
+    KineticProto_GetLog_Temperature** temperature;
+    KineticProto_GetLog_Capacity* capacity;
+    KineticProto_GetLog_Configuration* configuration;
     size_t n_statistics;
-    KineticProto_GetLog_Statistics **statistics;
+    KineticProto_GetLog_Statistics** statistics;
     protobuf_c_boolean has_messages;
     ProtobufCBinaryData messages;
-    KineticProto_GetLog_Limits *limits;
-    KineticProto_GetLog_Device *device;
+    KineticProto_GetLog_Limits* limits;
+    KineticProto_GetLog_Device* device;
 };
 #define KINETIC_PROTO_GET_LOG__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&KineticProto_get_log__descriptor) \
@@ -496,7 +496,7 @@ struct  _KineticProto_Security_ACL_Scope {
     protobuf_c_boolean has_value;
     ProtobufCBinaryData value;
     size_t n_permission;
-    KineticProto_Security_ACL_Permission *permission;
+    KineticProto_Security_ACL_Permission* permission;
     protobuf_c_boolean has_TlsRequired;
     protobuf_c_boolean TlsRequired;
 };
@@ -514,7 +514,7 @@ struct  _KineticProto_Security_ACL {
     protobuf_c_boolean has_hmacAlgorithm;
     KineticProto_Security_ACL_HMACAlgorithm hmacAlgorithm;
     size_t n_scope;
-    KineticProto_Security_ACL_Scope **scope;
+    KineticProto_Security_ACL_Scope** scope;
 };
 #define KINETIC_PROTO_SECURITY_ACL__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security_acl__descriptor) \
@@ -524,7 +524,7 @@ struct  _KineticProto_Security_ACL {
 struct  _KineticProto_Security {
     ProtobufCMessage base;
     size_t n_acl;
-    KineticProto_Security_ACL **acl;
+    KineticProto_Security_ACL** acl;
 };
 #define KINETIC_PROTO_SECURITY__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&KineticProto_security__descriptor) \
@@ -533,7 +533,7 @@ struct  _KineticProto_Security {
 
 struct  _KineticProto {
     ProtobufCMessage base;
-    KineticProto_Command *command;
+    KineticProto_Command* command;
     protobuf_c_boolean has_hmac;
     ProtobufCBinaryData hmac;
 };
@@ -612,14 +612,14 @@ void KineticProto_security__init
 void KineticProto__init
 (KineticProto* message);
 size_t KineticProto__get_packed_size(
-    const KineticProto *message);
+    const KineticProto* message);
 size_t KineticProto__pack(
-    const KineticProto *message,
+    const KineticProto* message,
     uint8_t* out);
 size_t KineticProto__pack_to_buffer(
     const KineticProto* message,
     ProtobufCBuffer* buffer);
-KineticProto * KineticProto__unpack(
+KineticProto* KineticProto__unpack(
     ProtobufCAllocator* allocator,
     size_t len,
     const uint8_t* data);

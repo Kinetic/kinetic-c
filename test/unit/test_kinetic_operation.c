@@ -71,6 +71,7 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
 
 void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_PDUs(void)
 {
+    LOG_LOCATION;
     KineticAllocator_NewPDU_ExpectAndReturn(&Request);
     KineticAllocator_NewPDU_ExpectAndReturn(&Response);
     KineticPDU_Init_Expect(&Request, &Connection);
@@ -85,9 +86,9 @@ void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_P
     TEST_ASSERT_NOT_NULL(operation.response);
 }
 
-
 void test_KineticOperation_Free_should_free_an_operation_with_allocated_PDUs(void)
 {
+    LOG_LOCATION;
     KineticAllocator_NewPDU_ExpectAndReturn(&Request);
     KineticAllocator_NewPDU_ExpectAndReturn(&Response);
     KineticPDU_Init_Expect(&Request, &Connection);
@@ -205,7 +206,7 @@ void test_KineticOperation_GetStatus_should_return_appropriate_KineticStatus_bas
     Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
-    
+
     Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
@@ -258,7 +259,7 @@ void test_KineticOperation_GetStatus_should_return_appropriate_KineticStatus_bas
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
 
     Response.proto->command->status->code = (KineticProto_Status_StatusCode)
-        (KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 10);
+                                            (KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 10);
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
 }
@@ -297,10 +298,9 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
 {
     LOG_LOCATION;
     ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
-
-    const ByteArray key = ByteArray_CreateWithCString("foobar");
-    const ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
-    const ByteArray tag = ByteArray_CreateWithCString("some_tag");
+    ByteArray key = ByteArray_CreateWithCString("foobar");
+    ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
+    ByteArray tag = ByteArray_CreateWithCString("some_tag");
 
     KineticConnection_IncrementSequence_Expect(&Connection);
 
@@ -374,7 +374,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     //       //        written before the FLUSH operation is returned completed.
     //       synchronization: ...
     //     }
-    const KineticEntry entry = {
+    KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
         .newVersion = ByteBuffer_CreateWithArray(newVersion),
         // .dbVersion = ByteBuffer_CreateWithArray(BYTE_ARRAY_NONE),
@@ -395,7 +395,8 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_PUT, Request.proto->command->header->messageType);
 
-    TEST_ASSERT_EQUAL_ByteArray(value, Operation.request->value);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.request->entry->value.array);
+    TEST_ASSERT_EQUAL(0, Operation.request->entry->value.bytesUsed);
 }
 
 uint8_t ValueData[PDU_VALUE_MAX_LEN];
@@ -404,11 +405,10 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 {
     LOG_LOCATION;
     const ByteArray key = ByteArray_CreateWithCString("foobar");
-    ByteArray value = {.data = ValueData};
-    ByteArray expectedValue = {.data = value.data, .len = PDU_VALUE_MAX_LEN};
-    const KineticEntry entry = {
+    ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
+    KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
-        .value = ByteBuffer_Create(value.data, PDU_VALUE_MAX_LEN),
+        .value = ByteBuffer_CreateWithArray(value),
     };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
@@ -443,16 +443,19 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_EQUAL_ByteArray(expectedValue, Response.value);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.response->entry->value.array);
+    TEST_ASSERT_EQUAL(0, Operation.response->entry->value.bytesUsed);
 }
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
 {
     LOG_LOCATION;
     const ByteArray key = ByteArray_CreateWithCString("foobar");
-    const KineticEntry entry = {
+    ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
+    KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
         .metadataOnly = true,
+        .value = ByteBuffer_CreateWithArray(value),
     };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
@@ -487,7 +490,8 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_ByteArray_NONE(Request.value);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.response->entry->value.array);
+    TEST_ASSERT_EQUAL(0, Operation.response->entry->value.bytesUsed);
 }
 
 
@@ -495,16 +499,14 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 {
     LOG_LOCATION;
     const ByteArray key = ByteArray_CreateWithCString("foobar");
-    const KineticEntry entry = {
-        .key = ByteBuffer_CreateWithArray(key),
-    };
+    KineticEntry entry = {.key = ByteBuffer_CreateWithArray(key)};
 
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
 
     KineticOperation_BuildDelete(&Operation, &entry);
 
-    // The `DELETE` operation removes the entry for a given key. It respects the 
+    // The `DELETE` operation removes the entry for a given key. It respects the
     // same locking behavior around `dbVersion` and `force` as described in the previous sections.
     // The following request will remove a key value pair to the store.
     //
@@ -531,6 +533,8 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     // }
     // hmac: "..."
 
-    TEST_ASSERT_ByteArray_NONE(Request.value);
-    TEST_ASSERT_ByteArray_NONE(Response.value);
+    TEST_ASSERT_NULL(Operation.request->entry->value.array.data);
+    TEST_ASSERT_EQUAL(0, Operation.request->entry->value.bytesUsed);
+    TEST_ASSERT_NULL(Operation.response->entry->value.array.data);
+    TEST_ASSERT_EQUAL(0, Operation.response->entry->value.bytesUsed);
 }

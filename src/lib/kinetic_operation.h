@@ -29,10 +29,10 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
 
 void KineticOperation_BuildNoop(KineticOperation* const operation);
 void KineticOperation_BuildPut(KineticOperation* const operation,
-                               const KineticEntry* const entry);
+                               KineticEntry* const entry);
 void KineticOperation_BuildGet(KineticOperation* const operation,
-                               const KineticEntry* const entry);
+                               KineticEntry* const entry);
 void KineticOperation_BuildDelete(KineticOperation* const operation,
-                                  const KineticEntry* const entry);
+                                  KineticEntry* const entry);
 
 #endif // _KINETIC_OPERATION_H

@@ -40,7 +40,7 @@
  * @return          Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Connect(const KineticSession* config,
-    KineticSessionHandle* handle);
+                                    KineticSessionHandle* handle);
 
 /**
  * @brief Closes the connection to a host.
@@ -70,7 +70,7 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle handle);
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Put(KineticSessionHandle handle,
-    KineticEntry* const metadata);
+                                KineticEntry* const metadata);
 
 /**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
@@ -82,7 +82,7 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Get(KineticSessionHandle handle,
-    KineticEntry* const metadata);
+                                KineticEntry* const metadata);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
@@ -94,6 +94,6 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
-    KineticEntry* const metadata);
+                                   KineticEntry* const metadata);
 
 #endif // _KINETIC_CLIENT_H

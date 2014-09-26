@@ -30,34 +30,34 @@
 
 // Load file access library to get cross-platform ability to delete a file
 #ifdef WIN32
-    #include <io.h>
-    #define FACCESS _access
+#include <io.h>
+#define FACCESS _access
 #else
-    #if defined(__unix__) || defined(__APPLE__)
-        #include <unistd.h>
-        #define FACCESS access
-    #else
-        #error Failed to find required file IO library with file access() method
-    #endif
+#if defined(__unix__) || defined(__APPLE__)
+#include <unistd.h>
+#define FACCESS access
+#else
+#error Failed to find required file IO library with file access() method
+#endif
 #endif // WIN32
 
 
 
 // // Make a FOREACH macro
-// #define FE_1(WHAT, X) WHAT(X) 
+// #define FE_1(WHAT, X) WHAT(X)
 // #define FE_2(WHAT, X, ...) WHAT(X)FE_1(WHAT, __VA_ARGS__)
 // #define FE_3(WHAT, X, ...) WHAT(X)FE_2(WHAT, __VA_ARGS__)
 // #define FE_4(WHAT, X, ...) WHAT(X)FE_3(WHAT, __VA_ARGS__)
 // #define FE_5(WHAT, X, ...) WHAT(X)FE_4(WHAT, __VA_ARGS__)
 // //... repeat as needed
 
-// #define GET_MACRO(_1,_2,_3,_4,_5,NAME,...) NAME 
-// #define FOR_EACH(action,...) 
+// #define GET_MACRO(_1,_2,_3,_4,_5,NAME,...) NAME
+// #define FOR_EACH(action,...)
 //   GET_MACRO(__VA_ARGS__,FE_5,FE_4,FE_3,FE_2,FE_1)(action,__VA_ARGS__)
 
 // #define _APPEND_UNDERSCORE(X) _X
 // // Helper function
-// #define _UNDERSCORE(_first,...) 
+// #define _UNDERSCORE(_first,...)
 //   _first ## _ ## FOR_EACH(_APPEND_UNDERSCORE,__VA_ARGS__)
 
 

@@ -47,10 +47,8 @@ void setUp(void)
 
 void tearDown(void)
 {
-    if (SessionHandle != KINETIC_HANDLE_INVALID)
-    {
-        if (Connection->connected)
-        {
+    if (SessionHandle != KINETIC_HANDLE_INVALID) {
+        if (Connection->connected) {
             KineticStatus status = KineticConnection_Disconnect(Connection);
             TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
             TEST_ASSERT_FALSE(Connection->connected);
@@ -102,7 +100,7 @@ void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 {
     LOG_LOCATION;
     KineticSocket_Connect_ExpectAndReturn(SessionConfig.host,
-        SessionConfig.port, SessionConfig.nonBlocking, -1);
+                                          SessionConfig.port, SessionConfig.nonBlocking, -1);
 
     KineticStatus status = KineticConnection_Connect(Connection);
 
@@ -114,47 +112,47 @@ void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_blocking_connection(void)
 {
     LOG_LOCATION;
-    const uint8_t hmacKey[] = {1,6,3,5,4,8,19};
+    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
 
     KineticConnection expected = (KineticConnection) {
         .connected = true,
-        .socket = 24,
+         .socket = 24,
         .session = (KineticSession) {
             .host = "valid-host.com",
-            .port = 1234,
-            .nonBlocking = false,
-            .clusterVersion = 17,
-            .identity = 12,
-            .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
-            .logFile = "my.log",
+             .port = 1234,
+              .nonBlocking = false,
+               .clusterVersion = 17,
+                .identity = 12,
+                 .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
+                  .logFile = "my.log",
         },
     };
     memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticConnection connection = (KineticConnection){
+    KineticConnection connection = (KineticConnection) {
         .connected = false,
-        .socket = -1,
+         .socket = -1,
         .session = (KineticSession) {
             .host = "valid-host.com",
-            .port = expected.session.port,
-            .nonBlocking = false,
-            .clusterVersion = expected.session.clusterVersion,
-            .identity = expected.session.identity,
-            .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
-            .logFile = "my.log",
+             .port = expected.session.port,
+              .nonBlocking = false,
+               .clusterVersion = expected.session.clusterVersion,
+                .identity = expected.session.identity,
+                 .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
+                  .logFile = "my.log",
         },
     };
     memcpy(connection.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
     KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
-        expected.session.nonBlocking, expected.socket);
+                                          expected.session.nonBlocking, expected.socket);
 
     KineticStatus status = KineticConnection_Connect(&connection);
 
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_TRUE(connection.connected);
     TEST_ASSERT_EQUAL(expected.socket, connection.socket);
-    
+
     TEST_ASSERT_EQUAL_STRING(expected.session.host, connection.session.host);
     TEST_ASSERT_EQUAL(expected.session.port, connection.session.port);
     TEST_ASSERT_EQUAL(expected.session.nonBlocking, connection.session.nonBlocking);
@@ -166,47 +164,47 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_blocking_connection(void)
 {
     LOG_LOCATION;
-    const uint8_t hmacKey[] = {1,6,3,5,4,8,19};
+    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
 
     KineticConnection expected = (KineticConnection) {
         .connected = true,
-        .socket = 24,
+         .socket = 24,
         .session = (KineticSession) {
             .host = "valid-host.com",
-            .port = 1234,
-            .nonBlocking = true,
-            .clusterVersion = 17,
-            .identity = 12,
-            .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
-            .logFile = "my.log",
+             .port = 1234,
+              .nonBlocking = true,
+               .clusterVersion = 17,
+                .identity = 12,
+                 .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
+                  .logFile = "my.log",
         },
     };
     memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticConnection connection = (KineticConnection){
+    KineticConnection connection = (KineticConnection) {
         .connected = false,
-        .socket = -1,
+         .socket = -1,
         .session = (KineticSession) {
             .host = "valid-host.com",
-            .port = expected.session.port,
-            .nonBlocking = true,
-            .clusterVersion = expected.session.clusterVersion,
-            .identity = expected.session.identity,
-            .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
-            .logFile = "my.log",
+             .port = expected.session.port,
+              .nonBlocking = true,
+               .clusterVersion = expected.session.clusterVersion,
+                .identity = expected.session.identity,
+                 .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
+                  .logFile = "my.log",
         },
     };
     memcpy(connection.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
     KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
-        expected.session.nonBlocking, expected.socket);
+                                          expected.session.nonBlocking, expected.socket);
 
     KineticStatus status = KineticConnection_Connect(&connection);
 
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_TRUE(connection.connected);
     TEST_ASSERT_EQUAL(expected.socket, connection.socket);
-    
+
     TEST_ASSERT_EQUAL_STRING(expected.session.host, connection.session.host);
     TEST_ASSERT_EQUAL(expected.session.port, connection.session.port);
     TEST_ASSERT_EQUAL(expected.session.nonBlocking, connection.session.nonBlocking);

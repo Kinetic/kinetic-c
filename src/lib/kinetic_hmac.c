@@ -28,7 +28,7 @@ static void KineticHMAC_Compute(KineticHMAC* hmac,
                                 const KineticProto* proto,
                                 const ByteArray key);
 
-void KineticHMAC_Init(KineticHMAC * hmac,
+void KineticHMAC_Init(KineticHMAC* hmac,
                       KineticProto_Security_ACL_HMACAlgorithm algorithm)
 {
     if (algorithm == KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1) {

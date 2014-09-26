@@ -24,7 +24,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 
-void KineticHMAC_Init(KineticHMAC * hmac,
+void KineticHMAC_Init(KineticHMAC* hmac,
                       KineticProto_Security_ACL_HMACAlgorithm algorithm);
 
 void KineticHMAC_Populate(KineticHMAC* hmac,

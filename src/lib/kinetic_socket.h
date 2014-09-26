@@ -27,10 +27,10 @@
 int KineticSocket_Connect(const char* host, int port, bool nonBlocking);
 void KineticSocket_Close(int socket);
 
-bool KineticSocket_Read(int socket, ByteArray dest);
+bool KineticSocket_Read(int socket, ByteBuffer* dest);
 bool KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu);
 
-bool KineticSocket_Write(int socket, ByteArray src);
+bool KineticSocket_Write(int socket, ByteBuffer* src);
 bool KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu);
 
 #endif // _KINETIC_SOCKET_H

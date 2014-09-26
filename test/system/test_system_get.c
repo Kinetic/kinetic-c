@@ -41,13 +41,14 @@
 #include <stdlib.h>
 
 static SystemTestFixture Fixture = {
-    .config = (KineticSession) {
+    .config = (KineticSession)
+    {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity =  1,
         .nonBlocking = false,
-        .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
+        .hmacKey = ByteArray_CreateWithCString("asdfasdf"),
     }
 };
 static ByteArray ValueKey;
@@ -62,11 +63,13 @@ static bool TestDataWritten = false;
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-    ValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("GET system test blob");
-    Version = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
-    Tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeOtherTagValue");
-    TestValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah blah blah... etc.");
-    Value = (ByteArray){.data = ValueBuffer, .len = sizeof(ValueBuffer)};
+    ValueKey = ByteArray_CreateWithCString("GET system test blob");
+    Version = ByteArray_CreateWithCString("v1.0");
+    Tag = ByteArray_CreateWithCString("SomeOtherTagValue");
+    TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
+    Value = (ByteArray) {
+        .data = ValueBuffer, .len = sizeof(ValueBuffer)
+    };
 
     // Setup to write some test data
     KineticKeyValue putMetadata = {
@@ -77,8 +80,7 @@ void setUp(void)
         .value = TestValue,
     };
 
-    if (!TestDataWritten)
-    {
+    if (!TestDataWritten) {
         KineticStatus status = KineticClient_Put(Fixture.handle, &putMetadata);
         TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
         TEST_ASSERT_EQUAL_ByteArray(Version, putMetadata.dbVersion);

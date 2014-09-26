@@ -2,19 +2,23 @@
 #include <assert.h>
 #include <string.h>
 
-ByteArray ByteArray_Create(uint8_t* data, size_t len)
+ByteArray ByteArray_Create(void* data, size_t len)
 {
-    return (ByteArray) {.data = (uint8_t*)(data), .len = len};
+    return (ByteArray) {
+        .data = (uint8_t*)(data), .len = len
+    };
 }
 
 ByteArray ByteArray_CreateWithCString(char* str)
 {
-    return (ByteArray) {.data = (uint8_t*)str, .len = strlen(str)};
+    return (ByteArray) {
+        .data = (uint8_t*)str, .len = strlen(str)
+    };
 }
 
 void ByteArray_FillWithDummyData(ByteArray array)
 {
-    for(size_t i = 0; i < array.len; i++) {
+    for (size_t i = 0; i < array.len; i++) {
         array.data[i] = (uint8_t)(i & 0x0FFu);
     }
 }
@@ -24,22 +28,26 @@ ByteArray ByteArray_GetSlice(ByteArray array, size_t start, size_t len)
     assert(array.data != NULL);
     assert(start < array.len);
     assert(start + len <= array.len);
-    return (ByteArray){.data = &array.data[start], .len = len};
+    return (ByteArray) {
+        .data = &array.data[start], .len = len
+    };
 }
 
 
 
-ByteBuffer ByteBuffer_Create(uint8_t* data, size_t max_len)
+ByteBuffer ByteBuffer_Create(void* data, size_t max_len)
 {
     return (ByteBuffer) {
-        .array = (ByteArray) {.data = data, .len = max_len},
+        .array = (ByteArray) {.data = (uint8_t*)data, .len = max_len},
         .bytesUsed = 0,
     };
 }
 
 ByteBuffer ByteBuffer_CreateWithArray(ByteArray array)
 {
-    return (ByteBuffer) {.array = array, .bytesUsed = 0};
+    return (ByteBuffer) {
+        .array = array, .bytesUsed = 0
+    };
 }
 
 long ByteBuffer_BytesRemaining(const ByteBuffer buffer)
@@ -64,8 +72,9 @@ ByteArray ByteBuffer_Consume(ByteBuffer* buffer, size_t len)
 }
 
 bool ByteBuffer_Append(ByteBuffer* buffer,
-    const uint8_t* data, size_t len)
+                       const void* data, size_t len)
 {
+    assert(buffer != NULL);
     assert(buffer->array.data != NULL);
     assert(data != NULL);
     if (len == 0 || ((buffer->bytesUsed + len) > buffer->array.len)) {
@@ -109,7 +118,7 @@ bool ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)
     if (len == 0 || ((buffer->bytesUsed + len) > buffer->array.len)) {
         return false;
     }
-    for(size_t i = 0; i < len; i++) {
+    for (size_t i = 0; i < len; i++) {
         buffer->array.data[buffer->bytesUsed + i] = (uint8_t)(i & 0x0FFu);
     }
     buffer->bytesUsed += len;

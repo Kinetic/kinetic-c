@@ -59,7 +59,7 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     LOGF("Executing operation: 0x%llX", operation);
     if (operation->request->entry != NULL) {
         KineticLogger_LogByteArray("  Sending PDU w/metadata:",
-            operation->request->entry->value.array);
+                                   operation->request->entry->value.array);
     }
     else {
         LOG_LOCATION;
@@ -222,10 +222,8 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
 
     // Update the entry upon success
     entry->value.array.len = 0;
-    if (status == KINETIC_STATUS_SUCCESS)
-    {
-        if (operation.response->proto->command->body->keyValue != NULL)
-        {
+    if (status == KINETIC_STATUS_SUCCESS) {
+        if (operation.response->proto->command->body->keyValue != NULL) {
             KineticProto_KeyValue* keyValue =
                 operation.response->proto->command->body->keyValue;
 
@@ -234,27 +232,24 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
             //     memcpy(entry->key.data, keyValue->key.data, keyValue->key.len);
             //     entry->key.len = keyValue->key.len;
             // }
-            // entry->key = 
+            // entry->key =
             //     operation.response->proto->command->body->keyValue->key;
 
-            if (entry->dbVersion.array.data != NULL)
-            {
-                Copy_ProtobufCBinaryData_to_ByteArray(
-                    entry->dbVersion.array, keyValue->dbVersion);
+            if (entry->dbVersion.array.data != NULL) {
+                Copy_ProtobufCBinaryData_to_ByteBuffer(
+                    entry->dbVersion, keyValue->dbVersion);
             }
 
-            // entry->tag = 
+            // entry->tag =
             //     operation.response->proto->command->body->keyValue->tag;
-            // entry->dbVersion = 
+            // entry->dbVersion =
             //     operation.response->proto->command->body->keyValue->dbVersion;
-            // entry->newVersion = 
+            // entry->newVersion =
             //     operation.response->proto->command->body->keyValue->newVersion;
-            // entry->algorithm = 
+            // entry->algorithm =
             //     operation.response->proto->command->body->keyValue->algorithm;
 
         }
-
-        entry->value.array.len = operation.response->value.len;
     }
 
     KineticOperation_Free(&operation);

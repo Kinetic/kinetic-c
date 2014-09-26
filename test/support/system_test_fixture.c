@@ -31,10 +31,9 @@ void SystemTestSetup(SystemTestFixture* fixture)
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
     fixture->testIgnored = false;
 
-    if (!fixture->connected)
-    {
+    if (!fixture->connected) {
         KineticStatus status = KineticClient_Connect(
-            &fixture->config, &fixture->handle);
+                                   &fixture->config, &fixture->handle);
         TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
@@ -51,8 +50,7 @@ void SystemTestTearDown(SystemTestFixture* fixture)
 {
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
 
-    if (!fixture->testIgnored)
-    {
+    if (!fixture->testIgnored) {
         fixture->expectedSequence++;
         // TEST_ASSERT_EQUAL_MESSAGE(
         //     fixture->expectedSequence,

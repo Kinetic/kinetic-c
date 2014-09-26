@@ -67,5 +67,5 @@ void test_KineticProto_Algorithm_from_KineticAlgorithm_should_map_from_public_to
         KineticProto_Algorithm_from_KineticAlgorithm((KineticAlgorithm)1000));
     TEST_ASSERT_EQUAL(
         KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM,
-        KineticProto_Algorithm_from_KineticAlgorithm((KineticAlgorithm)-19));
+        KineticProto_Algorithm_from_KineticAlgorithm((KineticAlgorithm) - 19));
 }

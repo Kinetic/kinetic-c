@@ -20,14 +20,16 @@
 
 #include "kinetic_client.h"
 #include "kinetic_types.h"
-#include <stdio.h>
-#include "protobuf-c/protobuf-c.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
+#include <stdio.h>
+#include "protobuf-c/protobuf-c.h"
+#include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
 
@@ -45,7 +47,7 @@ void setUp(void)
 {
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
-    HmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some hmac key");
+    HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);

@@ -45,7 +45,7 @@ void setUp(void)
 {
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
-    HmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("some hmac key");
+    HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
@@ -70,8 +70,8 @@ void test_KineticClient_Delete_should_execute_DELETE_operation(void)
     };
 
     KineticKeyValue metadata = {
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_key"),
-        .tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue"),
+        .key = ByteArray_CreateWithCString("some_key"),
+        .tag = ByteArray_CreateWithCString("SomeTagValue"),
     };
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);

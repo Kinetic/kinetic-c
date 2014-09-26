@@ -41,13 +41,14 @@
 #include <stdlib.h>
 
 static SystemTestFixture Fixture = {
-    .config = (KineticSession) {
+    .config = (KineticSession)
+    {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity =  1,
         .nonBlocking = false,
-        .hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf"),
+        .hmacKey = ByteArray_CreateWithCString("asdfasdf"),
     }
 };
 static ByteArray ValueKey;
@@ -60,12 +61,12 @@ static ByteArray NewVersion;
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-    ValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
-    OtherValueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927_0");
-    Tag = BYTE_ARRAY_INIT_FROM_CSTRING("SomeTagValue");
-    TestValue = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum... blah... etc...");
-    Version = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0");
-    NewVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v2.0");
+    ValueKey = ByteArray_CreateWithCString("my_key_3.1415927");
+    OtherValueKey = ByteArray_CreateWithCString("my_key_3.1415927_0");
+    Tag = ByteArray_CreateWithCString("SomeTagValue");
+    TestValue = ByteArray_CreateWithCString("lorem ipsum... blah... etc...");
+    Version = ByteArray_CreateWithCString("v1.0");
+    NewVersion = ByteArray_CreateWithCString("v2.0");
 }
 
 void tearDown(void)
@@ -75,7 +76,8 @@ void tearDown(void)
 
 
 void test_Put_should_create_new_object_on_device(void)
-{   LOG(""); LOG_LOCATION;
+{
+    LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
         .key = ValueKey,
         .newVersion = Version,
@@ -95,7 +97,8 @@ void test_Put_should_create_new_object_on_device(void)
 }
 
 void test_Put_should_create_another_new_object_on_device(void)
-{   LOG(""); LOG_LOCATION;
+{
+    LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
         .key = OtherValueKey,
         .newVersion = Version,
@@ -115,7 +118,8 @@ void test_Put_should_create_another_new_object_on_device(void)
 }
 
 void test_Put_should_update_object_data_on_device(void)
-{   LOG(""); LOG_LOCATION;
+{
+    LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
         .key = ValueKey,
         .dbVersion = Version,
@@ -135,7 +139,8 @@ void test_Put_should_update_object_data_on_device(void)
 }
 
 void test_Put_should_update_object_data_on_device_and_update_version(void)
-{   LOG(""); LOG_LOCATION;
+{
+    LOG(""); LOG_LOCATION;
     KineticKeyValue metadata = {
         .key = ValueKey,
         .dbVersion = Version,
@@ -149,8 +154,7 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
 
     Fixture.testIgnored = true;
 
-    if (status == KINETIC_STATUS_VERSION_FAILURE)
-    {
+    if (status == KINETIC_STATUS_VERSION_FAILURE) {
         TEST_IGNORE_MESSAGE(
             "Java simulator is responding with VERSION_MISMATCH(8) if algorithm "
             "un-specified on initial PUT and subsequent request updates dbVersion!");

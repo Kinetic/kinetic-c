@@ -41,12 +41,14 @@ void tearDown(void)
 }
 
 void test_KineticLogger_KINETIC_LOG_FILE_should_be_defined_properly(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
     TEST_ASSERT_EQUAL_STRING("kinetic.log", KINETIC_LOG_FILE);
 }
 
 void test_KineticLogger_Init_should_log_to_STDOUT_by_default(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
     KineticLogger_Init(NULL);
 
     TEST_ASSERT_TRUE(LogToConsole);
@@ -55,7 +57,8 @@ void test_KineticLogger_Init_should_log_to_STDOUT_by_default(void)
 }
 
 void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_file(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
     KineticLogger_Init(TEST_LOG_FILE);
 
     TEST_ASSERT_FALSE(LogToConsole);
@@ -64,7 +67,8 @@ void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_
 }
 
 void test_KineticLogger_Init_should_disable_logging_if_NONE_specified(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
     KineticLogger_Init("NONE");
 
     TEST_ASSERT_FALSE(LogToConsole);
@@ -73,7 +77,8 @@ void test_KineticLogger_Init_should_disable_logging_if_NONE_specified(void)
 }
 
 void test_KineticLogger_Log_should_write_log_message_to_file(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
     const char* msg = "Some really important message!";
     char content[64];
     size_t length;

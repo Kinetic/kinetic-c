@@ -173,28 +173,26 @@ struct _KineticPDU {
     // Object meta-data to be used/populated if provided and pertinent to the opearation
     KineticEntry* entry;
 
-    // Value data associated with PDU (if any)
-    // uint8_t valueBuffer[PDU_VALUE_MAX_LEN];
-    ByteArray value;
-
     // Embedded HMAC instance
     KineticHMAC hmac;
 
     // Exchange associated with this PDU instance (info gets embedded in protobuf message)
     KineticConnection* connection;
 };
-#define KINETIC_PDU_INIT(__pdu, _con) { \
-    assert((__pdu) != NULL); \
+#define KINETIC_PDU_INIT(_pdu, _con) { \
+    assert((_pdu) != NULL); \
     assert((_con) != NULL); \
-    (__pdu)->connection = (_con); \
-    (__pdu)->header = KINETIC_PDU_HEADER_INIT; \
-    (__pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
-    (__pdu)->value = BYTE_ARRAY_NONE; \
-    (__pdu)->proto = &(__pdu)->protoData.message.proto; \
-    KINETIC_MESSAGE_HEADER_INIT(&((__pdu)->protoData.message.header), (_con)); \
+    memset(_pdu, 0, sizeof(KineticPDU)); \
+    (_pdu)->connection = (_con); \
+    (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
+    (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
+    /*(_pdu)->value = BYTE_ARRAY_NONE;*/ \
+    /*(_pdu)->proto = &(_pdu)->protoData.message.proto;*/ \
+    KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
 }
 #define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) { \
     KINETIC_PDU_INIT((_pdu), (_con)) \
+    (_pdu)->proto = &(_pdu)->protoData.message.proto; \
     KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
     (_pdu)->proto->command = &(_pdu)->protoData.message.command; \
     (_pdu)->proto->command->header = &(_pdu)->protoData.message.header; \
@@ -228,5 +226,6 @@ KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(KineticAlgor
 KineticStatus KineticStatus_from_KineticProto(KineticProto_Status protoStatus);
 ByteArray ByteArray_from_ProtobufCBinaryData(ProtobufCBinaryData protoData);
 bool Copy_ProtobufCBinaryData_to_ByteArray(ByteArray dest, ProtobufCBinaryData src);
+bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData src);
 
 #endif // _KINETIC_TYPES_INTERNAL_H
