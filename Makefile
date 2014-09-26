@@ -12,7 +12,7 @@ PBC_INC = ./vendor/protobuf-c
 SOCKET99 = ./vendor/socket99
 VND_INC = ./vendor
 BIN = $(BIN_DIR)/kinetic_client
-LDFLAGS += -lm -l crypto -l ssl
+LDFLAGS += -lm -l ssl -l kinetic-c-client -l crypto
 
 PREFIX ?= /usr/local
 INSTALL ?= install
@@ -39,18 +39,21 @@ LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kin
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
 LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
 
-default: $(KINETIC_SO)
+# default: $(KINETIC_SO)
+default: $(KINETIC_LIB)
 
-test: Rakefile $(LIB_OBJS)
+test_all: Rakefile $(LIB_OBJS)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Testing $(PROJECT)
 	@echo --------------------------------------------------------------------------------
 	bundle install
-	bundle exec rake ci
+	bundle exec rake clobber test
 
 clean:
 	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
+
+all: clean test_all default run
 
 .PHONY: clean
 
@@ -102,7 +105,7 @@ $(KINETIC_SO): $(KINETIC_LIB)
 libso: $(KINETIC_SO)
 
 UTIL_OBJS = $(OUT_DIR)/noop.o $(OUT_DIR)/put.o $(OUT_DIR)/get.o $(OUT_DIR)/delete.o
-UTIL_INCS = -I/usr/local/include -I$(UTIL_DIR)
+UTIL_INCS = -I./include -I/usr/local/include -I$(UTIL_DIR)
 
 $(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
@@ -117,7 +120,7 @@ $(UTIL_EXEC): $(UTIL_DIR)/main.c $(UTIL_OBJS)
 	@echo --------------------------------------------------------------------------------
 	@echo Building $(UTIL_EXEC) $(PROJECT) test utility \(statically linked\)
 	@echo --------------------------------------------------------------------------------
-	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} -l $(PROJECT) ${LDFLAGS}
+	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
 $(UTIL_EXEC_DYN): $(UTIL_DIR)/main.c $(UTIL_OBJS)
 	@echo
 	@echo --------------------------------------------------------------------------------
@@ -166,7 +169,8 @@ rund: ${UTIL_EXEC_DYN}
 	exec pkill -f 'java.*kinetic-simulator'
 
 # Installation
-install: ${KINETIC_LIB} ${KINETIC_SO} VERSION
+# Need to re-add ${KINETIC_SO}, once ready
+install: ${KINETIC_LIB} VERSION
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
@@ -201,10 +205,10 @@ uninstall:
 	${RM} -f ${PREFIX}/include/protobuf-c.h
 
 # all: uninstall clean test default install run rund
-all: uninstall clean test default install run
+ci: uninstall clean test_all default install run
 	@echo
 	@echo --------------------------------------------------------------------------------
-	@echo $(PROJECT) build completed successfully!
+	@echo $(PROJECT) build w/ full regression tests completed successfully!
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) v$(VERSION) is in working order
 	@echo
