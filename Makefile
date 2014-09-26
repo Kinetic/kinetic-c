@@ -53,6 +53,7 @@ test_all: Rakefile $(LIB_OBJS)
 clean:
 	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
 
+# all: uninstall clean test default install run rund
 all: clean test_all default run
 
 .PHONY: clean
@@ -204,8 +205,7 @@ uninstall:
 	${RM} -f ${PREFIX}/include/protobuf-c/protobuf-c.h
 	${RM} -f ${PREFIX}/include/protobuf-c.h
 
-# all: uninstall clean test default install run rund
-ci: uninstall clean test_all default install run
+make_ci: uninstall clean test_all default install run
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build w/ full regression tests completed successfully!

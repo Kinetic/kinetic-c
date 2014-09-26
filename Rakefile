@@ -387,10 +387,6 @@ task :utility do
   sh "make utility"
 end
 
-task :make_ci do
-  sh "make ci"
-end
-
 desc "Test examples (test utility)"
 task :run => ['utility'] do
   sh "make run" 
@@ -412,11 +408,12 @@ task :all => [
 ]
 
 desc "Run full CI build"
-task :ci => [
-  'clobber',
-  'cppcheck',
-  'make_ci'
-]
+task :ci => ['clobber', 'cppcheck', 'test_all'] do
+  sh "sudo make uninstall"
+  sh "make"
+  sh "sudo make install"
+  sh "make run"
+end
 
 task :default => [
   'test:delta',
