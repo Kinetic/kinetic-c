@@ -317,5 +317,16 @@ typedef struct _KineticOperation
     .response = (_resp), \
 }
 
+// Kinetic Key Range request structure
+typedef struct _KineticKeyRange
+{
+    ByteBuffer startKey;
+    ByteBuffer endKey;
+    bool startKeyInclusive;
+    bool endKeyInclusive;
+    int32_t maxReturned;
+    bool reverse;
+} KineticKeyRange;
+
 
 #endif // _KINETIC_TYPES_H

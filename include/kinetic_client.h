@@ -121,4 +121,23 @@ KineticStatus KineticClient_Get(KineticOperation* operation,
 KineticStatus KineticClient_Delete(KineticOperation* operation,
     KineticKeyValue* metadata);
 
+/**
+ * @brief Executes a GETKEYRANGE command to retrive a set of keys in the range
+ * specified range from the Kinetic Device
+ *
+ * @param operation     KineticOperation instance to use for the operation
+ * @param range         KineticKeyRange specifying keys to return
+ * @param keys          An pointer to an array of ByteBuffers with pre-allocated
+ *                      arrays to store the retrieved keys
+ * @param max_keys      The number maximum number of keys to request from the 
+ *                      device. There must be at least this many ByteBuffers in
+ *                      the `keys` array for population.
+ *                      
+ *
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ *                      upon failure
+ */
+KineticStatus KineticClient_GetKeyRange(KineticOperation* operation,
+    KineticKeyRange* range, ByteBuffer* keys[], int max_keys);
+
 #endif // _KINETIC_CLIENT_H

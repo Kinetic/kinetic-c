@@ -104,7 +104,6 @@ int KineticSocket_Connect(char* host, int port, bool nonBlocking)
     for (ai = ai_result; ai != NULL; ai = ai->ai_next)
     {
         int setsockopt_result;
-        int enable = 1;
         int buffer_size = PDU_VALUE_MAX_LEN;
 
         #if defined(SO_NOSIGPIPE) && !defined(__APPLE__)

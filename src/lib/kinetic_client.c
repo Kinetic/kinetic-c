@@ -28,7 +28,28 @@
 #include "kinetic_logger.h"
 #include <stdio.h>
 
-KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation);
+
+KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
+{
+    KineticStatus status = KINETIC_STATUS_INVALID;
+
+    // Send the request
+    if (KineticPDU_Send(operation->request))
+    {
+        // Associate response with same exchange as request
+        operation->response->connection = operation->request->connection;
+
+        // Receive the response
+        if (KineticPDU_Receive(operation->response))
+        {
+            status = KineticOperation_GetStatus(operation);
+        }
+    }
+
+    return status;
+}
+
+
 
 void KineticClient_Init(const char* logFile)
 {
@@ -216,23 +237,53 @@ KineticStatus KineticClient_Delete(KineticOperation* operation,
     return status;
 }
 
-KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
+// command {
+//   header {
+//     // See above for descriptions of these fields
+//     clusterVersion: ...
+//     identity: ...
+//     connectionID: ...
+//     sequence: ...
+
+//     // messageType should be GETKEYRANGE
+//     messageType: GETKEYRANGE
+//   }
+//   body {
+//     // The range message must be populated
+//     range {
+//       // Required bytes, the beginning of the requested range
+//       startKey: "..."
+
+//       // Optional bool, defaults to false
+//       // True indicates that the start key should be included in the returned 
+//       // range
+//       startKeyInclusive: ...
+
+//       // Required bytes, the end of the requested range
+//       endKey: "..."
+
+//       // Optional bool, defaults to false
+//       // True indicates that the end key should be included in the returned 
+//       // range
+//       endKeyInclusive: ...
+
+//       // Required int32, must be greater than 0
+//       // The maximum number of keys returned, in sorted order
+//       maxReturned: ...
+
+//       // Optional bool, defaults to false
+//       // If true, the key range will be returned in reverse order, starting at
+//       // endKey and moving back to startKey.  For instance
+//       // if the search is startKey="j", endKey="k", maxReturned=2,
+//       // reverse=true and the keys "k0", "k1", "k2" exist
+//       // the system will return "k2" and "k1" in that order.
+//       reverse: ....
+//     }
+//   }
+// }
+KineticStatus KineticClient_GetKeyRange(KineticOperation* operation,
+    KineticKeyRange* range, ByteBuffer* keys[], int max_keys)
 {
-    KineticStatus status = KINETIC_STATUS_INVALID;
-
-    // Send the request
-    if (KineticPDU_Send(operation->request))
-    {
-        // Associate response with same exchange as request
-        operation->response->connection = operation->request->connection;
-
-        // Receive the response
-        if (KineticPDU_Receive(operation->response))
-        {
-            status = KineticOperation_GetStatus(operation);
-        }
-    }
-
+    KineticStatus status = KINETIC_STATUS_SUCCESS;
     return status;
 }
-
