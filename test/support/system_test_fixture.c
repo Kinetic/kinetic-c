@@ -32,17 +32,16 @@ void SystemTestSetup(SystemTestFixture* fixture)
     fixture->instance.testIgnored = false;
     fixture->hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING("asdfasdf");
 
-    if (!fixture->connected)
-    {
+    if (!fixture->connected) {
         KineticClient_Init(NULL);
 
         KINETIC_CONNECTION_INIT(&fixture->connection,
-            fixture->identity, fixture->hmacKey);
+                                fixture->identity, fixture->hmacKey);
 
         bool success = KineticClient_Connect(
-            &fixture->connection,
-            fixture->host, fixture->port, fixture->nonBlocking,
-            fixture->clusterVersion, fixture->identity, fixture->hmacKey);
+                           &fixture->connection,
+                           fixture->host, fixture->port, fixture->nonBlocking,
+                           fixture->clusterVersion, fixture->identity, fixture->hmacKey);
         TEST_ASSERT_TRUE(success);
         TEST_ASSERT(fixture->connection.socketDescriptor >= 0);
         fixture->expectedSequence = 0;
@@ -51,7 +50,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
 
     fixture->instance.operation =
         KineticClient_CreateOperation(&fixture->connection,
-        &fixture->request, &fixture->response);
+                                      &fixture->request, &fixture->response);
 
     KINETIC_PDU_INIT_WITH_MESSAGE(&fixture->request, &fixture->connection);
     KINETIC_PDU_INIT(&fixture->response, &fixture->connection);
@@ -67,8 +66,7 @@ void SystemTestTearDown(SystemTestFixture* fixture)
 {
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
 
-    if (!fixture->instance.testIgnored)
-    {
+    if (!fixture->instance.testIgnored) {
         fixture->expectedSequence++;
         TEST_ASSERT_EQUAL_MESSAGE(
             fixture->expectedSequence,

@@ -93,7 +93,7 @@ void tearDown(void)
 void test_Delete_should_delete_an_object_from_device(void)
 {
     KineticKeyValue getMetadata = {
-        .key = ValueKey, 
+        .key = ValueKey,
         .tag = Tag,
         .dbVersion = Version,
         .algorithm = Algorithm,
@@ -102,7 +102,7 @@ void test_Delete_should_delete_an_object_from_device(void)
 
     // Validate the object exists initially
     Fixture.instance.operation = KineticClient_CreateOperation(
-        &Fixture.connection, &Fixture.request, &Fixture.response);
+                                     &Fixture.connection, &Fixture.request, &Fixture.response);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Fixture.request, &Fixture.connection);
     KINETIC_PDU_INIT(&Fixture.response, &Fixture.connection);
     status = KineticClient_Get(&Fixture.instance.operation, &getMetadata);
@@ -110,17 +110,17 @@ void test_Delete_should_delete_an_object_from_device(void)
     TEST_ASSERT_EQUAL_ByteArray(TestValue, getMetadata.value);
     Fixture.expectedSequence++;
     TEST_ASSERT_EQUAL_MESSAGE(Fixture.expectedSequence, Fixture.connection.sequence,
-        "Sequence should post-increment for every operation on the session!");
+                              "Sequence should post-increment for every operation on the session!");
 
     // Delete the object
     KineticKeyValue metadata = {
-        .key = ValueKey, 
+        .key = ValueKey,
         .dbVersion = Version,
     };
     metadata.algorithm = (KineticProto_Algorithm)0;
     metadata.tag = BYTE_ARRAY_NONE;
     Fixture.instance.operation = KineticClient_CreateOperation(
-        &Fixture.connection, &Fixture.request, &Fixture.response);
+                                     &Fixture.connection, &Fixture.request, &Fixture.response);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Fixture.request, &Fixture.connection);
     KINETIC_PDU_INIT(&Fixture.response, &Fixture.connection);
     status = KineticClient_Delete(&Fixture.instance.operation, &metadata);
@@ -128,11 +128,11 @@ void test_Delete_should_delete_an_object_from_device(void)
     TEST_ASSERT_EQUAL(0, metadata.value.len);
     Fixture.expectedSequence++;
     TEST_ASSERT_EQUAL_MESSAGE(Fixture.expectedSequence, Fixture.connection.sequence,
-        "Sequence should post-increment for every operation on the session!");
+                              "Sequence should post-increment for every operation on the session!");
 
     // Validate the object no longer exists
     Fixture.instance.operation = KineticClient_CreateOperation(
-        &Fixture.connection, &Fixture.request, &Fixture.response);
+                                     &Fixture.connection, &Fixture.request, &Fixture.response);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Fixture.request, &Fixture.connection);
     KINETIC_PDU_INIT(&Fixture.response, &Fixture.connection);
     status = KineticClient_Get(&Fixture.instance.operation, &getMetadata);

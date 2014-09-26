@@ -23,8 +23,8 @@
 #include <string.h>
 
 bool KineticConnection_Connect(KineticConnection* const connection,
-    const char* host, int port, bool nonBlocking,
-    int64_t clusterVersion, int64_t identity, const ByteArray key)
+                               const char* host, int port, bool nonBlocking,
+                               int64_t clusterVersion, int64_t identity, const ByteArray key)
 {
     connection->connected = false;
     connection->nonBlocking = nonBlocking;
@@ -39,7 +39,7 @@ bool KineticConnection_Connect(KineticConnection* const connection,
     connection->key.len = key.len;
 
     connection->socketDescriptor = KineticSocket_Connect(
-        connection->host, connection->port, nonBlocking);
+                                       connection->host, connection->port, nonBlocking);
     connection->connected = (connection->socketDescriptor >= 0);
 
     return connection->connected;
@@ -47,8 +47,7 @@ bool KineticConnection_Connect(KineticConnection* const connection,
 
 void KineticConnection_Disconnect(KineticConnection* connection)
 {
-    if (connection != NULL || connection->socketDescriptor >= 0)
-    {
+    if (connection != NULL || connection->socketDescriptor >= 0) {
         close(connection->socketDescriptor);
         connection->socketDescriptor = -1;
     }

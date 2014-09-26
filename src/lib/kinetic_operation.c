@@ -33,47 +33,53 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
         operation->response->proto->command != NULL &&
         operation->response->proto->command->status != NULL &&
         operation->response->proto->command->status->has_code != false &&
-        operation->response->proto->command->status->code != 
-            KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE)
-    {
-        switch(operation->response->proto->command->status->code)
-        {
+        operation->response->proto->command->status->code !=
+        KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE) {
+        switch (operation->response->proto->command->status->code) {
         case KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS:
-            status = KINETIC_STATUS_SUCCESS; break;
+            status = KINETIC_STATUS_SUCCESS;
+            break;
 
         case KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR:
-            status = KINETIC_STATUS_CONNECTION_ERROR; break;
-        
+            status = KINETIC_STATUS_CONNECTION_ERROR;
+            break;
+
         case KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY:
-            status = KINETIC_STATUS_DEVICE_BUSY; break;
-        
+            status = KINETIC_STATUS_DEVICE_BUSY;
+            break;
+
         case KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST:
         case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED:
         case KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED:
         case KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM:
-            status = KINETIC_STATUS_INVALID_REQUEST; break;
+            status = KINETIC_STATUS_INVALID_REQUEST;
+            break;
 
         case KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH:
         case KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE:
-            status = KINETIC_STATUS_VERSION_FAILURE; break;
-        
+            status = KINETIC_STATUS_VERSION_FAILURE;
+            break;
+
         case KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR:
         case KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE:
         case KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR:
         case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND:
-            status = KINETIC_STATUS_DATA_ERROR; break;
-        
+            status = KINETIC_STATUS_DATA_ERROR;
+            break;
+
         case KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR:
         case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED:
         case KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED:
         case KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE:
         case KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS:
-            status = KINETIC_STATUS_OPERATION_FAILED; break;
+            status = KINETIC_STATUS_OPERATION_FAILED;
+            break;
 
         default:
         case KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE:
         case _KINETIC_PROTO_STATUS_STATUS_CODE_IS_INT_SIZE:
-            status = KINETIC_STATUS_INVALID; break;
+            status = KINETIC_STATUS_INVALID;
+            break;
         }
     }
     return status;
@@ -100,7 +106,7 @@ void KineticOperation_BuildNoop(KineticOperation* operation)
 }
 
 void KineticOperation_BuildPut(KineticOperation* operation,
-    const KineticKeyValue* metadata)
+                               const KineticKeyValue* metadata)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -114,7 +120,7 @@ void KineticOperation_BuildPut(KineticOperation* operation,
 }
 
 void KineticOperation_BuildGet(KineticOperation* operation,
-    const KineticKeyValue* metadata)
+                               const KineticKeyValue* metadata)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
@@ -123,12 +129,10 @@ void KineticOperation_BuildGet(KineticOperation* operation,
     operation->request->proto->command->header->has_messageType = true;
 
     operation->request->value = BYTE_ARRAY_NONE;
-    if (metadata->value.data != NULL)
-    {
+    if (metadata->value.data != NULL) {
         operation->response->value.data = metadata->value.data;
     }
-    else
-    {
+    else {
         operation->response->value.data = operation->response->valueBuffer;
     }
     operation->response->value.len = PDU_VALUE_MAX_LEN;
@@ -137,7 +141,7 @@ void KineticOperation_BuildGet(KineticOperation* operation,
 }
 
 void KineticOperation_BuildDelete(KineticOperation* operation,
-    const KineticKeyValue* metadata)
+                                  const KineticKeyValue* metadata)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);

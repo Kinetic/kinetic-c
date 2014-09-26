@@ -44,7 +44,7 @@
 
 
 // // // Structure for defining a custom memory allocator.
-// // typedef struct 
+// // typedef struct
 // // {
 // //     void        *(*alloc)(void *allocator_data, size_t size);
 // //     void        (*free)(void *allocator_data, void *pointer);
@@ -81,19 +81,19 @@
 //         .sequence = (_con)->sequence,
 //     };
 // }
-// #define KINETIC_MESSAGE_INIT(msg) { 
-//     KineticProto__init(&(msg)->proto); 
-//     KineticProto_command__init(&(msg)->command); 
-//     KineticProto_header__init(&(msg)->header); 
-//     KineticProto_status__init(&(msg)->status); 
-//     KineticProto_body__init(&(msg)->body); 
-//     KineticProto_key_value__init(&(msg)->keyValue); 
-//     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); 
-//     (msg)->proto.hmac.data = (msg)->hmacData; 
-//     (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; 
-//     (msg)->proto.has_hmac = true; 
-//     (msg)->command.header = &(msg)->header; 
-//     (msg)->proto.command = &(msg)->command; 
+// #define KINETIC_MESSAGE_INIT(msg) {
+//     KineticProto__init(&(msg)->proto);
+//     KineticProto_command__init(&(msg)->command);
+//     KineticProto_header__init(&(msg)->header);
+//     KineticProto_status__init(&(msg)->status);
+//     KineticProto_body__init(&(msg)->body);
+//     KineticProto_key_value__init(&(msg)->keyValue);
+//     memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH);
+//     (msg)->proto.hmac.data = (msg)->hmacData;
+//     (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN;
+//     (msg)->proto.has_hmac = true;
+//     (msg)->command.header = &(msg)->header;
+//     (msg)->proto.command = &(msg)->command;
 // }
 
 

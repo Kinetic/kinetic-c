@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #ifndef _BSD_SOURCE
-    #define _BSD_SOURCE
+#define _BSD_SOURCE
 #endif // _BSD_SOURCE
 #include <sys/types.h>
 #include <unistd.h>
@@ -55,8 +55,7 @@ static bool LogInitialized = false;
 void setUp(void)
 {
     FileDesc = -1;
-    if (!LogInitialized)
-    {
+    if (!LogInitialized) {
         KineticLogger_Init(NULL);//"test_kinetic_socket.log");
         LogInitialized = true;
     }
@@ -65,19 +64,22 @@ void setUp(void)
 
 void tearDown(void)
 {
-    if (FileDesc >= 0)
-    {
+    if (FileDesc >= 0) {
         LOG("Shutting down socket...");
         KineticSocket_Close(FileDesc);
         FileDesc = 0;
     }
 }
 
-void test_KineticSocket_KINETIC_PORT_should_be_8123(void) {LOG_LOCATION;
+void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
+{
+    LOG_LOCATION;
     TEST_ASSERT_EQUAL(8123, KINETIC_PORT);
 }
 
-void test_KineticSocket_Connect_should_create_a_socket_connection(void) {LOG_LOCATION;
+void test_KineticSocket_Connect_should_create_a_socket_connection(void)
+{
+    LOG_LOCATION;
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }
@@ -89,7 +91,8 @@ void test_KineticSocket_Connect_should_create_a_socket_connection(void) {LOG_LOC
 #if defined(__APPLE__)
 
 void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void)
-{   LOG_LOCATION;
+{
+    LOG_LOCATION;
     bool success = false;
     uint8_t bufferData[40];
     ByteArray buffer = {.data = bufferData, .len = sizeof(bufferData)};
@@ -172,7 +175,7 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
     success = KineticSocket_Read(FileDesc, buffer);
 
     TEST_ASSERT_FALSE_MESSAGE(success,
-        "Expected socket to timeout waiting on data!");
+                              "Expected socket to timeout waiting on data!");
 }
 
 void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
@@ -196,12 +199,12 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
 
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT_NOT_NULL_MESSAGE(pProto,
-        "Protobuf pointer was NULL, but expected dynamic memory allocation!");
-    LOG( "Received Kinetic protobuf:");
+                                 "Protobuf pointer was NULL, but expected dynamic memory allocation!");
+    LOG("Received Kinetic protobuf:");
     LOGF("  command: (0x%zX)", (size_t)pProto->command);
     LOGF("    header: (0x%zX)", (size_t)pProto->command->header);
     LOGF("      identity: %016llX",
-        (unsigned long long)pProto->command->header->identity);
+         (unsigned long long)pProto->command->header->identity);
     KineticLogger_LogByteArray("  hmac", pProto->hmac);
 
     LOG("Kinetic ProtoBuf read successfully!");
@@ -213,7 +216,7 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     bool success = false;
     ByteArray readRequest = BYTE_ARRAY_INIT_FROM_CSTRING("readProto()");
     uint8_t bufferData[256];
-    size_t expectedLength = 150; 
+    size_t expectedLength = 150;
     // This would normally be extracted from the PDU header
     ByteArray buffer = {.data = bufferData, .len = expectedLength};
 
@@ -227,8 +230,8 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     success = KineticSocket_ReadProtobuf(FileDesc, &pProto, buffer);
     TEST_ASSERT_FALSE_MESSAGE(success, "Expected timeout!");
     TEST_ASSERT_NULL_MESSAGE(pProto,
-        "Protobuf pointer should not have gotten set, "
-        "since no memory allocated.");
+                             "Protobuf pointer should not have gotten set, "
+                             "since no memory allocated.");
 }
 
 #endif // defined(__APPLE__)

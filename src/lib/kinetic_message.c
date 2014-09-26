@@ -34,13 +34,13 @@ void KineticMessage_Init(KineticMessage* const message)
     } \
 }
 
-// #define CONFIG_OPTIONAL_FIELD_ENUM(name, field, message) { 
-//     message->keyValue.(name) = ((int)metadata->algorithm > 0); 
-//     if (message->keyValue.has_(name)) { 
+// #define CONFIG_OPTIONAL_FIELD_ENUM(name, field, message) {
+//     message->keyValue.(name) = ((int)metadata->algorithm > 0);
+//     if (message->keyValue.has_(name)) {
 //         message->keyValue.algorithm = algorithm; } }
 
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-    const KineticKeyValue* metadata)
+                                      const KineticKeyValue* metadata)
 {
     assert(message != NULL);
     assert(metadata != NULL);
@@ -57,10 +57,40 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     CONFIG_FIELD_BYTE_ARRAY(newVersion, message->keyValue, metadata);
     CONFIG_FIELD_BYTE_ARRAY(dbVersion, message->keyValue, metadata);
     CONFIG_FIELD_BYTE_ARRAY(tag, message->keyValue, metadata);
+
+    message->keyValue.has_force = (bool)((int)metadata->force);
+    if (message->keyValue.has_force) {
+        message->keyValue.force = metadata->force;
+    }
+
     message->keyValue.has_algorithm = (bool)((int)metadata->algorithm > 0);
     if (message->keyValue.has_algorithm) {
-        message->keyValue.algorithm = metadata->algorithm; }
+        message->keyValue.algorithm = metadata->algorithm;
+    }
+
     message->keyValue.has_metadataOnly = metadata->metadataOnly;
     if (message->keyValue.has_metadataOnly) {
-        message->keyValue.metadataOnly = metadata->metadataOnly; }
+        message->keyValue.metadataOnly = metadata->metadataOnly;
+    }
+
+    message->keyValue.has_synchronization = (metadata->synchronization > 0);
+    if (message->keyValue.has_synchronization) {
+        KineticProto_Synchronization sync_mode;
+        switch(metadata->synchronization) {
+        case KINETIC_SYNCHRONIZATION_WRITETHROUGH:
+            sync_mode = KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH;
+            break;
+        case KINETIC_SYNCHRONIZATION_WRITEBACK:
+            sync_mode = KINETIC_PROTO_SYNCHRONIZATION_WRITEBACK;
+            break;
+        case KINETIC_SYNCHRONIZATION_FLUSH:
+            sync_mode = KINETIC_PROTO_SYNCHRONIZATION_FLUSH;
+            break;
+        default:
+        case KINETIC_SYNCHRONIZATION_INVALID:
+            sync_mode = KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION;
+            break;
+        };
+        message->keyValue.synchronization = sync_mode;
+    }
 }

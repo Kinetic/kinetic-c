@@ -23,12 +23,19 @@
 
 const char* KineticStatusDescriptor[] = {
     "SUCCESS",
+    "SESSION_EMPTY",
+    "SESSION_INVALID",
+    "HOST_EMPTY",
+    "HMAC_EMPTY",
+    "NO_PDUS_AVAVILABLE",
     "DEVICE_BUSY",
     "CONNECTION_ERROR",
     "INVALID_REQUEST",
+    "OPERATION_INVALID",
     "OPERATION_FAILED",
     "VERSION_FAILURE",
     "DATA_ERROR",
 };
 
-const int KineticStatusDescriptorCount = sizeof(KineticStatusDescriptor)/sizeof(char*);
+const int KineticStatusDescriptorCount =
+    sizeof(KineticStatusDescriptor) / sizeof(char*);

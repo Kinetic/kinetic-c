@@ -99,7 +99,7 @@ void test_KineticClient_Connect_should_return_false_upon_NULL_HMAC_key(void)
 void test_KineticClient_Connect_should_return_false_upon_empty_HMAC_key(void)
 {
     KineticConnection connection;
-    uint8_t keyData[] = {0,1,2,3};
+    uint8_t keyData[] = {0, 1, 2, 3};
     ByteArray key = {.len = 0, .data = keyData};
 
     KineticLogger_Log_Expect("Specified HMAC key is empty!");

@@ -160,7 +160,7 @@ void test_KineticOperation_GetStatus_should_return_appropriate_KineticStatus_bas
     Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
-    
+
     Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
@@ -213,7 +213,7 @@ void test_KineticOperation_GetStatus_should_return_appropriate_KineticStatus_bas
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
 
     Response.proto->command->status->code = (KineticProto_Status_StatusCode)
-        (KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 10);
+                                            (KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 10);
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
 }
@@ -361,7 +361,11 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_with_supplied_v
     const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("foobar");
     ByteArray value = {.data = ValueData};
     ByteArray expectedValue = {.data = value.data, .len = PDU_VALUE_MAX_LEN};
-    const KineticKeyValue metadata = {.key = key, .value = (ByteArray){.len = PDU_VALUE_MAX_LEN, .data = value.data}};
+    const KineticKeyValue metadata = {.key = key, .value = (ByteArray)
+    {
+        .len = PDU_VALUE_MAX_LEN, .data = value.data
+    }
+                                     };
 
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &metadata);
@@ -500,7 +504,7 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 
     KineticOperation_BuildDelete(&Operation, &metadata);
 
-    // The `DELETE` operation removes the entry for a given key. It respects the 
+    // The `DELETE` operation removes the entry for a given key. It respects the
     // same locking behavior around `dbVersion` and `force` as described in the previous sections.
     // The following request will remove a key value pair to the store.
     //

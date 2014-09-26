@@ -97,13 +97,13 @@ void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the
 
     LOG("Computed HMAC: ");
     LOGF("  %02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
-        actual.data[0],  actual.data[1],  actual.data[2],  actual.data[3],
-        actual.data[4],  actual.data[5],  actual.data[6],  actual.data[7]);
+         actual.data[0],  actual.data[1],  actual.data[2],  actual.data[3],
+         actual.data[4],  actual.data[5],  actual.data[6],  actual.data[7]);
     LOGF("  %02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
-        actual.data[8],  actual.data[9],  actual.data[10], actual.data[11],
-        actual.data[12], actual.data[13], actual.data[14], actual.data[15]);
+         actual.data[8],  actual.data[9],  actual.data[10], actual.data[11],
+         actual.data[12], actual.data[13], actual.data[14], actual.data[15]);
     LOGF("  %02hhX%02hhX%02hhX%02hhX",
-        actual.data[16], actual.data[17], actual.data[18], actual.data[19]);
+         actual.data[16], actual.data[17], actual.data[18], actual.data[19]);
 }
 
 void test_KineticHMAC_Validate_should_return_true_if_the_HMAC_for_the_supplied_message_and_key_is_correct(void)

@@ -58,11 +58,11 @@ void setUp(void)
     KINETIC_CONNECTION_INIT(&Connection, identity, HMACKey);
     Connection.socketDescriptor = socketDesc;
     KineticConnection_Connect_ExpectAndReturn(&Connection,
-        host, port, false, clusterVersion, identity, HMACKey, true);
-    
+            host, port, false, clusterVersion, identity, HMACKey, true);
+
     bool success = KineticClient_Connect(&Connection,
-        host, port, false, clusterVersion, identity, HMACKey);
-    
+                                         host, port, false, clusterVersion, identity, HMACKey);
+
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT_EQUAL_INT(socketDesc, Connection.socketDescriptor);
 
@@ -71,18 +71,21 @@ void setUp(void)
     KINETIC_PDU_INIT_WITH_MESSAGE(&Request, &Connection);
     KINETIC_PDU_INIT_WITH_MESSAGE(&Response, &Connection);
 
-    RequestHeader = (ByteArray){
+    RequestHeader = (ByteArray) {
         .data = (uint8_t*)&Request.headerNBO,
-        .len = sizeof(KineticPDUHeader) };
+         .len = sizeof(KineticPDUHeader)
+    };
     Response.headerNBO = KINETIC_PDU_HEADER_INIT;
     Response.headerNBO.protobufLength = KineticNBO_FromHostU32(17);
     Response.headerNBO.valueLength = KineticNBO_FromHostU32(0);
-    ResponseHeaderRaw = (ByteArray){
+    ResponseHeaderRaw = (ByteArray) {
         .data = (uint8_t*)&Response.headerNBO,
-        .len = sizeof(KineticPDUHeader) };
-    ResponseProtobuf = (ByteArray){
+         .len = sizeof(KineticPDUHeader)
+    };
+    ResponseProtobuf = (ByteArray) {
         .data = Response.protobufRaw,
-        .len = 0};
+         .len = 0
+    };
 }
 
 void tearDown(void)
@@ -113,16 +116,16 @@ void test_Delete_should_delete_an_object_from_the_device(void)
     // Send the request
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor,
-        RequestHeader, true);
+                                        RequestHeader, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor,
-        &Request, true);
+            &Request, true);
 
     // Receive the response
     Response.headerNBO.valueLength = KineticNBO_FromHostU32(0);
     KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor,
-        ResponseHeaderRaw, true);
+                                       ResponseHeaderRaw, true);
     KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor,
-        &Response, true);
+            &Response, true);
 
     // Execute the operation
     TEST_ASSERT_EQUAL_KINETIC_STATUS(

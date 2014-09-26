@@ -60,7 +60,7 @@ void test_KineticProto_should_pack_and_unpack_protocol_buffers(void)
 
     // Validate the both packed buffers are equal
     TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE(bs.data, packed, expectedLen, "Packed proto buffers do not match");
-    PROTOBUF_C_BUFFER_SIMPLE_CLEAR (&bs);
+    PROTOBUF_C_BUFFER_SIMPLE_CLEAR(&bs);
 
     // Free dynamically allocated memory
     free(packed);

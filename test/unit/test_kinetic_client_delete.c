@@ -41,7 +41,7 @@ void tearDown(void)
 {
 }
 
-// The `DELETE` operation removes the entry for a given key. It respects the 
+// The `DELETE` operation removes the entry for a given key. It respects the
 // same locking behavior around `dbVersion` and `force` as described in the previous sections.
 //
 // **Request Message**
@@ -87,7 +87,7 @@ void test_KineticClient_Delete_should_execute_DELETE_operation(void)
     KineticPDU_Init_Expect(&Request, &connection);
     KineticPDU_Init_Expect(&Response, &connection);
     KineticOperation operation = KineticClient_CreateOperation(&connection,
-        &Request, &Response);
+                                 &Request, &Response);
 
     KineticOperation_BuildDelete_Expect(&operation, &metadata);
     KineticPDU_Send_ExpectAndReturn(&Request, true);

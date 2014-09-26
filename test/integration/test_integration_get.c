@@ -58,11 +58,11 @@ void setUp(void)
     KINETIC_CONNECTION_INIT(&Connection, identity, HMACKey);
     Connection.socketDescriptor = socketDesc;
     KineticConnection_Connect_ExpectAndReturn(&Connection,
-        host, port, false, clusterVersion, identity, HMACKey, true);
-    
+            host, port, false, clusterVersion, identity, HMACKey, true);
+
     bool success = KineticClient_Connect(&Connection,
-        host, port, false, clusterVersion, identity, HMACKey);
-    
+                                         host, port, false, clusterVersion, identity, HMACKey);
+
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT_EQUAL_INT(socketDesc, Connection.socketDescriptor);
 
@@ -73,18 +73,21 @@ void setUp(void)
     KINETIC_PDU_INIT_WITH_MESSAGE(&Response, &Connection);
     KineticLogger_LogProtobuf(Response.proto);
 
-    RequestHeader = (ByteArray){
+    RequestHeader = (ByteArray) {
         .data = (uint8_t*)&Request.headerNBO,
-        .len = sizeof(KineticPDUHeader) };
+         .len = sizeof(KineticPDUHeader)
+    };
     Response.headerNBO = KINETIC_PDU_HEADER_INIT;
     Response.headerNBO.protobufLength = KineticNBO_FromHostU32(17);
     Response.headerNBO.valueLength = KineticNBO_FromHostU32(0);
-    ResponseHeaderRaw = (ByteArray){
+    ResponseHeaderRaw = (ByteArray) {
         .data = (uint8_t*)&Response.headerNBO,
-        .len = sizeof(KineticPDUHeader) };
-    ResponseProtobuf = (ByteArray){
+         .len = sizeof(KineticPDUHeader)
+    };
+    ResponseProtobuf = (ByteArray) {
         .data = Response.protobufRaw,
-        .len = 0};
+         .len = 0
+    };
 }
 
 void tearDown(void)
@@ -102,7 +105,7 @@ void test_Get_should_retrieve_an_object_from_the_device_and_store_in_supplied_by
     ByteArray valueKey = BYTE_ARRAY_INIT_FROM_CSTRING("my_key_3.1415927");
     ByteArray value = BYTE_ARRAY_INIT_FROM_CSTRING("lorem ipsum...");
     KineticKeyValue metadata = {
-        .key = valueKey, 
+        .key = valueKey,
         .value = value,
     };
 
@@ -116,25 +119,25 @@ void test_Get_should_retrieve_an_object_from_the_device_and_store_in_supplied_by
     // Send the request
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor,
-        RequestHeader, true);
+                                        RequestHeader, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor,
-        &Request, true);
+            &Request, true);
 
     // Receive the response
     Response.headerNBO.valueLength = KineticNBO_FromHostU32(value.len);
     KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor,
-        ResponseHeaderRaw, true);
+                                       ResponseHeaderRaw, true);
     KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor,
-        &Response, true);
+            &Response, true);
     LOG_LOCATION; LOGF("value.len=%u, value.data=0x%zu", value.len, value.data);
     KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor,
-        value, true);
+                                       value, true);
 
     // Execute the operation
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_STATUS_SUCCESS,
         KineticClient_Get(&Operation, &metadata));
-    TEST_ASSERT_EQUAL_PTR(value.data, Response.value.data); 
+    TEST_ASSERT_EQUAL_PTR(value.data, Response.value.data);
 }
 
 void test_Get_should_create_retrieve_an_object_from_the_device_and_store_in_embedded_ByteArray(void)
@@ -151,7 +154,7 @@ void test_Get_should_create_retrieve_an_object_from_the_device_and_store_in_embe
     // Associate the dummy value data with the response
     KineticPDU_EnableValueBuffer(&Response);
     memcpy(Response.valueBuffer, expectedValue.data, expectedValue.len);
-    
+
     // Initialize response message status and HMAC
     uint8_t hmacData[64];
     Response.protoData.message.proto.has_hmac = true;
@@ -162,24 +165,24 @@ void test_Get_should_create_retrieve_an_object_from_the_device_and_store_in_embe
     // Send the request
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticSocket_Write_ExpectAndReturn(Connection.socketDescriptor,
-        RequestHeader, true);
+                                        RequestHeader, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socketDescriptor,
-        &Request, true);
+            &Request, true);
 
     // Receive the response
     Response.headerNBO.valueLength = KineticNBO_FromHostU32(expectedValue.len);
     KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor,
-        ResponseHeaderRaw, true);
+                                       ResponseHeaderRaw, true);
     KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socketDescriptor,
-        &Response, true);
+            &Response, true);
     ByteArray value = {.data = Response.value.data, .len = expectedValue.len};
     KineticSocket_Read_ExpectAndReturn(Connection.socketDescriptor,
-        value, true);
+                                       value, true);
 
     // Execute the operation
     KineticKeyValue metadata = {.key = valueKey};
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_STATUS_SUCCESS,
         KineticClient_Get(&Operation, &metadata));
-    TEST_ASSERT_EQUAL_PTR(metadata.value.data, Response.value.data);     
+    TEST_ASSERT_EQUAL_PTR(metadata.value.data, Response.value.data);
 }

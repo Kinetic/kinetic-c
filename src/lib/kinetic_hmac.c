@@ -25,21 +25,19 @@
 #include <openssl/hmac.h>
 
 static void KineticHMAC_Compute(KineticHMAC* hmac,
-    const KineticProto* proto,
-    const ByteArray key);
+                                const KineticProto* proto,
+                                const ByteArray key);
 
-void KineticHMAC_Init(KineticHMAC * hmac,
-    KineticProto_Security_ACL_HMACAlgorithm algorithm)
+void KineticHMAC_Init(KineticHMAC* hmac,
+                      KineticProto_Security_ACL_HMACAlgorithm algorithm)
 {
-    if (algorithm == KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1)
-    {
+    if (algorithm == KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1) {
         *hmac = (KineticHMAC) {
             .algorithm = algorithm,
-            .len = KINETIC_HMAC_MAX_LEN
+             .len = KINETIC_HMAC_MAX_LEN
         };
     }
-    else
-    {
+    else {
         *hmac = (KineticHMAC) {
             .algorithm = KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM
         };
@@ -47,8 +45,8 @@ void KineticHMAC_Init(KineticHMAC * hmac,
 }
 
 void KineticHMAC_Populate(KineticHMAC* hmac,
-    KineticProto* proto,
-    const ByteArray key)
+                          KineticProto* proto,
+                          const ByteArray key)
 {
     KineticHMAC_Init(hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Compute(hmac, proto, key);
@@ -60,28 +58,24 @@ void KineticHMAC_Populate(KineticHMAC* hmac,
 }
 
 bool KineticHMAC_Validate(const KineticProto* proto,
-    const ByteArray key)
+                          const ByteArray key)
 {
     bool success = false;
     size_t i;
     int result = 0;
     KineticHMAC tempHMAC;
 
-    if (proto->has_hmac)
-    {
+    if (proto->has_hmac) {
         KineticHMAC_Init(&tempHMAC, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
         KineticHMAC_Compute(&tempHMAC, proto, key);
-        if (proto->hmac.len == tempHMAC.len)
-        {
-            for (i = 0; i < tempHMAC.len; i++)
-            {
+        if (proto->hmac.len == tempHMAC.len) {
+            for (i = 0; i < tempHMAC.len; i++) {
                 result |= proto->hmac.data[i] ^ tempHMAC.data[i];
             }
             success = (result == 0);
         }
 
-        if (!success)
-        {
+        if (!success) {
             LOG("HMAC did not compare!");
             ByteArray expected = {.data = proto->hmac.data, .len = proto->hmac.len};
             KineticLogger_LogByteArray("expected HMAC", expected);
@@ -95,8 +89,8 @@ bool KineticHMAC_Validate(const KineticProto* proto,
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 static void KineticHMAC_Compute(KineticHMAC* hmac,
-    const KineticProto* proto,
-    const ByteArray key)
+                                const KineticProto* proto,
+                                const ByteArray key)
 {
     assert(proto->command);
     uint32_t len = protobuf_c_message_get_packed_size((ProtobufCMessage*)proto->command);

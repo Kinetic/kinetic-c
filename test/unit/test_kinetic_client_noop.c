@@ -52,7 +52,7 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
     KineticPDU_Init_Expect(&Request, &connection);
     KineticPDU_Init_Expect(&Response, &connection);
     operation = KineticClient_CreateOperation(&connection,
-        &Request, &Response);
+                &Request, &Response);
 
     KineticOperation_BuildNoop_Expect(&operation);
     KineticPDU_Send_ExpectAndReturn(&Request, true);

@@ -44,12 +44,12 @@ void KineticClient_Init(const char* logFile);
  * @return                  Returns true if connection succeeded
  */
 bool KineticClient_Connect(KineticConnection* connection,
-    const char* host,
-    int port,
-    bool nonBlocking,
-    int64_t clusterVersion,
-    int64_t identity,
-    ByteArray hmacKey);
+                           const char* host,
+                           int port,
+                           bool nonBlocking,
+                           int64_t clusterVersion,
+                           int64_t identity,
+                           ByteArray hmacKey);
 
 /**
  * @brief Closes the socket connection to a host.
@@ -93,7 +93,7 @@ KineticStatus KineticClient_NoOp(KineticOperation* operation);
  *                      upon failure
  */
 KineticStatus KineticClient_Put(KineticOperation* operation,
-    const KineticKeyValue* metadata);
+                                const KineticKeyValue* metadata);
 
 /**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device
@@ -106,7 +106,7 @@ KineticStatus KineticClient_Put(KineticOperation* operation,
  *                      upon failure
  */
 KineticStatus KineticClient_Get(KineticOperation* operation,
-    KineticKeyValue* metadata);
+                                KineticKeyValue* metadata);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
@@ -119,7 +119,7 @@ KineticStatus KineticClient_Get(KineticOperation* operation,
  *                      upon failure
  */
 KineticStatus KineticClient_Delete(KineticOperation* operation,
-    KineticKeyValue* metadata);
+                                   KineticKeyValue* metadata);
 
 /**
  * @brief Executes a GETKEYRANGE command to retrive a set of keys in the range
@@ -129,15 +129,15 @@ KineticStatus KineticClient_Delete(KineticOperation* operation,
  * @param range         KineticKeyRange specifying keys to return
  * @param keys          An pointer to an array of ByteBuffers with pre-allocated
  *                      arrays to store the retrieved keys
- * @param max_keys      The number maximum number of keys to request from the 
+ * @param max_keys      The number maximum number of keys to request from the
  *                      device. There must be at least this many ByteBuffers in
  *                      the `keys` array for population.
- *                      
+ *
  *
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
 KineticStatus KineticClient_GetKeyRange(KineticOperation* operation,
-    KineticKeyRange* range, ByteBuffer* keys[], int max_keys);
+                                        KineticKeyRange* range, ByteBuffer* keys[], int max_keys);
 
 #endif // _KINETIC_CLIENT_H

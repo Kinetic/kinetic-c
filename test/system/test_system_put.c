@@ -82,7 +82,7 @@ void test_Put_should_create_new_object_on_device(void)
 
     KineticStatus status =
         KineticClient_Put(&Fixture.instance.operation,
-            &metadata);
+                          &metadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_STATUS_SUCCESS, status);
@@ -99,7 +99,7 @@ void test_Put_should_update_object_data_on_device(void)
     };
     KineticStatus status =
         KineticClient_Put(&Fixture.instance.operation,
-            &metadata);
+                          &metadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_STATUS_SUCCESS, status);
@@ -117,12 +117,11 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     };
     KineticStatus status =
         KineticClient_Put(&Fixture.instance.operation,
-            &metadata);
+                          &metadata);
 
     Fixture.instance.testIgnored = true;
 
-    if (status == KINETIC_STATUS_VERSION_FAILURE)
-    {
+    if (status == KINETIC_STATUS_VERSION_FAILURE) {
         TEST_IGNORE_MESSAGE(
             "Java simulator is responding with VERSION_MISMATCH(8) if algorithm "
             "un-specified on initial PUT and subsequent request updates dbVersion!");

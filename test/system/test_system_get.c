@@ -67,11 +67,10 @@ void setUp(void)
         .value = testValue,
     };
 
-    if (!testDataWritten)
-    {
+    if (!testDataWritten) {
         KineticStatus status =
             KineticClient_Put(&Fixture.instance.operation,
-                &metadata);
+                              &metadata);
 
         TEST_ASSERT_EQUAL_KINETIC_STATUS(
             KINETIC_STATUS_SUCCESS, status);
@@ -106,7 +105,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
 
     KineticStatus status =
         KineticClient_Get(&Fixture.instance.operation,
-            &metadata);
+                          &metadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_STATUS_SUCCESS, status);
@@ -123,7 +122,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
 
     KineticStatus status =
         KineticClient_Get(&Fixture.instance.operation,
-            &metadata);
+                          &metadata);
 
     TEST_ASSERT_EQUAL_KINETIC_STATUS(
         KINETIC_STATUS_SUCCESS, status);

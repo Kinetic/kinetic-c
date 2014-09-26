@@ -45,22 +45,22 @@
 
 // Ensure __func__ is defined (for debugging)
 #if __STDC_VERSION__ < 199901L
-    #if __GNUC__ >= 2
-        #define __func__ __FUNCTION__
-    #else
-        #define __func__ "<unknown>"
-    #endif
+#if __GNUC__ >= 2
+#define __func__ __FUNCTION__
+#else
+#define __func__ "<unknown>"
+#endif
 #endif
 
 // Define max host name length
 // Some Linux environments require this, although not all, but it's benign.
 #ifndef _BSD_SOURCE
-    #define _BSD_SOURCE
+#define _BSD_SOURCE
 #endif // _BSD_SOURCE
 #include <unistd.h>
 #include <sys/types.h>
 #ifndef HOST_NAME_MAX
-    #define HOST_NAME_MAX 256
+#define HOST_NAME_MAX 256
 #endif // HOST_NAME_MAX
 
 #include "kinetic_proto.h"
@@ -86,7 +86,7 @@ typedef ProtobufCBinaryData ByteArray;
 
 
 // // Structure for defining a custom memory allocator.
-// typedef struct 
+// typedef struct
 // {
 //     void        *(*alloc)(void *allocator_data, size_t size);
 //     void        (*free)(void *allocator_data, void *pointer);
@@ -94,8 +94,7 @@ typedef ProtobufCBinaryData ByteArray;
 //     void        *allocator_data;
 // } ProtobufCAllocator;
 
-typedef struct
-{
+typedef struct {
     ByteArray   buffer;
     size_t      maxLen;
 } ByteBuffer;
@@ -105,8 +104,7 @@ typedef struct
 
 
 // Kinetic Device Client Connection
-typedef struct _KineticConnection
-{
+typedef struct _KineticConnection {
     bool    connected;
     bool    nonBlocking;
     int     port;
@@ -150,8 +148,7 @@ typedef struct _KineticConnection
 
 
 // Kinetic Message HMAC
-typedef struct _KineticHMAC
-{
+typedef struct _KineticHMAC {
     KineticProto_Security_ACL_HMACAlgorithm algorithm;
     uint32_t len;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
@@ -159,8 +156,7 @@ typedef struct _KineticHMAC
 
 
 // Kinetic Device Message Request
-typedef struct _KineticMessage
-{
+typedef struct _KineticMessage {
     // Kinetic Protocol Buffer Elements
     KineticProto                proto;
     KineticProto_Command        command;
@@ -204,24 +200,53 @@ typedef struct _KineticMessage
 
 
 // Kinetic Status Codes
-typedef enum
-{
-    KINETIC_STATUS_INVALID = -1,     // Status not available (no reponse/status available)
-    KINETIC_STATUS_SUCCESS = 0,      // Operation successful
-    KINETIC_STATUS_DEVICE_BUSY,      // Device busy (retry later)
-    KINETIC_STATUS_CONNECTION_ERROR, // No connection/disconnected
-    KINETIC_STATUS_INVALID_REQUEST,  // Something about the request is invalid
-    KINETIC_STATUS_OPERATION_FAILED, // Device reported an operation error
-    KINETIC_STATUS_VERSION_FAILURE,  // Basically a VERSION_MISMATCH error for a PUT
-    KINETIC_STATUS_DATA_ERROR,       // Device reported data error, no spaces, HMAC failure
+typedef enum {
+    KINETIC_STATUS_INVALID = -1,        // Status not available (no reponse/status available)
+    KINETIC_STATUS_SUCCESS = 0,         // Operation successful
+    KINETIC_STATUS_SESSION_EMPTY,       // Session was NULL in request
+    KINETIC_STATUS_SESSION_INVALID,     // Session configuration was invalid or NULL
+    KINETIC_STATUS_HOST_EMPTY,          // Host was empty in request
+    KINETIC_STATUS_HMAC_EMPTY,          // HMAC key is empty or NULL
+    KINETIC_STATUS_NO_PDUS_AVAVILABLE,  // All PDUs for the session have been allocated
+    KINETIC_STATUS_DEVICE_BUSY,         // Device busy (retry later)
+    KINETIC_STATUS_CONNECTION_ERROR,    // No connection/disconnected
+    KINETIC_STATUS_INVALID_REQUEST,     // Something about the request is invalid
+    KINETIC_STATUS_OPERATION_INVALID,   // Operation was invalid
+    KINETIC_STATUS_OPERATION_FAILED,    // Device reported an operation error
+    KINETIC_STATUS_VERSION_FAILURE,     // Basically a VERSION_MISMATCH error for a PUT
+    KINETIC_STATUS_DATA_ERROR,          // Device reported data error, no space or HMAC failure
+    KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 extern const int KineticStatusDescriptorCount;
 extern const char* KineticStatusDescriptor[];
 
+/**
+ * @brief Enumeration of encryption/checksum key algorithms
+ */
+typedef enum _KineticAlgorithm {
+    KINETIC_ALGORITHM_INVALID = -1,
+    KINETIC_ALGORITHM_SHA1 = 2,
+    KINETIC_ALGORITHM_SHA2,
+    KINETIC_ALGORITHM_SHA3,
+    KINETIC_ALGORITHM_CRC32,
+    KINETIC_ALGORITHM_CRC64
+} KineticAlgorithm;
 
-// KeyValue meta-data
-typedef struct _KineticKeyValue
-{
+
+/**
+ * @brief Enumeration of synchronization types for an operation.
+ */
+typedef enum _KineticSynchronization {
+    KINETIC_SYNCHRONIZATION_INVALID = -1,
+    KINETIC_SYNCHRONIZATION_WRITETHROUGH = 1,
+    KINETIC_SYNCHRONIZATION_WRITEBACK = 2,
+    KINETIC_SYNCHRONIZATION_FLUSH = 3
+} KineticSynchronization;
+
+/**
+ * @brief KeyValue meta-data structure for Kinetic objects.
+ */
+typedef struct _KineticKeyValue {
     ByteArray key;
     ByteArray newVersion;
     ByteArray dbVersion;
@@ -229,7 +254,7 @@ typedef struct _KineticKeyValue
     bool force;
     KineticProto_Algorithm algorithm;
     bool metadataOnly;
-    KineticProto_Synchronization synchronization;
+    KineticSynchronization synchronization;
     ByteArray value;
 } KineticKeyValue;
 
@@ -241,8 +266,7 @@ typedef struct _KineticKeyValue
 #define PDU_VALUE_MAX_LEN           (1024 * 1024)
 #define PDU_MAX_LEN                 (PDU_HEADER_LEN + \
                                     PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
-typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
-{
+typedef struct __attribute__((__packed__)) _KineticPDUHeader {
     uint8_t     versionPrefix;
     uint32_t    protobufLength;
     uint32_t    valueLength;
@@ -252,8 +276,7 @@ typedef struct __attribute__ ((__packed__)) _KineticPDUHeader
 
 
 // Kinetic PDU
-typedef struct _KineticPDU
-{
+typedef struct _KineticPDU {
     // Binary PDU header
     KineticPDUHeader header;    // Header struct in native byte order
     KineticPDUHeader headerNBO; // Header struct in network-byte-order
@@ -304,8 +327,7 @@ typedef struct _KineticPDU
 }
 
 // Kinetic Operation
-typedef struct _KineticOperation
-{
+typedef struct _KineticOperation {
     KineticConnection* connection;
     KineticPDU* request;
     KineticPDU* response;
@@ -318,8 +340,7 @@ typedef struct _KineticOperation
 }
 
 // Kinetic Key Range request structure
-typedef struct _KineticKeyRange
-{
+typedef struct _KineticKeyRange {
     ByteBuffer startKey;
     ByteBuffer endKey;
     bool startKeyInclusive;

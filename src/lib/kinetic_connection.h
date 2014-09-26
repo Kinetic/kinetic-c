@@ -24,12 +24,12 @@
 #include "kinetic_types_internal.h"
 
 bool KineticConnection_Connect(KineticConnection* connection,
-    const char* host,
-    int port,
-    bool nonBlocking,
-    int64_t clusterVersion,
-    int64_t identity,
-    const ByteArray key);
+                               const char* host,
+                               int port,
+                               bool nonBlocking,
+                               int64_t clusterVersion,
+                               int64_t identity,
+                               const ByteArray key);
 
 void KineticConnection_Disconnect(KineticConnection* const connection);
 

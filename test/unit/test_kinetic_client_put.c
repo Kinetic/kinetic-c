@@ -65,7 +65,7 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     KineticPDU_Init_Expect(&Request, &connection);
     KineticPDU_Init_Expect(&Response, &connection);
     KineticOperation operation = KineticClient_CreateOperation(&connection,
-        &Request, &Response);
+                                 &Request, &Response);
 
     KineticOperation_BuildPut_Expect(&operation, &metadata);
     KineticPDU_Send_ExpectAndReturn(&Request, true);

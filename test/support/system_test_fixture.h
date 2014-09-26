@@ -23,14 +23,12 @@
 
 #include "kinetic_types.h"
 
-typedef struct _SystemTestInstance
-{
+typedef struct _SystemTestInstance {
     bool testIgnored;
     KineticOperation operation;
 } SystemTestInstance;
 
-typedef struct _SystemTestFixture
-{
+typedef struct _SystemTestFixture {
     char host[HOST_NAME_MAX];
     int port;
     int64_t clusterVersion;

@@ -34,14 +34,12 @@ KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     // Send the request
-    if (KineticPDU_Send(operation->request))
-    {
+    if (KineticPDU_Send(operation->request)) {
         // Associate response with same exchange as request
         operation->response->connection = operation->request->connection;
 
         // Receive the response
-        if (KineticPDU_Receive(operation->response))
-        {
+        if (KineticPDU_Receive(operation->response)) {
             status = KineticOperation_GetStatus(operation);
         }
     }
@@ -57,40 +55,35 @@ void KineticClient_Init(const char* logFile)
 }
 
 bool KineticClient_Connect(KineticConnection* connection,
-    const char* host,
-    int port,
-    bool nonBlocking,
-    int64_t clusterVersion,
-    int64_t identity,
-    ByteArray hmacKey)
+                           const char* host,
+                           int port,
+                           bool nonBlocking,
+                           int64_t clusterVersion,
+                           int64_t identity,
+                           ByteArray hmacKey)
 {
-    if (connection == NULL)
-    {
+    if (connection == NULL) {
         LOG("Specified KineticConnection is NULL!");
         return false;
     }
 
-    if (host == NULL)
-    {
+    if (host == NULL) {
         LOG("Specified host is NULL!");
         return false;
     }
 
-    if (hmacKey.len < 1)
-    {
+    if (hmacKey.len < 1) {
         LOG("Specified HMAC key is empty!");
         return false;
     }
 
-    if (hmacKey.data == NULL)
-    {
+    if (hmacKey.data == NULL) {
         LOG("Specified HMAC key is NULL!");
         return false;
     }
 
     if (!KineticConnection_Connect(connection, host, port, nonBlocking,
-        clusterVersion, identity, hmacKey))
-    {
+                                   clusterVersion, identity, hmacKey)) {
         connection->connected = false;
         connection->socketDescriptor = -1;
         char message[64];
@@ -106,29 +99,26 @@ bool KineticClient_Connect(KineticConnection* connection,
 
 void KineticClient_Disconnect(KineticConnection* connection)
 {
-   KineticConnection_Disconnect(connection);
+    KineticConnection_Disconnect(connection);
 }
 
 KineticOperation KineticClient_CreateOperation(KineticConnection* connection,
-    KineticPDU* request,
-    KineticPDU* response)
+        KineticPDU* request,
+        KineticPDU* response)
 {
     KineticOperation op;
 
-    if (connection == NULL)
-    {
+    if (connection == NULL) {
         LOG("Specified KineticConnection is NULL!");
         assert(connection != NULL);
     }
 
-    if (request == NULL)
-    {
+    if (request == NULL) {
         LOG("Specified KineticPDU request is NULL!");
         assert(request != NULL);
     }
 
-    if (response == NULL)
-    {
+    if (response == NULL) {
         LOG("Specified KineticPDU response is NULL!");
         assert(response != NULL);
     }
@@ -159,7 +149,7 @@ KineticStatus KineticClient_NoOp(KineticOperation* operation)
 }
 
 KineticStatus KineticClient_Put(KineticOperation* operation,
-    const KineticKeyValue* metadata)
+                                const KineticKeyValue* metadata)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
@@ -176,7 +166,7 @@ KineticStatus KineticClient_Put(KineticOperation* operation,
 }
 
 KineticStatus KineticClient_Get(KineticOperation* operation,
-    KineticKeyValue* metadata)
+                                KineticKeyValue* metadata)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
@@ -185,13 +175,12 @@ KineticStatus KineticClient_Get(KineticOperation* operation,
     assert(metadata->key.data != NULL);
     assert(metadata->key.len <= KINETIC_MAX_KEY_LEN);
 
-    if (!metadata->metadataOnly)
-    {
-        if (metadata->value.data == NULL)
-        {
-             metadata->value = (ByteArray){
+    if (!metadata->metadataOnly) {
+        if (metadata->value.data == NULL) {
+            metadata->value = (ByteArray) {
                 .data = operation->response->valueBuffer,
-                .len = PDU_VALUE_MAX_LEN};
+                 .len = PDU_VALUE_MAX_LEN
+            };
         }
     }
 
@@ -202,12 +191,10 @@ KineticStatus KineticClient_Get(KineticOperation* operation,
     KineticStatus status = KineticClient_ExecuteOperation(operation);
 
     // Update the metadata with the received value length upon success
-    if (status == KINETIC_STATUS_SUCCESS)
-    {
+    if (status == KINETIC_STATUS_SUCCESS) {
         metadata->value.len = operation->response->value.len;
     }
-    else
-    {
+    else {
         metadata->value.len = 0;
     }
 
@@ -215,7 +202,7 @@ KineticStatus KineticClient_Get(KineticOperation* operation,
 }
 
 KineticStatus KineticClient_Delete(KineticOperation* operation,
-    KineticKeyValue* metadata)
+                                   KineticKeyValue* metadata)
 {
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
@@ -255,7 +242,7 @@ KineticStatus KineticClient_Delete(KineticOperation* operation,
 //       startKey: "..."
 
 //       // Optional bool, defaults to false
-//       // True indicates that the start key should be included in the returned 
+//       // True indicates that the start key should be included in the returned
 //       // range
 //       startKeyInclusive: ...
 
@@ -263,7 +250,7 @@ KineticStatus KineticClient_Delete(KineticOperation* operation,
 //       endKey: "..."
 
 //       // Optional bool, defaults to false
-//       // True indicates that the end key should be included in the returned 
+//       // True indicates that the end key should be included in the returned
 //       // range
 //       endKeyInclusive: ...
 
@@ -282,7 +269,7 @@ KineticStatus KineticClient_Delete(KineticOperation* operation,
 //   }
 // }
 KineticStatus KineticClient_GetKeyRange(KineticOperation* operation,
-    KineticKeyRange* range, ByteBuffer* keys[], int max_keys)
+                                        KineticKeyRange* range, ByteBuffer* keys[], int max_keys)
 {
     KineticStatus status = KINETIC_STATUS_SUCCESS;
     return status;

@@ -78,21 +78,21 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 
 void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 {
-    Connection = (KineticConnection){
+    Connection = (KineticConnection) {
         .connected = true,
-        .nonBlocking = false,
-        .port = 1234,
-        .socketDescriptor = -1,
-        .host = "invalid-host.com",
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key"),
-        .identity = 456789,
+         .nonBlocking = false,
+          .port = 1234,
+           .socketDescriptor = -1,
+            .host = "invalid-host.com",
+             .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key"),
+              .identity = 456789,
     };
     Expected = Connection;
 
     KineticSocket_Connect_ExpectAndReturn(Expected.host, Expected.port, false, -1);
 
     bool success = KineticConnection_Connect(&Connection, "invalid-host.com", Expected.port,
-        Expected.nonBlocking, Expected.clusterVersion, Expected.identity, Expected.key);
+                   Expected.nonBlocking, Expected.clusterVersion, Expected.identity, Expected.key);
 
     TEST_ASSERT_FALSE(success);
     TEST_ASSERT_FALSE(Connection.connected);
@@ -101,12 +101,12 @@ void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_blocking_connection(void)
 {
-    Connection = (KineticConnection){
+    Connection = (KineticConnection) {
         .host = "invalid-host.com",
-        .nonBlocking = true,
-        .key = BYTE_ARRAY_INIT_FROM_CSTRING("invalid"),
-        .socketDescriptor = -1,
-        .connected = false,
+         .nonBlocking = true,
+          .key = BYTE_ARRAY_INIT_FROM_CSTRING("invalid"),
+           .socketDescriptor = -1,
+            .connected = false,
     };
     Expected = Connection;
     Expected.nonBlocking = false;
@@ -119,7 +119,7 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
     KineticSocket_Connect_ExpectAndReturn(Expected.host, Expected.port, false, Expected.socketDescriptor);
 
     bool success = KineticConnection_Connect(&Connection, "valid-host.com", Expected.port,
-        Expected.nonBlocking, Expected.clusterVersion, Expected.identity, Expected.key);
+                   Expected.nonBlocking, Expected.clusterVersion, Expected.identity, Expected.key);
 
     TEST_ASSERT_TRUE(success);
     TEST_ASSERT_TRUE(Connection.connected);
@@ -134,14 +134,14 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
 
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_blocking_connection(void)
 {
-    Connection = (KineticConnection){
+    Connection = (KineticConnection) {
         .connected = false,
-        .nonBlocking = false,
-        .port = 1234,
-        .socketDescriptor = -1 ,
-        .host = "valid-host.com",
-        .key = Key,
-        .identity = Identity,
+         .nonBlocking = false,
+          .port = 1234,
+           .socketDescriptor = -1 ,
+            .host = "valid-host.com",
+             .key = Key,
+              .identity = Identity,
     };
     Expected = Connection;
 
