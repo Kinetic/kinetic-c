@@ -75,7 +75,7 @@
     # - :array
     # - :cexception
     # - :callback
-    # - :return_thru_ptr
+    - :return_thru_ptr
   :unity_helper_path: test/support/unity_helper.h
   :includes_h_post_orig_header:
     - "unity.h"

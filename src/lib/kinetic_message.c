@@ -53,6 +53,12 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     CONFIG_FIELD_BYTE_BUFFER(newVersion, message->keyValue, entry);
     CONFIG_FIELD_BYTE_BUFFER(dbVersion, message->keyValue, entry);
     CONFIG_FIELD_BYTE_BUFFER(tag, message->keyValue, entry);
+
+    message->keyValue.has_force = (bool)((int)entry->force);
+    if (message->keyValue.has_force) {
+        message->keyValue.force = entry->force;
+    }
+
     message->keyValue.has_algorithm = (bool)((int)entry->algorithm > 0);
     if (message->keyValue.has_algorithm) {
         message->keyValue.algorithm =
@@ -61,5 +67,12 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_metadataOnly = entry->metadataOnly;
     if (message->keyValue.has_metadataOnly) {
         message->keyValue.metadataOnly = entry->metadataOnly;
+    }
+
+    message->keyValue.has_synchronization = (entry->synchronization > 0);
+    if (message->keyValue.has_synchronization) {
+        message->keyValue.synchronization =
+            KineticProto_Synchronization_from_KineticSynchronization(
+                entry->synchronization);
     }
 }

@@ -34,6 +34,8 @@ const char* KineticStatusDescriptor[] = {
     "OPERATION_FAILED",
     "VERSION_FAILURE",
     "DATA_ERROR",
+    "BUFFER_OVERRUN",
 };
 
-const int KineticStatusDescriptorCount = sizeof(KineticStatusDescriptor) / sizeof(char*);
+const int KineticStatusDescriptorCount =
+    sizeof(KineticStatusDescriptor) / sizeof(char*);

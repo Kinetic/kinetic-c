@@ -35,14 +35,14 @@ void KineticPDU_Init(KineticPDU* const pdu,
 void KineticPDU_AttachEntry(KineticPDU* const pdu, KineticEntry* const entry)
 {
     assert(entry != NULL);
-    pdu->entry = entry;
+    pdu->entry = *entry;
+    ByteBuffer_Reset(&pdu->entry.value);
 }
 
 bool KineticPDU_Send(KineticPDU* request)
 {
     assert(request != NULL);
     assert(request->connection != NULL);
-    assert(request->entry != NULL);
     LOGF("Attempting to send PDU via fd=%d", request->connection->socket);
 
     // Populate the HMAC for the protobuf
@@ -59,7 +59,7 @@ bool KineticPDU_Send(KineticPDU* request)
     request->header.protobufLength =
         KineticProto__get_packed_size(&request->protoData.message.proto);
     request->header.valueLength =
-        (request->entry->value.array.data == NULL) ? 0 : request->entry->value.array.len;
+        (request->entry.value.array.data == NULL) ? 0 : request->entry.value.array.len;
     KineticLogger_LogHeader(&request->header);
 
     // Create NBO copy of header for sending
@@ -85,7 +85,7 @@ bool KineticPDU_Send(KineticPDU* request)
     }
 
     // Send the value/payload, if specified
-    ByteBuffer* value = &request->entry->value;
+    ByteBuffer* value = &request->entry.value;
     if ((value->array.data != NULL) && (value->array.len > 0)) {
         if (!KineticSocket_Write(request->connection->socket, value)) {
             LOG("Failed to send PDU value payload!");
@@ -147,18 +147,18 @@ bool KineticPDU_Receive(KineticPDU* const response)
 
     // Receive the value payload, if specified
     if (response->header.valueLength > 0) {
-        assert(response->entry->value.array.data != NULL);
+        assert(response->entry.value.array.data != NULL);
         LOGF("Receiving value payload (%lld bytes)...",
              (long long)response->header.valueLength);
-        bool success = KineticSocket_Read(fd, &response->entry->value);
+        bool success = KineticSocket_Read(fd, &response->entry.value);
         if (!success) {
             LOG("Failed to receive PDU value payload!");
             return false;
         }
         else {
             LOG("Received value payload successfully");
-            response->entry->value.bytesUsed = response->header.valueLength;
-            KineticLogger_LogByteArray("Value Payload", response->entry->value.array);
+            response->entry.value.bytesUsed = response->header.valueLength;
+            KineticLogger_LogByteArray("Value Payload", response->entry.value.array);
         }
     }
 
@@ -169,4 +169,35 @@ bool KineticPDU_Receive(KineticPDU* const response)
     }
 
     return true;
+}
+
+KineticStatus KineticPDU_GetStatus(KineticPDU* pdu)
+{
+    KineticStatus status = KINETIC_STATUS_INVALID;
+
+    if (pdu != NULL &&
+        pdu->proto != NULL &&
+        pdu->proto->command != NULL &&
+        pdu->proto->command->status != NULL &&
+        pdu->proto->command->status->has_code != false) {
+
+        status = KineticProtoStatusCode_to_KineticStatus(
+            pdu->proto->command->status->code);
+    }
+
+    return status;
+}
+
+KineticProto_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu)
+{
+    KineticProto_KeyValue* keyValue = NULL;
+
+    if (pdu != NULL &&
+        pdu->proto != NULL &&
+        pdu->proto->command != NULL &&
+        pdu->proto->command->body != NULL) {
+
+        keyValue = pdu->proto->command->body->keyValue;
+    }
+    return keyValue;
 }

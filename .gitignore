@@ -31,6 +31,10 @@ obj/
 build/
 docs/
 
+# Eclipse temp junk
+.metadata/
+RemoteSystemsTempFiles/
+
 # Other local files to ignore
 .tags*
 *.sublime-workspace

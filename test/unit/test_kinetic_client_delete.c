@@ -20,14 +20,17 @@
 
 #include "kinetic_client.h"
 #include "kinetic_types.h"
-#include <stdio.h>
-#include "protobuf-c/protobuf-c.h"
+#include "kinetic_types_internal.h"
+#include "kinetic_operation.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
+#include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
-#include "mock_kinetic_operation.h"
+#include <stdio.h>
+#include "protobuf-c/protobuf-c.h"
+#include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
 
@@ -53,7 +56,7 @@ void setUp(void)
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
 }
 
@@ -63,26 +66,27 @@ void tearDown(void)
 
 void test_KineticClient_Delete_should_execute_DELETE_operation(void)
 {
-    KineticOperation operation = {
-        .connection = &Connection,
-        .request = &Request,
-        .response = &Response,
-    };
-
-    KineticKeyValue metadata = {
-        .key = ByteArray_CreateWithCString("some_key"),
-        .tag = ByteArray_CreateWithCString("SomeTagValue"),
+    ByteArray key = ByteArray_CreateWithCString("some_key");
+    ByteArray tag = ByteArray_CreateWithCString("SomeTagValue");
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .tag = ByteBuffer_CreateWithArray(tag),
     };
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticOperation_Create_ExpectAndReturn(&Connection, operation);
-    KineticOperation_BuildDelete_Expect(&operation, &metadata);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Response);
+    KineticPDU_Init_Expect(&Request, &Connection);
+    KineticPDU_Init_Expect(&Response, &Connection);
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
     KineticPDU_Send_ExpectAndReturn(&Request, true);
     KineticPDU_Receive_ExpectAndReturn(&Response, true);
-    KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
-    KineticOperation_Free_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_FreePDU_Expect(&Request);
+    KineticAllocator_FreePDU_Expect(&Response);
 
-    KineticStatus status = KineticClient_Delete(DummyHandle, &metadata);
+    KineticStatus status = KineticClient_Delete(DummyHandle, &entry);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

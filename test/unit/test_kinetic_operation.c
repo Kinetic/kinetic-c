@@ -25,6 +25,7 @@
 #include "kinetic_operation.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
+#include "mock_kinetic_types_internal.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
@@ -100,10 +101,10 @@ void test_KineticOperation_Free_should_free_an_operation_with_allocated_PDUs(voi
     TEST_ASSERT_NOT_NULL(operation.request);
     TEST_ASSERT_NOT_NULL(operation.response);
 
-    KineticAllocator_FreePDU_Expect(&operation.request);
-    KineticAllocator_FreePDU_Expect(&operation.response);
+    KineticAllocator_FreePDU_Expect(operation.request);
+    KineticAllocator_FreePDU_Expect(operation.response);
     KineticStatus status = KineticOperation_Free(&operation);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 
@@ -116,6 +117,7 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
 
     Operation.response = NULL;
+    KineticPDU_GetStatus_ExpectAndReturn(NULL, KINETIC_STATUS_INVALID);
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
 
@@ -125,143 +127,13 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticOperation_BuildNoop(&Operation);
 
-    KineticProto* proto = Response.proto;
-    Response.proto = NULL;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-    Response.proto = proto;
-
-    KineticProto_Command* cmd = Response.proto->command;
-    TEST_ASSERT_NOT_NULL(cmd);
-    Response.proto->command = NULL;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-    Response.proto->command = cmd;
-
-    Response.proto->command->status = NULL;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    Response.proto->command->status = &Response.protoData.message.status;
-    Response.proto->command->status->has_code = false;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    Response.proto->command->status->has_code = true;
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-}
-
-void test_KineticOperation_GetStatus_should_return_appropriate_KineticStatus_based_on_KineticProto_Status_StatusCode_in_response(void)
-{
-    LOG_LOCATION;
-    KineticStatus status;
-
-    // Build a valid NOOP to facilitate testing protobuf structure and status extraction
-    KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticOperation_BuildNoop(&Operation);
-
-    Response.proto = &Response.protoData.message.proto;
-    Response.proto->command = &Response.protoData.message.command;
-    Response.proto->command->status = &Response.protoData.message.status;
-    Response.proto->command->status->has_code = true;
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
 
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR;
+    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_CONNECTION_ERROR);
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
-
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_DEVICE_BUSY, status);
-
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
-
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_DATA_ERROR, status);
-
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_VERSION_FAILURE, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_VERSION_FAILURE, status);
-
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_OPERATION_FAILED, status);
-
-
-    Response.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    Response.proto->command->status->code = _KINETIC_PROTO_STATUS_STATUS_CODE_IS_INT_SIZE;
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    Response.proto->command->status->code = (KineticProto_Status_StatusCode)
-                                            (KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 10);
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
 }
 
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
@@ -292,6 +164,8 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     //
     TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_NOOP, Request.proto->command->header->messageType);
+    TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
+    TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
 }
 
 void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_create_a_new_object(void)
@@ -395,8 +269,9 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_PUT, Request.proto->command->header->messageType);
 
-    TEST_ASSERT_EQUAL_ByteArray(value, Operation.request->entry->value.array);
-    TEST_ASSERT_EQUAL(0, Operation.request->entry->value.bytesUsed);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.request->entry.value.array);
+    TEST_ASSERT_EQUAL(0, Operation.request->entry.value.bytesUsed);
+    TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
 }
 
 uint8_t ValueData[PDU_VALUE_MAX_LEN];
@@ -443,8 +318,9 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_EQUAL_ByteArray(value, Operation.response->entry->value.array);
-    TEST_ASSERT_EQUAL(0, Operation.response->entry->value.bytesUsed);
+    TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.response->entry.value.array);
+    TEST_ASSERT_EQUAL(0, Operation.response->entry.value.bytesUsed);
 }
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
@@ -490,8 +366,8 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_EQUAL_ByteArray(value, Operation.response->entry->value.array);
-    TEST_ASSERT_EQUAL(0, Operation.response->entry->value.bytesUsed);
+    TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
+    TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
 }
 
 
@@ -532,9 +408,7 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     //   }
     // }
     // hmac: "..."
-
-    TEST_ASSERT_NULL(Operation.request->entry->value.array.data);
-    TEST_ASSERT_EQUAL(0, Operation.request->entry->value.bytesUsed);
-    TEST_ASSERT_NULL(Operation.response->entry->value.array.data);
-    TEST_ASSERT_EQUAL(0, Operation.response->entry->value.bytesUsed);
+    
+    TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
+    TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
 }

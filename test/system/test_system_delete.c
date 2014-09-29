@@ -49,6 +49,7 @@ static SystemTestFixture Fixture = {
         .clusterVersion = 0,
         .identity =  1,
         .nonBlocking = false,
+        .logFile = "",
     }
 };
 static ByteArray ValueKey;
@@ -97,7 +98,7 @@ void test_Delete_should_delete_an_object_from_device(void)
         .value = ByteBuffer_CreateWithArray(TestValue),
     };
     status = KineticClient_Put(Fixture.handle, &putEntry);
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteArray(Version, putEntry.dbVersion.array);
     TEST_ASSERT_ByteArray_NONE(putEntry.newVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(ValueKey, putEntry.key.array);
@@ -110,12 +111,21 @@ void test_Delete_should_delete_an_object_from_device(void)
         .value = ByteBuffer_CreateWithArray(ValueIn),
     };
     status = KineticClient_Get(Fixture.handle, &getEntry);
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.key.array, getEntry.key.array);
     TEST_ASSERT_ByteArray_NONE(putEntry.newVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.tag.array, getEntry.tag.array);
     TEST_ASSERT_EQUAL(putEntry.algorithm, getEntry.algorithm);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.value.array, getEntry.value.array);
+
+    // Validate the object no longer exists
+    KineticEntry getEntryMetadata = {
+        .key = ByteBuffer_CreateWithArray(ValueKey),
+        .metadataOnly = true,
+    };
+    status = KineticClient_Get(Fixture.handle, &getEntryMetadata);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
+    TEST_ASSERT_ByteArray_EMPTY(getEntryMetadata.value.array);
 
     // Delete the object
     KineticEntry deleteEntry = {
@@ -126,17 +136,17 @@ void test_Delete_should_delete_an_object_from_device(void)
     };
     status = KineticClient_Delete(Fixture.handle, &deleteEntry);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(0, deleteEntry.value.array.len);
 
     // Validate the object no longer exists
-    KineticEntry regetEntry = {
+    KineticEntry regetEntryMetadata = {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .value = ByteBuffer_CreateWithArray(ValueIn),
+        .metadataOnly = true,
     };
-    status = KineticClient_Get(Fixture.handle, &regetEntry);
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_DATA_ERROR, status);
-    TEST_ASSERT_ByteArray_EMPTY(regetEntry.value.array);
+    status = KineticClient_Get(Fixture.handle, &regetEntryMetadata);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
+    TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
 }
 
 /*******************************************************************************

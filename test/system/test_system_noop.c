@@ -32,6 +32,7 @@
 #include "kinetic_socket.h"
 #include "kinetic_nbo.h"
 
+#include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
 #include "system_test_fixture.h"
@@ -40,17 +41,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-static SystemTestFixture Fixture = {
-    .config = (KineticSession)
-    {
-        .host = "localhost",
-        .port = KINETIC_PORT,
-        .clusterVersion = 0,
-        .identity =  1,
-        .nonBlocking = false,
-        .hmacKey = ByteArray_CreateWithCString("asdfasdf"),
-    }
-};
+static SystemTestFixture Fixture;
 
 void setUp(void)
 {
@@ -65,7 +56,7 @@ void tearDown(void)
 void test_NoOp_should_succeed(void)
 {
     KineticStatus status = KineticClient_NoOp(Fixture.handle);
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 /*******************************************************************************

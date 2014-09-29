@@ -35,6 +35,7 @@ void test_ByteArray_CreateWithCString_should_create_ByteArray_using_C_string(voi
     TEST_ASSERT_EQUAL_HEX8_ARRAY(str, array.data, len);
 }
 
+
 void test_ByteArray_FillWithDummyData_should_fill_an_array_with_dummy_data(void)
 {
     uint8_t data[4];
@@ -128,6 +129,13 @@ void test_ByteBuffer_BytesRemaining_should_return_lenth_of_unconsumed_bytes(void
 
     buffer.bytesUsed = len;
     TEST_ASSERT_EQUAL(0, ByteBuffer_BytesRemaining(buffer));
+}
+
+void test_ByteBuffer_Reset_should_reset_bytes_used(void)
+{
+    ByteBuffer buffer = {.bytesUsed = 4};
+    ByteBuffer_Reset(&buffer);
+    TEST_ASSERT_EQUAL(0, buffer.bytesUsed);
 }
 
 void test_ByteBuffer_Consume(void)

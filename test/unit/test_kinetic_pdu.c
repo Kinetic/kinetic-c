@@ -20,6 +20,8 @@
 
 #include "unity.h"
 #include "unity_helper.h"
+#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_pdu.h"
 #include "kinetic_nbo.h"
 #include "kinetic_proto.h"
@@ -60,10 +62,6 @@ void setUp(void)
     KINETIC_PDU_INIT(&PDU, &Connection);
     ByteArray_FillWithDummyData(Value);
     KineticLogger_Init(NULL);
-}
-
-void tearDown(void)
-{
 }
 
 void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
@@ -127,18 +125,22 @@ void test_KineticPDU_Init_should_set_the_exchange_fields_in_the_embedded_protobu
 }
 
 
-void test_KineticPDU_AttachEntry_should_attach_specified_KineticEntry(void)
+void test_KineticPDU_AttachEntry_should_attach_specified_KineticEntry_with_new_buffer(void)
 {
     LOG_LOCATION;
     KineticPDU_Init(&PDU, &Connection);
 
-    uint8_t data[5] = {5, 4, 3, 2, 1};
+    uint8_t data[5];
     ByteArray value = {.data = data, .len = sizeof(data)};
-    KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
+    ByteBuffer valueBuffer = ByteBuffer_CreateWithArray(value);
+    KineticEntry entry = {.value = valueBuffer};
+    entry.value.bytesUsed = 3;
 
     KineticPDU_AttachEntry(&PDU, &entry);
 
-    TEST_ASSERT_EQUAL_PTR(&entry, PDU.entry);
+    TEST_ASSERT_EQUAL_PTR(entry.value.array.data, PDU.entry.value.array.data);
+    TEST_ASSERT_EQUAL(0, PDU.entry.value.bytesUsed);
+    TEST_ASSERT_EQUAL(3, entry.value.bytesUsed);
 }
 
 
@@ -193,7 +195,7 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
                                 &PDU.protoData.message.proto, PDU.connection->session.hmacKey);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, true);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &PDU, true);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &PDU.entry->value, true);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, &PDU.entry.value, true);
 
     status = KineticPDU_Send(&PDU);
 
@@ -464,3 +466,87 @@ void test_KineticPDU_Receive_should_receive_a_message_and_NOT_update_the_Connect
     TEST_ASSERT_EQUAL(12345, PDU.connection->connectionID);
 }
 
+
+
+
+
+
+void test_KineticPDU_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_KineticProto_Status_StatusCode_in_response(void)
+{
+    LOG_LOCATION;
+    KineticStatus status;
+
+    status = KineticPDU_GetStatus(NULL);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    PDU.proto = NULL;
+    status = KineticPDU_GetStatus(&PDU);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+    
+    PDU.proto = &PDU.protoData.message.proto;
+    PDU.proto->command = NULL;
+    status = KineticPDU_GetStatus(&PDU);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    PDU.proto->command = &PDU.protoData.message.command;
+    status = KineticPDU_GetStatus(&PDU);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    PDU.proto->command->status = &PDU.protoData.message.status;
+    PDU.proto->command->status->has_code = false;
+    status = KineticPDU_GetStatus(&PDU);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+
+    PDU.proto->command->status->has_code = true;
+    PDU.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
+    status = KineticPDU_GetStatus(&PDU);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
+}
+
+void test_KineticPDU_GetStatus_should_return_appropriate_KineticStatus_based_on_KineticProto_Status_StatusCode_in_response(void)
+{
+    LOG_LOCATION;
+    KineticStatus status;
+
+    PDU.proto = &PDU.protoData.message.proto;
+    PDU.proto->command = &PDU.protoData.message.command;
+    PDU.proto->command->status = &PDU.protoData.message.status;
+    PDU.proto->command->status->has_code = true;
+
+    PDU.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS;
+    status = KineticPDU_GetStatus(&PDU);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+
+    PDU.proto->command->status->code = KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR;
+    status = KineticPDU_GetStatus(&PDU);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
+}
+
+void test_KineticPDU_GetKeyValue_should_return_NULL_message_has_no_KeyValue(void)
+{
+    LOG_LOCATION;
+
+    KineticProto_KeyValue* keyValue;
+
+    PDU.proto = NULL;
+    keyValue = KineticPDU_GetKeyValue(&PDU);
+    TEST_ASSERT_NULL(keyValue);
+    
+    PDU.proto = &PDU.protoData.message.proto;
+    PDU.proto->command = NULL;
+    keyValue = KineticPDU_GetKeyValue(&PDU);
+    TEST_ASSERT_NULL(keyValue);
+
+    PDU.proto->command = &PDU.protoData.message.command;
+    PDU.protoData.message.command.body = NULL;
+    keyValue = KineticPDU_GetKeyValue(&PDU);
+    TEST_ASSERT_NULL(keyValue);
+
+    PDU.protoData.message.command.body = &PDU.protoData.message.body;
+    keyValue = KineticPDU_GetKeyValue(&PDU);
+    TEST_ASSERT_NULL(keyValue);
+
+    PDU.protoData.message.command.body->keyValue = &PDU.protoData.message.keyValue;
+    keyValue = KineticPDU_GetKeyValue(&PDU);
+    TEST_ASSERT_NOT_NULL(keyValue);
+}

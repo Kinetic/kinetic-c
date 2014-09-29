@@ -23,20 +23,37 @@
 #include "kinetic_client.h"
 #include "kinetic_logger.h"
 
-uint8_t hmacKeyBuffer[KINETIC_MAX_KEY_LEN];
+// uint8_t hmacKeyBuffer[KINETIC_MAX_KEY_LEN];
 uint8_t data[PDU_VALUE_MAX_LEN];
 
 void SystemTestSetup(SystemTestFixture* fixture)
 {
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
-    fixture->testIgnored = false;
 
+    ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
     if (!fixture->connected) {
+        *fixture = (SystemTestFixture) {
+            .config = (KineticSession)
+            {
+                .host = "localhost",
+                .port = KINETIC_PORT,
+                .clusterVersion = 0,
+                .identity =  1,
+                .nonBlocking = false,
+                .hmacKey = hmacArray,
+            },
+            .connected = fixture->connected,
+            .testIgnored = false,
+        };
         KineticStatus status = KineticClient_Connect(
                                    &fixture->config, &fixture->handle);
-        TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
+    }
+    else
+    {
+        fixture->testIgnored = false;
     }
 
     // TEST_ASSERT_EQUAL_MESSAGE(

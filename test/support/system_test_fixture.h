@@ -22,6 +22,7 @@
 #define _SYSTEM_TEST_FIXTURE
 
 #include "kinetic_types.h"
+#include "kinetic_logger.h"
 
 typedef struct _SystemTestFixture {
     KineticSession config;
@@ -38,7 +39,8 @@ void SystemTestSuiteTearDown(SystemTestFixture* fixture);
 #define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) \
 void test_Suite_TearDown(void) \
 { \
-    if ((_fixture)->connected) { \
+    LOG("BLARF!!!!!!!!!!!!!!!"); \
+    if ((_fixture)->handle != KINETIC_HANDLE_INVALID && (_fixture)->connected) { \
         KineticClient_Disconnect(&(_fixture)->handle); } \
     (_fixture)->connected = false; \
 }

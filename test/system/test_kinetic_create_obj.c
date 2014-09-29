@@ -73,7 +73,7 @@ void* kinetic_put(void* kinetic_arg)
         // Store the data slice
         LOGF("Storing a data slice (%u bytes)", metaData->value.len);
         KineticStatus status = KineticClient_Put(arg->sessionHandle, metaData);
-        TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         LOGF("KineticClient put to disk success, ip:%s", arg->ip);
 
         objIndex++;
@@ -133,7 +133,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                    i + 1, numCopiesToStore, sessionConfig.host);
 
             // Establish connection
-            TEST_ASSERT_EQUAL_STATUS(
+            TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
                 KineticClient_Connect(&sessionConfig, &kinetic_client[i]));
 

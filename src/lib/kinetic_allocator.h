@@ -24,7 +24,7 @@
 #include "kinetic_types_internal.h"
 
 KineticPDU* KineticAllocator_NewPDU(void);
-void KineticAllocator_FreePDU(KineticPDU** pdu);
+void KineticAllocator_FreePDU(KineticPDU* pdu);
 void KineticAllocator_FreeAllPDUs(void);
 bool KineticAllocator_ValidateAllMemoryFreed(void);
 

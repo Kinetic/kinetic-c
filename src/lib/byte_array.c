@@ -33,7 +33,11 @@ ByteArray ByteArray_GetSlice(ByteArray array, size_t start, size_t len)
     };
 }
 
-
+void ByteBuffer_Reset(ByteBuffer* buffer)
+{
+    assert(buffer != NULL);
+    buffer->bytesUsed = 0;
+}
 
 ByteBuffer ByteBuffer_Create(void* data, size_t max_len)
 {

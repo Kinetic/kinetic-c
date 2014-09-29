@@ -63,7 +63,7 @@ static void ConnectSession(void)
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
 }
 
@@ -77,7 +77,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_
     SessionHandle = 17;
 
     KineticStatus status = KineticClient_Connect(NULL, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SESSION_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 
@@ -91,7 +91,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_HOST_EMPTY_upon_NUL
     SessionHandle = 17;
 
     KineticStatus status = KineticClient_Connect(&config, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_HOST_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HOST_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 
@@ -105,7 +105,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_HMAC_EMPTY_upon_NUL
     SessionHandle = 17;
 
     KineticStatus status = KineticClient_Connect(&config, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_HMAC_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 
@@ -120,7 +120,7 @@ void test_KineticClient_Connect_should_return_false_upon_empty_HMAC_key(void)
     SessionHandle = 17;
 
     KineticStatus status = KineticClient_Connect(&config, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_HMAC_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 
@@ -133,7 +133,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_
     SessionHandle = 17;
 
     KineticStatus status = KineticClient_Connect(&config, NULL);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SESSION_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_EMPTY, status);
 }
 
 void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_INVALID_if_connection_for_handle_is_NULL(void)
@@ -148,7 +148,7 @@ void test_KineticClient_Connect_should_return_KINETIC_STATUS_SESSION_INVALID_if_
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, NULL);
 
     KineticStatus status = KineticClient_Connect(&config, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_CONNECTION_ERROR, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR, status);
 }
 
 void test_KineticClient_Connect_should_return_status_from_a_failed_connection(void)
@@ -165,7 +165,7 @@ void test_KineticClient_Connect_should_return_status_from_a_failed_connection(vo
     KineticConnection_FreeConnection_Expect(&SessionHandle);
 
     KineticStatus status = KineticClient_Connect(&config, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_HMAC_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 
@@ -174,7 +174,7 @@ void test_KineticClient_Disconnect_should_return_KINETIC_STATUS_CONNECTION_ERROR
     SessionHandle = DummyHandle;
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, NULL);
     KineticStatus status = KineticClient_Disconnect(&SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_CONNECTION_ERROR, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR, status);
 }
 
 void test_KineticClient_Disconnect_should_disconnect_and_free_the_connection_associated_with_handle(void)
@@ -184,7 +184,7 @@ void test_KineticClient_Disconnect_should_disconnect_and_free_the_connection_ass
     KineticConnection_Disconnect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
     KineticConnection_FreeConnection_Expect(&SessionHandle);
     KineticStatus status = KineticClient_Disconnect(&SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 
@@ -195,7 +195,7 @@ void test_KineticClient_Disconnect_should_return_status_from_KineticConnection_u
     KineticConnection_Disconnect_ExpectAndReturn(&Connection, KINETIC_STATUS_SESSION_INVALID);
     KineticConnection_FreeConnection_Expect(&SessionHandle);
     KineticStatus status = KineticClient_Disconnect(&SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SESSION_INVALID, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_INVALID, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 

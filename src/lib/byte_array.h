@@ -41,6 +41,7 @@ typedef struct {
 
 ByteBuffer ByteBuffer_Create(void* data, size_t max_len);
 ByteBuffer ByteBuffer_CreateWithArray(ByteArray array);
+void ByteBuffer_Reset(ByteBuffer* buffer);
 long ByteBuffer_BytesRemaining(const ByteBuffer buffer);
 ByteArray ByteBuffer_Consume(ByteBuffer* buffer, size_t len);
 bool ByteBuffer_Append(ByteBuffer* buffer, const void* data, size_t len);

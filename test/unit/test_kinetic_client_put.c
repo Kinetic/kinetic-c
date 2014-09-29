@@ -20,14 +20,17 @@
 
 #include "kinetic_client.h"
 #include "kinetic_types.h"
-#include <stdio.h>
-#include "protobuf-c/protobuf-c.h"
+#include "kinetic_types_internal.h"
+#include "kinetic_operation.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
+#include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
-#include "mock_kinetic_operation.h"
+#include <stdio.h>
+#include "protobuf-c/protobuf-c.h"
+#include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
 
@@ -53,7 +56,7 @@ void setUp(void)
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
-    TEST_ASSERT_EQUAL_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
 }
 
@@ -63,31 +66,35 @@ void tearDown(void)
 
 void test_KineticClient_Put_should_execute_PUT_operation(void)
 {
-    KineticOperation operation = {
-        .connection = &Connection,
-        .request = &Request,
-        .response = &Response,
-    };
-    BYTE_ARRAY_CREATE(value, PDU_VALUE_MAX_LEN);
+    ByteArray newVersion = ByteArray_CreateWithCString("v2.0");
+    ByteArray key = ByteArray_CreateWithCString("my_key_3.1415927");
+    ByteArray dbVersion = ByteArray_CreateWithCString("v1.0");
+    ByteArray tag = ByteArray_CreateWithCString("SomeTagValue");
+    ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
 
-    const KineticKeyValue const metadata = {
-        .newVersion = ByteArray_CreateWithCString("v2.0"),
-        .key = ByteArray_CreateWithCString("my_key_3.1415927"),
-        .dbVersion = ByteArray_CreateWithCString("v1.0"),
-        .tag = ByteArray_CreateWithCString("SomeTagValue"),
+    KineticEntry entry = {
+        .newVersion = ByteBuffer_CreateWithArray(newVersion),
+        .key = ByteBuffer_CreateWithArray(key),
+        .dbVersion = ByteBuffer_CreateWithArray(dbVersion),
+        .tag = ByteBuffer_CreateWithArray(tag),
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = value,
+        .value = ByteBuffer_CreateWithArray(value),
     };
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticOperation_Create_ExpectAndReturn(&Connection, operation);
-    KineticOperation_BuildPut_Expect(&operation, &metadata);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Response);
+    KineticPDU_Init_Expect(&Request, &Connection);
+    KineticPDU_Init_Expect(&Response, &Connection);
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
     KineticPDU_Send_ExpectAndReturn(&Request, true);
     KineticPDU_Receive_ExpectAndReturn(&Response, true);
-    KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
-    KineticOperation_Free_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_VERSION_FAILURE);
+    KineticAllocator_FreePDU_Expect(&Request);
+    KineticAllocator_FreePDU_Expect(&Response);
 
-    KineticStatus status = KineticClient_Put(DummyHandle, &metadata);
+    KineticStatus status = KineticClient_Put(DummyHandle, &entry);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_FAILURE, status);
 }

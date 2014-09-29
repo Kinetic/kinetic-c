@@ -51,10 +51,10 @@ void* KineticAllocator_NewItem(KineticList* list, size_t size)
     return newItem->data;
 }
 
-void KineticAllocator_FreeItem(KineticList* list, void** item)
+void KineticAllocator_FreeItem(KineticList* list, void* item)
 {
     KineticListItem* cur = list->start;
-    while (cur->data != *item) {
+    while (cur->data != item) {
         if (cur->next == NULL) {
             LOG("  Reached end of list before finding item to free!");
             return;
@@ -65,7 +65,7 @@ void KineticAllocator_FreeItem(KineticList* list, void** item)
     }
     LOG("  Done searching for item list item");
 
-    if ((cur != NULL) && (cur->data == *item)) {
+    if ((cur != NULL) && (cur->data == item)) {
         LOG("  item found! freeing it.");
 
         // Handle PDU list emptied
@@ -111,8 +111,6 @@ void KineticAllocator_FreeItem(KineticList* list, void** item)
         free(cur);
         cur = NULL;
     }
-
-    *item = NULL;
 }
 
 void KineticAllocator_FreeList(KineticList* list)
@@ -171,13 +169,13 @@ KineticPDU* KineticAllocator_NewPDU(void)
     return newPDU;
 }
 
-void KineticAllocator_FreePDU(KineticPDU** pdu)
+void KineticAllocator_FreePDU(KineticPDU* pdu)
 {
-    if (((*pdu)->proto != NULL) && (*pdu)->protobufDynamicallyExtracted) {
+    if ((pdu->proto != NULL) && pdu->protobufDynamicallyExtracted) {
         LOG("Freeing dynamically allocated protobuf");
-        KineticProto__free_unpacked((*pdu)->proto, NULL);
+        KineticProto__free_unpacked(pdu->proto, NULL);
     };
-    KineticAllocator_FreeItem(&PDUList, (void**)pdu);
+    KineticAllocator_FreeItem(&PDUList, (void*)pdu);
 }
 
 void KineticAllocator_FreeAllPDUs(void)

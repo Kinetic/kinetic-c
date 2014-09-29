@@ -82,7 +82,7 @@ void setUp(void)
 
     if (!TestDataWritten) {
         KineticStatus status = KineticClient_Put(Fixture.handle, &putMetadata);
-        TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         TEST_ASSERT_EQUAL_ByteArray(Version, putMetadata.dbVersion);
         TEST_ASSERT_ByteArray_NONE(putMetadata.newVersion);
         TEST_ASSERT_EQUAL_ByteArray(ValueKey, putMetadata.key);
@@ -106,7 +106,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
 
     KineticStatus status = KineticClient_Get(Fixture.handle, &getMetadata);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteArray(Version, getMetadata.dbVersion);
     TEST_ASSERT_ByteArray_NONE(getMetadata.newVersion);
     TEST_ASSERT_EQUAL_ByteArray(ValueKey, getMetadata.key);
@@ -126,7 +126,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
 
     KineticStatus status = KineticClient_Get(Fixture.handle, &metadata);
 
-    TEST_ASSERT_EQUAL_KINETIC_STATUS(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     // TEST_ASSERT_EQUAL_ByteArray(TestValue, metadata.value);
 }
 

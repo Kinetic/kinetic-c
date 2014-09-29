@@ -170,8 +170,8 @@ struct _KineticPDU {
     // bool rawProtoEnabled;
     uint8_t protobufRaw[PDU_PROTO_MAX_LEN];
 
-    // Object meta-data to be used/populated if provided and pertinent to the opearation
-    KineticEntry* entry;
+    // Object meta-data to be used/populated if provided and pertinent to the operation
+    KineticEntry entry;
 
     // Embedded HMAC instance
     KineticHMAC hmac;
@@ -222,10 +222,21 @@ typedef struct _KineticOperation {
 //     void        *allocator_data;
 // } ProtobufCAllocator;
 
-KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(KineticAlgorithm kinteicAlgorithm);
-KineticStatus KineticStatus_from_KineticProto(KineticProto_Status protoStatus);
-ByteArray ByteArray_from_ProtobufCBinaryData(ProtobufCBinaryData protoData);
+KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(
+    KineticAlgorithm kinteicAlgorithm);
+KineticAlgorithm KineticAlgorithm_from_KineticProto_Algorithm(
+    KineticProto_Algorithm protoAlgorithm);
+
+KineticProto_Synchronization KineticProto_Synchronization_from_KineticSynchronization(
+    KineticSynchronization sync_mode);
+KineticSynchronization KineticSynchronization_from_KineticProto_Synchronization(
+    KineticProto_Synchronization sync_mode);
+
+KineticStatus KineticProtoStatusCode_to_KineticStatus(
+    KineticProto_Status_StatusCode protoStatus);
+ByteArray ProtobufCBinaryData_to_ByteArray(ProtobufCBinaryData protoData);
 bool Copy_ProtobufCBinaryData_to_ByteArray(ByteArray dest, ProtobufCBinaryData src);
 bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData src);
+bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue, KineticEntry* entry);
 
 #endif // _KINETIC_TYPES_INTERNAL_H
