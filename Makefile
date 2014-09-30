@@ -34,7 +34,7 @@ CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PBC_LIB) -I$(PBC_INC) -I$(VND_INC)
 LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
-LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
+LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o $(OUT_DIR)/byte_array.o $(OUT_DIR)/kinetic_allocator.o $(OUT_DIR)/kinetic_types_internal.o
 
 default: $(KINETIC_LIB)
 
@@ -79,6 +79,12 @@ $(OUT_DIR)/protobuf-c.o: $(PBC_LIB)/protobuf-c/protobuf-c.c $(PBC_LIB)/protobuf-
 $(OUT_DIR)/kinetic_types.o: $(LIB_DIR)/kinetic_types.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/byte_array.o: $(LIB_DIR)/byte_array.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_allocator.o: $(LIB_DIR)/kinetic_allocator.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_types_internal.o: $(LIB_DIR)/kinetic_types_internal.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 
 $(KINETIC_LIB): $(LIB_OBJS) $(VERSION_FILE)
