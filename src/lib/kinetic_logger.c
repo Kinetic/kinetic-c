@@ -417,3 +417,9 @@ void KineticLogger_LogByteArray(const char* title, ByteArray bytes)
         LOGF("  %s : %s", hex, ascii);
     }
 }
+
+void KineticLogger_LogByteBuffer(const char* title, ByteBuffer buffer)
+{
+    ByteArray array = {.data = buffer.array.data, .len = buffer.bytesUsed};
+    KineticLogger_LogByteArray(title, array);
+}

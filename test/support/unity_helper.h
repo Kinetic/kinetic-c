@@ -75,9 +75,9 @@
     TEST_ASSERT_EQUAL_SIZET_MESSAGE(expected, actual, NULL);
 
 /** Custom Unity assertion which validates a the value of a Kinetic protocol status code */
-#define TEST_ASSERT_EQUAL_KineticStatus(expected, actual) \
+#define TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(expected, actual, msg) \
 if ((expected) != (actual)) { \
-    char err[128]; \
+    char err[256]; \
     const char* invalidStatus = "INVALID_STATUS"; \
     const char* statusDescExpected = invalidStatus; \
     if ((expected) >= 0 && (expected) < KINETIC_STATUS_COUNT) { \
@@ -86,9 +86,12 @@ if ((expected) != (actual)) { \
     if ((actual) >= 0 && (actual) < KINETIC_STATUS_COUNT) { \
         statusDescActual = KineticStatusDescriptor[(actual)]; } \
     sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
-        statusDescExpected, (expected), statusDescActual, (actual));\
+        statusDescExpected, (expected), statusDescActual, (actual)); \
+    if (msg != NULL) { strcat(err, " : "); strcat(err, msg); } \
     TEST_FAIL_MESSAGE(err); \
 }
+#define TEST_ASSERT_EQUAL_KineticStatus(expected, actual) \
+    TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(expected, actual, NULL);
 
 /** Custom Unity assertion which validates the expected int64_t value is
     packed properly into a buffer in Network Byte-Order (big endian) */

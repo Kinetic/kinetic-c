@@ -59,8 +59,6 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
     KineticPDU_Init(operation.request, connection);
     KINETIC_PDU_INIT_WITH_MESSAGE(operation.request, connection);
     operation.request->proto = &operation.request->protoData.message.proto;
-    // operation.request->proto->command->header->connectionID =
-    //     connection->connectionID;
 
     if (operation.response == NULL) {
         LOG("Response PDU could not be allocated!"

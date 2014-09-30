@@ -13,8 +13,8 @@
  * `NULL`-terminated.
  */
 typedef struct _ByteArray {
-    size_t  len;    /**< Number of bytes in the `data` field. */
-    uint8_t* data;  /**< Pointer to an allocated array of data bytes. */
+    const size_t  len;    /**< Number of bytes in the `data` field. */
+    uint8_t* const data;  /**< Pointer to an allocated array of data bytes. */
 } ByteArray;
 
 /** @brief Convenience macro to represent an empty array with no data */
@@ -22,8 +22,8 @@ typedef struct _ByteArray {
 
 ByteArray ByteArray_Create(void* data, size_t len);
 ByteArray ByteArray_CreateWithCString(char* str);
-void ByteArray_FillWithDummyData(ByteArray array);
-ByteArray ByteArray_GetSlice(ByteArray array, size_t start, size_t len);
+void ByteArray_FillWithDummyData(const ByteArray array);
+ByteArray ByteArray_GetSlice(const ByteArray array, size_t start, size_t len);
 
 /**
  * @brief Structure for an embedded ByteArray as a buffer
@@ -32,8 +32,8 @@ ByteArray ByteArray_GetSlice(ByteArray array, size_t start, size_t len);
  * byte is consumed, but shall not exceed the `array` length
  */
 typedef struct {
-    ByteArray   array;     /**< ByteArray holding allocated array w/length = allocated size */
-    size_t      bytesUsed; /**< Reflects the number of bytes used from the `array` */
+    const ByteArray array;     /**< ByteArray holding allocated array w/length = allocated size */
+    size_t          bytesUsed; /**< Reflects the number of bytes used from the `array` */
 } ByteBuffer;
 
 /** @brief Convenience macro to represent an empty buffer with no data */

@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_types_internal.h"
+#include "kinetic_logger.h"
 
 // Type mapping from from public to internal protobuf status type
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
@@ -188,24 +189,6 @@ ByteArray ProtobufCBinaryData_to_ByteArray(
     };
 }
 
-bool Copy_ProtobufCBinaryData_to_ByteArray(ByteArray dest,
-        ProtobufCBinaryData src)
-{
-    if (src.data == NULL || src.len == 0) {
-        return false;
-    }
-    if (dest.data == NULL || dest.len < src.len) {
-        return false;
-    }
-
-    bool success = (memcpy(dest.data, src.data, src.len) == dest.data);
-    if (success) {
-        dest.len = src.len;
-    }
-
-    return success;
-}
-
 
 bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData src)
 {
@@ -227,7 +210,6 @@ bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData
 
 bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue, KineticEntry* entry)
 {
-    bool success = false;
     bool bufferOverflow = false;
 
     if (keyValue != NULL && entry != NULL) {
@@ -237,6 +219,7 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             entry->newVersion.bytesUsed = keyValue->newVersion.len;
             if (entry->newVersion.array.data == NULL ||
                 entry->newVersion.array.len < keyValue->newVersion.len) {
+                LOG(" BUFFER_OVERRUN: newVersion");
                 bufferOverflow = true;
             }
             else {
@@ -250,6 +233,7 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
             if (entry->dbVersion.array.data == NULL ||
                 entry->dbVersion.array.len < keyValue->dbVersion.len) {
+                LOG(" BUFFER_OVERRUN: dbVersion");
                 bufferOverflow = true;
             }
             else {
@@ -268,6 +252,7 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             entry->key.bytesUsed = keyValue->key.len;
             if (entry->key.array.data == NULL ||
                 entry->key.array.len < keyValue->key.len) {
+                LOG(" BUFFER_OVERRUN: key");
                 bufferOverflow = true;
             }
             else {
@@ -281,6 +266,7 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             entry->tag.bytesUsed = keyValue->tag.len;
             if (entry->tag.array.data == NULL ||
                 entry->tag.array.len < keyValue->tag.len) {
+                LOG(" BUFFER_OVERRUN: tag");
                 bufferOverflow = true;
             }
             else {
@@ -306,10 +292,9 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             entry->synchronization = KineticSynchronization_from_KineticProto_Synchronization(
                     keyValue->synchronization);
         }
-
     }
 
-    return success;
+    return !bufferOverflow;
 }
 
 

@@ -235,7 +235,6 @@ KineticSynchronization KineticSynchronization_from_KineticProto_Synchronization(
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
     KineticProto_Status_StatusCode protoStatus);
 ByteArray ProtobufCBinaryData_to_ByteArray(ProtobufCBinaryData protoData);
-bool Copy_ProtobufCBinaryData_to_ByteArray(ByteArray dest, ProtobufCBinaryData src);
 bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData src);
 bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue, KineticEntry* entry);
 

@@ -88,8 +88,8 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     KineticPDU_Init_Expect(&Response, &Connection);
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
-    KineticPDU_Send_ExpectAndReturn(&Request, true);
-    KineticPDU_Receive_ExpectAndReturn(&Response, true);
+    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
+    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_VERSION_FAILURE);
     KineticAllocator_FreePDU_Expect(&Request);
     KineticAllocator_FreePDU_Expect(&Response);

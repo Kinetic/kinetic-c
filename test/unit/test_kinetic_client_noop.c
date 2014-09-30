@@ -74,8 +74,8 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticOperation_Create_ExpectAndReturn(&Connection, operation);
     KineticOperation_BuildNoop_Expect(&operation);
-    KineticPDU_Send_ExpectAndReturn(&Request, true);
-    KineticPDU_Receive_ExpectAndReturn(&Response, true);
+    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
+    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
     KineticOperation_Free_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
 

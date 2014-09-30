@@ -75,19 +75,43 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
 
     Value = ByteArray_Create(ValueData, sizeof(ValueData));
     ByteBuffer valueBuffer = ByteBuffer_CreateWithArray(Value);
+    uint8_t versionData[128];
+    ByteBuffer versionBuffer = ByteBuffer_Create(versionData, sizeof(versionData));
+    versionData[0] = 9;
+    versionData[1] = 8;
+    versionData[2] = 7;
+    versionData[3] = 6;
+    versionData[4] = 0xFF;
+    versionBuffer.bytesUsed = 5;
+    uint8_t keyData[128];
+    ByteBuffer keyBuffer = ByteBuffer_Create(keyData, sizeof(keyData));
+    keyData[0] = 5;
+    keyData[1] = 4;
+    keyData[2] = 3;
+    keyData[3] = 2;
+    keyData[4] = 1;
+    keyBuffer.bytesUsed = 5;
+
     KineticEntry reqEntry = {
-        .key = ByteBuffer_CreateWithArray(Key),
+        .key = keyBuffer,
         .tag = ByteBuffer_CreateWithArray(Tag),
+        .dbVersion = versionBuffer,
         .value = valueBuffer,
     };
 
     KineticProto_KeyValue keyValue = KINETIC_PROTO_KEY_VALUE__INIT;
-
-    KineticEntry respEntry = {
-        .key = ByteBuffer_CreateWithArray(Key),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .value = valueBuffer,
+    keyValue.key = (ProtobufCBinaryData) {
+        .data = (uint8_t*)keyData,
+        .len = 3,
     };
+    keyValue.has_key = true;
+
+    uint8_t respFakeVer[] = {12, 13, 14, 15, 16, 17};
+    keyValue.dbVersion = (ProtobufCBinaryData) {
+        .data = respFakeVer,
+        .len = sizeof(respFakeVer),
+    };
+    keyValue.has_dbVersion = true;
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticAllocator_NewPDU_ExpectAndReturn(&Request);
@@ -96,8 +120,8 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     KineticPDU_Init_Expect(&Response, &Connection);
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &reqEntry);
-    KineticPDU_Send_ExpectAndReturn(&Request, true);
-    KineticPDU_Receive_ExpectAndReturn(&Response, true);
+    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
+    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticPDU_GetKeyValue_ExpectAndReturn(&Response, &keyValue);
     KineticAllocator_FreePDU_Expect(&Request);
@@ -106,6 +130,9 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     KineticStatus status = KineticClient_Get(DummyHandle, &reqEntry);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    KineticLogger_LogByteBuffer("key", reqEntry.key);
+    KineticLogger_LogByteBuffer("dbVersion", reqEntry.dbVersion);
+    KineticLogger_LogByteBuffer("value", reqEntry.value);
 }
 
 #if 0
@@ -133,8 +160,8 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
     operation = KineticClient_CreateOperation(&connection, &Request, &Response);
 
     KineticOperation_BuildGet_Expect(&operation, &entry);
-    KineticPDU_Send_ExpectAndReturn(&Request, true);
-    KineticPDU_Receive_ExpectAndReturn(&Response, true);
+    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
+    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Get(&operation, &entry);
@@ -164,8 +191,8 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
     operation = KineticClient_CreateOperation(&connection, &Request, &Response);
 
     KineticOperation_BuildGet_Expect(&operation, &entry);
-    KineticPDU_Send_ExpectAndReturn(&Request, true);
-    KineticPDU_Receive_ExpectAndReturn(&Response, true);
+    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
+    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Get(&operation, &entry);

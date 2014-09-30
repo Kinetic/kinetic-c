@@ -153,6 +153,9 @@ typedef enum {
     KINETIC_STATUS_VERSION_FAILURE,     // Basically a VERSION_MISMATCH error for a PUT
     KINETIC_STATUS_DATA_ERROR,          // Device reported data error, no space or HMAC failure
     KINETIC_STATUS_BUFFER_OVERRUN,      // One or more of byte buffers did not fit all data
+    KINETIC_STATUS_MEMORY_ERROR,        // Failed allocating/deallocating memory
+    KINETIC_STATUS_SOCKET_TIMEOUT,      // A timeout occurred while waiting for a socket operation
+    KINETIC_STATUS_SOCKET_ERROR,        // An I/O error occurred during a socket operation
     KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 extern const char* KineticStatusDescriptor[];

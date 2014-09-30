@@ -25,8 +25,8 @@
 
 void KineticPDU_Init(KineticPDU* const pdu, KineticConnection* const connection);
 void KineticPDU_AttachEntry(KineticPDU* const pdu, KineticEntry* const entry);
-bool KineticPDU_Send(KineticPDU* request);
-bool KineticPDU_Receive(KineticPDU* response);
+KineticStatus KineticPDU_Send(KineticPDU* request);
+KineticStatus KineticPDU_Receive(KineticPDU* response);
 KineticStatus KineticPDU_GetStatus(KineticPDU* pdu);
 KineticProto_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu);
 

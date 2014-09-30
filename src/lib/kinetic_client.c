@@ -58,20 +58,22 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     LOGF("Executing operation: 0x%llX", operation);
     if (operation->request->entry.value.array.data != NULL
       && operation->request->entry.value.array.len > 0) {
-        KineticLogger_LogByteArray("  Sending PDU w/metadata:",
+        KineticLogger_LogByteArray("  Sending PDU w/value:",
             operation->request->entry.value.array);
     }
     else {
-        LOG("  Sending PDU w/o metadata");
+        LOG("  Sending PDU w/o value");
     }
 
     // Send the request
-    if (KineticPDU_Send(operation->request)) {
+    status = KineticPDU_Send(operation->request);
+    if (status == KINETIC_STATUS_SUCCESS) {
         // Associate response with same exchange as request
         operation->response->connection = operation->request->connection;
 
         // Receive the response
-        if (KineticPDU_Receive(operation->response)) {
+        status = KineticPDU_Receive(operation->response);
+        if (status == KINETIC_STATUS_SUCCESS) {
             status = KineticOperation_GetStatus(operation);
         }
     }
@@ -191,8 +193,8 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
     if (status == KINETIC_STATUS_SUCCESS) {
         // Propagate newVersion to dbVersion in metadata, if newVersion specified
         if (entry->newVersion.array.data != NULL && entry->newVersion.array.len > 0) {
-            entry->dbVersion.array = entry->newVersion.array;
-            entry->newVersion.array = BYTE_ARRAY_NONE;
+            entry->dbVersion = entry->newVersion;
+            entry->newVersion = BYTE_BUFFER_NONE;
         }
     }
 
@@ -224,38 +226,11 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
     // Update the entry upon success
     // entry->value.array.len = 0;
     if (status == KINETIC_STATUS_SUCCESS) {
-        KineticProto_KeyValue* keyValue =
-            KineticPDU_GetKeyValue(operation.response);
+        KineticProto_KeyValue* keyValue = KineticPDU_GetKeyValue(operation.response);
         if (keyValue != NULL) {
-            
-            if (!Copy_KineticProto_KeyValue_to_KineticEntry(
-                keyValue, entry))
-            {
-                return KINETIC_STATUS_BUFFER_OVERRUN;
+            if (!Copy_KineticProto_KeyValue_to_KineticEntry(keyValue, entry)) {
+                status = KINETIC_STATUS_BUFFER_OVERRUN;
             }
-
-            // if (entry->key.data != NULL)
-            // {
-            //     memcpy(entry->key.data, keyValue->key.data, keyValue->key.len);
-            //     entry->key.len = keyValue->key.len;
-            // }
-            // entry->key =
-            //     operation.response->proto->command->body->keyValue->key;
-
-            // if (entry->dbVersion.array.data != NULL) {
-            //     Copy_ProtobufCBinaryData_to_ByteBuffer(
-            //         entry->dbVersion, keyValue->dbVersion);
-            // }
-
-            // entry->tag =
-            //     operation.response->proto->command->body->keyValue->tag;
-            // entry->dbVersion =
-            //     operation.response->proto->command->body->keyValue->dbVersion;
-            // entry->newVersion =
-            //     operation.response->proto->command->body->keyValue->newVersion;
-            // entry->algorithm =
-            //     operation.response->proto->command->body->keyValue->algorithm;
-
         }
     }
 

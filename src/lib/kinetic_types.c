@@ -35,6 +35,9 @@ const char* KineticStatusDescriptor[] = {
     "VERSION_FAILURE",
     "DATA_ERROR",
     "BUFFER_OVERRUN",
+    "MEMORY_ERROR",
+    "SOCKET_TIMEOUT",
+    "SOCKET_ERROR",
 };
 
 const int KineticStatusDescriptorCount =

@@ -153,13 +153,16 @@ void KineticSocket_Close(int socket)
     }
 }
 
-bool KineticSocket_Read(int socket, ByteBuffer* dest)
+KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
 {
     LOGF("Reading %zd bytes into buffer @ 0x%zX from fd=%d",
-         dest->array.len, (size_t)dest->array.data, socket);
+         len, (size_t)dest->array.data, socket);
 
+    KineticStatus status = KINETIC_STATUS_INVALID;
+
+    // Read "up to" the allocated number of bytes into dest buffer
     while (dest->bytesUsed < dest->array.len) {
-        int status;
+        int opStatus;
         fd_set readSet;
         struct timeval timeout;
 
@@ -169,78 +172,163 @@ bool KineticSocket_Read(int socket, ByteBuffer* dest)
 
         FD_ZERO(&readSet);
         FD_SET(socket, &readSet);
-        status = select(socket + 1, &readSet, NULL, NULL, &timeout);
+        opStatus = select(socket + 1, &readSet, NULL, NULL, &timeout);
 
-        if (status < 0) { // Error occurred
+        if (opStatus < 0) { // Error occurred
             LOGF("Failed waiting to read from socket!"
                  " status=%d, errno=%d, desc='%s'",
-                 status, errno, strerror(errno));
-            return false;
+                 opStatus, errno, strerror(errno));
+            return KINETIC_STATUS_SOCKET_ERROR;
         }
-        else if (status == 0) { // Timeout occurred
+        else if (opStatus == 0) { // Timeout occurred
             LOG("Timed out waiting for socket data to arrive!");
-            return false;
+            return KINETIC_STATUS_SOCKET_TIMEOUT;
         }
-        else if (status > 0) { // Data available to read
+        else if (opStatus > 0) { // Data available to read
             // The socket is ready for reading
-            status = read(socket,
+            opStatus = read(socket,
                           &dest->array.data[dest->bytesUsed],
                           dest->array.len - dest->bytesUsed);
             // Retry if no data yet...
-            if (status == -1 &&
+            if (opStatus == -1 &&
                 ((errno == EINTR) ||
                  (errno == EAGAIN) ||
                  (errno == EWOULDBLOCK)
                 )) {
                 continue;
             }
-            else if (status <= 0) {
+            else if (opStatus <= 0) {
                 LOGF("Failed to read from socket!"
                      " status=%d, errno=%d, desc='%s'",
-                     status, errno, strerror(errno));
-                return false;
+                     opStatus, errno, strerror(errno));
+                return KINETIC_STATUS_SOCKET_ERROR;
             }
             else {
-                dest->bytesUsed += status;
+                dest->bytesUsed += opStatus;
                 LOGF("Received %d bytes (%zd of %zd)",
-                     status, dest->bytesUsed, dest->array.len);
+                     opStatus, dest->bytesUsed, len);
             }
         }
     }
 
-    LOGF("Received %zd of %zd bytes requested", dest->bytesUsed, dest->array.len);
+    // Flush any remaining data, in case of a truncated read w/short dest buffer
+    if (dest->bytesUsed < len) {
+        bool abortFlush = false;
 
-    return true;
-}
-
-bool KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
-{
-    LOGF("Reading %zd bytes of protobuf", pdu->header.protobufLength);
-    ByteArray recvArray = {
-        .data = pdu->protobufRaw,
-        .len = pdu->header.protobufLength
-    };
-    ByteBuffer recvBuffer = ByteBuffer_CreateWithArray(recvArray);
-
-    if (KineticSocket_Read(socket, &recvBuffer)) {
-        LOG("Read completed!");
-        pdu->proto = KineticProto__unpack(NULL,
-                                          recvBuffer.bytesUsed, recvBuffer.array.data);
-        if (pdu->proto == NULL) {
-            pdu->protobufDynamicallyExtracted = false;
-            LOG("Error unpacking incoming Kinetic protobuf message!");
+        uint8_t *discardedBytes = malloc(len - dest->bytesUsed);
+        if (discardedBytes == NULL) {
+            LOG("Failed allocating a socket read discard buffer!");
+            abortFlush = true;
+            status = KINETIC_STATUS_MEMORY_ERROR;
         }
-        else {
-            pdu->protobufDynamicallyExtracted = true;
-            LOG("Protobuf unpacked successfully!");
-            return true;
+        
+        while (!abortFlush && dest->bytesUsed < len) {
+            int opStatus;
+            fd_set readSet;
+            struct timeval timeout;
+            size_t remainingLen = len - dest->bytesUsed;
+
+            // Time out after 5 seconds
+            timeout.tv_sec = 5;
+            timeout.tv_usec = 0;
+
+            FD_ZERO(&readSet);
+            FD_SET(socket, &readSet);
+            opStatus = select(socket + 1, &readSet, NULL, NULL, &timeout);
+
+            if (opStatus < 0) { // Error occurred
+                LOGF("Failure trying to flush read socket data!"
+                     " status=%d, errno=%d, desc='%s'",
+                     status, errno, strerror(errno));
+                abortFlush = true;
+                status = KINETIC_STATUS_SOCKET_ERROR;
+                continue;
+            }
+            else if (opStatus == 0) { // Timeout occurred
+                LOG("Timed out waiting to flush socket data!");
+                abortFlush = true;
+                status = KINETIC_STATUS_SOCKET_TIMEOUT;
+                continue;
+            }
+            else if (opStatus > 0) { // Data available to read
+                // The socket is ready for reading
+                opStatus = read(socket, discardedBytes, remainingLen);
+                // Retry if no data yet...
+                if (opStatus == -1 &&
+                    ((errno == EINTR) ||
+                     (errno == EAGAIN) ||
+                     (errno == EWOULDBLOCK)
+                    )) {
+                    continue;
+                }
+                else if (opStatus <= 0) {
+                    LOGF("Failed to read from socket while flushing!"
+                         " status=%d, errno=%d, desc='%s'",
+                         opStatus, errno, strerror(errno));
+                    abortFlush = true;
+                    status = KINETIC_STATUS_SOCKET_ERROR;
+                }
+                else {
+                    dest->bytesUsed += opStatus;
+                    LOGF("Flushed %d bytes from socket read pipe (%zd of %zd)",
+                         opStatus, dest->bytesUsed, len);
+                }
+            }
         }
+
+        // Free up dynamically allocated memory before returning
+        if (discardedBytes != NULL) {
+            free(discardedBytes);
+        }
+
+        // Report any error that occurred during socket flush
+        if (abortFlush) {
+            LOG("Socket read pipe flush aborted!");
+            assert(status == KINETIC_STATUS_SUCCESS);
+            return status;
+        }
+
+        // Report truncation of data for any variable length byte arrays
+        LOGF("Socket read buffer was truncated due to buffer overrun!"
+            " received=%zu, copied=%zu",
+            len, dest->array.len);
+        return KINETIC_STATUS_BUFFER_OVERRUN;
     }
 
-    return false;
+    LOGF("Received %zd of %zd bytes requested", dest->bytesUsed, len);
+
+    return KINETIC_STATUS_SUCCESS;
 }
 
-bool KineticSocket_Write(int socket, ByteBuffer* src)
+KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
+{
+    size_t bytesToRead = pdu->header.protobufLength;
+    LOGF("Reading %zd bytes of protobuf", bytesToRead);
+    ByteBuffer recvBuffer = ByteBuffer_Create(pdu->protobufRaw, bytesToRead);
+    KineticStatus status = KineticSocket_Read(socket, &recvBuffer, bytesToRead);
+
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOG("Protobuf read failed!");
+        return status;
+    }
+
+    LOG("Read packed protobuf successfully!");
+
+    pdu->proto =
+        KineticProto__unpack(NULL, recvBuffer.bytesUsed, recvBuffer.array.data);
+    if (pdu->proto == NULL) {
+        pdu->protobufDynamicallyExtracted = false;
+        LOG("Error unpacking incoming Kinetic protobuf message!");
+        return KINETIC_STATUS_DATA_ERROR;
+    }
+    else {
+        pdu->protobufDynamicallyExtracted = true;
+        LOG("Protobuf unpacked successfully!");
+        return KINETIC_STATUS_SUCCESS;
+    }
+}
+
+KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
 {
     LOGF("Writing %zu bytes to socket...", src->array.len);
     for (src->bytesUsed = 0; src->bytesUsed < src->array.len;) {
@@ -256,19 +344,20 @@ bool KineticSocket_Write(int socket, ByteBuffer* src)
         }
         else if (status <= 0) {
             LOGF("Failed to write to socket! status=%d, errno=%d\n", status, errno);
-            return false;
+            return KINETIC_STATUS_SOCKET_ERROR;
         }
         else {
             src->bytesUsed += status;
             LOGF("Wrote %d bytes (%zu of %zu sent)", status, src->bytesUsed, src->array.len);
         }
     }
-    LOG("Write complete");
 
-    return true;
+    LOG("Socket write completed successfully");
+
+    return KINETIC_STATUS_SUCCESS;
 }
 
-bool KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
+KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
 {
     assert(pdu != NULL);
     LOGF("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
