@@ -7,6 +7,7 @@ PUB_INC = ./include
 API_NAME = kinetic_client
 LIB_DIR = ./src/lib
 PBC_INC = ./vendor/protobuf-c
+PBC_LIB = ./vendor/protobuf-c
 SOCKET99 = ./vendor/socket99
 VND_INC = ./vendor
 BIN = $(BIN_DIR)/kinetic_client
@@ -30,7 +31,7 @@ WARN = -Wall -Wextra -pedantic
 CDEFS += -D_POSIX_C_SOURCE=1
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 
-LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PBC_LIB) -I$(VND_INC)
+LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PBC_LIB) -I$(PBC_INC) -I$(VND_INC)
 LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
 LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
@@ -197,7 +198,8 @@ KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 KINETIC_SO_DEV = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).so
 KINETIC_SO_RELEASE = $(PREFIX)/lib$(KINETIC_LIB_NAME).so
-install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
+# install: $(KINETIC_LIB) $(KINETIC_SO_DEV) 
+install: $(KINETIC_LIB) 
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
@@ -207,7 +209,7 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	@echo
 	$(INSTALL) -d $(PREFIX)/lib/
 	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)/lib/
-	$(INSTALL) -c $(KINETIC_SO_DEV) $(PREFIX)/lib/
+	# $(INSTALL) -c $(KINETIC_SO_DEV) $(PREFIX)/lib/
 	$(INSTALL) -d $(PREFIX)/include/
 	$(INSTALL) -c ./include/$(API_NAME).h $(PREFIX)/include/
 	$(INSTALL) -c ./include/kinetic_types.h $(PREFIX)/include/
