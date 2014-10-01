@@ -54,35 +54,34 @@ void test_ByteArray_GetSlice_should_return_a_subarray_of_the_ByteArray(void)
     uint8_t data[] = {0x1u, 0x2u, 0x3u, 0x4u};
     size_t len = sizeof(data);
     ByteArray array = {.data = data, .len = len};
-    ByteArray slice = BYTE_ARRAY_NONE;
     size_t sliceLen;
 
     // Validate slice of full array
-    slice = ByteArray_GetSlice(array, 0, len);
-    TEST_ASSERT_EQUAL_PTR(data, slice.data);
-    TEST_ASSERT_EQUAL(len, slice.len);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(data, slice.data, len);
+    ByteArray slice0 = ByteArray_GetSlice(array, 0, len);
+    TEST_ASSERT_EQUAL_PTR(data, slice0.data);
+    TEST_ASSERT_EQUAL(len, slice0.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(data, slice0.data, len);
 
     // Validate slice from beginning of array
     sliceLen = len - 1;
-    slice = ByteArray_GetSlice(array, 0, sliceLen);
-    TEST_ASSERT_EQUAL_PTR(data, slice.data);
-    TEST_ASSERT_EQUAL(sliceLen, slice.len);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(data, slice.data, sliceLen);
+    ByteArray slice1 = ByteArray_GetSlice(array, 0, sliceLen);
+    TEST_ASSERT_EQUAL_PTR(data, slice1.data);
+    TEST_ASSERT_EQUAL(sliceLen, slice1.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(data, slice1.data, sliceLen);
 
     // Validate slice from non-start to the end of the array
     sliceLen = len - 1;
-    slice = ByteArray_GetSlice(array, 1, sliceLen);
-    TEST_ASSERT_EQUAL_PTR(&data[1], slice.data);
-    TEST_ASSERT_EQUAL(sliceLen, slice.len);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[1], slice.data, sliceLen);
+    ByteArray slice2 = ByteArray_GetSlice(array, 1, sliceLen);
+    TEST_ASSERT_EQUAL_PTR(&data[1], slice2.data);
+    TEST_ASSERT_EQUAL(sliceLen, slice2.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[1], slice2.data, sliceLen);
 
     // Validate slice from middle of the array
     sliceLen = len - 2;
-    slice = ByteArray_GetSlice(array, 1, sliceLen);
-    TEST_ASSERT_EQUAL_PTR(&data[1], slice.data);
-    TEST_ASSERT_EQUAL(sliceLen, slice.len);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[1], slice.data, sliceLen);
+    ByteArray slice3 = ByteArray_GetSlice(array, 1, sliceLen);
+    TEST_ASSERT_EQUAL_PTR(&data[1], slice3.data);
+    TEST_ASSERT_EQUAL(sliceLen, slice3.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[1], slice3.data, sliceLen);
 }
 
 void test_ByteBuffer_Create_should_create_an_empty_ByteBuffer_with_specified_array_and_max_length(void)
@@ -145,40 +144,39 @@ void test_ByteBuffer_Consume(void)
     size_t totalConsumed = 0;
     size_t lenToConsume;
     ByteArray array = {.data = data, .len = len};
-    ByteArray consumed;
 
     ByteBuffer buffer = ByteBuffer_CreateWithArray(array);
 
     lenToConsume = 2;
     totalConsumed += lenToConsume;
-    consumed = ByteBuffer_Consume(&buffer, lenToConsume);
-    TEST_ASSERT_EQUAL_PTR(array.data, consumed.data);
-    TEST_ASSERT_EQUAL(totalConsumed, consumed.len);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[0], consumed.data, totalConsumed);
+    ByteArray consumed0 = ByteBuffer_Consume(&buffer, lenToConsume);
+    TEST_ASSERT_EQUAL_PTR(array.data, consumed0.data);
+    TEST_ASSERT_EQUAL(totalConsumed, consumed0.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[0], consumed0.data, totalConsumed);
     TEST_ASSERT_EQUAL(totalConsumed, buffer.bytesUsed);
 
     lenToConsume = 1;
     totalConsumed += lenToConsume;
-    consumed = ByteBuffer_Consume(&buffer, lenToConsume);
-    TEST_ASSERT_EQUAL_PTR(&array.data[2], consumed.data);
-    TEST_ASSERT_EQUAL(lenToConsume, consumed.len);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[2], consumed.data, lenToConsume);
+    ByteArray consumed1 = ByteBuffer_Consume(&buffer, lenToConsume);
+    TEST_ASSERT_EQUAL_PTR(&array.data[2], consumed1.data);
+    TEST_ASSERT_EQUAL(lenToConsume, consumed1.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[2], consumed1.data, lenToConsume);
     TEST_ASSERT_EQUAL(totalConsumed, buffer.bytesUsed);
 
     lenToConsume = 2;
     totalConsumed += lenToConsume;
-    consumed = ByteBuffer_Consume(&buffer, lenToConsume);
-    TEST_ASSERT_EQUAL_PTR(&array.data[3], consumed.data);
-    TEST_ASSERT_EQUAL(lenToConsume, consumed.len);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[3], consumed.data, lenToConsume);
+    ByteArray consumed2 = ByteBuffer_Consume(&buffer, lenToConsume);
+    TEST_ASSERT_EQUAL_PTR(&array.data[3], consumed2.data);
+    TEST_ASSERT_EQUAL(lenToConsume, consumed2.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[3], consumed2.data, lenToConsume);
     TEST_ASSERT_EQUAL(totalConsumed, buffer.bytesUsed);
     TEST_ASSERT_EQUAL(len, buffer.bytesUsed);
 
     // Try to consume from a fully consumed buffer
     lenToConsume = 1;
-    consumed = ByteBuffer_Consume(&buffer, lenToConsume);
-    TEST_ASSERT_EQUAL(0, consumed.len);
-    TEST_ASSERT_NULL(consumed.data);
+    ByteArray consumed3 = ByteBuffer_Consume(&buffer, lenToConsume);
+    TEST_ASSERT_EQUAL(0, consumed3.len);
+    TEST_ASSERT_NULL(consumed3.data);
     TEST_ASSERT_EQUAL(totalConsumed, buffer.bytesUsed);
     TEST_ASSERT_EQUAL(len, buffer.bytesUsed);
 }
@@ -213,21 +211,17 @@ void test_ByteBuffer_AppendArray_should_append_an_array_to_the_buffer(void)
     size_t len = sizeof(data);
     ByteBuffer buffer = ByteBuffer_Create(data, len);
     uint8_t appendData[len];
-    ByteArray appendArray;
 
     appendData[0] = 0xFCu;
-    appendArray = (ByteArray) {
+    ByteArray appendArray0 = (ByteArray) {
         .data = appendData, .len = 1
     };
-    TEST_ASSERT_TRUE(ByteBuffer_AppendArray(&buffer, appendArray));
+    TEST_ASSERT_TRUE(ByteBuffer_AppendArray(&buffer, appendArray0));
     TEST_ASSERT_EQUAL(1, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(appendData, buffer.array.data, 1);
 
     appendData[1] = 0xABu;
     appendData[2] = 0x8Cu;
-    appendArray = (ByteArray) {
-        .data = &appendData[1], .len = 2
-    };
     TEST_ASSERT_TRUE(ByteBuffer_Append(&buffer, &appendData[1], 2));
     TEST_ASSERT_EQUAL(3, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(appendData, buffer.array.data, 3);
