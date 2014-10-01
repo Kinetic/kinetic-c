@@ -28,13 +28,13 @@ OPTIMIZE = -O3
 WARN = -Wall -Wextra -pedantic
 # This is necessary because the library depends on
 # both C99 _and_ POSIX (for the BSD sockets API).
-CDEFS += -D_POSIX_C_SOURCE=1
+CDEFS += -D_POSIX_C_SOURCE=1 -D_C99_SOURCE=1
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PBC_LIB) -I$(PBC_INC) -I$(VND_INC)
-LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h
+LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/byte_array.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h $(LIB_DIR)/kinetic_types_internal.h
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
-LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
+LIB_OBJS = $(OUT_DIR)/kinetic_allocator.o $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_types_internal.o $(OUT_DIR)/byte_array.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o 
 
 default: $(KINETIC_LIB)
 
@@ -54,6 +54,8 @@ clean:
 # $(OUT_DIR)/%.o: %.c $(DEPS)
 # 	$(CC) -c -o $@ $< $(CFLAGS)
 
+$(OUT_DIR)/kinetic_allocator.o: $(LIB_DIR)/kinetic_allocator.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_nbo.o: $(LIB_DIR)/kinetic_nbo.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_pdu.o: $(LIB_DIR)/kinetic_pdu.c $(LIB_DEPS)
@@ -72,12 +74,16 @@ $(OUT_DIR)/kinetic_connection.o: $(LIB_DIR)/kinetic_connection.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_operation.o: $(LIB_DIR)/kinetic_operation.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_types.o: $(LIB_DIR)/kinetic_types.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_types_internal.o: $(LIB_DIR)/kinetic_types_internal.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/byte_array.o: $(LIB_DIR)/byte_array.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PBC_LIB)/protobuf-c/protobuf-c.c $(PBC_LIB)/protobuf-c/protobuf-c.h
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall $(OPTIMIZE) -I$(PBC_LIB)
-$(OUT_DIR)/kinetic_types.o: $(LIB_DIR)/kinetic_types.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 
@@ -89,14 +95,14 @@ $(KINETIC_LIB): $(LIB_OBJS) $(VERSION_FILE)
 	ar -rcs $@ $(LIB_OBJS)
 	ar -t $@
 
-$(KINETIC_SO): $(KINETIC_LIB)
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Building dynamic library: $(KINETIC_SO)
-	@echo --------------------------------------------------------------------------------
-	$(CC)(-) $(KINETIC_SO_DEV) -shared $(LDFLAGS) $(LIB_OBJS)
+# $(KINETIC_SO): $(KINETIC_LIB)
+# 	@echo
+# 	@echo --------------------------------------------------------------------------------
+# 	@echo Building dynamic library: $(KINETIC_SO)
+# 	@echo --------------------------------------------------------------------------------
+# 	$(CC)(-) $(KINETIC_SO_DEV) -shared $(LDFLAGS) $(LIB_OBJS)
 
-libso: $(KINETIC_SO)
+# libso: $(KINETIC_SO)
 
 UTIL_DIR = ./src/utility
 UTIL_EX = $(UTIL_DIR)/examples
@@ -106,26 +112,26 @@ UTIL_OBJS = $(OUT_DIR)/main.o $(UTIL_INTERNAL_OBJS)
 DEV_UTIL_INCS = -I./include -I$(UTIL_DIR)
 DEV_UTIL_LDFLAGS += $(LDFLAGS) $(KINETIC_LIB)
 
-$(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c $(UTIL_EX)/noop.h
-	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
-$(OUT_DIR)/put.o: $(UTIL_EX)/put.c $(UTIL_EX)/put.h
-	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
-$(OUT_DIR)/get.o: $(UTIL_EX)/get.c $(UTIL_EX)/get.h
-	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
-$(OUT_DIR)/delete.o: $(UTIL_EX)/delete.c $(UTIL_EX)/delete.h
-	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
-$(OUT_DIR)/main.o: $(UTIL_DIR)/main.c $(UTIL_INTERNAL_OBJS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
+# $(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c $(UTIL_EX)/noop.h
+# 	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
+# $(OUT_DIR)/put.o: $(UTIL_EX)/put.c $(UTIL_EX)/put.h
+# 	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
+# $(OUT_DIR)/get.o: $(UTIL_EX)/get.c $(UTIL_EX)/get.h
+# 	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
+# $(OUT_DIR)/delete.o: $(UTIL_EX)/delete.c $(UTIL_EX)/delete.h
+# 	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
+# $(OUT_DIR)/main.o: $(UTIL_DIR)/main.c $(UTIL_INTERNAL_OBJS)
+# 	$(CC) -c -o $@ $< $(CFLAGS) $(DEV_UTIL_INCS)
 
-UTIL_NAME = $(UTIL_EXEC_NAME)
-DEV_UTIL_EXEC = $(BIN_DIR)/$(DEV_UTIL_NAME)
+# UTIL_NAME = $(UTIL_EXEC_NAME)
+# DEV_UTIL_EXEC = $(BIN_DIR)/$(DEV_UTIL_NAME)
 
-$(DEV_UTIL_EXEC): $(UTIL_OBJS) $(KINETIC_LIB)
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Building development test utility: $(DEV_UTIL_EXEC)
-	@echo --------------------------------------------------------------------------------
-	$(CC) -o $@ $(UTIL_OBJS) $(CFLAGS) $(DEV_UTIL_LDFLAGS)
+# $(DEV_UTIL_EXEC): $(UTIL_OBJS) $(KINETIC_LIB)
+# 	@echo
+# 	@echo --------------------------------------------------------------------------------
+# 	@echo Building development test utility: $(DEV_UTIL_EXEC)
+# 	@echo --------------------------------------------------------------------------------
+# 	$(CC) -o $@ $(UTIL_OBJS) $(CFLAGS) $(DEV_UTIL_LDFLAGS)
 
 
 # # Common release includes and linker flags
@@ -154,7 +160,7 @@ $(DEV_UTIL_EXEC): $(UTIL_OBJS) $(KINETIC_LIB)
 # 	$(CC) -o $@ -L$(PREFIX) -l $(PROJECT).so.$(VERSION) $< $(UTIL_OBJS) $(REL_UTIL_INCS) $(CFLAGS) $(LDFLAGS)
 
 # utility: $(UTIL_EXEC) $(REL_UTIL_DYN)
-utility: $(UTIL_EXEC)
+# utility: $(UTIL_EXEC)
 
 # Configure to launch java simulator
 # JAVA=$(JAVA_HOME)/bin/java
@@ -163,20 +169,20 @@ CLASSPATH = $(JAVA_HOME)/lib/tools.jar:$(SIM_JARS_PREFIX)-jar-with-dependencies.
 SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
 SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
 
-run: $(UTIL_EXEC)
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Running test utility: $(UTIL_EXEC)
-	@echo --------------------------------------------------------------------------------
-	@sleep 2
-	exec java -classpath "$(CLASSPATH)" $(SIM_RUNNER) "$@" &
-	@sleep 5
-	exec java -classpath "$(CLASSPATH)" $(SIM_ADMIN) -setup -erase true
-	$(UTIL_EXEC) noop
-	$(UTIL_EXEC) put
-	$(UTIL_EXEC) get
-	$(UTIL_EXEC) delete
-	exec pkill -f 'java.*kinetic-simulator'
+# run: $(DEV_UTIL_EXEC)
+# 	@echo
+# 	@echo --------------------------------------------------------------------------------
+# 	@echo Running test utility: $(DEV_UTIL_EXEC)
+# 	@echo --------------------------------------------------------------------------------
+# 	@sleep 2
+# 	exec java -classpath "$(CLASSPATH)" $(SIM_RUNNER) "$@" &
+# 	@sleep 5
+# 	exec java -classpath "$(CLASSPATH)" $(SIM_ADMIN) -setup -erase true
+# 	$(DEV_UTIL_EXEC) noop
+# 	$(DEV_UTIL_EXEC) put
+# 	$(DEV_UTIL_EXEC) get
+# 	$(DEV_UTIL_EXEC) delete
+# 	exec pkill -f 'java.*kinetic-simulator'
 
 # rund: $(REL_UTIL_DYN)
 # 	@echo
@@ -231,7 +237,8 @@ uninstall:
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
 
 # all: uninstall clean test default install run rund
-all: clean test default run
+# all: clean test default run
+all: clean test default
 
 # ci: uninstall clean test default install rund
 # 	@echo

@@ -50,20 +50,32 @@
 
 static int FileDesc;
 static int KineticTestPort = KINETIC_PORT;
-static ByteArray TestData;
+static uint8_t TestData[128];
+static ByteBuffer TestDataBuffer;
 static bool LogInitialized = false;
 static KineticPDU PDU;
 static bool SocketReadRequested;
 
 void Socket_RequestBytes(size_t count)
 {
-    // Send request to test server to send us some data
     char request[10];
-    snprintf(request, sizeof(request), "read(%zu)", count);
-    ByteBuffer requestBuffer = ByteBuffer_Create((uint8_t*)request, strlen(request));
+    sprintf(request, "read(%zu)", count);
+    uint8_t requestData[64];
+    ByteBuffer requestBuffer = ByteBuffer_Create(requestData, sizeof(requestData));
+    ByteBuffer_AppendCString(&requestBuffer, request);
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
         KINETIC_STATUS_SUCCESS, KineticSocket_Write(FileDesc, &requestBuffer),
-        "Failed requesting dummy test data from test socket server");
+        "Failed requesting dummy data from test socket server");
+}
+
+void Socket_RequestProtobuf(void)
+{
+    uint8_t requestData[64];
+    ByteBuffer requestBuffer = ByteBuffer_Create(requestData, sizeof(requestData));
+    ByteBuffer_AppendCString(&requestBuffer, "readProto()");
+    TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
+        KINETIC_STATUS_SUCCESS, KineticSocket_Write(FileDesc, &requestBuffer),
+        "Failed requesting dummy protobuf from test socket server");
 }
 
 void Socket_FlushReadPipe(void)
@@ -83,7 +95,8 @@ void setUp(void)
         KineticLogger_Init(NULL);//"test_kinetic_socket.log");
         LogInitialized = true;
     }
-    TestData = ByteArray_CreateWithCString("Some like it hot!");
+    TestDataBuffer = ByteBuffer_Create(TestData, sizeof(TestData));
+    ByteBuffer_AppendCString(&TestDataBuffer, "Some like it hot!");
 }
 
 void tearDown(void)
@@ -97,6 +110,7 @@ void tearDown(void)
         FileDesc = 0;
     }
 }
+
 
 void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
 {
@@ -127,11 +141,9 @@ void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void
     TEST_IGNORE_MESSAGE("Disabled on Linux until KineticRuby server client connection cleanup is fixed!");
 #endif
 
-    ByteBuffer sendBuffer = ByteBuffer_CreateWithArray(TestData);
-    KineticStatus status = KineticSocket_Write(FileDesc, &sendBuffer);
+    KineticStatus status = KineticSocket_Write(FileDesc, &TestDataBuffer);
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
         KINETIC_STATUS_SUCCESS, status, "Failed to write to socket!");
-    TEST_ASSERT_EQUAL(TestData.len, sendBuffer.bytesUsed);
     Socket_FlushReadPipe();
 }
 
@@ -224,6 +236,7 @@ void test_KineticSocket_Read_should_read_up_to_the_array_length_into_the_buffer_
 }
 
 
+
 void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
 {
     LOG_LOCATION;
@@ -239,18 +252,14 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     // Send request to test server to send us a Kinetic protobuf
-    ByteArray requestArray = ByteArray_CreateWithCString("readProto()");
-    ByteBuffer requestBuffer = ByteBuffer_CreateWithArray(requestArray);
-    KineticStatus status = KineticSocket_Write(FileDesc, &requestBuffer);
-    TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(KINETIC_STATUS_SUCCESS, status,
-        "Failed sending protobuf read request");
+    Socket_RequestProtobuf();
 
     // Receive the response
     KINETIC_PDU_INIT(&PDU, &connection);
     PDU.header.protobufLength = 125;
     TEST_ASSERT_FALSE(PDU.protobufDynamicallyExtracted);
     TEST_ASSERT_NULL(PDU.proto);
-    status = KineticSocket_ReadProtobuf(FileDesc, &PDU);
+    KineticStatus status = KineticSocket_ReadProtobuf(FileDesc, &PDU);
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(KINETIC_STATUS_SUCCESS, status,
         "Failed receiving protobuf response");
     TEST_ASSERT_NOT_NULL_MESSAGE(

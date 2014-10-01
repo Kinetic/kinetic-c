@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_message.h"
+#include "kinetic_logger.h"
 
 void KineticMessage_Init(KineticMessage* const message)
 {
@@ -28,10 +29,16 @@ void KineticMessage_Init(KineticMessage* const message)
 
 // e.g. CONFIG_FIELD_BYTE_BUFFER(key, message->keyValue, entry)
 #define CONFIG_FIELD_BYTE_BUFFER(_name, _field, _entry) { \
-    if ((_entry)->_name.array.data != NULL && (_entry)->_name.array.len > 0) { \
-        _field._name.data = (_entry)->_name.array.data; \
-        _field._name.len = (_entry)->_name.array.len; \
-        _field.has_ ## _name = true; \
+    if ((_entry)->_name.array.data != NULL \
+        && (_entry)->_name.array.len > 0 \
+        && (_entry)->_name.bytesUsed > 0 \
+        && (_entry)->_name.bytesUsed <= (_entry)->_name.array.len) { \
+        (_field)._name.data = (_entry)->_name.array.data; \
+        (_field)._name.len = (_entry)->_name.bytesUsed; \
+        (_field).has_ ## _name = true; \
+    } \
+    else { \
+        (_field).has_ ## _name = false; \
     } \
 }
 
@@ -49,10 +56,10 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->proto.command->body->keyValue = &message->keyValue;
 
     // Set keyValue fields appropriately
-    CONFIG_FIELD_BYTE_BUFFER(key, message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(key,        message->keyValue, entry);
     CONFIG_FIELD_BYTE_BUFFER(newVersion, message->keyValue, entry);
-    CONFIG_FIELD_BYTE_BUFFER(dbVersion, message->keyValue, entry);
-    CONFIG_FIELD_BYTE_BUFFER(tag, message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(dbVersion,  message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(tag,        message->keyValue, entry);
 
     message->keyValue.has_force = (bool)((int)entry->force);
     if (message->keyValue.has_force) {

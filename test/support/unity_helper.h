@@ -22,6 +22,7 @@
 #define _UNITY_HELPER
 
 #include "unity.h"
+#include "unity_byte_Array_helper.h"
 #include "kinetic_types.h"
 #include <stdio.h>
 #include <string.h>
@@ -74,6 +75,7 @@
 #define TEST_ASSERT_EQUAL_SIZET(expected, actual) \
     TEST_ASSERT_EQUAL_SIZET_MESSAGE(expected, actual, NULL);
 
+
 /** Custom Unity assertion which validates a the value of a Kinetic protocol status code */
 #define TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(expected, actual, msg) \
 if ((expected) != (actual)) { \
@@ -101,61 +103,6 @@ if ((expected) != (actual)) { \
     sprintf(err, "@ index %zu", i); \
     TEST_ASSERT_EQUAL_INT32_MESSAGE(expected, val, err); \
 }
-
-
-
-/** Custom Unity/CMock equality assertion for validating equality of ByteArrays */
-#define TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, msg) \
-    TEST_ASSERT_EQUAL_INT_MESSAGE((expected).len, (actual).len, "Lengths do not match!"); \
-    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((expected).data, (actual).data, (expected).len, "Data does not match!");
-#define TEST_ASSERT_EQUAL_ByteArray(expected, actual) \
-    TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, NULL);
-
-/** Custom Unity assertion for validating empty ByteArrays */
-#define TEST_ASSERT_ByteArray_EMPTY(_actual) \
-    TEST_ASSERT_EQUAL_INT_MESSAGE(0, (_actual).len, "ByteArray length is non-zero!");
-#define TEST_ASSERT_ByteArray_NONE(_actual) \
-    TEST_ASSERT_ByteArray_EMPTY(_actual); \
-    TEST_ASSERT_NULL_MESSAGE((_actual).data, "ByteArray has non-null buffer");
-
-
-/** Custom Unity/CMock equality assertion for validating equality of ByteBuffers */
-#define TEST_ASSERT_EQUAL_ByteBuffer_MESSAGE(_expected, _actual, _msg) \
-    TEST_ASSERT_EQUAL_SIZET_MESSAGE((_expected).array.len, \
-        ((_actual)).array.len, \
-        "ByteBuffer array lengths do not match! " (_msg); \
-    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((_expected).array.data, \
-        ((_actual)).array.data, (_expected).array.len, \
-        "ByteBuffer data does not match! " (_msg); \
-    TEST_ASSERT_EQUAL_SIZET_MESSAGE((_expected).bytesUsed, \
-        ((_actual)).bytesUsed, "ByteBuffer bytesUsed do not match! " (_msg);
-#define TEST_ASSERT_EQUAL_ByteBuffer(_expected, _actual) \
-    TEST_ASSERT_EQUAL_ByteBuffer_MESSAGE((_expected), (_actual), (""));
-
-
-/** Custom Unity assertion for validating empty ByteArrays */
-// #define TEST_ASSERT_ByteBuffer_EMPTY_MESSAGE(_actual, _msg) \
-//     TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, \
-//         (_actual).bytesUsed, "ByteBuffer bytes used greater than zero! " (_msg));
-#define TEST_ASSERT_ByteBuffer_EMPTY(_actual) \
-    TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, \
-        (_actual).bytesUsed, "ByteBuffer bytes used greater than zero!");
-
-/** Custom Unity assertion for validating NULL ByteArrays */
-// #define TEST_ASSERT_ByteBuffer_NULL_MESSAGE(_actual, _msg) \
-//     TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, (_actual).array.len, \
-//         "ByteBuffer array was not empty! " (_msg)); \
-//     TEST_ASSERT_NULL_MESSAGE((_actual).array.data, \
-//         "ByteBuffer array was not NULL! " (_msg)); \
-//     TEST_ASSERT_ByteBuffer_EMPTY_MESSAGE((_actual), (_msg));
-#define TEST_ASSERT_ByteBuffer_NULL(_actual) \
-    TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, (_actual).array.len, \
-        "ByteBuffer array was not empty!"); \
-    TEST_ASSERT_NULL_MESSAGE((_actual).array.data, \
-        "ByteBuffer array was not NULL!"); \
-    TEST_ASSERT_ByteBuffer_EMPTY((_actual));
-
-
 
 #define GET_CWD(cwd) \
     TEST_ASSERT_NOT_NULL_MESSAGE(getcwd(cwd, sizeof(cwd)), "Failed getting current working directory");

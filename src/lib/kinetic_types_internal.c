@@ -256,8 +256,7 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->key.array.data, keyValue->key.data,
-                    keyValue->key.len);
+                memcpy(entry->key.array.data, keyValue->key.data, keyValue->key.len);
             }
         }
 
@@ -270,8 +269,7 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->tag.array.data, keyValue->tag.data,
-                    keyValue->tag.len);
+                memcpy(entry->tag.array.data, keyValue->tag.data, keyValue->tag.len);
             }
         }
 
@@ -289,7 +287,8 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
 
         if (keyValue->has_synchronization)
         {
-            entry->synchronization = KineticSynchronization_from_KineticProto_Synchronization(
+            entry->synchronization =
+                KineticSynchronization_from_KineticProto_Synchronization(
                     keyValue->synchronization);
         }
     }

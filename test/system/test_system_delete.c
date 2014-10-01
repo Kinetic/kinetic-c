@@ -52,24 +52,46 @@ static SystemTestFixture Fixture = {
         .logFile = "",
     }
 };
-static ByteArray ValueKey;
+
+static char HmacKeyString[] = "asdfasdf";
+static ByteArray HmacKey;
+static uint8_t KeyData[1024];
+static ByteArray Key;
+static ByteBuffer KeyBuffer;
+static uint8_t TagData[1024];
 static ByteArray Tag;
-static ByteArray TestValue;
+static ByteBuffer TagBuffer;
+static uint8_t VersionData[1024];
 static ByteArray Version;
-static ByteArray NewVersion;
+static ByteBuffer VersionBuffer;
 static ByteArray TestValue;
-static uint8_t ValueBuffer[PDU_VALUE_MAX_LEN];
-static ByteArray ValueIn = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
+static uint8_t ValueData[PDU_VALUE_MAX_LEN];
+static ByteArray Value;
+static ByteBuffer ValueBuffer;
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-    Fixture.config.hmacKey = ByteArray_CreateWithCString("asdfasdf");
-    ValueKey = ByteArray_CreateWithCString("DELETE test key");
-    Version = ByteArray_CreateWithCString("v1.0");
-    NewVersion = ByteArray_CreateWithCString("v2.0");
-    Tag = ByteArray_CreateWithCString("SomeTagValue");
-    TestValue = ByteArray_CreateWithCString("lorem ipsum... blah... etc...");
+
+    HmacKey = ByteArray_CreateWithCString(HmacKeyString);
+    Fixture.config.hmacKey = HmacKey;
+
+    Key = ByteArray_Create(KeyData, sizeof(KeyData));
+    KeyBuffer = ByteBuffer_CreateWithArray(Key);
+    ByteBuffer_AppendCString(&KeyBuffer, "DELETE test key");
+
+    Tag = ByteArray_Create(TagData, sizeof(TagData));
+    TagBuffer = ByteBuffer_CreateWithArray(Tag);
+    ByteBuffer_AppendCString(&TagBuffer, "SomeTagValue");
+
+    Version = ByteArray_Create(VersionData, sizeof(VersionData));
+    VersionBuffer = ByteBuffer_CreateWithArray(Version);
+    ByteBuffer_AppendCString(&VersionBuffer, "v1.0");
+
+    TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
+    Value = ByteArray_Create(ValueData, sizeof(ValueData));
+    ValueBuffer = ByteBuffer_CreateWithArray(Value);
+    ByteBuffer_AppendCString(&ValueBuffer, "lorem ipsum... blah blah blah... etc.");
 }
 
 void tearDown(void)
@@ -86,29 +108,31 @@ void tearDown(void)
 //  TBD!
 //
 void test_Delete_should_delete_an_object_from_device(void)
-{
+{ LOG_LOCATION;
     KineticStatus status;
 
     // Create an object so that we have something to delete
     KineticEntry putEntry = {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-        .newVersion = ByteBuffer_CreateWithArray(Version),
-        .tag = ByteBuffer_CreateWithArray(Tag),
+        .key = KeyBuffer,
+        .newVersion = VersionBuffer,
+        .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
+        .value = ValueBuffer,
     };
     status = KineticClient_Put(Fixture.handle, &putEntry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteArray(Version, putEntry.dbVersion.array);
     TEST_ASSERT_ByteArray_NONE(putEntry.newVersion.array);
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, putEntry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Key, putEntry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, putEntry.tag.array);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
 
     // Validate the object exists initially
     KineticEntry getEntry = {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-        .value = ByteBuffer_CreateWithArray(ValueIn),
+        .key = KeyBuffer,
+        .dbVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .value = ValueBuffer,
     };
     status = KineticClient_Get(Fixture.handle, &getEntry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -116,32 +140,21 @@ void test_Delete_should_delete_an_object_from_device(void)
     TEST_ASSERT_ByteArray_NONE(putEntry.newVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.tag.array, getEntry.tag.array);
     TEST_ASSERT_EQUAL(putEntry.algorithm, getEntry.algorithm);
-    TEST_ASSERT_EQUAL_ByteArray(putEntry.value.array, getEntry.value.array);
-
-    // Validate the object no longer exists
-    KineticEntry getEntryMetadata = {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-        .metadataOnly = true,
-    };
-    status = KineticClient_Get(Fixture.handle, &getEntryMetadata);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
-    TEST_ASSERT_ByteArray_EMPTY(getEntryMetadata.value.array);
+    TEST_ASSERT_EQUAL_ByteBuffer(putEntry.value, getEntry.value);
 
     // Delete the object
     KineticEntry deleteEntry = {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .dbVersion = ByteBuffer_CreateWithArray(Version),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .key = KeyBuffer,
+        .dbVersion = VersionBuffer,
     };
     status = KineticClient_Delete(Fixture.handle, &deleteEntry);
-
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL(0, deleteEntry.value.array.len);
+    TEST_ASSERT_EQUAL(0, deleteEntry.value.bytesUsed);
 
     // Validate the object no longer exists
     KineticEntry regetEntryMetadata = {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
+        .key = KeyBuffer,
+        .dbVersion = VersionBuffer,
         .metadataOnly = true,
     };
     status = KineticClient_Get(Fixture.handle, &regetEntryMetadata);

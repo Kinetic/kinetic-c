@@ -57,9 +57,9 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 
     LOGF("Executing operation: 0x%llX", operation);
     if (operation->request->entry.value.array.data != NULL
-      && operation->request->entry.value.array.len > 0) {
-        KineticLogger_LogByteArray("  Sending PDU w/value:",
-            operation->request->entry.value.array);
+      && operation->request->entry.value.bytesUsed > 0) {
+        KineticLogger_LogByteBuffer("  Sending PDU w/value:",
+            operation->request->entry.value);
     }
     else {
         LOG("  Sending PDU w/o value");
@@ -207,7 +207,9 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
                                 KineticEntry* const entry)
 {
     assert(entry != NULL);
-    assert(entry->value.array.data != NULL);
+    if (!entry->metadataOnly) {
+        assert(entry->value.array.data != NULL);
+    }
 
     KineticStatus status;
     KineticOperation operation;
@@ -222,6 +224,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
 
     // Execute the operation
     status = KineticClient_ExecuteOperation(&operation);
+
 
     // Update the entry upon success
     // entry->value.array.len = 0;

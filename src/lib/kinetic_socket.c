@@ -161,7 +161,11 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     // Read "up to" the allocated number of bytes into dest buffer
-    while (dest->bytesUsed < dest->array.len) {
+    size_t bytesToReadIntoBuffer = len;
+    if (dest->array.len < len) {
+        bytesToReadIntoBuffer = dest->array.len;
+    }
+    while (dest->bytesUsed < bytesToReadIntoBuffer) {
         int opStatus;
         fd_set readSet;
         struct timeval timeout;
@@ -330,15 +334,12 @@ KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
 
 KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
 {
-    LOGF("Writing %zu bytes to socket...", src->array.len);
-    for (src->bytesUsed = 0; src->bytesUsed < src->array.len;) {
-        int status = write(socket, &src->array.data[src->bytesUsed],
-                           src->array.len - src->bytesUsed);
+    LOGF("Writing %zu bytes to socket...", src->bytesUsed);
+    for (unsigned int bytesSent = 0; bytesSent < src->bytesUsed;) {
+        int bytesRemaining = src->bytesUsed - bytesSent;
+        int status = write(socket, &src->array.data[bytesSent], bytesRemaining);
         if (status == -1 &&
-            ((errno == EINTR) ||
-             (errno == EAGAIN) ||
-             (errno == EWOULDBLOCK)
-            )) {
+            ((errno == EINTR) || (errno == EAGAIN) || (errno == EWOULDBLOCK))) {
             LOG("Write interrupted. retrying...");
             continue;
         }
@@ -347,8 +348,8 @@ KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
             return KINETIC_STATUS_SOCKET_ERROR;
         }
         else {
-            src->bytesUsed += status;
-            LOGF("Wrote %d bytes (%zu of %zu sent)", status, src->bytesUsed, src->array.len);
+            bytesSent += status;
+            LOGF("Wrote %d bytes (%d of %zu sent)", status, bytesSent, src->bytesUsed);
         }
     }
 
@@ -366,6 +367,7 @@ KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
     assert(len == pdu->header.protobufLength);
 
     ByteBuffer buffer = ByteBuffer_Create(pdu->protobufRaw, len);
+    buffer.bytesUsed = len;
 
     return KineticSocket_Write(socket, &buffer);
 }

@@ -34,9 +34,9 @@ void KineticPDU_Init(KineticPDU* const pdu,
 
 void KineticPDU_AttachEntry(KineticPDU* const pdu, KineticEntry* const entry)
 {
+    assert(pdu != NULL);
     assert(entry != NULL);
     pdu->entry = *entry;
-    ByteBuffer_Reset(&pdu->entry.value);
 }
 
 KineticStatus KineticPDU_Send(KineticPDU* request)
@@ -61,7 +61,7 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
     request->header.protobufLength =
         KineticProto__get_packed_size(&request->protoData.message.proto);
     request->header.valueLength =
-        (request->entry.value.array.data == NULL) ? 0 : request->entry.value.array.len;
+        (request->entry.value.array.data == NULL) ? 0 : request->entry.value.bytesUsed;
     KineticLogger_LogHeader(&request->header);
 
     // Create NBO copy of header for sending
@@ -73,6 +73,7 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
 
     // Pack and send the PDU header
     ByteBuffer hdr = ByteBuffer_Create(&request->headerNBO, sizeof(KineticPDUHeader));
+    hdr.bytesUsed = hdr.array.len;
     status = KineticSocket_Write(request->connection->socket, &hdr);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG("Failed to send PDU header!");
@@ -91,7 +92,7 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
 
     // Send the value/payload, if specified
     ByteBuffer* value = &request->entry.value;
-    if ((value->array.data != NULL) && (value->array.len > 0)) {
+    if ((value->array.data != NULL) && (value->array.len > 0) && (value->bytesUsed > 0)) {
         status = KineticSocket_Write(request->connection->socket, value);
         if (status != KINETIC_STATUS_SUCCESS) {
             LOG("Failed to send PDU value payload!");
@@ -172,7 +173,7 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
             LOG("Received value payload successfully");
         }
 
-        KineticLogger_LogByteArray("Value Payload", response->entry.value.array);
+        KineticLogger_LogByteBuffer("Value Buffer", response->entry.value);
     }
 
     // Update connectionID to match value returned from device, if provided
