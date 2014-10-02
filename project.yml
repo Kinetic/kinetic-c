@@ -93,7 +93,7 @@
 
 :tools:
   :test_includes_preprocessor:
-    :executable: "#{ENV['CC']}"
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :arguments:
       - -E
       - -MM
@@ -112,7 +112,7 @@
       - -D_C99_SOURCE=1
       - ${1}
   :test_compiler:
-    :executable: "#{ENV['CC']}"
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :arguments:
       - -I"$": COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR
       - -I"$": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
@@ -131,14 +131,14 @@
       - -c ${1}
       - -o ${2}
   :test_linker:
-    :executable: "#{ENV['CC']}"
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :name: test_linker
     :arguments:
       - "\"${1}\""
       - -l crypto
       - "-o \"${2}\""
   :gcov_linker:
-    :executable: "#{ENV['CC']}"
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :arguments:
       - -fprofile-arcs
       - -ftest-coverage
@@ -146,7 +146,7 @@
       - ${1}
       - -o ${2}
   :release_compiler:
-    :executable: "#{ENV['CC']}"
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :arguments:
       - -I"$": 'COLLECTION_PATHS_SOURCE_INCLUDE_VENDOR'
       - -I"$": 'COLLECTION_PATHS_RELEASE_TOOLCHAIN_INCLUDE'
@@ -164,7 +164,7 @@
       - "-c \"${1}\""
       - "-o \"${2}\""
   :release_linker:
-    :executable: "#{ENV['CC']}"
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :name: release_linker
     :arguments:
       - "\"${1}\""
