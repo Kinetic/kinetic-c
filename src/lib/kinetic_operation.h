@@ -27,7 +27,7 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection);
 KineticStatus KineticOperation_Free(KineticOperation* const operation);
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
-void KineticOperation_BuildNoop(KineticOperation* const operation);
+void KineticOperation_BuildNoop(KineticOperation* operation);
 void KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry);
 void KineticOperation_BuildGet(KineticOperation* const operation,

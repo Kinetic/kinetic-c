@@ -123,8 +123,8 @@
       - -Wall
       - -Wextra
       - -pedantic
+      - -D_POSIX_C_SOURCE=1
       - -D_C99_SOURCE=1
-      - -D_DARWIN_C_SOURCE=1
       - -c ${1}
       - -o ${2}
   :test_linker:

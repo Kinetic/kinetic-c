@@ -403,8 +403,8 @@ task :all => [
   'cppcheck',
   'test_all',
   'lib',
-  'utility',
-  'run'
+  #'utility',
+  #'run'
 ]
 
 desc "Run full CI build"

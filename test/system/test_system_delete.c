@@ -41,18 +41,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-static SystemTestFixture Fixture = {
-    .config = (KineticSession)
-    {
-        .host = "localhost",
-        .port = KINETIC_PORT,
-        .clusterVersion = 0,
-        .identity =  1,
-        .nonBlocking = false,
-        .logFile = "",
-    }
-};
-
+static SystemTestFixture Fixture;
 static char HmacKeyString[] = "asdfasdf";
 static ByteArray HmacKey;
 static uint8_t KeyData[1024];

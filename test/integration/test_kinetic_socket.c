@@ -18,14 +18,22 @@
 *
 */
 
+#include "unity_helper.h"
+#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
+#include "kinetic_socket.h"
+#include "kinetic_logger.h"
+#include "kinetic_proto.h"
+#include "kinetic_message.h"
+
+#include "byte_array.h"
+#include "protobuf-c/protobuf-c.h"
+
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>
 #include <string.h>
-#ifndef _BSD_SOURCE
-#define _BSD_SOURCE
-#endif // _BSD_SOURCE
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -36,17 +44,7 @@
 #include <netdb.h>
 #include <signal.h>
 
-#include "byte_array.h"
 #include "socket99/socket99.h"
-#include "protobuf-c/protobuf-c.h"
-
-#include "unity_helper.h"
-#include "kinetic_types.h"
-#include "kinetic_types_internal.h"
-#include "kinetic_socket.h"
-#include "kinetic_logger.h"
-#include "kinetic_proto.h"
-#include "kinetic_message.h"
 
 static int FileDesc;
 static int KineticTestPort = KINETIC_PORT;
