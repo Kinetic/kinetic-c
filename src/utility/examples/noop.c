@@ -20,33 +20,25 @@
 
 #include "noop.h"
 
-KineticPDU Request, Response;
-
-int NoOp(
-    const char* host,
-    int port,
-    bool nonBlocking,
-    int64_t clusterVersion,
-    int64_t identity,
-    ByteArray hmacKey)
+KineticStatus NoOp(KineticSession* session)
 {
-    KineticOperation operation;
-    KineticConnection connection;
-    bool success;
+    KineticSessionHandle sessionHandle;
 
-    KineticClient_Init(NULL);
-    success = KineticClient_Connect(&connection, host, port, nonBlocking,
-                                    clusterVersion, identity, hmacKey);
-    assert(success);
-    operation = KineticClient_CreateOperation(&connection, &Request, &Response);
-    KineticStatus status = KineticClient_NoOp(&operation);
-    KineticClient_Disconnect(&connection);
-
-    if (status == KINETIC_STATUS_SUCCESS) {
-        printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
-        return 0;
+    KineticStatus status = KineticClient_Connect(session, &sessionHandle);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        printf("Failed connecting to host %s:%d", session->host, session->port);
+        return (int)status;
     }
 
-    KineticClient_Disconnect(&connection);
-    return (int)status;
+    status = KineticClient_NoOp(sessionHandle);
+    
+    KineticClient_Disconnect(&sessionHandle);
+    if (status == KINETIC_STATUS_SUCCESS) {
+        printf("NoOp operation completed successfully. Kinetic Device is alive and well!\n");
+    }
+    else {
+        printf("NoOp operations failed with status: %d", (int)status);
+    }
+
+    return status;
 }

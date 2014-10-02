@@ -20,10 +20,8 @@
 
 #include "put.h"
 
-KineticPDU request, response;
-
 int Put(
-    const char* host,
+    char* host,
     int port,
     bool nonBlocking,
     int64_t clusterVersion,
@@ -31,25 +29,32 @@ int Put(
     ByteArray hmacKey,
     KineticEntry* entry)
 {
-    KineticOperation operation;
-    KineticConnection connection;
-    bool success;
+    KineticSession session = {
+        .port = port,
+        .clusterVersion = clusterVersion,
+        .identity = identity,
+        .nonBlocking = nonBlocking,
+        .hmacKey = hmacKey,
+    };
+    strcpy(session.host, host);
+    KineticSessionHandle sessionHandle;
 
-    KineticClient_Init(NULL);
-    success = KineticClient_Connect(&connection, host, port, nonBlocking,
-                                    clusterVersion, identity, hmacKey);
-    assert(success);
+    KineticStatus status = KineticClient_Connect(&session, &sessionHandle);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        printf("Failed connecting to host %s:%d", host, port);
+        return (int)status;
+    }
 
-    operation = KineticClient_CreateOperation(
-                    &connection, &request, &response);
+    status = KineticClient_Put(sessionHandle, entry);
 
-    KineticStatus status = KineticClient_Put(&operation, entry);
+    KineticClient_Disconnect(&sessionHandle);
 
     if (status == KINETIC_STATUS_SUCCESS) {
         printf("Put operation completed successfully. Your data has been stored!\n");
         return 0;
     }
-
-    KineticClient_Disconnect(&connection);
-    return (int)status;
+    else {
+        printf("NoOp operations failed with status: %d\n", (int)status);
+        return (int)status;
+    }
 }

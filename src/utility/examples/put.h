@@ -41,7 +41,7 @@
  *                          upon failure
  */
 int Put(
-    const char* host,
+    char* host,
     int port,
     bool nonBlocking,
     int64_t clusterVersion,

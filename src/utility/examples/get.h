@@ -41,7 +41,7 @@
  * @return                  Returns 0 upon succes, -1 or the Kinetic status code
  *                          upon failure
  */
-int Get(const char* host,
+int Get(char* host,
         int port,
         bool nonBlocking,
         int64_t clusterVersion,

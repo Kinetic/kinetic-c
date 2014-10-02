@@ -43,7 +43,7 @@ typedef struct _Arguments {
     char valueKey[KINETIC_MAX_KEY_LEN];
     char version[32];
     char newVersion[32];
-    KineticProto_Algorithm algorithm;
+    KineticAlgorithm algorithm;
 } Arguments;
 
 int main(int argc, char** argv)
@@ -101,6 +101,15 @@ int main(int argc, char** argv)
         }
     }
 
+    KineticSession session = {
+        .port = cfg.port,
+        .clusterVersion = cfg.clusterVersion,
+        .identity = cfg.identity,
+        .nonBlocking = cfg.nonBlocking,
+        .hmacKey = cfg.hmacKey,
+    };
+    strcpy(session.host, host);
+
     // Execute all specified operations in order
     for (; optind < argc; optind++) {
         char* op = argv[optind];
@@ -115,12 +124,12 @@ int main(int argc, char** argv)
                    "  clusterVersion: %lld\n"
                    "  identity: %lld\n"
                    "  key: '%s'\n",
-                   cfg.host,
-                   cfg.port,
-                   cfg.nonBlocking ? "true" : "false",
-                   (long long int)cfg.clusterVersion,
-                   (long long int)cfg.identity,
-                   cfg.hmacKey);
+                   session.host,
+                   session.port,
+                   session.nonBlocking ? "true" : "false",
+                   (long long int)session.clusterVersion,
+                   (long long int)session.identity,
+                   session.hmacKey);
             status = NoOp(cfg.host, cfg.port, cfg.nonBlocking,
                           cfg.clusterVersion, cfg.identity, hmacKey);
             if (status == 0) {
@@ -140,9 +149,9 @@ int main(int argc, char** argv)
 
             KineticEntry entry = {
                 .key = ByteBuffer_CreateWithArray(key),
-                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
                 .newVersion = ByteBuffer_CreateWithArray(newVersion),
                 .tag = ByteBuffer_CreateWithArray(tag),
+                .algorithm = KINETIC_ALGORITHM_SHA1,
                 .metadataOnly = false,
                 .value = value,
             };
@@ -155,20 +164,20 @@ int main(int argc, char** argv)
                    "  non-blocking: %s\n"
                    "  clusterVersion: %lld\n"
                    "  identity: %lld\n"
-                   "  key: '%s'\n"
+                   "  key: %zd bytes\n"
                    "  value: %zd bytes\n",
                    cfg.host,
                    cfg.port,
                    cfg.nonBlocking ? "true" : "false",
                    (long long int)cfg.clusterVersion,
                    (long long int)cfg.identity,
-                   metadata.key.data,
-                   value.len);
+                   entry.key.bytesUsed,
+                   entry.value.bytesUsed);
 
             status = Put(
                          cfg.host, cfg.port, cfg.nonBlocking,
                          cfg.clusterVersion, cfg.identity, hmacKey,
-                         &metadata);
+                         &entry);
 
             if (status == 0) {
                 printf("\nPut executed successfully!\n\n");
@@ -182,7 +191,7 @@ int main(int argc, char** argv)
         else if (strcmp("get", op) == 0) {
             KineticEntry entry = {
                 .key = ByteBuffer_CreateWithArray(key),
-                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+                .algorithm = KINETIC_ALGORITHM_SHA1,
                 .newVersion = ByteBuffer_CreateWithArray(newVersion),
                 .tag = ByteBuffer_CreateWithArray(tag),
                 .metadataOnly = false,
@@ -208,9 +217,9 @@ int main(int argc, char** argv)
 
             status = Get(cfg.host, cfg.port, cfg.nonBlocking,
                          cfg.clusterVersion, cfg.identity, hmacKey,
-                         &metadata);
+                         &entry);
 
-            if (status == 0 || status == KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR) {
+            if (status == 0) {
                 printf("\nGet executed successfully!\n\n");
                 return 0;
             }
@@ -223,7 +232,7 @@ int main(int argc, char** argv)
         else if (strcmp("delete", op) == 0) {
             KineticEntry entry = {
                 .key = ByteBuffer_CreateWithArray(key),
-                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
+                .algorithm = KINETIC_ALGORITHM_SHA1,
                 .dbVersion =  ByteBuffer_CreateWithArray(newVersion),
                 .tag = ByteBuffer_CreateWithArray(tag),
                 .metadataOnly = false,
@@ -247,7 +256,7 @@ int main(int argc, char** argv)
 
             status = Delete(cfg.host, cfg.port, cfg.nonBlocking,
                             cfg.clusterVersion, cfg.identity, hmacKey,
-                            &metadata);
+                            &entry);
 
             if (status == 0) {
                 printf("\nDelete executed successfully!\n\n");
