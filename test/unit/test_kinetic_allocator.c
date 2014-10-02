@@ -53,12 +53,10 @@ void test_KineticAllocator_FreeAllPDUs_should_free_full_list_of_PDUs(void)
     LOG_LOCATION;
     const int count = 3;
     KineticListItem* list[count];
-    KineticPDU* pdus[count];
 
     // Allocate some PDUs and list items to hold them
     for (int i = 0; i < count; i++) {
         list[i] = (KineticListItem*)malloc(sizeof(KineticListItem));
-        pdus[i] = (KineticPDU*)malloc(sizeof(KineticPDU));
         LOGF("ALLOCATED item[%d]: 0x%0llX", i, (long long)list[i]);
     }
 

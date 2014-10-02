@@ -1,4 +1,5 @@
 require 'kinetic-ruby'
+
 KineticRuby::Rake::load_tasks
 require 'ceedling'
 Ceedling.load_project(config: './project.yml')

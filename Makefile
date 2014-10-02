@@ -8,7 +8,7 @@ PUB_INC = ./include
 #===============================================================================
 # Shared Build Variables
 #===============================================================================
-CC = gcc
+CC ?= gcc
 OPTIMIZE = -O3
 WARN = -Wall -Wextra -pedantic
 CDEFS += -D_POSIX_C_SOURCE=1 -D_C99_SOURCE=1
