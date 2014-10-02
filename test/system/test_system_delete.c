@@ -97,7 +97,8 @@ void tearDown(void)
 //  TBD!
 //
 void test_Delete_should_delete_an_object_from_device(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
     KineticStatus status;
 
     // Create an object so that we have something to delete

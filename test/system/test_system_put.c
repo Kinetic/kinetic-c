@@ -75,10 +75,10 @@ void test_Put_should_create_new_object_on_device(void)
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .newVersion = ByteBuffer_CreateWithArray(Version),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
+         .newVersion = ByteBuffer_CreateWithArray(Version),
+          .tag = ByteBuffer_CreateWithArray(Tag),
+           .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = ByteBuffer_CreateWithArray(TestValue),
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
@@ -100,10 +100,10 @@ void test_Put_should_create_another_new_object_on_device(void)
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(OtherValueKey),
-        .newVersion = ByteBuffer_CreateWithArray(Version),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
+         .newVersion = ByteBuffer_CreateWithArray(Version),
+          .tag = ByteBuffer_CreateWithArray(Tag),
+           .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = ByteBuffer_CreateWithArray(TestValue),
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
@@ -125,10 +125,10 @@ void test_Put_should_update_object_data_on_device(void)
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .dbVersion = ByteBuffer_CreateWithArray(Version),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
+         .dbVersion = ByteBuffer_CreateWithArray(Version),
+          .tag = ByteBuffer_CreateWithArray(Tag),
+           .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = ByteBuffer_CreateWithArray(TestValue),
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
@@ -150,12 +150,12 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .newVersion = ByteBuffer_CreateWithArray(OtherNewVersion),
-        .dbVersion = ByteBuffer_CreateWithArray(NewVersion),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
-        .force = true,
+         .newVersion = ByteBuffer_CreateWithArray(OtherNewVersion),
+          .dbVersion = ByteBuffer_CreateWithArray(NewVersion),
+           .tag = ByteBuffer_CreateWithArray(Tag),
+            .algorithm = KINETIC_ALGORITHM_SHA1,
+             .value = ByteBuffer_CreateWithArray(TestValue),
+              .force = true,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
@@ -172,11 +172,11 @@ void test_Put_should_update_object_data_on_device_and_with_FLUSH_sync_mode_enabl
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .dbVersion = ByteBuffer_CreateWithArray(OtherNewVersion),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
-        .synchronization = KINETIC_SYNCHRONIZATION_FLUSH,
+         .dbVersion = ByteBuffer_CreateWithArray(OtherNewVersion),
+          .tag = ByteBuffer_CreateWithArray(Tag),
+           .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = ByteBuffer_CreateWithArray(TestValue),
+             .synchronization = KINETIC_SYNCHRONIZATION_FLUSH,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
@@ -193,10 +193,10 @@ void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled(v
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
-        .force = true,
+         .tag = ByteBuffer_CreateWithArray(Tag),
+          .algorithm = KINETIC_ALGORITHM_SHA1,
+           .value = ByteBuffer_CreateWithArray(TestValue),
+            .force = true,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
@@ -213,10 +213,10 @@ void test_Put_should_update_object_data_on_device_again_via_FORCE_with_garbage_v
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
-        .force = true,
+         .tag = ByteBuffer_CreateWithArray(Tag),
+          .algorithm = KINETIC_ALGORITHM_SHA1,
+           .value = ByteBuffer_CreateWithArray(TestValue),
+            .force = true,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
@@ -233,11 +233,11 @@ void test_Put_should_update_object_data_on_device_via_FORCE_with_invalid_dbVersi
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .dbVersion = ByteBuffer_CreateWithArray(NewVersion),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
-        .force = true,
+         .dbVersion = ByteBuffer_CreateWithArray(NewVersion),
+          .tag = ByteBuffer_CreateWithArray(Tag),
+           .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = ByteBuffer_CreateWithArray(TestValue),
+             .force = true,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
@@ -254,11 +254,11 @@ void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled_a
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = ByteBuffer_CreateWithArray(ValueKey),
-        .newVersion = ByteBuffer_CreateWithArray(NewVersion),
-        .tag = ByteBuffer_CreateWithArray(Tag),
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_CreateWithArray(TestValue),
-        .force = true,
+         .newVersion = ByteBuffer_CreateWithArray(NewVersion),
+          .tag = ByteBuffer_CreateWithArray(Tag),
+           .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = ByteBuffer_CreateWithArray(TestValue),
+             .force = true,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);

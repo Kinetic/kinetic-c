@@ -149,7 +149,8 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
     operation->request->entry.value = BYTE_BUFFER_NONE;
     operation->response->entry.value = BYTE_BUFFER_NONE;
     if (!entry->metadataOnly) {
-    operation->response->entry.value = entry->value; }
+        operation->response->entry.value = entry->value;
+    }
 }
 
 void KineticOperation_BuildDelete(KineticOperation* const operation,

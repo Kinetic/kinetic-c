@@ -33,17 +33,16 @@ void SystemTestSetup(SystemTestFixture* fixture)
     ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
     if (!fixture->connected) {
         *fixture = (SystemTestFixture) {
-            .config = (KineticSession)
-            {
+            .config = (KineticSession) {
                 .host = "localhost",
-                .port = KINETIC_PORT,
-                .clusterVersion = 0,
-                .identity =  1,
-                .nonBlocking = false,
-                .hmacKey = hmacArray,
+                 .port = KINETIC_PORT,
+                  .clusterVersion = 0,
+                   .identity =  1,
+                    .nonBlocking = false,
+                     .hmacKey = hmacArray,
             },
             .connected = fixture->connected,
-            .testIgnored = false,
+             .testIgnored = false,
         };
         KineticStatus status = KineticClient_Connect(
                                    &fixture->config, &fixture->handle);
@@ -51,8 +50,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
         fixture->expectedSequence = 0;
         fixture->connected = true;
     }
-    else
-    {
+    else {
         fixture->testIgnored = false;
     }
 

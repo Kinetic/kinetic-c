@@ -133,13 +133,11 @@ typedef struct _KineticSession {
     memcpy((_session)->hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
 }
 
-// Operation handle
-typedef int KineticOperationHandle;
-
 // Kinetic Status Codes
 typedef enum {
     KINETIC_STATUS_INVALID = -1,        // Status not available (no reponse/status available)
-    KINETIC_STATUS_SUCCESS = 0,         // Operation successful
+    KINETIC_STATUS_NOT_ATTEMPTED = 0,   // No operation has been attempted
+    KINETIC_STATUS_SUCCESS = 1,         // Operation successful
     KINETIC_STATUS_SESSION_EMPTY,       // Session was NULL in request
     KINETIC_STATUS_SESSION_INVALID,     // Session configuration was invalid or NULL
     KINETIC_STATUS_HOST_EMPTY,          // Host was empty in request
@@ -158,8 +156,8 @@ typedef enum {
     KINETIC_STATUS_SOCKET_ERROR,        // An I/O error occurred during a socket operation
     KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;
-extern const char* KineticStatusDescriptor[];
 
+const char* Kinetic_GetStatusDescription(KineticStatus status);
 
 // KineticEntry - byte arrays need to be preallocated by the client
 typedef struct _KineticEntry {
@@ -173,6 +171,5 @@ typedef struct _KineticEntry {
     KineticSynchronization synchronization;
     ByteBuffer value;
 } KineticEntry;
-
 
 #endif // _KINETIC_TYPES_H

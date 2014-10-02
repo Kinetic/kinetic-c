@@ -444,7 +444,7 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader));
     PDU.headerNBO = (KineticPDUHeader) {
         .versionPrefix = 'F', .protobufLength = KineticNBO_ToHostU32(17),
-        .valueLength = KineticNBO_ToHostU32(124)
+         .valueLength = KineticNBO_ToHostU32(124)
     };
 
     // Fake value/payload length
@@ -548,7 +548,7 @@ void test_KineticPDU_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_Kineti
     PDU.proto = NULL;
     status = KineticPDU_GetStatus(&PDU);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-    
+
     PDU.proto = &PDU.protoData.message.proto;
     PDU.proto->command = NULL;
     status = KineticPDU_GetStatus(&PDU);
@@ -597,7 +597,7 @@ void test_KineticPDU_GetKeyValue_should_return_NULL_message_has_no_KeyValue(void
     PDU.proto = NULL;
     keyValue = KineticPDU_GetKeyValue(&PDU);
     TEST_ASSERT_NULL(keyValue);
-    
+
     PDU.proto = &PDU.protoData.message.proto;
     PDU.proto->command = NULL;
     keyValue = KineticPDU_GetKeyValue(&PDU);

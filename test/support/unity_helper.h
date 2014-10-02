@@ -83,10 +83,10 @@ if ((expected) != (actual)) { \
     const char* invalidStatus = "INVALID_STATUS"; \
     const char* statusDescExpected = invalidStatus; \
     if ((expected) >= 0 && (expected) < KINETIC_STATUS_COUNT) { \
-        statusDescExpected = KineticStatusDescriptor[(expected)]; } \
+        statusDescExpected = Kinetic_GetStatusDescription(expected); } \
     const char* statusDescActual = invalidStatus; \
     if ((actual) >= 0 && (actual) < KINETIC_STATUS_COUNT) { \
-        statusDescActual = KineticStatusDescriptor[(actual)]; } \
+        statusDescActual = Kinetic_GetStatusDescription(actual); } \
     sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
         statusDescExpected, (expected), statusDescActual, (actual)); \
     if (msg != NULL) { strcat(err, " : "); strcat(err, msg); } \

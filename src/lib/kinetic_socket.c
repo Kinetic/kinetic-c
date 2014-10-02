@@ -191,8 +191,8 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
         else if (opStatus > 0) { // Data available to read
             // The socket is ready for reading
             opStatus = read(socket,
-                          &dest->array.data[dest->bytesUsed],
-                          dest->array.len - dest->bytesUsed);
+                            &dest->array.data[dest->bytesUsed],
+                            dest->array.len - dest->bytesUsed);
             // Retry if no data yet...
             if (opStatus == -1 &&
                 ((errno == EINTR) ||
@@ -219,13 +219,13 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
     if (dest->bytesUsed < len) {
         bool abortFlush = false;
 
-        uint8_t *discardedBytes = malloc(len - dest->bytesUsed);
+        uint8_t* discardedBytes = malloc(len - dest->bytesUsed);
         if (discardedBytes == NULL) {
             LOG("Failed allocating a socket read discard buffer!");
             abortFlush = true;
             status = KINETIC_STATUS_MEMORY_ERROR;
         }
-        
+
         while (!abortFlush && dest->bytesUsed < len) {
             int opStatus;
             fd_set readSet;
@@ -294,8 +294,8 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
 
         // Report truncation of data for any variable length byte arrays
         LOGF("Socket read buffer was truncated due to buffer overrun!"
-            " received=%zu, copied=%zu",
-            len, dest->array.len);
+             " received=%zu, copied=%zu",
+             len, dest->array.len);
         return KINETIC_STATUS_BUFFER_OVERRUN;
     }
 

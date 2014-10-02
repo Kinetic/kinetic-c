@@ -253,13 +253,6 @@ task :apply_license do
   end
 end
 
-desc "Validate .travis.yml config file"
-namespace :travis do
-  task :validate do
-    execute_command "bundle exec travis lint --skip-version-check --skip-completion-check", "Validating Travis CI Configuration"
-  end
-end
-
 desc "Enable verbose output"
 task :verbose do
   Rake::Task[:verbosity].invoke(3) # Set verbosity to 3:semi-obnoxious for debugging
@@ -316,14 +309,9 @@ namespace :tests do
   end
 
   desc "Run Kinetic Client Utility tests"
-  task :utility => [
-    'release',
-    'ruby_sim:shutdown',
-    'tests:utility:noop',
-    'tests:utility:put',
-    'tests:utility:get',
-    'tests:utility:delete',
-  ]
+  task :utility => ['ruby_sim:shutdown'] do
+    sh "make run"
+  end
 
   namespace :utility do
 
@@ -336,7 +324,7 @@ namespace :tests do
       end
     end
 
-    task :noop => ['release', 'ruby_sim:shutdown'] do
+    task :noop => ['ruby_sim:shutdown'] do
       java_sim_erase_drive
       with_test_server("Testing NoOp Operation") do
         execute_command "./kinetic-c noop"
@@ -346,14 +334,14 @@ namespace :tests do
       end
     end
 
-    task :put => ['release', 'ruby_sim:shutdown'] do
+    task :put => ['ruby_sim:shutdown'] do
       java_sim_erase_drive
       with_test_server("Testing Put operation") do
         execute_command "./kinetic-c put"
       end
     end
 
-    task :get => ['release', 'ruby_sim:shutdown'] do
+    task :get => ['ruby_sim:shutdown'] do
       java_sim_erase_drive
       with_test_server("Testing Get operation") do
         execute_command "./kinetic-c put"
@@ -392,31 +380,15 @@ task :run => ['utility'] do
   sh "make run" 
 end
 
-task :test_all => [
-  'tests:unit',
-  'tests:integration',
-  'tests:system',
-]
+task :test_all => ['tests:unit', 'tests:integration', 'tests:system']
 
 desc "Build all and run test utility"
-task :all => [
-  'cppcheck',
-  'test_all',
-  'lib',
-  #'utility',
-  #'run'
-]
+task :all => ['cppcheck', 'test_all', 'lib', 'utility', 'run']
 
 desc "Run full CI build"
-task :ci => [
-  'clobber',
-  'all'
-]
+task :ci => ['clobber', 'all']
 
-task :default => [
-  'test:delta',
-  'release'
-]
+task :default => ['test:delta']
 
 END {
   # Ensure java simlator is shutdown prior to rake exiting

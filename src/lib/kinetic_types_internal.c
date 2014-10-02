@@ -81,7 +81,7 @@ KineticProto_Synchronization KineticProto_Synchronization_from_KineticSynchroniz
     KineticSynchronization sync_mode)
 {
     KineticProto_Synchronization protoSyncMode;
-    switch(sync_mode) {
+    switch (sync_mode) {
     case KINETIC_SYNCHRONIZATION_WRITETHROUGH:
         protoSyncMode = KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH;
         break;
@@ -103,7 +103,7 @@ KineticSynchronization KineticSynchronization_from_KineticProto_Synchronization(
     KineticProto_Synchronization sync_mode)
 {
     KineticSynchronization kineticSyncMode;
-    switch(sync_mode) {
+    switch (sync_mode) {
     case KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
         break;
@@ -214,8 +214,7 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
 
     if (keyValue != NULL && entry != NULL) {
 
-        if (keyValue->has_newVersion)
-        {
+        if (keyValue->has_newVersion) {
             entry->newVersion.bytesUsed = keyValue->newVersion.len;
             if (entry->newVersion.array.data == NULL ||
                 entry->newVersion.array.len < keyValue->newVersion.len) {
@@ -224,12 +223,11 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             }
             else {
                 memcpy(entry->newVersion.array.data, keyValue->newVersion.data,
-                    keyValue->newVersion.len);
+                       keyValue->newVersion.len);
             }
         }
 
-        if (keyValue->has_dbVersion)
-        {
+        if (keyValue->has_dbVersion) {
             entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
             if (entry->dbVersion.array.data == NULL ||
                 entry->dbVersion.array.len < keyValue->dbVersion.len) {
@@ -238,17 +236,15 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             }
             else {
                 memcpy(entry->dbVersion.array.data, keyValue->dbVersion.data,
-                    keyValue->dbVersion.len);
+                       keyValue->dbVersion.len);
             }
         }
 
-        if (keyValue->has_force)
-        {
+        if (keyValue->has_force) {
             entry->force = keyValue->force;
         }
 
-        if (keyValue->has_key)
-        {
+        if (keyValue->has_key) {
             entry->key.bytesUsed = keyValue->key.len;
             if (entry->key.array.data == NULL ||
                 entry->key.array.len < keyValue->key.len) {
@@ -260,8 +256,7 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             }
         }
 
-        if (keyValue->has_tag)
-        {
+        if (keyValue->has_tag) {
             entry->tag.bytesUsed = keyValue->tag.len;
             if (entry->tag.array.data == NULL ||
                 entry->tag.array.len < keyValue->tag.len) {
@@ -273,20 +268,17 @@ bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue,
             }
         }
 
-        if (keyValue->has_algorithm)
-        {
+        if (keyValue->has_algorithm) {
             entry->algorithm =
                 KineticAlgorithm_from_KineticProto_Algorithm(
                     keyValue->algorithm);
         }
 
-        if (keyValue->has_metadataOnly)
-        {
+        if (keyValue->has_metadataOnly) {
             entry->metadataOnly = keyValue->metadataOnly;
         }
 
-        if (keyValue->has_synchronization)
-        {
+        if (keyValue->has_synchronization) {
             entry->synchronization =
                 KineticSynchronization_from_KineticProto_Synchronization(
                     keyValue->synchronization);

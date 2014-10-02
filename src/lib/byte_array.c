@@ -75,56 +75,56 @@ ByteArray ByteBuffer_Consume(ByteBuffer* buffer, size_t len)
     return slice;
 }
 
-bool ByteBuffer_Append(ByteBuffer* buffer,
-                       const void* data, size_t len)
+ByteBuffer* ByteBuffer_Append(ByteBuffer* buffer, const void* data, size_t len)
 {
     assert(buffer != NULL);
     assert(buffer->array.data != NULL);
     assert(data != NULL);
     if (len == 0 || ((buffer->bytesUsed + len) > buffer->array.len)) {
-        return false;
+        return NULL;
     }
     memcpy(&buffer->array.data[buffer->bytesUsed], data, len);
     buffer->bytesUsed += len;
-    return true;
+    return buffer;
 }
 
-bool ByteBuffer_AppendArray(ByteBuffer* buffer, const ByteArray array)
+ByteBuffer* ByteBuffer_AppendArray(ByteBuffer* buffer, const ByteArray array)
 {
+    assert(buffer != NULL);
     assert(buffer->array.data != NULL);
     assert(array.data != NULL);
     if (array.len == 0 || ((buffer->bytesUsed + array.len) > buffer->array.len)) {
-        return false;
+        return NULL;
     }
     memcpy(&buffer->array.data[buffer->bytesUsed], array.data, array.len);
     buffer->bytesUsed += array.len;
-    return true;
+    return buffer;
 }
 
-bool ByteBuffer_AppendCString(ByteBuffer* buffer, const char* str)
+ByteBuffer* ByteBuffer_AppendCString(ByteBuffer* buffer, const char* str)
 {
+    assert(buffer != NULL);
     assert(buffer->array.data != NULL);
     assert(str != NULL);
     int len = strlen(str);
     if (len == 0 || ((buffer->bytesUsed + len) > buffer->array.len)) {
-        return false;
+        return NULL;
     }
     memcpy(&buffer->array.data[buffer->bytesUsed], str, len);
     buffer->bytesUsed += len;
-    return true;
+    return buffer;
 }
 
-#include <stdio.h>
-
-bool ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)
+ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)
 {
+    assert(buffer != NULL);
     assert(buffer->array.data != NULL);
     if (len == 0 || ((buffer->bytesUsed + len) > buffer->array.len)) {
-        return false;
+        return NULL;
     }
     for (size_t i = 0; i < len; i++) {
         buffer->array.data[buffer->bytesUsed + i] = (uint8_t)(i & 0x0FFu);
     }
     buffer->bytesUsed += len;
-    return true;
+    return buffer;
 }

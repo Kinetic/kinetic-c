@@ -124,7 +124,9 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
     TEST_ASSERT_EQUAL(KINETIC_SYNCHRONIZATION_WRITETHROUGH, message.keyValue.synchronization);
 
 
-    entry = (KineticEntry) {.metadataOnly = false};
+    entry = (KineticEntry) {
+        .metadataOnly = false
+    };
     memset(&message, 0, sizeof(KineticMessage));
     KineticMessage_Init(&message);
 

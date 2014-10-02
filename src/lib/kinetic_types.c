@@ -18,9 +18,12 @@
 *
 */
 
+#include "kinetic_types_internal.h"
 #include "kinetic_types.h"
 
-const char* KineticStatusDescriptor[] = {
+STATIC const char* KineticStatusInvalid = "INVALID_STATUS_CODE";
+STATIC const char* KineticStatusDescriptor[] = {
+    "NOT_ATTEMPTED",
     "SUCCESS",
     "SESSION_EMPTY",
     "SESSION_INVALID",
@@ -40,5 +43,15 @@ const char* KineticStatusDescriptor[] = {
     "SOCKET_ERROR",
 };
 
-const int KineticStatusDescriptorCount =
+#ifdef TEST
+STATIC const int KineticStatusDescriptorCount =
     sizeof(KineticStatusDescriptor) / sizeof(char*);
+#endif
+
+const char* Kinetic_GetStatusDescription(KineticStatus status)
+{
+    if ((int)status < 0 || status >= (int)KINETIC_STATUS_COUNT) {
+        return KineticStatusInvalid;
+    }
+    return KineticStatusDescriptor[(int)status];
+}

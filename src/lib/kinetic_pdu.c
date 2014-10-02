@@ -84,7 +84,7 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
     LOG("Sending PDU Protobuf:");
     KineticLogger_LogProtobuf(&request->protoData.message.proto);
     status = KineticSocket_WriteProtobuf(
-        request->connection->socket, request);
+                 request->connection->socket, request);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG("Failed to send PDU protobuf message!");
         return status;
@@ -164,7 +164,7 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
 
         response->entry.value.bytesUsed = 0;
         status = KineticSocket_Read(fd,
-            &response->entry.value, response->header.valueLength);
+                                    &response->entry.value, response->header.valueLength);
         if (status != KINETIC_STATUS_SUCCESS) {
             LOG("Failed to receive PDU value payload!");
             return status;
@@ -196,7 +196,7 @@ KineticStatus KineticPDU_GetStatus(KineticPDU* pdu)
         pdu->proto->command->status->has_code != false) {
 
         status = KineticProtoStatusCode_to_KineticStatus(
-            pdu->proto->command->status->code);
+                     pdu->proto->command->status->code);
     }
 
     return status;

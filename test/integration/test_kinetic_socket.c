@@ -205,7 +205,7 @@ void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_wi
 
     // Try to read more than was requested, to cause a timeout
     KineticStatus status = KineticSocket_Read(
-        FileDesc, &respBuffer, sizeof(respData));
+                               FileDesc, &respBuffer, sizeof(respData));
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
         KINETIC_STATUS_SOCKET_TIMEOUT, status,
         "Expected socket to timeout waiting on data!");
@@ -259,7 +259,7 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     TEST_ASSERT_NULL(PDU.proto);
     KineticStatus status = KineticSocket_ReadProtobuf(FileDesc, &PDU);
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(KINETIC_STATUS_SUCCESS, status,
-        "Failed receiving protobuf response");
+                                            "Failed receiving protobuf response");
     TEST_ASSERT_NOT_NULL_MESSAGE(
         PDU.proto,
         "Protobuf pointer was NULL, but expected dynamic memory allocation!");
@@ -300,7 +300,7 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     ByteBuffer requestBuffer = ByteBuffer_CreateWithArray(requestArray);
     KineticStatus status = KineticSocket_Write(FileDesc, &requestBuffer);
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(KINETIC_STATUS_SUCCESS, status,
-        "Failed sending protobuf read request");
+                                            "Failed sending protobuf read request");
 
     // Receive the dummy protobuf response, but expect too much data
     // to force timeout

@@ -55,12 +55,12 @@ void setUp(void)
     Tag = ByteArray_CreateWithCString("some_tag_value");
     Value = ByteArray_CreateWithCString("some random abitrary data...");
     KINETIC_SESSION_INIT(&Session,
-        "somehost.com", ClusterVersion, Identity, HmacKey);
+                         "somehost.com", ClusterVersion, Identity, HmacKey);
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection,
-        KINETIC_STATUS_SUCCESS);
+            KINETIC_STATUS_SUCCESS);
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
@@ -71,7 +71,8 @@ void tearDown(void)
 }
 
 void test_KineticClient_Get_should_execute_GET_operation(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
 
     Value = ByteArray_Create(ValueData, sizeof(ValueData));
     ByteBuffer valueBuffer = ByteBuffer_CreateWithArray(Value);
@@ -102,14 +103,14 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     KineticProto_KeyValue keyValue = KINETIC_PROTO_KEY_VALUE__INIT;
     keyValue.key = (ProtobufCBinaryData) {
         .data = (uint8_t*)keyData,
-        .len = 3,
+         .len = 3,
     };
     keyValue.has_key = true;
 
     uint8_t respFakeVer[] = {12, 13, 14, 15, 16, 17};
     keyValue.dbVersion = (ProtobufCBinaryData) {
         .data = respFakeVer,
-        .len = sizeof(respFakeVer),
+         .len = sizeof(respFakeVer),
     };
     keyValue.has_dbVersion = true;
 
@@ -137,7 +138,8 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
 
 #if 0
 void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_buffer_with_value(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
     KineticConnection connection;
     KINETIC_PDU_INIT(&Request, &connection);
     KINETIC_PDU_INIT(&Response, &connection);
@@ -171,7 +173,8 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
 }
 
 void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metadata(void)
-{ LOG_LOCATION;
+{
+    LOG_LOCATION;
     KineticConnection connection;
     KineticOperation operation;
 

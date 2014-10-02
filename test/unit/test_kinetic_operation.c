@@ -408,7 +408,7 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     //   }
     // }
     // hmac: "..."
-    
+
     TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
     TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
 }

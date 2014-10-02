@@ -45,7 +45,7 @@ void KineticLogger_Init(const char* logFile)
             FileDesc = fopen(LogFile, "w");
             if (FileDesc == NULL) {
                 fprintf(stderr, "Failed to initialize logger with file: "
-                    "fopen('%s') => FileDesc=%zd\n", logFile, (size_t)FileDesc);
+                        "fopen('%s') => FileDesc=%zd\n", logFile, (size_t)FileDesc);
             }
             else {
                 fprintf(stderr, "Logging output to %s\n", logFile);

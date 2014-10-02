@@ -65,7 +65,7 @@ static const char strKey[] = "GET system test blob";
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-    
+
     Key = ByteArray_Create(KeyData, sizeof(KeyData));
     KeyBuffer = ByteBuffer_CreateWithArray(Key);
     ByteBuffer_AppendCString(&KeyBuffer, strKey);

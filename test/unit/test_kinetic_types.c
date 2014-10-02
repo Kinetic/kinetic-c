@@ -40,11 +40,63 @@ void test_kinetic_types_should_be_defined(void)
     KineticSynchronization synchronization; (void)synchronization;
     KineticSessionHandle sessionHandle; (void)sessionHandle;
     KineticSession sessionConfig; (void)sessionConfig;
-    KineticOperationHandle operationHandle; (void)operationHandle;
     KineticStatus status; (void)status;
 }
 
 void test_KineticStatus_should_have_mapped_descriptors(void)
 {
     TEST_ASSERT_EQUAL(KINETIC_STATUS_COUNT, KineticStatusDescriptorCount);
+}
+
+void test_Kinetic_GetStatusDescription_should_return_appropriate_descriptions(void)
+{
+    TEST_ASSERT_EQUAL_STRING("INVALID_STATUS_CODE",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_COUNT));
+    TEST_ASSERT_EQUAL_STRING("INVALID_STATUS_CODE",
+                             Kinetic_GetStatusDescription((KineticStatus)(int)KINETIC_STATUS_COUNT + 1000));
+
+    TEST_ASSERT_EQUAL_STRING("INVALID_STATUS_CODE",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_INVALID));
+    TEST_ASSERT_EQUAL_STRING("INVALID_STATUS_CODE",
+                             Kinetic_GetStatusDescription((KineticStatus)(int)KINETIC_STATUS_INVALID + 1000));
+
+
+    TEST_ASSERT_EQUAL_STRING("NOT_ATTEMPTED",
+                             Kinetic_GetStatusDescription((KineticStatus)0));
+    TEST_ASSERT_EQUAL_STRING("NOT_ATTEMPTED",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_NOT_ATTEMPTED));
+    TEST_ASSERT_EQUAL_STRING("SUCCESS",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_SUCCESS));
+    TEST_ASSERT_EQUAL_STRING("SESSION_EMPTY",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_SESSION_EMPTY));
+    TEST_ASSERT_EQUAL_STRING("SESSION_INVALID",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_SESSION_INVALID));
+    TEST_ASSERT_EQUAL_STRING("HOST_EMPTY",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_HOST_EMPTY));
+    TEST_ASSERT_EQUAL_STRING("HMAC_EMPTY",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_HMAC_EMPTY));
+    TEST_ASSERT_EQUAL_STRING("NO_PDUS_AVAVILABLE",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_NO_PDUS_AVAVILABLE));
+    TEST_ASSERT_EQUAL_STRING("DEVICE_BUSY",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_DEVICE_BUSY));
+    TEST_ASSERT_EQUAL_STRING("CONNECTION_ERROR",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_CONNECTION_ERROR));
+    TEST_ASSERT_EQUAL_STRING("INVALID_REQUEST",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_INVALID_REQUEST));
+    TEST_ASSERT_EQUAL_STRING("OPERATION_INVALID",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_OPERATION_INVALID));
+    TEST_ASSERT_EQUAL_STRING("OPERATION_FAILED",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_OPERATION_FAILED));
+    TEST_ASSERT_EQUAL_STRING("VERSION_FAILURE",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_VERSION_FAILURE));
+    TEST_ASSERT_EQUAL_STRING("DATA_ERROR",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_DATA_ERROR));
+    TEST_ASSERT_EQUAL_STRING("BUFFER_OVERRUN",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_BUFFER_OVERRUN));
+    TEST_ASSERT_EQUAL_STRING("MEMORY_ERROR",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_MEMORY_ERROR));
+    TEST_ASSERT_EQUAL_STRING("SOCKET_TIMEOUT",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_SOCKET_TIMEOUT));
+    TEST_ASSERT_EQUAL_STRING("SOCKET_ERROR",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_SOCKET_ERROR));
 }
