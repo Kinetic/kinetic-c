@@ -122,6 +122,7 @@
       - "\"${1}\""
       - -l crypto
       - "-o \"${2}\""
+      - -l pthread
 
 :plugins:
   :load_paths:

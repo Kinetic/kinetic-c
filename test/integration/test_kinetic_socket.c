@@ -51,7 +51,6 @@ static int KineticTestPort = KINETIC_PORT;
 static uint8_t TestData[128];
 static ByteBuffer TestDataBuffer;
 static bool LogInitialized = false;
-static KineticPDU PDU;
 static bool SocketReadRequested;
 
 void Socket_RequestBytes(size_t count)
