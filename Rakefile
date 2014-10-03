@@ -1,5 +1,12 @@
 require 'kinetic-ruby'
 
+complier = ENV.fetch('CC', 'gcc')
+puts "" +
+"Configuration:\n" +
+"  compiler: #{complier}\n" +
+"  version info:\n" +
+"    " + `#{complier} --version`.lines.join("    ") + "\n"
+
 KineticRuby::Rake::load_tasks
 require 'ceedling'
 Ceedling.load_project(config: './project.yml')

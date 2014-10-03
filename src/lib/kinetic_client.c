@@ -58,8 +58,8 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     LOGF("Executing operation: 0x%llX", operation);
     if (operation->request->entry.value.array.data != NULL
         && operation->request->entry.value.bytesUsed > 0) {
-        KineticLogger_LogByteBuffer("  Sending PDU w/value:",
-                                    operation->request->entry.value);
+        LOGF("  Sending PDU w/value (%zu bytes)",
+            operation->request->entry.value.bytesUsed);
     }
     else {
         LOG("  Sending PDU w/o value");

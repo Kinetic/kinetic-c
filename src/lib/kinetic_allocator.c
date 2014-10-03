@@ -45,8 +45,8 @@ void* KineticAllocator_NewItem(KineticList* list, size_t size)
     }
     list->last = newItem;
 
-    LOGF("Allocated new list item @ 0x%0llX w/data @ 0x%0llX",
-         (long long)newItem, (long long)&newItem->data);
+    // LOGF("Allocated new list item @ 0x%0llX w/data @ 0x%0llX",
+    //      (long long)newItem, (long long)&newItem->data);
 
     return newItem->data;
 }
@@ -63,39 +63,39 @@ void KineticAllocator_FreeItem(KineticList* list, void* item)
             cur = cur->next;
         }
     }
-    LOG("  Done searching for item list item");
+    // LOG("  Done searching for item list item");
 
     if ((cur != NULL) && (cur->data == item)) {
-        LOG("  item found! freeing it.");
+        // LOG("  item found! freeing it.");
 
         // Handle PDU list emptied
         if (cur->previous == NULL) {
-            LOG("  At start of list.");
+            // LOG("  At start of list.");
             if (cur->next == NULL) {
-                LOG("  Making it empty, since all deallocated!");
+                // LOG("  Making it empty, since all deallocated!");
                 list->start = NULL;
                 list->last = NULL;
             }
             else {
-                LOG("  Moving current item to head, since head deallocated!");
+                // LOG("  Moving current item to head, since head deallocated!");
                 list->start = cur->next;
                 list->start->previous = NULL;
             }
         }
         else {
             // Relink from previous to next, if avaliable
-            LOG("  Not at list start, so relinking list to free item.");
+            // LOG("  Not at list start, so relinking list to free item.");
             if (cur->previous->next != NULL) {
-                LOG("  Relinking previous to next");
+                // LOG("  Relinking previous to next");
                 if (cur->next != NULL) {
-                    LOG("    next being reset!");
+                    // LOG("    next being reset!");
                     cur->previous->next = cur->next;
                 }
                 else {
                     list->last = cur->previous;
                     list->last->next = NULL;
-                    LOGF("    next is NULL. End of list now @ 0x%0llX",
-                         (long long)list->last);
+                    // LOGF("    next is NULL. End of list now @ 0x%0llX",
+                    //      (long long)list->last);
                 }
             }
             else {
@@ -104,8 +104,8 @@ void KineticAllocator_FreeItem(KineticList* list, void* item)
             }
         }
 
-        LOGF("  Freeing item @ 0x%0llX, item @ 0x%0llX",
-             (long long)cur, (long long)&cur->data);
+        // LOGF("  Freeing item @ 0x%0llX, item @ 0x%0llX",
+        //      (long long)cur, (long long)&cur->data);
         free(cur->data);
         cur->data = NULL;
         free(cur);
@@ -117,29 +117,29 @@ void KineticAllocator_FreeList(KineticList* list)
 {
     LOG_LOCATION;
     if (list != NULL) {
-        LOG("Freeing list of all items...");
+        LOG("Freeing list of all items");
         KineticListItem* current = list->start;
 
         while (current->next != NULL) {
-            LOG("Advancing to next list item...");
+            // LOG("Advancing to next list item...");
             current = current->next;
         }
 
         while (current != NULL) {
-            LOG("  Current item not freed!");
-            LOGF("  DEALLOCATING item: 0x%0llX, data: 0x%llX, prev: 0x%0llX",
-                 (long long)current, (long long)&current->data, (long long)current->previous);
+            // LOG("  Current item not freed!");
+            // LOGF("  DEALLOCATING item: 0x%0llX, data: 0x%llX, prev: 0x%0llX",
+            //     (long long)current, (long long)&current->data, (long long)current->previous);
             KineticListItem* curItem = current;
             KineticListItem* prevItem = current->previous;
             if (curItem != NULL) {
-                LOG("  Freeing list item");
+                // LOG("  Freeing list item");
                 if (curItem->data != NULL) {
                     free(curItem->data);
                 }
                 free(curItem);
             }
             current = prevItem;
-            LOGF("  on to prev=0x%llX", (long long)current);
+            // LOGF("  on to prev=0x%llX", (long long)current);
         }
     }
     else {
@@ -161,18 +161,15 @@ KineticPDU* KineticAllocator_NewPDU(void)
         LOG("Failed allocating new PDU!");
         return NULL;
     }
-
     assert(newPDU->proto == NULL);
-
-    LOGF("Allocated new PDU @ 0x%0llX", (long long)newPDU);
-
+    // LOGF("Allocated new PDU @ 0x%0llX", (long long)newPDU);
     return newPDU;
 }
 
 void KineticAllocator_FreePDU(KineticPDU* pdu)
 {
     if ((pdu->proto != NULL) && pdu->protobufDynamicallyExtracted) {
-        LOG("Freeing dynamically allocated protobuf");
+        // LOG("Freeing dynamically allocated protobuf");
         KineticProto__free_unpacked(pdu->proto, NULL);
     };
     KineticAllocator_FreeItem(&PDUList, (void*)pdu);
@@ -203,7 +200,7 @@ bool KineticAllocator_ValidateAllMemoryFreed(void)
 {
     bool empty = (PDUList.start == NULL);
     LOG_LOCATION;
-    LOGF("  PDUList: 0x%0llX, empty=%s",
-         (long long)PDUList.start, empty ? "true" : "false");
+    // LOGF("  PDUList: 0x%0llX, empty=%s",
+         // (long long)PDUList.start, empty ? "true" : "false");
     return empty;
 }
