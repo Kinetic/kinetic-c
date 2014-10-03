@@ -21,6 +21,23 @@
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
+#include <pthread.h>
+
+pthread_mutex_t _global_pdu_lists_mutex = PTHREAD_MUTEX_INITIALIZER;
+STATIC bool listsLocked = false;
+
+static inline void KineticAllocator_Lock(void)
+{
+    pthread_mutex_lock(&_global_pdu_lists_mutex);
+    assert(!listsLocked);
+    listsLocked = true;
+}
+
+static inline void KineticAllocator_Unlock(void)
+{
+    pthread_mutex_unlock(&_global_pdu_lists_mutex);
+    listsLocked = false;
+}
 
 void* KineticAllocator_NewItem(KineticList* const list, size_t size)
 {
@@ -34,6 +51,7 @@ void* KineticAllocator_NewItem(KineticList* const list, size_t size)
     memset(newItem->data, 0, size);
 
     // Add the new item to the list
+    KineticAllocator_Lock();
     if (list->start == NULL) {
         list->start = newItem;
     }
@@ -42,6 +60,7 @@ void* KineticAllocator_NewItem(KineticList* const list, size_t size)
         list->last->next = newItem;
     }
     list->last = newItem;
+    KineticAllocator_Unlock();
 
     // LOGF("Allocated new list item @ 0x%0llX w/data @ 0x%0llX",
     //      (long long)newItem, (long long)&newItem->data);
@@ -51,10 +70,12 @@ void* KineticAllocator_NewItem(KineticList* const list, size_t size)
 
 void KineticAllocator_FreeItem(KineticList* const list, void* item)
 {
+    KineticAllocator_Lock();
     KineticListItem* cur = list->start;
     while (cur->data != item) {
         if (cur->next == NULL) {
             LOG("  Reached end of list before finding item to free!");
+            KineticAllocator_Unlock();
             return;
         }
         else {
@@ -109,12 +130,16 @@ void KineticAllocator_FreeItem(KineticList* const list, void* item)
         free(cur);
         cur = NULL;
     }
+    KineticAllocator_Unlock();
 }
 
 void KineticAllocator_FreeList(KineticList* const list)
 {
     if (list != NULL) {
         LOG("Freeing list of all items");
+
+        KineticAllocator_Lock();
+
         KineticListItem* current = list->start;
 
         while (current->next != NULL) {
@@ -138,14 +163,17 @@ void KineticAllocator_FreeList(KineticList* const list)
             current = prevItem;
             // LOGF("  on to prev=0x%llX", (long long)current);
         }
+
+        *list = (KineticList) {
+            .start = NULL, .last = NULL
+        };
+
+        KineticAllocator_Unlock();
     }
     else {
         LOG("  Nothing to free!");
     }
 
-    *list = (KineticList) {
-        .start = NULL, .last = NULL
-    };
 }
 
 
@@ -165,10 +193,12 @@ KineticPDU* KineticAllocator_NewPDU(KineticList* const list)
 
 void KineticAllocator_FreePDU(KineticList* const list, KineticPDU* pdu)
 {
+    KineticAllocator_Lock();
     if ((pdu->proto != NULL) && pdu->protobufDynamicallyExtracted) {
         // LOG("Freeing dynamically allocated protobuf");
         KineticProto__free_unpacked(pdu->proto, NULL);
     };
+    KineticAllocator_Unlock();
     KineticAllocator_FreeItem(list, (void*)pdu);
 }
 
@@ -176,6 +206,7 @@ void KineticAllocator_FreeAllPDUs(KineticList* const list)
 {
     if (list->start != NULL) {
         LOG("Freeing all PDUs...");
+        KineticAllocator_Lock();
         KineticListItem* current = list->start;
         while (current != NULL) {
             KineticPDU* pdu = (KineticPDU*)current->data;
@@ -185,6 +216,7 @@ void KineticAllocator_FreeAllPDUs(KineticList* const list)
             }
             current = current->next;
         }
+        KineticAllocator_Unlock();
         KineticAllocator_FreeList(list);
     }
     else {

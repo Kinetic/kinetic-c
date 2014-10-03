@@ -27,13 +27,18 @@
 #include "unity_helper.h"
 #include <stdlib.h>
 
+extern bool listsLocked;
+
 KineticSession Session;
 KineticList PDUList;
 
 void setUp(void)
 {
+    KineticLogger_Init(NULL);
     TEST_ASSERT_NULL(PDUList.start);
     TEST_ASSERT_NULL(PDUList.last);
+    listsLocked = false;
+    TEST_ASSERT_FALSE(listsLocked);
 }
 
 void tearDown(void)
@@ -43,6 +48,7 @@ void tearDown(void)
     TEST_ASSERT_NULL(PDUList.start);
     TEST_ASSERT_NULL(PDUList.last);
     TEST_ASSERT_TRUE_MESSAGE(allFreed, "Dynamically allocated things were not freed!");
+    TEST_ASSERT_FALSE(listsLocked);
 }
 
 
@@ -120,6 +126,7 @@ void test_KineticAllocator_should_allocate_and_free_a_single_PDU_list_item(void)
     pdu0 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
+ 
     KineticAllocator_FreePDU(&PDUList, pdu0);
 
     allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
