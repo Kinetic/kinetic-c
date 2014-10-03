@@ -28,9 +28,7 @@
 #include <stdlib.h>
 
 KineticSession Session;
-
-extern KineticList PDUList;
-extern KineticList EntryList;
+KineticList PDUList;
 
 void setUp(void)
 {
@@ -40,8 +38,8 @@ void setUp(void)
 
 void tearDown(void)
 {
-    bool allFreed = KineticAllocator_ValidateAllMemoryFreed();
-    KineticAllocator_FreeAllPDUs();
+    bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
+    KineticAllocator_FreeAllPDUs(&PDUList);
     TEST_ASSERT_NULL(PDUList.start);
     TEST_ASSERT_NULL(PDUList.last);
     TEST_ASSERT_TRUE_MESSAGE(allFreed, "Dynamically allocated things were not freed!");
@@ -67,11 +65,11 @@ void test_KineticAllocator_FreeAllPDUs_should_free_full_list_of_PDUs(void)
     PDUList.start = list[0];
     PDUList.last  = list[2];
 
-    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed());
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&PDUList));
 
-    KineticAllocator_FreeAllPDUs();
+    KineticAllocator_FreeAllPDUs(&PDUList);
 
-    bool allFreed = KineticAllocator_ValidateAllMemoryFreed();
+    bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
 
     TEST_ASSERT_TRUE(allFreed);
 }
@@ -80,7 +78,7 @@ void test_KineticAllocator_FreeAllPDUs_should_free_full_list_of_PDUs(void)
 void test_KineticAllocator_ValidateAllMemoryFreed_should_return_true_if_all_PDUs_have_been_freed(void)
 {
     LOG_LOCATION;
-    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed());
+    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&PDUList));
 }
 
 void test_KineticAllocator_NewPDU_should_allocate_new_PDUs_and_store_references(void)
@@ -89,7 +87,7 @@ void test_KineticAllocator_NewPDU_should_allocate_new_PDUs_and_store_references(
     KineticConnection connection;
     KineticPDU* pdu;
 
-    pdu = KineticAllocator_NewPDU();
+    pdu = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
     TEST_ASSERT_NOT_NULL(PDUList.start);
@@ -98,17 +96,17 @@ void test_KineticAllocator_NewPDU_should_allocate_new_PDUs_and_store_references(
     TEST_ASSERT_NULL(PDUList.last->next);
     TEST_ASSERT_NULL(PDUList.last->previous);
 
-    pdu = KineticAllocator_NewPDU();
+    pdu = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
     TEST_ASSERT_NOT_NULL(PDUList.start->next);
 
-    pdu = KineticAllocator_NewPDU();
+    pdu = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
     TEST_ASSERT_NOT_NULL(PDUList.start->next);
 
-    KineticAllocator_FreeAllPDUs();
+    KineticAllocator_FreeAllPDUs(&PDUList);
 }
 
 
@@ -119,13 +117,13 @@ void test_KineticAllocator_should_allocate_and_free_a_single_PDU_list_item(void)
     KineticPDU* pdu0;
     bool allFreed = false;
 
-    pdu0 = KineticAllocator_NewPDU();
+    pdu0 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
-    KineticAllocator_FreePDU(pdu0);
+    KineticAllocator_FreePDU(&PDUList, pdu0);
 
-    allFreed = KineticAllocator_ValidateAllMemoryFreed();
-    KineticAllocator_FreeAllPDUs(); // Just so we don't leak memory upon failure...
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
+    KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
     TEST_ASSERT_TRUE(allFreed);
 }
 
@@ -137,30 +135,30 @@ void test_KineticAllocator_should_allocate_and_free_a_pair_of_PDU_list_items_in_
     bool allFreed = false;
 
     LOG("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU();
+    pdu0 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
 
     LOG("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU();
+    pdu1 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu1);
     pdu1->connection = &connection;
 
     LOG("Freeing second PDU");
-    KineticAllocator_FreePDU(pdu1);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed();
+    KineticAllocator_FreePDU(&PDUList, pdu1);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     if (allFreed) {
         LOG("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(); // Just so we don't leak memory upon failure...
+        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
     }
     TEST_ASSERT_FALSE(allFreed);
 
     LOG("Freeing first PDU");
-    KineticAllocator_FreePDU(pdu0);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed();
+    KineticAllocator_FreePDU(&PDUList, pdu0);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     if (!allFreed) {
         LOG("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(); // Just so we don't leak memory upon failure...
+        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
     }
     TEST_ASSERT_TRUE(allFreed);
 
@@ -175,30 +173,30 @@ void test_KineticAllocator_should_allocate_and_free_a_pair_of_PDU_list_items_in_
     bool allFreed = false;
 
     LOG("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU();
+    pdu0 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
 
     LOG("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU();
+    pdu1 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu1);
     pdu1->connection = &connection;
 
     LOG("Freeing first PDU");
-    KineticAllocator_FreePDU(pdu0);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed();
+    KineticAllocator_FreePDU(&PDUList, pdu0);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     if (allFreed) {
         LOG("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(); // Just so we don't leak memory upon failure...
+        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
     }
     TEST_ASSERT_FALSE(allFreed);
 
     LOG("Freeing second PDU");
-    KineticAllocator_FreePDU(pdu1);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed();
+    KineticAllocator_FreePDU(&PDUList, pdu1);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     if (!allFreed) {
         LOG("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(); // Just so we don't leak memory upon failure...
+        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
     }
     TEST_ASSERT_TRUE(allFreed);
 
@@ -213,44 +211,44 @@ void test_KineticAllocator_should_allocate_and_free_multiple_PDU_list_items_in_r
     bool allFreed = false;
 
     LOG("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU();
+    pdu0 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
 
     LOG("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU();
+    pdu1 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu1);
     pdu1->connection = &connection;
 
     LOG("Allocating third PDU");
-    pdu2 = KineticAllocator_NewPDU();
+    pdu2 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu2);
     pdu2->connection = &connection;
 
     LOG("Freeing second PDU");
-    KineticAllocator_FreePDU(pdu1);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed();
+    KineticAllocator_FreePDU(&PDUList, pdu1);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     if (allFreed) {
         LOG("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(); // Just so we don't leak memory upon failure...
+        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
     }
     TEST_ASSERT_FALSE(allFreed);
 
     LOG("Freeing first PDU");
-    KineticAllocator_FreePDU(pdu0);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed();
+    KineticAllocator_FreePDU(&PDUList, pdu0);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     if (allFreed) {
         LOG("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(); // Just so we don't leak memory upon failure...
+        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
     }
     TEST_ASSERT_FALSE(allFreed);
 
     LOG("Freeing third PDU");
-    KineticAllocator_FreePDU(pdu2);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed();
+    KineticAllocator_FreePDU(&PDUList, pdu2);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     if (!allFreed) {
         LOG("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(); // Just so we don't leak memory upon failure...
+        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
     }
     TEST_ASSERT_TRUE(allFreed);
 

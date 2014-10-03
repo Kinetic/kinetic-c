@@ -129,6 +129,5 @@
     - "#{Ceedling.load_path}"
   :enabled:
     - stdout_ide_tests_report
-    - xml_tests_report
     - module_generator
 ...

@@ -2,13 +2,13 @@ require 'kinetic-ruby'
 
 compiler = ENV.fetch('CC', 'gcc')
 compiler_location = `which #{compiler}`.strip
-compiler_info = `#{compiler} --version`.strip
+compiler_info = `#{compiler} --version 2>&1`.strip
 puts "" +
 "Configuration:\n" +
-"  compiler: #{compiler}\n" +
-"  location: #{compiler_location}\n" +
-"  version info:\n" +
-"    " + compiler_info.gsub(/\n/, "\n    ") + "\n\n"
+"  compiler:\n" +
+"    location: #{compiler_location}\n" +
+"    info:\n" +
+"      " + compiler_info.gsub(/\n/, "\n      ") + "\n\n"
 
 KineticRuby::Rake::load_tasks
 require 'ceedling'

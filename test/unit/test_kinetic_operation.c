@@ -73,8 +73,8 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
 void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_PDUs(void)
 {
     LOG_LOCATION;
-    KineticAllocator_NewPDU_ExpectAndReturn(&Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Response);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Response);
     KineticPDU_Init_Expect(&Request, &Connection);
     KineticPDU_Init_Expect(&Response, &Connection);
 
@@ -90,8 +90,8 @@ void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_P
 void test_KineticOperation_Free_should_free_an_operation_with_allocated_PDUs(void)
 {
     LOG_LOCATION;
-    KineticAllocator_NewPDU_ExpectAndReturn(&Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Response);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Response);
     KineticPDU_Init_Expect(&Request, &Connection);
     KineticPDU_Init_Expect(&Response, &Connection);
 
@@ -101,8 +101,8 @@ void test_KineticOperation_Free_should_free_an_operation_with_allocated_PDUs(voi
     TEST_ASSERT_NOT_NULL(operation.request);
     TEST_ASSERT_NOT_NULL(operation.response);
 
-    KineticAllocator_FreePDU_Expect(operation.request);
-    KineticAllocator_FreePDU_Expect(operation.response);
+    KineticAllocator_FreePDU_Expect(&Connection.pdus, operation.request);
+    KineticAllocator_FreePDU_Expect(&Connection.pdus, operation.response);
     KineticStatus status = KineticOperation_Free(&operation);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

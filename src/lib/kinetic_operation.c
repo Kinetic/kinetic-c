@@ -45,8 +45,8 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
 
     KineticOperation operation = {
         .connection = connection,
-        .request = KineticAllocator_NewPDU(),
-        .response =  KineticAllocator_NewPDU(),
+        .request = KineticAllocator_NewPDU(&connection->pdus),
+        .response =  KineticAllocator_NewPDU(&connection->pdus),
     };
 
     if (operation.request == NULL) {
@@ -81,12 +81,12 @@ KineticStatus KineticOperation_Free(KineticOperation* const operation)
     }
 
     if (operation->request != NULL) {
-        KineticAllocator_FreePDU(operation->request);
+        KineticAllocator_FreePDU(&operation->connection->pdus, operation->request);
         operation->request = NULL;
     }
 
     if (operation->response != NULL) {
-        KineticAllocator_FreePDU(operation->response);
+        KineticAllocator_FreePDU(&operation->connection->pdus, operation->response);
         operation->response = NULL;
     }
 

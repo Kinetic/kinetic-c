@@ -22,9 +22,7 @@
 #include "kinetic_logger.h"
 #include <stdlib.h>
 
-STATIC KineticList PDUList = {.start = NULL, .last = NULL};
-
-void* KineticAllocator_NewItem(KineticList* list, size_t size)
+void* KineticAllocator_NewItem(KineticList* const list, size_t size)
 {
     KineticListItem* newItem = (KineticListItem*)malloc(sizeof(KineticListItem));
     if (newItem == NULL) {
@@ -51,7 +49,7 @@ void* KineticAllocator_NewItem(KineticList* list, size_t size)
     return newItem->data;
 }
 
-void KineticAllocator_FreeItem(KineticList* list, void* item)
+void KineticAllocator_FreeItem(KineticList* const list, void* item)
 {
     KineticListItem* cur = list->start;
     while (cur->data != item) {
@@ -113,9 +111,8 @@ void KineticAllocator_FreeItem(KineticList* list, void* item)
     }
 }
 
-void KineticAllocator_FreeList(KineticList* list)
+void KineticAllocator_FreeList(KineticList* const list)
 {
-    LOG_LOCATION;
     if (list != NULL) {
         LOG("Freeing list of all items");
         KineticListItem* current = list->start;
@@ -153,10 +150,10 @@ void KineticAllocator_FreeList(KineticList* list)
 
 
 
-KineticPDU* KineticAllocator_NewPDU(void)
+KineticPDU* KineticAllocator_NewPDU(KineticList* const list)
 {
     KineticPDU* newPDU = (KineticPDU*)KineticAllocator_NewItem(
-                             &PDUList, sizeof(KineticPDU));
+                             list, sizeof(KineticPDU));
     if (newPDU == NULL) {
         LOG("Failed allocating new PDU!");
         return NULL;
@@ -166,21 +163,20 @@ KineticPDU* KineticAllocator_NewPDU(void)
     return newPDU;
 }
 
-void KineticAllocator_FreePDU(KineticPDU* pdu)
+void KineticAllocator_FreePDU(KineticList* const list, KineticPDU* pdu)
 {
     if ((pdu->proto != NULL) && pdu->protobufDynamicallyExtracted) {
         // LOG("Freeing dynamically allocated protobuf");
         KineticProto__free_unpacked(pdu->proto, NULL);
     };
-    KineticAllocator_FreeItem(&PDUList, (void*)pdu);
+    KineticAllocator_FreeItem(list, (void*)pdu);
 }
 
-void KineticAllocator_FreeAllPDUs(void)
+void KineticAllocator_FreeAllPDUs(KineticList* const list)
 {
-    LOG_LOCATION;
-    if (PDUList.start != NULL) {
+    if (list->start != NULL) {
         LOG("Freeing all PDUs...");
-        KineticListItem* current = PDUList.start;
+        KineticListItem* current = list->start;
         while (current != NULL) {
             KineticPDU* pdu = (KineticPDU*)current->data;
             if (pdu != NULL && pdu->proto != NULL
@@ -189,18 +185,17 @@ void KineticAllocator_FreeAllPDUs(void)
             }
             current = current->next;
         }
-        KineticAllocator_FreeList(&PDUList);
+        KineticAllocator_FreeList(list);
     }
     else {
         LOG("  Nothing to free!");
     }
 }
 
-bool KineticAllocator_ValidateAllMemoryFreed(void)
+bool KineticAllocator_ValidateAllMemoryFreed(KineticList* const list)
 {
-    bool empty = (PDUList.start == NULL);
-    LOG_LOCATION;
+    bool empty = (list->start == NULL);
     // LOGF("  PDUList: 0x%0llX, empty=%s",
-         // (long long)PDUList.start, empty ? "true" : "false");
+         // (long long)list->start, empty ? "true" : "false");
     return empty;
 }

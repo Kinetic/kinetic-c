@@ -52,6 +52,7 @@ static uint8_t TestData[128];
 static ByteBuffer TestDataBuffer;
 static bool LogInitialized = false;
 static bool SocketReadRequested;
+static KineticPDU PDU;
 
 void Socket_RequestBytes(size_t count)
 {

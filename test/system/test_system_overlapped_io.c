@@ -166,11 +166,11 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
             kt_arg[i].sessionHandle = kinetic_client[i];
             int create_status = pthread_create(&thread_id[i], NULL, kinetic_put, &kt_arg[i]);
             TEST_ASSERT_EQUAL_MESSAGE(0, create_status, "pthread create failed");
-        // }
+        }
 
-        // // Wait for each overlapped PUT operations to complete and cleanup
-        // printf("  Waiting for PUT threads to exit...\n");
-        // for (int i = 0; i < numCopiesToStore; i++) {
+        // Wait for each overlapped PUT operations to complete and cleanup
+        printf("  Waiting for PUT threads to exit...\n");
+        for (int i = 0; i < numCopiesToStore; i++) {
             int join_status = pthread_join(thread_id[i], NULL);
             TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
             KineticClient_Disconnect(&kinetic_client[i]);
