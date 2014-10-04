@@ -99,12 +99,11 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString("asdfasdf"),
-        .logFile = "NONE",
     };
 
     for (int iteration = 0; iteration < maxIterations; iteration++) {
 
-        LOGF("Overlapped PUT operation (iteration %d of %d)\n",
+        printf("Overlapped PUT operation (iteration %d of %d)\n",
                iteration + 1, maxIterations);
 
         char* buf = malloc(sizeof(char) * BUFSIZE);

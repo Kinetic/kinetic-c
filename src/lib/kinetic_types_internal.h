@@ -76,9 +76,6 @@ typedef struct _KineticConnection {
         .connectionID = time(NULL), \
         .sequence = 0, \
     }; \
-    /*(*_con).key = (ByteArray){.data = (*_con).keyData, .len = (_key).len};*/ \
-    /*if ((_key).data != NULL && (_key).len > 0) {*/ \
-    /*    memcpy((_con)->keyData, (_key).data, (_key).len); }*/ \
 }
 
 
@@ -158,17 +155,10 @@ struct _KineticPDU {
     // Message associated with this PDU instance
     union {
         KineticProto protoBase;
-
-        // Pre-structured message w/command
         KineticMessage message;
-
-        // Pad protobuf to max size for extraction of arbitrary packed proto
-        uint8_t buffer[PDU_PROTO_MAX_UNPACKED_LEN];
     } protoData;        // Proto will always be first
     KineticProto* proto;
     bool protobufDynamicallyExtracted;
-    // bool rawProtoEnabled;
-    uint8_t protobufRaw[PDU_PROTO_MAX_LEN];
 
     // Object meta-data to be used/populated if provided and pertinent to the operation
     KineticEntry entry;
@@ -186,8 +176,6 @@ struct _KineticPDU {
     (_pdu)->connection = (_con); \
     (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
-    /*(_pdu)->value = BYTE_ARRAY_NONE;*/ \
-    /*(_pdu)->proto = &(_pdu)->protoData.message.proto;*/ \
     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
 }
 #define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) { \
@@ -213,14 +201,6 @@ typedef struct _KineticOperation {
         .connection = (_con), \
     }
 
-// // Structure for defining a custom memory allocator.
-// typedef struct
-// {
-//     void        *(*alloc)(void *allocator_data, size_t size);
-//     void        (*free)(void *allocator_data, void *pointer);
-//     // Opaque pointer passed to `alloc` and `free` functions
-//     void        *allocator_data;
-// } ProtobufCAllocator;
 
 KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(
     KineticAlgorithm kinteicAlgorithm);

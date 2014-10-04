@@ -24,6 +24,13 @@
 #include "kinetic_types.h"
 
 /**
+ * Initializes the Kinetic API andcsonfigures logging destination.
+ *
+ * @param logFile Path to log file. Specify NULL to log to STDOUT.
+ */
+void KineticClient_Init(const char* logFile);
+
+/**
  * @brief Initializes the Kinetic API, configures logging destination, establishes a
  * connection to the specified Kinetic Device, and establishes a session.
  *
@@ -34,7 +41,6 @@
  *  .clusterVersion     Cluster version to use for the session
  *  .identity           Identity to use for the session
  *  .hmacKey            Key to use for HMAC calculations (NULL-terminated string)
- *  .logFile            Path to log file. Defaults to STDOUT if unspecified
  * @handle          Pointer to KineticSessionHandle (populated upon successful connection)
  *
  * @return          Returns the resulting KineticStatus
@@ -95,5 +101,24 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
  */
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
                                    KineticEntry* const metadata);
+
+/**
+ * @brief Executes a GETKEYRANGE command to retrive a set of keys in the range
+ * specified range from the Kinetic Device
+ *
+ * @param handle        KineticSessionHandle for a connected session.
+ * @param range         KineticKeyRange specifying keys to return
+ * @param keys          An pointer to an array of ByteBuffers with pre-allocated
+ *                      arrays to store the retrieved keys
+ * @param max_keys      The number maximum number of keys to request from the
+ *                      device. There must be at least this many ByteBuffers in
+ *                      the `keys` array for population.
+ *
+ *
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ *                      upon failure
+ */
+KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
+                                        KineticKeyRange* range, ByteBuffer* keys[], int max_keys);
 
 #endif // _KINETIC_CLIENT_H

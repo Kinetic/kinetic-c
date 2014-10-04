@@ -405,10 +405,9 @@ void test_KineticPDU_Receive_should_receive_a_message_for_the_exchange_and_retur
     PDU.protoData.message.status.has_code = true;
 
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader));
-    ByteArray protobuf = {.data = PDU.protobufRaw, .len = 12};
     PDU.headerNBO = (KineticPDUHeader) {
         .versionPrefix = (uint8_t)'F',
-         .protobufLength = KineticNBO_FromHostU32(protobuf.len),
+         .protobufLength = KineticNBO_FromHostU32(12),
           .valueLength = 0
     };
 

@@ -316,20 +316,28 @@ KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
     #ifdef KINETIC_LOG_SOCKET_OPERATIONS
     LOGF("Reading %zd bytes of protobuf", bytesToRead);
     #endif
-    ByteBuffer recvBuffer = ByteBuffer_Create(pdu->protobufRaw, bytesToRead);
+
+    uint8_t* packed = (uint8_t*)malloc(bytesToRead);
+    if (packed == NULL) {
+        LOG("Failed allocating memory for protocol buffer");
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+
+    ByteBuffer recvBuffer = ByteBuffer_Create(packed, bytesToRead);
     KineticStatus status = KineticSocket_Read(socket, &recvBuffer, bytesToRead);
 
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG("Protobuf read failed!");
+        free(packed);
         return status;
     }
+    else {
+        pdu->proto = KineticProto__unpack(
+            NULL, recvBuffer.bytesUsed, recvBuffer.array.data);
+    }
 
-    #ifdef KINETIC_LOG_SOCKET_OPERATIONS
-    LOG("Read packed protobuf successfully!");
-    #endif
+    free(packed);
 
-    pdu->proto =
-        KineticProto__unpack(NULL, recvBuffer.bytesUsed, recvBuffer.array.data);
     if (pdu->proto == NULL) {
         pdu->protobufDynamicallyExtracted = false;
         LOG("Error unpacking incoming Kinetic protobuf message!");
@@ -384,12 +392,21 @@ KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
     #ifdef KINETIC_LOG_SOCKET_OPERATIONS
     LOGF("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
     #endif
-    size_t len = KineticProto__pack(&pdu->protoData.message.proto,
-                                    pdu->protobufRaw);
+
+    uint8_t* packed = (uint8_t*)malloc(pdu->header.protobufLength);
+
+    if (packed == NULL) {
+        LOG("Failed allocating memory for protocol buffer");
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+    size_t len = KineticProto__pack(&pdu->protoData.message.proto, packed);
     assert(len == pdu->header.protobufLength);
 
-    ByteBuffer buffer = ByteBuffer_Create(pdu->protobufRaw, len);
+    ByteBuffer buffer = ByteBuffer_Create(packed, len);
     buffer.bytesUsed = len;
 
-    return KineticSocket_Write(socket, &buffer);
+    KineticStatus status = KineticSocket_Write(socket, &buffer);
+
+    free(packed);
+    return status;
 }

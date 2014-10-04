@@ -47,8 +47,11 @@ void setUp(void)
     SessionHandle = KINETIC_HANDLE_INVALID;
 }
 
-void tearDown(void)
+void test_KineticClient_Init_should_initialize_the_logger(void)
 {
+    KineticClient_Init("./some_file.log");
+    KineticClient_Init(NULL);
+    KineticClient_Init("NONE");
 }
 
 static void ConnectSession(void)

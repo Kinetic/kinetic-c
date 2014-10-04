@@ -81,6 +81,11 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     return status;
 }
 
+void KineticClient_Init(const char* logFile)
+{
+    KineticLogger_Init(logFile);
+}
+
 KineticStatus KineticClient_Connect(const KineticSession* config,
                                     KineticSessionHandle* handle)
 {
@@ -261,5 +266,56 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 
     KineticOperation_Free(&operation);
 
+    return status;
+}
+
+// command {
+//   header {
+//     // See above for descriptions of these fields
+//     clusterVersion: ...
+//     identity: ...
+//     connectionID: ...
+//     sequence: ...
+
+//     // messageType should be GETKEYRANGE
+//     messageType: GETKEYRANGE
+//   }
+//   body {
+//     // The range message must be populated
+//     range {
+//       // Required bytes, the beginning of the requested range
+//       startKey: "..."
+
+//       // Optional bool, defaults to false
+//       // True indicates that the start key should be included in the returned
+//       // range
+//       startKeyInclusive: ...
+
+//       // Required bytes, the end of the requested range
+//       endKey: "..."
+
+//       // Optional bool, defaults to false
+//       // True indicates that the end key should be included in the returned
+//       // range
+//       endKeyInclusive: ...
+
+//       // Required int32, must be greater than 0
+//       // The maximum number of keys returned, in sorted order
+//       maxReturned: ...
+
+//       // Optional bool, defaults to false
+//       // If true, the key range will be returned in reverse order, starting at
+//       // endKey and moving back to startKey.  For instance
+//       // if the search is startKey="j", endKey="k", maxReturned=2,
+//       // reverse=true and the keys "k0", "k1", "k2" exist
+//       // the system will return "k2" and "k1" in that order.
+//       reverse: ....
+//     }
+//   }
+// }
+KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
+                                        KineticKeyRange* range, ByteBuffer* keys[], int max_keys)
+{
+    KineticStatus status = KINETIC_STATUS_SUCCESS;
     return status;
 }

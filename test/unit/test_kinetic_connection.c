@@ -124,7 +124,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
                .clusterVersion = 17,
                 .identity = 12,
                  .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
-                  .logFile = "my.log",
         },
     };
     memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
@@ -139,7 +138,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_bloc
                .clusterVersion = expected.session.clusterVersion,
                 .identity = expected.session.identity,
                  .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
-                  .logFile = "my.log",
         },
     };
     memcpy(connection.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
@@ -176,7 +174,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_
                .clusterVersion = 17,
                 .identity = 12,
                  .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
-                  .logFile = "my.log",
         },
     };
     memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
@@ -191,7 +188,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_
                .clusterVersion = expected.session.clusterVersion,
                 .identity = expected.session.identity,
                  .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
-                  .logFile = "my.log",
         },
     };
     memcpy(connection.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);

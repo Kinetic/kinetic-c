@@ -115,15 +115,10 @@ typedef struct _KineticSession {
     // client and the device, used to sign requests.
     uint8_t keyData[KINETIC_MAX_KEY_LEN];
     ByteArray hmacKey;
-
-    // Log file name (uses stdout if empty)
-    char    logFile[LOG_FILE_NAME_MAX];
 } KineticSession;
 
-#define KINETIC_SESSION_INIT(_session, \
-    _host, _clusterVersion, _identity, _hmacKey) { \
+#define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey) { \
     *(_session) = (KineticSession) { \
-        .logFile = "", \
         .port = KINETIC_PORT, \
         .clusterVersion = (_clusterVersion), \
         .identity = (_identity), \
@@ -171,5 +166,15 @@ typedef struct _KineticEntry {
     KineticSynchronization synchronization;
     ByteBuffer value;
 } KineticEntry;
+
+// Kinetic Key Range request structure
+typedef struct _KineticKeyRange {
+    ByteBuffer startKey;
+    ByteBuffer endKey;
+    bool startKeyInclusive;
+    bool endKeyInclusive;
+    int32_t maxReturned;
+    bool reverse;
+} KineticKeyRange;
 
 #endif // _KINETIC_TYPES_H
