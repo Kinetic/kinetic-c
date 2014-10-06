@@ -169,3 +169,15 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
     operation->request->entry.value = BYTE_BUFFER_NONE;
     operation->response->entry.value = BYTE_BUFFER_NONE;
 }
+
+void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
+    KineticKeyRange* range)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+
+    operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_GETKEYRANGE;
+    operation->request->proto->command->header->has_messageType = true;
+
+    KineticMessage_ConfigureKeyRange(&operation->request->protoData.message, range);
+}

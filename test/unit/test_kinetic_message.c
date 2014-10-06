@@ -147,3 +147,92 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
     TEST_ASSERT_FALSE(message.keyValue.has_force);
     TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
 }
+
+void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticProto_KeyRange_to_the_message(void)
+{
+    KineticMessage message;
+
+    const int numKeysInRange = 4;
+    uint8_t startKeyData[32];
+    uint8_t endKeyData[32];
+    ByteBuffer startKey, endKey;
+
+    startKey = ByteBuffer_Create(startKeyData, sizeof(startKeyData));
+    ByteBuffer_AppendCString(&startKey, "key_range_00_00");
+    endKey = ByteBuffer_Create(endKeyData, sizeof(endKeyData));
+    ByteBuffer_AppendCString(&endKey, "key_range_00_03");
+
+    KineticKeyRange range = {
+        .startKey = startKey,
+        .endKey = endKey,
+        .startKeyInclusive = true,
+        .endKeyInclusive = true,
+        .maxReturned = numKeysInRange,
+        .reverse = true,
+    };
+
+    memset(&message, 0, sizeof(KineticMessage));
+    KineticMessage_Init(&message);
+
+    KineticMessage_ConfigureKeyRange(&message, &range);
+
+    // Validate that message keyValue and body container are enabled in protobuf
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.proto.command->body);
+    TEST_ASSERT_EQUAL_PTR(&message.keyRange, message.proto.command->body->range);
+
+    // Validate range fields
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_startKey);
+    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.proto.command->body->range->startKey.data);
+    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.proto.command->body->range->startKey.len);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_endKey);
+    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.proto.command->body->range->endKey.data);
+    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.proto.command->body->range->endKey.len);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_startKeyInclusive);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->startKeyInclusive);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_endKeyInclusive);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->endKeyInclusive);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_maxReturned);
+    TEST_ASSERT_EQUAL(numKeysInRange, message.proto.command->body->range->maxReturned);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_reverse);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->reverse);
+    TEST_ASSERT_EQUAL(0, message.proto.command->body->range->n_key);
+    TEST_ASSERT_NULL(message.proto.command->body->range->key);
+
+
+
+
+    range = (KineticKeyRange) {
+        .startKey = startKey,
+        .endKey = endKey,
+        .startKeyInclusive = false,
+        .endKeyInclusive = false,
+        .maxReturned = 1,
+        .reverse = false,
+    };
+
+    memset(&message, 0, sizeof(KineticMessage));
+    KineticMessage_Init(&message);
+
+    KineticMessage_ConfigureKeyRange(&message, &range);
+
+    // Validate that message keyValue and body container are enabled in protobuf
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.proto.command->body);
+    TEST_ASSERT_EQUAL_PTR(&message.keyRange, message.proto.command->body->range);
+
+    // Validate range fields
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_startKey);
+    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.proto.command->body->range->startKey.data);
+    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.proto.command->body->range->startKey.len);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_endKey);
+    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.proto.command->body->range->endKey.data);
+    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.proto.command->body->range->endKey.len);
+    TEST_ASSERT_FALSE(message.proto.command->body->range->has_startKeyInclusive);
+    TEST_ASSERT_FALSE(message.proto.command->body->range->has_endKeyInclusive);
+    TEST_ASSERT_TRUE(message.proto.command->body->range->has_maxReturned);
+    TEST_ASSERT_EQUAL(1, message.proto.command->body->range->maxReturned);
+    TEST_ASSERT_FALSE(message.proto.command->body->range->has_reverse);
+    TEST_ASSERT_EQUAL(0, message.proto.command->body->range->n_key);
+    TEST_ASSERT_NULL(message.proto.command->body->range->key);
+}

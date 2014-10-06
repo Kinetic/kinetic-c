@@ -98,6 +98,7 @@ typedef struct _KineticMessage {
     KineticProto_Security       security;
     KineticProto_Security_ACL   acl;
     KineticProto_KeyValue       keyValue;
+    KineticProto_Range          keyRange;
     uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
 } KineticMessage;
 #define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) { \
@@ -136,7 +137,7 @@ typedef struct _KineticMessage {
 #define PDU_PROTO_MAX_LEN           (1024 * 1024)
 #define PDU_PROTO_MAX_UNPACKED_LEN  (PDU_PROTO_MAX_LEN * 2)
 #define PDU_MAX_LEN                 (PDU_HEADER_LEN + \
-                                    PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
+                                    PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE)
 typedef struct __attribute__((__packed__)) _KineticPDUHeader {
     uint8_t     versionPrefix;
     uint32_t    protobufLength;
@@ -214,8 +215,13 @@ KineticSynchronization KineticSynchronization_from_KineticProto_Synchronization(
 
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
     KineticProto_Status_StatusCode protoStatus);
-ByteArray ProtobufCBinaryData_to_ByteArray(ProtobufCBinaryData protoData);
-bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData src);
-bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue, KineticEntry* entry);
+ByteArray ProtobufCBinaryData_to_ByteArray(
+    ProtobufCBinaryData protoData);
+bool Copy_ProtobufCBinaryData_to_ByteBuffer(
+    ByteBuffer dest, ProtobufCBinaryData src);
+bool Copy_KineticProto_KeyValue_to_KineticEntry(
+    KineticProto_KeyValue* keyValue, KineticEntry* entry);
+bool Copy_KineticProto_Range_to_buffer_list(
+    KineticProto_Range* keyRange, ByteBuffer* keys, int64_t max_keys);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

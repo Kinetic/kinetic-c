@@ -26,7 +26,6 @@
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
 
-#define KINETIC_OBJ_SIZE (PDU_VALUE_MAX_LEN)
 #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_KEY_SIZE (1000)
 #define KINETIC_MAX_THREADS (10)

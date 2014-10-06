@@ -88,12 +88,6 @@ task :proto => [PROTO_OUT] do
 
 end
 
-desc "Analyze code w/CppCheck"
-task :cppcheck do
-  raise "CppCheck not found!" unless `cppcheck --version` =~ /cppcheck \d+.\d+/mi
-  execute_command "cppcheck ./src ./test ./build/temp/proto", "Analyzing code w/CppCheck"
-end
-
 namespace :doxygen do
 
   DOCS_PATH = "./docs/"
@@ -394,7 +388,7 @@ end
 task :test_all => ['tests:unit', 'tests:integration', 'tests:system']
 
 desc "Build all and run test utility"
-task :all => ['cppcheck', 'test_all', 'lib', 'utility', 'run']
+task :all => ['test_all', 'lib', 'utility', 'run']
 
 desc "Run full CI build"
 task :ci => ['clobber', 'all']

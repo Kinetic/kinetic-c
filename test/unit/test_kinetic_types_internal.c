@@ -23,6 +23,7 @@
 #include "kinetic_logger.h"
 #include "protobuf-c/protobuf-c.h"
 #include "kinetic_types_internal.h"
+#include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
 
@@ -147,4 +148,9 @@ void test_KineticProto_Algorithm_from_KineticAlgorithm_should_map_from_public_to
     TEST_ASSERT_EQUAL(
         KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM,
         KineticProto_Algorithm_from_KineticAlgorithm((KineticAlgorithm) - 19));
+}
+
+void test_Copy_KineticProto_Range_to_buffer_list_should_copy_keys_into_byte_buffers(void)
+{
+    TEST_ASSERT_TRUE(Copy_KineticProto_Range_to_buffer_list(NULL, NULL, 0));
 }

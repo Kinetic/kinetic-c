@@ -39,7 +39,7 @@ static KineticPDU PDU;
 static KineticConnection Connection;
 static KineticSession Session;
 static ByteArray Key;
-static uint8_t ValueBuffer[PDU_VALUE_MAX_LEN];
+static uint8_t ValueBuffer[KINETIC_OBJ_SIZE];
 static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 
 void EnableAndSetPDUConnectionID(KineticPDU* pdu, int64_t connectionID)
@@ -97,16 +97,16 @@ void test_KineteicPDU_PDU_PROTO_MAX_LEN_should_be_1MB(void)
     TEST_ASSERT_EQUAL(1024 * 1024, PDU_PROTO_MAX_LEN);
 }
 
-void test_KineteicPDU_PDU_VALUE_MAX_LEN_should_be_1MB(void)
+void test_KineteicPDU_KINETIC_OBJ_SIZE_should_be_1MB(void)
 {
     LOG_LOCATION;
-    TEST_ASSERT_EQUAL(1024 * 1024, PDU_VALUE_MAX_LEN);
+    TEST_ASSERT_EQUAL(1024 * 1024, KINETIC_OBJ_SIZE);
 }
 
-void test_KineticPDU_PDU_VALUE_MAX_LEN_should_be_the_sum_of_header_protobuf_and_value_max_lengths(void)
+void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_value_max_lengths(void)
 {
     LOG_LOCATION;
-    TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN, PDU_MAX_LEN);
+    TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE, PDU_MAX_LEN);
 }
 
 
@@ -614,4 +614,25 @@ void test_KineticPDU_GetKeyValue_should_return_NULL_message_has_no_KeyValue(void
     PDU.protoData.message.command.body->keyValue = &PDU.protoData.message.keyValue;
     keyValue = KineticPDU_GetKeyValue(&PDU);
     TEST_ASSERT_NOT_NULL(keyValue);
+}
+
+
+void test_KineticPDU_GetKeyRange_should_return_the_KineticProto_Range_from_the_message_if_avaliable(void)
+{ LOG_LOCATION;
+    KINETIC_PDU_INIT_WITH_MESSAGE(&PDU, &Connection);
+    KineticProto_Range* range;
+
+    PDU.proto->command->body = NULL;
+
+    range = KineticPDU_GetKeyRange(&PDU);
+    TEST_ASSERT_NULL(range);
+
+    PDU.proto->command->body = &PDU.protoData.message.body;
+    PDU.proto->command->body->range = NULL;
+    range = KineticPDU_GetKeyRange(&PDU);
+    TEST_ASSERT_NULL(range);
+
+    PDU.proto->command->body->range = &PDU.protoData.message.keyRange;
+    range = KineticPDU_GetKeyRange(&PDU);
+    TEST_ASSERT_EQUAL_PTR(&PDU.protoData.message.keyRange, range);
 }
