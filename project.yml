@@ -5,15 +5,12 @@
   :use_test_preprocessor: true
   :use_deep_dependencies: true
   :build_root: build
-  :release_build: true
   :test_file_prefix: test_
   :options_paths:
     - config/
 
 :release_build:
   :output: kinetic-c
-  # Uncomment the following to enable use of assembly files
-  # :use_assembly: true
 
 # Enable this section to configure environment vars, if needed
 # :environment:
@@ -34,25 +31,13 @@
     - include/**
     - vendor/
     - vendor/protobuf-c/**
-  # Refactor release build once the Kinetic-C library is built, and link to it sepearately
-  :release_toolchain_include:
-    - src/**
-    - include/**
-    - vendor/
-    - vendor/protobuf-c/**
 
 :defines:
-  # in order to add common defines:
-  #  1) remove the trailing [] from the :common: section
-  #  2) add entries to the :common: section (e.g. :test: has TEST defined)
-  :commmon: &common_defines []
+  :commmon: &common_defines
+    - TEST
   :test:
     - *common_defines
-    - TEST
   :test_preprocess:
-    - *common_defines
-    - TEST
-  :release:
     - *common_defines
 
 :flags:
@@ -72,9 +57,9 @@
   :plugins:
     - :ignore
     # - :ignore_args
-    - :array
-    - :cexception
-    - :callback
+    # - :array
+    # - :cexception
+    # - :callback
     - :return_thru_ptr
   :unity_helper_path: test/support/unity_helper.h
   :includes_h_post_orig_header:
@@ -87,12 +72,13 @@
     int8_t:     INT8
     bool_t:     BOOL
     size_t:     INT
+    KineticSessionHandle: INT
+    KineticOperationHandle: INT
   :callback_include_count: true
 
 :tools:
-
   :test_includes_preprocessor:
-    :executable: gcc
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :arguments:
       - -E
       - -MM
@@ -110,9 +96,8 @@
       - -D_POSIX_C_SOURCE=1
       - -D_C99_SOURCE=1
       - ${1}
-
   :test_compiler:
-    :executable: gcc
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :arguments:
       - -I"$": COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR
       - -I"$": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
@@ -125,59 +110,24 @@
       - -pedantic
       - -D_POSIX_C_SOURCE=1
       - -D_C99_SOURCE=1
+      - -Wno-nonnull
+      - -Wno-address
+      - -Wno-missing-field-initializers
       - -c ${1}
       - -o ${2}
-  :release_compiler:
-    :executable: gcc
-    :arguments:
-      - -I"$": 'COLLECTION_PATHS_SOURCE_INCLUDE_VENDOR'
-      - -I"$": 'COLLECTION_PATHS_RELEASE_TOOLCHAIN_INCLUDE'
-      - -D"$": 'COLLECTION_DEFINES_RELEASE_AND_VENDOR'
-      - -DGNU_COMPILER
-      - -std=c99
-      - -g
-      - -Wall
-      - -Wextra
-      - -pedantic
-      - -D_POSIX_C_SOURCE=1
-      - -D_C99_SOURCE=1
-      - -l crypto
-      - -l ssl
-      - "-c \"${1}\""
-      - "-o \"${2}\""
-
-
   :test_linker:
-    :executable: gcc
+    :executable: "#{ENV.fetch('CC', 'gcc')}"
     :name: test_linker
     :arguments:
       - "\"${1}\""
       - -l crypto
       - "-o \"${2}\""
-  :gcov_linker:
-    :executable: gcc
-    :arguments:
-      - -fprofile-arcs
-      - -ftest-coverage
-      - -l crypto
-      - ${1}
-      - -o ${2}
-  :release_linker:
-    :executable: gcc
-    :name: release_linker
-    :arguments:
-      - "\"${1}\""
-      - -l crypto
-      - -l ssl
-      - "-o \"${2}\""
+      - -l pthread
 
 :plugins:
   :load_paths:
     - "#{Ceedling.load_path}"
   :enabled:
     - stdout_ide_tests_report
-    - xml_tests_report
-    # - warnings_report
     - module_generator
-    - gcov
 ...

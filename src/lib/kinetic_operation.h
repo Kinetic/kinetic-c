@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -23,14 +23,16 @@
 
 #include "kinetic_types_internal.h"
 
+KineticOperation KineticOperation_Create(KineticConnection* const connection);
+KineticStatus KineticOperation_Free(KineticOperation* const operation);
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
-void KineticOperation_BuildPut(KineticOperation* operation,
-                               const KineticKeyValue* metadata);
-void KineticOperation_BuildGet(KineticOperation* operation,
-                               const KineticKeyValue* metadata);
-void KineticOperation_BuildDelete(KineticOperation* operation,
-                                  const KineticKeyValue* metadata);
+void KineticOperation_BuildPut(KineticOperation* const operation,
+                               KineticEntry* const entry);
+void KineticOperation_BuildGet(KineticOperation* const operation,
+                               KineticEntry* const entry);
+void KineticOperation_BuildDelete(KineticOperation* const operation,
+                                  KineticEntry* const entry);
 
 #endif // _KINETIC_OPERATION_H

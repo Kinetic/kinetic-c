@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -26,6 +26,6 @@
 
 void KineticMessage_Init(KineticMessage* const message);
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-                                      const KineticKeyValue* metadata);
+                                      const KineticEntry* entry);
 
 #endif // _KINETIC_MESSAGE_H

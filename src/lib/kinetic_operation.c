@@ -14,78 +14,19 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
 #include "kinetic_operation.h"
 #include "kinetic_connection.h"
 #include "kinetic_message.h"
+#include "kinetic_pdu.h"
+#include "kinetic_allocator.h"
 #include "kinetic_logger.h"
+#include <stdlib.h>
 
-KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation)
-{
-    KineticStatus status = KINETIC_STATUS_INVALID;
-
-    if (operation != NULL &&
-        operation->response != NULL &&
-        operation->response->proto != NULL &&
-        operation->response->proto->command != NULL &&
-        operation->response->proto->command->status != NULL &&
-        operation->response->proto->command->status->has_code != false &&
-        operation->response->proto->command->status->code !=
-        KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE) {
-        switch (operation->response->proto->command->status->code) {
-        case KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS:
-            status = KINETIC_STATUS_SUCCESS;
-            break;
-
-        case KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR:
-            status = KINETIC_STATUS_CONNECTION_ERROR;
-            break;
-
-        case KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY:
-            status = KINETIC_STATUS_DEVICE_BUSY;
-            break;
-
-        case KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM:
-            status = KINETIC_STATUS_INVALID_REQUEST;
-            break;
-
-        case KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE:
-            status = KINETIC_STATUS_VERSION_FAILURE;
-            break;
-
-        case KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND:
-            status = KINETIC_STATUS_DATA_ERROR;
-            break;
-
-        case KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS:
-            status = KINETIC_STATUS_OPERATION_FAILED;
-            break;
-
-        default:
-        case KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE:
-        case _KINETIC_PROTO_STATUS_STATUS_CODE_IS_INT_SIZE:
-            status = KINETIC_STATUS_INVALID;
-            break;
-        }
-    }
-    return status;
-}
-
-void KineticOperation_ValidateOperation(KineticOperation* operation)
+static void KineticOperation_ValidateOperation(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
@@ -96,60 +37,135 @@ void KineticOperation_ValidateOperation(KineticOperation* operation)
     assert(operation->response != NULL);
 }
 
-void KineticOperation_BuildNoop(KineticOperation* operation)
+KineticOperation KineticOperation_Create(KineticConnection* const connection)
+{
+    LOGF("\n"
+         "--------------------------------------------------\n"
+         "Building new operation on connection @ 0x%llX", connection);
+
+    KineticOperation operation = {
+        .connection = connection,
+        .request = KineticAllocator_NewPDU(&connection->pdus),
+        .response =  KineticAllocator_NewPDU(&connection->pdus),
+    };
+
+    if (operation.request == NULL) {
+        LOG("Request PDU could not be allocated!"
+            " Try reusing or freeing a PDU.");
+        return (KineticOperation) {
+            .request = NULL, .response = NULL
+        };
+    }
+    KineticPDU_Init(operation.request, connection);
+    KINETIC_PDU_INIT_WITH_MESSAGE(operation.request, connection);
+    operation.request->proto = &operation.request->protoData.message.proto;
+
+    if (operation.response == NULL) {
+        LOG("Response PDU could not be allocated!"
+            " Try reusing or freeing a PDU.");
+        return (KineticOperation) {
+            .request = NULL, .response = NULL
+        };
+    }
+
+    KineticPDU_Init(operation.response, connection);
+
+    return operation;
+}
+
+KineticStatus KineticOperation_Free(KineticOperation* const operation)
+{
+    if (operation == NULL) {
+        LOG("Specified operation is NULL so nothing to free");
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
+
+    if (operation->request != NULL) {
+        KineticAllocator_FreePDU(&operation->connection->pdus, operation->request);
+        operation->request = NULL;
+    }
+
+    if (operation->response != NULL) {
+        KineticAllocator_FreePDU(&operation->connection->pdus, operation->response);
+        operation->response = NULL;
+    }
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation)
+{
+    KineticStatus status = KINETIC_STATUS_INVALID;
+
+    if (operation != NULL) {
+        status = KineticPDU_GetStatus(operation->response);
+    }
+
+    return status;
+}
+
+void KineticOperation_BuildNoop(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
     operation->request->proto->command->header->has_messageType = true;
+
+    operation->request->entry.value = BYTE_BUFFER_NONE;
+    operation->response->entry.value = BYTE_BUFFER_NONE;
 }
 
-void KineticOperation_BuildPut(KineticOperation* operation,
-                               const KineticKeyValue* metadata)
+void KineticOperation_BuildPut(KineticOperation* const operation,
+                               KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_PUT;
     operation->request->proto->command->header->has_messageType = true;
+    operation->request->entry = *entry;
+    operation->response->entry = *entry;
 
-    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 
-    operation->request->value = metadata->value;
+    operation->request->entry.value = entry->value;
+    operation->response->entry.value = BYTE_BUFFER_NONE;
 }
 
-void KineticOperation_BuildGet(KineticOperation* operation,
-                               const KineticKeyValue* metadata)
+void KineticOperation_BuildGet(KineticOperation* const operation,
+                               KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_GET;
     operation->request->proto->command->header->has_messageType = true;
+    operation->request->entry = *entry;
+    operation->response->entry = *entry;
 
-    operation->request->value = BYTE_ARRAY_NONE;
-    if (metadata->value.data != NULL) {
-        operation->response->value.data = metadata->value.data;
-    }
-    else {
-        operation->response->value.data = operation->response->valueBuffer;
-    }
-    operation->response->value.len = PDU_VALUE_MAX_LEN;
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 
-    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
+    operation->request->entry.value = BYTE_BUFFER_NONE;
+    operation->response->entry.value = BYTE_BUFFER_NONE;
+    if (!entry->metadataOnly) {
+        operation->response->entry.value = entry->value;
+    }
 }
 
-void KineticOperation_BuildDelete(KineticOperation* operation,
-                                  const KineticKeyValue* metadata)
+void KineticOperation_BuildDelete(KineticOperation* const operation,
+                                  KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_DELETE;
     operation->request->proto->command->header->has_messageType = true;
-    operation->request->value = BYTE_ARRAY_NONE;
-    operation->response->value = BYTE_ARRAY_NONE;
+    operation->request->entry = *entry;
+    operation->response->entry = *entry;
 
-    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, metadata);
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
+
+    operation->request->entry.value = BYTE_BUFFER_NONE;
+    operation->response->entry.value = BYTE_BUFFER_NONE;
 }

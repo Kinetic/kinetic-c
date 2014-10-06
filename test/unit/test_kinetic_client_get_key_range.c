@@ -1,3 +1,4 @@
+
 /*
 * kinetic-c
 * Copyright (C) 2014 Seagate Technology.
@@ -20,6 +21,7 @@
 
 #include "kinetic_client.h"
 #include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"

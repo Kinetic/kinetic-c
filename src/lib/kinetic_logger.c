@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -25,26 +25,32 @@
 
 static char LogFile[256] = "";
 bool LogToConsole = true;
+int LogLevel = 0;
 FILE* FileDesc = NULL;
 
 void KineticLogger_Init(const char* logFile)
 {
     LogToConsole = true;
     FileDesc = NULL;
+    LogLevel = 0;
+
     if (logFile != NULL) {
         strcpy(LogFile, logFile);
-        FileDesc = fopen(LogFile, "w");
-        if (FileDesc == NULL) {
-            fprintf(stderr,
-                    "Failed to initialize logger with file: "
-                    "fopen('%s') => FileDesc=%zd\n",
-                    logFile, (size_t)FileDesc);
+        if (strcmp(logFile, "NONE") == 0) {
+            LogLevel = -1;
+            LogToConsole = false;
+            return;
         }
         else {
-            fprintf(stderr,
-                    "Logging output to %s\n",
-                    logFile);
-            LogToConsole = false;
+            FileDesc = fopen(LogFile, "w");
+            if (FileDesc == NULL) {
+                fprintf(stderr, "Failed to initialize logger with file: "
+                        "fopen('%s') => FileDesc=%zd\n", logFile, (size_t)FileDesc);
+            }
+            else {
+                fprintf(stderr, "Logging output to %s\n", logFile);
+                LogToConsole = false;
+            }
         }
     }
 }
@@ -60,7 +66,7 @@ void KineticLogger_Close(void)
 
 void KineticLogger_Log(const char* message)
 {
-    if (message == NULL) {
+    if (message == NULL || LogLevel < 0) {
         return;
     }
 
@@ -75,13 +81,15 @@ int KineticLogger_LogPrintf(const char* format, ...)
 {
     int result = -1;
 
-    if (format != NULL) {
-        va_list arg_ptr;
-        char buffer[1024];
-        va_start(arg_ptr, format);
-        result = vsprintf(buffer, format, arg_ptr);
-        KineticLogger_Log(buffer);
-        va_end(arg_ptr);
+    if (LogLevel >= 0) {
+        if (format != NULL) {
+            va_list arg_ptr;
+            char buffer[1024];
+            va_start(arg_ptr, format);
+            result = vsprintf(buffer, format, arg_ptr);
+            KineticLogger_Log(buffer);
+            va_end(arg_ptr);
+        }
     }
 
     return (result);
@@ -90,6 +98,10 @@ int KineticLogger_LogPrintf(const char* format, ...)
 
 void KineticLogger_LogHeader(const KineticPDUHeader* header)
 {
+    if (LogLevel < 0) {
+        return;
+    }
+
     LOG("PDU Header:");
     LOGF("  versionPrefix: %c", header->versionPrefix);
     LOGF("  protobufLength: %d", header->protobufLength);
@@ -148,12 +160,16 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
 }
 
 #define BYTES_TO_CSTRING(_buf_start, _array, _array_start, _count) { \
-    char* p_buf = (_buf_start); \
-    KineticLogger_ByteArraySliceToCString(p_buf, (_array), 0, _array.len); \
+    ByteArray key = {.data = _array.data, .len = _array.len}; \
+    KineticLogger_ByteArraySliceToCString((char*)(_buf_start), key, 0, key.len); \
 }
 
 void KineticLogger_LogProtobuf(const KineticProto* proto)
 {
+    if (LogLevel < 0) {
+        return;
+    }
+
     LOG_PROTO_INIT();
     char tmpBuf[1024];
 
@@ -218,8 +234,8 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
                     {
                         if (proto->command->body->keyValue->has_key) {
                             BYTES_TO_CSTRING(tmpBuf,
-                                             proto->command->body->keyValue->key,
-                                             0, proto->command->body->keyValue->key.len);
+                                             proto->command->body->keyValue->key, 0,
+                                             proto->command->body->keyValue->key.len);
                             LOGF("%skey: '%s'", _indent, tmpBuf);
                         }
                         if (proto->command->body->keyValue->has_newVersion) {
@@ -303,6 +319,10 @@ void KineticLogger_LogProtobuf(const KineticProto* proto)
 
 void KineticLogger_LogStatus(KineticProto_Status* status)
 {
+    if (LogLevel < 0) {
+        return;
+    }
+
     ProtobufCMessage* protoMessage = (ProtobufCMessage*)status;
     KineticProto_Status_StatusCode code = status->code;
 
@@ -356,6 +376,19 @@ void KineticLogger_LogStatus(KineticProto_Status* status)
 
 void KineticLogger_LogByteArray(const char* title, ByteArray bytes)
 {
+    if (LogLevel < 0) {
+        return;
+    }
+
+    assert(title != NULL);
+    if (bytes.data == NULL) {
+        LOGF("%s: (??? bytes : buffer is NULL)", title);
+        return;
+    }
+    if (bytes.data == NULL) {
+        LOGF("%s: (0 bytes)", title);
+        return;
+    }
     LOGF("%s: (%zd bytes)", title, bytes.len);
     const int byteChars = 4;
     const int bytesPerLine = 16;
@@ -384,4 +417,10 @@ void KineticLogger_LogByteArray(const char* title, ByteArray bytes)
         }
         LOGF("  %s : %s", hex, ascii);
     }
+}
+
+void KineticLogger_LogByteBuffer(const char* title, ByteBuffer buffer)
+{
+    ByteArray array = {.data = buffer.array.data, .len = buffer.bytesUsed};
+    KineticLogger_LogByteArray(title, array);
 }

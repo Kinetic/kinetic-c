@@ -14,11 +14,12 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 
 #include "kinetic_message.h"
+#include "kinetic_logger.h"
 
 void KineticMessage_Init(KineticMessage* const message)
 {
@@ -26,24 +27,26 @@ void KineticMessage_Init(KineticMessage* const message)
     KINETIC_MESSAGE_INIT(message);
 }
 
-// e.g. CONFIG_FIELD_BYTE_ARRAY(key, message->keyValue, metadata)
-#define CONFIG_FIELD_BYTE_ARRAY(_name, _field, _config) { \
-    if (_config->_name.data != NULL && _config->_name.len > 0) { \
-        _field._name = _config->_name; \
-        _field.has_ ## _name = true; \
+// e.g. CONFIG_FIELD_BYTE_BUFFER(key, message->keyValue, entry)
+#define CONFIG_FIELD_BYTE_BUFFER(_name, _field, _entry) { \
+    if ((_entry)->_name.array.data != NULL \
+        && (_entry)->_name.array.len > 0 \
+        && (_entry)->_name.bytesUsed > 0 \
+        && (_entry)->_name.bytesUsed <= (_entry)->_name.array.len) { \
+        (_field)._name.data = (_entry)->_name.array.data; \
+        (_field)._name.len = (_entry)->_name.bytesUsed; \
+        (_field).has_ ## _name = true; \
+    } \
+    else { \
+        (_field).has_ ## _name = false; \
     } \
 }
 
-// #define CONFIG_OPTIONAL_FIELD_ENUM(name, field, message) {
-//     message->keyValue.(name) = ((int)metadata->algorithm > 0);
-//     if (message->keyValue.has_(name)) {
-//         message->keyValue.algorithm = algorithm; } }
-
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
-                                      const KineticKeyValue* metadata)
+                                      const KineticEntry* entry)
 {
     assert(message != NULL);
-    assert(metadata != NULL);
+    assert(entry != NULL);
 
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
@@ -53,44 +56,30 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->proto.command->body->keyValue = &message->keyValue;
 
     // Set keyValue fields appropriately
-    CONFIG_FIELD_BYTE_ARRAY(key, message->keyValue, metadata);
-    CONFIG_FIELD_BYTE_ARRAY(newVersion, message->keyValue, metadata);
-    CONFIG_FIELD_BYTE_ARRAY(dbVersion, message->keyValue, metadata);
-    CONFIG_FIELD_BYTE_ARRAY(tag, message->keyValue, metadata);
+    CONFIG_FIELD_BYTE_BUFFER(key,        message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(newVersion, message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(dbVersion,  message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(tag,        message->keyValue, entry);
 
-    message->keyValue.has_force = (bool)((int)metadata->force);
+    message->keyValue.has_force = (bool)((int)entry->force);
     if (message->keyValue.has_force) {
-        message->keyValue.force = metadata->force;
+        message->keyValue.force = entry->force;
     }
 
-    message->keyValue.has_algorithm = (bool)((int)metadata->algorithm > 0);
+    message->keyValue.has_algorithm = (bool)((int)entry->algorithm > 0);
     if (message->keyValue.has_algorithm) {
-        message->keyValue.algorithm = metadata->algorithm;
+        message->keyValue.algorithm =
+            KineticProto_Algorithm_from_KineticAlgorithm(entry->algorithm);
     }
-
-    message->keyValue.has_metadataOnly = metadata->metadataOnly;
+    message->keyValue.has_metadataOnly = entry->metadataOnly;
     if (message->keyValue.has_metadataOnly) {
-        message->keyValue.metadataOnly = metadata->metadataOnly;
+        message->keyValue.metadataOnly = entry->metadataOnly;
     }
 
-    message->keyValue.has_synchronization = (metadata->synchronization > 0);
+    message->keyValue.has_synchronization = (entry->synchronization > 0);
     if (message->keyValue.has_synchronization) {
-        KineticProto_Synchronization sync_mode;
-        switch(metadata->synchronization) {
-        case KINETIC_SYNCHRONIZATION_WRITETHROUGH:
-            sync_mode = KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH;
-            break;
-        case KINETIC_SYNCHRONIZATION_WRITEBACK:
-            sync_mode = KINETIC_PROTO_SYNCHRONIZATION_WRITEBACK;
-            break;
-        case KINETIC_SYNCHRONIZATION_FLUSH:
-            sync_mode = KINETIC_PROTO_SYNCHRONIZATION_FLUSH;
-            break;
-        default:
-        case KINETIC_SYNCHRONIZATION_INVALID:
-            sync_mode = KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION;
-            break;
-        };
-        message->keyValue.synchronization = sync_mode;
+        message->keyValue.synchronization =
+            KineticProto_Synchronization_from_KineticSynchronization(
+                entry->synchronization);
     }
 }

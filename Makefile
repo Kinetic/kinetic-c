@@ -1,66 +1,72 @@
-PROJECT = kinetic-c-client
-UTILITY = kinetic-c-util
-
+#===============================================================================
+# Configuration of Shared Paths
+#===============================================================================
 OUT_DIR = ./obj
 BIN_DIR = ./bin
 PUB_INC = ./include
-API_NAME = kinetic_client
-LIB_DIR = ./src/lib
-UTIL_DIR = ./src/utility
-UTIL_EX = $(UTIL_DIR)/examples
-PBC_INC = ./vendor/protobuf-c
-SOCKET99 = ./vendor/socket99
-VND_INC = ./vendor
-BIN = $(BIN_DIR)/kinetic_client
-LDFLAGS += -lm -l ssl -l kinetic-c-client -l crypto
 
-PREFIX ?= /usr/local
-INSTALL ?= install
-RM ?= rm
-
-KINETIC_LIB = $(BIN_DIR)/lib${PROJECT}.a
-VERSION = $(shell head -n1 ./VERSION)
-KINETIC_SO = $(BIN_DIR)/lib${PROJECT}.${VERSION}.so
-UTIL_EXEC_NAME = $(UTILITY).$(VERSION)
-UTIL_EXEC = $(BIN_DIR)/$(UTIL_EXEC_NAME)
-UTIL_EXEC_DYN_NAME = $(UTILITY)
-UTIL_EXEC_DYN = $(BIN_DIR)/$(UTIL_EXEC_DYN_NAME)
-
-CC = gcc
+#===============================================================================
+# Shared Build Variables
+#===============================================================================
+CC ?= gcc
 OPTIMIZE = -O3
 WARN = -Wall -Wextra -pedantic
-# This is necessary because the library depends on
-# both C99 _and_ POSIX (for the BSD sockets API).
 CDEFS += -D_POSIX_C_SOURCE=1 -D_C99_SOURCE=1
-CFLAGS += -std=c99 -fPIC -g ${WARN} ${CDEFS} ${OPTIMIZE}
+CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
+LDFLAGS += -lm -l crypto -l ssl
 
-LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PBC_INC) -I$(VND_INC)
-LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h
+#===============================================================================
+# Kinetic-C Library Build Support
+#===============================================================================
+
+PROJECT = kinetic-c-client
+
+LIB_DIR = ./src/lib
+VENDOR = ./vendor
+PROTOBUFC = $(VENDOR)/protobuf-c
+SOCKET99 = $(VENDOR)/socket99
+VERSION_FILE = ./VERSION
+VERSION = ${shell head -n1 $(VERSION_FILE)}
+
+KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
+KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
+LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(VENDOR)
+LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/byte_array.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h $(LIB_DIR)/kinetic_types_internal.h
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
-LIB_OBJS = $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
+LIB_OBJS = $(OUT_DIR)/kinetic_allocator.o $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_types_internal.o $(OUT_DIR)/byte_array.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
+KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
-# default: $(KINETIC_SO)
 default: $(KINETIC_LIB)
 
-test_all: Rakefile $(LIB_OBJS)
+all: clean test default run
+
+ci: uninstall all install
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo $(PROJECT) build completed successfully!
+	@echo --------------------------------------------------------------------------------
+	@echo $(PROJECT) v$(VERSION) is in working order
+	@echo
+
+test: Rakefile $(LIB_OBJS)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Testing $(PROJECT)
 	@echo --------------------------------------------------------------------------------
 	bundle install
-	bundle exec rake clobber test
+	bundle exec rake ci
 
 clean:
 	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
-
-# all: uninstall clean test default install run rund
-all: clean test_all default run
 
 .PHONY: clean
 
 # $(OUT_DIR)/%.o: %.c $(DEPS)
 # 	$(CC) -c -o $@ $< $(CFLAGS)
-
+$(OUT_DIR)/kinetic_allocator.o: $(LIB_DIR)/kinetic_allocator.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_types_internal.o: $(LIB_DIR)/kinetic_types_internal.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_nbo.o: $(LIB_DIR)/kinetic_nbo.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_pdu.o: $(LIB_DIR)/kinetic_pdu.c $(LIB_DEPS)
@@ -79,115 +85,63 @@ $(OUT_DIR)/kinetic_connection.o: $(LIB_DIR)/kinetic_connection.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_operation.o: $(LIB_DIR)/kinetic_operation.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
-	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
-$(OUT_DIR)/protobuf-c.o: $(PBC_INC)/protobuf-c/protobuf-c.c $(PBC_INC)/protobuf-c/protobuf-c.h
-	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall ${OPTIMIZE} -I$(PBC_INC)
 $(OUT_DIR)/kinetic_types.o: $(LIB_DIR)/kinetic_types.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/byte_array.o: $(LIB_DIR)/byte_array.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
+$(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
+	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall $(OPTIMIZE) -Wno-unused-parameter -I$(PROTOBUFC)
 $(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 
-$(KINETIC_LIB): $(LIB_OBJS)
+
+
+#-------------------------------------------------------------------------------
+# Static and Dynamic Library Build Support
+#-------------------------------------------------------------------------------
+
+PREFIX ?= /usr/local
+KINETIC_SO_DEV = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).so
+KINETIC_SO_RELEASE = $(PREFIX)/lib$(KINETIC_LIB_NAME).so
+
+$(KINETIC_LIB): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
 	@echo
 	@echo --------------------------------------------------------------------------------
-	@echo Building $(KINETIC_LIB) static library
+	@echo Building static library: $(KINETIC_LIB)
 	@echo --------------------------------------------------------------------------------
 	ar -rcs $@ $(LIB_OBJS)
 	ar -t $@
 
-$(KINETIC_SO): $(KINETIC_LIB)
+$(KINETIC_SO_DEV): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
 	@echo
 	@echo --------------------------------------------------------------------------------
-	@echo Building $(KINETIC_SO) dynamic library
+	@echo Building dynamic library: $(KINETIC_SO_DEV)
 	@echo --------------------------------------------------------------------------------
-	$(CC) $(LIB_OBJS) -shared ${LDFLAGS} -o ${KINETIC_SO}
+	$(CC) -o $@ -shared $(LDFLAGS) $(LIB_OBJS)
 
-libso: $(KINETIC_SO)
 
-UTIL_OBJS = $(OUT_DIR)/noop.o $(OUT_DIR)/put.o $(OUT_DIR)/get.o $(OUT_DIR)/delete.o
-UTIL_INCS = -I./include -I/usr/local/include -I$(UTIL_DIR)
 
-$(OUT_DIR)/noop.o: $(UTIL_EX)/noop.c
-	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
-$(OUT_DIR)/put.o: $(UTIL_EX)/put.c
-	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
-$(OUT_DIR)/get.o: $(UTIL_EX)/get.c
-	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
-$(OUT_DIR)/delete.o: $(UTIL_EX)/delete.c
-	$(CC) -c -o $@ $< $(CFLAGS) $(UTIL_INCS)
-$(UTIL_EXEC): $(UTIL_DIR)/main.c $(UTIL_OBJS)
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Building $(UTIL_EXEC) $(PROJECT) test utility \(statically linked\)
-	@echo --------------------------------------------------------------------------------
-	${CC} -o $@ $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
-$(UTIL_EXEC_DYN): $(UTIL_DIR)/main.c $(UTIL_OBJS)
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Building $(UTIL_EXEC) $(PROJECT) test utility \(dynamically linked\)
-	@echo --------------------------------------------------------------------------------
-	${CC} -o $@ -L$(PREFIX) -l $(PROJECT).$(VERSION) $< $(UTIL_OBJS) $(UTIL_INCS) ${CFLAGS} ${LDFLAGS}
+#-------------------------------------------------------------------------------
+# Installation Support
+#-------------------------------------------------------------------------------
 
-# utility: ${UTIL_EXEC} ${UTIL_EXEC_DYN}
-utility: ${UTIL_EXEC}
+API_NAME = kinetic_client
+INSTALL ?= install
+RM ?= rm
 
-# Configure to launch java simulator
-# JAVA=${JAVA_HOME}/bin/java
-SIM_JARS_PREFIX = vendor/kinetic-java/kinetic-simulator-0.7.0.2-kinetic-proto-2.0.6-SNAPSHOT
-CLASSPATH = ${JAVA_HOME}/lib/tools.jar:$(SIM_JARS_PREFIX)-jar-with-dependencies.jar:$(SIM_JARS_PREFIX)-sources.jar:$(SIM_JARS_PREFIX).jar
-SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
-SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
-
-run: ${UTIL_EXEC}
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Running $(UTIL_EXEC) $(PROJECT) test utility \(statically linked\)
-	@echo --------------------------------------------------------------------------------
-	@sleep 2
-	exec java -classpath "${CLASSPATH}" ${SIM_RUNNER} "$@" &
-	@sleep 5
-	exec java -classpath "${CLASSPATH}" ${SIM_ADMIN} -setup -erase true
-	${UTIL_EXEC} noop
-	${UTIL_EXEC} put
-	${UTIL_EXEC} get
-	${UTIL_EXEC} delete
-	exec pkill -f 'java.*kinetic-simulator'
-
-rund: ${UTIL_EXEC_DYN}
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Running $(UTIL_EXEC) $(PROJECT) test utility \(dynamically linked\)
-	@echo --------------------------------------------------------------------------------
-	@sleep 2
-	exec java -classpath "${CLASSPATH}" ${SIM_RUNNER} "$@" &
-	@sleep 5
-	exec java -classpath "${CLASSPATH}" ${SIM_ADMIN} -setup -erase true
-	${UTIL_EXEC_DYN} noop
-	${UTIL_EXEC_DYN} put
-	${UTIL_EXEC_DYN} get
-	${UTIL_EXEC_DYN} delete
-	exec pkill -f 'java.*kinetic-simulator'
-
-# Installation
-# Need to re-add ${KINETIC_SO}, once ready
-install: ${KINETIC_LIB} VERSION
+install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	@echo You may be prompted for your password in order to proceed.
-	@echo
-	${INSTALL} -d ${PREFIX}/lib/
-	${INSTALL} -c ${KINETIC_LIB} ${PREFIX}/lib/
-	# ${INSTALL} -c ${KINETIC_SO} ${PREFIX}/lib/
-	${INSTALL} -d ${PREFIX}/include/
-	${INSTALL} -c ./include/${API_NAME}.h ${PREFIX}/include/
-	${INSTALL} -c ./include/kinetic_types.h ${PREFIX}/include/
-	${INSTALL} -c ./src/lib/kinetic_proto.h ${PREFIX}/include/
-	${INSTALL} -d ${PREFIX}/include/protobuf-c
-	${INSTALL} -c ./vendor/protobuf-c/protobuf-c/protobuf-c.h ${PREFIX}/include/protobuf-c/
+	$(INSTALL) -d $(PREFIX)/lib/
+	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)/lib/
+	$(INSTALL) -d $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
 
 uninstall:
 	@echo
@@ -195,24 +149,56 @@ uninstall:
 	@echo Uninstalling $(PROJECT) from $(PREFIX)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	@echo You may be prompted for your password in order to proceed.
-	@echo
-	${RM} -f ${PREFIX}/lib/lib${PROJECT}*.a
-	${RM} -f ${PREFIX}/lib/lib${PROJECT}*.so
-	${RM} -f ${PREFIX}/include/${PUBLIC_API}.h
-	${RM} -f ${PREFIX}/include/kinetic_types.h
-	${RM} -f ${PREFIX}/include/kinetic_proto.h
-	${RM} -f ${PREFIX}/include/protobuf-c/protobuf-c.h
-	${RM} -f ${PREFIX}/include/protobuf-c.h
+	$(RM) -f $(PREFIX)/lib/lib$(PROJECT)*.a
+	$(RM) -f $(PREFIX)/lib/lib$(PROJECT)*.so
+	$(RM) -f $(PREFIX)/include/${PUBLIC_API}.h
+	$(RM) -f $(PREFIX)/include/kinetic_types.h
+	$(RM) -f $(PREFIX)/include/kinetic_proto.h
+	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
+	$(RM) -f $(PREFIX)/include/protobuf-c.h
 
-make_ci: uninstall clean test_all default install run
+
+#===============================================================================
+# Test Utility Build Support
+#===============================================================================
+
+UTILITY = kinetic-c-util
+UTIL_DIR = ./src/utility
+UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
+UTIL_OBJ = $(OUT_DIR)/main.o
+UTIL_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto
+
+$(UTIL_OBJ): $(UTIL_DIR)/main.c
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)
+
+$(UTIL_EXEC): $(UTIL_OBJ) $(KINETIC_LIB)
 	@echo
 	@echo --------------------------------------------------------------------------------
-	@echo $(PROJECT) build w/ full regression tests completed successfully!
+	@echo Building development test utility: $(UTIL_EXEC)
 	@echo --------------------------------------------------------------------------------
-	@echo $(PROJECT) v$(VERSION) is in working order
-	@echo
+	$(CC) -o $@ $< $(CFLAGS) $(UTIL_LDFLAGS) $(KINETIC_LIB)
 
-# Other dependencies
-$(BIN_DIR)/lib${PROJECT}.a: Makefile Rakefile VERSION
-# kinetic-lib.o: kinetic_client.h kinetic_connection.h kinetic_hmac.h kinetic_logger.h kinetic_message.h kinetic_nbo.h kinetic_operation.h kinetic_pdu.h kinetic_proto.h kinetic_socket.h protobuf-c.h socket99.h
+utility: $(UTIL_EXEC)
+
+build: $(KINETIC_LIB) $(KINETIC_SO_DEV) utility
+
+#-------------------------------------------------------------------------------
+# Support for Simulator and Exection of Test Utility
+#-------------------------------------------------------------------------------
+# JAVA=$(JAVA_HOME)/bin/java
+SIM_JARS_PREFIX = vendor/kinetic-java/kinetic-simulator-0.7.0.2-kinetic-proto-2.0.6-SNAPSHOT
+CLASSPATH = $(JAVA_HOME)/lib/tools.jar:$(SIM_JARS_PREFIX)-jar-with-dependencies.jar:$(SIM_JARS_PREFIX)-sources.jar:$(SIM_JARS_PREFIX).jar
+SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
+SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
+
+run: $(UTIL_EXEC)
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Running test utility: $(UTIL_EXEC)
+	@echo --------------------------------------------------------------------------------
+	@sleep 2
+	exec java -classpath "$(CLASSPATH)" $(SIM_RUNNER) "$@" &
+	@sleep 5
+	exec java -classpath "$(CLASSPATH)" $(SIM_ADMIN) -setup -erase true
+	$(UTIL_EXEC) noop put get delete
+	exec pkill -f 'java.*kinetic-simulator'
