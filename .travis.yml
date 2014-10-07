@@ -1,15 +1,12 @@
+language: c
 os:
   - linux
   - osx
-matrix:
-  allow_failures:
-    - os: osx
-language: ruby
-rvm:
-  - "1.9.3"
-  - "2.0.0"
+compiler:
+  - clang
+  - gcc
 install:
   - bundle install
   - bundle exec ruby ./config/travis_install.rb
 script:
-  - bundle exec rake verbose ci
+  - make all

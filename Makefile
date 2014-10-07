@@ -202,3 +202,6 @@ run: $(UTIL_EXEC)
 	exec java -classpath "$(CLASSPATH)" $(SIM_ADMIN) -setup -erase true
 	$(UTIL_EXEC) noop put get delete
 	exec pkill -f 'java.*kinetic-simulator'
+	@echo
+	@echo Test Utility integration tests w/ kinetic-c lib passed!
+	@echo
