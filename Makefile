@@ -54,9 +54,10 @@ test: Rakefile $(LIB_OBJS)
 	@echo Testing $(PROJECT)
 	@echo --------------------------------------------------------------------------------
 	bundle install
-	bundle exec rake ci
+	bundle exec rake test_all
 
 clean:
+	bundle exec rake clobber
 	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
 
 .PHONY: clean
