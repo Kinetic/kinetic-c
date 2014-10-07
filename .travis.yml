@@ -7,6 +7,5 @@ compiler:
   - gcc
 install:
   - bundle install
-  - bundle exec ruby ./config/travis_install.rb
 script:
   - make all
