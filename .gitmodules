@@ -6,10 +6,6 @@
 	path = vendor/kinetic-protocol
 	url = https://github.com/Seagate/kinetic-protocol.git
 	branch = 3.0.5
-[submodule "kinetic-java"]
-	path = vendor/kinetic-java
-	url = https://github.com/Seagate/kinetic-java.git
-	branch = kinetic-java-0.8.0.1
 [submodule "socket99"]
 	path = vendor/socket99
 	url = https://github.com/silentbicycle/socket99.git
