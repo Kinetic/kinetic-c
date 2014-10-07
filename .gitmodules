@@ -14,3 +14,6 @@
 	path = vendor/zlog
 	url = https://github.com/zma/zlog.git
 	branch = master
+[submodule "vendor/kinetic-java"]
+	path = vendor/kinetic-java
+	url = https://github.com/Seagate/kinetic-java.git
