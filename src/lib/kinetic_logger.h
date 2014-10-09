@@ -32,8 +32,8 @@ void KineticLogger_Close(void);
 void KineticLogger_Log(const char* message);
 int  KineticLogger_LogPrintf(const char* format, ...);
 void KineticLogger_LogHeader(const KineticPDUHeader* header);
-void KineticLogger_LogProtobuf(const KineticProto* proto);
-void KineticLogger_LogStatus(KineticProto_Status* status);
+void KineticLogger_LogProtobuf(const KineticProto_Message* msg);
+void KineticLogger_LogStatus(KineticProto_Command_Status* status);
 void KineticLogger_LogByteArray(const char* title, ByteArray bytes);
 void KineticLogger_LogByteBuffer(const char* title, ByteBuffer buffer);
 

@@ -49,102 +49,104 @@ void test_kinetic_internal_types_should_be_defined(void)
 void test_KineticProtoStatusCode_to_KineticStatus_should__map_from_internal_to_public_type(void)
 {
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_BUSY,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE));
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE));
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_FAILURE,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH));
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_FAILURE,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND,
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND));
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH,
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE));
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH,
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE));
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
-                                    KineticProtoStatusCode_to_KineticStatus(_KINETIC_PROTO_STATUS_STATUS_CODE_IS_INT_SIZE));
+                                    KineticProtoStatusCode_to_KineticStatus(_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_IS_INT_SIZE));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
-                                    KineticProtoStatusCode_to_KineticStatus((KineticProto_Status_StatusCode)
-                                            (KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 100)));
+                                    KineticProtoStatusCode_to_KineticStatus((KineticProto_Command_Status_StatusCode)
+                                            (KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 100)));
 }
 
-void test_KineticProto_Synchronization_from_KineticSynchronization_should_map_from_internal_to_public_type(void)
+void test_KineticProto_Command_Synchronization_from_KineticSynchronization_should_map_from_internal_to_public_type(void)
 {
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH,
-                      KineticProto_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH,
+                      KineticProto_Command_Synchronization_from_KineticSynchronization(
                           KINETIC_SYNCHRONIZATION_WRITETHROUGH));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_SYNCHRONIZATION_WRITEBACK,
-                      KineticProto_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK,
+                      KineticProto_Command_Synchronization_from_KineticSynchronization(
                           KINETIC_SYNCHRONIZATION_WRITEBACK));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_SYNCHRONIZATION_FLUSH,
-                      KineticProto_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH,
+                      KineticProto_Command_Synchronization_from_KineticSynchronization(
                           KINETIC_SYNCHRONIZATION_FLUSH));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION,
-                      KineticProto_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION,
+                      KineticProto_Command_Synchronization_from_KineticSynchronization(
                           KINETIC_SYNCHRONIZATION_INVALID));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION,
-                      KineticProto_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION,
+                      KineticProto_Command_Synchronization_from_KineticSynchronization(
                           (KineticSynchronization)((int)KINETIC_SYNCHRONIZATION_FLUSH + 1000)));
 }
 
-void test_KineticProto_Algorithm_from_KineticAlgorithm_should_map_from_public_to_internal_type(void)
+void test_KineticProto_Command_Algorithm_from_KineticAlgorithm_should_map_from_public_to_internal_type(void)
 {
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_ALGORITHM_SHA1,
-        KineticProto_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA1));
+        KINETIC_PROTO_COMMAND_ALGORITHM_SHA1,
+        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA1));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_ALGORITHM_SHA2,
-        KineticProto_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA2));
+        KINETIC_PROTO_COMMAND_ALGORITHM_SHA2,
+        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA2));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_ALGORITHM_SHA3,
-        KineticProto_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA3));
+        KINETIC_PROTO_COMMAND_ALGORITHM_SHA3,
+        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA3));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_ALGORITHM_CRC32,
-        KineticProto_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_CRC32));
+        KINETIC_PROTO_COMMAND_ALGORITHM_CRC32,
+        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_CRC32));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_ALGORITHM_CRC64,
-        KineticProto_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_CRC64));
+        KINETIC_PROTO_COMMAND_ALGORITHM_CRC64,
+        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_CRC64));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM,
-        KineticProto_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_INVALID));
+        KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
+        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_INVALID));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM,
-        KineticProto_Algorithm_from_KineticAlgorithm((KineticAlgorithm)1000));
+        KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
+        KineticProto_Command_Algorithm_from_KineticAlgorithm((KineticAlgorithm)1000));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM,
-        KineticProto_Algorithm_from_KineticAlgorithm((KineticAlgorithm) - 19));
+        KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
+        KineticProto_Command_Algorithm_from_KineticAlgorithm((KineticAlgorithm) - 19));
 }

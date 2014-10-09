@@ -53,8 +53,8 @@ void test_KineticHMAC_KINETIC_HMAC_MAX_LEN_should_be_set_to_proper_maximum_size(
 void test_KineticHMAC_Init_should_initialize_the_HMAC_struct_with_the_specified_algorithm(void)
 {
     KineticHMAC actual, expected;
-    const KineticProto_Security_ACL_HMACAlgorithm expectedAlgorithm =
-        KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1;
+    const KineticProto_Command_Security_ACL_HMACAlgorithm expectedAlgorithm =
+        KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1;
 
     memset(&actual, 0xC5, sizeof(KineticHMAC)); // Initialize with bogus data
     expected.algorithm = expectedAlgorithm;
@@ -72,31 +72,40 @@ void test_KineticHMAC_Init_should_set_HMAC_algorithm_to_INVALID_if_the_specified
     KineticHMAC actual;
 
     // Set to valid value to ensure result actually changed
-    actual.algorithm = KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1;
+    actual.algorithm = KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1;
 
-    KineticHMAC_Init(&actual, (KineticProto_Security_ACL_HMACAlgorithm)100);
+    KineticHMAC_Init(&actual, (KineticProto_Command_Security_ACL_HMACAlgorithm)100);
 
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM, actual.algorithm);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM, actual.algorithm);
 }
 
 void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the_supplied_message_and_key(void)
 {
     KineticHMAC actual;
-    KineticProto_Command command = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto proto = KINETIC_PROTO__INIT;
+    KineticProto_Message msg = KINETIC_PROTO_MESSAGE__INIT;
+    KineticProto_Message_HMACauth hmacAuth = KINETIC_PROTO_MESSAGE_HMACAUTH__INIT;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
     ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
     const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
+    uint8_t commandBytes[123];
+    ByteArray commandArray = ByteArray_Create(commandBytes, sizeof(commandBytes));
+    ByteArray_FillWithDummyData(commandArray);
+    ProtobufCBinaryData dummyCommandData = {.data = commandArray.data, .len = commandArray.len};
 
-    proto.command = &command;
-    proto.hmac = hmac;
-    proto.has_hmac = true;
+    msg.commandBytes = dummyCommandData;
+    msg.has_commandBytes = true;
+    msg.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    msg.has_authType = true;
+    hmacAuth.has_hmac = true;
+    hmacAuth.hmac = hmac;
+    msg.hmacAuth = &hmacAuth;
 
-    KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&actual, &proto, key);
+    KineticHMAC_Init(&actual, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Populate(&actual, &msg, key);
 
-    TEST_ASSERT_TRUE(proto.has_hmac);
-    TEST_ASSERT_EQUAL(KINETIC_HMAC_MAX_LEN, proto.hmac.len);
+    TEST_ASSERT_TRUE(msg.hmacAuth->has_hmac);
+    TEST_ASSERT_EQUAL_PTR(hmac.data, msg.hmacAuth->hmac.data);
+    TEST_ASSERT_EQUAL(KINETIC_HMAC_MAX_LEN, msg.hmacAuth->hmac.len);
 
     LOG("Computed HMAC: ");
     LOGF("  %02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
@@ -112,16 +121,29 @@ void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the
 void test_KineticHMAC_Validate_should_return_true_if_the_HMAC_for_the_supplied_message_and_key_is_correct(void)
 {
     KineticHMAC actual;
+    KineticProto_Command_Status status = KINETIC_PROTO_COMMAND_STATUS__INIT;
     KineticProto_Command command = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto proto = KINETIC_PROTO__INIT;
+    status.code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE;
+    status.has_code = true;
+    command.status = &status;
+    KineticProto_Message proto = KINETIC_PROTO_MESSAGE__INIT;
+    KineticProto_Message_HMACauth hmacAuth = KINETIC_PROTO_MESSAGE_HMACAUTH__INIT;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
     ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
     const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
-    proto.command = &command;
-    proto.hmac = hmac;
-    proto.has_hmac = true;
+    proto.has_commandBytes = true;
+    uint8_t packedCmd[128];
+    size_t packedLen = KineticProto_command__pack(&command, packedCmd);
+    proto.commandBytes = (ProtobufCBinaryData){.data = packedCmd, .len = packedLen};
+    hmacAuth.identity = 7;
+    hmacAuth.has_identity = true;
+    hmacAuth.hmac = hmac;
+    hmacAuth.has_hmac = true;
+    proto.hmacAuth = &hmacAuth;
+    proto.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    proto.has_authType = true;
 
-    KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Init(&actual, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate(&actual, &proto, key);
 
     TEST_ASSERT_TRUE(KineticHMAC_Validate(&proto, key));
@@ -130,20 +152,35 @@ void test_KineticHMAC_Validate_should_return_true_if_the_HMAC_for_the_supplied_m
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_value_of_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
+    KineticProto_Command_Status status = KINETIC_PROTO_COMMAND_STATUS__INIT;
     KineticProto_Command command = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto proto = KINETIC_PROTO__INIT;
-    uint8_t data[64];
-    ProtobufCBinaryData hmac = {.len = 0, .data = data};
+    status.code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE;
+    status.has_code = true;
+    command.status = &status;
+    KineticProto_Message proto = KINETIC_PROTO_MESSAGE__INIT;
+    KineticProto_Message_HMACauth hmacAuth = KINETIC_PROTO_MESSAGE_HMACAUTH__INIT;
+    uint8_t data[KINETIC_HMAC_MAX_LEN];
+    ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
     const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
-    proto.command = &command;
-    proto.hmac = hmac;
-    proto.has_hmac = true;
+    proto.has_commandBytes = true;
+    uint8_t packedCmd[128];
+    size_t packedLen = KineticProto_command__pack(&command, packedCmd);
+    proto.commandBytes = (ProtobufCBinaryData){.data = packedCmd, .len = packedLen};
+    hmacAuth.identity = 7;
+    hmacAuth.has_identity = true;
+    hmacAuth.hmac = hmac;
+    hmacAuth.has_hmac = true;
+    proto.hmacAuth = &hmacAuth;
+    proto.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    proto.has_authType = true;
 
-    KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Init(&actual, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate(&actual, &proto, key);
 
+    TEST_ASSERT_TRUE(KineticHMAC_Validate(&proto, key));
+
     // Bork the HMAC
-    proto.hmac.data[3]++;
+    hmacAuth.hmac.data[3]++;
 
     TEST_ASSERT_FALSE(KineticHMAC_Validate(&proto, key));
 }
@@ -151,20 +188,35 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_value_of_the_supp
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_length_of_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
+    KineticProto_Command_Status status = KINETIC_PROTO_COMMAND_STATUS__INIT;
     KineticProto_Command command = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto proto = KINETIC_PROTO__INIT;
-    uint8_t data[64];
-    ProtobufCBinaryData hmac = {.len = 0, .data = data};
+    status.code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE;
+    status.has_code = true;
+    command.status = &status;
+    KineticProto_Message proto = KINETIC_PROTO_MESSAGE__INIT;
+    KineticProto_Message_HMACauth hmacAuth = KINETIC_PROTO_MESSAGE_HMACAUTH__INIT;
+    uint8_t data[KINETIC_HMAC_MAX_LEN];
+    ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
     const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
-    proto.command = &command;
-    proto.hmac = hmac;
-    proto.has_hmac = true;
+    proto.has_commandBytes = true;
+    uint8_t packedCmd[128];
+    size_t packedLen = KineticProto_command__pack(&command, packedCmd);
+    proto.commandBytes = (ProtobufCBinaryData){.data = packedCmd, .len = packedLen};
+    hmacAuth.identity = 7;
+    hmacAuth.has_identity = true;
+    hmacAuth.hmac = hmac;
+    hmacAuth.has_hmac = true;
+    proto.hmacAuth = &hmacAuth;
+    proto.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    proto.has_authType = true;
 
-    KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Init(&actual, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate(&actual, &proto, key);
 
+    TEST_ASSERT_TRUE(KineticHMAC_Validate(&proto, key));
+
     // Bork the HMAC
-    proto.hmac.len--;
+    hmacAuth.hmac.len--;
 
     TEST_ASSERT_FALSE(KineticHMAC_Validate(&proto, key));
 }
@@ -172,20 +224,35 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_length_of_the_sup
 void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_presence_is_false_for_the_supplied_message_and_key_is_incorrect(void)
 {
     KineticHMAC actual;
+    KineticProto_Command_Status status = KINETIC_PROTO_COMMAND_STATUS__INIT;
     KineticProto_Command command = KINETIC_PROTO_COMMAND__INIT;
-    KineticProto proto = KINETIC_PROTO__INIT;
-    uint8_t data[64];
-    ProtobufCBinaryData hmac = {.len = 0, .data = data};
+    status.code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE;
+    status.has_code = true;
+    command.status = &status;
+    KineticProto_Message proto = KINETIC_PROTO_MESSAGE__INIT;
+    KineticProto_Message_HMACauth hmacAuth = KINETIC_PROTO_MESSAGE_HMACAUTH__INIT;
+    uint8_t data[KINETIC_HMAC_MAX_LEN];
+    ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
     const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
-    proto.command = &command;
-    proto.hmac = hmac;
-    proto.has_hmac = true;
+    proto.has_commandBytes = true;
+    uint8_t packedCmd[128];
+    size_t packedLen = KineticProto_command__pack(&command, packedCmd);
+    proto.commandBytes = (ProtobufCBinaryData){.data = packedCmd, .len = packedLen};
+    hmacAuth.identity = 7;
+    hmacAuth.has_identity = true;
+    hmacAuth.hmac = hmac;
+    hmacAuth.has_hmac = true;
+    proto.hmacAuth = &hmacAuth;
+    proto.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    proto.has_authType = true;
 
-    KineticHMAC_Init(&actual, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Init(&actual, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate(&actual, &proto, key);
 
+    TEST_ASSERT_TRUE(KineticHMAC_Validate(&proto, key));
+
     // Bork the HMAC
-    proto.has_hmac = false;
+    hmacAuth.has_hmac = false;
 
     TEST_ASSERT_FALSE(KineticHMAC_Validate(&proto, key));
 }

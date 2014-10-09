@@ -35,20 +35,22 @@ void SystemTestSetup(SystemTestFixture* fixture)
         *fixture = (SystemTestFixture) {
             .config = (KineticSession) {
                 .host = "localhost",
-                 .port = KINETIC_PORT,
-                  .clusterVersion = 0,
-                   .identity =  1,
-                    .nonBlocking = false,
-                     .hmacKey = hmacArray,
+                .port = KINETIC_PORT,
+                .clusterVersion = 0,
+                .identity =  1,
+                .nonBlocking = false,
+                .hmacKey = hmacArray,
             },
+            .keyToDelete = BYTE_BUFFER_NONE,
             .connected = fixture->connected,
-             .testIgnored = false,
+            .testIgnored = false,
         };
         KineticStatus status = KineticClient_Connect(
                                    &fixture->config, &fixture->handle);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
+        fixture->keyToDelete = ByteBuffer_Create(fixture->keyData, sizeof(fixture->keyData), 0);
     }
     else {
         fixture->testIgnored = false;
@@ -59,6 +61,52 @@ void SystemTestSetup(SystemTestFixture* fixture)
     //     fixture->connection.sequence,
     //     "Failed validating starting sequence count for the"
     //     " operation w/session!");
+}
+
+void SystemTestEraseSimulator(SystemTestFixture* fixture)
+{ LOG_LOCATION;
+    TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
+    if (fixture->keyToDelete.bytesUsed > 0) {
+        char verData[] = "v1.0";
+        ByteBuffer ver = ByteBuffer_Create((uint8_t*)verData, strlen(verData), strlen(verData));
+        KineticEntry entry = {
+            .key = fixture->keyToDelete,
+            .dbVersion = ver,
+        };
+        KineticStatus status = KineticClient_Delete(fixture->handle, &entry);
+        if (status != KINETIC_STATUS_SUCCESS) {
+            LOG("Failed to delete object via specified key!");
+        }
+        else {
+            LOG("DELETED!");
+        }
+
+        verData[1] = '2';
+        entry = (KineticEntry) {
+            .key = fixture->keyToDelete,
+            .dbVersion = ver,
+        };
+        status = KineticClient_Delete(fixture->handle, &entry);
+        if (status != KINETIC_STATUS_SUCCESS) {
+            LOG("Failed to delete object via specified key!");
+        }
+        else {
+            LOG("NOTHING DELETED!");
+        }
+
+        verData[1] = '3';
+        entry = (KineticEntry) {
+            .key = fixture->keyToDelete,
+            .dbVersion = ver,
+        };
+        status = KineticClient_Delete(fixture->handle, &entry);
+        if (status != KINETIC_STATUS_SUCCESS) {
+            LOG("Failed to delete object via specified key!");
+        }
+        else {
+            LOG("NOTHING DELETED!");
+        }
+    }
 }
 
 void SystemTestTearDown(SystemTestFixture* fixture)

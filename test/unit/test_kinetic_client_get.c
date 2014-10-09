@@ -77,21 +77,19 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     Value = ByteArray_Create(ValueData, sizeof(ValueData));
     ByteBuffer valueBuffer = ByteBuffer_CreateWithArray(Value);
     uint8_t versionData[128];
-    ByteBuffer versionBuffer = ByteBuffer_Create(versionData, sizeof(versionData));
+    ByteBuffer versionBuffer = ByteBuffer_Create(versionData, sizeof(versionData), 5);
     versionData[0] = 9;
     versionData[1] = 8;
     versionData[2] = 7;
     versionData[3] = 6;
     versionData[4] = 0xFF;
-    versionBuffer.bytesUsed = 5;
     uint8_t keyData[128];
-    ByteBuffer keyBuffer = ByteBuffer_Create(keyData, sizeof(keyData));
+    ByteBuffer keyBuffer = ByteBuffer_Create(keyData, sizeof(keyData), 5);
     keyData[0] = 5;
     keyData[1] = 4;
     keyData[2] = 3;
     keyData[3] = 2;
     keyData[4] = 1;
-    keyBuffer.bytesUsed = 5;
 
     KineticEntry reqEntry = {
         .key = keyBuffer,
@@ -100,7 +98,7 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
         .value = valueBuffer,
     };
 
-    KineticProto_KeyValue keyValue = KINETIC_PROTO_KEY_VALUE__INIT;
+    KineticProto_Command_KeyValue keyValue = KINETIC_PROTO_COMMAND_KEY_VALUE__INIT;
     keyValue.key = (ProtobufCBinaryData) {
         .data = (uint8_t*)keyData,
          .len = 3,

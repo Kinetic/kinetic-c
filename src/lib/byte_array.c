@@ -39,19 +39,17 @@ void ByteBuffer_Reset(ByteBuffer* buffer)
     buffer->bytesUsed = 0;
 }
 
-ByteBuffer ByteBuffer_Create(void* data, size_t max_len)
+ByteBuffer ByteBuffer_Create(void* data, size_t max_len, size_t used)
 {
     return (ByteBuffer) {
         .array = (ByteArray) {.data = (uint8_t*)data, .len = max_len},
-        .bytesUsed = 0,
+        .bytesUsed = used,
     };
 }
 
 ByteBuffer ByteBuffer_CreateWithArray(ByteArray array)
 {
-    return (ByteBuffer) {
-        .array = array, .bytesUsed = 0
-    };
+    return (ByteBuffer) {.array = array, .bytesUsed = 0};
 }
 
 long ByteBuffer_BytesRemaining(const ByteBuffer buffer)

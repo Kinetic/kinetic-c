@@ -160,6 +160,28 @@ uninstall:
 
 
 #===============================================================================
+# Java Simulator Support
+#===============================================================================
+
+update_simulator:
+	cd vendor/kinetic-java; mvn clean package; cd -
+	cp vendor/kinetic-java/kinetic-simulator/target/*.jar vendor/kinetic-java-simulator/
+
+start_simulator:
+	./vendor/kinetic-simulator/startSimulator.sh &
+	sleep 4
+
+erase_simulator: start_simulator
+	./vendor/kinetic-simulator/eraseSimulator.sh
+	sleep 1
+
+stop_simulator:
+	./vendor/kinetic-simulator/stopSimulator.sh
+
+.PHONY: start_simulator erase_simulator stop_simulator
+
+
+#===============================================================================
 # Test Utility Build Support
 #===============================================================================
 
@@ -192,17 +214,19 @@ CLASSPATH = $(JAVA_HOME)/lib/tools.jar:$(SIM_JARS_PREFIX)-jar-with-dependencies.
 SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
 SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
 
-run: $(UTIL_EXEC)
+run: $(UTIL_EXEC) start_simulator
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Running test utility: $(UTIL_EXEC)
 	@echo --------------------------------------------------------------------------------
-	@sleep 2
-	exec java -classpath "$(CLASSPATH)" $(SIM_RUNNER) "$@" &
-	@sleep 5
-	exec java -classpath "$(CLASSPATH)" $(SIM_ADMIN) -setup -erase true
-	$(UTIL_EXEC) noop put get delete
-	exec pkill -f 'java.*kinetic-simulator'
+	@echo
+	$(UTIL_EXEC) noop
+	exec $(UTIL_EXEC) put
+	exec $(UTIL_EXEC) get
+	exec $(UTIL_EXEC) delete
+	exec $(UTIL_EXEC) put get delete
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
 	@echo
+	@echo Stopping simulator...
+	./vendor/kinetic-simulator/stopSimulator.sh

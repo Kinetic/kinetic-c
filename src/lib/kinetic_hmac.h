@@ -25,13 +25,13 @@
 #include "kinetic_proto.h"
 
 void KineticHMAC_Init(KineticHMAC* hmac,
-                      KineticProto_Security_ACL_HMACAlgorithm algorithm);
+                      KineticProto_Command_Security_ACL_HMACAlgorithm algorithm);
 
 void KineticHMAC_Populate(KineticHMAC* hmac,
-                          KineticProto* proto,
+                          KineticProto_Message* msg,
                           const ByteArray key);
 
-bool KineticHMAC_Validate(const KineticProto* proto,
+bool KineticHMAC_Validate(const KineticProto_Message* msg,
                           const ByteArray key);
 
 #endif  // _KINETIC_HMAC_H

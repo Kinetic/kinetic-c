@@ -51,9 +51,7 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
     message->command.body = &message->body;
-    message->proto.command->body = &message->body;
     message->command.body->keyValue = &message->keyValue;
-    message->proto.command->body->keyValue = &message->keyValue;
 
     // Set keyValue fields appropriately
     CONFIG_FIELD_BYTE_BUFFER(key,        message->keyValue, entry);
@@ -69,7 +67,7 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_algorithm = (bool)((int)entry->algorithm > 0);
     if (message->keyValue.has_algorithm) {
         message->keyValue.algorithm =
-            KineticProto_Algorithm_from_KineticAlgorithm(entry->algorithm);
+            KineticProto_Command_Algorithm_from_KineticAlgorithm(entry->algorithm);
     }
     message->keyValue.has_metadataOnly = entry->metadataOnly;
     if (message->keyValue.has_metadataOnly) {
@@ -79,7 +77,7 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_synchronization = (entry->synchronization > 0);
     if (message->keyValue.has_synchronization) {
         message->keyValue.synchronization =
-            KineticProto_Synchronization_from_KineticSynchronization(
+            KineticProto_Command_Synchronization_from_KineticSynchronization(
                 entry->synchronization);
     }
 }

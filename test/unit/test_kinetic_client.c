@@ -26,6 +26,7 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
+#include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -40,6 +41,7 @@ static const int64_t Identity = 47;
 static ByteArray HmacKey;
 static KineticSessionHandle DummyHandle = 1;
 static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
+static KineticPDU UnsolicitedPDU;
 
 void setUp(void)
 {
@@ -64,6 +66,32 @@ static void ConnectSession(void)
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+
+    // Kinetic Protobuf:
+    //   authType: UNSOLICITEDSTATUS
+    //   commandBytes {
+    //     header {
+    //       clusterVersion: 0
+    //       connectionID: 1412866010427
+    //     }
+    //     body {
+    //     }
+    //     status {
+    //       code: SUCCESS
+    //     }
+    //   }
+    KINETIC_PDU_INIT_WITH_COMMAND(&UnsolicitedPDU, &Connection);
+    UnsolicitedPDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
+    UnsolicitedPDU.proto->hmacAuth = NULL;
+    UnsolicitedPDU.proto->pinAuth = NULL;
+    UnsolicitedPDU.command->header->clusterVersion = 5;
+    UnsolicitedPDU.command->header->connectionID = 2233445566;
+    UnsolicitedPDU.command->header->has_sequence = false;
+    UnsolicitedPDU.command->header->has_messageType = false;
+
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &UnsolicitedPDU);
+    KineticPDU_Receive_ExpectAndReturn(&UnsolicitedPDU, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_FreePDU_Expect(&Connection.pdus, &UnsolicitedPDU);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -171,6 +199,72 @@ void test_KineticClient_Connect_should_return_status_from_a_failed_connection(vo
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
+
+void test_KinetiClient_Connect_should_return_MEMORY_ERROR_if_connection_status_response_PDU_could_not_be_allocated(void)
+{
+    KINETIC_CONNECTION_INIT(&Connection);
+    Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    HmacKey = ByteArray_CreateWithCString("some hmac key");
+    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
+
+    KineticConnection_FromHandle_IgnoreAndReturn(&Connection);
+    KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
+    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, NULL);
+    KineticConnection_Disconnect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticConnection_FreeConnection_Expect(&DummyHandle);
+
+    KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MEMORY_ERROR, status);
+    TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
+}
+
+void test_KinetiClient_Connect_should_return_MEMORY_ERROR_if_connection_status_response_PDU_could_not_be_allocated_and_disconnect_fails(void)
+{
+    KINETIC_CONNECTION_INIT(&Connection);
+    Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    HmacKey = ByteArray_CreateWithCString("some hmac key");
+    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
+
+    KineticConnection_FromHandle_IgnoreAndReturn(&Connection);
+    KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
+    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, NULL);
+    KineticConnection_Disconnect_ExpectAndReturn(&Connection, KINETIC_STATUS_SESSION_INVALID);
+    KineticConnection_FreeConnection_Expect(&DummyHandle);
+
+    KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MEMORY_ERROR, status);
+    TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
+}
+
+void test_KinetiClient_Connect_should_return_status_from_unsolicited_post_connection_status(void)
+{
+    KINETIC_CONNECTION_INIT(&Connection);
+    Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    HmacKey = ByteArray_CreateWithCString("some hmac key");
+    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
+    KINETIC_PDU_INIT_WITH_COMMAND(&UnsolicitedPDU, &Connection);
+    UnsolicitedPDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
+    UnsolicitedPDU.proto->hmacAuth = NULL;
+    UnsolicitedPDU.proto->pinAuth = NULL;
+    UnsolicitedPDU.command->header->clusterVersion = 5;
+    UnsolicitedPDU.command->header->connectionID = 2233445566;
+    UnsolicitedPDU.command->header->has_sequence = false;
+    UnsolicitedPDU.command->header->has_messageType = false;
+
+    KineticConnection_FromHandle_IgnoreAndReturn(&Connection);
+    KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
+    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &UnsolicitedPDU);
+    KineticPDU_Receive_ExpectAndReturn(&UnsolicitedPDU, KINETIC_STATUS_DATA_ERROR);
+    KineticAllocator_FreePDU_Expect(&Connection.pdus, &UnsolicitedPDU);
+
+    KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
+    TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
+}
+
 
 void test_KineticClient_Disconnect_should_return_KINETIC_STATUS_CONNECTION_ERROR_upon_failure_to_get_connection_from_handle(void)
 {

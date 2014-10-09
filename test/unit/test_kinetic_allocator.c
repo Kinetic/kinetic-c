@@ -126,7 +126,7 @@ void test_KineticAllocator_should_allocate_and_free_a_single_PDU_list_item(void)
     pdu0 = KineticAllocator_NewPDU(&PDUList);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
- 
+
     KineticAllocator_FreePDU(&PDUList, pdu0);
 
     allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);

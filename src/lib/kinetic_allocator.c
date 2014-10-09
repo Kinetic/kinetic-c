@@ -196,7 +196,7 @@ void KineticAllocator_FreePDU(KineticList* const list, KineticPDU* pdu)
     KineticAllocator_Lock();
     if ((pdu->proto != NULL) && pdu->protobufDynamicallyExtracted) {
         // LOG("Freeing dynamically allocated protobuf");
-        KineticProto__free_unpacked(pdu->proto, NULL);
+        KineticProto_Message__free_unpacked(pdu->proto, NULL);
     };
     KineticAllocator_Unlock();
     KineticAllocator_FreeItem(list, (void*)pdu);
@@ -212,7 +212,7 @@ void KineticAllocator_FreeAllPDUs(KineticList* const list)
             KineticPDU* pdu = (KineticPDU*)current->data;
             if (pdu != NULL && pdu->proto != NULL
                 && pdu->protobufDynamicallyExtracted) {
-                KineticProto__free_unpacked(pdu->proto, NULL);
+                KineticProto_Message__free_unpacked(pdu->proto, NULL);
             }
             current = current->next;
         }
@@ -228,6 +228,6 @@ bool KineticAllocator_ValidateAllMemoryFreed(KineticList* const list)
 {
     bool empty = (list->start == NULL);
     // LOGF("  PDUList: 0x%0llX, empty=%s",
-         // (long long)list->start, empty ? "true" : "false");
+    // (long long)list->start, empty ? "true" : "false");
     return empty;
 }

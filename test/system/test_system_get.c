@@ -42,7 +42,6 @@
 #include <stdlib.h>
 
 static SystemTestFixture Fixture;
-
 static uint8_t KeyData[1024];
 static ByteArray Key;
 static ByteBuffer KeyBuffer;
@@ -56,14 +55,10 @@ static ByteArray TestValue;
 static uint8_t ValueData[PDU_VALUE_MAX_LEN];
 static ByteArray Value;
 static ByteBuffer ValueBuffer;
-
-
-static bool TestDataWritten = false;
-
 static const char strKey[] = "GET system test blob";
 
 void setUp(void)
-{
+{ LOG_LOCATION;
     SystemTestSetup(&Fixture);
 
     Key = ByteArray_Create(KeyData, sizeof(KeyData));
@@ -81,7 +76,10 @@ void setUp(void)
     TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
     Value = ByteArray_Create(ValueData, sizeof(ValueData));
     ValueBuffer = ByteBuffer_CreateWithArray(Value);
-    ByteBuffer_AppendCString(&ValueBuffer, "lorem ipsum... blah blah blah... etc.");
+    ByteBuffer_AppendArray(&ValueBuffer, TestValue);
+
+    ByteBuffer_Append(&Fixture.keyToDelete, Key.data, KeyBuffer.bytesUsed);
+    SystemTestEraseSimulator(&Fixture);
 
     // Setup to write some test data
     KineticEntry putEntry = {
@@ -92,58 +90,55 @@ void setUp(void)
         .value = ValueBuffer,
     };
 
-    if (!TestDataWritten) {
-        KineticStatus status = KineticClient_Put(Fixture.handle, &putEntry);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        TEST_ASSERT_NOT_NULL(putEntry.dbVersion.array.data);
-        // TEST_ASSERT_EQUAL(strlen("v1.0"), putEntry.dbVersion.array.len);
-        // TEST_ASSERT_EQUAL_ByteBuffer(Version, putEntry.dbVersion);
-        // TEST_ASSERT_ByteBuffer_NONE(putEntry.newVersion);
-        TEST_ASSERT_NULL(putEntry.newVersion.array.data);
-        TEST_ASSERT_EQUAL(0, putEntry.newVersion.array.len);
-        TEST_ASSERT_EQUAL(0, putEntry.newVersion.bytesUsed);
-        TEST_ASSERT_EQUAL_ByteArray(Key, putEntry.key.array);
-        TEST_ASSERT_EQUAL_ByteArray(Tag, putEntry.tag.array);
-        TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
+    KineticStatus status = KineticClient_Put(Fixture.handle, &putEntry);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_NOT_NULL(putEntry.dbVersion.array.data);
+    TEST_ASSERT_EQUAL(strlen("v1.0"), putEntry.dbVersion.bytesUsed);
+    TEST_ASSERT_EQUAL(0, putEntry.newVersion.bytesUsed);
+    TEST_ASSERT_NULL(putEntry.newVersion.array.data);
+    TEST_ASSERT_EQUAL(0, putEntry.newVersion.array.len);
+    TEST_ASSERT_EQUAL(0, putEntry.newVersion.bytesUsed);
+    TEST_ASSERT_EQUAL_ByteArray(Key, putEntry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, putEntry.tag.array);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
 
-        Fixture.expectedSequence++;
-        TestDataWritten = true;
-    }
+    Fixture.expectedSequence++;
 }
 
 void tearDown(void)
-{
+{ LOG_LOCATION;
     SystemTestTearDown(&Fixture);
 }
 
-
 void test_Get_should_retrieve_object_and_metadata_from_device(void)
-{
-    // uint8_t dbVersionData[1024];
-    // memset(Value.data, 0, Value.len);
-    // ByteBuffer keyBuffer = ByteBuffer_CreateWithArray(ValueKey);
-    // keyBuffer.bytesUsed = strlen(strKey);
-    // KineticEntry getEntry = {
-    //     .key = keyBuffer,
-    //     .dbVersion = ByteBuffer_Create(dbVersionData, sizeof(dbVersionData)),
-    //     .tag = ByteBuffer_CreateWithArray(Tag),
-    //     .value = ByteBuffer_CreateWithArray(Value),
-    // };
+{ LOG_LOCATION;
+    uint8_t dbVersionData[1024];
+    memset(Value.data, 0, Value.len);
+    ByteBuffer keyBuffer = ByteBuffer_CreateWithArray(Key);
+    keyBuffer.bytesUsed = strlen(strKey);
+    KineticEntry getEntry = {
+        .key = keyBuffer,
+        .dbVersion = ByteBuffer_Create(dbVersionData, sizeof(dbVersionData), 0),
+        .tag = ByteBuffer_CreateWithArray(Tag),
+        .value = ByteBuffer_CreateWithArray(Value),
+    };
 
-    // KineticStatus status = KineticClient_Get(Fixture.handle, &getEntry);
+    KineticStatus status = KineticClient_Get(Fixture.handle, &getEntry);
 
-    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    // TEST_ASSERT_EQUAL_ByteBuffer(ByteBuffer_CreateWithArray(Version), getEntry.dbVersion);
-    // // TEST_ASSERT_EQUAL_ByteArray(Version, getEntry.dbVersion.array);
-    // TEST_ASSERT_ByteArray_NONE(getEntry.newVersion.array);
-    // TEST_ASSERT_EQUAL_ByteArray(ValueKey, getEntry.key.array);
-    // TEST_ASSERT_EQUAL_ByteArray(Tag, getEntry.tag.array);
-    // TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
-    // TEST_ASSERT_EQUAL_ByteArray(TestValue, getEntry.value.array);
+    ByteBuffer_AppendArray(&Fixture.keyToDelete, Key);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    ByteBuffer expectedVer = ByteBuffer_Create(Version.data, Version.len, strlen("v1.0"));
+    TEST_ASSERT_EQUAL_ByteBuffer(expectedVer, getEntry.dbVersion);
+    TEST_ASSERT_ByteArray_NONE(getEntry.newVersion.array);
+    TEST_ASSERT_EQUAL_ByteArray(Key, getEntry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, getEntry.tag.array);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
+    TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(TestValue, getEntry.value);
 }
 
 // void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
-// {
+// { LOG_LOCATION;
 //     sleep(1);
 
 //     KineticEntry entry = {

@@ -25,6 +25,7 @@
 #include "kinetic_connection.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
+#include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
 
@@ -59,7 +60,7 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     if (operation->request->entry.value.array.data != NULL
         && operation->request->entry.value.bytesUsed > 0) {
         LOGF("  Sending PDU w/value (%zu bytes)",
-            operation->request->entry.value.bytesUsed);
+             operation->request->entry.value.bytesUsed);
     }
     else {
         LOG("  Sending PDU w/o value");
@@ -130,7 +131,18 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
         return status;
     }
 
-    return KINETIC_STATUS_SUCCESS;
+    // Retrieve initial connection status message
+    KineticPDU* statusPDU = KineticAllocator_NewPDU(&connection->pdus);
+    if (statusPDU == NULL) {
+        LOG("Failed allocating connection status PDU after establishing a session!");
+        KineticClient_Disconnect(handle);
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+    KINETIC_PDU_INIT(statusPDU, connection);
+    status = KineticPDU_Receive(statusPDU);
+    KineticAllocator_FreePDU(&connection->pdus, statusPDU);
+
+    return status;
 }
 
 KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)
@@ -230,13 +242,12 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
     // Execute the operation
     status = KineticClient_ExecuteOperation(&operation);
 
-
     // Update the entry upon success
-    // entry->value.array.len = 0;
     if (status == KINETIC_STATUS_SUCCESS) {
-        KineticProto_KeyValue* keyValue = KineticPDU_GetKeyValue(operation.response);
+        entry->value.bytesUsed = operation.response->entry.value.bytesUsed;
+        KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation.response);
         if (keyValue != NULL) {
-            if (!Copy_KineticProto_KeyValue_to_KineticEntry(keyValue, entry)) {
+            if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, entry)) {
                 status = KINETIC_STATUS_BUFFER_OVERRUN;
             }
         }

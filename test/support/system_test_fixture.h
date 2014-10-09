@@ -30,16 +30,18 @@ typedef struct _SystemTestFixture {
     bool testIgnored;
     bool connected;
     int64_t expectedSequence;
+    uint8_t keyData[256];
+    ByteBuffer keyToDelete;
 } SystemTestFixture;
 
 void SystemTestSetup(SystemTestFixture* fixture);
+void SystemTestEraseSimulator(SystemTestFixture* fixture);
 void SystemTestTearDown(SystemTestFixture* fixture);
 void SystemTestSuiteTearDown(SystemTestFixture* fixture);
 
 #define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) \
 void test_Suite_TearDown(void) \
 { \
-    LOG("BLARF!!!!!!!!!!!!!!!"); \
     if ((_fixture)->handle != KINETIC_HANDLE_INVALID && (_fixture)->connected) { \
         KineticClient_Disconnect(&(_fixture)->handle); } \
     (_fixture)->connected = false; \

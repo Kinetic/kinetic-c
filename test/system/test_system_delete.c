@@ -81,6 +81,9 @@ void setUp(void)
     Value = ByteArray_Create(ValueData, sizeof(ValueData));
     ValueBuffer = ByteBuffer_CreateWithArray(Value);
     ByteBuffer_AppendCString(&ValueBuffer, "lorem ipsum... blah blah blah... etc.");
+
+    ByteBuffer_Append(&Fixture.keyToDelete, Key.data, KeyBuffer.bytesUsed);
+    SystemTestEraseSimulator(&Fixture);
 }
 
 void tearDown(void)
@@ -148,7 +151,7 @@ void test_Delete_should_delete_an_object_from_device(void)
         .metadataOnly = true,
     };
     status = KineticClient_Get(Fixture.handle, &regetEntryMetadata);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
     TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
 }
 
