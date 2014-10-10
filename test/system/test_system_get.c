@@ -79,7 +79,6 @@ void setUp(void)
     ByteBuffer_AppendArray(&ValueBuffer, TestValue);
 
     ByteBuffer_Append(&Fixture.keyToDelete, Key.data, KeyBuffer.bytesUsed);
-    SystemTestEraseSimulator(&Fixture);
 
     // Setup to write some test data
     KineticEntry putEntry = {

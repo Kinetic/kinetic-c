@@ -6,7 +6,7 @@ JAVA=""
 if [ "$JAVA_HOME" != "" ]; then
    JAVA=$JAVA_HOME/bin/java
 else
-   $JAVA_HOME=/usr
+   JAVA_HOME=/usr
    JAVA=`which java`
 fi
 
@@ -22,5 +22,4 @@ for f in $BASE_DIR/*.jar; do
    CLASSPATH=${CLASSPATH}:$f
 done
 
-echo "$JAVA" -classpath "$CLASSPATH" com.seagate.kinetic.admin.cli.KineticAdminCLI -setup -erase true
-exec "$JAVA" -classpath "$CLASSPATH" com.seagate.kinetic.admin.cli.KineticAdminCLI -setup -erase true
+exec "$JAVA" -classpath "$CLASSPATH" com.seagate.kinetic.admin.cli.KineticAdminCLI -instanterase

@@ -170,7 +170,7 @@ namespace :java_sim do
 
   def java_sim_erase_drive
     java_sim_start
-    sh "#{JAVA_BIN} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.admin.cli.KineticAdminCLI -setup -erase true"
+    sh "\"#{JAVA_BIN}\" -classpath \"#{ENV['CLASSPATH']}\" com.seagate.kinetic.admin.cli.KineticAdminCLI -instanterase"
   end
 
   def java_sim_cleanup

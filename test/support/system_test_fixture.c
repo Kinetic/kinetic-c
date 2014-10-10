@@ -63,52 +63,6 @@ void SystemTestSetup(SystemTestFixture* fixture)
     //     " operation w/session!");
 }
 
-void SystemTestEraseSimulator(SystemTestFixture* fixture)
-{ LOG_LOCATION;
-    TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
-    if (fixture->keyToDelete.bytesUsed > 0) {
-        char verData[] = "v1.0";
-        ByteBuffer ver = ByteBuffer_Create((uint8_t*)verData, strlen(verData), strlen(verData));
-        KineticEntry entry = {
-            .key = fixture->keyToDelete,
-            .dbVersion = ver,
-        };
-        KineticStatus status = KineticClient_Delete(fixture->handle, &entry);
-        if (status != KINETIC_STATUS_SUCCESS) {
-            LOG("Failed to delete object via specified key!");
-        }
-        else {
-            LOG("DELETED!");
-        }
-
-        verData[1] = '2';
-        entry = (KineticEntry) {
-            .key = fixture->keyToDelete,
-            .dbVersion = ver,
-        };
-        status = KineticClient_Delete(fixture->handle, &entry);
-        if (status != KINETIC_STATUS_SUCCESS) {
-            LOG("Failed to delete object via specified key!");
-        }
-        else {
-            LOG("NOTHING DELETED!");
-        }
-
-        verData[1] = '3';
-        entry = (KineticEntry) {
-            .key = fixture->keyToDelete,
-            .dbVersion = ver,
-        };
-        status = KineticClient_Delete(fixture->handle, &entry);
-        if (status != KINETIC_STATUS_SUCCESS) {
-            LOG("Failed to delete object via specified key!");
-        }
-        else {
-            LOG("NOTHING DELETED!");
-        }
-    }
-}
-
 void SystemTestTearDown(SystemTestFixture* fixture)
 {
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");

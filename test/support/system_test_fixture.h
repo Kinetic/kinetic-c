@@ -35,7 +35,6 @@ typedef struct _SystemTestFixture {
 } SystemTestFixture;
 
 void SystemTestSetup(SystemTestFixture* fixture);
-void SystemTestEraseSimulator(SystemTestFixture* fixture);
 void SystemTestTearDown(SystemTestFixture* fixture);
 void SystemTestSuiteTearDown(SystemTestFixture* fixture);
 

@@ -101,8 +101,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         .hmacKey = ByteArray_CreateWithCString("asdfasdf"),
     };
 
-    TEST_IGNORE_MESSAGE("Disabled temporarily until erase option is re-enabled on Java simulator!");
-
     for (int iteration = 0; iteration < maxIterations; iteration++) {
 
         printf("Overlapped PUT operation (iteration %d of %d)\n",

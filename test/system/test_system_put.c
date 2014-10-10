@@ -63,7 +63,6 @@ void setUp(void)
     OtherNewVersion = ByteArray_CreateWithCString("v3.0");
 
     ByteBuffer_Append(&Fixture.keyToDelete, ValueKey.data, ValueKey.len);
-    SystemTestEraseSimulator(&Fixture);
 }
 
 void tearDown(void)

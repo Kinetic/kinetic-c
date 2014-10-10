@@ -83,7 +83,6 @@ void setUp(void)
     ByteBuffer_AppendCString(&ValueBuffer, "lorem ipsum... blah blah blah... etc.");
 
     ByteBuffer_Append(&Fixture.keyToDelete, Key.data, KeyBuffer.bytesUsed);
-    SystemTestEraseSimulator(&Fixture);
 }
 
 void tearDown(void)
