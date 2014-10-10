@@ -274,7 +274,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
 }
 
-uint8_t ValueData[PDU_VALUE_MAX_LEN];
+uint8_t ValueData[KINETIC_OBJ_SIZE];
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 {
@@ -411,4 +411,86 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 
     TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
     TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
+}
+
+
+void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(void)
+{
+    LOG_LOCATION;
+
+    const int numKeysInRange = 4;
+    uint8_t startKeyData[32];
+    uint8_t endKeyData[32];
+    ByteBuffer startKey, endKey;
+
+    startKey = ByteBuffer_Create(startKeyData, sizeof(startKeyData), 0);
+    ByteBuffer_AppendCString(&startKey, "key_range_00_00");
+    endKey = ByteBuffer_Create(endKeyData, sizeof(endKeyData), 0);
+    ByteBuffer_AppendCString(&endKey, "key_range_00_03");
+
+    KineticKeyRange range = {
+        .startKey = startKey,
+        .endKey = endKey,
+        .startKeyInclusive = true,
+        .endKeyInclusive = true,
+        .maxReturned = numKeysInRange,
+        .reverse = false,
+    };
+
+    // KineticProto_Range protoKeyRangeRequest = {
+    //     .has_startKey = true,
+    //     .startKey = (ProtobufCBinaryData) {
+    //         .data = StartKey.array.data,
+    //         .len = StartKey.bytesUsed},
+    //     .has_endKey = true,
+    //     .endKey = (ProtobufCBinaryData) {
+    //         .data = StartKey.array.data,
+    //         .len = StartKey.bytesUsed},
+    //     .has_startKeyInclusive = true,
+    //     .startKeyInclusive = true,
+    //     .has_endKeyInclusive = true,
+    //     .endKeyInclusive = true,
+    //     .has_maxReturned = true,
+    //     .maxReturned = NUM_KEYS_IN_RANGE,
+    // };
+
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyRange_Expect(&Request.protoData.message, &range);
+
+    KineticOperation_BuildGetKeyRange(&Operation, &range);
+
+    // The `DELETE` operation removes the entry for a given key. It respects the
+    // same locking behavior around `dbVersion` and `force` as described in the previous sections.
+    // The following request will remove a key value pair to the store.
+    //
+    // ```
+    // command {
+    //   // See top level cross cutting concerns for header details
+    //   header {
+    //     clusterVersion: ...
+    //     identity: ...
+    //     connectionID: ...
+    //     sequence: ...
+    //     // messageType should be DELETE
+    //     messageType: DELETE
+    TEST_ASSERT_TRUE(Request.command->header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE, Request.command->header->messageType);
+    //   }
+    //   body {
+    //     keyValue {
+    //       key: "..."
+    //       // See write operation cross cutting concerns
+    //       synchronization: ...
+    //     }
+    //   }
+    // }
+    // hmac: "..."
+
+    TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
+    TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
+
+    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message, Request.proto);
+    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.command, Request.command);
+    // TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.body, Request.command->body);
+    // TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.keyRange, Request.command->body->range);
 }

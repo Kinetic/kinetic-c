@@ -1,6 +1,7 @@
 #include "byte_array.h"
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 ByteArray ByteArray_Create(void* data, size_t len)
 {
@@ -79,10 +80,13 @@ ByteBuffer* ByteBuffer_Append(ByteBuffer* buffer, const void* data, size_t len)
     assert(buffer->array.data != NULL);
     assert(data != NULL);
     if (len == 0 || ((buffer->bytesUsed + len) > buffer->array.len)) {
+        // printf("Invalid parameters for buffer copy!\n");
         return NULL;
     }
     memcpy(&buffer->array.data[buffer->bytesUsed], data, len);
     buffer->bytesUsed += len;
+    // printf("Appended data!\n")
+    assert(buffer != NULL);
     return buffer;
 }
 

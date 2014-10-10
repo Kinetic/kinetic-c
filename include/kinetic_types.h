@@ -40,9 +40,10 @@
 #define KINETIC_TLS_PORT        (8443)
 #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
+#define KINETIC_DEFAULT_KEY_LEN (1024)
 #define KINETIC_MAX_KEY_LEN     (4096)
 #define KINETIC_MAX_VERSION_LEN (256)
-#define PDU_VALUE_MAX_LEN       (1024 * 1024)
+#define KINETIC_OBJ_SIZE        (1024 * 1024)
 
 // Define max host name length
 // Some Linux environments require this, although not all, but it's benign.

@@ -84,7 +84,7 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
 
     for (ai = ai_result; ai != NULL; ai = ai->ai_next) {
         int setsockopt_result;
-        int buffer_size = PDU_VALUE_MAX_LEN;
+        int buffer_size = KINETIC_OBJ_SIZE;
 
 #if defined(SO_NOSIGPIPE) && !defined(__APPLE__)
         // On BSD-like systems we can set SO_NOSIGPIPE on the socket to
@@ -102,7 +102,7 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
         }
 #endif
 
-        // Increase send buffer to PDU_VALUE_MAX_LEN
+        // Increase send buffer to KINETIC_OBJ_SIZE
         // Note: OS allocates 2x this value for its overhead
         setsockopt_result = setsockopt(result.fd,
                                        SOL_SOCKET, SO_SNDBUF,
@@ -112,7 +112,7 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
             continue;
         }
 
-        // Increase receive buffer to PDU_VALUE_MAX_LEN
+        // Increase receive buffer to KINETIC_OBJ_SIZE
         // Note: OS allocates 2x this value for its overheadbuffer_size
         setsockopt_result = setsockopt(result.fd,
                                        SOL_SOCKET, SO_RCVBUF,

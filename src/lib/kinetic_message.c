@@ -81,3 +81,55 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
                 entry->synchronization);
     }
 }
+
+
+void KineticMessage_ConfigureKeyRange(KineticMessage* const message,
+                                      const KineticKeyRange* range)
+{
+    assert(message != NULL);
+    assert(range != NULL);
+    assert(range->startKey.array.data != NULL);
+    assert(range->startKey.array.len > 0);
+    assert(range->startKey.bytesUsed > 0);
+    assert(range->startKey.bytesUsed <= range->startKey.array.len);
+    assert(range->maxReturned > 0);
+
+    // Enable command body and keyValue fields by pointing at
+    // pre-allocated elements in message
+    message->command.body = &message->body;
+    message->command.body->range = &message->keyRange;
+
+    // Populate startKey, if supplied
+    message->command.body->range->startKey = (ProtobufCBinaryData) {
+        .data = range->startKey.array.data,
+        .len = range->startKey.bytesUsed,
+    };
+    message->command.body->range->has_startKey = true;
+
+    // Populate endKey, if supplied
+    message->command.body->range->endKey = (ProtobufCBinaryData) {
+        .data = range->endKey.array.data,
+        .len = range->endKey.bytesUsed,
+    };
+    message->command.body->range->has_endKey = true;
+
+    // Populate start/end key inclusive flags, if specified
+    if (range->startKeyInclusive) {
+        message->command.body->range->startKeyInclusive = range->startKeyInclusive;
+    }
+    message->command.body->range->has_startKeyInclusive = range->startKeyInclusive;
+    if (range->endKeyInclusive) {
+        message->command.body->range->endKeyInclusive = range->endKeyInclusive;
+    }
+    message->command.body->range->has_endKeyInclusive = range->endKeyInclusive;
+
+    // Populate max keys to return
+    message->command.body->range->maxReturned = range->maxReturned;
+    message->command.body->range->has_maxReturned = true;
+
+    // Populate reverse flag (return keys in reverse order)
+    if (range->reverse) {
+        message->command.body->range->reverse = range->reverse;
+    }
+    message->command.body->range->has_reverse = range->reverse;
+}

@@ -52,7 +52,7 @@ static uint8_t VersionData[1024];
 static ByteArray Version;
 static ByteBuffer VersionBuffer;
 static ByteArray TestValue;
-static uint8_t ValueData[PDU_VALUE_MAX_LEN];
+static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteArray Value;
 static ByteBuffer ValueBuffer;
 static const char strKey[] = "GET system test blob";

@@ -146,3 +146,91 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
     TEST_ASSERT_FALSE(message.keyValue.has_force);
     TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
 }
+
+void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticProto_KeyRange_to_the_message(void)
+{
+    KineticMessage message;
+
+    const int numKeysInRange = 4;
+    uint8_t startKeyData[32];
+    uint8_t endKeyData[32];
+    ByteBuffer startKey, endKey;
+
+    startKey = ByteBuffer_Create(startKeyData, sizeof(startKeyData), 0);
+    ByteBuffer_AppendCString(&startKey, "key_range_00_00");
+    endKey = ByteBuffer_Create(endKeyData, sizeof(endKeyData), 0);
+    ByteBuffer_AppendCString(&endKey, "key_range_00_03");
+
+    KineticKeyRange range = {
+        .startKey = startKey,
+        .endKey = endKey,
+        .startKeyInclusive = true,
+        .endKeyInclusive = true,
+        .maxReturned = numKeysInRange,
+        .reverse = true,
+    };
+
+    memset(&message, 0, sizeof(KineticMessage));
+    KineticMessage_Init(&message);
+
+    KineticMessage_ConfigureKeyRange(&message, &range);
+
+    // Validate that message keyValue and body container are enabled in protobuf
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.keyRange, message.command.body->range);
+
+    // Validate range fields
+    TEST_ASSERT_TRUE(message.command.body->range->has_startKey);
+    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.command.body->range->startKey.data);
+    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.command.body->range->startKey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endKey);
+    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.command.body->range->endKey.data);
+    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.command.body->range->endKey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_startKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->startKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->endKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_maxReturned);
+    TEST_ASSERT_EQUAL(numKeysInRange, message.command.body->range->maxReturned);
+    TEST_ASSERT_TRUE(message.command.body->range->has_reverse);
+    TEST_ASSERT_TRUE(message.command.body->range->reverse);
+    TEST_ASSERT_EQUAL(0, message.command.body->range->n_keys);
+    TEST_ASSERT_NULL(message.command.body->range->keys);
+
+
+
+
+    range = (KineticKeyRange) {
+        .startKey = startKey,
+        .endKey = endKey,
+        .startKeyInclusive = false,
+        .endKeyInclusive = false,
+        .maxReturned = 1,
+        .reverse = false,
+    };
+
+    memset(&message, 0, sizeof(KineticMessage));
+    KineticMessage_Init(&message);
+
+    KineticMessage_ConfigureKeyRange(&message, &range);
+
+    // Validate that message keyValue and body container are enabled in protobuf
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.keyRange, message.command.body->range);
+
+    // Validate range fields
+    TEST_ASSERT_TRUE(message.command.body->range->has_startKey);
+    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.command.body->range->startKey.data);
+    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.command.body->range->startKey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endKey);
+    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.command.body->range->endKey.data);
+    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.command.body->range->endKey.len);
+    TEST_ASSERT_FALSE(message.command.body->range->has_startKeyInclusive);
+    TEST_ASSERT_FALSE(message.command.body->range->has_endKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_maxReturned);
+    TEST_ASSERT_EQUAL(1, message.command.body->range->maxReturned);
+    TEST_ASSERT_FALSE(message.command.body->range->has_reverse);
+    TEST_ASSERT_EQUAL(0, message.command.body->range->n_keys);
+    TEST_ASSERT_NULL(message.command.body->range->keys);
+}

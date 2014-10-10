@@ -280,7 +280,7 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 //     identity: ...
 //     connectionID: ...
 //     sequence: ...
-
+// 
 //     // messageType should be GETKEYRANGE
 //     messageType: GETKEYRANGE
 //   }
@@ -289,24 +289,24 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 //     range {
 //       // Required bytes, the beginning of the requested range
 //       startKey: "..."
-
+// 
 //       // Optional bool, defaults to false
 //       // True indicates that the start key should be included in the returned
 //       // range
 //       startKeyInclusive: ...
-
+// 
 //       // Required bytes, the end of the requested range
 //       endKey: "..."
-
+// 
 //       // Optional bool, defaults to false
 //       // True indicates that the end key should be included in the returned
 //       // range
 //       endKeyInclusive: ...
-
+// 
 //       // Required int32, must be greater than 0
 //       // The maximum number of keys returned, in sorted order
 //       maxReturned: ...
-
+// 
 //       // Optional bool, defaults to false
 //       // If true, the key range will be returned in reverse order, starting at
 //       // endKey and moving back to startKey.  For instance
@@ -318,8 +318,38 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 //   }
 // }
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
-                                        KineticKeyRange* range, ByteBuffer* keys[], int max_keys)
+                                        KineticKeyRange* range, ByteBuffer keys[], int max_keys)
 {
-    KineticStatus status = KINETIC_STATUS_SUCCESS;
+    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(range != NULL);
+    assert(keys != NULL);
+    assert(max_keys > 0);
+
+    KineticStatus status;
+    KineticOperation operation;
+
+    status = KineticClient_CreateOperation(&operation, handle);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        return status;
+    }
+
+    // Initialize request
+    KineticOperation_BuildGetKeyRange(&operation, range);
+
+    // Execute the operation
+    status = KineticClient_ExecuteOperation(&operation);
+
+    // Report the key list upon success
+    if (status == KINETIC_STATUS_SUCCESS) {
+        KineticProto_Command_Range* keyRange = KineticPDU_GetKeyRange(operation.response);
+        if (keyRange != NULL) {
+            if (!Copy_KineticProto_Command_Range_to_buffer_list(keyRange, keys, max_keys)) {
+                status = KINETIC_STATUS_BUFFER_OVERRUN;
+            }
+        }
+    }
+
+    KineticOperation_Free(&operation);
+
     return status;
 }

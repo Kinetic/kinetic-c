@@ -24,7 +24,7 @@
 #include "kinetic_logger.h"
 
 // uint8_t hmacKeyBuffer[KINETIC_MAX_KEY_LEN];
-uint8_t data[PDU_VALUE_MAX_LEN];
+uint8_t data[KINETIC_OBJ_SIZE];
 
 void SystemTestSetup(SystemTestFixture* fixture)
 {

@@ -53,7 +53,7 @@ static KineticEntry Entry;
 static uint8_t KeyData[1024];
 static uint8_t TagData[1024];
 static uint8_t VersionData[1024];
-static uint8_t ValueData[PDU_VALUE_MAX_LEN];
+static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
 
 

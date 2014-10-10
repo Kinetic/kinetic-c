@@ -254,7 +254,6 @@ KineticStatus KineticPDU_GetStatus(KineticPDU* pdu)
 KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu)
 {
     KineticProto_Command_KeyValue* keyValue = NULL;
-
     if (pdu != NULL &&
         pdu->command != NULL &&
         pdu->command != NULL &&
@@ -263,4 +262,17 @@ KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu)
         keyValue = pdu->command->body->keyValue;
     }
     return keyValue;
+}
+
+KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticPDU* pdu)
+{
+    KineticProto_Command_Range* range = NULL;
+    if (pdu != NULL &&
+        pdu->proto != NULL &&
+        pdu->command != NULL &&
+        pdu->command->body != NULL) {
+
+        range = pdu->command->body->range;
+    }
+    return range;
 }

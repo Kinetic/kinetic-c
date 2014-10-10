@@ -93,6 +93,7 @@ typedef struct _KineticMessage {
     KineticProto_Message                message;
     KineticProto_Message_HMACauth       hmacAuth;
     KineticProto_Message_PINauth        pinAuth;
+    uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
 
     bool                                has_command; // Set to `true` to enable command element
     KineticProto_Command                command;
@@ -102,7 +103,7 @@ typedef struct _KineticMessage {
     KineticProto_Command_Security       security;
     KineticProto_Command_Security_ACL   acl;
     KineticProto_Command_KeyValue       keyValue;
-    uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
+    KineticProto_Command_Range          keyRange;
 } KineticMessage;
 
 #define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
@@ -158,7 +159,7 @@ typedef struct _KineticMessage {
 #define PDU_PROTO_MAX_LEN           (1024 * 1024)
 #define PDU_PROTO_MAX_UNPACKED_LEN  (PDU_PROTO_MAX_LEN * 2)
 #define PDU_MAX_LEN                 (PDU_HEADER_LEN + \
-                                    PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
+                                    PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE)
 typedef struct __attribute__((__packed__)) _KineticPDUHeader {
     uint8_t     versionPrefix;
     uint32_t    protobufLength;
@@ -193,13 +194,6 @@ struct _KineticPDU {
     KineticConnection* connection;
 };
 
-// struct  _KineticProto_Message_HMACauth {
-//     ProtobufCMessage base;
-//     protobuf_c_boolean has_identity;
-//     int64_t identity;
-//     protobuf_c_boolean has_hmac;
-//     ProtobufCBinaryData hmac;
-// };
 #define KINETIC_PDU_INIT(_pdu, _con) { \
     assert((_pdu) != NULL); \
     assert((_con) != NULL); \
@@ -212,6 +206,7 @@ struct _KineticPDU {
             &((_pdu)->protoData.message), (_con)->session.identity, (_con)->session.hmacKey); \
     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
 }
+
 #define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con) { \
     KINETIC_PDU_INIT((_pdu), (_con)) \
     (_pdu)->proto = &(_pdu)->protoData.message.message; \
@@ -219,7 +214,6 @@ struct _KineticPDU {
     (_pdu)->command = &(_pdu)->protoData.message.command; \
     (_pdu)->command->header = &(_pdu)->protoData.message.header; \
 }
-
 
 // Kinetic Operation
 typedef struct _KineticOperation {
@@ -247,8 +241,13 @@ KineticSynchronization KineticSynchronization_from_KineticProto_Command_Synchron
 
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
     KineticProto_Command_Status_StatusCode protoStatus);
-ByteArray ProtobufCBinaryData_to_ByteArray(ProtobufCBinaryData protoData);
-bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData src);
-bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_KeyValue* keyValue, KineticEntry* entry);
+ByteArray ProtobufCBinaryData_to_ByteArray(
+    ProtobufCBinaryData protoData);
+bool Copy_ProtobufCBinaryData_to_ByteBuffer(
+    ByteBuffer dest, ProtobufCBinaryData src);
+bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
+    KineticProto_Command_KeyValue* keyValue, KineticEntry* entry);
+bool Copy_KineticProto_Command_Range_to_buffer_list(
+    KineticProto_Command_Range* keyRange, ByteBuffer* keys, int64_t max_keys);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

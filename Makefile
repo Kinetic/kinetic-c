@@ -48,14 +48,6 @@ ci: uninstall all install
 	@echo $(PROJECT) v$(VERSION) is in working order
 	@echo
 
-test: Rakefile $(LIB_OBJS)
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Testing $(PROJECT)
-	@echo --------------------------------------------------------------------------------
-	bundle install
-	bundle exec rake test_all
-
 clean:
 	bundle exec rake clobber
 	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
@@ -97,6 +89,21 @@ $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/proto
 $(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 
+
+#-------------------------------------------------------------------------------
+# Test Support
+#-------------------------------------------------------------------------------
+
+test: Rakefile $(LIB_OBJS)
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Testing $(PROJECT)
+	@echo --------------------------------------------------------------------------------
+	bundle install
+	bundle exec rake test_all
+
+JAVA_HOME ?= /usr
+JAVA_BIN = $(JAVA_HOME)/bin/java
 
 
 #-------------------------------------------------------------------------------
