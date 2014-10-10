@@ -52,7 +52,6 @@ static uint8_t TestData[128];
 static ByteBuffer TestDataBuffer;
 static bool LogInitialized = false;
 static bool SocketReadRequested;
-static KineticPDU PDU;
 
 void Socket_RequestBytes(size_t count)
 {
@@ -127,6 +126,8 @@ void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 // Disabling socket read/write tests in not OSX, since Linux TravisCI builds
 // fail, but system test passes. Most likely an issue with KineticRuby server
 #if defined(__APPLE__)
+
+static KineticPDU PDU;
 
 void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void)
 {
