@@ -125,7 +125,9 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
 
 KineticStatus KineticPDU_Receive(KineticPDU* const response)
 {
+LOG_LOCATION; LOG("HERE");
     assert(response != NULL);
+    assert(response->connection != NULL);
     const int fd = response->connection->socket;
     assert(fd >= 0);
     LOGF("Receiving PDU via fd=%d", fd);

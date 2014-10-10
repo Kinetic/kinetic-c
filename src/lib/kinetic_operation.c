@@ -45,8 +45,8 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
 
     KineticOperation operation = {
         .connection = connection,
-        .request = KineticAllocator_NewPDU(&connection->pdus),
-        .response =  KineticAllocator_NewPDU(&connection->pdus),
+        .request = KineticAllocator_NewPDU(&connection->pdus, connection),
+        .response =  KineticAllocator_NewPDU(&connection->pdus, connection),
     };
 
     if (operation.request == NULL) {

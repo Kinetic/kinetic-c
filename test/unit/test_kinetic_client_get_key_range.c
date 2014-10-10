@@ -23,6 +23,7 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
+#include "kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"

@@ -111,18 +111,19 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
+    // Obtain a new connection/handle
     *handle = KineticConnection_NewConnection(config);
     if (handle == KINETIC_HANDLE_INVALID) {
         LOG("Failed connecting to device!");
         return KINETIC_STATUS_SESSION_INVALID;
     }
-
     KineticConnection* connection = KineticConnection_FromHandle(*handle);
     if (connection == NULL) {
         LOG("Failed getting valid connection from handle!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
+    // Create the connection
     KineticStatus status = KineticConnection_Connect(connection);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOGF("Failed creating connection to %s:%d", config->host, config->port);
@@ -131,16 +132,8 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
         return status;
     }
 
-    // Retrieve initial connection status message
-    KineticPDU* statusPDU = KineticAllocator_NewPDU(&connection->pdus);
-    if (statusPDU == NULL) {
-        LOG("Failed allocating connection status PDU after establishing a session!");
-        KineticClient_Disconnect(handle);
-        return KINETIC_STATUS_MEMORY_ERROR;
-    }
-    KINETIC_PDU_INIT(statusPDU, connection);
-    status = KineticPDU_Receive(statusPDU);
-    KineticAllocator_FreePDU(&connection->pdus, statusPDU);
+    // Retrieve initial connection status info
+    status = KineticConnection_ReceiveDeviceStatusMessage(connection);
 
     return status;
 }

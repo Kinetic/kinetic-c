@@ -176,10 +176,9 @@ void KineticAllocator_FreeList(KineticList* const list)
 
 }
 
-
-
-KineticPDU* KineticAllocator_NewPDU(KineticList* const list)
+KineticPDU* KineticAllocator_NewPDU(KineticList* const list, KineticConnection* connection)
 {
+    assert(connection != NULL);
     KineticPDU* newPDU = (KineticPDU*)KineticAllocator_NewItem(
                              list, sizeof(KineticPDU));
     if (newPDU == NULL) {
@@ -187,6 +186,7 @@ KineticPDU* KineticAllocator_NewPDU(KineticList* const list)
         return NULL;
     }
     assert(newPDU->proto == NULL);
+    KINETIC_PDU_INIT(newPDU, connection);
     // LOGF("Allocated new PDU @ 0x%0llX", (long long)newPDU);
     return newPDU;
 }

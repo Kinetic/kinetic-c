@@ -59,8 +59,9 @@ void setUp(void)
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticConnection_Connect_ExpectAndReturn(&Connection,
-            KINETIC_STATUS_SUCCESS);
+    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
@@ -113,8 +114,8 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     keyValue.has_dbVersion = true;
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Response);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
     KineticPDU_Init_Expect(&Request, &Connection);
     KineticPDU_Init_Expect(&Response, &Connection);
     KineticConnection_IncrementSequence_Expect(&Connection);

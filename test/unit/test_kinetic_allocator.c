@@ -93,7 +93,7 @@ void test_KineticAllocator_NewPDU_should_allocate_new_PDUs_and_store_references(
     KineticConnection connection;
     KineticPDU* pdu;
 
-    pdu = KineticAllocator_NewPDU(&PDUList);
+    pdu = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
     TEST_ASSERT_NOT_NULL(PDUList.start);
@@ -102,12 +102,12 @@ void test_KineticAllocator_NewPDU_should_allocate_new_PDUs_and_store_references(
     TEST_ASSERT_NULL(PDUList.last->next);
     TEST_ASSERT_NULL(PDUList.last->previous);
 
-    pdu = KineticAllocator_NewPDU(&PDUList);
+    pdu = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
     TEST_ASSERT_NOT_NULL(PDUList.start->next);
 
-    pdu = KineticAllocator_NewPDU(&PDUList);
+    pdu = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu);
     pdu->connection = &connection;
     TEST_ASSERT_NOT_NULL(PDUList.start->next);
@@ -123,7 +123,7 @@ void test_KineticAllocator_should_allocate_and_free_a_single_PDU_list_item(void)
     KineticPDU* pdu0;
     bool allFreed = false;
 
-    pdu0 = KineticAllocator_NewPDU(&PDUList);
+    pdu0 = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
 
@@ -142,12 +142,12 @@ void test_KineticAllocator_should_allocate_and_free_a_pair_of_PDU_list_items_in_
     bool allFreed = false;
 
     LOG("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU(&PDUList);
+    pdu0 = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
 
     LOG("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU(&PDUList);
+    pdu1 = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu1);
     pdu1->connection = &connection;
 
@@ -180,12 +180,12 @@ void test_KineticAllocator_should_allocate_and_free_a_pair_of_PDU_list_items_in_
     bool allFreed = false;
 
     LOG("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU(&PDUList);
+    pdu0 = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
 
     LOG("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU(&PDUList);
+    pdu1 = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu1);
     pdu1->connection = &connection;
 
@@ -218,17 +218,17 @@ void test_KineticAllocator_should_allocate_and_free_multiple_PDU_list_items_in_r
     bool allFreed = false;
 
     LOG("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU(&PDUList);
+    pdu0 = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu0);
     pdu0->connection = &connection;
 
     LOG("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU(&PDUList);
+    pdu1 = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu1);
     pdu1->connection = &connection;
 
     LOG("Allocating third PDU");
-    pdu2 = KineticAllocator_NewPDU(&PDUList);
+    pdu2 = KineticAllocator_NewPDU(&PDUList, &connection);
     TEST_ASSERT_NOT_NULL(pdu2);
     pdu2->connection = &connection;
 

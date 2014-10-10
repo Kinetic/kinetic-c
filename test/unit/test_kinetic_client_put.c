@@ -54,6 +54,7 @@ void setUp(void)
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -82,19 +83,19 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     };
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Response);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
     KineticPDU_Init_Expect(&Request, &Connection);
     KineticPDU_Init_Expect(&Response, &Connection);
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
     KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
     KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_VERSION_FAILURE);
+    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_VERSION_MISMATCH);
     KineticAllocator_FreePDU_Expect(&Connection.pdus, &Request);
     KineticAllocator_FreePDU_Expect(&Connection.pdus, &Response);
 
     KineticStatus status = KineticClient_Put(DummyHandle, &entry);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_FAILURE, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
 }
