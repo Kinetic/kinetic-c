@@ -13,8 +13,8 @@
  * `NULL`-terminated.
  */
 typedef struct _ByteArray {
-    const size_t  len;    /**< Number of bytes in the `data` field. */
-    uint8_t* const data;  /**< Pointer to an allocated array of data bytes. */
+    size_t  len;    /**< Number of bytes in the `data` field. */
+    uint8_t* data;  /**< Pointer to an allocated array of data bytes. */
 } ByteArray;
 
 /** @brief Convenience macro to represent an empty array with no data */
@@ -32,12 +32,12 @@ void ByteArray_FillWithDummyData(const ByteArray array);
  * byte is consumed, but shall not exceed the `array` length
  */
 typedef struct {
-    const ByteArray array;     /**< ByteArray holding allocated array w/length = allocated size */
-    size_t          bytesUsed; /**< Reflects the number of bytes used from the `array` */
+    ByteArray array;  /**< ByteArray holding allocated array w/length = allocated size */
+    size_t bytesUsed; /**< Reflects the number of bytes used from the `array` */
 } ByteBuffer;
 
 /** @brief Convenience macro to represent an empty buffer with no data */
-#define BYTE_BUFFER_NONE (ByteBuffer){.array = BYTE_ARRAY_NONE}
+#define BYTE_BUFFER_NONE (ByteBuffer){.array = BYTE_ARRAY_NONE, .bytesUsed = 0}
 
 ByteBuffer ByteBuffer_Create(void* data, size_t max_len, size_t used);
 ByteBuffer ByteBuffer_CreateWithArray(ByteArray array);

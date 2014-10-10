@@ -43,6 +43,7 @@ void setUp(void)
 
 void tearDown(void)
 {
+    LOG_LOCATION;
     bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     KineticAllocator_FreeAllPDUs(&PDUList);
     TEST_ASSERT_NULL(PDUList.start);

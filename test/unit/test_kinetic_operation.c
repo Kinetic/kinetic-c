@@ -33,13 +33,11 @@
 
 static KineticConnection Connection;
 static int64_t ConnectionID = 12345;
-static ByteArray HMACKey;
 static KineticPDU Request, Response;
 static KineticOperation Operation;
 
 void setUp(void)
 {
-    HMACKey = ByteArray_CreateWithCString("some_hmac_key");
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connectionID = ConnectionID;
     KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);

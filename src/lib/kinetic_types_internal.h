@@ -115,9 +115,10 @@ typedef struct _KineticMessage {
     (_msg)->message.pinAuth = NULL; \
     (_msg)->command.header = &(_msg)->header; \
     memset((_msg)->hmacData, 0, KINETIC_HMAC_MAX_LEN); \
-    if ((_hmac).data != NULL) { \
+    if ((_hmac).len <= KINETIC_HMAC_MAX_LEN \
+        && (_hmac).data != NULL && (_hmac).len > 0 \
+        && (_msg)->hmacData != NULL) { \
         memcpy((_msg)->hmacData, (_hmac).data, (_hmac).len);} \
-    (_msg)->message.hmacAuth->has_identity = false; \
     (_msg)->message.hmacAuth->has_identity = true; \
     (_msg)->message.hmacAuth->identity = (_identity); \
     (_msg)->message.hmacAuth->has_hmac = true; \
@@ -207,7 +208,8 @@ struct _KineticPDU {
     (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
     KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
-    KINETIC_MESSAGE_AUTH_HMAC_INIT(&((_pdu)->protoData.message), (_con)->session.identity, (_con)->session.hmacKey); \
+    KINETIC_MESSAGE_AUTH_HMAC_INIT( \
+            &((_pdu)->protoData.message), (_con)->session.identity, (_con)->session.hmacKey); \
     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
 }
 #define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con) { \

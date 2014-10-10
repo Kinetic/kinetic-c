@@ -125,7 +125,6 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
 
 KineticStatus KineticPDU_Receive(KineticPDU* const response)
 {
-LOG_LOCATION; LOG("HERE");
     assert(response != NULL);
     assert(response->connection != NULL);
     const int fd = response->connection->socket;
@@ -223,9 +222,8 @@ LOG_LOCATION; LOG("HERE");
             LOG("Received value payload successfully");
             KineticLogger_LogByteBuffer("ACTUAL VALUE RECEIVED", response->entry.value);
         }
+        KineticLogger_LogByteBuffer("Value Buffer", response->entry.value);
 #endif
-
-        // KineticLogger_LogByteBuffer("Value Buffer", response->entry.value);
     }
 
     // Update connectionID to match value returned from device, if provided

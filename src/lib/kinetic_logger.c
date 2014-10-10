@@ -217,6 +217,7 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
     if (msg->has_commandBytes
       && msg->commandBytes.data != NULL
       && msg->commandBytes.len > 0) {
+        
         LOG_PROTO_LEVEL_START("commandBytes");
 
         KineticProto_Command* cmd = KineticProto_command__unpack(NULL, msg->commandBytes.len, msg->commandBytes.data);
