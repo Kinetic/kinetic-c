@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -24,13 +24,13 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_message.h"
 
-int KineticSocket_Connect(char* host, int port, bool nonBlocking);
-void KineticSocket_Close(int socketDescriptor);
+int KineticSocket_Connect(const char* host, int port, bool nonBlocking);
+void KineticSocket_Close(int socket);
 
-bool KineticSocket_Read(int socketDescriptor, ByteArray buffer);
-bool KineticSocket_ReadProtobuf(int socketDescriptor, KineticPDU* pdu);
+KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len);
+KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu);
 
-bool KineticSocket_Write(int socketDescriptor, ByteArray buffer);
-bool KineticSocket_WriteProtobuf(int socketDescriptor, KineticPDU* pdu);
+KineticStatus KineticSocket_Write(int socket, ByteBuffer* src);
+KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu);
 
 #endif // _KINETIC_SOCKET_H

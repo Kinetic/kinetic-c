@@ -14,46 +14,205 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <getopt.h>
-#include <stdbool.h>
-
 #include "kinetic_client.h"
-#include "examples/noop.h"
-#include "examples/put.h"
-#include "examples/get.h"
-#include "examples/delete.h"
+#include <stdio.h>
+#include <getopt.h>
 
-typedef struct _Arguments {
-    char host[HOST_NAME_MAX];
-    int port;
-    int nonBlocking;
-    int useTls;
-    int64_t clusterVersion;
-    int64_t identity;
-    char hmacKey[KINETIC_MAX_KEY_LEN];
-    uint8_t value[PDU_VALUE_MAX_LEN];
-    int64_t valueLength;
-    char valueKey[KINETIC_MAX_KEY_LEN];
-    char version[32];
-    char newVersion[32];
-    KineticProto_Algorithm algorithm;
-} Arguments;
+void ParseOptions(
+    const int argc,
+    char** const argv,
+    KineticSession* config,
+    KineticEntry* entry);
+
+KineticStatus ExecuteOperation(
+    const char* op,
+    KineticSessionHandle sessionHandle,
+    KineticEntry* entry);
+
+void ConfigureEntry(
+    KineticEntry* entry,
+    const char* key,
+    const char* tag,
+    const char* version,
+    KineticAlgorithm algorithm,
+    const char* value);
+
+void ReportOperationConfiguration(
+    const char* operation,
+    KineticSession* config,
+    KineticEntry* entry);
+
+
+static KineticSession SessionConfig;
+static uint8_t HmacData[1024];
+static KineticEntry Entry;
+static uint8_t KeyData[1024];
+static uint8_t TagData[1024];
+static uint8_t VersionData[1024];
+static uint8_t ValueData[PDU_VALUE_MAX_LEN];
+static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
+
 
 int main(int argc, char** argv)
 {
-    int status = -1;
-    int opt;
-    int optIndex = 0;
+    // Parse command line options
+    ParseOptions(argc, argv, &SessionConfig, &Entry);
 
+    // Establish a session/connection with the Kinetic Device
+    KineticSessionHandle sessionHandle;
+    KineticStatus status = KineticClient_Connect(&SessionConfig, &sessionHandle);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        printf("Failed connecting to host %s:%d (status: %s)",
+               SessionConfig.host, SessionConfig.port,
+               Kinetic_GetStatusDescription(status));
+        return -1;
+    }
+
+    // Execute all specified operations in order
+    for (int optionIndex = 1; optionIndex < argc; optionIndex++) {
+        const char* operation = argv[optionIndex];
+        ReportOperationConfiguration(operation, &SessionConfig, &Entry);
+        ExecuteOperation(operation, sessionHandle, &Entry);
+    }
+
+    // Shutdown the Kinetic Device session
+    KineticClient_Disconnect(&sessionHandle);
+    printf("\nKinetic client session terminated!\n\n");
+
+    return 0;
+}
+
+KineticStatus ExecuteOperation(
+    const char* operation,
+    KineticSessionHandle sessionHandle,
+    KineticEntry* entry)
+{
+    KineticStatus status = KINETIC_STATUS_INVALID;
+
+    if (strcmp("noop", operation) == 0) {
+        status = KineticClient_NoOp(sessionHandle);
+        if (status == KINETIC_STATUS_SUCCESS) {
+            printf("\nNoOp operation completed successfully."
+                   " Kinetic Device is alive and well!\n");
+        }
+    }
+
+    else if (strcmp("put", operation) == 0) {
+        status = KineticClient_Put(sessionHandle, entry);
+        if (status == KINETIC_STATUS_SUCCESS) {
+            printf("\nPut operation completed successfully."
+                   " Your data has been stored!\n\n");
+        }
+    }
+
+    else if (strcmp("get", operation) == 0) {
+        status = KineticClient_Get(sessionHandle, entry);
+        if (status == 0) {
+            printf("\nGet executed successfully."
+                   "The entry has been retrieved!\n\n");
+        }
+    }
+
+    else if (strcmp("delete", operation) == 0) {
+        status = KineticClient_Delete(sessionHandle, entry);
+        if (status == 0) {
+            printf("\nDelete executed successfully."
+                   " The entry has been destroyed!\n\n");
+        }
+    }
+
+    else {
+        printf("\nSpecified operation '%s' is invalid!\n", operation);
+        return -1;
+    }
+
+    // Print out status code description if operation was not successful
+    if (status != KINETIC_STATUS_SUCCESS) {
+        printf("\nERROR: Operation '%s' failed! with status = %s)\n\n",
+               operation, Kinetic_GetStatusDescription(status));
+    }
+
+    return status;
+}
+
+void ConfigureEntry(
+    KineticEntry* entry,
+    const char* key,
+    const char* tag,
+    const char* version,
+    KineticAlgorithm algorithm,
+    const char* value)
+{
+    assert(entry != NULL);
+
+    ByteBuffer keyBuffer = ByteBuffer_Create(KeyData, sizeof(KeyData));
+    ByteBuffer_AppendCString(&keyBuffer, key);
+    ByteBuffer tagBuffer = ByteBuffer_Create(TagData, sizeof(TagData));
+    ByteBuffer_AppendCString(&tagBuffer, tag);
+    ByteBuffer versionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData));
+    ByteBuffer_AppendCString(&versionBuffer, version);
+    ByteBuffer valueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData));
+    ByteBuffer_AppendCString(&valueBuffer, value);
+
+    // Setup to write some test data
+    *entry = (KineticEntry) {
+        .key = keyBuffer,
+         .tag = tagBuffer,
+          .newVersion = versionBuffer,
+           .algorithm = algorithm,
+            .value = valueBuffer,
+    };
+}
+
+void ReportOperationConfiguration(
+    const char* operation,
+    KineticSession* config,
+    KineticEntry* entry)
+{
+    printf("\n"
+           "Executing '%s' w/configuration:\n"
+           "-------------------------------\n"
+           "  host: %s\n"
+           "  port: %d\n"
+           "  non-blocking: %s\n"
+           "  clusterVersion: %lld\n"
+           "  identity: %lld\n"
+           "  key: %zd bytes\n"
+           "  value: %zd bytes\n",
+           operation,
+           config->host,
+           config->port,
+           config->nonBlocking ? "true" : "false",
+           (long long int)config->clusterVersion,
+           (long long int)config->identity,
+           entry->key.bytesUsed,
+           entry->value.bytesUsed);
+}
+
+void ParseOptions(
+    const int argc,
+    char** const argv,
+    KineticSession* sessionConfig,
+    KineticEntry* entry)
+{
     // Create an ArgP processor to parse arguments
-    Arguments cfg = {
+    struct {
+        char host[HOST_NAME_MAX];
+        int port;
+        int nonBlocking;
+        int useTls;
+        int64_t clusterVersion;
+        int64_t identity;
+        char hmacKey[KINETIC_MAX_KEY_LEN];
+        char key[64];
+        char version[64];
+        char tag[64];
+        KineticAlgorithm algorithm;
+    } cfg = {
         .host = "localhost",
         .port = KINETIC_PORT,
         .nonBlocking = false,
@@ -61,209 +220,51 @@ int main(int argc, char** argv)
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = "asdfasdf",
-        .value = {0},
-        .valueLength = 0,
-        .valueKey = "some_value_key...",
+        .key = "SomeObjectKeyValue",
         .version = "v1.0",
-        .newVersion = "v1.0",
+        .tag = "SomeTagValue",
+        .algorithm = KINETIC_ALGORITHM_SHA1,
     };
-    ByteArray hmacKey = BYTE_ARRAY_INIT_FROM_CSTRING(cfg.hmacKey);
-    ByteArray value = {.data = cfg.value, .len = cfg.valueLength};
 
+    // Create configuration for long format options
     struct option long_options[] = {
-        {"non-blocking", no_argument,      &cfg.nonBlocking, true},
-        {"blocking",    no_argument,       &cfg.nonBlocking, false},
-        {"tls",         no_argument,       &cfg.port,        KINETIC_TLS_PORT},
-        {"host",        required_argument, 0, 'h'},
-        {0, 0, 0, 0}
+        {"non-blocking", no_argument,       &cfg.nonBlocking, true},
+        {"blocking",     no_argument,       &cfg.nonBlocking, false},
+        {"tls",          no_argument,       &cfg.port,        KINETIC_TLS_PORT},
+        {"host",         required_argument, 0,                'h'},
+        {0,              0,                 0,                0},
     };
 
-    while ((opt = getopt_long(argc, argv, "h", long_options, &optIndex)) != -1) {
+    // Parse the options from the command line
+    int option, optionIndex = 0;
+    while ((option = getopt_long(argc, argv, "h", long_options, &optionIndex)) != -1) {
         // Parse options until we reach the end of the argument list
-        if (opt != -1) {
-            switch (opt) {
-            case 0:
-                // If this option set a flag, do nothing else now.
-                if (long_options[optIndex].flag != 0)
-                    break;
-            case 'h':
-                strcpy(cfg.host, optarg);
+        switch (option) {
+        // If this option set a flag, do nothing else now
+        case 0: if (long_options[optionIndex].flag != 0) {
                 break;
-            case '?':
-                // getopt_long already printed an error message.
-                break;
-            default:
-                abort();
             }
+        // Configure host
+        case 'h': strcpy(cfg.host, optarg); break;
+        // Discard '?', since getopt_long already printed info
+        case '?': break;
+        // Abort upon error
+        default: assert(false);
         }
     }
 
-    // Execute all specified operations in order
-    for (; optind < argc; optind++) {
-        char* op = argv[optind];
+    // Configure session for connection
+    *sessionConfig = (KineticSession) {
+        .port = cfg.port,
+         .clusterVersion = cfg.clusterVersion,
+          .identity = cfg.identity,
+           .nonBlocking = cfg.nonBlocking,
+            .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
+    };
+    memcpy(HmacData, cfg.hmacKey, strlen(cfg.hmacKey));
+    strncpy(sessionConfig->host, cfg.host, HOST_NAME_MAX);
 
-        if (strcmp("noop", op) == 0) {
-            printf("\n"
-                   "Executing NoOp w/configuration:\n"
-                   "-------------------------------\n"
-                   "  host: %s\n"
-                   "  port: %d\n"
-                   "  non-blocking: %s\n"
-                   "  clusterVersion: %lld\n"
-                   "  identity: %lld\n"
-                   "  key: '%s'\n",
-                   cfg.host,
-                   cfg.port,
-                   cfg.nonBlocking ? "true" : "false",
-                   (long long int)cfg.clusterVersion,
-                   (long long int)cfg.identity,
-                   cfg.hmacKey);
-            status = NoOp(cfg.host, cfg.port, cfg.nonBlocking,
-                          cfg.clusterVersion, cfg.identity, hmacKey);
-            if (status == 0) {
-                printf("\nNoOp executed successfully!\n\n");
-            }
-            else {
-                printf("\nNoOp operation failed! status=%d\n\n", status);
-                return -1;
-            }
-        }
-
-        else if (strcmp("put", op) == 0) {
-            unsigned int i;
-            for (i = 0; i < sizeof(cfg.value); i++) {
-                cfg.value[i] = (uint8_t)(0x0ff & i);
-            }
-
-            KineticKeyValue metadata = {
-                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
-                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
-                .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-                .dbVersion = BYTE_ARRAY_NONE,
-                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
-                .metadataOnly = false,
-                .value = value,
-            };
-
-            printf("\n"
-                   "Executing Put w/configuration:\n"
-                   "-------------------------------\n"
-                   "  host: %s\n"
-                   "  port: %d\n"
-                   "  non-blocking: %s\n"
-                   "  clusterVersion: %lld\n"
-                   "  identity: %lld\n"
-                   "  key: '%s'\n"
-                   "  value: %zd bytes\n",
-                   cfg.host,
-                   cfg.port,
-                   cfg.nonBlocking ? "true" : "false",
-                   (long long int)cfg.clusterVersion,
-                   (long long int)cfg.identity,
-                   metadata.key.data,
-                   value.len);
-
-            status = Put(
-                         cfg.host, cfg.port, cfg.nonBlocking,
-                         cfg.clusterVersion, cfg.identity, hmacKey,
-                         &metadata);
-
-            if (status == 0) {
-                printf("\nPut executed successfully!\n\n");
-            }
-            else {
-                printf("\nPut operation failed! status=%d\n\n", status);
-                return -1;
-            }
-        }
-
-        else if (strcmp("get", op) == 0) {
-            KineticKeyValue metadata = {
-                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
-                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
-                .newVersion = BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-                .dbVersion = BYTE_ARRAY_NONE,
-                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
-                .metadataOnly = false,
-            };
-
-            printf("\n"
-                   "Executing Get w/configuration:\n"
-                   "-------------------------------\n"
-                   "  host: %s\n"
-                   "  port: %d\n"
-                   "  non-blocking: %s\n"
-                   "  clusterVersion: %lld\n"
-                   "  identity: %lld\n"
-                   "  hmacKey: '%s'\n"
-                   "  value: %zd bytes\n",
-                   cfg.host,
-                   cfg.port,
-                   cfg.nonBlocking ? "true" : "false",
-                   (long long int)cfg.clusterVersion,
-                   (long long int)cfg.identity,
-                   (char*)hmacKey.data,
-                   value.len);
-
-            status = Get(cfg.host, cfg.port, cfg.nonBlocking,
-                         cfg.clusterVersion, cfg.identity, hmacKey,
-                         &metadata);
-
-            if (status == 0 || status == KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR) {
-                printf("\nGet executed successfully!\n\n");
-                return 0;
-            }
-            else {
-                printf("\nGet operation failed! status=%d\n\n", status);
-                return -1;
-            }
-        }
-
-        else if (strcmp("delete", op) == 0) {
-            KineticKeyValue metadata = {
-                .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_key..."),
-                .algorithm = KINETIC_PROTO_ALGORITHM_SHA1,
-                .dbVersion =  BYTE_ARRAY_INIT_FROM_CSTRING("v1.0"),
-                .tag = BYTE_ARRAY_INIT_FROM_CSTRING("some_value_tag..."),
-                .metadataOnly = false,
-            };
-
-            printf("\n"
-                   "Executing Delete w/configuration:\n"
-                   "-------------------------------\n"
-                   "  host: %s\n"
-                   "  port: %d\n"
-                   "  non-blocking: %s\n"
-                   "  clusterVersion: %lld\n"
-                   "  identity: %lld\n"
-                   "  hmacKey: '%s'\n",
-                   cfg.host,
-                   cfg.port,
-                   cfg.nonBlocking ? "true" : "false",
-                   (long long int)cfg.clusterVersion,
-                   (long long int)cfg.identity,
-                   (char*)hmacKey.data);
-
-            status = Delete(cfg.host, cfg.port, cfg.nonBlocking,
-                            cfg.clusterVersion, cfg.identity, hmacKey,
-                            &metadata);
-
-            if (status == 0) {
-                printf("\nDelete executed successfully!\n\n");
-                return 0;
-            }
-            else {
-                printf("\nDelete operation failed! status=%d\n\n", status);
-                return -1;
-            }
-        }
-
-        else {
-            printf("\nSpecified operation is invalid!\n");
-            return -1;
-        }
-
-    }
-
-    return status;
+    // Populate and configure the entry to be used for operations
+    ConfigureEntry(entry,
+                   cfg.key, cfg.tag, cfg.version, cfg.algorithm, TestDataString);
 }

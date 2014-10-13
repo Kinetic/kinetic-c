@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -23,16 +23,11 @@
 
 #include "kinetic_types_internal.h"
 
-void KineticPDU_Init(KineticPDU* const pdu,
-                     KineticConnection* const connection);
-
-void KineticPDU_AttachValuePayload(KineticPDU* const pdu,
-                                   ByteArray payload);
-void KineticPDU_EnableValueBuffer(KineticPDU* const pdu);
-void KineticPDU_EnableValueBufferWithLength(KineticPDU* const pdu,
-        size_t length);
-
-bool KineticPDU_Send(KineticPDU* request);
-bool KineticPDU_Receive(KineticPDU* response);
+void KineticPDU_Init(KineticPDU* const pdu, KineticConnection* const connection);
+void KineticPDU_AttachEntry(KineticPDU* const pdu, KineticEntry* const entry);
+KineticStatus KineticPDU_Send(KineticPDU* request);
+KineticStatus KineticPDU_Receive(KineticPDU* response);
+KineticStatus KineticPDU_GetStatus(KineticPDU* pdu);
+KineticProto_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu);
 
 #endif // _KINETIC_PDU_H

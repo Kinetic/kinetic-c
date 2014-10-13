@@ -14,160 +14,209 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
+#include "unity.h"
+#include "unity_helper.h"
 #include "kinetic_connection.h"
 #include "kinetic_proto.h"
-#include "kinetic_message.h"
-#include "kinetic_pdu.h"
-#include "kinetic_hmac.h"
-#include "kinetic_logger.h"
-#include "kinetic_logger.h"
-#include "kinetic_nbo.h"
-
-#include "mock_kinetic_socket.h"
 #include "protobuf-c/protobuf-c.h"
+#include "kinetic_logger.h"
+#include "mock_kinetic_socket.h"
 #include <string.h>
 #include <time.h>
 
-
-#include "unity.h"
-#include "unity_helper.h"
-
-static KineticConnection Connection, Expected;
-static const int64_t ClusterVersion = 12;
-static const int64_t Identity = 1234;
-static ByteArray Key;
-static KineticMessage MessageOut, MessageIn;
+static KineticConnection* Connection;
+static KineticSessionHandle SessionHandle;
+static const KineticSession SessionConfig = {
+    .host = "somehost.com",
+    .port = 17,
+    .nonBlocking = false,
+};
 
 void setUp(void)
 {
-    Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
-    KINETIC_CONNECTION_INIT(&Connection, Identity, Key);
-    Expected = Connection;
-    KINETIC_MESSAGE_INIT(&MessageOut);
-    MessageIn = MessageOut;
+    SessionHandle = KineticConnection_NewConnection(&SessionConfig);
+    TEST_ASSERT_TRUE(SessionHandle > KINETIC_HANDLE_INVALID);
+    Connection = KineticConnection_FromHandle(SessionHandle);
+    TEST_ASSERT_NOT_NULL(Connection);
+    TEST_ASSERT_FALSE(Connection->connected);
 }
 
 void tearDown(void)
 {
+    if (SessionHandle != KINETIC_HANDLE_INVALID) {
+        if (Connection->connected) {
+            KineticStatus status = KineticConnection_Disconnect(Connection);
+            TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+            TEST_ASSERT_FALSE(Connection->connected);
+        }
+        KineticConnection_FreeConnection(&SessionHandle);
+    }
+}
+
+void test_KineticConnection_NewConnection_should_return_KINETIC_HANDLE_INVALID_upon_failure(void)
+{
+    LOG_LOCATION;
+    TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, KineticConnection_NewConnection(NULL));
+}
+
+void test_KineticConnection_NewConnection_should_allocate_a_new_KineticConnection(void)
+{
+    LOG_LOCATION;
+    KineticSessionHandle handle = KineticConnection_NewConnection(&SessionConfig);
+    TEST_ASSERT_TRUE(handle > KINETIC_HANDLE_INVALID);
+    KineticConnection* connection = KineticConnection_FromHandle(handle);
+    TEST_ASSERT_NOT_NULL(connection);
+    KineticConnection_FreeConnection(&handle);
 }
 
 void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 {
+    LOG_LOCATION;
     KineticConnection connection;
     time_t curTime = time(NULL);
-    Key = BYTE_ARRAY_INIT_FROM_CSTRING("12345678");
-    KINETIC_CONNECTION_INIT(&connection, Identity, Key);
+    KINETIC_CONNECTION_INIT(&connection);
 
     TEST_ASSERT_FALSE(connection.connected);
-    TEST_ASSERT_FALSE(connection.nonBlocking);
-    TEST_ASSERT_EQUAL(0, connection.port);
-    TEST_ASSERT_EQUAL(-1, connection.socketDescriptor);
-    TEST_ASSERT_EQUAL_STRING("", connection.host);
+    TEST_ASSERT_EQUAL(0, connection.session.port);
+    TEST_ASSERT_EQUAL(-1, connection.socket);
+    TEST_ASSERT_EQUAL_INT64(0, connection.sequence);
     // Give 1-second flexibility in the rare case that
     // we were on a second boundary
-    TEST_ASSERT_INT64_WITHIN(curTime, Connection.connectionID, 1);
-    TEST_ASSERT_EQUAL_INT64(0, Connection.clusterVersion);
-    TEST_ASSERT_EQUAL_INT64(1234, Connection.identity);
-    TEST_ASSERT_EQUAL_ByteArray(Key, Connection.key);
-    TEST_ASSERT_EQUAL_INT64(0, Connection.sequence);
+    TEST_ASSERT_INT64_WITHIN(curTime, connection.connectionID, 1);
+
+    TEST_ASSERT_EQUAL_STRING("", connection.session.host);
+    TEST_ASSERT_FALSE(connection.session.nonBlocking);
+    TEST_ASSERT_EQUAL_INT64(0, connection.session.clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(0, connection.session.identity);
+
+    TEST_ASSERT_FALSE(Connection->connected);
 }
 
 void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 {
-    Connection = (KineticConnection) {
-        .connected = true,
-         .nonBlocking = false,
-          .port = 1234,
-           .socketDescriptor = -1,
-            .host = "invalid-host.com",
-             .key = BYTE_ARRAY_INIT_FROM_CSTRING("some_hmac_key"),
-              .identity = 456789,
-    };
-    Expected = Connection;
+    LOG_LOCATION;
+    KineticSocket_Connect_ExpectAndReturn(SessionConfig.host,
+                                          SessionConfig.port, SessionConfig.nonBlocking, -1);
 
-    KineticSocket_Connect_ExpectAndReturn(Expected.host, Expected.port, false, -1);
+    KineticStatus status = KineticConnection_Connect(Connection);
 
-    bool success = KineticConnection_Connect(&Connection, "invalid-host.com", Expected.port,
-                   Expected.nonBlocking, Expected.clusterVersion, Expected.identity, Expected.key);
-
-    TEST_ASSERT_FALSE(success);
-    TEST_ASSERT_FALSE(Connection.connected);
-    TEST_ASSERT_EQUAL(-1, Connection.socketDescriptor);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
+    TEST_ASSERT_FALSE(Connection->connected);
+    TEST_ASSERT_EQUAL(KINETIC_SOCKET_DESCRIPTOR_INVALID, Connection->socket);
 }
 
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_blocking_connection(void)
 {
-    Connection = (KineticConnection) {
-        .host = "invalid-host.com",
-         .nonBlocking = true,
-          .key = BYTE_ARRAY_INIT_FROM_CSTRING("invalid"),
-           .socketDescriptor = -1,
-            .connected = false,
+    LOG_LOCATION;
+    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+
+    KineticConnection expected = (KineticConnection) {
+        .connected = true,
+         .socket = 24,
+        .session = (KineticSession) {
+            .host = "valid-host.com",
+             .port = 1234,
+              .nonBlocking = false,
+               .clusterVersion = 17,
+                .identity = 12,
+                 .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
+        },
     };
-    Expected = Connection;
-    Expected.nonBlocking = false;
-    Expected.port = 1234;
-    Expected.clusterVersion = 17;
-    Expected.identity = 12;
-    Expected.socketDescriptor = 24;
-    strcpy(Expected.host, "valid-host.com");
+    memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn(Expected.host, Expected.port, false, Expected.socketDescriptor);
+    KineticConnection connection = (KineticConnection) {
+        .connected = false,
+         .socket = -1,
+        .session = (KineticSession) {
+            .host = "valid-host.com",
+             .port = expected.session.port,
+              .nonBlocking = false,
+               .clusterVersion = expected.session.clusterVersion,
+                .identity = expected.session.identity,
+                 .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
+        },
+    };
+    memcpy(connection.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    bool success = KineticConnection_Connect(&Connection, "valid-host.com", Expected.port,
-                   Expected.nonBlocking, Expected.clusterVersion, Expected.identity, Expected.key);
+    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
+                                          expected.session.nonBlocking, expected.socket);
 
-    TEST_ASSERT_TRUE(success);
-    TEST_ASSERT_TRUE(Connection.connected);
-    TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.host);
-    TEST_ASSERT_EQUAL(Expected.port, Connection.port);
-    TEST_ASSERT_FALSE(Connection.nonBlocking);
-    TEST_ASSERT_EQUAL_INT64(Expected.clusterVersion, Connection.clusterVersion);
-    TEST_ASSERT_EQUAL_INT64(Expected.identity, Connection.identity);
-    TEST_ASSERT_EQUAL_ByteArray(Expected.key, Connection.key);
-    TEST_ASSERT_EQUAL(Expected.socketDescriptor, Connection.socketDescriptor);
+    KineticStatus status = KineticConnection_Connect(&connection);
+
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_TRUE(connection.connected);
+    TEST_ASSERT_EQUAL(expected.socket, connection.socket);
+
+    TEST_ASSERT_EQUAL_STRING(expected.session.host, connection.session.host);
+    TEST_ASSERT_EQUAL(expected.session.port, connection.session.port);
+    TEST_ASSERT_EQUAL(expected.session.nonBlocking, connection.session.nonBlocking);
+    TEST_ASSERT_EQUAL_INT64(expected.session.clusterVersion, connection.session.clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(expected.session.identity, connection.session.identity);
+    TEST_ASSERT_EQUAL_ByteArray(expected.session.hmacKey, connection.session.hmacKey);
 }
 
 void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_blocking_connection(void)
 {
-    Connection = (KineticConnection) {
-        .connected = false,
-         .nonBlocking = false,
-          .port = 1234,
-           .socketDescriptor = -1 ,
+    LOG_LOCATION;
+    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+
+    KineticConnection expected = (KineticConnection) {
+        .connected = true,
+         .socket = 24,
+        .session = (KineticSession) {
             .host = "valid-host.com",
-             .key = Key,
-              .identity = Identity,
+             .port = 1234,
+              .nonBlocking = true,
+               .clusterVersion = 17,
+                .identity = 12,
+                 .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
+        },
     };
-    Expected = Connection;
+    memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn("valid-host.com", 2345, true, 48);
+    KineticConnection connection = (KineticConnection) {
+        .connected = false,
+         .socket = -1,
+        .session = (KineticSession) {
+            .host = "valid-host.com",
+             .port = expected.session.port,
+              .nonBlocking = true,
+               .clusterVersion = expected.session.clusterVersion,
+                .identity = expected.session.identity,
+                 .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
+        },
+    };
+    memcpy(connection.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    bool success = KineticConnection_Connect(&Connection, "valid-host.com", 2345, true, ClusterVersion, Identity, Key);
+    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
+                                          expected.session.nonBlocking, expected.socket);
 
-    TEST_ASSERT_TRUE(success);
-    TEST_ASSERT_TRUE(Connection.connected);
-    TEST_ASSERT_TRUE(Connection.nonBlocking);
-    TEST_ASSERT_EQUAL(2345, Connection.port);
-    TEST_ASSERT_EQUAL(48, Connection.socketDescriptor);
-    TEST_ASSERT_EQUAL_STRING("valid-host.com", Connection.host);
+    KineticStatus status = KineticConnection_Connect(&connection);
+
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_TRUE(connection.connected);
+    TEST_ASSERT_EQUAL(expected.socket, connection.socket);
+
+    TEST_ASSERT_EQUAL_STRING(expected.session.host, connection.session.host);
+    TEST_ASSERT_EQUAL(expected.session.port, connection.session.port);
+    TEST_ASSERT_EQUAL(expected.session.nonBlocking, connection.session.nonBlocking);
+    TEST_ASSERT_EQUAL_INT64(expected.session.clusterVersion, connection.session.clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(expected.session.identity, connection.session.identity);
+    TEST_ASSERT_EQUAL_ByteArray(expected.session.hmacKey, connection.session.hmacKey);
 }
 
 void test_KineticConnection_IncrementSequence_should_increment_the_sequence_count(void)
 {
-    Connection.sequence = 57;
+    LOG_LOCATION;
+    Connection->sequence = 57;
+    KineticConnection_IncrementSequence(Connection);
+    TEST_ASSERT_EQUAL_INT64(58, Connection->sequence);
 
-    KineticConnection_IncrementSequence(&Connection);
-
-    TEST_ASSERT_EQUAL_INT64(58, Connection.sequence);
-
-    Connection.sequence = 57;
-
-    KineticConnection_IncrementSequence(&Connection);
-
-    TEST_ASSERT_EQUAL_INT64(58, Connection.sequence);
+    Connection->sequence = 0;
+    KineticConnection_IncrementSequence(Connection);
+    TEST_ASSERT_EQUAL_INT64(1, Connection->sequence);
 }

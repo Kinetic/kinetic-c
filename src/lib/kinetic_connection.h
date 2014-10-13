@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -23,16 +23,11 @@
 
 #include "kinetic_types_internal.h"
 
-bool KineticConnection_Connect(KineticConnection* connection,
-                               const char* host,
-                               int port,
-                               bool nonBlocking,
-                               int64_t clusterVersion,
-                               int64_t identity,
-                               const ByteArray key);
-
-void KineticConnection_Disconnect(KineticConnection* const connection);
-
+KineticSessionHandle KineticConnection_NewConnection(const KineticSession* const config);
+void KineticConnection_FreeConnection(KineticSessionHandle* const handle);
+KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle);
+KineticStatus KineticConnection_Connect(KineticConnection* const connection);
+KineticStatus KineticConnection_Disconnect(KineticConnection* const connection);
 void KineticConnection_IncrementSequence(KineticConnection* const connection);
 
 #endif // _KINETIC_CONNECTION_H

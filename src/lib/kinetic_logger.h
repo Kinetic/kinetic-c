@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -35,6 +35,7 @@ void KineticLogger_LogHeader(const KineticPDUHeader* header);
 void KineticLogger_LogProtobuf(const KineticProto* proto);
 void KineticLogger_LogStatus(KineticProto_Status* status);
 void KineticLogger_LogByteArray(const char* title, ByteArray bytes);
+void KineticLogger_LogByteBuffer(const char* title, ByteBuffer buffer);
 
 #define LOG(message) KineticLogger_Log(message)
 #define LOGF(message, ...) KineticLogger_LogPrintf(message, __VA_ARGS__)

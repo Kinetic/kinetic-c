@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -24,6 +24,9 @@
 #include "kinetic_nbo.h"
 #include "kinetic_message.h"
 #include "kinetic_logger.h"
+#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
+#include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
 #include <string.h>
 #include <openssl/hmac.h>
@@ -83,7 +86,7 @@ void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the
     KineticProto proto = KINETIC_PROTO__INIT;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
     ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("1234567890ABCDEFGHIJK");
+    const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
 
     proto.command = &command;
     proto.hmac = hmac;
@@ -113,7 +116,7 @@ void test_KineticHMAC_Validate_should_return_true_if_the_HMAC_for_the_supplied_m
     KineticProto proto = KINETIC_PROTO__INIT;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
     ProtobufCBinaryData hmac = {.len = KINETIC_HMAC_MAX_LEN, .data = data};
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("1234567890ABCDEFGHIJK");
+    const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
     proto.command = &command;
     proto.hmac = hmac;
     proto.has_hmac = true;
@@ -131,7 +134,7 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_value_of_the_supp
     KineticProto proto = KINETIC_PROTO__INIT;
     uint8_t data[64];
     ProtobufCBinaryData hmac = {.len = 0, .data = data};
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("1234567890ABCDEFGHIJK");
+    const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
     proto.command = &command;
     proto.hmac = hmac;
     proto.has_hmac = true;
@@ -152,7 +155,7 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_length_of_the_sup
     KineticProto proto = KINETIC_PROTO__INIT;
     uint8_t data[64];
     ProtobufCBinaryData hmac = {.len = 0, .data = data};
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("1234567890ABCDEFGHIJK");
+    const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
     proto.command = &command;
     proto.hmac = hmac;
     proto.has_hmac = true;
@@ -173,7 +176,7 @@ void test_KineticHMAC_Validate_should_return_false_if_the_HMAC_presence_is_false
     KineticProto proto = KINETIC_PROTO__INIT;
     uint8_t data[64];
     ProtobufCBinaryData hmac = {.len = 0, .data = data};
-    const ByteArray key = BYTE_ARRAY_INIT_FROM_CSTRING("1234567890ABCDEFGHIJK");
+    const ByteArray key = ByteArray_CreateWithCString("1234567890ABCDEFGHIJK");
     proto.command = &command;
     proto.hmac = hmac;
     proto.has_hmac = true;

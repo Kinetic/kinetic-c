@@ -14,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -22,6 +22,7 @@
 #define _UNITY_HELPER
 
 #include "unity.h"
+#include "unity_byte_array_helper.h"
 #include "kinetic_types.h"
 #include <stdio.h>
 #include <string.h>
@@ -74,21 +75,25 @@
 #define TEST_ASSERT_EQUAL_SIZET(expected, actual) \
     TEST_ASSERT_EQUAL_SIZET_MESSAGE(expected, actual, NULL);
 
+
 /** Custom Unity assertion which validates a the value of a Kinetic protocol status code */
-#define TEST_ASSERT_EQUAL_KINETIC_STATUS(expected, actual) \
+#define TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(expected, actual, msg) \
 if ((expected) != (actual)) { \
-    char err[128]; \
+    char err[256]; \
     const char* invalidStatus = "INVALID_STATUS"; \
     const char* statusDescExpected = invalidStatus; \
-    if ((expected) >= 0 && (expected) < KineticStatusDescriptorCount) { \
-        statusDescExpected = KineticStatusDescriptor[(expected)]; } \
+    if ((expected) >= 0 && (expected) < KINETIC_STATUS_COUNT) { \
+        statusDescExpected = Kinetic_GetStatusDescription(expected); } \
     const char* statusDescActual = invalidStatus; \
-    if ((actual) >= 0 && (actual) < KineticStatusDescriptorCount) { \
-        statusDescActual = KineticStatusDescriptor[(actual)]; } \
+    if ((actual) >= 0 && (actual) < KINETIC_STATUS_COUNT) { \
+        statusDescActual = Kinetic_GetStatusDescription(actual); } \
     sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d)", \
-        statusDescExpected, (expected), statusDescActual, (actual));\
+        statusDescExpected, (expected), statusDescActual, (actual)); \
+    if (msg != NULL) { strcat(err, " : "); strcat(err, msg); } \
     TEST_FAIL_MESSAGE(err); \
 }
+#define TEST_ASSERT_EQUAL_KineticStatus(expected, actual) \
+    TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(expected, actual, NULL);
 
 /** Custom Unity assertion which validates the expected int64_t value is
     packed properly into a buffer in Network Byte-Order (big endian) */
@@ -98,24 +103,6 @@ if ((expected) != (actual)) { \
     sprintf(err, "@ index %zu", i); \
     TEST_ASSERT_EQUAL_INT32_MESSAGE(expected, val, err); \
 }
-
-
-
-/** Custom Unity/CMock equality assertion for validating equality of ByteArrays */
-#define TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, msg) \
-    TEST_ASSERT_EQUAL_INT_MESSAGE((expected).len, (actual).len, "Lengths do not match!"); \
-    TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((expected).data, (actual).data, (expected).len, "Data does not match!");
-#define TEST_ASSERT_EQUAL_ByteArray(expected, actual) \
-    TEST_ASSERT_EQUAL_ByteArray_MESSAGE(expected, actual, NULL);
-
-/** Custom Unity assertion for validating empty ByteArrays */
-#define TEST_ASSERT_ByteArray_EMPTY(actual) \
-    TEST_ASSERT_EQUAL_INT_MESSAGE(0, (actual).len, "ByteArray length is non-zero!");
-#define TEST_ASSERT_ByteArray_NONE(actual) \
-    TEST_ASSERT_ByteArray_EMPTY(actual); \
-    TEST_ASSERT_NULL_MESSAGE((actual).data, "ByteArray has non-null buffer");
-
-
 
 #define GET_CWD(cwd) \
     TEST_ASSERT_NOT_NULL_MESSAGE(getcwd(cwd, sizeof(cwd)), "Failed getting current working directory");
