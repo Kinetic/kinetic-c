@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "unity.h"
 #include "unity_helper.h"
 
@@ -46,6 +47,7 @@ KineticPDU Request, Response;
 
 void setUp(void)
 {
+    KineticLogger_Init("stdout");
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
     HmacKey = ByteArray_CreateWithCString("some hmac key");
@@ -63,6 +65,7 @@ void setUp(void)
 
 void tearDown(void)
 {
+    KineticLogger_Close();
 }
 
 void test_KineticClient_Delete_should_execute_DELETE_operation(void)

@@ -36,6 +36,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include "system_test_fixture.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
 #include <string.h>

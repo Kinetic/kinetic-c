@@ -24,6 +24,7 @@
 #include "protobuf-c/protobuf-c.h"
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "unity.h"
 #include "unity_helper.h"
 

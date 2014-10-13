@@ -28,6 +28,7 @@
 
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
+#include "zlog/zlog.h"
 
 #include <stdlib.h>
 #include <errno.h>
@@ -50,7 +51,6 @@ static int FileDesc;
 static int KineticTestPort = KINETIC_PORT;
 static uint8_t TestData[128];
 static ByteBuffer TestDataBuffer;
-static bool LogInitialized = false;
 static bool SocketReadRequested;
 
 void Socket_RequestBytes(size_t count)
@@ -86,12 +86,9 @@ void Socket_FlushReadPipe(void)
 
 void setUp(void)
 {
+    KineticLogger_Init("stdout");
     FileDesc = -1;
     SocketReadRequested = false;
-    if (!LogInitialized) {
-        KineticLogger_Init(NULL);//"test_kinetic_socket.log");
-        LogInitialized = true;
-    }
     TestDataBuffer = ByteBuffer_Create(TestData, sizeof(TestData), 0);
     ByteBuffer_AppendCString(&TestDataBuffer, "Some like it hot!");
 }
@@ -106,6 +103,7 @@ void tearDown(void)
         KineticSocket_Close(FileDesc);
         FileDesc = 0;
     }
+    KineticLogger_Close();
 }
 
 
@@ -123,6 +121,8 @@ void test_KineticSocket_Connect_should_create_a_socket_connection(void)
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }
 
+
+
 // Disabling socket read/write tests in not OSX, since Linux TravisCI builds
 // fail, but system test passes. Most likely an issue with KineticRuby server
 #if defined(__APPLE__)
@@ -132,7 +132,6 @@ static KineticPDU PDU;
 void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void)
 {
     LOG_LOCATION;
-
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 

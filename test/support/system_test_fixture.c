@@ -28,6 +28,8 @@ uint8_t data[KINETIC_OBJ_SIZE];
 
 void SystemTestSetup(SystemTestFixture* fixture)
 {
+    KineticClient_Init("stdout");
+
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
 
     ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
@@ -74,4 +76,6 @@ void SystemTestTearDown(SystemTestFixture* fixture)
         //     fixture->connection.sequence,
         //     "Sequence should post-increment for every operation on the session!");
     }
+
+    KineticClient_Shutdown();
 }

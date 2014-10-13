@@ -87,6 +87,11 @@ void KineticClient_Init(const char* logFile)
     KineticLogger_Init(logFile);
 }
 
+void KineticClient_Shutdown(void)
+{
+    KineticLogger_Close();
+}
+
 KineticStatus KineticClient_Connect(const KineticSession* config,
                                     KineticSessionHandle* handle)
 {

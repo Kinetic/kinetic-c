@@ -19,49 +19,43 @@
 */
 
 #include "kinetic_logger.h"
-// #include "zlog/zlog.h"
+#include "zlog/zlog.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-static char LogFile[256] = "";
-bool LogToConsole = true;
-int LogLevel = 0;
-FILE* FileDesc = NULL;
+int LogLevel = -1;
 
 void KineticLogger_Init(const char* logFile)
 {
-    LogToConsole = true;
-    FileDesc = NULL;
-    LogLevel = 0;
-
-    if (logFile != NULL) {
-        strcpy(LogFile, logFile);
-        if (strcmp(logFile, "NONE") == 0) {
-            LogLevel = -1;
-            LogToConsole = false;
-            return;
+    if (logFile == NULL) {
+        LogLevel = -1;
+        printf("\nLogging kinetic-c output is disabled!\n");
+        return;
+    }
+    else {
+        LogLevel = 0;
+        
+        if (strncmp(logFile, "stdout", 4) == 0 || strncmp(logFile, "STDOUT", 4) == 0) {
+            printf("\nLogging kinetic-c output to console (stdout)\n");
+            zlog_init_stdout();
         }
         else {
-            FileDesc = fopen(LogFile, "w");
-            if (FileDesc == NULL) {
-                fprintf(stderr, "Failed to initialize logger with file: "
-                        "fopen('%s') => FileDesc=%zd\n", logFile, (size_t)FileDesc);
-            }
-            else {
-                fprintf(stderr, "Logging output to %s\n", logFile);
-                LogToConsole = false;
-            }
+            zlog_init(logFile);
+            printf("\nLogging kinetic-c output to %s\n", logFile);
         }
+
+        // Create flushing thread to periodically flush the log
+        zlogf("\n");
+        zlog_init_flush_thread();
+        zlogf("\n");
     }
 }
 
 void KineticLogger_Close(void)
 {
-    // Don't close std/already-opened streams
-    if (!LogToConsole && strlen(LogFile) > 0 &&
-        FileDesc != stdout && FileDesc != stderr && FileDesc != stdin) {
-        fclose(FileDesc);
+    if (LogLevel >= 0) {
+        zlog_finish();
     }
 }
 
@@ -70,32 +64,33 @@ void KineticLogger_Log(const char* message)
     if (message == NULL || LogLevel < 0) {
         return;
     }
-
-    FileDesc = LogToConsole ? stderr : fopen(LogFile, "a");
-    if (FileDesc != NULL) {
-        fprintf(FileDesc, "%s\n", message);
-        fflush(FileDesc);
-    }
+    zlogf(message);
+    zlogf("\n");
 }
 
-int KineticLogger_LogPrintf(const char* format, ...)
+void KineticLogger_LogPrintf(const char* format, ...)
 {
-    int result = -1;
-
-    if (LogLevel >= 0) {
-        if (format != NULL) {
-            va_list arg_ptr;
-            char buffer[1024];
-            va_start(arg_ptr, format);
-            result = vsprintf(buffer, format, arg_ptr);
-            KineticLogger_Log(buffer);
-            va_end(arg_ptr);
-        }
+    if (LogLevel < 0 || format == NULL) {
+        return;
     }
-
-    return (result);
+    char buffer[128];
+    va_list arg_ptr;
+    va_start(arg_ptr, format);
+    vsnprintf(buffer, sizeof(buffer), format, arg_ptr);
+    va_end(arg_ptr);
+    strcat(buffer, "\n");
+    zlogf(buffer);
 }
 
+void KineticLogger_LogLocation(char* filename, int line, char const * format, ...)
+{
+    if (LogLevel >= 0) {
+        va_list arg_ptr;
+        va_start(arg_ptr, format);
+        zlogf("[@%s:%d] %s\n", filename, line, format, arg_ptr);
+        va_end(arg_ptr);
+    }
+}
 
 void KineticLogger_LogHeader(const KineticPDUHeader* header)
 {

@@ -27,17 +27,19 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include <string.h>
 #include <openssl/hmac.h>
 
 void setUp(void)
 {
-    KineticLogger_Init(NULL);
+    KineticLogger_Init("stdout");
 }
 
 void tearDown(void)
 {
+    KineticLogger_Close();
 }
 
 void test_KineticHMAC_KINETIC_HMAC_SHA1_LEN_should_be_20(void)

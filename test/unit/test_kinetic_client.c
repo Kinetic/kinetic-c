@@ -31,6 +31,7 @@
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include <stdio.h>
 
@@ -44,15 +45,20 @@ static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
 
 void setUp(void)
 {
-    KineticLogger_Init(NULL);
+    KineticLogger_Init("stdout");
     SessionHandle = KINETIC_HANDLE_INVALID;
+}
+
+void tearDown()
+{
+    KineticLogger_Close();
 }
 
 void test_KineticClient_Init_should_initialize_the_logger(void)
 {
     KineticClient_Init("./some_file.log");
+    KineticClient_Init("stdout");
     KineticClient_Init(NULL);
-    KineticClient_Init("NONE");
 }
 
 static void ConnectSession(void)

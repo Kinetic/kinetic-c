@@ -30,6 +30,7 @@
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_allocator.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include <string.h>
 #include <time.h>
 

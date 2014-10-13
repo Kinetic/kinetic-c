@@ -31,6 +31,11 @@
 void KineticClient_Init(const char* logFile);
 
 /**
+ * @brief Performs shutdown/cleanup of the kinetic-c client lib
+ */
+void KineticClient_Shutdown(void);
+
+/**
  * @brief Initializes the Kinetic API, configures logging destination, establishes a
  * connection to the specified Kinetic Device, and establishes a session.
  *

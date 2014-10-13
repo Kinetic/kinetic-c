@@ -31,6 +31,7 @@
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_hmac.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include <arpa/inet.h>
 #include <string.h>
@@ -82,9 +83,15 @@ void setUp(void)
 
     KINETIC_PDU_INIT(&PDU, &Connection);
     ByteArray_FillWithDummyData(Value);
-    KineticLogger_Init(NULL);
+    KineticLogger_Init("stdout");
 }
 
+void tearDown()
+{
+    KineticLogger_Close();
+}
+
+#if 0
 void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
 {
     LOG_LOCATION;
@@ -111,7 +118,7 @@ void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_v
 }
 
 
-void test_KineticPDU_Init_should_populate_the_PDU_structure_and_PDU_buffer_with_the_supplied_protocol_buffer(void)
+void test_KineticPDU_Init_should_populate_the_PDU_and_buffer_with_the_supplied_buffer(void)
 {
     LOG_LOCATION;
 
@@ -182,9 +189,10 @@ void test_KINETIC_PDU_INIT_WITH_COMMAND_should_initialize_PDU_and_protobuf_messa
         KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY,
         PDU.protoData.message.command.status->code);
 }
+#endif
 
 
-void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_transmission_of_full_PDU_with_no_value_payload(void)
+void test_KineticPDU_Send_should_transmit_PDU_with_no_value_payload(void)
 {
     LOG_LOCATION;
     KineticProto_Message* msg = &PDU.protoData.message.message;
@@ -209,30 +217,29 @@ void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_tr
     PDU.protoData.message.message.has_commandBytes = true;
 
     // Create NBO copy of header for sending
-    PDU.headerNBO.versionPrefix = 'F';
-    PDU.headerNBO.protobufLength =
-        KineticNBO_FromHostU32(KineticProto_Message__get_packed_size(msg));
-    PDU.headerNBO.valueLength = 0;
-
-    // Free pre-packed buffer, since will be allocated internally
-    PDU.protoData.message.message.commandBytes.data = NULL;
+    PDU.header.versionPrefix = 'F';
+    PDU.header.protobufLength = KineticProto_Message__get_packed_size(msg);
+    PDU.header.valueLength = 0;
+    PDU.headerNBO.versionPrefix = PDU.header.versionPrefix;
+    PDU.headerNBO.protobufLength = KineticNBO_FromHostU32(PDU.header.protobufLength);
+    PDU.headerNBO.valueLength = KineticNBO_FromHostU32(PDU.header.valueLength);
 
     // Setup expectations for interaction
     KineticHMAC_Init_Expect(&PDU.hmac,
         KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate_Expect(&PDU.hmac,
         &PDU.protoData.message.message, PDU.connection->session.hmacKey);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
-
-    // TEST_IGNORE_MESSAGE("Need to figure out how to handle address of PDU header");
+    KineticSocket_Write_ExpectAndReturn(
+        Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
+    KineticSocket_WriteProtobuf_ExpectAndReturn(
+        Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticPDU_Send(&PDU);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
-void test_KineticPDU_Send_should_send_the_PDU_and_return_true_upon_successful_transmission_of_full_PDU_with_value_payload(void)
+void test_KineticPDU_Send_should_send_PDU_with_value_payload(void)
 {
     LOG_LOCATION;
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));

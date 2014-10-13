@@ -23,6 +23,7 @@
 #include "kinetic_connection.h"
 #include "kinetic_socket.h"
 #include "kinetic_nbo.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
 
@@ -44,6 +45,16 @@ struct kinetic_thread_arg {
     ByteBuffer data;
     KineticStatus status;
 };
+
+void setUp()
+{
+    KineticClient_Init(NULL);
+}
+
+void tearDown()
+{
+    KineticClient_Shutdown();
+}
 
 void* kinetic_put(void* kinetic_arg)
 {

@@ -30,6 +30,7 @@
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
+#include "zlog/zlog.h"
 
 static KineticConnection Connection;
 static int64_t ConnectionID = 12345;

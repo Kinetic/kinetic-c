@@ -23,6 +23,7 @@
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include "unity.h"
 #include "unity_helper.h"
@@ -35,7 +36,7 @@ KineticList PDUList;
 
 void setUp(void)
 {
-    KineticLogger_Init(NULL);
+    KineticLogger_Init("stdout");
     TEST_ASSERT_NULL(PDUList.start);
     TEST_ASSERT_NULL(PDUList.last);
     listsLocked = false;

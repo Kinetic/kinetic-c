@@ -59,6 +59,8 @@ static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
 
 int main(int argc, char** argv)
 {
+    KineticClient_Init("stdout");
+
     // Parse command line options
     ParseOptions(argc, argv, &SessionConfig, &Entry);
 
@@ -81,6 +83,7 @@ int main(int argc, char** argv)
 
     // Shutdown the Kinetic Device session
     KineticClient_Disconnect(&sessionHandle);
+    KineticClient_Shutdown();
     printf("\nKinetic client session terminated!\n\n");
 
     return 0;

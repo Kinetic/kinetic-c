@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "unity.h"
 #include "unity_helper.h"
 

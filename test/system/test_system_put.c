@@ -33,6 +33,7 @@
 #include "kinetic_nbo.h"
 
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "unity.h"
 #include "unity_helper.h"
 #include "system_test_fixture.h"
