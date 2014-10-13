@@ -35,4 +35,7 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
 void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry);
 
+void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
+                               KineticKeyRange* range);
+
 #endif // _KINETIC_OPERATION_H

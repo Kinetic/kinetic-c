@@ -36,6 +36,7 @@
 #include "unity_helper.h"
 #include "system_test_fixture.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
 #include <string.h>
@@ -54,7 +55,7 @@ static uint8_t VersionData[1024];
 static ByteArray Version;
 static ByteBuffer VersionBuffer;
 static ByteArray TestValue;
-static uint8_t ValueData[PDU_VALUE_MAX_LEN];
+static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteArray Value;
 static ByteBuffer ValueBuffer;
 
@@ -81,6 +82,8 @@ void setUp(void)
     Value = ByteArray_Create(ValueData, sizeof(ValueData));
     ValueBuffer = ByteBuffer_CreateWithArray(Value);
     ByteBuffer_AppendCString(&ValueBuffer, "lorem ipsum... blah blah blah... etc.");
+
+    ByteBuffer_Append(&Fixture.keyToDelete, Key.data, KeyBuffer.bytesUsed);
 }
 
 void tearDown(void)
@@ -148,7 +151,7 @@ void test_Delete_should_delete_an_object_from_device(void)
         .metadataOnly = true,
     };
     status = KineticClient_Get(Fixture.handle, &regetEntryMetadata);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
     TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
 }
 

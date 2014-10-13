@@ -27,5 +27,7 @@
 void KineticMessage_Init(KineticMessage* const message);
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
                                       const KineticEntry* entry);
+void KineticMessage_ConfigureKeyRange(KineticMessage* const message,
+                                      const KineticKeyRange* range);
 
 #endif // _KINETIC_MESSAGE_H

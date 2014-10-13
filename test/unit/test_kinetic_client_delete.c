@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "unity.h"
 #include "unity_helper.h"
 
@@ -46,6 +47,7 @@ KineticPDU Request, Response;
 
 void setUp(void)
 {
+    KineticLogger_Init("stdout");
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
     HmacKey = ByteArray_CreateWithCString("some hmac key");
@@ -54,6 +56,7 @@ void setUp(void)
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -62,6 +65,7 @@ void setUp(void)
 
 void tearDown(void)
 {
+    KineticLogger_Close();
 }
 
 void test_KineticClient_Delete_should_execute_DELETE_operation(void)
@@ -74,8 +78,8 @@ void test_KineticClient_Delete_should_execute_DELETE_operation(void)
     };
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Response);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
     KineticPDU_Init_Expect(&Request, &Connection);
     KineticPDU_Init_Expect(&Response, &Connection);
     KineticConnection_IncrementSequence_Expect(&Connection);

@@ -30,20 +30,19 @@
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
+#include "zlog/zlog.h"
 
 static KineticConnection Connection;
 static int64_t ConnectionID = 12345;
-static ByteArray HMACKey;
 static KineticPDU Request, Response;
 static KineticOperation Operation;
 
 void setUp(void)
 {
-    HMACKey = ByteArray_CreateWithCString("some_hmac_key");
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connectionID = ConnectionID;
-    KINETIC_PDU_INIT_WITH_MESSAGE(&Request, &Connection);
-    KINETIC_PDU_INIT_WITH_MESSAGE(&Response, &Connection);
+    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
+    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
     KINETIC_OPERATION_INIT(&Operation, &Connection);
     Operation.request = &Request;
     Operation.response = &Response;
@@ -73,8 +72,8 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
 void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_PDUs(void)
 {
     LOG_LOCATION;
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Response);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
     KineticPDU_Init_Expect(&Request, &Connection);
     KineticPDU_Init_Expect(&Response, &Connection);
 
@@ -82,7 +81,9 @@ void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_P
 
     TEST_ASSERT_EQUAL_PTR(&Connection, operation.connection);
     TEST_ASSERT_EQUAL_INT64(ConnectionID, Connection.connectionID);
-    TEST_ASSERT_EQUAL_INT64(ConnectionID, operation.request->proto->command->header->connectionID);
+    TEST_ASSERT_EQUAL_PTR(&operation.request->protoData, operation.request->proto);
+    TEST_ASSERT_TRUE(operation.request->protoData.message.has_command);
+    TEST_ASSERT_EQUAL_INT64(ConnectionID, operation.request->protoData.message.command.header->connectionID);
     TEST_ASSERT_NOT_NULL(operation.request);
     TEST_ASSERT_NOT_NULL(operation.response);
 }
@@ -90,8 +91,8 @@ void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_P
 void test_KineticOperation_Free_should_free_an_operation_with_allocated_PDUs(void)
 {
     LOG_LOCATION;
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Response);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
+    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
     KineticPDU_Init_Expect(&Request, &Connection);
     KineticPDU_Init_Expect(&Response, &Connection);
 
@@ -108,7 +109,7 @@ void test_KineticOperation_Free_should_free_an_operation_with_allocated_PDUs(voi
 }
 
 
-void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_KineticProto_Status_StatusCode_in_response(void)
+void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_KineticProto_Command_Status_StatusCode_in_response(void)
 {
     LOG_LOCATION;
     KineticStatus status;
@@ -162,8 +163,8 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     // }
     // hmac: "..."
     //
-    TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_NOOP, Request.proto->command->header->messageType);
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, Request.protoData.message.command.header->messageType);
     TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
     TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
 }
@@ -266,15 +267,15 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     KineticOperation_BuildPut(&Operation, &entry);
 
     // Ensure proper message type
-    TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_PUT, Request.proto->command->header->messageType);
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT, Request.protoData.message.command.header->messageType);
 
     TEST_ASSERT_EQUAL_ByteArray(value, Operation.request->entry.value.array);
     TEST_ASSERT_EQUAL(0, Operation.request->entry.value.bytesUsed);
     TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
 }
 
-uint8_t ValueData[PDU_VALUE_MAX_LEN];
+uint8_t ValueData[KINETIC_OBJ_SIZE];
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 {
@@ -305,8 +306,8 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     //
     //     // The mesageType should be GET
     //     messageType: GET
-    TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_GET, Request.proto->command->header->messageType);
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.protoData.message.command.header->messageType);
     //   }
     //   body {
     //     keyValue {
@@ -353,8 +354,8 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     //
     //     // The mesageType should be GET
     //     messageType: GET
-    TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_GET, Request.proto->command->header->messageType);
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.protoData.message.command.header->messageType);
     //   }
     //   body {
     //     keyValue {
@@ -396,8 +397,8 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     //     sequence: ...
     //     // messageType should be DELETE
     //     messageType: DELETE
-    TEST_ASSERT_TRUE(Request.proto->command->header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_TYPE_DELETE, Request.proto->command->header->messageType);
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE, Request.protoData.message.command.header->messageType);
     //   }
     //   body {
     //     keyValue {
@@ -411,4 +412,86 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 
     TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
     TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
+}
+
+
+void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(void)
+{
+    LOG_LOCATION;
+
+    const int numKeysInRange = 4;
+    uint8_t startKeyData[32];
+    uint8_t endKeyData[32];
+    ByteBuffer startKey, endKey;
+
+    startKey = ByteBuffer_Create(startKeyData, sizeof(startKeyData), 0);
+    ByteBuffer_AppendCString(&startKey, "key_range_00_00");
+    endKey = ByteBuffer_Create(endKeyData, sizeof(endKeyData), 0);
+    ByteBuffer_AppendCString(&endKey, "key_range_00_03");
+
+    KineticKeyRange range = {
+        .startKey = startKey,
+        .endKey = endKey,
+        .startKeyInclusive = true,
+        .endKeyInclusive = true,
+        .maxReturned = numKeysInRange,
+        .reverse = false,
+    };
+
+    // KineticProto_Range protoKeyRangeRequest = {
+    //     .has_startKey = true,
+    //     .startKey = (ProtobufCBinaryData) {
+    //         .data = StartKey.array.data,
+    //         .len = StartKey.bytesUsed},
+    //     .has_endKey = true,
+    //     .endKey = (ProtobufCBinaryData) {
+    //         .data = StartKey.array.data,
+    //         .len = StartKey.bytesUsed},
+    //     .has_startKeyInclusive = true,
+    //     .startKeyInclusive = true,
+    //     .has_endKeyInclusive = true,
+    //     .endKeyInclusive = true,
+    //     .has_maxReturned = true,
+    //     .maxReturned = NUM_KEYS_IN_RANGE,
+    // };
+
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyRange_Expect(&Request.protoData.message, &range);
+
+    KineticOperation_BuildGetKeyRange(&Operation, &range);
+
+    // The `DELETE` operation removes the entry for a given key. It respects the
+    // same locking behavior around `dbVersion` and `force` as described in the previous sections.
+    // The following request will remove a key value pair to the store.
+    //
+    // ```
+    // command {
+    //   // See top level cross cutting concerns for header details
+    //   header {
+    //     clusterVersion: ...
+    //     identity: ...
+    //     connectionID: ...
+    //     sequence: ...
+    //     // messageType should be DELETE
+    //     messageType: DELETE
+    TEST_ASSERT_TRUE(Request.command->header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE, Request.command->header->messageType);
+    //   }
+    //   body {
+    //     keyValue {
+    //       key: "..."
+    //       // See write operation cross cutting concerns
+    //       synchronization: ...
+    //     }
+    //   }
+    // }
+    // hmac: "..."
+
+    TEST_ASSERT_ByteBuffer_NULL(Request.entry.value);
+    TEST_ASSERT_ByteBuffer_NULL(Response.entry.value);
+
+    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message, Request.proto);
+    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.command, Request.command);
+    // TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.body, Request.command->body);
+    // TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.keyRange, Request.command->body->range);
 }

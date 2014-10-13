@@ -32,8 +32,8 @@ static void KineticOperation_ValidateOperation(KineticOperation* operation)
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
     assert(operation->request->proto != NULL);
-    assert(operation->request->proto->command != NULL);
-    assert(operation->request->proto->command->header != NULL);
+    assert(operation->request->protoData.message.has_command);
+    assert(operation->request->protoData.message.command.header != NULL);
     assert(operation->response != NULL);
 }
 
@@ -45,8 +45,8 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
 
     KineticOperation operation = {
         .connection = connection,
-        .request = KineticAllocator_NewPDU(&connection->pdus),
-        .response =  KineticAllocator_NewPDU(&connection->pdus),
+        .request = KineticAllocator_NewPDU(&connection->pdus, connection),
+        .response =  KineticAllocator_NewPDU(&connection->pdus, connection),
     };
 
     if (operation.request == NULL) {
@@ -57,8 +57,8 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
         };
     }
     KineticPDU_Init(operation.request, connection);
-    KINETIC_PDU_INIT_WITH_MESSAGE(operation.request, connection);
-    operation.request->proto = &operation.request->protoData.message.proto;
+    KINETIC_PDU_INIT_WITH_COMMAND(operation.request, connection);
+    // operation.request->proto = &operation.request->protoData.message;
 
     if (operation.response == NULL) {
         LOG("Response PDU could not be allocated!"
@@ -109,8 +109,8 @@ void KineticOperation_BuildNoop(KineticOperation* const operation)
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
-    operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_NOOP;
-    operation->request->proto->command->header->has_messageType = true;
+    operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
+    operation->request->protoData.message.command.header->has_messageType = true;
 
     operation->request->entry.value = BYTE_BUFFER_NONE;
     operation->response->entry.value = BYTE_BUFFER_NONE;
@@ -122,8 +122,8 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
-    operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_PUT;
-    operation->request->proto->command->header->has_messageType = true;
+    operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT;
+    operation->request->protoData.message.command.header->has_messageType = true;
     operation->request->entry = *entry;
     operation->response->entry = *entry;
 
@@ -139,8 +139,8 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
-    operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_GET;
-    operation->request->proto->command->header->has_messageType = true;
+    operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET;
+    operation->request->protoData.message.command.header->has_messageType = true;
     operation->request->entry = *entry;
     operation->response->entry = *entry;
 
@@ -159,8 +159,8 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
-    operation->request->proto->command->header->messageType = KINETIC_PROTO_MESSAGE_TYPE_DELETE;
-    operation->request->proto->command->header->has_messageType = true;
+    operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE;
+    operation->request->protoData.message.command.header->has_messageType = true;
     operation->request->entry = *entry;
     operation->response->entry = *entry;
 
@@ -168,4 +168,16 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
 
     operation->request->entry.value = BYTE_BUFFER_NONE;
     operation->response->entry.value = BYTE_BUFFER_NONE;
+}
+
+void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
+    KineticKeyRange* range)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+
+    operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE;
+    operation->request->command->header->has_messageType = true;
+
+    KineticMessage_ConfigureKeyRange(&operation->request->protoData.message, range);
 }

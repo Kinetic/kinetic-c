@@ -23,10 +23,10 @@
 #include "kinetic_connection.h"
 #include "kinetic_socket.h"
 #include "kinetic_nbo.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
 
-#define KINETIC_OBJ_SIZE (PDU_VALUE_MAX_LEN)
 #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_KEY_SIZE (1000)
 #define KINETIC_MAX_THREADS (10)
@@ -45,6 +45,16 @@ struct kinetic_thread_arg {
     ByteBuffer data;
     KineticStatus status;
 };
+
+void setUp()
+{
+    KineticClient_Init(NULL);
+}
+
+void tearDown()
+{
+    KineticClient_Shutdown();
+}
 
 void* kinetic_put(void* kinetic_arg)
 {
@@ -136,30 +146,29 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
             // Configure the KineticEntry
             char keyPrefix[128];
             snprintf(keyPrefix, sizeof(keyPrefix), "pre_%02d%02d", iteration, i);
-            LOGF("NEW HUNK PREFIX: %s", keyPrefix);
-            ByteBuffer keyBuf = ByteBuffer_Create(kt_arg[i].key, sizeof(kt_arg[i].key));
+            ByteBuffer keyBuf = ByteBuffer_Create(kt_arg[i].key, sizeof(kt_arg[i].key), 0);
             ByteBuffer_AppendCString(&keyBuf, keyPrefix);
             kt_arg[i].keyPrefixLength = keyBuf.bytesUsed;
 
-            ByteBuffer verBuf = ByteBuffer_Create(kt_arg[i].version, sizeof(kt_arg[i].version));
+            ByteBuffer verBuf = ByteBuffer_Create(kt_arg[i].version, sizeof(kt_arg[i].version), 0);
             ByteBuffer_AppendCString(&verBuf, "v1.0");
 
-            ByteBuffer tagBuf = ByteBuffer_Create(kt_arg[i].tag, sizeof(kt_arg[i].tag));
+            ByteBuffer tagBuf = ByteBuffer_Create(kt_arg[i].tag, sizeof(kt_arg[i].tag), 0);
             ByteBuffer_AppendCString(&tagBuf, "some_value_tag...");
 
-            ByteBuffer valBuf = ByteBuffer_Create(kt_arg[i].value, sizeof(kt_arg[i].value));
-            
+            ByteBuffer valBuf = ByteBuffer_Create(kt_arg[i].value, sizeof(kt_arg[i].value), 0);
+
             kt_arg[i].entry = (KineticEntry) {
                 .key = keyBuf,
-                .newVersion = verBuf,
-                .tag = tagBuf,
-                .metadataOnly = false,
-                .algorithm = KINETIC_ALGORITHM_SHA1,
-                .value = valBuf,
+                 .newVersion = verBuf,
+                  .tag = tagBuf,
+                   .metadataOnly = false,
+                    .algorithm = KINETIC_ALGORITHM_SHA1,
+                     .value = valBuf,
             };
 
             // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
-            kt_arg[i].data = ByteBuffer_Create(buf, dataLen);
+            kt_arg[i].data = ByteBuffer_Create(buf, dataLen, 0);
 
             // Spawn the worker thread
             kt_arg[i].sessionHandle = kinetic_client[i];

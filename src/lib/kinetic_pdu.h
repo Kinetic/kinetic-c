@@ -28,6 +28,7 @@ void KineticPDU_AttachEntry(KineticPDU* const pdu, KineticEntry* const entry);
 KineticStatus KineticPDU_Send(KineticPDU* request);
 KineticStatus KineticPDU_Receive(KineticPDU* response);
 KineticStatus KineticPDU_GetStatus(KineticPDU* pdu);
-KineticProto_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu);
+KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu);
+KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticPDU* pdu);
 
 #endif // _KINETIC_PDU_H

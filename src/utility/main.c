@@ -53,12 +53,14 @@ static KineticEntry Entry;
 static uint8_t KeyData[1024];
 static uint8_t TagData[1024];
 static uint8_t VersionData[1024];
-static uint8_t ValueData[PDU_VALUE_MAX_LEN];
+static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
 
 
 int main(int argc, char** argv)
 {
+    KineticClient_Init("stdout");
+
     // Parse command line options
     ParseOptions(argc, argv, &SessionConfig, &Entry);
 
@@ -66,7 +68,7 @@ int main(int argc, char** argv)
     KineticSessionHandle sessionHandle;
     KineticStatus status = KineticClient_Connect(&SessionConfig, &sessionHandle);
     if (status != KINETIC_STATUS_SUCCESS) {
-        printf("Failed connecting to host %s:%d (status: %s)",
+        printf("Failed connecting to host %s:%d (status: %s)\n\n",
                SessionConfig.host, SessionConfig.port,
                Kinetic_GetStatusDescription(status));
         return -1;
@@ -81,6 +83,7 @@ int main(int argc, char** argv)
 
     // Shutdown the Kinetic Device session
     KineticClient_Disconnect(&sessionHandle);
+    KineticClient_Shutdown();
     printf("\nKinetic client session terminated!\n\n");
 
     return 0;
@@ -97,7 +100,7 @@ KineticStatus ExecuteOperation(
         status = KineticClient_NoOp(sessionHandle);
         if (status == KINETIC_STATUS_SUCCESS) {
             printf("\nNoOp operation completed successfully."
-                   " Kinetic Device is alive and well!\n");
+                   " Kinetic Device is alive and well!\n\n");
         }
     }
 
@@ -126,7 +129,7 @@ KineticStatus ExecuteOperation(
     }
 
     else {
-        printf("\nSpecified operation '%s' is invalid!\n", operation);
+        printf("\nSpecified operation '%s' is invalid!\n\n", operation);
         return -1;
     }
 
@@ -149,13 +152,13 @@ void ConfigureEntry(
 {
     assert(entry != NULL);
 
-    ByteBuffer keyBuffer = ByteBuffer_Create(KeyData, sizeof(KeyData));
+    ByteBuffer keyBuffer = ByteBuffer_Create(KeyData, sizeof(KeyData), 0);
     ByteBuffer_AppendCString(&keyBuffer, key);
-    ByteBuffer tagBuffer = ByteBuffer_Create(TagData, sizeof(TagData));
+    ByteBuffer tagBuffer = ByteBuffer_Create(TagData, sizeof(TagData), 0);
     ByteBuffer_AppendCString(&tagBuffer, tag);
-    ByteBuffer versionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData));
+    ByteBuffer versionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData), 0);
     ByteBuffer_AppendCString(&versionBuffer, version);
-    ByteBuffer valueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData));
+    ByteBuffer valueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData), 0);
     ByteBuffer_AppendCString(&valueBuffer, value);
 
     // Setup to write some test data

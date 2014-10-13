@@ -46,6 +46,9 @@
 #include "socket99/socket99.h"
 
 
+// #define KINETIC_LOG_SOCKET_OPERATIONS
+
+
 int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
 {
     char port_str[32];
@@ -81,7 +84,7 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
 
     for (ai = ai_result; ai != NULL; ai = ai->ai_next) {
         int setsockopt_result;
-        int buffer_size = PDU_VALUE_MAX_LEN;
+        int buffer_size = KINETIC_OBJ_SIZE;
 
 #if defined(SO_NOSIGPIPE) && !defined(__APPLE__)
         // On BSD-like systems we can set SO_NOSIGPIPE on the socket to
@@ -99,7 +102,7 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
         }
 #endif
 
-        // Increase send buffer to PDU_VALUE_MAX_LEN
+        // Increase send buffer to KINETIC_OBJ_SIZE
         // Note: OS allocates 2x this value for its overhead
         setsockopt_result = setsockopt(result.fd,
                                        SOL_SOCKET, SO_SNDBUF,
@@ -109,7 +112,7 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
             continue;
         }
 
-        // Increase receive buffer to PDU_VALUE_MAX_LEN
+        // Increase receive buffer to KINETIC_OBJ_SIZE
         // Note: OS allocates 2x this value for its overheadbuffer_size
         setsockopt_result = setsockopt(result.fd,
                                        SOL_SOCKET, SO_RCVBUF,
@@ -155,10 +158,10 @@ void KineticSocket_Close(int socket)
 
 KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
 {
-    #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
     LOGF("Reading %zd bytes into buffer @ 0x%zX from fd=%d",
          len, (size_t)dest->array.data, socket);
-    #endif
+#endif
 
     KineticStatus status = KINETIC_STATUS_INVALID;
 
@@ -211,10 +214,10 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
             }
             else {
                 dest->bytesUsed += opStatus;
-                #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
                 LOGF("Received %d bytes (%zd of %zd)",
                      opStatus, dest->bytesUsed, len);
-                #endif
+#endif
             }
         }
     }
@@ -303,9 +306,9 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
         return KINETIC_STATUS_BUFFER_OVERRUN;
     }
 
-    #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
     LOGF("Received %zd of %zd bytes requested", dest->bytesUsed, len);
-    #endif
+#endif
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -313,9 +316,9 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
 KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
 {
     size_t bytesToRead = pdu->header.protobufLength;
-    #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
     LOGF("Reading %zd bytes of protobuf", bytesToRead);
-    #endif
+#endif
 
     uint8_t* packed = (uint8_t*)malloc(bytesToRead);
     if (packed == NULL) {
@@ -323,7 +326,7 @@ KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
         return KINETIC_STATUS_MEMORY_ERROR;
     }
 
-    ByteBuffer recvBuffer = ByteBuffer_Create(packed, bytesToRead);
+    ByteBuffer recvBuffer = ByteBuffer_Create(packed, bytesToRead, 0);
     KineticStatus status = KineticSocket_Read(socket, &recvBuffer, bytesToRead);
 
     if (status != KINETIC_STATUS_SUCCESS) {
@@ -332,8 +335,8 @@ KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
         return status;
     }
     else {
-        pdu->proto = KineticProto__unpack(
-            NULL, recvBuffer.bytesUsed, recvBuffer.array.data);
+        pdu->proto = KineticProto_Message__unpack(
+                         NULL, recvBuffer.bytesUsed, recvBuffer.array.data);
     }
 
     free(packed);
@@ -345,26 +348,26 @@ KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
     }
     else {
         pdu->protobufDynamicallyExtracted = true;
-        #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
         LOG("Protobuf unpacked successfully!");
-        #endif
+#endif
         return KINETIC_STATUS_SUCCESS;
     }
 }
 
 KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
 {
-    #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
     LOGF("Writing %zu bytes to socket...", src->bytesUsed);
-    #endif
+#endif
     for (unsigned int bytesSent = 0; bytesSent < src->bytesUsed;) {
         int bytesRemaining = src->bytesUsed - bytesSent;
         int status = write(socket, &src->array.data[bytesSent], bytesRemaining);
         if (status == -1 &&
             ((errno == EINTR) || (errno == EAGAIN) || (errno == EWOULDBLOCK))) {
-            #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
             LOG("Write interrupted. retrying...");
-            #endif
+#endif
             continue;
         }
         else if (status <= 0) {
@@ -373,15 +376,15 @@ KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
         }
         else {
             bytesSent += status;
-            #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
             LOGF("Wrote %d bytes (%d of %zu sent)", status, bytesSent, src->bytesUsed);
-            #endif
+#endif
         }
     }
 
-    #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
     LOG("Socket write completed successfully");
-    #endif
+#endif
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -389,9 +392,9 @@ KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
 KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
 {
     assert(pdu != NULL);
-    #ifdef KINETIC_LOG_SOCKET_OPERATIONS
+#ifdef KINETIC_LOG_SOCKET_OPERATIONS
     LOGF("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
-    #endif
+#endif
 
     uint8_t* packed = (uint8_t*)malloc(pdu->header.protobufLength);
 
@@ -399,11 +402,10 @@ KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
         LOG("Failed allocating memory for protocol buffer");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
-    size_t len = KineticProto__pack(&pdu->protoData.message.proto, packed);
+    size_t len = KineticProto_Message__pack(&pdu->protoData.message.message, packed);
     assert(len == pdu->header.protobufLength);
 
-    ByteBuffer buffer = ByteBuffer_Create(packed, len);
-    buffer.bytesUsed = len;
+    ByteBuffer buffer = ByteBuffer_Create(packed, len, len);
 
     KineticStatus status = KineticSocket_Write(socket, &buffer);
 

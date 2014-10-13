@@ -23,10 +23,12 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
+#include "kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
+#include "zlog/zlog.h"
 #include <stdio.h>
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
@@ -53,6 +55,7 @@ void setUp(void)
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);

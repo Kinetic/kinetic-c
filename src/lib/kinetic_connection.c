@@ -21,6 +21,8 @@
 #include "kinetic_connection.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_socket.h"
+#include "kinetic_pdu.h"
+#include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <string.h>
 #include <stdlib.h>
@@ -98,6 +100,28 @@ KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
     close(connection->socket);
     connection->socket = KINETIC_HANDLE_INVALID;
     return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticConnection_ReceiveDeviceStatusMessage(
+    KineticConnection* const connection)
+{
+    if (connection == NULL || connection->socket < 0) {
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
+
+    KineticPDU* statusPDU = KineticAllocator_NewPDU(&connection->pdus, connection);
+    if (statusPDU == NULL) {
+        LOG("Failed allocating connection status PDU to receive session info!");
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+    KineticStatus status = KineticPDU_Receive(statusPDU);
+    if (status == KINETIC_STATUS_SUCCESS) {
+        if (statusPDU->command != NULL && statusPDU->command->header != NULL) {
+            connection->connectionID = statusPDU->command->header->connectionID;  
+        }
+    }
+    KineticAllocator_FreePDU(&connection->pdus, statusPDU);
+    return status;
 }
 
 void KineticConnection_IncrementSequence(KineticConnection* const connection)

@@ -26,10 +26,12 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
+#include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
+#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include <stdio.h>
 
@@ -43,15 +45,20 @@ static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
 
 void setUp(void)
 {
-    KineticLogger_Init(NULL);
+    KineticLogger_Init("stdout");
     SessionHandle = KINETIC_HANDLE_INVALID;
+}
+
+void tearDown()
+{
+    KineticLogger_Close();
 }
 
 void test_KineticClient_Init_should_initialize_the_logger(void)
 {
     KineticClient_Init("./some_file.log");
+    KineticClient_Init("stdout");
     KineticClient_Init(NULL);
-    KineticClient_Init("NONE");
 }
 
 static void ConnectSession(void)
@@ -64,6 +71,7 @@ static void ConnectSession(void)
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -171,6 +179,23 @@ void test_KineticClient_Connect_should_return_status_from_a_failed_connection(vo
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
+
+void test_KinetiClient_Connect_should_return_status_code_if_connection_status_PDU_receive_fails(void)
+{
+    KINETIC_CONNECTION_INIT(&Connection);
+    Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    HmacKey = ByteArray_CreateWithCString("some hmac key");
+    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
+
+    KineticConnection_FromHandle_IgnoreAndReturn(&Connection);
+    KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
+    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_CONNECTION_ERROR);
+
+    KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR, status);
+}
+
 
 void test_KineticClient_Disconnect_should_return_KINETIC_STATUS_CONNECTION_ERROR_upon_failure_to_get_connection_from_handle(void)
 {

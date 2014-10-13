@@ -33,6 +33,7 @@
 #include "kinetic_nbo.h"
 
 #include "byte_array.h"
+#include "zlog/zlog.h"
 #include "unity.h"
 #include "unity_helper.h"
 #include "system_test_fixture.h"
@@ -49,7 +50,6 @@ static ByteArray TestValue;
 static ByteArray Version;
 static ByteArray NewVersion;
 static ByteArray OtherNewVersion;
-static ByteArray GarbageVersion;
 static KineticEntry Entry;
 
 void setUp(void)
@@ -62,7 +62,8 @@ void setUp(void)
     Version = ByteArray_CreateWithCString("v1.0");
     NewVersion = ByteArray_CreateWithCString("v2.0");
     OtherNewVersion = ByteArray_CreateWithCString("v3.0");
-    GarbageVersion = ByteArray_CreateWithCString("some...garbage..&$*#^@");
+
+    ByteBuffer_Append(&Fixture.keyToDelete, ValueKey.data, ValueKey.len);
 }
 
 void tearDown(void)

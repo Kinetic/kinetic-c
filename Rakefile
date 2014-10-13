@@ -3,12 +3,16 @@ require 'kinetic-ruby'
 compiler = ENV.fetch('CC', 'gcc')
 compiler_location = `which #{compiler}`.strip
 compiler_info = `#{compiler} --version 2>&1`.strip
-puts "" +
-"Configuration:\n" +
-"  compiler:\n" +
-"    location: #{compiler_location}\n" +
-"    info:\n" +
-"      " + compiler_info.gsub(/\n/, "\n      ") + "\n\n"
+
+
+task :report_toolchain do
+  report_banner("Toolchain Configuration")
+  report "" +
+    "  compiler:\n" +
+    "    location: #{compiler_location}\n" +
+    "    info:\n" +
+    "      " + compiler_info.gsub(/\n/, "\n      ") + "\n"
+end
 
 KineticRuby::Rake::load_tasks
 require 'ceedling'
@@ -60,12 +64,12 @@ task :proto => [PROTO_OUT] do
 
   report_banner "Building protobuf v2.5.0"
   cd PROTOBUF_CORE do
-    execute_command "./configure --disable-shared; make; make check; make install"
+    execute_command "./configure --disable-shared; make; make check; sudo make install"
   end
 
   report_banner "Building protobuf-c and installing protoc-c"
   cd PROTOBUF_C do
-    execute_command "./autogen.sh && ./configure && make && make install"
+    execute_command "./autogen.sh && ./configure && make && sudo make install"
     protoc_c = `which protoc-c`
     raise "Failed to find protoc-c utility" if protoc_c.strip.empty?
     versions = `protoc-c --version`
@@ -140,7 +144,7 @@ namespace :java_sim do
     java_sim_cleanup
 
     # Find the java simulator jar
-    jars = Dir["vendor/kinetic-java/kinetic-simulator*.jar"]
+    jars = Dir["vendor/kinetic-simulator/kinetic-simulator*.jar"]
     raise "No Kinetic Java simulator .jar files found!" if jars.empty?
 
     # Configure the classpath
@@ -166,7 +170,7 @@ namespace :java_sim do
 
   def java_sim_erase_drive
     java_sim_start
-    sh "#{JAVA_BIN} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.admin.cli.KineticAdminCLI -setup -erase true"
+    sh "\"#{JAVA_BIN}\" -classpath \"#{ENV['CLASSPATH']}\" com.seagate.kinetic.admin.cli.KineticAdminCLI -instanterase"
   end
 
   def java_sim_cleanup
@@ -368,7 +372,7 @@ namespace :tests do
 
 end
 
-task :test_all => ['tests:unit', 'tests:integration', 'tests:system']
+task :test_all => ['report_toolchain', 'tests:unit', 'tests:integration', 'tests:system']
 
 desc "Build all and run test utility"
 task :all => ['test_all']

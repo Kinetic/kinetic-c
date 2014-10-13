@@ -25,6 +25,7 @@
 #include "kinetic_connection.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
+#include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
 
@@ -59,7 +60,7 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     if (operation->request->entry.value.array.data != NULL
         && operation->request->entry.value.bytesUsed > 0) {
         LOGF("  Sending PDU w/value (%zu bytes)",
-            operation->request->entry.value.bytesUsed);
+             operation->request->entry.value.bytesUsed);
     }
     else {
         LOG("  Sending PDU w/o value");
@@ -86,6 +87,11 @@ void KineticClient_Init(const char* logFile)
     KineticLogger_Init(logFile);
 }
 
+void KineticClient_Shutdown(void)
+{
+    KineticLogger_Close();
+}
+
 KineticStatus KineticClient_Connect(const KineticSession* config,
                                     KineticSessionHandle* handle)
 {
@@ -110,18 +116,19 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
+    // Obtain a new connection/handle
     *handle = KineticConnection_NewConnection(config);
     if (handle == KINETIC_HANDLE_INVALID) {
         LOG("Failed connecting to device!");
         return KINETIC_STATUS_SESSION_INVALID;
     }
-
     KineticConnection* connection = KineticConnection_FromHandle(*handle);
     if (connection == NULL) {
         LOG("Failed getting valid connection from handle!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
+    // Create the connection
     KineticStatus status = KineticConnection_Connect(connection);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOGF("Failed creating connection to %s:%d", config->host, config->port);
@@ -130,7 +137,10 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
         return status;
     }
 
-    return KINETIC_STATUS_SUCCESS;
+    // Retrieve initial connection status info
+    status = KineticConnection_ReceiveDeviceStatusMessage(connection);
+
+    return status;
 }
 
 KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)
@@ -230,13 +240,12 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
     // Execute the operation
     status = KineticClient_ExecuteOperation(&operation);
 
-
     // Update the entry upon success
-    // entry->value.array.len = 0;
     if (status == KINETIC_STATUS_SUCCESS) {
-        KineticProto_KeyValue* keyValue = KineticPDU_GetKeyValue(operation.response);
+        entry->value.bytesUsed = operation.response->entry.value.bytesUsed;
+        KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation.response);
         if (keyValue != NULL) {
-            if (!Copy_KineticProto_KeyValue_to_KineticEntry(keyValue, entry)) {
+            if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, entry)) {
                 status = KINETIC_STATUS_BUFFER_OVERRUN;
             }
         }
@@ -276,7 +285,7 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 //     identity: ...
 //     connectionID: ...
 //     sequence: ...
-
+// 
 //     // messageType should be GETKEYRANGE
 //     messageType: GETKEYRANGE
 //   }
@@ -285,24 +294,24 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 //     range {
 //       // Required bytes, the beginning of the requested range
 //       startKey: "..."
-
+// 
 //       // Optional bool, defaults to false
 //       // True indicates that the start key should be included in the returned
 //       // range
 //       startKeyInclusive: ...
-
+// 
 //       // Required bytes, the end of the requested range
 //       endKey: "..."
-
+// 
 //       // Optional bool, defaults to false
 //       // True indicates that the end key should be included in the returned
 //       // range
 //       endKeyInclusive: ...
-
+// 
 //       // Required int32, must be greater than 0
 //       // The maximum number of keys returned, in sorted order
 //       maxReturned: ...
-
+// 
 //       // Optional bool, defaults to false
 //       // If true, the key range will be returned in reverse order, starting at
 //       // endKey and moving back to startKey.  For instance
@@ -314,8 +323,38 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 //   }
 // }
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
-                                        KineticKeyRange* range, ByteBuffer* keys[], int max_keys)
+                                        KineticKeyRange* range, ByteBuffer keys[], int max_keys)
 {
-    KineticStatus status = KINETIC_STATUS_SUCCESS;
+    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(range != NULL);
+    assert(keys != NULL);
+    assert(max_keys > 0);
+
+    KineticStatus status;
+    KineticOperation operation;
+
+    status = KineticClient_CreateOperation(&operation, handle);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        return status;
+    }
+
+    // Initialize request
+    KineticOperation_BuildGetKeyRange(&operation, range);
+
+    // Execute the operation
+    status = KineticClient_ExecuteOperation(&operation);
+
+    // Report the key list upon success
+    if (status == KINETIC_STATUS_SUCCESS) {
+        KineticProto_Command_Range* keyRange = KineticPDU_GetKeyRange(operation.response);
+        if (keyRange != NULL) {
+            if (!Copy_KineticProto_Command_Range_to_buffer_list(keyRange, keys, max_keys)) {
+                status = KINETIC_STATUS_BUFFER_OVERRUN;
+            }
+        }
+    }
+
+    KineticOperation_Free(&operation);
+
     return status;
 }

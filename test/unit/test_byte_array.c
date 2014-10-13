@@ -84,17 +84,17 @@ void test_ByteArray_GetSlice_should_return_a_subarray_of_the_ByteArray(void)
     TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[1], slice3.data, sliceLen);
 }
 
-void test_ByteBuffer_Create_should_create_an_empty_ByteBuffer_with_specified_array_and_max_length(void)
+void test_ByteBuffer_Create_should_create_ByteBuffer_with_specified_array_and_max_length_and_used_bytes(void)
 {
     uint8_t data[] = {0x1u, 0x2u, 0x3u, 0x4u};
     size_t len = sizeof(data);
 
-    ByteBuffer buffer = ByteBuffer_Create(data, len);
+    ByteBuffer buffer = ByteBuffer_Create(data, len, 2);
 
     TEST_ASSERT_EQUAL_PTR(data, buffer.array.data);
     TEST_ASSERT_EQUAL(len, buffer.array.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(data, buffer.array.data, len);
-    TEST_ASSERT_EQUAL(0, buffer.bytesUsed);
+    TEST_ASSERT_EQUAL(2, buffer.bytesUsed);
 }
 
 void test_ByteBuffer_CreateWithArray_should_create_an_empty_ByteBuffer_with_specified_ByteArray(void)
@@ -185,7 +185,7 @@ void test_ByteBuffer_Append_should_append_bytes_to_the_buffer(void)
 {
     uint8_t data[] = {0, 0, 0};
     size_t len = sizeof(data);
-    ByteBuffer buffer = ByteBuffer_Create(data, len);
+    ByteBuffer buffer = ByteBuffer_Create(data, len, 0);
     uint8_t appendData[len];
 
     appendData[0] = 0xFCu;
@@ -209,7 +209,7 @@ void test_ByteBuffer_AppendArray_should_append_an_array_to_the_buffer(void)
 {
     uint8_t data[] = {0, 0, 0};
     size_t len = sizeof(data);
-    ByteBuffer buffer = ByteBuffer_Create(data, len);
+    ByteBuffer buffer = ByteBuffer_Create(data, len, 0);
     uint8_t appendData[len];
 
     appendData[0] = 0xFCu;
@@ -236,7 +236,7 @@ void test_ByteBuffer_AppendCString_should_append_a_C_string(void)
 {
     uint8_t data[] = {0, 0, 0};
     size_t len = sizeof(data);
-    ByteBuffer buffer = ByteBuffer_Create(data, len);
+    ByteBuffer buffer = ByteBuffer_Create(data, len, 0);
 
     TEST_ASSERT_TRUE(ByteBuffer_AppendCString(&buffer, "Co"));
     TEST_ASSERT_EQUAL(2, buffer.bytesUsed);
@@ -256,7 +256,7 @@ void test_ByteBuffer_AppendDummyData_should_append_dummy_data_to_buffer(void)
 {
     uint8_t data[] = {5, 5, 5};
     size_t len = sizeof(data);
-    ByteBuffer buffer = ByteBuffer_Create(data, len);
+    ByteBuffer buffer = ByteBuffer_Create(data, len, 0);
     uint8_t expectedData[] = {0, 1, 0};
 
     TEST_ASSERT_EQUAL(0, buffer.bytesUsed);

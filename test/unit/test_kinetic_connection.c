@@ -24,7 +24,13 @@
 #include "kinetic_proto.h"
 #include "protobuf-c/protobuf-c.h"
 #include "kinetic_logger.h"
+#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "mock_kinetic_socket.h"
+#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_allocator.h"
+#include "byte_array.h"
+#include "zlog/zlog.h"
 #include <string.h>
 #include <time.h>
 
@@ -35,6 +41,7 @@ static const KineticSession SessionConfig = {
     .port = 17,
     .nonBlocking = false,
 };
+static KineticPDU UnsolicitedPDU;
 
 void setUp(void)
 {
@@ -207,6 +214,56 @@ void test_KineticConnection_Connect_should_connect_to_specified_host_with_a_non_
     TEST_ASSERT_EQUAL_INT64(expected.session.clusterVersion, connection.session.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(expected.session.identity, connection.session.identity);
     TEST_ASSERT_EQUAL_ByteArray(expected.session.hmacKey, connection.session.hmacKey);
+}
+
+void test_KineticConnection_ReceiveDeviceStatusMessage_should_receive_device_status_message_and_obtain_connection_ID(void)
+{
+    LOG_LOCATION;
+    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+    KineticConnection connection = (KineticConnection) {
+        .connected = false,
+        .socket = 8,
+        .connectionID = 0,
+        .session = (KineticSession) {
+            .host = "valid-host.com",
+            .port = 1234,
+            .nonBlocking = true,
+            .clusterVersion = 17,
+            .identity = 12,
+            .hmacKey = {.data = connection.session.keyData, .len = sizeof(hmacKey)},
+        },
+    };
+    memcpy(connection.session.hmacKey.data, hmacKey, connection.session.hmacKey.len);
+
+    // Kinetic Protobuf:
+    //   authType: UNSOLICITEDSTATUS
+    //   commandBytes {
+    //     header {
+    //       clusterVersion: 0
+    //       connectionID: 1412866010427
+    //     }
+    //     body {
+    //     }
+    //     status {
+    //       code: SUCCESS
+    //     }
+    //   }
+    KINETIC_PDU_INIT_WITH_COMMAND(&UnsolicitedPDU, &connection);
+    UnsolicitedPDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
+    UnsolicitedPDU.proto->hmacAuth = NULL;
+    UnsolicitedPDU.proto->pinAuth = NULL;
+    UnsolicitedPDU.command->header->clusterVersion = 5;
+    UnsolicitedPDU.command->header->connectionID = 2233445566;
+    UnsolicitedPDU.command->header->has_sequence = false;
+    UnsolicitedPDU.command->header->has_messageType = false;
+
+    KineticAllocator_NewPDU_ExpectAndReturn(&connection.pdus, &connection, &UnsolicitedPDU);
+    KineticPDU_Receive_ExpectAndReturn(&UnsolicitedPDU, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_FreePDU_Expect(&connection.pdus, &UnsolicitedPDU);
+
+    KineticStatus status = KineticConnection_ReceiveDeviceStatusMessage(&connection);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_INT64(2233445566, connection.connectionID);
 }
 
 void test_KineticConnection_IncrementSequence_should_increment_the_sequence_count(void)

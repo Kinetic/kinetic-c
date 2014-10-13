@@ -81,7 +81,7 @@ typedef struct _KineticConnection {
 
 // Kinetic Message HMAC
 typedef struct _KineticHMAC {
-    KineticProto_Security_ACL_HMACAlgorithm algorithm;
+    KineticProto_Command_Security_ACL_HMACAlgorithm algorithm;
     uint32_t len;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
 } KineticHMAC;
@@ -90,53 +90,76 @@ typedef struct _KineticHMAC {
 // Kinetic Device Message Request
 typedef struct _KineticMessage {
     // Kinetic Protocol Buffer Elements
-    KineticProto                proto;
-    KineticProto_Command        command;
-    KineticProto_Header         header;
-    KineticProto_Body           body;
-    KineticProto_Status         status;
-    KineticProto_Security       security;
-    KineticProto_Security_ACL   acl;
-    KineticProto_KeyValue       keyValue;
-    uint8_t                     hmacData[KINETIC_HMAC_MAX_LEN];
+    KineticProto_Message                message;
+    KineticProto_Message_HMACauth       hmacAuth;
+    KineticProto_Message_PINauth        pinAuth;
+    uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
+
+    bool                                has_command; // Set to `true` to enable command element
+    KineticProto_Command                command;
+    KineticProto_Command_Header         header;
+    KineticProto_Command_Body           body;
+    KineticProto_Command_Status         status;
+    KineticProto_Command_Security       security;
+    KineticProto_Command_Security_ACL   acl;
+    KineticProto_Command_KeyValue       keyValue;
+    KineticProto_Command_Range          keyRange;
 } KineticMessage;
+
+#define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
+    assert((_msg) != NULL); \
+    (_msg)->message.has_authType = true; \
+    (_msg)->message.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH; \
+    KineticProto_Message_hmacauth__init(&(_msg)->hmacAuth); \
+    (_msg)->message.hmacAuth = &(_msg)->hmacAuth; \
+    KineticProto_Message_pinauth__init(&(_msg)->pinAuth); \
+    (_msg)->message.pinAuth = NULL; \
+    (_msg)->command.header = &(_msg)->header; \
+    memset((_msg)->hmacData, 0, KINETIC_HMAC_MAX_LEN); \
+    if ((_hmac).len <= KINETIC_HMAC_MAX_LEN \
+        && (_hmac).data != NULL && (_hmac).len > 0 \
+        && (_msg)->hmacData != NULL) { \
+        memcpy((_msg)->hmacData, (_hmac).data, (_hmac).len);} \
+    (_msg)->message.hmacAuth->has_identity = true; \
+    (_msg)->message.hmacAuth->identity = (_identity); \
+    (_msg)->message.hmacAuth->has_hmac = true; \
+    (_msg)->message.hmacAuth->hmac = (ProtobufCBinaryData) { \
+        .data = (_msg)->hmacData, .len = SHA_DIGEST_LENGTH}; \
+}
+
 #define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) { \
     assert((_hdr) != NULL); \
     assert((_con) != NULL); \
-    *(_hdr) = (KineticProto_Header) { \
-        .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_header__descriptor), \
+    *(_hdr) = (KineticProto_Command_Header) { \
+        .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor), \
         .has_clusterVersion = true, \
         .clusterVersion = (_con)->session.clusterVersion, \
-        .has_identity = true, \
-        .identity = (_con)->session.identity, \
         .has_connectionID = true, \
         .connectionID = (_con)->connectionID, \
         .has_sequence = true, \
         .sequence = (_con)->sequence, \
     }; \
 }
-#define KINETIC_MESSAGE_INIT(msg) { \
-    KineticProto__init(&(msg)->proto); \
-    KineticProto_command__init(&(msg)->command); \
-    KineticProto_header__init(&(msg)->header); \
-    KineticProto_status__init(&(msg)->status); \
-    KineticProto_body__init(&(msg)->body); \
-    KineticProto_key_value__init(&(msg)->keyValue); \
-    memset((msg)->hmacData, 0, SHA_DIGEST_LENGTH); \
-    (msg)->proto.hmac.data = (msg)->hmacData; \
-    (msg)->proto.hmac.len = KINETIC_HMAC_MAX_LEN; \
-    (msg)->proto.has_hmac = true; \
-    (msg)->command.header = &(msg)->header; \
-    (msg)->proto.command = &(msg)->command; \
-}
 
+#define KINETIC_MESSAGE_INIT(msg) { \
+    KineticProto_Message__init(&(msg)->message); \
+    KineticProto_command__init(&(msg)->command); \
+    KineticProto_Message_hmacauth__init(&(msg)->hmacAuth); \
+    KineticProto_Message_pinauth__init(&(msg)->pinAuth); \
+    KineticProto_command_header__init(&(msg)->header); \
+    KineticProto_command_status__init(&(msg)->status); \
+    KineticProto_command_body__init(&(msg)->body); \
+    KineticProto_command_key_value__init(&(msg)->keyValue); \
+    KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
+    (msg)->has_command = false; \
+}
 
 // Kinetic PDU Header
 #define PDU_HEADER_LEN              (1 + (2 * sizeof(int32_t)))
 #define PDU_PROTO_MAX_LEN           (1024 * 1024)
 #define PDU_PROTO_MAX_UNPACKED_LEN  (PDU_PROTO_MAX_LEN * 2)
 #define PDU_MAX_LEN                 (PDU_HEADER_LEN + \
-                                    PDU_PROTO_MAX_LEN + PDU_VALUE_MAX_LEN)
+                                    PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE)
 typedef struct __attribute__((__packed__)) _KineticPDUHeader {
     uint8_t     versionPrefix;
     uint32_t    protobufLength;
@@ -154,11 +177,12 @@ struct _KineticPDU {
 
     // Message associated with this PDU instance
     union {
-        KineticProto protoBase;
+        KineticProto_Message base;
         KineticMessage message;
     } protoData;        // Proto will always be first
-    KineticProto* proto;
+    KineticProto_Message* proto;
     bool protobufDynamicallyExtracted;
+    KineticProto_Command* command;
 
     // Object meta-data to be used/populated if provided and pertinent to the operation
     KineticEntry entry;
@@ -169,24 +193,27 @@ struct _KineticPDU {
     // Exchange associated with this PDU instance (info gets embedded in protobuf message)
     KineticConnection* connection;
 };
+
 #define KINETIC_PDU_INIT(_pdu, _con) { \
     assert((_pdu) != NULL); \
     assert((_con) != NULL); \
-    memset(_pdu, 0, sizeof(KineticPDU)); \
+    memset((_pdu), 0, sizeof(KineticPDU)); \
     (_pdu)->connection = (_con); \
     (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
+    KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
+    KINETIC_MESSAGE_AUTH_HMAC_INIT( \
+            &((_pdu)->protoData.message), (_con)->session.identity, (_con)->session.hmacKey); \
     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
 }
-#define KINETIC_PDU_INIT_WITH_MESSAGE(_pdu, _con) { \
-    KINETIC_PDU_INIT((_pdu), (_con)) \
-    (_pdu)->proto = &(_pdu)->protoData.message.proto; \
-    KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
-    (_pdu)->proto->command = &(_pdu)->protoData.message.command; \
-    (_pdu)->proto->command->header = &(_pdu)->protoData.message.header; \
-    KINETIC_MESSAGE_HEADER_INIT(&(_pdu)->protoData.message.header, (_con)); \
-}
 
+#define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con) { \
+    KINETIC_PDU_INIT((_pdu), (_con)) \
+    (_pdu)->proto = &(_pdu)->protoData.message.message; \
+    (_pdu)->protoData.message.has_command = true; \
+    (_pdu)->command = &(_pdu)->protoData.message.command; \
+    (_pdu)->command->header = &(_pdu)->protoData.message.header; \
+}
 
 // Kinetic Operation
 typedef struct _KineticOperation {
@@ -202,20 +229,25 @@ typedef struct _KineticOperation {
     }
 
 
-KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(
+KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
     KineticAlgorithm kinteicAlgorithm);
-KineticAlgorithm KineticAlgorithm_from_KineticProto_Algorithm(
-    KineticProto_Algorithm protoAlgorithm);
+KineticAlgorithm KineticAlgorithm_from_KineticProto_Command_Algorithm(
+    KineticProto_Command_Algorithm protoAlgorithm);
 
-KineticProto_Synchronization KineticProto_Synchronization_from_KineticSynchronization(
+KineticProto_Command_Synchronization KineticProto_Command_Synchronization_from_KineticSynchronization(
     KineticSynchronization sync_mode);
-KineticSynchronization KineticSynchronization_from_KineticProto_Synchronization(
-    KineticProto_Synchronization sync_mode);
+KineticSynchronization KineticSynchronization_from_KineticProto_Command_Synchronization(
+    KineticProto_Command_Synchronization sync_mode);
 
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
-    KineticProto_Status_StatusCode protoStatus);
-ByteArray ProtobufCBinaryData_to_ByteArray(ProtobufCBinaryData protoData);
-bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData src);
-bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue, KineticEntry* entry);
+    KineticProto_Command_Status_StatusCode protoStatus);
+ByteArray ProtobufCBinaryData_to_ByteArray(
+    ProtobufCBinaryData protoData);
+bool Copy_ProtobufCBinaryData_to_ByteBuffer(
+    ByteBuffer dest, ProtobufCBinaryData src);
+bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
+    KineticProto_Command_KeyValue* keyValue, KineticEntry* entry);
+bool Copy_KineticProto_Command_Range_to_buffer_list(
+    KineticProto_Command_Range* keyRange, ByteBuffer* keys, int64_t max_keys);
 
 #endif // _KINETIC_TYPES_INTERNAL_H
