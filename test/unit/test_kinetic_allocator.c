@@ -48,6 +48,9 @@ void tearDown(void)
     LOG_LOCATION;
     bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
     KineticAllocator_FreeAllPDUs(&PDUList);
+
+    KineticLogger_Close();
+
     TEST_ASSERT_NULL(PDUList.start);
     TEST_ASSERT_NULL(PDUList.last);
     TEST_ASSERT_TRUE_MESSAGE(allFreed, "Dynamically allocated things were not freed!");

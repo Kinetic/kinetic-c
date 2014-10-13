@@ -13,7 +13,7 @@ OPTIMIZE = -O3
 WARN = -Wall -Wextra -pedantic
 CDEFS += -D_POSIX_C_SOURCE=1 -D_C99_SOURCE=1
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
-LDFLAGS += -lm -l crypto -l ssl
+LDFLAGS += -lm -l crypto -l ssl -l pthread
 
 #===============================================================================
 # Kinetic-C Library Build Support
@@ -199,7 +199,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto
+UTIL_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)
