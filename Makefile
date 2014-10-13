@@ -52,6 +52,7 @@ ci: uninstall all install
 clean:
 	bundle exec rake clobber
 	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
+	git submodule update --init
 
 .PHONY: clean
 
