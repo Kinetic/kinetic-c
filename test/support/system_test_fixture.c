@@ -36,7 +36,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
     if (!fixture->connected) {
         *fixture = (SystemTestFixture) {
             .config = (KineticSession) {
-                .host = "localhost",
+                .host = SYSTEM_TEST_HOST,
                 .port = KINETIC_PORT,
                 .clusterVersion = 0,
                 .identity =  1,

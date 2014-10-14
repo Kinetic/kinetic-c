@@ -28,8 +28,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include <stdlib.h>
-
-extern bool listsLocked;
+#include <pthread.h>
 
 KineticSession Session;
 KineticList PDUList;
@@ -37,10 +36,12 @@ KineticList PDUList;
 void setUp(void)
 {
     KineticLogger_Init("stdout");
+    KineticAllocator_InitList(&PDUList);
     TEST_ASSERT_NULL(PDUList.start);
     TEST_ASSERT_NULL(PDUList.last);
-    listsLocked = false;
-    TEST_ASSERT_FALSE(listsLocked);
+    pthread_mutex_t expectedMutex = PTHREAD_MUTEX_INITIALIZER;
+    TEST_ASSERT_EQUAL_MEMORY(&expectedMutex, &PDUList.mutex, sizeof(pthread_mutex_t));
+    TEST_ASSERT_FALSE(PDUList.locked);
 }
 
 void tearDown(void)
@@ -54,7 +55,7 @@ void tearDown(void)
     TEST_ASSERT_NULL(PDUList.start);
     TEST_ASSERT_NULL(PDUList.last);
     TEST_ASSERT_TRUE_MESSAGE(allFreed, "Dynamically allocated things were not freed!");
-    TEST_ASSERT_FALSE(listsLocked);
+    TEST_ASSERT_FALSE(PDUList.locked);
 }
 
 

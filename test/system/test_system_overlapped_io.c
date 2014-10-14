@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>
 #include <sys/param.h>
 
 #include "kinetic_client.h"
@@ -10,6 +11,7 @@
 // Link dependencies, since built using Ceedling
 #include "unity.h"
 #include "unity_helper.h"
+#include "system_test_fixture.h"
 #include "byte_array.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
@@ -26,6 +28,15 @@
 #include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
+
+#include <sys/time.h>
+#include <stdio.h>
+ 
+#include <time.h>
+#ifdef __MACH__ // Since time.h on OSX does not supply clock_gettime()
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
 
 #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_KEY_SIZE (1000)
@@ -56,11 +67,27 @@ void tearDown()
     KineticClient_Shutdown();
 }
 
+void current_utc_time(struct timespec *ts) {
+    #ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
+      clock_serv_t cclock;
+      mach_timespec_t mts;
+      host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+      clock_get_time(cclock, &mts);
+      mach_port_deallocate(mach_task_self(), cclock);
+      ts->tv_sec = mts.tv_sec;
+      ts->tv_nsec = mts.tv_nsec;
+    #else
+      clock_gettime(CLOCK_REALTIME, ts);
+    #endif
+}
+
 void* kinetic_put(void* kinetic_arg)
 {
     struct kinetic_thread_arg* arg = kinetic_arg;
     KineticEntry* entry = &(arg->entry);
     int32_t objIndex = 0;
+    struct timespec startTime, stopTime;
+    current_utc_time(&startTime);
 
     while (ByteBuffer_BytesRemaining(arg->data) > 0) {
 
@@ -95,15 +122,54 @@ void* kinetic_put(void* kinetic_arg)
         objIndex++;
     }
 
+    current_utc_time(&stopTime);
+    double elapsed_ms = (float)(
+          ((double)(stopTime.tv_sec  * 1000) + (double)(stopTime.tv_nsec  / 1000000))
+        - ((double)(startTime.tv_sec * 1000) + (double)(startTime.tv_nsec / 1000000)));
+    float throughput = (arg->data.array.len * 1000.0f) / (elapsed_ms * 1024);
+    printf("\n"
+        "Write/Put Performance:\n"
+        "----------------------------------------\n"
+        "wrote:      %.1f kB\n"
+        "duration:   %.3f seconds\n"
+        "entries:    %d entries\n"
+        "throughput: %.1f MB/sec\n\n",
+        arg->data.array.len / 1024.0f,
+        elapsed_ms / 1000.0f,
+        objIndex,
+        throughput);
+
+    // Configure GetKeyRange request
+    const int maxKeys = 5;
+    // char startKey[] = "";
+    // char endKey[] = "";
+    // KineticKeyRange keyRange = {
+    //     .startKey = ByteBuffer_Create(),
+    //     .endKey,
+    //     .startKeyInclusive = true,
+    //     .endKeyInclusive = true,
+    //     .maxReturned = maxKeys,
+    //     .reverse = false,
+    // };
+
+    uint8_t keysData[maxKeys][KINETIC_MAX_KEY_LEN];
+    ByteBuffer keys[maxKeys];
+    for (int i = 0; i < maxKeys; i++) {
+        keys[i] = ByteBuffer_Create(&keysData[i], sizeof(keysData[i]), 0);
+    }
+
+    // KineticStatus KineticClient_GetKeyRange(arg->sessionHandle,
+    //     keyRange, keys, maxKeys);
+
     return (void*)0;
 }
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
 {
     const int maxIterations = 4;
-    const int numCopiesToStore = 4;
+    const int numCopiesToStore = 5;
     const KineticSession sessionConfig = {
-        .host = "localhost",
+        .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .nonBlocking = false,
         .clusterVersion = 0,
@@ -160,11 +226,11 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
             kt_arg[i].entry = (KineticEntry) {
                 .key = keyBuf,
-                 .newVersion = verBuf,
-                  .tag = tagBuf,
-                   .metadataOnly = false,
-                    .algorithm = KINETIC_ALGORITHM_SHA1,
-                     .value = valBuf,
+                .newVersion = verBuf,
+                .tag = tagBuf,
+                .metadataOnly = false,
+                .algorithm = KINETIC_ALGORITHM_SHA1,
+                .value = valBuf,
             };
 
             // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
@@ -190,6 +256,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         free(buf);
 
         printf("  Iteration complete!\n");
+        // sleep(2);
     }
 
     printf("Overlapped PUT operation test complete!\n");

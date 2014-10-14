@@ -56,6 +56,8 @@ struct _KineticListItem {
 typedef struct _KineticList {
     KineticListItem* start;
     KineticListItem* last;
+    pthread_mutex_t mutex;
+    bool locked;
 } KineticList;
 
 typedef struct _KineticPDU KineticPDU;
