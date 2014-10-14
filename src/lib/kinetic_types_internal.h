@@ -27,6 +27,7 @@
 #include <ifaddrs.h>
 #include <openssl/sha.h>
 #include <time.h>
+#include <pthread.h>
 
 #define KINETIC_SESSIONS_MAX (6)
 #define KINETIC_PDUS_PER_SESSION_DEFAULT (2)
