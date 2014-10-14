@@ -42,10 +42,6 @@
     - *common_defines
 
 :flags:
-  :release:
-    :link:
-      :kinetic-c-client:
-        - -l libssl
   :test:
     :link:
       :test_kinetic_hmac:

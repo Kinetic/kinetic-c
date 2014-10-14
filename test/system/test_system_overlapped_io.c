@@ -77,7 +77,7 @@ void current_utc_time(struct timespec *ts) {
       ts->tv_sec = mts.tv_sec;
       ts->tv_nsec = mts.tv_nsec;
     #else
-      clock_gettime(CLOCK_REALTIME, ts);
+      clock_gettime(CLOCK_MONOTONIC, ts);
     #endif
 }
 
@@ -166,8 +166,8 @@ void* kinetic_put(void* kinetic_arg)
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
 {
-    const int maxIterations = 4;
-    const int numCopiesToStore = 5;
+    const int maxIterations = 2;
+    const int numCopiesToStore = 4;
     const KineticSession sessionConfig = {
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
