@@ -67,27 +67,13 @@ void tearDown()
     KineticClient_Shutdown();
 }
 
-void current_utc_time(struct timespec *ts) {
-    #ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
-      clock_serv_t cclock;
-      mach_timespec_t mts;
-      host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
-      clock_get_time(cclock, &mts);
-      mach_port_deallocate(mach_task_self(), cclock);
-      ts->tv_sec = mts.tv_sec;
-      ts->tv_nsec = mts.tv_nsec;
-    #else
-      clock_gettime(CLOCK_MONOTONIC, ts);
-    #endif
-}
-
 void* kinetic_put(void* kinetic_arg)
 {
     struct kinetic_thread_arg* arg = kinetic_arg;
     KineticEntry* entry = &(arg->entry);
     int32_t objIndex = 0;
-    struct timespec startTime, stopTime;
-    current_utc_time(&startTime);
+    struct timeval startTime, stopTime;
+    gettimeofday(&startTime, NULL);
 
     while (ByteBuffer_BytesRemaining(arg->data) > 0) {
 
@@ -122,10 +108,10 @@ void* kinetic_put(void* kinetic_arg)
         objIndex++;
     }
 
-    current_utc_time(&stopTime);
-    double elapsed_ms = (float)(
-          ((double)(stopTime.tv_sec  * 1000) + (double)(stopTime.tv_nsec  / 1000000))
-        - ((double)(startTime.tv_sec * 1000) + (double)(startTime.tv_nsec / 1000000)));
+    gettimeofday(&stopTime, NULL);
+    int64_t elapsed_us = ((stopTime.tv_sec - startTime.tv_sec) * 1000000)
+        + (stopTime.tv_usec - startTime.tv_usec);
+    float elapsed_ms = elapsed_us / 1000.0f;
     float throughput = (arg->data.array.len * 1000.0f) / (elapsed_ms * 1024);
     printf("\n"
         "Write/Put Performance:\n"
