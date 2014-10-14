@@ -25,8 +25,8 @@
 #include "kinetic_logger.h"
 
 #ifndef SYSTEM_TEST_HOST
-// #define SYSTEM_TEST_HOST "localhost"
-#define SYSTEM_TEST_HOST "192.168.2.17"
+#define SYSTEM_TEST_HOST "localhost"
+// #define SYSTEM_TEST_HOST "192.168.2.17"
 #endif
 
 typedef struct _SystemTestFixture {
