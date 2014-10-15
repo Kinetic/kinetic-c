@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta-2</span>
+   &#160;<span id="projectnumber">v0.7.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -45,7 +45,7 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d729c10c892d40b7e80e1d956ac94d74.html">src</a></li><li class="navelem"><a class="el" href="dir_8022d97437212dcef4d003f114d6167d.html">lib</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -69,7 +69,7 @@
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">* You should have received a copy of the GNU General Public License</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">* along with this program; if not, write to the Free Software</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">*/</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
@@ -78,30 +78,23 @@
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__pdu_8h.html#ac2b45fc01853688e458920a95bf12dda">KineticPDU_Init</a>(<a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* <span class="keyword">const</span> pdu,</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* <span class="keyword">const</span> connection);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__pdu_8h.html#ad29d8f808b47e72f33d8a9ce09c478f4">KineticPDU_AttachValuePayload</a>(<a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* <span class="keyword">const</span> pdu,</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a> payload);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__pdu_8h.html#a73fb6bffccab39055afb05c99d6fdf39">KineticPDU_EnableValueBuffer</a>(<a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* <span class="keyword">const</span> pdu);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__pdu_8h.html#a151c58f636193815a70a05ea8b1e289c">KineticPDU_EnableValueBufferWithLength</a>(<a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* <span class="keyword">const</span> pdu,</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">size_t</span> length);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f">KineticPDU_Send</a>(<a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* <a class="code" href="put_8c.html#aa7a5f7da6c35f80db2b9bd7a681034e3">request</a>);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7">KineticPDU_Receive</a>(<a class="code" href="struct_kinetic_p_d_u.html">KineticPDU</a>* <a class="code" href="put_8c.html#a7b09f3348dc407c7c3313f6d4454022e">response</a>);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif // _KINETIC_PDU_H</span></div>
-<div class="ttc" id="kinetic__pdu_8h_html_a73fb6bffccab39055afb05c99d6fdf39"><div class="ttname"><a href="kinetic__pdu_8h.html#a73fb6bffccab39055afb05c99d6fdf39">KineticPDU_EnableValueBuffer</a></div><div class="ttdeci">void KineticPDU_EnableValueBuffer(KineticPDU *const pdu)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00042">kinetic_pdu.c:42</a></div></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__pdu_8h.html#ac2b45fc01853688e458920a95bf12dda">KineticPDU_Init</a>(KineticPDU* <span class="keyword">const</span> pdu, <a class="code" href="struct_kinetic_connection.html">KineticConnection</a>* <span class="keyword">const</span> connection);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__pdu_8h.html#a0b37fae81ac5379ce8d7ef9afbe1bb19">KineticPDU_AttachEntry</a>(KineticPDU* <span class="keyword">const</span> pdu, <a class="code" href="struct_kinetic_entry.html">KineticEntry</a>* <span class="keyword">const</span> entry);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> <a class="code" href="kinetic__pdu_8h.html#aa2160e914a83af8f555d00550db427c7">KineticPDU_Send</a>(KineticPDU* request);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> <a class="code" href="kinetic__pdu_8h.html#a931f5bab73cb01b1abc7bbf0730b6a03">KineticPDU_Receive</a>(KineticPDU* response);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> <a class="code" href="kinetic__pdu_8h.html#a4ea55bc7608cfae0092aebffe0a5f5ee">KineticPDU_GetStatus</a>(KineticPDU* pdu);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;KineticProto_KeyValue* <a class="code" href="kinetic__pdu_8h.html#ad7a79b97e3a12baba3b2d771fef133bb">KineticPDU_GetKeyValue</a>(KineticPDU* pdu);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif // _KINETIC_PDU_H</span></div>
 <div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
-<div class="ttc" id="put_8c_html_aa7a5f7da6c35f80db2b9bd7a681034e3"><div class="ttname"><a href="put_8c.html#aa7a5f7da6c35f80db2b9bd7a681034e3">request</a></div><div class="ttdeci">KineticPDU request</div><div class="ttdef"><b>Definition:</b> <a href="put_8c_source.html#l00023">put.c:23</a></div></div>
-<div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00108">kinetic_types.h:108</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_a22e72ec9fae2d1ed7d950fb49da5777f"><div class="ttname"><a href="kinetic__types_8h.html#a22e72ec9fae2d1ed7d950fb49da5777f">ByteArray</a></div><div class="ttdeci">ProtobufCBinaryData ByteArray</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00069">kinetic_types.h:69</a></div></div>
-<div class="ttc" id="kinetic__pdu_8h_html_a9b83efba84b9ea49ae6fca07f026e77f"><div class="ttname"><a href="kinetic__pdu_8h.html#a9b83efba84b9ea49ae6fca07f026e77f">KineticPDU_Send</a></div><div class="ttdeci">bool KineticPDU_Send(KineticPDU *request)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00058">kinetic_pdu.c:58</a></div></div>
-<div class="ttc" id="put_8c_html_a7b09f3348dc407c7c3313f6d4454022e"><div class="ttname"><a href="put_8c.html#a7b09f3348dc407c7c3313f6d4454022e">response</a></div><div class="ttdeci">KineticPDU response</div><div class="ttdef"><b>Definition:</b> <a href="put_8c_source.html#l00023">put.c:23</a></div></div>
-<div class="ttc" id="kinetic__pdu_8h_html_ad29d8f808b47e72f33d8a9ce09c478f4"><div class="ttname"><a href="kinetic__pdu_8h.html#ad29d8f808b47e72f33d8a9ce09c478f4">KineticPDU_AttachValuePayload</a></div><div class="ttdeci">void KineticPDU_AttachValuePayload(KineticPDU *const pdu, ByteArray payload)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00035">kinetic_pdu.c:35</a></div></div>
-<div class="ttc" id="kinetic__pdu_8h_html_a4f32128bd0732ca9cea7662391db71f7"><div class="ttname"><a href="kinetic__pdu_8h.html#a4f32128bd0732ca9cea7662391db71f7">KineticPDU_Receive</a></div><div class="ttdeci">bool KineticPDU_Receive(KineticPDU *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00121">kinetic_pdu.c:121</a></div></div>
-<div class="ttc" id="struct_kinetic_p_d_u_html"><div class="ttname"><a href="struct_kinetic_p_d_u.html">KineticPDU</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00255">kinetic_types.h:255</a></div></div>
-<div class="ttc" id="kinetic__pdu_8h_html_a151c58f636193815a70a05ea8b1e289c"><div class="ttname"><a href="kinetic__pdu_8h.html#a151c58f636193815a70a05ea8b1e289c">KineticPDU_EnableValueBufferWithLength</a></div><div class="ttdeci">void KineticPDU_EnableValueBufferWithLength(KineticPDU *const pdu, size_t length)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00048">kinetic_pdu.c:48</a></div></div>
+<div class="ttc" id="kinetic__pdu_8h_html_a4ea55bc7608cfae0092aebffe0a5f5ee"><div class="ttname"><a href="kinetic__pdu_8h.html#a4ea55bc7608cfae0092aebffe0a5f5ee">KineticPDU_GetStatus</a></div><div class="ttdeci">KineticStatus KineticPDU_GetStatus(KineticPDU *pdu)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00200">kinetic_pdu.c:200</a></div></div>
+<div class="ttc" id="struct_kinetic_connection_html"><div class="ttname"><a href="struct_kinetic_connection.html">KineticConnection</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00064">kinetic_types_internal.h:64</a></div></div>
+<div class="ttc" id="kinetic__pdu_8h_html_ad7a79b97e3a12baba3b2d771fef133bb"><div class="ttname"><a href="kinetic__pdu_8h.html#ad7a79b97e3a12baba3b2d771fef133bb">KineticPDU_GetKeyValue</a></div><div class="ttdeci">KineticProto_KeyValue * KineticPDU_GetKeyValue(KineticPDU *pdu)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00217">kinetic_pdu.c:217</a></div></div>
+<div class="ttc" id="kinetic__pdu_8h_html_a931f5bab73cb01b1abc7bbf0730b6a03"><div class="ttname"><a href="kinetic__pdu_8h.html#a931f5bab73cb01b1abc7bbf0730b6a03">KineticPDU_Receive</a></div><div class="ttdeci">KineticStatus KineticPDU_Receive(KineticPDU *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00108">kinetic_pdu.c:108</a></div></div>
+<div class="ttc" id="struct_kinetic_entry_html"><div class="ttname"><a href="struct_kinetic_entry.html">KineticEntry</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00158">kinetic_types.h:158</a></div></div>
+<div class="ttc" id="kinetic__pdu_8h_html_aa2160e914a83af8f555d00550db427c7"><div class="ttname"><a href="kinetic__pdu_8h.html#aa2160e914a83af8f555d00550db427c7">KineticPDU_Send</a></div><div class="ttdeci">KineticStatus KineticPDU_Send(KineticPDU *request)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00042">kinetic_pdu.c:42</a></div></div>
+<div class="ttc" id="kinetic__pdu_8h_html_a0b37fae81ac5379ce8d7ef9afbe1bb19"><div class="ttname"><a href="kinetic__pdu_8h.html#a0b37fae81ac5379ce8d7ef9afbe1bb19">KineticPDU_AttachEntry</a></div><div class="ttdeci">void KineticPDU_AttachEntry(KineticPDU *const pdu, KineticEntry *const entry)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00035">kinetic_pdu.c:35</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a></div><div class="ttdeci">KineticStatus</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00132">kinetic_types.h:132</a></div></div>
 <div class="ttc" id="kinetic__pdu_8h_html_ac2b45fc01853688e458920a95bf12dda"><div class="ttname"><a href="kinetic__pdu_8h.html#ac2b45fc01853688e458920a95bf12dda">KineticPDU_Init</a></div><div class="ttdeci">void KineticPDU_Init(KineticPDU *const pdu, KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu_8c_source.html#l00029">kinetic_pdu.c:29</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

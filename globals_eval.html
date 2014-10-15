@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta-2</span>
+   &#160;<span id="projectnumber">v0.7.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -64,6 +64,24 @@
 &#160;
 
 <h3><a class="anchor" id="index_k"></a>- k -</h3><ul>
+<li>KINETIC_ALGORITHM_CRC32
+: <a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09aaab84de045ce61f42337e854e5b70484">kinetic_types.h</a>
+</li>
+<li>KINETIC_ALGORITHM_CRC64
+: <a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09a557e88bdb0a2d0728cc04a1a008a38b8">kinetic_types.h</a>
+</li>
+<li>KINETIC_ALGORITHM_INVALID
+: <a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09a4b72e1e6f22ff34f7bb91e170c2787d9">kinetic_types.h</a>
+</li>
+<li>KINETIC_ALGORITHM_SHA1
+: <a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09a543a4f72b499ea5ef6e3591ed69c112c">kinetic_types.h</a>
+</li>
+<li>KINETIC_ALGORITHM_SHA2
+: <a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09a495cafcdee4af2cbd7afb64647aea1b0">kinetic_types.h</a>
+</li>
+<li>KINETIC_ALGORITHM_SHA3
+: <a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09a9f0b099f79aa0ee56d7e6e1099ffd477">kinetic_types.h</a>
+</li>
 <li>KINETIC_PROTO_ALGORITHM_CRC32
 : <a class="el" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304eae63e9e2c7ffa49bbb903aa10291c686b">kinetic_proto.h</a>
 </li>
@@ -292,8 +310,14 @@
 <li>KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH
 : <a class="el" href="kinetic__proto_8h.html#a8e45b19c26d1b29d31c5ab67e6ae6a5ea6ce7077e37a981574c2866e4edec8d68">kinetic_proto.h</a>
 </li>
+<li>KINETIC_STATUS_BUFFER_OVERRUN
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a6a2ee44da05d8dc7b42b2cde2c784c6d">kinetic_types.h</a>
+</li>
 <li>KINETIC_STATUS_CONNECTION_ERROR
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_COUNT
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa6a2bd5838c04467a4b7385b1a1e8cb4">kinetic_types.h</a>
 </li>
 <li>KINETIC_STATUS_DATA_ERROR
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a880da6938443e4f357d12a22e4d51aef">kinetic_types.h</a>
@@ -301,20 +325,62 @@
 <li>KINETIC_STATUS_DEVICE_BUSY
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a6c1bab895a12cbc908fc4ac3c912f2af">kinetic_types.h</a>
 </li>
+<li>KINETIC_STATUS_HMAC_EMPTY
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a72368b71976086bddf0308d32456c817">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_HOST_EMPTY
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a7a20715bee191c5ee51d2461ffedacb0">kinetic_types.h</a>
+</li>
 <li>KINETIC_STATUS_INVALID
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f">kinetic_types.h</a>
 </li>
 <li>KINETIC_STATUS_INVALID_REQUEST
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0910418168ab52290184d28436cd1499">kinetic_types.h</a>
 </li>
+<li>KINETIC_STATUS_MEMORY_ERROR
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ac0f79301a35ae3a53e979f69012bf5a3">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_NO_PDUS_AVAVILABLE
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a5b1cb4b9d3ce032c90510853fc53745f">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_NOT_ATTEMPTED
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a33b64dd81cae94469f50cee52123718f">kinetic_types.h</a>
+</li>
 <li>KINETIC_STATUS_OPERATION_FAILED
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_OPERATION_INVALID
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aaae0e2fcdb6f20713083d21b817abcf2">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_SESSION_EMPTY
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ae004f902f39faff5c3117b7e4524f04b">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_SESSION_INVALID
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a145893949409e77de5f393f4ba4e70f4">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_SOCKET_ERROR
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a062cab06528a8ff0e145fd33fe7e6789">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_SOCKET_TIMEOUT
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad30c7ef07c00fe000119aac6973ec139">kinetic_types.h</a>
 </li>
 <li>KINETIC_STATUS_SUCCESS
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e">kinetic_types.h</a>
 </li>
 <li>KINETIC_STATUS_VERSION_FAILURE
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a83075fb61e6fdff87354313fbf37d830">kinetic_types.h</a>
+</li>
+<li>KINETIC_SYNCHRONIZATION_FLUSH
+: <a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3a21e19f0d27726421bc690bb1b115ab88">kinetic_types.h</a>
+</li>
+<li>KINETIC_SYNCHRONIZATION_INVALID
+: <a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3aa80606d4e63469cb05a15a9e05dbf75d">kinetic_types.h</a>
+</li>
+<li>KINETIC_SYNCHRONIZATION_WRITEBACK
+: <a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3aba9b67f24a947cf25d47fce9ca1c68d8">kinetic_types.h</a>
+</li>
+<li>KINETIC_SYNCHRONIZATION_WRITETHROUGH
+: <a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3a7bc2d5aa096a740bd3c8641fc5d40b48">kinetic_types.h</a>
 </li>
 </ul>
 </div><!-- contents -->

@@ -1,4 +1,4 @@
-.TH "KineticMessage" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.TH "KineticMessage" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@ KineticMessage \-
 .br
 .PP
 .PP
-\fC#include <kinetic_types\&.h>\fP
+\fC#include <kinetic_types_internal\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
@@ -36,50 +36,50 @@ KineticMessage \-
 .RI "KineticProto_KeyValue \fBkeyValue\fP"
 .br
 .ti -1c
-.RI "uint8_t \fBhmacData\fP [((SHA_DIGEST_LENGTH))]"
+.RI "uint8_t \fBhmacData\fP [\fBKINETIC_HMAC_MAX_LEN\fP]"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 162 of file kinetic_types\&.h\&.
+Definition at line 91 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticProto\fP KineticMessage::proto"
 
 .PP
-Definition at line 165 of file kinetic_types\&.h\&.
+Definition at line 93 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command KineticMessage::command"
 
 .PP
-Definition at line 166 of file kinetic_types\&.h\&.
+Definition at line 94 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Header KineticMessage::header"
 
 .PP
-Definition at line 167 of file kinetic_types\&.h\&.
+Definition at line 95 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Body KineticMessage::body"
 
 .PP
-Definition at line 168 of file kinetic_types\&.h\&.
+Definition at line 96 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Status KineticMessage::status"
 
 .PP
-Definition at line 169 of file kinetic_types\&.h\&.
+Definition at line 97 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Security KineticMessage::security"
 
 .PP
-Definition at line 170 of file kinetic_types\&.h\&.
+Definition at line 98 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Security_ACL KineticMessage::acl"
 
 .PP
-Definition at line 171 of file kinetic_types\&.h\&.
+Definition at line 99 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_KeyValue KineticMessage::keyValue"
 
 .PP
-Definition at line 172 of file kinetic_types\&.h\&.
-.SS "uint8_t KineticMessage::hmacData[((SHA_DIGEST_LENGTH))]"
+Definition at line 100 of file kinetic_types_internal\&.h\&.
+.SS "uint8_t KineticMessage::hmacData[\fBKINETIC_HMAC_MAX_LEN\fP]"
 
 .PP
-Definition at line 173 of file kinetic_types\&.h\&.
+Definition at line 101 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

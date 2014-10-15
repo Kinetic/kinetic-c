@@ -1,4 +1,4 @@
-.TH "kinetic_logger.h" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_logger.h" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -56,6 +56,9 @@ kinetic_logger.h \-
 .ti -1c
 .RI "void \fBKineticLogger_LogByteArray\fP (const char *title, \fBByteArray\fP bytes)"
 .br
+.ti -1c
+.RI "void \fBKineticLogger_LogByteBuffer\fP (const char *title, \fBByteBuffer\fP buffer)"
+.br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
@@ -66,65 +69,71 @@ Definition at line 28 of file kinetic_logger\&.h\&.
 .SS "#define LOG(message)   \fBKineticLogger_Log\fP(message)"
 
 .PP
-Definition at line 39 of file kinetic_logger\&.h\&.
+Definition at line 40 of file kinetic_logger\&.h\&.
 .SS "#define LOGF(message, \&.\&.\&.)   \fBKineticLogger_LogPrintf\fP(message, __VA_ARGS__)"
 
 .PP
-Definition at line 40 of file kinetic_logger\&.h\&.
+Definition at line 41 of file kinetic_logger\&.h\&.
 .SS "#define LOG_LOCATION   \fBKineticLogger_LogPrintf\fP('@ %s:%s:%d', __func__, __FILE__, __LINE__)"
 
 .PP
-Definition at line 41 of file kinetic_logger\&.h\&.
+Definition at line 42 of file kinetic_logger\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "void KineticLogger_Init (const char *logFile)"
 
 .PP
-Definition at line 30 of file kinetic_logger\&.c\&.
+Definition at line 31 of file kinetic_logger\&.c\&.
 .PP
-References FileDesc, and LogToConsole\&.
+References FileDesc, LogLevel, and LogToConsole\&.
 .SS "void KineticLogger_Close (void)"
 
 .PP
-Definition at line 55 of file kinetic_logger\&.c\&.
+Definition at line 58 of file kinetic_logger\&.c\&.
 .PP
 References FileDesc, and LogToConsole\&.
 .SS "void KineticLogger_Log (const char *message)"
 
 .PP
-Definition at line 65 of file kinetic_logger\&.c\&.
+Definition at line 67 of file kinetic_logger\&.c\&.
 .PP
-References FileDesc, and LogToConsole\&.
+References FileDesc, LogLevel, and LogToConsole\&.
 .SS "int KineticLogger_LogPrintf (const char *format, \&.\&.\&.)"
 
 .PP
 Definition at line 80 of file kinetic_logger\&.c\&.
 .PP
-References KineticLogger_Log()\&.
+References KineticLogger_Log(), and LogLevel\&.
 .SS "void KineticLogger_LogHeader (const \fBKineticPDUHeader\fP *header)"
 
 .PP
-Definition at line 98 of file kinetic_logger\&.c\&.
+Definition at line 99 of file kinetic_logger\&.c\&.
 .PP
-References LOG, and LOGF\&.
+References LOG, LOGF, and LogLevel\&.
 .SS "void KineticLogger_LogProtobuf (const \fBKineticProto\fP *proto)"
 
 .PP
-Definition at line 162 of file kinetic_logger\&.c\&.
+Definition at line 167 of file kinetic_logger\&.c\&.
 .PP
-References BYTES_TO_CSTRING, KineticProto_algorithm__descriptor, KineticProto_message_type__descriptor, KineticProto_status_status_code__descriptor, KineticProto_synchronization__descriptor, LOG, LOG_PROTO_INIT, LOG_PROTO_LEVEL_END, LOG_PROTO_LEVEL_START, and LOGF\&.
+References BYTES_TO_CSTRING, KineticProto_algorithm__descriptor, KineticProto_message_type__descriptor, KineticProto_status_status_code__descriptor, KineticProto_synchronization__descriptor, LOG, LOG_PROTO_INIT, LOG_PROTO_LEVEL_END, LOG_PROTO_LEVEL_START, LOGF, and LogLevel\&.
 .SS "void KineticLogger_LogStatus (KineticProto_Status *status)"
 
 .PP
-Definition at line 338 of file kinetic_logger\&.c\&.
+Definition at line 320 of file kinetic_logger\&.c\&.
 .PP
-References KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, and KineticLogger_LogPrintf()\&.
+References KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS, KineticLogger_LogPrintf(), and LogLevel\&.
 .SS "void KineticLogger_LogByteArray (const char *title, \fBByteArray\fPbytes)"
 
 .PP
-Definition at line 397 of file kinetic_logger\&.c\&.
+Definition at line 377 of file kinetic_logger\&.c\&.
 .PP
-References LOGF\&.
+References ByteArray::data, ByteArray::len, LOGF, and LogLevel\&.
+.SS "void KineticLogger_LogByteBuffer (const char *title, \fBByteBuffer\fPbuffer)"
+
+.PP
+Definition at line 422 of file kinetic_logger\&.c\&.
+.PP
+References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and KineticLogger_LogByteArray()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

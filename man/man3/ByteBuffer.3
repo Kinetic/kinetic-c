@@ -1,36 +1,59 @@
-.TH "ByteBuffer" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.TH "ByteBuffer" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 ByteBuffer \- 
+.PP
+Structure for an embedded \fBByteArray\fP as a buffer\&.  
+
 .SH SYNOPSIS
 .br
 .PP
 .PP
-\fC#include <kinetic_types\&.h>\fP
+\fC#include <byte_array\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
 .ti -1c
-.RI "\fBByteArray\fP \fBbuffer\fP"
+.RI "\fBByteArray\fP \fBarray\fP"
 .br
+.RI "\fI\fBByteArray\fP holding allocated array w/length = allocated size\&. \fP"
 .ti -1c
-.RI "size_t \fBmaxLen\fP"
+.RI "size_t \fBbytesUsed\fP"
 .br
+.RI "\fIReflects the number of bytes used from the \fCarray\fP \fP"
+.ti -1c
+.RI "const \fBByteArray\fP \fBarray\fP"
+.br
+.RI "\fI\fBByteArray\fP holding allocated array w/length = allocated size\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 97 of file kinetic_types\&.h\&.
+Structure for an embedded \fBByteArray\fP as a buffer\&. 
+
+The \fCbytesUsed\fP field is initialized to zero, and is to incremented as each byte is consumed, but shall not exceed the \fCarray\fP length 
+.PP
+Definition at line 34 of file include/byte_array\&.h\&.
 .SH "Field Documentation"
 .PP 
-.SS "\fBByteArray\fP ByteBuffer::buffer"
+.SS "\fBByteArray\fP ByteBuffer::array"
 
 .PP
-Definition at line 99 of file kinetic_types\&.h\&.
-.SS "size_t ByteBuffer::maxLen"
+\fBByteArray\fP holding allocated array w/length = allocated size\&. 
+.PP
+Definition at line 35 of file include/byte_array\&.h\&.
+.SS "size_t ByteBuffer::bytesUsed"
 
 .PP
-Definition at line 100 of file kinetic_types\&.h\&.
+Reflects the number of bytes used from the \fCarray\fP 
+.PP
+Definition at line 36 of file include/byte_array\&.h\&.
+.SS "const \fBByteArray\fP ByteBuffer::array"
+
+.PP
+\fBByteArray\fP holding allocated array w/length = allocated size\&. 
+.PP
+Definition at line 35 of file src/lib/byte_array\&.h\&.
 
 .SH "Author"
 .PP 

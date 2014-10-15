@@ -1,4 +1,4 @@
-.TH "kinetic_hmac.h" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_hmac.h" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,15 +35,15 @@ References KineticHMAC::algorithm, KINETIC_HMAC_MAX_LEN, KINETIC_PROTO_SECURITY_
 .SS "void KineticHMAC_Populate (\fBKineticHMAC\fP *hmac, \fBKineticProto\fP *proto, const \fBByteArray\fPkey)"
 
 .PP
-Definition at line 49 of file kinetic_hmac\&.c\&.
+Definition at line 47 of file kinetic_hmac\&.c\&.
 .PP
 References KineticHMAC::data, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), and KineticHMAC::len\&.
 .SS "bool KineticHMAC_Validate (const \fBKineticProto\fP *proto, const \fBByteArray\fPkey)"
 
 .PP
-Definition at line 62 of file kinetic_hmac\&.c\&.
+Definition at line 60 of file kinetic_hmac\&.c\&.
 .PP
-References KineticHMAC::data, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticLogger_LogByteArray(), KineticHMAC::len, and LOG\&.
+References ByteArray::data, KineticHMAC::data, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticLogger_LogByteArray(), KineticHMAC::len, and LOG\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

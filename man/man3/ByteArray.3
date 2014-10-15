@@ -1,0 +1,70 @@
+.TH "ByteArray" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ByteArray \- 
+.PP
+Structure for handling generic arrays of bytes\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <byte_array\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBlen\fP"
+.br
+.RI "\fINumber of bytes in the \fCdata\fP field\&. \fP"
+.ti -1c
+.RI "uint8_t * \fBdata\fP"
+.br
+.RI "\fIPointer to an allocated array of data bytes\&. \fP"
+.ti -1c
+.RI "const size_t \fBlen\fP"
+.br
+.RI "\fINumber of bytes in the \fCdata\fP field\&. \fP"
+.ti -1c
+.RI "uint8_t *const \fBdata\fP"
+.br
+.RI "\fIPointer to an allocated array of data bytes\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Structure for handling generic arrays of bytes\&. 
+
+The data contained in a \fC\fBByteArray\fP\fP is an arbitrary sequence of bytes\&. It may contain embedded \fCNULL\fP characters and is not required to be \fCNULL\fP-terminated\&. 
+.PP
+Definition at line 15 of file include/byte_array\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "size_t ByteArray::len"
+
+.PP
+Number of bytes in the \fCdata\fP field\&. 
+.PP
+Definition at line 16 of file include/byte_array\&.h\&.
+.SS "uint8_t* ByteArray::data"
+
+.PP
+Pointer to an allocated array of data bytes\&. 
+.PP
+Definition at line 17 of file include/byte_array\&.h\&.
+.SS "const size_t ByteArray::len"
+
+.PP
+Number of bytes in the \fCdata\fP field\&. 
+.PP
+Definition at line 16 of file src/lib/byte_array\&.h\&.
+.SS "uint8_t* const ByteArray::data"
+
+.PP
+Pointer to an allocated array of data bytes\&. 
+.PP
+Definition at line 17 of file src/lib/byte_array\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

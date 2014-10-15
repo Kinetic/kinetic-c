@@ -1,0 +1,77 @@
+.TH "KineticSession" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+KineticSession \- 
+.PP
+Structure used to specify the configuration of a session\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <kinetic_types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "char \fBhost\fP [256]"
+.br
+.ti -1c
+.RI "int \fBport\fP"
+.br
+.ti -1c
+.RI "bool \fBnonBlocking\fP"
+.br
+.ti -1c
+.RI "int64_t \fBclusterVersion\fP"
+.br
+.ti -1c
+.RI "int64_t \fBidentity\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBkeyData\fP [(4096)]"
+.br
+.ti -1c
+.RI "\fBByteArray\fP \fBhmacKey\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Structure used to specify the configuration of a session\&. 
+.PP
+Definition at line 94 of file kinetic_types\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "char KineticSession::host[256]"
+
+.PP
+Definition at line 96 of file kinetic_types\&.h\&.
+.SS "int KineticSession::port"
+
+.PP
+Definition at line 99 of file kinetic_types\&.h\&.
+.SS "bool KineticSession::nonBlocking"
+
+.PP
+Definition at line 102 of file kinetic_types\&.h\&.
+.SS "int64_t KineticSession::clusterVersion"
+
+.PP
+Definition at line 107 of file kinetic_types\&.h\&.
+.SS "int64_t KineticSession::identity"
+
+.PP
+Definition at line 112 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticSession::keyData[(4096)]"
+
+.PP
+Definition at line 116 of file kinetic_types\&.h\&.
+.SS "\fBByteArray\fP KineticSession::hmacKey"
+
+.PP
+Definition at line 117 of file kinetic_types\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

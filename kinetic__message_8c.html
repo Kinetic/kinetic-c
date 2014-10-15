@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta-2</span>
+   &#160;<span id="projectnumber">v0.7.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -45,7 +45,7 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d729c10c892d40b7e80e1d956ac94d74.html">src</a></li><li class="navelem"><a class="el" href="dir_8022d97437212dcef4d003f114d6167d.html">lib</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -57,28 +57,29 @@
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__message_8h_source.html">kinetic_message.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
 </div>
 <p><a href="kinetic__message_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a8739ecef99201e2b2f486401f783792f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f">CONFIG_FIELD_BYTE_ARRAY</a>(_name, _field, _config)</td></tr>
-<tr class="separator:a8739ecef99201e2b2f486401f783792f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a880c65867677a47bb31aafbdef780554"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8c.html#a880c65867677a47bb31aafbdef780554">CONFIG_FIELD_BYTE_BUFFER</a>(_name, _field, _entry)</td></tr>
+<tr class="separator:a880c65867677a47bb31aafbdef780554"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ac6ea752dfd491fffd99d4cad256f679d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const message)</td></tr>
 <tr class="separator:ac6ea752dfd491fffd99d4cad256f679d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4149617eb669e1bb58c70c40a2df2c7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8c.html#a4149617eb669e1bb58c70c40a2df2c7b">KineticMessage_ConfigureKeyValue</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const message, const <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *metadata)</td></tr>
-<tr class="separator:a4149617eb669e1bb58c70c40a2df2c7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f1d330254f18b6b76e27d43b0381be6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8c.html#a9f1d330254f18b6b76e27d43b0381be6">KineticMessage_ConfigureKeyValue</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const message, const <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *entry)</td></tr>
+<tr class="separator:a9f1d330254f18b6b76e27d43b0381be6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="a8739ecef99201e2b2f486401f783792f"></a>
+<a class="anchor" id="a880c65867677a47bb31aafbdef780554"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define CONFIG_FIELD_BYTE_ARRAY</td>
+          <td class="memname">#define CONFIG_FIELD_BYTE_BUFFER</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">_name, </td>
@@ -93,7 +94,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">_config&#160;</td>
+          <td class="paramname">_entry&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -103,13 +104,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">{ \</div>
-<div class="line">    if (_config-&gt;_name.data != NULL &amp;&amp; _config-&gt;_name.len &gt; 0) { \</div>
-<div class="line">        _field._name = _config-&gt;_name; \</div>
-<div class="line">        _field.has_ ## _name = <span class="keyword">true</span>; \</div>
+<div class="line">    if ((_entry)-&gt;_name.array.data != NULL \</div>
+<div class="line">        &amp;&amp; (_entry)-&gt;_name.array.len &gt; 0 \</div>
+<div class="line">        &amp;&amp; (_entry)-&gt;_name.bytesUsed &gt; 0 \</div>
+<div class="line">        &amp;&amp; (_entry)-&gt;_name.bytesUsed &lt;= (_entry)-&gt;_name.array.len) { \</div>
+<div class="line">        (_field)._name.data = (_entry)-&gt;_name.array.data; \</div>
+<div class="line">        (_field)._name.len = (_entry)-&gt;_name.bytesUsed; \</div>
+<div class="line">        (_field).has_ ## _name = <span class="keyword">true</span>; \</div>
+<div class="line">    } \</div>
+<div class="line">    else { \</div>
+<div class="line">        (_field).has_ ## _name = <span class="keyword">false</span>; \</div>
 <div class="line">    } \</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00030">30</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00031">31</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
 
 </div>
 </div>
@@ -128,13 +136,13 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00023">23</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00024">24</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00190">KINETIC_MESSAGE_INIT</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00118">KINETIC_MESSAGE_INIT</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4149617eb669e1bb58c70c40a2df2c7b"></a>
+<a class="anchor" id="a9f1d330254f18b6b76e27d43b0381be6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -147,8 +155,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="struct_kinetic_key_value.html">KineticKeyValue</a> *&#160;</td>
-          <td class="paramname"><em>metadata</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *&#160;</td>
+          <td class="paramname"><em>entry</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -158,9 +166,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00042">42</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00045">45</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00230">KineticKeyValue::algorithm</a>, <a class="el" href="kinetic__types_8h_source.html#l00168">KineticMessage::body</a>, <a class="el" href="kinetic__types_8h_source.html#l00166">KineticMessage::command</a>, <a class="el" href="kinetic__message_8c_source.html#l00030">CONFIG_FIELD_BYTE_ARRAY</a>, <a class="el" href="kinetic__types_8h_source.html#l00172">KineticMessage::keyValue</a>, <a class="el" href="kinetic__types_8h_source.html#l00231">KineticKeyValue::metadataOnly</a>, and <a class="el" href="kinetic__types_8h_source.html#l00165">KineticMessage::proto</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00164">KineticEntry::algorithm</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00096">KineticMessage::body</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00094">KineticMessage::command</a>, <a class="el" href="kinetic__message_8c_source.html#l00031">CONFIG_FIELD_BYTE_BUFFER</a>, <a class="el" href="kinetic__types_8h_source.html#l00163">KineticEntry::force</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00100">KineticMessage::keyValue</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00125">KineticProto_Algorithm_from_KineticAlgorithm()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00080">KineticProto_Synchronization_from_KineticSynchronization()</a>, <a class="el" href="kinetic__types_8h_source.html#l00165">KineticEntry::metadataOnly</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00093">KineticMessage::proto</a>, and <a class="el" href="kinetic__types_8h_source.html#l00166">KineticEntry::synchronization</a>.</p>
 
 </div>
 </div>

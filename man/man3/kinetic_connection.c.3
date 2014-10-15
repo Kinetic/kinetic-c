@@ -1,4 +1,4 @@
-.TH "kinetic_connection.c" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_connection.c" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,19 +8,34 @@ kinetic_connection.c \-
 .PP
 \fC#include 'kinetic_connection\&.h'\fP
 .br
+\fC#include 'kinetic_types_internal\&.h'\fP
+.br
 \fC#include 'kinetic_socket\&.h'\fP
 .br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
 \fC#include <string\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
 .br
 
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "bool \fBKineticConnection_Connect\fP (\fBKineticConnection\fP *const connection, const char *host, int port, bool nonBlocking, int64_t clusterVersion, int64_t identity, const \fBByteArray\fP key)"
+.RI "\fBKineticSessionHandle\fP \fBKineticConnection_NewConnection\fP (const \fBKineticSession\fP *const config)"
 .br
 .ti -1c
-.RI "void \fBKineticConnection_Disconnect\fP (\fBKineticConnection\fP *connection)"
+.RI "void \fBKineticConnection_FreeConnection\fP (\fBKineticSessionHandle\fP *const handle)"
+.br
+.ti -1c
+.RI "\fBKineticConnection\fP * \fBKineticConnection_FromHandle\fP (\fBKineticSessionHandle\fP handle)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticConnection_Connect\fP (\fBKineticConnection\fP *const connection)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticConnection_Disconnect\fP (\fBKineticConnection\fP *const connection)"
 .br
 .ti -1c
 .RI "void \fBKineticConnection_IncrementSequence\fP (\fBKineticConnection\fP *const connection)"
@@ -28,22 +43,40 @@ kinetic_connection.c \-
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "bool KineticConnection_Connect (\fBKineticConnection\fP *constconnection, const char *host, intport, boolnonBlocking, int64_tclusterVersion, int64_tidentity, const \fBByteArray\fPkey)"
+.SS "\fBKineticSessionHandle\fP KineticConnection_NewConnection (const \fBKineticSession\fP *constconfig)"
 
 .PP
-Definition at line 25 of file kinetic_connection\&.c\&.
+Definition at line 31 of file kinetic_connection\&.c\&.
 .PP
-References KineticConnection::clusterVersion, KineticConnection::connected, KineticConnection::host, KineticConnection::identity, KineticConnection::key, KineticConnection::keyData, KineticSocket_Connect(), KineticConnection::nonBlocking, KineticConnection::port, and KineticConnection::socketDescriptor\&.
-.SS "void KineticConnection_Disconnect (\fBKineticConnection\fP *connection)"
+References KINETIC_CONNECTION_INIT, KINETIC_HANDLE_INVALID, KINETIC_SESSIONS_MAX, and KineticConnection::session\&.
+.SS "void KineticConnection_FreeConnection (\fBKineticSessionHandle\fP *consthandle)"
 
 .PP
-Definition at line 48 of file kinetic_connection\&.c\&.
+Definition at line 51 of file kinetic_connection\&.c\&.
 .PP
-References KineticConnection::socketDescriptor\&.
+References KineticConnection::connected, KINETIC_HANDLE_INVALID, and KineticConnection_FromHandle()\&.
+.SS "\fBKineticConnection\fP* KineticConnection_FromHandle (\fBKineticSessionHandle\fPhandle)"
+
+.PP
+Definition at line 63 of file kinetic_connection\&.c\&.
+.PP
+References KINETIC_HANDLE_INVALID, and KINETIC_SESSIONS_MAX\&.
+.SS "\fBKineticStatus\fP KineticConnection_Connect (\fBKineticConnection\fP *constconnection)"
+
+.PP
+Definition at line 70 of file kinetic_connection\&.c\&.
+.PP
+References KineticConnection::connected, KineticSession::host, KINETIC_SOCKET_DESCRIPTOR_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticSocket_Connect(), LOG, KineticSession::nonBlocking, KineticSession::port, KineticConnection::session, and KineticConnection::socket\&.
+.SS "\fBKineticStatus\fP KineticConnection_Disconnect (\fBKineticConnection\fP *constconnection)"
+
+.PP
+Definition at line 92 of file kinetic_connection\&.c\&.
+.PP
+References KINETIC_HANDLE_INVALID, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, and KineticConnection::socket\&.
 .SS "void KineticConnection_IncrementSequence (\fBKineticConnection\fP *constconnection)"
 
 .PP
-Definition at line 57 of file kinetic_connection\&.c\&.
+Definition at line 103 of file kinetic_connection\&.c\&.
 .PP
 References KineticConnection::sequence\&.
 .SH "Author"

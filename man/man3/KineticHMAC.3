@@ -1,4 +1,4 @@
-.TH "KineticHMAC" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.TH "KineticHMAC" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@ KineticHMAC \-
 .br
 .PP
 .PP
-\fC#include <kinetic_types\&.h>\fP
+\fC#include <kinetic_types_internal\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
@@ -18,26 +18,26 @@ KineticHMAC \-
 .RI "uint32_t \fBlen\fP"
 .br
 .ti -1c
-.RI "uint8_t \fBdata\fP [((SHA_DIGEST_LENGTH))]"
+.RI "uint8_t \fBdata\fP [\fBKINETIC_HMAC_MAX_LEN\fP]"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 153 of file kinetic_types\&.h\&.
+Definition at line 83 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticProto_Security_ACL_HMACAlgorithm\fP KineticHMAC::algorithm"
 
 .PP
-Definition at line 155 of file kinetic_types\&.h\&.
+Definition at line 84 of file kinetic_types_internal\&.h\&.
 .SS "uint32_t KineticHMAC::len"
 
 .PP
-Definition at line 156 of file kinetic_types\&.h\&.
-.SS "uint8_t KineticHMAC::data[((SHA_DIGEST_LENGTH))]"
+Definition at line 85 of file kinetic_types_internal\&.h\&.
+.SS "uint8_t KineticHMAC::data[\fBKINETIC_HMAC_MAX_LEN\fP]"
 
 .PP
-Definition at line 157 of file kinetic_types\&.h\&.
+Definition at line 86 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

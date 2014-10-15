@@ -1,0 +1,56 @@
+.TH "kinetic_allocator.h" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_allocator.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_types_internal\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "KineticPDU * \fBKineticAllocator_NewPDU\fP (\fBKineticList\fP *const list)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreePDU\fP (\fBKineticList\fP *const list, KineticPDU *pdu)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeAllPDUs\fP (\fBKineticList\fP *const list)"
+.br
+.ti -1c
+.RI "bool \fBKineticAllocator_ValidateAllMemoryFreed\fP (\fBKineticList\fP *const list)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "KineticPDU* KineticAllocator_NewPDU (\fBKineticList\fP *constlist)"
+
+.PP
+Definition at line 181 of file kinetic_allocator\&.c\&.
+.PP
+References KineticAllocator_NewItem(), and LOG\&.
+.SS "void KineticAllocator_FreePDU (\fBKineticList\fP *constlist, KineticPDU *pdu)"
+
+.PP
+Definition at line 194 of file kinetic_allocator\&.c\&.
+.PP
+References KineticAllocator_FreeItem(), and KineticProto__free_unpacked()\&.
+.SS "void KineticAllocator_FreeAllPDUs (\fBKineticList\fP *constlist)"
+
+.PP
+Definition at line 205 of file kinetic_allocator\&.c\&.
+.PP
+References KineticAllocator_FreeList(), KineticProto__free_unpacked(), LOG, and KineticList::start\&.
+.SS "bool KineticAllocator_ValidateAllMemoryFreed (\fBKineticList\fP *constlist)"
+
+.PP
+Definition at line 227 of file kinetic_allocator\&.c\&.
+.PP
+References KineticList::start\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

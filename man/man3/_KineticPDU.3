@@ -1,0 +1,94 @@
+.TH "KineticPDU" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+KineticPDU \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <kinetic_types_internal\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticPDUHeader\fP \fBheader\fP"
+.br
+.ti -1c
+.RI "\fBKineticPDUHeader\fP \fBheaderNBO\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   \fBKineticProto\fP \fBprotoBase\fP"
+.br
+.ti -1c
+.RI "   \fBKineticMessage\fP \fBmessage\fP"
+.br
+.ti -1c
+.RI "} \fBprotoData\fP"
+.br
+.ti -1c
+.RI "\fBKineticProto\fP * \fBproto\fP"
+.br
+.ti -1c
+.RI "bool \fBprotobufDynamicallyExtracted\fP"
+.br
+.ti -1c
+.RI "\fBKineticEntry\fP \fBentry\fP"
+.br
+.ti -1c
+.RI "\fBKineticHMAC\fP \fBhmac\fP"
+.br
+.ti -1c
+.RI "\fBKineticConnection\fP * \fBconnection\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 150 of file kinetic_types_internal\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "\fBKineticPDUHeader\fP KineticPDU::header"
+
+.PP
+Definition at line 152 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticPDUHeader\fP KineticPDU::headerNBO"
+
+.PP
+Definition at line 153 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticProto\fP KineticPDU::protoBase"
+
+.PP
+Definition at line 157 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticMessage\fP KineticPDU::message"
+
+.PP
+Definition at line 158 of file kinetic_types_internal\&.h\&.
+.SS "union { \&.\&.\&. }   KineticPDU::protoData"
+
+.SS "\fBKineticProto\fP* KineticPDU::proto"
+
+.PP
+Definition at line 160 of file kinetic_types_internal\&.h\&.
+.SS "bool KineticPDU::protobufDynamicallyExtracted"
+
+.PP
+Definition at line 161 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticEntry\fP KineticPDU::entry"
+
+.PP
+Definition at line 164 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticHMAC\fP KineticPDU::hmac"
+
+.PP
+Definition at line 167 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticConnection\fP* KineticPDU::connection"
+
+.PP
+Definition at line 170 of file kinetic_types_internal\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

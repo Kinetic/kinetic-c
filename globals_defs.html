@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta-2</span>
+   &#160;<span id="projectnumber">v0.7.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -62,7 +62,8 @@
       <li><a href="#index_h"><span>h</span></a></li>
       <li><a href="#index_k"><span>k</span></a></li>
       <li><a href="#index_l"><span>l</span></a></li>
-      <li class="current"><a href="#index_p"><span>p</span></a></li>
+      <li><a href="#index_p"><span>p</span></a></li>
+      <li class="current"><a href="#index_s"><span>s</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -71,42 +72,23 @@
 
 <h3><a class="anchor" id="index__"></a>- _ -</h3><ul>
 <li>__func__
-: <a class="el" href="kinetic__types_8h.html#a7d6e1cf1a8d53f38471e9e9db3faf740">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a7d6e1cf1a8d53f38471e9e9db3faf740">kinetic_types_internal.h</a>
 </li>
 <li>_BSD_SOURCE
-: <a class="el" href="kinetic__socket_8c.html#ad3d8a3bd0c0b677acef144f2c2ef6d73">kinetic_socket.c</a>
-, <a class="el" href="kinetic__types_8h.html#ad3d8a3bd0c0b677acef144f2c2ef6d73">kinetic_types.h</a>
+: <a class="el" href="kinetic__types_8h.html#ad3d8a3bd0c0b677acef144f2c2ef6d73">kinetic_types.h</a>
+, <a class="el" href="kinetic__socket_8c.html#ad3d8a3bd0c0b677acef144f2c2ef6d73">kinetic_socket.c</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_b"></a>- b -</h3><ul>
-<li>BYTE_ARRAY_CREATE
-: <a class="el" href="kinetic__types_8h.html#ab9683cd4b754c409b4d3c9e2b52e1ad2">kinetic_types.h</a>
-</li>
-<li>BYTE_ARRAY_CREATE_WITH_BUFFER
-: <a class="el" href="kinetic__types_8h.html#ae8416494f157df3824d335b169b4705e">kinetic_types.h</a>
-</li>
-<li>BYTE_ARRAY_CREATE_WITH_DATA
-: <a class="el" href="kinetic__types_8h.html#ac0005d10e0401a14ea734cbab88cf258">kinetic_types.h</a>
-</li>
-<li>BYTE_ARRAY_FILL_WITH_DUMMY_DATA
-: <a class="el" href="kinetic__types_8h.html#a607c451dbf6707500f6fe03a55935394">kinetic_types.h</a>
-</li>
-<li>BYTE_ARRAY_INIT
-: <a class="el" href="kinetic__types_8h.html#a1a80cef8d1ba96d7a8e0bdcd6ca37e58">kinetic_types.h</a>
-</li>
-<li>BYTE_ARRAY_INIT_FROM_CSTRING
-: <a class="el" href="kinetic__types_8h.html#a670876b8b94ff794501137747307f0df">kinetic_types.h</a>
-</li>
-<li>BYTE_ARRAY_INIT_WITH_LEN
-: <a class="el" href="kinetic__types_8h.html#aecf1d52c0c83787245437de8e8e98454">kinetic_types.h</a>
-</li>
 <li>BYTE_ARRAY_NONE
-: <a class="el" href="kinetic__types_8h.html#a284b2fa610ec1be5d86406563d8107ce">kinetic_types.h</a>
+: <a class="el" href="include_2byte__array_8h.html#a284b2fa610ec1be5d86406563d8107ce">include/byte_array.h</a>
+, <a class="el" href="src_2lib_2byte__array_8h.html#a284b2fa610ec1be5d86406563d8107ce">src/lib/byte_array.h</a>
 </li>
-<li>BYTE_BUFFER_INIT
-: <a class="el" href="kinetic__types_8h.html#a9695960e61fe691ab4b6536088064db4">kinetic_types.h</a>
+<li>BYTE_BUFFER_NONE
+: <a class="el" href="include_2byte__array_8h.html#a9da5f8699370d9eb7841f4b13ebb54cb">include/byte_array.h</a>
+, <a class="el" href="src_2lib_2byte__array_8h.html#a9da5f8699370d9eb7841f4b13ebb54cb">src/lib/byte_array.h</a>
 </li>
 <li>BYTES_TO_CSTRING
 : <a class="el" href="kinetic__logger_8c.html#a1f53a109345e468584a1fd3510ed7a20">kinetic_logger.c</a>
@@ -115,8 +97,8 @@
 
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
-<li>CONFIG_FIELD_BYTE_ARRAY
-: <a class="el" href="kinetic__message_8c.html#a8739ecef99201e2b2f486401f783792f">kinetic_message.c</a>
+<li>CONFIG_FIELD_BYTE_BUFFER
+: <a class="el" href="kinetic__message_8c.html#a880c65867677a47bb31aafbdef780554">kinetic_message.c</a>
 </li>
 </ul>
 
@@ -130,7 +112,10 @@
 
 <h3><a class="anchor" id="index_k"></a>- k -</h3><ul>
 <li>KINETIC_CONNECTION_INIT
-: <a class="el" href="kinetic__types_8h.html#a7e1eaf5908eceee5e98f0f399fc43e8d">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a529fe75e17c8366353a843ca5cce2a04">kinetic_types_internal.h</a>
+</li>
+<li>KINETIC_HANDLE_INVALID
+: <a class="el" href="kinetic__types_8h.html#a2519b60015d5c8d2c1d68d173a0469f1">kinetic_types.h</a>
 </li>
 <li>KINETIC_HMAC_MAX_LEN
 : <a class="el" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">kinetic_types.h</a>
@@ -144,23 +129,32 @@
 <li>KINETIC_MAX_KEY_LEN
 : <a class="el" href="kinetic__types_8h.html#a7f225a5911212081b2f7c8d9c4b81c90">kinetic_types.h</a>
 </li>
+<li>KINETIC_MAX_VERSION_LEN
+: <a class="el" href="kinetic__types_8h.html#a5e316ff158aa7dc9efd6aa06b40c63d9">kinetic_types.h</a>
+</li>
 <li>KINETIC_MESSAGE_HEADER_INIT
-: <a class="el" href="kinetic__types_8h.html#a8b294889cc0f006c00b54ec528933988">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a8b294889cc0f006c00b54ec528933988">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_MESSAGE_INIT
-: <a class="el" href="kinetic__types_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_OPERATION_INIT
-: <a class="el" href="kinetic__types_8h.html#aea7521ddc30f84e971ec31ede1ef527a">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a7c5a07c3343ea1a9cb5a63947c064a16">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_PDU_HEADER_INIT
-: <a class="el" href="kinetic__types_8h.html#aadb3b50142303f07107c0dccd980d2cd">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#aadb3b50142303f07107c0dccd980d2cd">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_PDU_INIT
-: <a class="el" href="kinetic__types_8h.html#a6dcbf11d2ca311f7edff940de2bab28b">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a6dcbf11d2ca311f7edff940de2bab28b">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_PDU_INIT_WITH_MESSAGE
-: <a class="el" href="kinetic__types_8h.html#a75f768b35723de9834d28d6c229503d4">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a75f768b35723de9834d28d6c229503d4">kinetic_types_internal.h</a>
+</li>
+<li>KINETIC_PDUS_PER_SESSION_DEFAULT
+: <a class="el" href="kinetic__types__internal_8h.html#adeb11d8b4d0e22c34b6f90999f36be5f">kinetic_types_internal.h</a>
+</li>
+<li>KINETIC_PDUS_PER_SESSION_MAX
+: <a class="el" href="kinetic__types__internal_8h.html#ab0f8fc24ffa4ae321be3b3cf5c6ee528">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_PORT
 : <a class="el" href="kinetic__types_8h.html#add9d47513f5472c08a593999978f8018">kinetic_types.h</a>
@@ -234,6 +228,15 @@
 <li>KINETIC_PROTO_STATUS__INIT
 : <a class="el" href="kinetic__proto_8h.html#af8f7ef8bfac868f72aca3b210f3f0058">kinetic_proto.h</a>
 </li>
+<li>KINETIC_SESSION_INIT
+: <a class="el" href="kinetic__types_8h.html#a2f0f476362d01ca4c7899cf1325c72e6">kinetic_types.h</a>
+</li>
+<li>KINETIC_SESSIONS_MAX
+: <a class="el" href="kinetic__types__internal_8h.html#a7d725a2545f43f46932801f583149e2a">kinetic_types_internal.h</a>
+</li>
+<li>KINETIC_SOCKET_DESCRIPTOR_INVALID
+: <a class="el" href="kinetic__types__internal_8h.html#a0bc19e020524d33828e824c007525fcd">kinetic_types_internal.h</a>
+</li>
 <li>KINETIC_TLS_PORT
 : <a class="el" href="kinetic__types_8h.html#a43b41ecab84ae37ab03051451c0aedc9">kinetic_types.h</a>
 </li>
@@ -243,6 +246,9 @@
 <h3><a class="anchor" id="index_l"></a>- l -</h3><ul>
 <li>LOG
 : <a class="el" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">kinetic_logger.h</a>
+</li>
+<li>LOG_FILE_NAME_MAX
+: <a class="el" href="kinetic__types_8h.html#acae020d3fbf250dee3e33035c261ab9e">kinetic_types.h</a>
 </li>
 <li>LOG_LOCATION
 : <a class="el" href="kinetic__logger_8h.html#ad7b252887c17c035e5591c68848cce61">kinetic_logger.h</a>
@@ -264,22 +270,29 @@
 
 <h3><a class="anchor" id="index_p"></a>- p -</h3><ul>
 <li>PDU_HEADER_LEN
-: <a class="el" href="kinetic__types_8h.html#a5e8c36eaf4eeb49cfcecb646ffecbb0c">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a5e8c36eaf4eeb49cfcecb646ffecbb0c">kinetic_types_internal.h</a>
 </li>
 <li>PDU_MAX_LEN
-: <a class="el" href="kinetic__types_8h.html#a7324ffb3ec713d1ec9f1b0b24d8a3977">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a7324ffb3ec713d1ec9f1b0b24d8a3977">kinetic_types_internal.h</a>
 </li>
 <li>PDU_PROTO_MAX_LEN
-: <a class="el" href="kinetic__types_8h.html#abf66a0acd5490ccc5c651a8767d4024d">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#abf66a0acd5490ccc5c651a8767d4024d">kinetic_types_internal.h</a>
 </li>
 <li>PDU_PROTO_MAX_UNPACKED_LEN
-: <a class="el" href="kinetic__types_8h.html#a26291b5b35c086465b3ce6a1cc3bc734">kinetic_types.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a26291b5b35c086465b3ce6a1cc3bc734">kinetic_types_internal.h</a>
 </li>
 <li>PDU_VALUE_MAX_LEN
 : <a class="el" href="kinetic__types_8h.html#ace420af0e9ec78ad303b9a5d6ac4af1d">kinetic_types.h</a>
 </li>
 <li>PROTOBUF_C__NO_DEPRECATED
 : <a class="el" href="kinetic__proto_8c.html#ad9480935c25b5155174487b631af52f5">kinetic_proto.c</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
+<li>STATIC
+: <a class="el" href="kinetic__types__internal_8h.html#a10b2d890d871e1489bb02b7e70d9bdfb">kinetic_types_internal.h</a>
 </li>
 </ul>
 </div><!-- contents -->

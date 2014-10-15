@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.6.0-beta-2</span>
+   &#160;<span id="projectnumber">v0.7.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -45,7 +45,7 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d729c10c892d40b7e80e1d956ac94d74.html">src</a></li><li class="navelem"><a class="el" href="dir_9c7fb1738cdff91c352cb4ea706321d8.html">utility</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_0619a8f54b4fad7043a6de45be8fde0b.html">utility</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -55,25 +55,194 @@
 <div class="title">main.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
-<code>#include &lt;string.h&gt;</code><br />
-<code>#include &lt;stdlib.h&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="kinetic__client_8h_source.html">kinetic_client.h</a>&quot;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;getopt.h&gt;</code><br />
-<code>#include &lt;stdbool.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__client_8h_source.html">kinetic_client.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="noop_8h_source.html">examples/noop.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="put_8h_source.html">examples/put.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="get_8h_source.html">examples/get.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="delete_8h_source.html">examples/delete.h</a>&quot;</code><br />
 </div>
 <p><a href="main_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:afeaf83d086efeeca4fc1c2d55f8b2215"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#afeaf83d086efeeca4fc1c2d55f8b2215">ParseOptions</a> (const int argc, char **const argv, <a class="el" href="struct_kinetic_session.html">KineticSession</a> *config, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *entry)</td></tr>
+<tr class="separator:afeaf83d086efeeca4fc1c2d55f8b2215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9ece4b89d458109e7982e0d61bdf755"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#af9ece4b89d458109e7982e0d61bdf755">ExecuteOperation</a> (const char *op, <a class="el" href="kinetic__types_8h.html#af2747d5f7954601329c11b58757764b9">KineticSessionHandle</a> sessionHandle, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *entry)</td></tr>
+<tr class="separator:af9ece4b89d458109e7982e0d61bdf755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accc58a0ccb27ada497745be3318ed246"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#accc58a0ccb27ada497745be3318ed246">ConfigureEntry</a> (<a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *entry, const char *key, const char *tag, const char *version, <a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09">KineticAlgorithm</a> algorithm, const char *value)</td></tr>
+<tr class="separator:accc58a0ccb27ada497745be3318ed246"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76f5e276822a796ac108bc8a8e8bd698"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a76f5e276822a796ac108bc8a8e8bd698">ReportOperationConfiguration</a> (const char *operation, <a class="el" href="struct_kinetic_session.html">KineticSession</a> *config, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *entry)</td></tr>
+<tr class="separator:a76f5e276822a796ac108bc8a8e8bd698"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="afeaf83d086efeeca4fc1c2d55f8b2215"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ParseOptions </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **const&#160;</td>
+          <td class="paramname"><em>argv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> *&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *&#160;</td>
+          <td class="paramname"><em>entry</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00196">196</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8c_source.html#l00005">ByteArray_Create()</a>, <a class="el" href="main_8c_source.html#l00142">ConfigureEntry()</a>, <a class="el" href="kinetic__types_8h_source.html#l00096">KineticSession::host</a>, <a class="el" href="kinetic__types_8h_source.html#l00055">HOST_NAME_MAX</a>, <a class="el" href="kinetic__types_8h_source.html#l00159">KineticEntry::key</a>, <a class="el" href="kinetic__types_8h_source.html#l00066">KINETIC_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__types_8h_source.html#l00043">KINETIC_MAX_KEY_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_PORT</a>, <a class="el" href="kinetic__types_8h_source.html#l00040">KINETIC_TLS_PORT</a>, and <a class="el" href="kinetic__types_8h_source.html#l00099">KineticSession::port</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af9ece4b89d458109e7982e0d61bdf755"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> ExecuteOperation </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>op</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#af2747d5f7954601329c11b58757764b9">KineticSessionHandle</a>&#160;</td>
+          <td class="paramname"><em>sessionHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *&#160;</td>
+          <td class="paramname"><em>entry</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00089">89</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8c_source.html#l00051">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00133">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00135">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00250">KineticClient_Delete()</a>, <a class="el" href="kinetic__client_8c_source.html#l00211">KineticClient_Get()</a>, <a class="el" href="kinetic__client_8c_source.html#l00160">KineticClient_NoOp()</a>, and <a class="el" href="kinetic__client_8c_source.html#l00181">KineticClient_Put()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="accc58a0ccb27ada497745be3318ed246"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ConfigureEntry </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *&#160;</td>
+          <td class="paramname"><em>entry</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>version</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09">KineticAlgorithm</a>&#160;</td>
+          <td class="paramname"><em>algorithm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00142">142</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8c_source.html#l00104">ByteBuffer_AppendCString()</a>, <a class="el" href="byte__array_8c_source.html#l00042">ByteBuffer_Create()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00159">KineticEntry::key</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a76f5e276822a796ac108bc8a8e8bd698"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ReportOperationConfiguration </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>operation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> *&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *&#160;</td>
+          <td class="paramname"><em>entry</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="main_8c_source.html#l00171">171</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+
+<p>References <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="kinetic__types_8h_source.html#l00107">KineticSession::clusterVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00096">KineticSession::host</a>, <a class="el" href="kinetic__types_8h_source.html#l00112">KineticSession::identity</a>, <a class="el" href="kinetic__types_8h_source.html#l00159">KineticEntry::key</a>, <a class="el" href="kinetic__types_8h_source.html#l00102">KineticSession::nonBlocking</a>, <a class="el" href="kinetic__types_8h_source.html#l00099">KineticSession::port</a>, and <a class="el" href="kinetic__types_8h_source.html#l00167">KineticEntry::value</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3c04138a5bfe5d72780bb7e82a18e627"></a>
 <div class="memitem">
 <div class="memproto">
@@ -98,9 +267,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="main_8c_source.html#l00049">49</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p>Definition at line <a class="el" href="main_8c_source.html#l00060">60</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00082">BYTE_ARRAY_INIT_FROM_CSTRING</a>, <a class="el" href="kinetic__types_8h_source.html#l00070">BYTE_ARRAY_NONE</a>, <a class="el" href="delete_8c_source.html#l00025">Delete()</a>, <a class="el" href="get_8c_source.html#l00025">Get()</a>, <a class="el" href="kinetic__types_8h_source.html#l00225">KineticKeyValue::key</a>, <a class="el" href="kinetic__types_8h_source.html#l00040">KINETIC_PORT</a>, <a class="el" href="kinetic__proto_8h_source.html#l00125">KINETIC_PROTO_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__proto_8h_source.html#l00078">KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00041">KINETIC_TLS_PORT</a>, <a class="el" href="noop_8c_source.html#l00025">NoOp()</a>, and <a class="el" href="put_8c_source.html#l00025">Put()</a>.</p>
+<p>References <a class="el" href="main_8c_source.html#l00089">ExecuteOperation()</a>, <a class="el" href="kinetic__types_8h_source.html#l00096">KineticSession::host</a>, <a class="el" href="kinetic__types_8c_source.html#l00051">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00135">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00089">KineticClient_Connect()</a>, <a class="el" href="kinetic__client_8c_source.html#l00136">KineticClient_Disconnect()</a>, <a class="el" href="main_8c_source.html#l00196">ParseOptions()</a>, <a class="el" href="kinetic__types_8h_source.html#l00099">KineticSession::port</a>, and <a class="el" href="main_8c_source.html#l00171">ReportOperationConfiguration()</a>.</p>
 
 </div>
 </div>

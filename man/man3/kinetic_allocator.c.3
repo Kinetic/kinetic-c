@@ -1,0 +1,102 @@
+.TH "kinetic_allocator.c" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_allocator.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_allocator\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void * \fBKineticAllocator_NewItem\fP (\fBKineticList\fP *const list, size_t size)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeItem\fP (\fBKineticList\fP *const list, void *item)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeList\fP (\fBKineticList\fP *const list)"
+.br
+.ti -1c
+.RI "KineticPDU * \fBKineticAllocator_NewPDU\fP (\fBKineticList\fP *const list)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreePDU\fP (\fBKineticList\fP *const list, KineticPDU *pdu)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeAllPDUs\fP (\fBKineticList\fP *const list)"
+.br
+.ti -1c
+.RI "bool \fBKineticAllocator_ValidateAllMemoryFreed\fP (\fBKineticList\fP *const list)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "pthread_mutex_t \fB_global_pdu_lists_mutex\fP = PTHREAD_MUTEX_INITIALIZER"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void* KineticAllocator_NewItem (\fBKineticList\fP *constlist, size_tsize)"
+
+.PP
+Definition at line 42 of file kinetic_allocator\&.c\&.
+.PP
+References KineticList::last, LOG, and KineticList::start\&.
+.SS "void KineticAllocator_FreeItem (\fBKineticList\fP *constlist, void *item)"
+
+.PP
+Definition at line 71 of file kinetic_allocator\&.c\&.
+.PP
+References KineticList::last, LOG, and KineticList::start\&.
+.SS "void KineticAllocator_FreeList (\fBKineticList\fP *constlist)"
+
+.PP
+Definition at line 136 of file kinetic_allocator\&.c\&.
+.PP
+References LOG, and KineticList::start\&.
+.SS "KineticPDU* KineticAllocator_NewPDU (\fBKineticList\fP *constlist)"
+
+.PP
+Definition at line 181 of file kinetic_allocator\&.c\&.
+.PP
+References KineticAllocator_NewItem(), and LOG\&.
+.SS "void KineticAllocator_FreePDU (\fBKineticList\fP *constlist, KineticPDU *pdu)"
+
+.PP
+Definition at line 194 of file kinetic_allocator\&.c\&.
+.PP
+References KineticAllocator_FreeItem(), and KineticProto__free_unpacked()\&.
+.SS "void KineticAllocator_FreeAllPDUs (\fBKineticList\fP *constlist)"
+
+.PP
+Definition at line 205 of file kinetic_allocator\&.c\&.
+.PP
+References KineticAllocator_FreeList(), KineticProto__free_unpacked(), LOG, and KineticList::start\&.
+.SS "bool KineticAllocator_ValidateAllMemoryFreed (\fBKineticList\fP *constlist)"
+
+.PP
+Definition at line 227 of file kinetic_allocator\&.c\&.
+.PP
+References KineticList::start\&.
+.SH "Variable Documentation"
+.PP 
+.SS "pthread_mutex_t _global_pdu_lists_mutex = PTHREAD_MUTEX_INITIALIZER"
+
+.PP
+Definition at line 26 of file kinetic_allocator\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

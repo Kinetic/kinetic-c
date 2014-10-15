@@ -1,4 +1,4 @@
-.TH "kinetic_message.h" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_message.h" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,7 +18,7 @@ kinetic_message.h \-
 .RI "void \fBKineticMessage_Init\fP (\fBKineticMessage\fP *const message)"
 .br
 .ti -1c
-.RI "void \fBKineticMessage_ConfigureKeyValue\fP (\fBKineticMessage\fP *const message, const \fBKineticKeyValue\fP *metadata)"
+.RI "void \fBKineticMessage_ConfigureKeyValue\fP (\fBKineticMessage\fP *const message, const \fBKineticEntry\fP *entry)"
 .br
 .in -1c
 .SH "Function Documentation"
@@ -26,15 +26,15 @@ kinetic_message.h \-
 .SS "void KineticMessage_Init (\fBKineticMessage\fP *constmessage)"
 
 .PP
-Definition at line 23 of file kinetic_message\&.c\&.
+Definition at line 24 of file kinetic_message\&.c\&.
 .PP
 References KINETIC_MESSAGE_INIT\&.
-.SS "void KineticMessage_ConfigureKeyValue (\fBKineticMessage\fP *constmessage, const \fBKineticKeyValue\fP *metadata)"
+.SS "void KineticMessage_ConfigureKeyValue (\fBKineticMessage\fP *constmessage, const \fBKineticEntry\fP *entry)"
 
 .PP
-Definition at line 42 of file kinetic_message\&.c\&.
+Definition at line 45 of file kinetic_message\&.c\&.
 .PP
-References KineticKeyValue::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_ARRAY, KineticMessage::keyValue, KineticKeyValue::metadataOnly, and KineticMessage::proto\&.
+References KineticEntry::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_BUFFER, KineticEntry::force, KineticMessage::keyValue, KineticProto_Algorithm_from_KineticAlgorithm(), KineticProto_Synchronization_from_KineticSynchronization(), KineticEntry::metadataOnly, KineticMessage::proto, and KineticEntry::synchronization\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.

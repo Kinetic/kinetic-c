@@ -1,0 +1,153 @@
+.TH "byte_array.h" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+byte_array.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include <stddef\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBByteArray\fP"
+.br
+.RI "\fIStructure for handling generic arrays of bytes\&. \fP"
+.ti -1c
+.RI "struct \fBByteBuffer\fP"
+.br
+.RI "\fIStructure for an embedded \fBByteArray\fP as a buffer\&. \fP"
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBYTE_ARRAY_NONE\fP   (\fBByteArray\fP){\&.len = 0, \&.data = NULL}"
+.br
+.RI "\fIConvenience macro to represent an empty array with no data\&. \fP"
+.ti -1c
+.RI "#define \fBBYTE_BUFFER_NONE\fP   (\fBByteBuffer\fP){\&.array = \fBBYTE_ARRAY_NONE\fP, \&.bytesUsed = 0}"
+.br
+.RI "\fIConvenience macro to represent an empty buffer with no data\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBByteArray\fP \fBByteArray_Create\fP (void *data, size_t len)"
+.br
+.ti -1c
+.RI "\fBByteArray\fP \fBByteArray_CreateWithCString\fP (char *str)"
+.br
+.ti -1c
+.RI "void \fBByteArray_FillWithDummyData\fP (const \fBByteArray\fP array)"
+.br
+.ti -1c
+.RI "\fBByteArray\fP \fBByteArray_GetSlice\fP (const \fBByteArray\fP array, size_t start, size_t len)"
+.br
+.ti -1c
+.RI "\fBByteBuffer\fP \fBByteBuffer_Create\fP (void *data, size_t max_len)"
+.br
+.ti -1c
+.RI "\fBByteBuffer\fP \fBByteBuffer_CreateWithArray\fP (\fBByteArray\fP array)"
+.br
+.ti -1c
+.RI "void \fBByteBuffer_Reset\fP (\fBByteBuffer\fP *buffer)"
+.br
+.ti -1c
+.RI "long \fBByteBuffer_BytesRemaining\fP (const \fBByteBuffer\fP buffer)"
+.br
+.ti -1c
+.RI "\fBByteArray\fP \fBByteBuffer_Consume\fP (\fBByteBuffer\fP *buffer, size_t len)"
+.br
+.ti -1c
+.RI "bool \fBByteBuffer_Append\fP (\fBByteBuffer\fP *buffer, const void *data, size_t len)"
+.br
+.ti -1c
+.RI "bool \fBByteBuffer_AppendArray\fP (\fBByteBuffer\fP *buffer, const \fBByteArray\fP array)"
+.br
+.ti -1c
+.RI "bool \fBByteBuffer_AppendCString\fP (\fBByteBuffer\fP *buffer, const char *data)"
+.br
+.ti -1c
+.RI "bool \fBByteBuffer_AppendDummyData\fP (\fBByteBuffer\fP *buffer, size_t len)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define BYTE_ARRAY_NONE   (\fBByteArray\fP){\&.len = 0, \&.data = NULL}"
+
+.PP
+Convenience macro to represent an empty array with no data\&. 
+.PP
+Definition at line 21 of file include/byte_array\&.h\&.
+.SS "#define BYTE_BUFFER_NONE   (\fBByteBuffer\fP){\&.array = \fBBYTE_ARRAY_NONE\fP, \&.bytesUsed = 0}"
+
+.PP
+Convenience macro to represent an empty buffer with no data\&. 
+.PP
+Definition at line 40 of file include/byte_array\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "\fBByteArray\fP ByteArray_Create (void *data, size_tlen)"
+
+.PP
+Definition at line 5 of file byte_array\&.c\&.
+.SS "\fBByteArray\fP ByteArray_CreateWithCString (char *str)"
+
+.PP
+Definition at line 12 of file byte_array\&.c\&.
+.SS "void ByteArray_FillWithDummyData (const \fBByteArray\fParray)"
+
+.PP
+Definition at line 19 of file byte_array\&.c\&.
+.SS "\fBByteArray\fP ByteArray_GetSlice (const \fBByteArray\fParray, size_tstart, size_tlen)"
+
+.PP
+Definition at line 26 of file byte_array\&.c\&.
+.SS "\fBByteBuffer\fP ByteBuffer_Create (void *data, size_tmax_len)"
+
+.PP
+Definition at line 42 of file byte_array\&.c\&.
+.SS "\fBByteBuffer\fP ByteBuffer_CreateWithArray (\fBByteArray\fParray)"
+
+.PP
+Definition at line 50 of file byte_array\&.c\&.
+.SS "void ByteBuffer_Reset (\fBByteBuffer\fP *buffer)"
+
+.PP
+Definition at line 36 of file byte_array\&.c\&.
+.SS "long ByteBuffer_BytesRemaining (const \fBByteBuffer\fPbuffer)"
+
+.PP
+Definition at line 57 of file byte_array\&.c\&.
+.SS "\fBByteArray\fP ByteBuffer_Consume (\fBByteBuffer\fP *buffer, size_tlen)"
+
+.PP
+Definition at line 63 of file byte_array\&.c\&.
+.SS "bool ByteBuffer_Append (\fBByteBuffer\fP *buffer, const void *data, size_tlen)"
+
+.PP
+Definition at line 78 of file byte_array\&.c\&.
+.SS "bool ByteBuffer_AppendArray (\fBByteBuffer\fP *buffer, const \fBByteArray\fParray)"
+
+.PP
+Definition at line 91 of file byte_array\&.c\&.
+.SS "bool ByteBuffer_AppendCString (\fBByteBuffer\fP *buffer, const char *data)"
+
+.PP
+Definition at line 104 of file byte_array\&.c\&.
+.SS "bool ByteBuffer_AppendDummyData (\fBByteBuffer\fP *buffer, size_tlen)"
+
+.PP
+Definition at line 118 of file byte_array\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for protobuf-c from the source code\&.

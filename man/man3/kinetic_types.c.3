@@ -1,4 +1,4 @@
-.TH "kinetic_types.c" 3 "Thu Sep 11 2014" "Version v0.6.0-beta-2" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_types.c" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,41 +6,26 @@ kinetic_types.c \-
 .SH SYNOPSIS
 .br
 .PP
+\fC#include 'kinetic_types_internal\&.h'\fP
+.br
 \fC#include 'kinetic_types\&.h'\fP
 .br
 
-.SS "Variables"
+.SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "const char * \fBKineticStatusDescriptor\fP []"
-.br
-.ti -1c
-.RI "const int \fBKineticStatusDescriptorCount\fP = sizeof(\fBKineticStatusDescriptor\fP)/sizeof(char*)"
+.RI "const char * \fBKinetic_GetStatusDescription\fP (\fBKineticStatus\fP status)"
 .br
 .in -1c
-.SH "Variable Documentation"
+.SH "Function Documentation"
 .PP 
-.SS "const char* KineticStatusDescriptor[]"
-\fBInitial value:\fP
-.PP
-.nf
-= {
-    "SUCCESS",
-    "DEVICE_BUSY",
-    "CONNECTION_ERROR",
-    "INVALID_REQUEST",
-    "OPERATION_FAILED",
-    "VERSION_FAILURE",
-    "DATA_ERROR",
-}
-.fi
-.PP
-Definition at line 4 of file kinetic_types\&.c\&.
-.SS "const int KineticStatusDescriptorCount = sizeof(\fBKineticStatusDescriptor\fP)/sizeof(char*)"
+.SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
 
 .PP
-Definition at line 14 of file kinetic_types\&.c\&.
+Definition at line 51 of file kinetic_types\&.c\&.
+.PP
+References KINETIC_STATUS_COUNT\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for protobuf-c from the source code\&.
