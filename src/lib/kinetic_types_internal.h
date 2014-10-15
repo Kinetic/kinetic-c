@@ -153,6 +153,7 @@ typedef struct _KineticMessage {
     KineticProto_command_status__init(&(msg)->status); \
     KineticProto_command_body__init(&(msg)->body); \
     KineticProto_command_key_value__init(&(msg)->keyValue); \
+    KineticProto_command_range__init(&(msg)->keyRange); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
     (msg)->has_command = false; \
 }

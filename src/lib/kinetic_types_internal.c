@@ -303,15 +303,12 @@ bool Copy_KineticProto_Command_Range_to_buffer_list(
     int64_t max_keys)
 {
     bool bufferOverflow = false;
-    LOGF("HERE: keyRange=0x%0llX, keys=0x%0llX, max_keys=%lld", keyRange, keys, max_keys);
+    LOGF("Copying: keyRange=0x%0llX, keys=0x%0llX, max_keys=%lld", keyRange, keys, max_keys);
     if (keyRange != NULL && keys != NULL && max_keys > 0) {
-        LOG("THERE");
         for (size_t i = 0; i < MIN((size_t)max_keys, (size_t)keyRange->n_keys); i++) {
             ByteBuffer_Reset(&keys[i]);
-            LOGF("EVERYWHERE key[%llu]: actual data=0x%0llX, actual len=%zu, buff len=%zu, buff data=0x%0llX buff used=%zu",
-                i, keyRange->keys[i].data, keyRange->keys[i].len, keys[i].array.len, keys[i].array.data, keys[i].bytesUsed);
             if (ByteBuffer_Append(&keys[i], keyRange->keys[i].data, keyRange->keys[i].len) == NULL) {
-                LOG(" BUFFER_OVERRUN: keyRange");
+                LOGF(" BUFFER_OVERRUN: keyRange[%zd]", i);
                 bufferOverflow = true;
             }
         }

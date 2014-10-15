@@ -66,6 +66,7 @@ void KineticLogger_Log(const char* message)
     }
     zlogf(message);
     zlogf("\n");
+    zlog_flush_buffer();
 }
 
 void KineticLogger_LogPrintf(const char* format, ...)
@@ -80,6 +81,7 @@ void KineticLogger_LogPrintf(const char* format, ...)
     va_end(arg_ptr);
     strcat(buffer, "\n");
     zlogf(buffer);
+    zlog_flush_buffer();
 }
 
 void KineticLogger_LogLocation(char* filename, int line, char const * format, ...)
@@ -89,6 +91,7 @@ void KineticLogger_LogLocation(char* filename, int line, char const * format, ..
         va_start(arg_ptr, format);
         zlogf("[@%s:%d] %s\n", filename, line, format, arg_ptr);
         va_end(arg_ptr);
+        zlog_flush_buffer();
     }
 }
 
@@ -160,6 +163,11 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
     KineticLogger_ByteArraySliceToCString((char*)(_buf_start), key, 0, key.len); \
 }
 
+// #define Proto_LogBinaryDataOptional(el, attr)
+// if ((el)->has_##(attr)) {
+//     KineticLogger_LogByteArray(#attr, (el)->(attr));
+// }
+
 void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
 {
     if (LogLevel < 0) {
@@ -208,13 +216,10 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
         }
     }
 
-
     if (msg->has_commandBytes
       && msg->commandBytes.data != NULL
       && msg->commandBytes.len > 0) {
-        
         LOG_PROTO_LEVEL_START("commandBytes");
-
         KineticProto_Command* cmd = KineticProto_command__unpack(NULL, msg->commandBytes.len, msg->commandBytes.data);
 
         if (cmd->header) {
@@ -251,9 +256,10 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
                          cmd->header->earlyExit ? _str_true : _str_false);
                 }
                 if (cmd->header->has_priority) {
-                    const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                                         &KineticProto_command_priority__descriptor,
-                                                         cmd->header->messageType);
+                    const ProtobufCEnumValue* eVal = 
+                        protobuf_c_enum_descriptor_get_value(
+                            &KineticProto_command_priority__descriptor,
+                            cmd->header->messageType);
                     LOGF("%spriority: %s", _indent, eVal->name);
                 }
                 if (cmd->header->has_TimeQuanta) {
@@ -314,6 +320,58 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
                                                                  cmd->body->keyValue->synchronization);
                             LOGF("%ssynchronization: %s", _indent, eVal->name);
                         }
+                    }
+                    LOG_PROTO_LEVEL_END();
+                }
+
+                if (cmd->body->range) {
+                    LOG_PROTO_LEVEL_START("keyRange");
+                    {
+                        if (cmd->body->range->has_startKey) {
+                            BYTES_TO_CSTRING(tmpBuf,
+                                             cmd->body->range->startKey,
+                                             0, cmd->body->range->startKey.len);
+                            LOGF("%sstartKey: '%s'", _indent, tmpBuf);
+                        }
+
+                        if (cmd->body->range->has_endKey) {
+                            BYTES_TO_CSTRING(tmpBuf,
+                                             cmd->body->range->endKey,
+                                             0, cmd->body->range->endKey.len);
+                            LOGF("%sendKey:   '%s'", _indent, tmpBuf);
+                        }
+
+                        // protobuf_c_boolean has_startKeyInclusive;
+                        // protobuf_c_boolean startKeyInclusive;
+
+                        // protobuf_c_boolean has_endKeyInclusive;
+                        // protobuf_c_boolean endKeyInclusive;
+
+                        // protobuf_c_boolean has_maxReturned;
+                        // int32_t maxReturned;
+
+                        // protobuf_c_boolean has_reverse;
+                        // protobuf_c_boolean reverse;
+
+                        // size_t n_keys;
+                        // ProtobufCBinaryData* keys;
+
+                        if (cmd->body->range->n_keys == 0
+                          || cmd->body->range->keys == NULL) {
+                            LOGF("%s[empty]", _indent);
+                        }
+                        else {
+                            LOGF("%s%d keys", _indent, cmd->body->range->n_keys);
+                            for (unsigned int i = 0; i < cmd->body->range->n_keys; i++) {
+                                BYTES_TO_CSTRING(tmpBuf,
+                                                 cmd->body->range->keys[i],
+                                                 0, cmd->body->range->keys[i].len);
+                                LOGF("%skeys[%d]: '%s'", _indent, i, tmpBuf);
+                            }
+                        } 
+
+                        // if (cmd->body->keyValue->has_key) {
+                        // }
                     }
                     LOG_PROTO_LEVEL_END();
                 }

@@ -59,7 +59,7 @@ struct kinetic_thread_arg {
 
 void setUp()
 {
-    KineticClient_Init(NULL);
+    KineticClient_Init("stdout");
 }
 
 void tearDown()
@@ -127,16 +127,16 @@ void* kinetic_put(void* kinetic_arg)
 
     // Configure GetKeyRange request
     const int maxKeys = 5;
-    // char startKey[] = "";
-    // char endKey[] = "";
-    // KineticKeyRange keyRange = {
-    //     .startKey = ByteBuffer_Create(),
-    //     .endKey,
-    //     .startKeyInclusive = true,
-    //     .endKeyInclusive = true,
-    //     .maxReturned = maxKeys,
-    //     .reverse = false,
-    // };
+    char startKey[] = "pre_0000_";
+    char endKey[] = "pre_0000_03";
+    KineticKeyRange keyRange = {
+        .startKey = ByteBuffer_Create(startKey, strlen(startKey), strlen(startKey)),
+        .endKey = ByteBuffer_Create(endKey, strlen(endKey), strlen(endKey)),
+        .startKeyInclusive = true,
+        .endKeyInclusive = true,
+        .maxReturned = maxKeys,
+        .reverse = false,
+    };
 
     uint8_t keysData[maxKeys][KINETIC_MAX_KEY_LEN];
     ByteBuffer keys[maxKeys];
@@ -144,8 +144,17 @@ void* kinetic_put(void* kinetic_arg)
         keys[i] = ByteBuffer_Create(&keysData[i], sizeof(keysData[i]), 0);
     }
 
-    // KineticStatus KineticClient_GetKeyRange(arg->sessionHandle,
-    //     keyRange, keys, maxKeys);
+    KineticStatus status = KineticClient_GetKeyRange(arg->sessionHandle,
+        &keyRange, keys, maxKeys);
+    LOGF("GetKeyRange completed w/ status: %s", Kinetic_GetStatusDescription(status));
+    int numKeys = 0;
+    for (int i = 0; i < maxKeys; i++) {
+        if (keys[i].bytesUsed > 0) {
+            KineticLogger_LogByteBuffer("key", keys[i]);
+            numKeys++;
+        }
+    }
+    TEST_ASSERT_EQUAL(4, numKeys);
 
     return (void*)0;
 }
@@ -153,7 +162,7 @@ void* kinetic_put(void* kinetic_arg)
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
 {
     const int maxIterations = 2;
-    const int numCopiesToStore = 4;
+    const int numCopiesToStore = 3;
     const KineticSession sessionConfig = {
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
@@ -186,8 +195,10 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
         for (int i = 0; i < numCopiesToStore; i++) {
 
-            printf("    Overlapped PUT operations (writing copy %d of %d) on IP (iteration %d of %d):%s\n",
-                   i + 1, numCopiesToStore, iteration + 1, maxIterations, sessionConfig.host);
+            printf("    Overlapped PUT operations (writing copy %d of %d)"
+                   " on IP (iteration %d of %d):%s\n",
+                   i + 1, numCopiesToStore, iteration + 1,
+                   maxIterations, sessionConfig.host);
 
             // Establish connection
             TEST_ASSERT_EQUAL_KineticStatus(
@@ -242,7 +253,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         free(buf);
 
         printf("  Iteration complete!\n");
-        // sleep(2);
     }
 
     printf("Overlapped PUT operation test complete!\n");

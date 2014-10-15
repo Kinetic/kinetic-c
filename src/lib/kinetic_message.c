@@ -100,18 +100,24 @@ void KineticMessage_ConfigureKeyRange(KineticMessage* const message,
     message->command.body->range = &message->keyRange;
 
     // Populate startKey, if supplied
-    message->command.body->range->startKey = (ProtobufCBinaryData) {
-        .data = range->startKey.array.data,
-        .len = range->startKey.bytesUsed,
-    };
-    message->command.body->range->has_startKey = true;
+    message->command.body->range->has_startKey = 
+        (range->startKey.array.data != NULL);
+    if (message->command.body->range->has_startKey) {
+        message->command.body->range->startKey = (ProtobufCBinaryData) {
+            .data = range->startKey.array.data,
+            .len = range->startKey.bytesUsed,
+        };
+    }
 
     // Populate endKey, if supplied
-    message->command.body->range->endKey = (ProtobufCBinaryData) {
-        .data = range->endKey.array.data,
-        .len = range->endKey.bytesUsed,
-    };
-    message->command.body->range->has_endKey = true;
+    message->command.body->range->has_endKey = 
+        (range->endKey.array.data != NULL);
+    if (message->command.body->range->has_endKey) {
+        message->command.body->range->endKey = (ProtobufCBinaryData) {
+            .data = range->endKey.array.data,
+            .len = range->endKey.bytesUsed,
+        };
+    }
 
     // Populate start/end key inclusive flags, if specified
     if (range->startKeyInclusive) {

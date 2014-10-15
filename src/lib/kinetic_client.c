@@ -323,7 +323,9 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 //   }
 // }
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
-                                        KineticKeyRange* range, ByteBuffer keys[], int max_keys)
+                                        KineticKeyRange* range,
+                                        ByteBuffer keys[],
+                                        int max_keys)
 {
     assert(handle != KINETIC_HANDLE_INVALID);
     assert(range != NULL);
