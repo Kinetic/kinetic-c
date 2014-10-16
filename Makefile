@@ -21,6 +21,9 @@ LDFLAGS += -lm -l crypto -l ssl
 
 PROJECT = kinetic-c-client
 
+PREFIX ?= /usr/local
+LIBDIR ?= /lib
+
 LIB_DIR = ./src/lib
 VENDOR = ./vendor
 PROTOBUFC = $(VENDOR)/protobuf-c
@@ -103,7 +106,6 @@ $(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
 # Static and Dynamic Library Build Support
 #-------------------------------------------------------------------------------
 
-PREFIX ?= /usr/local
 KINETIC_SO_DEV = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).so
 KINETIC_SO_RELEASE = $(PREFIX)/lib$(KINETIC_LIB_NAME).so
 
@@ -138,8 +140,8 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	$(INSTALL) -d $(PREFIX)/lib/
-	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)/lib/
+	$(INSTALL) -d $(PREFIX)${LIBDIR}
+	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)${LIBDIR}/
 	$(INSTALL) -d $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
@@ -150,8 +152,8 @@ uninstall:
 	@echo Uninstalling $(PROJECT) from $(PREFIX)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	$(RM) -f $(PREFIX)/lib/lib$(PROJECT)*.a
-	$(RM) -f $(PREFIX)/lib/lib$(PROJECT)*.so
+	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.a
+	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
 	$(RM) -f $(PREFIX)/include/${PUBLIC_API}.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
