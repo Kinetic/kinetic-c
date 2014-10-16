@@ -46,9 +46,7 @@ void KineticLogger_Init(const char* logFile)
         }
 
         // Create flushing thread to periodically flush the log
-        zlogf("\n");
-        zlog_init_flush_thread();
-        zlogf("\n");
+        // zlog_init_flush_thread();
     }
 }
 
@@ -107,13 +105,13 @@ void KineticLogger_LogHeader(const KineticPDUHeader* header)
     LOGF("  valueLength: %d", header->valueLength);
 }
 
-#define LOG_PROTO_INIT() \
-    char _indent[32] = "  "; \
-    const char* _str_true = "true"; \
-    const char* _str_false = "false";
+const char* _str_true = "true";
+const char* _str_false = "false";
 
-#define LOG_PROTO_LEVEL_START(name) \
-    LOGF("%s" name " {", _indent); \
+#define LOG_PROTO_INIT() char _indent[32] = "  ";
+
+#define LOG_PROTO_LEVEL_START(__name) \
+    LOGF("%s%s {", (_indent), (__name)); \
     strcat(_indent, "  ");
 
 #define LOG_PROTO_LEVEL_END() \
@@ -134,7 +132,6 @@ int KineticLogger_u8toa(char* p_buf, uint8_t val)
         val /= base;
         if (c >= 10) c += 'A' - '0' - 10;
         c += '0';
-        // LOGF("CH: %c @ %d to 0x%llX", c, i, (long long)(p_buf));
         *p_buf-- = c;
     }
     while (--i);
@@ -144,29 +141,313 @@ int KineticLogger_u8toa(char* p_buf, uint8_t val)
 int KineticLogger_ByteArraySliceToCString(char* p_buf,
         const ByteArray bytes, const int start, const int count)
 {
-    // LOGF("Converting ByteArray (count=%u)", count);
     int len = 0;
     for (int i = 0; i < count; i++) {
-        // LOGF("BYTE to 0x%llX (prepending '\\')", (long long)(&p_buf[len]));
         p_buf[len++] = '\\';
-        // LOGF("BYTE digits to 0x%llX", (long long)(&p_buf[len]));
         len += KineticLogger_u8toa(&p_buf[len], bytes.data[start + i]);
-        // LOGF("BYTE next @ 0x%llX", (long long)(&p_buf[len]));
     }
     p_buf[len] = '\0';
-    // LOGF("BYTE string terminated @ 0x%llX", (long long)(&p_buf[len]));
     return len;
 }
 
 #define BYTES_TO_CSTRING(_buf_start, _array, _array_start, _count) { \
-    ByteArray key = {.data = _array.data, .len = _array.len}; \
-    KineticLogger_ByteArraySliceToCString((char*)(_buf_start), key, 0, key.len); \
+    ByteArray __array = {.data = _array.data, .len = (_array).len}; \
+    KineticLogger_ByteArraySliceToCString((char*)(_buf_start), (__array), (_array_start), (_count)); \
 }
 
 // #define Proto_LogBinaryDataOptional(el, attr)
 // if ((el)->has_##(attr)) {
 //     KineticLogger_LogByteArray(#attr, (el)->(attr));
 // }
+
+#if 0
+static void KineticLogger_LogProtobufMessage(const ProtobufCMessage *msg, char* _indent)
+{
+    assert(msg != NULL);
+    assert(msg->descriptor != NULL);
+
+    const ProtobufCMessageDescriptor* desc = msg->descriptor;
+    const uint8_t* pMsg = (const uint8_t*)msg;
+    char tmpBuf[1024];
+
+    LOG_PROTO_LEVEL_START(desc->short_name);
+
+    LOGF("** ProtobufMessage: msg=0x%0llX, range=0x%0llX, name=%s, fields=%u",
+        msg, pMsg, desc->short_name, desc->n_fields);
+
+    for (unsigned int i = 0; i < desc->n_fields; i++) {
+
+        size_t count = 0;
+        bool indexed = false;
+        const ProtobufCFieldDescriptor* fieldDesc =
+            (const ProtobufCFieldDescriptor*)((uint8_t*)&desc->fields[i]);
+        const uint8_t* pVal = pMsg + fieldDesc->offset;
+        const uint8_t* quantifier = pMsg + fieldDesc->quantifier_offset;
+        const uint32_t quantity = *((uint32_t*)quantifier);
+
+        if (fieldDesc == NULL) {
+            continue;
+        }
+        LOGF("**** ProtobufField[%s]: descriptor=0x%0llX", fieldDesc->name, fieldDesc);
+        LOGF("     value:      field=0x%0llX,      offset=%u, value=?", pVal, fieldDesc->offset);
+        LOGF("     quantifier: quantifier=0x%0llX, offset=%u, quantity=%u", quantifier, fieldDesc->quantifier_offset, quantity);
+
+        switch (fieldDesc->type) {
+        case PROTOBUF_C_TYPE_INT32:
+        case PROTOBUF_C_TYPE_SINT32:
+        case PROTOBUF_C_TYPE_SFIXED32: {
+            int32_t* value = (int32_t*)&pMsg[fieldDesc->offset];
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {
+                count = 1;
+            }
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                bool present = *((const protobuf_c_boolean*)quantifier) != 0;
+                if (present) {count = 1;}
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((const size_t*)quantifier);
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %ld", _indent, fieldDesc->name, suffix, value[i]);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_INT64:
+        case PROTOBUF_C_TYPE_SINT64:
+        case PROTOBUF_C_TYPE_SFIXED64: {
+            int64_t* value = (int64_t*)(msg + fieldDesc->offset);
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
+                    count = 1;
+                }
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %lld", _indent, fieldDesc->name, suffix, value[i]);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_UINT32:
+        case PROTOBUF_C_TYPE_FIXED32: {
+            uint32_t* value = (uint32_t*)(msg + fieldDesc->offset);
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
+                    count = 1;
+                }
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %lu", _indent, fieldDesc->name, suffix, value[i]);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_UINT64:
+        case PROTOBUF_C_TYPE_FIXED64: {
+            uint64_t* value = (uint64_t*)(msg + fieldDesc->offset);
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
+                    count = 1;
+                }
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %llu", _indent, fieldDesc->name, suffix, value[i]);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_FLOAT: {
+            float* value = (float*)(msg + fieldDesc->offset);
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
+                    count = 1;
+                }
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %f", _indent, fieldDesc->name, suffix, value[i]);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_DOUBLE: {
+            double* value = (double*)(msg + fieldDesc->offset);
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
+                    count = 1;
+                }
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %f", _indent, fieldDesc->name, suffix, value[i]);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_BOOL: {
+            protobuf_c_boolean* value = (protobuf_c_boolean*)(msg + fieldDesc->offset);
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
+                    count = 1;
+                }
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix,
+                        value[i] ? _str_true : _str_false);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_STRING: {
+            char** strings = (char**)(msg + fieldDesc->offset);
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
+                    count = 1;
+                }
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %ld", _indent, fieldDesc->name, suffix, strings[i]);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_BYTES: {
+            LOG("****** TYPE: PROTOBUF_C_TYPE_BYTES");
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {
+                count = 1;
+            }
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                count = (quantity == 0) ? 0 : 1;
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = quantity;
+                if (count > 0) {indexed = true;}
+            }
+
+            if (count > 0) {
+                ProtobufCBinaryData* pArray = *(ProtobufCBinaryData**)((unsigned long)(pVal));
+                LOGF("DDDDDDD pArray=0x%0llX, points to: 0x%0llX", pArray, *pArray);
+                ProtobufCBinaryData* arrays = (ProtobufCBinaryData*)pArray;
+                // arrays++;
+                LOGF("******** BYTE_ARRAYS: raw=0x%0llX, arrays=0x%0llX, count=%u, &[0]=0x%0llX, &[1]=0x%0llX"
+                    , pVal, arrays, count, &arrays[0], &arrays[1]);
+                for (unsigned j = 0; j < count; j++) {
+                    ProtobufCBinaryData* myArray = (ProtobufCBinaryData*)&arrays[j];
+                    myArray += j;
+                    LOGF("******************* data=0x%0llX, len=%u", myArray->data, myArray->len);
+                    if (myArray->data != NULL && myArray->len > 0) {
+                        char suffix[32] = {'\0'};
+                        if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", j);}
+                        // BYTES_TO_CSTRING(tmpBuf, &myArray, 0, myArray->len);
+                        // LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix, tmpBuf);
+                    }
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_ENUM: {
+            ProtobufCEnumValue* enumVal = (ProtobufCEnumValue*)(msg + fieldDesc->offset);
+            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
+            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
+                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
+                    count = 1;
+                }
+            }
+            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
+                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
+                if (count > 0) {indexed = true;}
+            }
+            if (count > 0) {
+                for (unsigned int i = 0; i < count; i++) {
+                    char suffix[32] = {'\0'};
+                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                    LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix, enumVal[i].name);
+                }
+            }
+            break;
+        }
+
+        case PROTOBUF_C_TYPE_MESSAGE:  // nested message
+            LOG("Nested messages not yet supported!");
+            assert(false); // nested messages not yet handled!
+            break;
+        default:
+            LOG("Invalid message field type!");
+            assert(false); // should never get here!
+            break;
+        };
+    }
+
+    LOG_PROTO_LEVEL_END();
+}
+#endif
 
 void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
 {
@@ -198,7 +479,7 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
             }
 
             if (msg->hmacAuth->has_hmac) {
-                BYTES_TO_CSTRING(tmpBuf, msg->hmacAuth->hmac, 0, msg->hmacAuth->hmac->key.len);
+                BYTES_TO_CSTRING(tmpBuf, msg->hmacAuth->hmac, 0, msg->hmacAuth->hmac.len);
                 LOGF("%shmac: '%s'", _indent, tmpBuf);
             }
 
@@ -208,7 +489,7 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
             LOG_PROTO_LEVEL_START("pinAuth");
 
             if (msg->pinAuth->has_pin) {
-                BYTES_TO_CSTRING(tmpBuf, msg->pinAuth->pin, 0, msg->pinAuth->pin->key.len);
+                BYTES_TO_CSTRING(tmpBuf, msg->pinAuth->pin, 0, msg->pinAuth->pin.len);
                 LOGF("%spin: '%s'", _indent, tmpBuf);
             }
 
@@ -341,39 +622,44 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
                             LOGF("%sendKey:   '%s'", _indent, tmpBuf);
                         }
 
-                        // protobuf_c_boolean has_startKeyInclusive;
-                        // protobuf_c_boolean startKeyInclusive;
+                        if (cmd->body->range->has_startKeyInclusive) {
+                            LOGF("%sstartKeyInclusive: %s", _indent,
+                                 cmd->body->range->startKeyInclusive ? _str_true : _str_false);
+                        }
 
-                        // protobuf_c_boolean has_endKeyInclusive;
-                        // protobuf_c_boolean endKeyInclusive;
+                        if (cmd->body->range->has_endKeyInclusive) {
+                            LOGF("%sendKeyInclusive: %s", _indent,
+                                 cmd->body->range->endKeyInclusive ? _str_true : _str_false);
+                        }
 
-                        // protobuf_c_boolean has_maxReturned;
-                        // int32_t maxReturned;
+                        if (cmd->body->range->has_maxReturned) {
+                            LOGF("%smaxReturned: %d", _indent, cmd->body->range->maxReturned);
+                        }
 
-                        // protobuf_c_boolean has_reverse;
-                        // protobuf_c_boolean reverse;
+                        if (cmd->body->range->has_reverse) {
+                            LOGF("%sreverse: %s", _indent,
+                                 cmd->body->range->reverse ? _str_true : _str_false);
+                        }
 
-                        // size_t n_keys;
-                        // ProtobufCBinaryData* keys;
-
-                        if (cmd->body->range->n_keys == 0
-                          || cmd->body->range->keys == NULL) {
-                            LOGF("%s[empty]", _indent);
+                        if (cmd->body->range->n_keys == 0 || cmd->body->range->keys == NULL) {
+                            LOGF("%skeys: NONE", _indent);
                         }
                         else {
-                            LOGF("%s%d keys", _indent, cmd->body->range->n_keys);
-                            for (unsigned int i = 0; i < cmd->body->range->n_keys; i++) {
+                            LOGF("%skeys: %d", _indent, cmd->body->range->n_keys);
+                            // LOGF("XXXX BYTE_ARRAYS: range=0x%0llX, keys=0x%0llX, count=%u",
+                            //     cmd->body->range, cmd->body->range->keys, cmd->body->range->n_keys);
+                            for (unsigned int j = 0; j < cmd->body->range->n_keys; j++) {
+                                // LOGF("XXXX  w/ key[%u] @ 0x%0llX", j, &cmd->body->range->keys[j]);
                                 BYTES_TO_CSTRING(tmpBuf,
-                                                 cmd->body->range->keys[i],
-                                                 0, cmd->body->range->keys[i].len);
-                                LOGF("%skeys[%d]: '%s'", _indent, i, tmpBuf);
+                                                 cmd->body->range->keys[j],
+                                                 0, cmd->body->range->keys[j].len);
+                                LOGF("%skeys[%d]: '%s'", _indent, j, tmpBuf);
                             }
-                        } 
-
-                        // if (cmd->body->keyValue->has_key) {
-                        // }
+                        }
                     }
                     LOG_PROTO_LEVEL_END();
+                
+                    // KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->body->range, _indent);
                 }
             }
 
@@ -397,7 +683,7 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
                     BYTES_TO_CSTRING(tmpBuf,
                                      cmd->status->detailedMessage,
                                      0, cmd->status->detailedMessage.len);
-                    LOGF("%detailedMessage: '%s'", _indent, tmpBuf);
+                    LOGF("%sdetailedMessage: '%s'", _indent, tmpBuf);
                 }
             }
             LOG_PROTO_LEVEL_END();
