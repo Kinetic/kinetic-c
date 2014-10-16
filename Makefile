@@ -34,9 +34,36 @@ VERSION = ${shell head -n1 $(VERSION_FILE)}
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(VENDOR)
-LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/byte_array.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h $(LIB_DIR)/kinetic_types_internal.h
+LIB_DEPS = $(PUB_INC)/kinetic_client.h \
+	   $(PUB_INC)/byte_array.h \
+	   $(PUB_INC)/kinetic_types.h \
+	   $(LIB_DIR)/kinetic_connection.h \
+	   $(LIB_DIR)/kinetic_hmac.h \
+	   $(LIB_DIR)/kinetic_logger.h \
+	   $(LIB_DIR)/kinetic_message.h \
+	   $(LIB_DIR)/kinetic_nbo.h \
+	   $(LIB_DIR)/kinetic_operation.h \
+	   $(LIB_DIR)/kinetic_pdu.h \
+	   $(LIB_DIR)/kinetic_proto.h \
+	   $(LIB_DIR)/kinetic_socket.h \
+	   $(LIB_DIR)/kinetic_types_internal.h
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
-LIB_OBJS = $(OUT_DIR)/kinetic_allocator.o $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_types_internal.o $(OUT_DIR)/byte_array.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o
+LIB_OBJS = $(OUT_DIR)/kinetic_allocator.o \
+   	   $(OUT_DIR)/kinetic_nbo.o \
+   	   $(OUT_DIR)/kinetic_operation.o \
+   	   $(OUT_DIR)/kinetic_pdu.o \
+   	   $(OUT_DIR)/kinetic_proto.o \
+   	   $(OUT_DIR)/kinetic_socket.o \
+   	   $(OUT_DIR)/kinetic_message.o \
+   	   $(OUT_DIR)/kinetic_logger.o \
+   	   $(OUT_DIR)/kinetic_hmac.o \
+   	   $(OUT_DIR)/kinetic_connection.o \
+   	   $(OUT_DIR)/kinetic_types.o \
+   	   $(OUT_DIR)/kinetic_types_internal.o \
+   	   $(OUT_DIR)/byte_array.o \
+   	   $(OUT_DIR)/kinetic_client.o \
+   	   $(OUT_DIR)/socket99.o \
+   	   $(OUT_DIR)/protobuf-c.o
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
 default: $(KINETIC_LIB)
