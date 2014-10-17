@@ -181,7 +181,7 @@ uninstall:
 	@echo
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.a
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
-	$(RM) -f $(PREFIX)/include/${PUBLIC_API}.h
+	$(RM) -f $(PREFIX)/include/${API_NAME}.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
