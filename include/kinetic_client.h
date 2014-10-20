@@ -39,14 +39,14 @@ void KineticClient_Shutdown(void);
  * @brief Initializes the Kinetic API, configures logging destination, establishes a
  * connection to the specified Kinetic Device, and establishes a session.
  *
- * @config          Session configuration
- *  .host               Host name or IP address to connect to
- *  .port               Port to establish socket connection on
- *  .nonBlocking        Set to true for non-blocking or false for blocking I/O
- *  .clusterVersion     Cluster version to use for the session
- *  .identity           Identity to use for the session
- *  .hmacKey            Key to use for HMAC calculations (NULL-terminated string)
- * @handle          Pointer to KineticSessionHandle (populated upon successful connection)
+ * @param config    Session configuration
+ *  .host             Host name or IP address to connect to
+ *  .port             Port to establish socket connection on
+ *  .nonBlocking      Set to true for non-blocking or false for blocking I/O
+ *  .clusterVersion   Cluster version to use for the session
+ *  .identity         Identity to use for the session
+ *  .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
+ * @param handle    Pointer to KineticSessionHandle (populated upon successful connection)
  *
  * @return          Returns the resulting KineticStatus
  */
