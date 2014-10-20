@@ -32,7 +32,7 @@
 #define KINETIC_LOGGER_FLUSH_INTERVAL_SEC 180
 #define KINETIC_LOGGER_SLEEP_TIME_SEC 10
 #define KINETIC_LOGGER_BUFFER_FLUSH_SIZE (0.8 * KINETIC_LOGGER_BUFFER_SIZE)
-#define KINETIC_LOGGER_FLUSH_THREAD_ENABLED true
+#define KINETIC_LOGGER_FLUSH_THREAD_ENABLED false
 
 STATIC int KineticLogLevel = -1;
 STATIC FILE* KineticLoggerHandle = NULL;
@@ -83,6 +83,7 @@ static inline void KineticLogger_FinishBuffer(void)
     KineticLogger_BufferUnlock();
 }
 
+#if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
 static void* KineticLogger_FlushThread(void* arg)
 {
     (void)arg;
@@ -114,7 +115,6 @@ static void* KineticLogger_FlushThread(void* arg)
     return NULL;
 }
 
-#if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
 static void KineticLogger_InitFlushThread(void)
 {
     pthread_t thr;
@@ -123,16 +123,17 @@ static void KineticLogger_InitFlushThread(void)
 }
 #endif
 
-void KineticLogger_Init(const char* log_file)
+void KineticLogger_Init(const char* log_file, int log_level)
 {
+    KineticLogLevel = -1;
+
     KineticLoggerHandle = NULL;
     if (log_file == NULL) {
-        KineticLogLevel = -1;
         printf("\nLogging kinetic-c output is disabled!\n");
         return;
     }
     else {
-        KineticLogLevel = 0;
+        KineticLogLevel = log_level;
         
         if (strncmp(log_file, "stdout", 4) == 0 || strncmp(log_file, "STDOUT", 4) == 0) {
             printf("\nLogging kinetic-c output to console (stdout)\n");

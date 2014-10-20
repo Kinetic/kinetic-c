@@ -59,7 +59,7 @@ static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
 
 int main(int argc, char** argv)
 {
-    KineticClient_Init("stdout");
+    KineticClient_Init("stdout", 1);
 
     // Parse command line options
     ParseOptions(argc, argv, &SessionConfig, &Entry);

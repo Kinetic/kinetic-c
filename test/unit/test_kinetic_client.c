@@ -44,7 +44,7 @@ static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout");
+    KineticLogger_Init("stdout", 3);
     SessionHandle = KINETIC_HANDLE_INVALID;
 }
 
@@ -55,9 +55,9 @@ void tearDown()
 
 void test_KineticClient_Init_should_initialize_the_logger(void)
 {
-    KineticClient_Init("./some_file.log");
-    KineticClient_Init("stdout");
-    KineticClient_Init(NULL);
+    KineticClient_Init("./some_file.log", 3);
+    KineticClient_Init("stdout", 1);
+    KineticClient_Init(NULL, -1);
 }
 
 static void ConnectSession(void)

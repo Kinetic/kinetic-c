@@ -82,7 +82,7 @@ void setUp(void)
 
     KINETIC_PDU_INIT(&PDU, &Connection);
     ByteArray_FillWithDummyData(Value);
-    KineticLogger_Init("stdout");
+    KineticLogger_Init("stdout", 3);
 }
 
 void tearDown()

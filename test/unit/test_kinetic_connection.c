@@ -44,7 +44,7 @@ static KineticPDU UnsolicitedPDU;
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout");
+    KineticLogger_Init("stdout", 3);
     SessionHandle = KineticConnection_NewConnection(&SessionConfig);
     TEST_ASSERT_TRUE(SessionHandle > KINETIC_HANDLE_INVALID);
     Connection = KineticConnection_FromHandle(SessionHandle);

@@ -85,7 +85,7 @@ void Socket_FlushReadPipe(void)
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout");
+    KineticLogger_Init("stdout", 3);
     FileDesc = -1;
     SocketReadRequested = false;
     TestDataBuffer = ByteBuffer_Create(TestData, sizeof(TestData), 0);

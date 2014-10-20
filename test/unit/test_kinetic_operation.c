@@ -38,7 +38,7 @@ static KineticOperation Operation;
 
 void setUp(void)
 {
-    // KineticLogger_Init(NULL);
+    KineticLogger_Init(NULL, 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connectionID = ConnectionID;
     KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);

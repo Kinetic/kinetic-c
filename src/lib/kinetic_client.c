@@ -82,9 +82,9 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     return status;
 }
 
-void KineticClient_Init(const char* logFile)
+void KineticClient_Init(const char* log_file, int log_level)
 {
-    KineticLogger_Init(logFile);
+    KineticLogger_Init(log_file, log_level);
 }
 
 void KineticClient_Shutdown(void)

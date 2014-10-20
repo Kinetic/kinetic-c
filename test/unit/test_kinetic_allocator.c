@@ -34,7 +34,7 @@ KineticList PDUList;
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout");
+    KineticLogger_Init("stdout", 3);
     KineticAllocator_InitList(&PDUList);
     TEST_ASSERT_NULL(PDUList.start);
     TEST_ASSERT_NULL(PDUList.last);

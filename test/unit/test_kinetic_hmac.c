@@ -33,7 +33,7 @@
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout");
+    KineticLogger_Init("stdout", 3);
 }
 
 void tearDown(void)

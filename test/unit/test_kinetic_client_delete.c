@@ -46,7 +46,7 @@ KineticPDU Request, Response;
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout");
+    KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
     HmacKey = ByteArray_CreateWithCString("some hmac key");
