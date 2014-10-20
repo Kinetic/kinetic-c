@@ -111,7 +111,7 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
     }
 
     *handle = KineticConnection_NewConnection(config);
-    if (handle == KINETIC_HANDLE_INVALID) {
+    if (*handle == KINETIC_HANDLE_INVALID) {
         LOG("Failed connecting to device!");
         return KINETIC_STATUS_SESSION_INVALID;
     }

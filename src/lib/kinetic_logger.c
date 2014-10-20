@@ -121,7 +121,7 @@ void KineticLogger_LogHeader(const KineticPDUHeader* header)
     _indent[strlen(_indent) - 2] = '\0'; \
     LOGF("%s}", _indent);
 
-int KineticLogger_u8toa(char* p_buf, uint8_t val)
+static int KineticLogger_u8toa(char* p_buf, uint8_t val)
 {
     // LOGF("Converting byte=%02u", val);
     const int width = 2;
@@ -142,7 +142,7 @@ int KineticLogger_u8toa(char* p_buf, uint8_t val)
     return width;
 }
 
-int KineticLogger_ByteArraySliceToCString(char* p_buf,
+static int KineticLogger_ByteArraySliceToCString(char* p_buf,
         const ByteArray bytes, const int start, const int count)
 {
     // LOGF("Converting ByteArray (count=%u)", count);
