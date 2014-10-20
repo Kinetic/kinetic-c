@@ -47,7 +47,7 @@ void KineticAllocator_InitList(KineticList* const list)
     };
 }
 
-void* KineticAllocator_NewItem(KineticList* const list, size_t size)
+static void* KineticAllocator_NewItem(KineticList* const list, size_t size)
 {
     KineticListItem* newItem = (KineticListItem*)malloc(sizeof(KineticListItem));
     if (newItem == NULL) {
@@ -82,7 +82,7 @@ void* KineticAllocator_NewItem(KineticList* const list, size_t size)
     return newItem->data;
 }
 
-void KineticAllocator_FreeItem(KineticList* const list, void* item)
+static void KineticAllocator_FreeItem(KineticList* const list, void* item)
 {
     KineticAllocator_LockList(list);
     KineticListItem* cur = list->start;
@@ -149,7 +149,7 @@ void KineticAllocator_FreeItem(KineticList* const list, void* item)
     KineticAllocator_UnlockList(list);
 }
 
-void KineticAllocator_FreeList(KineticList* const list)
+static void KineticAllocator_FreeList(KineticList* const list)
 {
     if (list != NULL) {
         #ifdef KINETIC_LOG_ALLOCATOR

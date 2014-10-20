@@ -21,6 +21,9 @@ LDFLAGS += -lm -l crypto -l ssl -l pthread
 
 PROJECT = kinetic-c-client
 
+PREFIX ?= /usr/local
+LIBDIR ?= /lib
+
 LIB_DIR = ./src/lib
 VENDOR = ./vendor
 PROTOBUFC = $(VENDOR)/protobuf-c
@@ -32,22 +35,50 @@ VERSION = ${shell head -n1 $(VERSION_FILE)}
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(VENDOR)
-LIB_DEPS = $(PUB_INC)/kinetic_client.h $(PUB_INC)/byte_array.h $(PUB_INC)/kinetic_types.h $(LIB_DIR)/kinetic_connection.h $(LIB_DIR)/kinetic_hmac.h $(LIB_DIR)/kinetic_logger.h $(LIB_DIR)/kinetic_message.h $(LIB_DIR)/kinetic_nbo.h $(LIB_DIR)/kinetic_operation.h $(LIB_DIR)/kinetic_pdu.h $(LIB_DIR)/kinetic_proto.h $(LIB_DIR)/kinetic_socket.h $(LIB_DIR)/kinetic_types_internal.h
+LIB_DEPS = \
+	$(PROTOBUFC)/protobuf-c/protobuf-c.h \
+	$(ZLOG)/zlog.h \
+	$(ZLOG)/zlog-config.h \
+	$(SOCKET99)/socket99.h \
+	$(LIB_DIR)/kinetic_allocator.h \
+	$(LIB_DIR)/kinetic_nbo.h \
+	$(LIB_DIR)/kinetic_operation.h \
+	$(LIB_DIR)/kinetic_pdu.h \
+	$(LIB_DIR)/kinetic_proto.h \
+	$(LIB_DIR)/kinetic_socket.h \
+	$(LIB_DIR)/kinetic_message.h \
+	$(LIB_DIR)/kinetic_logger.h \
+	$(LIB_DIR)/kinetic_hmac.h \
+	$(LIB_DIR)/kinetic_connection.h \
+	$(LIB_DIR)/kinetic_types_internal.h \
+	$(PUB_INC)/kinetic_types.h \
+	$(PUB_INC)/byte_array.h \
+	$(PUB_INC)/kinetic_client.h
+
 # LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
-LIB_OBJS = $(OUT_DIR)/kinetic_allocator.o $(OUT_DIR)/kinetic_nbo.o $(OUT_DIR)/kinetic_operation.o $(OUT_DIR)/kinetic_pdu.o $(OUT_DIR)/kinetic_proto.o $(OUT_DIR)/kinetic_socket.o $(OUT_DIR)/kinetic_message.o $(OUT_DIR)/kinetic_logger.o $(OUT_DIR)/kinetic_hmac.o $(OUT_DIR)/kinetic_connection.o $(OUT_DIR)/kinetic_types.o $(OUT_DIR)/kinetic_types_internal.o $(OUT_DIR)/byte_array.o $(OUT_DIR)/kinetic_client.o $(OUT_DIR)/socket99.o $(OUT_DIR)/protobuf-c.o $(OUT_DIR)/zlog.o
+LIB_OBJS = \
+	$(OUT_DIR)/socket99.o \
+	$(OUT_DIR)/protobuf-c.o \
+	$(OUT_DIR)/zlog.o \
+	$(OUT_DIR)/kinetic_allocator.o \
+	$(OUT_DIR)/kinetic_nbo.o \
+	$(OUT_DIR)/kinetic_operation.o \
+	$(OUT_DIR)/kinetic_pdu.o \
+	$(OUT_DIR)/kinetic_proto.o \
+	$(OUT_DIR)/kinetic_socket.o \
+	$(OUT_DIR)/kinetic_message.o \
+	$(OUT_DIR)/kinetic_logger.o \
+	$(OUT_DIR)/kinetic_hmac.o \
+	$(OUT_DIR)/kinetic_connection.o \
+	$(OUT_DIR)/kinetic_types_internal.o \
+	$(OUT_DIR)/kinetic_types.o \
+	$(OUT_DIR)/byte_array.o \
+	$(OUT_DIR)/kinetic_client.o
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
 default: $(KINETIC_LIB)
 
 all: clean test default run
-
-ci: uninstall all install
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo $(PROJECT) build completed successfully!
-	@echo --------------------------------------------------------------------------------
-	@echo $(PROJECT) v$(VERSION) is in working order
-	@echo
 
 clean:
 	bundle exec rake clobber
@@ -58,11 +89,17 @@ clean:
 
 # $(OUT_DIR)/%.o: %.c $(DEPS)
 # 	$(CC) -c -o $@ $< $(CFLAGS)
+$(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
+$(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
+	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall $(OPTIMIZE) -Wno-unused-parameter -I$(PROTOBUFC)
+$(OUT_DIR)/zlog.o: $(ZLOG)/zlog.c $(ZLOG)/zlog.h $(ZLOG)/zlog-config.h
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(ZLOG)
 $(OUT_DIR)/kinetic_allocator.o: $(LIB_DIR)/kinetic_allocator.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_types_internal.o: $(LIB_DIR)/kinetic_types_internal.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_nbo.o: $(LIB_DIR)/kinetic_nbo.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_operation.o: $(LIB_DIR)/kinetic_operation.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_pdu.o: $(LIB_DIR)/kinetic_pdu.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
@@ -78,20 +115,23 @@ $(OUT_DIR)/kinetic_hmac.o: $(LIB_DIR)/kinetic_hmac.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_connection.o: $(LIB_DIR)/kinetic_connection.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_operation.o: $(LIB_DIR)/kinetic_operation.c $(LIB_DEPS)
+$(OUT_DIR)/kinetic_types_internal.o: $(LIB_DIR)/kinetic_types_internal.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_types.o: $(LIB_DIR)/kinetic_types.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/byte_array.o: $(LIB_DIR)/byte_array.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/zlog.o: $(ZLOG)/zlog.c $(ZLOG)/zlog.h $(ZLOG)/zlog-config.h
-	$(CC) -c -o $@ $< $(CFLAGS) -I$(ZLOG)
-$(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
-	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
-$(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
-	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall $(OPTIMIZE) -Wno-unused-parameter -I$(PROTOBUFC)
 $(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+
+
+ci: uninstall all install
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo $(PROJECT) build completed successfully!
+	@echo --------------------------------------------------------------------------------
+	@echo $(PROJECT) v$(VERSION) is in working order
+	@echo
 
 
 #-------------------------------------------------------------------------------
@@ -114,7 +154,6 @@ JAVA_BIN = $(JAVA_HOME)/bin/java
 # Static and Dynamic Library Build Support
 #-------------------------------------------------------------------------------
 
-PREFIX ?= /usr/local
 KINETIC_SO_DEV = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).so
 KINETIC_SO_RELEASE = $(PREFIX)/lib$(KINETIC_LIB_NAME).so
 
@@ -149,8 +188,8 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	$(INSTALL) -d $(PREFIX)/lib/
-	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)/lib/
+	$(INSTALL) -d $(PREFIX)${LIBDIR}
+	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)${LIBDIR}/
 	$(INSTALL) -d $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
@@ -161,9 +200,9 @@ uninstall:
 	@echo Uninstalling $(PROJECT) from $(PREFIX)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	$(RM) -f $(PREFIX)/lib/lib$(PROJECT)*.a
-	$(RM) -f $(PREFIX)/lib/lib$(PROJECT)*.so
-	$(RM) -f $(PREFIX)/include/${PUBLIC_API}.h
+	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.a
+	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
+	$(RM) -f $(PREFIX)/include/${API_NAME}.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
