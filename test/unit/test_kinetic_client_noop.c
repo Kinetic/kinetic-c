@@ -28,7 +28,6 @@
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
-#include "zlog/zlog.h"
 #include <stdio.h>
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"

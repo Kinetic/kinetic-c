@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
-#include "zlog/zlog.h"
 #include "unity.h"
 #include "unity_helper.h"
 
@@ -164,7 +163,7 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
 
     ProtobufCBinaryData protoKeysInRange[NUM_KEYS_IN_RANGE];
     for (int i = 0; i < NUM_KEYS_IN_RANGE; i++) {
-        LOGF("  USED: %zu", Keys[i].bytesUsed);
+        LOGF0("  USED: %zu", Keys[i].bytesUsed);
         protoKeysInRange[i] = (ProtobufCBinaryData) {
             .data = Keys[i].array.data, .len = Keys[i].bytesUsed};
     }
@@ -191,5 +190,5 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
     KineticStatus status = KineticClient_GetKeyRange(DummyHandle, &keyRange, Keys, NUM_KEYS_IN_RANGE);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    // KineticLogger_LogByteBuffer("key", reqEntry.key);
+    // KineticLogger_LogByteBuffer(0, "key", reqEntry.key);
 }

@@ -26,7 +26,6 @@
     - src/utility/**
     - vendor/protobuf-c/protobuf-c/protobuf-c.c
     - vendor/socket99/socket99.c
-    - vendor/zlog/zlog.c
   :include:
     - src/**
     - include/**

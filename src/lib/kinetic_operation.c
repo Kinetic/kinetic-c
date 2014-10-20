@@ -39,7 +39,7 @@ static void KineticOperation_ValidateOperation(KineticOperation* operation)
 
 KineticOperation KineticOperation_Create(KineticConnection* const connection)
 {
-    LOGF("\n"
+    LOGF1("\n"
          "--------------------------------------------------\n"
          "Building new operation on connection @ 0x%llX", connection);
 
@@ -50,7 +50,7 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
     };
 
     if (operation.request == NULL) {
-        LOG("Request PDU could not be allocated!"
+        LOG0("Request PDU could not be allocated!"
             " Try reusing or freeing a PDU.");
         return (KineticOperation) {
             .request = NULL, .response = NULL
@@ -61,7 +61,7 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
     // operation.request->proto = &operation.request->protoData.message;
 
     if (operation.response == NULL) {
-        LOG("Response PDU could not be allocated!"
+        LOG0("Response PDU could not be allocated!"
             " Try reusing or freeing a PDU.");
         return (KineticOperation) {
             .request = NULL, .response = NULL
@@ -76,7 +76,7 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
 KineticStatus KineticOperation_Free(KineticOperation* const operation)
 {
     if (operation == NULL) {
-        LOG("Specified operation is NULL so nothing to free");
+        LOG1("Specified operation is NULL so nothing to free");
         return KINETIC_STATUS_SESSION_INVALID;
     }
 

@@ -10,7 +10,3 @@
 	path = vendor/socket99
 	url = https://github.com/silentbicycle/socket99.git
 	branch = master
-[submodule "zlog"]
-	path = vendor/zlog
-	url = https://github.com/zma/zlog.git
-	branch = master

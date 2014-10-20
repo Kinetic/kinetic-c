@@ -83,7 +83,7 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
     connection->connected = (connection->socket >= 0);
 
     if (!connection->connected) {
-        LOG("Session connection failed!");
+        LOG0("Session connection failed!");
         connection->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
@@ -111,7 +111,7 @@ KineticStatus KineticConnection_ReceiveDeviceStatusMessage(
 
     KineticPDU* statusPDU = KineticAllocator_NewPDU(&connection->pdus, connection);
     if (statusPDU == NULL) {
-        LOG("Failed allocating connection status PDU to receive session info!");
+        LOG0("Failed allocating connection status PDU to receive session info!");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
     KineticStatus status = KineticPDU_Receive(statusPDU);

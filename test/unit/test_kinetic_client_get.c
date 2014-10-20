@@ -30,7 +30,6 @@
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include <stdio.h>
-#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
 #include "unity.h"
@@ -134,9 +133,9 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     KineticStatus status = KineticClient_Get(DummyHandle, &reqEntry);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    KineticLogger_LogByteBuffer("key", reqEntry.key);
-    KineticLogger_LogByteBuffer("dbVersion", reqEntry.dbVersion);
-    KineticLogger_LogByteBuffer("value", reqEntry.value);
+    KineticLogger_LogByteBuffer(1, "key", reqEntry.key);
+    KineticLogger_LogByteBuffer(1, "dbVersion", reqEntry.dbVersion);
+    KineticLogger_LogByteBuffer(1, "value", reqEntry.value);
 }
 
 void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_buffer_with_value(void)
@@ -194,9 +193,9 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
 
     KineticStatus status = KineticClient_Get(DummyHandle, &reqEntry);
 
-    KineticLogger_LogByteBuffer("key", reqEntry.key);
-    KineticLogger_LogByteBuffer("dbVersion", reqEntry.dbVersion);
-    KineticLogger_LogByteBuffer("value", reqEntry.value);
+    KineticLogger_LogByteBuffer(0, "key", reqEntry.key);
+    KineticLogger_LogByteBuffer(0, "dbVersion", reqEntry.dbVersion);
+    KineticLogger_LogByteBuffer(0, "value", reqEntry.value);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
@@ -251,8 +250,8 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
 
     KineticStatus status = KineticClient_Get(DummyHandle, &reqEntry);
 
-    KineticLogger_LogByteBuffer("key", reqEntry.key);
-    KineticLogger_LogByteBuffer("dbVersion", reqEntry.dbVersion);
-    KineticLogger_LogByteBuffer("value", reqEntry.value);
+    KineticLogger_LogByteBuffer(0, "key", reqEntry.key);
+    KineticLogger_LogByteBuffer(0, "dbVersion", reqEntry.dbVersion);
+    KineticLogger_LogByteBuffer(0, "value", reqEntry.value);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

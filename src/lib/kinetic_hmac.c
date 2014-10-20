@@ -93,11 +93,11 @@ bool KineticHMAC_Validate(const KineticProto_Message* msg,
     }
 
     if (!success) {
-        LOG("HMAC did not compare!");
+        LOG0("HMAC did not compare!");
         ByteArray expected = {.data = msg->hmacAuth->hmac.data, .len = msg->hmacAuth->hmac.len};
-        KineticLogger_LogByteArray("expected HMAC", expected);
+        KineticLogger_LogByteArray(1, "expected HMAC", expected);
         ByteArray actual = {.data = tempHMAC.data, .len = tempHMAC.len};
-        KineticLogger_LogByteArray("actual HMAC", actual);
+        KineticLogger_LogByteArray(1, "actual HMAC", actual);
     }
 
     return success;

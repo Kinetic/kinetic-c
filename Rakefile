@@ -130,7 +130,6 @@ namespace :doxygen do
 end
 
 namespace :java_sim do
-
   JAVA_HOME = ENV.fetch('JAVA_HOME', '/usr')
   JAVA_BIN = File.join(JAVA_HOME, 'bin/java')
   $java_sim = nil

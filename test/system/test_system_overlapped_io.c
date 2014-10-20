@@ -25,7 +25,6 @@
 #include "kinetic_connection.h"
 #include "kinetic_socket.h"
 #include "kinetic_nbo.h"
-#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
 
@@ -62,7 +61,6 @@ struct kinetic_thread_arg {
 void setUp()
 {
     KineticClient_Init(NULL);
-    // KineticClient_Init("stdout");
 }
 
 void tearDown()
@@ -104,10 +102,10 @@ void* kinetic_put(void* kinetic_arg)
         // entry->synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
 
         // Store the data slice
-        LOGF("  *** Storing a data slice (%u bytes)", entry->value.bytesUsed);
+        LOGF0("  *** Storing a data slice (%u bytes)", entry->value.bytesUsed);
         KineticStatus status = KineticClient_Put(arg->sessionHandle, entry);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        LOGF("  *** KineticClient put to disk success, ip:%s", arg->ip);
+        LOGF0("  *** KineticClient put to disk success, ip:%s", arg->ip);
 
         objIndex++;
     }
@@ -156,11 +154,11 @@ void* kinetic_put(void* kinetic_arg)
 
     KineticStatus status = KineticClient_GetKeyRange(arg->sessionHandle,
         &keyRange, keys, maxKeys);
-    LOGF("GetKeyRange completed w/ status: %s", Kinetic_GetStatusDescription(status));
+    LOGF0("GetKeyRange completed w/ status: %s", Kinetic_GetStatusDescription(status));
     int numKeys = 0;
     for (int i = 0; i < maxKeys; i++) {
         if (keys[i].bytesUsed > 0) {
-            KineticLogger_LogByteBuffer("key", keys[i]);
+            KineticLogger_LogByteBuffer(0, "key", keys[i]);
             numKeys++;
         }
     }

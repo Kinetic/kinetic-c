@@ -27,7 +27,6 @@
 #include "kinetic_proto.h"
 #include "kinetic_message.h"
 #include "kinetic_logger.h"
-#include "zlog/zlog.h"
 
 uint8_t KeyData[1024];
 ByteArray Key;

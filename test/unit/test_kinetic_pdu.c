@@ -31,7 +31,6 @@
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_hmac.h"
 #include "byte_array.h"
-#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include <arpa/inet.h>
 #include <string.h>

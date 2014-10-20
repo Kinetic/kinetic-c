@@ -34,13 +34,13 @@ static KineticStatus KineticClient_CreateOperation(
     KineticSessionHandle handle)
 {
     if (handle == KINETIC_HANDLE_INVALID) {
-        LOG("Specified session has invalid handle value");
+        LOG0("Specified session has invalid handle value");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
     KineticConnection* connection = KineticConnection_FromHandle(handle);
     if (connection == NULL) {
-        LOG("Specified session is not associated with a connection");
+        LOG0("Specified session is not associated with a connection");
         return KINETIC_STATUS_SESSION_INVALID;
     }
 
@@ -56,14 +56,14 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
 
-    LOGF("Executing operation: 0x%llX", operation);
+    LOGF1("Executing operation: 0x%llX", operation);
     if (operation->request->entry.value.array.data != NULL
         && operation->request->entry.value.bytesUsed > 0) {
-        LOGF("  Sending PDU w/value (%zu bytes)",
+        LOGF1("  Sending PDU w/value (%zu bytes)",
              operation->request->entry.value.bytesUsed);
     }
     else {
-        LOG("  Sending PDU w/o value");
+        LOG1("  Sending PDU w/o value");
     }
 
     // Send the request
@@ -96,42 +96,42 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
                                     KineticSessionHandle* handle)
 {
     if (handle == NULL) {
-        LOG("Session handle is NULL!");
+        LOG0("Session handle is NULL!");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
     *handle = KINETIC_HANDLE_INVALID;
 
     if (config == NULL) {
-        LOG("KineticSession is NULL!");
+        LOG0("KineticSession is NULL!");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
     if (strlen(config->host) == 0) {
-        LOG("Host is empty!");
+        LOG0("Host is empty!");
         return KINETIC_STATUS_HOST_EMPTY;
     }
 
     if (config->hmacKey.len < 1 || config->hmacKey.data == NULL) {
-        LOG("HMAC key is NULL or empty!");
+        LOG0("HMAC key is NULL or empty!");
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
     // Obtain a new connection/handle
     *handle = KineticConnection_NewConnection(config);
     if (*handle == KINETIC_HANDLE_INVALID) {
-        LOG("Failed connecting to device!");
+        LOG0("Failed connecting to device!");
         return KINETIC_STATUS_SESSION_INVALID;
     }
     KineticConnection* connection = KineticConnection_FromHandle(*handle);
     if (connection == NULL) {
-        LOG("Failed getting valid connection from handle!");
+        LOG0("Failed getting valid connection from handle!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     // Create the connection
     KineticStatus status = KineticConnection_Connect(connection);
     if (status != KINETIC_STATUS_SUCCESS) {
-        LOGF("Failed creating connection to %s:%d", config->host, config->port);
+        LOGF0("Failed creating connection to %s:%d", config->host, config->port);
         KineticConnection_FreeConnection(handle);
         *handle = KINETIC_HANDLE_INVALID;
         return status;
@@ -146,19 +146,19 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
 KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)
 {
     if (*handle == KINETIC_HANDLE_INVALID) {
-        LOG("Invalid KineticSessionHandle specified!");
+        LOG0("Invalid KineticSessionHandle specified!");
         return KINETIC_STATUS_SESSION_INVALID;
     }
 
     KineticConnection* connection = KineticConnection_FromHandle(*handle);
     if (connection == NULL) {
-        LOG("Failed getting valid connection from handle!");
+        LOG0("Failed getting valid connection from handle!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     KineticStatus status = KineticConnection_Disconnect(connection);
     if (status != KINETIC_STATUS_SUCCESS) {
-        LOG("Disconnection failed!");
+        LOG0("Disconnection failed!");
     }
 
     KineticConnection_FreeConnection(handle);

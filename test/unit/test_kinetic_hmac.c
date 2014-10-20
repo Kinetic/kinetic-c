@@ -27,7 +27,6 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
-#include "zlog/zlog.h"
 #include "protobuf-c/protobuf-c.h"
 #include <string.h>
 #include <openssl/hmac.h>
@@ -109,14 +108,14 @@ void test_KineticHMAC_Populate_should_compute_and_populate_the_SHA1_HMAC_for_the
     TEST_ASSERT_EQUAL_PTR(hmac.data, msg.hmacAuth->hmac.data);
     TEST_ASSERT_EQUAL(KINETIC_HMAC_MAX_LEN, msg.hmacAuth->hmac.len);
 
-    LOG("Computed HMAC: ");
-    LOGF("  %02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+    LOG0("Computed HMAC: ");
+    LOGF0("  %02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
          actual.data[0],  actual.data[1],  actual.data[2],  actual.data[3],
          actual.data[4],  actual.data[5],  actual.data[6],  actual.data[7]);
-    LOGF("  %02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
+    LOGF0("  %02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX",
          actual.data[8],  actual.data[9],  actual.data[10], actual.data[11],
          actual.data[12], actual.data[13], actual.data[14], actual.data[15]);
-    LOGF("  %02hhX%02hhX%02hhX%02hhX",
+    LOGF0("  %02hhX%02hhX%02hhX%02hhX",
          actual.data[16], actual.data[17], actual.data[18], actual.data[19]);
 }
 

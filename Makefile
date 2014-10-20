@@ -28,7 +28,6 @@ LIB_DIR = ./src/lib
 VENDOR = ./vendor
 PROTOBUFC = $(VENDOR)/protobuf-c
 SOCKET99 = $(VENDOR)/socket99
-ZLOG = $(VENDOR)/zlog
 VERSION_FILE = ./VERSION
 VERSION = ${shell head -n1 $(VERSION_FILE)}
 
@@ -37,8 +36,6 @@ KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(VENDOR)
 LIB_DEPS = \
 	$(PROTOBUFC)/protobuf-c/protobuf-c.h \
-	$(ZLOG)/zlog.h \
-	$(ZLOG)/zlog-config.h \
 	$(SOCKET99)/socket99.h \
 	$(LIB_DIR)/kinetic_allocator.h \
 	$(LIB_DIR)/kinetic_nbo.h \
@@ -59,7 +56,6 @@ LIB_DEPS = \
 LIB_OBJS = \
 	$(OUT_DIR)/socket99.o \
 	$(OUT_DIR)/protobuf-c.o \
-	$(OUT_DIR)/zlog.o \
 	$(OUT_DIR)/kinetic_allocator.o \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
@@ -93,8 +89,6 @@ $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall $(OPTIMIZE) -Wno-unused-parameter -I$(PROTOBUFC)
-$(OUT_DIR)/zlog.o: $(ZLOG)/zlog.c $(ZLOG)/zlog.h $(ZLOG)/zlog-config.h
-	$(CC) -c -o $@ $< $(CFLAGS) -I$(ZLOG)
 $(OUT_DIR)/kinetic_allocator.o: $(LIB_DIR)/kinetic_allocator.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_nbo.o: $(LIB_DIR)/kinetic_nbo.c $(LIB_DEPS)

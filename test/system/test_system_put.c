@@ -33,7 +33,6 @@
 #include "kinetic_nbo.h"
 
 #include "byte_array.h"
-#include "zlog/zlog.h"
 #include "unity.h"
 #include "unity_helper.h"
 #include "system_test_fixture.h"
@@ -42,14 +41,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-// static SystemTestFixture Fixture;
-// static ByteArray ValueKey;
-// static ByteArray OtherValueKey;
-// static ByteArray Tag;
-// static ByteArray TestValue;
-// static ByteArray Version;
-// static ByteArray NewVersion;
-// static ByteArray OtherNewVersion;
 static KineticEntry Entry;
 
 static SystemTestFixture Fixture;
@@ -175,7 +166,7 @@ void test_Delete_old_object_if_exists(void)
 
 void test_Put_should_create_new_object_on_device(void)
 {
-    LOG(""); LOG_LOCATION;
+    LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = KeyBuffer,
         .newVersion = VersionBuffer,
@@ -200,7 +191,7 @@ void test_Put_should_create_new_object_on_device(void)
 
 void test_Put_should_create_another_new_object_on_device(void)
 {
-    LOG(""); LOG_LOCATION;
+    LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = OtherKeyBuffer,
         .newVersion = VersionBuffer,
@@ -225,7 +216,7 @@ void test_Put_should_create_another_new_object_on_device(void)
 
 void test_Put_should_update_object_data_on_device_and_update_version(void)
 {
-    LOG(""); LOG_LOCATION;
+    LOG_LOCATION;
     ByteBuffer_Reset(&ValueBuffer);
     ByteBuffer_AppendCString(&ValueBuffer, "This is some other random to update the entry with... again!");
 
@@ -254,7 +245,7 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
 
 void test_Put_should_update_object_data_on_device_and_with_FLUSH_sync_mode_enabled(void)
 {
-    LOG(""); LOG_LOCATION;
+    LOG_LOCATION;
     ByteBuffer_Reset(&ValueBuffer);
     ByteBuffer_AppendCString(&ValueBuffer, "OK, this is, yet again, some new and different data!");
 
@@ -283,7 +274,7 @@ void test_Put_should_update_object_data_on_device_and_with_FLUSH_sync_mode_enabl
 
 void test_Put_should_update_object_data_on_device_and_with_WRITETHROUGH_sync_mode_enabled(void)
 {
-    LOG(""); LOG_LOCATION;
+    LOG_LOCATION;
     ByteBuffer_Reset(&ValueBuffer);
     ByteBuffer_AppendCString(&ValueBuffer, "OK, this is, yet again, some new and different data... again!");
 
@@ -313,7 +304,7 @@ void test_Put_should_update_object_data_on_device_and_with_WRITETHROUGH_sync_mod
 
 void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled(void)
 {
-    LOG(""); LOG_LOCATION;
+    LOG_LOCATION;
     ByteBuffer_Reset(&ValueBuffer);
     ByteBuffer_AppendCString(&ValueBuffer, "...blah blah!");
 
@@ -342,7 +333,7 @@ void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled(v
 
 void test_Put_should_update_object_data_on_device_again_via_FORCE_with_garbage_version(void)
 {
-    LOG(""); LOG_LOCATION;
+    LOG_LOCATION;
     ByteBuffer_Reset(&ValueBuffer);
     ByteBuffer_AppendCString(&ValueBuffer, "Zippety do dah, zippedy eh...");
 
@@ -369,7 +360,7 @@ void test_Put_should_update_object_data_on_device_again_via_FORCE_with_garbage_v
 
 void test_Put_should_be_able_to_store_max_sized_entry(void)
 {
-    LOG(""); LOG_LOCATION;
+    LOG_LOCATION;
 
     uint8_t keyBytes[] = {0x31,0x34,0x31,0x33,0x35,0x35,0x38,0x31,0x35,0x30,0x5F,0x30,0x30,0x30,0x30,0x5F,0x30,0x30};
     uint8_t versionBytes[] = {0x76,0x31,0x2E,0x30};

@@ -30,7 +30,6 @@
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_allocator.h"
 #include "byte_array.h"
-#include "zlog/zlog.h"
 #include <string.h>
 #include <time.h>
 
@@ -45,6 +44,7 @@ static KineticPDU UnsolicitedPDU;
 
 void setUp(void)
 {
+    KineticLogger_Init("stdout");
     SessionHandle = KineticConnection_NewConnection(&SessionConfig);
     TEST_ASSERT_TRUE(SessionHandle > KINETIC_HANDLE_INVALID);
     Connection = KineticConnection_FromHandle(SessionHandle);
@@ -64,7 +64,7 @@ void tearDown(void)
     }
 }
 
-void test_KineticConnection_NewConnection_should_return_KINETIC_HANDLE_INVALID_upon_failure(void)
+void test_KineticConnection_NewConnection_should_return_HANDLE_INVALID_upon_failure(void)
 {
     LOG_LOCATION;
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, KineticConnection_NewConnection(NULL));

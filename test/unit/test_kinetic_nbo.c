@@ -22,7 +22,6 @@
 #include "unity_helper.h"
 #include "kinetic_types.h"
 #include "kinetic_nbo.h"
-#include "zlog/zlog.h"
 #include <arpa/inet.h>
 
 void setUp(void)

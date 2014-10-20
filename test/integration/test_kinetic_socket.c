@@ -28,7 +28,6 @@
 
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
-#include "zlog/zlog.h"
 
 #include <stdlib.h>
 #include <errno.h>
@@ -77,7 +76,7 @@ void Socket_RequestProtobuf(void)
 
 void Socket_FlushReadPipe(void)
 {
-    LOG("Flushing socket socket read pipe...");
+    LOG0("Flushing socket socket read pipe...");
     uint8_t bufferData[40];
     ByteBuffer recvBuffer = ByteBuffer_Create(bufferData, sizeof(bufferData), 0);
     KineticSocket_Read(FileDesc, &recvBuffer, sizeof(bufferData));
@@ -99,7 +98,7 @@ void tearDown(void)
         if (SocketReadRequested) {
             Socket_FlushReadPipe();
         }
-        LOG("Shutting down socket...");
+        LOG0("Shutting down socket...");
         KineticSocket_Close(FileDesc);
         FileDesc = 0;
     }
@@ -166,7 +165,7 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     TEST_IGNORE_MESSAGE("Disabled on Linux until KineticRuby server client connection cleanup is fixed!");
 #endif
 
-    LOG("Writing a dummy protobuf...");
+    LOG0("Writing a dummy protobuf...");
     KineticStatus status = KineticSocket_WriteProtobuf(FileDesc, &PDU);
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
         KINETIC_STATUS_SUCCESS, status, "Failed to write to socket!");
@@ -267,18 +266,18 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
         PDU.protobufDynamicallyExtracted,
         "Flag was not set per dynamically allocated/extracted protobuf");
 
-    LOG("Received Kinetic protobuf:");
-    LOGF("  command: (0x%zX)", (size_t)PDU.command);
-    // LOGF("    header: (0x%zX)", (size_t)PDU.command->header);
-    // LOGF("      identity: %016llX",
+    LOG0("Received Kinetic protobuf:");
+    LOGF0("  command: (0x%zX)", (size_t)PDU.command);
+    // LOGF0("    header: (0x%zX)", (size_t)PDU.command->header);
+    // LOGF0("      identity: %016llX",
     //      (unsigned long long)PDU.command->header->identity);
     KineticProto_Message__free_unpacked(PDU.proto, NULL);
     // ByteArray hmacArray = {
     //     .data = PDU.proto->hmac.data, .len = PDU.proto->hmac.len
     // };
-    // KineticLogger_LogByteArray("  hmac", hmacArray);
+    // KineticLogger_LogByteArray(2, "  hmac", hmacArray);
 
-    LOG("Kinetic ProtoBuf read successfully!");
+    LOG0("Kinetic ProtoBuf read successfully!");
 }
 
 void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_specified_length_fails_to_be_read_within_timeout(void)

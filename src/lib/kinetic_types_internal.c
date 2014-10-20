@@ -226,7 +226,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
             entry->newVersion.bytesUsed = keyValue->newVersion.len;
             if (entry->newVersion.array.data == NULL ||
                 entry->newVersion.array.len < keyValue->newVersion.len) {
-                LOG(" BUFFER_OVERRUN: newVersion");
+                LOG1(" BUFFER_OVERRUN: newVersion");
                 bufferOverflow = true;
             }
             else {
@@ -239,7 +239,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
             entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
             if (entry->dbVersion.array.data == NULL ||
                 entry->dbVersion.array.len < keyValue->dbVersion.len) {
-                LOG(" BUFFER_OVERRUN: dbVersion");
+                LOG1(" BUFFER_OVERRUN: dbVersion");
                 bufferOverflow = true;
             }
             else {
@@ -256,7 +256,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
             entry->key.bytesUsed = keyValue->key.len;
             if (entry->key.array.data == NULL ||
                 entry->key.array.len < keyValue->key.len) {
-                LOG(" BUFFER_OVERRUN: key");
+                LOG1(" BUFFER_OVERRUN: key");
                 bufferOverflow = true;
             }
             else {
@@ -268,7 +268,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
             entry->tag.bytesUsed = keyValue->tag.len;
             if (entry->tag.array.data == NULL ||
                 entry->tag.array.len < keyValue->tag.len) {
-                LOG(" BUFFER_OVERRUN: tag");
+                LOG1(" BUFFER_OVERRUN: tag");
                 bufferOverflow = true;
             }
             else {
@@ -303,12 +303,12 @@ bool Copy_KineticProto_Command_Range_to_buffer_list(
     int64_t max_keys)
 {
     bool bufferOverflow = false;
-    LOGF("Copying: keyRange=0x%0llX, keys=0x%0llX, max_keys=%lld", keyRange, keys, max_keys);
+    LOGF2("Copying: keyRange=0x%0llX, keys=0x%0llX, max_keys=%lld", keyRange, keys, max_keys);
     if (keyRange != NULL && keys != NULL && max_keys > 0) {
         for (size_t i = 0; i < MIN((size_t)max_keys, (size_t)keyRange->n_keys); i++) {
             ByteBuffer_Reset(&keys[i]);
             if (ByteBuffer_Append(&keys[i], keyRange->keys[i].data, keyRange->keys[i].len) == NULL) {
-                LOGF(" BUFFER_OVERRUN: keyRange[%zd]", i);
+                LOGF2(" BUFFER_OVERRUN: keyRange[%zd]", i);
                 bufferOverflow = true;
             }
         }
