@@ -58,6 +58,65 @@ void tearDown(void)
     TEST_ASSERT_FALSE(PDUList.locked);
 }
 
+#if 0
+void test_KineticAllocator_GetFirstPDU_should_return_the_first_PDU_in_the_list(void)
+{
+    LOG_LOCATION;
+    KineticConnection connection;
+    KineticPDU* pdus[] = {NULL, NULL, NULL};
+
+    TEST_ASSERT_NULL(KineticAllocator_GetFirstPDU(&PDUList));
+
+    pdus[0] = KineticAllocator_NewPDU(&PDUList, &connection);
+    TEST_ASSERT_EQUAL_PTR(pdus[0], KineticAllocator_GetFirstPDU(&PDUList));
+
+    pdus[1] = KineticAllocator_NewPDU(&PDUList, &connection);
+    TEST_ASSERT_EQUAL_PTR(pdus[0], KineticAllocator_GetFirstPDU(&PDUList));
+
+    KineticAllocator_FreeAllPDUs(&PDUList);
+    TEST_ASSERT_NULL(KineticAllocator_GetFirstPDU(&PDUList));
+}
+
+
+void test_KineticAllocator_GetNextPDU_should_return_the_next_PDU_in_the_list(void)
+{
+    LOG_LOCATION;
+    KineticConnection connection;
+    KineticPDU* pdus[] = {NULL, NULL, NULL};
+
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, NULL));
+
+    pdus[0] = KineticAllocator_NewPDU(&PDUList, &connection);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, NULL));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
+
+    pdus[1] = KineticAllocator_NewPDU(&PDUList, &connection);
+    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
+
+    pdus[2] = KineticAllocator_NewPDU(&PDUList, &connection);
+    TEST_ASSERT_EQUAL_PTR(pdus[2], KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
+    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[2]));
+
+    KineticAllocator_FreePDU(&PDUList, pdus[2]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
+    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
+
+    KineticAllocator_FreePDU(&PDUList, pdus[0]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
+
+    // Should return NULL if passed the address of a non-existent/freed PDU
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[2]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, NULL));
+
+    KineticAllocator_FreePDU(&PDUList, pdus[1]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[2]));
+}
+#endif
 
 void test_KineticAllocator_FreeAllPDUs_should_free_full_list_of_PDUs(void)
 {

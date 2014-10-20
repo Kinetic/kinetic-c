@@ -41,17 +41,19 @@
 #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_KEY_SIZE (1000)
 #define KINETIC_MAX_THREADS (10)
+#define MAX_OBJ_SIZE (KINETIC_KEY_SIZE)
 
 KineticSessionHandle* kinetic_client;
+const char HmacKeyString[] = "asdfasdf";
 
 struct kinetic_thread_arg {
     char ip[16];
     KineticSessionHandle sessionHandle;
+    char keyPrefix[KINETIC_KEY_SIZE];
     uint8_t key[KINETIC_KEY_SIZE];
     uint8_t version[KINETIC_KEY_SIZE];
     uint8_t tag[KINETIC_KEY_SIZE];
     uint8_t value[KINETIC_OBJ_SIZE];
-    int keyPrefixLength;
     KineticEntry entry;
     ByteBuffer data;
     KineticStatus status;
@@ -59,7 +61,8 @@ struct kinetic_thread_arg {
 
 void setUp()
 {
-    KineticClient_Init("stdout");
+    KineticClient_Init(NULL);
+    // KineticClient_Init("stdout");
 }
 
 void tearDown()
@@ -79,8 +82,8 @@ void* kinetic_put(void* kinetic_arg)
 
         // Configure meta-data
         char keySuffix[8];
-        snprintf(keySuffix, sizeof(keySuffix), "_%02d", objIndex);
-        entry->key.bytesUsed = arg->keyPrefixLength;
+        snprintf(keySuffix, sizeof(keySuffix), "%02d", objIndex);
+        entry->key.bytesUsed = strlen(arg->keyPrefix);
         ByteBuffer_AppendCString(&entry->key, keySuffix);
 
         // Move dbVersion back to newVersion, since successful PUTs do this
@@ -91,19 +94,20 @@ void* kinetic_put(void* kinetic_arg)
         }
 
         // Prepare the next chunk of data to store
+        ByteBuffer_Reset(&entry->value);
         ByteBuffer_AppendArray(
             &entry->value,
-            ByteBuffer_Consume(
-                &arg->data,
-                MIN(ByteBuffer_BytesRemaining(arg->data), KINETIC_OBJ_SIZE)
-            )
+            ByteBuffer_Consume(&arg->data, MIN(ByteBuffer_BytesRemaining(arg->data), MAX_OBJ_SIZE))
         );
 
+        // Set operation-specific attributes
+        // entry->synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
+
         // Store the data slice
-        LOGF("Storing a data slice (%u bytes)", entry->value.bytesUsed);
+        LOGF("  *** Storing a data slice (%u bytes)", entry->value.bytesUsed);
         KineticStatus status = KineticClient_Put(arg->sessionHandle, entry);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        LOGF("KineticClient put to disk success, ip:%s", arg->ip);
+        LOGF("  *** KineticClient put to disk success, ip:%s", arg->ip);
 
         objIndex++;
     }
@@ -112,7 +116,7 @@ void* kinetic_put(void* kinetic_arg)
     int64_t elapsed_us = ((stopTime.tv_sec - startTime.tv_sec) * 1000000)
         + (stopTime.tv_usec - startTime.tv_usec);
     float elapsed_ms = elapsed_us / 1000.0f;
-    float throughput = (arg->data.array.len * 1000.0f) / (elapsed_ms * 1024);
+    float throughput = (arg->data.array.len * 1000.0f) / (elapsed_ms * 1024 * 1024);
     printf("\n"
         "Write/Put Performance:\n"
         "----------------------------------------\n"
@@ -127,11 +131,17 @@ void* kinetic_put(void* kinetic_arg)
 
     // Configure GetKeyRange request
     const int maxKeys = 5;
-    char startKey[] = "pre_0000_";
-    char endKey[] = "pre_0000_03";
+    char startKey[KINETIC_KEY_SIZE];
+    ByteBuffer startKeyBuffer = ByteBuffer_Create(startKey, sizeof(startKey), 0);
+    ByteBuffer_AppendCString(&startKeyBuffer, arg->keyPrefix);
+    ByteBuffer_AppendCString(&startKeyBuffer, "00");
+    char endKey[KINETIC_KEY_SIZE];
+    ByteBuffer endKeyBuffer = ByteBuffer_Create(endKey, sizeof(endKey), 0);
+    ByteBuffer_AppendCString(&endKeyBuffer, arg->keyPrefix);
+    ByteBuffer_AppendCString(&endKeyBuffer, "03");
     KineticKeyRange keyRange = {
-        .startKey = ByteBuffer_Create(startKey, strlen(startKey), strlen(startKey)),
-        .endKey = ByteBuffer_Create(endKey, strlen(endKey), strlen(endKey)),
+        .startKey = startKeyBuffer,
+        .endKey = endKeyBuffer,
         .startKeyInclusive = true,
         .endKeyInclusive = true,
         .maxReturned = maxKeys,
@@ -166,15 +176,15 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
     const KineticSession sessionConfig = {
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
-        .nonBlocking = false,
         .clusterVersion = 0,
         .identity = 1,
-        .hmacKey = ByteArray_CreateWithCString("asdfasdf"),
+        .nonBlocking = false,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
 
     for (int iteration = 0; iteration < maxIterations; iteration++) {
 
-        printf("Overlapped PUT operation (iteration %d of %d)\n",
+        printf("\n*** Overlapped PUT operation (iteration %d of %d)\n",
                iteration + 1, maxIterations);
 
         char* buf = malloc(sizeof(char) * BUFSIZE);
@@ -195,7 +205,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
         for (int i = 0; i < numCopiesToStore; i++) {
 
-            printf("    Overlapped PUT operations (writing copy %d of %d)"
+            printf("  *** Overlapped PUT operations (writing copy %d of %d)"
                    " on IP (iteration %d of %d):%s\n",
                    i + 1, numCopiesToStore, iteration + 1,
                    maxIterations, sessionConfig.host);
@@ -207,11 +217,11 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
             strcpy(kt_arg[i].ip, sessionConfig.host);
 
             // Configure the KineticEntry
-            char keyPrefix[128];
-            snprintf(keyPrefix, sizeof(keyPrefix), "pre_%02d%02d", iteration, i);
+            struct timeval now;
+            gettimeofday(&now, NULL);
+            snprintf(kt_arg[i].keyPrefix, sizeof(kt_arg[i].keyPrefix), "%010llu_%02d%02d_", (unsigned long long)now.tv_sec, iteration, i);
             ByteBuffer keyBuf = ByteBuffer_Create(kt_arg[i].key, sizeof(kt_arg[i].key), 0);
-            ByteBuffer_AppendCString(&keyBuf, keyPrefix);
-            kt_arg[i].keyPrefixLength = keyBuf.bytesUsed;
+            ByteBuffer_AppendCString(&keyBuf, kt_arg[i].keyPrefix);
 
             ByteBuffer verBuf = ByteBuffer_Create(kt_arg[i].version, sizeof(kt_arg[i].version), 0);
             ByteBuffer_AppendCString(&verBuf, "v1.0");
@@ -240,7 +250,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         }
 
         // Wait for each overlapped PUT operations to complete and cleanup
-        printf("  Waiting for PUT threads to exit...\n");
+        printf("  *** Waiting for PUT threads to exit...\n");
         for (int i = 0; i < numCopiesToStore; i++) {
             int join_status = pthread_join(thread_id[i], NULL);
             TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
@@ -252,8 +262,8 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         free(kt_arg);
         free(buf);
 
-        printf("  Iteration complete!\n");
+        printf("  *** Iteration complete!\n");
     }
 
-    printf("Overlapped PUT operation test complete!\n");
+    printf("*** Overlapped PUT operation test complete!\n");
 }

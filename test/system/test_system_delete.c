@@ -111,6 +111,8 @@ void test_Delete_should_delete_an_object_from_device(void)
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
+        .force = true,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
     status = KineticClient_Put(Fixture.handle, &putEntry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);

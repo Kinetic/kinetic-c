@@ -42,28 +42,84 @@
 #include <string.h>
 #include <stdlib.h>
 
-static SystemTestFixture Fixture;
-static ByteArray ValueKey;
-static ByteArray OtherValueKey;
-static ByteArray Tag;
-static ByteArray TestValue;
-static ByteArray Version;
-static ByteArray NewVersion;
-static ByteArray OtherNewVersion;
+// static SystemTestFixture Fixture;
+// static ByteArray ValueKey;
+// static ByteArray OtherValueKey;
+// static ByteArray Tag;
+// static ByteArray TestValue;
+// static ByteArray Version;
+// static ByteArray NewVersion;
+// static ByteArray OtherNewVersion;
 static KineticEntry Entry;
+
+static SystemTestFixture Fixture;
+static char HmacKeyString[] = "asdfasdf";
+static ByteArray HmacKey;
+
+static uint8_t KeyData[1024];
+static ByteArray Key;
+static ByteBuffer KeyBuffer;
+
+static uint8_t OtherKeyData[1024];
+static ByteArray OtherKey;
+static ByteBuffer OtherKeyBuffer;
+
+static uint8_t TagData[1024];
+static ByteArray Tag;
+static ByteBuffer TagBuffer;
+
+static uint8_t VersionData[1024];
+static ByteArray Version;
+static ByteBuffer VersionBuffer;
+
+static uint8_t NewVersionData[1024];
+static ByteArray NewVersion;
+static ByteBuffer NewVersionBuffer;
+
+static uint8_t OtherVersionData[1024];
+static ByteArray OtherVersion;
+static ByteBuffer OtherVersionBuffer;
+
+static ByteArray TestValue;
+static uint8_t ValueData[KINETIC_OBJ_SIZE];
+static ByteArray Value;
+static ByteBuffer ValueBuffer;
 
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-    ValueKey = ByteArray_CreateWithCString("my_key_3.1415927");
-    OtherValueKey = ByteArray_CreateWithCString("my_key_3.1415927_0");
-    Tag = ByteArray_CreateWithCString("SomeTagValue");
-    TestValue = ByteArray_CreateWithCString("lorem ipsum... blah... etc...");
-    Version = ByteArray_CreateWithCString("v1.0");
-    NewVersion = ByteArray_CreateWithCString("v2.0");
-    OtherNewVersion = ByteArray_CreateWithCString("v3.0");
 
-    ByteBuffer_Append(&Fixture.keyToDelete, ValueKey.data, ValueKey.len);
+    HmacKey = ByteArray_CreateWithCString(HmacKeyString);
+    Fixture.config.hmacKey = HmacKey;
+
+    Key = ByteArray_Create(KeyData, sizeof(KeyData));
+    KeyBuffer = ByteBuffer_CreateWithArray(Key);
+    ByteBuffer_AppendCString(&KeyBuffer, "PUT test key");
+
+    OtherKey = ByteArray_Create(OtherKeyData, sizeof(OtherKeyData));
+    OtherKeyBuffer = ByteBuffer_CreateWithArray(OtherKey);
+    ByteBuffer_AppendCString(&OtherKeyBuffer, "Some other PUT test key");
+
+    Tag = ByteArray_Create(TagData, sizeof(TagData));
+    TagBuffer = ByteBuffer_CreateWithArray(Tag);
+    ByteBuffer_AppendCString(&TagBuffer, "SomeTagValue");
+
+    Version = ByteArray_Create(VersionData, sizeof(VersionData));
+    VersionBuffer = ByteBuffer_CreateWithArray(Version);
+    ByteBuffer_AppendCString(&VersionBuffer, "v1.0");
+
+    NewVersion = ByteArray_Create(NewVersionData, sizeof(NewVersionData));
+    NewVersionBuffer = ByteBuffer_CreateWithArray(NewVersion);
+    ByteBuffer_AppendCString(&NewVersionBuffer, "v2.0");
+
+    OtherVersion = ByteArray_Create(OtherVersionData, sizeof(OtherVersionData));
+    OtherVersionBuffer = ByteBuffer_CreateWithArray(OtherVersion);
+    ByteBuffer_AppendCString(&OtherVersionBuffer, "v3.0");
+
+    TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
+    Value = ByteArray_Create(ValueData, sizeof(ValueData));
+    ValueBuffer = ByteBuffer_CreateWithArray(Value);
+    ByteBuffer_AppendCString(&ValueBuffer, "lorem ipsum... blah blah blah... etc.");
 }
 
 void tearDown(void)
@@ -71,26 +127,72 @@ void tearDown(void)
     SystemTestTearDown(&Fixture);
 }
 
+void test_Delete_old_object_if_exists(void)
+{
+    KineticStatus status;
+
+    ByteBuffer_Reset(&VersionBuffer);
+    ByteBuffer_Reset(&TagBuffer);
+    ByteBuffer_Reset(&ValueBuffer);
+    Entry = (KineticEntry) {
+        .key = KeyBuffer,
+        .dbVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .value = ValueBuffer,
+    };
+    status = KineticClient_Get(Fixture.handle, &Entry);
+
+    if (status == KINETIC_STATUS_SUCCESS) {
+        status = KineticClient_Delete(Fixture.handle, &Entry);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
+    else
+    {
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
+    }
+
+
+    ByteBuffer_Reset(&VersionBuffer);
+    ByteBuffer_Reset(&TagBuffer);
+    ByteBuffer_Reset(&ValueBuffer);
+    Entry = (KineticEntry) {
+        .key = OtherKeyBuffer,
+        .dbVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .value = ValueBuffer,
+    };
+    status = KineticClient_Get(Fixture.handle, &Entry);
+
+    if (status == KINETIC_STATUS_SUCCESS) {
+        status = KineticClient_Delete(Fixture.handle, &Entry);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
+    else
+    {
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
+    }
+}
+
 void test_Put_should_create_new_object_on_device(void)
 {
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-         .newVersion = ByteBuffer_CreateWithArray(Version),
-          .tag = ByteBuffer_CreateWithArray(Tag),
-           .algorithm = KINETIC_ALGORITHM_SHA1,
-            .value = ByteBuffer_CreateWithArray(TestValue),
+        .key = KeyBuffer,
+        .newVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteArray(Version, Entry.dbVersion.array);
-    TEST_ASSERT_ByteBuffer_EMPTY(Entry.dbVersion);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
     TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
 
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, Entry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Key, Entry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
@@ -100,47 +202,22 @@ void test_Put_should_create_another_new_object_on_device(void)
 {
     LOG(""); LOG_LOCATION;
     Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(OtherValueKey),
-         .newVersion = ByteBuffer_CreateWithArray(Version),
-          .tag = ByteBuffer_CreateWithArray(Tag),
-           .algorithm = KINETIC_ALGORITHM_SHA1,
-            .value = ByteBuffer_CreateWithArray(TestValue),
+        .key = OtherKeyBuffer,
+        .newVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteArray(Version, Entry.dbVersion.array);
-    TEST_ASSERT_ByteBuffer_EMPTY(Entry.dbVersion);
-    TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
-    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
-
-    TEST_ASSERT_EQUAL_ByteArray(OtherValueKey, Entry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
-
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
-}
-
-void test_Put_should_update_object_data_on_device(void)
-{
-    LOG(""); LOG_LOCATION;
-    Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-         .dbVersion = ByteBuffer_CreateWithArray(Version),
-          .tag = ByteBuffer_CreateWithArray(Tag),
-           .algorithm = KINETIC_ALGORITHM_SHA1,
-            .value = ByteBuffer_CreateWithArray(TestValue),
-    };
-
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    TEST_ASSERT_EQUAL_ByteArray(Version, Entry.dbVersion.array);
-    TEST_ASSERT_ByteBuffer_EMPTY(Entry.dbVersion);
     TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
 
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, Entry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(OtherKey, Entry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
@@ -149,21 +226,28 @@ void test_Put_should_update_object_data_on_device(void)
 void test_Put_should_update_object_data_on_device_and_update_version(void)
 {
     LOG(""); LOG_LOCATION;
+    ByteBuffer_Reset(&ValueBuffer);
+    ByteBuffer_AppendCString(&ValueBuffer, "This is some other random to update the entry with... again!");
+
     Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-         .newVersion = ByteBuffer_CreateWithArray(OtherNewVersion),
-          .dbVersion = ByteBuffer_CreateWithArray(NewVersion),
-           .tag = ByteBuffer_CreateWithArray(Tag),
-            .algorithm = KINETIC_ALGORITHM_SHA1,
-             .value = ByteBuffer_CreateWithArray(TestValue),
-              .force = true,
+        .key = KeyBuffer,
+        .dbVersion = VersionBuffer,
+        .newVersion = NewVersionBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, Entry.key.array);
+
+    TEST_ASSERT_EQUAL_ByteArray(NewVersion, Entry.dbVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
-    TEST_ASSERT_EQUAL_ByteArray(TestValue, Entry.value.array);
+    TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+
+    TEST_ASSERT_EQUAL_ByteArray(Key, Entry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
@@ -171,20 +255,58 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
 void test_Put_should_update_object_data_on_device_and_with_FLUSH_sync_mode_enabled(void)
 {
     LOG(""); LOG_LOCATION;
+    ByteBuffer_Reset(&ValueBuffer);
+    ByteBuffer_AppendCString(&ValueBuffer, "OK, this is, yet again, some new and different data!");
+
     Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-         .dbVersion = ByteBuffer_CreateWithArray(OtherNewVersion),
-          .tag = ByteBuffer_CreateWithArray(Tag),
-           .algorithm = KINETIC_ALGORITHM_SHA1,
-            .value = ByteBuffer_CreateWithArray(TestValue),
-             .synchronization = KINETIC_SYNCHRONIZATION_FLUSH,
+        .key = KeyBuffer,
+        .dbVersion = NewVersionBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
+        .synchronization = KINETIC_SYNCHRONIZATION_FLUSH,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, Entry.key.array);
+
+    TEST_ASSERT_EQUAL_ByteArray(NewVersion, Entry.dbVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
-    TEST_ASSERT_EQUAL_ByteArray(TestValue, Entry.value.array);
+    TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+
+    TEST_ASSERT_EQUAL_ByteArray(Key, Entry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
+
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
+}
+
+void test_Put_should_update_object_data_on_device_and_with_WRITETHROUGH_sync_mode_enabled(void)
+{
+    LOG(""); LOG_LOCATION;
+    ByteBuffer_Reset(&ValueBuffer);
+    ByteBuffer_AppendCString(&ValueBuffer, "OK, this is, yet again, some new and different data... again!");
+
+    Entry = (KineticEntry) {
+        .key = KeyBuffer,
+        .dbVersion = NewVersionBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
+        .force = true,
+    };
+
+    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteArray(NewVersion, Entry.dbVersion.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
+    TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+
+    TEST_ASSERT_EQUAL_ByteArray(Key, Entry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
@@ -192,19 +314,28 @@ void test_Put_should_update_object_data_on_device_and_with_FLUSH_sync_mode_enabl
 void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled(void)
 {
     LOG(""); LOG_LOCATION;
+    ByteBuffer_Reset(&ValueBuffer);
+    ByteBuffer_AppendCString(&ValueBuffer, "...blah blah!");
+
     Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-         .tag = ByteBuffer_CreateWithArray(Tag),
-          .algorithm = KINETIC_ALGORITHM_SHA1,
-           .value = ByteBuffer_CreateWithArray(TestValue),
-            .force = true,
+        .key = KeyBuffer,
+        .dbVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
+        .force = true,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, Entry.key.array);
+
+    TEST_ASSERT_EQUAL_ByteArray(Version, Entry.dbVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
-    TEST_ASSERT_EQUAL_ByteArray(TestValue, Entry.value.array);
+    TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+
+    TEST_ASSERT_EQUAL_ByteArray(Key, Entry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
@@ -212,63 +343,68 @@ void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled(v
 void test_Put_should_update_object_data_on_device_again_via_FORCE_with_garbage_version(void)
 {
     LOG(""); LOG_LOCATION;
+    ByteBuffer_Reset(&ValueBuffer);
+    ByteBuffer_AppendCString(&ValueBuffer, "Zippety do dah, zippedy eh...");
+
     Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-         .tag = ByteBuffer_CreateWithArray(Tag),
-          .algorithm = KINETIC_ALGORITHM_SHA1,
-           .value = ByteBuffer_CreateWithArray(TestValue),
-            .force = true,
+        .key = KeyBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
+        .force = true,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, Entry.key.array);
+
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
-    TEST_ASSERT_EQUAL_ByteArray(TestValue, Entry.value.array);
+    TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+
+    TEST_ASSERT_EQUAL_ByteArray(Key, Entry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
 
-void test_Put_should_update_object_data_on_device_via_FORCE_with_invalid_dbVersion(void)
+void test_Put_should_be_able_to_store_max_sized_entry(void)
 {
     LOG(""); LOG_LOCATION;
+
+    uint8_t keyBytes[] = {0x31,0x34,0x31,0x33,0x35,0x35,0x38,0x31,0x35,0x30,0x5F,0x30,0x30,0x30,0x30,0x5F,0x30,0x30};
+    uint8_t versionBytes[] = {0x76,0x31,0x2E,0x30};
+    uint8_t tagBytes[] = {0x73,0x6F,0x6D,0x65,0x5F,0x76,0x61,0x6C,0x75,0x65,0x5F,0x74,0x61,0x67,0x2E,0x2E,0x2E};
+
+    ByteBuffer_Reset(&KeyBuffer);
+    ByteBuffer_Append(&KeyBuffer, keyBytes, sizeof(keyBytes));
+    ByteBuffer_Reset(&VersionBuffer);
+    ByteBuffer_Append(&VersionBuffer, versionBytes, sizeof(versionBytes));
+    ByteBuffer_Reset(&TagBuffer);
+    ByteBuffer_Append(&TagBuffer, tagBytes, sizeof(tagBytes));
+    ByteBuffer_Reset(&ValueBuffer);
+    // ByteBuffer_AppendDummyData(&ValueBuffer, ValueBuffer.array.len);
+    ByteBuffer_AppendDummyData(&ValueBuffer, 1024 * 128);
+
     Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-         .dbVersion = ByteBuffer_CreateWithArray(NewVersion),
-          .tag = ByteBuffer_CreateWithArray(Tag),
-           .algorithm = KINETIC_ALGORITHM_SHA1,
-            .value = ByteBuffer_CreateWithArray(TestValue),
-             .force = true,
+        .key = KeyBuffer,
+        .dbVersion = NewVersionBuffer,
+        .tag = TagBuffer,
+        .value = ValueBuffer,
+        .force = true,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
 
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, Entry.key.array);
+
+    TEST_ASSERT_EQUAL_ByteArray(Key, Entry.key.array);
+    // TEST_ASSERT_EQUAL_ByteArray(Version, Entry.dbVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
-    TEST_ASSERT_EQUAL_ByteArray(TestValue, Entry.value.array);
-
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+    TEST_ASSERT_TRUE(Entry.force);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
-}
-
-void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled_and_unused_newVersion(void)
-{
-    LOG(""); LOG_LOCATION;
-    Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateWithArray(ValueKey),
-         .newVersion = ByteBuffer_CreateWithArray(NewVersion),
-          .tag = ByteBuffer_CreateWithArray(Tag),
-           .algorithm = KINETIC_ALGORITHM_SHA1,
-            .value = ByteBuffer_CreateWithArray(TestValue),
-             .force = true,
-    };
-
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(ValueKey, Entry.key.array);
-    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
-    TEST_ASSERT_EQUAL_ByteArray(TestValue, Entry.value.array);
-
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
+    TEST_ASSERT_EQUAL(KINETIC_SYNCHRONIZATION_WRITETHROUGH, Entry.synchronization);
 }
 
 /*******************************************************************************

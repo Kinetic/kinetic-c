@@ -21,7 +21,7 @@ typedef struct _ByteArray {
 #define BYTE_ARRAY_NONE (ByteArray){.len = 0, .data = NULL}
 
 ByteArray ByteArray_Create(void* data, size_t len);
-ByteArray ByteArray_CreateWithCString(char* str);
+ByteArray ByteArray_CreateWithCString(const char* str);
 ByteArray ByteArray_GetSlice(const ByteArray array, size_t start, size_t len);
 void ByteArray_FillWithDummyData(const ByteArray array);
 

@@ -10,7 +10,7 @@ ByteArray ByteArray_Create(void* data, size_t len)
     };
 }
 
-ByteArray ByteArray_CreateWithCString(char* str)
+ByteArray ByteArray_CreateWithCString(const char* str)
 {
     return (ByteArray) {
         .data = (uint8_t*)str, .len = strlen(str)

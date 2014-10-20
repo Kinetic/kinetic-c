@@ -24,6 +24,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+// #define USE_GENERIC_LOGGER 1
+
 int LogLevel = -1;
 
 void KineticLogger_Init(const char* logFile)
@@ -160,7 +162,7 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
 //     KineticLogger_LogByteArray(#attr, (el)->(attr));
 // }
 
-#if 0
+#if USE_GENERIC_LOGGER
 static void KineticLogger_LogProtobufMessage(const ProtobufCMessage *msg, char* _indent)
 {
     assert(msg != NULL);
@@ -168,276 +170,157 @@ static void KineticLogger_LogProtobufMessage(const ProtobufCMessage *msg, char* 
 
     const ProtobufCMessageDescriptor* desc = msg->descriptor;
     const uint8_t* pMsg = (const uint8_t*)msg;
-    char tmpBuf[1024];
+    // char tmpBuf[1024];
 
     LOG_PROTO_LEVEL_START(desc->short_name);
-
-    LOGF("** ProtobufMessage: msg=0x%0llX, range=0x%0llX, name=%s, fields=%u",
-        msg, pMsg, desc->short_name, desc->n_fields);
+    // LOGF("%s* ProtobufMessage: msg=0x%0llX, _indent, range=0x%0llX, name=%s, fields=%u",
+    //     _indent, msg, pMsg, desc->short_name, desc->n_fields);
 
     for (unsigned int i = 0; i < desc->n_fields; i++) {
-
-        size_t count = 0;
         bool indexed = false;
         const ProtobufCFieldDescriptor* fieldDesc =
             (const ProtobufCFieldDescriptor*)((uint8_t*)&desc->fields[i]);
-        const uint8_t* pVal = pMsg + fieldDesc->offset;
+        // const uint8_t* pVal = pMsg + fieldDesc->offset;
         const uint8_t* quantifier = pMsg + fieldDesc->quantifier_offset;
         const uint32_t quantity = *((uint32_t*)quantifier);
 
         if (fieldDesc == NULL) {
             continue;
         }
-        LOGF("**** ProtobufField[%s]: descriptor=0x%0llX", fieldDesc->name, fieldDesc);
-        LOGF("     value:      field=0x%0llX,      offset=%u, value=?", pVal, fieldDesc->offset);
-        LOGF("     quantifier: quantifier=0x%0llX, offset=%u, quantity=%u", quantifier, fieldDesc->quantifier_offset, quantity);
+
+        // LOGF("%s * ProtobufField[%s]: descriptor=0x%0llX",
+        //     _indent, fieldDesc->name, fieldDesc);
+        // LOGF("%s   * value: field=0x%0llX, offset=%u, value=?, type=%d",
+        //     _indent, pVal, fieldDesc->offset, fieldDesc->type);
+        // LOGF("%s   * quantifier: quantifier=0x%0llX, offset=%u, quantity=%u",
+        //     _indent, quantifier, fieldDesc->quantifier_offset, quantity);
 
         switch (fieldDesc->type) {
         case PROTOBUF_C_TYPE_INT32:
         case PROTOBUF_C_TYPE_SINT32:
-        case PROTOBUF_C_TYPE_SFIXED32: {
-            int32_t* value = (int32_t*)&pMsg[fieldDesc->offset];
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {
-                count = 1;
-            }
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                bool present = *((const protobuf_c_boolean*)quantifier) != 0;
-                if (present) {count = 1;}
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((const size_t*)quantifier);
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %ld", _indent, fieldDesc->name, suffix, value[i]);
-                }
+        case PROTOBUF_C_TYPE_SFIXED32:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                int32_t* value = (int32_t*)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %ld", _indent, fieldDesc->name, suffix, value[i]);
             }
             break;
-        }
 
         case PROTOBUF_C_TYPE_INT64:
         case PROTOBUF_C_TYPE_SINT64:
-        case PROTOBUF_C_TYPE_SFIXED64: {
-            int64_t* value = (int64_t*)(msg + fieldDesc->offset);
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
-                    count = 1;
-                }
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %lld", _indent, fieldDesc->name, suffix, value[i]);
-                }
+        case PROTOBUF_C_TYPE_SFIXED64:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                int64_t* value = (int64_t*)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %lld", _indent, fieldDesc->name, suffix, value[i]);
             }
             break;
-        }
 
         case PROTOBUF_C_TYPE_UINT32:
-        case PROTOBUF_C_TYPE_FIXED32: {
-            uint32_t* value = (uint32_t*)(msg + fieldDesc->offset);
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
-                    count = 1;
-                }
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %lu", _indent, fieldDesc->name, suffix, value[i]);
-                }
+        case PROTOBUF_C_TYPE_FIXED32:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                uint32_t* value = (uint32_t*)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %lu", _indent, fieldDesc->name, suffix, value[i]);
             }
             break;
-        }
 
         case PROTOBUF_C_TYPE_UINT64:
-        case PROTOBUF_C_TYPE_FIXED64: {
-            uint64_t* value = (uint64_t*)(msg + fieldDesc->offset);
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
-                    count = 1;
-                }
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %llu", _indent, fieldDesc->name, suffix, value[i]);
-                }
+        case PROTOBUF_C_TYPE_FIXED64:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                uint64_t* value = (uint64_t*)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %llu", _indent, fieldDesc->name, suffix, value[i]);
             }
             break;
-        }
 
-        case PROTOBUF_C_TYPE_FLOAT: {
-            float* value = (float*)(msg + fieldDesc->offset);
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
-                    count = 1;
-                }
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %f", _indent, fieldDesc->name, suffix, value[i]);
-                }
+        case PROTOBUF_C_TYPE_FLOAT:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                float* value = (float*)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %f", _indent, fieldDesc->name, suffix, value[i]);
             }
             break;
-        }
 
-        case PROTOBUF_C_TYPE_DOUBLE: {
-            double* value = (double*)(msg + fieldDesc->offset);
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
-                    count = 1;
-                }
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %f", _indent, fieldDesc->name, suffix, value[i]);
-                }
+        case PROTOBUF_C_TYPE_DOUBLE:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                double* value = (double*)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %f", _indent, fieldDesc->name, suffix, value[i]);
             }
             break;
-        }
 
-        case PROTOBUF_C_TYPE_BOOL: {
-            protobuf_c_boolean* value = (protobuf_c_boolean*)(msg + fieldDesc->offset);
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
-                    count = 1;
-                }
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix,
+        case PROTOBUF_C_TYPE_BOOL:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                protobuf_c_boolean* value = (protobuf_c_boolean*)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix,
                         value[i] ? _str_true : _str_false);
-                }
             }
             break;
-        }
 
-        case PROTOBUF_C_TYPE_STRING: {
-            char** strings = (char**)(msg + fieldDesc->offset);
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
-                    count = 1;
-                }
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %ld", _indent, fieldDesc->name, suffix, strings[i]);
-                }
+        case PROTOBUF_C_TYPE_STRING:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                char** strings = (char**)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix, strings[i]);
             }
             break;
-        }
 
-        case PROTOBUF_C_TYPE_BYTES: {
-            LOG("****** TYPE: PROTOBUF_C_TYPE_BYTES");
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {
-                count = 1;
-            }
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                count = (quantity == 0) ? 0 : 1;
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = quantity;
-                if (count > 0) {indexed = true;}
-            }
-
-            if (count > 0) {
-                ProtobufCBinaryData* pArray = *(ProtobufCBinaryData**)((unsigned long)(pVal));
-                LOGF("DDDDDDD pArray=0x%0llX, points to: 0x%0llX", pArray, *pArray);
-                ProtobufCBinaryData* arrays = (ProtobufCBinaryData*)pArray;
-                // arrays++;
-                LOGF("******** BYTE_ARRAYS: raw=0x%0llX, arrays=0x%0llX, count=%u, &[0]=0x%0llX, &[1]=0x%0llX"
-                    , pVal, arrays, count, &arrays[0], &arrays[1]);
-                for (unsigned j = 0; j < count; j++) {
-                    ProtobufCBinaryData* myArray = (ProtobufCBinaryData*)&arrays[j];
-                    myArray += j;
-                    LOGF("******************* data=0x%0llX, len=%u", myArray->data, myArray->len);
-                    if (myArray->data != NULL && myArray->len > 0) {
-                        char suffix[32] = {'\0'};
-                        if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", j);}
-                        // BYTES_TO_CSTRING(tmpBuf, &myArray, 0, myArray->len);
-                        // LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix, tmpBuf);
-                    }
-                }
+        case PROTOBUF_C_TYPE_BYTES:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                ProtobufCBinaryData* array = (ProtobufCBinaryData*)(msg + fieldDesc->offset + (i * sizeof(ProtobufCBinaryData)));
+                LOGF("%s%s%s: addr=0x%0llX, data=0x%0llX, len=%zu",
+                    _indent, fieldDesc->name, suffix, array, array->data, array->len);
             }
             break;
-        }
 
-        case PROTOBUF_C_TYPE_ENUM: {
-            ProtobufCEnumValue* enumVal = (ProtobufCEnumValue*)(msg + fieldDesc->offset);
-            if (fieldDesc->label == PROTOBUF_C_LABEL_REQUIRED) {count = 1;}
-            else if(fieldDesc->label == PROTOBUF_C_LABEL_OPTIONAL) {
-                if (*((protobuf_c_boolean*)(msg + fieldDesc->quantifier_offset))) {
-                    count = 1;
-                }
-            }
-            else if (fieldDesc->label == PROTOBUF_C_LABEL_REPEATED) {
-                count = *((size_t*)(msg + fieldDesc->quantifier_offset));
-                if (count > 0) {indexed = true;}
-            }
-            if (count > 0) {
-                for (unsigned int i = 0; i < count; i++) {
-                    char suffix[32] = {'\0'};
-                    if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                    LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix, enumVal[i].name);
-                }
+            // if (quantity > 0) {
+            //     LOGF("%s* TYPE: PROTOBUF_C_TYPE_BYTES (incomplete!)", _indent);
+            //     // ProtobufCBinaryData* pArray = *(ProtobufCBinaryData**)((unsigned long)(pVal));
+            //     // LOGF("%s    * pArray=0x%0llX, points to: 0x%0llX", _indent, pArray, *pArray);
+            //     // ProtobufCBinaryData* arrays = (ProtobufCBinaryData*)pArray;
+            //     // // arrays++;
+            //     // LOGF("%s    * BYTE_ARRAYS: raw=0x%0llX, arrays=0x%0llX, quantity=%u, &[0]=0x%0llX, &[1]=0x%0llX",
+            //     //     _indent, pVal, arrays, quantity, &arrays[0], &arrays[1]);
+            //     // for (unsigned int i = 0; i < quantity; i++) {
+            //     //     ProtobufCBinaryData* myArray = (ProtobufCBinaryData*)&arrays[i];
+            //     //     myArray += i;
+            //     //     LOGF("%s     * data=0x%0llX, len=%u", _indent, myArray->data, myArray->len);
+            //     //     if (myArray->data != NULL && myArray->len > 0) {
+            //     //         char suffix[32] = {'\0'};
+            //     //         if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+            //     //         // BYTES_TO_CSTRING(tmpBuf, &myArray, 0, myArray->len);
+            //     //         // LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix, tmpBuf);
+            //     //     }
+            //     // }
+            // }
+            // break;
+
+        case PROTOBUF_C_TYPE_ENUM:
+            for (unsigned int i = 0; i < quantity; i++) {
+                char suffix[32] = {'\0'};
+                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
+                ProtobufCEnumValue* enumVal = (ProtobufCEnumValue*)(msg + fieldDesc->offset);
+                LOGF("%s%s%s: %s", _indent, fieldDesc->name, suffix, enumVal[i].name);
             }
             break;
-        }
 
         case PROTOBUF_C_TYPE_MESSAGE:  // nested message
             LOG("Nested messages not yet supported!");
             assert(false); // nested messages not yet handled!
             break;
+
         default:
             LOG("Invalid message field type!");
             assert(false); // should never get here!
@@ -451,16 +334,15 @@ static void KineticLogger_LogProtobufMessage(const ProtobufCMessage *msg, char* 
 
 void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
 {
-    if (LogLevel < 0) {
+    if (LogLevel < 0 || msg == NULL) {
         return;
     }
 
     LOG_PROTO_INIT();
+// #if USE_GENERIC_LOGGER
+// #else
     char tmpBuf[1024];
-
-    if (msg == NULL) {
-        return;
-    }
+// #endif
 
     LOG("Kinetic Protobuf:");
 
@@ -472,8 +354,10 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
         LOGF("%sauthType: %s", _indent, eVal->name);
 
         if (msg->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH && msg->hmacAuth != NULL) {
+        #if USE_GENERIC_LOGGER
+            KineticLogger_LogProtobufMessage((ProtobufCMessage*)msg->hmacAuth, _indent);
+        #else
             LOG_PROTO_LEVEL_START("hmacAuth");
-
             if (msg->hmacAuth->has_identity) {
                 LOGF("%sidentity: %lld", _indent, msg->hmacAuth->identity);
             }
@@ -484,8 +368,12 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
             }
 
             LOG_PROTO_LEVEL_END();
+        #endif
         }
         else if (msg->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH && msg->pinAuth != NULL) {
+        #if USE_GENERIC_LOGGER
+            KineticLogger_LogProtobufMessage((ProtobufCMessage*)msg->hmacAuth, _indent);
+        #else
             LOG_PROTO_LEVEL_START("pinAuth");
 
             if (msg->pinAuth->has_pin) {
@@ -494,6 +382,7 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
             }
 
             LOG_PROTO_LEVEL_END();
+        #endif
         }
     }
 
@@ -504,6 +393,9 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
         KineticProto_Command* cmd = KineticProto_command__unpack(NULL, msg->commandBytes.len, msg->commandBytes.data);
 
         if (cmd->header) {
+        #if 0 //USE_GENERIC_LOGGER
+            KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->header, _indent);
+        #else
             LOG_PROTO_LEVEL_START("header");
             {
                 if (cmd->header->has_clusterVersion) {
@@ -549,12 +441,16 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
                 }
             }
             LOG_PROTO_LEVEL_END();
+        #endif
         }
 
         if (cmd->body) {
             LOG_PROTO_LEVEL_START("body");
             {
                 if (cmd->body->keyValue) {
+                #if USE_GENERIC_LOGGER
+                        KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->body->keyValue, _indent);
+                #else
                     LOG_PROTO_LEVEL_START("keyValue");
                     {
                         if (cmd->body->keyValue->has_key) {
@@ -603,9 +499,13 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
                         }
                     }
                     LOG_PROTO_LEVEL_END();
+                #endif
                 }
 
                 if (cmd->body->range) {
+                #if USE_GENERIC_LOGGER
+                    KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->body->range, _indent);
+                #else
                     LOG_PROTO_LEVEL_START("keyRange");
                     {
                         if (cmd->body->range->has_startKey) {
@@ -658,8 +558,7 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
                         }
                     }
                     LOG_PROTO_LEVEL_END();
-                
-                    // KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->body->range, _indent);
+                #endif
                 }
             }
 
@@ -667,6 +566,9 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
         }
 
         if (cmd->status) {
+        // #if USE_GENERIC_LOGGER
+        //     KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->status, _indent);
+        // #else
             LOG_PROTO_LEVEL_START("status");
             {
                 if (cmd->status->has_code) {
@@ -687,6 +589,7 @@ void KineticLogger_LogProtobuf(const KineticProto_Message* msg)
                 }
             }
             LOG_PROTO_LEVEL_END();
+        // #endif
         }
 
         free(cmd);
@@ -769,7 +672,7 @@ void KineticLogger_LogByteArray(const char* title, ByteArray bytes)
     }
     LOGF("%s: (%zd bytes)", title, bytes.len);
     const int byteChars = 4;
-    const int bytesPerLine = 16;
+    const int bytesPerLine = 32;
     const int lineLen = 4 + (bytesPerLine * byteChars);
     char hex[lineLen + 1];
     char ascii[lineLen + 1];

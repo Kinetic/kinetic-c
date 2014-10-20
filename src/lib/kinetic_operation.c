@@ -104,6 +104,11 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
     return status;
 }
 
+KineticPDU* KineticOperation_FindMatchingRequest(const KineticPDU* const response)
+{
+    return NULL;
+}
+
 void KineticOperation_BuildNoop(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);

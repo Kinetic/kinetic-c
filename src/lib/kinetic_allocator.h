@@ -26,6 +26,8 @@
 void KineticAllocator_InitList(KineticList* const list);
 KineticPDU* KineticAllocator_NewPDU(KineticList* const list, KineticConnection* connection);
 void KineticAllocator_FreePDU(KineticList* const list, KineticPDU* pdu);
+KineticPDU* KineticAllocator_GetFirstPDU(KineticList* const list);
+KineticPDU* KineticAllocator_GetNextPDU(KineticList* const list, KineticPDU* pdu);
 void KineticAllocator_FreeAllPDUs(KineticList* const list);
 bool KineticAllocator_ValidateAllMemoryFreed(KineticList* const list);
 

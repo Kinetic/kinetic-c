@@ -137,6 +137,22 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
     TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
 }
 
+
+void test_KineticOperation_FindMatchingRequest_should_return_a_request_PDU_with_matching_sequence_count(void)
+{
+    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
+    Response.command->header->ackSequence = 12;
+
+    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
+    Response.command->header->sequence = 12;
+    
+    KineticPDU* request = KineticOperation_FindMatchingRequest(&Response);
+    TEST_ASSERT_NULL(request);
+}
+
+
+
+
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
     LOG_LOCATION;

@@ -234,6 +234,37 @@ void KineticAllocator_FreePDU(KineticList* const list, KineticPDU* pdu)
     KineticAllocator_FreeItem(list, (void*)pdu);
 }
 
+KineticPDU* KineticAllocator_GetFirstPDU(KineticList* const list)
+{
+    assert(list != NULL);
+    if (list->start == NULL) {
+        return NULL;
+    }
+    return (KineticPDU*)list->start->data;
+}
+
+KineticPDU* KineticAllocator_GetNextPDU(KineticList* const list, KineticPDU* pdu)
+{
+    assert(list != NULL);
+    KineticPDU* next = NULL;
+
+    KineticAllocator_LockList(list);
+    KineticListItem* current = list->start;
+    while (current != NULL) {
+        KineticPDU* currPDU = (KineticPDU*)current->data;
+        if (currPDU == pdu) {
+            if (current->next != NULL) {
+                next = (KineticPDU*)current->next->data;
+            }
+            break;
+        }
+        current = current->next;
+    }
+    KineticAllocator_UnlockList(list);
+    
+    return next;
+}
+
 void KineticAllocator_FreeAllPDUs(KineticList* const list)
 {
     if (list->start != NULL) {

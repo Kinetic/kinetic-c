@@ -46,7 +46,7 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
 {
     assert(request != NULL);
     assert(request->connection != NULL);
-    LOGF("Sending PDU via fd=%d", request->connection->socket);
+    LOGF("\nSending PDU via fd=%d", request->connection->socket);
     KineticStatus status = KINETIC_STATUS_INVALID;
     request->proto = &request->protoData.message.message;
 
@@ -113,6 +113,7 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
     // Send the value/payload, if specified
     ByteBuffer* value = &request->entry.value;
     if ((value->array.data != NULL) && (value->array.len > 0) && (value->bytesUsed > 0)) {
+        LOGF("Sending PDU Value Payload (%zu bytes)", value->bytesUsed);
         status = KineticSocket_Write(request->connection->socket, value);
         if (status != KINETIC_STATUS_SUCCESS) {
             LOG("Failed to send PDU value payload!");
@@ -129,7 +130,7 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
     assert(response->connection != NULL);
     const int fd = response->connection->socket;
     assert(fd >= 0);
-    LOGF("Receiving PDU via fd=%d", fd);
+    LOGF("\nReceiving PDU via fd=%d", fd);
 
     KineticStatus status;
     KineticMessage* msg = &response->protoData.message;
