@@ -88,7 +88,7 @@ clean:
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
-	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall $(OPTIMIZE) -Wno-unused-parameter -I$(PROTOBUFC)
+	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 $(OUT_DIR)/kinetic_allocator.o: $(LIB_DIR)/kinetic_allocator.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_nbo.o: $(LIB_DIR)/kinetic_nbo.c $(LIB_DEPS)

@@ -25,103 +25,43 @@
 #include <pthread.h>
 #include <sys/time.h>
 
-// #define USE_GENERIC_LOGGER 1
+// #define USE_GENERIC_LOGGER 1 (not ready yet!)
 
 #define KINETIC_LOGGER_BUFFER_STR_MAX_LEN 256
 #define KINETIC_LOGGER_BUFFER_SIZE (0x1 << 12)
 #define KINETIC_LOGGER_FLUSH_INTERVAL_SEC 180
 #define KINETIC_LOGGER_SLEEP_TIME_SEC 10
 #define KINETIC_LOGGER_BUFFER_FLUSH_SIZE (0.8 * KINETIC_LOGGER_BUFFER_SIZE)
-#define KINETIC_LOGGER_FLUSH_THREAD_ENABLED false
 
 STATIC int KineticLogLevel = -1;
 STATIC FILE* KineticLoggerHandle = NULL;
 STATIC pthread_mutex_t KineticLoggerBufferMutex = PTHREAD_MUTEX_INITIALIZER;
 STATIC char KineticLoggerBuffer[KINETIC_LOGGER_BUFFER_SIZE][KINETIC_LOGGER_BUFFER_STR_MAX_LEN];
 STATIC int KineticLoggerBufferSize = 0;
-STATIC bool KineticLoggerForceFlush = false;
-
-static inline void KineticLogger_BufferLock(void)
-{
-    pthread_mutex_lock(&KineticLoggerBufferMutex);
-}
-
-static inline void KineticLogger_BufferUnlock()
-{
-    pthread_mutex_unlock(&KineticLoggerBufferMutex);
-}
-
-static void KineticLogger_FlushBuffer(void)
-{
-    if (KineticLoggerHandle == NULL) {
-        return;
-    }
-    for (int i = 0; i < KineticLoggerBufferSize; i++) {
-        fprintf(KineticLoggerHandle, "%s", KineticLoggerBuffer[i]);
-    }
-    fflush(KineticLoggerHandle);
-    KineticLoggerBufferSize = 0;
-}
-
-static inline char* KineticLogger_GetBuffer()
-{
-    KineticLogger_BufferLock();
-    if (KineticLoggerBufferSize >= KINETIC_LOGGER_BUFFER_SIZE) {
-        KineticLogger_FlushBuffer();
-    }
-
-    // allocate buffer
-    KineticLoggerBufferSize++;
-    return KineticLoggerBuffer[KineticLoggerBufferSize-1];
-}
-
-static inline void KineticLogger_FinishBuffer(void)
-{
-    if (KineticLoggerForceFlush) {
-        KineticLogger_FlushBuffer();
-    }
-    KineticLogger_BufferUnlock();
-}
 
 #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
-static void* KineticLogger_FlushThread(void* arg)
-{
-    (void)arg;
-    struct timeval tv;
-    time_t lasttime;
-    time_t curtime;
-
-    gettimeofday(&tv, NULL);
-
-    lasttime = tv.tv_sec;
-
-    for(;;) {
-        sleep(KINETIC_LOGGER_SLEEP_TIME_SEC);
-        gettimeofday(&tv, NULL);
-        curtime = tv.tv_sec;
-        if ((curtime - lasttime) >= KINETIC_LOGGER_FLUSH_INTERVAL_SEC) {
-            KineticLogger_FlushBuffer();
-            lasttime = curtime;
-        }
-        else {
-            KineticLogger_BufferLock();
-            if (KineticLoggerBufferSize >= KINETIC_LOGGER_BUFFER_FLUSH_SIZE) {
-                KineticLogger_FlushBuffer();
-            }
-            KineticLogger_BufferUnlock();
-        }
-    }
-
-    return NULL;
-}
-
-static void KineticLogger_InitFlushThread(void)
-{
-    pthread_t thr;
-    pthread_create(&thr, NULL, KineticLogger_FlushThread, NULL);
-    KineticLogger_Log(0, "Flush thread is created.\n");
-}
+STATIC bool KineticLoggerForceFlush = false;
+#else
+STATIC bool KineticLoggerForceFlush = true;
 #endif
+
+
+//------------------------------------------------------------------------------
+// Private Method Declarations
+
+static inline void KineticLogger_BufferLock(void);
+static inline void KineticLogger_BufferUnlock(void);
+static void KineticLogger_FlushBuffer(void);
+static inline char* KineticLogger_GetBuffer(void);
+static inline void KineticLogger_FinishBuffer(void);
+#if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
+static void* KineticLogger_FlushThread(void* arg);
+static void KineticLogger_InitFlushThread(void);
+#endif
+
+
+//------------------------------------------------------------------------------
+// Public Method Definitions
 
 void KineticLogger_Init(const char* log_file, int log_level)
 {
@@ -136,11 +76,11 @@ void KineticLogger_Init(const char* log_file, int log_level)
         KineticLogLevel = log_level;
         
         if (strncmp(log_file, "stdout", 4) == 0 || strncmp(log_file, "STDOUT", 4) == 0) {
-            printf("\nLogging kinetic-c output to console (stdout)\n");
+            printf("\nLogging kinetic-c output to console (stdout) w/ log_level=%d\n", KineticLogLevel);
             KineticLoggerHandle = stdout;
         }
         else {
-            printf("\nLogging kinetic-c output to %s\n", log_file);
+            printf("\nLogging kinetic-c output to %s w/ log_level=%d\n", log_file, KineticLogLevel);
             KineticLoggerHandle = fopen(log_file, "a+");
             assert(KineticLoggerHandle != NULL);
         }
@@ -148,6 +88,7 @@ void KineticLogger_Init(const char* log_file, int log_level)
         // Create thread to periodically flush the log
         #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
         KineticLogger_InitFlushThread();
+        KineticLoggerForceFlush = false;
         #endif
     }
 }
@@ -165,7 +106,7 @@ void KineticLogger_Close(void)
 
 void KineticLogger_Log(int log_level, const char* message)
 {
-    if (message == NULL || log_level < KineticLogLevel || KineticLogLevel < 0) {
+    if (message == NULL || log_level > KineticLogLevel || KineticLogLevel < 0) {
         return;
     }
 
@@ -173,12 +114,11 @@ void KineticLogger_Log(int log_level, const char* message)
     buffer = KineticLogger_GetBuffer();
     snprintf(buffer, KINETIC_LOGGER_BUFFER_STR_MAX_LEN, "%s\n", message);
     KineticLogger_FinishBuffer();
-    KineticLogger_FlushBuffer();
 }
 
 void KineticLogger_LogPrintf(int log_level, const char* format, ...)
 {
-    if (format == NULL || log_level < KineticLogLevel || KineticLogLevel < 0) {
+    if (format == NULL || log_level > KineticLogLevel || KineticLogLevel < 0) {
         return;
     }
 
@@ -192,7 +132,6 @@ void KineticLogger_LogPrintf(int log_level, const char* format, ...)
 
     strcat(buffer, "\n");
     KineticLogger_FinishBuffer();
-    KineticLogger_FlushBuffer();
 }
 
 void KineticLogger_LogLocation(const char* filename, int line, const char* message)
@@ -825,3 +764,91 @@ void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer bu
     ByteArray array = {.data = buffer.array.data, .len = buffer.bytesUsed};
     KineticLogger_LogByteArray(log_level, title, array);
 }
+
+
+//------------------------------------------------------------------------------
+// Private Method Definitions
+
+static inline void KineticLogger_BufferLock(void)
+{
+    pthread_mutex_lock(&KineticLoggerBufferMutex);
+}
+
+static inline void KineticLogger_BufferUnlock()
+{
+    pthread_mutex_unlock(&KineticLoggerBufferMutex);
+}
+
+static void KineticLogger_FlushBuffer(void)
+{
+    if (KineticLoggerHandle == NULL) {
+        return;
+    }
+    for (int i = 0; i < KineticLoggerBufferSize; i++) {
+        fprintf(KineticLoggerHandle, "%s", KineticLoggerBuffer[i]);
+    }
+    fflush(KineticLoggerHandle);
+    KineticLoggerBufferSize = 0;
+}
+
+static inline char* KineticLogger_GetBuffer()
+{
+    KineticLogger_BufferLock();
+    if (KineticLoggerBufferSize >= KINETIC_LOGGER_BUFFER_SIZE) {
+        KineticLogger_FlushBuffer();
+    }
+
+    // allocate buffer
+    KineticLoggerBufferSize++;
+    return KineticLoggerBuffer[KineticLoggerBufferSize-1];
+}
+
+static inline void KineticLogger_FinishBuffer(void)
+{
+    if (KineticLoggerForceFlush) {
+        KineticLogger_FlushBuffer();
+    }
+    KineticLogger_BufferUnlock();
+}
+
+#if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
+
+static void* KineticLogger_FlushThread(void* arg)
+{
+    (void)arg;
+    struct timeval tv;
+    time_t lasttime;
+    time_t curtime;
+
+    gettimeofday(&tv, NULL);
+
+    lasttime = tv.tv_sec;
+
+    for(;;) {
+        sleep(KINETIC_LOGGER_SLEEP_TIME_SEC);
+        gettimeofday(&tv, NULL);
+        curtime = tv.tv_sec;
+        if ((curtime - lasttime) >= KINETIC_LOGGER_FLUSH_INTERVAL_SEC) {
+            KineticLogger_FlushBuffer();
+            lasttime = curtime;
+        }
+        else {
+            KineticLogger_BufferLock();
+            if (KineticLoggerBufferSize >= KINETIC_LOGGER_BUFFER_FLUSH_SIZE) {
+                KineticLogger_FlushBuffer();
+            }
+            KineticLogger_BufferUnlock();
+        }
+    }
+
+    return NULL;
+}
+
+static void KineticLogger_InitFlushThread(void)
+{
+    pthread_t thr;
+    pthread_create(&thr, NULL, KineticLogger_FlushThread, NULL);
+    KineticLogger_Log(0, "Flush thread is created.\n");
+}
+
+#endif

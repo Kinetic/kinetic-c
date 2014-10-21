@@ -27,22 +27,21 @@
 #include "kinetic_nbo.h"
 #include "protobuf-c/protobuf-c.h"
 #include "socket99/socket99.h"
-
+#include <errno.h>
 #include <sys/time.h>
 #include <stdio.h>
- 
-#include <time.h>
 #ifdef __MACH__ // Since time.h on OSX does not supply clock_gettime()
 #include <mach/clock.h>
 #include <mach/mach.h>
 #endif
-
 
 #define MAX_ITERATIONS (3)
 #define NUM_COPIES (3)
 #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_MAX_THREADS (10)
 #define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
+
+#define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
 STATIC KineticSessionHandle* kinetic_client;
 STATIC const char HmacKeyString[] = "asdfasdf";
@@ -104,13 +103,13 @@ void* kinetic_put(void* kinetic_arg)
         );
 
         // Set operation-specific attributes
-        // entry->synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
+        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
 
         // Store the data slice
-        LOGF0("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);
+        LOGF1("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);
         KineticStatus status = KineticClient_Put(arg->sessionHandle, entry);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        LOGF0("  *** KineticClient put to disk success, ip:%s", arg->ip);
+        LOGF1("  *** KineticClient put to disk success, ip:%s", arg->ip);
 
         objIndex++;
     }
@@ -121,6 +120,7 @@ void* kinetic_put(void* kinetic_arg)
         + (stopTime.tv_usec - startTime.tv_usec);
     float elapsed_ms = elapsed_us / 1000.0f;
     arg->bandwidth = (arg->data.array.len * 1000.0f) / (elapsed_ms * 1024 * 1024);
+    fflush(stdout);
     printf("\n"
         "Write/Put Performance:\n"
         "----------------------------------------\n"
@@ -132,6 +132,7 @@ void* kinetic_put(void* kinetic_arg)
         elapsed_ms / 1000.0f,
         objIndex,
         arg->bandwidth);
+    fflush(stdout);
 
     // Configure GetKeyRange request
     const int maxKeys = 5;
@@ -186,6 +187,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
     };
 
     float bandwidthAccumulator = 0.0f, minBandwidth = 1000000000.0f, maxBandwidth = -1000000000.0f;
+    float aggregateBandwidthPerIteration[MAX_ITERATIONS];
 
     for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
 
@@ -198,13 +200,11 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         close(fd);
         TEST_ASSERT_MESSAGE(SourceDataSize > 0, "read error");
 
-        /* thread structure */
+        // Allocate session/thread data
         struct kinetic_thread_arg* kt_arg;
         pthread_t thread_id[KINETIC_MAX_THREADS];
-
         kinetic_client = malloc(sizeof(KineticSessionHandle) * NUM_COPIES);
         TEST_ASSERT_NOT_NULL_MESSAGE(kinetic_client, "kinetic_client malloc failed");
-
         kt_arg = malloc(sizeof(struct kinetic_thread_arg) * NUM_COPIES);
         TEST_ASSERT_NOT_NULL_MESSAGE(kt_arg, "kinetic_thread_arg malloc failed");
 
@@ -221,21 +221,21 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                 KineticClient_Connect(&sessionConfig, &kinetic_client[i]));
             strcpy(kt_arg[i].ip, sessionConfig.host);
 
+            // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
+            kt_arg[i].data = ByteBuffer_Create(buf, SourceDataSize, 0);
+
             // Configure the KineticEntry
             struct timeval now;
             gettimeofday(&now, NULL);
-            snprintf(kt_arg[i].keyPrefix, sizeof(kt_arg[i].keyPrefix), "%010llu_%02d%02d_", (unsigned long long)now.tv_sec, iteration, i);
+            snprintf(kt_arg[i].keyPrefix, sizeof(kt_arg[i].keyPrefix), "%010llu_%02d%02d_",
+                (unsigned long long)now.tv_sec, iteration, i);
             ByteBuffer keyBuf = ByteBuffer_Create(kt_arg[i].key, sizeof(kt_arg[i].key), 0);
             ByteBuffer_AppendCString(&keyBuf, kt_arg[i].keyPrefix);
-
             ByteBuffer verBuf = ByteBuffer_Create(kt_arg[i].version, sizeof(kt_arg[i].version), 0);
             ByteBuffer_AppendCString(&verBuf, "v1.0");
-
             ByteBuffer tagBuf = ByteBuffer_Create(kt_arg[i].tag, sizeof(kt_arg[i].tag), 0);
             ByteBuffer_AppendCString(&tagBuf, "some_value_tag...");
-
             ByteBuffer valBuf = ByteBuffer_Create(kt_arg[i].value, sizeof(kt_arg[i].value), 0);
-
             kt_arg[i].entry = (KineticEntry) {
                 .key = keyBuf,
                 .newVersion = verBuf,
@@ -245,17 +245,16 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                 .value = valBuf,
             };
 
-            // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
-            kt_arg[i].data = ByteBuffer_Create(buf, SourceDataSize, 0);
-
-            // Spawn the worker thread
+            // Spawn the thread
             kt_arg[i].sessionHandle = kinetic_client[i];
-            int create_status = pthread_create(&thread_id[i], NULL, kinetic_put, &kt_arg[i]);
-            TEST_ASSERT_EQUAL_MESSAGE(0, create_status, "pthread create failed");
+            int pthreadStatus = pthread_create(&thread_id[i], NULL, kinetic_put, &kt_arg[i]);
+            REPORT_ERRNO(pthreadStatus, "pthread_create");
+            TEST_ASSERT_EQUAL_MESSAGE(0, pthreadStatus, "pthread create failed");
         }
 
         // Wait for each overlapped PUT operations to complete and cleanup
         printf("  *** Waiting for PUT threads to exit...\n");
+        aggregateBandwidthPerIteration[iteration] = 0.0f; 
         for (int i = 0; i < NUM_COPIES; i++) {
             int join_status = pthread_join(thread_id[i], NULL);
             TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
@@ -263,6 +262,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
             // Update results for summary
             bandwidthAccumulator += kt_arg[i].bandwidth;
+            aggregateBandwidthPerIteration[iteration] += kt_arg[i].bandwidth;
             minBandwidth = MIN(kt_arg[i].bandwidth, minBandwidth);
             maxBandwidth = MAX(kt_arg[i].bandwidth, maxBandwidth);
         }
@@ -272,17 +272,26 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         free(kt_arg);
         free(buf);
 
+        fflush(stdout);
         printf("  *** Iteration complete!\n");
-        sleep(1);
+        fflush(stdout);
     }
 
-    printf("*** Overlapped PUT operation test complete!\n\n");
-
+    fflush(stdout);
+    printf("\n*** Overlapped PUT operation test complete!\n\n");
     double meanBandwidth = bandwidthAccumulator / (MAX_ITERATIONS * NUM_COPIES);
+    double meanAggregateBandwidth = 0.0f;
+    for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
+        meanAggregateBandwidth += aggregateBandwidthPerIteration[iteration];
+    }
+    meanAggregateBandwidth /= MAX_ITERATIONS;
     printf("========================================\n");
     printf("=         Performance Summary          =\n");
     printf("========================================\n");
-    printf("Min write bandwidth:  %.2f (MB/sec)\n", minBandwidth);
-    printf("Max write bandwidth:  %.2f (MB/sec)\n", maxBandwidth);
-    printf("Mean write bandwidth: %.2f (MB/sec)\n", meanBandwidth);
+    printf("Min write bandwidth:      %.2f (MB/sec)\n", minBandwidth);
+    printf("Max write bandwidth:      %.2f (MB/sec)\n", maxBandwidth);
+    printf("Mean write bandwidth:     %.2f (MB/sec)\n", meanBandwidth);
+    printf("Mean aggregate bandwidth: %.2f (MB/sec)\n", meanAggregateBandwidth);
+    printf("\n");
+    fflush(stdout);
 }
