@@ -26,7 +26,7 @@
 /**
  * Initializes the Kinetic API andcsonfigures logging destination.
  *
- * @param logFile Path to log file. Specify NULL to log to STDOUT.
+ * @param log_file (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
  * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
  */
 void KineticClient_Init(const char* log_file, int log_level);

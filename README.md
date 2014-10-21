@@ -48,9 +48,9 @@ Getting Started
 API Documentation
 =================
 
-[Kinetic-C API Documentation](http://seagate.github.io/kinetic-c) (generated with Doxygen)
-* [Kinetic-C API](http://seagate.github.io/kinetic-c/kinetic__client_8h.html)
-* [Kinetic-C types](http://seagate.github.io/kinetic-c/kinetic__types_8h.html)
+[Kinetic-C API Documentation](index.html) (generated with Doxygen)
+* [Kinetic-C API](kinetic__client_8h.html)
+* [Kinetic-C types](kinetic__types_8h.html)
 
 Example Client/Test Utility
 ===========================
