@@ -154,10 +154,8 @@ void KineticSocket_Close(int socket)
 
 KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
 {
-#ifdef KINETIC_LOG_SOCKET_OPERATIONS
-    LOGF1("Reading %zd bytes into buffer @ 0x%zX from fd=%d",
+    LOGF2("Reading %zd bytes into buffer @ 0x%zX from fd=%d",
          len, (size_t)dest->array.data, socket);
-#endif
 
     KineticStatus status = KINETIC_STATUS_INVALID;
 
@@ -210,7 +208,7 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
             }
             else {
                 dest->bytesUsed += opStatus;
-                LOGF1("Received %d bytes (%zd of %zd)",
+                LOGF3("Received %d bytes (%zd of %zd)",
                      opStatus, dest->bytesUsed, len);
             }
         }
@@ -275,7 +273,7 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
                 }
                 else {
                     dest->bytesUsed += opStatus;
-                    LOGF2("Flushed %d bytes from socket read pipe (%zd of %zd)",
+                    LOGF3("Flushed %d bytes from socket read pipe (%zd of %zd)",
                          opStatus, dest->bytesUsed, len);
                 }
             }
@@ -299,14 +297,14 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
              len, dest->array.len);
         return KINETIC_STATUS_BUFFER_OVERRUN;
     }
-    LOGF1("Received %zd of %zd bytes requested", dest->bytesUsed, len);
+    LOGF3("Received %zd of %zd bytes requested", dest->bytesUsed, len);
     return KINETIC_STATUS_SUCCESS;
 }
 
 KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
 {
     size_t bytesToRead = pdu->header.protobufLength;
-    LOGF1("Reading %zd bytes of protobuf", bytesToRead);
+    LOGF2("Reading %zd bytes of protobuf", bytesToRead);
 
     uint8_t* packed = (uint8_t*)malloc(bytesToRead);
     if (packed == NULL) {
@@ -336,14 +334,14 @@ KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
     }
     else {
         pdu->protobufDynamicallyExtracted = true;
-        LOG2("Protobuf unpacked successfully!");
+        LOG3("Protobuf unpacked successfully!");
         return KINETIC_STATUS_SUCCESS;
     }
 }
 
 KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
 {
-    LOGF1("Writing %zu bytes to socket...", src->bytesUsed);
+    LOGF3("Writing %zu bytes to socket...", src->bytesUsed);
     for (unsigned int bytesSent = 0; bytesSent < src->bytesUsed;) {
         int bytesRemaining = src->bytesUsed - bytesSent;
         int status = write(socket, &src->array.data[bytesSent], bytesRemaining);
@@ -361,7 +359,7 @@ KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
             LOGF2("Wrote %d bytes (%d of %zu sent)", status, bytesSent, src->bytesUsed);
         }
     }
-    LOG2("Socket write completed successfully");
+    LOG3("Socket write completed successfully");
     return KINETIC_STATUS_SUCCESS;
 }
 

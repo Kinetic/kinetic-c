@@ -119,6 +119,7 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
         }
     }
 
+    LOG2("PDU sent successfully!");
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -142,7 +143,7 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
         return status;
     }
     else {
-        LOG2("PDU header received successfully");
+        LOG3("PDU header received successfully");
         KineticPDUHeader* headerNBO = &response->headerNBO;
         response->header = (KineticPDUHeader) {
             .versionPrefix = headerNBO->versionPrefix,
@@ -159,7 +160,7 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
         return status;
     }
     else {
-        LOG2("Received PDU protobuf");
+        LOG3("Received PDU protobuf");
         KineticLogger_LogProtobuf(2, response->proto);
     }
 
@@ -174,7 +175,7 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
             return KINETIC_STATUS_DATA_ERROR;
         }
         else {
-            LOG2("Received protobuf HMAC validation succeeded");
+            LOG3("Received protobuf HMAC validation succeeded");
         }
     }
     else if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH) {
@@ -182,7 +183,7 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
         return KINETIC_STATUS_DATA_ERROR;
     }
     else if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
-        LOG1("Unsolicited status message is not authenticated");
+        LOG3("Unsolicited status message is not authenticated");
     }
 
     // Extract embedded command, if supplied
@@ -221,7 +222,11 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
         response->connection->connectionID = cmd->header->connectionID;
     }
 
-    return KineticPDU_GetStatus(response);
+    status = KineticPDU_GetStatus(response);
+    if (status == KINETIC_STATUS_SUCCESS) {
+        LOG2("PDU received successfully!");
+    }
+    return status;
 }
 
 KineticStatus KineticPDU_GetStatus(KineticPDU* pdu)

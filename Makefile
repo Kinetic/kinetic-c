@@ -265,9 +265,6 @@ run: $(UTIL_EXEC) start_simulator
 	@echo --------------------------------------------------------------------------------
 	@echo
 	$(UTIL_EXEC) noop
-	exec $(UTIL_EXEC) put
-	exec $(UTIL_EXEC) get
-	exec $(UTIL_EXEC) delete
 	exec $(UTIL_EXEC) put get delete
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!

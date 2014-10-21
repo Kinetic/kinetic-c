@@ -222,57 +222,52 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
 
     if (keyValue != NULL && entry != NULL) {
 
+        ByteBuffer_Reset(&entry->newVersion);
         if (keyValue->has_newVersion) {
-            entry->newVersion.bytesUsed = keyValue->newVersion.len;
             if (entry->newVersion.array.data == NULL ||
                 entry->newVersion.array.len < keyValue->newVersion.len) {
+                entry->newVersion.bytesUsed = keyValue->newVersion.len;
                 LOG1(" BUFFER_OVERRUN: newVersion");
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->newVersion.array.data, keyValue->newVersion.data,
-                       keyValue->newVersion.len);
+                ByteBuffer_Append(&entry->newVersion, keyValue->newVersion.data, keyValue->newVersion.len);
             }
         }
 
+        ByteBuffer_Reset(&entry->dbVersion);
         if (keyValue->has_dbVersion) {
-            entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
-            if (entry->dbVersion.array.data == NULL ||
-                entry->dbVersion.array.len < keyValue->dbVersion.len) {
+            if (entry->dbVersion.array.data == NULL || entry->dbVersion.array.len < keyValue->dbVersion.len) {
+                entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
                 LOG1(" BUFFER_OVERRUN: dbVersion");
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->dbVersion.array.data, keyValue->dbVersion.data,
-                       keyValue->dbVersion.len);
+                ByteBuffer_Append(&entry->dbVersion, keyValue->dbVersion.data, keyValue->dbVersion.len);
             }
         }
 
-        if (keyValue->has_force) {
-            entry->force = keyValue->force;
-        }
-
+        ByteBuffer_Reset(&entry->key);
         if (keyValue->has_key) {
-            entry->key.bytesUsed = keyValue->key.len;
-            if (entry->key.array.data == NULL ||
-                entry->key.array.len < keyValue->key.len) {
+            if (entry->key.array.data == NULL || entry->key.array.len < keyValue->key.len) {
+                entry->key.bytesUsed = keyValue->key.len;
                 LOG1(" BUFFER_OVERRUN: key");
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->key.array.data, keyValue->key.data, keyValue->key.len);
+                ByteBuffer_Append(&entry->key, keyValue->key.data, keyValue->key.len);
             }
         }
 
+        ByteBuffer_Reset(&entry->tag);
         if (keyValue->has_tag) {
             entry->tag.bytesUsed = keyValue->tag.len;
-            if (entry->tag.array.data == NULL ||
-                entry->tag.array.len < keyValue->tag.len) {
+            if (entry->tag.array.data == NULL || entry->tag.array.len < keyValue->tag.len) {
                 LOG1(" BUFFER_OVERRUN: tag");
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->tag.array.data, keyValue->tag.data, keyValue->tag.len);
+                ByteBuffer_Append(&entry->tag, keyValue->tag.data, keyValue->tag.len);
             }
         }
 
@@ -282,15 +277,14 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
                     keyValue->algorithm);
         }
 
-        if (keyValue->has_metadataOnly) {
-            entry->metadataOnly = keyValue->metadataOnly;
-        }
-
         if (keyValue->has_synchronization) {
             entry->synchronization =
                 KineticSynchronization_from_KineticProto_Command_Synchronization(
                     keyValue->synchronization);
         }
+
+        entry->metadataOnly = keyValue->has_metadataOnly ? keyValue->metadataOnly : false;
+        entry->force = keyValue->has_force ? keyValue->force : false;
     }
 
     return !bufferOverflow;

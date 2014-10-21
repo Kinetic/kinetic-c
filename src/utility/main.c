@@ -22,44 +22,45 @@
 #include <stdio.h>
 #include <getopt.h>
 
-void ParseOptions(
+static KineticSession SessionConfig;
+static uint8_t HmacData[1024];
+static KineticEntry Entry;
+static uint8_t KeyData[1024];
+static uint8_t TagData[1024];
+static uint8_t NewVersionData[1024];
+static uint8_t VersionData[1024];
+static uint8_t ValueData[KINETIC_OBJ_SIZE];
+static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
+
+//------------------------------------------------------------------------------
+// Private Method Declarations
+static void ParseOptions(
     const int argc,
     char** const argv,
     KineticSession* config,
     KineticEntry* entry);
-
-KineticStatus ExecuteOperation(
+static KineticStatus ExecuteOperation(
     const char* op,
     KineticSessionHandle sessionHandle,
     KineticEntry* entry);
-
-void ConfigureEntry(
+static void ConfigureEntry(
     KineticEntry* entry,
     const char* key,
     const char* tag,
     const char* version,
     KineticAlgorithm algorithm,
     const char* value);
-
-void ReportOperationConfiguration(
+static void ReportOperationConfiguration(
     const char* operation,
     KineticSession* config,
     KineticEntry* entry);
 
 
-static KineticSession SessionConfig;
-static uint8_t HmacData[1024];
-static KineticEntry Entry;
-static uint8_t KeyData[1024];
-static uint8_t TagData[1024];
-static uint8_t VersionData[1024];
-static uint8_t ValueData[KINETIC_OBJ_SIZE];
-static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
-
-
+//------------------------------------------------------------------------------
+// Main Entry Point Definition
 int main(int argc, char** argv)
 {
-    KineticClient_Init("stdout", 1);
+    KineticClient_Init("stdout", 2);
 
     // Parse command line options
     ParseOptions(argc, argv, &SessionConfig, &Entry);
@@ -88,6 +89,10 @@ int main(int argc, char** argv)
 
     return 0;
 }
+
+
+//------------------------------------------------------------------------------
+// Private Method Definitions
 
 KineticStatus ExecuteOperation(
     const char* operation,
@@ -156,18 +161,20 @@ void ConfigureEntry(
     ByteBuffer_AppendCString(&keyBuffer, key);
     ByteBuffer tagBuffer = ByteBuffer_Create(TagData, sizeof(TagData), 0);
     ByteBuffer_AppendCString(&tagBuffer, tag);
+    ByteBuffer newVersionBuffer = ByteBuffer_Create(NewVersionData, sizeof(NewVersionData), 0);
+    ByteBuffer_AppendCString(&newVersionBuffer, version);
     ByteBuffer versionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData), 0);
-    ByteBuffer_AppendCString(&versionBuffer, version);
     ByteBuffer valueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData), 0);
     ByteBuffer_AppendCString(&valueBuffer, value);
 
     // Setup to write some test data
     *entry = (KineticEntry) {
         .key = keyBuffer,
-         .tag = tagBuffer,
-          .newVersion = versionBuffer,
-           .algorithm = algorithm,
-            .value = valueBuffer,
+        .tag = tagBuffer,
+        .newVersion = newVersionBuffer,
+        .dbVersion = versionBuffer,
+        .algorithm = algorithm,
+        .value = valueBuffer,
     };
 }
 
@@ -176,16 +183,18 @@ void ReportOperationConfiguration(
     KineticSession* config,
     KineticEntry* entry)
 {
-    printf("\n"
+    printf("\n\n"
+           "================================================================================\n"
            "Executing '%s' w/configuration:\n"
-           "-------------------------------\n"
+           "================================================================================\n"
            "  host: %s\n"
            "  port: %d\n"
            "  non-blocking: %s\n"
            "  clusterVersion: %lld\n"
            "  identity: %lld\n"
            "  key: %zd bytes\n"
-           "  value: %zd bytes\n",
+           "  value: %zd bytes\n"
+           "================================================================================\n",
            operation,
            config->host,
            config->port,
@@ -259,10 +268,10 @@ void ParseOptions(
     // Configure session for connection
     *sessionConfig = (KineticSession) {
         .port = cfg.port,
-         .clusterVersion = cfg.clusterVersion,
-          .identity = cfg.identity,
-           .nonBlocking = cfg.nonBlocking,
-            .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
+        .clusterVersion = cfg.clusterVersion,
+        .identity = cfg.identity,
+        .nonBlocking = cfg.nonBlocking,
+        .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
     };
     memcpy(HmacData, cfg.hmacKey, strlen(cfg.hmacKey));
     strncpy(sessionConfig->host, cfg.host, HOST_NAME_MAX);
