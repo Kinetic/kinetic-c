@@ -28,7 +28,7 @@ uint8_t data[KINETIC_OBJ_SIZE];
 
 void SystemTestSetup(SystemTestFixture* fixture)
 {
-    KineticClient_Init("stdout", 1);
+    KineticClient_Init("stdout", 2);
 
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
 

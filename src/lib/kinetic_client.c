@@ -212,7 +212,7 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
             // If both buffers supplied, copy newVersion into dbVersion, and clear newVersion
             if (entry->dbVersion.array.data != NULL && entry->dbVersion.array.len > 0) {
                 ByteBuffer_Reset(&entry->dbVersion);
-                ByteBuffer_Append(&entry->dbVersion, entry->dbVersion.array.data, entry->dbVersion.bytesUsed);
+                ByteBuffer_Append(&entry->dbVersion, entry->newVersion.array.data, entry->newVersion.bytesUsed);
                 ByteBuffer_Reset(&entry->newVersion);
             }
 

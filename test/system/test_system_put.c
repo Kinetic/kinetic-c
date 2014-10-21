@@ -232,11 +232,8 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    TEST_ASSERT_EQUAL_ByteArray(NewVersion, Entry.dbVersion.array);
-    TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
-    TEST_ASSERT_ByteArray_NONE(Entry.newVersion.array);
-    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
-
+    TEST_ASSERT_ByteBuffer_EMPTY(Entry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
     TEST_ASSERT_EQUAL_ByteArray(Key, Entry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, Entry.tag.array);
 
