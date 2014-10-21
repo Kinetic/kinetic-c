@@ -16,7 +16,7 @@ end
 
 KineticRuby::Rake::load_tasks
 require 'ceedling'
-Ceedling.load_project(config: './project.yml')
+Ceedling.load_project(config: './config/project.yml')
 
 def report(message='')
   $stderr.flush
@@ -97,7 +97,7 @@ namespace :doxygen do
   DOCS_PATH = "./docs/"
   directory DOCS_PATH
   CLOBBER.include DOCS_PATH
-  VERSION = File.read('VERSION').strip
+  VERSION = File.read('./config/VERSION').strip
 
   task :checkout_github_pages => ['clobber', DOCS_PATH] do
     git "clone git@github.com:seagate/kinetic-c.git -b gh-pages #{DOCS_PATH}"

@@ -28,7 +28,7 @@ LIB_DIR = ./src/lib
 VENDOR = ./vendor
 PROTOBUFC = $(VENDOR)/protobuf-c
 SOCKET99 = $(VENDOR)/socket99
-VERSION_FILE = ./VERSION
+VERSION_FILE = ./config/VERSION
 VERSION = ${shell head -n1 $(VERSION_FILE)}
 
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
