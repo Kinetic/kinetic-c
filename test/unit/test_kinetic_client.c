@@ -70,12 +70,14 @@ static void ConnectSession(void)
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
-    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    // KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
 }
+
+
 
 void test_KineticClient_Connect_should_configure_a_session_and_connect_to_specified_host(void)
 {
@@ -179,21 +181,6 @@ void test_KineticClient_Connect_should_return_status_from_a_failed_connection(vo
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 
-void test_KinetiClient_Connect_should_return_status_code_if_connection_status_PDU_receive_fails(void)
-{
-    KINETIC_CONNECTION_INIT(&Connection);
-    Connection.connected = false; // Ensure gets set appropriately by internal connect call
-    HmacKey = ByteArray_CreateWithCString("some hmac key");
-    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
-
-    KineticConnection_FromHandle_IgnoreAndReturn(&Connection);
-    KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
-    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
-    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_CONNECTION_ERROR);
-
-    KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR, status);
-}
 
 
 void test_KineticClient_Disconnect_should_return_KINETIC_STATUS_CONNECTION_ERROR_upon_failure_to_get_connection_from_handle(void)

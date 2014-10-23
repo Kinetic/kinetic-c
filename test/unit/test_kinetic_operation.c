@@ -34,11 +34,12 @@
 static KineticConnection Connection;
 static int64_t ConnectionID = 12345;
 static KineticPDU Request, Response;
+static KineticPDU Requests[3];
 static KineticOperation Operation;
 
 void setUp(void)
 {
-    KineticLogger_Init(NULL, 3);
+    KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connectionID = ConnectionID;
     KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
@@ -50,7 +51,10 @@ void setUp(void)
 
 void tearDown(void)
 {
+    KineticLogger_Close();
 }
+
+
 
 void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
 {
@@ -67,6 +71,7 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
     TEST_ASSERT_NULL(op.request);
     TEST_ASSERT_NULL(op.response);
 }
+
 
 
 void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_PDUs(void)
@@ -87,6 +92,8 @@ void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_P
     TEST_ASSERT_NOT_NULL(operation.request);
     TEST_ASSERT_NOT_NULL(operation.response);
 }
+
+
 
 void test_KineticOperation_Free_should_free_an_operation_with_allocated_PDUs(void)
 {
@@ -138,18 +145,94 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
 }
 
 
-void test_KineticOperation_FindMatchingRequest_should_return_a_request_PDU_with_matching_sequence_count(void)
-{
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
-    Response.command->header->ackSequence = 12;
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    Response.command->header->sequence = 12;
-    
-    KineticPDU* request = KineticOperation_FindMatchingRequest(&Response);
-    TEST_ASSERT_NULL(request);
+void test_KineticOperation_AssociateResponseWithRequest_should_return_NULL_if_supplied_PDU_is_invalid(void)
+{
+    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithRequest(NULL));
+
+    Response.type = KINETIC_PDU_TYPE_RESPONSE;
+    TEST_ASSERT_NOT_NULL(Response.command);
+    TEST_ASSERT_NOT_NULL(Response.command->header);
+    TEST_ASSERT_FALSE(Response.command->header->has_ackSequence);
+
+    Response.type = KINETIC_PDU_TYPE_REQUEST;
+    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithRequest(&Response));
+
+    Response.type = KINETIC_PDU_TYPE_UNSOLICITED;
+    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithRequest(&Response));
+
+    Response.type = KINETIC_PDU_TYPE_RESPONSE;
+    Response.command->header->has_ackSequence = false;
+    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithRequest(&Response));
+
+    Response.command->header = NULL;
+    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithRequest(&Response));
+
+    Response.command = NULL;
+    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithRequest(&Response));
 }
 
+void test_KineticOperation_AssociateResponseWithRequest_should_return_NULL_if_no_matching_request_was_found_in_PDU_list(void)
+{
+    Response.type = KINETIC_PDU_TYPE_RESPONSE;
+    Response.command->header->has_ackSequence = true;
+    Response.command->header->ackSequence = 9876543210;
+    TEST_ASSERT_EQUAL_PTR(&Connection, Response.connection);
+    TEST_ASSERT_NOT_NULL(Response.command);
+    TEST_ASSERT_NOT_NULL(Response.command->header);
+
+    KineticAllocator_GetFirstPDU_ExpectAndReturn(&Connection.pdus, NULL);
+
+    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithRequest(&Response));
+
+    // A list with only the expected PDU
+    KINETIC_PDU_INIT_WITH_COMMAND(&Requests[0], &Connection);
+    Requests[0].command->header->has_sequence = true;
+    Requests[0].command->header->sequence = 9876543210;
+    Requests[0].type = KINETIC_PDU_TYPE_REQUEST;
+    Requests[0].associatedPDU = NULL;
+    Response.associatedPDU = NULL;
+    KineticAllocator_GetFirstPDU_ExpectAndReturn(&Connection.pdus, &Requests[0]);
+    TEST_ASSERT_EQUAL_PTR(&Requests[0], KineticOperation_AssociateResponseWithRequest(&Response));
+    TEST_ASSERT_EQUAL_PTR(&Response, Requests[0].associatedPDU);
+    TEST_ASSERT_EQUAL_PTR(&Requests[0], Response.associatedPDU);
+
+    // A list starting with a non-matching PDU, followed by the expected PDU
+    Requests[0].command->header->sequence = 12345;
+    KINETIC_PDU_INIT_WITH_COMMAND(&Requests[1], &Connection);
+    Requests[1].command->header->has_sequence = true;
+    Requests[1].command->header->sequence = 9876543210;
+    Requests[1].type = KINETIC_PDU_TYPE_REQUEST;
+    Requests[0].associatedPDU = NULL;
+    Requests[1].associatedPDU = NULL;
+    Response.associatedPDU = NULL;
+    KineticAllocator_GetFirstPDU_ExpectAndReturn(&Connection.pdus, &Requests[0]);
+    KineticAllocator_GetNextPDU_ExpectAndReturn(&Connection.pdus, &Requests[0], &Requests[1]);
+    TEST_ASSERT_EQUAL_PTR(&Requests[1], KineticOperation_AssociateResponseWithRequest(&Response));
+    TEST_ASSERT_EQUAL_PTR(&Response, Requests[1].associatedPDU);
+    TEST_ASSERT_EQUAL_PTR(&Requests[1], Response.associatedPDU);
+    TEST_ASSERT_NULL(Requests[0].associatedPDU);
+
+    // A list starting with with multiple non-matching PDUs, followed by the expected PDU
+    Requests[0].command->header->sequence = 12345;
+    Requests[1].command->header->sequence = 45678;
+    KINETIC_PDU_INIT_WITH_COMMAND(&Requests[2], &Connection);
+    Requests[2].command->header->has_sequence = true;
+    Requests[2].command->header->sequence = 9876543210;
+    Requests[2].type = KINETIC_PDU_TYPE_REQUEST;
+    Requests[0].associatedPDU = NULL;
+    Requests[1].associatedPDU = NULL;
+    Requests[2].associatedPDU = NULL;
+    Response.associatedPDU = NULL;
+    KineticAllocator_GetFirstPDU_ExpectAndReturn(&Connection.pdus, &Requests[0]);
+    KineticAllocator_GetNextPDU_ExpectAndReturn(&Connection.pdus, &Requests[0], &Requests[1]);
+    KineticAllocator_GetNextPDU_ExpectAndReturn(&Connection.pdus, &Requests[1], &Requests[2]);
+    TEST_ASSERT_EQUAL_PTR(&Requests[2], KineticOperation_AssociateResponseWithRequest(&Response));
+    TEST_ASSERT_EQUAL_PTR(&Response, Requests[2].associatedPDU);
+    TEST_ASSERT_EQUAL_PTR(&Requests[2], Response.associatedPDU);
+    TEST_ASSERT_NULL(Requests[0].associatedPDU);
+    TEST_ASSERT_NULL(Requests[1].associatedPDU);
+}
 
 
 

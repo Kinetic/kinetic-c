@@ -29,15 +29,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <string.h>
-
-#ifndef _BSD_SOURCE
-#define _BSD_SOURCE
-#endif // _BSD_SOURCE
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/select.h>
+#include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -64,8 +61,7 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
     // Open socket
     LOGF0("Connecting to %s:%d", host, port);
     if (!socket99_open(&cfg, &result)) {
-        LOGF0("Failed to open socket connection"
-             "with host: status %d, errno %d",
+        LOGF0("Failed to open socket connection with host: status %d, errno %d",
              result.status, result.saved_errno);
         return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
@@ -150,6 +146,14 @@ void KineticSocket_Close(int socket)
                  socket, errno, strerror(errno));
         }
     }
+}
+
+int KineticSocket_DataBytesAvailable(int socket)
+{
+    if (socket < 0) {return -1;}
+    int count = -1;
+    ioctl(socket, FIONREAD, &count);
+    return count;
 }
 
 KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)

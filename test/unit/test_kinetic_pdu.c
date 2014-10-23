@@ -68,10 +68,10 @@ void setUp(void)
     // Create and configure a new Kinetic protocol instance
     Key = ByteArray_CreateWithCString("some valid HMAC key...");
     Session = (KineticSession) {
-        .nonBlocking = false,
-         .port = 1234,
-          .host = "valid-host.com",
-        .hmacKey = (ByteArray) {.data = &Session.keyData[0], .len = Key.len},
+    .nonBlocking = false,
+    .port = 1234,
+    .host = "valid-host.com",
+    .hmacKey = (ByteArray) {.data = &Session.keyData[0], .len = Key.len},
     };
     memcpy(Session.hmacKey.data, Key.data, Key.len);
 
@@ -90,7 +90,6 @@ void tearDown()
     KineticLogger_Close();
 }
 
-#if 0
 void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
 {
     LOG_LOCATION;
@@ -135,7 +134,7 @@ void test_KineticPDU_Init_should_set_the_exchange_fields_in_the_embedded_protobu
     Connection.connectionID = 8765432;
     Session = (KineticSession) {
         .clusterVersion = 1122334455667788,
-         .identity = 37,
+        .identity = 37,
     };
     Connection.session = Session;
     KINETIC_PDU_INIT(&PDU, &Connection);
@@ -188,7 +187,7 @@ void test_KINETIC_PDU_INIT_WITH_COMMAND_should_initialize_PDU_and_protobuf_messa
         KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY,
         PDU.protoData.message.command.status->code);
 }
-#endif
+
 
 
 void test_KineticPDU_Send_should_transmit_PDU_with_no_value_payload(void)

@@ -27,6 +27,7 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection);
 KineticStatus KineticOperation_Free(KineticOperation* const operation);
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 KineticPDU* KineticOperation_FindMatchingRequest(const KineticPDU* const response);
+KineticPDU* KineticOperation_AssociateResponseWithRequest(KineticPDU* response);
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
 void KineticOperation_BuildPut(KineticOperation* const operation,

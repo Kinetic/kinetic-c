@@ -58,7 +58,6 @@ KineticOperation KineticOperation_Create(KineticConnection* const connection)
     }
     KineticPDU_Init(operation.request, connection);
     KINETIC_PDU_INIT_WITH_COMMAND(operation.request, connection);
-    // operation.request->proto = &operation.request->protoData.message;
 
     if (operation.response == NULL) {
         LOG0("Response PDU could not be allocated!"
@@ -104,8 +103,34 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
     return status;
 }
 
-KineticPDU* KineticOperation_FindMatchingRequest(const KineticPDU* const response)
+KineticPDU* KineticOperation_AssociateResponseWithRequest(KineticPDU* response)
 {
+    if (response == NULL ||
+        response->command == NULL ||
+        response->command->header == NULL ||
+        !response->command->header->has_ackSequence ||
+        response->type != KINETIC_PDU_TYPE_RESPONSE)
+    {
+        LOG0("Response to associate with request in invalid!");
+        return NULL;
+    }
+
+    const int64_t targetSequence = response->command->header->ackSequence;
+    KineticPDU* currPDU = KineticAllocator_GetFirstPDU(&response->connection->pdus);
+    while (currPDU != NULL) {
+        if (currPDU->type == KINETIC_PDU_TYPE_REQUEST &&
+            currPDU->command != NULL &&
+            currPDU->command->header != NULL &&
+            currPDU->command->header->has_sequence && 
+            currPDU->command->header->sequence == targetSequence)
+        {
+            currPDU->associatedPDU = response;
+            response->associatedPDU = currPDU;
+            return currPDU;
+        }
+        currPDU = KineticAllocator_GetNextPDU(&response->connection->pdus, currPDU);
+    }
+
     return NULL;
 }
 

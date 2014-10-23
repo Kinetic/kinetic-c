@@ -22,6 +22,7 @@
 #include "kinetic_logger.h"
 #include "byte_array.h"
 #include <sys/param.h>
+#include <errno.h>
 
 // Type mapping from from public to internal protobuf status type
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
@@ -308,4 +309,19 @@ bool Copy_KineticProto_Command_Range_to_buffer_list(
         }
     }
     return !bufferOverflow;
+}
+
+int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len)
+{
+    static pthread_mutex_t strerror_lock = PTHREAD_MUTEX_INITIALIZER;
+    if (!len)
+    {
+        errno = ENOSPC;
+        return -1;
+    }
+    buf[0] = '\0';
+    pthread_mutex_lock(&strerror_lock);
+    strncat(buf, strerror(err_num), len - 1);
+    pthread_mutex_unlock(&strerror_lock);
+    return 0;
 }

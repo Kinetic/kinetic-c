@@ -27,6 +27,7 @@
 int KineticSocket_Connect(const char* host, int port, bool nonBlocking);
 void KineticSocket_Close(int socket);
 
+int KineticSocket_DataBytesAvailable(int socket);
 KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len);
 KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu);
 

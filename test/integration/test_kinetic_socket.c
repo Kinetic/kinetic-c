@@ -62,6 +62,7 @@ void Socket_RequestBytes(size_t count)
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
         KINETIC_STATUS_SUCCESS, KineticSocket_Write(FileDesc, &requestBuffer),
         "Failed requesting dummy data from test socket server");
+    sleep(1);
 }
 
 void Socket_RequestProtobuf(void)
@@ -170,6 +171,26 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
         KINETIC_STATUS_SUCCESS, status, "Failed to write to socket!");
 }
+
+
+
+void test_KineticSocket_DataBytesAvailable_should_report_receive_pipe_status(void)
+{
+    LOG_LOCATION;
+    TEST_ASSERT_EQUAL(-1, KineticSocket_DataBytesAvailable(123));
+
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
+
+    TEST_ASSERT_EQUAL(0, KineticSocket_DataBytesAvailable(FileDesc));
+
+    const size_t expectedLen = 5;
+    Socket_RequestBytes(expectedLen);
+    int actualLen = KineticSocket_DataBytesAvailable(FileDesc);
+    TEST_ASSERT_EQUAL(expectedLen, actualLen);
+}
+
+
 
 void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
 {

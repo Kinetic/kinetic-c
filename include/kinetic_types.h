@@ -157,6 +157,8 @@ typedef enum {
 
 const char* Kinetic_GetStatusDescription(KineticStatus status);
 
+typedef void (*KineticCompletionCallback)(KineticStatus status);
+
 // KineticEntry - byte arrays need to be preallocated by the client
 typedef struct _KineticEntry {
     ByteBuffer key;

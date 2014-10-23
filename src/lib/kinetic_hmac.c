@@ -34,7 +34,7 @@ void KineticHMAC_Init(KineticHMAC* hmac,
     if (algorithm == KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1) {
         *hmac = (KineticHMAC) {
             .algorithm = algorithm,
-             .len = KINETIC_HMAC_MAX_LEN
+            .len = KINETIC_HMAC_MAX_LEN
         };
     }
     else {

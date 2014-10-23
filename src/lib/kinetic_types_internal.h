@@ -33,6 +33,8 @@
 #define KINETIC_PDUS_PER_SESSION_DEFAULT (2)
 #define KINETIC_PDUS_PER_SESSION_MAX (10)
 #define KINETIC_SOCKET_DESCRIPTOR_INVALID (-1)
+#define KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS (3)
+#define KINETIC_PDU_RECEIVE_TIMEOUT_SECS (5)
 
 // Ensure __func__ is defined (for debugging)
 #if !defined __func__
@@ -47,13 +49,19 @@
 #endif
 
 
-// Kinetic generic double-linked list item
+typedef struct _KineticPDU KineticPDU;
+typedef struct _KineticConnection KineticConnection;
+
+
+// Kinetic list item
 typedef struct _KineticListItem KineticListItem;
 struct _KineticListItem {
     KineticListItem* next;
     KineticListItem* previous;
     void* data;
 };
+
+// Kinetic list
 typedef struct _KineticList {
     KineticListItem* start;
     KineticListItem* last;
@@ -61,23 +69,31 @@ typedef struct _KineticList {
     bool locked;
 } KineticList;
 
-typedef struct _KineticPDU KineticPDU;
+
+// Kinetic Thread Instance
+typedef struct _KineticThread {
+    bool abortRequested;
+    bool fatalError;
+    KineticConnection* connection;
+} KineticThread;
+
 
 // Kinetic Device Client Connection
-typedef struct _KineticConnection {
-    bool    connected;       // state of connection
-    int     socket;          // socket file descriptor
-    int64_t connectionID;    // initialized to seconds since epoch
-    int64_t sequence;        // increments for each request in a session
-    KineticList pdus;        // list of dynamically allocated PDUs
-    KineticSession session;  // session configuration
-} KineticConnection;
+struct _KineticConnection {
+    bool            connected;      // state of connection
+    int             socket;         // socket file descriptor
+    int64_t         connectionID;   // initialized to seconds since epoch
+    int64_t         sequence;       // increments for each request in a session
+    KineticList     pdus;           // list of dynamically allocated PDUs
+    KineticSession  session;        // session configuration
+    KineticThread   thread;         // worker thread instance struct
+    pthread_t       threadID;       // worker pthread
+    bool            threadCreated;  // thread creation status
+};
 #define KINETIC_CONNECTION_INIT(_con) { \
     (*_con) = (KineticConnection) { \
         .connected = false, \
         .socket = -1, \
-        .connectionID = time(NULL), \
-        .sequence = 0, \
     }; \
 }
 
@@ -172,6 +188,13 @@ typedef struct __attribute__((__packed__)) _KineticPDUHeader {
 #define KINETIC_PDU_HEADER_INIT \
     (KineticPDUHeader) {.versionPrefix = 'F'}
 
+typedef enum {
+    KINETIC_PDU_TYPE_INVALID = 0,
+    KINETIC_PDU_TYPE_REQUEST,
+    KINETIC_PDU_TYPE_RESPONSE,
+    KINETIC_PDU_TYPE_UNSOLICITED
+} KineticPDUType;
+
 
 // Kinetic PDU
 struct _KineticPDU {
@@ -196,6 +219,15 @@ struct _KineticPDU {
 
     // Exchange associated with this PDU instance (info gets embedded in protobuf message)
     KineticConnection* connection;
+
+    // The type of this PDU (request, response or unsolicited)
+    KineticPDUType type;
+
+    // PDU associated with this one (for associating request and response PDUs for operations)
+    KineticPDU* associatedPDU;
+
+    // Operation complete callback
+    KineticCompletionCallback callback;
 };
 
 #define KINETIC_PDU_INIT(_pdu, _con) { \
@@ -253,5 +285,6 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
     KineticProto_Command_KeyValue* keyValue, KineticEntry* entry);
 bool Copy_KineticProto_Command_Range_to_buffer_list(
     KineticProto_Command_Range* keyRange, ByteBuffer* keys, int64_t max_keys);
+int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

@@ -27,8 +27,8 @@ KineticSessionHandle KineticConnection_NewConnection(const KineticSession* const
 void KineticConnection_FreeConnection(KineticSessionHandle* const handle);
 KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle);
 KineticStatus KineticConnection_Connect(KineticConnection* const connection);
+KineticStatus KineticConnection_WaitForInitialDeviceStatus(KineticConnection* const connection);
 KineticStatus KineticConnection_Disconnect(KineticConnection* const connection);
-KineticStatus KineticConnection_ReceiveDeviceStatusMessage(KineticConnection* const connection);
 void KineticConnection_IncrementSequence(KineticConnection* const connection);
 
 #endif // _KINETIC_CONNECTION_H

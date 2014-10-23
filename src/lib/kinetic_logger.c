@@ -22,8 +22,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <pthread.h>
 #include <sys/time.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <pthread.h>
 
 // #define USE_GENERIC_LOGGER 1 (not ready yet!)
 
@@ -35,6 +37,8 @@
 
 STATIC int KineticLogLevel = -1;
 STATIC FILE* KineticLoggerHandle = NULL;
+STATIC bool KineticLogggerAbortRequested = false;
+STATIC pthread_t KineticLoggerFlushThread;
 STATIC pthread_mutex_t KineticLoggerBufferMutex = PTHREAD_MUTEX_INITIALIZER;
 STATIC char KineticLoggerBuffer[KINETIC_LOGGER_BUFFER_SIZE][KINETIC_LOGGER_BUFFER_STR_MAX_LEN];
 STATIC int KineticLoggerBufferSize = 0;
@@ -96,6 +100,15 @@ void KineticLogger_Init(const char* log_file, int log_level)
 void KineticLogger_Close(void)
 {
     if (KineticLogLevel >= 0 && KineticLoggerHandle != NULL) {
+        KineticLogggerAbortRequested = true;
+        #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
+        int pthreadStatus = pthread_join(KineticLoggerFlushThread, NULL);
+        if (pthreadStatus != 0) {
+            char errMsg[256];
+            Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
+            LOGF0("Failed terminating logger flush thread w/error: %s", errMsg);
+        }
+        #endif
         KineticLogger_FlushBuffer();
         if (KineticLoggerHandle != stdout) {
             fclose(KineticLoggerHandle);
@@ -141,7 +154,7 @@ void KineticLogger_LogLocation(const char* filename, int line, const char* messa
     }
 
     if (KineticLogLevel >= 0) {
-        KineticLogger_LogPrintf(1, "[@%s:%d] %s", filename, line, message);
+        KineticLogger_LogPrintf(1, "\n[@%s:%d] %s", filename, line, message);
     }
     else
     {
@@ -824,7 +837,7 @@ static void* KineticLogger_FlushThread(void* arg)
 
     lasttime = tv.tv_sec;
 
-    for(;;) {
+    while(!KineticLogggerAbortRequested) {
         sleep(KINETIC_LOGGER_SLEEP_TIME_SEC);
         gettimeofday(&tv, NULL);
         curtime = tv.tv_sec;
@@ -846,9 +859,9 @@ static void* KineticLogger_FlushThread(void* arg)
 
 static void KineticLogger_InitFlushThread(void)
 {
-    pthread_t thr;
-    pthread_create(&thr, NULL, KineticLogger_FlushThread, NULL);
-    KineticLogger_Log(0, "Flush thread is created.\n");
+    KineticLogger_Log(3, "Starting log flush thread");
+    KineticLogger_FlushBuffer();
+    pthread_create(&KineticLoggerFlushThread, NULL, KineticLogger_FlushThread, NULL);
 }
 
 #endif

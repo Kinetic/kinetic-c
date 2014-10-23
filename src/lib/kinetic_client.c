@@ -29,6 +29,8 @@
 #include "kinetic_logger.h"
 #include <stdlib.h>
 
+STATIC bool AsyncModeEnabled = false;
+
 static KineticStatus KineticClient_CreateOperation(
     KineticOperation* const operation,
     KineticSessionHandle handle)
@@ -68,17 +70,24 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
 
     // Send the request
     status = KineticPDU_Send(operation->request);
-    if (status == KINETIC_STATUS_SUCCESS) {
+    if (status != KINETIC_STATUS_SUCCESS) {
+        return status;
+    }
+
+    if (AsyncModeEnabled) {
+    }
+    else {
         // Associate response with same exchange as request
         operation->response->connection = operation->request->connection;
 
         // Receive the response
         status = KineticPDU_Receive(operation->response);
-        if (status == KINETIC_STATUS_SUCCESS) {
-            status = KineticOperation_GetStatus(operation);
-        }
     }
 
+    // Update with status from response, if execution suceeded
+    if (status == KINETIC_STATUS_SUCCESS) {
+        status = KineticOperation_GetStatus(operation);
+    }
     return status;
 }
 
@@ -137,9 +146,6 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
         return status;
     }
 
-    // Retrieve initial connection status info
-    status = KineticConnection_ReceiveDeviceStatusMessage(connection);
-
     return status;
 }
 
@@ -149,18 +155,17 @@ KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)
         LOG0("Invalid KineticSessionHandle specified!");
         return KINETIC_STATUS_SESSION_INVALID;
     }
-
     KineticConnection* connection = KineticConnection_FromHandle(*handle);
     if (connection == NULL) {
         LOG0("Failed getting valid connection from handle!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
+    // Disconnect
     KineticStatus status = KineticConnection_Disconnect(connection);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG0("Disconnection failed!");
     }
-
     KineticConnection_FreeConnection(handle);
     *handle = KINETIC_HANDLE_INVALID;
 

@@ -26,8 +26,8 @@
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include <stdlib.h>
+#include <sys/time.h>
 
-// #define KINETIC_LOG_PDU_OPERATIONS
 
 void KineticPDU_Init(KineticPDU* const pdu,
                      KineticConnection* const connection)
@@ -123,13 +123,21 @@ KineticStatus KineticPDU_Send(KineticPDU* request)
     return KINETIC_STATUS_SUCCESS;
 }
 
+bool KineticPDU_IsResponseAvailable(const KineticConnection* connection)
+{
+    assert(connection != NULL);
+    assert(connection->socket >= 0);
+    int status = KineticSocket_DataBytesAvailable(connection->socket);
+    return (status > (int)PDU_HEADER_LEN);
+}
+
 KineticStatus KineticPDU_Receive(KineticPDU* const response)
 {
     assert(response != NULL);
     assert(response->connection != NULL);
     const int fd = response->connection->socket;
     assert(fd >= 0);
-    LOGF1("\nReceiving PDU via fd=%d", fd);
+    LOGF1("\nReceiving PDU (synchronous) via fd=%d", fd);
 
     KineticStatus status;
     KineticMessage* msg = &response->protoData.message;
@@ -147,8 +155,8 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
         KineticPDUHeader* headerNBO = &response->headerNBO;
         response->header = (KineticPDUHeader) {
             .versionPrefix = headerNBO->versionPrefix,
-             .protobufLength = KineticNBO_ToHostU32(headerNBO->protobufLength),
-              .valueLength = KineticNBO_ToHostU32(headerNBO->valueLength),
+            .protobufLength = KineticNBO_ToHostU32(headerNBO->protobufLength),
+            .valueLength = KineticNBO_ToHostU32(headerNBO->valueLength),
         };
         KineticLogger_LogHeader(1, &response->header);
     }
@@ -229,6 +237,62 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
     return status;
 }
 
+KineticStatus KineticPDU_ReceiveAsync(KineticPDU* const request, KineticPDU** response)
+{
+    assert(request != NULL);
+    assert(request->connection != NULL);
+    assert(request->proto != NULL);
+    assert(request->command != NULL);
+    assert(request->command->header != NULL);
+    assert(request->command->header->has_sequence);
+    assert(response != NULL);
+
+    const int fd = request->connection->socket;
+    assert(fd >= 0);
+    LOGF1("\nReceiving PDU (asynchronous) via fd=%d", fd);
+
+    bool timeout = false;
+    struct timeval tv;
+    time_t startTime;
+    time_t currentTime;
+    KineticStatus status = KINETIC_STATUS_SOCKET_TIMEOUT;
+    KineticPDU* pdu = NULL;
+
+    // Obtain start time
+    gettimeofday(&tv, NULL);
+    startTime = tv.tv_sec;
+
+    // Wait for matching response to arrive
+    while(request->associatedPDU == NULL && !timeout) {
+        gettimeofday(&tv, NULL);
+        currentTime = tv.tv_sec;
+        if ((currentTime - startTime) >= KINETIC_PDU_RECEIVE_TIMEOUT_SECS) {
+            timeout = true;
+        }
+        else {
+            sleep(0);
+        }
+    }
+
+    if (timeout) {
+        LOG0("Timed out waiting to received response PDU!");
+        status = KINETIC_STATUS_SOCKET_TIMEOUT;
+    }
+    else if (pdu != NULL) {
+        status = KineticPDU_GetStatus(pdu);
+        if (status == KINETIC_STATUS_SUCCESS) {
+            LOG2("PDU received successfully!");
+        }
+        *response = pdu;
+    }
+    else {
+        LOG0("Unknown error occurred waiting for response PDU to arrive!");
+        status = KINETIC_STATUS_CONNECTION_ERROR;
+    }
+
+    return status;
+}
+
 KineticStatus KineticPDU_GetStatus(KineticPDU* pdu)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
@@ -251,8 +315,8 @@ KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu)
     if (pdu != NULL &&
         pdu->command != NULL &&
         pdu->command != NULL &&
-        pdu->command->body != NULL) {
-
+        pdu->command->body != NULL)
+    {
         keyValue = pdu->command->body->keyValue;
     }
     return keyValue;
@@ -264,8 +328,8 @@ KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticPDU* pdu)
     if (pdu != NULL &&
         pdu->proto != NULL &&
         pdu->command != NULL &&
-        pdu->command->body != NULL) {
-
+        pdu->command->body != NULL)
+    {
         range = pdu->command->body->range;
     }
     return range;

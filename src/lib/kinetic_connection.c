@@ -22,13 +22,106 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_socket.h"
 #include "kinetic_pdu.h"
+#include "kinetic_operation.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+#include <errno.h>
+#include <sys/time.h>
 
 STATIC KineticConnection ConnectionInstances[KINETIC_SESSIONS_MAX];
 STATIC KineticConnection* Connections[KINETIC_SESSIONS_MAX];
+
+static void* KineticConnection_Worker(void* thread_arg)
+{
+    KineticStatus status;
+    KineticThread* thread = thread_arg;
+    bool noDataArrived = false;
+    bool someDataArrived = false;
+
+    while (!thread->connection->threadCreated) {
+        sleep(1);
+    }
+
+    while(!thread->abortRequested && !thread->fatalError) {
+
+        // Wait for and receive a PDU
+        int dataAvailable = KineticSocket_DataBytesAvailable(thread->connection->socket);
+        if (dataAvailable < 0) {
+            LOG0("ERROR: Socket error while waiting for PDU to arrive");
+            thread->fatalError = true;
+        }
+        else if (dataAvailable == 0) {
+            if (!noDataArrived) {
+                LOG2("No data available to process yet...");
+                noDataArrived = true;
+                someDataArrived = false;
+            }
+            sleep(0);
+        }
+        else if (dataAvailable < (int)PDU_HEADER_LEN) {
+            if (!someDataArrived) {
+                LOG2("Not enough data available to process yet");
+                someDataArrived = true;
+                noDataArrived = false;
+            }
+            sleep(0);
+        }
+        else {
+            KineticPDU* response = KineticAllocator_NewPDU(&thread->connection->pdus, thread->connection);
+            status = KineticPDU_Receive(response);
+            if (status != KINETIC_STATUS_SUCCESS) {
+                LOGF0("ERROR: PDU receive reported an error: %s", Kinetic_GetStatusDescription(status));
+            }
+            else {
+                status = KineticPDU_GetStatus(response);
+            }
+
+            if (response->proto != NULL && response->proto->has_authType) {
+
+                // Handle unsolicited status PDUs
+                if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
+                    if (response->command != NULL &&
+                        response->command->header != NULL &&
+                        response->command->header->has_connectionID)
+                    {
+                        // Extract connectionID from unsolicited status message
+                        response->connection->connectionID = response->command->header->connectionID;
+                        LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
+                            response->connection->connectionID);
+                    }
+                    else {
+                        LOG0("WARNING: Unsolicited PDU is not recognized!");
+                    }
+                }
+
+                // Associate solicited response PDUs with their requests
+                else {
+                    KineticPDU* request = NULL;
+                    response->type = KINETIC_PDU_TYPE_RESPONSE;
+                    request = KineticOperation_AssociateResponseWithRequest(response);
+                    if (request == NULL) {
+                        LOG0("Failed to find request matching received response PDU!");
+                    }
+                    else {
+                        LOG2("Found associated request for response PDU.");
+                        if (request->callback != NULL) {
+                            request->callback(status);
+                        }
+                    }
+                }
+            }
+
+            // Always free the reponse PDU
+            KineticAllocator_FreePDU(&thread->connection->pdus, response);
+        }
+    }
+
+    LOG1("Worker thread terminated!");
+    return (void*)NULL;
+}
 
 KineticSessionHandle KineticConnection_NewConnection(
     const KineticSession* const config)
@@ -75,52 +168,97 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
+    // Establish the connection
     connection->connected = false;
     connection->socket = KineticSocket_Connect(
                              connection->session.host,
                              connection->session.port,
                              connection->session.nonBlocking);
     connection->connected = (connection->socket >= 0);
-
     if (!connection->connected) {
         LOG0("Session connection failed!");
         connection->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
+    // Kick off the worker thread
+    connection->threadCreated = false;
+    connection->thread.connection = connection;
+    int pthreadStatus = pthread_create(&connection->threadID, NULL, KineticConnection_Worker, &connection->thread);
+    if (pthreadStatus == 0) {
+        connection->threadCreated = true;
+    }
+    else {
+        char errMsg[256];
+        Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
+        LOGF0("Failed creating worker thread w/error: %s", errMsg);
+    }
+
     return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticConnection_WaitForInitialDeviceStatus(KineticConnection* const connection)
+{
+    assert(connection != NULL);
+
+    KineticStatus status = KINETIC_STATUS_INVALID;
+    bool statusReceived = false;
+    bool timeout = false;
+    struct timeval tv;
+    time_t startTime;
+    time_t currentTime;
+
+    // Obtain start time
+    gettimeofday(&tv, NULL);
+    startTime = tv.tv_sec;
+
+    while(!statusReceived && !timeout) {
+        gettimeofday(&tv, NULL);
+        currentTime = tv.tv_sec;
+        if ((currentTime - startTime) >= KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS) {
+            timeout = true;
+        }
+        else if (connection->connectionID > 0) {
+            statusReceived = true;
+        }
+        else {
+            sleep(0);
+        }
+    }
+
+    if (statusReceived) {
+        status = KINETIC_STATUS_SUCCESS;
+    }
+    else if (timeout) {
+        status = KINETIC_STATUS_SOCKET_TIMEOUT;
+    }
+
+    return status;
 }
 
 KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
 {
-    if (connection == NULL || connection->socket < 0) {
+    if (connection == NULL || !connection->connected || connection->socket < 0) {
         return KINETIC_STATUS_SESSION_INVALID;
     }
 
+    // Shutdown the worker thread
+    KineticStatus status = KINETIC_STATUS_SUCCESS;
+    connection->thread.abortRequested = true;
+    LOG0("Sent abort request to worker thread!");
+    int pthreadStatus = pthread_join(connection->threadID, NULL);
+    if (pthreadStatus != 0) {
+        char errMsg[256];
+        Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
+        LOGF0("Failed terminating worker thread w/error: %s", errMsg);
+        status = KINETIC_STATUS_CONNECTION_ERROR;
+    }
+
+    // Close the connection
     close(connection->socket);
     connection->socket = KINETIC_HANDLE_INVALID;
-    return KINETIC_STATUS_SUCCESS;
-}
+    connection->connected = false;
 
-KineticStatus KineticConnection_ReceiveDeviceStatusMessage(
-    KineticConnection* const connection)
-{
-    if (connection == NULL || connection->socket < 0) {
-        return KINETIC_STATUS_SESSION_INVALID;
-    }
-
-    KineticPDU* statusPDU = KineticAllocator_NewPDU(&connection->pdus, connection);
-    if (statusPDU == NULL) {
-        LOG0("Failed allocating connection status PDU to receive session info!");
-        return KINETIC_STATUS_MEMORY_ERROR;
-    }
-    KineticStatus status = KineticPDU_Receive(statusPDU);
-    if (status == KINETIC_STATUS_SUCCESS) {
-        if (statusPDU->command != NULL && statusPDU->command->header != NULL) {
-            connection->connectionID = statusPDU->command->header->connectionID;  
-        }
-    }
-    KineticAllocator_FreePDU(&connection->pdus, statusPDU);
     return status;
 }
 
