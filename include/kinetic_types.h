@@ -157,7 +157,16 @@ typedef enum {
 
 const char* Kinetic_GetStatusDescription(KineticStatus status);
 
-typedef void (*KineticCompletionCallback)(KineticStatus status);
+typedef struct _KineticCompletionData {
+    KineticStatus status;
+} KineticCompletionData;
+
+typedef void (*KineticCompletionCallback)(KineticCompletionData* kinetic_data, void* client_data);
+
+typedef struct _KineticCompletionClosure {
+    KineticCompletionCallback callback;
+    void* clientData;
+} KineticCompletionClosure;
 
 // KineticEntry - byte arrays need to be preallocated by the client
 typedef struct _KineticEntry {

@@ -59,10 +59,11 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     LOGF1("Executing operation: 0x%llX", operation);
-    if (operation->request->entry.value.array.data != NULL
-        && operation->request->entry.value.bytesUsed > 0) {
+    if (operation->entry.value.array.data != NULL
+        && operation->entry.value.bytesUsed > 0)
+    {
         LOGF1("  Sending PDU w/value (%zu bytes)",
-             operation->request->entry.value.bytesUsed);
+             operation->entry.value.bytesUsed);
     }
     else {
         LOG1("  Sending PDU w/o value");
@@ -259,7 +260,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
 
     // Update the entry upon success
     if (status == KINETIC_STATUS_SUCCESS) {
-        entry->value.bytesUsed = operation.response->entry.value.bytesUsed;
+        entry->value.bytesUsed = operation.entry.value.bytesUsed;
         KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation.response);
         if (keyValue != NULL) {
             if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, entry)) {
@@ -295,50 +296,6 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
     return status;
 }
 
-// command {
-//   header {
-//     // See above for descriptions of these fields
-//     clusterVersion: ...
-//     identity: ...
-//     connectionID: ...
-//     sequence: ...
-// 
-//     // messageType should be GETKEYRANGE
-//     messageType: GETKEYRANGE
-//   }
-//   body {
-//     // The range message must be populated
-//     range {
-//       // Required bytes, the beginning of the requested range
-//       startKey: "..."
-// 
-//       // Optional bool, defaults to false
-//       // True indicates that the start key should be included in the returned
-//       // range
-//       startKeyInclusive: ...
-// 
-//       // Required bytes, the end of the requested range
-//       endKey: "..."
-// 
-//       // Optional bool, defaults to false
-//       // True indicates that the end key should be included in the returned
-//       // range
-//       endKeyInclusive: ...
-// 
-//       // Required int32, must be greater than 0
-//       // The maximum number of keys returned, in sorted order
-//       maxReturned: ...
-// 
-//       // Optional bool, defaults to false
-//       // If true, the key range will be returned in reverse order, starting at
-//       // endKey and moving back to startKey.  For instance
-//       // if the search is startKey="j", endKey="k", maxReturned=2,
-//       // reverse=true and the keys "k0", "k1", "k2" exist
-//       // the system will return "k2" and "k1" in that order.
-//       reverse: ....
-//     }
-//   }
-// }
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
                                         KineticKeyRange* range,
                                         ByteBuffer keys[],

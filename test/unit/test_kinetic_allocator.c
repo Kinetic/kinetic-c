@@ -29,300 +29,410 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+KineticConnection Connection;
 KineticSession Session;
-KineticList PDUList;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-    KineticAllocator_InitList(&PDUList);
-    TEST_ASSERT_NULL(PDUList.start);
-    TEST_ASSERT_NULL(PDUList.last);
+    KINETIC_CONNECTION_INIT(&Connection);
+
+    KineticAllocator_InitLists(&Connection);
+
     pthread_mutex_t expectedMutex = PTHREAD_MUTEX_INITIALIZER;
-    TEST_ASSERT_EQUAL_MEMORY(&expectedMutex, &PDUList.mutex, sizeof(pthread_mutex_t));
-    TEST_ASSERT_FALSE(PDUList.locked);
+
+    TEST_ASSERT_NULL(Connection.operations.start);
+    TEST_ASSERT_NULL(Connection.operations.last);
+    TEST_ASSERT_EQUAL_MEMORY(&expectedMutex, &Connection.operations.mutex, sizeof(pthread_mutex_t));
+    TEST_ASSERT_FALSE(Connection.operations.locked);
+
+    TEST_ASSERT_NULL(Connection.pdus.start);
+    TEST_ASSERT_NULL(Connection.pdus.last);
+    TEST_ASSERT_EQUAL_MEMORY(&expectedMutex, &Connection.pdus.mutex, sizeof(pthread_mutex_t));
+    TEST_ASSERT_FALSE(Connection.pdus.locked);
 }
 
 void tearDown(void)
 {
-    LOG_LOCATION;
-    bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
-    KineticAllocator_FreeAllPDUs(&PDUList);
+    bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&Connection);
+    KineticAllocator_FreeAllPDUs(&Connection);
+    KineticAllocator_FreeAllOperations(&Connection);
+
+    TEST_ASSERT_NULL(Connection.operations.start);
+    TEST_ASSERT_NULL(Connection.operations.last);
+    TEST_ASSERT_FALSE(Connection.operations.locked);
+
+    TEST_ASSERT_NULL(Connection.pdus.start);
+    TEST_ASSERT_NULL(Connection.pdus.last);
+    TEST_ASSERT_FALSE(Connection.pdus.locked);
+
+    TEST_ASSERT_TRUE_MESSAGE(allFreed, "Dynamically allocated things were not freed!");
 
     KineticLogger_Close();
-
-    TEST_ASSERT_NULL(PDUList.start);
-    TEST_ASSERT_NULL(PDUList.last);
-    TEST_ASSERT_TRUE_MESSAGE(allFreed, "Dynamically allocated things were not freed!");
-    TEST_ASSERT_FALSE(PDUList.locked);
 }
 
-#if 0
+
+void test_KineticAllocator_ValidateAllMemoryFreed_should_return_true_if_all_allocated_things_have_been_freed(void)
+{
+    LOG_LOCATION;
+    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+}
+
+
+//==============================================================================
+// PDU List Support
+//==============================================================================
+
 void test_KineticAllocator_GetFirstPDU_should_return_the_first_PDU_in_the_list(void)
 {
     LOG_LOCATION;
-    KineticConnection connection;
     KineticPDU* pdus[] = {NULL, NULL, NULL};
 
-    TEST_ASSERT_NULL(KineticAllocator_GetFirstPDU(&PDUList));
+    TEST_ASSERT_NULL(KineticAllocator_GetFirstPDU(&Connection));
 
-    pdus[0] = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_EQUAL_PTR(pdus[0], KineticAllocator_GetFirstPDU(&PDUList));
+    pdus[0] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_EQUAL_PTR(pdus[0], KineticAllocator_GetFirstPDU(&Connection));
 
-    pdus[1] = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_EQUAL_PTR(pdus[0], KineticAllocator_GetFirstPDU(&PDUList));
+    pdus[1] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_EQUAL_PTR(pdus[0], KineticAllocator_GetFirstPDU(&Connection));
 
-    KineticAllocator_FreeAllPDUs(&PDUList);
-    TEST_ASSERT_NULL(KineticAllocator_GetFirstPDU(&PDUList));
+    KineticAllocator_FreeAllPDUs(&Connection);
+    TEST_ASSERT_NULL(KineticAllocator_GetFirstPDU(&Connection));
 }
 
 
 void test_KineticAllocator_GetNextPDU_should_return_the_next_PDU_in_the_list(void)
 {
     LOG_LOCATION;
-    KineticConnection connection;
     KineticPDU* pdus[] = {NULL, NULL, NULL};
 
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, NULL));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, NULL));
 
-    pdus[0] = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, NULL));
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
+    pdus[0] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, NULL));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[0]));
 
-    pdus[1] = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
+    pdus[1] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&Connection, pdus[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[1]));
 
-    pdus[2] = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_EQUAL_PTR(pdus[2], KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
-    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[2]));
+    pdus[2] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_EQUAL_PTR(pdus[2], KineticAllocator_GetNextPDU(&Connection, pdus[1]));
+    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&Connection, pdus[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[2]));
 
-    KineticAllocator_FreePDU(&PDUList, pdus[2]);
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
-    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
-
-    KineticAllocator_FreePDU(&PDUList, pdus[0]);
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
+    KineticAllocator_FreePDU(&Connection, pdus[2]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[1]));
+    TEST_ASSERT_EQUAL_PTR(pdus[1], KineticAllocator_GetNextPDU(&Connection, pdus[0]));
+    KineticAllocator_FreePDU(&Connection, pdus[0]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[1]));
 
     // Should return NULL if passed the address of a non-existent/freed PDU
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[2]));
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, NULL));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[2]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, NULL));
 
-    KineticAllocator_FreePDU(&PDUList, pdus[1]);
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[0]));
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[1]));
-    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&PDUList, pdus[2]));
+    KineticAllocator_FreePDU(&Connection, pdus[1]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[1]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextPDU(&Connection, pdus[2]));
 }
-#endif
 
 void test_KineticAllocator_FreeAllPDUs_should_free_full_list_of_PDUs(void)
 {
     LOG_LOCATION;
-    const int count = 3;
-    KineticListItem* list[count];
+    KINETIC_CONNECTION_INIT(&Connection);
 
-    // Allocate some PDUs and list items to hold them
-    for (int i = 0; i < count; i++) {
-        list[i] = (KineticListItem*)malloc(sizeof(KineticListItem));
-        LOGF0("ALLOCATED item[%d]: 0x%0llX", i, (long long)list[i]);
-    }
+    KineticAllocator_NewPDU(&Connection);
+    KineticAllocator_NewPDU(&Connection);
+    KineticAllocator_NewPDU(&Connection);
 
-    // Allocate the double-linked list
-    list[0]->previous = NULL;       list[0]->next = list[1];
-    list[1]->previous = list[0];    list[1]->next = list[2];
-    list[2]->previous = list[1];    list[2]->next = NULL;
-    PDUList.start = list[0];
-    PDUList.last  = list[2];
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
 
-    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&PDUList));
+    KineticAllocator_FreeAllPDUs(&Connection);
 
-    KineticAllocator_FreeAllPDUs(&PDUList);
-
-    bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
+    bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&Connection);
 
     TEST_ASSERT_TRUE(allFreed);
-}
-
-
-void test_KineticAllocator_ValidateAllMemoryFreed_should_return_true_if_all_PDUs_have_been_freed(void)
-{
-    LOG_LOCATION;
-    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&PDUList));
 }
 
 void test_KineticAllocator_NewPDU_should_allocate_new_PDUs_and_store_references(void)
 {
     LOG_LOCATION;
-    KineticConnection connection;
     KineticPDU* pdu;
 
-    pdu = KineticAllocator_NewPDU(&PDUList, &connection);
+    pdu = KineticAllocator_NewPDU(&Connection);
     TEST_ASSERT_NOT_NULL(pdu);
-    pdu->connection = &connection;
-    TEST_ASSERT_NOT_NULL(PDUList.start);
-    TEST_ASSERT_NULL(PDUList.start->previous);
-    TEST_ASSERT_NULL(PDUList.start->next);
-    TEST_ASSERT_NULL(PDUList.last->next);
-    TEST_ASSERT_NULL(PDUList.last->previous);
+    TEST_ASSERT_EQUAL_PTR(&Connection, pdu->connection);
 
-    pdu = KineticAllocator_NewPDU(&PDUList, &connection);
+    TEST_ASSERT_NOT_NULL(Connection.pdus.start);
+    
+    TEST_ASSERT_NULL(Connection.pdus.start->previous);
+    TEST_ASSERT_NULL(Connection.pdus.start->next);
+    TEST_ASSERT_NULL(Connection.pdus.last->next);
+    TEST_ASSERT_NULL(Connection.pdus.last->previous);
+
+    pdu = KineticAllocator_NewPDU(&Connection);
     TEST_ASSERT_NOT_NULL(pdu);
-    pdu->connection = &connection;
-    TEST_ASSERT_NOT_NULL(PDUList.start->next);
+    TEST_ASSERT_EQUAL_PTR(&Connection, pdu->connection);
+    TEST_ASSERT_NOT_NULL(Connection.pdus.start->next);
 
-    pdu = KineticAllocator_NewPDU(&PDUList, &connection);
+    pdu = KineticAllocator_NewPDU(&Connection);
     TEST_ASSERT_NOT_NULL(pdu);
-    pdu->connection = &connection;
-    TEST_ASSERT_NOT_NULL(PDUList.start->next);
+    TEST_ASSERT_EQUAL_PTR(&Connection, pdu->connection);
+    TEST_ASSERT_NOT_NULL(Connection.pdus.start->next);
 
-    KineticAllocator_FreeAllPDUs(&PDUList);
+    KineticAllocator_FreeAllPDUs(&Connection);
 }
 
 
 void test_KineticAllocator_should_allocate_and_free_a_single_PDU_list_item(void)
 {
     LOG_LOCATION;
-    KineticConnection connection;
-    KineticPDU* pdu0;
+    KineticPDU* pdu;
     bool allFreed = false;
 
-    pdu0 = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NOT_NULL(pdu0);
-    pdu0->connection = &connection;
+    pdu = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NOT_NULL(pdu);
 
-    KineticAllocator_FreePDU(&PDUList, pdu0);
+    KineticAllocator_FreePDU(&Connection, pdu);
 
-    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
-    KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&Connection);
+    KineticAllocator_FreeAllPDUs(&Connection); // Just so we don't leak memory upon failure...
     TEST_ASSERT_TRUE(allFreed);
 }
 
 void test_KineticAllocator_should_allocate_and_free_a_pair_of_PDU_list_items_in_stacked_order(void)
 {
     LOG_LOCATION;
-    KineticConnection connection;
-    KineticPDU* pdu0, *pdu1;
-    bool allFreed = false;
+    KineticPDU* pdus[2];
 
-    LOG0("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NOT_NULL(pdu0);
-    pdu0->connection = &connection;
+    pdus[0] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NOT_NULL(pdus[0]);
+    pdus[1] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NOT_NULL(pdus[1]);
 
-    LOG0("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NOT_NULL(pdu1);
-    pdu1->connection = &connection;
-
-    LOG0("Freeing second PDU");
-    KineticAllocator_FreePDU(&PDUList, pdu1);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
-    if (allFreed) {
-        LOG0("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
-    }
-    TEST_ASSERT_FALSE(allFreed);
-
-    LOG0("Freeing first PDU");
-    KineticAllocator_FreePDU(&PDUList, pdu0);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
-    if (!allFreed) {
-        LOG0("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
-    }
-    TEST_ASSERT_TRUE(allFreed);
-
-    LOG0("PASSED!");
+    KineticAllocator_FreePDU(&Connection, pdus[1]);
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+    KineticAllocator_FreePDU(&Connection, pdus[0]);
+    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
 }
 
 void test_KineticAllocator_should_allocate_and_free_a_pair_of_PDU_list_items_in_allocation_order(void)
 {
     LOG_LOCATION;
-    KineticConnection connection;
-    KineticPDU* pdu0, *pdu1;
-    bool allFreed = false;
+    KineticPDU* pdus[2];
 
-    LOG0("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NOT_NULL(pdu0);
-    pdu0->connection = &connection;
+    pdus[0] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NOT_NULL(pdus[0]);
+    pdus[1] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NOT_NULL(pdus[1]);
 
-    LOG0("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NOT_NULL(pdu1);
-    pdu1->connection = &connection;
-
-    LOG0("Freeing first PDU");
-    KineticAllocator_FreePDU(&PDUList, pdu0);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
-    if (allFreed) {
-        LOG0("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
-    }
-    TEST_ASSERT_FALSE(allFreed);
-
-    LOG0("Freeing second PDU");
-    KineticAllocator_FreePDU(&PDUList, pdu1);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
-    if (!allFreed) {
-        LOG0("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
-    }
-    TEST_ASSERT_TRUE(allFreed);
-
-    LOG0("PASSED!");
+    KineticAllocator_FreePDU(&Connection, pdus[0]);
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+    KineticAllocator_FreePDU(&Connection, pdus[1]);
+    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
 }
 
 void test_KineticAllocator_should_allocate_and_free_multiple_PDU_list_items_in_random_order(void)
 {
     LOG_LOCATION;
-    KineticConnection connection;
-    KineticPDU* pdu0, *pdu1, *pdu2;
+    KineticPDU* pdus[3];
+
+    pdus[0] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NOT_NULL(pdus[0]);
+    pdus[1] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NOT_NULL(pdus[1]);
+    pdus[2] = KineticAllocator_NewPDU(&Connection);
+    TEST_ASSERT_NOT_NULL(pdus[2]);
+
+    KineticAllocator_FreePDU(&Connection, pdus[1]);
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+    KineticAllocator_FreePDU(&Connection, pdus[0]);
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+    KineticAllocator_FreePDU(&Connection, pdus[2]);
+    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+}
+
+
+
+
+void test_KineticAllocator_GetFirstOperation_should_return_the_first_Operation_in_the_list(void)
+{
+    LOG_LOCATION;
+    KineticOperation* operations[] = {NULL, NULL, NULL};
+
+    TEST_ASSERT_NULL(KineticAllocator_GetFirstOperation(&Connection));
+    operations[0] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_EQUAL_PTR(operations[0], KineticAllocator_GetFirstOperation(&Connection));
+    operations[1] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_EQUAL_PTR(operations[0], KineticAllocator_GetFirstOperation(&Connection));
+
+    KineticAllocator_FreeAllOperations(&Connection);
+    TEST_ASSERT_NULL(KineticAllocator_GetFirstOperation(&Connection));
+}
+
+void test_KineticAllocator_GetNextOperation_should_return_the_next_Operation_in_the_list(void)
+{
+    LOG_LOCATION;
+    KineticOperation* operations[] = {NULL, NULL, NULL};
+
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, NULL));
+
+    operations[0] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, NULL));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[0]));
+
+    operations[1] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_EQUAL_PTR(operations[1], KineticAllocator_GetNextOperation(&Connection, operations[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[1]));
+
+    operations[2] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_EQUAL_PTR(operations[2], KineticAllocator_GetNextOperation(&Connection, operations[1]));
+    TEST_ASSERT_EQUAL_PTR(operations[1], KineticAllocator_GetNextOperation(&Connection, operations[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[2]));
+
+    KineticAllocator_FreeOperation(&Connection, operations[2]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[1]));
+    TEST_ASSERT_EQUAL_PTR(operations[1], KineticAllocator_GetNextOperation(&Connection, operations[0]));
+    KineticAllocator_FreeOperation(&Connection, operations[0]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[1]));
+
+    // Should return NULL if passed the address of a non-existent/freed Operation
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[2]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, NULL));
+
+    KineticAllocator_FreeOperation(&Connection, operations[1]);
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[0]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[1]));
+    TEST_ASSERT_NULL(KineticAllocator_GetNextOperation(&Connection, operations[2]));
+}
+
+void test_KineticAllocator_FreeAllOperations_should_free_full_list_of_Operations(void)
+{
+    LOG_LOCATION;
+    KINETIC_CONNECTION_INIT(&Connection);
+    KineticOperation* operations[3];
+
+    operations[0] = KineticAllocator_NewOperation(&Connection);
+    operations[1] = KineticAllocator_NewOperation(&Connection);
+    operations[2] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+
+    KineticAllocator_FreePDU(&Connection, operations[0]->request);
+    operations[1]->response = KineticAllocator_NewPDU(&Connection);
+
+    KineticAllocator_FreeAllOperations(&Connection);
+    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+}
+
+
+void test_KineticAllocator_NewOperation_should_allocate_new_Operations_and_store_references(void)
+{
+    LOG_LOCATION;
+    KineticOperation* operation;
+
+    operation = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operation);
+    TEST_ASSERT_EQUAL_PTR(&Connection, operation->connection);
+    TEST_ASSERT_NOT_NULL(Connection.operations.start);
+    TEST_ASSERT_NULL(Connection.operations.start->previous);
+    TEST_ASSERT_NULL(Connection.operations.start->next);
+    TEST_ASSERT_NULL(Connection.operations.last->next);
+    TEST_ASSERT_NULL(Connection.operations.last->previous);
+
+    operation = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operation);
+    TEST_ASSERT_NOT_NULL(Connection.operations.start->next);
+
+    operation = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operation);
+    TEST_ASSERT_NOT_NULL(Connection.operations.start->next);
+
+    KineticAllocator_FreeAllOperations(&Connection);
+}
+
+
+void test_KineticAllocator_should_allocate_and_free_a_single_Operation_list_item_with_request_PDU(void)
+{
+    LOG_LOCATION;
+    KineticOperation* operation;
+
+    operation = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operation);
+    TEST_ASSERT_EQUAL_PTR(&Connection, operation->connection);
+    TEST_ASSERT_NOT_NULL(operation->request);
+    TEST_ASSERT_NOT_NULL(operation->request->proto);
+    TEST_ASSERT_NOT_NULL(operation->request->command);
+    TEST_ASSERT_EQUAL(KINETIC_PDU_TYPE_REQUEST, operation->request->type);
+    TEST_ASSERT_NULL(operation->response);
+
+    KineticAllocator_FreeOperation(&Connection, operation);
+
+    bool allFreed = KineticAllocator_ValidateAllMemoryFreed(&Connection);
+    KineticAllocator_FreeAllOperations(&Connection); // Just so we don't leak memory upon failure...
+    TEST_ASSERT_TRUE(allFreed);
+}
+
+void test_KineticAllocator_should_allocate_and_free_a_pair_of_Operation_list_items_in_stacked_order(void)
+{
+    LOG_LOCATION;
+    KineticOperation* operations[2];
+
+    operations[0] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operations[0]);
+    operations[1] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operations[1]);
+
+    KineticAllocator_FreeOperation(&Connection, operations[1]);
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+    KineticAllocator_FreeOperation(&Connection, operations[0]);
+    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+}
+
+void test_KineticAllocator_should_allocate_and_free_a_pair_of_Operation_list_items_in_allocation_order(void)
+{
+    LOG_LOCATION;
+    KineticOperation* operations[2];
     bool allFreed = false;
 
-    LOG0("Allocating first PDU");
-    pdu0 = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NOT_NULL(pdu0);
-    pdu0->connection = &connection;
+    operations[0] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operations[0]);
+    operations[1] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operations[1]);
 
-    LOG0("Allocating second PDU");
-    pdu1 = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NOT_NULL(pdu1);
-    pdu1->connection = &connection;
-
-    LOG0("Allocating third PDU");
-    pdu2 = KineticAllocator_NewPDU(&PDUList, &connection);
-    TEST_ASSERT_NOT_NULL(pdu2);
-    pdu2->connection = &connection;
-
-    LOG0("Freeing second PDU");
-    KineticAllocator_FreePDU(&PDUList, pdu1);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
+    KineticAllocator_FreeOperation(&Connection, operations[0]);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&Connection);
     if (allFreed) {
-        LOG0("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
+        LOG0("Failed validating Operation freed!");
     }
     TEST_ASSERT_FALSE(allFreed);
 
-    LOG0("Freeing first PDU");
-    KineticAllocator_FreePDU(&PDUList, pdu0);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
-    if (allFreed) {
-        LOG0("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
-    }
-    TEST_ASSERT_FALSE(allFreed);
-
-    LOG0("Freeing third PDU");
-    KineticAllocator_FreePDU(&PDUList, pdu2);
-    allFreed = KineticAllocator_ValidateAllMemoryFreed(&PDUList);
+    KineticAllocator_FreeOperation(&Connection, operations[1]);
+    allFreed = KineticAllocator_ValidateAllMemoryFreed(&Connection);
     if (!allFreed) {
-        LOG0("Failed validating PDU freed!");
-        KineticAllocator_FreeAllPDUs(&PDUList); // Just so we don't leak memory upon failure...
+        LOG0("Failed validating Operation freed!");
     }
     TEST_ASSERT_TRUE(allFreed);
+}
 
-    LOG0("PASSED!");
+void test_KineticAllocator_should_allocate_and_free_multiple_Operation_list_items_in_random_order(void)
+{
+    LOG_LOCATION;
+    KineticOperation* operations[3];
+
+    operations[0] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operations[0]);
+    operations[1] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operations[1]);
+    operations[2] = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NOT_NULL(operations[2]);
+
+    KineticAllocator_FreeOperation(&Connection, operations[1]);
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+    KineticAllocator_FreeOperation(&Connection, operations[0]);
+    TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
+    KineticAllocator_FreeOperation(&Connection, operations[2]);
+    TEST_ASSERT_TRUE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
 }

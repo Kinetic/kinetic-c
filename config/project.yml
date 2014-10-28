@@ -88,6 +88,8 @@
       - -g
       - -Wall
       - -Wextra
+      - -Wstrict-prototypes
+      - -Wcast-align
       - -pedantic
       - -D_POSIX_C_SOURCE=1
       - -D_C99_SOURCE=1
@@ -103,7 +105,9 @@
       - -g
       - -Wall
       - -Wextra
-      - -pedantic
+      # - -pedantic
+      - -Wstrict-prototypes
+      # - -Wcast-align
       - -D_POSIX_C_SOURCE=1
       - -D_C99_SOURCE=1
       - -Wno-nonnull

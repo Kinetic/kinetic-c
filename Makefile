@@ -10,7 +10,7 @@ PUB_INC = ./include
 #===============================================================================
 CC ?= gcc
 OPTIMIZE = -O3
-WARN = -Wall -Wextra -pedantic
+WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic
 CDEFS += -D_POSIX_C_SOURCE=1 -D_C99_SOURCE=1
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -l crypto -l ssl -l pthread

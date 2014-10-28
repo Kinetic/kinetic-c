@@ -48,8 +48,11 @@
 #define STATIC static
 #endif
 
+#define BOOL_TO_STRING(_bool) (_bool) ? "true" : "false"
+
 
 typedef struct _KineticPDU KineticPDU;
+typedef struct _KineticOperation KineticOperation;
 typedef struct _KineticConnection KineticConnection;
 
 
@@ -68,12 +71,14 @@ typedef struct _KineticList {
     pthread_mutex_t mutex;
     bool locked;
 } KineticList;
-
+#define KINETIC_LIST_INITIALIZER (KineticList) { \
+    .mutex = PTHREAD_MUTEX_INITIALIZER, .locked = false, .start = NULL, .last = NULL }
 
 // Kinetic Thread Instance
 typedef struct _KineticThread {
     bool abortRequested;
     bool fatalError;
+    bool paused;
     KineticConnection* connection;
 } KineticThread;
 
@@ -85,17 +90,15 @@ struct _KineticConnection {
     int64_t         connectionID;   // initialized to seconds since epoch
     int64_t         sequence;       // increments for each request in a session
     KineticList     pdus;           // list of dynamically allocated PDUs
+    KineticList     operations;     // list of dynamically allocated operations
     KineticSession  session;        // session configuration
     KineticThread   thread;         // worker thread instance struct
     pthread_t       threadID;       // worker pthread
     bool            threadCreated;  // thread creation status
 };
-#define KINETIC_CONNECTION_INIT(_con) { \
-    (*_con) = (KineticConnection) { \
-        .connected = false, \
-        .socket = -1, \
-    }; \
-}
+#define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
+    .connected = false, .socket = -1, \
+    .operations = KINETIC_LIST_INITIALIZER, .pdus = KINETIC_LIST_INITIALIZER}; }
 
 
 // Kinetic Message HMAC
@@ -211,8 +214,8 @@ struct _KineticPDU {
     bool protobufDynamicallyExtracted;
     KineticProto_Command* command;
 
-    // Object meta-data to be used/populated if provided and pertinent to the operation
-    KineticEntry entry;
+    // // Object meta-data to be used/populated if provided and pertinent to the operation
+    // KineticEntry entry;
 
     // Embedded HMAC instance
     KineticHMAC hmac;
@@ -223,11 +226,14 @@ struct _KineticPDU {
     // The type of this PDU (request, response or unsolicited)
     KineticPDUType type;
 
-    // PDU associated with this one (for associating request and response PDUs for operations)
-    KineticPDU* associatedPDU;
+    // Kinetic operation associated with this PDU, if any
+    KineticOperation* operation;
 
-    // Operation complete callback
-    KineticCompletionCallback callback;
+    // // PDU associated with this one (for associating request and response PDUs for operations)
+    // KineticPDU* associatedPDU;
+
+    // // Operation complete closure
+    // KineticCompletionClosure closure;
 };
 
 #define KINETIC_PDU_INIT(_pdu, _con) { \
@@ -249,20 +255,24 @@ struct _KineticPDU {
     (_pdu)->protoData.message.has_command = true; \
     (_pdu)->command = &(_pdu)->protoData.message.command; \
     (_pdu)->command->header = &(_pdu)->protoData.message.header; \
+    (_pdu)->type = KINETIC_PDU_TYPE_REQUEST; \
 }
 
 // Kinetic Operation
-typedef struct _KineticOperation {
-    KineticConnection* connection;  // Associated KineticSession
+struct _KineticOperation {
+    KineticConnection* connection;
     KineticPDU* request;
     KineticPDU* response;
-} KineticOperation;
+    bool entryEnabled;
+    bool valueEnabled;
+    bool sendValue;
+    KineticEntry entry;
+    KineticCompletionClosure closure;
+};
 #define KINETIC_OPERATION_INIT(_op, _con) \
     assert((_op) != NULL); \
     assert((_con) != NULL); \
-    *(_op) = (KineticOperation) { \
-        .connection = (_con), \
-    }
+    *(_op) = (KineticOperation) {.connection = (_con)}
 
 
 KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(

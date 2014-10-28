@@ -34,18 +34,29 @@
 STATIC KineticConnection ConnectionInstances[KINETIC_SESSIONS_MAX];
 STATIC KineticConnection* Connections[KINETIC_SESSIONS_MAX];
 
+
+void KineticConnection_Pause(KineticConnection* const connection, bool pause)
+{
+    assert(connection != NULL);
+    connection->thread.paused = pause;
+}
+
 static void* KineticConnection_Worker(void* thread_arg)
 {
     KineticStatus status;
     KineticThread* thread = thread_arg;
-    bool noDataArrived = false;
-    bool someDataArrived = false;
 
-    while (!thread->connection->threadCreated) {
-        sleep(1);
-    }
+    // Wait for thread status to be updated synced with main thread
+    // TODO: Figure out why this 
+    while (!thread->connection->threadCreated) {sleep(0);}
 
     while(!thread->abortRequested && !thread->fatalError) {
+
+        // Don't service and PDUs is thread paused
+        if (thread->paused) {
+            sleep(0);
+            continue;
+        } 
 
         // Wait for and receive a PDU
         int dataAvailable = KineticSocket_DataBytesAvailable(thread->connection->socket);
@@ -53,25 +64,12 @@ static void* KineticConnection_Worker(void* thread_arg)
             LOG0("ERROR: Socket error while waiting for PDU to arrive");
             thread->fatalError = true;
         }
-        else if (dataAvailable == 0) {
-            if (!noDataArrived) {
-                LOG2("No data available to process yet...");
-                noDataArrived = true;
-                someDataArrived = false;
-            }
-            sleep(0);
-        }
         else if (dataAvailable < (int)PDU_HEADER_LEN) {
-            if (!someDataArrived) {
-                LOG2("Not enough data available to process yet");
-                someDataArrived = true;
-                noDataArrived = false;
-            }
             sleep(0);
         }
         else {
-            KineticPDU* response = KineticAllocator_NewPDU(&thread->connection->pdus, thread->connection);
-            status = KineticPDU_Receive(response);
+            KineticPDU* response = KineticAllocator_NewPDU(thread->connection);
+            status = KineticPDU_ReceiveMain(response);
             if (status != KINETIC_STATUS_SUCCESS) {
                 LOGF0("ERROR: PDU receive reported an error: %s", Kinetic_GetStatusDescription(status));
             }
@@ -95,27 +93,38 @@ static void* KineticConnection_Worker(void* thread_arg)
                     else {
                         LOG0("WARNING: Unsolicited PDU is not recognized!");
                     }
+                    KineticAllocator_FreePDU(thread->connection, response);
                 }
 
                 // Associate solicited response PDUs with their requests
                 else {
-                    KineticPDU* request = NULL;
+                    KineticOperation* op;
                     response->type = KINETIC_PDU_TYPE_RESPONSE;
-                    request = KineticOperation_AssociateResponseWithRequest(response);
-                    if (request == NULL) {
+                    op = KineticOperation_AssociateResponseWithOperation(response);
+                    if (op == NULL) {
                         LOG0("Failed to find request matching received response PDU!");
+                        KineticAllocator_FreePDU(thread->connection, response);
                     }
                     else {
-                        LOG2("Found associated request for response PDU.");
-                        if (request->callback != NULL) {
-                            request->callback(status);
+                        LOG2("Found associated operation/request for response PDU.");
+                        if (op->request->header.valueLength > 0) {
+                            status = KineticPDU_ReceiveValue(
+                                op->connection->socket,
+                                &op->entry.value,
+                                op->request->header.valueLength);
                         }
+                        if (op->closure.callback != NULL) {
+                            KineticCompletionData completionData = {.status = status};
+                            op->closure.callback(&completionData, op->closure.clientData);
+                        }
+                        KineticAllocator_FreeOperation(thread->connection, op);
                     }
                 }
             }
-
-            // Always free the reponse PDU
-            KineticAllocator_FreePDU(&thread->connection->pdus, response);
+            else {
+                // Free invalid PDU
+                KineticAllocator_FreePDU(thread->connection, response);
+            }
         }
     }
 

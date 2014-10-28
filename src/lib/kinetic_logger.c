@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <pthread.h>
+#include <time.h>
 
 // #define USE_GENERIC_LOGGER 1 (not ready yet!)
 
@@ -37,14 +38,14 @@
 
 STATIC int KineticLogLevel = -1;
 STATIC FILE* KineticLoggerHandle = NULL;
-STATIC bool KineticLogggerAbortRequested = false;
-STATIC pthread_t KineticLoggerFlushThread;
 STATIC pthread_mutex_t KineticLoggerBufferMutex = PTHREAD_MUTEX_INITIALIZER;
 STATIC char KineticLoggerBuffer[KINETIC_LOGGER_BUFFER_SIZE][KINETIC_LOGGER_BUFFER_STR_MAX_LEN];
 STATIC int KineticLoggerBufferSize = 0;
 
 #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
+STATIC pthread_t KineticLoggerFlushThread;
 STATIC bool KineticLoggerForceFlush = false;
+STATIC bool KineticLogggerAbortRequested = false;
 #else
 STATIC bool KineticLoggerForceFlush = true;
 #endif
@@ -91,8 +92,8 @@ void KineticLogger_Init(const char* log_file, int log_level)
 
         // Create thread to periodically flush the log
         #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
-        KineticLogger_InitFlushThread();
         KineticLoggerForceFlush = false;
+        KineticLogger_InitFlushThread();
         #endif
     }
 }
@@ -174,9 +175,6 @@ void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header)
     KineticLogger_LogPrintf(log_level, "  protobufLength: %d", header->protobufLength);
     KineticLogger_LogPrintf(log_level, "  valueLength: %d", header->valueLength);
 }
-
-static const char* _str_true = "true";
-static const char* _str_false = "false";
 
 #define LOG_PROTO_INIT() char _indent[32] = "  ";
 
@@ -495,7 +493,7 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
                 }
                 if (cmd->header->has_earlyExit) {
                     KineticLogger_LogPrintf(log_level, "%searlyExit: %s", _indent,
-                         cmd->header->earlyExit ? _str_true : _str_false);
+                         BOOL_TO_STRING(cmd->header->earlyExit));
                 }
                 if (cmd->header->has_priority) {
                     const ProtobufCEnumValue* eVal = 
@@ -506,7 +504,7 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
                 }
                 if (cmd->header->has_TimeQuanta) {
                     KineticLogger_LogPrintf(log_level, "%sTimeQuanta: %s", _indent,
-                         cmd->header->TimeQuanta ? _str_true : _str_false);
+                         BOOL_TO_STRING(cmd->header->TimeQuanta));
                 }
             }
             LOG_PROTO_LEVEL_END();
@@ -548,7 +546,7 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
                         }
                         if (cmd->body->keyValue->has_force) {
                             KineticLogger_LogPrintf(log_level, "%sforce: %s", _indent,
-                                 cmd->body->keyValue->force ? _str_true : _str_false);
+                                 BOOL_TO_STRING(cmd->body->keyValue->force));
                         }
                         if (cmd->body->keyValue->has_algorithm) {
                             const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
@@ -558,7 +556,7 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
                         }
                         if (cmd->body->keyValue->has_metadataOnly) {
                             KineticLogger_LogPrintf(log_level, "%smetadataOnly: %s", _indent,
-                                 cmd->body->keyValue->metadataOnly ? _str_true : _str_false);
+                                 BOOL_TO_STRING(cmd->body->keyValue->metadataOnly));
                         }
                         if (cmd->body->keyValue->has_synchronization) {
                             const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
@@ -593,12 +591,12 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
 
                         if (cmd->body->range->has_startKeyInclusive) {
                             KineticLogger_LogPrintf(log_level, "%sstartKeyInclusive: %s", _indent,
-                                 cmd->body->range->startKeyInclusive ? _str_true : _str_false);
+                                 BOOL_TO_STRING(cmd->body->range->startKeyInclusive));
                         }
 
                         if (cmd->body->range->has_endKeyInclusive) {
                             KineticLogger_LogPrintf(log_level, "%sendKeyInclusive: %s", _indent,
-                                 cmd->body->range->endKeyInclusive ? _str_true : _str_false);
+                                 BOOL_TO_STRING(cmd->body->range->endKeyInclusive));
                         }
 
                         if (cmd->body->range->has_maxReturned) {
@@ -607,7 +605,7 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
 
                         if (cmd->body->range->has_reverse) {
                             KineticLogger_LogPrintf(log_level, "%sreverse: %s", _indent,
-                                 cmd->body->range->reverse ? _str_true : _str_false);
+                                 BOOL_TO_STRING(cmd->body->range->reverse));
                         }
 
                         if (cmd->body->range->n_keys == 0 || cmd->body->range->keys == NULL) {
@@ -826,16 +824,18 @@ static inline void KineticLogger_FinishBuffer(void)
 
 #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
 
+static bool LoggerFlushThreadStarted;
+
 static void* KineticLogger_FlushThread(void* arg)
 {
     (void)arg;
     struct timeval tv;
-    time_t lasttime;
-    time_t curtime;
+    time_t lasttime, curtime;
 
     gettimeofday(&tv, NULL);
 
     lasttime = tv.tv_sec;
+    LoggerFlushThreadStarted = true;
 
     while(!KineticLogggerAbortRequested) {
         sleep(KINETIC_LOGGER_SLEEP_TIME_SEC);
@@ -859,9 +859,10 @@ static void* KineticLogger_FlushThread(void* arg)
 
 static void KineticLogger_InitFlushThread(void)
 {
-    KineticLogger_Log(3, "Starting log flush thread");
-    KineticLogger_FlushBuffer();
+    LoggerFlushThreadStarted = false;
     pthread_create(&KineticLoggerFlushThread, NULL, KineticLogger_FlushThread, NULL);
+    KineticLogger_Log(3, "Logger flush thread started!");
+    KineticLogger_FlushBuffer();
 }
 
 #endif

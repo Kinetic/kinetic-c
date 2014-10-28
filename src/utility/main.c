@@ -198,7 +198,7 @@ void ReportOperationConfiguration(
            operation,
            config->host,
            config->port,
-           config->nonBlocking ? "true" : "false",
+           BOOL_TO_STRING(config->nonBlocking),
            (long long int)config->clusterVersion,
            (long long int)config->identity,
            entry->key.bytesUsed,

@@ -25,8 +25,6 @@
 #include "kinetic_hmac.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
-#include <stdlib.h>
-#include <sys/time.h>
 
 
 void KineticPDU_Init(KineticPDU* const pdu,
@@ -35,103 +33,7 @@ void KineticPDU_Init(KineticPDU* const pdu,
     KINETIC_PDU_INIT(pdu, connection);
 }
 
-void KineticPDU_AttachEntry(KineticPDU* const pdu, KineticEntry* const entry)
-{
-    assert(pdu != NULL);
-    assert(entry != NULL);
-    pdu->entry = *entry;
-}
-
-KineticStatus KineticPDU_Send(KineticPDU* request)
-{
-    assert(request != NULL);
-    assert(request->connection != NULL);
-    LOGF1("\nSending PDU via fd=%d", request->connection->socket);
-    KineticStatus status = KINETIC_STATUS_INVALID;
-    request->proto = &request->protoData.message.message;
-
-    // Pack the command, if available
-    if (request->protoData.message.has_command) {
-        size_t expectedLen = 
-            KineticProto_command__get_packed_size(&request->protoData.message.command);
-        request->protoData.message.message.commandBytes.data = 
-            (uint8_t*)malloc(expectedLen);
-        assert(request->protoData.message.message.commandBytes.data != NULL);
-        size_t packedLen = KineticProto_command__pack(
-            &request->protoData.message.command,
-            request->protoData.message.message.commandBytes.data);
-        assert(packedLen == expectedLen);
-        request->protoData.message.message.commandBytes.len = packedLen;
-        request->protoData.message.message.has_commandBytes = true;
-        KineticLogger_LogByteArray(2, "commandBytes", (ByteArray){
-            .data = request->protoData.message.message.commandBytes.data,
-            .len = request->protoData.message.message.commandBytes.len,
-        });
-    }
-
-    // Populate the HMAC for the protobuf
-    KineticHMAC_Init(
-        &request->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(
-        &request->hmac, request->proto, request->connection->session.hmacKey);
-
-    // Configure PDU header length fields
-    request->header.versionPrefix = 'F';
-    request->header.protobufLength =
-        KineticProto_Message__get_packed_size(request->proto);
-    request->header.valueLength =
-        (request->entry.value.array.data == NULL) ? 0 : request->entry.value.bytesUsed;
-    KineticLogger_LogHeader(1, &request->header);
-
-    // Create NBO copy of header for sending
-    request->headerNBO.versionPrefix = 'F';
-    request->headerNBO.protobufLength =
-        KineticNBO_FromHostU32(request->header.protobufLength);
-    request->headerNBO.valueLength =
-        KineticNBO_FromHostU32(request->header.valueLength);
-
-    // Pack and send the PDU header
-    ByteBuffer hdr = ByteBuffer_Create(&request->headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-    status = KineticSocket_Write(request->connection->socket, &hdr);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        LOG0("Failed to send PDU header!");
-        return status;
-    }
-
-    // Send the protobuf message
-    LOG1("Sending PDU Protobuf:");
-    KineticLogger_LogProtobuf(2, request->proto);
-    status = KineticSocket_WriteProtobuf(
-                 request->connection->socket, request);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        LOG0("Failed to send PDU protobuf message!");
-        return status;
-    }
-
-    // Send the value/payload, if specified
-    ByteBuffer* value = &request->entry.value;
-    if ((value->array.data != NULL) && (value->array.len > 0) && (value->bytesUsed > 0)) {
-        LOGF1("Sending PDU Value Payload (%zu bytes)", value->bytesUsed);
-        status = KineticSocket_Write(request->connection->socket, value);
-        if (status != KINETIC_STATUS_SUCCESS) {
-            LOG0("Failed to send PDU value payload!");
-            return status;
-        }
-    }
-
-    LOG2("PDU sent successfully!");
-    return KINETIC_STATUS_SUCCESS;
-}
-
-bool KineticPDU_IsResponseAvailable(const KineticConnection* connection)
-{
-    assert(connection != NULL);
-    assert(connection->socket >= 0);
-    int status = KineticSocket_DataBytesAvailable(connection->socket);
-    return (status > (int)PDU_HEADER_LEN);
-}
-
-KineticStatus KineticPDU_Receive(KineticPDU* const response)
+KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
 {
     assert(response != NULL);
     assert(response->connection != NULL);
@@ -205,31 +107,6 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
             pMsg->commandBytes.data);
     }
 
-    // Receive the value payload, if specified
-    if (response->header.valueLength > 0) {
-        assert(response->entry.value.array.data != NULL);
-        LOGF1("Receiving value payload (%lld bytes)...",
-             (long long)response->header.valueLength);
-        ByteBuffer_Reset(&response->entry.value);
-        status = KineticSocket_Read(fd,
-            &response->entry.value, response->header.valueLength);
-        if (status != KINETIC_STATUS_SUCCESS) {
-            LOG0("Failed to receive PDU value payload!");
-            return status;
-        }
-        else {
-            LOG1("Received value payload successfully");
-            KineticLogger_LogByteBuffer(2, "ACTUAL VALUE RECEIVED", response->entry.value);
-        }
-        KineticLogger_LogByteBuffer(2, "Value Buffer", response->entry.value);
-    }
-
-    // Update connectionID to match value returned from device, if provided
-    KineticProto_Command* cmd = &response->protoData.message.command;
-    if ((msg->has_command) && (cmd->header != NULL) && (cmd->header->has_connectionID)) {
-        response->connection->connectionID = cmd->header->connectionID;
-    }
-
     status = KineticPDU_GetStatus(response);
     if (status == KINETIC_STATUS_SUCCESS) {
         LOG2("PDU received successfully!");
@@ -237,60 +114,29 @@ KineticStatus KineticPDU_Receive(KineticPDU* const response)
     return status;
 }
 
-KineticStatus KineticPDU_ReceiveAsync(KineticPDU* const request, KineticPDU** response)
+KineticStatus KineticPDU_ReceiveValue(int socket_desc, ByteBuffer* value, size_t value_length)
 {
-    assert(request != NULL);
-    assert(request->connection != NULL);
-    assert(request->proto != NULL);
-    assert(request->command != NULL);
-    assert(request->command->header != NULL);
-    assert(request->command->header->has_sequence);
-    assert(response != NULL);
+    assert(socket_desc >= 0);
+    assert(value != NULL);
+    assert(value->array.data != NULL);
 
-    const int fd = request->connection->socket;
-    assert(fd >= 0);
-    LOGF1("\nReceiving PDU (asynchronous) via fd=%d", fd);
-
-    bool timeout = false;
-    struct timeval tv;
-    time_t startTime;
-    time_t currentTime;
-    KineticStatus status = KINETIC_STATUS_SOCKET_TIMEOUT;
-    KineticPDU* pdu = NULL;
-
-    // Obtain start time
-    gettimeofday(&tv, NULL);
-    startTime = tv.tv_sec;
-
-    // Wait for matching response to arrive
-    while(request->associatedPDU == NULL && !timeout) {
-        gettimeofday(&tv, NULL);
-        currentTime = tv.tv_sec;
-        if ((currentTime - startTime) >= KINETIC_PDU_RECEIVE_TIMEOUT_SECS) {
-            timeout = true;
-        }
-        else {
-            sleep(0);
-        }
+    // Receive value payload
+    LOGF1("Receiving value payload (%lld bytes)...", value_length);
+    ByteBuffer_Reset(value);
+    KineticStatus status = KineticSocket_Read(socket_desc, value, value_length);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOG0("Failed to receive PDU value payload!");
+        return status;
     }
-
-    if (timeout) {
-        LOG0("Timed out waiting to received response PDU!");
-        status = KINETIC_STATUS_SOCKET_TIMEOUT;
-    }
-    else if (pdu != NULL) {
-        status = KineticPDU_GetStatus(pdu);
-        if (status == KINETIC_STATUS_SUCCESS) {
-            LOG2("PDU received successfully!");
-        }
-        *response = pdu;
-    }
-    else {
-        LOG0("Unknown error occurred waiting for response PDU to arrive!");
-        status = KINETIC_STATUS_CONNECTION_ERROR;
-    }
-
+    LOG1("Received value payload successfully");
+    KineticLogger_LogByteBuffer(3, "Value Buffer", *value);
     return status;
+}
+
+size_t KineticPDU_GetValueLength(KineticPDU* const pdu)
+{
+    assert(pdu != NULL);
+    return (size_t)pdu->header.valueLength;
 }
 
 KineticStatus KineticPDU_GetStatus(KineticPDU* pdu)
