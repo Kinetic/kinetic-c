@@ -362,9 +362,11 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
+    
     LOG_LOCATION; LOGF3("GETKEYRANGE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->buffers.count > 0);
+    assert(operation->buffers != NULL);
+    assert(operation->buffers->count > 0);
 
     // Report the key list upon success
     KineticProto_Command_Range* keyRange = KineticPDU_GetKeyRange(operation->response);
@@ -377,13 +379,14 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation)
 }
 
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
-    KineticKeyRange* range, ByteBufferArray buffers)
+    KineticKeyRange* range, ByteBufferArray* buffers)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
     assert(range != NULL);
+    assert(buffers != NULL);
 
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE;
     operation->request->command->header->has_messageType = true;

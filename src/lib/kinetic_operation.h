@@ -38,6 +38,6 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry);
 
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
-                               KineticKeyRange* range, ByteBufferArray buffers);
+                               KineticKeyRange* range, ByteBufferArray* buffers);
 
 #endif // _KINETIC_OPERATION_H

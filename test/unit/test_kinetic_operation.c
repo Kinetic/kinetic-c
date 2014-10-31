@@ -672,27 +672,10 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     }
     ByteBufferArray keys = {.buffers = keyBuffers, .count = numKeysInRange};
 
-    // KineticProto_Range protoKeyRangeRequest = {
-    //     .has_startKey = true,
-    //     .startKey = (ProtobufCBinaryData) {
-    //         .data = StartKey.array.data,
-    //         .len = StartKey.bytesUsed},
-    //     .has_endKey = true,
-    //     .endKey = (ProtobufCBinaryData) {
-    //         .data = StartKey.array.data,
-    //         .len = StartKey.bytesUsed},
-    //     .has_startKeyInclusive = true,
-    //     .startKeyInclusive = true,
-    //     .has_endKeyInclusive = true,
-    //     .endKeyInclusive = true,
-    //     .has_maxReturned = true,
-    //     .maxReturned = NUM_KEYS_IN_RANGE,
-    // };
-
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyRange_Expect(&Request.protoData.message, &range);
 
-    KineticOperation_BuildGetKeyRange(&Operation, &range, keys);
+    KineticOperation_BuildGetKeyRange(&Operation, &range, &keys);
 
     // The `DELETE` operation removes the entry for a given key. It respects the
     // same locking behavior around `dbVersion` and `force` as described in the previous sections.

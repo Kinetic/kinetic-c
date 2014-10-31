@@ -48,6 +48,7 @@ void setUp(void)
     KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    Connection.connectionID = 182736; // Dummy connection ID to allow connect to complete
     HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 

@@ -24,10 +24,10 @@
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_operation.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
 #include "mock_kinetic_allocator.h"
+#include "mock_kinetic_operation.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -50,13 +50,14 @@ static uint8_t KeyRangeData[NumKeysInRange][KINETIC_MAX_KEY_LEN];
 static ByteBuffer Keys[NumKeysInRange];
 static KineticSessionHandle DummyHandle = 1;
 static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
-KineticPDU Request, Response;
+static KineticPDU Request, Response;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false;
+    Connection.connectionID = 182736; // Dummy connection ID to allow connect to complete
     HmacKey = ByteArray_CreateWithCString("some hmac key");
 
     // Configure start and end key buffers
@@ -68,17 +69,14 @@ void setUp(void)
         Keys[i] = ByteBuffer_Create(&KeyRangeData[i], sizeof(KeyRangeData[i]), sizeof(KeyRangeData[i]));
         char keyBuf[64];
         snprintf(keyBuf, sizeof(keyBuf), "key_range_00_%02d", i);
-        ByteBuffer_AppendCString(&Keys[i], keyBuf); 
+        ByteBuffer_AppendCString(&Keys[i], keyBuf);
     }
 
-    KINETIC_SESSION_INIT(&Session,
-                         "somehost.com", ClusterVersion, Identity, HmacKey);
+    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticConnection_Connect_ExpectAndReturn(&Connection,
-            KINETIC_STATUS_SUCCESS);
-    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -150,52 +148,30 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
         .reverse = false,
     };
 
-    // KineticProto_Command_Range protoKeyRangeRequest = {
-    //     .has_startKey = true,
-    //     .startKey = (ProtobufCBinaryData) {
-    //         .data = StartKey.array.data,
-    //         .len = StartKey.bytesUsed},
-    //     .has_endKey = true,
-    //     .endKey = (ProtobufCBinaryData) {
-    //         .data = StartKey.array.data,
-    //         .len = StartKey.bytesUsed},
-    //     .has_startKeyInclusive = true,
-    //     .startKeyInclusive = true,
-    //     .has_endKeyInclusive = true,
-    //     .endKeyInclusive = true,
-    //     .has_maxReturned = true,
-    //     .maxReturned = NumKeysInRange,
-    // };
-
     ProtobufCBinaryData protoKeysInRange[NumKeysInRange];
     for (int i = 0; i < NumKeysInRange; i++) {
-        LOGF0("  USED: %zu", Keys[i].bytesUsed);
         protoKeysInRange[i] = (ProtobufCBinaryData) {
             .data = Keys[i].array.data, .len = Keys[i].bytesUsed};
     }
 
-    KineticProto_Command_Range protoKeyRangeResponse = {
-        .n_keys = NumKeysInRange,
-        .keys = &protoKeysInRange[0],
+    KineticOperation operation = {
+        .connection = &Connection,
+        .request = &Request,
+        .response = &Response,
+    };
+
+    ByteBufferArray keyArray = {
+        .buffers = &Keys[0],
+        .count = NumKeysInRange
     };
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
-    KineticPDU_Init_Expect(&Request, &Connection);
-    KineticPDU_Init_Expect(&Response, &Connection);
-    KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyRange_Expect(&Request.protoData.message, &keyRange);
-    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
-    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetKeyRange_ExpectAndReturn(&Response, &protoKeyRangeResponse);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Request);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Response);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticOperation_BuildGetKeyRange_Expect(&operation, &keyRange, &keyArray);
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticOperation_ReceiveAsync_ExpectAndReturn(&operation, KINETIC_STATUS_BUFFER_OVERRUN);
 
-    ByteBufferArray keyArray = {.buffers = &Keys[0], .count = NumKeysInRange}
-    KineticStatus status = KineticClient_GetKeyRange(DummyHandle, &keyRange, keyArray);
+    KineticStatus status = KineticClient_GetKeyRange(DummyHandle, &keyRange, &keyArray, NULL);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    // KineticLogger_LogByteBuffer(0, "key", reqEntry.key);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_BUFFER_OVERRUN, status);
 }

@@ -159,5 +159,5 @@ void test_Copy_KineticProto_Command_Range_to_ByteBufferArray_should_copy_keys_in
         .buffers = buffers,
         .count = 5,
     };
-    TEST_ASSERT_TRUE(Copy_KineticProto_Command_Range_to_ByteBufferArray(NULL, array));
+    TEST_ASSERT_TRUE(Copy_KineticProto_Command_Range_to_ByteBufferArray(NULL, &array));
 }

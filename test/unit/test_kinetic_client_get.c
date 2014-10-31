@@ -19,12 +19,11 @@
 */
 
 #include "kinetic_client.h"
-#include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_operation.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
+#include "mock_kinetic_operation.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
@@ -43,7 +42,7 @@ static ByteArray HmacKey, Key, Tag, Value;
 static uint8_t ValueData[64];
 static KineticSessionHandle DummyHandle = 1;
 static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
-KineticPDU Request, Response;
+static KineticPDU Request, Response;
 
 
 void setUp(void)
@@ -51,17 +50,16 @@ void setUp(void)
     KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false;
+    Connection.connectionID = 182736; // Dummy connection ID to allow connect to complete
     HmacKey = ByteArray_CreateWithCString("some hmac key");
     Key = ByteArray_CreateWithCString("some_value_key");
     Tag = ByteArray_CreateWithCString("some_tag_value");
     Value = ByteArray_CreateWithCString("some random abitrary data...");
-    KINETIC_SESSION_INIT(&Session,
-                         "somehost.com", ClusterVersion, Identity, HmacKey);
+    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
-    KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
     
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -94,7 +92,7 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     keyData[3] = 2;
     keyData[4] = 1;
 
-    KineticEntry reqEntry = {
+    KineticEntry entry = {
         .key = keyBuffer,
         .tag = ByteBuffer_CreateWithArray(Tag),
         .dbVersion = versionBuffer,
@@ -115,26 +113,24 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     };
     keyValue.has_dbVersion = true;
 
+    KineticOperation operation = {
+        .connection = &Connection,
+        .request = &Request,
+        .response = &Response,
+    };
+
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
-    KineticPDU_Init_Expect(&Request, &Connection);
-    KineticPDU_Init_Expect(&Response, &Connection);
-    KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &reqEntry);
-    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
-    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetKeyValue_ExpectAndReturn(&Response, &keyValue);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Request);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Response);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticOperation_BuildGet_Expect(&operation, &entry);
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticOperation_ReceiveAsync_ExpectAndReturn(&operation, KINETIC_STATUS_DEVICE_BUSY);
 
-    KineticStatus status = KineticClient_Get(DummyHandle, &reqEntry);
+    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    KineticLogger_LogByteBuffer(1, "key", reqEntry.key);
-    KineticLogger_LogByteBuffer(1, "dbVersion", reqEntry.dbVersion);
-    KineticLogger_LogByteBuffer(1, "value", reqEntry.value);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_BUSY, status);
+    KineticLogger_LogByteBuffer(1, "key", entry.key);
+    KineticLogger_LogByteBuffer(1, "dbVersion", entry.dbVersion);
+    KineticLogger_LogByteBuffer(1, "value", entry.value);
 }
 
 void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_buffer_with_value(void)
@@ -161,7 +157,7 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
     ByteBuffer valueBuffer = ByteBuffer_CreateWithArray(Value);
     ByteBuffer_AppendDummyData(&valueBuffer, Value.len);
 
-    KineticEntry reqEntry = {
+    KineticEntry entry = {
         .key = keyBuffer,
         .tag = ByteBuffer_CreateWithArray(Tag),
         .dbVersion = versionBuffer,
@@ -176,26 +172,24 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
     keyValue.dbVersion = (ProtobufCBinaryData){.data = respFakeVer, .len = sizeof(respFakeVer)};
     keyValue.has_dbVersion = true;
 
+    KineticOperation operation = {
+        .connection = &Connection,
+        .request = &Request,
+        .response = &Response,
+    };
+
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
-    KineticPDU_Init_Expect(&Request, &Connection);
-    KineticPDU_Init_Expect(&Response, &Connection);
-    KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &reqEntry);
-    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
-    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetKeyValue_ExpectAndReturn(&Response, &keyValue);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Request);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Response);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticOperation_BuildGet_Expect(&operation, &entry);
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticOperation_ReceiveAsync_ExpectAndReturn(&operation, KINETIC_STATUS_CLUSTER_MISMATCH);
 
-    KineticStatus status = KineticClient_Get(DummyHandle, &reqEntry);
+    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
 
-    KineticLogger_LogByteBuffer(0, "key", reqEntry.key);
-    KineticLogger_LogByteBuffer(0, "dbVersion", reqEntry.dbVersion);
-    KineticLogger_LogByteBuffer(0, "value", reqEntry.value);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    KineticLogger_LogByteBuffer(0, "key", entry.key);
+    KineticLogger_LogByteBuffer(0, "dbVersion", entry.dbVersion);
+    KineticLogger_LogByteBuffer(0, "value", entry.value);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH, status);
 }
 
 void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metadata(void)
@@ -218,7 +212,7 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
     versionData[3] = 6;
     versionData[4] = 0xFF;
 
-    KineticEntry reqEntry = {
+    KineticEntry entry = {
         .key = keyBuffer,
         .tag = ByteBuffer_CreateWithArray(Tag),
         .dbVersion = versionBuffer,
@@ -233,24 +227,22 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
     keyValue.dbVersion = (ProtobufCBinaryData){.data = respFakeVer, .len = sizeof(respFakeVer)};
     keyValue.has_dbVersion = true;
 
+    KineticOperation operation = {
+        .connection = &Connection,
+        .request = &Request,
+        .response = &Response,
+    };
+
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Connection, &Response);
-    KineticPDU_Init_Expect(&Request, &Connection);
-    KineticPDU_Init_Expect(&Response, &Connection);
-    KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &reqEntry);
-    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
-    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetKeyValue_ExpectAndReturn(&Response, &keyValue);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Request);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Response);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticOperation_BuildGet_Expect(&operation, &entry);
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticOperation_ReceiveAsync_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_Get(DummyHandle, &reqEntry);
+    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
 
-    KineticLogger_LogByteBuffer(0, "key", reqEntry.key);
-    KineticLogger_LogByteBuffer(0, "dbVersion", reqEntry.dbVersion);
-    KineticLogger_LogByteBuffer(0, "value", reqEntry.value);
+    KineticLogger_LogByteBuffer(0, "key", entry.key);
+    KineticLogger_LogByteBuffer(0, "dbVersion", entry.dbVersion);
+    KineticLogger_LogByteBuffer(0, "value", entry.value);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

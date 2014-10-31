@@ -124,7 +124,7 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
  *                      upon failure
  */
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
-                                        KineticKeyRange* range, ByteBufferArray keys,
+                                        KineticKeyRange* range, ByteBufferArray* keys,
                                         KineticCompletionClosure* closure);
 
 #endif // _KINETIC_CLIENT_H

@@ -88,13 +88,13 @@
       - -g
       - -Wall
       - -Wextra
-      - -Wstrict-prototypes
-      - -Wincompatible-pointer-types
-      - -Werror=incompatible-pointer-types
-      - -Werror=strict-prototypes
-      - -Werror=implicit-function-declaration
-      # - -Wcast-align
       - -pedantic
+      - -Wstrict-prototypes
+      # - -Werror=strict-prototypes
+      - -Werror=implicit-function-declaration
+      # - -Wincompatible-pointer-types
+      # - -Werror=incompatible-pointer-types
+      # - -Wcast-align
       - -D_POSIX_C_SOURCE=1
       - -D_C99_SOURCE=1
       - ${1}
@@ -111,10 +111,11 @@
       - -Wextra
       # - -pedantic
       - -Wstrict-prototypes
-      # - -Wcast-align
-      - -Werror=strict-prototypes
+      # - -Werror=strict-prototypes
       - -Werror=implicit-function-declaration
-      - -Werror=incompatible-pointer-types
+      # - -Werror=incompatible-pointer-types
+      # - -Wincompatible-pointer-types
+      # - -Wcast-align
       - -D_POSIX_C_SOURCE=1
       - -D_C99_SOURCE=1
       - -Wno-nonnull

@@ -83,50 +83,42 @@ void tearDown(void)
     SystemTestTearDown(&Fixture);
 }
 
-// void test_Delete_old_object_if_exists(void)
-// {
-//     KineticStatus status;
+void test_Delete_old_object_if_exists(void)
+{
+    KineticStatus status;
 
-//     ByteBuffer_Reset(&VersionBuffer);
-//     ByteBuffer_Reset(&TagBuffer);
-//     ByteBuffer_Reset(&ValueBuffer);
-//     Entry = (KineticEntry) {
-//         .key = KeyBuffer,
-//         .dbVersion = VersionBuffer,
-//         .tag = TagBuffer,
-//         .value = ValueBuffer,
-//     };
-//     status = KineticClient_Get(Fixture.handle, &Entry);
+    // Delete the first object, if it exists
+    ByteBuffer_Reset(&TagBuffer);
+    Entry = (KineticEntry) {
+        .key = KeyBuffer,
+        .tag = TagBuffer,
+        .metadataOnly = true
+    };
+    status = KineticClient_Get(Fixture.handle, &Entry, NULL);
+    if (status == KINETIC_STATUS_SUCCESS) {
+        status = KineticClient_Delete(Fixture.handle, &Entry, NULL);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
+    else {
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
+    }
 
-//     if (status == KINETIC_STATUS_SUCCESS) {
-//         status = KineticClient_Delete(Fixture.handle, &Entry);
-//         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-//     }
-//     else
-//     {
-//         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
-//     }
-
-//     ByteBuffer_Reset(&VersionBuffer);
-//     ByteBuffer_Reset(&TagBuffer);
-//     ByteBuffer_Reset(&ValueBuffer);
-//     Entry = (KineticEntry) {
-//         .key = OtherKeyBuffer,
-//         .dbVersion = VersionBuffer,
-//         .tag = TagBuffer,
-//         .value = ValueBuffer,
-//     };
-//     status = KineticClient_Get(Fixture.handle, &Entry);
-
-//     if (status == KINETIC_STATUS_SUCCESS) {
-//         status = KineticClient_Delete(Fixture.handle, &Entry);
-//         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-//     }
-//     else
-//     {
-//         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
-//     }
-// }
+    // Delete the second object, if it exists
+    ByteBuffer_Reset(&TagBuffer);
+    Entry = (KineticEntry) {
+        .key = OtherKeyBuffer,
+        .tag = TagBuffer,
+        .value = ValueBuffer,
+    };
+    status = KineticClient_Get(Fixture.handle, &Entry, NULL);
+    if (status == KINETIC_STATUS_SUCCESS) {
+        status = KineticClient_Delete(Fixture.handle, &Entry, NULL);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
+    else {
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
+    }
+}
 
 
 void test_Put_should_create_new_object_on_device(void)
@@ -386,7 +378,7 @@ void test_Put_should_use_asynchronous_mode_if_closure_specified(void)
 
     const long maxWaitMillisecs = 500;
     long millisecsWaiting = 0;
-    struct timespec sleepDuration = {.tv_nsec = 1000000};
+    struct timespec sleepDuration = {.tv_nsec = 100000};
     while(!TestPutClientData.called) {
         TEST_ASSERT_TRUE_MESSAGE(millisecsWaiting < maxWaitMillisecs, "Timed out waiting to receive PUT async callback!");
         nanosleep(&sleepDuration, NULL);

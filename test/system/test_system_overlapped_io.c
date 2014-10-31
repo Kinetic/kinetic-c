@@ -61,12 +61,12 @@ struct kinetic_thread_arg {
     float bandwidth;
 };
 
-void setUp()
+void setUp(void)
 {
     KineticClient_Init("stdout", 3);
 }
 
-void tearDown()
+void tearDown(void)
 {
     KineticClient_Shutdown();
 }

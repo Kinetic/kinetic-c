@@ -86,7 +86,7 @@ void setUp(void)
     ByteArray_FillWithDummyData(Value);
 }
 
-void tearDown()
+void tearDown(void)
 {
     KineticLogger_Close();
 }

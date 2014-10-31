@@ -48,7 +48,7 @@ void setUp(void)
     SessionHandle = KINETIC_HANDLE_INVALID;
 }
 
-void tearDown()
+void tearDown(void)
 {
     KineticLogger_Close();
 }
