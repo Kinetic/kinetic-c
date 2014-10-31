@@ -46,13 +46,9 @@ static void* KineticConnection_Worker(void* thread_arg)
     KineticStatus status;
     KineticThread* thread = thread_arg;
 
-    // Wait for thread status to be updated synced with main thread
-    // TODO: Figure out why this 
-    while (!thread->connection->threadCreated) {sleep(0);}
-
     while(!thread->abortRequested && !thread->fatalError) {
 
-        // Don't service and PDUs is thread paused
+        // Do not service PDUs if thread paused
         if (thread->paused) {
             sleep(0);
             continue;
@@ -81,6 +77,7 @@ static void* KineticConnection_Worker(void* thread_arg)
 
                 // Handle unsolicited status PDUs
                 if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
+                    response->type = KINETIC_PDU_TYPE_UNSOLICITED;
                     if (response->command != NULL &&
                         response->command->header != NULL &&
                         response->command->header->has_connectionID)
@@ -98,26 +95,36 @@ static void* KineticConnection_Worker(void* thread_arg)
 
                 // Associate solicited response PDUs with their requests
                 else {
-                    KineticOperation* op;
                     response->type = KINETIC_PDU_TYPE_RESPONSE;
-                    op = KineticOperation_AssociateResponseWithOperation(response);
+                    KineticOperation* op = KineticOperation_AssociateResponseWithOperation(response);
                     if (op == NULL) {
                         LOG0("Failed to find request matching received response PDU!");
                         KineticAllocator_FreePDU(thread->connection, response);
                     }
                     else {
                         LOG2("Found associated operation/request for response PDU.");
-                        if (op->request->header.valueLength > 0) {
-                            status = KineticPDU_ReceiveValue(
-                                op->connection->socket,
-                                &op->entry.value,
-                                op->request->header.valueLength);
+                        size_t valueLength = KineticPDU_GetValueLength(response);
+                        if (valueLength > 0) {
+                            status = KineticPDU_ReceiveValue(op->connection->socket,
+                                &op->entry.value, valueLength);
                         }
+
+                        // Call operation-specific callback, if configured
+                        if (status == KINETIC_STATUS_SUCCESS && op->callback != NULL) {
+                            status = op->callback(op);
+                        }
+
+                        // Call client-supplied closure callback, if supplied
                         if (op->closure.callback != NULL) {
                             KineticCompletionData completionData = {.status = status};
                             op->closure.callback(&completionData, op->closure.clientData);
+                            KineticAllocator_FreeOperation(thread->connection, op);
                         }
-                        KineticAllocator_FreeOperation(thread->connection, op);
+
+                        // Otherwise, is a synchronous opearation, so just set a flag
+                        else {
+                            op->receiveComplete = true;               
+                        }
                     }
                 }
             }
@@ -206,45 +213,6 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticConnection_WaitForInitialDeviceStatus(KineticConnection* const connection)
-{
-    assert(connection != NULL);
-
-    KineticStatus status = KINETIC_STATUS_INVALID;
-    bool statusReceived = false;
-    bool timeout = false;
-    struct timeval tv;
-    time_t startTime;
-    time_t currentTime;
-
-    // Obtain start time
-    gettimeofday(&tv, NULL);
-    startTime = tv.tv_sec;
-
-    while(!statusReceived && !timeout) {
-        gettimeofday(&tv, NULL);
-        currentTime = tv.tv_sec;
-        if ((currentTime - startTime) >= KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS) {
-            timeout = true;
-        }
-        else if (connection->connectionID > 0) {
-            statusReceived = true;
-        }
-        else {
-            sleep(0);
-        }
-    }
-
-    if (statusReceived) {
-        status = KINETIC_STATUS_SUCCESS;
-    }
-    else if (timeout) {
-        status = KINETIC_STATUS_SOCKET_TIMEOUT;
-    }
-
-    return status;
-}
-
 KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
 {
     if (connection == NULL || !connection->connected || connection->socket < 0) {
@@ -254,7 +222,7 @@ KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
     // Shutdown the worker thread
     KineticStatus status = KINETIC_STATUS_SUCCESS;
     connection->thread.abortRequested = true;
-    LOG0("Sent abort request to worker thread!");
+    LOG0("\nSent abort request to worker thread!\n");
     int pthreadStatus = pthread_join(connection->threadID, NULL);
     if (pthreadStatus != 0) {
         char errMsg[256];

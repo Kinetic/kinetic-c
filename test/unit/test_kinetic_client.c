@@ -64,6 +64,7 @@ static void ConnectSession(void)
 {
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    Connection.connectionID = 12374626536; // Fake connection ID to allow connection to complete for these tests
     HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
@@ -212,4 +213,3 @@ void test_KineticClient_Disconnect_should_return_status_from_KineticConnection_u
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_INVALID, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
-

@@ -82,7 +82,8 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle handle);
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Put(KineticSessionHandle handle,
-                                KineticEntry* const metadata);
+                                KineticEntry* const metadata,
+                                KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
@@ -94,7 +95,8 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Get(KineticSessionHandle handle,
-                                KineticEntry* const metadata);
+                                KineticEntry* const metadata,
+                                KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
@@ -106,25 +108,23 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
-                                   KineticEntry* const metadata);
+                                   KineticEntry* const metadata,
+                                   KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a GETKEYRANGE command to retrive a set of keys in the range
  * specified range from the Kinetic Device
  *
- * @param handle        KineticSessionHandle for a connected session.
+ * @param handle        KineticSessionHandle for a connected session
  * @param range         KineticKeyRange specifying keys to return
- * @param keys          An pointer to an array of ByteBuffers with pre-allocated
- *                      arrays to store the retrieved keys
- * @param max_keys      The number maximum number of keys to request from the
- *                      device. There must be at least this many ByteBuffers in
- *                      the `keys` array for population.
+ * @param keys          ByteBufferArray to store the retrieved keys
  *
  *
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
-                                        KineticKeyRange* range, ByteBuffer keys[], int max_keys);
+                                        KineticKeyRange* range, ByteBufferArray keys,
+                                        KineticCompletionClosure* closure);
 
 #endif // _KINETIC_CLIENT_H

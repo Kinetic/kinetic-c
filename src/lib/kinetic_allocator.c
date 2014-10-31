@@ -339,29 +339,19 @@ KineticOperation* KineticAllocator_GetNextOperation(KineticConnection* const con
 void KineticAllocator_FreeAllOperations(KineticConnection* const connection)
 {
     assert(connection != NULL);
-    if (connection->operations.start != NULL) {
-        LOGF3("Freeing all operations in list (0x%0llX) from connection (0x%0llX)...",
+    KineticListItem* current = connection->operations.start;
+    if (current != NULL) {
+        LOGF3("Freeing operations list (0x%0llX) from connection (0x%0llX)...",
             &connection->operations, connection);
-        KINETIC_LIST_LOCK(&connection->operations);
-        KineticListItem* current = connection->operations.start;
         while (current != NULL) {
-            KineticOperation* operation = (KineticOperation*)current->data;
-            if (operation->request != NULL) {
-                KineticAllocator_FreePDU(connection, operation->request);
-            }
-            if (operation->response != NULL) {
-                KineticAllocator_FreePDU(connection, operation->response);
-            }
+            KineticAllocator_FreeOperation(connection, current->data);
             current = current->next;
         }
-        KINETIC_LIST_UNLOCK(&connection->operations);
-        KineticAllocator_FreeList(&connection->operations);
     }
     else {
         LOG1("  Nothing to free!");
     }
 }
-
 
 bool KineticAllocator_ValidateAllMemoryFreed(KineticConnection* const connection)
 {

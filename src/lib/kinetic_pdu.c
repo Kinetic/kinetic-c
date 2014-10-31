@@ -39,7 +39,7 @@ KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
     assert(response->connection != NULL);
     const int fd = response->connection->socket;
     assert(fd >= 0);
-    LOGF1("\nReceiving PDU (synchronous) via fd=%d", fd);
+    LOGF1("\nReceiving PDU via fd=%d", fd);
 
     KineticStatus status;
     KineticMessage* msg = &response->protoData.message;

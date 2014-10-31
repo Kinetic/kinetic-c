@@ -54,6 +54,7 @@ STATIC bool KineticLoggerForceFlush = true;
 //------------------------------------------------------------------------------
 // Private Method Declarations
 
+static inline bool KineticLogger_IsLevelEnabled(int log_level);
 static inline void KineticLogger_BufferLock(void);
 static inline void KineticLogger_BufferUnlock(void);
 static void KineticLogger_FlushBuffer(void);
@@ -101,8 +102,8 @@ void KineticLogger_Init(const char* log_file, int log_level)
 void KineticLogger_Close(void)
 {
     if (KineticLogLevel >= 0 && KineticLoggerHandle != NULL) {
-        KineticLogggerAbortRequested = true;
         #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
+        KineticLogggerAbortRequested = true;
         int pthreadStatus = pthread_join(KineticLoggerFlushThread, NULL);
         if (pthreadStatus != 0) {
             char errMsg[256];
@@ -120,7 +121,7 @@ void KineticLogger_Close(void)
 
 void KineticLogger_Log(int log_level, const char* message)
 {
-    if (message == NULL || log_level > KineticLogLevel || KineticLogLevel < 0) {
+    if (message == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
 
@@ -132,7 +133,7 @@ void KineticLogger_Log(int log_level, const char* message)
 
 void KineticLogger_LogPrintf(int log_level, const char* format, ...)
 {
-    if (format == NULL || log_level > KineticLogLevel || KineticLogLevel < 0) {
+    if (format == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
 
@@ -166,7 +167,7 @@ void KineticLogger_LogLocation(const char* filename, int line, const char* messa
 
 void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header)
 {
-    if (header == NULL || log_level < KineticLogLevel || KineticLogLevel < 0) {
+    if (header == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
 
@@ -231,7 +232,7 @@ static int KineticLogger_ByteArraySliceToCString(char* p_buf,
 #if USE_GENERIC_LOGGER
 static void KineticLogger_LogProtobufMessage(int log_level, const ProtobufCMessage *msg, char* _indent)
 {
-    if (msg == NULL || msg->descriptor == NULL || log_level < 0 || KineticLogLevel < 0) {
+    if (msg == NULL || msg->descriptor == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
 
@@ -401,7 +402,7 @@ static void KineticLogger_LogProtobufMessage(int log_level, const ProtobufCMessa
 
 void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
 {
-    if (log_level < KineticLogLevel || KineticLogLevel < 0 || msg == NULL) {
+    if (msg == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
 
@@ -667,7 +668,7 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
 
 void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
 {
-    if (status == NULL || log_level < KineticLogLevel || KineticLogLevel < 0) {
+    if (status == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
 
@@ -724,11 +725,10 @@ void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
 
 void KineticLogger_LogByteArray(int log_level, const char* title, ByteArray bytes)
 {
-    if (log_level < KineticLogLevel || KineticLogLevel < 0) {
+    if (title == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
 
-    assert(title != NULL);
     if (bytes.data == NULL) {
         KineticLogger_LogPrintf(log_level, "%s: (??? bytes : buffer is NULL)", title);
         return;
@@ -769,7 +769,7 @@ void KineticLogger_LogByteArray(int log_level, const char* title, ByteArray byte
 
 void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer buffer)
 {
-    if (log_level < KineticLogLevel || KineticLogLevel < 0) {
+    if (title == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
     ByteArray array = {.data = buffer.array.data, .len = buffer.bytesUsed};
@@ -779,6 +779,11 @@ void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer bu
 
 //------------------------------------------------------------------------------
 // Private Method Definitions
+
+static inline bool KineticLogger_IsLevelEnabled(int log_level)
+{
+    return (log_level <= KineticLogLevel && KineticLogLevel >= 0);
+}
 
 static inline void KineticLogger_BufferLock(void)
 {

@@ -76,57 +76,6 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
 }
 
 
-
-void test_KineticOperation_Create_should_create_a_new_operation_with_allocated_request_PDU(void)
-{
-    LOG_LOCATION;
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection, &Request);
-    KineticPDU_Init_Expect(&Request, &Connection);
-
-    KineticOperation operation = KineticOperation_Create(&Connection);
-
-    TEST_ASSERT_EQUAL_PTR(&Connection, operation.connection);
-    TEST_ASSERT_EQUAL_INT64(ConnectionID, Connection.connectionID);
-    TEST_ASSERT_EQUAL_PTR(&operation.request->protoData, operation.request->proto);
-    TEST_ASSERT_TRUE(operation.request->protoData.message.has_command);
-    TEST_ASSERT_EQUAL_INT64(ConnectionID, operation.request->protoData.message.command.header->connectionID);
-    TEST_ASSERT_NOT_NULL(operation.request);
-    TEST_ASSERT_NULL(operation.response);
-}
-
-
-
-void test_KineticOperation_Free_should_free_an_operation_with_no_allocated_response_PDU(void)
-{
-    LOG_LOCATION;
-    KineticOperation operation = {
-        .connection = &Connection,
-        .request = &Request,
-        .response = NULL,
-    };
-
-    KineticAllocator_FreePDU_Expect(&Connection, operation.request);
-    KineticStatus status = KineticOperation_Free(&operation);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-}
-
-void test_KineticOperation_Free_should_free_an_operation_with_request_and_response_PDUs_both_allocated(void)
-{
-    LOG_LOCATION;
-    KineticOperation operation = {
-        .connection = &Connection,
-        .request = &Request,
-        .response = &Response,
-    };
-
-    KineticAllocator_FreePDU_Expect(&Connection, operation.request);
-    KineticAllocator_FreePDU_Expect(&Connection, operation.response);
-    KineticStatus status = KineticOperation_Free(&operation);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-}
-
-
-
 void test_KineticOperation_SendRequest_should_transmit_PDU_with_no_value_payload(void)
 {
     LOG_LOCATION;
@@ -525,9 +474,9 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     KineticOperation_BuildPut(&Operation, &entry);
 
     // Ensure proper message type
-    TEST_ASSERT_FALSE(Operation.entryEnabled);
-    TEST_ASSERT_FALSE(Operation.valueEnabled);
-    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_TRUE(Operation.entryEnabled);
+    TEST_ASSERT_TRUE(Operation.valueEnabled);
+    TEST_ASSERT_TRUE(Operation.sendValue);
     TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT, Request.protoData.message.command.header->messageType);
     TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry.value.array);
@@ -698,16 +647,15 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
 {
     LOG_LOCATION;
 
-    const int numKeysInRange = 4;
-    uint8_t startKeyData[32];
-    uint8_t endKeyData[32];
+    const int maxKeyLen = 32; // arbitrary key length for test
+    uint8_t startKeyData[maxKeyLen];
+    uint8_t endKeyData[maxKeyLen];
     ByteBuffer startKey, endKey;
-
     startKey = ByteBuffer_Create(startKeyData, sizeof(startKeyData), 0);
     ByteBuffer_AppendCString(&startKey, "key_range_00_00");
     endKey = ByteBuffer_Create(endKeyData, sizeof(endKeyData), 0);
     ByteBuffer_AppendCString(&endKey, "key_range_00_03");
-
+    const int numKeysInRange = 4;
     KineticKeyRange range = {
         .startKey = startKey,
         .endKey = endKey,
@@ -716,6 +664,13 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
         .maxReturned = numKeysInRange,
         .reverse = false,
     };
+
+    uint8_t keysData[numKeysInRange][maxKeyLen];
+    ByteBuffer keyBuffers[numKeysInRange];
+    for (int i = 0; i < numKeysInRange; i++) {
+        keyBuffers[i] = ByteBuffer_Create(keysData[i], maxKeyLen, 0);
+    }
+    ByteBufferArray keys = {.buffers = keyBuffers, .count = numKeysInRange};
 
     // KineticProto_Range protoKeyRangeRequest = {
     //     .has_startKey = true,
@@ -737,7 +692,7 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     KineticConnection_IncrementSequence_Expect(&Connection);
     KineticMessage_ConfigureKeyRange_Expect(&Request.protoData.message, &range);
 
-    KineticOperation_BuildGetKeyRange(&Operation, &range);
+    KineticOperation_BuildGetKeyRange(&Operation, &range, keys);
 
     // The `DELETE` operation removes the entry for a given key. It respects the
     // same locking behavior around `dbVersion` and `force` as described in the previous sections.

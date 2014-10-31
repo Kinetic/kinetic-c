@@ -152,7 +152,12 @@ void test_KineticProto_Command_Algorithm_from_KineticAlgorithm_should_map_from_p
         KineticProto_Command_Algorithm_from_KineticAlgorithm((KineticAlgorithm) - 19));
 }
 
-void test_Copy_KineticProto_Command_Range_to_buffer_list_should_copy_keys_into_byte_buffers(void)
+void test_Copy_KineticProto_Command_Range_to_ByteBufferArray_should_copy_keys_into_byte_buffers(void)
 {
-    TEST_ASSERT_TRUE(Copy_KineticProto_Command_Range_to_buffer_list(NULL, NULL, 0));
+    ByteBuffer buffers[5];
+    ByteBufferArray array = {
+        .buffers = buffers,
+        .count = 5,
+    };
+    TEST_ASSERT_TRUE(Copy_KineticProto_Command_Range_to_ByteBufferArray(NULL, array));
 }

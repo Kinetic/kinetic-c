@@ -150,8 +150,8 @@ namespace :java_sim do
     ENV['CLASSPATH'] = '' unless ENV['CLASSPATH']
     jars += [File.join(JAVA_HOME, 'lib/tools.jar')]
     jars.each {|jar| ENV['CLASSPATH'] += ':' + jar }
-    $java_sim = spawn("#{JAVA_BIN} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
-    sleep 5 # wait for simulator to start up and server ready to receive connections
+    $java_sim = spawn("#{JAVA_BIN} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner") # &> ./build/kinetic-simulator-test.log")
+    sleep 3 # wait for simulator to start up and server ready to receive connections
     # TODO: use netstat or something to just wait until the server opens the port
     #       since it might take longer than the hardcoded sleep(x) above :-/
   end
@@ -169,7 +169,7 @@ namespace :java_sim do
 
   def java_sim_erase_drive
     java_sim_start
-    sh "\"#{JAVA_BIN}\" -classpath \"#{ENV['CLASSPATH']}\" com.seagate.kinetic.admin.cli.KineticAdminCLI -instanterase"
+    sh "\"#{JAVA_BIN}\" -classpath \"#{ENV['CLASSPATH']}\" com.seagate.kinetic.admin.cli.KineticAdminCLI -instanterase" # &> ./build/kinetic-simulator-setup.log"
   end
 
   def java_sim_cleanup

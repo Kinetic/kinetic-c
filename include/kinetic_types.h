@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <limits.h>
+#include <sys/time.h>
 #include "byte_array.h"
 
 
@@ -158,6 +159,9 @@ typedef enum {
 const char* Kinetic_GetStatusDescription(KineticStatus status);
 
 typedef struct _KineticCompletionData {
+    int64_t connectionID;
+    int64_t sequence;
+    struct timeval requestTime;
     KineticStatus status;
 } KineticCompletionData;
 

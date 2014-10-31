@@ -36,6 +36,11 @@ typedef struct {
     size_t bytesUsed; /**< Reflects the number of bytes used from the `array` */
 } ByteBuffer;
 
+typedef struct {
+    ByteBuffer* buffers;
+    int count;
+} ByteBufferArray;
+
 /** @brief Convenience macro to represent an empty buffer with no data */
 #define BYTE_BUFFER_NONE (ByteBuffer){.array = BYTE_ARRAY_NONE, .bytesUsed = 0}
 

@@ -155,7 +155,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host(void)
     KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
                                           expected.session.nonBlocking, expected.socket);
 
-
     // Setup mock expectations for worker thread
     KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
 
@@ -173,87 +172,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host(void)
     TEST_ASSERT_EQUAL_INT64(expected.session.identity, Connection->session.identity);
     TEST_ASSERT_EQUAL_ByteArray(expected.session.hmacKey, Connection->session.hmacKey);
 }
-
-
-
-
-struct _TestThreadArg {
-    KineticConnection* connection;
-    int delay;
-    int64_t connectionID;
-};
-
-void* SetConnectionIDAfterDelay(void* thread_arg)
-{
-    LOG_LOCATION;
-
-    struct _TestThreadArg* arg = (struct _TestThreadArg*)thread_arg;
-    LOGF0("Waiting to set connectionID for %d seconds...", arg->delay);
-
-    struct timeval tv;
-    time_t startTime;
-    time_t endTime;
-
-    // Obtain start time
-    gettimeofday(&tv, NULL);
-    startTime = tv.tv_sec;
-    sleep(arg->delay);
-    gettimeofday(&tv, NULL);
-    endTime = tv.tv_sec;
-    LOGF0("Setting connectionID after %llu seconds!", endTime - startTime);
-    arg->connection->connectionID = arg->connectionID;
-    return (void*)NULL;
-}
-
-void test_KineticConnection_WaitForInitialDeviceStatus_should_timeout_if_connectionID_still_invalid_after_configured_duration(void)
-{
-    LOG_LOCATION;
-
-    KineticStatus status = KineticConnection_WaitForInitialDeviceStatus(Connection);
-    TEST_ASSERT_EQUAL(0, Connection->connectionID);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SOCKET_TIMEOUT, status);
-}
-
-void test_KineticConnection_WaitForInitialDeviceStatus_should_wait_for_initial_unsolicited_status_and_initialize_connectionID(void)
-{
-    LOG_LOCATION;
-
-    KineticConnection connection;
-    KINETIC_CONNECTION_INIT(&connection);
-    TEST_ASSERT_EQUAL_INT64(0, connection.connectionID);
-
-    pthread_t delayThread;
-    int pthreadStatus;
-    char errDesc[256], errMsg[512];
-    struct _TestThreadArg threadArg = {
-        .connection = &connection,
-        .delay = 1,
-        .connectionID = 123456789,
-    };
-
-    // Start test thread to set connectionID after a delay
-    pthreadStatus = pthread_create(&delayThread, NULL, SetConnectionIDAfterDelay, &threadArg);
-    if (pthreadStatus != 0 ) {
-        Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
-        snprintf(errMsg, sizeof(errMsg) - 1, "Failed creating test thread w/error: %s", errMsg);
-        TEST_ASSERT_EQUAL_MESSAGE(0, pthreadStatus, errMsg);
-    }
-
-    KineticStatus status = KineticConnection_WaitForInitialDeviceStatus(&connection);
-
-    // Allow test thread to terminate
-    pthreadStatus = pthread_join(delayThread, NULL);
-    if (pthreadStatus != 0) {
-        Kinetic_GetErrnoDescription(pthreadStatus, errDesc, sizeof(errDesc));
-        snprintf(errMsg, sizeof(errMsg), "Failed terminating test thread w/error: %s", errDesc);
-        TEST_ASSERT_EQUAL_MESSAGE(0, pthreadStatus, errMsg);
-    }
-
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_INT64(123456789, connection.connectionID);
-}
-
-
 
 void test_KineticConnection_Worker_should_run_fine_while_no_data_arrives(void)
 {
@@ -298,7 +216,7 @@ void test_KineticConnection_Worker_should_run_fine_while_no_data_arrives(void)
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
 
     LOG0("Letting worker thread run for a little bit...");
-    sleep(1);
+    sleep(0);
     LOG0("Done allowing worker thread to execute for a bit!");
 }
 
@@ -354,7 +272,6 @@ void test_KineticConnection_Worker_should_run_fine_if_not_enough_data_has_arrive
     KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
     sleep(0);
 }
-
 
 
 void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void)
@@ -427,9 +344,9 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
     // Make sure to return read thread to IDLE state
     KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
     KineticConnection_Pause(Connection, false);
-    sleep(1);
 
     // Wait for unsolicited status PDU to be received and processed...
+    sleep(1);
     TEST_ASSERT_EQUAL_INT64_MESSAGE(connectionID, Response.connection->connectionID,
         "Connection ID should have been extracted from unsolicited status PDU!");
 }
@@ -452,7 +369,6 @@ void DummyCompletionCallback(KineticCompletionData* kinetic_data, void* client_d
     cdata->callbackCount++;
 }
 
-#if 0
 void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
 {
     LOG_LOCATION;
@@ -494,7 +410,9 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
         .status = KINETIC_STATUS_INVALID,
         .callbackCount = 0,
     };
-    Request.closure = (KineticCompletionClosure) {
+    KineticOperation op;
+    KINETIC_OPERATION_INIT(&op, Connection);
+    op.closure = (KineticCompletionClosure) {
         .callback = &DummyCompletionCallback,
         .clientData = &dummyClosureData,
     };
@@ -509,20 +427,24 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     KineticStatus status = KineticConnection_Connect(Connection);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
 
-    sleep(1);
+    // Pause worker thread to setup expectations
+    KineticConnection_Pause(Connection, true);
+    sleep(0);
 
     // Prepare the status PDU to be received
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection->pdus, Connection, &Response);
-    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
+    KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticOperation_AssociateResponseWithRequest_ExpectAndReturn(&Response, &Request);
-    KineticAllocator_FreePDU_Expect(&Connection->pdus, &Response);
+    KineticOperation_AssociateResponseWithOperation_ExpectAndReturn(&Response, &op);
+    KineticPDU_GetValueLength_ExpectAndReturn(&Response, 0);
+    KineticAllocator_FreeOperation_Expect(Connection, &op);
 
     // Signal data has arrived so status PDU can be consumed
     KineticSocket_DataBytesAvailable_ExpectAndReturn(socket, PDU_HEADER_LEN);
 
     // Make sure to return read thread to IDLE state
     KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticConnection_Pause(Connection, false);
 
     // Wait for solicited status PDU to be received and processed...
     sleep(1);
@@ -531,7 +453,95 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, dummyClosureData.status);
     TEST_ASSERT_EQUAL(1, dummyClosureData.callbackCount);
 }
-#endif
+
+void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_Value_payload(void)
+{
+    LOG_LOCATION;
+    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+    const int socket = 24;
+
+    KineticConnection expected = (KineticConnection) {
+        .connected = true,
+        .socket = socket,
+        .session = (KineticSession) {
+            .host = "valid-host.com",
+            .port = 1234,
+            .clusterVersion = 17,
+            .identity = 12,
+            .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
+        },
+    };
+    memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
+
+    *Connection = (KineticConnection) {
+        .connected = false,
+        .socket = -1,
+        .session = (KineticSession) {
+            .host = "valid-host.com",
+            .port = expected.session.port,
+            .nonBlocking = false,
+            .clusterVersion = expected.session.clusterVersion,
+            .identity = expected.session.identity,
+            .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
+        },
+    };
+    memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
+
+    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
+                                          expected.session.nonBlocking, expected.socket);
+
+    // Configure dummy request PDU async callback
+    struct DummyCompletionClosureData dummyClosureData = {
+        .status = KINETIC_STATUS_INVALID,
+        .callbackCount = 0,
+    };
+    KineticOperation op;
+    KINETIC_OPERATION_INIT(&op, Connection);
+    op.closure = (KineticCompletionClosure) {
+        .callback = &DummyCompletionCallback,
+        .clientData = &dummyClosureData,
+    };
+    uint8_t valueData[100];
+    ByteBuffer value = ByteBuffer_Create(valueData, sizeof(valueData), 0);
+    op.entry.value = value;
+
+    // Setup mock expectations for worker thread
+    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    Response.type = KINETIC_PDU_TYPE_RESPONSE;
+    Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    Response.proto->has_authType = true;
+
+    // Establish connection
+    KineticStatus status = KineticConnection_Connect(Connection);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+
+    // Pause worker thread to setup expectations
+    KineticConnection_Pause(Connection, true);
+    sleep(0);
+
+    // Prepare the status PDU to be received
+    KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
+    KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
+    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
+    KineticOperation_AssociateResponseWithOperation_ExpectAndReturn(&Response, &op);
+    KineticPDU_GetValueLength_ExpectAndReturn(&Response, 83);
+    KineticPDU_ReceiveValue_ExpectAndReturn(socket, &value, 83, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_FreeOperation_Expect(Connection, &op);
+
+    // Signal data has arrived so status PDU can be consumed
+    KineticSocket_DataBytesAvailable_ExpectAndReturn(socket, PDU_HEADER_LEN);
+
+    // Make sure to return read thread to IDLE state
+    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticConnection_Pause(Connection, false);
+
+    // Wait for solicited status PDU to be received and processed...
+    sleep(1);
+
+    // Validate callback called and check status
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, dummyClosureData.status);
+    TEST_ASSERT_EQUAL(1, dummyClosureData.callbackCount);
+}
 
 void test_KineticConnection_Worker_should_not_poll_but_instead_do_a_blocking_wait_on_receive_socket(void)
 {

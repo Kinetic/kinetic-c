@@ -23,14 +23,15 @@
 #include "kinetic_client.h"
 #include "kinetic_logger.h"
 
-// uint8_t hmacKeyBuffer[KINETIC_MAX_KEY_LEN];
 uint8_t data[KINETIC_OBJ_SIZE];
 
 void SystemTestSetup(SystemTestFixture* fixture)
 {
-    KineticClient_Init("stdout", 2);
+    KineticClient_Init("stdout", 3);
 
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
+
+    memset(fixture, 0, sizeof(SystemTestFixture));
 
     ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
     if (!fixture->connected) {

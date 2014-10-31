@@ -45,15 +45,16 @@ static ByteArray HmacKey;
 static const char* StartKeyData[KINETIC_DEFAULT_KEY_LEN];
 static const char* EndKeyData[KINETIC_DEFAULT_KEY_LEN];
 static ByteBuffer StartKey, EndKey;
-#define NUM_KEYS_IN_RANGE (4)
-static uint8_t KeyRangeData[NUM_KEYS_IN_RANGE][KINETIC_MAX_KEY_LEN];
-static ByteBuffer Keys[NUM_KEYS_IN_RANGE];
+static const int NumKeysInRange = 4;
+static uint8_t KeyRangeData[NumKeysInRange][KINETIC_MAX_KEY_LEN];
+static ByteBuffer Keys[NumKeysInRange];
 static KineticSessionHandle DummyHandle = 1;
 static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
 KineticPDU Request, Response;
 
 void setUp(void)
 {
+    KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false;
     HmacKey = ByteArray_CreateWithCString("some hmac key");
@@ -63,7 +64,7 @@ void setUp(void)
     EndKey = ByteBuffer_Create(EndKeyData, sizeof(EndKeyData), sizeof(EndKeyData));
 
     // Initialize buffers to hold returned keys in requested range
-    for (int i = 0; i < NUM_KEYS_IN_RANGE; i++) {
+    for (int i = 0; i < NumKeysInRange; i++) {
         Keys[i] = ByteBuffer_Create(&KeyRangeData[i], sizeof(KeyRangeData[i]), sizeof(KeyRangeData[i]));
         char keyBuf[64];
         snprintf(keyBuf, sizeof(keyBuf), "key_range_00_%02d", i);
@@ -82,6 +83,11 @@ void setUp(void)
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
+}
+
+void tearDown(void)
+{
+    KineticLogger_Close();
 }
 
 // command {
@@ -140,7 +146,7 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
         .endKey = EndKey,
         .startKeyInclusive = true,
         .endKeyInclusive = true,
-        .maxReturned = NUM_KEYS_IN_RANGE,
+        .maxReturned = NumKeysInRange,
         .reverse = false,
     };
 
@@ -158,18 +164,18 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
     //     .has_endKeyInclusive = true,
     //     .endKeyInclusive = true,
     //     .has_maxReturned = true,
-    //     .maxReturned = NUM_KEYS_IN_RANGE,
+    //     .maxReturned = NumKeysInRange,
     // };
 
-    ProtobufCBinaryData protoKeysInRange[NUM_KEYS_IN_RANGE];
-    for (int i = 0; i < NUM_KEYS_IN_RANGE; i++) {
+    ProtobufCBinaryData protoKeysInRange[NumKeysInRange];
+    for (int i = 0; i < NumKeysInRange; i++) {
         LOGF0("  USED: %zu", Keys[i].bytesUsed);
         protoKeysInRange[i] = (ProtobufCBinaryData) {
             .data = Keys[i].array.data, .len = Keys[i].bytesUsed};
     }
 
     KineticProto_Command_Range protoKeyRangeResponse = {
-        .n_keys = NUM_KEYS_IN_RANGE,
+        .n_keys = NumKeysInRange,
         .keys = &protoKeysInRange[0],
     };
 
@@ -187,7 +193,8 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
     KineticAllocator_FreePDU_Expect(&Connection.pdus, &Request);
     KineticAllocator_FreePDU_Expect(&Connection.pdus, &Response);
 
-    KineticStatus status = KineticClient_GetKeyRange(DummyHandle, &keyRange, Keys, NUM_KEYS_IN_RANGE);
+    ByteBufferArray keyArray = {.buffers = &Keys[0], .count = NumKeysInRange}
+    KineticStatus status = KineticClient_GetKeyRange(DummyHandle, &keyRange, keyArray);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     // KineticLogger_LogByteBuffer(0, "key", reqEntry.key);

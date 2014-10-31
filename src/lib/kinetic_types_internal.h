@@ -258,6 +258,8 @@ struct _KineticPDU {
     (_pdu)->type = KINETIC_PDU_TYPE_REQUEST; \
 }
 
+typedef KineticStatus (*KineticOperationCallback)(KineticOperation* operation);
+
 // Kinetic Operation
 struct _KineticOperation {
     KineticConnection* connection;
@@ -266,7 +268,11 @@ struct _KineticOperation {
     bool entryEnabled;
     bool valueEnabled;
     bool sendValue;
+    bool receiveComplete;
     KineticEntry entry;
+    KineticEntry* destEntry;
+    ByteBufferArray buffers;
+    KineticOperationCallback callback;
     KineticCompletionClosure closure;
 };
 #define KINETIC_OPERATION_INIT(_op, _con) \
@@ -293,8 +299,8 @@ bool Copy_ProtobufCBinaryData_to_ByteBuffer(
     ByteBuffer dest, ProtobufCBinaryData src);
 bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
     KineticProto_Command_KeyValue* keyValue, KineticEntry* entry);
-bool Copy_KineticProto_Command_Range_to_buffer_list(
-    KineticProto_Command_Range* keyRange, ByteBuffer* keys, int64_t max_keys);
+bool Copy_KineticProto_Command_Range_to_ByteBufferArray(
+    KineticProto_Command_Range* keyRange, ByteBufferArray keys);
 int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len);
 
 #endif // _KINETIC_TYPES_INTERNAL_H
