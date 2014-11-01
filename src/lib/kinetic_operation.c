@@ -271,7 +271,6 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->destEntry = entry;
-    operation->entry = *entry;
 
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 
@@ -296,9 +295,9 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
             return KINETIC_STATUS_BUFFER_OVERRUN;
         }
     }
-    if (operation->destEntry != NULL) {
-        operation->destEntry->value.bytesUsed = operation->entry.value.bytesUsed;
-    }
+    // if (operation->destEntry != NULL) {
+    //     operation->destEntry->value.bytesUsed = operation->entry.value.bytesUsed;
+    // }
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -311,7 +310,6 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->destEntry = entry;
-    operation->entry = *entry;
 
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 
@@ -344,12 +342,11 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->destEntry = entry;
-    operation->entry = *entry;
 
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 
     if (operation->entry.value.array.data != NULL) {
-        ByteBuffer_Reset(&operation->entry.value);
+        ByteBuffer_Reset(&operation->destEntry->value);
     }
 
     operation->entryEnabled = true;

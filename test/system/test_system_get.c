@@ -81,15 +81,11 @@ void setUp(void)
     KineticStatus status = KineticClient_Put(Fixture.handle, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // TEST_ASSERT_NOT_NULL(putEntry.dbVersion.array.data);
-    // TEST_ASSERT_EQUAL(strlen("v1.0"), putEntry.dbVersion.bytesUsed);
-    // TEST_ASSERT_EQUAL(0, putEntry.newVersion.bytesUsed);
-    // TEST_ASSERT_NULL(putEntry.newVersion.array.data);
-    // TEST_ASSERT_EQUAL(0, putEntry.newVersion.array.len);
-    // TEST_ASSERT_EQUAL(0, putEntry.newVersion.bytesUsed);
+    TEST_ASSERT_NOT_NULL(putEntry.dbVersion.array.data);
+    TEST_ASSERT_EQUAL(strlen("v1.0"), putEntry.dbVersion.bytesUsed);
+    TEST_ASSERT_ByteBuffer_NULL(putEntry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, putEntry.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, putEntry.tag);
-    
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
 
     Fixture.expectedSequence++;
@@ -124,13 +120,13 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
     ByteBuffer_AppendArray(&Fixture.keyToDelete, KeyBuffer.array);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    // uint8_t expectedVersionData[64];
-    // ByteBuffer expectedVer = ByteBuffer_Create(expectedVersionData, sizeof(expectedVersionData), 0);
-    // ByteBuffer_AppendCString(&expectedVer, "v1.0");
-    // TEST_ASSERT_EQUAL_ByteBuffer(expectedVer, getEntry.dbVersion);
-    // TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
+    uint8_t expectedVersionData[64];
+    ByteBuffer expectedVer = ByteBuffer_Create(expectedVersionData, sizeof(expectedVersionData), 0);
+    ByteBuffer_AppendCString(&expectedVer, "v1.0");
+    TEST_ASSERT_EQUAL_ByteBuffer(expectedVer, getEntry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, getEntry.key);
-    // TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry.tag);
+    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry.tag);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
     uint8_t expectedValueData[128];
     ByteBuffer expectedValue = ByteBuffer_Create(expectedValueData, sizeof(expectedValueData), 0);
@@ -162,13 +158,13 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
     ByteBuffer_AppendArray(&Fixture.keyToDelete, KeyBuffer.array);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    // uint8_t expectedVersionData[64];
-    // ByteBuffer expectedVer = ByteBuffer_Create(expectedVersionData, sizeof(expectedVersionData), 0);
-    // ByteBuffer_AppendCString(&expectedVer, "v1.0");
-    // TEST_ASSERT_EQUAL_ByteBuffer(expectedVer, getEntry.dbVersion);
-    // TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
+    uint8_t expectedVersionData[64];
+    ByteBuffer expectedVer = ByteBuffer_Create(expectedVersionData, sizeof(expectedVersionData), 0);
+    ByteBuffer_AppendCString(&expectedVer, "v1.0");
+    TEST_ASSERT_EQUAL_ByteBuffer(expectedVer, getEntry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, getEntry.key);
-    // TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry.tag);
+    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry.tag);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
     uint8_t expectedValueData[128];
     ByteBuffer expectedValue = ByteBuffer_Create(expectedValueData, sizeof(expectedValueData), 0);

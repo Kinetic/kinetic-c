@@ -35,8 +35,8 @@
 #include <mach/mach.h>
 #endif
 
-#define MAX_ITERATIONS (10)
-#define NUM_COPIES (5)
+#define MAX_ITERATIONS (1)
+#define NUM_COPIES (1)
 #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_MAX_THREADS (10)
 #define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
@@ -47,8 +47,7 @@ STATIC KineticSessionHandle* kinetic_client;
 STATIC const char HmacKeyString[] = "asdfasdf";
 STATIC int SourceDataSize;
 
-struct kinetic_thread_arg {
-    char ip[16];
+struct kinetic_put_arg {
     KineticSessionHandle sessionHandle;
     char keyPrefix[KINETIC_DEFAULT_KEY_LEN];
     uint8_t key[KINETIC_DEFAULT_KEY_LEN];
@@ -61,9 +60,15 @@ struct kinetic_thread_arg {
     float bandwidth;
 };
 
+struct kinetic_thread_arg {
+    char ip[16];
+    struct kinetic_put_arg* opArgs;
+    int opCount;
+};
+
 void setUp(void)
 {
-    KineticClient_Init("stdout", 1);
+    KineticClient_Init("stdout", 3);
 }
 
 void tearDown(void)
@@ -71,6 +76,12 @@ void tearDown(void)
     KineticClient_Shutdown();
 }
 
+void test_Need_to_test_overlapped_asynchronous_PUT_operations(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: test/validate overlapped aync I/O!");
+}
+
+#if 0
 void* kinetic_put(void* kinetic_arg)
 {
     struct kinetic_thread_arg* arg = kinetic_arg;
@@ -295,3 +306,4 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
     printf("\n");
     fflush(stdout);
 }
+#endif
