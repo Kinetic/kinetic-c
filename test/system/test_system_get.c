@@ -48,6 +48,8 @@ static uint8_t TagData[1024];
 static ByteBuffer TagBuffer;
 static uint8_t VersionData[1024];
 static ByteBuffer VersionBuffer;
+static uint8_t ExpectedVersionData[1024];
+static ByteBuffer ExpectedVersionBuffer;
 static ByteArray TestValue;
 static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
@@ -63,6 +65,8 @@ void setUp(void)
     ByteBuffer_AppendCString(&TagBuffer, "SomeTagValue");
     VersionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData), 0);
     ByteBuffer_AppendCString(&VersionBuffer, "v1.0");
+    ExpectedVersionBuffer = ByteBuffer_Create(ExpectedVersionData, sizeof(ExpectedVersionData), 0);
+    ByteBuffer_AppendCString(&ExpectedVersionBuffer, "v1.0");
     TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
     ValueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData), 0);
     ByteBuffer_AppendArray(&ValueBuffer, TestValue);
@@ -81,12 +85,13 @@ void setUp(void)
     KineticStatus status = KineticClient_Put(Fixture.handle, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    TEST_ASSERT_NOT_NULL(putEntry.dbVersion.array.data);
-    TEST_ASSERT_EQUAL(strlen("v1.0"), putEntry.dbVersion.bytesUsed);
-    TEST_ASSERT_ByteBuffer_NULL(putEntry.newVersion);
+    // TEST_ASSERT_NOT_NULL(putEntry.dbVersion.array.data);
+    // TEST_ASSERT_EQUAL(strlen("v1.0"), putEntry.dbVersion.bytesUsed);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, putEntry.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, putEntry.tag);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, putEntry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(putEntry.newVersion);
 
     Fixture.expectedSequence++;
     sleep(1);

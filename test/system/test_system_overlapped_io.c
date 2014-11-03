@@ -35,8 +35,8 @@
 #include <mach/mach.h>
 #endif
 
-#define MAX_ITERATIONS (10)
-#define NUM_COPIES (5)
+#define MAX_ITERATIONS (1)
+#define NUM_COPIES (10)
 #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_MAX_THREADS (10)
 #define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
@@ -63,7 +63,7 @@ struct kinetic_thread_arg {
 
 void setUp(void)
 {
-    KineticClient_Init("stdout", 1);
+    KineticClient_Init(NULL, 0);
 }
 
 void tearDown(void)

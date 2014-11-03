@@ -175,14 +175,18 @@ typedef struct _KineticCompletionClosure {
 // KineticEntry - byte arrays need to be preallocated by the client
 typedef struct _KineticEntry {
     ByteBuffer key;
-    ByteBuffer newVersion;
+    ByteBuffer value;
+
+    // Metadata
     ByteBuffer dbVersion;
     ByteBuffer tag;
-    bool force;
     KineticAlgorithm algorithm;
+
+    // Operation-specific attributes (TODO: remove from struct, and specify a attributes to PUT/GET operations)
+    ByteBuffer newVersion;
     bool metadataOnly;
+    bool force;
     KineticSynchronization synchronization;
-    ByteBuffer value;
 } KineticEntry;
 
 // Kinetic Key Range request structure

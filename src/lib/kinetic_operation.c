@@ -215,7 +215,7 @@ KineticStatus KineticOperation_NoopCallback(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    LOG_LOCATION; LOGF3("NOOP callback w/ operation (0x%0llX) on connection (0x%0llX)",
+    LOGF3("NOOP callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     return KINETIC_STATUS_SUCCESS;
 }
@@ -238,7 +238,7 @@ KineticStatus KineticOperation_PutCallback(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    LOG_LOCATION; LOGF3("PUT callback w/ operation (0x%0llX) on connection (0x%0llX)",
+    LOGF3("PUT callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     assert(operation->entryEnabled);
 
@@ -284,7 +284,7 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    LOG_LOCATION; LOGF3("GET callback w/ operation (0x%0llX) on connection (0x%0llX)",
+    LOGF3("GET callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     assert(operation->entryEnabled);
 
@@ -296,7 +296,7 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
         }
     }
     // if (operation->destEntry != NULL) {
-    //     operation->destEntry->value.bytesUsed = operation->entry.value.bytesUsed;
+        // operation->destEntry->value.bytesUsed = operation->entry.value.bytesUsed;
     // }
     return KINETIC_STATUS_SUCCESS;
 }
@@ -327,7 +327,7 @@ KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    LOG_LOCATION; LOGF3("DELETE callback w/ operation (0x%0llX) on connection (0x%0llX)",
+    LOGF3("DELETE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     assert(operation->entryEnabled);
     return KINETIC_STATUS_SUCCESS;
@@ -359,8 +359,7 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    
-    LOG_LOCATION; LOGF3("GETKEYRANGE callback w/ operation (0x%0llX) on connection (0x%0llX)",
+    LOGF3("GETKEYRANGE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     assert(operation->buffers != NULL);
     assert(operation->buffers->count > 0);
