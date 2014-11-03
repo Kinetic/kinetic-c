@@ -60,7 +60,9 @@ void test_KineticAllocator_FreeAllPDUs_should_free_full_list_of_PDUs(void)
 
     // Allocate some PDUs and list items to hold them
     for (int i = 0; i < count; i++) {
-        list[i] = (KineticListItem*)malloc(sizeof(KineticListItem));
+        KineticListItem * listItem = malloc(sizeof(KineticListItem));
+        memset(listItem, 0x00, sizeof(*listItem));
+        list[i] = listItem;
         LOGF("ALLOCATED item[%d]: 0x%0llX", i, (long long)list[i]);
     }
 
