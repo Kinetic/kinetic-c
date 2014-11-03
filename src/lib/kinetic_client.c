@@ -65,11 +65,11 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     LOGF1("Executing operation: 0x%llX", operation);
-    if (operation->entry.value.array.data != NULL
-        && operation->entry.value.bytesUsed > 0)
+    if (operation->destEntry->value.array.data != NULL
+        && operation->destEntry->value.bytesUsed > 0)
     {
         LOGF1("  Sending PDU (0x%0llX) w/value (%zu bytes)",
-            operation->request, operation->entry.value.bytesUsed);
+            operation->request, operation->destEntry->value.bytesUsed);
     }
     else {
         LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);

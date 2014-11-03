@@ -32,7 +32,8 @@ void KineticMessage_Init(KineticMessage* const message)
     if ((_entry)->_name.array.data != NULL \
         && (_entry)->_name.array.len > 0 \
         && (_entry)->_name.bytesUsed > 0 \
-        && (_entry)->_name.bytesUsed <= (_entry)->_name.array.len) { \
+        && (_entry)->_name.bytesUsed <= (_entry)->_name.array.len) \
+    { \
         (_field)._name.data = (_entry)->_name.array.data; \
         (_field)._name.len = (_entry)->_name.bytesUsed; \
         (_field).has_ ## _name = true; \

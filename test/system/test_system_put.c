@@ -136,11 +136,10 @@ void test_Put_should_create_new_object_on_device(void)
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
-    // TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
-    // TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
-    // TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
-    // TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
+    TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
+    TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }

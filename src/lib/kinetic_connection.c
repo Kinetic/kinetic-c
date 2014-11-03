@@ -106,7 +106,7 @@ static void* KineticConnection_Worker(void* thread_arg)
                         size_t valueLength = KineticPDU_GetValueLength(response);
                         if (valueLength > 0) {
                             status = KineticPDU_ReceiveValue(op->connection->socket,
-                                &op->entry.value, valueLength);
+                                &op->destEntry->value, valueLength);
                         }
 
                         // Call operation-specific callback, if configured

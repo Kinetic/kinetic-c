@@ -269,7 +269,7 @@ struct _KineticOperation {
     bool valueEnabled;
     bool sendValue;
     bool receiveComplete;
-    KineticEntry entry;
+    // KineticEntry entry;
     KineticEntry* destEntry;
     ByteBufferArray* buffers;
     KineticOperationCallback callback;

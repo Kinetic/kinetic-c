@@ -502,8 +502,8 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
         .clientData = &dummyClosureData,
     };
     uint8_t valueData[100];
-    ByteBuffer value = ByteBuffer_Create(valueData, sizeof(valueData), 0);
-    op.entry.value = value;
+    KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
+    op.destEntry = &entry;
 
     // Setup mock expectations for worker thread
     KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
@@ -525,7 +525,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticOperation_AssociateResponseWithOperation_ExpectAndReturn(&Response, &op);
     KineticPDU_GetValueLength_ExpectAndReturn(&Response, 83);
-    KineticPDU_ReceiveValue_ExpectAndReturn(socket, &value, 83, KINETIC_STATUS_SUCCESS);
+    KineticPDU_ReceiveValue_ExpectAndReturn(socket, &entry.value, 83, KINETIC_STATUS_SUCCESS);
     KineticAllocator_FreeOperation_Expect(Connection, &op);
 
     // Signal data has arrived so status PDU can be consumed

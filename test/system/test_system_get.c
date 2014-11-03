@@ -44,8 +44,12 @@
 static SystemTestFixture Fixture;
 static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
+static uint8_t ExpectedKeyData[1024];
+static ByteBuffer ExpectedKeyBuffer;
 static uint8_t TagData[1024];
 static ByteBuffer TagBuffer;
+static uint8_t ExpectedTagData[1024];
+static ByteBuffer ExpectedTagBuffer;
 static uint8_t VersionData[1024];
 static ByteBuffer VersionBuffer;
 static uint8_t ExpectedVersionData[1024];
@@ -61,8 +65,12 @@ void setUp(void)
 
     KeyBuffer = ByteBuffer_Create(KeyData, sizeof(KeyData), 0);
     ByteBuffer_AppendCString(&KeyBuffer, strKey);
+    ExpectedKeyBuffer = ByteBuffer_Create(ExpectedKeyData, sizeof(ExpectedKeyData), 0);
+    ByteBuffer_AppendCString(&ExpectedKeyBuffer, strKey);
     TagBuffer = ByteBuffer_Create(TagData, sizeof(TagData), 0);
     ByteBuffer_AppendCString(&TagBuffer, "SomeTagValue");
+    ExpectedTagBuffer = ByteBuffer_Create(ExpectedTagData, sizeof(ExpectedTagData), 0);
+    ByteBuffer_AppendCString(&ExpectedTagBuffer, "SomeTagValue");
     VersionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData), 0);
     ByteBuffer_AppendCString(&VersionBuffer, "v1.0");
     ExpectedVersionBuffer = ByteBuffer_Create(ExpectedVersionData, sizeof(ExpectedVersionData), 0);
@@ -85,12 +93,10 @@ void setUp(void)
     KineticStatus status = KineticClient_Put(Fixture.handle, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // TEST_ASSERT_NOT_NULL(putEntry.dbVersion.array.data);
-    // TEST_ASSERT_EQUAL(strlen("v1.0"), putEntry.dbVersion.bytesUsed);
-    TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, putEntry.key);
-    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, putEntry.tag);
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, putEntry.key);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, putEntry.tag);
     TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, putEntry.dbVersion);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
     TEST_ASSERT_ByteBuffer_NULL(putEntry.newVersion);
 
     Fixture.expectedSequence++;
@@ -104,10 +110,10 @@ void tearDown(void)
 
 void test_Get_should_retrieve_object_and_metadata_from_device(void)
 { LOG_LOCATION;
-    // ByteBuffer_Reset(&KeyBuffer);
 
     ByteBuffer_Reset(&VersionBuffer);
     ByteBuffer_Reset(&TagBuffer);
+    // ByteBuffer_Reset(&KeyBuffer);
     ByteBuffer_Reset(&ValueBuffer);
 
     KineticEntry getEntry = {
@@ -125,25 +131,19 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
     ByteBuffer_AppendArray(&Fixture.keyToDelete, KeyBuffer.array);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    uint8_t expectedVersionData[64];
-    ByteBuffer expectedVer = ByteBuffer_Create(expectedVersionData, sizeof(expectedVersionData), 0);
-    ByteBuffer_AppendCString(&expectedVer, "v1.0");
-    TEST_ASSERT_EQUAL_ByteBuffer(expectedVer, getEntry.dbVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);
     TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
-    TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, getEntry.key);
-    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry.tag);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, getEntry.key);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, getEntry.tag);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
     uint8_t expectedValueData[128];
     ByteBuffer expectedValue = ByteBuffer_Create(expectedValueData, sizeof(expectedValueData), 0);
     ByteBuffer_AppendArray(&expectedValue, TestValue);
     TEST_ASSERT_EQUAL_ByteBuffer(expectedValue, getEntry.value);
-
-    TEST_IGNORE_MESSAGE("TODO: Need to update/verify entry buffer assertions!")
 }
 
 void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
 { LOG_LOCATION;
-    // ByteBuffer_Reset(&KeyBuffer);
 
     ByteBuffer_Reset(&VersionBuffer);
     ByteBuffer_Reset(&TagBuffer);
@@ -163,20 +163,15 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
     ByteBuffer_AppendArray(&Fixture.keyToDelete, KeyBuffer.array);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    uint8_t expectedVersionData[64];
-    ByteBuffer expectedVer = ByteBuffer_Create(expectedVersionData, sizeof(expectedVersionData), 0);
-    ByteBuffer_AppendCString(&expectedVer, "v1.0");
-    TEST_ASSERT_EQUAL_ByteBuffer(expectedVer, getEntry.dbVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);
     TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
-    TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, getEntry.key);
-    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry.tag);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, getEntry.key);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, getEntry.tag);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
     uint8_t expectedValueData[128];
     ByteBuffer expectedValue = ByteBuffer_Create(expectedValueData, sizeof(expectedValueData), 0);
     ByteBuffer_AppendArray(&expectedValue, TestValue);
     TEST_ASSERT_EQUAL_ByteBuffer(expectedValue, getEntry.value);
-
-    TEST_IGNORE_MESSAGE("TODO: Need to update/verify entry buffer assertions!")
 }
 
 /*******************************************************************************

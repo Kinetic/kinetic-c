@@ -262,8 +262,8 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
 
         ByteBuffer_Reset(&entry->tag);
         if (keyValue->has_tag) {
-            entry->tag.bytesUsed = keyValue->tag.len;
             if (entry->tag.array.data == NULL || entry->tag.array.len < keyValue->tag.len) {
+                entry->tag.bytesUsed = keyValue->tag.len;
                 LOG1(" BUFFER_OVERRUN: tag");
                 bufferOverflow = true;
             }

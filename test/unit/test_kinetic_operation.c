@@ -128,8 +128,10 @@ void test_KineticOperation_SendRequest_should_send_PDU_with_value_payload(void)
     uint8_t valueData[128];
     ByteBuffer valueBuffer = ByteBuffer_Create(valueData, sizeof(valueData), 0);
     ByteBuffer_AppendCString(&valueBuffer, "Some arbitrary value");
+    KineticEntry entry = {.value = valueBuffer};
     KINETIC_OPERATION_INIT(&Operation, &Connection);
-    Operation.entry.value = valueBuffer;
+
+    Operation.destEntry = &entry;
     Operation.request = &Request;
     Operation.entryEnabled = true;
     Operation.valueEnabled = true;
@@ -140,7 +142,7 @@ void test_KineticOperation_SendRequest_should_send_PDU_with_value_payload(void)
         &Request.protoData.message.message, Request.connection->session.hmacKey);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &Operation.entry.value, KINETIC_STATUS_SUCCESS);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, &entry.value, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
 
@@ -153,10 +155,13 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
 
     KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    char valueData[] = "Some arbitrary value";
     KINETIC_OPERATION_INIT(&Operation, &Connection);
-    Operation.entry.value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData));
     Operation.request = &Request;
+    char valueData[] = "Some arbitrary value";
+    KineticEntry entry = {
+        .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
+    };
+    Operation.destEntry = &entry;
     Operation.entryEnabled = true;
     Operation.valueEnabled = true;
     Operation.sendValue = true;
@@ -176,9 +181,12 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
 
     KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    char valueData[] = "Some arbitrary value";
     KINETIC_OPERATION_INIT(&Operation, &Connection);
-    Operation.entry.value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData));
+    char valueData[] = "Some arbitrary value";
+    KineticEntry entry = {
+        .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
+    };
+    Operation.destEntry = &entry;
     Operation.request = &Request;
     Operation.entryEnabled = true;
     Operation.valueEnabled = true;
@@ -201,10 +209,13 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
 
     KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    uint8_t valueData[128];
     KINETIC_OPERATION_INIT(&Operation, &Connection);
-    Operation.entry.value = ByteBuffer_Create(valueData, sizeof(valueData), 0);
-    ByteBuffer_AppendCString(&Operation.entry.value, "Some arbitrary value");
+    uint8_t valueData[128];
+    KineticEntry entry = {
+        .value = ByteBuffer_Create(valueData, sizeof(valueData), 0)
+    };
+    ByteBuffer_AppendCString(&entry.value, "Some arbitrary value");
+    Operation.destEntry = &entry;
     Operation.request = &Request;
     Operation.entryEnabled = true;
     Operation.valueEnabled = true;
@@ -214,7 +225,7 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message, Request.connection->session.hmacKey);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &Operation.entry.value, KINETIC_STATUS_SOCKET_TIMEOUT);
+    KineticSocket_Write_ExpectAndReturn(Connection.socket, &entry.value, KINETIC_STATUS_SOCKET_TIMEOUT);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
 
@@ -372,7 +383,6 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     //
     TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, Request.protoData.message.command.header->messageType);
-    TEST_ASSERT_ByteBuffer_NULL(Operation.entry.value);
     TEST_ASSERT_NULL(Operation.response);
 }
 
@@ -480,11 +490,12 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
         Request.protoData.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry.value.array);
-    TEST_ASSERT_EQUAL(0, Operation.entry.value.bytesUsed);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.destEntry->value.array);
+    TEST_ASSERT_EQUAL(0, Operation.destEntry->value.bytesUsed);
     TEST_ASSERT_NULL(Operation.response);
 }
 
+#if 0
 uint8_t ValueData[KINETIC_OBJ_SIZE];
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
@@ -719,3 +730,4 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     TEST_ASSERT_EQUAL_PTR(&Request.protoData.message, Request.proto);
     TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.command, Request.command);
 }
+#endif
