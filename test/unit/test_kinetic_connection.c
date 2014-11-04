@@ -156,7 +156,7 @@ void test_KineticConnection_Connect_should_connect_to_specified_host(void)
                                           expected.session.nonBlocking, expected.socket);
 
     // Setup mock expectations for worker thread
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
 
     // Establish connection
     KineticStatus status = KineticConnection_Connect(Connection);
@@ -209,7 +209,7 @@ void test_KineticConnection_Worker_should_run_fine_while_no_data_arrives(void)
                                           expected.session.nonBlocking, expected.socket);
 
     // Setup mock expectations for worker thread so it can run in IDLE mode
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
 
     // Establish connection
     KineticStatus status = KineticConnection_Connect(Connection);
@@ -219,60 +219,6 @@ void test_KineticConnection_Worker_should_run_fine_while_no_data_arrives(void)
     sleep(0);
     LOG0("Done allowing worker thread to execute for a bit!");
 }
-
-void test_KineticConnection_Worker_should_run_fine_if_not_enough_data_has_arrived(void)
-{
-    LOG_LOCATION;
-    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
-    const int socket = 24;
-
-    KineticConnection expected = (KineticConnection) {
-        .connected = true,
-        .socket = socket,
-        .session = (KineticSession) {
-            .host = "valid-host.com",
-            .port = 1234,
-            .clusterVersion = 17,
-            .identity = 12,
-            .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
-        },
-    };
-    memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
-
-    *Connection = (KineticConnection) {
-        .connected = false,
-        .socket = -1,
-        .session = (KineticSession) {
-            .host = "valid-host.com",
-            .port = expected.session.port,
-            .nonBlocking = false,
-            .clusterVersion = expected.session.clusterVersion,
-            .identity = expected.session.identity,
-            .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
-        },
-    };
-    memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
-
-    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
-                                          expected.session.nonBlocking, expected.socket);
-
-    // Setup mock expectations for worker thread
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
-
-    // Establish connection
-    KineticStatus status = KineticConnection_Connect(Connection);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
-
-    // Ensure no PDUs are attempted to be read if some, but not enough, data has been received
-    sleep(0);
-    KineticSocket_DataBytesAvailable_ExpectAndReturn(socket, 1);
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
-    sleep(0);
-    KineticSocket_DataBytesAvailable_ExpectAndReturn(socket, PDU_HEADER_LEN - 1);
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
-    sleep(0);
-}
-
 
 void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void)
 {
@@ -312,7 +258,7 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
                                           expected.session.nonBlocking, expected.socket);
 
     // Setup mock expectations for worker thread
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     Response.type = KINETIC_PDU_TYPE_UNSOLICITED;
     Response.command->header->connectionID = connectionID;
     Response.command->header->has_connectionID = true;
@@ -339,10 +285,10 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
     KineticAllocator_FreePDU_Expect(Connection, &Response);
 
     // Must trigger data ready last, in order for mocked simulation to work as desired
-    KineticSocket_DataBytesAvailable_ExpectAndReturn(socket, PDU_HEADER_LEN);
+    KineticSocket_WaitUntilDataAvailable_ExpectAndReturn(socket, 100, KINETIC_WAIT_STATUS_DATA_AVAILABLE);
 
     // Make sure to return read thread to IDLE state
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     KineticConnection_Pause(Connection, false);
 
     // Wait for unsolicited status PDU to be received and processed...
@@ -418,7 +364,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     };
 
     // Setup mock expectations for worker thread
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     Response.type = KINETIC_PDU_TYPE_RESPONSE;
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
     Response.proto->has_authType = true;
@@ -440,10 +386,10 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     KineticAllocator_FreeOperation_Expect(Connection, &op);
 
     // Signal data has arrived so status PDU can be consumed
-    KineticSocket_DataBytesAvailable_ExpectAndReturn(socket, PDU_HEADER_LEN);
+    KineticSocket_WaitUntilDataAvailable_ExpectAndReturn(socket, 100, KINETIC_WAIT_STATUS_DATA_AVAILABLE);
 
     // Make sure to return read thread to IDLE state
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     KineticConnection_Pause(Connection, false);
 
     // Wait for solicited status PDU to be received and processed...
@@ -506,7 +452,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     op.entry = &entry;
 
     // Setup mock expectations for worker thread
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     Response.type = KINETIC_PDU_TYPE_RESPONSE;
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
     Response.proto->has_authType = true;
@@ -529,10 +475,10 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     KineticAllocator_FreeOperation_Expect(Connection, &op);
 
     // Signal data has arrived so status PDU can be consumed
-    KineticSocket_DataBytesAvailable_ExpectAndReturn(socket, PDU_HEADER_LEN);
+    KineticSocket_WaitUntilDataAvailable_ExpectAndReturn(socket, 100, KINETIC_WAIT_STATUS_DATA_AVAILABLE);
 
     // Make sure to return read thread to IDLE state
-    KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     KineticConnection_Pause(Connection, false);
 
     // Wait for solicited status PDU to be received and processed...
