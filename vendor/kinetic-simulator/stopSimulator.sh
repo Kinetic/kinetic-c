@@ -1,13 +1,6 @@
+#! /usr/bin/env bash
+
 # Ensure stray simulators are not still running
-
-# sleep 1
-# _CUT_COL=''
-# if [[ $OSTYPE == darwin* ]]; then
-#   _CUT_COL='3'
-# else
-#   _CUT_COL='2'
-# fi
-
 _SIMS=`ps -ef | grep "kinetic-simulator/kinetic-simulator-" | grep -v 'grep' | sed -e 's/^ *//' -e 's/ *$//' | tr -s ' '`
 echo "Kinetic Simulators Still Alive"
 echo "------------------------------"

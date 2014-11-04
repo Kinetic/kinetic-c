@@ -344,8 +344,24 @@ void KineticAllocator_FreeAllOperations(KineticConnection* const connection)
         LOGF3("Freeing operations list (0x%0llX) from connection (0x%0llX)...",
             &connection->operations, connection);
         while (current != NULL) {
-            KineticAllocator_FreeOperation(connection, current->data);
-            current = current->next;
+            KineticOperation* op = (KineticOperation*)current->data;
+            if (op != NULL) {
+
+                if (op->request != NULL) {
+                    LOGF3("Freeing request PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)",
+                        op->request, op, connection);
+                    KineticAllocator_FreePDU(connection, op->request);
+                }
+
+                if (op->response != NULL) {
+                    LOGF3("Freeing response PDU (0x%0llX) from op (0x%0llX) on connection (0x%0llX)",
+                        op->response, op, connection);
+                    KineticAllocator_FreePDU(connection, op->response);
+                }
+
+                current = current->next;
+                KineticAllocator_FreeItem(&connection->operations, (void*)op);
+            }
         }
     }
     else {

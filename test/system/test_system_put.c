@@ -41,6 +41,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+#if _POSIX_C_SOURCE < 199309L
+#error Your version of Posix C ## _POSIX_C_SOURCE ## is too old!
+#endif
+
+#include <time.h>
+
 static SystemTestFixture Fixture;
 static KineticEntry Entry;
 static uint8_t KeyData[1024];

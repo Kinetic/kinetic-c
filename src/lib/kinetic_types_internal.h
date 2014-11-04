@@ -95,8 +95,12 @@ struct _KineticConnection {
     bool            threadCreated;  // thread creation status
 };
 #define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
-    .connected = false, .socket = -1, \
-    .operations = KINETIC_LIST_INITIALIZER, .pdus = KINETIC_LIST_INITIALIZER}; }
+        .connected = false, \
+        .socket = -1, \
+        .operations = KINETIC_LIST_INITIALIZER, \
+        .pdus = KINETIC_LIST_INITIALIZER, \
+    }; \
+}
 
 
 // Kinetic Message HMAC

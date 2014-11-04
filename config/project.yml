@@ -95,7 +95,7 @@
       # - -Wincompatible-pointer-types
       # - -Werror=incompatible-pointer-types
       # - -Wcast-align
-      - -D_POSIX_C_SOURCE=1
+      - -D_POSIX_C_SOURCE=199309L
       - -D_C99_SOURCE=1
       - ${1}
   :test_compiler:
@@ -116,7 +116,7 @@
       # - -Werror=incompatible-pointer-types
       # - -Wincompatible-pointer-types
       # - -Wcast-align
-      - -D_POSIX_C_SOURCE=1
+      - -D_POSIX_C_SOURCE=199309L
       - -D_C99_SOURCE=1
       - -Wno-nonnull
       - -Wno-address
