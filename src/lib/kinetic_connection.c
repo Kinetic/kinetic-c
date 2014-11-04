@@ -106,7 +106,7 @@ static void* KineticConnection_Worker(void* thread_arg)
                         size_t valueLength = KineticPDU_GetValueLength(response);
                         if (valueLength > 0) {
                             status = KineticPDU_ReceiveValue(op->connection->socket,
-                                &op->destEntry->value, valueLength);
+                                &op->entry->value, valueLength);
                         }
 
                         // Call operation-specific callback, if configured
@@ -222,7 +222,7 @@ KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
     // Shutdown the worker thread
     KineticStatus status = KINETIC_STATUS_SUCCESS;
     connection->thread.abortRequested = true;
-    LOG0("\nSent abort request to worker thread!\n");
+    LOG2("\nSent abort request to worker thread!\n");
     int pthreadStatus = pthread_join(connection->threadID, NULL);
     if (pthreadStatus != 0) {
         char errMsg[256];

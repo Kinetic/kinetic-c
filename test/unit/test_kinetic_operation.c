@@ -131,7 +131,7 @@ void test_KineticOperation_SendRequest_should_send_PDU_with_value_payload(void)
     KineticEntry entry = {.value = valueBuffer};
     KINETIC_OPERATION_INIT(&Operation, &Connection);
 
-    Operation.destEntry = &entry;
+    Operation.entry = &entry;
     Operation.request = &Request;
     Operation.entryEnabled = true;
     Operation.valueEnabled = true;
@@ -161,7 +161,7 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     KineticEntry entry = {
         .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
     };
-    Operation.destEntry = &entry;
+    Operation.entry = &entry;
     Operation.entryEnabled = true;
     Operation.valueEnabled = true;
     Operation.sendValue = true;
@@ -186,7 +186,7 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     KineticEntry entry = {
         .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
     };
-    Operation.destEntry = &entry;
+    Operation.entry = &entry;
     Operation.request = &Request;
     Operation.entryEnabled = true;
     Operation.valueEnabled = true;
@@ -215,7 +215,7 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
         .value = ByteBuffer_Create(valueData, sizeof(valueData), 0)
     };
     ByteBuffer_AppendCString(&entry.value, "Some arbitrary value");
-    Operation.destEntry = &entry;
+    Operation.entry = &entry;
     Operation.request = &Request;
     Operation.entryEnabled = true;
     Operation.valueEnabled = true;
@@ -490,8 +490,8 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
         Request.protoData.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_ByteArray(value, Operation.destEntry->value.array);
-    TEST_ASSERT_EQUAL(0, Operation.destEntry->value.bytesUsed);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry->value.array);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
     TEST_ASSERT_NULL(Operation.response);
 }
 

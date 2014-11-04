@@ -503,7 +503,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     };
     uint8_t valueData[100];
     KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
-    op.destEntry = &entry;
+    op.entry = &entry;
 
     // Setup mock expectations for worker thread
     KineticSocket_DataBytesAvailable_IgnoreAndReturn(0);

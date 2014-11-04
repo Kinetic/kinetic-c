@@ -59,7 +59,7 @@ struct kinetic_thread_arg {
 
 void setUp(void)
 {
-    KineticClient_Init(NULL, 0);
+    KineticClient_Init("stdout", 0);
 }
 
 void tearDown(void)
@@ -197,13 +197,8 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         kt_arg = malloc(sizeof(struct kinetic_thread_arg) * NUM_COPIES);
         TEST_ASSERT_NOT_NULL_MESSAGE(kt_arg, "kinetic_thread_arg malloc failed");
 
+        // Establish all of the connection first, so their session can all get initialized first
         for (int i = 0; i < NUM_COPIES; i++) {
-
-            printf("  *** Overlapped PUT operations (writing copy %d of %d)"
-                   " on IP (iteration %d of %d):%s\n",
-                   i + 1, NUM_COPIES, iteration + 1,
-                   MAX_ITERATIONS, sessionConfig.host);
-
             // Establish connection
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
@@ -232,6 +227,15 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                 .algorithm = KINETIC_ALGORITHM_SHA1,
                 .value = valBuf,
             };
+        }
+        sleep(2); // Give a generous chunk of time for session initialized by the target device
+
+        // Write all of the copies simultaneously (overlapped)
+        for (int i = 0; i < NUM_COPIES; i++) {
+            printf("  *** Overlapped PUT operations (writing copy %d of %d)"
+                   " on IP (iteration %d of %d):%s\n",
+                   i + 1, NUM_COPIES, iteration + 1,
+                   MAX_ITERATIONS, sessionConfig.host);
 
             // Spawn the thread
             kt_arg[i].sessionHandle = kinetic_client[i];
@@ -279,14 +283,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
     printf("Min write bandwidth:      %.2f (MB/sec)\n", minBandwidth);
     printf("Max write bandwidth:      %.2f (MB/sec)\n", maxBandwidth);
     printf("Mean write bandwidth:     %.2f (MB/sec)\n", meanBandwidth);
-    // printf("Mean aggregate bandwidth: %.2f (MB/sec)\n", meanAggregateBandwidth);
+    printf("Mean aggregate bandwidth: %.2f (MB/sec)\n", meanAggregateBandwidth);
     printf("\n");
     fflush(stdout);
-
-    TEST_IGNORE_MESSAGE("TODO: Need to fix aggregate PUT bandwidth calculation!");
-}
-
-void test_KineticClient_GetKeyRange_needs_to_work(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Need to fix crash in GETKEYRANGE!");
 }

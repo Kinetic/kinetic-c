@@ -45,9 +45,9 @@ static ByteArray HmacKey;
 static const char* StartKeyData[KINETIC_DEFAULT_KEY_LEN];
 static const char* EndKeyData[KINETIC_DEFAULT_KEY_LEN];
 static ByteBuffer StartKey, EndKey;
-static const int NumKeysInRange = 4;
-static uint8_t KeyRangeData[NumKeysInRange][KINETIC_MAX_KEY_LEN];
-static ByteBuffer Keys[NumKeysInRange];
+#define MAX_KEYS_RETRIEVED (4)
+static uint8_t KeyRangeData[MAX_KEYS_RETRIEVED][KINETIC_MAX_KEY_LEN];
+static ByteBuffer Keys[MAX_KEYS_RETRIEVED];
 static KineticSessionHandle DummyHandle = 1;
 static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
 static KineticPDU Request, Response;
@@ -65,7 +65,7 @@ void setUp(void)
     EndKey = ByteBuffer_Create(EndKeyData, sizeof(EndKeyData), sizeof(EndKeyData));
 
     // Initialize buffers to hold returned keys in requested range
-    for (int i = 0; i < NumKeysInRange; i++) {
+    for (int i = 0; i < MAX_KEYS_RETRIEVED; i++) {
         Keys[i] = ByteBuffer_Create(&KeyRangeData[i], sizeof(KeyRangeData[i]), sizeof(KeyRangeData[i]));
         char keyBuf[64];
         snprintf(keyBuf, sizeof(keyBuf), "key_range_00_%02d", i);
@@ -144,15 +144,9 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
         .endKey = EndKey,
         .startKeyInclusive = true,
         .endKeyInclusive = true,
-        .maxReturned = NumKeysInRange,
+        .maxReturned = MAX_KEYS_RETRIEVED,
         .reverse = false,
     };
-
-    ProtobufCBinaryData protoKeysInRange[NumKeysInRange];
-    for (int i = 0; i < NumKeysInRange; i++) {
-        protoKeysInRange[i] = (ProtobufCBinaryData) {
-            .data = Keys[i].array.data, .len = Keys[i].bytesUsed};
-    }
 
     KineticOperation operation = {
         .connection = &Connection,
@@ -162,7 +156,7 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
 
     ByteBufferArray keyArray = {
         .buffers = &Keys[0],
-        .count = NumKeysInRange
+        .count = MAX_KEYS_RETRIEVED
     };
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);

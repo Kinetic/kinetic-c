@@ -99,20 +99,6 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
         .value = valueBuffer,
     };
 
-    KineticProto_Command_KeyValue keyValue = KINETIC_PROTO_COMMAND_KEY_VALUE__INIT;
-    keyValue.key = (ProtobufCBinaryData) {
-        .data = (uint8_t*)keyData,
-         .len = 3,
-    };
-    keyValue.has_key = true;
-
-    uint8_t respFakeVer[] = {12, 13, 14, 15, 16, 17};
-    keyValue.dbVersion = (ProtobufCBinaryData) {
-        .data = respFakeVer,
-         .len = sizeof(respFakeVer),
-    };
-    keyValue.has_dbVersion = true;
-
     KineticOperation operation = {
         .connection = &Connection,
         .request = &Request,
@@ -164,14 +150,6 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
         .value = valueBuffer,
     };
 
-    KineticProto_Command_KeyValue keyValue = KINETIC_PROTO_COMMAND_KEY_VALUE__INIT;
-    keyValue.key = (ProtobufCBinaryData){.data = (uint8_t*)keyData, .len = 3};
-    keyValue.has_key = true;
-
-    uint8_t respFakeVer[] = {12, 13, 14, 15, 16, 17};
-    keyValue.dbVersion = (ProtobufCBinaryData){.data = respFakeVer, .len = sizeof(respFakeVer)};
-    keyValue.has_dbVersion = true;
-
     KineticOperation operation = {
         .connection = &Connection,
         .request = &Request,
@@ -218,14 +196,6 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
         .dbVersion = versionBuffer,
         .metadataOnly = true,
     };
-
-    KineticProto_Command_KeyValue keyValue = KINETIC_PROTO_COMMAND_KEY_VALUE__INIT;
-    keyValue.key = (ProtobufCBinaryData){.data = (uint8_t*)keyData, .len = 3};
-    keyValue.has_key = true;
-
-    uint8_t respFakeVer[] = {12, 13, 14, 15, 16, 17};
-    keyValue.dbVersion = (ProtobufCBinaryData){.data = respFakeVer, .len = sizeof(respFakeVer)};
-    keyValue.has_dbVersion = true;
 
     KineticOperation operation = {
         .connection = &Connection,

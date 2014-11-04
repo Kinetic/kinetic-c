@@ -66,8 +66,8 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
     request->header.protobufLength = KineticProto_Message__get_packed_size(request->proto);
-    if (operation->destEntry != NULL && operation->sendValue) {
-        request->header.valueLength = operation->destEntry->value.bytesUsed;
+    if (operation->entry != NULL && operation->sendValue) {
+        request->header.valueLength = operation->entry->value.bytesUsed;
     }
     else
     {
@@ -99,8 +99,8 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 
     // Send the value/payload, if specified
     if (operation->valueEnabled && operation->sendValue) {
-        LOGF1("Sending PDU Value Payload (%zu bytes)", operation->destEntry->value.bytesUsed);
-        status = KineticSocket_Write(request->connection->socket, &operation->destEntry->value);
+        LOGF1("Sending PDU Value Payload (%zu bytes)", operation->entry->value.bytesUsed);
+        status = KineticSocket_Write(request->connection->socket, &operation->entry->value);
         if (status != KINETIC_STATUS_SUCCESS) {
             LOG0("Failed to send PDU value payload!");
             return status;
@@ -248,7 +248,7 @@ KineticStatus KineticOperation_PutCallback(KineticOperation* operation)
     assert(operation->entryEnabled);
 
     // Propagate newVersion to dbVersion in metadata, if newVersion specified
-    KineticEntry* entry = operation->destEntry;
+    KineticEntry* entry = operation->entry;
     if (entry->newVersion.array.data != NULL && entry->newVersion.array.len > 0) {
         // If both buffers supplied, copy newVersion into dbVersion, and clear newVersion
         if (entry->dbVersion.array.data != NULL && entry->dbVersion.array.len > 0) {
@@ -275,12 +275,12 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
 
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT;
     operation->request->protoData.message.command.header->has_messageType = true;
-    operation->destEntry = entry;
+    operation->entry = entry;
 
-    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, operation->destEntry);
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, operation->entry);
 
     operation->entryEnabled = true;
-    operation->valueEnabled = !operation->destEntry->metadataOnly;
+    operation->valueEnabled = !operation->entry->metadataOnly;
     operation->sendValue = true;
     operation->callback = &KineticOperation_PutCallback;
 }
@@ -296,12 +296,12 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
     // Update the entry upon success
     KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation->response);
     if (keyValue != NULL) {
-        if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, operation->destEntry)) {
+        if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, operation->entry)) {
             return KINETIC_STATUS_BUFFER_OVERRUN;
         }
     }
-    // if (operation->destEntry != NULL) {
-        // operation->destEntry->value.bytesUsed = operation->destEntry->value.bytesUsed;
+    // if (operation->entry != NULL) {
+        // operation->entry->value.bytesUsed = operation->entry->value.bytesUsed;
     // }
     return KINETIC_STATUS_SUCCESS;
 }
@@ -314,12 +314,12 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
 
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET;
     operation->request->protoData.message.command.header->has_messageType = true;
-    operation->destEntry = entry;
+    operation->entry = entry;
 
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, entry);
 
-    if (operation->destEntry->value.array.data != NULL) {
-        ByteBuffer_Reset(&operation->destEntry->value);
+    if (operation->entry->value.array.data != NULL) {
+        ByteBuffer_Reset(&operation->entry->value);
     }
 
     operation->entryEnabled = true;
@@ -346,12 +346,12 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
 
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE;
     operation->request->protoData.message.command.header->has_messageType = true;
-    operation->destEntry = entry;
+    operation->entry = entry;
 
-    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, operation->destEntry);
+    KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, operation->entry);
 
-    if (operation->destEntry->value.array.data != NULL) {
-        ByteBuffer_Reset(&operation->destEntry->value);
+    if (operation->entry->value.array.data != NULL) {
+        ByteBuffer_Reset(&operation->entry->value);
     }
 
     operation->entryEnabled = true;

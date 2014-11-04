@@ -267,8 +267,7 @@ struct _KineticOperation {
     bool valueEnabled;
     bool sendValue;
     bool receiveComplete;
-    // KineticEntry entry;
-    KineticEntry* destEntry;
+    KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
