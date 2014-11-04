@@ -78,7 +78,6 @@ void setUp(void)
     TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
     ValueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData), 0);
     ByteBuffer_AppendArray(&ValueBuffer, TestValue);
-    ByteBuffer_AppendCString(&Fixture.keyToDelete, strKey);
 
     // Setup to write some test data
     KineticEntry putEntry = {
@@ -128,8 +127,6 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
 
     KineticStatus status = KineticClient_Get(Fixture.handle, &getEntry, NULL);
 
-    ByteBuffer_AppendArray(&Fixture.keyToDelete, KeyBuffer.array);
-
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);
     TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
@@ -159,8 +156,6 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
     };
 
     KineticStatus status = KineticClient_Get(Fixture.handle, &getEntry, NULL);
-
-    ByteBuffer_AppendArray(&Fixture.keyToDelete, KeyBuffer.array);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);

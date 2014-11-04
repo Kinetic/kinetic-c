@@ -74,7 +74,7 @@ void tearDown(void)
 
 void test_Need_to_test_overlapped_asynchronous_PUT_operations(void)
 {
-    TEST_IGNORE_MESSAGE("TODO: test/validate overlapped aync I/O!");
+    TEST_IGNORE_MESSAGE("TODO: test/validate overlapped async I/O!");
 }
 
 #if 0

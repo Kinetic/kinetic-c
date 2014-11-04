@@ -97,6 +97,7 @@ void test_Delete_old_object_if_exists(void)
     };
     status = KineticClient_Get(Fixture.handle, &Entry, NULL);
     if (status == KINETIC_STATUS_SUCCESS) {
+        Entry.force = true;
         status = KineticClient_Delete(Fixture.handle, &Entry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     }
@@ -113,6 +114,7 @@ void test_Delete_old_object_if_exists(void)
     };
     status = KineticClient_Get(Fixture.handle, &Entry, NULL);
     if (status == KINETIC_STATUS_SUCCESS) {
+        Entry.force = true;
         status = KineticClient_Delete(Fixture.handle, &Entry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     }
@@ -307,11 +309,12 @@ void test_Put_should_be_able_to_store_max_sized_entry(void)
     ByteBuffer_Reset(&KeyBuffer);
     ByteBuffer_Append(&KeyBuffer, keyBytes, sizeof(keyBytes));
     ByteBuffer_Reset(&ValueBuffer);
-    ByteBuffer_AppendDummyData(&ValueBuffer, 1024 * 128);
+    ByteBuffer_AppendDummyData(&ValueBuffer, KINETIC_OBJ_SIZE);
 
     Entry = (KineticEntry) {
         .key = KeyBuffer,
         .value = ValueBuffer,
+        .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         .force = true,
@@ -357,13 +360,14 @@ void test_Put_should_use_asynchronous_mode_if_closure_specified(void)
     ByteBuffer_Reset(&KeyBuffer);
     ByteBuffer_Append(&KeyBuffer, keyBytes, sizeof(keyBytes));
     ByteBuffer_Reset(&ValueBuffer);
-    ByteBuffer_AppendDummyData(&ValueBuffer, 1024 * 128);
+    ByteBuffer_AppendDummyData(&ValueBuffer, KINETIC_OBJ_SIZE);
 
     Entry = (KineticEntry) {
         .key = KeyBuffer,
         .value = ValueBuffer,
+        .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
+        // .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         .force = true,
     };
 

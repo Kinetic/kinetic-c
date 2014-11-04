@@ -62,4 +62,4 @@ void test_NoOp_should_succeed(void)
 /*******************************************************************************
 * ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
 *******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)
+SYSTEM_TEST_SUITE_TEARDOWN(&Fixture);

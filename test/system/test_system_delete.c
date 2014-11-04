@@ -81,8 +81,6 @@ void setUp(void)
     Value = ByteArray_Create(ValueData, sizeof(ValueData));
     ValueBuffer = ByteBuffer_CreateWithArray(Value);
     ByteBuffer_AppendCString(&ValueBuffer, "lorem ipsum... blah blah blah... etc.");
-
-    ByteBuffer_Append(&Fixture.keyToDelete, Key.data, KeyBuffer.bytesUsed);
 }
 
 void tearDown(void)

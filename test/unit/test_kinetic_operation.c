@@ -133,7 +133,6 @@ void test_KineticOperation_SendRequest_should_send_PDU_with_value_payload(void)
 
     Operation.entry = &entry;
     Operation.request = &Request;
-    Operation.entryEnabled = true;
     Operation.valueEnabled = true;
     Operation.sendValue = true;
 
@@ -162,7 +161,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
         .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
     };
     Operation.entry = &entry;
-    Operation.entryEnabled = true;
     Operation.valueEnabled = true;
     Operation.sendValue = true;
 
@@ -188,7 +186,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     };
     Operation.entry = &entry;
     Operation.request = &Request;
-    Operation.entryEnabled = true;
     Operation.valueEnabled = true;
     Operation.sendValue = true;
 
@@ -217,7 +214,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     ByteBuffer_AppendCString(&entry.value, "Some arbitrary value");
     Operation.entry = &entry;
     Operation.request = &Request;
-    Operation.entryEnabled = true;
     Operation.valueEnabled = true;
     Operation.sendValue = true;
 
@@ -484,7 +480,6 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     KineticOperation_BuildPut(&Operation, &entry);
 
     // Ensure proper message type
-    TEST_ASSERT_TRUE(Operation.entryEnabled);
     TEST_ASSERT_TRUE(Operation.valueEnabled);
     TEST_ASSERT_TRUE(Operation.sendValue);
     TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
@@ -495,7 +490,6 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     TEST_ASSERT_NULL(Operation.response);
 }
 
-#if 0
 uint8_t ValueData[KINETIC_OBJ_SIZE];
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
@@ -541,16 +535,16 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_TRUE(Operation.entryEnabled);
     TEST_ASSERT_TRUE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
-    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry.value.array.data);
-    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry.value.array.len);
-    TEST_ASSERT_EQUAL(0, Operation.entry.value.bytesUsed);
+    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
     TEST_ASSERT_NULL(Operation.response);
-    TEST_ASSERT_FALSE(Operation.entry.metadataOnly);
+    TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
 }
 
+#if 1
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
 {
     LOG_LOCATION;
@@ -595,14 +589,13 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     // // See above
     // hmac: "..."
 
-    TEST_ASSERT_TRUE(Operation.entryEnabled);
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
-    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry.value.array.data);
-    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry.value.array.len);
-    TEST_ASSERT_EQUAL(0, Operation.entry.value.bytesUsed);
+    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
     TEST_ASSERT_NULL(Operation.response);
-    TEST_ASSERT_TRUE(Operation.entry.metadataOnly);
+    TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
 }
 
 
@@ -645,12 +638,11 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     // }
     // hmac: "..."
 
-    TEST_ASSERT_TRUE(Operation.entryEnabled);
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
-    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry.value.array.data);
-    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry.value.array.len);
-    TEST_ASSERT_EQUAL(0, Operation.entry.value.bytesUsed);
+    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
     TEST_ASSERT_NULL(Operation.response);
 }
 
@@ -689,44 +681,69 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
 
     KineticOperation_BuildGetKeyRange(&Operation, &range, &keys);
 
-    // The `DELETE` operation removes the entry for a given key. It respects the
-    // same locking behavior around `dbVersion` and `force` as described in the previous sections.
-    // The following request will remove a key value pair to the store.
+    // Get Key Range
+    // 
+    // The GETKEYRANGE operation takes a start and end key and returns all keys between those in the sorted set of keys.
+    // This operation can be configured so that the range is either inclusive or exclusive of the start and end keys,
+    // the range can be reversed, and the requester can cap the number of keys returned.
+    // 
+    // Note that this operation does not fetch associated values, or other metadata. It only returns the keys themselves,
+    // which can be used for other operations.
+    // 
+    // Request Message
     //
-    // ```
     // command {
-    //   // See top level cross cutting concerns for header details
     //   header {
+    //     // See above for descriptions of these fields
     //     clusterVersion: ...
     //     identity: ...
     //     connectionID: ...
     //     sequence: ...
-    //     // messageType should be DELETE
-    //     messageType: DELETE
+    //
+    //     // messageType should be GETKEYRANGE
+    //     messageType: GETKEYRANGE
+    //   }
     TEST_ASSERT_TRUE(Request.command->header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE, Request.command->header->messageType);
-    //   }
     //   body {
-    //     keyValue {
-    //       key: "..."
-    //       // See write operation cross cutting concerns
-    //       synchronization: ...
+    //     // The range message must be populated
+    //     range {
+    //       // Required bytes, the beginning of the requested range
+    //       startKey: "..."
+    //
+    //       // Optional bool, defaults to false
+    //       // True indicates that the start key should be included in the returned 
+    //       // range
+    //       startKeyInclusive: ...
+    //
+    //       // Required bytes, the end of the requested range
+    //       endKey: "..."
+    //
+    //       // Optional bool, defaults to false
+    //       // True indicates that the end key should be included in the returned 
+    //       // range
+    //       endKeyInclusive: ...
+    //
+    //       // Required int32, must be greater than 0
+    //       // The maximum number of keys returned, in sorted order
+    //       maxReturned: ...
+    //
+    //       // Optional bool, defaults to false
+    //       // If true, the key range will be returned in reverse order, starting at
+    //       // endKey and moving back to startKey.  For instance
+    //       // if the search is startKey="j", endKey="k", maxReturned=2,
+    //       // reverse=true and the keys "k0", "k1", "k2" exist
+    //       // the system will return "k2" and "k1" in that order.
+    //       reverse: ....
     //     }
     //   }
     // }
-    // hmac: "..."
 
-    TEST_ASSERT_FALSE(Operation.entryEnabled);
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
-    TEST_ASSERT_ByteBuffer_EMPTY(Operation.entry.value);
+    TEST_ASSERT_NULL(Operation.entry);
     TEST_ASSERT_EQUAL_PTR(&Request, Operation.request);
     TEST_ASSERT_NULL(Operation.response);
-    TEST_ASSERT_ByteBuffer_EMPTY(Operation.entry.key);
-    TEST_ASSERT_ByteBuffer_EMPTY(Operation.entry.tag);
-    TEST_ASSERT_ByteBuffer_EMPTY(Operation.entry.dbVersion);
-    TEST_ASSERT_ByteBuffer_EMPTY(Operation.entry.newVersion);
-    TEST_ASSERT_ByteBuffer_EMPTY(Operation.entry.value);
     TEST_ASSERT_EQUAL_PTR(&Request.protoData.message, Request.proto);
     TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.command, Request.command);
 }

@@ -232,8 +232,6 @@ void KineticOperation_BuildNoop(KineticOperation* const operation)
     KineticConnection_IncrementSequence(operation->connection);
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
     operation->request->protoData.message.command.header->has_messageType = true;
-
-    operation->entryEnabled = false;
     operation->valueEnabled = false;
     operation->sendValue = true;
     operation->callback = &KineticOperation_NoopCallback;
@@ -245,7 +243,7 @@ KineticStatus KineticOperation_PutCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("PUT callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->entryEnabled);
+    assert(operation->entry != NULL);
 
     // Propagate newVersion to dbVersion in metadata, if newVersion specified
     KineticEntry* entry = operation->entry;
@@ -279,7 +277,6 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
 
     KineticMessage_ConfigureKeyValue(&operation->request->protoData.message, operation->entry);
 
-    operation->entryEnabled = true;
     operation->valueEnabled = !operation->entry->metadataOnly;
     operation->sendValue = true;
     operation->callback = &KineticOperation_PutCallback;
@@ -291,7 +288,7 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("GET callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->entryEnabled);
+    assert(operation->entry != NULL);
 
     // Update the entry upon success
     KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation->response);
@@ -322,7 +319,6 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
         ByteBuffer_Reset(&operation->entry->value);
     }
 
-    operation->entryEnabled = true;
     operation->valueEnabled = !entry->metadataOnly;
     operation->sendValue = false;
     operation->callback = &KineticOperation_GetCallback;
@@ -334,7 +330,7 @@ KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("DELETE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->entryEnabled);
+    assert(operation->entry != NULL);
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -354,7 +350,6 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
         ByteBuffer_Reset(&operation->entry->value);
     }
 
-    operation->entryEnabled = true;
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_DeleteCallback;
@@ -394,7 +389,6 @@ void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
 
     KineticMessage_ConfigureKeyRange(&operation->request->protoData.message, range);
 
-    operation->entryEnabled = false;
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->buffers = buffers;

@@ -44,7 +44,6 @@ void SystemTestSetup(SystemTestFixture* fixture)
                 .nonBlocking = false,
                 .hmacKey = hmacArray,
             },
-            .keyToDelete = BYTE_BUFFER_NONE,
             .connected = fixture->connected,
             .testIgnored = false,
         };
@@ -52,7 +51,6 @@ void SystemTestSetup(SystemTestFixture* fixture)
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
-        fixture->keyToDelete = ByteBuffer_Create(fixture->keyData, sizeof(fixture->keyData), 0);
     }
     else {
         fixture->testIgnored = false;

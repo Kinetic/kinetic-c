@@ -92,7 +92,6 @@ struct _KineticConnection {
     KineticSession  session;        // session configuration
     KineticThread   thread;         // worker thread instance struct
     pthread_t       threadID;       // worker pthread
-    bool            threadCreated;  // thread creation status
 };
 #define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
         .connected = false, \
@@ -216,9 +215,6 @@ struct _KineticPDU {
     bool protobufDynamicallyExtracted;
     KineticProto_Command* command;
 
-    // // Object meta-data to be used/populated if provided and pertinent to the operation
-    // KineticEntry entry;
-
     // Embedded HMAC instance
     KineticHMAC hmac;
 
@@ -230,12 +226,6 @@ struct _KineticPDU {
 
     // Kinetic operation associated with this PDU, if any
     KineticOperation* operation;
-
-    // // PDU associated with this one (for associating request and response PDUs for operations)
-    // KineticPDU* associatedPDU;
-
-    // // Operation complete closure
-    // KineticCompletionClosure closure;
 };
 
 #define KINETIC_PDU_INIT(_pdu, _con) { \
@@ -267,7 +257,6 @@ struct _KineticOperation {
     KineticConnection* connection;
     KineticPDU* request;
     KineticPDU* response;
-    bool entryEnabled;
     bool valueEnabled;
     bool sendValue;
     bool receiveComplete;

@@ -123,44 +123,6 @@ void* kinetic_put(void* kinetic_arg)
         arg->bandwidth);
     fflush(stdout);
 
-    // Configure GetKeyRange request
-    const int maxKeys = 5;
-    char startKey[KINETIC_DEFAULT_KEY_LEN];
-    ByteBuffer startKeyBuffer = ByteBuffer_Create(startKey, sizeof(startKey), 0);
-    ByteBuffer_AppendCString(&startKeyBuffer, arg->keyPrefix);
-    ByteBuffer_AppendCString(&startKeyBuffer, "00");
-    char endKey[KINETIC_DEFAULT_KEY_LEN];
-    ByteBuffer endKeyBuffer = ByteBuffer_Create(endKey, sizeof(endKey), 0);
-    ByteBuffer_AppendCString(&endKeyBuffer, arg->keyPrefix);
-    ByteBuffer_AppendCString(&endKeyBuffer, "03");
-    KineticKeyRange keyRange = {
-        .startKey = startKeyBuffer,
-        .endKey = endKeyBuffer,
-        .startKeyInclusive = true,
-        .endKeyInclusive = true,
-        .maxReturned = maxKeys,
-        .reverse = false,
-    };
-
-    uint8_t keysData[maxKeys][KINETIC_MAX_KEY_LEN];
-    ByteBuffer keyBuffers[maxKeys];
-    for (int i = 0; i < maxKeys; i++) {
-        keyBuffers[i] = ByteBuffer_Create(&keysData[i], sizeof(keysData[i]), 0);
-    }
-    ByteBufferArray keys = {.buffers = &keyBuffers[0], .count = maxKeys};
-
-    KineticStatus status = KineticClient_GetKeyRange(arg->sessionHandle, &keyRange, &keys, NULL);
-    LOGF0("GetKeyRange completed w/ status: %d", status);
-    int numKeys = 0;
-    for (int i = 0; i < keys.count; i++) {
-        if (keys.buffers[i].bytesUsed > 0) {
-            KineticLogger_LogByteBuffer(0, "key", keys.buffers[i]);
-            numKeys++;
-        }
-    }
-    TEST_ASSERT_EQUAL(4, numKeys);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
     return (void*)0;
 }
 
@@ -228,7 +190,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                 .value = valBuf,
             };
         }
-        sleep(2); // Give a generous chunk of time for session initialized by the target device
+        sleep(2); // Give a generous chunk of time for session to be initialized by the target device
 
         // Write all of the copies simultaneously (overlapped)
         for (int i = 0; i < NUM_COPIES; i++) {

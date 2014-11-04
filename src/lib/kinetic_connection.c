@@ -198,13 +198,9 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
     }
 
     // Kick off the worker thread
-    connection->threadCreated = false;
     connection->thread.connection = connection;
     int pthreadStatus = pthread_create(&connection->threadID, NULL, KineticConnection_Worker, &connection->thread);
-    if (pthreadStatus == 0) {
-        connection->threadCreated = true;
-    }
-    else {
+    if (pthreadStatus != 0) {
         char errMsg[256];
         Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
         LOGF0("Failed creating worker thread w/error: %s", errMsg);

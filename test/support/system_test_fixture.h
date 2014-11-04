@@ -34,8 +34,6 @@ typedef struct _SystemTestFixture {
     bool testIgnored;
     bool connected;
     int64_t expectedSequence;
-    uint8_t keyData[256];
-    ByteBuffer keyToDelete;
 } SystemTestFixture;
 
 void SystemTestSetup(SystemTestFixture* fixture);
