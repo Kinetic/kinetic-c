@@ -30,7 +30,6 @@
 
 #define KINETIC_LIST_LOCK(_list) { \
     /*LOG_LOCATION; LOGF3("Locking list! (list_addr=0x%llX)", (_list));*/ \
-    assert(!((_list)->locked)); \
     pthread_mutex_lock(&((_list)->mutex)); \
     ((_list)->locked) = true; \
 }

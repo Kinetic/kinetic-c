@@ -40,6 +40,7 @@
 #include <netdb.h>
 #include <signal.h>
 #include <unistd.h>
+#include <poll.h>
 #include "socket99/socket99.h"
 
 int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
@@ -145,6 +146,42 @@ void KineticSocket_Close(int socket)
                  " (fd=%d, errno=%d, desc='%s')",
                  socket, errno, strerror(errno));
         }
+    }
+}
+
+KineticWaitStatus KineticSocket_WaitUntilDataAvailable(int socket, int timeout)
+{
+    if (socket < 0) {return -1;}
+    struct pollfd fd = {
+        .fd = socket,
+        .events = POLLIN,
+        .revents = 0,
+    };
+
+    int res = poll(&fd, 1, timeout);
+
+    if (res > 0) {
+        //if (fd.revents & POLLHUP) // hung up
+        if (fd.revents & POLLIN)
+        {
+            return KINETIC_WAIT_STATUS_DATA_AVAILABLE;
+        }
+        else
+        {
+            return KINETIC_WAIT_STATUS_FATAL_ERROR;
+        }
+    }
+    else if (res == 0)
+    {
+        return KINETIC_WAIT_STATUS_TIMED_OUT;
+    }
+    else if ((errno & (EAGAIN | EINTR)) != 0)
+    {
+        return KINETIC_WAIT_STATUS_RETRYABLE_ERROR;
+    }
+    else
+    {
+        return KINETIC_WAIT_STATUS_FATAL_ERROR;
     }
 }
 
