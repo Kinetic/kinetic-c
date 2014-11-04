@@ -110,7 +110,7 @@ KineticStatus ExecuteOperation(
     }
 
     else if (strcmp("put", operation) == 0) {
-        status = KineticClient_Put(sessionHandle, entry);
+        status = KineticClient_Put(sessionHandle, entry, NULL);
         if (status == KINETIC_STATUS_SUCCESS) {
             printf("\nPut operation completed successfully."
                    " Your data has been stored!\n\n");
@@ -118,7 +118,7 @@ KineticStatus ExecuteOperation(
     }
 
     else if (strcmp("get", operation) == 0) {
-        status = KineticClient_Get(sessionHandle, entry);
+        status = KineticClient_Get(sessionHandle, entry, NULL);
         if (status == 0) {
             printf("\nGet executed successfully."
                    "The entry has been retrieved!\n\n");
@@ -126,7 +126,7 @@ KineticStatus ExecuteOperation(
     }
 
     else if (strcmp("delete", operation) == 0) {
-        status = KineticClient_Delete(sessionHandle, entry);
+        status = KineticClient_Delete(sessionHandle, entry, NULL);
         if (status == 0) {
             printf("\nDelete executed successfully."
                    " The entry has been destroyed!\n\n");

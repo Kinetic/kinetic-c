@@ -60,6 +60,9 @@
 #ifndef LOG_FILE_NAME_MAX
 #define LOG_FILE_NAME_MAX (HOST_NAME_MAX)
 #endif
+
+#define BOOL_TO_STRING(_bool) (_bool) ? "true" : "false"
+
 /**
  * @brief Enumeration of encryption/checksum key algorithms
  */

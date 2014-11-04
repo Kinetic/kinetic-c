@@ -30,13 +30,9 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <stdio.h>
-#ifdef __MACH__ // Since time.h on OSX does not supply clock_gettime()
-#include <mach/clock.h>
-#include <mach/mach.h>
-#endif
 
-#define MAX_ITERATIONS (1)
-#define NUM_COPIES (10)
+#define MAX_ITERATIONS (2)
+#define NUM_COPIES (3)
 #define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_MAX_THREADS (10)
 #define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
@@ -88,13 +84,6 @@ void* kinetic_put(void* kinetic_arg)
         entry->key.bytesUsed = strlen(arg->keyPrefix);
         ByteBuffer_AppendCString(&entry->key, keySuffix);
 
-        // // Move dbVersion back to newVersion, since successful PUTs do this
-        // // in order to sync with the actual entry on disk
-        // if (entry->newVersion.array.data == NULL) {
-        //     entry->newVersion = entry->dbVersion;
-        //     entry->dbVersion = BYTE_BUFFER_NONE;
-        // }
-
         // Prepare the next chunk of data to store
         ByteBuffer_Reset(&entry->value);
         ByteBuffer_AppendArray(
@@ -110,7 +99,6 @@ void* kinetic_put(void* kinetic_arg)
         KineticStatus status = KineticClient_Put(arg->sessionHandle, entry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         LOGF1("  *** KineticClient put to disk success, ip:%s", arg->ip);
-        // sleep(1);
 
         objIndex++;
     }
@@ -135,43 +123,43 @@ void* kinetic_put(void* kinetic_arg)
         arg->bandwidth);
     fflush(stdout);
 
-    // // Configure GetKeyRange request
-    // const int maxKeys = 5;
-    // char startKey[KINETIC_DEFAULT_KEY_LEN];
-    // ByteBuffer startKeyBuffer = ByteBuffer_Create(startKey, sizeof(startKey), 0);
-    // ByteBuffer_AppendCString(&startKeyBuffer, arg->keyPrefix);
-    // ByteBuffer_AppendCString(&startKeyBuffer, "00");
-    // char endKey[KINETIC_DEFAULT_KEY_LEN];
-    // ByteBuffer endKeyBuffer = ByteBuffer_Create(endKey, sizeof(endKey), 0);
-    // ByteBuffer_AppendCString(&endKeyBuffer, arg->keyPrefix);
-    // ByteBuffer_AppendCString(&endKeyBuffer, "03");
-    // KineticKeyRange keyRange = {
-    //     .startKey = startKeyBuffer,
-    //     .endKey = endKeyBuffer,
-    //     .startKeyInclusive = true,
-    //     .endKeyInclusive = true,
-    //     .maxReturned = maxKeys,
-    //     .reverse = false,
-    // };
+    // Configure GetKeyRange request
+    const int maxKeys = 5;
+    char startKey[KINETIC_DEFAULT_KEY_LEN];
+    ByteBuffer startKeyBuffer = ByteBuffer_Create(startKey, sizeof(startKey), 0);
+    ByteBuffer_AppendCString(&startKeyBuffer, arg->keyPrefix);
+    ByteBuffer_AppendCString(&startKeyBuffer, "00");
+    char endKey[KINETIC_DEFAULT_KEY_LEN];
+    ByteBuffer endKeyBuffer = ByteBuffer_Create(endKey, sizeof(endKey), 0);
+    ByteBuffer_AppendCString(&endKeyBuffer, arg->keyPrefix);
+    ByteBuffer_AppendCString(&endKeyBuffer, "03");
+    KineticKeyRange keyRange = {
+        .startKey = startKeyBuffer,
+        .endKey = endKeyBuffer,
+        .startKeyInclusive = true,
+        .endKeyInclusive = true,
+        .maxReturned = maxKeys,
+        .reverse = false,
+    };
 
-    // uint8_t keysData[maxKeys][KINETIC_MAX_KEY_LEN];
-    // ByteBuffer keyBuffers[maxKeys];
-    // for (int i = 0; i < maxKeys; i++) {
-    //     keyBuffers[i] = ByteBuffer_Create(&keysData[i], sizeof(keysData[i]), 0);
-    // }
-    // ByteBufferArray keys = {.buffers = &keyBuffers[0], .count = maxKeys};
+    uint8_t keysData[maxKeys][KINETIC_MAX_KEY_LEN];
+    ByteBuffer keyBuffers[maxKeys];
+    for (int i = 0; i < maxKeys; i++) {
+        keyBuffers[i] = ByteBuffer_Create(&keysData[i], sizeof(keysData[i]), 0);
+    }
+    ByteBufferArray keys = {.buffers = &keyBuffers[0], .count = maxKeys};
 
-    // KineticStatus status = KineticClient_GetKeyRange(arg->sessionHandle, &keyRange, keys);
-    // LOGF0("GetKeyRange completed w/ status: %d", status);
-    // int numKeys = 0;
-    // for (int i = 0; i < keys.count; i++) {
-    //     if (keys.buffers[i].bytesUsed > 0) {
-    //         KineticLogger_LogByteBuffer(0, "key", keys.buffers[i]);
-    //         numKeys++;
-    //     }
-    // }
-    // TEST_ASSERT_EQUAL(4, numKeys);
-    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    KineticStatus status = KineticClient_GetKeyRange(arg->sessionHandle, &keyRange, &keys, NULL);
+    LOGF0("GetKeyRange completed w/ status: %d", status);
+    int numKeys = 0;
+    for (int i = 0; i < keys.count; i++) {
+        if (keys.buffers[i].bytesUsed > 0) {
+            KineticLogger_LogByteBuffer(0, "key", keys.buffers[i]);
+            numKeys++;
+        }
+    }
+    TEST_ASSERT_EQUAL(4, numKeys);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     return (void*)0;
 }
@@ -291,7 +279,14 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
     printf("Min write bandwidth:      %.2f (MB/sec)\n", minBandwidth);
     printf("Max write bandwidth:      %.2f (MB/sec)\n", maxBandwidth);
     printf("Mean write bandwidth:     %.2f (MB/sec)\n", meanBandwidth);
-    printf("Mean aggregate bandwidth: %.2f (MB/sec)\n", meanAggregateBandwidth);
+    // printf("Mean aggregate bandwidth: %.2f (MB/sec)\n", meanAggregateBandwidth);
     printf("\n");
     fflush(stdout);
+
+    TEST_IGNORE_MESSAGE("TODO: Need to fix aggregate PUT bandwidth calculation!");
+}
+
+void test_KineticClient_GetKeyRange_needs_to_work(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Need to fix crash in GETKEYRANGE!");
 }

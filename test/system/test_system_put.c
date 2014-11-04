@@ -126,7 +126,7 @@ void test_Put_should_create_new_object_on_device(void)
     LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = KeyBuffer,
-        // .newVersion = VersionBuffer,
+        .newVersion = VersionBuffer,
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
@@ -149,7 +149,7 @@ void test_Put_should_create_another_new_object_on_device(void)
     LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = OtherKeyBuffer,
-        // .newVersion = VersionBuffer,
+        .newVersion = VersionBuffer,
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
@@ -159,11 +159,11 @@ void test_Put_should_create_another_new_object_on_device(void)
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
-    // TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
-    // TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
-    // TEST_ASSERT_EQUAL_ByteBuffer(OtherKeyBuffer, Entry.key);
-    // TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
+    TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(OtherKeyBuffer, Entry.key);
+    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
@@ -176,8 +176,8 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
 
     Entry = (KineticEntry) {
         .key = KeyBuffer,
-        // .dbVersion = VersionBuffer,
-        // .newVersion = NewVersionBuffer,
+        .dbVersion = VersionBuffer,
+        .newVersion = NewVersionBuffer,
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
@@ -187,7 +187,7 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_ByteBuffer_EMPTY(Entry.newVersion);
-    // TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
 
@@ -202,7 +202,7 @@ void test_Put_should_update_object_data_on_device_and_with_FLUSH_sync_mode_enabl
 
     Entry = (KineticEntry) {
         .key = KeyBuffer,
-        // .dbVersion = NewVersionBuffer,
+        .dbVersion = NewVersionBuffer,
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
@@ -213,8 +213,8 @@ void test_Put_should_update_object_data_on_device_and_with_FLUSH_sync_mode_enabl
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
-    // TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
 
@@ -229,7 +229,7 @@ void test_Put_should_update_object_data_on_device_and_with_WRITETHROUGH_sync_mod
 
     Entry = (KineticEntry) {
         .key = KeyBuffer,
-        // .dbVersion = NewVersionBuffer,
+        .dbVersion = NewVersionBuffer,
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
@@ -240,8 +240,8 @@ void test_Put_should_update_object_data_on_device_and_with_WRITETHROUGH_sync_mod
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
-    // TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
 
@@ -256,7 +256,7 @@ void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled(v
 
     Entry = (KineticEntry) {
         .key = KeyBuffer,
-        // .dbVersion = VersionBuffer,
+        .dbVersion = VersionBuffer,
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
@@ -266,7 +266,7 @@ void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled(v
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
@@ -377,7 +377,7 @@ void test_Put_should_use_asynchronous_mode_if_closure_specified(void)
 
     const long maxWaitMillisecs = 500;
     long millisecsWaiting = 0;
-    struct timespec sleepDuration = {.tv_nsec = 100000};
+    struct timespec sleepDuration = {.tv_nsec = 1000000};
     while(!TestPutClientData.called) {
         TEST_ASSERT_TRUE_MESSAGE(millisecsWaiting < maxWaitMillisecs, "Timed out waiting to receive PUT async callback!");
         nanosleep(&sleepDuration, NULL);

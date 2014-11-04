@@ -48,8 +48,6 @@
 #define STATIC static
 #endif
 
-#define BOOL_TO_STRING(_bool) (_bool) ? "true" : "false"
-
 
 typedef struct _KineticPDU KineticPDU;
 typedef struct _KineticOperation KineticOperation;

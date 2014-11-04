@@ -86,8 +86,8 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
         .connection = &Connection,
         .request = &Request,
         .response = &Response,
-    }; 
-
+    };
+    
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildPut_Expect(&operation, &entry);

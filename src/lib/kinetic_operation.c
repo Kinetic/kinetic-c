@@ -66,7 +66,13 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
     request->header.protobufLength = KineticProto_Message__get_packed_size(request->proto);
-    request->header.valueLength = (operation->sendValue) ? operation->destEntry->value.bytesUsed : 0;
+    if (operation->destEntry != NULL && operation->sendValue) {
+        request->header.valueLength = operation->destEntry->value.bytesUsed;
+    }
+    else
+    {
+        request->header.valueLength = 0;
+    }
     KineticLogger_LogHeader(1, &request->header);
 
     // Create NBO copy of header for sending

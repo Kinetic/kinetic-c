@@ -30,10 +30,6 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <stdio.h>
-#ifdef __MACH__ // Since time.h on OSX does not supply clock_gettime()
-#include <mach/clock.h>
-#include <mach/mach.h>
-#endif
 
 #define MAX_ITERATIONS (1)
 #define NUM_COPIES (1)
