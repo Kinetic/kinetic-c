@@ -1,4 +1,4 @@
-[![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)](http://travis-ci.org/atomicobject/kinetic-c)
+[![Build Status](http://travis-ci.org/Seagate/kinetic-c.png?branch=master)](http://travis-ci.org/Seagate/kinetic-c)
 Kinetic C Client Library
 ========================
 The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
@@ -48,9 +48,12 @@ Getting Started
 API Documentation
 =================
 
-[Kinetic-C API Documentation](index.html) (generated with Doxygen)
-* [Kinetic-C API](kinetic__client_8h.html)
-* [Kinetic-C types](kinetic__types_8h.html)
+[Kinetic-C API Documentation](http://seagate.github.io/kinetic-c/) (generated with Doxygen)
+* [Kinetic-C API](http://seagate.github.io/kinetic-c/kinetic__client_8h.html)
+* [Kinetic-C types](http://seagate.github.io/kinetic-c/kinetic__types_8h.html)
+* [ByteArray API](http://seagate.github.io/kinetic-c/byte__array_8h.html)
+    * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c
+        * e.g. object keys, object value data, etc.
 
 Example Client/Test Utility
 ===========================
