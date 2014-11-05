@@ -26,6 +26,7 @@
 
 #ifndef SYSTEM_TEST_HOST
 #define SYSTEM_TEST_HOST "localhost"
+// #define SYSTEM_TEST_HOST "10.138.123.65"
 #endif
 
 typedef struct _SystemTestFixture {

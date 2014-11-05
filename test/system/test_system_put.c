@@ -123,7 +123,7 @@ void test_Delete_old_object_if_exists(void)
     }
 }
 
-
+#if 0
 void test_Put_should_create_new_object_on_device(void)
 {
     LOG_LOCATION;
@@ -326,7 +326,9 @@ void test_Put_should_be_able_to_store_max_sized_entry(void)
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
 }
+#endif
 
+#if 1
 typedef struct _TestPutClientDataStruct {
     bool called;
     int callbackCount;
@@ -380,16 +382,16 @@ void test_Put_should_use_asynchronous_mode_if_closure_specified(void)
     KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, &closure);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    const long maxWaitMillisecs = 500;
-    long millisecsWaiting = 0;
-    struct timespec sleepDuration = {.tv_nsec = 1000000};
+    const long maxWaitMicrosecs = 2000000;
+    long microsecsWaiting = 0;
+    struct timespec sleepDuration = {.tv_nsec = 500000};
     while(!TestPutClientData.called) {
-        TEST_ASSERT_TRUE_MESSAGE(millisecsWaiting < maxWaitMillisecs, "Timed out waiting to receive PUT async callback!");
+        TEST_ASSERT_TRUE_MESSAGE(microsecsWaiting < maxWaitMicrosecs, "Timed out waiting to receive PUT async callback!");
         nanosleep(&sleepDuration, NULL);
-        millisecsWaiting += (sleepDuration.tv_nsec / 1000000);
+        microsecsWaiting += (sleepDuration.tv_nsec / 1000);
     }
 
-    LOGF0("PUT Response Time = %d ms", millisecsWaiting);
+    LOGF0("PUT Response Time = %.1f ms", microsecsWaiting / 1000.0f);
 
     TEST_ASSERT_EQUAL(1, TestPutClientData.callbackCount);
     TEST_ASSERT_EQUAL(100, TestPutClientData.bytesWritten);
@@ -398,6 +400,7 @@ void test_Put_should_use_asynchronous_mode_if_closure_specified(void)
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
 }
+#endif
 
 /*******************************************************************************
 * ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
