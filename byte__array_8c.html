@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: byte_array.c File Reference</title>
+<title>kinetic-c: byte_array.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,9 +55,10 @@
 <div class="title">byte_array.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="src_2lib_2byte__array_8h_source.html">byte_array.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="byte__array_8h_source.html">byte_array.h</a>&quot;</code><br />
 <code>#include &lt;assert.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
 </div>
 <p><a href="byte__array_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -65,16 +66,16 @@
 Functions</h2></td></tr>
 <tr class="memitem:a1029bfd0bb667fc593fe3e0733310a3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a1029bfd0bb667fc593fe3e0733310a3e">ByteArray_Create</a> (void *data, size_t len)</td></tr>
 <tr class="separator:a1029bfd0bb667fc593fe3e0733310a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b940066a349be84c3ec4985c5e1f779"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a3b940066a349be84c3ec4985c5e1f779">ByteArray_CreateWithCString</a> (char *str)</td></tr>
-<tr class="separator:a3b940066a349be84c3ec4985c5e1f779"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad43c36dca8421ec3e2f48e55d8f9e413"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#ad43c36dca8421ec3e2f48e55d8f9e413">ByteArray_CreateWithCString</a> (const char *str)</td></tr>
+<tr class="separator:ad43c36dca8421ec3e2f48e55d8f9e413"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f76a0b370ef0d1b71b6234110cdf750"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a9f76a0b370ef0d1b71b6234110cdf750">ByteArray_FillWithDummyData</a> (<a class="el" href="struct_byte_array.html">ByteArray</a> array)</td></tr>
 <tr class="separator:a9f76a0b370ef0d1b71b6234110cdf750"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22f0c55397251be386a01f1ed6ae7dcc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a22f0c55397251be386a01f1ed6ae7dcc">ByteArray_GetSlice</a> (<a class="el" href="struct_byte_array.html">ByteArray</a> array, size_t start, size_t len)</td></tr>
 <tr class="separator:a22f0c55397251be386a01f1ed6ae7dcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b0e7ea156628d159b781a9bc32a7e35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a4b0e7ea156628d159b781a9bc32a7e35">ByteBuffer_Reset</a> (<a class="el" href="struct_byte_buffer.html">ByteBuffer</a> *buffer)</td></tr>
 <tr class="separator:a4b0e7ea156628d159b781a9bc32a7e35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2afcce8437b336e8330374d0f65a7000"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a2afcce8437b336e8330374d0f65a7000">ByteBuffer_Create</a> (void *data, size_t max_len)</td></tr>
-<tr class="separator:a2afcce8437b336e8330374d0f65a7000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8366cb95371c1aebfddb2b80625a981e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a8366cb95371c1aebfddb2b80625a981e">ByteBuffer_Create</a> (void *data, size_t max_len, size_t used)</td></tr>
+<tr class="separator:a8366cb95371c1aebfddb2b80625a981e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e9a5e85a93de22ffeed6d088be9995b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a3e9a5e85a93de22ffeed6d088be9995b">ByteBuffer_CreateWithArray</a> (<a class="el" href="struct_byte_array.html">ByteArray</a> array)</td></tr>
 <tr class="separator:a3e9a5e85a93de22ffeed6d088be9995b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9a38855ec827f618c1c67c5c2d909fc"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#ab9a38855ec827f618c1c67c5c2d909fc">ByteBuffer_BytesRemaining</a> (const <a class="el" href="struct_byte_buffer.html">ByteBuffer</a> buffer)</td></tr>
@@ -115,29 +116,29 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00005">5</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00006">6</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a3b940066a349be84c3ec4985c5e1f779"></a>
+<a class="anchor" id="ad43c36dca8421ec3e2f48e55d8f9e413"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="struct_byte_array.html">ByteArray</a> ByteArray_CreateWithCString </td>
           <td>(</td>
-          <td class="paramtype">char *&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>str</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00012">12</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00013">13</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>.</p>
 
 </div>
 </div>
@@ -155,9 +156,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00019">19</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00020">20</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>
@@ -191,9 +192,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00026">26</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00027">27</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>
@@ -211,13 +212,13 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00036">36</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00037">37</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2afcce8437b336e8330374d0f65a7000"></a>
+<a class="anchor" id="a8366cb95371c1aebfddb2b80625a981e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -231,7 +232,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>max_len</em>&#160;</td>
+          <td class="paramname"><em>max_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>used</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -241,9 +248,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00042">42</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00043">43</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, and <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>.</p>
 
 </div>
 </div>
@@ -261,9 +268,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00050">50</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00051">51</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>.</p>
 
 </div>
 </div>
@@ -281,9 +288,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00057">57</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00056">56</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>
@@ -311,9 +318,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00063">63</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00062">62</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00021">BYTE_ARRAY_NONE</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00021">BYTE_ARRAY_NONE</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>
@@ -347,9 +354,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00078">78</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00077">77</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>
@@ -377,9 +384,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00091">91</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00093">93</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>
@@ -407,9 +414,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00104">104</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00106">106</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>
@@ -437,9 +444,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00118">118</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00120">120</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>

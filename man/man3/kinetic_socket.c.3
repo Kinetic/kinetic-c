@@ -1,4 +1,4 @@
-.TH "kinetic_socket.c" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_socket.c" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -34,6 +34,8 @@ kinetic_socket.c \-
 .br
 \fC#include <sys/select\&.h>\fP
 .br
+\fC#include <sys/ioctl\&.h>\fP
+.br
 \fC#include <netinet/in\&.h>\fP
 .br
 \fC#include <arpa/inet\&.h>\fP
@@ -42,16 +44,11 @@ kinetic_socket.c \-
 .br
 \fC#include <signal\&.h>\fP
 .br
+\fC#include <poll\&.h>\fP
+.br
 \fC#include 'socket99/socket99\&.h'\fP
 .br
 
-.SS "Macros"
-
-.in +1c
-.ti -1c
-.RI "#define \fB_BSD_SOURCE\fP"
-.br
-.in -1c
 .SS "Functions"
 
 .in +1c
@@ -60,6 +57,12 @@ kinetic_socket.c \-
 .br
 .ti -1c
 .RI "void \fBKineticSocket_Close\fP (int socket)"
+.br
+.ti -1c
+.RI "\fBKineticWaitStatus\fP \fBKineticSocket_WaitUntilDataAvailable\fP (int socket, int timeout)"
+.br
+.ti -1c
+.RI "int \fBKineticSocket_DataBytesAvailable\fP (int socket)"
 .br
 .ti -1c
 .RI "\fBKineticStatus\fP \fBKineticSocket_Read\fP (int socket, \fBByteBuffer\fP *dest, size_t len)"
@@ -74,50 +77,54 @@ kinetic_socket.c \-
 .RI "\fBKineticStatus\fP \fBKineticSocket_WriteProtobuf\fP (int socket, KineticPDU *pdu)"
 .br
 .in -1c
-.SH "Macro Definition Documentation"
-.PP 
-.SS "#define _BSD_SOURCE"
-
-.PP
-Definition at line 34 of file kinetic_socket\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "int KineticSocket_Connect (const char *host, intport, boolnonBlocking)"
 
 .PP
-Definition at line 49 of file kinetic_socket\&.c\&.
+Definition at line 46 of file kinetic_socket\&.c\&.
 .PP
-References KINETIC_SOCKET_DESCRIPTOR_INVALID, LOG, LOGF, and PDU_VALUE_MAX_LEN\&.
+References KINETIC_OBJ_SIZE, KINETIC_SOCKET_DESCRIPTOR_INVALID, LOG0, LOGF0, and LOGF1\&.
 .SS "void KineticSocket_Close (intsocket)"
 
 .PP
-Definition at line 138 of file kinetic_socket\&.c\&.
+Definition at line 134 of file kinetic_socket\&.c\&.
 .PP
-References LOG, and LOGF\&.
+References LOG1, LOG2, and LOGF0\&.
+.SS "\fBKineticWaitStatus\fP KineticSocket_WaitUntilDataAvailable (intsocket, inttimeout)"
+
+.PP
+Definition at line 152 of file kinetic_socket\&.c\&.
+.PP
+References KINETIC_WAIT_STATUS_DATA_AVAILABLE, KINETIC_WAIT_STATUS_FATAL_ERROR, KINETIC_WAIT_STATUS_RETRYABLE_ERROR, and KINETIC_WAIT_STATUS_TIMED_OUT\&.
+.SS "int KineticSocket_DataBytesAvailable (intsocket)"
+
+.PP
+Definition at line 188 of file kinetic_socket\&.c\&.
 .SS "\fBKineticStatus\fP KineticSocket_Read (intsocket, \fBByteBuffer\fP *dest, size_tlen)"
 
 .PP
-Definition at line 156 of file kinetic_socket\&.c\&.
+Definition at line 196 of file kinetic_socket\&.c\&.
 .PP
-References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, KINETIC_STATUS_BUFFER_OVERRUN, KINETIC_STATUS_INVALID, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SOCKET_ERROR, KINETIC_STATUS_SOCKET_TIMEOUT, KINETIC_STATUS_SUCCESS, ByteArray::len, LOG, and LOGF\&.
+References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, KINETIC_STATUS_BUFFER_OVERRUN, KINETIC_STATUS_INVALID, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SOCKET_ERROR, KINETIC_STATUS_SOCKET_TIMEOUT, KINETIC_STATUS_SUCCESS, ByteArray::len, LOG0, LOGF0, LOGF1, LOGF2, and LOGF3\&.
 .SS "\fBKineticStatus\fP KineticSocket_ReadProtobuf (intsocket, KineticPDU *pdu)"
 
 .PP
-Definition at line 313 of file kinetic_socket\&.c\&.
+Definition at line 345 of file kinetic_socket\&.c\&.
 .PP
-References ByteBuffer::array, ByteBuffer_Create(), ByteBuffer::bytesUsed, ByteArray::data, KINETIC_STATUS_DATA_ERROR, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SUCCESS, KineticProto__unpack(), KineticSocket_Read(), LOG, and LOGF\&.
+References ByteBuffer::array, ByteBuffer_Create(), ByteBuffer::bytesUsed, ByteArray::data, KINETIC_STATUS_DATA_ERROR, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SUCCESS, KineticProto_Message__unpack(), KineticSocket_Read(), LOG0, LOG3, and LOGF2\&.
 .SS "\fBKineticStatus\fP KineticSocket_Write (intsocket, \fBByteBuffer\fP *src)"
 
 .PP
-Definition at line 355 of file kinetic_socket\&.c\&.
+Definition at line 383 of file kinetic_socket\&.c\&.
 .PP
-References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, KINETIC_STATUS_SOCKET_ERROR, KINETIC_STATUS_SUCCESS, LOG, and LOGF\&.
+References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, KINETIC_STATUS_SOCKET_ERROR, KINETIC_STATUS_SUCCESS, LOG2, LOG3, LOGF0, LOGF2, and LOGF3\&.
 .SS "\fBKineticStatus\fP KineticSocket_WriteProtobuf (intsocket, KineticPDU *pdu)"
 
 .PP
-Definition at line 389 of file kinetic_socket\&.c\&.
+Definition at line 407 of file kinetic_socket\&.c\&.
 .PP
-References ByteBuffer_Create(), ByteBuffer::bytesUsed, KINETIC_STATUS_MEMORY_ERROR, KineticProto__pack(), KineticSocket_Write(), LOG, and LOGF\&.
+References ByteBuffer_Create(), KINETIC_STATUS_MEMORY_ERROR, KineticProto_Message__pack(), KineticSocket_Write(), LOG0, and LOGF1\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.

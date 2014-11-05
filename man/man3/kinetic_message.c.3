@@ -1,4 +1,4 @@
-.TH "kinetic_message.c" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_message.c" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,6 +27,9 @@ kinetic_message.c \-
 .ti -1c
 .RI "void \fBKineticMessage_ConfigureKeyValue\fP (\fBKineticMessage\fP *const message, const \fBKineticEntry\fP *entry)"
 .br
+.ti -1c
+.RI "void \fBKineticMessage_ConfigureKeyRange\fP (\fBKineticMessage\fP *const message, const \fBKineticKeyRange\fP *range)"
+.br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
@@ -38,7 +41,8 @@ kinetic_message.c \-
     if ((_entry)->_name\&.array\&.data != NULL \
         && (_entry)->_name\&.array\&.len > 0 \
         && (_entry)->_name\&.bytesUsed > 0 \
-        && (_entry)->_name\&.bytesUsed <= (_entry)->_name\&.array\&.len) { \
+        && (_entry)->_name\&.bytesUsed <= (_entry)->_name\&.array\&.len) \
+    { \
         (_field)\&._name\&.data = (_entry)->_name\&.array\&.data; \
         (_field)\&._name\&.len = (_entry)->_name\&.bytesUsed; \
         (_field)\&.has_ ## _name = true; \
@@ -61,9 +65,15 @@ References KINETIC_MESSAGE_INIT\&.
 .SS "void KineticMessage_ConfigureKeyValue (\fBKineticMessage\fP *constmessage, const \fBKineticEntry\fP *entry)"
 
 .PP
-Definition at line 45 of file kinetic_message\&.c\&.
+Definition at line 46 of file kinetic_message\&.c\&.
 .PP
-References KineticEntry::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_BUFFER, KineticEntry::force, KineticMessage::keyValue, KineticProto_Algorithm_from_KineticAlgorithm(), KineticProto_Synchronization_from_KineticSynchronization(), KineticEntry::metadataOnly, KineticMessage::proto, and KineticEntry::synchronization\&.
+References KineticEntry::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_BUFFER, KineticEntry::force, KineticMessage::keyValue, KineticProto_Command_Algorithm_from_KineticAlgorithm(), KineticProto_Command_Synchronization_from_KineticSynchronization(), KineticEntry::metadataOnly, and KineticEntry::synchronization\&.
+.SS "void KineticMessage_ConfigureKeyRange (\fBKineticMessage\fP *constmessage, const \fBKineticKeyRange\fP *range)"
+
+.PP
+Definition at line 87 of file kinetic_message\&.c\&.
+.PP
+References ByteBuffer::array, KineticMessage::body, ByteBuffer::bytesUsed, KineticMessage::command, ByteArray::data, KineticKeyRange::endKey, KineticKeyRange::endKeyInclusive, KineticMessage::keyRange, ByteArray::len, KineticKeyRange::maxReturned, KineticKeyRange::reverse, KineticKeyRange::startKey, and KineticKeyRange::startKeyInclusive\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.

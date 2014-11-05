@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: kinetic_logger.c File Reference</title>
+<title>kinetic-c: kinetic_logger.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -51,8 +51,7 @@
 <div class="header">
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">kinetic_logger.c File Reference</div>  </div>
 </div><!--header-->
@@ -60,15 +59,30 @@
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
+<code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;sys/time.h&gt;</code><br />
+<code>#include &lt;errno.h&gt;</code><br />
+<code>#include &lt;pthread.h&gt;</code><br />
+<code>#include &lt;time.h&gt;</code><br />
 </div>
 <p><a href="kinetic__logger_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:aa759dab3714df698270c4644b8559ed5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#aa759dab3714df698270c4644b8559ed5">LOG_PROTO_INIT</a>()</td></tr>
+<tr class="memitem:afd9117f49e6fe26a09f07a8b4094668b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#afd9117f49e6fe26a09f07a8b4094668b">KINETIC_LOGGER_BUFFER_STR_MAX_LEN</a>&#160;&#160;&#160;256</td></tr>
+<tr class="separator:afd9117f49e6fe26a09f07a8b4094668b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46c0b1536713e7bd16d5d879b148fcbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a46c0b1536713e7bd16d5d879b148fcbd">KINETIC_LOGGER_BUFFER_SIZE</a>&#160;&#160;&#160;(0x1 &lt;&lt; 12)</td></tr>
+<tr class="separator:a46c0b1536713e7bd16d5d879b148fcbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3825b625f64850a03373ec53f7882557"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a3825b625f64850a03373ec53f7882557">KINETIC_LOGGER_FLUSH_INTERVAL_SEC</a>&#160;&#160;&#160;180</td></tr>
+<tr class="separator:a3825b625f64850a03373ec53f7882557"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accf24c9dab82c503a41930746d2c0ea4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#accf24c9dab82c503a41930746d2c0ea4">KINETIC_LOGGER_SLEEP_TIME_SEC</a>&#160;&#160;&#160;10</td></tr>
+<tr class="separator:accf24c9dab82c503a41930746d2c0ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a929eb7f04063b2b0e8e4a6ef59b8f58e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a929eb7f04063b2b0e8e4a6ef59b8f58e">KINETIC_LOGGER_BUFFER_FLUSH_SIZE</a>&#160;&#160;&#160;(0.8 * <a class="el" href="kinetic__logger_8c.html#a46c0b1536713e7bd16d5d879b148fcbd">KINETIC_LOGGER_BUFFER_SIZE</a>)</td></tr>
+<tr class="separator:a929eb7f04063b2b0e8e4a6ef59b8f58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa759dab3714df698270c4644b8559ed5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#aa759dab3714df698270c4644b8559ed5">LOG_PROTO_INIT</a>()&#160;&#160;&#160;char _indent[32] = &quot;  &quot;;</td></tr>
 <tr class="separator:aa759dab3714df698270c4644b8559ed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28459a92b566c5a45aa7800392202c01"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a28459a92b566c5a45aa7800392202c01">LOG_PROTO_LEVEL_START</a>(name)</td></tr>
-<tr class="separator:a28459a92b566c5a45aa7800392202c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3a2abfb5107485323e52906371f1bbc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#ad3a2abfb5107485323e52906371f1bbc">LOG_PROTO_LEVEL_START</a>(__name)</td></tr>
+<tr class="separator:ad3a2abfb5107485323e52906371f1bbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3d221b143080cbf9b6abe41272c07b0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#ac3d221b143080cbf9b6abe41272c07b0">LOG_PROTO_LEVEL_END</a>()</td></tr>
 <tr class="separator:ac3d221b143080cbf9b6abe41272c07b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f53a109345e468584a1fd3510ed7a20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a1f53a109345e468584a1fd3510ed7a20">BYTES_TO_CSTRING</a>(_buf_start, _array, _array_start, _count)</td></tr>
@@ -76,39 +90,98 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae302c2ba2d4dcb526dd9efdec6264d8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#ae302c2ba2d4dcb526dd9efdec6264d8d">KineticLogger_Init</a> (const char *logFile)</td></tr>
-<tr class="separator:ae302c2ba2d4dcb526dd9efdec6264d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4be6e3e6d246591f27b1c8bcb4c911ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a4be6e3e6d246591f27b1c8bcb4c911ab">KineticLogger_Init</a> (const char *log_file, int log_level)</td></tr>
+<tr class="separator:a4be6e3e6d246591f27b1c8bcb4c911ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10716dedde03111fb55d990993a3c031"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a10716dedde03111fb55d990993a3c031">KineticLogger_Close</a> (void)</td></tr>
 <tr class="separator:a10716dedde03111fb55d990993a3c031"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28134eaa6c6c82a2755d895573dc8201"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a28134eaa6c6c82a2755d895573dc8201">KineticLogger_Log</a> (const char *message)</td></tr>
-<tr class="separator:a28134eaa6c6c82a2755d895573dc8201"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c76a5e7dd9fdb81725953964d803449"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a1c76a5e7dd9fdb81725953964d803449">KineticLogger_LogPrintf</a> (const char *format,...)</td></tr>
-<tr class="separator:a1c76a5e7dd9fdb81725953964d803449"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa165cca23a8303a430aaeb13843d2259"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#aa165cca23a8303a430aaeb13843d2259">KineticLogger_LogHeader</a> (const <a class="el" href="kinetic__types__internal_8h.html#aeefc7ca996ea90f5703b1b8440092c5e">KineticPDUHeader</a> *header)</td></tr>
-<tr class="separator:aa165cca23a8303a430aaeb13843d2259"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35347e7ed4f565357f944c2d7bf2af19"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a35347e7ed4f565357f944c2d7bf2af19">KineticLogger_u8toa</a> (char *p_buf, uint8_t val)</td></tr>
-<tr class="separator:a35347e7ed4f565357f944c2d7bf2af19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f04a2ee23e533260754ce515744063f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a7f04a2ee23e533260754ce515744063f">KineticLogger_ByteArraySliceToCString</a> (char *p_buf, const <a class="el" href="struct_byte_array.html">ByteArray</a> bytes, const int start, const int count)</td></tr>
-<tr class="separator:a7f04a2ee23e533260754ce515744063f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a382d80f28dc772bd38ef93c01bd7150e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a382d80f28dc772bd38ef93c01bd7150e">KineticLogger_LogProtobuf</a> (const <a class="el" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a> *proto)</td></tr>
-<tr class="separator:a382d80f28dc772bd38ef93c01bd7150e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aa59417bd3189bfb42fc380fea468aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a1aa59417bd3189bfb42fc380fea468aa">KineticLogger_LogStatus</a> (KineticProto_Status *status)</td></tr>
-<tr class="separator:a1aa59417bd3189bfb42fc380fea468aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1833be5893222cc3650250726623f93c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a1833be5893222cc3650250726623f93c">KineticLogger_LogByteArray</a> (const char *title, <a class="el" href="struct_byte_array.html">ByteArray</a> bytes)</td></tr>
-<tr class="separator:a1833be5893222cc3650250726623f93c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae87e13f796f66a8867e3f7a83f6d9d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#aae87e13f796f66a8867e3f7a83f6d9d8">KineticLogger_LogByteBuffer</a> (const char *title, <a class="el" href="struct_byte_buffer.html">ByteBuffer</a> buffer)</td></tr>
-<tr class="separator:aae87e13f796f66a8867e3f7a83f6d9d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:ae60edc58511ed3e59de3c86cf749ae48"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#ae60edc58511ed3e59de3c86cf749ae48">LogToConsole</a> = true</td></tr>
-<tr class="separator:ae60edc58511ed3e59de3c86cf749ae48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d9dbc10f909598fcdc79473e9d8a9fa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a8d9dbc10f909598fcdc79473e9d8a9fa">LogLevel</a> = 0</td></tr>
-<tr class="separator:a8d9dbc10f909598fcdc79473e9d8a9fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81d619ddb9f03da2ef4f4419e61b7ba5"><td class="memItemLeft" align="right" valign="top">FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a81d619ddb9f03da2ef4f4419e61b7ba5">FileDesc</a> = NULL</td></tr>
-<tr class="separator:a81d619ddb9f03da2ef4f4419e61b7ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad122c68480fdf25667ee3422a9514938"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#ad122c68480fdf25667ee3422a9514938">KineticLogger_Log</a> (int log_level, const char *message)</td></tr>
+<tr class="separator:ad122c68480fdf25667ee3422a9514938"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8a9ff07bbef2692cdd898a5c62553b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a> (int log_level, const char *format,...)</td></tr>
+<tr class="separator:ad8a9ff07bbef2692cdd898a5c62553b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe64352e6aab285bffe78ccf2b2ff595"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#afe64352e6aab285bffe78ccf2b2ff595">KineticLogger_LogLocation</a> (const char *filename, int line, const char *message)</td></tr>
+<tr class="separator:afe64352e6aab285bffe78ccf2b2ff595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a209382d99015a79632efa289738f6dec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a209382d99015a79632efa289738f6dec">KineticLogger_LogHeader</a> (int log_level, const <a class="el" href="kinetic__types__internal_8h.html#aeefc7ca996ea90f5703b1b8440092c5e">KineticPDUHeader</a> *header)</td></tr>
+<tr class="separator:a209382d99015a79632efa289738f6dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb2c0ba1c83448424d7148ea79f4192a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#adb2c0ba1c83448424d7148ea79f4192a">KineticLogger_LogProtobuf</a> (int log_level, const KineticProto_Message *msg)</td></tr>
+<tr class="separator:adb2c0ba1c83448424d7148ea79f4192a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8bf66757a616534b039c31ad863a519"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#ae8bf66757a616534b039c31ad863a519">KineticLogger_LogStatus</a> (int log_level, KineticProto_Command_Status *status)</td></tr>
+<tr class="separator:ae8bf66757a616534b039c31ad863a519"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeef474b44c9d6e0c08b05b873aaf3ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#adeef474b44c9d6e0c08b05b873aaf3ba">KineticLogger_LogByteArray</a> (int log_level, const char *title, <a class="el" href="struct_byte_array.html">ByteArray</a> bytes)</td></tr>
+<tr class="separator:adeef474b44c9d6e0c08b05b873aaf3ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b725885ac7e8249ee9da46955c03e5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a6b725885ac7e8249ee9da46955c03e5e">KineticLogger_LogByteBuffer</a> (int log_level, const char *title, <a class="el" href="struct_byte_buffer.html">ByteBuffer</a> buffer)</td></tr>
+<tr class="separator:a6b725885ac7e8249ee9da46955c03e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="afd9117f49e6fe26a09f07a8b4094668b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_LOGGER_BUFFER_STR_MAX_LEN&#160;&#160;&#160;256</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00033">33</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a46c0b1536713e7bd16d5d879b148fcbd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_LOGGER_BUFFER_SIZE&#160;&#160;&#160;(0x1 &lt;&lt; 12)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00034">34</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3825b625f64850a03373ec53f7882557"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_LOGGER_FLUSH_INTERVAL_SEC&#160;&#160;&#160;180</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00035">35</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="accf24c9dab82c503a41930746d2c0ea4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_LOGGER_SLEEP_TIME_SEC&#160;&#160;&#160;10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00036">36</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a929eb7f04063b2b0e8e4a6ef59b8f58e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_LOGGER_BUFFER_FLUSH_SIZE&#160;&#160;&#160;(0.8 * <a class="el" href="kinetic__logger_8c.html#a46c0b1536713e7bd16d5d879b148fcbd">KINETIC_LOGGER_BUFFER_SIZE</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00037">37</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aa759dab3714df698270c4644b8559ed5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -117,19 +190,16 @@ Variables</h2></td></tr>
           <td class="memname">#define LOG_PROTO_INIT</td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td>&#160;&#160;&#160;char _indent[32] = &quot;  &quot;;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordtype">char</span> _indent[32] = <span class="stringliteral">&quot;  &quot;</span>; \</div>
-<div class="line">    const <span class="keywordtype">char</span>* _str_true = <span class="stringliteral">&quot;true&quot;</span>; \</div>
-<div class="line">    const <span class="keywordtype">char</span>* _str_false = <span class="stringliteral">&quot;false&quot;</span>;</div>
-</div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00111">111</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00180">180</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a28459a92b566c5a45aa7800392202c01"></a>
+<a class="anchor" id="ad3a2abfb5107485323e52906371f1bbc"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -137,16 +207,16 @@ Variables</h2></td></tr>
           <td class="memname">#define LOG_PROTO_LEVEL_START</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">name</td><td>)</td>
+          <td class="paramname">__name</td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">LOGF</a>(<span class="stringliteral">&quot;%s&quot;</span> name <span class="stringliteral">&quot; {&quot;</span>, _indent); \</div>
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a>(2, <span class="stringliteral">&quot;%s%s {&quot;</span>, (_indent), (__name)); \</div>
 <div class="line">    strcat(_indent, <span class="stringliteral">&quot;  &quot;</span>);</div>
-<div class="ttc" id="kinetic__logger_8h_html_a4e91ccd87aae13aca0a7f1d6518d93f7"><div class="ttname"><a href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">LOGF</a></div><div class="ttdeci">#define LOGF(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00041">kinetic_logger.h:41</a></div></div>
+<div class="ttc" id="kinetic__logger_8c_html_ad8a9ff07bbef2692cdd898a5c62553b4"><div class="ttname"><a href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a></div><div class="ttdeci">void KineticLogger_LogPrintf(int log_level, const char *format,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00134">kinetic_logger.c:134</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00116">116</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00182">182</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
 </div>
 </div>
@@ -162,11 +232,11 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">_indent[strlen(_indent) - 2] = <span class="charliteral">&#39;\0&#39;</span>; <a class="code" href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">\</a></div>
-<div class="line"><a class="code" href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">    LOGF</a>(<span class="stringliteral">&quot;%s}&quot;</span>, _indent);</div>
-<div class="ttc" id="kinetic__logger_8h_html_a4e91ccd87aae13aca0a7f1d6518d93f7"><div class="ttname"><a href="kinetic__logger_8h.html#a4e91ccd87aae13aca0a7f1d6518d93f7">LOGF</a></div><div class="ttdeci">#define LOGF(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00041">kinetic_logger.h:41</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line">_indent[strlen(_indent) - 2] = <span class="charliteral">&#39;\0&#39;</span>; <a class="code" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">\</a></div>
+<div class="line"><a class="code" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">    KineticLogger_LogPrintf</a>(2, <span class="stringliteral">&quot;%s}&quot;</span>, _indent);</div>
+<div class="ttc" id="kinetic__logger_8c_html_ad8a9ff07bbef2692cdd898a5c62553b4"><div class="ttname"><a href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a></div><div class="ttdeci">void KineticLogger_LogPrintf(int log_level, const char *format,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00134">kinetic_logger.c:134</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00120">120</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00186">186</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
 </div>
 </div>
@@ -206,17 +276,16 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">{ \</div>
-<div class="line">    ByteArray key = {.data = _array.data, .len = _array.len}; <a class="code" href="kinetic__logger_8c.html#a7f04a2ee23e533260754ce515744063f">\</a></div>
-<div class="line"><a class="code" href="kinetic__logger_8c.html#a7f04a2ee23e533260754ce515744063f">    KineticLogger_ByteArraySliceToCString</a>((<span class="keywordtype">char</span>*)(_buf_start), key, 0, key.len); \</div>
+<div class="line">    ByteArray __array = {.data = _array.data, .len = (_array).len}; \</div>
+<div class="line">    KineticLogger_ByteArraySliceToCString((<span class="keywordtype">char</span>*)(_buf_start), (__array), (_array_start), (_count)); \</div>
 <div class="line">}</div>
-<div class="ttc" id="kinetic__logger_8c_html_a7f04a2ee23e533260754ce515744063f"><div class="ttname"><a href="kinetic__logger_8c.html#a7f04a2ee23e533260754ce515744063f">KineticLogger_ByteArraySliceToCString</a></div><div class="ttdeci">int KineticLogger_ByteArraySliceToCString(char *p_buf, const ByteArray bytes, const int start, const int count)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00145">kinetic_logger.c:145</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00162">162</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00222">222</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ae302c2ba2d4dcb526dd9efdec6264d8d"></a>
+<a class="anchor" id="a4be6e3e6d246591f27b1c8bcb4c911ab"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -224,15 +293,23 @@ Variables</h2></td></tr>
           <td class="memname">void KineticLogger_Init </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>logFile</em></td><td>)</td>
+          <td class="paramname"><em>log_file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00031">31</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00029">FileDesc</a>, <a class="el" href="kinetic__logger_8c_source.html#l00028">LogLevel</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToConsole</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00072">72</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
 </div>
 </div>
@@ -250,39 +327,55 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00058">58</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00102">102</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00029">FileDesc</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToConsole</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00310">Kinetic_GetErrnoDescription()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00050">LOGF0</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a28134eaa6c6c82a2755d895573dc8201"></a>
+<a class="anchor" id="ad122c68480fdf25667ee3422a9514938"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void KineticLogger_Log </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>message</em></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>message</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00067">67</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00122">122</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00029">FileDesc</a>, <a class="el" href="kinetic__logger_8c_source.html#l00028">LogLevel</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00027">LogToConsole</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00033">KINETIC_LOGGER_BUFFER_STR_MAX_LEN</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1c76a5e7dd9fdb81725953964d803449"></a>
+<a class="anchor" id="ad8a9ff07bbef2692cdd898a5c62553b4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int KineticLogger_LogPrintf </td>
+          <td class="memname">void KineticLogger_LogPrintf </td>
           <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>format</em>, </td>
         </tr>
@@ -300,47 +393,63 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00080">80</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00134">134</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00067">KineticLogger_Log()</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00028">LogLevel</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00033">KINETIC_LOGGER_BUFFER_STR_MAX_LEN</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aa165cca23a8303a430aaeb13843d2259"></a>
+<a class="anchor" id="afe64352e6aab285bffe78ccf2b2ff595"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticLogger_LogLocation </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>message</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00152">152</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00134">KineticLogger_LogPrintf()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a209382d99015a79632efa289738f6dec"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void KineticLogger_LogHeader </td>
           <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="el" href="kinetic__types__internal_8h.html#aeefc7ca996ea90f5703b1b8440092c5e">KineticPDUHeader</a> *&#160;</td>
-          <td class="paramname"><em>header</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00099">99</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00028">LogLevel</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a35347e7ed4f565357f944c2d7bf2af19"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int KineticLogger_u8toa </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>p_buf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>val</em>&#160;</td>
+          <td class="paramname"><em>header</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -350,99 +459,85 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00124">124</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00168">168</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__logger_8c_source.html#l00122">KineticLogger_Log()</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00134">KineticLogger_LogPrintf()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a7f04a2ee23e533260754ce515744063f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int KineticLogger_ByteArraySliceToCString </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>p_buf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td>
-          <td class="paramname"><em>bytes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>start</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>count</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00145">145</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
-
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00124">KineticLogger_u8toa()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a382d80f28dc772bd38ef93c01bd7150e"></a>
+<a class="anchor" id="adb2c0ba1c83448424d7148ea79f4192a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void KineticLogger_LogProtobuf </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a> *&#160;</td>
-          <td class="paramname"><em>proto</em></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const KineticProto_Message *&#160;</td>
+          <td class="paramname"><em>msg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00167">167</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00403">403</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8c_source.html#l00162">BYTES_TO_CSTRING</a>, <a class="el" href="kinetic__proto_8c_source.html#l02319">KineticProto_algorithm__descriptor</a>, <a class="el" href="kinetic__proto_8c_source.html#l02394">KineticProto_message_type__descriptor</a>, <a class="el" href="kinetic__proto_8c_source.html#l00525">KineticProto_status_status_code__descriptor</a>, <a class="el" href="kinetic__proto_8c_source.html#l02286">KineticProto_synchronization__descriptor</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, <a class="el" href="kinetic__logger_8c_source.html#l00111">LOG_PROTO_INIT</a>, <a class="el" href="kinetic__logger_8c_source.html#l00120">LOG_PROTO_LEVEL_END</a>, <a class="el" href="kinetic__logger_8c_source.html#l00116">LOG_PROTO_LEVEL_START</a>, <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00028">LogLevel</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00064">BOOL_TO_STRING</a>, <a class="el" href="kinetic__logger_8c_source.html#l00222">BYTES_TO_CSTRING</a>, <a class="el" href="kinetic__proto_8h_source.html#l00071">KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH</a>, <a class="el" href="kinetic__proto_8h_source.html#l00072">KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH</a>, <a class="el" href="kinetic__logger_8c_source.html#l00122">KineticLogger_Log()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00134">KineticLogger_LogPrintf()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00242">KineticProto_command__unpack()</a>, <a class="el" href="kinetic__proto_8c_source.html#l02716">KineticProto_command_algorithm__descriptor</a>, <a class="el" href="kinetic__proto_8c_source.html#l02803">KineticProto_command_message_type__descriptor</a>, <a class="el" href="kinetic__proto_8c_source.html#l02683">KineticProto_command_priority__descriptor</a>, <a class="el" href="kinetic__proto_8c_source.html#l00785">KineticProto_command_status_status_code__descriptor</a>, <a class="el" href="kinetic__proto_8c_source.html#l02652">KineticProto_command_synchronization__descriptor</a>, <a class="el" href="kinetic__proto_8c_source.html#l00389">KineticProto_Message_auth_type__descriptor</a>, <a class="el" href="kinetic__logger_8c_source.html#l00180">LOG_PROTO_INIT</a>, <a class="el" href="kinetic__logger_8c_source.html#l00186">LOG_PROTO_LEVEL_END</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00182">LOG_PROTO_LEVEL_START</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1aa59417bd3189bfb42fc380fea468aa"></a>
+<a class="anchor" id="ae8bf66757a616534b039c31ad863a519"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void KineticLogger_LogStatus </td>
           <td>(</td>
-          <td class="paramtype">KineticProto_Status *&#160;</td>
-          <td class="paramname"><em>status</em></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">KineticProto_Command_Status *&#160;</td>
+          <td class="paramname"><em>status</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00320">320</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00669">669</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00066">KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00068">KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS</a>, <a class="el" href="kinetic__logger_8c_source.html#l00080">KineticLogger_LogPrintf()</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00028">LogLevel</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00077">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00079">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00134">KineticLogger_LogPrintf()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1833be5893222cc3650250726623f93c"></a>
+<a class="anchor" id="adeef474b44c9d6e0c08b05b873aaf3ba"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void KineticLogger_LogByteArray </td>
           <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>title</em>, </td>
         </tr>
@@ -460,19 +555,25 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00377">377</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00726">726</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00028">LogLevel</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__logger_8c_source.html#l00134">KineticLogger_LogPrintf()</a>, and <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aae87e13f796f66a8867e3f7a83f6d9d8"></a>
+<a class="anchor" id="a6b725885ac7e8249ee9da46955c03e5e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void KineticLogger_LogByteBuffer </td>
           <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>title</em>, </td>
         </tr>
@@ -490,52 +591,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00422">422</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00770">770</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00377">KineticLogger_LogByteArray()</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="ae60edc58511ed3e59de3c86cf749ae48"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool LogToConsole = true</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00027">27</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a8d9dbc10f909598fcdc79473e9d8a9fa"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int LogLevel = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00028">28</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a81d619ddb9f03da2ef4f4419e61b7ba5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">FILE* FileDesc = NULL</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00029">29</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00726">KineticLogger_LogByteArray()</a>.</p>
 
 </div>
 </div>

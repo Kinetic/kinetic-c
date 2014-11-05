@@ -1,4 +1,4 @@
-.TH "KineticMessage" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "KineticMessage" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,75 +12,103 @@ KineticMessage \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticProto\fP \fBproto\fP"
+.RI "KineticProto_Message \fBmessage\fP"
+.br
+.ti -1c
+.RI "KineticProto_Message_HMACauth \fBhmacAuth\fP"
+.br
+.ti -1c
+.RI "KineticProto_Message_PINauth \fBpinAuth\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBhmacData\fP [\fBKINETIC_HMAC_MAX_LEN\fP]"
+.br
+.ti -1c
+.RI "bool \fBhas_command\fP"
 .br
 .ti -1c
 .RI "KineticProto_Command \fBcommand\fP"
 .br
 .ti -1c
-.RI "KineticProto_Header \fBheader\fP"
+.RI "KineticProto_Command_Header \fBheader\fP"
 .br
 .ti -1c
-.RI "KineticProto_Body \fBbody\fP"
+.RI "KineticProto_Command_Body \fBbody\fP"
 .br
 .ti -1c
-.RI "KineticProto_Status \fBstatus\fP"
+.RI "KineticProto_Command_Status \fBstatus\fP"
 .br
 .ti -1c
-.RI "KineticProto_Security \fBsecurity\fP"
+.RI "KineticProto_Command_Security \fBsecurity\fP"
 .br
 .ti -1c
-.RI "KineticProto_Security_ACL \fBacl\fP"
+.RI "KineticProto_Command_Security_ACL \fBacl\fP"
 .br
 .ti -1c
-.RI "KineticProto_KeyValue \fBkeyValue\fP"
+.RI "KineticProto_Command_KeyValue \fBkeyValue\fP"
 .br
 .ti -1c
-.RI "uint8_t \fBhmacData\fP [\fBKINETIC_HMAC_MAX_LEN\fP]"
+.RI "KineticProto_Command_Range \fBkeyRange\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 91 of file kinetic_types_internal\&.h\&.
+Definition at line 114 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
-.SS "\fBKineticProto\fP KineticMessage::proto"
+.SS "KineticProto_Message KineticMessage::message"
 
 .PP
-Definition at line 93 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command KineticMessage::command"
+Definition at line 116 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Message_HMACauth KineticMessage::hmacAuth"
 
 .PP
-Definition at line 94 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Header KineticMessage::header"
+Definition at line 117 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Message_PINauth KineticMessage::pinAuth"
 
 .PP
-Definition at line 95 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Body KineticMessage::body"
-
-.PP
-Definition at line 96 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Status KineticMessage::status"
-
-.PP
-Definition at line 97 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Security KineticMessage::security"
-
-.PP
-Definition at line 98 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Security_ACL KineticMessage::acl"
-
-.PP
-Definition at line 99 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_KeyValue KineticMessage::keyValue"
-
-.PP
-Definition at line 100 of file kinetic_types_internal\&.h\&.
+Definition at line 118 of file kinetic_types_internal\&.h\&.
 .SS "uint8_t KineticMessage::hmacData[\fBKINETIC_HMAC_MAX_LEN\fP]"
 
 .PP
-Definition at line 101 of file kinetic_types_internal\&.h\&.
+Definition at line 119 of file kinetic_types_internal\&.h\&.
+.SS "bool KineticMessage::has_command"
+
+.PP
+Definition at line 121 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command KineticMessage::command"
+
+.PP
+Definition at line 122 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command_Header KineticMessage::header"
+
+.PP
+Definition at line 123 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command_Body KineticMessage::body"
+
+.PP
+Definition at line 124 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command_Status KineticMessage::status"
+
+.PP
+Definition at line 125 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command_Security KineticMessage::security"
+
+.PP
+Definition at line 126 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command_Security_ACL KineticMessage::acl"
+
+.PP
+Definition at line 127 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command_KeyValue KineticMessage::keyValue"
+
+.PP
+Definition at line 128 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command_Range KineticMessage::keyRange"
+
+.PP
+Definition at line 129 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.

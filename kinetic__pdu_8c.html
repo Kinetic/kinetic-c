@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: kinetic_pdu.c File Reference</title>
+<title>kinetic-c: kinetic_pdu.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -67,18 +67,20 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac2b45fc01853688e458920a95bf12dda"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda">KineticPDU_Init</a> (KineticPDU *const pdu, <a class="el" href="struct_kinetic_connection.html">KineticConnection</a> *const connection)</td></tr>
+<tr class="memitem:ac2b45fc01853688e458920a95bf12dda"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda">KineticPDU_Init</a> (KineticPDU *const pdu, KineticConnection *const connection)</td></tr>
 <tr class="separator:ac2b45fc01853688e458920a95bf12dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b37fae81ac5379ce8d7ef9afbe1bb19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#a0b37fae81ac5379ce8d7ef9afbe1bb19">KineticPDU_AttachEntry</a> (KineticPDU *const pdu, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry)</td></tr>
-<tr class="separator:a0b37fae81ac5379ce8d7ef9afbe1bb19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2160e914a83af8f555d00550db427c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#aa2160e914a83af8f555d00550db427c7">KineticPDU_Send</a> (KineticPDU *request)</td></tr>
-<tr class="separator:aa2160e914a83af8f555d00550db427c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e08ba039dd7adfca33ec3f3a7896905"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#a5e08ba039dd7adfca33ec3f3a7896905">KineticPDU_Receive</a> (KineticPDU *const response)</td></tr>
-<tr class="separator:a5e08ba039dd7adfca33ec3f3a7896905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a877f18e71293f3878e09770b3cc411eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#a877f18e71293f3878e09770b3cc411eb">KineticPDU_ReceiveMain</a> (KineticPDU *const response)</td></tr>
+<tr class="separator:a877f18e71293f3878e09770b3cc411eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a869fcb527d256fd6857c105b45a654bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#a869fcb527d256fd6857c105b45a654bf">KineticPDU_ReceiveValue</a> (int socket_desc, <a class="el" href="struct_byte_buffer.html">ByteBuffer</a> *value, size_t value_length)</td></tr>
+<tr class="separator:a869fcb527d256fd6857c105b45a654bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbef97b337b85443dddc0e30d13e8cdd"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#afbef97b337b85443dddc0e30d13e8cdd">KineticPDU_GetValueLength</a> (KineticPDU *const pdu)</td></tr>
+<tr class="separator:afbef97b337b85443dddc0e30d13e8cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ea55bc7608cfae0092aebffe0a5f5ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#a4ea55bc7608cfae0092aebffe0a5f5ee">KineticPDU_GetStatus</a> (KineticPDU *pdu)</td></tr>
 <tr class="separator:a4ea55bc7608cfae0092aebffe0a5f5ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7a79b97e3a12baba3b2d771fef133bb"><td class="memItemLeft" align="right" valign="top">KineticProto_KeyValue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#ad7a79b97e3a12baba3b2d771fef133bb">KineticPDU_GetKeyValue</a> (KineticPDU *pdu)</td></tr>
-<tr class="separator:ad7a79b97e3a12baba3b2d771fef133bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7d47d35bb768c734aa33ec1facdb5f5"><td class="memItemLeft" align="right" valign="top">KineticProto_Command_KeyValue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#af7d47d35bb768c734aa33ec1facdb5f5">KineticPDU_GetKeyValue</a> (KineticPDU *pdu)</td></tr>
+<tr class="separator:af7d47d35bb768c734aa33ec1facdb5f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4125ca7cfcca3196615d1c7ac8b4288e"><td class="memItemLeft" align="right" valign="top">KineticProto_Command_Range *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__pdu_8c.html#a4125ca7cfcca3196615d1c7ac8b4288e">KineticPDU_GetKeyRange</a> (KineticPDU *pdu)</td></tr>
+<tr class="separator:a4125ca7cfcca3196615d1c7ac8b4288e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ac2b45fc01853688e458920a95bf12dda"></a>
@@ -94,7 +96,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_connection.html">KineticConnection</a> *const&#160;</td>
+          <td class="paramtype">KineticConnection *const&#160;</td>
           <td class="paramname"><em>connection</em>&#160;</td>
         </tr>
         <tr>
@@ -105,27 +107,53 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00029">29</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00030">30</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00172">KINETIC_PDU_INIT</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00231">KINETIC_PDU_INIT</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a0b37fae81ac5379ce8d7ef9afbe1bb19"></a>
+<a class="anchor" id="a877f18e71293f3878e09770b3cc411eb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void KineticPDU_AttachEntry </td>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticPDU_ReceiveMain </td>
           <td>(</td>
           <td class="paramtype">KineticPDU *const&#160;</td>
-          <td class="paramname"><em>pdu</em>, </td>
+          <td class="paramname"><em>response</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00036">36</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00043">ByteBuffer_Create()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00122">KineticMessage::command</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00121">KineticMessage::has_command</a>, <a class="el" href="kinetic__proto_8h_source.html#l00089">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00071">KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH</a>, <a class="el" href="kinetic__proto_8h_source.html#l00072">KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH</a>, <a class="el" href="kinetic__proto_8h_source.html#l00073">KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS</a>, <a class="el" href="kinetic__types_8h_source.html#l00153">KINETIC_STATUS_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00065">KineticHMAC_Validate()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00168">KineticLogger_LogHeader()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00403">KineticLogger_LogProtobuf()</a>, <a class="el" href="kinetic__nbo_8c_source.html#l00038">KineticNBO_ToHostU32()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00142">KineticPDU_GetStatus()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00191">KineticPDUHeader</a>, <a class="el" href="kinetic__proto_8c_source.html#l00242">KineticProto_command__unpack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00196">KineticSocket_Read()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00345">KineticSocket_ReadProtobuf()</a>, <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00046">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00048">LOG2</a>, <a class="el" href="kinetic__logger_8h_source.html#l00049">LOG3</a>, <a class="el" href="kinetic__logger_8h_source.html#l00051">LOGF1</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00116">KineticMessage::message</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00125">KineticMessage::status</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a869fcb527d256fd6857c105b45a654bf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticPDU_ReceiveValue </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>socket_desc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const&#160;</td>
-          <td class="paramname"><em>entry</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a> *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>value_length</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -135,47 +163,27 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00035">35</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00117">117</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00037">ByteBuffer_Reset()</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__logger_8c_source.html#l00770">KineticLogger_LogByteBuffer()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00196">KineticSocket_Read()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00046">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00047">LOG1</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00051">LOGF1</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aa2160e914a83af8f555d00550db427c7"></a>
+<a class="anchor" id="afbef97b337b85443dddc0e30d13e8cdd"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticPDU_Send </td>
-          <td>(</td>
-          <td class="paramtype">KineticPDU *&#160;</td>
-          <td class="paramname"><em>request</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00042">42</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
-
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00042">ByteBuffer_Create()</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__proto_8h_source.html#l00101">KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>, <a class="el" href="kinetic__types_8h_source.html#l00133">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00135">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00031">KineticHMAC_Init()</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00047">KineticHMAC_Populate()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00099">KineticLogger_LogHeader()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00167">KineticLogger_LogProtobuf()</a>, <a class="el" href="kinetic__nbo_8c_source.html#l00032">KineticNBO_FromHostU32()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00144">KineticPDUHeader</a>, <a class="el" href="kinetic__proto_8c_source.html#l00147">KineticProto__get_packed_size()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00355">KineticSocket_Write()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00389">KineticSocket_WriteProtobuf()</a>, <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5e08ba039dd7adfca33ec3f3a7896905"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticPDU_Receive </td>
+          <td class="memname">size_t KineticPDU_GetValueLength </td>
           <td>(</td>
           <td class="paramtype">KineticPDU *const&#160;</td>
-          <td class="paramname"><em>response</em></td><td>)</td>
+          <td class="paramname"><em>pdu</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00108">108</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
-
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00042">ByteBuffer_Create()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00094">KineticMessage::command</a>, <a class="el" href="kinetic__proto_8h_source.html#l00078">KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00135">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00060">KineticHMAC_Validate()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00099">KineticLogger_LogHeader()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00167">KineticLogger_LogProtobuf()</a>, <a class="el" href="kinetic__nbo_8c_source.html#l00038">KineticNBO_ToHostU32()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00200">KineticPDU_GetStatus()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00144">KineticPDUHeader</a>, <a class="el" href="kinetic__socket_8c_source.html#l00156">KineticSocket_Read()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00313">KineticSocket_ReadProtobuf()</a>, <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00093">KineticMessage::proto</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00097">KineticMessage::status</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00136">136</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
 
 </div>
 </div>
@@ -193,18 +201,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00200">200</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00142">142</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00133">KINETIC_STATUS_INVALID</a>, and <a class="el" href="kinetic__types__internal_8c_source.html#l00025">KineticProtoStatusCode_to_KineticStatus()</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00138">KINETIC_STATUS_INVALID</a>, and <a class="el" href="kinetic__types__internal_8c_source.html#l00028">KineticProtoStatusCode_to_KineticStatus()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ad7a79b97e3a12baba3b2d771fef133bb"></a>
+<a class="anchor" id="af7d47d35bb768c734aa33ec1facdb5f5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">KineticProto_KeyValue* KineticPDU_GetKeyValue </td>
+          <td class="memname">KineticProto_Command_KeyValue* KineticPDU_GetKeyValue </td>
           <td>(</td>
           <td class="paramtype">KineticPDU *&#160;</td>
           <td class="paramname"><em>pdu</em></td><td>)</td>
@@ -213,7 +221,25 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00217">217</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00158">158</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4125ca7cfcca3196615d1c7ac8b4288e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">KineticProto_Command_Range* KineticPDU_GetKeyRange </td>
+          <td>(</td>
+          <td class="paramtype">KineticPDU *&#160;</td>
+          <td class="paramname"><em>pdu</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__pdu_8c_source.html#l00171">171</a> of file <a class="el" href="kinetic__pdu_8c_source.html">kinetic_pdu.c</a>.</p>
 
 </div>
 </div>

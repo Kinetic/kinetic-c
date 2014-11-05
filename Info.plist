@@ -4,11 +4,11 @@
 <plist version="1.0">
 <dict>
      <key>CFBundleName</key>
-     <string>protobuf-c</string>
+     <string>kinetic-c</string>
      <key>CFBundleIdentifier</key>
      <string>com.seagate.kinetic-c</string>
      <key>CFBundleVersion</key>
-     <string>v0.7.0</string>
+     <string>v0.8.0</string>
      <key>DocSetFeedName</key>
      <string>Seagate Kinetic Docs</string>
      <key>DocSetPublisherIdentifier</key>

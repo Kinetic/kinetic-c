@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,6 +22,8 @@ kinetic_types.h \-
 .br
 \fC#include <limits\&.h>\fP
 .br
+\fC#include <sys/time\&.h>\fP
+.br
 \fC#include 'byte_array\&.h'\fP
 .br
 \fC#include <unistd\&.h>\fP
@@ -36,6 +38,12 @@ kinetic_types.h \-
 .RI "struct \fBKineticSession\fP"
 .br
 .RI "\fIStructure used to specify the configuration of a session\&. \fP"
+.ti -1c
+.RI "struct \fBKineticCompletionData\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticCompletionClosure\fP"
+.br
 .ti -1c
 .RI "struct \fBKineticEntry\fP"
 .br
@@ -62,13 +70,16 @@ kinetic_types.h \-
 .RI "#define \fBKINETIC_HMAC_MAX_LEN\fP   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
 .br
 .ti -1c
+.RI "#define \fBKINETIC_DEFAULT_KEY_LEN\fP   (1024)"
+.br
+.ti -1c
 .RI "#define \fBKINETIC_MAX_KEY_LEN\fP   (4096)"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_MAX_VERSION_LEN\fP   (256)"
 .br
 .ti -1c
-.RI "#define \fBPDU_VALUE_MAX_LEN\fP   (1024 * 1024)"
+.RI "#define \fBKINETIC_OBJ_SIZE\fP   (1024 * 1024)"
 .br
 .ti -1c
 .RI "#define \fB_BSD_SOURCE\fP"
@@ -78,6 +89,9 @@ kinetic_types.h \-
 .br
 .ti -1c
 .RI "#define \fBLOG_FILE_NAME_MAX\fP   (\fBHOST_NAME_MAX\fP)"
+.br
+.ti -1c
+.RI "#define \fBBOOL_TO_STRING\fP(_bool)   (_bool) ? 'true' : 'false'"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_SESSION_INIT\fP(_session, _host, _clusterVersion, _identity, _hmacKey)"
@@ -90,6 +104,9 @@ kinetic_types.h \-
 .RI "typedef int \fBKineticSessionHandle\fP"
 .br
 .RI "\fIHandle for a session instance\&. \fP"
+.ti -1c
+.RI "typedef void(* \fBKineticCompletionCallback\fP )(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
+.br
 .in -1c
 .SS "Enumerations"
 
@@ -118,47 +135,55 @@ kinetic_types.h \-
 .SS "#define KINETIC_HANDLE_INVALID   (0)"
 
 .PP
-Definition at line 38 of file kinetic_types\&.h\&.
+Definition at line 39 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_PORT   (8123)"
 
 .PP
-Definition at line 39 of file kinetic_types\&.h\&.
+Definition at line 40 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_TLS_PORT   (8443)"
 
 .PP
-Definition at line 40 of file kinetic_types\&.h\&.
+Definition at line 41 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)"
 
 .PP
-Definition at line 41 of file kinetic_types\&.h\&.
+Definition at line 42 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_HMAC_MAX_LEN   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
 
 .PP
-Definition at line 42 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_MAX_KEY_LEN   (4096)"
-
-.PP
 Definition at line 43 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_MAX_VERSION_LEN   (256)"
+.SS "#define KINETIC_DEFAULT_KEY_LEN   (1024)"
 
 .PP
 Definition at line 44 of file kinetic_types\&.h\&.
-.SS "#define PDU_VALUE_MAX_LEN   (1024 * 1024)"
+.SS "#define KINETIC_MAX_KEY_LEN   (4096)"
 
 .PP
 Definition at line 45 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_MAX_VERSION_LEN   (256)"
+
+.PP
+Definition at line 46 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_OBJ_SIZE   (1024 * 1024)"
+
+.PP
+Definition at line 47 of file kinetic_types\&.h\&.
 .SS "#define _BSD_SOURCE"
 
 .PP
-Definition at line 50 of file kinetic_types\&.h\&.
+Definition at line 52 of file kinetic_types\&.h\&.
 .SS "#define HOST_NAME_MAX   256"
 
 .PP
-Definition at line 55 of file kinetic_types\&.h\&.
+Definition at line 57 of file kinetic_types\&.h\&.
 .SS "#define LOG_FILE_NAME_MAX   (\fBHOST_NAME_MAX\fP)"
 
 .PP
-Definition at line 59 of file kinetic_types\&.h\&.
+Definition at line 61 of file kinetic_types\&.h\&.
+.SS "#define BOOL_TO_STRING(_bool)   (_bool) ? 'true' : 'false'"
+
+.PP
+Definition at line 64 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey)"
 \fBValue:\fP
 .PP
@@ -175,7 +200,7 @@ Definition at line 59 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 120 of file kinetic_types\&.h\&.
+Definition at line 125 of file kinetic_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef int \fBKineticSessionHandle\fP"
@@ -183,7 +208,11 @@ Definition at line 120 of file kinetic_types\&.h\&.
 .PP
 Handle for a session instance\&. 
 .PP
-Definition at line 88 of file kinetic_types\&.h\&.
+Definition at line 93 of file kinetic_types\&.h\&.
+.SS "typedef void(* KineticCompletionCallback)(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
+
+.PP
+Definition at line 171 of file kinetic_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBKineticAlgorithm\fP"
@@ -206,7 +235,7 @@ Enumeration of encryption/checksum key algorithms\&.
 .TP
 \fB\fIKINETIC_ALGORITHM_CRC64 \fP\fP
 .PP
-Definition at line 64 of file kinetic_types\&.h\&.
+Definition at line 69 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticSynchronization\fP"
 
 .PP
@@ -223,7 +252,7 @@ Enumeration of synchronization types for an operation\&.
 .TP
 \fB\fIKINETIC_SYNCHRONIZATION_FLUSH \fP\fP
 .PP
-Definition at line 77 of file kinetic_types\&.h\&.
+Definition at line 82 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticStatus\fP"
 
 .PP
@@ -256,9 +285,13 @@ Definition at line 77 of file kinetic_types\&.h\&.
 .TP
 \fB\fIKINETIC_STATUS_OPERATION_FAILED \fP\fP
 .TP
-\fB\fIKINETIC_STATUS_VERSION_FAILURE \fP\fP
+\fB\fIKINETIC_STATUS_CLUSTER_MISMATCH \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_VERSION_MISMATCH \fP\fP
 .TP
 \fB\fIKINETIC_STATUS_DATA_ERROR \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_NOT_FOUND \fP\fP
 .TP
 \fB\fIKINETIC_STATUS_BUFFER_OVERRUN \fP\fP
 .TP
@@ -270,15 +303,15 @@ Definition at line 77 of file kinetic_types\&.h\&.
 .TP
 \fB\fIKINETIC_STATUS_COUNT \fP\fP
 .PP
-Definition at line 132 of file kinetic_types\&.h\&.
+Definition at line 137 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
 
 .PP
-Definition at line 51 of file kinetic_types\&.c\&.
+Definition at line 53 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_STATUS_COUNT\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.

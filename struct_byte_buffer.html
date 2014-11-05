@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: ByteBuffer Struct Reference</title>
+<title>kinetic-c: ByteBuffer Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,7 +55,7 @@
 <p>Structure for an embedded <a class="el" href="struct_byte_array.html" title="Structure for handling generic arrays of bytes. ">ByteArray</a> as a buffer.  
  <a href="struct_byte_buffer.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="include_2byte__array_8h_source.html">byte_array.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="byte__array_8h_source.html">byte_array.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
@@ -65,15 +65,12 @@ Data Fields</h2></td></tr>
 <tr class="memitem:ac8b4d499aec3223045e239e80f7e49c8"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_byte_buffer.html#ac8b4d499aec3223045e239e80f7e49c8">bytesUsed</a></td></tr>
 <tr class="memdesc:ac8b4d499aec3223045e239e80f7e49c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reflects the number of bytes used from the <code>array</code>  <a href="#ac8b4d499aec3223045e239e80f7e49c8">More...</a><br /></td></tr>
 <tr class="separator:ac8b4d499aec3223045e239e80f7e49c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae80a42989963367e29193cd95267ea6a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_byte_buffer.html#ae80a42989963367e29193cd95267ea6a">array</a></td></tr>
-<tr class="memdesc:ae80a42989963367e29193cd95267ea6a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="struct_byte_array.html" title="Structure for handling generic arrays of bytes. ">ByteArray</a> holding allocated array w/length = allocated size.  <a href="#ae80a42989963367e29193cd95267ea6a">More...</a><br /></td></tr>
-<tr class="separator:ae80a42989963367e29193cd95267ea6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure for an embedded <a class="el" href="struct_byte_array.html" title="Structure for handling generic arrays of bytes. ">ByteArray</a> as a buffer. </p>
 <p>The <code>bytesUsed</code> field is initialized to zero, and is to incremented as each byte is consumed, but shall not exceed the <code>array</code> length </p>
 
-<p>Definition at line <a class="el" href="include_2byte__array_8h_source.html#l00034">34</a> of file <a class="el" href="include_2byte__array_8h_source.html">include/byte_array.h</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8h_source.html#l00034">34</a> of file <a class="el" href="byte__array_8h_source.html">byte_array.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a6cbbf0173ee65e5c229a358fbf1b8aae"></a>
 <div class="memitem">
@@ -87,7 +84,7 @@ Data Fields</h2></td></tr>
 
 <p><a class="el" href="struct_byte_array.html" title="Structure for handling generic arrays of bytes. ">ByteArray</a> holding allocated array w/length = allocated size. </p>
 
-<p>Definition at line <a class="el" href="include_2byte__array_8h_source.html#l00035">35</a> of file <a class="el" href="include_2byte__array_8h_source.html">include/byte_array.h</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8h_source.html#l00035">35</a> of file <a class="el" href="byte__array_8h_source.html">byte_array.h</a>.</p>
 
 </div>
 </div>
@@ -103,28 +100,12 @@ Data Fields</h2></td></tr>
 
 <p>Reflects the number of bytes used from the <code>array</code> </p>
 
-<p>Definition at line <a class="el" href="include_2byte__array_8h_source.html#l00036">36</a> of file <a class="el" href="include_2byte__array_8h_source.html">include/byte_array.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae80a42989963367e29193cd95267ea6a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="struct_byte_array.html">ByteArray</a> ByteBuffer::array</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p><a class="el" href="struct_byte_array.html" title="Structure for handling generic arrays of bytes. ">ByteArray</a> holding allocated array w/length = allocated size. </p>
-
-<p>Definition at line <a class="el" href="src_2lib_2byte__array_8h_source.html#l00035">35</a> of file <a class="el" href="src_2lib_2byte__array_8h_source.html">src/lib/byte_array.h</a>.</p>
+<p>Definition at line <a class="el" href="byte__array_8h_source.html#l00036">36</a> of file <a class="el" href="byte__array_8h_source.html">byte_array.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li><a class="el" href="include_2byte__array_8h_source.html">include/byte_array.h</a></li>
+<li><a class="el" href="byte__array_8h_source.html">byte_array.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

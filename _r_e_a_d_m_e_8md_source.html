@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: README.md Source File</title>
+<title>kinetic-c: README.md Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,75 +54,82 @@
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;========================</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;The [Github kinetic-c Git repository](https:<span class="comment">//github.com/Seagate/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;[Code examples](https:<span class="comment">//github.com/Seagate/kinetic-c/tree/master/src/utility/examples) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-client-utility`)](https://github.com/Seagate/kinetic-c/tree/master/src/utility), which builds and links against the installed `kinetic-c-client` static library.</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;[Code examples](https:<span class="comment">//github.com/Seagate/kinetic-c/tree/master/src/utility/examples) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-util`)](https://github.com/Seagate/kinetic-c/tree/master/src/utility), which builds and links against the installed `kinetic-c-client` static library.</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;The [project Makefile](https:<span class="comment">//github.com/Seagate/kinetic-c/blob/master/Makefile) can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;Prerequisites</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;-------------</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;* [Open SSL](https:<span class="comment">//www.openssl.org/) for security and encryption</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    * Installation (<span class="keywordflow">if</span> you don<span class="stringliteral">&#39;t already have OpenSSL installed)</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">        * Linux (using apt-get)</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral">            * `&gt; sudo apt-get install openssl`</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral">        * OSX (using [Homebrew](http://brew.sh/))</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">            * `&gt; brew install openssl`</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">Getting Started</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">---------------</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">**Clone the repo**</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral">    &gt; git clone --recursive https://github.com/atomicobject/kinetic-c.git</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">    &gt; cd kinetic-c</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral">    &gt; bundle install # ensure you have all RubyGems at the proper versions</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">**Update to the latest version (previously cloned)**</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">    &gt; git pull</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral">    &gt; git submodule update --init # Ensure submodules are up to date</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">    &gt; bundle install # Ensure you have all RubyGems at the proper versions</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral">**Build and install static library**</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">    &gt; make</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">    &gt; sudo make install</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral">**Clean and uninstall old versions**</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">    &gt; make clean</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="stringliteral">    &gt; sudo uninstall</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral">**Build example utility and run tests against Kinetic Device simulator**</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="stringliteral">    &gt; make all # this is what Travis-CI build does to ensure it all keeps working</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="stringliteral">API Documentation</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="stringliteral">=================</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="stringliteral">[Kinetic-C API Documentation](http://seagate.github.io/kinetic-c) (generated with Doxygen)</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="stringliteral">* [Kinetic-C API](http://seagate.github.io/kinetic-c/kinetic__client_8h.html)</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral">* [Kinetic-C types](http://seagate.github.io/kinetic-c/kinetic__types_8h.html)</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;* [Open SSL](https:<span class="comment">//www.openssl.org/) for security and encryption</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    * Installation (<span class="keywordflow">if</span> you don<span class="stringliteral">&#39;t already have OpenSSL installed)</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral">        * Linux (using apt-get)</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral">            * `&gt; sudo apt-get install openssl`</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">        * OSX (using [Homebrew](http://brew.sh/))</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">            * `&gt; brew install openssl`</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">Getting Started</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">---------------</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">**Clone the repo**</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">    &gt; git clone --recursive https://github.com/atomicobject/kinetic-c.git</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">    &gt; cd kinetic-c</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral">    &gt; bundle install # ensure you have all RubyGems at the proper versions</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral">**Update to the latest version (previously cloned)**</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">    &gt; git pull</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral">    &gt; make clean</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="stringliteral">**Build and install static library**</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="stringliteral">    &gt; make</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="stringliteral">    &gt; sudo make install</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="stringliteral">**Clean and uninstall old versions**</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="stringliteral">    &gt; make clean</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral">    &gt; sudo make uninstall</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">Example Client/Test Utility</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">===========================</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">**Build example utility and run tests against Kinetic Device simulator**</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">    &gt; make all # this is what Travis-CI build does does for regression testing</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">* &#39;</span>kinetic-c-util<span class="stringliteral">&#39; builds/links against installed Kinetic C static library (.a)</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">* &#39;</span>kinetic-c-util.x.y.z<span class="stringliteral">&#39; builds/links against installed Kinetic C dynamic library (.so)</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">API Documentation</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">=================</span></div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">In order to execute a given example, after building it, you must first do:</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">[Kinetic-C API Documentation](index.html) (generated with Doxygen)</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">* [Kinetic-C API](kinetic__client_8h.html)</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">* [Kinetic-C types](kinetic__types_8h.html)</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">    &gt; cd bin</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">You can then execute `kinetic-c-client-util` with a valid example name, optionally preceeded with any of the optional arguments.</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">Options</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">-------</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">* `--host [HostName/IP]` or `-h [HostName/IP]` - Set the Kinetic Device host</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">* `--tls` - Use the TLS port to execute the specified operation(s)</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral"></span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">Operations</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">----------</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">* `kinetic-c-client [--host|-h hostname|123.253.253.23] noop put get`</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">    * `kinetic-c-client-util noop`</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">        * Execute a NoOp (ping) operation to verify the Kinetic Device is ready</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">    * `kinetic-c-client-util put`</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">        * Execute a Put operation to store a key/value entry</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">    * `kinetic-c-client-util get`</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">        * Execute a Get operation to retrieve a key/value entry</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">    * `kinetic-c-client-util delete`</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">        * Execute a Delete operation to destroy a key/value entry</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">Example Client/Test Utility</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">===========================</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">* &#39;</span>kinetic-c-util<span class="stringliteral">&#39; builds/links against installed Kinetic C static library (.a)</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">* &#39;</span>kinetic-c-util.x.y.z<span class="stringliteral">&#39; builds/links against installed Kinetic C dynamic library (.so)</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">Options</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">-------</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">* `--host [HostName/IP]` or `-h [HostName/IP]` - Set the Kinetic Device host</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">Operations</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">----------</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">* `kinetic-c-util [--host|-h hostname|123.253.253.23] [noop] [put] [get] [delete]`</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">    * `./bin/kinetic-c-util noop`</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">        * Execute a NoOp (ping) operation to verify the Kinetic Device is ready</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">    * `./bin/kinetic-c-util put`</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">        * Execute a Put operation to store a key/value entry</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">    * `./bin/kinetic-c-util get`</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">        * Execute a Get operation to retrieve a key/value entry</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">    * `./bin/kinetic-c-util delete`</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">        * Execute a Delete operation to destroy a key/value entry</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

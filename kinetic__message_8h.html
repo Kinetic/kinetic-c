@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: kinetic_message.h File Reference</title>
+<title>kinetic-c: kinetic_message.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -66,6 +66,8 @@ Functions</h2></td></tr>
 <tr class="separator:ac6ea752dfd491fffd99d4cad256f679d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f1d330254f18b6b76e27d43b0381be6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8h.html#a9f1d330254f18b6b76e27d43b0381be6">KineticMessage_ConfigureKeyValue</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const message, const <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *entry)</td></tr>
 <tr class="separator:a9f1d330254f18b6b76e27d43b0381be6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a203eff60f47299f8d08e7bee30fa8b73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__message_8h.html#a203eff60f47299f8d08e7bee30fa8b73">KineticMessage_ConfigureKeyRange</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const message, const <a class="el" href="struct_kinetic_key_range.html">KineticKeyRange</a> *range)</td></tr>
+<tr class="separator:a203eff60f47299f8d08e7bee30fa8b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ac6ea752dfd491fffd99d4cad256f679d"></a>
@@ -84,7 +86,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00024">24</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00118">KINETIC_MESSAGE_INIT</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00167">KINETIC_MESSAGE_INIT</a>.</p>
 
 </div>
 </div>
@@ -112,9 +114,39 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00045">45</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00046">46</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00164">KineticEntry::algorithm</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00096">KineticMessage::body</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00094">KineticMessage::command</a>, <a class="el" href="kinetic__message_8c_source.html#l00031">CONFIG_FIELD_BYTE_BUFFER</a>, <a class="el" href="kinetic__types_8h_source.html#l00163">KineticEntry::force</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00100">KineticMessage::keyValue</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00125">KineticProto_Algorithm_from_KineticAlgorithm()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00080">KineticProto_Synchronization_from_KineticSynchronization()</a>, <a class="el" href="kinetic__types_8h_source.html#l00165">KineticEntry::metadataOnly</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00093">KineticMessage::proto</a>, and <a class="el" href="kinetic__types_8h_source.html#l00166">KineticEntry::synchronization</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00186">KineticEntry::algorithm</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00124">KineticMessage::body</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00122">KineticMessage::command</a>, <a class="el" href="kinetic__message_8c_source.html#l00031">CONFIG_FIELD_BYTE_BUFFER</a>, <a class="el" href="kinetic__types_8h_source.html#l00191">KineticEntry::force</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00128">KineticMessage::keyValue</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00134">KineticProto_Command_Algorithm_from_KineticAlgorithm()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00089">KineticProto_Command_Synchronization_from_KineticSynchronization()</a>, <a class="el" href="kinetic__types_8h_source.html#l00190">KineticEntry::metadataOnly</a>, and <a class="el" href="kinetic__types_8h_source.html#l00192">KineticEntry::synchronization</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a203eff60f47299f8d08e7bee30fa8b73"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticMessage_ConfigureKeyRange </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const&#160;</td>
+          <td class="paramname"><em>message</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_kinetic_key_range.html">KineticKeyRange</a> *&#160;</td>
+          <td class="paramname"><em>range</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__message_8c_source.html#l00087">87</a> of file <a class="el" href="kinetic__message_8c_source.html">kinetic_message.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00124">KineticMessage::body</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00122">KineticMessage::command</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00198">KineticKeyRange::endKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00200">KineticKeyRange::endKeyInclusive</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00129">KineticMessage::keyRange</a>, <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__types_8h_source.html#l00201">KineticKeyRange::maxReturned</a>, <a class="el" href="kinetic__types_8h_source.html#l00202">KineticKeyRange::reverse</a>, <a class="el" href="kinetic__types_8h_source.html#l00197">KineticKeyRange::startKey</a>, and <a class="el" href="kinetic__types_8h_source.html#l00199">KineticKeyRange::startKeyInclusive</a>.</p>
 
 </div>
 </div>

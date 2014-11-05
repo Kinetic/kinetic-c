@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: kinetic_socket.h File Reference</title>
+<title>kinetic-c: kinetic_socket.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -50,6 +50,7 @@
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">kinetic_socket.h File Reference</div>  </div>
@@ -60,12 +61,21 @@
 </div>
 <p><a href="kinetic__socket_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ab17d289ac26850e85927a83b66334da3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3">KineticWaitStatus</a> </td></tr>
+<tr class="separator:ab17d289ac26850e85927a83b66334da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a55e73e990b4844af842f19380342c0d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a55e73e990b4844af842f19380342c0d8">KineticSocket_Connect</a> (const char *host, int port, bool nonBlocking)</td></tr>
 <tr class="separator:a55e73e990b4844af842f19380342c0d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2017c6854e7e85b8d94f382e29f26084"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a2017c6854e7e85b8d94f382e29f26084">KineticSocket_Close</a> (int socket)</td></tr>
 <tr class="separator:a2017c6854e7e85b8d94f382e29f26084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ae8c4825a7fde0908a06ed9b053db74"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a4ae8c4825a7fde0908a06ed9b053db74">KineticSocket_DataBytesAvailable</a> (int socket)</td></tr>
+<tr class="separator:a4ae8c4825a7fde0908a06ed9b053db74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a878d06b782421ad04571d700d345efe7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3">KineticWaitStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a878d06b782421ad04571d700d345efe7">KineticSocket_WaitUntilDataAvailable</a> (int socket, int timeout)</td></tr>
+<tr class="separator:a878d06b782421ad04571d700d345efe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16f878274f1db677992874412a7e0297"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a16f878274f1db677992874412a7e0297">KineticSocket_Read</a> (int socket, <a class="el" href="struct_byte_buffer.html">ByteBuffer</a> *dest, size_t len)</td></tr>
 <tr class="separator:a16f878274f1db677992874412a7e0297"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad82b06cbb8d3c2900d82c2150c65166d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#ad82b06cbb8d3c2900d82c2150c65166d">KineticSocket_ReadProtobuf</a> (int socket, KineticPDU *pdu)</td></tr>
@@ -75,6 +85,31 @@ Functions</h2></td></tr>
 <tr class="memitem:a99a055b710b2aae0895730e2963a39f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__socket_8h.html#a99a055b710b2aae0895730e2963a39f5">KineticSocket_WriteProtobuf</a> (int socket, KineticPDU *pdu)</td></tr>
 <tr class="separator:a99a055b710b2aae0895730e2963a39f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="ab17d289ac26850e85927a83b66334da3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3">KineticWaitStatus</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ab17d289ac26850e85927a83b66334da3aeb858f54050fb1363ba03345b8983b8f"></a>KINETIC_WAIT_STATUS_DATA_AVAILABLE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ab17d289ac26850e85927a83b66334da3a07fb8207dd9266a4613bee7d4cac382e"></a>KINETIC_WAIT_STATUS_TIMED_OUT&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ab17d289ac26850e85927a83b66334da3a4bc3260f7dc64e2765e151218e5c8cd6"></a>KINETIC_WAIT_STATUS_RETRYABLE_ERROR&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ab17d289ac26850e85927a83b66334da3af3a3a0534c5df0c746b99cdd4b28b8cc"></a>KINETIC_WAIT_STATUS_FATAL_ERROR&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="kinetic__socket_8h_source.html#l00027">27</a> of file <a class="el" href="kinetic__socket_8h_source.html">kinetic_socket.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a55e73e990b4844af842f19380342c0d8"></a>
 <div class="memitem">
@@ -106,9 +141,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00049">49</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00046">46</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00034">KINETIC_SOCKET_DESCRIPTOR_INVALID</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>, and <a class="el" href="kinetic__types_8h_source.html#l00045">PDU_VALUE_MAX_LEN</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00047">KINETIC_OBJ_SIZE</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00035">KINETIC_SOCKET_DESCRIPTOR_INVALID</a>, <a class="el" href="kinetic__logger_8h_source.html#l00046">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00050">LOGF0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00051">LOGF1</a>.</p>
 
 </div>
 </div>
@@ -126,9 +161,57 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00138">138</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00134">134</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00047">LOG1</a>, <a class="el" href="kinetic__logger_8h_source.html#l00048">LOG2</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00050">LOGF0</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4ae8c4825a7fde0908a06ed9b053db74"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KineticSocket_DataBytesAvailable </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>socket</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00188">188</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a878d06b782421ad04571d700d345efe7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3">KineticWaitStatus</a> KineticSocket_WaitUntilDataAvailable </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>socket</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>timeout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00152">152</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__socket_8h_source.html#l00029">KINETIC_WAIT_STATUS_DATA_AVAILABLE</a>, <a class="el" href="kinetic__socket_8h_source.html#l00032">KINETIC_WAIT_STATUS_FATAL_ERROR</a>, <a class="el" href="kinetic__socket_8h_source.html#l00031">KINETIC_WAIT_STATUS_RETRYABLE_ERROR</a>, and <a class="el" href="kinetic__socket_8h_source.html#l00030">KINETIC_WAIT_STATUS_TIMED_OUT</a>.</p>
 
 </div>
 </div>
@@ -162,9 +245,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00156">156</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00196">196</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00148">KINETIC_STATUS_BUFFER_OVERRUN</a>, <a class="el" href="kinetic__types_8h_source.html#l00133">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00151">KINETIC_STATUS_SOCKET_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00150">KINETIC_STATUS_SOCKET_TIMEOUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00135">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="include_2byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00155">KINETIC_STATUS_BUFFER_OVERRUN</a>, <a class="el" href="kinetic__types_8h_source.html#l00138">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00156">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00158">KINETIC_STATUS_SOCKET_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00157">KINETIC_STATUS_SOCKET_TIMEOUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00046">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00050">LOGF0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00051">LOGF1</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOGF2</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00053">LOGF3</a>.</p>
 
 </div>
 </div>
@@ -192,9 +275,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00313">313</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00345">345</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00042">ByteBuffer_Create()</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00135">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__proto_8c_source.html#l00164">KineticProto__unpack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00156">KineticSocket_Read()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00043">ByteBuffer_Create()</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00153">KINETIC_STATUS_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00156">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__proto_8c_source.html#l00097">KineticProto_Message__unpack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00196">KineticSocket_Read()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00046">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00049">LOG3</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00052">LOGF2</a>.</p>
 
 </div>
 </div>
@@ -222,9 +305,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00355">355</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00383">383</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="include_2byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="include_2byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00151">KINETIC_STATUS_SOCKET_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00135">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00158">KINETIC_STATUS_SOCKET_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__logger_8h_source.html#l00048">LOG2</a>, <a class="el" href="kinetic__logger_8h_source.html#l00049">LOG3</a>, <a class="el" href="kinetic__logger_8h_source.html#l00050">LOGF0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOGF2</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00053">LOGF3</a>.</p>
 
 </div>
 </div>
@@ -252,9 +335,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00389">389</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__socket_8c_source.html#l00407">407</a> of file <a class="el" href="kinetic__socket_8c_source.html">kinetic_socket.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8c_source.html#l00042">ByteBuffer_Create()</a>, <a class="el" href="include_2byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__proto_8c_source.html#l00152">KineticProto__pack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00355">KineticSocket_Write()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00040">LOG</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00041">LOGF</a>.</p>
+<p>References <a class="el" href="byte__array_8c_source.html#l00043">ByteBuffer_Create()</a>, <a class="el" href="kinetic__types_8h_source.html#l00156">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__proto_8c_source.html#l00085">KineticProto_Message__pack()</a>, <a class="el" href="kinetic__socket_8c_source.html#l00383">KineticSocket_Write()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00046">LOG0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00051">LOGF1</a>.</p>
 
 </div>
 </div>

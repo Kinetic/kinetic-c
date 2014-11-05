@@ -1,4 +1,4 @@
-.TH "kinetic_allocator.h" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_allocator.h" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,44 +13,108 @@ kinetic_allocator.h \-
 
 .in +1c
 .ti -1c
-.RI "KineticPDU * \fBKineticAllocator_NewPDU\fP (\fBKineticList\fP *const list)"
+.RI "void \fBKineticAllocator_InitLists\fP (KineticConnection *connection)"
 .br
 .ti -1c
-.RI "void \fBKineticAllocator_FreePDU\fP (\fBKineticList\fP *const list, KineticPDU *pdu)"
+.RI "KineticPDU * \fBKineticAllocator_NewPDU\fP (KineticConnection *connection)"
 .br
 .ti -1c
-.RI "void \fBKineticAllocator_FreeAllPDUs\fP (\fBKineticList\fP *const list)"
+.RI "void \fBKineticAllocator_FreePDU\fP (KineticConnection *connection, KineticPDU *pdu)"
 .br
 .ti -1c
-.RI "bool \fBKineticAllocator_ValidateAllMemoryFreed\fP (\fBKineticList\fP *const list)"
+.RI "KineticPDU * \fBKineticAllocator_GetFirstPDU\fP (KineticConnection *connection)"
+.br
+.ti -1c
+.RI "KineticPDU * \fBKineticAllocator_GetNextPDU\fP (KineticConnection *connection, KineticPDU *pdu)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeAllPDUs\fP (KineticConnection *connection)"
+.br
+.ti -1c
+.RI "KineticOperation * \fBKineticAllocator_NewOperation\fP (KineticConnection *connection)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeOperation\fP (KineticConnection *connection, KineticOperation *operation)"
+.br
+.ti -1c
+.RI "KineticOperation * \fBKineticAllocator_GetFirstOperation\fP (KineticConnection *connection)"
+.br
+.ti -1c
+.RI "KineticOperation * \fBKineticAllocator_GetNextOperation\fP (KineticConnection *connection, KineticOperation *operation)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeAllOperations\fP (KineticConnection *connection)"
+.br
+.ti -1c
+.RI "bool \fBKineticAllocator_ValidateAllMemoryFreed\fP (KineticConnection *connection)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "KineticPDU* KineticAllocator_NewPDU (\fBKineticList\fP *constlist)"
+.SS "void KineticAllocator_InitLists (KineticConnection *connection)"
 
 .PP
-Definition at line 181 of file kinetic_allocator\&.c\&.
+Definition at line 44 of file kinetic_allocator\&.c\&.
 .PP
-References KineticAllocator_NewItem(), and LOG\&.
-.SS "void KineticAllocator_FreePDU (\fBKineticList\fP *constlist, KineticPDU *pdu)"
+References KINETIC_LIST_INITIALIZER\&.
+.SS "KineticPDU* KineticAllocator_NewPDU (KineticConnection *connection)"
 
 .PP
-Definition at line 194 of file kinetic_allocator\&.c\&.
+Definition at line 221 of file kinetic_allocator\&.c\&.
 .PP
-References KineticAllocator_FreeItem(), and KineticProto__free_unpacked()\&.
-.SS "void KineticAllocator_FreeAllPDUs (\fBKineticList\fP *constlist)"
+References KINETIC_PDU_INIT, LOG0, and LOGF3\&.
+.SS "void KineticAllocator_FreePDU (KineticConnection *connection, KineticPDU *pdu)"
 
 .PP
-Definition at line 205 of file kinetic_allocator\&.c\&.
+Definition at line 237 of file kinetic_allocator\&.c\&.
 .PP
-References KineticAllocator_FreeList(), KineticProto__free_unpacked(), LOG, and KineticList::start\&.
-.SS "bool KineticAllocator_ValidateAllMemoryFreed (\fBKineticList\fP *constlist)"
+References KINETIC_LIST_LOCK, KINETIC_LIST_UNLOCK, KineticProto_Message__free_unpacked(), LOG3, and LOGF3\&.
+.SS "KineticPDU* KineticAllocator_GetFirstPDU (KineticConnection *connection)"
 
 .PP
-Definition at line 227 of file kinetic_allocator\&.c\&.
+Definition at line 250 of file kinetic_allocator\&.c\&.
+.SS "KineticPDU* KineticAllocator_GetNextPDU (KineticConnection *connection, KineticPDU *pdu)"
+
 .PP
-References KineticList::start\&.
+Definition at line 256 of file kinetic_allocator\&.c\&.
+.SS "void KineticAllocator_FreeAllPDUs (KineticConnection *connection)"
+
+.PP
+Definition at line 262 of file kinetic_allocator\&.c\&.
+.PP
+References KINETIC_LIST_LOCK, KINETIC_LIST_UNLOCK, KineticProto_Message__free_unpacked(), LOG1, and LOG3\&.
+.SS "KineticOperation* KineticAllocator_NewOperation (KineticConnection *connection)"
+
+.PP
+Definition at line 290 of file kinetic_allocator\&.c\&.
+.PP
+References KINETIC_OPERATION_INIT, KINETIC_PDU_INIT_WITH_COMMAND, KineticAllocator_NewPDU(), LOGF0, and LOGF3\&.
+.SS "void KineticAllocator_FreeOperation (KineticConnection *connection, KineticOperation *operation)"
+
+.PP
+Definition at line 307 of file kinetic_allocator\&.c\&.
+.PP
+References KineticAllocator_FreePDU(), and LOGF3\&.
+.SS "KineticOperation* KineticAllocator_GetFirstOperation (KineticConnection *connection)"
+
+.PP
+Definition at line 326 of file kinetic_allocator\&.c\&.
+.SS "KineticOperation* KineticAllocator_GetNextOperation (KineticConnection *connection, KineticOperation *operation)"
+
+.PP
+Definition at line 332 of file kinetic_allocator\&.c\&.
+.SS "void KineticAllocator_FreeAllOperations (KineticConnection *connection)"
+
+.PP
+Definition at line 338 of file kinetic_allocator\&.c\&.
+.PP
+References KineticAllocator_FreePDU(), LOG1, and LOGF3\&.
+.SS "bool KineticAllocator_ValidateAllMemoryFreed (KineticConnection *connection)"
+
+.PP
+Definition at line 371 of file kinetic_allocator\&.c\&.
+.PP
+References BOOL_TO_STRING, and LOGF3\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.

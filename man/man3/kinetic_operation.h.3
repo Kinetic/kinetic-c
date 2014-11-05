@@ -1,4 +1,4 @@
-.TH "kinetic_operation.h" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_operation.h" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,71 +13,89 @@ kinetic_operation.h \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticOperation\fP \fBKineticOperation_Create\fP (\fBKineticConnection\fP *const connection)"
+.RI "\fBKineticStatus\fP \fBKineticOperation_SendRequest\fP (KineticOperation *const operation)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticOperation_Free\fP (\fBKineticOperation\fP *const operation)"
+.RI "\fBKineticStatus\fP \fBKineticOperation_ReceiveAsync\fP (KineticOperation *const operation)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticOperation_GetStatus\fP (const \fBKineticOperation\fP *const operation)"
+.RI "KineticOperation * \fBKineticOperation_AssociateResponseWithOperation\fP (KineticPDU *response)"
 .br
 .ti -1c
-.RI "void \fBKineticOperation_BuildNoop\fP (\fBKineticOperation\fP *operation)"
+.RI "\fBKineticStatus\fP \fBKineticOperation_GetStatus\fP (const KineticOperation *const operation)"
 .br
 .ti -1c
-.RI "void \fBKineticOperation_BuildPut\fP (\fBKineticOperation\fP *const operation, \fBKineticEntry\fP *const entry)"
+.RI "void \fBKineticOperation_BuildNoop\fP (KineticOperation *operation)"
 .br
 .ti -1c
-.RI "void \fBKineticOperation_BuildGet\fP (\fBKineticOperation\fP *const operation, \fBKineticEntry\fP *const entry)"
+.RI "void \fBKineticOperation_BuildPut\fP (KineticOperation *const operation, \fBKineticEntry\fP *const entry)"
 .br
 .ti -1c
-.RI "void \fBKineticOperation_BuildDelete\fP (\fBKineticOperation\fP *const operation, \fBKineticEntry\fP *const entry)"
+.RI "void \fBKineticOperation_BuildGet\fP (KineticOperation *const operation, \fBKineticEntry\fP *const entry)"
+.br
+.ti -1c
+.RI "void \fBKineticOperation_BuildDelete\fP (KineticOperation *const operation, \fBKineticEntry\fP *const entry)"
+.br
+.ti -1c
+.RI "void \fBKineticOperation_BuildGetKeyRange\fP (KineticOperation *const operation, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *buffers)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticOperation\fP KineticOperation_Create (\fBKineticConnection\fP *constconnection)"
+.SS "\fBKineticStatus\fP KineticOperation_SendRequest (KineticOperation *constoperation)"
 
 .PP
-Definition at line 40 of file kinetic_operation\&.c\&.
+Definition at line 34 of file kinetic_operation\&.c\&.
 .PP
-References KineticOperation::connection, KINETIC_PDU_INIT_WITH_MESSAGE, KineticAllocator_NewPDU(), KineticPDU_Init(), LOG, LOGF, KineticConnection::pdus, KineticOperation::request, and KineticOperation::response\&.
-.SS "\fBKineticStatus\fP KineticOperation_Free (\fBKineticOperation\fP *constoperation)"
+References ByteBuffer_Create(), KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticHMAC_Init(), KineticHMAC_Populate(), KineticLogger_LogByteArray(), KineticLogger_LogHeader(), KineticLogger_LogProtobuf(), KineticNBO_FromHostU32(), KineticPDUHeader, KineticProto_command__get_packed_size(), KineticProto_command__pack(), KineticProto_Message__get_packed_size(), KineticSocket_Write(), KineticSocket_WriteProtobuf(), LOG0, LOG1, LOG2, and LOGF1\&.
+.SS "\fBKineticStatus\fP KineticOperation_ReceiveAsync (KineticOperation *constoperation)"
 
 .PP
-Definition at line 76 of file kinetic_operation\&.c\&.
+Definition at line 162 of file kinetic_operation\&.c\&.
 .PP
-References KineticOperation::connection, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticAllocator_FreePDU(), LOG, KineticConnection::pdus, KineticOperation::request, and KineticOperation::response\&.
-.SS "\fBKineticStatus\fP KineticOperation_GetStatus (const \fBKineticOperation\fP *constoperation)"
+References Kinetic_GetStatusDescription(), KINETIC_PDU_RECEIVE_TIMEOUT_SECS, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SOCKET_TIMEOUT, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeOperation(), KineticPDU_GetStatus(), LOG0, LOGF1, and LOGF2\&.
+.SS "KineticOperation* KineticOperation_AssociateResponseWithOperation (KineticPDU *response)"
 
 .PP
-Definition at line 96 of file kinetic_operation\&.c\&.
+Definition at line 123 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_STATUS_INVALID, KineticPDU_GetStatus(), and KineticOperation::response\&.
-.SS "void KineticOperation_BuildNoop (\fBKineticOperation\fP *operation)"
+References KINETIC_PDU_TYPE_REQUEST, KINETIC_PDU_TYPE_RESPONSE, KineticAllocator_GetFirstOperation(), KineticAllocator_GetNextOperation(), LOG0, LOG2, and LOGF2\&.
+.SS "\fBKineticStatus\fP KineticOperation_GetStatus (const KineticOperation *constoperation)"
 
 .PP
-Definition at line 107 of file kinetic_operation\&.c\&.
+Definition at line 114 of file kinetic_operation\&.c\&.
 .PP
-References BYTE_BUFFER_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_NOOP, KineticConnection_IncrementSequence(), KineticOperation::request, and KineticOperation::response\&.
-.SS "void KineticOperation_BuildPut (\fBKineticOperation\fP *constoperation, \fBKineticEntry\fP *constentry)"
+References KINETIC_STATUS_INVALID, and KineticPDU_GetStatus()\&.
+.SS "void KineticOperation_BuildNoop (KineticOperation *operation)"
 
 .PP
-Definition at line 119 of file kinetic_operation\&.c\&.
+Definition at line 229 of file kinetic_operation\&.c\&.
 .PP
-References BYTE_BUFFER_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_PUT, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation::request, KineticOperation::response, and KineticEntry::value\&.
-.SS "void KineticOperation_BuildGet (\fBKineticOperation\fP *constoperation, \fBKineticEntry\fP *constentry)"
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, KineticConnection_IncrementSequence(), and KineticOperation_NoopCallback()\&.
+.SS "void KineticOperation_BuildPut (KineticOperation *constoperation, \fBKineticEntry\fP *constentry)"
 
 .PP
-Definition at line 136 of file kinetic_operation\&.c\&.
+Definition at line 268 of file kinetic_operation\&.c\&.
 .PP
-References BYTE_BUFFER_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_GET, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticEntry::metadataOnly, KineticOperation::request, KineticOperation::response, and KineticEntry::value\&.
-.SS "void KineticOperation_BuildDelete (\fBKineticOperation\fP *constoperation, \fBKineticEntry\fP *constentry)"
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), and KineticOperation_PutCallback()\&.
+.SS "void KineticOperation_BuildGet (KineticOperation *constoperation, \fBKineticEntry\fP *constentry)"
 
 .PP
-Definition at line 156 of file kinetic_operation\&.c\&.
+Definition at line 306 of file kinetic_operation\&.c\&.
 .PP
-References BYTE_BUFFER_NONE, KineticOperation::connection, KINETIC_PROTO_MESSAGE_TYPE_DELETE, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation::request, and KineticOperation::response\&.
+References ByteBuffer_Reset(), KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), KineticOperation_GetCallback(), and KineticEntry::metadataOnly\&.
+.SS "void KineticOperation_BuildDelete (KineticOperation *constoperation, \fBKineticEntry\fP *constentry)"
+
+.PP
+Definition at line 337 of file kinetic_operation\&.c\&.
+.PP
+References ByteBuffer_Reset(), KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyValue(), and KineticOperation_DeleteCallback()\&.
+.SS "void KineticOperation_BuildGetKeyRange (KineticOperation *constoperation, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *buffers)"
+
+.PP
+Definition at line 377 of file kinetic_operation\&.c\&.
+.PP
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE, KineticConnection_IncrementSequence(), KineticMessage_ConfigureKeyRange(), and KineticOperation_GetKeyRangeCallback()\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.

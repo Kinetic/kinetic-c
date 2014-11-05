@@ -1,4 +1,4 @@
-.TH "kinetic_pdu.c" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "kinetic_pdu.c" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,58 +25,65 @@ kinetic_pdu.c \-
 
 .in +1c
 .ti -1c
-.RI "void \fBKineticPDU_Init\fP (KineticPDU *const pdu, \fBKineticConnection\fP *const connection)"
+.RI "void \fBKineticPDU_Init\fP (KineticPDU *const pdu, KineticConnection *const connection)"
 .br
 .ti -1c
-.RI "void \fBKineticPDU_AttachEntry\fP (KineticPDU *const pdu, \fBKineticEntry\fP *const entry)"
+.RI "\fBKineticStatus\fP \fBKineticPDU_ReceiveMain\fP (KineticPDU *const response)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticPDU_Send\fP (KineticPDU *request)"
+.RI "\fBKineticStatus\fP \fBKineticPDU_ReceiveValue\fP (int socket_desc, \fBByteBuffer\fP *value, size_t value_length)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticPDU_Receive\fP (KineticPDU *const response)"
+.RI "size_t \fBKineticPDU_GetValueLength\fP (KineticPDU *const pdu)"
 .br
 .ti -1c
 .RI "\fBKineticStatus\fP \fBKineticPDU_GetStatus\fP (KineticPDU *pdu)"
 .br
 .ti -1c
-.RI "KineticProto_KeyValue * \fBKineticPDU_GetKeyValue\fP (KineticPDU *pdu)"
+.RI "KineticProto_Command_KeyValue * \fBKineticPDU_GetKeyValue\fP (KineticPDU *pdu)"
+.br
+.ti -1c
+.RI "KineticProto_Command_Range * \fBKineticPDU_GetKeyRange\fP (KineticPDU *pdu)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "void KineticPDU_Init (KineticPDU *constpdu, \fBKineticConnection\fP *constconnection)"
+.SS "void KineticPDU_Init (KineticPDU *constpdu, KineticConnection *constconnection)"
 
 .PP
-Definition at line 29 of file kinetic_pdu\&.c\&.
+Definition at line 30 of file kinetic_pdu\&.c\&.
 .PP
 References KINETIC_PDU_INIT\&.
-.SS "void KineticPDU_AttachEntry (KineticPDU *constpdu, \fBKineticEntry\fP *constentry)"
+.SS "\fBKineticStatus\fP KineticPDU_ReceiveMain (KineticPDU *constresponse)"
 
 .PP
-Definition at line 35 of file kinetic_pdu\&.c\&.
-.SS "\fBKineticStatus\fP KineticPDU_Send (KineticPDU *request)"
+Definition at line 36 of file kinetic_pdu\&.c\&.
+.PP
+References ByteBuffer::array, ByteBuffer_Create(), KineticMessage::command, KineticMessage::has_command, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR, KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS, KINETIC_STATUS_DATA_ERROR, KINETIC_STATUS_SUCCESS, KineticHMAC_Validate(), KineticLogger_LogHeader(), KineticLogger_LogProtobuf(), KineticNBO_ToHostU32(), KineticPDU_GetStatus(), KineticPDUHeader, KineticProto_command__unpack(), KineticSocket_Read(), KineticSocket_ReadProtobuf(), ByteArray::len, LOG0, LOG2, LOG3, LOGF1, KineticMessage::message, and KineticMessage::status\&.
+.SS "\fBKineticStatus\fP KineticPDU_ReceiveValue (intsocket_desc, \fBByteBuffer\fP *value, size_tvalue_length)"
 
 .PP
-Definition at line 42 of file kinetic_pdu\&.c\&.
+Definition at line 117 of file kinetic_pdu\&.c\&.
 .PP
-References ByteBuffer::array, ByteBuffer_Create(), ByteBuffer::bytesUsed, ByteArray::data, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticHMAC_Init(), KineticHMAC_Populate(), KineticLogger_LogHeader(), KineticLogger_LogProtobuf(), KineticNBO_FromHostU32(), KineticPDUHeader, KineticProto__get_packed_size(), KineticSocket_Write(), KineticSocket_WriteProtobuf(), ByteArray::len, LOG, and LOGF\&.
-.SS "\fBKineticStatus\fP KineticPDU_Receive (KineticPDU *constresponse)"
+References ByteBuffer::array, ByteBuffer_Reset(), ByteArray::data, KINETIC_STATUS_SUCCESS, KineticLogger_LogByteBuffer(), KineticSocket_Read(), LOG0, LOG1, and LOGF1\&.
+.SS "size_t KineticPDU_GetValueLength (KineticPDU *constpdu)"
 
 .PP
-Definition at line 108 of file kinetic_pdu\&.c\&.
-.PP
-References ByteBuffer::array, ByteBuffer_Create(), KineticMessage::command, KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR, KINETIC_STATUS_DATA_ERROR, KINETIC_STATUS_SUCCESS, KineticHMAC_Validate(), KineticLogger_LogHeader(), KineticLogger_LogProtobuf(), KineticNBO_ToHostU32(), KineticPDU_GetStatus(), KineticPDUHeader, KineticSocket_Read(), KineticSocket_ReadProtobuf(), ByteArray::len, LOG, LOGF, KineticMessage::proto, and KineticMessage::status\&.
+Definition at line 136 of file kinetic_pdu\&.c\&.
 .SS "\fBKineticStatus\fP KineticPDU_GetStatus (KineticPDU *pdu)"
 
 .PP
-Definition at line 200 of file kinetic_pdu\&.c\&.
+Definition at line 142 of file kinetic_pdu\&.c\&.
 .PP
 References KINETIC_STATUS_INVALID, and KineticProtoStatusCode_to_KineticStatus()\&.
-.SS "KineticProto_KeyValue* KineticPDU_GetKeyValue (KineticPDU *pdu)"
+.SS "KineticProto_Command_KeyValue* KineticPDU_GetKeyValue (KineticPDU *pdu)"
 
 .PP
-Definition at line 217 of file kinetic_pdu\&.c\&.
+Definition at line 158 of file kinetic_pdu\&.c\&.
+.SS "KineticProto_Command_Range* KineticPDU_GetKeyRange (KineticPDU *pdu)"
+
+.PP
+Definition at line 171 of file kinetic_pdu\&.c\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.

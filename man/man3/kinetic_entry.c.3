@@ -1,0 +1,83 @@
+.TH "kinetic_entry.c" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_entry.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_entry\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBKineticEntry_Init\fP (\fBKineticEntry\fP *entry)"
+.br
+.ti -1c
+.RI "\fBByteBuffer\fP * \fBKineticEntry_GetVersion\fP (\fBKineticEntry\fP *entry)"
+.br
+.ti -1c
+.RI "void \fBKineticEntry_SetVersion\fP (\fBKineticEntry\fP *entry, \fBByteBuffer\fP version)"
+.br
+.ti -1c
+.RI "\fBByteBuffer\fP * \fBKineticEntry_GetTag\fP (\fBKineticEntry\fP *entry)"
+.br
+.ti -1c
+.RI "void \fBKineticEntry_SetTag\fP (\fBKineticEntry\fP *entry, \fBByteBuffer\fP tag)"
+.br
+.ti -1c
+.RI "\fBKineticAlgorithm\fP \fBKineticEntry_GetAlgorithm\fP (\fBKineticEntry\fP *entry)"
+.br
+.ti -1c
+.RI "void \fBKineticEntry_SetAlgorithm\fP (\fBKineticEntry\fP *entry, \fBKineticAlgorithm\fP algorithm)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void KineticEntry_Init (\fBKineticEntry\fP *entry)"
+
+.PP
+Definition at line 41 of file kinetic_entry\&.c\&.
+.PP
+References BYTE_BUFFER_NONE, and KineticEntry::key\&.
+.SS "\fBByteBuffer\fP* KineticEntry_GetVersion (\fBKineticEntry\fP *entry)"
+
+.PP
+Definition at line 50 of file kinetic_entry\&.c\&.
+.PP
+References KineticEntry::dbVersion\&.
+.SS "void KineticEntry_SetVersion (\fBKineticEntry\fP *entry, \fBByteBuffer\fPversion)"
+
+.PP
+Definition at line 56 of file kinetic_entry\&.c\&.
+.PP
+References KineticEntry::dbVersion\&.
+.SS "\fBByteBuffer\fP* KineticEntry_GetTag (\fBKineticEntry\fP *entry)"
+
+.PP
+Definition at line 62 of file kinetic_entry\&.c\&.
+.PP
+References KineticEntry::tag\&.
+.SS "void KineticEntry_SetTag (\fBKineticEntry\fP *entry, \fBByteBuffer\fPtag)"
+
+.PP
+Definition at line 68 of file kinetic_entry\&.c\&.
+.PP
+References KineticEntry::tag\&.
+.SS "\fBKineticAlgorithm\fP KineticEntry_GetAlgorithm (\fBKineticEntry\fP *entry)"
+
+.PP
+Definition at line 74 of file kinetic_entry\&.c\&.
+.PP
+References KineticEntry::algorithm\&.
+.SS "void KineticEntry_SetAlgorithm (\fBKineticEntry\fP *entry, \fBKineticAlgorithm\fPalgorithm)"
+
+.PP
+Definition at line 80 of file kinetic_entry\&.c\&.
+.PP
+References KineticEntry::algorithm\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

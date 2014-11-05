@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: kinetic_hmac.c Source File</title>
+<title>kinetic-c: kinetic_hmac.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -80,111 +80,128 @@
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;openssl/hmac.h&gt;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> KineticHMAC_Compute(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                                <span class="keyword">const</span> <a class="code" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a>* proto,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                                <span class="keyword">const</span> KineticProto_Message* proto,</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                                <span class="keyword">const</span> <a class="code" href="struct_byte_array.html">ByteArray</a> key);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="kinetic__hmac_8h.html#af18bc978da74d29a03ef969007c5201f">   31</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__hmac_8c.html#af18bc978da74d29a03ef969007c5201f">KineticHMAC_Init</a>(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                      <a class="code" href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549a">KineticProto_Security_ACL_HMACAlgorithm</a> algorithm)</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="kinetic__hmac_8h.html#a560fa368e7286d678faa097df39a5e55">   31</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__hmac_8c.html#a560fa368e7286d678faa097df39a5e55">KineticHMAC_Init</a>(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                      <a class="code" href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697">KineticProto_Command_Security_ACL_HMACAlgorithm</a> algorithm)</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordflow">if</span> (algorithm == <a class="code" href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549aa068543baabc664a534094767a67539f2">KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>) {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordflow">if</span> (algorithm == <a class="code" href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697a5496579a12fcc819b6866257ce00b03d">KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>) {</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        *hmac = (<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            .<a class="code" href="struct_kinetic_h_m_a_c.html#a8b00d3368fc08fba9b41370568dc6d11">algorithm</a> = algorithm,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;             .len = <a class="code" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            .<a class="code" href="struct_kinetic_h_m_a_c.html#a40e569922e404f14a5cd041d5d2a2910">algorithm</a> = algorithm,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            .len = <a class="code" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        };</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    }</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        *hmac = (<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>) {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            .<a class="code" href="struct_kinetic_h_m_a_c.html#a8b00d3368fc08fba9b41370568dc6d11">algorithm</a> = <a class="code" href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549aac5fc12142af1ef2e6d47976e6ab61c6e">KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM</a></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            .<a class="code" href="struct_kinetic_h_m_a_c.html#a40e569922e404f14a5cd041d5d2a2910">algorithm</a> = <a class="code" href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697add9222b2bd3eea200cc44e960287ff37">KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM</a></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        };</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="kinetic__hmac_8h.html#a5dd91c42c8cc41c324c917f3d463ef7f">   47</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__hmac_8c.html#a5dd91c42c8cc41c324c917f3d463ef7f">KineticHMAC_Populate</a>(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                          <a class="code" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a>* proto,</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="kinetic__hmac_8h.html#afc2c3f733a1383b02b125f0c6d08e95b">   47</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__hmac_8c.html#afc2c3f733a1383b02b125f0c6d08e95b">KineticHMAC_Populate</a>(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                          KineticProto_Message* msg,</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                          <span class="keyword">const</span> <a class="code" href="struct_byte_array.html">ByteArray</a> key)</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="kinetic__hmac_8c.html#af18bc978da74d29a03ef969007c5201f">KineticHMAC_Init</a>(hmac, <a class="code" href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549aa068543baabc664a534094767a67539f2">KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    KineticHMAC_Compute(hmac, proto, key);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">// Copy computed HMAC into message</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    memcpy(proto-&gt;hmac.data, hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a>, hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    proto-&gt;hmac.len = hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    proto-&gt;has_hmac = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="kinetic__hmac_8h.html#ac38b2071b2c9425be6a8eac68e0fb27e">   60</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__hmac_8c.html#ac38b2071b2c9425be6a8eac68e0fb27e">KineticHMAC_Validate</a>(<span class="keyword">const</span> <a class="code" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a>* proto,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                          <span class="keyword">const</span> <a class="code" href="struct_byte_array.html">ByteArray</a> key)</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;{</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> success = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">size_t</span> i;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">int</span> result = 0;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a> tempHMAC;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> (proto-&gt;has_hmac) {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="code" href="kinetic__hmac_8c.html#af18bc978da74d29a03ef969007c5201f">KineticHMAC_Init</a>(&amp;tempHMAC, <a class="code" href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549aa068543baabc664a534094767a67539f2">KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        KineticHMAC_Compute(&amp;tempHMAC, proto, key);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">if</span> (proto-&gt;hmac.len == tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">for</span> (i = 0; i &lt; tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>; i++) {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                result |= proto-&gt;hmac.data[i] ^ tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a>[i];</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            success = (result == 0);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">if</span> (!success) {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <a class="code" href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a>(<span class="stringliteral">&quot;HMAC did not compare!&quot;</span>);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <a class="code" href="struct_byte_array.html">ByteArray</a> expected = {.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a> = proto-&gt;hmac.data, .len = proto-&gt;hmac.len};</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <a class="code" href="kinetic__logger_8c.html#a1833be5893222cc3650250726623f93c">KineticLogger_LogByteArray</a>(<span class="stringliteral">&quot;expected HMAC&quot;</span>, expected);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <a class="code" href="struct_byte_array.html">ByteArray</a> actual = {.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a> = tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a>, .len = tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>};</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <a class="code" href="kinetic__logger_8c.html#a1833be5893222cc3650250726623f93c">KineticLogger_LogByteArray</a>(<span class="stringliteral">&quot;actual HMAC&quot;</span>, actual);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">return</span> success;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wdeprecated-declarations&quot;</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> KineticHMAC_Compute(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                                <span class="keyword">const</span> <a class="code" href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a>* proto,</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                                <span class="keyword">const</span> <a class="code" href="struct_byte_array.html">ByteArray</a> key)</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;{</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    assert(proto-&gt;command);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    uint32_t len = protobuf_c_message_get_packed_size((ProtobufCMessage*)proto-&gt;command);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    uint32_t lenNBO = <a class="code" href="kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad">KineticNBO_FromHostU32</a>(len);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    uint8_t* packed = malloc(len);</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    assert(packed);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    uint32_t lenPacked = protobuf_c_message_pack((ProtobufCMessage*)proto-&gt;command, packed);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    assert(lenPacked == len);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    assert(hmac != NULL);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    assert(msg != NULL);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    assert(key.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a> != NULL);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    assert(key.<a class="code" href="struct_byte_array.html#a9a69ed98466be27ba69a44764c16f694">len</a> &gt; 0);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="kinetic__hmac_8c.html#a560fa368e7286d678faa097df39a5e55">KineticHMAC_Init</a>(hmac, <a class="code" href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697a5496579a12fcc819b6866257ce00b03d">KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    KineticHMAC_Compute(hmac, msg, key);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">// Copy computed HMAC into message</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    memcpy(msg-&gt;hmacAuth-&gt;hmac.data, hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a>, hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    msg-&gt;hmacAuth-&gt;hmac.len = hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    msg-&gt;hmacAuth-&gt;has_hmac = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="kinetic__hmac_8h.html#aa5f262809b134357770fe1b289797fb7">   65</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__hmac_8c.html#aa5f262809b134357770fe1b289797fb7">KineticHMAC_Validate</a>(<span class="keyword">const</span> KineticProto_Message* msg,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                          <span class="keyword">const</span> <a class="code" href="struct_byte_array.html">ByteArray</a> key)</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;{</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    assert(msg != NULL);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    assert(key.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a> != NULL);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    assert(key.<a class="code" href="struct_byte_array.html#a9a69ed98466be27ba69a44764c16f694">len</a> &gt; 0);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">bool</span> success = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">size_t</span> i;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">int</span> result = 0;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a> tempHMAC;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">if</span> (!msg-&gt;has_authType</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;     || msg-&gt;authType != <a class="code" href="kinetic__proto_8h.html#a77e7fcd58668ab869af2d87810c8f337a0a97fd3bef0345b803b7178b93759070">KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH</a></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;     || msg-&gt;hmacAuth == NULL</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;     || !msg-&gt;hmacAuth-&gt;has_hmac</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;     || msg-&gt;hmacAuth-&gt;hmac.data == NULL</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;     || msg-&gt;hmacAuth-&gt;hmac.len == 0) {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="kinetic__hmac_8c.html#a560fa368e7286d678faa097df39a5e55">KineticHMAC_Init</a>(&amp;tempHMAC, <a class="code" href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697a5496579a12fcc819b6866257ce00b03d">KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    KineticHMAC_Compute(&amp;tempHMAC, msg, key);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">if</span> (msg-&gt;hmacAuth-&gt;hmac.len == tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">for</span> (i = 0; i &lt; tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>; i++) {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            result |= msg-&gt;hmacAuth-&gt;hmac.data[i] ^ tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a>[i];</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        }</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        success = (result == 0);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordflow">if</span> (!success) {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <a class="code" href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a>(<span class="stringliteral">&quot;HMAC did not compare!&quot;</span>);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <a class="code" href="struct_byte_array.html">ByteArray</a> expected = {.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a> = msg-&gt;hmacAuth-&gt;hmac.data, .len = msg-&gt;hmacAuth-&gt;hmac.len};</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="code" href="kinetic__logger_8c.html#adeef474b44c9d6e0c08b05b873aaf3ba">KineticLogger_LogByteArray</a>(1, <span class="stringliteral">&quot;expected HMAC&quot;</span>, expected);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <a class="code" href="struct_byte_array.html">ByteArray</a> actual = {.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a> = tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a>, .len = tempHMAC.<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>};</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="kinetic__logger_8c.html#adeef474b44c9d6e0c08b05b873aaf3ba">KineticLogger_LogByteArray</a>(1, <span class="stringliteral">&quot;actual HMAC&quot;</span>, actual);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    HMAC_CTX ctx;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    HMAC_CTX_init(&amp;ctx);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    HMAC_Init_ex(&amp;ctx, key.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a>, key.<a class="code" href="struct_byte_array.html#a9a69ed98466be27ba69a44764c16f694">len</a>, EVP_sha1(), NULL);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    HMAC_Update(&amp;ctx, (uint8_t*)&amp;lenNBO, <span class="keyword">sizeof</span>(uint32_t));</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    HMAC_Update(&amp;ctx, packed, len);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    HMAC_Final(&amp;ctx, hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a>, &amp;hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    HMAC_CTX_cleanup(&amp;ctx);</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    free(packed);</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;}</div>
-<div class="ttc" id="struct_byte_array_html"><div class="ttname"><a href="struct_byte_array.html">ByteArray</a></div><div class="ttdoc">Structure for handling generic arrays of bytes. </div><div class="ttdef"><b>Definition:</b> <a href="include_2byte__array_8h_source.html#l00015">include/byte_array.h:15</a></div></div>
-<div class="ttc" id="struct_kinetic_h_m_a_c_html"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html">KineticHMAC</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00083">kinetic_types_internal.h:83</a></div></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">return</span> success;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wdeprecated-declarations&quot;</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> KineticHMAC_Compute(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                                <span class="keyword">const</span> KineticProto_Message* msg,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                                <span class="keyword">const</span> <a class="code" href="struct_byte_array.html">ByteArray</a> key)</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;{</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    assert(hmac != NULL);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    assert(hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a> != NULL);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    assert(hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a> &gt; 0);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    assert(msg != NULL);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    assert(msg-&gt;has_commandBytes);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    assert(msg-&gt;commandBytes.data != NULL);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    assert(msg-&gt;commandBytes.len &gt; 0);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    uint32_t lenNBO = <a class="code" href="kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad">KineticNBO_FromHostU32</a>(msg-&gt;commandBytes.len);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    HMAC_CTX ctx;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    HMAC_CTX_init(&amp;ctx);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    HMAC_Init_ex(&amp;ctx, key.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a>, key.<a class="code" href="struct_byte_array.html#a9a69ed98466be27ba69a44764c16f694">len</a>, EVP_sha1(), NULL);</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    HMAC_Update(&amp;ctx, (uint8_t*)&amp;lenNBO, <span class="keyword">sizeof</span>(uint32_t));</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    HMAC_Update(&amp;ctx, msg-&gt;commandBytes.data, msg-&gt;commandBytes.len);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    HMAC_Final(&amp;ctx, hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">data</a>, &amp;hmac-&gt;<a class="code" href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">len</a>);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    HMAC_CTX_cleanup(&amp;ctx);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;}</div>
+<div class="ttc" id="struct_byte_array_html"><div class="ttname"><a href="struct_byte_array.html">ByteArray</a></div><div class="ttdoc">Structure for handling generic arrays of bytes. </div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00015">byte_array.h:15</a></div></div>
+<div class="ttc" id="kinetic__hmac_8c_html_aa5f262809b134357770fe1b289797fb7"><div class="ttname"><a href="kinetic__hmac_8c.html#aa5f262809b134357770fe1b289797fb7">KineticHMAC_Validate</a></div><div class="ttdeci">bool KineticHMAC_Validate(const KineticProto_Message *msg, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00065">kinetic_hmac.c:65</a></div></div>
+<div class="ttc" id="struct_kinetic_h_m_a_c_html"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html">KineticHMAC</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00106">kinetic_types_internal.h:106</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html"><div class="ttname"><a href="kinetic__logger_8h.html">kinetic_logger.h</a></div></div>
 <div class="ttc" id="kinetic__nbo_8c_html_ab29859f82a05cd469391e003b4aac3ad"><div class="ttname"><a href="kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad">KineticNBO_FromHostU32</a></div><div class="ttdeci">uint32_t KineticNBO_FromHostU32(uint32_t valueHost)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__nbo_8c_source.html#l00032">kinetic_nbo.c:32</a></div></div>
-<div class="ttc" id="struct_kinetic_h_m_a_c_html_a8b00d3368fc08fba9b41370568dc6d11"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html#a8b00d3368fc08fba9b41370568dc6d11">KineticHMAC::algorithm</a></div><div class="ttdeci">KineticProto_Security_ACL_HMACAlgorithm algorithm</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00084">kinetic_types_internal.h:84</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_ab25f5f599fde5352c70e529ebba7a6da"><div class="ttname"><a href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a></div><div class="ttdeci">#define KINETIC_HMAC_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00042">kinetic_types.h:42</a></div></div>
-<div class="ttc" id="kinetic__proto_8h_html_ab7618cff33ad482ce8ab53bf72cd549aa068543baabc664a534094767a67539f2"><div class="ttname"><a href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549aa068543baabc664a534094767a67539f2">KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00101">kinetic_proto.h:101</a></div></div>
-<div class="ttc" id="struct_kinetic_h_m_a_c_html_a411426228f4c23527f5a48158a46500b"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">KineticHMAC::len</a></div><div class="ttdeci">uint32_t len</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00085">kinetic_types_internal.h:85</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_a04a117a4d31fa8b12a406b1aa66864f3"><div class="ttname"><a href="kinetic__logger_8h.html#a04a117a4d31fa8b12a406b1aa66864f3">LOG</a></div><div class="ttdeci">#define LOG(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00040">kinetic_logger.h:40</a></div></div>
-<div class="ttc" id="kinetic__proto_8h_html_ad0a95a86f790c67b513ec195e4f4c352"><div class="ttname"><a href="kinetic__proto_8h.html#ad0a95a86f790c67b513ec195e4f4c352">KineticProto</a></div><div class="ttdeci">typedefPROTOBUF_C__BEGIN_DECLS struct _KineticProto KineticProto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00038">kinetic_proto.h:38</a></div></div>
-<div class="ttc" id="kinetic__hmac_8c_html_ac38b2071b2c9425be6a8eac68e0fb27e"><div class="ttname"><a href="kinetic__hmac_8c.html#ac38b2071b2c9425be6a8eac68e0fb27e">KineticHMAC_Validate</a></div><div class="ttdeci">bool KineticHMAC_Validate(const KineticProto *proto, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00060">kinetic_hmac.c:60</a></div></div>
-<div class="ttc" id="kinetic__hmac_8c_html_a5dd91c42c8cc41c324c917f3d463ef7f"><div class="ttname"><a href="kinetic__hmac_8c.html#a5dd91c42c8cc41c324c917f3d463ef7f">KineticHMAC_Populate</a></div><div class="ttdeci">void KineticHMAC_Populate(KineticHMAC *hmac, KineticProto *proto, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00047">kinetic_hmac.c:47</a></div></div>
-<div class="ttc" id="struct_byte_array_html_a9a69ed98466be27ba69a44764c16f694"><div class="ttname"><a href="struct_byte_array.html#a9a69ed98466be27ba69a44764c16f694">ByteArray::len</a></div><div class="ttdeci">size_t len</div><div class="ttdoc">Number of bytes in the data field. </div><div class="ttdef"><b>Definition:</b> <a href="include_2byte__array_8h_source.html#l00016">include/byte_array.h:16</a></div></div>
-<div class="ttc" id="kinetic__logger_8c_html_a1833be5893222cc3650250726623f93c"><div class="ttname"><a href="kinetic__logger_8c.html#a1833be5893222cc3650250726623f93c">KineticLogger_LogByteArray</a></div><div class="ttdeci">void KineticLogger_LogByteArray(const char *title, ByteArray bytes)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00377">kinetic_logger.c:377</a></div></div>
-<div class="ttc" id="struct_kinetic_h_m_a_c_html_ae9208d3a492d573f46db07fb3a494011"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">KineticHMAC::data</a></div><div class="ttdeci">uint8_t data[KINETIC_HMAC_MAX_LEN]</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00086">kinetic_types_internal.h:86</a></div></div>
-<div class="ttc" id="struct_byte_array_html_aad2e9b4bac5a6198e4ef08b3b6890981"><div class="ttname"><a href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">ByteArray::data</a></div><div class="ttdeci">uint8_t * data</div><div class="ttdoc">Pointer to an allocated array of data bytes. </div><div class="ttdef"><b>Definition:</b> <a href="include_2byte__array_8h_source.html#l00017">include/byte_array.h:17</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_ab25f5f599fde5352c70e529ebba7a6da"><div class="ttname"><a href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da">KINETIC_HMAC_MAX_LEN</a></div><div class="ttdeci">#define KINETIC_HMAC_MAX_LEN</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00043">kinetic_types.h:43</a></div></div>
+<div class="ttc" id="kinetic__hmac_8c_html_afc2c3f733a1383b02b125f0c6d08e95b"><div class="ttname"><a href="kinetic__hmac_8c.html#afc2c3f733a1383b02b125f0c6d08e95b">KineticHMAC_Populate</a></div><div class="ttdeci">void KineticHMAC_Populate(KineticHMAC *hmac, KineticProto_Message *msg, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00047">kinetic_hmac.c:47</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_a675e2ac21e94b34e4d5fd7dbde312697"><div class="ttname"><a href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697">KineticProto_Command_Security_ACL_HMACAlgorithm</a></div><div class="ttdeci">KineticProto_Command_Security_ACL_HMACAlgorithm</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00113">kinetic_proto.h:113</a></div></div>
+<div class="ttc" id="struct_kinetic_h_m_a_c_html_a411426228f4c23527f5a48158a46500b"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html#a411426228f4c23527f5a48158a46500b">KineticHMAC::len</a></div><div class="ttdeci">uint32_t len</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00108">kinetic_types_internal.h:108</a></div></div>
+<div class="ttc" id="kinetic__hmac_8c_html_a560fa368e7286d678faa097df39a5e55"><div class="ttname"><a href="kinetic__hmac_8c.html#a560fa368e7286d678faa097df39a5e55">KineticHMAC_Init</a></div><div class="ttdeci">void KineticHMAC_Init(KineticHMAC *hmac, KineticProto_Command_Security_ACL_HMACAlgorithm algorithm)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00031">kinetic_hmac.c:31</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_a675e2ac21e94b34e4d5fd7dbde312697add9222b2bd3eea200cc44e960287ff37"><div class="ttname"><a href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697add9222b2bd3eea200cc44e960287ff37">KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00114">kinetic_proto.h:114</a></div></div>
+<div class="ttc" id="struct_kinetic_h_m_a_c_html_a40e569922e404f14a5cd041d5d2a2910"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html#a40e569922e404f14a5cd041d5d2a2910">KineticHMAC::algorithm</a></div><div class="ttdeci">KineticProto_Command_Security_ACL_HMACAlgorithm algorithm</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00107">kinetic_types_internal.h:107</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_aa65b0516ca90f3ef1cda5feab07e239c"><div class="ttname"><a href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a></div><div class="ttdeci">#define LOG0(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00046">kinetic_logger.h:46</a></div></div>
+<div class="ttc" id="struct_byte_array_html_a9a69ed98466be27ba69a44764c16f694"><div class="ttname"><a href="struct_byte_array.html#a9a69ed98466be27ba69a44764c16f694">ByteArray::len</a></div><div class="ttdeci">size_t len</div><div class="ttdoc">Number of bytes in the data field. </div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00016">byte_array.h:16</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_a675e2ac21e94b34e4d5fd7dbde312697a5496579a12fcc819b6866257ce00b03d"><div class="ttname"><a href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697a5496579a12fcc819b6866257ce00b03d">KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00115">kinetic_proto.h:115</a></div></div>
+<div class="ttc" id="struct_kinetic_h_m_a_c_html_ae9208d3a492d573f46db07fb3a494011"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html#ae9208d3a492d573f46db07fb3a494011">KineticHMAC::data</a></div><div class="ttdeci">uint8_t data[KINETIC_HMAC_MAX_LEN]</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00109">kinetic_types_internal.h:109</a></div></div>
+<div class="ttc" id="kinetic__proto_8h_html_a77e7fcd58668ab869af2d87810c8f337a0a97fd3bef0345b803b7178b93759070"><div class="ttname"><a href="kinetic__proto_8h.html#a77e7fcd58668ab869af2d87810c8f337a0a97fd3bef0345b803b7178b93759070">KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00071">kinetic_proto.h:71</a></div></div>
+<div class="ttc" id="struct_byte_array_html_aad2e9b4bac5a6198e4ef08b3b6890981"><div class="ttname"><a href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">ByteArray::data</a></div><div class="ttdeci">uint8_t * data</div><div class="ttdoc">Pointer to an allocated array of data bytes. </div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00017">byte_array.h:17</a></div></div>
+<div class="ttc" id="kinetic__logger_8c_html_adeef474b44c9d6e0c08b05b873aaf3ba"><div class="ttname"><a href="kinetic__logger_8c.html#adeef474b44c9d6e0c08b05b873aaf3ba">KineticLogger_LogByteArray</a></div><div class="ttdeci">void KineticLogger_LogByteArray(int log_level, const char *title, ByteArray bytes)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00726">kinetic_logger.c:726</a></div></div>
 <div class="ttc" id="kinetic__nbo_8h_html"><div class="ttname"><a href="kinetic__nbo_8h.html">kinetic_nbo.h</a></div></div>
-<div class="ttc" id="kinetic__hmac_8c_html_af18bc978da74d29a03ef969007c5201f"><div class="ttname"><a href="kinetic__hmac_8c.html#af18bc978da74d29a03ef969007c5201f">KineticHMAC_Init</a></div><div class="ttdeci">void KineticHMAC_Init(KineticHMAC *hmac, KineticProto_Security_ACL_HMACAlgorithm algorithm)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00031">kinetic_hmac.c:31</a></div></div>
-<div class="ttc" id="kinetic__proto_8h_html_ab7618cff33ad482ce8ab53bf72cd549a"><div class="ttname"><a href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549a">KineticProto_Security_ACL_HMACAlgorithm</a></div><div class="ttdeci">KineticProto_Security_ACL_HMACAlgorithm</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00099">kinetic_proto.h:99</a></div></div>
-<div class="ttc" id="kinetic__proto_8h_html_ab7618cff33ad482ce8ab53bf72cd549aac5fc12142af1ef2e6d47976e6ab61c6e"><div class="ttname"><a href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549aac5fc12142af1ef2e6d47976e6ab61c6e">KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00100">kinetic_proto.h:100</a></div></div>
 <div class="ttc" id="kinetic__hmac_8h_html"><div class="ttname"><a href="kinetic__hmac_8h.html">kinetic_hmac.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

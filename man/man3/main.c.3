@@ -1,4 +1,4 @@
-.TH "main.c" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "main.c" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,53 +17,17 @@ main.c \-
 
 .in +1c
 .ti -1c
-.RI "void \fBParseOptions\fP (const int argc, char **const argv, \fBKineticSession\fP *config, \fBKineticEntry\fP *entry)"
-.br
-.ti -1c
-.RI "\fBKineticStatus\fP \fBExecuteOperation\fP (const char *op, \fBKineticSessionHandle\fP sessionHandle, \fBKineticEntry\fP *entry)"
-.br
-.ti -1c
-.RI "void \fBConfigureEntry\fP (\fBKineticEntry\fP *entry, const char *key, const char *tag, const char *version, \fBKineticAlgorithm\fP algorithm, const char *value)"
-.br
-.ti -1c
-.RI "void \fBReportOperationConfiguration\fP (const char *operation, \fBKineticSession\fP *config, \fBKineticEntry\fP *entry)"
-.br
-.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "void ParseOptions (const intargc, char **constargv, \fBKineticSession\fP *config, \fBKineticEntry\fP *entry)"
-
-.PP
-Definition at line 196 of file main\&.c\&.
-.PP
-References ByteArray_Create(), ConfigureEntry(), KineticSession::host, HOST_NAME_MAX, KineticEntry::key, KINETIC_ALGORITHM_SHA1, KINETIC_MAX_KEY_LEN, KINETIC_PORT, KINETIC_TLS_PORT, and KineticSession::port\&.
-.SS "\fBKineticStatus\fP ExecuteOperation (const char *op, \fBKineticSessionHandle\fPsessionHandle, \fBKineticEntry\fP *entry)"
-
-.PP
-Definition at line 89 of file main\&.c\&.
-.PP
-References Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticClient_Delete(), KineticClient_Get(), KineticClient_NoOp(), and KineticClient_Put()\&.
-.SS "void ConfigureEntry (\fBKineticEntry\fP *entry, const char *key, const char *tag, const char *version, \fBKineticAlgorithm\fPalgorithm, const char *value)"
-
-.PP
-Definition at line 142 of file main\&.c\&.
-.PP
-References ByteBuffer_AppendCString(), ByteBuffer_Create(), and KineticEntry::key\&.
-.SS "void ReportOperationConfiguration (const char *operation, \fBKineticSession\fP *config, \fBKineticEntry\fP *entry)"
-
-.PP
-Definition at line 171 of file main\&.c\&.
-.PP
-References ByteBuffer::bytesUsed, KineticSession::clusterVersion, KineticSession::host, KineticSession::identity, KineticEntry::key, KineticSession::nonBlocking, KineticSession::port, and KineticEntry::value\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
-Definition at line 60 of file main\&.c\&.
+Definition at line 61 of file main\&.c\&.
 .PP
-References ExecuteOperation(), KineticSession::host, Kinetic_GetStatusDescription(), KINETIC_STATUS_SUCCESS, KineticClient_Connect(), KineticClient_Disconnect(), ParseOptions(), KineticSession::port, and ReportOperationConfiguration()\&.
+References KineticSession::host, Kinetic_GetStatusDescription(), KINETIC_STATUS_SUCCESS, KineticClient_Connect(), KineticClient_Disconnect(), KineticClient_Init(), KineticClient_Shutdown(), and KineticSession::port\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.

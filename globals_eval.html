@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>protobuf-c: Globals</title>
+<title>kinetic-c: Globals</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,8 +18,8 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">protobuf-c
-   &#160;<span id="projectnumber">v0.7.0</span>
+   <div id="projectname">kinetic-c
+   &#160;<span id="projectnumber">v0.8.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -82,236 +82,320 @@
 <li>KINETIC_ALGORITHM_SHA3
 : <a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09a9f0b099f79aa0ee56d7e6e1099ffd477">kinetic_types.h</a>
 </li>
-<li>KINETIC_PROTO_ALGORITHM_CRC32
-: <a class="el" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304eae63e9e2c7ffa49bbb903aa10291c686b">kinetic_proto.h</a>
+<li>KINETIC_PDU_TYPE_INVALID
+: <a class="el" href="kinetic__types__internal_8h.html#a3b2dc08e44838e78d8b07dbf71583fababf062639fc81efe32fabc38333fa183f">kinetic_types_internal.h</a>
 </li>
-<li>KINETIC_PROTO_ALGORITHM_CRC64
-: <a class="el" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304ea895317d6128847bdaa924a3f756f7721">kinetic_proto.h</a>
+<li>KINETIC_PDU_TYPE_REQUEST
+: <a class="el" href="kinetic__types__internal_8h.html#a3b2dc08e44838e78d8b07dbf71583faba7e9fde16e985663f08e83755bdfcd17f">kinetic_types_internal.h</a>
 </li>
-<li>KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM
-: <a class="el" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304eaa2fa709a0628a12fa71262d17b8301e7">kinetic_proto.h</a>
+<li>KINETIC_PDU_TYPE_RESPONSE
+: <a class="el" href="kinetic__types__internal_8h.html#a3b2dc08e44838e78d8b07dbf71583faba2b244422044d47418434cded168c1012">kinetic_types_internal.h</a>
 </li>
-<li>KINETIC_PROTO_ALGORITHM_SHA1
-: <a class="el" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304ea170808bf8a3da70f86022eb4835c9a2b">kinetic_proto.h</a>
+<li>KINETIC_PDU_TYPE_UNSOLICITED
+: <a class="el" href="kinetic__types__internal_8h.html#a3b2dc08e44838e78d8b07dbf71583faba70be82f66c35e6da94318e07de0aa15f">kinetic_types_internal.h</a>
 </li>
-<li>KINETIC_PROTO_ALGORITHM_SHA2
-: <a class="el" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304ea9baa0a0fad9eec8ad778a6e4349e47a5">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_ALGORITHM_CRC32
+: <a class="el" href="kinetic__proto_8h.html#aa83f51bec77b9ed6f96f40b5e0b2a4c0addd518c2a84249c7188ad49fbc9c1c32">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_ALGORITHM_SHA3
-: <a class="el" href="kinetic__proto_8h.html#acdc9c77aa72442cc9b7b5f4af84e304ea221da27a8d20338ee0f67852a07f27dd">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_ALGORITHM_CRC64
+: <a class="el" href="kinetic__proto_8h.html#aa83f51bec77b9ed6f96f40b5e0b2a4c0af52e6aae980013b688b36f4dcefa7fbb">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_CAPACITIES
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6ab18644761aeb200a468e30029d061966">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM
+: <a class="el" href="kinetic__proto_8h.html#aa83f51bec77b9ed6f96f40b5e0b2a4c0a74d2453778698d16a0abe55a49e7658d">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_CONFIGURATION
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6a4aec39711ec7625fe3c2062895464e21">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_ALGORITHM_SHA1
+: <a class="el" href="kinetic__proto_8h.html#aa83f51bec77b9ed6f96f40b5e0b2a4c0ab3f03df26a17db2e2286fa475f4fcb23">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_DEVICE
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6ab770bda3b394e9fc4c8382887c8a0537">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_ALGORITHM_SHA2
+: <a class="el" href="kinetic__proto_8h.html#aa83f51bec77b9ed6f96f40b5e0b2a4c0a88fe48d63dc264658416d121c73ee31c">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_INVALID_TYPE
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6a28f8b9b5d2914dc11aac9c7bd7ca4e22">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_ALGORITHM_SHA3
+: <a class="el" href="kinetic__proto_8h.html#aa83f51bec77b9ed6f96f40b5e0b2a4c0a0d4531a09e0949d8a7dd5f052dfd2d26">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_LIMITS
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6a5057e9e7b1c45cfab739ec5268fd98e3">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8ca42e12445f36bce6c057b8a2f81d068d7">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_MESSAGES
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6a246dbb491eb378643b7b237185b724de">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8cabc41806cfcd680dedd705c26d3694dec">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_STATISTICS
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6ae2378c03f45feb5bab8cbaf0467fc28b">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8ca8ca38daf073f387d88bc9255e61d202f">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_TEMPERATURES
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6adea3ebb3d5bc861a296fe20c9bfba792">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8cadccd8a01b1f963af6a4c548e47ce7d5d">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_GET_LOG_TYPE_UTILIZATIONS
-: <a class="el" href="kinetic__proto_8h.html#ac77905b416e536036928d001298600d6a18cfa118c9dc43a19a760645a8d4ea94">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8ca720af86fa1fb34e1fa182717c91f1bda">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_DELETE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea0b7879430c732e24ee79c70435c14afd">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8cafdb1a5e61ce004205bfe013c7aca2279">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_DELETE_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea8546417a87cc3cf3ad0d7f28067e22e5">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8cad3a9c401c769d54f3a33ab070ba9bcea">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea9f619677466d7056bbe75532d7d90298">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8caec112d90f2c099f159704571c29bf63a">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea4a41080d0505e452aadfa9adf15b3ced">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS
+: <a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8caa126377714a71fec8a5add585133fcdf">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GET
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea2b3fba8bfac673eeb042173f3cac559f">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1adeb5a9233cb34e43a6782c1a0896d8f7">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GET_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea58e701d5938eef20bf069ab6a7742d61">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a37749c2a7acfaee2fa843ba08d4f830b">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETKEYRANGE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea6317810f31dff71a08906291a91052fe">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a3dd43db74665e60ab5a026053db8f73b">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETKEYRANGE_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea68ce8e1879b287c8305c3b60fd9f011f">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ae404302c8461e078f4718eeb819e5d3e">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETLOG
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea49dc8d2be9618a3e303a7c87347ace6d">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ad7949e7ab4d0fd861498470f2dbd02dc">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETLOG_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ead56a073e5accbc9f81a44d031815215d">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a59c487c511516368d767601a7bdb1d48">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETNEXT
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4eabb0f273a0a08660ab2293ca3820e2161">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ada568e8ddfa4c28dea260fb46c71b654">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETNEXT_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea4eca9e53bf959c7c527c042dfbf5f929">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1aab25965353caaa5d1fd97e02f73c0968">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETPREVIOUS
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea80cfcfe47c7684409e531200b1009a93">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a6972183a81bf9912bca4b6e9bd96bb62">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETPREVIOUS_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ead229beaa45611c9f4efe7e2a6f0a45fa">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a2c9134c8cf60ed5c274948312dba2c51">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETVERSION
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea0648614633fc4b33c5a0521f13151d4a">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a199429ee170b1db4e015f9f3a670eff9">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_GETVERSION_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea1a2cc77e026474463a3f4cafa87146b9">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ad77a86ddc1099336232e5f15ecdac734">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_INVALID_MESSAGE_TYPE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea149191f446c2a08e64662d878647aac9">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1acb9bfb3b66bb90c024e8d54f39ae2a62">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_NOOP
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4eaee00c38cb34944bf2e93dbd7133696bd">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a56cb9d75255fd8c3a777611fb104d7ea">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_NOOP_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4eaaf8f999fc7e899307facf28428e660fe">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETVERSION
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1aef605f027865c840cb2ec3ba45ec4a55">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_PEER2PEERPUSH
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea54f77cf833ab67e886415208044e6087">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETVERSION_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1aa60bf548916cd45b707edb1801c7b78d">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea6cd222e477b93e5f7c9428a91d343703">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_INVALID_MESSAGE_TYPE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ab0bb2454d04e5ba28a53b1f831815bc3">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_PUT
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea0bcc0bd9bda658856ccf00677d94559b">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIAOPTIMIZE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ac5c46abbf725b495836c6b1b992a595a">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_PUT_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea185d82ec61138376e60d29b20fe9caf3">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a9f713aff49fc68c177f525d0fae8b3d8">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_SECURITY
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4eae922aa1f21d304628b4a8cb32658c2aa">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIASCAN
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a4d22bed4a1e461c6935671754674412c">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_SECURITY_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4eaff9fe83593a461135ec631b65f446ac3">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIASCAN_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a64c58f1f5c664c6e36b34172d361a257">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_SETUP
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea709ceb4c417c02878ee7f67405688f00">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a7964ebbde8f792d06a5763df114ec7d5">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_MESSAGE_TYPE_SETUP_RESPONSE
-: <a class="el" href="kinetic__proto_8h.html#a3fb011dc29092aba1a3fda905b4c5d4ea552c00b5c5edd95c6849f96901223c48">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a4ae541fc534c25134c3481d2962bb026">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1
-: <a class="el" href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549aa068543baabc664a534094767a67539f2">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ad394c0c5da9b623fda7f7d5c0b427322">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM
-: <a class="el" href="kinetic__proto_8h.html#ab7618cff33ad482ce8ab53bf72cd549aac5fc12142af1ef2e6d47976e6ab61c6e">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1af62cea4493cc1a2b6114925d5476942d">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_DELETE
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525a7639a9ef079b6791f94fb89059f5c515">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ad167a325b5c22453e1e940dd4b1915f1">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_GETLOG
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525a7217eb13f85401cfcca0b04127607066">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a07146cd7dc78010d656b26d6538def53">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_INVALID_PERMISSION
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525af37a428c19efe45b949aee0b7ba9bcfb">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a6035c3516b25b8e7cb28e0c0e4492443">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_P2POP
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525af8125b6f9099ab5be67f36ff0b039689">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a8c6fd1cc3c4e545b8806adcf8a90ff82">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_RANGE
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525a3b54a519cd302ce4293eb2d004ab0ae7">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1aad4463f5b44219232602dd6b9cbdea24">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_READ
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525aa2e75a18f08729916d6717345a026bfe">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a12b5c8b1bd7e1d7017e752c4a688a85a">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_SECURITY
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525a1fb834b4f99d3fce5e6d2ebf7bf62357">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ae649c4e4671ec24bcbd1875ca3c7c1b0">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_SETUP
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525afefe88a1ca7fa482f221957b46e57946">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP_RESPONSE
+: <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a28f43b58abdf65aa03e131c3116117da">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SECURITY_ACL_PERMISSION_WRITE
-: <a class="el" href="kinetic__proto_8h.html#a6703ba6022047f749b7c3230b16f1525a392b27af8fb33388401d6f75f5999f09">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP
+: <a class="el" href="kinetic__proto_8h.html#afb83e2d62d4e8f275fa5a82d9bf8f09dabec2ad7b9453447cab518351a7dce677">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73ab075e29725ba8bdd358b0cdf937abc6b">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_INVALID_PINOP
+: <a class="el" href="kinetic__proto_8h.html#afb83e2d62d4e8f275fa5a82d9bf8f09daaed669f180f02a85d8d618848c241752">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a1bc39de3ad1364c0214295129ff25700">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_LOCK_PINOP
+: <a class="el" href="kinetic__proto_8h.html#afb83e2d62d4e8f275fa5a82d9bf8f09dab2ad50ed34c8cac05254639fd23c9e0f">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73ac94d9ad9875e77cd4faa5ada51a7fda8">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP
+: <a class="el" href="kinetic__proto_8h.html#afb83e2d62d4e8f275fa5a82d9bf8f09da5433b3691a62f143dd3b12ea38d66021">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a229cd62305dacfd745789381ef2b376e">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP
+: <a class="el" href="kinetic__proto_8h.html#afb83e2d62d4e8f275fa5a82d9bf8f09dae40261b00cf6d412291e20d5eded2c0a">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a7cfa9176f2871e0d907e5f4f0fda0c6d">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PRIORITY_HIGHER
+: <a class="el" href="kinetic__proto_8h.html#aecca40a73476437a474f15b5bc6b9dc0a5877b85531914dceec3ac9995b6cc9c1">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a26e7bf6c0dc834477300d679e544a246">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PRIORITY_HIGHEST
+: <a class="el" href="kinetic__proto_8h.html#aecca40a73476437a474f15b5bc6b9dc0a86b4b0fd1416b3cb241af62781b0acab">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a2c896f8bfd0c8f6e7dc9c41bb249e9db">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PRIORITY_LOWER
+: <a class="el" href="kinetic__proto_8h.html#aecca40a73476437a474f15b5bc6b9dc0af01ac43bb65841ab60b66126d219ea3c">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73af24dc60eed854071ef8292bf0091b8c6">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PRIORITY_LOWEST
+: <a class="el" href="kinetic__proto_8h.html#aecca40a73476437a474f15b5bc6b9dc0a78a4b5d8b5882206eab7ae27f6fe6dc3">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a06b03b660019bb2b27ac879436e85aa9">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_PRIORITY_NORMAL
+: <a class="el" href="kinetic__proto_8h.html#aecca40a73476437a474f15b5bc6b9dc0a6d7dac8cae39fbbff1217a1668f2679f">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a7e0382bcb09e5b1c7f0355fdfdf34906">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1
+: <a class="el" href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697a5496579a12fcc819b6866257ce00b03d">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73af5ed70862e327b14d291bc114b656379">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM
+: <a class="el" href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697add9222b2bd3eea200cc44e960287ff37">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a9540f30774c8a157343a6c335f3d07d1">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_DELETE
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7a29f675e427a181be819ea393a758acfd">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73af39b800c4e2d84a484a2efacced60b11">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_GETLOG
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7ab799be0fa4cfe4071d16b139bde6dafe">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a4226502ec1e4dce8d82995b6dd5e4366">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7a7282409a2b5ca0bceef50c0800a080a1">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73a0be2832e4842cc1c3b95ecdd54e6eae9">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_P2POP
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7a924f0e4f2cd460f37cacc648fc87f944">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73acc6d6790ea0cccea0177a0e8c77b4ff4">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_RANGE
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7ac719ad446c4cd832f00a5f39dc6d2c15">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73acb0cec8976a4dcdd23940af408edd8a2">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_READ
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7ac41a807f338314690b74f58e2c8f0fab">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73af1ae7bc162e5202198c66a49f2c16867">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SECURITY
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7a6a6f7dd88eef327bf9f36276d1f87d2d">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH
-: <a class="el" href="kinetic__proto_8h.html#aadb300185305f2335d47042126f79d73ab9fa028d2a32ca5ff1800b5c4dd0c1ad">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SETUP
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7ae83695011614350de6817188d18a50e4">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SYNCHRONIZATION_FLUSH
-: <a class="el" href="kinetic__proto_8h.html#a8e45b19c26d1b29d31c5ab67e6ae6a5eaa8cd0d752d98f423b353c2b03ce81e6b">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_WRITE
+: <a class="el" href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7a9b307ec821ce54e7936ab67286734826">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION
-: <a class="el" href="kinetic__proto_8h.html#a8e45b19c26d1b29d31c5ab67e6ae6a5ea9a5f879e12db4e40925e2ce6268506b2">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_CONNECTION_TERMINATED
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca1e5ba115b7cdb06fe7efc05395cbfeb3">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SYNCHRONIZATION_WRITEBACK
-: <a class="el" href="kinetic__proto_8h.html#a8e45b19c26d1b29d31c5ab67e6ae6a5ea4b3db97fc61777ec0499ec004dd39aab">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca0112b5e39aacfbd58ae5dc8ab88ba6ab">kinetic_proto.h</a>
 </li>
-<li>KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH
-: <a class="el" href="kinetic__proto_8h.html#a8e45b19c26d1b29d31c5ab67e6ae6a5ea6ce7077e37a981574c2866e4edec8d68">kinetic_proto.h</a>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_ALREADY_UNLOCKED
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca1fc5c6e97faedf2014eff322d18387e9">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20cac936450a7dc8f276b423d645577f6651">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca3466734967f43bb0a6f115623be922ed">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20caacc6c3f1539c9b49fc6910e9c4e1b634">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20cad9cb03a02a97d4235244481e0d88747a">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca1ea0ed16c49b50499e35ae493c8b3993">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20cad576914348b853799f78eb86cebe9a52">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca9347329582c18886bcd628f372a8f185">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20cad0641d31f6761737d8bc5ce8bf21e4d1">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca97ada50d9641194213c90c029a845870">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20cad9fccd41b7b1bfc18c4f02c49805d510">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca3ed15c23192b392ffb845f47564f429c">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca4e38fdf443a6b1b4b06b7d5b208dda56">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20cae200ee02b6144262209332ebff681553">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20caf8feec0036fac77e26198cea9e8e9c41">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca33723ac0a4bc35cce212b3ed51b5f48f">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca698b6e5997e4332a7684d94630716be4">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca093bebe80234e72b117c5dad38a917ac">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20caf043860d07ff97c456dfe5f431c5ebc2">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH
+: <a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20ca98dd65af55eecf64e430a81567d74a67">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH
+: <a class="el" href="kinetic__proto_8h.html#a1ee19b34dbd4df10bc722bb6d5b35265ae7aa99a5ec0a40489b1ee919f0962430">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION
+: <a class="el" href="kinetic__proto_8h.html#a1ee19b34dbd4df10bc722bb6d5b35265ace6ebe3567efb233fd09bb7ad856852a">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK
+: <a class="el" href="kinetic__proto_8h.html#a1ee19b34dbd4df10bc722bb6d5b35265a690aa4c1372b2e8579c804383b86a7be">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH
+: <a class="el" href="kinetic__proto_8h.html#a1ee19b34dbd4df10bc722bb6d5b35265a02646055745ab3f8c91922144a572d28">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH
+: <a class="el" href="kinetic__proto_8h.html#a77e7fcd58668ab869af2d87810c8f337a0a97fd3bef0345b803b7178b93759070">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_MESSAGE_AUTH_TYPE_INVALID_AUTH_TYPE
+: <a class="el" href="kinetic__proto_8h.html#a77e7fcd58668ab869af2d87810c8f337a064e31ee505e31785ddd698df2c5100f">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH
+: <a class="el" href="kinetic__proto_8h.html#a77e7fcd58668ab869af2d87810c8f337a7093cfbc46b1fcdb49859976a79c9709">kinetic_proto.h</a>
+</li>
+<li>KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS
+: <a class="el" href="kinetic__proto_8h.html#a77e7fcd58668ab869af2d87810c8f337a55c5b245c284427d8424d708e4499b03">kinetic_proto.h</a>
 </li>
 <li>KINETIC_STATUS_BUFFER_OVERRUN
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a6a2ee44da05d8dc7b42b2cde2c784c6d">kinetic_types.h</a>
+</li>
+<li>KINETIC_STATUS_CLUSTER_MISMATCH
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ac6363230f4f02e8f3881736bda428407">kinetic_types.h</a>
 </li>
 <li>KINETIC_STATUS_CONNECTION_ERROR
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018">kinetic_types.h</a>
@@ -346,6 +430,9 @@
 <li>KINETIC_STATUS_NOT_ATTEMPTED
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a33b64dd81cae94469f50cee52123718f">kinetic_types.h</a>
 </li>
+<li>KINETIC_STATUS_NOT_FOUND
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a80b5621d0bb12abaf42de6431e05c039">kinetic_types.h</a>
+</li>
 <li>KINETIC_STATUS_OPERATION_FAILED
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285">kinetic_types.h</a>
 </li>
@@ -367,8 +454,8 @@
 <li>KINETIC_STATUS_SUCCESS
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e">kinetic_types.h</a>
 </li>
-<li>KINETIC_STATUS_VERSION_FAILURE
-: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a83075fb61e6fdff87354313fbf37d830">kinetic_types.h</a>
+<li>KINETIC_STATUS_VERSION_MISMATCH
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad184ad42294d8549d18305473cd07cd7">kinetic_types.h</a>
 </li>
 <li>KINETIC_SYNCHRONIZATION_FLUSH
 : <a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3a21e19f0d27726421bc690bb1b115ab88">kinetic_types.h</a>
@@ -381,6 +468,18 @@
 </li>
 <li>KINETIC_SYNCHRONIZATION_WRITETHROUGH
 : <a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3a7bc2d5aa096a740bd3c8641fc5d40b48">kinetic_types.h</a>
+</li>
+<li>KINETIC_WAIT_STATUS_DATA_AVAILABLE
+: <a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3aeb858f54050fb1363ba03345b8983b8f">kinetic_socket.h</a>
+</li>
+<li>KINETIC_WAIT_STATUS_FATAL_ERROR
+: <a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3af3a3a0534c5df0c746b99cdd4b28b8cc">kinetic_socket.h</a>
+</li>
+<li>KINETIC_WAIT_STATUS_RETRYABLE_ERROR
+: <a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3a4bc3260f7dc64e2765e151218e5c8cd6">kinetic_socket.h</a>
+</li>
+<li>KINETIC_WAIT_STATUS_TIMED_OUT
+: <a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3a07fb8207dd9266a4613bee7d4cac382e">kinetic_socket.h</a>
 </li>
 </ul>
 </div><!-- contents -->

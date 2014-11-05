@@ -1,4 +1,4 @@
-.TH "KineticPDU" 3 "Wed Oct 15 2014" "Version v0.7.0" "protobuf-c" \" -*- nroff -*-
+.TH "KineticPDU" 3 "Tue Nov 4 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,7 +21,7 @@ KineticPDU \-
 .RI "union {"
 .br
 .ti -1c
-.RI "   \fBKineticProto\fP \fBprotoBase\fP"
+.RI "   KineticProto_Message \fBbase\fP"
 .br
 .ti -1c
 .RI "   \fBKineticMessage\fP \fBmessage\fP"
@@ -30,65 +30,79 @@ KineticPDU \-
 .RI "} \fBprotoData\fP"
 .br
 .ti -1c
-.RI "\fBKineticProto\fP * \fBproto\fP"
+.RI "KineticProto_Message * \fBproto\fP"
 .br
 .ti -1c
 .RI "bool \fBprotobufDynamicallyExtracted\fP"
 .br
 .ti -1c
-.RI "\fBKineticEntry\fP \fBentry\fP"
+.RI "KineticProto_Command * \fBcommand\fP"
 .br
 .ti -1c
 .RI "\fBKineticHMAC\fP \fBhmac\fP"
 .br
 .ti -1c
-.RI "\fBKineticConnection\fP * \fBconnection\fP"
+.RI "KineticConnection * \fBconnection\fP"
+.br
+.ti -1c
+.RI "\fBKineticPDUType\fP \fBtype\fP"
+.br
+.ti -1c
+.RI "KineticOperation * \fBoperation\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 150 of file kinetic_types_internal\&.h\&.
+Definition at line 204 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticPDUHeader\fP KineticPDU::header"
 
 .PP
-Definition at line 152 of file kinetic_types_internal\&.h\&.
+Definition at line 206 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticPDUHeader\fP KineticPDU::headerNBO"
 
 .PP
-Definition at line 153 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticProto\fP KineticPDU::protoBase"
+Definition at line 207 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Message KineticPDU::base"
 
 .PP
-Definition at line 157 of file kinetic_types_internal\&.h\&.
+Definition at line 211 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticMessage\fP KineticPDU::message"
 
 .PP
-Definition at line 158 of file kinetic_types_internal\&.h\&.
+Definition at line 212 of file kinetic_types_internal\&.h\&.
 .SS "union { \&.\&.\&. }   KineticPDU::protoData"
 
-.SS "\fBKineticProto\fP* KineticPDU::proto"
+.SS "KineticProto_Message* KineticPDU::proto"
 
 .PP
-Definition at line 160 of file kinetic_types_internal\&.h\&.
+Definition at line 214 of file kinetic_types_internal\&.h\&.
 .SS "bool KineticPDU::protobufDynamicallyExtracted"
 
 .PP
-Definition at line 161 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticEntry\fP KineticPDU::entry"
+Definition at line 215 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command* KineticPDU::command"
 
 .PP
-Definition at line 164 of file kinetic_types_internal\&.h\&.
+Definition at line 216 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticHMAC\fP KineticPDU::hmac"
 
 .PP
-Definition at line 167 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticConnection\fP* KineticPDU::connection"
+Definition at line 219 of file kinetic_types_internal\&.h\&.
+.SS "KineticConnection* KineticPDU::connection"
 
 .PP
-Definition at line 170 of file kinetic_types_internal\&.h\&.
+Definition at line 222 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticPDUType\fP KineticPDU::type"
+
+.PP
+Definition at line 225 of file kinetic_types_internal\&.h\&.
+.SS "KineticOperation* KineticPDU::operation"
+
+.PP
+Definition at line 228 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for protobuf-c from the source code\&.
+Generated automatically by Doxygen for kinetic-c from the source code\&.
