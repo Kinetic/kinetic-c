@@ -7,6 +7,10 @@ The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) cont
 
 The [project Makefile](https://github.com/Seagate/kinetic-c/blob/master/Makefile) can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.
 
+Kinetic Protocol Support
+------------------------
+Built using [Kinetic Protocol v3.0.5](https://github.com/Seagate/kinetic-protocol/tree/3.0.5)
+
 Prerequisites
 -------------
 

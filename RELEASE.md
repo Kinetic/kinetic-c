@@ -16,6 +16,9 @@ v0.7.0
 
 v0.8.0
 ------
+* Updated to use Kinetic Protocol v3.0 (3.0.5)
+    * NOT backwards compatible with earlier versions of Kinetic Protocol
+    * Kinetic device firmware must be updated to a release supporting v3.0 protocol!
 * Added asynchronous/non-blocking execution option to all operations (GET/PUT/DELETE/GETKEYRANGE).
     * A given operation is carried out in asynchronous mode if a closure callback with optional data is supplied.
 * ByteArray and ByteBuffer types are now supplied directly in the byte_array.h public interface file.
