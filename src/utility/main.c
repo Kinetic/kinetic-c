@@ -34,7 +34,7 @@ static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
 
 //------------------------------------------------------------------------------
 // Private Method Declarations
-static void ParseOptions(
+static int ParseOptions(
     const int argc,
     char** const argv,
     KineticSession* config,
@@ -63,7 +63,7 @@ int main(int argc, char** argv)
     KineticClient_Init("stdout", 2);
 
     // Parse command line options
-    ParseOptions(argc, argv, &SessionConfig, &Entry);
+    int operationsArgsIndex = ParseOptions(argc, argv, &SessionConfig, &Entry);
 
     // Establish a session/connection with the Kinetic Device
     KineticSessionHandle sessionHandle;
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
     }
 
     // Execute all specified operations in order
-    for (int optionIndex = 1; optionIndex < argc; optionIndex++) {
+    for (int optionIndex = operationsArgsIndex; optionIndex < argc; optionIndex++) {
         const char* operation = argv[optionIndex];
         ReportOperationConfiguration(operation, &SessionConfig, &Entry);
         ExecuteOperation(operation, sessionHandle, &Entry);
@@ -205,7 +205,7 @@ void ReportOperationConfiguration(
            entry->value.bytesUsed);
 }
 
-void ParseOptions(
+int ParseOptions(
     const int argc,
     char** const argv,
     KineticSession* sessionConfig,
@@ -248,14 +248,14 @@ void ParseOptions(
     };
 
     // Parse the options from the command line
+    extern char *optarg;
+    extern int optind;
     int option, optionIndex = 0;
-    while ((option = getopt_long(argc, argv, "h", long_options, &optionIndex)) != -1) {
+    while ((option = getopt_long(argc, argv, "h:", long_options, &optionIndex)) != -1) {
         // Parse options until we reach the end of the argument list
         switch (option) {
         // If this option set a flag, do nothing else now
-        case 0: if (long_options[optionIndex].flag != 0) {
-                break;
-            }
+        case 0: if (long_options[optionIndex].flag != 0) {break;}
         // Configure host
         case 'h': strcpy(cfg.host, optarg); break;
         // Discard '?', since getopt_long already printed info
@@ -277,6 +277,7 @@ void ParseOptions(
     strncpy(sessionConfig->host, cfg.host, HOST_NAME_MAX);
 
     // Populate and configure the entry to be used for operations
-    ConfigureEntry(entry,
-                   cfg.key, cfg.tag, cfg.version, cfg.algorithm, TestDataString);
+    ConfigureEntry(entry, cfg.key, cfg.tag, cfg.version, cfg.algorithm, TestDataString);
+
+    return optind;
 }
