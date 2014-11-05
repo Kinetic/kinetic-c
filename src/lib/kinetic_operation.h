@@ -23,8 +23,10 @@
 
 #include "kinetic_types_internal.h"
 
-KineticOperation KineticOperation_Create(KineticConnection* const connection);
-KineticStatus KineticOperation_Free(KineticOperation* const operation);
+KineticStatus KineticOperation_SendRequest(KineticOperation* const operation);
+KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation);
+KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* response);
+
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
@@ -34,5 +36,8 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry);
 void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry);
+
+void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
+                               KineticKeyRange* range, ByteBufferArray* buffers);
 
 #endif // _KINETIC_OPERATION_H

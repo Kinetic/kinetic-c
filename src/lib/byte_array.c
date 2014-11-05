@@ -1,6 +1,7 @@
 #include "byte_array.h"
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 ByteArray ByteArray_Create(void* data, size_t len)
 {
@@ -9,7 +10,7 @@ ByteArray ByteArray_Create(void* data, size_t len)
     };
 }
 
-ByteArray ByteArray_CreateWithCString(char* str)
+ByteArray ByteArray_CreateWithCString(const char* str)
 {
     return (ByteArray) {
         .data = (uint8_t*)str, .len = strlen(str)
@@ -39,19 +40,17 @@ void ByteBuffer_Reset(ByteBuffer* buffer)
     buffer->bytesUsed = 0;
 }
 
-ByteBuffer ByteBuffer_Create(void* data, size_t max_len)
+ByteBuffer ByteBuffer_Create(void* data, size_t max_len, size_t used)
 {
     return (ByteBuffer) {
         .array = (ByteArray) {.data = (uint8_t*)data, .len = max_len},
-        .bytesUsed = 0,
+        .bytesUsed = used,
     };
 }
 
 ByteBuffer ByteBuffer_CreateWithArray(ByteArray array)
 {
-    return (ByteBuffer) {
-        .array = array, .bytesUsed = 0
-    };
+    return (ByteBuffer) {.array = array, .bytesUsed = 0};
 }
 
 long ByteBuffer_BytesRemaining(const ByteBuffer buffer)
@@ -81,10 +80,13 @@ ByteBuffer* ByteBuffer_Append(ByteBuffer* buffer, const void* data, size_t len)
     assert(buffer->array.data != NULL);
     assert(data != NULL);
     if (len == 0 || ((buffer->bytesUsed + len) > buffer->array.len)) {
+        // printf("Invalid parameters for buffer copy!\n");
         return NULL;
     }
     memcpy(&buffer->array.data[buffer->bytesUsed], data, len);
     buffer->bytesUsed += len;
+    // printf("Appended data!\n")
+    assert(buffer != NULL);
     return buffer;
 }
 

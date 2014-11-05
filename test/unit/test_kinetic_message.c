@@ -68,17 +68,18 @@ void tearDown(void)
 
 void test_KineticMessage_Init_should_initialize_the_message_and_required_protobuf_fields(void)
 {
-    KineticMessage message;
+    KineticMessage protoMsg;
 
-    KineticMessage_Init(&message);
+    KineticMessage_Init(&protoMsg);
 
-    TEST_ASSERT_EQUAL_PTR(&message.header, message.command.header);
-    TEST_ASSERT_EQUAL_PTR(&message.command, message.proto.command);
-    TEST_ASSERT_TRUE(message.proto.has_hmac);
-    TEST_ASSERT_EQUAL_PTR(message.hmacData, message.proto.hmac.data);
-    TEST_ASSERT_EQUAL(KINETIC_HMAC_MAX_LEN, message.proto.hmac.len);
-    TEST_ASSERT_NULL(message.command.body);
-    TEST_ASSERT_NULL(message.command.status);
+    TEST_ASSERT_EQUAL_PTR(&protoMsg.header, protoMsg.command.header);
+    TEST_ASSERT_TRUE(protoMsg.message.has_authType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, protoMsg.message.authType);
+    TEST_ASSERT_EQUAL_PTR(&protoMsg.hmacAuth, protoMsg.message.hmacAuth);
+    TEST_ASSERT_EQUAL_PTR(protoMsg.hmacData, protoMsg.message.hmacAuth->hmac.data);
+    TEST_ASSERT_EQUAL(KINETIC_HMAC_MAX_LEN, protoMsg.message.hmacAuth->hmac.len);
+    TEST_ASSERT_NULL(protoMsg.command.body);
+    TEST_ASSERT_NULL(protoMsg.command.status);
 }
 
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_add_to_message(void)
@@ -102,8 +103,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
-    TEST_ASSERT_EQUAL_PTR(&message.body, message.proto.command->body);
-    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.proto.command->body->keyValue);
+    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.command.body->keyValue);
 
     // Validate keyValue fields
     TEST_ASSERT_TRUE(message.keyValue.has_newVersion);
@@ -115,7 +115,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
     TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(message.keyValue.tag, entry.tag);
     TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_ALGORITHM_SHA1, message.keyValue.algorithm);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_ALGORITHM_SHA1, message.keyValue.algorithm);
     TEST_ASSERT_TRUE(message.keyValue.has_metadataOnly);
     TEST_ASSERT_TRUE(message.keyValue.metadataOnly);
     TEST_ASSERT_TRUE(message.keyValue.has_force);
@@ -134,8 +134,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
-    TEST_ASSERT_EQUAL_PTR(&message.body, message.proto.command->body);
-    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.proto.command->body->keyValue);
+    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.command.body->keyValue);
 
     // Validate keyValue fields
     TEST_ASSERT_FALSE(message.keyValue.has_newVersion);
@@ -146,4 +145,92 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
     TEST_ASSERT_FALSE(message.keyValue.has_metadataOnly);
     TEST_ASSERT_FALSE(message.keyValue.has_force);
     TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
+}
+
+void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticProto_KeyRange_to_the_message(void)
+{
+    KineticMessage message;
+
+    const int numKeysInRange = 4;
+    uint8_t startKeyData[32];
+    uint8_t endKeyData[32];
+    ByteBuffer startKey, endKey;
+
+    startKey = ByteBuffer_Create(startKeyData, sizeof(startKeyData), 0);
+    ByteBuffer_AppendCString(&startKey, "key_range_00_00");
+    endKey = ByteBuffer_Create(endKeyData, sizeof(endKeyData), 0);
+    ByteBuffer_AppendCString(&endKey, "key_range_00_03");
+
+    KineticKeyRange range = {
+        .startKey = startKey,
+        .endKey = endKey,
+        .startKeyInclusive = true,
+        .endKeyInclusive = true,
+        .maxReturned = numKeysInRange,
+        .reverse = true,
+    };
+
+    memset(&message, 0, sizeof(KineticMessage));
+    KineticMessage_Init(&message);
+
+    KineticMessage_ConfigureKeyRange(&message, &range);
+
+    // Validate that message keyValue and body container are enabled in protobuf
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.keyRange, message.command.body->range);
+
+    // Validate range fields
+    TEST_ASSERT_TRUE(message.command.body->range->has_startKey);
+    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.command.body->range->startKey.data);
+    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.command.body->range->startKey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endKey);
+    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.command.body->range->endKey.data);
+    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.command.body->range->endKey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_startKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->startKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->endKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_maxReturned);
+    TEST_ASSERT_EQUAL(numKeysInRange, message.command.body->range->maxReturned);
+    TEST_ASSERT_TRUE(message.command.body->range->has_reverse);
+    TEST_ASSERT_TRUE(message.command.body->range->reverse);
+    TEST_ASSERT_EQUAL(0, message.command.body->range->n_keys);
+    TEST_ASSERT_NULL(message.command.body->range->keys);
+
+
+
+
+    range = (KineticKeyRange) {
+        .startKey = startKey,
+        .endKey = endKey,
+        .startKeyInclusive = false,
+        .endKeyInclusive = false,
+        .maxReturned = 1,
+        .reverse = false,
+    };
+
+    memset(&message, 0, sizeof(KineticMessage));
+    KineticMessage_Init(&message);
+
+    KineticMessage_ConfigureKeyRange(&message, &range);
+
+    // Validate that message keyValue and body container are enabled in protobuf
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
+    TEST_ASSERT_EQUAL_PTR(&message.keyRange, message.command.body->range);
+
+    // Validate range fields
+    TEST_ASSERT_TRUE(message.command.body->range->has_startKey);
+    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.command.body->range->startKey.data);
+    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.command.body->range->startKey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endKey);
+    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.command.body->range->endKey.data);
+    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.command.body->range->endKey.len);
+    TEST_ASSERT_FALSE(message.command.body->range->has_startKeyInclusive);
+    TEST_ASSERT_FALSE(message.command.body->range->has_endKeyInclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_maxReturned);
+    TEST_ASSERT_EQUAL(1, message.command.body->range->maxReturned);
+    TEST_ASSERT_FALSE(message.command.body->range->has_reverse);
+    TEST_ASSERT_EQUAL(0, message.command.body->range->n_keys);
+    TEST_ASSERT_NULL(message.command.body->range->keys);
 }

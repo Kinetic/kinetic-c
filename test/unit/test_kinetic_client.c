@@ -26,6 +26,7 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
+#include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -43,32 +44,41 @@ static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
 
 void setUp(void)
 {
-    KineticLogger_Init(NULL);
+    KineticLogger_Init("stdout", 3);
     SessionHandle = KINETIC_HANDLE_INVALID;
+}
+
+void tearDown(void)
+{
+    KineticLogger_Close();
 }
 
 void test_KineticClient_Init_should_initialize_the_logger(void)
 {
-    KineticClient_Init("./some_file.log");
-    KineticClient_Init(NULL);
-    KineticClient_Init("NONE");
+    KineticClient_Init("./some_file.log", 3);
+    KineticClient_Init("stdout", 1);
+    KineticClient_Init(NULL, -1);
 }
 
 static void ConnectSession(void)
 {
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    Connection.connectionID = 12374626536; // Fake connection ID to allow connection to complete for these tests
     HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
     KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
     KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
+    // KineticConnection_ReceiveDeviceStatusMessage_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
 }
+
+
 
 void test_KineticClient_Connect_should_configure_a_session_and_connect_to_specified_host(void)
 {
@@ -172,6 +182,8 @@ void test_KineticClient_Connect_should_return_status_from_a_failed_connection(vo
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
 
+
+
 void test_KineticClient_Disconnect_should_return_KINETIC_STATUS_CONNECTION_ERROR_upon_failure_to_get_connection_from_handle(void)
 {
     SessionHandle = DummyHandle;
@@ -201,4 +213,3 @@ void test_KineticClient_Disconnect_should_return_status_from_KineticConnection_u
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_INVALID, status);
     TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, SessionHandle);
 }
-

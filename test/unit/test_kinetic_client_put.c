@@ -21,9 +21,9 @@
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_operation.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
+#include "mock_kinetic_operation.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
@@ -41,13 +41,14 @@ static const int64_t Identity = 47;
 static ByteArray HmacKey;
 static KineticSessionHandle DummyHandle = 1;
 static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
-KineticPDU Request, Response;
-
+static KineticPDU Request, Response;
 
 void setUp(void)
 {
+    KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    Connection.connectionID = 182736; // Dummy connection ID to allow connect to complete
     HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
@@ -62,6 +63,7 @@ void setUp(void)
 
 void tearDown(void)
 {
+    KineticLogger_Close();
 }
 
 void test_KineticClient_Put_should_execute_PUT_operation(void)
@@ -71,7 +73,6 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     ByteArray dbVersion = ByteArray_CreateWithCString("v1.0");
     ByteArray tag = ByteArray_CreateWithCString("SomeTagValue");
     ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
-
     KineticEntry entry = {
         .newVersion = ByteBuffer_CreateWithArray(newVersion),
         .key = ByteBuffer_CreateWithArray(key),
@@ -81,20 +82,19 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
         .value = ByteBuffer_CreateWithArray(value),
     };
 
+    KineticOperation operation = {
+        .connection = &Connection,
+        .request = &Request,
+        .response = &Response,
+    };
+    
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Request);
-    KineticAllocator_NewPDU_ExpectAndReturn(&Connection.pdus, &Response);
-    KineticPDU_Init_Expect(&Request, &Connection);
-    KineticPDU_Init_Expect(&Response, &Connection);
-    KineticConnection_IncrementSequence_Expect(&Connection);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
-    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
-    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_VERSION_FAILURE);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Request);
-    KineticAllocator_FreePDU_Expect(&Connection.pdus, &Response);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticOperation_BuildPut_Expect(&operation, &entry);
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticOperation_ReceiveAsync_ExpectAndReturn(&operation, KINETIC_STATUS_VERSION_MISMATCH);
 
-    KineticStatus status = KineticClient_Put(DummyHandle, &entry);
+    KineticStatus status = KineticClient_Put(DummyHandle, &entry, NULL);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_FAILURE, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
 }

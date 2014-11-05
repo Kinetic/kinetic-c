@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <limits.h>
+#include <sys/time.h>
 #include "byte_array.h"
 
 
@@ -40,9 +41,10 @@
 #define KINETIC_TLS_PORT        (8443)
 #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
+#define KINETIC_DEFAULT_KEY_LEN (1024)
 #define KINETIC_MAX_KEY_LEN     (4096)
 #define KINETIC_MAX_VERSION_LEN (256)
-#define PDU_VALUE_MAX_LEN       (1024 * 1024)
+#define KINETIC_OBJ_SIZE        (1024 * 1024)
 
 // Define max host name length
 // Some Linux environments require this, although not all, but it's benign.
@@ -58,6 +60,9 @@
 #ifndef LOG_FILE_NAME_MAX
 #define LOG_FILE_NAME_MAX (HOST_NAME_MAX)
 #endif
+
+#define BOOL_TO_STRING(_bool) (_bool) ? "true" : "false"
+
 /**
  * @brief Enumeration of encryption/checksum key algorithms
  */
@@ -143,8 +148,10 @@ typedef enum {
     KINETIC_STATUS_INVALID_REQUEST,     // Something about the request is invalid
     KINETIC_STATUS_OPERATION_INVALID,   // Operation was invalid
     KINETIC_STATUS_OPERATION_FAILED,    // Device reported an operation error
-    KINETIC_STATUS_VERSION_FAILURE,     // Basically a VERSION_MISMATCH error for a PUT
+    KINETIC_STATUS_CLUSTER_MISMATCH,    // Specified cluster version does not match device
+    KINETIC_STATUS_VERSION_MISMATCH,    // The specified object version info for a PUT/GET do not match stored object
     KINETIC_STATUS_DATA_ERROR,          // Device reported data error, no space or HMAC failure
+    KINETIC_STATUS_NOT_FOUND,           // The requested object does not exist
     KINETIC_STATUS_BUFFER_OVERRUN,      // One or more of byte buffers did not fit all data
     KINETIC_STATUS_MEMORY_ERROR,        // Failed allocating/deallocating memory
     KINETIC_STATUS_SOCKET_TIMEOUT,      // A timeout occurred while waiting for a socket operation
@@ -154,17 +161,35 @@ typedef enum {
 
 const char* Kinetic_GetStatusDescription(KineticStatus status);
 
+typedef struct _KineticCompletionData {
+    int64_t connectionID;
+    int64_t sequence;
+    struct timeval requestTime;
+    KineticStatus status;
+} KineticCompletionData;
+
+typedef void (*KineticCompletionCallback)(KineticCompletionData* kinetic_data, void* client_data);
+
+typedef struct _KineticCompletionClosure {
+    KineticCompletionCallback callback;
+    void* clientData;
+} KineticCompletionClosure;
+
 // KineticEntry - byte arrays need to be preallocated by the client
 typedef struct _KineticEntry {
     ByteBuffer key;
-    ByteBuffer newVersion;
+    ByteBuffer value;
+
+    // Metadata
     ByteBuffer dbVersion;
     ByteBuffer tag;
-    bool force;
     KineticAlgorithm algorithm;
+
+    // Operation-specific attributes (TODO: remove from struct, and specify a attributes to PUT/GET operations)
+    ByteBuffer newVersion;
     bool metadataOnly;
+    bool force;
     KineticSynchronization synchronization;
-    ByteBuffer value;
 } KineticEntry;
 
 // Kinetic Key Range request structure

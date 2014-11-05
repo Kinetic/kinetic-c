@@ -21,76 +21,61 @@
 #include "unity_helper.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
+#include "kinetic_types_internal.h"
 #include "protobuf-c/protobuf-c.h"
-// #include "zlog/zlog.h"
+#include "byte_array.h"
 
-extern bool LogToConsole;
-extern FILE* FileDesc;
-extern int LogLevel;
+extern int KineticLogLevel;
 
 void setUp(void)
 {
     DELETE_FILE(TEST_LOG_FILE);
-    KineticLogger_Init(NULL);
+    KineticLogger_Init(NULL, -1);
 }
 
 void tearDown(void)
 {
     KineticLogger_Close();
-    DELETE_FILE(TEST_LOG_FILE);
 }
 
 void test_KineticLogger_KINETIC_LOG_FILE_should_be_defined_properly(void)
-{
-    LOG_LOCATION;
+{ LOG_LOCATION;
     TEST_ASSERT_EQUAL_STRING("kinetic.log", KINETIC_LOG_FILE);
 }
 
-void test_KineticLogger_Init_should_log_to_STDOUT_by_default(void)
-{
-    LOG_LOCATION;
-    KineticLogger_Init(NULL);
-
-    TEST_ASSERT_TRUE(LogToConsole);
-    TEST_ASSERT_NULL(FileDesc);
-    TEST_ASSERT_EQUAL(0, LogLevel);
+void test_KineticLogger_Init_should_be_disabled_if_logFile_is_NULL(void)
+{ LOG_LOCATION;
+    KineticLogger_Init(NULL, 3);
+    TEST_ASSERT_EQUAL(-1, KineticLogLevel);
+    KineticLogger_Log(0, "This message should be discarded and not logged!");
 }
 
 void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_file(void)
-{
-    LOG_LOCATION;
-    KineticLogger_Init(TEST_LOG_FILE);
-
-    TEST_ASSERT_FALSE(LogToConsole);
+{ LOG_LOCATION;
+    KineticLogger_Init(TEST_LOG_FILE, 3);
+    KineticLogger_Log(0, "Some message to log file...");
     TEST_ASSERT_FILE_EXISTS(TEST_LOG_FILE);
-    TEST_ASSERT_EQUAL(0, LogLevel);
+    TEST_ASSERT_EQUAL(3, KineticLogLevel);
 }
 
-void test_KineticLogger_Init_should_disable_logging_if_NONE_specified(void)
-{
-    LOG_LOCATION;
-    TEST_IGNORE_MESSAGE("Need to figure out why this test is crashing");
-    KineticLogger_Init("NONE");
-
-    TEST_ASSERT_FALSE(LogToConsole);
-    TEST_ASSERT_NULL(FileDesc);
-    TEST_ASSERT_EQUAL(-1, LogLevel);
+void test_KineticLogger_Init_should_log_to_stdout_if_specified(void)
+{ LOG_LOCATION;
+    KineticLogger_Init("stdout", 0);
+    TEST_ASSERT_EQUAL(0, KineticLogLevel);
+    KineticLogger_Log(0, "This message should be logged to stdout!");
 }
 
 void test_KineticLogger_Log_should_write_log_message_to_file(void)
-{
-    LOG_LOCATION;
+{ LOG_LOCATION;
     const char* msg = "Some really important message!";
-    char content[64];
-    size_t length;
-
-    sprintf(content, "%s\n", msg);
-    length = strlen(content);
-
-    KineticLogger_Init(TEST_LOG_FILE);
-
-    KineticLogger_Log(msg);
-
-    TEST_ASSERT_EQUAL_FILE_CONTENT(TEST_LOG_FILE, content, length);
+    KineticLogger_Init(TEST_LOG_FILE, 3);
+    KineticLogger_LogPrintf(0, msg);
+    // TEST_ASSERT_EQUAL_FILE_CONTENT(TEST_LOG_FILE, content, length);
+    TEST_ASSERT_FILE_EXISTS(TEST_LOG_FILE);
 }
 
+void test_LOG_LOCATION_should_log_location(void)
+{
+    KineticLogger_Init(TEST_LOG_FILE, 2);
+    LOG_LOCATION;
+}

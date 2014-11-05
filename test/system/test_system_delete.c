@@ -54,7 +54,7 @@ static uint8_t VersionData[1024];
 static ByteArray Version;
 static ByteBuffer VersionBuffer;
 static ByteArray TestValue;
-static uint8_t ValueData[PDU_VALUE_MAX_LEN];
+static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteArray Value;
 static ByteBuffer ValueBuffer;
 
@@ -88,14 +88,6 @@ void tearDown(void)
     SystemTestTearDown(&Fixture);
 }
 
-// -----------------------------------------------------------------------------
-// Put Command - Write a blob of data to a Kinetic Device
-//
-// Inspected Request: (m/d/y)
-// -----------------------------------------------------------------------------
-//
-//  TBD!
-//
 void test_Delete_should_delete_an_object_from_device(void)
 {
     LOG_LOCATION;
@@ -104,15 +96,14 @@ void test_Delete_should_delete_an_object_from_device(void)
     // Create an object so that we have something to delete
     KineticEntry putEntry = {
         .key = KeyBuffer,
-        .newVersion = VersionBuffer,
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
+        .force = true,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    status = KineticClient_Put(Fixture.handle, &putEntry);
+    status = KineticClient_Put(Fixture.handle, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_ByteArray(Version, putEntry.dbVersion.array);
-    TEST_ASSERT_ByteArray_NONE(putEntry.newVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(Key, putEntry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, putEntry.tag.array);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
@@ -120,14 +111,15 @@ void test_Delete_should_delete_an_object_from_device(void)
     // Validate the object exists initially
     KineticEntry getEntry = {
         .key = KeyBuffer,
-        .dbVersion = VersionBuffer,
         .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
+        .force = true,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    status = KineticClient_Get(Fixture.handle, &getEntry);
+    status = KineticClient_Get(Fixture.handle, &getEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.key.array, getEntry.key.array);
-    TEST_ASSERT_ByteArray_NONE(putEntry.newVersion.array);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.tag.array, getEntry.tag.array);
     TEST_ASSERT_EQUAL(putEntry.algorithm, getEntry.algorithm);
     TEST_ASSERT_EQUAL_ByteBuffer(putEntry.value, getEntry.value);
@@ -135,9 +127,8 @@ void test_Delete_should_delete_an_object_from_device(void)
     // Delete the object
     KineticEntry deleteEntry = {
         .key = KeyBuffer,
-        .dbVersion = VersionBuffer,
     };
-    status = KineticClient_Delete(Fixture.handle, &deleteEntry);
+    status = KineticClient_Delete(Fixture.handle, &deleteEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(0, deleteEntry.value.bytesUsed);
 
@@ -147,8 +138,8 @@ void test_Delete_should_delete_an_object_from_device(void)
         .dbVersion = VersionBuffer,
         .metadataOnly = true,
     };
-    status = KineticClient_Get(Fixture.handle, &regetEntryMetadata);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
+    status = KineticClient_Get(Fixture.handle, &regetEntryMetadata, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
     TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
 }
 

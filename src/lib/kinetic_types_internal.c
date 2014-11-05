@@ -20,56 +20,65 @@
 
 #include "kinetic_types_internal.h"
 #include "kinetic_logger.h"
+#include "byte_array.h"
+#include <sys/param.h>
+#include <errno.h>
 
 // Type mapping from from public to internal protobuf status type
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
-    KineticProto_Status_StatusCode protoStatus)
+    KineticProto_Command_Status_StatusCode protoStatus)
 {
     KineticStatus status;
 
     switch (protoStatus) {
-    case KINETIC_PROTO_STATUS_STATUS_CODE_SUCCESS:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS:
         status = KINETIC_STATUS_SUCCESS;
         break;
 
-    case KINETIC_PROTO_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR:
         status = KINETIC_STATUS_CONNECTION_ERROR;
         break;
 
-    case KINETIC_PROTO_STATUS_STATUS_CODE_SERVICE_BUSY:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY:
         status = KINETIC_STATUS_DEVICE_BUSY;
         break;
 
-    case KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_REQUEST:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_ATTEMPTED:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_HEADER_REQUIRED:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM:
         status = KINETIC_STATUS_INVALID_REQUEST;
         break;
 
-    case KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_MISMATCH:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_VERSION_FAILURE:
-        status = KINETIC_STATUS_VERSION_FAILURE;
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE:
+        status = KINETIC_STATUS_CLUSTER_MISMATCH;
         break;
 
-    case KINETIC_PROTO_STATUS_STATUS_CODE_DATA_ERROR:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_HMAC_FAILURE:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_PERM_DATA_ERROR:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_FOUND:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH:
+        status = KINETIC_STATUS_VERSION_MISMATCH;
+        break;
+
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR:
         status = KINETIC_STATUS_DATA_ERROR;
         break;
 
-    case KINETIC_PROTO_STATUS_STATUS_CODE_INTERNAL_ERROR:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_NOT_AUTHORIZED:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_EXPIRED:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_NO_SPACE:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND:
+        status = KINETIC_STATUS_NOT_FOUND;
+        break;
+
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS:
         status = KINETIC_STATUS_OPERATION_FAILED;
         break;
 
     default:
-    case KINETIC_PROTO_STATUS_STATUS_CODE_INVALID_STATUS_CODE:
-    case _KINETIC_PROTO_STATUS_STATUS_CODE_IS_INT_SIZE:
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE:
+    case _KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_IS_INT_SIZE:
         status = KINETIC_STATUS_INVALID;
         break;
     }
@@ -77,44 +86,44 @@ KineticStatus KineticProtoStatusCode_to_KineticStatus(
     return status;
 }
 
-KineticProto_Synchronization KineticProto_Synchronization_from_KineticSynchronization(
+KineticProto_Command_Synchronization KineticProto_Command_Synchronization_from_KineticSynchronization(
     KineticSynchronization sync_mode)
 {
-    KineticProto_Synchronization protoSyncMode;
+    KineticProto_Command_Synchronization protoSyncMode;
     switch (sync_mode) {
     case KINETIC_SYNCHRONIZATION_WRITETHROUGH:
-        protoSyncMode = KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH;
+        protoSyncMode = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH;
         break;
     case KINETIC_SYNCHRONIZATION_WRITEBACK:
-        protoSyncMode = KINETIC_PROTO_SYNCHRONIZATION_WRITEBACK;
+        protoSyncMode = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK;
         break;
     case KINETIC_SYNCHRONIZATION_FLUSH:
-        protoSyncMode = KINETIC_PROTO_SYNCHRONIZATION_FLUSH;
+        protoSyncMode = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH;
         break;
     default:
     case KINETIC_SYNCHRONIZATION_INVALID:
-        protoSyncMode = KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION;
+        protoSyncMode = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION;
         break;
     };
     return protoSyncMode;
 }
 
-KineticSynchronization KineticSynchronization_from_KineticProto_Synchronization(
-    KineticProto_Synchronization sync_mode)
+KineticSynchronization KineticSynchronization_from_KineticProto_Command_Synchronization(
+    KineticProto_Command_Synchronization sync_mode)
 {
     KineticSynchronization kineticSyncMode;
     switch (sync_mode) {
-    case KINETIC_PROTO_SYNCHRONIZATION_WRITETHROUGH:
+    case KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
         break;
-    case KINETIC_PROTO_SYNCHRONIZATION_WRITEBACK:
+    case KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_WRITEBACK;
         break;
-    case KINETIC_PROTO_SYNCHRONIZATION_FLUSH:
+    case KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_FLUSH;
         break;
     default:
-    case KINETIC_PROTO_SYNCHRONIZATION_INVALID_SYNCHRONIZATION:
+    case KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_INVALID;
         break;
     };
@@ -122,29 +131,29 @@ KineticSynchronization KineticSynchronization_from_KineticProto_Synchronization(
 }
 
 // Type mapping from public to internal types
-KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(
+KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
     KineticAlgorithm kinteicAlgorithm)
 {
-    KineticProto_Algorithm protoAlgorithm;
+    KineticProto_Command_Algorithm protoAlgorithm;
     switch (kinteicAlgorithm) {
     case KINETIC_ALGORITHM_SHA1:
-        protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA1;
+        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_SHA1;
         break;
     case KINETIC_ALGORITHM_SHA2:
-        protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA2;
+        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_SHA2;
         break;
     case KINETIC_ALGORITHM_SHA3:
-        protoAlgorithm = KINETIC_PROTO_ALGORITHM_SHA3;
+        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_SHA3;
         break;
     case KINETIC_ALGORITHM_CRC32:
-        protoAlgorithm = KINETIC_PROTO_ALGORITHM_CRC32;
+        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_CRC32;
         break;
     case KINETIC_ALGORITHM_CRC64:
-        protoAlgorithm = KINETIC_PROTO_ALGORITHM_CRC64;
+        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_CRC64;
         break;
     case KINETIC_ALGORITHM_INVALID:
     default:
-        protoAlgorithm = KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM;
+        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM;
         break;
     };
     return protoAlgorithm;
@@ -153,27 +162,27 @@ KineticProto_Algorithm KineticProto_Algorithm_from_KineticAlgorithm(
 
 
 // Type mapping from internal types
-KineticAlgorithm KineticAlgorithm_from_KineticProto_Algorithm(
-    KineticProto_Algorithm protoAlgorithm)
+KineticAlgorithm KineticAlgorithm_from_KineticProto_Command_Algorithm(
+    KineticProto_Command_Algorithm protoAlgorithm)
 {
     KineticAlgorithm kineticAlgorithm;
     switch (protoAlgorithm) {
-    case KINETIC_PROTO_ALGORITHM_SHA1:
+    case KINETIC_PROTO_COMMAND_ALGORITHM_SHA1:
         kineticAlgorithm = KINETIC_ALGORITHM_SHA1;
         break;
-    case KINETIC_PROTO_ALGORITHM_SHA2:
+    case KINETIC_PROTO_COMMAND_ALGORITHM_SHA2:
         kineticAlgorithm = KINETIC_ALGORITHM_SHA2;
         break;
-    case KINETIC_PROTO_ALGORITHM_SHA3:
+    case KINETIC_PROTO_COMMAND_ALGORITHM_SHA3:
         kineticAlgorithm = KINETIC_ALGORITHM_SHA3;
         break;
-    case KINETIC_PROTO_ALGORITHM_CRC32:
+    case KINETIC_PROTO_COMMAND_ALGORITHM_CRC32:
         kineticAlgorithm = KINETIC_ALGORITHM_CRC32;
         break;
-    case KINETIC_PROTO_ALGORITHM_CRC64:
+    case KINETIC_PROTO_COMMAND_ALGORITHM_CRC64:
         kineticAlgorithm = KINETIC_ALGORITHM_CRC64;
         break;
-    case KINETIC_PROTO_ALGORITHM_INVALID_ALGORITHM:
+    case KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM:
     default:
         kineticAlgorithm = KINETIC_ALGORITHM_INVALID;
         break;
@@ -208,101 +217,107 @@ bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData
 }
 
 
-bool Copy_KineticProto_KeyValue_to_KineticEntry(KineticProto_KeyValue* keyValue, KineticEntry* entry)
+bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_KeyValue* keyValue, KineticEntry* entry)
 {
     bool bufferOverflow = false;
 
     if (keyValue != NULL && entry != NULL) {
 
+        ByteBuffer_Reset(&entry->newVersion);
         if (keyValue->has_newVersion) {
-            entry->newVersion.bytesUsed = keyValue->newVersion.len;
             if (entry->newVersion.array.data == NULL ||
                 entry->newVersion.array.len < keyValue->newVersion.len) {
-                LOG(" BUFFER_OVERRUN: newVersion");
+                entry->newVersion.bytesUsed = keyValue->newVersion.len;
+                LOG1(" BUFFER_OVERRUN: newVersion");
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->newVersion.array.data, keyValue->newVersion.data,
-                       keyValue->newVersion.len);
+                ByteBuffer_Append(&entry->newVersion, keyValue->newVersion.data, keyValue->newVersion.len);
             }
         }
 
+        ByteBuffer_Reset(&entry->dbVersion);
         if (keyValue->has_dbVersion) {
-            entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
-            if (entry->dbVersion.array.data == NULL ||
-                entry->dbVersion.array.len < keyValue->dbVersion.len) {
-                LOG(" BUFFER_OVERRUN: dbVersion");
+            if (entry->dbVersion.array.data == NULL || entry->dbVersion.array.len < keyValue->dbVersion.len) {
+                entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
+                LOG1(" BUFFER_OVERRUN: dbVersion");
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->dbVersion.array.data, keyValue->dbVersion.data,
-                       keyValue->dbVersion.len);
+                ByteBuffer_Append(&entry->dbVersion, keyValue->dbVersion.data, keyValue->dbVersion.len);
             }
         }
 
-        if (keyValue->has_force) {
-            entry->force = keyValue->force;
-        }
-
+        ByteBuffer_Reset(&entry->key);
         if (keyValue->has_key) {
-            entry->key.bytesUsed = keyValue->key.len;
-            if (entry->key.array.data == NULL ||
-                entry->key.array.len < keyValue->key.len) {
-                LOG(" BUFFER_OVERRUN: key");
+            if (entry->key.array.data == NULL || entry->key.array.len < keyValue->key.len) {
+                entry->key.bytesUsed = keyValue->key.len;
+                LOG1(" BUFFER_OVERRUN: key");
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->key.array.data, keyValue->key.data, keyValue->key.len);
+                ByteBuffer_Append(&entry->key, keyValue->key.data, keyValue->key.len);
             }
         }
 
+        ByteBuffer_Reset(&entry->tag);
         if (keyValue->has_tag) {
-            entry->tag.bytesUsed = keyValue->tag.len;
-            if (entry->tag.array.data == NULL ||
-                entry->tag.array.len < keyValue->tag.len) {
-                LOG(" BUFFER_OVERRUN: tag");
+            if (entry->tag.array.data == NULL || entry->tag.array.len < keyValue->tag.len) {
+                entry->tag.bytesUsed = keyValue->tag.len;
+                LOG1(" BUFFER_OVERRUN: tag");
                 bufferOverflow = true;
             }
             else {
-                memcpy(entry->tag.array.data, keyValue->tag.data, keyValue->tag.len);
+                ByteBuffer_Append(&entry->tag, keyValue->tag.data, keyValue->tag.len);
             }
         }
 
         if (keyValue->has_algorithm) {
             entry->algorithm =
-                KineticAlgorithm_from_KineticProto_Algorithm(
+                KineticAlgorithm_from_KineticProto_Command_Algorithm(
                     keyValue->algorithm);
-        }
-
-        if (keyValue->has_metadataOnly) {
-            entry->metadataOnly = keyValue->metadataOnly;
         }
 
         if (keyValue->has_synchronization) {
             entry->synchronization =
-                KineticSynchronization_from_KineticProto_Synchronization(
+                KineticSynchronization_from_KineticProto_Command_Synchronization(
                     keyValue->synchronization);
         }
+
+        entry->metadataOnly = keyValue->has_metadataOnly ? keyValue->metadataOnly : false;
+        entry->force = keyValue->has_force ? keyValue->force : false;
     }
 
     return !bufferOverflow;
 }
 
+bool Copy_KineticProto_Command_Range_to_ByteBufferArray(KineticProto_Command_Range* keyRange, ByteBufferArray* keys)
+{
+    bool bufferOverflow = false;
+    LOGF2("Copying: keyRange=0x%0llX, keys=0x%0llX, max_keys=%lld", keyRange, keys->buffers, keys->count);
+    if (keyRange != NULL && keys->count > 0 && keys != NULL) {
+        for (size_t i = 0; i < MIN((size_t)keys->count, (size_t)keyRange->n_keys); i++) {
+            ByteBuffer_Reset(&keys->buffers[i]);
+            if (ByteBuffer_Append(&keys->buffers[i], keyRange->keys[i].data, keyRange->keys[i].len) == NULL) {
+                LOGF2("WANRNING: Buffer overrun for keys[%zd]", i);
+                bufferOverflow = true;
+            }
+        }
+    }
+    return !bufferOverflow;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len)
+{
+    static pthread_mutex_t strerror_lock = PTHREAD_MUTEX_INITIALIZER;
+    if (!len)
+    {
+        errno = ENOSPC;
+        return -1;
+    }
+    buf[0] = '\0';
+    pthread_mutex_lock(&strerror_lock);
+    strncat(buf, strerror(err_num), len - 1);
+    pthread_mutex_unlock(&strerror_lock);
+    return 0;
+}

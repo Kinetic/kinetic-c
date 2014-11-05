@@ -36,12 +36,10 @@
 /** Custom Unity/CMock equality assertion for validating equality of ByteBuffers */
 #define TEST_ASSERT_EQUAL_ByteBuffer(_expected, _actual) \
     TEST_ASSERT_EQUAL_SIZET_MESSAGE((_expected).bytesUsed, (_actual).bytesUsed, \
-        "ByteBuffer array lengths do not match!"); \
+        "ByteBuffer used lengths do not match!"); \
     TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE((_expected).array.data, \
-        ((_actual)).array.data, (_expected).array.len, \
-        "ByteBuffer data does not match!"); \
-    TEST_ASSERT_EQUAL_SIZET_MESSAGE((_expected).bytesUsed, \
-        ((_actual)).bytesUsed, "ByteBuffer bytesUsed do not match!");
+        ((_actual)).array.data, (_expected).bytesUsed, \
+        "ByteBuffer data does not match!");
 
 /** Custom Unity assertion for validating a ByteBuffer is empty (zero length) */
 #define TEST_ASSERT_ByteBuffer_EMPTY(_actual) \

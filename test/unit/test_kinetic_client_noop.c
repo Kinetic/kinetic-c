@@ -23,6 +23,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
+#include "mock_kinetic_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -40,13 +41,14 @@ static const int64_t Identity = 47;
 static ByteArray HmacKey;
 static KineticSessionHandle DummyHandle = 1;
 static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
-KineticPDU Request, Response;
-
+static KineticPDU Request, Response;
 
 void setUp(void)
 {
+    KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
+    Connection.connectionID = 182736; // Dummy connection ID to allow connect to complete
     HmacKey = ByteArray_CreateWithCString("some hmac key");
     KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
 
@@ -61,9 +63,10 @@ void setUp(void)
 
 void tearDown(void)
 {
+    KineticLogger_Close();
 }
 
-void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
+void test_KineticClient_NoOp_should_execute_NOOP_operation_in_asynchronous_mode(void)
 {
     KineticOperation operation = {
         .connection = &Connection,
@@ -72,12 +75,10 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation(void)
     };
 
     KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticOperation_Create_ExpectAndReturn(&Connection, operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildNoop_Expect(&operation);
-    KineticPDU_Send_ExpectAndReturn(&Request, KINETIC_STATUS_SUCCESS);
-    KineticPDU_Receive_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticOperation_GetStatus_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
-    KineticOperation_Free_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+    KineticOperation_ReceiveAsync_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_NoOp(DummyHandle);
 

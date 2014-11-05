@@ -25,88 +25,105 @@
 #include <openssl/hmac.h>
 
 static void KineticHMAC_Compute(KineticHMAC* hmac,
-                                const KineticProto* proto,
+                                const KineticProto_Message* proto,
                                 const ByteArray key);
 
 void KineticHMAC_Init(KineticHMAC* hmac,
-                      KineticProto_Security_ACL_HMACAlgorithm algorithm)
+                      KineticProto_Command_Security_ACL_HMACAlgorithm algorithm)
 {
-    if (algorithm == KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1) {
+    if (algorithm == KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1) {
         *hmac = (KineticHMAC) {
             .algorithm = algorithm,
-             .len = KINETIC_HMAC_MAX_LEN
+            .len = KINETIC_HMAC_MAX_LEN
         };
     }
     else {
         *hmac = (KineticHMAC) {
-            .algorithm = KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM
+            .algorithm = KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM
         };
     }
 }
 
 void KineticHMAC_Populate(KineticHMAC* hmac,
-                          KineticProto* proto,
+                          KineticProto_Message* msg,
                           const ByteArray key)
 {
-    KineticHMAC_Init(hmac, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Compute(hmac, proto, key);
+    assert(hmac != NULL);
+    assert(msg != NULL);
+    assert(key.data != NULL);
+    assert(key.len > 0);
+
+    KineticHMAC_Init(hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Compute(hmac, msg, key);
 
     // Copy computed HMAC into message
-    memcpy(proto->hmac.data, hmac->data, hmac->len);
-    proto->hmac.len = hmac->len;
-    proto->has_hmac = true;
+    memcpy(msg->hmacAuth->hmac.data, hmac->data, hmac->len);
+    msg->hmacAuth->hmac.len = hmac->len;
+    msg->hmacAuth->has_hmac = true;
 }
 
-bool KineticHMAC_Validate(const KineticProto* proto,
+bool KineticHMAC_Validate(const KineticProto_Message* msg,
                           const ByteArray key)
 {
+    assert(msg != NULL);
+    assert(key.data != NULL);
+    assert(key.len > 0);
+
     bool success = false;
     size_t i;
     int result = 0;
     KineticHMAC tempHMAC;
 
-    if (proto->has_hmac) {
-        KineticHMAC_Init(&tempHMAC, KINETIC_PROTO_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-        KineticHMAC_Compute(&tempHMAC, proto, key);
-        if (proto->hmac.len == tempHMAC.len) {
-            for (i = 0; i < tempHMAC.len; i++) {
-                result |= proto->hmac.data[i] ^ tempHMAC.data[i];
-            }
-            success = (result == 0);
-        }
-
-        if (!success) {
-            LOG("HMAC did not compare!");
-            ByteArray expected = {.data = proto->hmac.data, .len = proto->hmac.len};
-            KineticLogger_LogByteArray("expected HMAC", expected);
-            ByteArray actual = {.data = tempHMAC.data, .len = tempHMAC.len};
-            KineticLogger_LogByteArray("actual HMAC", actual);
-        }
+    if (!msg->has_authType
+     || msg->authType != KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH
+     || msg->hmacAuth == NULL
+     || !msg->hmacAuth->has_hmac
+     || msg->hmacAuth->hmac.data == NULL
+     || msg->hmacAuth->hmac.len == 0) {
+        return false;
     }
+
+    KineticHMAC_Init(&tempHMAC, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Compute(&tempHMAC, msg, key);
+    if (msg->hmacAuth->hmac.len == tempHMAC.len) {
+        for (i = 0; i < tempHMAC.len; i++) {
+            result |= msg->hmacAuth->hmac.data[i] ^ tempHMAC.data[i];
+        }
+        success = (result == 0);
+    }
+
+    if (!success) {
+        LOG0("HMAC did not compare!");
+        ByteArray expected = {.data = msg->hmacAuth->hmac.data, .len = msg->hmacAuth->hmac.len};
+        KineticLogger_LogByteArray(1, "expected HMAC", expected);
+        ByteArray actual = {.data = tempHMAC.data, .len = tempHMAC.len};
+        KineticLogger_LogByteArray(1, "actual HMAC", actual);
+    }
+
     return success;
 }
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 static void KineticHMAC_Compute(KineticHMAC* hmac,
-                                const KineticProto* proto,
+                                const KineticProto_Message* msg,
                                 const ByteArray key)
 {
-    assert(proto->command);
-    uint32_t len = protobuf_c_message_get_packed_size((ProtobufCMessage*)proto->command);
-    uint32_t lenNBO = KineticNBO_FromHostU32(len);
-    uint8_t* packed = malloc(len);
-    assert(packed);
-    uint32_t lenPacked = protobuf_c_message_pack((ProtobufCMessage*)proto->command, packed);
-    assert(lenPacked == len);
+    assert(hmac != NULL);
+    assert(hmac->data != NULL);
+    assert(hmac->len > 0);
+    assert(msg != NULL);
+    assert(msg->has_commandBytes);
+    assert(msg->commandBytes.data != NULL);
+    assert(msg->commandBytes.len > 0);
+
+    uint32_t lenNBO = KineticNBO_FromHostU32(msg->commandBytes.len);
 
     HMAC_CTX ctx;
     HMAC_CTX_init(&ctx);
     HMAC_Init_ex(&ctx, key.data, key.len, EVP_sha1(), NULL);
     HMAC_Update(&ctx, (uint8_t*)&lenNBO, sizeof(uint32_t));
-    HMAC_Update(&ctx, packed, len);
+    HMAC_Update(&ctx, msg->commandBytes.data, msg->commandBytes.len);
     HMAC_Final(&ctx, hmac->data, &hmac->len);
     HMAC_CTX_cleanup(&ctx);
-
-    free(packed);
 }

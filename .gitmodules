@@ -5,12 +5,8 @@
 [submodule "kinetic-protocol"]
 	path = vendor/kinetic-protocol
 	url = https://github.com/Seagate/kinetic-protocol.git
-	branch = 2.0.6
+	branch = 3.0.5
 [submodule "socket99"]
 	path = vendor/socket99
 	url = https://github.com/silentbicycle/socket99.git
-	branch = master
-[submodule "zlog"]
-	path = vendor/zlog
-	url = https://github.com/zma/zlog.git
 	branch = master

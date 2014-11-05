@@ -87,8 +87,10 @@ void test_Kinetic_GetStatusDescription_should_return_appropriate_descriptions(vo
                              Kinetic_GetStatusDescription(KINETIC_STATUS_OPERATION_INVALID));
     TEST_ASSERT_EQUAL_STRING("OPERATION_FAILED",
                              Kinetic_GetStatusDescription(KINETIC_STATUS_OPERATION_FAILED));
-    TEST_ASSERT_EQUAL_STRING("VERSION_FAILURE",
-                             Kinetic_GetStatusDescription(KINETIC_STATUS_VERSION_FAILURE));
+    TEST_ASSERT_EQUAL_STRING("CLUSTER_MISMATCH",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_CLUSTER_MISMATCH));
+    TEST_ASSERT_EQUAL_STRING("VERSION_MISMATCH",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_VERSION_MISMATCH));
     TEST_ASSERT_EQUAL_STRING("DATA_ERROR",
                              Kinetic_GetStatusDescription(KINETIC_STATUS_DATA_ERROR));
     TEST_ASSERT_EQUAL_STRING("BUFFER_OVERRUN",

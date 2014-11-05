@@ -24,9 +24,19 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_message.h"
 
+typedef enum
+{
+    KINETIC_WAIT_STATUS_DATA_AVAILABLE,
+    KINETIC_WAIT_STATUS_TIMED_OUT,
+    KINETIC_WAIT_STATUS_RETRYABLE_ERROR,
+    KINETIC_WAIT_STATUS_FATAL_ERROR,
+} KineticWaitStatus;
+
 int KineticSocket_Connect(const char* host, int port, bool nonBlocking);
 void KineticSocket_Close(int socket);
 
+int KineticSocket_DataBytesAvailable(int socket);
+KineticWaitStatus KineticSocket_WaitUntilDataAvailable(int socket, int timeout);
 KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len);
 KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu);
 

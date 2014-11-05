@@ -32,7 +32,8 @@ void KineticMessage_Init(KineticMessage* const message)
     if ((_entry)->_name.array.data != NULL \
         && (_entry)->_name.array.len > 0 \
         && (_entry)->_name.bytesUsed > 0 \
-        && (_entry)->_name.bytesUsed <= (_entry)->_name.array.len) { \
+        && (_entry)->_name.bytesUsed <= (_entry)->_name.array.len) \
+    { \
         (_field)._name.data = (_entry)->_name.array.data; \
         (_field)._name.len = (_entry)->_name.bytesUsed; \
         (_field).has_ ## _name = true; \
@@ -51,9 +52,7 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
     message->command.body = &message->body;
-    message->proto.command->body = &message->body;
     message->command.body->keyValue = &message->keyValue;
-    message->proto.command->body->keyValue = &message->keyValue;
 
     // Set keyValue fields appropriately
     CONFIG_FIELD_BYTE_BUFFER(key,        message->keyValue, entry);
@@ -69,7 +68,7 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_algorithm = (bool)((int)entry->algorithm > 0);
     if (message->keyValue.has_algorithm) {
         message->keyValue.algorithm =
-            KineticProto_Algorithm_from_KineticAlgorithm(entry->algorithm);
+            KineticProto_Command_Algorithm_from_KineticAlgorithm(entry->algorithm);
     }
     message->keyValue.has_metadataOnly = entry->metadataOnly;
     if (message->keyValue.has_metadataOnly) {
@@ -79,7 +78,65 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_synchronization = (entry->synchronization > 0);
     if (message->keyValue.has_synchronization) {
         message->keyValue.synchronization =
-            KineticProto_Synchronization_from_KineticSynchronization(
+            KineticProto_Command_Synchronization_from_KineticSynchronization(
                 entry->synchronization);
     }
+}
+
+
+void KineticMessage_ConfigureKeyRange(KineticMessage* const message,
+                                      const KineticKeyRange* range)
+{
+    assert(message != NULL);
+    assert(range != NULL);
+    assert(range->startKey.array.data != NULL);
+    assert(range->startKey.array.len > 0);
+    assert(range->startKey.bytesUsed > 0);
+    assert(range->startKey.bytesUsed <= range->startKey.array.len);
+    assert(range->maxReturned > 0);
+
+    // Enable command body and keyValue fields by pointing at
+    // pre-allocated elements in message
+    message->command.body = &message->body;
+    message->command.body->range = &message->keyRange;
+
+    // Populate startKey, if supplied
+    message->command.body->range->has_startKey = 
+        (range->startKey.array.data != NULL);
+    if (message->command.body->range->has_startKey) {
+        message->command.body->range->startKey = (ProtobufCBinaryData) {
+            .data = range->startKey.array.data,
+            .len = range->startKey.bytesUsed,
+        };
+    }
+
+    // Populate endKey, if supplied
+    message->command.body->range->has_endKey = 
+        (range->endKey.array.data != NULL);
+    if (message->command.body->range->has_endKey) {
+        message->command.body->range->endKey = (ProtobufCBinaryData) {
+            .data = range->endKey.array.data,
+            .len = range->endKey.bytesUsed,
+        };
+    }
+
+    // Populate start/end key inclusive flags, if specified
+    if (range->startKeyInclusive) {
+        message->command.body->range->startKeyInclusive = range->startKeyInclusive;
+    }
+    message->command.body->range->has_startKeyInclusive = range->startKeyInclusive;
+    if (range->endKeyInclusive) {
+        message->command.body->range->endKeyInclusive = range->endKeyInclusive;
+    }
+    message->command.body->range->has_endKeyInclusive = range->endKeyInclusive;
+
+    // Populate max keys to return
+    message->command.body->range->maxReturned = range->maxReturned;
+    message->command.body->range->has_maxReturned = true;
+
+    // Populate reverse flag (return keys in reverse order)
+    if (range->reverse) {
+        message->command.body->range->reverse = range->reverse;
+    }
+    message->command.body->range->has_reverse = range->reverse;
 }

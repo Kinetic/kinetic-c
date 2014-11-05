@@ -23,29 +23,31 @@
 #include "kinetic_client.h"
 #include "kinetic_logger.h"
 
-// uint8_t hmacKeyBuffer[KINETIC_MAX_KEY_LEN];
-uint8_t data[PDU_VALUE_MAX_LEN];
+uint8_t data[KINETIC_OBJ_SIZE];
 
 void SystemTestSetup(SystemTestFixture* fixture)
 {
+    KineticClient_Init("stdout", 3);
+
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
+
+    memset(fixture, 0, sizeof(SystemTestFixture));
 
     ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
     if (!fixture->connected) {
         *fixture = (SystemTestFixture) {
             .config = (KineticSession) {
-                .host = "localhost",
-                 .port = KINETIC_PORT,
-                  .clusterVersion = 0,
-                   .identity =  1,
-                    .nonBlocking = false,
-                     .hmacKey = hmacArray,
+                .host = SYSTEM_TEST_HOST,
+                .port = KINETIC_PORT,
+                .clusterVersion = 0,
+                .identity =  1,
+                .nonBlocking = false,
+                .hmacKey = hmacArray,
             },
             .connected = fixture->connected,
-             .testIgnored = false,
+            .testIgnored = false,
         };
-        KineticStatus status = KineticClient_Connect(
-                                   &fixture->config, &fixture->handle);
+        KineticStatus status = KineticClient_Connect(&fixture->config, &fixture->handle);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
@@ -72,4 +74,9 @@ void SystemTestTearDown(SystemTestFixture* fixture)
         //     fixture->connection.sequence,
         //     "Sequence should post-increment for every operation on the session!");
     }
+
+    KineticStatus status = KineticClient_Disconnect(&fixture->handle);
+    TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
+
+    KineticClient_Shutdown();
 }

@@ -24,6 +24,10 @@
 #include "kinetic_types.h"
 #include "kinetic_logger.h"
 
+#ifndef SYSTEM_TEST_HOST
+#define SYSTEM_TEST_HOST "localhost"
+#endif
+
 typedef struct _SystemTestFixture {
     KineticSession config;
     KineticSessionHandle handle;
@@ -39,7 +43,6 @@ void SystemTestSuiteTearDown(SystemTestFixture* fixture);
 #define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) \
 void test_Suite_TearDown(void) \
 { \
-    LOG("BLARF!!!!!!!!!!!!!!!"); \
     if ((_fixture)->handle != KINETIC_HANDLE_INVALID && (_fixture)->connected) { \
         KineticClient_Disconnect(&(_fixture)->handle); } \
     (_fixture)->connected = false; \

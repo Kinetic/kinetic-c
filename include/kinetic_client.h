@@ -26,9 +26,15 @@
 /**
  * Initializes the Kinetic API andcsonfigures logging destination.
  *
- * @param logFile Path to log file. Specify NULL to log to STDOUT.
+ * @param log_file (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
+ * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
  */
-void KineticClient_Init(const char* logFile);
+void KineticClient_Init(const char* log_file, int log_level);
+
+/**
+ * @brief Performs shutdown/cleanup of the kinetic-c client lib
+ */
+void KineticClient_Shutdown(void);
 
 /**
  * @brief Initializes the Kinetic API, configures logging destination, establishes a
@@ -70,55 +76,68 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle handle);
  * @brief Executes a PUT command to store/update an entry on the Kinetic Device.
  *
  * @param handle        KineticSessionHandle for a connected session.
- * @param metadata      Key/value metadata for object to store. 'value' must
+ * @param entry         Key/value entry for object to store. 'value' must
  *                      specify the data to be stored.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
+ * 
  *
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Put(KineticSessionHandle handle,
-                                KineticEntry* const metadata);
+                                KineticEntry* const entry,
+                                KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
  *
  * @param handle        KineticSessionHandle for a connected session.
- * @param metadata      Key/value metadata for object to retrieve. 'value' will
- *                      be populated unless 'metadataOnly' is set to 'true'
+ * @param entry         Key/value entry for object to retrieve. 'value' will
+ *                      be populated unless 'metadataOnly' is set to 'true'.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
  *
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Get(KineticSessionHandle handle,
-                                KineticEntry* const metadata);
+                                KineticEntry* const entry,
+                                KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
  *
  * @param handle        KineticSessionHandle for a connected session.
- * @param metadata      Key/value metadata for object to delete. 'value' is
+ * @param entry         Key/value entry for object to delete. 'value' is
  *                      not used for this operation.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
  *
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
-                                   KineticEntry* const metadata);
+                                   KineticEntry* const entry,
+                                   KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a GETKEYRANGE command to retrive a set of keys in the range
  * specified range from the Kinetic Device
  *
- * @param handle        KineticSessionHandle for a connected session.
+ * @param handle        KineticSessionHandle for a connected session
  * @param range         KineticKeyRange specifying keys to return
- * @param keys          An pointer to an array of ByteBuffers with pre-allocated
- *                      arrays to store the retrieved keys
- * @param max_keys      The number maximum number of keys to request from the
- *                      device. There must be at least this many ByteBuffers in
- *                      the `keys` array for population.
+ * @param keys          ByteBufferArray to store the retrieved keys
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
  *
  *
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
-                                        KineticKeyRange* range, ByteBuffer* keys[], int max_keys);
+                                        KineticKeyRange* range, ByteBufferArray* keys,
+                                        KineticCompletionClosure* closure);
 
 #endif // _KINETIC_CLIENT_H
