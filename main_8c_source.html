@@ -89,7 +89,7 @@
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">// Private Method Declarations</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> ParseOptions(</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">static</span> <span class="keywordtype">int</span> ParseOptions(</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> argc,</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">char</span>** <span class="keyword">const</span> argv,</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="struct_kinetic_session.html">KineticSession</a>* config,</div>
@@ -118,7 +118,7 @@
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="kinetic__client_8h.html#ab3839aed7b68c5bdc63c79ac90f4084b">KineticClient_Init</a>(<span class="stringliteral">&quot;stdout&quot;</span>, 2);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">// Parse command line options</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    ParseOptions(argc, argv, &amp;SessionConfig, &amp;Entry);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">int</span> operationsArgsIndex = ParseOptions(argc, argv, &amp;SessionConfig, &amp;Entry);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="comment">// Establish a session/connection with the Kinetic Device</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="kinetic__types_8h.html#af2747d5f7954601329c11b58757764b9">KineticSessionHandle</a> sessionHandle;</div>
@@ -131,7 +131,7 @@
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">// Execute all specified operations in order</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> optionIndex = 1; optionIndex &lt; argc; optionIndex++) {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> optionIndex = operationsArgsIndex; optionIndex &lt; argc; optionIndex++) {</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>* operation = argv[optionIndex];</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        ReportOperationConfiguration(operation, &amp;SessionConfig, &amp;Entry);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        ExecuteOperation(operation, sessionHandle, &amp;Entry);</div>
@@ -260,7 +260,7 @@
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;           entry-&gt;<a class="code" href="struct_kinetic_entry.html#a59e00f6de104c463050dd6108e3564e3">value</a>.<a class="code" href="struct_byte_buffer.html#ac8b4d499aec3223045e239e80f7e49c8">bytesUsed</a>);</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;}</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="keywordtype">void</span> ParseOptions(</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="keywordtype">int</span> ParseOptions(</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> argc,</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keywordtype">char</span>** <span class="keyword">const</span> argv,</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <a class="code" href="struct_kinetic_session.html">KineticSession</a>* sessionConfig,</div>
@@ -303,14 +303,14 @@
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    };</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="comment">// Parse the options from the command line</span></div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keywordtype">int</span> option, optionIndex = 0;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordflow">while</span> ((option = getopt_long(argc, argv, <span class="stringliteral">&quot;h&quot;</span>, long_options, &amp;optionIndex)) != -1) {</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="comment">// Parse options until we reach the end of the argument list</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="keywordflow">switch</span> (option) {</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="comment">// If this option set a flag, do nothing else now</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keywordflow">case</span> 0: <span class="keywordflow">if</span> (long_options[optionIndex].flag != 0) {</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            }</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keyword">extern</span> <span class="keywordtype">char</span> *optarg;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keyword">extern</span> <span class="keywordtype">int</span> optind;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <span class="keywordtype">int</span> option, optionIndex = 0;</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordflow">while</span> ((option = getopt_long(argc, argv, <span class="stringliteral">&quot;h:&quot;</span>, long_options, &amp;optionIndex)) != -1) {</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="comment">// Parse options until we reach the end of the argument list</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keywordflow">switch</span> (option) {</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="comment">// If this option set a flag, do nothing else now</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordflow">case</span> 0: <span class="keywordflow">if</span> (long_options[optionIndex].flag != 0) {<span class="keywordflow">break</span>;}</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="comment">// Configure host</span></div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;h&#39;</span>: strcpy(cfg.host, optarg); <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        <span class="comment">// Discard &#39;?&#39;, since getopt_long already printed info</span></div>
@@ -332,9 +332,10 @@
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    strncpy(sessionConfig-&gt;<a class="code" href="struct_kinetic_session.html#aa4cfddfaf641f3d2c44660f84fc0d8d0">host</a>, cfg.host, <a class="code" href="kinetic__types_8h.html#ac956117a90023ec0971b8f9fce9dec75">HOST_NAME_MAX</a>);</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="comment">// Populate and configure the entry to be used for operations</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    ConfigureEntry(entry,</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                   cfg.<a class="code" href="struct_kinetic_entry.html#ab34b2be83d0c4bf878d51fa557f229ac">key</a>, cfg.tag, cfg.version, cfg.algorithm, TestDataString);</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;}</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    ConfigureEntry(entry, cfg.<a class="code" href="struct_kinetic_entry.html#ab34b2be83d0c4bf878d51fa557f229ac">key</a>, cfg.tag, cfg.version, cfg.algorithm, TestDataString);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordflow">return</span> optind;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;}</div>
 <div class="ttc" id="struct_kinetic_session_html_a8a59b5498aca354c6a59397061e61a2c"><div class="ttname"><a href="struct_kinetic_session.html#a8a59b5498aca354c6a59397061e61a2c">KineticSession::clusterVersion</a></div><div class="ttdeci">int64_t clusterVersion</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00112">kinetic_types.h:112</a></div></div>
 <div class="ttc" id="struct_byte_buffer_html"><div class="ttname"><a href="struct_byte_buffer.html">ByteBuffer</a></div><div class="ttdoc">Structure for an embedded ByteArray as a buffer. </div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00034">byte_array.h:34</a></div></div>
 <div class="ttc" id="struct_kinetic_session_html_aa4cfddfaf641f3d2c44660f84fc0d8d0"><div class="ttname"><a href="struct_kinetic_session.html#aa4cfddfaf641f3d2c44660f84fc0d8d0">KineticSession::host</a></div><div class="ttdeci">char host[256]</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00101">kinetic_types.h:101</a></div></div>

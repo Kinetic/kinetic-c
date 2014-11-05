@@ -43,7 +43,7 @@
 <div class="title">kinetic-c Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a href="http://travis-ci.org/atomicobject/kinetic-c">![Build Status](http://travis-ci.org/atomicobject/kinetic-c.png?branch=master)</a> </p><h1>Kinetic C Client Library </h1>
+<div class="textblock"><p><a href="http://travis-ci.org/Seagate/kinetic-c">![Build Status](http://travis-ci.org/Seagate/kinetic-c.png?branch=master)</a> </p><h1>Kinetic C Client Library </h1>
 <p>The <a href="https://github.com/Seagate/kinetic-c">Github kinetic-c Git repository</a> contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.</p>
 <p><a href="https://github.com/Seagate/kinetic-c/tree/master/src/utility/examples">Code examples</a> are included for reference as part of the <a href="https://github.com/Seagate/kinetic-c/tree/master/src/utility">kinetic-c client library test utility (`kinetic-c-util`)</a>, which builds and links against the installed <code>kinetic-c-client</code> static library.</p>
 <p>The <a href="https://github.com/Seagate/kinetic-c/blob/master/Makefile">project Makefile</a> can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.</p>
@@ -76,9 +76,16 @@
 &gt; sudo make uninstall
 </pre><p><b>Build example utility and run tests against Kinetic Device simulator</b> </p><pre class="fragment">&gt; make all # this is what Travis-CI build does does for regression testing
 </pre><h1>API Documentation </h1>
-<p><a href="index.html">Kinetic-C API Documentation</a> (generated with Doxygen)</p><ul>
-<li><a href="kinetic__client_8h.html">Kinetic-C API</a></li>
-<li><a href="kinetic__types_8h.html">Kinetic-C types</a></li>
+<p><a href="http://seagate.github.io/kinetic-c/">Kinetic-C API Documentation</a> (generated with Doxygen)</p><ul>
+<li><a href="http://seagate.github.io/kinetic-c/kinetic__client_8h.html">Kinetic-C API</a></li>
+<li><a href="http://seagate.github.io/kinetic-c/kinetic__types_8h.html">Kinetic-C types</a></li>
+<li><a href="http://seagate.github.io/kinetic-c/byte__array_8h.html">ByteArray API</a><ul>
+<li>The <a class="el" href="struct_byte_array.html" title="Structure for handling generic arrays of bytes. ">ByteArray</a> and <a class="el" href="struct_byte_buffer.html" title="Structure for an embedded ByteArray as a buffer. ">ByteBuffer</a> types are used for exchanging variable length byte-arrays with kinetic-c<ul>
+<li>e.g. object keys, object value data, etc.</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h1>Example Client/Test Utility </h1>
 <p>Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.</p>
