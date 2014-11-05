@@ -76,39 +76,49 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle handle);
  * @brief Executes a PUT command to store/update an entry on the Kinetic Device.
  *
  * @param handle        KineticSessionHandle for a connected session.
- * @param metadata      Key/value metadata for object to store. 'value' must
+ * @param entry         Key/value entry for object to store. 'value' must
  *                      specify the data to be stored.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
+ * 
  *
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Put(KineticSessionHandle handle,
-                                KineticEntry* const metadata,
+                                KineticEntry* const entry,
                                 KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
  *
  * @param handle        KineticSessionHandle for a connected session.
- * @param metadata      Key/value metadata for object to retrieve. 'value' will
- *                      be populated unless 'metadataOnly' is set to 'true'
+ * @param entry         Key/value entry for object to retrieve. 'value' will
+ *                      be populated unless 'metadataOnly' is set to 'true'.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
  *
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Get(KineticSessionHandle handle,
-                                KineticEntry* const metadata,
+                                KineticEntry* const entry,
                                 KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
  *
  * @param handle        KineticSessionHandle for a connected session.
- * @param metadata      Key/value metadata for object to delete. 'value' is
+ * @param entry         Key/value entry for object to delete. 'value' is
  *                      not used for this operation.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
  *
  * @return              Returns the resulting KineticStatus
  */
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
-                                   KineticEntry* const metadata,
+                                   KineticEntry* const entry,
                                    KineticCompletionClosure* closure);
 
 /**
@@ -118,6 +128,9 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
  * @param handle        KineticSessionHandle for a connected session
  * @param range         KineticKeyRange specifying keys to return
  * @param keys          ByteBufferArray to store the retrieved keys
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
  *
  *
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
