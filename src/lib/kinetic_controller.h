@@ -18,16 +18,15 @@
 *
 */
 
-#ifndef _KINETIC_CONNECTION_H
-#define _KINETIC_CONNECTION_H
+#ifndef _KINETIC_CONTROLLER_H
+#define _KINETIC_CONTROLLER_H
 
 #include "kinetic_types_internal.h"
 
-KineticSessionHandle KineticConnection_NewConnection(const KineticSession* const config);
-void KineticConnection_FreeConnection(KineticSessionHandle* const handle);
-KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle);
-KineticStatus KineticConnection_Connect(KineticConnection* const connection);
-KineticStatus KineticConnection_Disconnect(KineticConnection* const connection);
-void KineticConnection_IncrementSequence(KineticConnection* const connection);
+KineticStatus KineticController_CreateWorkerThreads(KineticConnection* const connection);
+KineticStatus KineticController_CreateOperation(KineticOperation** operation, KineticSessionHandle handle);
+KineticStatus KineticController_ExecuteOperation(KineticOperation* operation);
+void KineticController_Pause(KineticConnection* const connection, bool pause);
+void* KineticController_ReceiveThread(void* thread_arg);
 
-#endif // _KINETIC_CONNECTION_H
+#endif // _KINETIC_CONTROLLER_H

@@ -215,8 +215,6 @@ KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation)
     return status;
 }
 
-
-
 KineticStatus KineticOperation_NoopCallback(KineticOperation* operation)
 {
     assert(operation != NULL);

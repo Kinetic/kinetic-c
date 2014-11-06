@@ -26,6 +26,7 @@
 #include "kinetic_logger.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
+#include "kinetic_controller.h"
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
@@ -64,7 +65,7 @@ void tearDown(void)
     if (SessionHandle != KINETIC_HANDLE_INVALID) {
         if (Connection->connected) {
             KineticStatus status = KineticConnection_Disconnect(Connection);
-            TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+            TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
             TEST_ASSERT_FALSE(Connection->connected);
         }
         KineticConnection_FreeConnection(&SessionHandle);
@@ -275,7 +276,7 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
         "Connection ID should not be assigned yet!");
 
     // Pause worker thread to setup expectations
-    KineticConnection_Pause(Connection, true);
+    KineticController_Pause(Connection, true);
     sleep(0);
 
     // Prepare the status PDU to be received
@@ -289,7 +290,7 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
 
     // Make sure to return read thread to IDLE state
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
-    KineticConnection_Pause(Connection, false);
+    KineticController_Pause(Connection, false);
 
     // Wait for unsolicited status PDU to be received and processed...
     sleep(1);
@@ -374,7 +375,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
 
     // Pause worker thread to setup expectations
-    KineticConnection_Pause(Connection, true);
+    KineticController_Pause(Connection, true);
     sleep(0);
 
     // Prepare the status PDU to be received
@@ -390,7 +391,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
 
     // Make sure to return read thread to IDLE state
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
-    KineticConnection_Pause(Connection, false);
+    KineticController_Pause(Connection, false);
 
     // Wait for solicited status PDU to be received and processed...
     sleep(1);
@@ -462,7 +463,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
 
     // Pause worker thread to setup expectations
-    KineticConnection_Pause(Connection, true);
+    KineticController_Pause(Connection, true);
     sleep(0);
 
     // Prepare the status PDU to be received
@@ -479,7 +480,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
 
     // Make sure to return read thread to IDLE state
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
-    KineticConnection_Pause(Connection, false);
+    KineticController_Pause(Connection, false);
 
     // Wait for solicited status PDU to be received and processed...
     sleep(1);
@@ -488,13 +489,6 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, dummyClosureData.status);
     TEST_ASSERT_EQUAL(1, dummyClosureData.callbackCount);
 }
-
-void test_KineticConnection_Worker_should_not_poll_but_instead_do_a_blocking_wait_on_receive_socket(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Change worker thread to be blocking!");
-}
-
-
 
 void test_KineticConnection_IncrementSequence_should_increment_the_sequence_count(void)
 {
