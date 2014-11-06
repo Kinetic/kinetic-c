@@ -140,4 +140,22 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
                                         KineticKeyRange* range, ByteBufferArray* keys,
                                         KineticCompletionClosure* closure);
 
+/**
+ * @brief Executes a GETLOG command to retrive a set of keys in the range
+ * specified range from the Kinetic Device
+ *
+ * @param handle        KineticSessionHandle for a connected session
+ * @param type          KineticLogDataType specifying data type to retrieve.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
+ *
+ *
+ * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ *                      upon failure
+ */
+KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
+                                   KineticLogDataType type,
+                                   KineticCompletionClosure* closure);
+
 #endif // _KINETIC_CLIENT_H

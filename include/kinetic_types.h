@@ -202,4 +202,15 @@ typedef struct _KineticKeyRange {
     bool reverse;
 } KineticKeyRange;
 
+// Kinetic GetLog data types
+typedef enum {
+    KINETIC_LOG_DATA_TYPE_UTILIZATIONS = 0,
+    KINETIC_LOG_DATA_TYPE_TEMPERATURES,
+    KINETIC_LOG_DATA_TYPE_CAPACITIES,
+    KINETIC_LOG_DATA_TYPE_CONFIGURATION,
+    KINETIC_LOG_DATA_TYPE_STATISTICS,
+    KINETIC_LOG_DATA_TYPE_MESSAGES,
+    KINETIC_LOG_DATA_TYPE_LIMITS,
+} KineticLogDataType;
+
 #endif // _KINETIC_TYPES_H
