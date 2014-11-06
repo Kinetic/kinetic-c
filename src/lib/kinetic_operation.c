@@ -27,6 +27,7 @@
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
+#include <errno.h>
 #include <sys/time.h>
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation);
@@ -149,7 +150,6 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
             operation->request->command->header->has_sequence && 
             operation->request->command->header->sequence == targetSequence)
         {
-            operation->receiveComplete = false;
             operation->response = response;
             return operation;
         }
@@ -177,30 +177,26 @@ KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation)
 
     // Wait for response if no callback supplied (synchronous)
     if (operation->closure.callback == NULL) { 
-        bool timeout = false;
         struct timeval tv;
-        time_t startTime, currentTime;
+
         status = KINETIC_STATUS_SOCKET_TIMEOUT;
 
         // Wait for matching response to arrive
         gettimeofday(&tv, NULL);
-        startTime = tv.tv_sec;
-        while(!operation->receiveComplete && !timeout) {
-            gettimeofday(&tv, NULL);
-            currentTime = tv.tv_sec;
-            if ((currentTime - startTime) >= KINETIC_PDU_RECEIVE_TIMEOUT_SECS) {
-                timeout = true;
-            }
-            else {
-                sleep(0);
-            }
-        }
+        struct timespec timeoutTime = {
+            .tv_sec = tv.tv_sec + KINETIC_PDU_RECEIVE_TIMEOUT_SECS,
+            .tv_nsec = 0,
+        };
 
-        if (timeout) {
+        pthread_mutex_lock(&operation->receiveCompleteMutex);
+        int res = pthread_cond_timedwait(&operation->receiveComplete, &operation->receiveCompleteMutex, &timeoutTime);
+        pthread_mutex_unlock(&operation->receiveCompleteMutex);
+
+        if (res == ETIMEDOUT) {
             LOG0("Timed out waiting to received response PDU!");
             status = KINETIC_STATUS_SOCKET_TIMEOUT;
         }
-        else if (operation->response != NULL) {
+        else if (res == 0 && operation->response != NULL) {
             status = KineticPDU_GetStatus(operation->response);
             LOGF2("Response PDU received w/status %s", Kinetic_GetStatusDescription(status));
         }
@@ -210,6 +206,9 @@ KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation)
         }
 
         KineticAllocator_FreeOperation(operation->connection, operation);
+
+        pthread_cond_destroy(&operation->receiveComplete);
+        pthread_mutex_destroy(&operation->receiveCompleteMutex);
     }
 
     return status;

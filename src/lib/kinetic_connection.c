@@ -119,7 +119,7 @@ static void* KineticConnection_Worker(void* thread_arg)
 
                             // Otherwise, is a synchronous opearation, so just set a flag
                             else {
-                                op->receiveComplete = true;
+                                pthread_cond_signal(&op->receiveComplete);
                             }
                         }
                     }

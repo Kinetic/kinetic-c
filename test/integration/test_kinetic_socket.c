@@ -44,7 +44,7 @@
 #include <netdb.h>
 #include <signal.h>
 
-#include "socket99/socket99.h"
+#include "socket99.h"
 
 static int FileDesc;
 static int KineticTestPort = KINETIC_PORT;

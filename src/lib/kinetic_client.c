@@ -60,7 +60,7 @@ static KineticStatus KineticClient_CreateOperation(
     return KINETIC_STATUS_SUCCESS;
 }
 
-static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
+static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure)
 {
     assert(operation != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
@@ -75,6 +75,16 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
     }
     else {
         LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);
+    }
+
+    if (closure != NULL)
+    {
+        operation->closure = *closure;
+    }
+    else
+    {
+        pthread_mutex_init(&operation->receiveCompleteMutex, NULL);
+        pthread_cond_init(&operation->receiveComplete, NULL);
     }
 
     // Send the request
@@ -179,7 +189,7 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle handle)
     KineticOperation_BuildNoop(operation);
 
     // Execute the operation
-    status = KineticClient_ExecuteOperation(operation);
+    status = KineticClient_ExecuteOperation(operation, NULL);
 
     return status;
 }
@@ -197,10 +207,9 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildPut(operation, entry);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticClient_ExecuteOperation(operation, closure);
 }
 
 KineticStatus KineticClient_Get(KineticSessionHandle handle,
@@ -219,7 +228,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
     if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticClient_ExecuteOperation(operation, closure);
 }
 
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
@@ -237,7 +246,7 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
     if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticClient_ExecuteOperation(operation, closure);
 }
 
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
@@ -264,5 +273,5 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
     if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticClient_ExecuteOperation(operation, closure);
 }

@@ -26,7 +26,7 @@
 #include "kinetic_socket.h"
 #include "kinetic_nbo.h"
 #include "protobuf-c/protobuf-c.h"
-#include "socket99/socket99.h"
+#include "socket99.h"
 #include <errno.h>
 #include <sys/time.h>
 #include <stdio.h>

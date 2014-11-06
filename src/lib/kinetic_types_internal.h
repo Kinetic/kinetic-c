@@ -259,7 +259,8 @@ struct _KineticOperation {
     KineticPDU* response;
     bool valueEnabled;
     bool sendValue;
-    bool receiveComplete;
+    pthread_mutex_t receiveCompleteMutex;
+    pthread_cond_t receiveComplete;
     KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticOperationCallback callback;
