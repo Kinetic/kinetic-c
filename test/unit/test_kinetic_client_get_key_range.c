@@ -20,28 +20,19 @@
 */
 
 #include "kinetic_client.h"
-#include "kinetic_client.h"
-#include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_proto.h"
-#include "kinetic_logger.h"
-#include "mock_kinetic_allocator.h"
-#include "mock_kinetic_operation.h"
 #include "mock_kinetic_connection.h"
-#include "mock_kinetic_message.h"
-#include "mock_kinetic_pdu.h"
-#include <stdio.h>
+#include "mock_kinetic_controller.h"
+#include "mock_kinetic_operation.h"
+
+#include "kinetic_logger.h"
+#include "kinetic_proto.h"
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
 
-static KineticSession Session;
-static KineticConnection Connection;
-static const int64_t ClusterVersion = 1234;
-static const int64_t Identity = 47;
-static ByteArray HmacKey;
 static const char* StartKeyData[KINETIC_DEFAULT_KEY_LEN];
 static const char* EndKeyData[KINETIC_DEFAULT_KEY_LEN];
 static ByteBuffer StartKey, EndKey;
@@ -49,16 +40,10 @@ static ByteBuffer StartKey, EndKey;
 static uint8_t KeyRangeData[MAX_KEYS_RETRIEVED][KINETIC_MAX_KEY_LEN];
 static ByteBuffer Keys[MAX_KEYS_RETRIEVED];
 static KineticSessionHandle DummyHandle = 1;
-static KineticSessionHandle SessionHandle = KINETIC_HANDLE_INVALID;
-static KineticPDU Request, Response;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-    KINETIC_CONNECTION_INIT(&Connection);
-    Connection.connected = false;
-    Connection.connectionID = 182736; // Dummy connection ID to allow connect to complete
-    HmacKey = ByteArray_CreateWithCString("some hmac key");
 
     // Configure start and end key buffers
     StartKey = ByteBuffer_Create(StartKeyData, sizeof(StartKeyData), sizeof(StartKeyData));
@@ -71,16 +56,6 @@ void setUp(void)
         snprintf(keyBuf, sizeof(keyBuf), "key_range_00_%02d", i);
         ByteBuffer_AppendCString(&Keys[i], keyBuf);
     }
-
-    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
-
-    KineticConnection_NewConnection_ExpectAndReturn(&Session, DummyHandle);
-    KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticConnection_Connect_ExpectAndReturn(&Connection, KINETIC_STATUS_SUCCESS);
-
-    KineticStatus status = KineticClient_Connect(&Session, &SessionHandle);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL(DummyHandle, SessionHandle);
 }
 
 void tearDown(void)
@@ -147,23 +122,15 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
         .maxReturned = MAX_KEYS_RETRIEVED,
         .reverse = false,
     };
-
-    KineticOperation operation = {
-        .connection = &Connection,
-        .request = &Request,
-        .response = &Response,
-    };
-
     ByteBufferArray keyArray = {
         .buffers = &Keys[0],
         .count = MAX_KEYS_RETRIEVED
     };
+    KineticOperation operation;
 
-    KineticConnection_FromHandle_ExpectAndReturn(DummyHandle, &Connection);
-    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
     KineticOperation_BuildGetKeyRange_Expect(&operation, &keyRange, &keyArray);
-    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
-    KineticOperation_ReceiveAsync_ExpectAndReturn(&operation, KINETIC_STATUS_BUFFER_OVERRUN);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_BUFFER_OVERRUN);
 
     KineticStatus status = KineticClient_GetKeyRange(DummyHandle, &keyRange, &keyArray, NULL);
 

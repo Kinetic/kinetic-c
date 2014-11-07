@@ -29,7 +29,7 @@
   :include:
     - src/**
     - include/**
-    - vendor/
+    - vendor/socket99/**
     - vendor/protobuf-c/**
 
 :defines:

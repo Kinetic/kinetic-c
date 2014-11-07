@@ -49,37 +49,32 @@ KineticStatus KineticController_CreateWorkerThreads(KineticConnection* const con
     return status;
 }
 
-KineticStatus KineticController_CreateOperation(
-    KineticOperation** operation,
-    KineticSessionHandle handle)
+KineticOperation* KineticController_CreateOperation(KineticSessionHandle handle)
 {
     if (handle == KINETIC_HANDLE_INVALID) {
         LOG0("Specified session has invalid handle value");
-        return KINETIC_STATUS_SESSION_EMPTY;
+        return NULL;
     }
 
     KineticConnection* connection = KineticConnection_FromHandle(handle);
     if (connection == NULL) {
         LOG0("Specified session is not associated with a connection");
-        return KINETIC_STATUS_SESSION_INVALID;
+        return NULL;
     }
 
     LOGF1("\n"
          "--------------------------------------------------\n"
          "Building new operation on connection @ 0x%llX", connection);
 
-    *operation = KineticAllocator_NewOperation(connection);
-    if (*operation == NULL) {
-        return KINETIC_STATUS_MEMORY_ERROR;
-    }
-    if ((*operation)->request == NULL) {
-        return KINETIC_STATUS_NO_PDUS_AVAVILABLE;
+    KineticOperation* operation = KineticAllocator_NewOperation(connection);
+    if (operation == NULL || operation->request == NULL) {
+        return NULL;
     }
 
-    return KINETIC_STATUS_SUCCESS;
+    return operation;
 }
 
-KineticStatus KineticController_ExecuteOperation(KineticOperation* operation)
+KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure)
 {
     assert(operation != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
@@ -94,6 +89,17 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation)
     }
     else {
         LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);
+    }
+
+    // Configure completion for synchronous/asynchronous
+    if (closure != NULL)
+    {
+        operation->closure = *closure;
+    }
+    else
+    {
+        pthread_mutex_init(&operation->receiveCompleteMutex, NULL);
+        pthread_cond_init(&operation->receiveComplete, NULL);
     }
 
     // Send the request
@@ -187,9 +193,9 @@ void* KineticController_ReceiveThread(void* thread_arg)
                                 KineticAllocator_FreeOperation(thread->connection, op);
                             }
 
-                            // Otherwise, is a synchronous opearation, so just set a flag
+                            // Otherwise, is a synchronous operation, so signal the main thread operation
                             else {
-                                op->receiveComplete = true;
+                                pthread_cond_signal(&op->receiveComplete);
                             }
                         }
                     }

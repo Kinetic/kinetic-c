@@ -17,6 +17,7 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
+
 #include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
@@ -44,27 +45,20 @@
 static SystemTestFixture Fixture;
 
 void setUp(void)
-{
+{ LOG_LOCATION;
     SystemTestSetup(&Fixture);
 }
 
 void tearDown(void)
-{
+{ LOG_LOCATION;
     SystemTestTearDown(&Fixture);
 }
 
-void test_KineticClient_should_process_initial_unsolicited_status_response(void)
-{
-    int secondsWaiting = 0, maxWaiting = 2;
-    KineticConnection* connection = KineticConnection_FromHandle(Fixture.handle);
-    while(connection->connectionID == 0) {
-        LOG0("Waiting for connection ID...");
-        sleep(1);
-        secondsWaiting++;
-        TEST_ASSERT_TRUE_MESSAGE(secondsWaiting < maxWaiting,
-            "Timed out waiting for initial unsolicited status!");
-    }
-    TEST_ASSERT_TRUE_MESSAGE(connection->connectionID > 0, "Invalid connection ID!");
+void test_GetLog_should_retrieve_capacities_from_device(void)
+{ LOG_LOCATION;
+    KineticStatus status = KineticClient_GetLog(Fixture.handle, KINETIC_LOG_DATA_TYPE_CAPACITIES, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 /*******************************************************************************

@@ -127,6 +127,8 @@ typedef struct _KineticMessage {
     KineticProto_Command_Security_ACL   acl;
     KineticProto_Command_KeyValue       keyValue;
     KineticProto_Command_Range          keyRange;
+    KineticProto_Command_GetLog         getLog;
+    KineticProto_Command_GetLog_Type    getLogType;
 } KineticMessage;
 
 #define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
@@ -174,6 +176,7 @@ typedef struct _KineticMessage {
     KineticProto_command_body__init(&(msg)->body); \
     KineticProto_command_key_value__init(&(msg)->keyValue); \
     KineticProto_command_range__init(&(msg)->keyRange); \
+    KineticProto_command_get_log__init(&(msg)->getLog); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
     (msg)->has_command = false; \
 }
@@ -259,7 +262,8 @@ struct _KineticOperation {
     KineticPDU* response;
     bool valueEnabled;
     bool sendValue;
-    bool receiveComplete;
+    pthread_mutex_t receiveCompleteMutex;
+    pthread_cond_t receiveComplete;
     KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticOperationCallback callback;
@@ -292,5 +296,6 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
 bool Copy_KineticProto_Command_Range_to_ByteBufferArray(
     KineticProto_Command_Range* keyRange, ByteBufferArray* keys);
 int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len);
+KineticProto_Command_GetLog_Type KineticLogDataType_to_KineticProto_Command_GetLog_Type(KineticLogDataType type);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

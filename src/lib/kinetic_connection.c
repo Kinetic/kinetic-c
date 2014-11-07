@@ -20,6 +20,7 @@
 
 #include "kinetic_connection.h"
 #include "kinetic_types_internal.h"
+#include "kinetic_controller.h"
 #include "kinetic_socket.h"
 #include "kinetic_pdu.h"
 #include "kinetic_operation.h"

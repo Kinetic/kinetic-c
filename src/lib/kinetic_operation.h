@@ -36,8 +36,9 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry);
 void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry);
-
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
                                KineticKeyRange* range, ByteBufferArray* buffers);
+void KineticOperation_BuildGetLog(KineticOperation* const operation,
+                               KineticLogDataType type);
 
 #endif // _KINETIC_OPERATION_H
