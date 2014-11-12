@@ -198,16 +198,19 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
 }
 
 KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
-                                   KineticLogDataType type,
+                                   KineticDeviceInfo_Type type,
+                                   KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure)
 {
     assert(handle != KINETIC_HANDLE_INVALID);
+    assert(info != NULL);
+    // assert(*info != NULL);
 
     KineticOperation* operation = KineticController_CreateOperation(handle);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticOperation_BuildGetLog(operation, type);
+    KineticOperation_BuildGetLog(operation, type, info);
     if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation

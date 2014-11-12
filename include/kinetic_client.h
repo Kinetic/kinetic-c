@@ -146,16 +146,19 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
  *
  * @param handle        KineticSessionHandle for a connected session
  * @param type          KineticLogDataType specifying data type to retrieve.
+ * @param info          KineticDeviceInfo pointer, which will be assigned to
+ *                      a dynamically allocated structure populated with
+ *                      the requested data, if successful.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion.
- *
  *
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
 KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
-                                   KineticLogDataType type,
+                                   KineticDeviceInfo_Type type,
+                                   KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure);
 
 #endif // _KINETIC_CLIENT_H

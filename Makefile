@@ -80,7 +80,7 @@ all: clean test default run
 
 clean:
 	bundle exec rake clobber
-	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
+	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core *.log
 	git submodule update --init
 
 .PHONY: clean

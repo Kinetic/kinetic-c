@@ -230,6 +230,7 @@ KineticStatus KineticOperation_PutCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("PUT callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
     // Propagate newVersion to dbVersion in metadata, if newVersion specified
@@ -275,6 +276,7 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("GET callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
     // Update the entry upon success
@@ -315,6 +317,7 @@ KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("DELETE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
     assert(operation->entry != NULL);
     return KINETIC_STATUS_SUCCESS;
 }
@@ -346,6 +349,7 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("GETKEYRANGE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
     assert(operation->buffers != NULL);
     assert(operation->buffers->count > 0);
 
@@ -382,18 +386,25 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
+    assert(operation->deviceInfo != NULL);
     LOGF3("GETLOG callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
+
+    // Copy the data from the response protobuf into a new info struct
+    // TODO: stuff!!!
+
     return KINETIC_STATUS_INVALID;
 }
 
 void KineticOperation_BuildGetLog(KineticOperation* const operation,
-    KineticLogDataType type)
+    KineticDeviceInfo_Type type,
+    KineticDeviceInfo** info)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
     KineticProto_Command_GetLog_Type protoType =
-        KineticLogDataType_to_KineticProto_Command_GetLog_Type(type);
+        KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(type);
         
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG;
     operation->request->command->header->has_messageType = true;
@@ -402,6 +413,7 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     operation->request->command->body->getLog->types = &operation->request->protoData.message.getLogType;
     operation->request->command->body->getLog->types[0] = protoType;
     operation->request->command->body->getLog->n_types = 1;
+    operation->deviceInfo = info;
     operation->callback = &KineticOperation_GetLogCallback;
 }
 

@@ -28,6 +28,7 @@
 #include "kinetic_logger.h"
 #include "kinetic_types_internal.h"
 #include "mock_kinetic_allocator.h"
+#include "mock_kinetic_serial_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -753,9 +754,11 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 {
     LOG_LOCATION;
 
+    KineticDeviceInfo* pInfo;
+
     KineticConnection_IncrementSequence_Expect(&Connection);
 
-    KineticOperation_BuildGetLog(&Operation, KINETIC_LOG_DATA_TYPE_STATISTICS);
+    KineticOperation_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
 
     // Get Log
     //
@@ -805,5 +808,25 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
     TEST_ASSERT_EQUAL(1, Request.command->body->getLog->n_types);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
         Request.command->body->getLog->types[0]);
+    TEST_ASSERT_EQUAL_PTR(&pInfo, Operation.deviceInfo);
     TEST_ASSERT_NULL(Operation.response);
+}
+
+
+void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
+{
+    KineticConnection con;
+    KineticPDU response;
+    KineticDeviceInfo* info;
+    KineticOperation op = {
+        .connection = &con,
+        .response = &response,
+        .deviceInfo = &info,
+    };
+
+    TEST_IGNORE_MESSAGE("TODO: Need to implement!")
+
+    // KineticSerialAllocator_Create()
+
+    // KineticStatus status = KineticOperation_GetLogCallback(&op);
 }

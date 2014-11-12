@@ -43,6 +43,8 @@
 #include "kinetic_nbo.h"
 
 static SystemTestFixture Fixture;
+static KineticStatus Status;
+static KineticDeviceInfo* Info;
 
 void setUp(void)
 { LOG_LOCATION;
@@ -56,9 +58,54 @@ void tearDown(void)
 
 void test_GetLog_should_retrieve_capacities_from_device(void)
 { LOG_LOCATION;
-    KineticStatus status = KineticClient_GetLog(Fixture.handle, KINETIC_LOG_DATA_TYPE_CAPACITIES, NULL);
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, &Info, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
+}
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+void test_GetLog_should_retrieve_utilizations_from_device(void)
+{ LOG_LOCATION;
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &Info, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
+}
+
+void test_GetLog_should_retrieve_temeratures_from_device(void)
+{ LOG_LOCATION;
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, &Info, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
+}
+
+void test_GetLog_should_retrieve_configuration_from_device(void)
+{ LOG_LOCATION;
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, &Info, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
+}
+
+void test_GetLog_should_retrieve_statistics_from_device(void)
+{ LOG_LOCATION;
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &Info, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
+}
+
+void test_GetLog_should_retrieve_messages_from_device(void)
+{ LOG_LOCATION;
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_MESSAGES, &Info, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
+}
+
+void test_GetLog_should_retrieve_limits_from_device(void)
+{ LOG_LOCATION;
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_LIMITS, &Info, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
+    TEST_IGNORE_MESSAGE("TODO: Need to implement log decoding for device limits from GetLog!")
+}
+
+void test_GetLog_should_retrieve_device_info_from_device(void)
+{ LOG_LOCATION;
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_DEVICE, &Info, NULL);
+    if (Status == KINETIC_STATUS_NOT_FOUND) {
+        TEST_IGNORE_MESSAGE("Java simulator currently does NOT support GETLOG 'DEVICE' info attribute!");
+    }
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
 }
 
 /*******************************************************************************

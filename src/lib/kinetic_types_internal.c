@@ -322,26 +322,26 @@ int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len)
     return 0;
 }
 
-KineticProto_Command_GetLog_Type KineticLogDataType_to_KineticProto_Command_GetLog_Type(KineticLogDataType type)
+KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type)
 {
     KineticProto_Command_GetLog_Type protoType;
 
     switch(type) {
-    case KINETIC_LOG_DATA_TYPE_UTILIZATIONS:
+    case KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS; break;
-    case KINETIC_LOG_DATA_TYPE_TEMPERATURES:
+    case KINETIC_DEVICE_INFO_TYPE_TEMPERATURES:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES; break;
-    case KINETIC_LOG_DATA_TYPE_CAPACITIES:
+    case KINETIC_DEVICE_INFO_TYPE_CAPACITIES:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES; break;
-    case KINETIC_LOG_DATA_TYPE_CONFIGURATION:
+    case KINETIC_DEVICE_INFO_TYPE_CONFIGURATION:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION; break;
-    case KINETIC_LOG_DATA_TYPE_STATISTICS:
+    case KINETIC_DEVICE_INFO_TYPE_STATISTICS:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS; break;
-    case KINETIC_LOG_DATA_TYPE_MESSAGES:
+    case KINETIC_DEVICE_INFO_TYPE_MESSAGES:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES; break;
-    case KINETIC_LOG_DATA_TYPE_LIMITS:
+    case KINETIC_DEVICE_INFO_TYPE_LIMITS:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS; break;
-    case KINETIC_LOG_DATA_TYPE_DEVICE:
+    case KINETIC_DEVICE_INFO_TYPE_DEVICE:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE; break;
     default:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE;

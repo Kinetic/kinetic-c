@@ -26,19 +26,30 @@
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation);
 KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation);
 KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* response);
-
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
+KineticStatus KineticOperation_NoopCallback(KineticOperation* operation);
 void KineticOperation_BuildNoop(KineticOperation* operation);
+
+KineticStatus KineticOperation_PutCallback(KineticOperation* operation);
 void KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry);
+
+KineticStatus KineticOperation_GetCallback(KineticOperation* operation);
 void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry);
+
+KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation);
 void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry);
+
+KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation);
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
                                KineticKeyRange* range, ByteBufferArray* buffers);
+
+KineticStatus KineticOperation_GetLogCallback(KineticOperation* operation);
 void KineticOperation_BuildGetLog(KineticOperation* const operation,
-                               KineticLogDataType type);
+                               KineticDeviceInfo_Type type,
+                               KineticDeviceInfo** info);
 
 #endif // _KINETIC_OPERATION_H

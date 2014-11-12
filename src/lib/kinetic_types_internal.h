@@ -266,6 +266,7 @@ struct _KineticOperation {
     pthread_cond_t receiveComplete;
     KineticEntry* entry;
     ByteBufferArray* buffers;
+    KineticDeviceInfo** deviceInfo;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
 };
@@ -273,6 +274,14 @@ struct _KineticOperation {
     assert((_op) != NULL); \
     assert((_con) != NULL); \
     *(_op) = (KineticOperation) {.connection = (_con)}
+
+// Kintic Serial Allocator
+// Used for allocating a contiguous hunk of memory to hold arbitrary variable-length response data
+typedef struct _KineticSerialAllocator {
+    uint8_t* buffer;
+    size_t used;
+    size_t total;
+} KineticSerialAllocator;
 
 
 KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
@@ -296,6 +305,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
 bool Copy_KineticProto_Command_Range_to_ByteBufferArray(
     KineticProto_Command_Range* keyRange, ByteBufferArray* keys);
 int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len);
-KineticProto_Command_GetLog_Type KineticLogDataType_to_KineticProto_Command_GetLog_Type(KineticLogDataType type);
+
+KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

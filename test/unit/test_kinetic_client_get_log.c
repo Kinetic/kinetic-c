@@ -49,14 +49,14 @@ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_de
 {
     LOG_LOCATION;
 
+    KineticDeviceInfo* info;
     KineticOperation operation;
 
     KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
-    KineticOperation_BuildGetLog_Expect(&operation, KINETIC_LOG_DATA_TYPE_UTILIZATIONS);
+    KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_GetLog(DummyHandle, KINETIC_LOG_DATA_TYPE_UTILIZATIONS, NULL);
+    KineticStatus status = KineticClient_GetLog(DummyHandle, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_IGNORE_MESSAGE("TODO: Complete implementation (need to figure out where to stash log data returned)");
 }
