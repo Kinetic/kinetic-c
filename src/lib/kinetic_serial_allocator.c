@@ -31,8 +31,7 @@ KineticSerialAllocator KineticSerialAllocator_Create(size_t max_len) {
     };
 }
 
-
-void* KineticSerialAllocator_Base(KineticSerialAllocator* allocator)
+void* KineticSerialAllocator_GetBuffer(KineticSerialAllocator* allocator)
 {
     assert(allocator != NULL);
     return allocator->buffer;
@@ -55,11 +54,22 @@ void* KineticSerialAllocator_AllocateChunk(KineticSerialAllocator* allocator, si
         }
 
         // Mark buffer full, if the current allocation has exhausted allocated data
-        size_t padding = (sizeof(uint64_t) - 1);
+        const size_t padding = (sizeof(uint64_t) - 1);
         newUsed += padding;
-        newUsed &= ~(sizeof(uint64_t) - 1);
+        newUsed &= ~padding;
         allocator->used = MIN(newUsed, allocator->total);
     }
 
     return data;
+}
+
+size_t KineticSerialAllocator_TrimBuffer(KineticSerialAllocator* allocator)
+{
+    assert(allocator != NULL);
+    assert(allocator->buffer != NULL);
+    void* final = realloc(allocator->buffer, allocator->used);
+    assert(final != NULL);
+    allocator->buffer = final;
+    allocator->total = allocator->used;
+    return allocator->total;
 }

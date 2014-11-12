@@ -23,21 +23,36 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
-#include "mock_kinetic_serial_allocator.h"
+#include "kinetic_serial_allocator.h"
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
 #include "unity_helper.h"
 #include <stdlib.h>
 
+static KineticDeviceInfo* Info;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
+    Info = NULL;
 }
 
 void tearDown(void)
 {
+    // if (Info != NULL) {
+    //     free(Info);
+    //     Info = NULL;
+    // }
     KineticLogger_Close();
+}
+
+
+static size_t GetPaddedLength(size_t len)
+{
+    size_t padding = (sizeof(uint64_t) - 1);
+    size_t paddedLen = len + padding;
+    paddedLen &= ~padding;
+    return paddedLen;
 }
 
 
@@ -56,28 +71,31 @@ void test_KineticDeviceInfo_Create_should_allocate_and_populate_device_info_with
     utilizations[0].name = names[0];
     utilizations[0].has_value = true;
     utilizations[0].value = 1.7f;
-    expectedSize += sizeof(KineticDeviceInfo_Utilization*) + sizeof(KineticDeviceInfo_Utilization) + strlen(utilizations[0].name)+1;
+    expectedSize += sizeof(KineticDeviceInfo_Utilization) + GetPaddedLength(strlen(utilizations[0].name)+1);
 
     utilizations[1].name = names[1];
     utilizations[1].has_value = true;
     utilizations[1].value = 2.3f;
-    expectedSize += sizeof(KineticDeviceInfo_Utilization*) + sizeof(KineticDeviceInfo_Utilization) + strlen(utilizations[1].name)+1;
+    expectedSize += sizeof(KineticDeviceInfo_Utilization) + GetPaddedLength(strlen(utilizations[1].name)+1);
 
     KineticProto_Command_GetLog_Utilization* pUtilizations[] = {
         &utilizations[0], &utilizations[1]
     };
     getLog.utilizations = pUtilizations;
-    
-    uint8_t* buffer = calloc(1, expectedSize);
-    KineticSerialAllocator allocator = {
-        .buffer = buffer,
-        .total = expectedSize,
-        .used = 0,
-    };
 
-    KineticSerialAllocator_Create_ExpectAndReturn(expectedSize, allocator);
+    Info = KineticDeviceInfo_Create(&getLog);
 
-    KineticDeviceInfo* info = KineticDeviceInfo_Create(&getLog);
+    TEST_ASSERT_NOT_NULL(Info);
+    TEST_ASSERT_NOT_NULL(Info->utilizations);
+    TEST_ASSERT_EQUAL(numUtilizations, Info->numUtilizations);
+    TEST_ASSERT_EQUAL(expectedSize, Info->totalLength);
 
-    TEST_ASSERT_NOT_NULL(info);
+    TEST_ASSERT_EQUAL_STRING("fo", Info->utilizations[0].name);
+    TEST_ASSERT_EQUAL_FLOAT(1.7f, Info->utilizations[0].value);
+
+    TEST_ASSERT_EQUAL_STRING("shizzle", Info->utilizations[1].name);
+    TEST_ASSERT_EQUAL_FLOAT(2.3f, Info->utilizations[1].value);
+
+    free(Info);
+    Info = NULL;
 }

@@ -290,17 +290,19 @@ typedef struct {
     ByteArray name;
 } KineticDeviceInfo_Device;
 typedef struct {
-    KineticDeviceInfo_Utilization** utilizations;
+    size_t totalLength;
+    KineticDeviceInfo_Utilization* utilizations;
     size_t numUtilizations;
-    KineticDeviceInfo_Temperature** temperatures;
+    KineticDeviceInfo_Temperature* temperatures;
     size_t numTemperatures;
     KineticDeviceInfo_Capacity* capacity;
     KineticDeviceInfo_Configuration* configuration;
-    KineticDeviceInfo_Statistics** statistics;
+    KineticDeviceInfo_Statistics* statistics;
     size_t numStatistics;
     ByteArray messages;
     KineticDeviceInfo_Limits* limits;
     KineticDeviceInfo_Device* device;
 } KineticDeviceInfo;
+#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN (1024 * 1024 * 4) // Will get reallocated to actual/used size post-copy
 
 #endif // _KINETIC_TYPES_H

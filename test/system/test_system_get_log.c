@@ -31,6 +31,8 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
+#include "kinetic_device_info.h"
+#include "kinetic_serial_allocator.h"
 #include "kinetic_proto.h"
 #include "kinetic_allocator.h"
 #include "kinetic_message.h"
@@ -49,22 +51,40 @@ static KineticDeviceInfo* Info;
 void setUp(void)
 { LOG_LOCATION;
     SystemTestSetup(&Fixture);
+    Info = NULL;
 }
 
 void tearDown(void)
 { LOG_LOCATION;
     SystemTestTearDown(&Fixture);
+    if (Info != NULL) {
+        free(Info);
+        Info = NULL;
+    };
+}
+
+
+void test_GetLog_should_retrieve_utilizations_from_device(void)
+{ LOG_LOCATION;
+    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &Info, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
+    TEST_ASSERT_NOT_NULL(Info);
+    TEST_ASSERT_NOT_NULL(Info->utilizations);
+    TEST_ASSERT_EQUAL(4, Info->numUtilizations);
+    TEST_ASSERT_NOT_NULL(Info->utilizations[0].name);
+    TEST_ASSERT_NOT_NULL(Info->utilizations[1].name);
+    TEST_ASSERT_NOT_NULL(Info->utilizations[2].name);
+    TEST_ASSERT_NOT_NULL(Info->utilizations[3].name);
+
+    for (size_t i = 0; i < 4; i++) {
+        KineticDeviceInfo_Utilization* utilization = &Info->utilizations[i];
+        LOGF0("info->utilizations[%zu]: %s = %.3f", i, utilization->name, utilization->value);
+    }
 }
 
 void test_GetLog_should_retrieve_capacities_from_device(void)
 { LOG_LOCATION;
     Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, &Info, NULL);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
-}
-
-void test_GetLog_should_retrieve_utilizations_from_device(void)
-{ LOG_LOCATION;
-    Status = KineticClient_GetLog(Fixture.handle, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
 }
 

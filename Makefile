@@ -47,6 +47,8 @@ LIB_DEPS = \
 	$(LIB_DIR)/kinetic_logger.h \
 	$(LIB_DIR)/kinetic_hmac.h \
 	$(LIB_DIR)/kinetic_controller.h \
+	$(LIB_DIR)/kinetic_device_info.h \
+	$(LIB_DIR)/kinetic_serial_allocator.h \
 	$(LIB_DIR)/kinetic_connection.h \
 	$(LIB_DIR)/kinetic_types_internal.h \
 	$(PUB_INC)/kinetic_types.h \
@@ -67,6 +69,8 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_logger.o \
 	$(OUT_DIR)/kinetic_hmac.o \
 	$(OUT_DIR)/kinetic_controller.o \
+	$(OUT_DIR)/kinetic_device_info.o \
+	$(OUT_DIR)/kinetic_serial_allocator.o \
 	$(OUT_DIR)/kinetic_connection.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
@@ -112,6 +116,10 @@ $(OUT_DIR)/kinetic_hmac.o: $(LIB_DIR)/kinetic_hmac.c $(LIB_DEPS)
 $(OUT_DIR)/kinetic_controller.o: $(LIB_DIR)/kinetic_controller.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_connection.o: $(LIB_DIR)/kinetic_connection.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_device_info.o: $(LIB_DIR)/kinetic_device_info.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_serial_allocator.o: $(LIB_DIR)/kinetic_serial_allocator.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_types_internal.o: $(LIB_DIR)/kinetic_types_internal.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
