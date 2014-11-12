@@ -46,6 +46,7 @@ LIB_DEPS = \
 	$(LIB_DIR)/kinetic_message.h \
 	$(LIB_DIR)/kinetic_logger.h \
 	$(LIB_DIR)/kinetic_hmac.h \
+	$(LIB_DIR)/kinetic_controller.h \
 	$(LIB_DIR)/kinetic_connection.h \
 	$(LIB_DIR)/kinetic_types_internal.h \
 	$(PUB_INC)/kinetic_types.h \
@@ -65,6 +66,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_message.o \
 	$(OUT_DIR)/kinetic_logger.o \
 	$(OUT_DIR)/kinetic_hmac.o \
+	$(OUT_DIR)/kinetic_controller.o \
 	$(OUT_DIR)/kinetic_connection.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
@@ -78,7 +80,7 @@ all: clean test default run
 
 clean:
 	bundle exec rake clobber
-	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
+	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core *.log
 	git submodule update --init
 
 .PHONY: clean
@@ -106,6 +108,8 @@ $(OUT_DIR)/kinetic_message.o: $(LIB_DIR)/kinetic_message.c $(LIB_DEPS)
 $(OUT_DIR)/kinetic_logger.o: $(LIB_DIR)/kinetic_logger.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_hmac.o: $(LIB_DIR)/kinetic_hmac.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_controller.o: $(LIB_DIR)/kinetic_controller.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_connection.o: $(LIB_DIR)/kinetic_connection.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)

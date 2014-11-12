@@ -6,7 +6,7 @@ JAVA=""
 if [ "$JAVA_HOME" != "" ]; then
    JAVA=$JAVA_HOME/bin/java
 else
-   $JAVA_HOME=/usr
+   $JAVA_HOME='/usr'
    JAVA=`which java`
 fi
 

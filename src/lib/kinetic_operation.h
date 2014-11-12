@@ -28,17 +28,34 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
 
 struct timeval KineticOperation_GetTimeoutTime(KineticOperation* const operation);
 void KineticOperation_SetTimeoutTime(KineticOperation* const operation, uint32_t const timeout_in_sec);
+
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
+KineticStatus KineticOperation_NoopCallback(KineticOperation* operation);
 void KineticOperation_BuildNoop(KineticOperation* operation);
+
+KineticStatus KineticOperation_PutCallback(KineticOperation* operation);
 void KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry);
+
+KineticStatus KineticOperation_GetCallback(KineticOperation* operation);
 void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry);
+
+KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation);
 void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry);
 
+KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation);
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
                                KineticKeyRange* range, ByteBufferArray* buffers);
+
+KineticStatus KineticOperation_GetLogCallback(KineticOperation* operation);
+void KineticOperation_BuildGetLog(KineticOperation* const operation,
+                               KineticDeviceInfo_Type type,
+                               KineticDeviceInfo** info);
+
+void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);
+void KineticOperation_TimeoutOperations(KineticConnection* const connection);
 
 #endif // _KINETIC_OPERATION_H

@@ -129,6 +129,8 @@ typedef struct _KineticMessage {
     KineticProto_Command_Security_ACL   acl;
     KineticProto_Command_KeyValue       keyValue;
     KineticProto_Command_Range          keyRange;
+    KineticProto_Command_GetLog         getLog;
+    KineticProto_Command_GetLog_Type    getLogType;
 } KineticMessage;
 
 #define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
@@ -176,6 +178,7 @@ typedef struct _KineticMessage {
     KineticProto_command_body__init(&(msg)->body); \
     KineticProto_command_key_value__init(&(msg)->keyValue); \
     KineticProto_command_range__init(&(msg)->keyRange); \
+    KineticProto_command_get_log__init(&(msg)->getLog); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
     (msg)->has_command = false; \
 }
@@ -265,6 +268,7 @@ struct _KineticOperation {
     bool sendValue;
     KineticEntry* entry;
     ByteBufferArray* buffers;
+    KineticDeviceInfo** deviceInfo;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
 };
@@ -275,6 +279,14 @@ struct _KineticOperation {
         .connection = (_con), \
         .timeoutTimeMutex = PTHREAD_MUTEX_INITIALIZER, \
     }
+
+// Kintic Serial Allocator
+// Used for allocating a contiguous hunk of memory to hold arbitrary variable-length response data
+typedef struct _KineticSerialAllocator {
+    uint8_t* buffer;
+    size_t used;
+    size_t total;
+} KineticSerialAllocator;
 
 
 KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
@@ -302,5 +314,7 @@ struct timeval Kinetic_TimevalZero(void);
 bool Kinetic_TimevalIsZero(struct timeval const tv);
 struct timeval Kinetic_TimevalAdd(struct timeval const a, struct timeval const b);
 int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b);
+
+KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

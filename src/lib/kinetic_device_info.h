@@ -18,16 +18,13 @@
 *
 */
 
-#ifndef _KINETIC_CONNECTION_H
-#define _KINETIC_CONNECTION_H
+#ifndef _KINETIC_DEVICE_INFO_H
+#define _KINETIC_DEVICE_INFO_H
 
+#include "kinetic_device_info.h"
+#include "kinetic_serial_allocator.h"
 #include "kinetic_types_internal.h"
 
-KineticSessionHandle KineticConnection_NewConnection(const KineticSession* const config);
-void KineticConnection_FreeConnection(KineticSessionHandle* const handle);
-KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle);
-KineticStatus KineticConnection_Connect(KineticConnection* const connection);
-KineticStatus KineticConnection_Disconnect(KineticConnection* const connection);
-void KineticConnection_IncrementSequence(KineticConnection* const connection);
+KineticDeviceInfo* KineticDeviceInfo_Create(const KineticProto_Command_GetLog* getLog);
 
-#endif // _KINETIC_CONNECTION_H
+#endif // _KINETIC_DEVICE_INFO_H
