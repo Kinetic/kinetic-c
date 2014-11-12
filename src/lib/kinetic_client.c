@@ -60,7 +60,28 @@ static KineticStatus KineticClient_CreateOperation(
     return KINETIC_STATUS_SUCCESS;
 }
 
-static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure)
+typedef struct {
+    pthread_mutex_t receiveCompleteMutex;
+    pthread_cond_t receiveComplete;
+    KineticStatus status;
+} DefaultCallbackData;
+
+static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
+{
+    DefaultCallbackData * data = client_data;
+    data->status = kinetic_data->status;
+    pthread_cond_signal(&data->receiveComplete);
+}
+
+static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
+{
+    return (KineticCompletionClosure) {
+        .callback = DefaultCallback,
+        .clientData = data,
+    };
+}
+
+static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* const closure)
 {
     assert(operation != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
@@ -77,23 +98,37 @@ static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation,
         LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);
     }
 
+    KineticOperation_SetTimeoutTime(operation, KINETIC_OPERATION_TIMEOUT_SECS);
+
     if (closure != NULL)
     {
         operation->closure = *closure;
+        return KineticOperation_SendRequest(operation);
     }
     else
     {
-        pthread_mutex_init(&operation->receiveCompleteMutex, NULL);
-        pthread_cond_init(&operation->receiveComplete, NULL);
-    }
+        DefaultCallbackData data;
+        pthread_mutex_init(&data.receiveCompleteMutex, NULL);
+        pthread_cond_init(&data.receiveComplete, NULL);
+        data.status = KINETIC_STATUS_SUCCESS;
 
-    // Send the request
-    status = KineticOperation_SendRequest(operation);
-    if (status != KINETIC_STATUS_SUCCESS) {
+        operation->closure = DefaultClosure(&data);
+
+        // Send the request
+        status = KineticOperation_SendRequest(operation);
+
+        if (status == KINETIC_STATUS_SUCCESS) {
+            pthread_mutex_lock(&data.receiveCompleteMutex);
+            pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex);
+            pthread_mutex_unlock(&data.receiveCompleteMutex);
+            status = data.status;
+        }
+
+        pthread_cond_destroy(&data.receiveComplete);
+        pthread_mutex_destroy(&data.receiveCompleteMutex);
+
         return status;
     }
-
-    return KineticOperation_ReceiveAsync(operation);
 }
 
 void KineticClient_Init(const char* log_file, int log_level)
@@ -189,9 +224,7 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle handle)
     KineticOperation_BuildNoop(operation);
 
     // Execute the operation
-    status = KineticClient_ExecuteOperation(operation, NULL);
-
-    return status;
+    return  KineticClient_ExecuteOperation(operation, NULL);
 }
 
 KineticStatus KineticClient_Put(KineticSessionHandle handle,
@@ -225,7 +258,6 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildGet(operation, entry);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
     return KineticClient_ExecuteOperation(operation, closure);
@@ -243,7 +275,6 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildDelete(operation, entry);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
     return KineticClient_ExecuteOperation(operation, closure);
@@ -270,7 +301,6 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildGetKeyRange(operation, range, keys);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
     return KineticClient_ExecuteOperation(operation, closure);

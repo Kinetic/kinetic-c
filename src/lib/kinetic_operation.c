@@ -129,6 +129,30 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
     return status;
 }
 
+struct timeval KineticOperation_GetTimeoutTime(KineticOperation* const operation)
+{
+    pthread_mutex_lock(&operation->timeoutTimeMutex);
+    struct timeval timeoutTime = operation->timeoutTime;
+    pthread_mutex_unlock(&operation->timeoutTimeMutex);
+    return timeoutTime;
+}
+
+void KineticOperation_SetTimeoutTime(KineticOperation* const operation, uint32_t const timeout_in_sec)
+{
+    pthread_mutex_lock(&operation->timeoutTimeMutex);
+
+    // set timeout time
+    struct timeval currentTime;
+    gettimeofday(&currentTime, NULL);
+    struct timeval timeoutIn = {
+        .tv_sec = timeout_in_sec,
+        .tv_usec = 0,
+    };
+    operation->timeoutTime = Kinetic_TimevalAdd(currentTime, timeoutIn);
+
+    pthread_mutex_unlock(&operation->timeoutTimeMutex);
+}
+
 KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* response)
 {
     if (response == NULL ||
@@ -166,63 +190,6 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
 
     return NULL;
 }
-
-KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation)
-{
-    assert(operation != NULL);
-    assert(operation->request != NULL);
-    assert(operation->request->connection != NULL);
-    assert(operation->request->proto != NULL);
-    assert(operation->request->command != NULL);
-    assert(operation->request->command->header != NULL);
-    assert(operation->request->command->header->has_sequence);
-
-    const int fd = operation->request->connection->socket;
-    assert(fd >= 0);
-    LOGF1("\nReceiving PDU via fd=%d", fd);
-
-    KineticStatus status = KINETIC_STATUS_SUCCESS;
-
-    // Wait for response if no callback supplied (synchronous)
-    if (operation->closure.callback == NULL) { 
-        struct timeval tv;
-
-        status = KINETIC_STATUS_SOCKET_TIMEOUT;
-
-        // Wait for matching response to arrive
-        gettimeofday(&tv, NULL);
-        struct timespec timeoutTime = {
-            .tv_sec = tv.tv_sec + KINETIC_PDU_RECEIVE_TIMEOUT_SECS,
-            .tv_nsec = 0,
-        };
-
-        pthread_mutex_lock(&operation->receiveCompleteMutex);
-        int res = pthread_cond_timedwait(&operation->receiveComplete, &operation->receiveCompleteMutex, &timeoutTime);
-        pthread_mutex_unlock(&operation->receiveCompleteMutex);
-
-        if (res == ETIMEDOUT) {
-            LOG0("Timed out waiting to received response PDU!");
-            status = KINETIC_STATUS_SOCKET_TIMEOUT;
-        }
-        else if (res == 0 && operation->response != NULL) {
-            status = KineticPDU_GetStatus(operation->response);
-            LOGF2("Response PDU received w/status %s", Kinetic_GetStatusDescription(status));
-        }
-        else {
-            LOG0("Unknown error occurred waiting for response PDU to arrive!");
-            status = KINETIC_STATUS_CONNECTION_ERROR;
-        }
-
-        KineticAllocator_FreeOperation(operation->connection, operation);
-
-        pthread_cond_destroy(&operation->receiveComplete);
-        pthread_mutex_destroy(&operation->receiveCompleteMutex);
-    }
-
-    return status;
-}
-
-
 
 KineticStatus KineticOperation_NoopCallback(KineticOperation* operation)
 {

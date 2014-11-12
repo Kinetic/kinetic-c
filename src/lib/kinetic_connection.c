@@ -41,6 +41,37 @@ void KineticConnection_Pause(KineticConnection* const connection, bool pause)
     connection->thread.paused = pause;
 }
 
+static void CompleteOperation(KineticOperation* operation, KineticStatus status)
+{
+    assert(operation != NULL);
+    // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
+    assert(operation->closure.callback != NULL);
+    KineticCompletionData completionData = {.status = status};
+    operation->closure.callback(&completionData, operation->closure.clientData);
+    KineticAllocator_FreeOperation(operation->connection, operation);
+}
+
+static void TimeoutOperations(KineticConnection* const connection)
+{
+    struct timeval currentTime;
+    gettimeofday(&currentTime, NULL);
+
+    for (KineticOperation* operation = KineticAllocator_GetFirstOperation(connection);
+         operation != NULL;
+         operation = KineticAllocator_GetNextOperation(connection, operation)) {
+
+        struct timeval timeoutTime = KineticOperation_GetTimeoutTime(operation);
+
+        // if this operation has a nonzero timeout
+        //   and it's timed out
+        if (!Kinetic_TimevalIsZero(timeoutTime) &&
+            Kinetic_TimevalCmp(currentTime, operation->timeoutTime) >= 0)
+        {
+            CompleteOperation(operation, KINETIC_STATUS_OPERATION_TIMEDOUT);
+        }
+    }
+}
+
 static void* KineticConnection_Worker(void* thread_arg)
 {
     KineticStatus status;
@@ -110,17 +141,11 @@ static void* KineticConnection_Worker(void* thread_arg)
                                 status = op->callback(op);
                             }
 
-                            // Call client-supplied closure callback, if supplied
-                            if (op->closure.callback != NULL) {
-                                KineticCompletionData completionData = {.status = status};
-                                op->closure.callback(&completionData, op->closure.clientData);
-                                KineticAllocator_FreeOperation(thread->connection, op);
+                            if (status == KINETIC_STATUS_SUCCESS) {
+                                status = KineticPDU_GetStatus(op->response);
                             }
 
-                            // Otherwise, is a synchronous opearation, so just set a flag
-                            else {
-                                pthread_cond_signal(&op->receiveComplete);
-                            }
+                            CompleteOperation(op, status);
                         }
                     }
                 }
@@ -141,6 +166,8 @@ static void* KineticConnection_Worker(void* thread_arg)
                 thread->fatalError = true;
             } break;
         }
+
+        TimeoutOperations(thread->connection);
     }
 
     LOG1("Worker thread terminated!");

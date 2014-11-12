@@ -34,7 +34,7 @@
 #define KINETIC_PDUS_PER_SESSION_MAX (10)
 #define KINETIC_SOCKET_DESCRIPTOR_INVALID (-1)
 #define KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS (3)
-#define KINETIC_PDU_RECEIVE_TIMEOUT_SECS (5)
+#define KINETIC_OPERATION_TIMEOUT_SECS (20)
 
 // Ensure __func__ is defined (for debugging)
 #if !defined __func__
@@ -259,10 +259,10 @@ struct _KineticOperation {
     KineticConnection* connection;
     KineticPDU* request;
     KineticPDU* response;
+    pthread_mutex_t timeoutTimeMutex;
+    struct timeval timeoutTime;
     bool valueEnabled;
     bool sendValue;
-    pthread_mutex_t receiveCompleteMutex;
-    pthread_cond_t receiveComplete;
     KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticOperationCallback callback;
@@ -271,7 +271,10 @@ struct _KineticOperation {
 #define KINETIC_OPERATION_INIT(_op, _con) \
     assert((_op) != NULL); \
     assert((_con) != NULL); \
-    *(_op) = (KineticOperation) {.connection = (_con)}
+    *(_op) = (KineticOperation) { \
+        .connection = (_con), \
+        .timeoutTimeMutex = PTHREAD_MUTEX_INITIALIZER, \
+    }
 
 
 KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
@@ -295,5 +298,9 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
 bool Copy_KineticProto_Command_Range_to_ByteBufferArray(
     KineticProto_Command_Range* keyRange, ByteBufferArray* keys);
 int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len);
+struct timeval Kinetic_TimevalZero(void);
+bool Kinetic_TimevalIsZero(struct timeval const tv);
+struct timeval Kinetic_TimevalAdd(struct timeval const a, struct timeval const b);
+int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

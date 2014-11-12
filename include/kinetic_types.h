@@ -148,6 +148,7 @@ typedef enum {
     KINETIC_STATUS_INVALID_REQUEST,     // Something about the request is invalid
     KINETIC_STATUS_OPERATION_INVALID,   // Operation was invalid
     KINETIC_STATUS_OPERATION_FAILED,    // Device reported an operation error
+    KINETIC_STATUS_OPERATION_TIMEDOUT,  // Device did not respond to the operation in time
     KINETIC_STATUS_CLUSTER_MISMATCH,    // Specified cluster version does not match device
     KINETIC_STATUS_VERSION_MISMATCH,    // The specified object version info for a PUT/GET do not match stored object
     KINETIC_STATUS_DATA_ERROR,          // Device reported data error, no space or HMAC failure

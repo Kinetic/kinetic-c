@@ -24,9 +24,10 @@
 #include "kinetic_types_internal.h"
 
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation);
-KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation);
 KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* response);
 
+struct timeval KineticOperation_GetTimeoutTime(KineticOperation* const operation);
+void KineticOperation_SetTimeoutTime(KineticOperation* const operation, uint32_t const timeout_in_sec);
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
 void KineticOperation_BuildNoop(KineticOperation* operation);
