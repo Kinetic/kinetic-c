@@ -914,10 +914,12 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
                         // * protobuf_c_boolean has_messages;
                         // * ProtobufCBinaryData messages;
                         if (cmd->body->getLog->has_messages) {
-                            BYTES_TO_CSTRING(tmpBuf,
+                            uint8_t* buf = malloc(cmd->body->getLog->messages.len * 4);
+                            BYTES_TO_CSTRING(buf,
                                 cmd->body->getLog->messages,
                                 0, cmd->body->getLog->messages.len);
-                            KineticLogger_LogPrintf(log_level, "%smessages: '%s'", _indent, tmpBuf);
+                            KineticLogger_LogPrintf(log_level, "%smessages: '%s'", _indent, buf);
+                            free(buf);
                         }
                             
                         // * KineticProto_Command_GetLog_Limits* limits;
