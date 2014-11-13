@@ -89,3 +89,33 @@ void test_KineticSerialAllocator_AllocateChunk_should_allocate_new_chunks_of_dat
     TEST_ASSERT_NULL(u8);
     TEST_ASSERT_EQUAL_SIZET(maxLen, allocator.used);
 }
+
+static size_t GetPaddedLength(size_t len)
+{
+    size_t padding = (sizeof(uint64_t) - 1);
+    size_t paddedLen = len + padding;
+    paddedLen &= ~padding;
+    return paddedLen;
+}
+
+void test_KineticSerialAllocator_TrimBuffer_should_trim_the_resultant_buffer_to_utilized_size(void)
+{
+    const size_t initialLen = 1024 * 1024 * 4; // Allocate 4MB initially
+    size_t finalLen = 0;
+    KineticSerialAllocator allocator = KineticSerialAllocator_Create(initialLen);
+
+    // Allocate some things...
+    KineticSerialAllocator_AllocateChunk(&allocator, 1);
+    finalLen += GetPaddedLength(1);
+    KineticSerialAllocator_AllocateChunk(&allocator, sizeof(uint64_t));
+    finalLen += GetPaddedLength(sizeof(uint64_t));
+    KineticSerialAllocator_AllocateChunk(&allocator, sizeof(uint64_t) - 1);
+    finalLen += GetPaddedLength(sizeof(uint64_t)-1);
+    KineticSerialAllocator_AllocateChunk(&allocator, sizeof(uint64_t) + 1);
+    finalLen += GetPaddedLength(sizeof(uint64_t)+1);
+
+    // Trim the buffer to the used length
+    size_t actualLen = KineticSerialAllocator_TrimBuffer(&allocator);
+    TEST_ASSERT_EQUAL_SIZET(finalLen, actualLen);
+}
+

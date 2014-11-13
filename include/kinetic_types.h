@@ -245,27 +245,44 @@ typedef struct {
     char* protocolVersion;
     char* protocolCompilationDate;
     char* protocolSourceHash;
-    KineticDeviceInfo_Interface** interfaces;
+    KineticDeviceInfo_Interface* interfaces;
     size_t numInterfaces;
     int32_t port;
     int32_t tlsPort;
 } KineticDeviceInfo_Configuration;
 typedef enum {
-    KINETIC_MESSAGE_TYPE_GET = 0,
+    KINETIC_MESSAGE_TYPE_INVALID = 0,
+    KINETIC_MESSAGE_TYPE_GET_RESPONSE,
+    KINETIC_MESSAGE_TYPE_GET,
+    KINETIC_MESSAGE_TYPE_PUT_RESPONSE,
     KINETIC_MESSAGE_TYPE_PUT,
+    KINETIC_MESSAGE_TYPE_DELETE_RESPONSE,
     KINETIC_MESSAGE_TYPE_DELETE,
+    KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE,
     KINETIC_MESSAGE_TYPE_GETNEXT,
+    KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE,
     KINETIC_MESSAGE_TYPE_GETPREVIOUS,
+    KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE,
     KINETIC_MESSAGE_TYPE_GETKEYRANGE,
+    KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE,
     KINETIC_MESSAGE_TYPE_GETVERSION,
+    KINETIC_MESSAGE_TYPE_SETUP_RESPONSE,
     KINETIC_MESSAGE_TYPE_SETUP,
+    KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE,
     KINETIC_MESSAGE_TYPE_GETLOG,
+    KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE,
     KINETIC_MESSAGE_TYPE_SECURITY,
+    KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE,
     KINETIC_MESSAGE_TYPE_PEER2PEERPUSH,
+    KINETIC_MESSAGE_TYPE_NOOP_RESPONSE,
     KINETIC_MESSAGE_TYPE_NOOP,
+    KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE,
     KINETIC_MESSAGE_TYPE_FLUSHALLDATA,
+    KINETIC_MESSAGE_TYPE_PINOP_RESPONSE,
     KINETIC_MESSAGE_TYPE_PINOP,
+    KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE,
     KINETIC_MESSAGE_TYPE_MEDIASCAN,
+    KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE,
     KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE,
 } KineticMessageType;
 typedef struct {
@@ -290,17 +307,22 @@ typedef struct {
     ByteArray name;
 } KineticDeviceInfo_Device;
 typedef struct {
-    KineticDeviceInfo_Utilization** utilizations;
+    size_t totalLength;
+    KineticDeviceInfo_Utilization* utilizations;
     size_t numUtilizations;
-    KineticDeviceInfo_Temperature** temperatures;
+    KineticDeviceInfo_Temperature* temperatures;
     size_t numTemperatures;
     KineticDeviceInfo_Capacity* capacity;
     KineticDeviceInfo_Configuration* configuration;
-    KineticDeviceInfo_Statistics** statistics;
+    KineticDeviceInfo_Statistics* statistics;
     size_t numStatistics;
     ByteArray messages;
     KineticDeviceInfo_Limits* limits;
     KineticDeviceInfo_Device* device;
 } KineticDeviceInfo;
+
+const char* KineticMessageType_GetName(KineticMessageType type);
+
+#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN (1024 * 1024 * 4) // Will get reallocated to actual/used size post-copy
 
 #endif // _KINETIC_TYPES_H
