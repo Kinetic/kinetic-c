@@ -70,13 +70,9 @@ void test_GetLog_should_retrieve_utilizations_from_device(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info);
     TEST_ASSERT_NOT_NULL(Info->utilizations);
-    TEST_ASSERT_EQUAL(4, Info->numUtilizations);
-    TEST_ASSERT_NOT_NULL(Info->utilizations[0].name);
-    TEST_ASSERT_NOT_NULL(Info->utilizations[1].name);
-    TEST_ASSERT_NOT_NULL(Info->utilizations[2].name);
-    TEST_ASSERT_NOT_NULL(Info->utilizations[3].name);
-
-    for (size_t i = 0; i < 4; i++) {
+    TEST_ASSERT_TRUE(Info->numUtilizations >= 4);
+    for (size_t i = 0; i < Info->numUtilizations; i++) {
+        TEST_ASSERT_NOT_NULL(Info->utilizations[i].name);
         KineticDeviceInfo_Utilization* utilization = &Info->utilizations[i];
         LOGF0("info->utilizations[%zu]: %s = %.3f", i, utilization->name, utilization->value);
     }
@@ -161,7 +157,7 @@ void test_GetLog_should_retrieve_statistics_from_device(void)
     }
 }
 
-uint8_t* Buffer[1024 * 1024 * 4];
+uint8_t* Buffer[1024 * 1024 * 10];
 
 void test_GetLog_should_retrieve_messages_from_device(void)
 { LOG_LOCATION;

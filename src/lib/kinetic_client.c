@@ -151,7 +151,6 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildGet(operation, entry);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
@@ -169,7 +168,6 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildDelete(operation, entry);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
@@ -191,7 +189,6 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildGetKeyRange(operation, range, keys);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
@@ -210,7 +207,6 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildGetLog(operation, type, info);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);

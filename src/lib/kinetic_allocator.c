@@ -319,6 +319,7 @@ void KineticAllocator_FreeOperation(KineticConnection* const connection, Kinetic
             operation->response, operation, connection);
         KineticAllocator_FreePDU(connection, operation->response);
     }
+    pthread_mutex_destroy(&operation->timeoutTimeMutex);
     KineticAllocator_FreeItem(&connection->operations, (void*)operation);
     LOGF3("Freed operation (0x%0llX) on connection (0x%0llX)", operation, connection);
 }
