@@ -287,7 +287,6 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
     // Prepare the status PDU to be received
     KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticAllocator_FreePDU_Expect(Connection, &Response);
 
     KineticOperation_TimeoutOperations_Expect(Connection);
@@ -386,7 +385,6 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     // Prepare the status PDU to be received
     KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticOperation_AssociateResponseWithOperation_ExpectAndReturn(&Response, &op);
     KineticPDU_GetValueLength_ExpectAndReturn(&Response, 0);
     KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
@@ -468,7 +466,6 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     // Prepare the status PDU to be received
     KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticOperation_AssociateResponseWithOperation_ExpectAndReturn(&Response, &op);
     KineticPDU_GetValueLength_ExpectAndReturn(&Response, 83);
     KineticPDU_ReceiveValue_ExpectAndReturn(socket, &entry.value, 83, KINETIC_STATUS_SUCCESS);
