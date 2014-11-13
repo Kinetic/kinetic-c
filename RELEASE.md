@@ -16,6 +16,12 @@ v0.7.0
 
 v0.8.0
 ------
+* Updated to Kinetic Protocol v3.0.5 (NOT compatible with v2.x simulator/devices or earlier)
 * Added asynchronous/non-blocking execution option to all operations (GET/PUT/DELETE/GETKEYRANGE).
     * A given operation is carried out in asynchronous mode if a closure callback with optional data is supplied.
 * ByteArray and ByteBuffer types are now supplied directly in the byte_array.h public interface file.
+
+v0.8.1
+------
+* Added GETLOG operation.
+* Added thread-safety to allow multiple client threads within the same session.
