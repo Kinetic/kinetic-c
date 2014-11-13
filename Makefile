@@ -33,7 +33,7 @@ VERSION = ${shell head -n1 $(VERSION_FILE)}
 
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
-LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(VENDOR)
+LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR)
 LIB_DEPS = \
 	$(PROTOBUFC)/protobuf-c/protobuf-c.h \
 	$(SOCKET99)/socket99.h \
@@ -46,6 +46,9 @@ LIB_DEPS = \
 	$(LIB_DIR)/kinetic_message.h \
 	$(LIB_DIR)/kinetic_logger.h \
 	$(LIB_DIR)/kinetic_hmac.h \
+	$(LIB_DIR)/kinetic_controller.h \
+	$(LIB_DIR)/kinetic_device_info.h \
+	$(LIB_DIR)/kinetic_serial_allocator.h \
 	$(LIB_DIR)/kinetic_connection.h \
 	$(LIB_DIR)/kinetic_types_internal.h \
 	$(PUB_INC)/kinetic_types.h \
@@ -65,6 +68,9 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_message.o \
 	$(OUT_DIR)/kinetic_logger.o \
 	$(OUT_DIR)/kinetic_hmac.o \
+	$(OUT_DIR)/kinetic_controller.o \
+	$(OUT_DIR)/kinetic_device_info.o \
+	$(OUT_DIR)/kinetic_serial_allocator.o \
 	$(OUT_DIR)/kinetic_connection.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
@@ -78,7 +84,7 @@ all: clean test default run
 
 clean:
 	bundle exec rake clobber
-	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core
+	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core *.log
 	git submodule update --init
 
 .PHONY: clean
@@ -107,7 +113,13 @@ $(OUT_DIR)/kinetic_logger.o: $(LIB_DIR)/kinetic_logger.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_hmac.o: $(LIB_DIR)/kinetic_hmac.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_controller.o: $(LIB_DIR)/kinetic_controller.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_connection.o: $(LIB_DIR)/kinetic_connection.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_device_info.o: $(LIB_DIR)/kinetic_device_info.c $(LIB_DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+$(OUT_DIR)/kinetic_serial_allocator.o: $(LIB_DIR)/kinetic_serial_allocator.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
 $(OUT_DIR)/kinetic_types_internal.o: $(LIB_DIR)/kinetic_types_internal.c $(LIB_DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)

@@ -26,7 +26,7 @@
 #include <stdarg.h>
 
 #define KINETIC_LOGGER_DISABLED false
-#define KINETIC_LOGGER_FLUSH_THREAD_ENABLED true
+#define KINETIC_LOGGER_FLUSH_THREAD_ENABLED false
 #define KINETIC_LOG_FILE "kinetic.log"
 
 void KineticLogger_Init(const char* logFile, int log_level);
@@ -39,6 +39,12 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg);
 void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status);
 void KineticLogger_LogByteArray(int log_level, const char* title, ByteArray bytes);
 void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer buffer);
+
+int KineticLogger_ByteArraySliceToCString(char* p_buf, const ByteArray bytes, const int start, const int count);
+#define BYTES_TO_CSTRING(_buf_start, _array, _array_start, _count) { \
+    ByteArray __array = {.data = _array.data, .len = (_array).len}; \
+    KineticLogger_ByteArraySliceToCString((char*)(_buf_start), (__array), (_array_start), (_count)); \
+}
 
 // #define LOG(message)  KineticLogger_Log(2, message)
 #if !KINETIC_LOGGER_DISABLED

@@ -1,3 +1,4 @@
+
 /*
 * kinetic-c
 * Copyright (C) 2014 Seagate Technology.
@@ -14,7 +15,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
@@ -32,7 +33,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 
-static KineticSessionHandle DummyHandle = 27;
+static KineticSessionHandle DummyHandle = 12;
 
 void setUp(void)
 {
@@ -44,17 +45,18 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KineticClient_Put_should_execute_PUT_operation(void)
+void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_device(void)
 {
-    ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
-    KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
+    LOG_LOCATION;
+
+    KineticDeviceInfo* info;
     KineticOperation operation;
-    
+
     KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
-    KineticOperation_BuildPut_Expect(&operation, &entry);
-    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
+    KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_Put(DummyHandle, &entry, NULL);
+    KineticStatus status = KineticClient_GetLog(DummyHandle, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

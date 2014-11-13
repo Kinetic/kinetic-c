@@ -71,11 +71,11 @@ KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
     }
     else {
         LOG3("Received PDU protobuf");
-        KineticLogger_LogProtobuf(2, response->proto);
     }
 
     // Validate the HMAC for the recevied protobuf message
     if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH) {
+        KineticLogger_LogProtobuf(2, response->proto);
         if(!KineticHMAC_Validate(
           response->proto, response->connection->session.hmacKey)) {
             LOG0("Received PDU protobuf message has invalid HMAC!");
@@ -89,10 +89,12 @@ KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
         }
     }
     else if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH) {
+        KineticLogger_LogProtobuf(2, response->proto);
         LOG0("PIN-based authentication not yet supported!");
         return KINETIC_STATUS_DATA_ERROR;
     }
     else if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
+        KineticLogger_LogProtobuf(3, response->proto);
         LOG3("Unsolicited status message is not authenticated");
     }
 

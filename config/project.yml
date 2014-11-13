@@ -1,7 +1,7 @@
 ---
 
 :project:
-  :use_exceptions: true
+  :use_exceptions: false
   :use_test_preprocessor: true
   :use_deep_dependencies: true
   :build_root: build
@@ -29,7 +29,7 @@
   :include:
     - src/**
     - include/**
-    - vendor/
+    - vendor/socket99/**
     - vendor/protobuf-c/**
 
 :defines:

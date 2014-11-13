@@ -20,71 +20,12 @@
 
 #include "kinetic_client.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_pdu.h"
-#include "kinetic_operation.h"
 #include "kinetic_connection.h"
-#include "kinetic_message.h"
-#include "kinetic_pdu.h"
-#include "kinetic_allocator.h"
+#include "kinetic_controller.h"
+#include "kinetic_operation.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
 #include <sys/time.h>
-
-static KineticStatus KineticClient_CreateOperation(
-    KineticOperation** operation,
-    KineticSessionHandle handle)
-{
-    if (handle == KINETIC_HANDLE_INVALID) {
-        LOG0("Specified session has invalid handle value");
-        return KINETIC_STATUS_SESSION_EMPTY;
-    }
-
-    KineticConnection* connection = KineticConnection_FromHandle(handle);
-    if (connection == NULL) {
-        LOG0("Specified session is not associated with a connection");
-        return KINETIC_STATUS_SESSION_INVALID;
-    }
-
-    LOGF1("\n"
-         "--------------------------------------------------\n"
-         "Building new operation on connection @ 0x%llX", connection);
-
-    *operation = KineticAllocator_NewOperation(connection);
-    if (*operation == NULL) {
-        return KINETIC_STATUS_MEMORY_ERROR;
-    }
-    if ((*operation)->request == NULL) {
-        return KINETIC_STATUS_NO_PDUS_AVAVILABLE;
-    }
-
-    return KINETIC_STATUS_SUCCESS;
-}
-
-static KineticStatus KineticClient_ExecuteOperation(KineticOperation* operation)
-{
-    assert(operation != NULL);
-    KineticStatus status = KINETIC_STATUS_INVALID;
-
-    LOGF1("Executing operation: 0x%llX", operation);
-    if (operation->entry != NULL &&
-        operation->entry->value.array.data != NULL &&
-        operation->entry->value.bytesUsed > 0)
-    {
-        LOGF1("  Sending PDU (0x%0llX) w/value (%zu bytes)",
-            operation->request, operation->entry->value.bytesUsed);
-    }
-    else {
-        LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);
-    }
-
-    // Send the request
-    status = KineticOperation_SendRequest(operation);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        return status;
-    }
-
-    return KineticOperation_ReceiveAsync(operation);
-}
 
 void KineticClient_Init(const char* log_file, int log_level)
 {
@@ -170,74 +111,68 @@ KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)
 
 KineticStatus KineticClient_NoOp(KineticSessionHandle handle)
 {
-    KineticStatus status;
-    KineticOperation* operation;
-    status = KineticClient_CreateOperation(&operation, handle);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+    assert(handle != KINETIC_HANDLE_INVALID);
 
-    // Initialize request
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
     KineticOperation_BuildNoop(operation);
-
-    // Execute the operation
-    status = KineticClient_ExecuteOperation(operation);
-
-    return status;
+    return KineticController_ExecuteOperation(operation, NULL);
 }
 
 KineticStatus KineticClient_Put(KineticSessionHandle handle,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure)
 {
+    assert(handle != KINETIC_HANDLE_INVALID);
     assert(entry != NULL);
     assert(entry->value.array.data != NULL);
-    KineticStatus status;
-    KineticOperation* operation;
-    status = KineticClient_CreateOperation(&operation, handle);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
     KineticOperation_BuildPut(operation, entry);
-    if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticController_ExecuteOperation(operation, closure);
 }
 
 KineticStatus KineticClient_Get(KineticSessionHandle handle,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure)
 {
+    assert(handle != KINETIC_HANDLE_INVALID);
     assert(entry != NULL);
     if (!entry->metadataOnly) {assert(entry->value.array.data != NULL);}
-    KineticStatus status;
-    KineticOperation* operation;
-    status = KineticClient_CreateOperation(&operation, handle);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
     KineticOperation_BuildGet(operation, entry);
     if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticController_ExecuteOperation(operation, closure);
 }
 
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
                                    KineticEntry* const entry,
                                    KineticCompletionClosure* closure)
 {
+    assert(handle != KINETIC_HANDLE_INVALID);
     assert(entry != NULL);
-    KineticStatus status;
-    KineticOperation* operation;
-    status = KineticClient_CreateOperation(&operation, handle);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
     KineticOperation_BuildDelete(operation, entry);
     if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticController_ExecuteOperation(operation, closure);
 }
 
 KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
@@ -251,18 +186,32 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
     assert(keys->buffers != NULL);
     assert(keys->count > 0);
 
-    KineticStatus status;
-    KineticOperation* operation;
-
-    status = KineticClient_CreateOperation(&operation, handle);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        return status;
-    }
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
     KineticOperation_BuildGetKeyRange(operation, range, keys);
     if (closure != NULL) {operation->closure = *closure;}
 
     // Execute the operation
-    return KineticClient_ExecuteOperation(operation);
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
+KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
+                                   KineticDeviceInfo_Type type,
+                                   KineticDeviceInfo** info,
+                                   KineticCompletionClosure* closure)
+{
+    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(info != NULL);
+
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    // Initialize request
+    KineticOperation_BuildGetLog(operation, type, info);
+    if (closure != NULL) {operation->closure = *closure;}
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
 }

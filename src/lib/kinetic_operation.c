@@ -24,9 +24,11 @@
 #include "kinetic_pdu.h"
 #include "kinetic_nbo.h"
 #include "kinetic_socket.h"
+#include "kinetic_device_info.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
+#include <errno.h>
 #include <sys/time.h>
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation);
@@ -69,8 +71,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     if (operation->entry != NULL && operation->sendValue) {
         request->header.valueLength = operation->entry->value.bytesUsed;
     }
-    else
-    {
+    else {
         request->header.valueLength = 0;
     }
     KineticLogger_LogHeader(1, &request->header);
@@ -149,7 +150,6 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
             operation->request->command->header->has_sequence && 
             operation->request->command->header->sequence == targetSequence)
         {
-            operation->receiveComplete = false;
             operation->response = response;
             return operation;
         }
@@ -161,13 +161,7 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
 
 KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation)
 {
-    assert(operation != NULL);
-    assert(operation->request != NULL);
-    assert(operation->request->connection != NULL);
-    assert(operation->request->proto != NULL);
-    assert(operation->request->command != NULL);
-    assert(operation->request->command->header != NULL);
-    assert(operation->request->command->header->has_sequence);
+    KineticOperation_ValidateOperation(operation);
 
     const int fd = operation->request->connection->socket;
     assert(fd >= 0);
@@ -177,30 +171,23 @@ KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation)
 
     // Wait for response if no callback supplied (synchronous)
     if (operation->closure.callback == NULL) { 
-        bool timeout = false;
-        struct timeval tv;
-        time_t startTime, currentTime;
         status = KINETIC_STATUS_SOCKET_TIMEOUT;
-
-        // Wait for matching response to arrive
+        struct timeval tv;
         gettimeofday(&tv, NULL);
-        startTime = tv.tv_sec;
-        while(!operation->receiveComplete && !timeout) {
-            gettimeofday(&tv, NULL);
-            currentTime = tv.tv_sec;
-            if ((currentTime - startTime) >= KINETIC_PDU_RECEIVE_TIMEOUT_SECS) {
-                timeout = true;
-            }
-            else {
-                sleep(0);
-            }
-        }
+        struct timespec timeoutTime = {
+            .tv_sec = tv.tv_sec + KINETIC_PDU_RECEIVE_TIMEOUT_SECS,
+            .tv_nsec = 0,
+        };
 
-        if (timeout) {
+        pthread_mutex_lock(&operation->receiveCompleteMutex);
+        int res = pthread_cond_timedwait(&operation->receiveComplete, &operation->receiveCompleteMutex, &timeoutTime);
+        pthread_mutex_unlock(&operation->receiveCompleteMutex);
+
+        if (res == ETIMEDOUT) {
             LOG0("Timed out waiting to received response PDU!");
             status = KINETIC_STATUS_SOCKET_TIMEOUT;
         }
-        else if (operation->response != NULL) {
+        else if (res == 0 && operation->response != NULL) {
             status = KineticPDU_GetStatus(operation->response);
             LOGF2("Response PDU received w/status %s", Kinetic_GetStatusDescription(status));
         }
@@ -210,12 +197,13 @@ KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation)
         }
 
         KineticAllocator_FreeOperation(operation->connection, operation);
+
+        pthread_cond_destroy(&operation->receiveComplete);
+        pthread_mutex_destroy(&operation->receiveCompleteMutex);
     }
 
     return status;
 }
-
-
 
 KineticStatus KineticOperation_NoopCallback(KineticOperation* operation)
 {
@@ -243,6 +231,7 @@ KineticStatus KineticOperation_PutCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("PUT callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
     // Propagate newVersion to dbVersion in metadata, if newVersion specified
@@ -288,6 +277,7 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("GET callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
     // Update the entry upon success
@@ -297,9 +287,7 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
             return KINETIC_STATUS_BUFFER_OVERRUN;
         }
     }
-    // if (operation->entry != NULL) {
-        // operation->entry->value.bytesUsed = operation->entry->value.bytesUsed;
-    // }
+
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -330,6 +318,7 @@ KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("DELETE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
     assert(operation->entry != NULL);
     return KINETIC_STATUS_SUCCESS;
 }
@@ -361,6 +350,7 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation)
     assert(operation->connection != NULL);
     LOGF3("GETKEYRANGE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
+    assert(operation->response != NULL);
     assert(operation->buffers != NULL);
     assert(operation->buffers->count > 0);
 
@@ -377,12 +367,10 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation)
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
     KineticKeyRange* range, ByteBufferArray* buffers)
 {
-    assert(operation != NULL);
-    assert(operation->connection != NULL);
     KineticOperation_ValidateOperation(operation);
-    KineticConnection_IncrementSequence(operation->connection);
     assert(range != NULL);
     assert(buffers != NULL);
+    KineticConnection_IncrementSequence(operation->connection);
 
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE;
     operation->request->command->header->has_messageType = true;
@@ -395,13 +383,55 @@ void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
     operation->callback = &KineticOperation_GetKeyRangeCallback;
 }
 
+KineticStatus KineticOperation_GetLogCallback(KineticOperation* operation)
+{
+    assert(operation != NULL);
+    assert(operation->connection != NULL);
+    assert(operation->deviceInfo != NULL);
+    LOGF3("GETLOG callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        operation, operation->connection);
+    assert(operation->response != NULL);
+    assert(operation->response->command->body->getLog != NULL);
+
+    // Copy the data from the response protobuf into a new info struct
+    if (operation->response->command->body->getLog == NULL) {
+        return KINETIC_STATUS_OPERATION_FAILED;
+    }
+    else {
+        *operation->deviceInfo = KineticDeviceInfo_Create(operation->response->command->body->getLog);
+        return KINETIC_STATUS_SUCCESS;
+    }
+}
+
+void KineticOperation_BuildGetLog(KineticOperation* const operation,
+    KineticDeviceInfo_Type type,
+    KineticDeviceInfo** info)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+    KineticProto_Command_GetLog_Type protoType =
+        KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(type);
+        
+    operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG;
+    operation->request->command->header->has_messageType = true;
+    operation->request->command->body = &operation->request->protoData.message.body;
+    operation->request->command->body->getLog = &operation->request->protoData.message.getLog;
+    operation->request->command->body->getLog->types = &operation->request->protoData.message.getLogType;
+    operation->request->command->body->getLog->types[0] = protoType;
+    operation->request->command->body->getLog->n_types = 1;
+    operation->deviceInfo = info;
+    operation->callback = &KineticOperation_GetLogCallback;
+}
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
+    assert(operation->request->connection != NULL);
     assert(operation->request->proto != NULL);
     assert(operation->request->protoData.message.has_command);
-    assert(operation->request->protoData.message.command.header != NULL);
+    assert(operation->request->command != NULL);
+    assert(operation->request->command->header != NULL);
+    assert(operation->request->command->header->has_sequence);
 }

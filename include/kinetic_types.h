@@ -202,4 +202,127 @@ typedef struct _KineticKeyRange {
     bool reverse;
 } KineticKeyRange;
 
+// Kinetic GetLog data types
+typedef enum {
+    KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS = 0,
+    KINETIC_DEVICE_INFO_TYPE_TEMPERATURES,
+    KINETIC_DEVICE_INFO_TYPE_CAPACITIES,
+    KINETIC_DEVICE_INFO_TYPE_CONFIGURATION,
+    KINETIC_DEVICE_INFO_TYPE_STATISTICS,
+    KINETIC_DEVICE_INFO_TYPE_MESSAGES,
+    KINETIC_DEVICE_INFO_TYPE_LIMITS,
+    KINETIC_DEVICE_INFO_TYPE_DEVICE,
+} KineticDeviceInfo_Type;
+typedef struct {
+    char* name;
+    float value;
+} KineticDeviceInfo_Utilization;
+typedef struct {
+    char* name;
+    float current;
+    float minimum;
+    float maximum;
+    float target;
+} KineticDeviceInfo_Temperature;
+typedef struct {
+    uint64_t nominalCapacityInBytes;
+    float portionFull;
+} KineticDeviceInfo_Capacity;
+typedef struct {
+    char* name;
+    ByteArray MAC;
+    ByteArray ipv4Address;
+    ByteArray ipv6Address;
+} KineticDeviceInfo_Interface;
+typedef struct {
+    char* vendor;
+    char* model;
+    ByteArray serialNumber;
+    ByteArray worldWideName;
+    char* version;
+    char* compilationDate;
+    char* sourceHash;
+    char* protocolVersion;
+    char* protocolCompilationDate;
+    char* protocolSourceHash;
+    KineticDeviceInfo_Interface* interfaces;
+    size_t numInterfaces;
+    int32_t port;
+    int32_t tlsPort;
+} KineticDeviceInfo_Configuration;
+typedef enum {
+    KINETIC_MESSAGE_TYPE_INVALID = 0,
+    KINETIC_MESSAGE_TYPE_GET_RESPONSE,
+    KINETIC_MESSAGE_TYPE_GET,
+    KINETIC_MESSAGE_TYPE_PUT_RESPONSE,
+    KINETIC_MESSAGE_TYPE_PUT,
+    KINETIC_MESSAGE_TYPE_DELETE_RESPONSE,
+    KINETIC_MESSAGE_TYPE_DELETE,
+    KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE,
+    KINETIC_MESSAGE_TYPE_GETNEXT,
+    KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE,
+    KINETIC_MESSAGE_TYPE_GETPREVIOUS,
+    KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE,
+    KINETIC_MESSAGE_TYPE_GETKEYRANGE,
+    KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE,
+    KINETIC_MESSAGE_TYPE_GETVERSION,
+    KINETIC_MESSAGE_TYPE_SETUP_RESPONSE,
+    KINETIC_MESSAGE_TYPE_SETUP,
+    KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE,
+    KINETIC_MESSAGE_TYPE_GETLOG,
+    KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE,
+    KINETIC_MESSAGE_TYPE_SECURITY,
+    KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE,
+    KINETIC_MESSAGE_TYPE_PEER2PEERPUSH,
+    KINETIC_MESSAGE_TYPE_NOOP_RESPONSE,
+    KINETIC_MESSAGE_TYPE_NOOP,
+    KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE,
+    KINETIC_MESSAGE_TYPE_FLUSHALLDATA,
+    KINETIC_MESSAGE_TYPE_PINOP_RESPONSE,
+    KINETIC_MESSAGE_TYPE_PINOP,
+    KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE,
+    KINETIC_MESSAGE_TYPE_MEDIASCAN,
+    KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE,
+    KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE,
+} KineticMessageType;
+typedef struct {
+    KineticMessageType messageType;
+    uint64_t count;
+    uint64_t bytes;
+} KineticDeviceInfo_Statistics;
+typedef struct {
+    uint32_t maxKeySize;
+    uint32_t maxValueSize;
+    uint32_t maxVersionSize;
+    uint32_t maxTagSize;
+    uint32_t maxConnections;
+    uint32_t maxOutstandingReadRequests;
+    uint32_t maxOutstandingWriteRequests;
+    uint32_t maxMessageSize;
+    uint32_t maxKeyRangeCount;
+    uint32_t maxIdentityCount;
+    uint32_t maxPinSize;
+} KineticDeviceInfo_Limits;
+typedef struct {
+    ByteArray name;
+} KineticDeviceInfo_Device;
+typedef struct {
+    size_t totalLength;
+    KineticDeviceInfo_Utilization* utilizations;
+    size_t numUtilizations;
+    KineticDeviceInfo_Temperature* temperatures;
+    size_t numTemperatures;
+    KineticDeviceInfo_Capacity* capacity;
+    KineticDeviceInfo_Configuration* configuration;
+    KineticDeviceInfo_Statistics* statistics;
+    size_t numStatistics;
+    ByteArray messages;
+    KineticDeviceInfo_Limits* limits;
+    KineticDeviceInfo_Device* device;
+} KineticDeviceInfo;
+
+const char* KineticMessageType_GetName(KineticMessageType type);
+
+#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN (1024 * 1024 * 4) // Will get reallocated to actual/used size post-copy
+
 #endif // _KINETIC_TYPES_H

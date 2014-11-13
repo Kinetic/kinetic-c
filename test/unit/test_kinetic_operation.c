@@ -26,8 +26,10 @@
 #include "kinetic_nbo.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
-#include "mock_kinetic_types_internal.h"
+#include "kinetic_types_internal.h"
+#include "kinetic_device_info.h"
 #include "mock_kinetic_allocator.h"
+#include "mock_kinetic_serial_allocator.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
@@ -544,7 +546,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
 }
 
-#if 1
+
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
 {
     LOG_LOCATION;
@@ -747,4 +749,85 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     TEST_ASSERT_EQUAL_PTR(&Request.protoData.message, Request.proto);
     TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.command, Request.command);
 }
-#endif
+
+
+void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
+{
+    LOG_LOCATION;
+
+    KineticDeviceInfo* pInfo;
+
+    KineticConnection_IncrementSequence_Expect(&Connection);
+
+    KineticOperation_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
+
+    // Get Log
+    //
+    // The GETLOG operation gives the client access to log information.
+    // The request message must include at least one type and can have many types. The supported types are:
+    //     UTILIZATIONS
+    //     TEMPERATURES
+    //     CAPACITIES
+    //     CONFIGURATION
+    //     STATISTICS
+    //     MESSAGES
+    //     LIMITS
+    // Below we will show the message structure used to request all types in a single GETLOG request.
+    // 
+    // Request Message
+    // ---------------
+    // command {
+    //   header {
+    //     clusterVersion: ...
+    //     identity: ...
+    //     connectionID: ...
+    //     sequence: ...
+    //     // The messageType should be GETLOG
+    //     messageType: GETLOG
+    //   }
+    //   body {
+    //     // The body should contain a getLog message, which must have
+    //     // at least one value for type. Multiple are allowed. 
+    //     // Here all types are requested.
+    //     getLog {
+    //       type: CAPACITIES
+    //       type: CONFIGURATION
+    //       type: MESSAGES
+    //       type: STATISTICS
+    //       type: TEMPERATURES
+    //       type: UTILIZATIONS
+    //     }
+    //   }
+    // }
+    // hmac: "..."
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG,
+        Request.protoData.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.getLog, Request.command->body->getLog);
+    TEST_ASSERT_NOT_NULL(Request.command->body->getLog->types);
+    TEST_ASSERT_EQUAL(1, Request.command->body->getLog->n_types);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
+        Request.command->body->getLog->types[0]);
+    TEST_ASSERT_EQUAL_PTR(&pInfo, Operation.deviceInfo);
+    TEST_ASSERT_NULL(Operation.response);
+}
+
+
+void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
+{
+    // KineticConnection con;
+    // KineticPDU response;
+    // KineticDeviceInfo* info;
+    // KineticOperation op = {
+    //     .connection = &con,
+    //     .response = &response,
+    //     .deviceInfo = &info,
+    // };
+
+    TEST_IGNORE_MESSAGE("TODO: Need to implement!")
+
+    // KineticSerialAllocator_Create()
+
+    // KineticStatus status = KineticOperation_GetLogCallback(&op);
+}

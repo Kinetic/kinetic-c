@@ -41,7 +41,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <poll.h>
-#include "socket99/socket99.h"
+#include "socket99.h"
 
 int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
 {

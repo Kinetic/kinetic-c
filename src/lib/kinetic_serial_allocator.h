@@ -18,16 +18,14 @@
 *
 */
 
-#ifndef _KINETIC_CONNECTION_H
-#define _KINETIC_CONNECTION_H
+#ifndef _KINETIC_SERIAL_ALLOCATOR_H
+#define _KINETIC_SERIAL_ALLOCATOR_H
 
 #include "kinetic_types_internal.h"
 
-KineticSessionHandle KineticConnection_NewConnection(const KineticSession* const config);
-void KineticConnection_FreeConnection(KineticSessionHandle* const handle);
-KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle);
-KineticStatus KineticConnection_Connect(KineticConnection* const connection);
-KineticStatus KineticConnection_Disconnect(KineticConnection* const connection);
-void KineticConnection_IncrementSequence(KineticConnection* const connection);
+KineticSerialAllocator KineticSerialAllocator_Create(size_t max_len);
+void* KineticSerialAllocator_GetBuffer(KineticSerialAllocator* allocator);
+void* KineticSerialAllocator_AllocateChunk(KineticSerialAllocator* allocator, size_t len);
+size_t KineticSerialAllocator_TrimBuffer(KineticSerialAllocator* allocator);
 
-#endif // _KINETIC_CONNECTION_H
+#endif // _KINETIC_SERIAL_ALLOCATOR_H
