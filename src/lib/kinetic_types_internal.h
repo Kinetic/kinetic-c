@@ -317,4 +317,6 @@ int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b);
 
 KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type);
 
+KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type);
+
 #endif // _KINETIC_TYPES_INTERNAL_H

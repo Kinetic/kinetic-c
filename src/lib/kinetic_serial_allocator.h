@@ -24,7 +24,8 @@
 #include "kinetic_types_internal.h"
 
 KineticSerialAllocator KineticSerialAllocator_Create(size_t max_len);
-void* KineticSerialAllocator_Base(KineticSerialAllocator* allocator);
+void* KineticSerialAllocator_GetBuffer(KineticSerialAllocator* allocator);
 void* KineticSerialAllocator_AllocateChunk(KineticSerialAllocator* allocator, size_t len);
+size_t KineticSerialAllocator_TrimBuffer(KineticSerialAllocator* allocator);
 
 #endif // _KINETIC_SERIAL_ALLOCATOR_H

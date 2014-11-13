@@ -24,6 +24,7 @@
 #include "kinetic_pdu.h"
 #include "kinetic_nbo.h"
 #include "kinetic_socket.h"
+#include "kinetic_device_info.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
@@ -376,11 +377,16 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* operation)
     LOGF3("GETLOG callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     assert(operation->response != NULL);
+    assert(operation->response->command->body->getLog != NULL);
 
     // Copy the data from the response protobuf into a new info struct
-    // TODO: stuff!!!
-
-    return KINETIC_STATUS_INVALID;
+    if (operation->response->command->body->getLog == NULL) {
+        return KINETIC_STATUS_OPERATION_FAILED;
+    }
+    else {
+        *operation->deviceInfo = KineticDeviceInfo_Create(operation->response->command->body->getLog);
+        return KINETIC_STATUS_SUCCESS;
+    }
 }
 
 void KineticOperation_BuildGetLog(KineticOperation* const operation,

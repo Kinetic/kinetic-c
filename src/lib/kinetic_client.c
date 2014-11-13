@@ -201,7 +201,6 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
 {
     assert(handle != KINETIC_HANDLE_INVALID);
     assert(info != NULL);
-    // assert(*info != NULL);
 
     KineticOperation* operation = KineticController_CreateOperation(handle);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}

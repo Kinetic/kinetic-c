@@ -56,27 +56,27 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KineticController_CreateWorkerThreads_should_create_and_kickoff_worker_threads(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_CreateWorkerThreads");
-}
+// void test_KineticController_CreateWorkerThreads_should_create_and_kickoff_worker_threads(void)
+// {
+//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_CreateWorkerThreads");
+// }
 
-void test_KineticController_CreateOperation_should_create_a_new_operation_for_the_specified_session(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_CreateOperation");
-}
+// void test_KineticController_CreateOperation_should_create_a_new_operation_for_the_specified_session(void)
+// {
+//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_CreateOperation");
+// }
 
-void test_KineticController_ExecuteOperation_should_execute_the_specified_operation(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_ExecuteOperation");
-}
+// void test_KineticController_ExecuteOperation_should_execute_the_specified_operation(void)
+// {
+//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_ExecuteOperation");
+// }
 
-void test_KineticController_Pause_should_pause_worker_threads_when_paused(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Pause");
-}
+// void test_KineticController_Pause_should_pause_worker_threads_when_paused(void)
+// {
+//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Pause");
+// }
 
-void test_KineticController_ReceiveThread_should_service_response_PDUs(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_ReceiveThread");
-}
+// void test_KineticController_ReceiveThread_should_service_response_PDUs(void)
+// {
+//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_ReceiveThread");
+// }

@@ -394,3 +394,8 @@ KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_
 
     return protoType;
 }
+
+KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type)
+{
+    return (KineticMessageType)type;
+}
