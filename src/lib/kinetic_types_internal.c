@@ -224,7 +224,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
     if (keyValue != NULL && entry != NULL) {
 
         ByteBuffer_Reset(&entry->newVersion);
-        if (keyValue->has_newVersion) {
+        if (keyValue->has_newVersion && keyValue->newVersion.len > 0) {
             if (entry->newVersion.array.data == NULL ||
                 entry->newVersion.array.len < keyValue->newVersion.len) {
                 entry->newVersion.bytesUsed = keyValue->newVersion.len;
@@ -237,7 +237,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
         }
 
         ByteBuffer_Reset(&entry->dbVersion);
-        if (keyValue->has_dbVersion) {
+        if (keyValue->has_dbVersion && keyValue->dbVersion.len > 0) {
             if (entry->dbVersion.array.data == NULL || entry->dbVersion.array.len < keyValue->dbVersion.len) {
                 entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
                 LOG1(" BUFFER_OVERRUN: dbVersion");
@@ -249,7 +249,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
         }
 
         ByteBuffer_Reset(&entry->key);
-        if (keyValue->has_key) {
+        if (keyValue->has_key && keyValue->key.len > 0) {
             if (entry->key.array.data == NULL || entry->key.array.len < keyValue->key.len) {
                 entry->key.bytesUsed = keyValue->key.len;
                 LOG1(" BUFFER_OVERRUN: key");
@@ -261,7 +261,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
         }
 
         ByteBuffer_Reset(&entry->tag);
-        if (keyValue->has_tag) {
+        if (keyValue->has_tag && keyValue->tag.len > 0) {
             if (entry->tag.array.data == NULL || entry->tag.array.len < keyValue->tag.len) {
                 entry->tag.bytesUsed = keyValue->tag.len;
                 LOG1(" BUFFER_OVERRUN: tag");
@@ -320,6 +320,51 @@ int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len)
     strncat(buf, strerror(err_num), len - 1);
     pthread_mutex_unlock(&strerror_lock);
     return 0;
+}
+
+struct timeval Kinetic_TimevalZero(void)
+{
+    return (struct timeval) {
+        .tv_sec = 0,
+        .tv_usec = 0,
+    };
+}
+
+bool Kinetic_TimevalIsZero(struct timeval const tv)
+{
+    return tv.tv_sec == 0 && tv.tv_usec == 0;
+}
+
+struct timeval Kinetic_TimevalAdd(struct timeval const a, struct timeval const b)
+{
+    struct timeval result = {
+        .tv_sec = a.tv_sec + b.tv_sec,
+        .tv_usec = a.tv_usec + b.tv_usec,
+    };
+
+    if (result.tv_usec >= 1000000) {
+        result.tv_sec++;
+        result.tv_usec -= 1000000;
+    }
+    return result;
+}
+
+static int cmp_suseconds_t(suseconds_t const a, suseconds_t const b)
+{
+    if (a == b) {
+        return 0;
+    }
+    else if (a > b) {
+        return 1;
+    }
+    else {
+        return -1;
+    }
+}
+
+int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b)
+{
+    return (a.tv_sec == b.tv_sec) ? cmp_suseconds_t(a.tv_usec, b.tv_usec) : ((a.tv_sec > b.tv_sec) ? 1 : -1);
 }
 
 KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type)

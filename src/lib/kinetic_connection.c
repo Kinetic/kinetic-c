@@ -62,6 +62,7 @@ void KineticConnection_FreeConnection(KineticSessionHandle* const handle)
     assert(*handle != KINETIC_HANDLE_INVALID);
     KineticConnection* connection = KineticConnection_FromHandle(*handle);
     assert(connection != NULL);
+    pthread_mutex_destroy(&connection->writeMutex);
     *connection = (KineticConnection) {
         .connected = false
     };

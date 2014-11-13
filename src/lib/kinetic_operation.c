@@ -33,6 +33,40 @@
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation);
 
+static KineticStatus WritePDU(KineticOperation* const operation)
+{
+    KineticPDU* request = operation->request;
+    // Pack and send the PDU header
+    ByteBuffer hdr = ByteBuffer_Create(&request->headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
+    KineticStatus status = KineticSocket_Write(request->connection->socket, &hdr);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOG0("Failed to send PDU header!");
+        return status;
+    }
+
+    // Send the protobuf message
+    LOG1("Sending PDU Protobuf:");
+    KineticLogger_LogProtobuf(2, request->proto);
+    status = KineticSocket_WriteProtobuf(request->connection->socket, request);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOG0("Failed to send PDU protobuf message!");
+        return status;
+    }
+
+    // Send the value/payload, if specified
+    if (operation->valueEnabled && operation->sendValue) {
+        LOGF1("Sending PDU Value Payload (%zu bytes)", operation->entry->value.bytesUsed);
+        status = KineticSocket_Write(request->connection->socket, &operation->entry->value);
+        if (status != KINETIC_STATUS_SUCCESS) {
+            LOG0("Failed to send PDU value payload!");
+            return status;
+        }
+    }
+
+    LOG2("PDU sent successfully!");
+    return KINETIC_STATUS_SUCCESS;
+}
+
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 {
     assert(operation != NULL);
@@ -40,7 +74,6 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     assert(operation->request != NULL);
     assert(operation->request->connection == operation->connection);
     LOGF1("\nSending PDU via fd=%d", operation->connection->socket);
-    KineticStatus status = KINETIC_STATUS_INVALID;
     KineticPDU* request = operation->request;
     request->proto = &operation->request->protoData.message.message;
 
@@ -81,35 +114,10 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     request->headerNBO.protobufLength = KineticNBO_FromHostU32(request->header.protobufLength);
     request->headerNBO.valueLength = KineticNBO_FromHostU32(request->header.valueLength);
 
-    // Pack and send the PDU header
-    ByteBuffer hdr = ByteBuffer_Create(&request->headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-    status = KineticSocket_Write(request->connection->socket, &hdr);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        LOG0("Failed to send PDU header!");
-        return status;
-    }
-
-    // Send the protobuf message
-    LOG1("Sending PDU Protobuf:");
-    KineticLogger_LogProtobuf(2, request->proto);
-    status = KineticSocket_WriteProtobuf(request->connection->socket, request);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        LOG0("Failed to send PDU protobuf message!");
-        return status;
-    }
-
-    // Send the value/payload, if specified
-    if (operation->valueEnabled && operation->sendValue) {
-        LOGF1("Sending PDU Value Payload (%zu bytes)", operation->entry->value.bytesUsed);
-        status = KineticSocket_Write(request->connection->socket, &operation->entry->value);
-        if (status != KINETIC_STATUS_SUCCESS) {
-            LOG0("Failed to send PDU value payload!");
-            return status;
-        }
-    }
-
-    LOG2("PDU sent successfully!");
-    return KINETIC_STATUS_SUCCESS;
+    pthread_mutex_lock(&operation->connection->writeMutex);
+    KineticStatus status = WritePDU(operation);
+    pthread_mutex_unlock(&operation->connection->writeMutex);
+    return status;
 }
 
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation)
@@ -119,6 +127,30 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
         status = KineticPDU_GetStatus(operation->response);
     }
     return status;
+}
+
+struct timeval KineticOperation_GetTimeoutTime(KineticOperation* const operation)
+{
+    pthread_mutex_lock(&operation->timeoutTimeMutex);
+    struct timeval timeoutTime = operation->timeoutTime;
+    pthread_mutex_unlock(&operation->timeoutTimeMutex);
+    return timeoutTime;
+}
+
+void KineticOperation_SetTimeoutTime(KineticOperation* const operation, uint32_t const timeout_in_sec)
+{
+    pthread_mutex_lock(&operation->timeoutTimeMutex);
+
+    // set timeout time
+    struct timeval currentTime;
+    gettimeofday(&currentTime, NULL);
+    struct timeval timeoutIn = {
+        .tv_sec = timeout_in_sec,
+        .tv_usec = 0,
+    };
+    operation->timeoutTime = Kinetic_TimevalAdd(currentTime, timeoutIn);
+
+    pthread_mutex_unlock(&operation->timeoutTimeMutex);
 }
 
 KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* response)
@@ -157,52 +189,6 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
     }
 
     return NULL;
-}
-
-KineticStatus KineticOperation_ReceiveAsync(KineticOperation* const operation)
-{
-    KineticOperation_ValidateOperation(operation);
-
-    const int fd = operation->request->connection->socket;
-    assert(fd >= 0);
-    LOGF1("\nReceiving PDU via fd=%d", fd);
-
-    KineticStatus status = KINETIC_STATUS_SUCCESS;
-
-    // Wait for response if no callback supplied (synchronous)
-    if (operation->closure.callback == NULL) { 
-        status = KINETIC_STATUS_SOCKET_TIMEOUT;
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
-        struct timespec timeoutTime = {
-            .tv_sec = tv.tv_sec + KINETIC_PDU_RECEIVE_TIMEOUT_SECS,
-            .tv_nsec = 0,
-        };
-
-        pthread_mutex_lock(&operation->receiveCompleteMutex);
-        int res = pthread_cond_timedwait(&operation->receiveComplete, &operation->receiveCompleteMutex, &timeoutTime);
-        pthread_mutex_unlock(&operation->receiveCompleteMutex);
-
-        if (res == ETIMEDOUT) {
-            LOG0("Timed out waiting to received response PDU!");
-            status = KINETIC_STATUS_SOCKET_TIMEOUT;
-        }
-        else if (res == 0 && operation->response != NULL) {
-            status = KineticPDU_GetStatus(operation->response);
-            LOGF2("Response PDU received w/status %s", Kinetic_GetStatusDescription(status));
-        }
-        else {
-            LOG0("Unknown error occurred waiting for response PDU to arrive!");
-            status = KINETIC_STATUS_CONNECTION_ERROR;
-        }
-
-        KineticAllocator_FreeOperation(operation->connection, operation);
-
-        pthread_cond_destroy(&operation->receiveComplete);
-        pthread_mutex_destroy(&operation->receiveCompleteMutex);
-    }
-
-    return status;
 }
 
 KineticStatus KineticOperation_NoopCallback(KineticOperation* operation)
@@ -434,4 +420,35 @@ static void KineticOperation_ValidateOperation(KineticOperation* operation)
     assert(operation->request->command != NULL);
     assert(operation->request->command->header != NULL);
     assert(operation->request->command->header->has_sequence);
+}
+
+void KineticOperation_Complete(KineticOperation* operation, KineticStatus status)
+{
+    assert(operation != NULL);
+    // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
+    assert(operation->closure.callback != NULL);
+    KineticCompletionData completionData = {.status = status};
+    operation->closure.callback(&completionData, operation->closure.clientData);
+    KineticAllocator_FreeOperation(operation->connection, operation);
+}
+
+void KineticOperation_TimeoutOperations(KineticConnection* const connection)
+{
+    struct timeval currentTime;
+    gettimeofday(&currentTime, NULL);
+
+    for (KineticOperation* operation = KineticAllocator_GetFirstOperation(connection);
+         operation != NULL;
+         operation = KineticAllocator_GetNextOperation(connection, operation)) {
+
+        struct timeval timeoutTime = KineticOperation_GetTimeoutTime(operation);
+
+        // if this operation has a nonzero timeout
+        //   and it's timed out
+        if (!Kinetic_TimevalIsZero(timeoutTime) &&
+            Kinetic_TimevalCmp(currentTime, operation->timeoutTime) >= 0)
+        {
+            KineticOperation_Complete(operation, KINETIC_STATUS_OPERATION_TIMEDOUT);
+        }
+    }
 }

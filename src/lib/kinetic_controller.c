@@ -74,7 +74,28 @@ KineticOperation* KineticController_CreateOperation(KineticSessionHandle handle)
     return operation;
 }
 
-KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure)
+typedef struct {
+    pthread_mutex_t receiveCompleteMutex;
+    pthread_cond_t receiveComplete;
+    KineticStatus status;
+} DefaultCallbackData;
+
+static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
+{
+    DefaultCallbackData * data = client_data;
+    data->status = kinetic_data->status;
+    pthread_cond_signal(&data->receiveComplete);
+}
+
+static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
+{
+    return (KineticCompletionClosure) {
+        .callback = DefaultCallback,
+        .clientData = data,
+    };
+}
+
+KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* const closure)
 {
     assert(operation != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
@@ -91,24 +112,37 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
         LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);
     }
 
-    // Configure completion for synchronous/asynchronous
+    KineticOperation_SetTimeoutTime(operation, KINETIC_OPERATION_TIMEOUT_SECS);
+
     if (closure != NULL)
     {
         operation->closure = *closure;
+        return KineticOperation_SendRequest(operation);
     }
     else
     {
-        pthread_mutex_init(&operation->receiveCompleteMutex, NULL);
-        pthread_cond_init(&operation->receiveComplete, NULL);
-    }
+        DefaultCallbackData data;
+        pthread_mutex_init(&data.receiveCompleteMutex, NULL);
+        pthread_cond_init(&data.receiveComplete, NULL);
+        data.status = KINETIC_STATUS_INVALID;
 
-    // Send the request
-    status = KineticOperation_SendRequest(operation);
-    if (status != KINETIC_STATUS_SUCCESS) {
+        operation->closure = DefaultClosure(&data);
+
+        // Send the request
+        status = KineticOperation_SendRequest(operation);
+
+        if (status == KINETIC_STATUS_SUCCESS) {
+            pthread_mutex_lock(&data.receiveCompleteMutex);
+            pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex);
+            pthread_mutex_unlock(&data.receiveCompleteMutex);
+            status = data.status;
+        }
+
+        pthread_cond_destroy(&data.receiveComplete);
+        pthread_mutex_destroy(&data.receiveCompleteMutex);
+
         return status;
     }
-
-    return KineticOperation_ReceiveAsync(operation);
 }
 
 void KineticController_Pause(KineticConnection* const connection, bool pause)
@@ -140,9 +174,6 @@ void* KineticController_ReceiveThread(void* thread_arg)
                 status = KineticPDU_ReceiveMain(response);
                 if (status != KINETIC_STATUS_SUCCESS) {
                     LOGF0("ERROR: PDU receive reported an error: %s", Kinetic_GetStatusDescription(status));
-                }
-                else {
-                    status = KineticPDU_GetStatus(response);
                 }
 
                 if (response->proto != NULL && response->proto->has_authType) {
@@ -186,17 +217,13 @@ void* KineticController_ReceiveThread(void* thread_arg)
                                 status = op->callback(op);
                             }
 
-                            // Call client-supplied closure callback, if supplied
-                            if (op->closure.callback != NULL) {
-                                KineticCompletionData completionData = {.status = status};
-                                op->closure.callback(&completionData, op->closure.clientData);
-                                KineticAllocator_FreeOperation(thread->connection, op);
+                            if (status == KINETIC_STATUS_SUCCESS) {
+                                status = KineticPDU_GetStatus(response);
                             }
+                            
+                            LOGF2("Response PDU received w/status %s, %i", Kinetic_GetStatusDescription(status), status);
 
-                            // Otherwise, is a synchronous operation, so signal the main thread operation
-                            else {
-                                pthread_cond_signal(&op->receiveComplete);
-                            }
+                            KineticOperation_Complete(op, status);
                         }
                     }
                 }
@@ -217,6 +244,8 @@ void* KineticController_ReceiveThread(void* thread_arg)
                 thread->fatalError = true;
             } break;
         }
+
+        KineticOperation_TimeoutOperations(thread->connection);
     }
 
     LOG1("Worker thread terminated!");

@@ -34,7 +34,7 @@
 #define KINETIC_PDUS_PER_SESSION_MAX (10)
 #define KINETIC_SOCKET_DESCRIPTOR_INVALID (-1)
 #define KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS (3)
-#define KINETIC_PDU_RECEIVE_TIMEOUT_SECS (5)
+#define KINETIC_OPERATION_TIMEOUT_SECS (20)
 
 // Ensure __func__ is defined (for debugging)
 #if !defined __func__
@@ -85,6 +85,7 @@ typedef struct _KineticThread {
 struct _KineticConnection {
     bool            connected;      // state of connection
     int             socket;         // socket file descriptor
+    pthread_mutex_t writeMutex;     // socket write mutex
     int64_t         connectionID;   // initialized to seconds since epoch
     int64_t         sequence;       // increments for each request in a session
     KineticList     pdus;           // list of dynamically allocated PDUs
@@ -96,6 +97,7 @@ struct _KineticConnection {
 #define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
         .connected = false, \
         .socket = -1, \
+        .writeMutex = PTHREAD_MUTEX_INITIALIZER, \
         .operations = KINETIC_LIST_INITIALIZER, \
         .pdus = KINETIC_LIST_INITIALIZER, \
     }; \
@@ -260,10 +262,10 @@ struct _KineticOperation {
     KineticConnection* connection;
     KineticPDU* request;
     KineticPDU* response;
+    pthread_mutex_t timeoutTimeMutex;
+    struct timeval timeoutTime;
     bool valueEnabled;
     bool sendValue;
-    pthread_mutex_t receiveCompleteMutex;
-    pthread_cond_t receiveComplete;
     KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticDeviceInfo** deviceInfo;
@@ -273,7 +275,10 @@ struct _KineticOperation {
 #define KINETIC_OPERATION_INIT(_op, _con) \
     assert((_op) != NULL); \
     assert((_con) != NULL); \
-    *(_op) = (KineticOperation) {.connection = (_con)}
+    *(_op) = (KineticOperation) { \
+        .connection = (_con), \
+        .timeoutTimeMutex = PTHREAD_MUTEX_INITIALIZER, \
+    }
 
 // Kintic Serial Allocator
 // Used for allocating a contiguous hunk of memory to hold arbitrary variable-length response data
@@ -305,6 +310,10 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
 bool Copy_KineticProto_Command_Range_to_ByteBufferArray(
     KineticProto_Command_Range* keyRange, ByteBufferArray* keys);
 int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len);
+struct timeval Kinetic_TimevalZero(void);
+bool Kinetic_TimevalIsZero(struct timeval const tv);
+struct timeval Kinetic_TimevalAdd(struct timeval const a, struct timeval const b);
+int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b);
 
 KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type);
 

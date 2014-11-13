@@ -211,6 +211,7 @@ void test_KineticConnection_Worker_should_run_fine_while_no_data_arrives(void)
 
     // Setup mock expectations for worker thread so it can run in IDLE mode
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
+    KineticOperation_TimeoutOperations_Ignore();
 
     // Establish connection
     KineticStatus status = KineticConnection_Connect(Connection);
@@ -260,11 +261,15 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
 
     // Setup mock expectations for worker thread
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
+    KineticOperation_TimeoutOperations_Ignore();
+
     Response.type = KINETIC_PDU_TYPE_UNSOLICITED;
     Response.command->header->connectionID = connectionID;
     Response.command->header->has_connectionID = true;
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
     Response.proto->has_authType = true;
+
+    // KineticOperation_TimeoutOperations_Expect(Connection);
 
     // Establish connection
     KineticStatus status = KineticConnection_Connect(Connection);
@@ -282,14 +287,18 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
     // Prepare the status PDU to be received
     KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticAllocator_FreePDU_Expect(Connection, &Response);
+
+    KineticOperation_TimeoutOperations_Expect(Connection);
 
     // Must trigger data ready last, in order for mocked simulation to work as desired
     KineticSocket_WaitUntilDataAvailable_ExpectAndReturn(socket, 100, KINETIC_WAIT_STATUS_DATA_AVAILABLE);
+    KineticOperation_TimeoutOperations_Expect(Connection);
 
     // Make sure to return read thread to IDLE state
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
+    KineticOperation_TimeoutOperations_Ignore();
+
     KineticController_Pause(Connection, false);
 
     // Wait for unsolicited status PDU to be received and processed...
@@ -352,23 +361,18 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
                                           expected.session.nonBlocking, expected.socket);
 
-    // Configure dummy request PDU async callback
-    struct DummyCompletionClosureData dummyClosureData = {
-        .status = KINETIC_STATUS_INVALID,
-        .callbackCount = 0,
-    };
+
     KineticOperation op;
     KINETIC_OPERATION_INIT(&op, Connection);
-    op.closure = (KineticCompletionClosure) {
-        .callback = &DummyCompletionCallback,
-        .clientData = &dummyClosureData,
-    };
+
 
     // Setup mock expectations for worker thread
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
+    KineticOperation_TimeoutOperations_Ignore();
     Response.type = KINETIC_PDU_TYPE_RESPONSE;
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
     Response.proto->has_authType = true;
+
 
     // Establish connection
     KineticStatus status = KineticConnection_Connect(Connection);
@@ -381,24 +385,25 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     // Prepare the status PDU to be received
     KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticOperation_AssociateResponseWithOperation_ExpectAndReturn(&Response, &op);
     KineticPDU_GetValueLength_ExpectAndReturn(&Response, 0);
-    KineticAllocator_FreeOperation_Expect(Connection, &op);
+    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
+    KineticOperation_Complete_Expect(&op, KINETIC_STATUS_SUCCESS);
+
+    KineticOperation_TimeoutOperations_Expect(Connection);
+
 
     // Signal data has arrived so status PDU can be consumed
     KineticSocket_WaitUntilDataAvailable_ExpectAndReturn(socket, 100, KINETIC_WAIT_STATUS_DATA_AVAILABLE);
+    KineticOperation_TimeoutOperations_Expect(Connection);
 
     // Make sure to return read thread to IDLE state
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
+    KineticOperation_TimeoutOperations_Ignore();
     KineticController_Pause(Connection, false);
 
     // Wait for solicited status PDU to be received and processed...
     sleep(1);
-
-    // Validate callback called and check status
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, dummyClosureData.status);
-    TEST_ASSERT_EQUAL(1, dummyClosureData.callbackCount);
 }
 
 void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_Value_payload(void)
@@ -437,23 +442,15 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
                                           expected.session.nonBlocking, expected.socket);
 
-    // Configure dummy request PDU async callback
-    struct DummyCompletionClosureData dummyClosureData = {
-        .status = KINETIC_STATUS_INVALID,
-        .callbackCount = 0,
-    };
     KineticOperation op;
     KINETIC_OPERATION_INIT(&op, Connection);
-    op.closure = (KineticCompletionClosure) {
-        .callback = &DummyCompletionCallback,
-        .clientData = &dummyClosureData,
-    };
     uint8_t valueData[100];
     KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
     op.entry = &entry;
 
     // Setup mock expectations for worker thread
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
+    KineticOperation_TimeoutOperations_Ignore();
     Response.type = KINETIC_PDU_TYPE_RESPONSE;
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
     Response.proto->has_authType = true;
@@ -469,25 +466,25 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     // Prepare the status PDU to be received
     KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
     KineticOperation_AssociateResponseWithOperation_ExpectAndReturn(&Response, &op);
     KineticPDU_GetValueLength_ExpectAndReturn(&Response, 83);
     KineticPDU_ReceiveValue_ExpectAndReturn(socket, &entry.value, 83, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_FreeOperation_Expect(Connection, &op);
+    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
+    KineticOperation_Complete_Expect(&op, KINETIC_STATUS_SUCCESS);
+
+    KineticOperation_TimeoutOperations_Expect(Connection);
 
     // Signal data has arrived so status PDU can be consumed
     KineticSocket_WaitUntilDataAvailable_ExpectAndReturn(socket, 100, KINETIC_WAIT_STATUS_DATA_AVAILABLE);
+    KineticOperation_TimeoutOperations_Expect(Connection);
 
     // Make sure to return read thread to IDLE state
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
+    KineticOperation_TimeoutOperations_Ignore();
     KineticController_Pause(Connection, false);
 
     // Wait for solicited status PDU to be received and processed...
     sleep(1);
-
-    // Validate callback called and check status
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, dummyClosureData.status);
-    TEST_ASSERT_EQUAL(1, dummyClosureData.callbackCount);
 }
 
 void test_KineticConnection_IncrementSequence_should_increment_the_sequence_count(void)
