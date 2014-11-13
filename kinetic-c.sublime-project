@@ -1,0 +1,48 @@
+{
+  "folders":
+  [
+    {
+      "path": "."
+    }
+  ],
+  "settings":
+  {
+    "sublimeclang_dont_prepend_clang_includes": true,
+    "sublimeclang_options":
+    [
+      "-Wcast-align",
+      "-g",
+      "-DGNU_COMPILER",
+      "-std=c99",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-Wstrict-prototypes",
+      "-Werror=strict-prototypes",
+      "-Werror=implicit-function-declaration",
+      "-D_POSIX_C_SOURCE=199309L",
+      "-D_C99_SOURCE=1",
+      "-Wno-nonnull",
+      "-Wno-address",
+      "-Wno-missing-field-initializers",
+      "-O",
+      "-xc",
+      "-isystem", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/",
+      // "-isystem", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/c++/4.2.1",
+      // "-isystem", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/c++/4.2.1/tr1",
+      "-isystem", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Kernel.framework/Versions/A/Headers",
+
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/src/**",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/include",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/test/**",
+      // "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/**",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/protobuf-c",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/socket99",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/bundle/ruby/2.0.0/bundler/gems/ceedling-0.15.6/vendor/unity/src",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/build/test/mocks",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/test/support/stubs",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/test/support"
+    ]
+  }
+}
