@@ -124,7 +124,7 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
         DefaultCallbackData data;
         pthread_mutex_init(&data.receiveCompleteMutex, NULL);
         pthread_cond_init(&data.receiveComplete, NULL);
-        data.status = KINETIC_STATUS_SUCCESS;
+        data.status = KINETIC_STATUS_INVALID;
 
         operation->closure = DefaultClosure(&data);
 
@@ -219,8 +219,6 @@ void* KineticController_ReceiveThread(void* thread_arg)
                             if (status == KINETIC_STATUS_SUCCESS && op->callback != NULL) {
                                 status = op->callback(op);
                             }
-
-                            // TODO what to use for status?  response? or op->response? adsfjklasdfjklsdafjkldfsaj 
 
                             if (status == KINETIC_STATUS_SUCCESS) {
                                 status = KineticPDU_GetStatus(response);
