@@ -1,0 +1,33 @@
+.TH "kinetic_device_info.h" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_device_info.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_device_info\&.h'\fP
+.br
+\fC#include 'kinetic_serial_allocator\&.h'\fP
+.br
+\fC#include 'kinetic_types_internal\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticDeviceInfo\fP * \fBKineticDeviceInfo_Create\fP (const KineticProto_Command_GetLog *getLog)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticDeviceInfo\fP* KineticDeviceInfo_Create (const KineticProto_Command_GetLog *getLog)"
+
+.PP
+Definition at line 185 of file kinetic_device_info\&.c\&.
+.PP
+References KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN, KineticSerialAllocator_AllocateChunk(), KineticSerialAllocator_Create(), KineticSerialAllocator_GetBuffer(), KineticSerialAllocator_TrimBuffer(), LOGF2, KineticDeviceInfo::totalLength, and KineticSerialAllocator::used\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

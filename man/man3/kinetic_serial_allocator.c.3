@@ -1,0 +1,62 @@
+.TH "kinetic_serial_allocator.c" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_serial_allocator.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_serial_allocator\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <sys/param\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticSerialAllocator\fP \fBKineticSerialAllocator_Create\fP (size_t max_len)"
+.br
+.ti -1c
+.RI "void * \fBKineticSerialAllocator_GetBuffer\fP (\fBKineticSerialAllocator\fP *allocator)"
+.br
+.ti -1c
+.RI "void * \fBKineticSerialAllocator_AllocateChunk\fP (\fBKineticSerialAllocator\fP *allocator, size_t len)"
+.br
+.ti -1c
+.RI "size_t \fBKineticSerialAllocator_TrimBuffer\fP (\fBKineticSerialAllocator\fP *allocator)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticSerialAllocator\fP KineticSerialAllocator_Create (size_tmax_len)"
+
+.PP
+Definition at line 26 of file kinetic_serial_allocator\&.c\&.
+.PP
+References KineticSerialAllocator::buffer\&.
+.SS "void* KineticSerialAllocator_GetBuffer (\fBKineticSerialAllocator\fP *allocator)"
+
+.PP
+Definition at line 34 of file kinetic_serial_allocator\&.c\&.
+.PP
+References KineticSerialAllocator::buffer\&.
+.SS "void* KineticSerialAllocator_AllocateChunk (\fBKineticSerialAllocator\fP *allocator, size_tlen)"
+
+.PP
+Definition at line 40 of file kinetic_serial_allocator\&.c\&.
+.PP
+References KineticSerialAllocator::buffer, KineticSerialAllocator::total, and KineticSerialAllocator::used\&.
+.SS "size_t KineticSerialAllocator_TrimBuffer (\fBKineticSerialAllocator\fP *allocator)"
+
+.PP
+Definition at line 66 of file kinetic_serial_allocator\&.c\&.
+.PP
+References KineticSerialAllocator::buffer, KineticSerialAllocator::total, and KineticSerialAllocator::used\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

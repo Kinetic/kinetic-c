@@ -1,4 +1,4 @@
-.TH "KineticConnection" 3 "Wed Nov 5 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
+.TH "KineticConnection" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,6 +16,9 @@ KineticConnection \-
 .br
 .ti -1c
 .RI "int \fBsocket\fP"
+.br
+.ti -1c
+.RI "pthread_mutex_t \fBwriteMutex\fP"
 .br
 .ti -1c
 .RI "int64_t \fBconnectionID\fP"
@@ -52,34 +55,38 @@ Definition at line 86 of file kinetic_types_internal\&.h\&.
 
 .PP
 Definition at line 87 of file kinetic_types_internal\&.h\&.
-.SS "int64_t KineticConnection::connectionID"
+.SS "pthread_mutex_t KineticConnection::writeMutex"
 
 .PP
 Definition at line 88 of file kinetic_types_internal\&.h\&.
-.SS "int64_t KineticConnection::sequence"
+.SS "int64_t KineticConnection::connectionID"
 
 .PP
 Definition at line 89 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticList\fP KineticConnection::pdus"
+.SS "int64_t KineticConnection::sequence"
 
 .PP
 Definition at line 90 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticList\fP KineticConnection::operations"
+.SS "\fBKineticList\fP KineticConnection::pdus"
 
 .PP
 Definition at line 91 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticSession\fP KineticConnection::session"
+.SS "\fBKineticList\fP KineticConnection::operations"
 
 .PP
 Definition at line 92 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticThread\fP KineticConnection::thread"
+.SS "\fBKineticSession\fP KineticConnection::session"
 
 .PP
 Definition at line 93 of file kinetic_types_internal\&.h\&.
-.SS "pthread_t KineticConnection::threadID"
+.SS "\fBKineticThread\fP KineticConnection::thread"
 
 .PP
 Definition at line 94 of file kinetic_types_internal\&.h\&.
+.SS "pthread_t KineticConnection::threadID"
+
+.PP
+Definition at line 95 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

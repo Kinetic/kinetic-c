@@ -138,6 +138,11 @@
               <Anchor>a65428b0886df3645114237f15f91e461</Anchor>
              </Node>
              <Node>
+              <Name>writeMutex</Name>
+              <Path>struct___kinetic_connection.html</Path>
+              <Anchor>adc66a2d19d8365858e2c29ceb01d158a</Anchor>
+             </Node>
+             <Node>
               <Name>connectionID</Name>
               <Path>struct___kinetic_connection.html</Path>
               <Anchor>a559c2a2ceffdd95af1462d7a7e0ebc3c</Anchor>
@@ -171,6 +176,330 @@
               <Name>threadID</Name>
               <Path>struct___kinetic_connection.html</Path>
               <Anchor>a3893717dea4a3fa1c6d13ef146c325de</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo</Name>
+            <Path>struct_kinetic_device_info.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>totalLength</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a5bc85996c592ada26d4b6afe598df364</Anchor>
+             </Node>
+             <Node>
+              <Name>utilizations</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a80a9b83a8ff3725066444c4fc60e1a54</Anchor>
+             </Node>
+             <Node>
+              <Name>numUtilizations</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a98f17d4d4e1b0493a9599798a7e1021a</Anchor>
+             </Node>
+             <Node>
+              <Name>temperatures</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>af45283c54bcf1f0d430b56bfc1d8b245</Anchor>
+             </Node>
+             <Node>
+              <Name>numTemperatures</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a49d3ae4bb10659f909076fda0e6c60ce</Anchor>
+             </Node>
+             <Node>
+              <Name>capacity</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a90ca11225302d5aa989e28d3f01fba91</Anchor>
+             </Node>
+             <Node>
+              <Name>configuration</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>af447595843039264ac6b6b1535979762</Anchor>
+             </Node>
+             <Node>
+              <Name>statistics</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a7c053fbb04a49a59d14089f2b947fc3f</Anchor>
+             </Node>
+             <Node>
+              <Name>numStatistics</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a4e7e363d38b675cda44660d04307c01f</Anchor>
+             </Node>
+             <Node>
+              <Name>messages</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a602548440d390c03d01fcea784651b65</Anchor>
+             </Node>
+             <Node>
+              <Name>limits</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>ae74c6e7d673bac4b9d2d538d507804f6</Anchor>
+             </Node>
+             <Node>
+              <Name>device</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Anchor>a88a3e6f3439eda322812c61c17527885</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo_Capacity</Name>
+            <Path>struct_kinetic_device_info___capacity.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>nominalCapacityInBytes</Name>
+              <Path>struct_kinetic_device_info___capacity.html</Path>
+              <Anchor>acceee8e59aab5e140b8b03b49bdc3374</Anchor>
+             </Node>
+             <Node>
+              <Name>portionFull</Name>
+              <Path>struct_kinetic_device_info___capacity.html</Path>
+              <Anchor>ac6965e88e9286697719f230649a09706</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo_Configuration</Name>
+            <Path>struct_kinetic_device_info___configuration.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>vendor</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>af7de3bc7733c54c7ba967649f4919e6c</Anchor>
+             </Node>
+             <Node>
+              <Name>model</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a46e697f399233077844eb3896f138f56</Anchor>
+             </Node>
+             <Node>
+              <Name>serialNumber</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a4853b215f44647003b24a636650c9337</Anchor>
+             </Node>
+             <Node>
+              <Name>worldWideName</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a1c248378c9d9113a8ae698b01084b2c4</Anchor>
+             </Node>
+             <Node>
+              <Name>version</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a2268d0aa3aee6faa2fe789ea3a319251</Anchor>
+             </Node>
+             <Node>
+              <Name>compilationDate</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a71f53ad3973b153f7eab8a984b1d847f</Anchor>
+             </Node>
+             <Node>
+              <Name>sourceHash</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a1cdf2cdb0eba996a3880d8bc408bab50</Anchor>
+             </Node>
+             <Node>
+              <Name>protocolVersion</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a3a96719b8c04a7a9cf99636d9fefbf96</Anchor>
+             </Node>
+             <Node>
+              <Name>protocolCompilationDate</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a8675e4c1e069e8db7aa94ee91093d1b7</Anchor>
+             </Node>
+             <Node>
+              <Name>protocolSourceHash</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a400c8d7199dc2f911a92bc23cc436ab6</Anchor>
+             </Node>
+             <Node>
+              <Name>interfaces</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a50db2891ab38d90744dc726d9711c619</Anchor>
+             </Node>
+             <Node>
+              <Name>numInterfaces</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a63e01aec4f3c912fd5cb1705f3fa3a67</Anchor>
+             </Node>
+             <Node>
+              <Name>port</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>aaaa46b5727d68bca0d4971273eb52d49</Anchor>
+             </Node>
+             <Node>
+              <Name>tlsPort</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Anchor>a43b4e67dc300fbb6d96b373b7bcc1949</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo_Device</Name>
+            <Path>struct_kinetic_device_info___device.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>name</Name>
+              <Path>struct_kinetic_device_info___device.html</Path>
+              <Anchor>a420bba1419a3cd0335d21ad3674a053d</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo_Interface</Name>
+            <Path>struct_kinetic_device_info___interface.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>name</Name>
+              <Path>struct_kinetic_device_info___interface.html</Path>
+              <Anchor>ad69dfd81cab6c30f619e8a1509ae1e4c</Anchor>
+             </Node>
+             <Node>
+              <Name>MAC</Name>
+              <Path>struct_kinetic_device_info___interface.html</Path>
+              <Anchor>acc43b66caf8c884a7dfb1d991740c48b</Anchor>
+             </Node>
+             <Node>
+              <Name>ipv4Address</Name>
+              <Path>struct_kinetic_device_info___interface.html</Path>
+              <Anchor>afd572ace38ab0d7e45820e1be4453e48</Anchor>
+             </Node>
+             <Node>
+              <Name>ipv6Address</Name>
+              <Path>struct_kinetic_device_info___interface.html</Path>
+              <Anchor>a42dcbfb4526200ec90f82ff629a0b6bd</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo_Limits</Name>
+            <Path>struct_kinetic_device_info___limits.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>maxKeySize</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>a19bdabaa34e4e725034ef8964f4e7ab2</Anchor>
+             </Node>
+             <Node>
+              <Name>maxValueSize</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>a94744cef585e4b30f9142162ba2edaa2</Anchor>
+             </Node>
+             <Node>
+              <Name>maxVersionSize</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>adb6fb1b86676faae40d48decb434d319</Anchor>
+             </Node>
+             <Node>
+              <Name>maxTagSize</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>acea516b78a19bb5c8ad3ca95ae2dcc20</Anchor>
+             </Node>
+             <Node>
+              <Name>maxConnections</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>abeda60208d450388a9500c60bd03d365</Anchor>
+             </Node>
+             <Node>
+              <Name>maxOutstandingReadRequests</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>a6cc16bb57933e86f169a3fa4b264724c</Anchor>
+             </Node>
+             <Node>
+              <Name>maxOutstandingWriteRequests</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>aa6b4df48081d81cc781ca81f9a0fef66</Anchor>
+             </Node>
+             <Node>
+              <Name>maxMessageSize</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>a98ed863aa7028970402e69f8bc4f6651</Anchor>
+             </Node>
+             <Node>
+              <Name>maxKeyRangeCount</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>a18c7a0a8dc7cd509e2ee5c4c6c43b566</Anchor>
+             </Node>
+             <Node>
+              <Name>maxIdentityCount</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>a780b0f45f01ebb64d182187c20345a9f</Anchor>
+             </Node>
+             <Node>
+              <Name>maxPinSize</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Anchor>a7d7569c18b0efb18f7d1b53f4efe76f5</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo_Statistics</Name>
+            <Path>struct_kinetic_device_info___statistics.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>messageType</Name>
+              <Path>struct_kinetic_device_info___statistics.html</Path>
+              <Anchor>a186ed9a223ef6b593cd5775ede005931</Anchor>
+             </Node>
+             <Node>
+              <Name>count</Name>
+              <Path>struct_kinetic_device_info___statistics.html</Path>
+              <Anchor>a7a6447733f3e66999d25c1df1b73a3aa</Anchor>
+             </Node>
+             <Node>
+              <Name>bytes</Name>
+              <Path>struct_kinetic_device_info___statistics.html</Path>
+              <Anchor>ae954815d2deba3af692bed1bc920dbfc</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo_Temperature</Name>
+            <Path>struct_kinetic_device_info___temperature.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>name</Name>
+              <Path>struct_kinetic_device_info___temperature.html</Path>
+              <Anchor>a52480103d9d785018f1e53113d2f8b86</Anchor>
+             </Node>
+             <Node>
+              <Name>current</Name>
+              <Path>struct_kinetic_device_info___temperature.html</Path>
+              <Anchor>a8ee3cf22bf84d55d1374343f3128f8e8</Anchor>
+             </Node>
+             <Node>
+              <Name>minimum</Name>
+              <Path>struct_kinetic_device_info___temperature.html</Path>
+              <Anchor>ac76d4ea07a01fa63df446150db80a2b7</Anchor>
+             </Node>
+             <Node>
+              <Name>maximum</Name>
+              <Path>struct_kinetic_device_info___temperature.html</Path>
+              <Anchor>ab13b602b42ce38aa3ed32968b5672400</Anchor>
+             </Node>
+             <Node>
+              <Name>target</Name>
+              <Path>struct_kinetic_device_info___temperature.html</Path>
+              <Anchor>a86481d52dc935d778141e9b94e07c1e6</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>KineticDeviceInfo_Utilization</Name>
+            <Path>struct_kinetic_device_info___utilization.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>name</Name>
+              <Path>struct_kinetic_device_info___utilization.html</Path>
+              <Anchor>a98c35e8e425cf1c7f19ab098f59db619</Anchor>
+             </Node>
+             <Node>
+              <Name>value</Name>
+              <Path>struct_kinetic_device_info___utilization.html</Path>
+              <Anchor>a4f2a30730672fee7af69b2f13d8c84b3</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -398,6 +727,16 @@
               <Path>struct_kinetic_message.html</Path>
               <Anchor>a8cffeff6f4b6660b6f3e0e9f502a7fcd</Anchor>
              </Node>
+             <Node>
+              <Name>getLog</Name>
+              <Path>struct_kinetic_message.html</Path>
+              <Anchor>a351d4c07b916dde6048890acf90e31c3</Anchor>
+             </Node>
+             <Node>
+              <Name>getLogType</Name>
+              <Path>struct_kinetic_message.html</Path>
+              <Anchor>aa4867e12d41b7ec1e8e29b9d1692be17</Anchor>
+             </Node>
             </Subnodes>
            </Node>
            <Node>
@@ -420,6 +759,16 @@
               <Anchor>a9474f1811fbed7a7ac32e0f11f154d3c</Anchor>
              </Node>
              <Node>
+              <Name>timeoutTimeMutex</Name>
+              <Path>struct___kinetic_operation.html</Path>
+              <Anchor>a7fe2a843ed679523c30a0157d62b912c</Anchor>
+             </Node>
+             <Node>
+              <Name>timeoutTime</Name>
+              <Path>struct___kinetic_operation.html</Path>
+              <Anchor>a091d149b7abe0b77605f7d8d55ca2d12</Anchor>
+             </Node>
+             <Node>
               <Name>valueEnabled</Name>
               <Path>struct___kinetic_operation.html</Path>
               <Anchor>a0573280c6741d56bd6f091058a99c1ce</Anchor>
@@ -430,11 +779,6 @@
               <Anchor>a4ceadb1f36b4b9852ab8e65f8cc21729</Anchor>
              </Node>
              <Node>
-              <Name>receiveComplete</Name>
-              <Path>struct___kinetic_operation.html</Path>
-              <Anchor>aeb8f296b3fc8be54d1bab4d5ac5c44a5</Anchor>
-             </Node>
-             <Node>
               <Name>entry</Name>
               <Path>struct___kinetic_operation.html</Path>
               <Anchor>a96efb9145bc9d56b2b5a6118bf433d0d</Anchor>
@@ -443,6 +787,11 @@
               <Name>buffers</Name>
               <Path>struct___kinetic_operation.html</Path>
               <Anchor>a0524c2ab9e5490d2d0a47369b69ae2f6</Anchor>
+             </Node>
+             <Node>
+              <Name>deviceInfo</Name>
+              <Path>struct___kinetic_operation.html</Path>
+              <Anchor>a18989ae27379642dee51604bd075431a</Anchor>
              </Node>
              <Node>
               <Name>callback</Name>
@@ -1879,6 +2228,27 @@
             </Subnodes>
            </Node>
            <Node>
+            <Name>KineticSerialAllocator</Name>
+            <Path>struct_kinetic_serial_allocator.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>buffer</Name>
+              <Path>struct_kinetic_serial_allocator.html</Path>
+              <Anchor>a9db8f55118e26ad2bc2aff148bc6b9db</Anchor>
+             </Node>
+             <Node>
+              <Name>used</Name>
+              <Path>struct_kinetic_serial_allocator.html</Path>
+              <Anchor>a12b3207f947f91187b1f0e4dbb9562d7</Anchor>
+             </Node>
+             <Node>
+              <Name>total</Name>
+              <Path>struct_kinetic_serial_allocator.html</Path>
+              <Anchor>ab45e2320da51e4ee77378b0354f94202</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
             <Name>KineticSession</Name>
             <Path>struct_kinetic_session.html</Path>
             <Subnodes>
@@ -2534,6 +2904,11 @@
               <Path>kinetic__client_8c.html</Path>
               <Anchor>aa45452dad04a72b7e51ceed31321bc00</Anchor>
              </Node>
+             <Node>
+              <Name>KineticClient_GetLog</Name>
+              <Path>kinetic__client_8c.html</Path>
+              <Anchor>a9526ad964e0d25da9aa51c8748cf7b47</Anchor>
+             </Node>
             </Subnodes>
            </Node>
            <Node>
@@ -2585,17 +2960,17 @@
               <Path>kinetic__client_8h.html</Path>
               <Anchor>aa45452dad04a72b7e51ceed31321bc00</Anchor>
              </Node>
+             <Node>
+              <Name>KineticClient_GetLog</Name>
+              <Path>kinetic__client_8h.html</Path>
+              <Anchor>a9526ad964e0d25da9aa51c8748cf7b47</Anchor>
+             </Node>
             </Subnodes>
            </Node>
            <Node>
             <Name>kinetic_connection.c</Name>
             <Path>kinetic__connection_8c.html</Path>
             <Subnodes>
-             <Node>
-              <Name>KineticConnection_Pause</Name>
-              <Path>kinetic__connection_8c.html</Path>
-              <Anchor>ad4fbf45e5186d78b190d7e3a73a646c2</Anchor>
-             </Node>
              <Node>
               <Name>KineticConnection_NewConnection</Name>
               <Path>kinetic__connection_8c.html</Path>
@@ -2653,11 +3028,6 @@
               <Anchor>aa4f86528211aa385ab97097f02a91292</Anchor>
              </Node>
              <Node>
-              <Name>KineticConnection_Pause</Name>
-              <Path>kinetic__connection_8h.html</Path>
-              <Anchor>ad4fbf45e5186d78b190d7e3a73a646c2</Anchor>
-             </Node>
-             <Node>
               <Name>KineticConnection_Disconnect</Name>
               <Path>kinetic__connection_8h.html</Path>
               <Anchor>a1db4c9dc98b070a29847463728915e25</Anchor>
@@ -2666,6 +3036,105 @@
               <Name>KineticConnection_IncrementSequence</Name>
               <Path>kinetic__connection_8h.html</Path>
               <Anchor>ab3cd8fa23a61ea1c982a50e13d6dac5d</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>kinetic_controller.c</Name>
+            <Path>kinetic__controller_8c.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>KineticController_CreateWorkerThreads</Name>
+              <Path>kinetic__controller_8c.html</Path>
+              <Anchor>a93df5b6cabb255fca90d347cdbad46eb</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticController_CreateOperation</Name>
+              <Path>kinetic__controller_8c.html</Path>
+              <Anchor>a36c4acc3923b06bb2fd6a4566bc6cd89</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticController_ExecuteOperation</Name>
+              <Path>kinetic__controller_8c.html</Path>
+              <Anchor>ac9a4252a775e193885639be40bd3d2a0</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticController_Pause</Name>
+              <Path>kinetic__controller_8c.html</Path>
+              <Anchor>a0bba3769ca4d689de43b6ba684530c47</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticController_ReceiveThread</Name>
+              <Path>kinetic__controller_8c.html</Path>
+              <Anchor>a40cdec3b98767b923793edff1bc1f1c5</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>kinetic_controller.h</Name>
+            <Path>kinetic__controller_8h.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>KineticController_CreateWorkerThreads</Name>
+              <Path>kinetic__controller_8h.html</Path>
+              <Anchor>a93df5b6cabb255fca90d347cdbad46eb</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticController_CreateOperation</Name>
+              <Path>kinetic__controller_8h.html</Path>
+              <Anchor>a36c4acc3923b06bb2fd6a4566bc6cd89</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticController_ExecuteOperation</Name>
+              <Path>kinetic__controller_8h.html</Path>
+              <Anchor>a317e37adb34e380e2266c764b0becf36</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticController_Pause</Name>
+              <Path>kinetic__controller_8h.html</Path>
+              <Anchor>a0bba3769ca4d689de43b6ba684530c47</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticController_ReceiveThread</Name>
+              <Path>kinetic__controller_8h.html</Path>
+              <Anchor>a40cdec3b98767b923793edff1bc1f1c5</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>kinetic_device_info.c</Name>
+            <Path>kinetic__device__info_8c.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>COPY_VALUE_OPTIONAL</Name>
+              <Path>kinetic__device__info_8c.html</Path>
+              <Anchor>acde0f6af9a9b2e350c9b3a51b46e8eda</Anchor>
+             </Node>
+             <Node>
+              <Name>COPY_CSTRING</Name>
+              <Path>kinetic__device__info_8c.html</Path>
+              <Anchor>ad39c068eecc58c6cbee8184819e87f2e</Anchor>
+             </Node>
+             <Node>
+              <Name>COPY_BYTES_OPTIONAL</Name>
+              <Path>kinetic__device__info_8c.html</Path>
+              <Anchor>a29635d2652beba37e5f990feac50efd6</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Create</Name>
+              <Path>kinetic__device__info_8c.html</Path>
+              <Anchor>a5f061838bd7c675301f9a7e9bbee8758</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>kinetic_device_info.h</Name>
+            <Path>kinetic__device__info_8h.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>KineticDeviceInfo_Create</Name>
+              <Path>kinetic__device__info_8h.html</Path>
+              <Anchor>a5f061838bd7c675301f9a7e9bbee8758</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -2838,9 +3307,14 @@
               <Anchor>ac3d221b143080cbf9b6abe41272c07b0</Anchor>
              </Node>
              <Node>
-              <Name>BYTES_TO_CSTRING</Name>
+              <Name>LOG_PROTO_LEVEL_START_ARRAY</Name>
               <Path>kinetic__logger_8c.html</Path>
-              <Anchor>a1f53a109345e468584a1fd3510ed7a20</Anchor>
+              <Anchor>af91f573a8304bdef3cc1b01739c92095</Anchor>
+             </Node>
+             <Node>
+              <Name>LOG_PROTO_LEVEL_END_ARRAY</Name>
+              <Path>kinetic__logger_8c.html</Path>
+              <Anchor>a0451e133e0d5b557b7af956003efdb11</Anchor>
              </Node>
              <Node>
               <Name>KineticLogger_Init</Name>
@@ -2871,6 +3345,11 @@
               <Name>KineticLogger_LogHeader</Name>
               <Path>kinetic__logger_8c.html</Path>
               <Anchor>a209382d99015a79632efa289738f6dec</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticLogger_ByteArraySliceToCString</Name>
+              <Path>kinetic__logger_8c.html</Path>
+              <Anchor>a7f04a2ee23e533260754ce515744063f</Anchor>
              </Node>
              <Node>
               <Name>KineticLogger_LogProtobuf</Name>
@@ -2912,6 +3391,11 @@
               <Name>KINETIC_LOG_FILE</Name>
               <Path>kinetic__logger_8h.html</Path>
               <Anchor>ae9edfec85940b30f258236a221b51057</Anchor>
+             </Node>
+             <Node>
+              <Name>BYTES_TO_CSTRING</Name>
+              <Path>kinetic__logger_8h.html</Path>
+              <Anchor>a1f53a109345e468584a1fd3510ed7a20</Anchor>
              </Node>
              <Node>
               <Name>LOG0</Name>
@@ -3007,6 +3491,11 @@
               <Name>KineticLogger_LogByteBuffer</Name>
               <Path>kinetic__logger_8h.html</Path>
               <Anchor>a6b725885ac7e8249ee9da46955c03e5e</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticLogger_ByteArraySliceToCString</Name>
+              <Path>kinetic__logger_8h.html</Path>
+              <Anchor>a7f04a2ee23e533260754ce515744063f</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -3124,14 +3613,19 @@
               <Anchor>adbf3eeef54dcdb65dfaf75f2e0312cd0</Anchor>
              </Node>
              <Node>
+              <Name>KineticOperation_GetTimeoutTime</Name>
+              <Path>kinetic__operation_8c.html</Path>
+              <Anchor>a790389f0f654a43da93c8af714e2f281</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_SetTimeoutTime</Name>
+              <Path>kinetic__operation_8c.html</Path>
+              <Anchor>a2cd218545f9b11b8ffe04efea3b9ab27</Anchor>
+             </Node>
+             <Node>
               <Name>KineticOperation_AssociateResponseWithOperation</Name>
               <Path>kinetic__operation_8c.html</Path>
               <Anchor>a89e0c50021d088a66e7dd43b5bffdfb6</Anchor>
-             </Node>
-             <Node>
-              <Name>KineticOperation_ReceiveAsync</Name>
-              <Path>kinetic__operation_8c.html</Path>
-              <Anchor>ae05744703ff1aff004cbe2b9546fe463</Anchor>
              </Node>
              <Node>
               <Name>KineticOperation_NoopCallback</Name>
@@ -3183,6 +3677,26 @@
               <Path>kinetic__operation_8c.html</Path>
               <Anchor>ac88b3aa9c05e27f0ede2b4c2465e158b</Anchor>
              </Node>
+             <Node>
+              <Name>KineticOperation_GetLogCallback</Name>
+              <Path>kinetic__operation_8c.html</Path>
+              <Anchor>af1a71707ced7ffe124589efa7dd4e8ab</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_BuildGetLog</Name>
+              <Path>kinetic__operation_8c.html</Path>
+              <Anchor>a8ef4faa6a804f6f69cb9d4cbe040a810</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_Complete</Name>
+              <Path>kinetic__operation_8c.html</Path>
+              <Anchor>a8ed174b20d25b186335a498efc3d763e</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_TimeoutOperations</Name>
+              <Path>kinetic__operation_8c.html</Path>
+              <Anchor>a7b6d1724eb75b7c589664fb51865cfb4</Anchor>
+             </Node>
             </Subnodes>
            </Node>
            <Node>
@@ -3195,14 +3709,19 @@
               <Anchor>a267d9481a259bcc26147d166a3fc515a</Anchor>
              </Node>
              <Node>
-              <Name>KineticOperation_ReceiveAsync</Name>
-              <Path>kinetic__operation_8h.html</Path>
-              <Anchor>ae05744703ff1aff004cbe2b9546fe463</Anchor>
-             </Node>
-             <Node>
               <Name>KineticOperation_AssociateResponseWithOperation</Name>
               <Path>kinetic__operation_8h.html</Path>
               <Anchor>a89e0c50021d088a66e7dd43b5bffdfb6</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_GetTimeoutTime</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a790389f0f654a43da93c8af714e2f281</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_SetTimeoutTime</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a2cd218545f9b11b8ffe04efea3b9ab27</Anchor>
              </Node>
              <Node>
               <Name>KineticOperation_GetStatus</Name>
@@ -3210,9 +3729,19 @@
               <Anchor>adbf3eeef54dcdb65dfaf75f2e0312cd0</Anchor>
              </Node>
              <Node>
+              <Name>KineticOperation_NoopCallback</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a70633c4e94361df29bf1c32751e476e6</Anchor>
+             </Node>
+             <Node>
               <Name>KineticOperation_BuildNoop</Name>
               <Path>kinetic__operation_8h.html</Path>
               <Anchor>a25c0d192edf098893390eb9236bb9888</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_PutCallback</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a268cce69e9c5685227a24d8a7cb41892</Anchor>
              </Node>
              <Node>
               <Name>KineticOperation_BuildPut</Name>
@@ -3220,9 +3749,19 @@
               <Anchor>a60c586cb8811f4820ec41d421a44797d</Anchor>
              </Node>
              <Node>
+              <Name>KineticOperation_GetCallback</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a275cd19f10ca3d62735ec7376b580273</Anchor>
+             </Node>
+             <Node>
               <Name>KineticOperation_BuildGet</Name>
               <Path>kinetic__operation_8h.html</Path>
               <Anchor>ac9154d34805acb4d50877f8b6ae18595</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_DeleteCallback</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a8b2eca1a6f5bf17513598710b08c9888</Anchor>
              </Node>
              <Node>
               <Name>KineticOperation_BuildDelete</Name>
@@ -3230,9 +3769,34 @@
               <Anchor>a5b9d3d9bf8bce1ff0d6ba269994a2a0b</Anchor>
              </Node>
              <Node>
+              <Name>KineticOperation_GetKeyRangeCallback</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a3a728d31f3840fdc4ee444456bc1ad19</Anchor>
+             </Node>
+             <Node>
               <Name>KineticOperation_BuildGetKeyRange</Name>
               <Path>kinetic__operation_8h.html</Path>
               <Anchor>ac88b3aa9c05e27f0ede2b4c2465e158b</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_GetLogCallback</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>af1a71707ced7ffe124589efa7dd4e8ab</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_BuildGetLog</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a8ef4faa6a804f6f69cb9d4cbe040a810</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_Complete</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a8ed174b20d25b186335a498efc3d763e</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticOperation_TimeoutOperations</Name>
+              <Path>kinetic__operation_8h.html</Path>
+              <Anchor>a7b6d1724eb75b7c589664fb51865cfb4</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -6453,6 +7017,58 @@
             </Subnodes>
            </Node>
            <Node>
+            <Name>kinetic_serial_allocator.c</Name>
+            <Path>kinetic__serial__allocator_8c.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>KineticSerialAllocator_Create</Name>
+              <Path>kinetic__serial__allocator_8c.html</Path>
+              <Anchor>af594292bcd05e13afbef238d31fea362</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticSerialAllocator_GetBuffer</Name>
+              <Path>kinetic__serial__allocator_8c.html</Path>
+              <Anchor>a652f3b6d0902396612a636381ae435b3</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticSerialAllocator_AllocateChunk</Name>
+              <Path>kinetic__serial__allocator_8c.html</Path>
+              <Anchor>a5461e7660ca76f2e4df9895d2dc0ed0f</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticSerialAllocator_TrimBuffer</Name>
+              <Path>kinetic__serial__allocator_8c.html</Path>
+              <Anchor>a305ba9f4b1446e84cefc09abb6391b32</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>kinetic_serial_allocator.h</Name>
+            <Path>kinetic__serial__allocator_8h.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>KineticSerialAllocator_Create</Name>
+              <Path>kinetic__serial__allocator_8h.html</Path>
+              <Anchor>af594292bcd05e13afbef238d31fea362</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticSerialAllocator_GetBuffer</Name>
+              <Path>kinetic__serial__allocator_8h.html</Path>
+              <Anchor>a652f3b6d0902396612a636381ae435b3</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticSerialAllocator_AllocateChunk</Name>
+              <Path>kinetic__serial__allocator_8h.html</Path>
+              <Anchor>a5461e7660ca76f2e4df9895d2dc0ed0f</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticSerialAllocator_TrimBuffer</Name>
+              <Path>kinetic__serial__allocator_8h.html</Path>
+              <Anchor>a305ba9f4b1446e84cefc09abb6391b32</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
             <Name>kinetic_socket.c</Name>
             <Path>kinetic__socket_8c.html</Path>
             <Subnodes>
@@ -6579,6 +7195,16 @@
               <Name>Kinetic_GetStatusDescription</Name>
               <Path>kinetic__types_8c.html</Path>
               <Anchor>a82c4aac2c0a454092185b10d8809f1bc</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticMessageType_GetName</Name>
+              <Path>kinetic__types_8c.html</Path>
+              <Anchor>a38e38f8880dedd6a7ba66c374f34b264</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticMessageTypeNames</Name>
+              <Path>kinetic__types_8c.html</Path>
+              <Anchor>a15947f01729fd71d277a7ac1216c50e9</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -6757,6 +7383,330 @@
               </Subnodes>
              </Node>
              <Node>
+              <Name>KineticDeviceInfo_Utilization</Name>
+              <Path>struct_kinetic_device_info___utilization.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>name</Name>
+                <Path>struct_kinetic_device_info___utilization.html</Path>
+                <Anchor>a98c35e8e425cf1c7f19ab098f59db619</Anchor>
+               </Node>
+               <Node>
+                <Name>value</Name>
+                <Path>struct_kinetic_device_info___utilization.html</Path>
+                <Anchor>a4f2a30730672fee7af69b2f13d8c84b3</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Temperature</Name>
+              <Path>struct_kinetic_device_info___temperature.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>name</Name>
+                <Path>struct_kinetic_device_info___temperature.html</Path>
+                <Anchor>a52480103d9d785018f1e53113d2f8b86</Anchor>
+               </Node>
+               <Node>
+                <Name>current</Name>
+                <Path>struct_kinetic_device_info___temperature.html</Path>
+                <Anchor>a8ee3cf22bf84d55d1374343f3128f8e8</Anchor>
+               </Node>
+               <Node>
+                <Name>minimum</Name>
+                <Path>struct_kinetic_device_info___temperature.html</Path>
+                <Anchor>ac76d4ea07a01fa63df446150db80a2b7</Anchor>
+               </Node>
+               <Node>
+                <Name>maximum</Name>
+                <Path>struct_kinetic_device_info___temperature.html</Path>
+                <Anchor>ab13b602b42ce38aa3ed32968b5672400</Anchor>
+               </Node>
+               <Node>
+                <Name>target</Name>
+                <Path>struct_kinetic_device_info___temperature.html</Path>
+                <Anchor>a86481d52dc935d778141e9b94e07c1e6</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Capacity</Name>
+              <Path>struct_kinetic_device_info___capacity.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>nominalCapacityInBytes</Name>
+                <Path>struct_kinetic_device_info___capacity.html</Path>
+                <Anchor>acceee8e59aab5e140b8b03b49bdc3374</Anchor>
+               </Node>
+               <Node>
+                <Name>portionFull</Name>
+                <Path>struct_kinetic_device_info___capacity.html</Path>
+                <Anchor>ac6965e88e9286697719f230649a09706</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Interface</Name>
+              <Path>struct_kinetic_device_info___interface.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>name</Name>
+                <Path>struct_kinetic_device_info___interface.html</Path>
+                <Anchor>ad69dfd81cab6c30f619e8a1509ae1e4c</Anchor>
+               </Node>
+               <Node>
+                <Name>MAC</Name>
+                <Path>struct_kinetic_device_info___interface.html</Path>
+                <Anchor>acc43b66caf8c884a7dfb1d991740c48b</Anchor>
+               </Node>
+               <Node>
+                <Name>ipv4Address</Name>
+                <Path>struct_kinetic_device_info___interface.html</Path>
+                <Anchor>afd572ace38ab0d7e45820e1be4453e48</Anchor>
+               </Node>
+               <Node>
+                <Name>ipv6Address</Name>
+                <Path>struct_kinetic_device_info___interface.html</Path>
+                <Anchor>a42dcbfb4526200ec90f82ff629a0b6bd</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Configuration</Name>
+              <Path>struct_kinetic_device_info___configuration.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>vendor</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>af7de3bc7733c54c7ba967649f4919e6c</Anchor>
+               </Node>
+               <Node>
+                <Name>model</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a46e697f399233077844eb3896f138f56</Anchor>
+               </Node>
+               <Node>
+                <Name>serialNumber</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a4853b215f44647003b24a636650c9337</Anchor>
+               </Node>
+               <Node>
+                <Name>worldWideName</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a1c248378c9d9113a8ae698b01084b2c4</Anchor>
+               </Node>
+               <Node>
+                <Name>version</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a2268d0aa3aee6faa2fe789ea3a319251</Anchor>
+               </Node>
+               <Node>
+                <Name>compilationDate</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a71f53ad3973b153f7eab8a984b1d847f</Anchor>
+               </Node>
+               <Node>
+                <Name>sourceHash</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a1cdf2cdb0eba996a3880d8bc408bab50</Anchor>
+               </Node>
+               <Node>
+                <Name>protocolVersion</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a3a96719b8c04a7a9cf99636d9fefbf96</Anchor>
+               </Node>
+               <Node>
+                <Name>protocolCompilationDate</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a8675e4c1e069e8db7aa94ee91093d1b7</Anchor>
+               </Node>
+               <Node>
+                <Name>protocolSourceHash</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a400c8d7199dc2f911a92bc23cc436ab6</Anchor>
+               </Node>
+               <Node>
+                <Name>interfaces</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a50db2891ab38d90744dc726d9711c619</Anchor>
+               </Node>
+               <Node>
+                <Name>numInterfaces</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a63e01aec4f3c912fd5cb1705f3fa3a67</Anchor>
+               </Node>
+               <Node>
+                <Name>port</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>aaaa46b5727d68bca0d4971273eb52d49</Anchor>
+               </Node>
+               <Node>
+                <Name>tlsPort</Name>
+                <Path>struct_kinetic_device_info___configuration.html</Path>
+                <Anchor>a43b4e67dc300fbb6d96b373b7bcc1949</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Statistics</Name>
+              <Path>struct_kinetic_device_info___statistics.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>messageType</Name>
+                <Path>struct_kinetic_device_info___statistics.html</Path>
+                <Anchor>a186ed9a223ef6b593cd5775ede005931</Anchor>
+               </Node>
+               <Node>
+                <Name>count</Name>
+                <Path>struct_kinetic_device_info___statistics.html</Path>
+                <Anchor>a7a6447733f3e66999d25c1df1b73a3aa</Anchor>
+               </Node>
+               <Node>
+                <Name>bytes</Name>
+                <Path>struct_kinetic_device_info___statistics.html</Path>
+                <Anchor>ae954815d2deba3af692bed1bc920dbfc</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Limits</Name>
+              <Path>struct_kinetic_device_info___limits.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>maxKeySize</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>a19bdabaa34e4e725034ef8964f4e7ab2</Anchor>
+               </Node>
+               <Node>
+                <Name>maxValueSize</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>a94744cef585e4b30f9142162ba2edaa2</Anchor>
+               </Node>
+               <Node>
+                <Name>maxVersionSize</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>adb6fb1b86676faae40d48decb434d319</Anchor>
+               </Node>
+               <Node>
+                <Name>maxTagSize</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>acea516b78a19bb5c8ad3ca95ae2dcc20</Anchor>
+               </Node>
+               <Node>
+                <Name>maxConnections</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>abeda60208d450388a9500c60bd03d365</Anchor>
+               </Node>
+               <Node>
+                <Name>maxOutstandingReadRequests</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>a6cc16bb57933e86f169a3fa4b264724c</Anchor>
+               </Node>
+               <Node>
+                <Name>maxOutstandingWriteRequests</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>aa6b4df48081d81cc781ca81f9a0fef66</Anchor>
+               </Node>
+               <Node>
+                <Name>maxMessageSize</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>a98ed863aa7028970402e69f8bc4f6651</Anchor>
+               </Node>
+               <Node>
+                <Name>maxKeyRangeCount</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>a18c7a0a8dc7cd509e2ee5c4c6c43b566</Anchor>
+               </Node>
+               <Node>
+                <Name>maxIdentityCount</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>a780b0f45f01ebb64d182187c20345a9f</Anchor>
+               </Node>
+               <Node>
+                <Name>maxPinSize</Name>
+                <Path>struct_kinetic_device_info___limits.html</Path>
+                <Anchor>a7d7569c18b0efb18f7d1b53f4efe76f5</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Device</Name>
+              <Path>struct_kinetic_device_info___device.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>name</Name>
+                <Path>struct_kinetic_device_info___device.html</Path>
+                <Anchor>a420bba1419a3cd0335d21ad3674a053d</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo</Name>
+              <Path>struct_kinetic_device_info.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>totalLength</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a5bc85996c592ada26d4b6afe598df364</Anchor>
+               </Node>
+               <Node>
+                <Name>utilizations</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a80a9b83a8ff3725066444c4fc60e1a54</Anchor>
+               </Node>
+               <Node>
+                <Name>numUtilizations</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a98f17d4d4e1b0493a9599798a7e1021a</Anchor>
+               </Node>
+               <Node>
+                <Name>temperatures</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>af45283c54bcf1f0d430b56bfc1d8b245</Anchor>
+               </Node>
+               <Node>
+                <Name>numTemperatures</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a49d3ae4bb10659f909076fda0e6c60ce</Anchor>
+               </Node>
+               <Node>
+                <Name>capacity</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a90ca11225302d5aa989e28d3f01fba91</Anchor>
+               </Node>
+               <Node>
+                <Name>configuration</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>af447595843039264ac6b6b1535979762</Anchor>
+               </Node>
+               <Node>
+                <Name>statistics</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a7c053fbb04a49a59d14089f2b947fc3f</Anchor>
+               </Node>
+               <Node>
+                <Name>numStatistics</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a4e7e363d38b675cda44660d04307c01f</Anchor>
+               </Node>
+               <Node>
+                <Name>messages</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a602548440d390c03d01fcea784651b65</Anchor>
+               </Node>
+               <Node>
+                <Name>limits</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>ae74c6e7d673bac4b9d2d538d507804f6</Anchor>
+               </Node>
+               <Node>
+                <Name>device</Name>
+                <Path>struct_kinetic_device_info.html</Path>
+                <Anchor>a88a3e6f3439eda322812c61c17527885</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
               <Name>KINETIC_HANDLE_INVALID</Name>
               <Path>kinetic__types_8h.html</Path>
               <Anchor>a2519b60015d5c8d2c1d68d173a0469f1</Anchor>
@@ -6825,6 +7775,11 @@
               <Name>KINETIC_SESSION_INIT</Name>
               <Path>kinetic__types_8h.html</Path>
               <Anchor>a2f0f476362d01ca4c7899cf1325c72e6</Anchor>
+             </Node>
+             <Node>
+              <Name>KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN</Name>
+              <Path>kinetic__types_8h.html</Path>
+              <Anchor>a19eed82e573d877a85b41792b553b1df</Anchor>
              </Node>
              <Node>
               <Name>KineticSessionHandle</Name>
@@ -6971,6 +7926,11 @@
                 <Anchor>a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285</Anchor>
                </Node>
                <Node>
+                <Name>KINETIC_STATUS_OPERATION_TIMEDOUT</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a455d29140e6816c61eba35e8f52b0d57aec174c53ca475d4bada51ef8b6aae27f</Anchor>
+               </Node>
+               <Node>
                 <Name>KINETIC_STATUS_CLUSTER_MISMATCH</Name>
                 <Path>kinetic__types_8h.html</Path>
                 <Anchor>a455d29140e6816c61eba35e8f52b0d57ac6363230f4f02e8f3881736bda428407</Anchor>
@@ -7018,9 +7978,233 @@
               </Subnodes>
              </Node>
              <Node>
+              <Name>KineticDeviceInfo_Type</Name>
+              <Path>kinetic__types_8h.html</Path>
+              <Anchor>a0659f218c5ddd6a07d0e17e99f6e507d</Anchor>
+              <Subnodes>
+               <Node>
+                <Name>KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a0659f218c5ddd6a07d0e17e99f6e507dad300215af8d48b27e86095e9313dc30d</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_DEVICE_INFO_TYPE_TEMPERATURES</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a0659f218c5ddd6a07d0e17e99f6e507da37ad8e6c62a3ae6342abd75380fb8ffe</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_DEVICE_INFO_TYPE_CAPACITIES</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a0659f218c5ddd6a07d0e17e99f6e507dab9c895727dddd61bb20dddef9459232a</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_DEVICE_INFO_TYPE_CONFIGURATION</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a0659f218c5ddd6a07d0e17e99f6e507dac96617eafa01dff755e48f2db4bf7286</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_DEVICE_INFO_TYPE_STATISTICS</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a0659f218c5ddd6a07d0e17e99f6e507da2b3afb56f7859e4197ec21db11a086ca</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_DEVICE_INFO_TYPE_MESSAGES</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a0659f218c5ddd6a07d0e17e99f6e507da84ae3ba7d0b51f92085dc2ab07beed0b</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_DEVICE_INFO_TYPE_LIMITS</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a0659f218c5ddd6a07d0e17e99f6e507da1a75f25b1f495a0ed63ca0616447ab63</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_DEVICE_INFO_TYPE_DEVICE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a0659f218c5ddd6a07d0e17e99f6e507da6a54576c6b15e77dcdb54100269a149a</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticMessageType</Name>
+              <Path>kinetic__types_8h.html</Path>
+              <Anchor>a00f738045cd3e7be4d876e341453c15f</Anchor>
+              <Subnodes>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_INVALID</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa14be56f724bcbb8c1da013cdf05a6c9a</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GET_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa50acc5233931b41da0638214091381f9</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GET</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa6294ace63aa5283d0106786a50f795dc</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_PUT_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa0b049c0398ab8674938d8d812f5c52ed</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_PUT</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa2994028db64c6d4d1b26925b80ab7c45</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_DELETE_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa1c6c35335c9a053f0f1e73b0fe278db7</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_DELETE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faf8bd9d9c0abfcbf11533068db3752f50</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faebf98e2922841cd913249ab74b51f39a</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETNEXT</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fac5dd99658135ca1691f2b6b88ef6f34f</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faac5a2dc338c76fb76818eb72b174f57c</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETPREVIOUS</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faf748bc303a14c4921f476fe220201397</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa6dfe4a05341f9ae65a1277c0ad6634b3</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETKEYRANGE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15facff5cf72de8f529c27159925351dcde3</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faaf86f91ce5cce325a4b250e25fd73ac3</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETVERSION</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa80b280e489c591d2a05381290377f200</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_SETUP_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faa77b3f4fe14b2886b473a406a0a0f565</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_SETUP</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa99f8ab06d2be1ee727e5b94acd95b26d</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa1913687de3f5d33ef4fa818cf619d528</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_GETLOG</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faa5875e7f9af1e1904705660908527b69</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa66e8e6eea2f28a99f03d7e9d134241fd</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_SECURITY</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa7ae7baa4956d805bfc00ee7fd218c5b4</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa3bff70fc93ff9c39cca4740160714488</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_PEER2PEERPUSH</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa5859aa715220e6d6de10c701b0f2cd6c</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_NOOP_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa7e23ef4f856c61ff301a0c934e8c8769</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_NOOP</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa2a1eacb916e62766345871ffea0bc73f</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faaf3ccd2e79d512aee93b5f061677448a</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_FLUSHALLDATA</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa90298fea7c22abdc6bbe27586a9b6ff1</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_PINOP_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15faf731f234afe403d28575876ce8d4becb</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_PINOP</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fadcb95d5d972d6dc281f05b367df11b5f</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa2573ecbb6043251e698c506f354a790e</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_MEDIASCAN</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa8ce12b8a5362de4a2fbac471f5dc2dc9</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa46bb582b24917f3414dd7277e48749cc</Anchor>
+               </Node>
+               <Node>
+                <Name>KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE</Name>
+                <Path>kinetic__types_8h.html</Path>
+                <Anchor>a00f738045cd3e7be4d876e341453c15fa96e96fd7c3d65364e3e055616465298a</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
               <Name>Kinetic_GetStatusDescription</Name>
               <Path>kinetic__types_8h.html</Path>
               <Anchor>a82c4aac2c0a454092185b10d8809f1bc</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticMessageType_GetName</Name>
+              <Path>kinetic__types_8h.html</Path>
+              <Anchor>a38e38f8880dedd6a7ba66c374f34b264</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -7077,6 +8261,36 @@
               <Name>Kinetic_GetErrnoDescription</Name>
               <Path>kinetic__types__internal_8c.html</Path>
               <Anchor>a6ed7e9a044c07404610caa9b8e452e30</Anchor>
+             </Node>
+             <Node>
+              <Name>Kinetic_TimevalZero</Name>
+              <Path>kinetic__types__internal_8c.html</Path>
+              <Anchor>a5081b34063b199edb5818ac94260a038</Anchor>
+             </Node>
+             <Node>
+              <Name>Kinetic_TimevalIsZero</Name>
+              <Path>kinetic__types__internal_8c.html</Path>
+              <Anchor>ae08016165ab72a7ad14383d5eafff708</Anchor>
+             </Node>
+             <Node>
+              <Name>Kinetic_TimevalAdd</Name>
+              <Path>kinetic__types__internal_8c.html</Path>
+              <Anchor>a2adf85c18351b5094b3f7b1784d49459</Anchor>
+             </Node>
+             <Node>
+              <Name>Kinetic_TimevalCmp</Name>
+              <Path>kinetic__types__internal_8c.html</Path>
+              <Anchor>a4a9f3c8864a793f00a125bad2b25d215</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type</Name>
+              <Path>kinetic__types__internal_8c.html</Path>
+              <Anchor>a38e45c64e90e7b5508743454fd0c0568</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticProto_Command_MessageType_to_KineticMessageType</Name>
+              <Path>kinetic__types__internal_8c.html</Path>
+              <Anchor>a67187990cf86b81a9b72b93f347d7c41</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -7170,6 +8384,11 @@
                 <Name>socket</Name>
                 <Path>struct___kinetic_connection.html</Path>
                 <Anchor>a65428b0886df3645114237f15f91e461</Anchor>
+               </Node>
+               <Node>
+                <Name>writeMutex</Name>
+                <Path>struct___kinetic_connection.html</Path>
+                <Anchor>adc66a2d19d8365858e2c29ceb01d158a</Anchor>
                </Node>
                <Node>
                 <Name>connectionID</Name>
@@ -7298,6 +8517,16 @@
                 <Path>struct_kinetic_message.html</Path>
                 <Anchor>a8cffeff6f4b6660b6f3e0e9f502a7fcd</Anchor>
                </Node>
+               <Node>
+                <Name>getLog</Name>
+                <Path>struct_kinetic_message.html</Path>
+                <Anchor>a351d4c07b916dde6048890acf90e31c3</Anchor>
+               </Node>
+               <Node>
+                <Name>getLogType</Name>
+                <Path>struct_kinetic_message.html</Path>
+                <Anchor>aa4867e12d41b7ec1e8e29b9d1692be17</Anchor>
+               </Node>
               </Subnodes>
              </Node>
              <Node>
@@ -7386,6 +8615,16 @@
                 <Anchor>a9474f1811fbed7a7ac32e0f11f154d3c</Anchor>
                </Node>
                <Node>
+                <Name>timeoutTimeMutex</Name>
+                <Path>struct___kinetic_operation.html</Path>
+                <Anchor>a7fe2a843ed679523c30a0157d62b912c</Anchor>
+               </Node>
+               <Node>
+                <Name>timeoutTime</Name>
+                <Path>struct___kinetic_operation.html</Path>
+                <Anchor>a091d149b7abe0b77605f7d8d55ca2d12</Anchor>
+               </Node>
+               <Node>
                 <Name>valueEnabled</Name>
                 <Path>struct___kinetic_operation.html</Path>
                 <Anchor>a0573280c6741d56bd6f091058a99c1ce</Anchor>
@@ -7394,11 +8633,6 @@
                 <Name>sendValue</Name>
                 <Path>struct___kinetic_operation.html</Path>
                 <Anchor>a4ceadb1f36b4b9852ab8e65f8cc21729</Anchor>
-               </Node>
-               <Node>
-                <Name>receiveComplete</Name>
-                <Path>struct___kinetic_operation.html</Path>
-                <Anchor>aeb8f296b3fc8be54d1bab4d5ac5c44a5</Anchor>
                </Node>
                <Node>
                 <Name>entry</Name>
@@ -7411,6 +8645,11 @@
                 <Anchor>a0524c2ab9e5490d2d0a47369b69ae2f6</Anchor>
                </Node>
                <Node>
+                <Name>deviceInfo</Name>
+                <Path>struct___kinetic_operation.html</Path>
+                <Anchor>a18989ae27379642dee51604bd075431a</Anchor>
+               </Node>
+               <Node>
                 <Name>callback</Name>
                 <Path>struct___kinetic_operation.html</Path>
                 <Anchor>a0e76abf58099b6ee378ecce94d723798</Anchor>
@@ -7419,6 +8658,27 @@
                 <Name>closure</Name>
                 <Path>struct___kinetic_operation.html</Path>
                 <Anchor>abf2c244091c0989d5028a13d2176a59a</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>KineticSerialAllocator</Name>
+              <Path>struct_kinetic_serial_allocator.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>buffer</Name>
+                <Path>struct_kinetic_serial_allocator.html</Path>
+                <Anchor>a9db8f55118e26ad2bc2aff148bc6b9db</Anchor>
+               </Node>
+               <Node>
+                <Name>used</Name>
+                <Path>struct_kinetic_serial_allocator.html</Path>
+                <Anchor>a12b3207f947f91187b1f0e4dbb9562d7</Anchor>
+               </Node>
+               <Node>
+                <Name>total</Name>
+                <Path>struct_kinetic_serial_allocator.html</Path>
+                <Anchor>ab45e2320da51e4ee77378b0354f94202</Anchor>
                </Node>
               </Subnodes>
              </Node>
@@ -7448,9 +8708,9 @@
               <Anchor>a64ac7fed776d11a5bd3658db69731fc8</Anchor>
              </Node>
              <Node>
-              <Name>KINETIC_PDU_RECEIVE_TIMEOUT_SECS</Name>
+              <Name>KINETIC_OPERATION_TIMEOUT_SECS</Name>
               <Path>kinetic__types__internal_8h.html</Path>
-              <Anchor>adab587d1eda383a425713ba542b284f3</Anchor>
+              <Anchor>a4a27e0de183fafdafcc87bf2169fb640</Anchor>
              </Node>
              <Node>
               <Name>__func__</Name>
@@ -7613,6 +8873,36 @@
               <Name>Kinetic_GetErrnoDescription</Name>
               <Path>kinetic__types__internal_8h.html</Path>
               <Anchor>a6ed7e9a044c07404610caa9b8e452e30</Anchor>
+             </Node>
+             <Node>
+              <Name>Kinetic_TimevalZero</Name>
+              <Path>kinetic__types__internal_8h.html</Path>
+              <Anchor>a5081b34063b199edb5818ac94260a038</Anchor>
+             </Node>
+             <Node>
+              <Name>Kinetic_TimevalIsZero</Name>
+              <Path>kinetic__types__internal_8h.html</Path>
+              <Anchor>ae08016165ab72a7ad14383d5eafff708</Anchor>
+             </Node>
+             <Node>
+              <Name>Kinetic_TimevalAdd</Name>
+              <Path>kinetic__types__internal_8h.html</Path>
+              <Anchor>a2adf85c18351b5094b3f7b1784d49459</Anchor>
+             </Node>
+             <Node>
+              <Name>Kinetic_TimevalCmp</Name>
+              <Path>kinetic__types__internal_8h.html</Path>
+              <Anchor>a4a9f3c8864a793f00a125bad2b25d215</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type</Name>
+              <Path>kinetic__types__internal_8h.html</Path>
+              <Anchor>a38e45c64e90e7b5508743454fd0c0568</Anchor>
+             </Node>
+             <Node>
+              <Name>KineticProto_Command_MessageType_to_KineticMessageType</Name>
+              <Path>kinetic__types__internal_8h.html</Path>
+              <Anchor>a67187990cf86b81a9b72b93f347d7c41</Anchor>
              </Node>
              <Node>
               <Name>KineticPDUHeader</Name>

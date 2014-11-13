@@ -1,4 +1,4 @@
-.TH "kinetic_types_internal.c" 3 "Wed Nov 5 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types_internal.c" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -49,6 +49,24 @@ kinetic_types_internal.c \-
 .br
 .ti -1c
 .RI "int \fBKinetic_GetErrnoDescription\fP (int err_num, char *buf, size_t len)"
+.br
+.ti -1c
+.RI "struct timeval \fBKinetic_TimevalZero\fP (void)"
+.br
+.ti -1c
+.RI "bool \fBKinetic_TimevalIsZero\fP (struct timeval const tv)"
+.br
+.ti -1c
+.RI "struct timeval \fBKinetic_TimevalAdd\fP (struct timeval const a, struct timeval const b)"
+.br
+.ti -1c
+.RI "int \fBKinetic_TimevalCmp\fP (struct timeval const a, struct timeval const b)"
+.br
+.ti -1c
+.RI "\fBKineticProto_Command_GetLog_Type\fP \fBKineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type\fP (\fBKineticDeviceInfo_Type\fP type)"
+.br
+.ti -1c
+.RI "\fBKineticMessageType\fP \fBKineticProto_Command_MessageType_to_KineticMessageType\fP (\fBKineticProto_Command_MessageType\fP type)"
 .br
 .in -1c
 .SH "Function Documentation"
@@ -111,6 +129,32 @@ References ByteBufferArray::buffers, ByteBuffer_Append(), ByteBuffer_Reset(), By
 
 .PP
 Definition at line 310 of file kinetic_types_internal\&.c\&.
+.SS "struct timeval Kinetic_TimevalZero (void)"
+
+.PP
+Definition at line 325 of file kinetic_types_internal\&.c\&.
+.SS "bool Kinetic_TimevalIsZero (struct timeval consttv)"
+
+.PP
+Definition at line 333 of file kinetic_types_internal\&.c\&.
+.SS "struct timeval Kinetic_TimevalAdd (struct timeval consta, struct timeval constb)"
+
+.PP
+Definition at line 338 of file kinetic_types_internal\&.c\&.
+.SS "int Kinetic_TimevalCmp (struct timeval consta, struct timeval constb)"
+
+.PP
+Definition at line 365 of file kinetic_types_internal\&.c\&.
+.SS "\fBKineticProto_Command_GetLog_Type\fP KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type (\fBKineticDeviceInfo_Type\fPtype)"
+
+.PP
+Definition at line 370 of file kinetic_types_internal\&.c\&.
+.PP
+References KINETIC_DEVICE_INFO_TYPE_CAPACITIES, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, KINETIC_DEVICE_INFO_TYPE_DEVICE, KINETIC_DEVICE_INFO_TYPE_LIMITS, KINETIC_DEVICE_INFO_TYPE_MESSAGES, KINETIC_DEVICE_INFO_TYPE_STATISTICS, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES, and KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS\&.
+.SS "\fBKineticMessageType\fP KineticProto_Command_MessageType_to_KineticMessageType (\fBKineticProto_Command_MessageType\fPtype)"
+
+.PP
+Definition at line 398 of file kinetic_types_internal\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

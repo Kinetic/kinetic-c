@@ -1,4 +1,4 @@
-.TH "kinetic_pdu.c" 3 "Wed Nov 5 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_pdu.c" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -63,27 +63,27 @@ References ByteBuffer::array, ByteBuffer_Create(), KineticMessage::command, Kine
 .SS "\fBKineticStatus\fP KineticPDU_ReceiveValue (intsocket_desc, \fBByteBuffer\fP *value, size_tvalue_length)"
 
 .PP
-Definition at line 117 of file kinetic_pdu\&.c\&.
+Definition at line 119 of file kinetic_pdu\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer_Reset(), ByteArray::data, KINETIC_STATUS_SUCCESS, KineticLogger_LogByteBuffer(), KineticSocket_Read(), LOG0, LOG1, and LOGF1\&.
 .SS "size_t KineticPDU_GetValueLength (KineticPDU *constpdu)"
 
 .PP
-Definition at line 136 of file kinetic_pdu\&.c\&.
+Definition at line 138 of file kinetic_pdu\&.c\&.
 .SS "\fBKineticStatus\fP KineticPDU_GetStatus (KineticPDU *pdu)"
 
 .PP
-Definition at line 142 of file kinetic_pdu\&.c\&.
+Definition at line 144 of file kinetic_pdu\&.c\&.
 .PP
 References KINETIC_STATUS_INVALID, and KineticProtoStatusCode_to_KineticStatus()\&.
 .SS "KineticProto_Command_KeyValue* KineticPDU_GetKeyValue (KineticPDU *pdu)"
 
 .PP
-Definition at line 158 of file kinetic_pdu\&.c\&.
+Definition at line 160 of file kinetic_pdu\&.c\&.
 .SS "KineticProto_Command_Range* KineticPDU_GetKeyRange (KineticPDU *pdu)"
 
 .PP
-Definition at line 171 of file kinetic_pdu\&.c\&.
+Definition at line 173 of file kinetic_pdu\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "KineticOperation" 3 "Wed Nov 5 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
+.TH "KineticOperation" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,19 +21,25 @@ KineticOperation \-
 .RI "KineticPDU * \fBresponse\fP"
 .br
 .ti -1c
+.RI "pthread_mutex_t \fBtimeoutTimeMutex\fP"
+.br
+.ti -1c
+.RI "struct timeval \fBtimeoutTime\fP"
+.br
+.ti -1c
 .RI "bool \fBvalueEnabled\fP"
 .br
 .ti -1c
 .RI "bool \fBsendValue\fP"
 .br
 .ti -1c
-.RI "bool \fBreceiveComplete\fP"
-.br
-.ti -1c
 .RI "\fBKineticEntry\fP * \fBentry\fP"
 .br
 .ti -1c
 .RI "\fBByteBufferArray\fP * \fBbuffers\fP"
+.br
+.ti -1c
+.RI "\fBKineticDeviceInfo\fP ** \fBdeviceInfo\fP"
 .br
 .ti -1c
 .RI "\fBKineticOperationCallback\fP \fBcallback\fP"
@@ -44,49 +50,57 @@ KineticOperation \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 256 of file kinetic_types_internal\&.h\&.
+Definition at line 261 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "KineticConnection* KineticOperation::connection"
 
 .PP
-Definition at line 257 of file kinetic_types_internal\&.h\&.
+Definition at line 262 of file kinetic_types_internal\&.h\&.
 .SS "KineticPDU* KineticOperation::request"
 
 .PP
-Definition at line 258 of file kinetic_types_internal\&.h\&.
+Definition at line 263 of file kinetic_types_internal\&.h\&.
 .SS "KineticPDU* KineticOperation::response"
 
 .PP
-Definition at line 259 of file kinetic_types_internal\&.h\&.
-.SS "bool KineticOperation::valueEnabled"
-
-.PP
-Definition at line 260 of file kinetic_types_internal\&.h\&.
-.SS "bool KineticOperation::sendValue"
-
-.PP
-Definition at line 261 of file kinetic_types_internal\&.h\&.
-.SS "bool KineticOperation::receiveComplete"
-
-.PP
-Definition at line 262 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticEntry\fP* KineticOperation::entry"
-
-.PP
-Definition at line 263 of file kinetic_types_internal\&.h\&.
-.SS "\fBByteBufferArray\fP* KineticOperation::buffers"
-
-.PP
 Definition at line 264 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticOperationCallback\fP KineticOperation::callback"
+.SS "pthread_mutex_t KineticOperation::timeoutTimeMutex"
 
 .PP
 Definition at line 265 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticCompletionClosure\fP KineticOperation::closure"
+.SS "struct timeval KineticOperation::timeoutTime"
 
 .PP
 Definition at line 266 of file kinetic_types_internal\&.h\&.
+.SS "bool KineticOperation::valueEnabled"
+
+.PP
+Definition at line 267 of file kinetic_types_internal\&.h\&.
+.SS "bool KineticOperation::sendValue"
+
+.PP
+Definition at line 268 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticEntry\fP* KineticOperation::entry"
+
+.PP
+Definition at line 269 of file kinetic_types_internal\&.h\&.
+.SS "\fBByteBufferArray\fP* KineticOperation::buffers"
+
+.PP
+Definition at line 270 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticDeviceInfo\fP** KineticOperation::deviceInfo"
+
+.PP
+Definition at line 271 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticOperationCallback\fP KineticOperation::callback"
+
+.PP
+Definition at line 272 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticCompletionClosure\fP KineticOperation::closure"
+
+.PP
+Definition at line 273 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

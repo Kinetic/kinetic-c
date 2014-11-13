@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.8.0</span>
+   &#160;<span id="projectnumber">v0.8.1-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -57,11 +57,9 @@
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__client_8h_source.html">kinetic_client.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__operation_8h_source.html">kinetic_operation.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__connection_8h_source.html">kinetic_connection.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__message_8h_source.html">kinetic_message.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__allocator_8h_source.html">kinetic_allocator.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__controller_8h_source.html">kinetic_controller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__operation_8h_source.html">kinetic_operation.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;sys/time.h&gt;</code><br />
@@ -97,6 +95,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aa45452dad04a72b7e51ceed31321bc00"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8c.html#aa45452dad04a72b7e51ceed31321bc00">KineticClient_GetKeyRange</a> (<a class="el" href="kinetic__types_8h.html#af2747d5f7954601329c11b58757764b9">KineticSessionHandle</a> handle, <a class="el" href="struct_kinetic_key_range.html">KineticKeyRange</a> *range, <a class="el" href="struct_byte_buffer_array.html">ByteBufferArray</a> *keys, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:aa45452dad04a72b7e51ceed31321bc00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GETKEYRANGE command to retrive a set of keys in the range specified range from the Kinetic Device.  <a href="#aa45452dad04a72b7e51ceed31321bc00">More...</a><br /></td></tr>
 <tr class="separator:aa45452dad04a72b7e51ceed31321bc00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9526ad964e0d25da9aa51c8748cf7b47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8c.html#a9526ad964e0d25da9aa51c8748cf7b47">KineticClient_GetLog</a> (<a class="el" href="kinetic__types_8h.html#af2747d5f7954601329c11b58757764b9">KineticSessionHandle</a> handle, <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a> type, <a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> **info, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memdesc:a9526ad964e0d25da9aa51c8748cf7b47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GETLOG command to retrive a set of keys in the range specified range from the Kinetic Device.  <a href="#a9526ad964e0d25da9aa51c8748cf7b47">More...</a><br /></td></tr>
+<tr class="separator:a9526ad964e0d25da9aa51c8748cf7b47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ab3839aed7b68c5bdc63c79ac90f4084b"></a>
@@ -132,7 +133,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00089">89</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00030">30</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__logger_8c_source.html#l00072">KineticLogger_Init()</a>.</p>
 
@@ -154,7 +155,7 @@ Functions</h2></td></tr>
 
 <p>Performs shutdown/cleanup of the kinetic-c client lib. </p>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00094">94</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00035">35</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__logger_8c_source.html#l00102">KineticLogger_Close()</a>.</p>
 
@@ -194,9 +195,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00099">99</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00040">40</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00122">KineticSession::hmacKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00101">KineticSession::host</a>, <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00144">KINETIC_STATUS_HMAC_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00143">KINETIC_STATUS_HOST_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00141">KINETIC_STATUS_SESSION_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00142">KINETIC_STATUS_SESSION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__connection_8c_source.html#l00189">KineticConnection_Connect()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00170">KineticConnection_FreeConnection()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00182">KineticConnection_FromHandle()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00150">KineticConnection_NewConnection()</a>, <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00046">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00050">LOGF0</a>, and <a class="el" href="kinetic__types_8h_source.html#l00104">KineticSession::port</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00122">KineticSession::hmacKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00101">KineticSession::host</a>, <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00144">KINETIC_STATUS_HMAC_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00143">KINETIC_STATUS_HOST_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00141">KINETIC_STATUS_SESSION_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00142">KINETIC_STATUS_SESSION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__connection_8c_source.html#l00079">KineticConnection_Connect()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00059">KineticConnection_FreeConnection()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00072">KineticConnection_FromHandle()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00039">KineticConnection_NewConnection()</a>, <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>, and <a class="el" href="kinetic__types_8h_source.html#l00104">KineticSession::port</a>.</p>
 
 </div>
 </div>
@@ -223,9 +224,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00150">150</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00091">91</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00142">KINETIC_STATUS_SESSION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__connection_8c_source.html#l00220">KineticConnection_Disconnect()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00170">KineticConnection_FreeConnection()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00182">KineticConnection_FromHandle()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00046">LOG0</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00142">KINETIC_STATUS_SESSION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__connection_8c_source.html#l00105">KineticConnection_Disconnect()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00059">KineticConnection_FreeConnection()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00072">KineticConnection_FromHandle()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>.</p>
 
 </div>
 </div>
@@ -252,9 +253,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00171">171</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00112">112</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00229">KineticOperation_BuildNoop()</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00157">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00052">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00098">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00203">KineticOperation_BuildNoop()</a>.</p>
 
 </div>
 </div>
@@ -299,9 +300,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00187">187</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00123">123</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__operation_8c_source.html#l00268">KineticOperation_BuildPut()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00181">KineticEntry::value</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00157">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00052">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00098">KineticController_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00243">KineticOperation_BuildPut()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00182">KineticEntry::value</a>.</p>
 
 </div>
 </div>
@@ -346,9 +347,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00206">206</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00141">141</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__operation_8c_source.html#l00306">KineticOperation_BuildGet()</a>, <a class="el" href="kinetic__types_8h_source.html#l00190">KineticEntry::metadataOnly</a>, and <a class="el" href="kinetic__types_8h_source.html#l00181">KineticEntry::value</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00157">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00052">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00098">KineticController_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00280">KineticOperation_BuildGet()</a>, <a class="el" href="kinetic__types_8h_source.html#l00191">KineticEntry::metadataOnly</a>, and <a class="el" href="kinetic__types_8h_source.html#l00182">KineticEntry::value</a>.</p>
 
 </div>
 </div>
@@ -393,9 +394,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00225">225</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00159">159</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00337">KineticOperation_BuildDelete()</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00157">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00052">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00098">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00312">KineticOperation_BuildDelete()</a>.</p>
 
 </div>
 </div>
@@ -447,9 +448,63 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns 0 upon succes, -1 or the Kinetic status code upon failure </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00243">243</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00176">176</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00040">ByteBufferArray::buffers</a>, <a class="el" href="byte__array_8h_source.html#l00041">ByteBufferArray::count</a>, <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00140">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00377">KineticOperation_BuildGetKeyRange()</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00040">ByteBufferArray::buffers</a>, <a class="el" href="byte__array_8h_source.html#l00041">ByteBufferArray::count</a>, <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00157">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00052">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00098">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00353">KineticOperation_BuildGetKeyRange()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9526ad964e0d25da9aa51c8748cf7b47"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_GetLog </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#af2747d5f7954601329c11b58757764b9">KineticSessionHandle</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> **&#160;</td>
+          <td class="paramname"><em>info</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *&#160;</td>
+          <td class="paramname"><em>closure</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Executes a GETLOG command to retrive a set of keys in the range specified range from the Kinetic Device. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>KineticSessionHandle for a connected session </td></tr>
+    <tr><td class="paramname">type</td><td>KineticLogDataType specifying data type to retrieve. </td></tr>
+    <tr><td class="paramname">info</td><td><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> pointer, which will be assigned to a dynamically allocated structure populated with the requested data, if successful. </td></tr>
+    <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns 0 upon succes, -1 or the Kinetic status code upon failure </dd></dl>
+
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00197">197</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00039">KINETIC_HANDLE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00157">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00052">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00098">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00392">KineticOperation_BuildGetLog()</a>.</p>
 
 </div>
 </div>

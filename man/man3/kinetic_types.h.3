@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Wed Nov 5 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -50,6 +50,33 @@ kinetic_types.h \-
 .ti -1c
 .RI "struct \fBKineticKeyRange\fP"
 .br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo_Utilization\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo_Temperature\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo_Capacity\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo_Interface\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo_Configuration\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo_Statistics\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo_Limits\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo_Device\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticDeviceInfo\fP"
+.br
 .in -1c
 .SS "Macros"
 
@@ -96,6 +123,9 @@ kinetic_types.h \-
 .ti -1c
 .RI "#define \fBKINETIC_SESSION_INIT\fP(_session, _host, _clusterVersion, _identity, _hmacKey)"
 .br
+.ti -1c
+.RI "#define \fBKINETIC_DEVICE_INFO_SCRATCH_BUF_LEN\fP   (1024 * 1024 * 4)"
+.br
 .in -1c
 .SS "Typedefs"
 
@@ -122,12 +152,21 @@ kinetic_types.h \-
 .ti -1c
 .RI "enum \fBKineticStatus\fP "
 .br
+.ti -1c
+.RI "enum \fBKineticDeviceInfo_Type\fP "
+.br
+.ti -1c
+.RI "enum \fBKineticMessageType\fP "
+.br
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
 .RI "const char * \fBKinetic_GetStatusDescription\fP (\fBKineticStatus\fP status)"
+.br
+.ti -1c
+.RI "const char * \fBKineticMessageType_GetName\fP (\fBKineticMessageType\fP type)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -201,6 +240,10 @@ Definition at line 64 of file kinetic_types\&.h\&.
 .fi
 .PP
 Definition at line 125 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN   (1024 * 1024 * 4)"
+
+.PP
+Definition at line 327 of file kinetic_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef int \fBKineticSessionHandle\fP"
@@ -212,7 +255,7 @@ Definition at line 93 of file kinetic_types\&.h\&.
 .SS "typedef void(* KineticCompletionCallback)(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
 
 .PP
-Definition at line 171 of file kinetic_types\&.h\&.
+Definition at line 172 of file kinetic_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBKineticAlgorithm\fP"
@@ -285,6 +328,8 @@ Definition at line 82 of file kinetic_types\&.h\&.
 .TP
 \fB\fIKINETIC_STATUS_OPERATION_FAILED \fP\fP
 .TP
+\fB\fIKINETIC_STATUS_OPERATION_TIMEDOUT \fP\fP
+.TP
 \fB\fIKINETIC_STATUS_CLUSTER_MISMATCH \fP\fP
 .TP
 \fB\fIKINETIC_STATUS_VERSION_MISMATCH \fP\fP
@@ -304,14 +349,116 @@ Definition at line 82 of file kinetic_types\&.h\&.
 \fB\fIKINETIC_STATUS_COUNT \fP\fP
 .PP
 Definition at line 137 of file kinetic_types\&.h\&.
+.SS "enum \fBKineticDeviceInfo_Type\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIKINETIC_DEVICE_INFO_TYPE_UTILIZATIONS \fP\fP
+.TP
+\fB\fIKINETIC_DEVICE_INFO_TYPE_TEMPERATURES \fP\fP
+.TP
+\fB\fIKINETIC_DEVICE_INFO_TYPE_CAPACITIES \fP\fP
+.TP
+\fB\fIKINETIC_DEVICE_INFO_TYPE_CONFIGURATION \fP\fP
+.TP
+\fB\fIKINETIC_DEVICE_INFO_TYPE_STATISTICS \fP\fP
+.TP
+\fB\fIKINETIC_DEVICE_INFO_TYPE_MESSAGES \fP\fP
+.TP
+\fB\fIKINETIC_DEVICE_INFO_TYPE_LIMITS \fP\fP
+.TP
+\fB\fIKINETIC_DEVICE_INFO_TYPE_DEVICE \fP\fP
+.PP
+Definition at line 207 of file kinetic_types\&.h\&.
+.SS "enum \fBKineticMessageType\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_INVALID \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GET_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GET \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_PUT_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_PUT \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_DELETE_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_DELETE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETNEXT \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETPREVIOUS \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETKEYRANGE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETVERSION \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_SETUP_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_SETUP \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETLOG_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_GETLOG \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_SECURITY_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_SECURITY \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_PEER2PEERPUSH \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_NOOP_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_NOOP \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_FLUSHALLDATA \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_PINOP_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_PINOP \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_MEDIASCAN \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE \fP\fP
+.TP
+\fB\fIKINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE \fP\fP
+.PP
+Definition at line 254 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
 
 .PP
-Definition at line 53 of file kinetic_types\&.c\&.
+Definition at line 54 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_STATUS_COUNT\&.
+.SS "const char* KineticMessageType_GetName (\fBKineticMessageType\fPtype)"
+
+.PP
+Definition at line 99 of file kinetic_types\&.c\&.
+.PP
+References KINETIC_MESSAGE_TYPE_DELETE, KINETIC_MESSAGE_TYPE_DELETE_RESPONSE, KINETIC_MESSAGE_TYPE_FLUSHALLDATA, KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE, KINETIC_MESSAGE_TYPE_GET, KINETIC_MESSAGE_TYPE_GET_RESPONSE, KINETIC_MESSAGE_TYPE_GETKEYRANGE, KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE, KINETIC_MESSAGE_TYPE_GETLOG, KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE, KINETIC_MESSAGE_TYPE_GETNEXT, KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE, KINETIC_MESSAGE_TYPE_GETPREVIOUS, KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE, KINETIC_MESSAGE_TYPE_GETVERSION, KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE, KINETIC_MESSAGE_TYPE_INVALID, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE, KINETIC_MESSAGE_TYPE_MEDIASCAN, KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE, KINETIC_MESSAGE_TYPE_NOOP, KINETIC_MESSAGE_TYPE_NOOP_RESPONSE, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE, KINETIC_MESSAGE_TYPE_PINOP, KINETIC_MESSAGE_TYPE_PINOP_RESPONSE, KINETIC_MESSAGE_TYPE_PUT, KINETIC_MESSAGE_TYPE_PUT_RESPONSE, KINETIC_MESSAGE_TYPE_SECURITY, KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE, KINETIC_MESSAGE_TYPE_SETUP, and KINETIC_MESSAGE_TYPE_SETUP_RESPONSE\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

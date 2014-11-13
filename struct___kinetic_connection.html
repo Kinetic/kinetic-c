@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.8.0</span>
+   &#160;<span id="projectnumber">v0.8.1-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,6 +60,8 @@ Data Fields</h2></td></tr>
 <tr class="separator:a5bdd709737de27e845262d7b291bcc53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65428b0886df3645114237f15f91e461"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_connection.html#a65428b0886df3645114237f15f91e461">socket</a></td></tr>
 <tr class="separator:a65428b0886df3645114237f15f91e461"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc66a2d19d8365858e2c29ceb01d158a"><td class="memItemLeft" align="right" valign="top">pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_connection.html#adc66a2d19d8365858e2c29ceb01d158a">writeMutex</a></td></tr>
+<tr class="separator:adc66a2d19d8365858e2c29ceb01d158a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a559c2a2ceffdd95af1462d7a7e0ebc3c"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_connection.html#a559c2a2ceffdd95af1462d7a7e0ebc3c">connectionID</a></td></tr>
 <tr class="separator:a559c2a2ceffdd95af1462d7a7e0ebc3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c112933e5183b7b9fde38b012c77d0f"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_connection.html#a9c112933e5183b7b9fde38b012c77d0f">sequence</a></td></tr>
@@ -107,6 +109,20 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="adc66a2d19d8365858e2c29ceb01d158a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pthread_mutex_t KineticConnection::writeMutex</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00088">88</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a559c2a2ceffdd95af1462d7a7e0ebc3c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -117,7 +133,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00088">88</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00089">89</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -131,7 +147,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00089">89</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00090">90</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -145,7 +161,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00090">90</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00091">91</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -159,7 +175,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00091">91</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00092">92</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -173,7 +189,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00092">92</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00093">93</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -187,7 +203,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00093">93</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00094">94</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -201,7 +217,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00094">94</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00095">95</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>

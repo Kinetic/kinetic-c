@@ -1,4 +1,4 @@
-.TH "kinetic_client.h" 3 "Wed Nov 5 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_client.h" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -48,6 +48,10 @@ kinetic_client.h \-
 .RI "\fBKineticStatus\fP \fBKineticClient_GetKeyRange\fP (\fBKineticSessionHandle\fP handle, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *keys, \fBKineticCompletionClosure\fP *closure)"
 .br
 .RI "\fIExecutes a GETKEYRANGE command to retrive a set of keys in the range specified range from the Kinetic Device\&. \fP"
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticClient_GetLog\fP (\fBKineticSessionHandle\fP handle, \fBKineticDeviceInfo_Type\fP type, \fBKineticDeviceInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
+.br
+.RI "\fIExecutes a GETLOG command to retrive a set of keys in the range specified range from the Kinetic Device\&. \fP"
 .in -1c
 .SH "Function Documentation"
 .PP 
@@ -65,7 +69,7 @@ Initializes the Kinetic API andcsonfigures logging destination\&.
 .PP
 
 .PP
-Definition at line 89 of file kinetic_client\&.c\&.
+Definition at line 30 of file kinetic_client\&.c\&.
 .PP
 References KineticLogger_Init()\&.
 .SS "void KineticClient_Shutdown (void)"
@@ -73,7 +77,7 @@ References KineticLogger_Init()\&.
 .PP
 Performs shutdown/cleanup of the kinetic-c client lib\&. 
 .PP
-Definition at line 94 of file kinetic_client\&.c\&.
+Definition at line 35 of file kinetic_client\&.c\&.
 .PP
 References KineticLogger_Close()\&.
 .SS "\fBKineticStatus\fP KineticClient_Connect (const \fBKineticSession\fP *config, \fBKineticSessionHandle\fP *handle)"
@@ -95,7 +99,7 @@ Returns the resulting KineticStatus
 .PP
 
 .PP
-Definition at line 99 of file kinetic_client\&.c\&.
+Definition at line 40 of file kinetic_client\&.c\&.
 .PP
 References ByteArray::data, KineticSession::hmacKey, KineticSession::host, KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_HMAC_EMPTY, KINETIC_STATUS_HOST_EMPTY, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticConnection_Connect(), KineticConnection_FreeConnection(), KineticConnection_FromHandle(), KineticConnection_NewConnection(), ByteArray::len, LOG0, LOGF0, and KineticSession::port\&.
 .SS "\fBKineticStatus\fP KineticClient_Disconnect (\fBKineticSessionHandle\fP *consthandle)"
@@ -115,7 +119,7 @@ Returns the resulting KineticStatus
 .PP
 
 .PP
-Definition at line 150 of file kinetic_client\&.c\&.
+Definition at line 91 of file kinetic_client\&.c\&.
 .PP
 References KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticConnection_Disconnect(), KineticConnection_FreeConnection(), KineticConnection_FromHandle(), and LOG0\&.
 .SS "\fBKineticStatus\fP KineticClient_NoOp (\fBKineticSessionHandle\fPhandle)"
@@ -135,9 +139,9 @@ Returns the resulting KineticStatus
 .PP
 
 .PP
-Definition at line 171 of file kinetic_client\&.c\&.
+Definition at line 112 of file kinetic_client\&.c\&.
 .PP
-References KINETIC_STATUS_SUCCESS, and KineticOperation_BuildNoop()\&.
+References KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildNoop()\&.
 .SS "\fBKineticStatus\fP KineticClient_Put (\fBKineticSessionHandle\fPhandle, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
 
 .PP
@@ -159,9 +163,9 @@ Returns the resulting KineticStatus
 .PP
 
 .PP
-Definition at line 187 of file kinetic_client\&.c\&.
+Definition at line 123 of file kinetic_client\&.c\&.
 .PP
-References ByteBuffer::array, ByteArray::data, KINETIC_STATUS_SUCCESS, KineticOperation_BuildPut(), and KineticEntry::value\&.
+References ByteBuffer::array, ByteArray::data, KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), KineticOperation_BuildPut(), and KineticEntry::value\&.
 .SS "\fBKineticStatus\fP KineticClient_Get (\fBKineticSessionHandle\fPhandle, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
 
 .PP
@@ -183,9 +187,9 @@ Returns the resulting KineticStatus
 .PP
 
 .PP
-Definition at line 206 of file kinetic_client\&.c\&.
+Definition at line 141 of file kinetic_client\&.c\&.
 .PP
-References ByteBuffer::array, ByteArray::data, KINETIC_STATUS_SUCCESS, KineticOperation_BuildGet(), KineticEntry::metadataOnly, and KineticEntry::value\&.
+References ByteBuffer::array, ByteArray::data, KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), KineticOperation_BuildGet(), KineticEntry::metadataOnly, and KineticEntry::value\&.
 .SS "\fBKineticStatus\fP KineticClient_Delete (\fBKineticSessionHandle\fPhandle, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
 
 .PP
@@ -207,9 +211,9 @@ Returns the resulting KineticStatus
 .PP
 
 .PP
-Definition at line 225 of file kinetic_client\&.c\&.
+Definition at line 159 of file kinetic_client\&.c\&.
 .PP
-References KINETIC_STATUS_SUCCESS, and KineticOperation_BuildDelete()\&.
+References KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildDelete()\&.
 .SS "\fBKineticStatus\fP KineticClient_GetKeyRange (\fBKineticSessionHandle\fPhandle, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *keys, \fBKineticCompletionClosure\fP *closure)"
 
 .PP
@@ -233,9 +237,35 @@ Returns 0 upon succes, -1 or the Kinetic status code upon failure
 .PP
 
 .PP
-Definition at line 243 of file kinetic_client\&.c\&.
+Definition at line 176 of file kinetic_client\&.c\&.
 .PP
-References ByteBufferArray::buffers, ByteBufferArray::count, KINETIC_HANDLE_INVALID, KINETIC_STATUS_SUCCESS, and KineticOperation_BuildGetKeyRange()\&.
+References ByteBufferArray::buffers, ByteBufferArray::count, KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildGetKeyRange()\&.
+.SS "\fBKineticStatus\fP KineticClient_GetLog (\fBKineticSessionHandle\fPhandle, \fBKineticDeviceInfo_Type\fPtype, \fBKineticDeviceInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a GETLOG command to retrive a set of keys in the range specified range from the Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIhandle\fP KineticSessionHandle for a connected session 
+.br
+\fItype\fP KineticLogDataType specifying data type to retrieve\&. 
+.br
+\fIinfo\fP \fBKineticDeviceInfo\fP pointer, which will be assigned to a dynamically allocated structure populated with the requested data, if successful\&. 
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns 0 upon succes, -1 or the Kinetic status code upon failure 
+.RE
+.PP
+
+.PP
+Definition at line 197 of file kinetic_client\&.c\&.
+.PP
+References KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildGetLog()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

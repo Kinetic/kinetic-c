@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.8.0</span>
+   &#160;<span id="projectnumber">v0.8.1-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -87,6 +87,24 @@ Data Structures</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_key_range.html">KineticKeyRange</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___utilization.html">KineticDeviceInfo_Utilization</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___temperature.html">KineticDeviceInfo_Temperature</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___capacity.html">KineticDeviceInfo_Capacity</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___interface.html">KineticDeviceInfo_Interface</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___configuration.html">KineticDeviceInfo_Configuration</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___statistics.html">KineticDeviceInfo_Statistics</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___limits.html">KineticDeviceInfo_Limits</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___device.html">KineticDeviceInfo_Device</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -118,6 +136,8 @@ Macros</h2></td></tr>
 <tr class="separator:a77c3b6f6dc303295398cc6a1308a5e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f0f476362d01ca4c7899cf1325c72e6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a2f0f476362d01ca4c7899cf1325c72e6">KINETIC_SESSION_INIT</a>(_session, _host, _clusterVersion, _identity, _hmacKey)</td></tr>
 <tr class="separator:a2f0f476362d01ca4c7899cf1325c72e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19eed82e573d877a85b41792b553b1df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a19eed82e573d877a85b41792b553b1df">KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN</a>&#160;&#160;&#160;(1024 * 1024 * 4)</td></tr>
+<tr class="separator:a19eed82e573d877a85b41792b553b1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -137,11 +157,17 @@ Enumerations</h2></td></tr>
 <tr class="separator:a9265fe1f35c1db2f10f24203622466c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a455d29140e6816c61eba35e8f52b0d57"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> </td></tr>
 <tr class="separator:a455d29140e6816c61eba35e8f52b0d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0659f218c5ddd6a07d0e17e99f6e507d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a> </td></tr>
+<tr class="separator:a0659f218c5ddd6a07d0e17e99f6e507d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00f738045cd3e7be4d876e341453c15f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">KineticMessageType</a> </td></tr>
+<tr class="separator:a00f738045cd3e7be4d876e341453c15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a82c4aac2c0a454092185b10d8809f1bc"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a82c4aac2c0a454092185b10d8809f1bc">Kinetic_GetStatusDescription</a> (<a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> status)</td></tr>
 <tr class="separator:a82c4aac2c0a454092185b10d8809f1bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38e38f8880dedd6a7ba66c374f34b264"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a38e38f8880dedd6a7ba66c374f34b264">KineticMessageType_GetName</a> (<a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">KineticMessageType</a> type)</td></tr>
+<tr class="separator:a38e38f8880dedd6a7ba66c374f34b264"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a2519b60015d5c8d2c1d68d173a0469f1"></a>
@@ -388,6 +414,20 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a19eed82e573d877a85b41792b553b1df"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN&#160;&#160;&#160;(1024 * 1024 * 4)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00327">327</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a class="anchor" id="af2747d5f7954601329c11b58757764b9"></a>
 <div class="memitem">
@@ -415,7 +455,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00171">171</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00172">172</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -512,6 +552,8 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285"></a>KINETIC_STATUS_OPERATION_FAILED&#160;</td><td class="fielddoc">
 </td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57aec174c53ca475d4bada51ef8b6aae27f"></a>KINETIC_STATUS_OPERATION_TIMEDOUT&#160;</td><td class="fielddoc">
+</td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ac6363230f4f02e8f3881736bda428407"></a>KINETIC_STATUS_CLUSTER_MISMATCH&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ad184ad42294d8549d18305473cd07cd7"></a>KINETIC_STATUS_VERSION_MISMATCH&#160;</td><td class="fielddoc">
@@ -536,6 +578,120 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507dad300215af8d48b27e86095e9313dc30d"></a>KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507da37ad8e6c62a3ae6342abd75380fb8ffe"></a>KINETIC_DEVICE_INFO_TYPE_TEMPERATURES&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507dab9c895727dddd61bb20dddef9459232a"></a>KINETIC_DEVICE_INFO_TYPE_CAPACITIES&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507dac96617eafa01dff755e48f2db4bf7286"></a>KINETIC_DEVICE_INFO_TYPE_CONFIGURATION&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507da2b3afb56f7859e4197ec21db11a086ca"></a>KINETIC_DEVICE_INFO_TYPE_STATISTICS&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507da84ae3ba7d0b51f92085dc2ab07beed0b"></a>KINETIC_DEVICE_INFO_TYPE_MESSAGES&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507da1a75f25b1f495a0ed63ca0616447ab63"></a>KINETIC_DEVICE_INFO_TYPE_LIMITS&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a0659f218c5ddd6a07d0e17e99f6e507da6a54576c6b15e77dcdb54100269a149a"></a>KINETIC_DEVICE_INFO_TYPE_DEVICE&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00207">207</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a00f738045cd3e7be4d876e341453c15f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">KineticMessageType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa14be56f724bcbb8c1da013cdf05a6c9a"></a>KINETIC_MESSAGE_TYPE_INVALID&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa50acc5233931b41da0638214091381f9"></a>KINETIC_MESSAGE_TYPE_GET_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa6294ace63aa5283d0106786a50f795dc"></a>KINETIC_MESSAGE_TYPE_GET&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa0b049c0398ab8674938d8d812f5c52ed"></a>KINETIC_MESSAGE_TYPE_PUT_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa2994028db64c6d4d1b26925b80ab7c45"></a>KINETIC_MESSAGE_TYPE_PUT&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa1c6c35335c9a053f0f1e73b0fe278db7"></a>KINETIC_MESSAGE_TYPE_DELETE_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faf8bd9d9c0abfcbf11533068db3752f50"></a>KINETIC_MESSAGE_TYPE_DELETE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faebf98e2922841cd913249ab74b51f39a"></a>KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fac5dd99658135ca1691f2b6b88ef6f34f"></a>KINETIC_MESSAGE_TYPE_GETNEXT&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faac5a2dc338c76fb76818eb72b174f57c"></a>KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faf748bc303a14c4921f476fe220201397"></a>KINETIC_MESSAGE_TYPE_GETPREVIOUS&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa6dfe4a05341f9ae65a1277c0ad6634b3"></a>KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15facff5cf72de8f529c27159925351dcde3"></a>KINETIC_MESSAGE_TYPE_GETKEYRANGE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faaf86f91ce5cce325a4b250e25fd73ac3"></a>KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa80b280e489c591d2a05381290377f200"></a>KINETIC_MESSAGE_TYPE_GETVERSION&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faa77b3f4fe14b2886b473a406a0a0f565"></a>KINETIC_MESSAGE_TYPE_SETUP_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa99f8ab06d2be1ee727e5b94acd95b26d"></a>KINETIC_MESSAGE_TYPE_SETUP&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa1913687de3f5d33ef4fa818cf619d528"></a>KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faa5875e7f9af1e1904705660908527b69"></a>KINETIC_MESSAGE_TYPE_GETLOG&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa66e8e6eea2f28a99f03d7e9d134241fd"></a>KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa7ae7baa4956d805bfc00ee7fd218c5b4"></a>KINETIC_MESSAGE_TYPE_SECURITY&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa3bff70fc93ff9c39cca4740160714488"></a>KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa5859aa715220e6d6de10c701b0f2cd6c"></a>KINETIC_MESSAGE_TYPE_PEER2PEERPUSH&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa7e23ef4f856c61ff301a0c934e8c8769"></a>KINETIC_MESSAGE_TYPE_NOOP_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa2a1eacb916e62766345871ffea0bc73f"></a>KINETIC_MESSAGE_TYPE_NOOP&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faaf3ccd2e79d512aee93b5f061677448a"></a>KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa90298fea7c22abdc6bbe27586a9b6ff1"></a>KINETIC_MESSAGE_TYPE_FLUSHALLDATA&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faf731f234afe403d28575876ce8d4becb"></a>KINETIC_MESSAGE_TYPE_PINOP_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fadcb95d5d972d6dc281f05b367df11b5f"></a>KINETIC_MESSAGE_TYPE_PINOP&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa2573ecbb6043251e698c506f354a790e"></a>KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa8ce12b8a5362de4a2fbac471f5dc2dc9"></a>KINETIC_MESSAGE_TYPE_MEDIASCAN&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa46bb582b24917f3414dd7277e48749cc"></a>KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa96e96fd7c3d65364e3e055616465298a"></a>KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00254">254</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a82c4aac2c0a454092185b10d8809f1bc"></a>
 <div class="memitem">
@@ -551,9 +707,29 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8c_source.html#l00053">53</a> of file <a class="el" href="kinetic__types_8c_source.html">kinetic_types.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8c_source.html#l00054">54</a> of file <a class="el" href="kinetic__types_8c_source.html">kinetic_types.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00159">KINETIC_STATUS_COUNT</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00160">KINETIC_STATUS_COUNT</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a38e38f8880dedd6a7ba66c374f34b264"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* KineticMessageType_GetName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">KineticMessageType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8c_source.html#l00099">99</a> of file <a class="el" href="kinetic__types_8c_source.html">kinetic_types.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00261">KINETIC_MESSAGE_TYPE_DELETE</a>, <a class="el" href="kinetic__types_8h_source.html#l00260">KINETIC_MESSAGE_TYPE_DELETE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00281">KINETIC_MESSAGE_TYPE_FLUSHALLDATA</a>, <a class="el" href="kinetic__types_8h_source.html#l00280">KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00257">KINETIC_MESSAGE_TYPE_GET</a>, <a class="el" href="kinetic__types_8h_source.html#l00256">KINETIC_MESSAGE_TYPE_GET_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00267">KINETIC_MESSAGE_TYPE_GETKEYRANGE</a>, <a class="el" href="kinetic__types_8h_source.html#l00266">KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00273">KINETIC_MESSAGE_TYPE_GETLOG</a>, <a class="el" href="kinetic__types_8h_source.html#l00272">KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00263">KINETIC_MESSAGE_TYPE_GETNEXT</a>, <a class="el" href="kinetic__types_8h_source.html#l00262">KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00265">KINETIC_MESSAGE_TYPE_GETPREVIOUS</a>, <a class="el" href="kinetic__types_8h_source.html#l00264">KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00269">KINETIC_MESSAGE_TYPE_GETVERSION</a>, <a class="el" href="kinetic__types_8h_source.html#l00268">KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00255">KINETIC_MESSAGE_TYPE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00287">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE</a>, <a class="el" href="kinetic__types_8h_source.html#l00286">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00285">KINETIC_MESSAGE_TYPE_MEDIASCAN</a>, <a class="el" href="kinetic__types_8h_source.html#l00284">KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00279">KINETIC_MESSAGE_TYPE_NOOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00278">KINETIC_MESSAGE_TYPE_NOOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00277">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00276">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00283">KINETIC_MESSAGE_TYPE_PINOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00282">KINETIC_MESSAGE_TYPE_PINOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00259">KINETIC_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00258">KINETIC_MESSAGE_TYPE_PUT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00275">KINETIC_MESSAGE_TYPE_SECURITY</a>, <a class="el" href="kinetic__types_8h_source.html#l00274">KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00271">KINETIC_MESSAGE_TYPE_SETUP</a>, and <a class="el" href="kinetic__types_8h_source.html#l00270">KINETIC_MESSAGE_TYPE_SETUP_RESPONSE</a>.</p>
 
 </div>
 </div>

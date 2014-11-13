@@ -1,4 +1,4 @@
-.TH "kinetic_types.c" 3 "Wed Nov 5 2014" "Version v0.8.0" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types.c" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,15 +17,37 @@ kinetic_types.c \-
 .ti -1c
 .RI "const char * \fBKinetic_GetStatusDescription\fP (\fBKineticStatus\fP status)"
 .br
+.ti -1c
+.RI "const char * \fBKineticMessageType_GetName\fP (\fBKineticMessageType\fP type)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const char * \fBKineticMessageTypeNames\fP [33]"
+.br
 .in -1c
 .SH "Function Documentation"
 .PP 
 .SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
 
 .PP
-Definition at line 53 of file kinetic_types\&.c\&.
+Definition at line 54 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_STATUS_COUNT\&.
+.SS "const char* KineticMessageType_GetName (\fBKineticMessageType\fPtype)"
+
+.PP
+Definition at line 99 of file kinetic_types\&.c\&.
+.PP
+References KINETIC_MESSAGE_TYPE_DELETE, KINETIC_MESSAGE_TYPE_DELETE_RESPONSE, KINETIC_MESSAGE_TYPE_FLUSHALLDATA, KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE, KINETIC_MESSAGE_TYPE_GET, KINETIC_MESSAGE_TYPE_GET_RESPONSE, KINETIC_MESSAGE_TYPE_GETKEYRANGE, KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE, KINETIC_MESSAGE_TYPE_GETLOG, KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE, KINETIC_MESSAGE_TYPE_GETNEXT, KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE, KINETIC_MESSAGE_TYPE_GETPREVIOUS, KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE, KINETIC_MESSAGE_TYPE_GETVERSION, KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE, KINETIC_MESSAGE_TYPE_INVALID, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE, KINETIC_MESSAGE_TYPE_MEDIASCAN, KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE, KINETIC_MESSAGE_TYPE_NOOP, KINETIC_MESSAGE_TYPE_NOOP_RESPONSE, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE, KINETIC_MESSAGE_TYPE_PINOP, KINETIC_MESSAGE_TYPE_PINOP_RESPONSE, KINETIC_MESSAGE_TYPE_PUT, KINETIC_MESSAGE_TYPE_PUT_RESPONSE, KINETIC_MESSAGE_TYPE_SECURITY, KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE, KINETIC_MESSAGE_TYPE_SETUP, and KINETIC_MESSAGE_TYPE_SETUP_RESPONSE\&.
+.SH "Variable Documentation"
+.PP 
+.SS "const char* KineticMessageTypeNames[33]"
+
+.PP
+Definition at line 62 of file kinetic_types\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

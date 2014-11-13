@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.8.0</span>
+   &#160;<span id="projectnumber">v0.8.1-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -99,6 +99,33 @@
 <li>KINETIC_DEFAULT_KEY_LEN
 : <a class="el" href="kinetic__types_8h.html#adf35ed8ced54272941dc71fd889c6feb">kinetic_types.h</a>
 </li>
+<li>KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN
+: <a class="el" href="kinetic__types_8h.html#a19eed82e573d877a85b41792b553b1df">kinetic_types.h</a>
+</li>
+<li>KINETIC_DEVICE_INFO_TYPE_CAPACITIES
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507dab9c895727dddd61bb20dddef9459232a">kinetic_types.h</a>
+</li>
+<li>KINETIC_DEVICE_INFO_TYPE_CONFIGURATION
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507dac96617eafa01dff755e48f2db4bf7286">kinetic_types.h</a>
+</li>
+<li>KINETIC_DEVICE_INFO_TYPE_DEVICE
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da6a54576c6b15e77dcdb54100269a149a">kinetic_types.h</a>
+</li>
+<li>KINETIC_DEVICE_INFO_TYPE_LIMITS
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da1a75f25b1f495a0ed63ca0616447ab63">kinetic_types.h</a>
+</li>
+<li>KINETIC_DEVICE_INFO_TYPE_MESSAGES
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da84ae3ba7d0b51f92085dc2ab07beed0b">kinetic_types.h</a>
+</li>
+<li>KINETIC_DEVICE_INFO_TYPE_STATISTICS
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da2b3afb56f7859e4197ec21db11a086ca">kinetic_types.h</a>
+</li>
+<li>KINETIC_DEVICE_INFO_TYPE_TEMPERATURES
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da37ad8e6c62a3ae6342abd75380fb8ffe">kinetic_types.h</a>
+</li>
+<li>KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507dad300215af8d48b27e86095e9313dc30d">kinetic_types.h</a>
+</li>
 <li>Kinetic_GetErrnoDescription()
 : <a class="el" href="kinetic__types__internal_8c.html#a6ed7e9a044c07404610caa9b8e452e30">kinetic_types_internal.c</a>
 , <a class="el" href="kinetic__types__internal_8h.html#a6ed7e9a044c07404610caa9b8e452e30">kinetic_types_internal.h</a>
@@ -164,11 +191,113 @@
 <li>KINETIC_MESSAGE_INIT
 : <a class="el" href="kinetic__types__internal_8h.html#a89cdffed422dfae0e8a4d3f25dce276f">kinetic_types_internal.h</a>
 </li>
+<li>KINETIC_MESSAGE_TYPE_DELETE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faf8bd9d9c0abfcbf11533068db3752f50">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_DELETE_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa1c6c35335c9a053f0f1e73b0fe278db7">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_FLUSHALLDATA
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa90298fea7c22abdc6bbe27586a9b6ff1">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faaf3ccd2e79d512aee93b5f061677448a">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GET
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa6294ace63aa5283d0106786a50f795dc">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GET_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa50acc5233931b41da0638214091381f9">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETKEYRANGE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15facff5cf72de8f529c27159925351dcde3">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa6dfe4a05341f9ae65a1277c0ad6634b3">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETLOG
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faa5875e7f9af1e1904705660908527b69">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa1913687de3f5d33ef4fa818cf619d528">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETNEXT
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fac5dd99658135ca1691f2b6b88ef6f34f">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faebf98e2922841cd913249ab74b51f39a">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETPREVIOUS
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faf748bc303a14c4921f476fe220201397">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faac5a2dc338c76fb76818eb72b174f57c">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETVERSION
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa80b280e489c591d2a05381290377f200">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faaf86f91ce5cce325a4b250e25fd73ac3">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_INVALID
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa14be56f724bcbb8c1da013cdf05a6c9a">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa96e96fd7c3d65364e3e055616465298a">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa46bb582b24917f3414dd7277e48749cc">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_MEDIASCAN
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa8ce12b8a5362de4a2fbac471f5dc2dc9">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa2573ecbb6043251e698c506f354a790e">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_NOOP
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa2a1eacb916e62766345871ffea0bc73f">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_NOOP_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa7e23ef4f856c61ff301a0c934e8c8769">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_PEER2PEERPUSH
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa5859aa715220e6d6de10c701b0f2cd6c">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa3bff70fc93ff9c39cca4740160714488">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_PINOP
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fadcb95d5d972d6dc281f05b367df11b5f">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_PINOP_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faf731f234afe403d28575876ce8d4becb">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_PUT
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa2994028db64c6d4d1b26925b80ab7c45">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_PUT_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa0b049c0398ab8674938d8d812f5c52ed">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_SECURITY
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa7ae7baa4956d805bfc00ee7fd218c5b4">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa66e8e6eea2f28a99f03d7e9d134241fd">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_SETUP
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa99f8ab06d2be1ee727e5b94acd95b26d">kinetic_types.h</a>
+</li>
+<li>KINETIC_MESSAGE_TYPE_SETUP_RESPONSE
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15faa77b3f4fe14b2886b473a406a0a0f565">kinetic_types.h</a>
+</li>
 <li>KINETIC_OBJ_SIZE
 : <a class="el" href="kinetic__types_8h.html#ab86e624f3e5859f35c94ab24eb6c97d7">kinetic_types.h</a>
 </li>
 <li>KINETIC_OPERATION_INIT
 : <a class="el" href="kinetic__types__internal_8h.html#a7c5a07c3343ea1a9cb5a63947c064a16">kinetic_types_internal.h</a>
+</li>
+<li>KINETIC_OPERATION_TIMEOUT_SECS
+: <a class="el" href="kinetic__types__internal_8h.html#a4a27e0de183fafdafcc87bf2169fb640">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_PDU_HEADER_INIT
 : <a class="el" href="kinetic__types__internal_8h.html#aadb3b50142303f07107c0dccd980d2cd">kinetic_types_internal.h</a>
@@ -178,9 +307,6 @@
 </li>
 <li>KINETIC_PDU_INIT_WITH_COMMAND
 : <a class="el" href="kinetic__types__internal_8h.html#a8b2d382301935a7b9290d83683e47624">kinetic_types_internal.h</a>
-</li>
-<li>KINETIC_PDU_RECEIVE_TIMEOUT_SECS
-: <a class="el" href="kinetic__types__internal_8h.html#adab587d1eda383a425713ba542b284f3">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_PDU_TYPE_INVALID
 : <a class="el" href="kinetic__types__internal_8h.html#a3b2dc08e44838e78d8b07dbf71583fababf062639fc81efe32fabc38333fa183f">kinetic_types_internal.h</a>
@@ -638,6 +764,9 @@
 <li>KINETIC_STATUS_OPERATION_INVALID
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aaae0e2fcdb6f20713083d21b817abcf2">kinetic_types.h</a>
 </li>
+<li>KINETIC_STATUS_OPERATION_TIMEDOUT
+: <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aec174c53ca475d4bada51ef8b6aae27f">kinetic_types.h</a>
+</li>
 <li>KINETIC_STATUS_SESSION_EMPTY
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ae004f902f39faff5c3117b7e4524f04b">kinetic_types.h</a>
 </li>
@@ -667,6 +796,22 @@
 </li>
 <li>KINETIC_SYNCHRONIZATION_WRITETHROUGH
 : <a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3a7bc2d5aa096a740bd3c8641fc5d40b48">kinetic_types.h</a>
+</li>
+<li>Kinetic_TimevalAdd()
+: <a class="el" href="kinetic__types__internal_8c.html#a2adf85c18351b5094b3f7b1784d49459">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a2adf85c18351b5094b3f7b1784d49459">kinetic_types_internal.h</a>
+</li>
+<li>Kinetic_TimevalCmp()
+: <a class="el" href="kinetic__types__internal_8c.html#a4a9f3c8864a793f00a125bad2b25d215">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a4a9f3c8864a793f00a125bad2b25d215">kinetic_types_internal.h</a>
+</li>
+<li>Kinetic_TimevalIsZero()
+: <a class="el" href="kinetic__types__internal_8c.html#ae08016165ab72a7ad14383d5eafff708">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#ae08016165ab72a7ad14383d5eafff708">kinetic_types_internal.h</a>
+</li>
+<li>Kinetic_TimevalZero()
+: <a class="el" href="kinetic__types__internal_8c.html#a5081b34063b199edb5818ac94260a038">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a5081b34063b199edb5818ac94260a038">kinetic_types_internal.h</a>
 </li>
 <li>KINETIC_TLS_PORT
 : <a class="el" href="kinetic__types_8h.html#a43b41ecab84ae37ab03051451c0aedc9">kinetic_types.h</a>
@@ -758,6 +903,10 @@
 : <a class="el" href="kinetic__client_8h.html#aa45452dad04a72b7e51ceed31321bc00">kinetic_client.h</a>
 , <a class="el" href="kinetic__client_8c.html#aa45452dad04a72b7e51ceed31321bc00">kinetic_client.c</a>
 </li>
+<li>KineticClient_GetLog()
+: <a class="el" href="kinetic__client_8h.html#a9526ad964e0d25da9aa51c8748cf7b47">kinetic_client.h</a>
+, <a class="el" href="kinetic__client_8c.html#a9526ad964e0d25da9aa51c8748cf7b47">kinetic_client.c</a>
+</li>
 <li>KineticClient_Init()
 : <a class="el" href="kinetic__client_8h.html#ab3839aed7b68c5bdc63c79ac90f4084b">kinetic_client.h</a>
 , <a class="el" href="kinetic__client_8c.html#ab3839aed7b68c5bdc63c79ac90f4084b">kinetic_client.c</a>
@@ -801,9 +950,36 @@
 : <a class="el" href="kinetic__connection_8c.html#aff1bcc17fa93954da47498bed3cac9d6">kinetic_connection.c</a>
 , <a class="el" href="kinetic__connection_8h.html#aff1bcc17fa93954da47498bed3cac9d6">kinetic_connection.h</a>
 </li>
-<li>KineticConnection_Pause()
-: <a class="el" href="kinetic__connection_8c.html#ad4fbf45e5186d78b190d7e3a73a646c2">kinetic_connection.c</a>
-, <a class="el" href="kinetic__connection_8h.html#ad4fbf45e5186d78b190d7e3a73a646c2">kinetic_connection.h</a>
+<li>KineticController_CreateOperation()
+: <a class="el" href="kinetic__controller_8c.html#a36c4acc3923b06bb2fd6a4566bc6cd89">kinetic_controller.c</a>
+, <a class="el" href="kinetic__controller_8h.html#a36c4acc3923b06bb2fd6a4566bc6cd89">kinetic_controller.h</a>
+</li>
+<li>KineticController_CreateWorkerThreads()
+: <a class="el" href="kinetic__controller_8c.html#a93df5b6cabb255fca90d347cdbad46eb">kinetic_controller.c</a>
+, <a class="el" href="kinetic__controller_8h.html#a93df5b6cabb255fca90d347cdbad46eb">kinetic_controller.h</a>
+</li>
+<li>KineticController_ExecuteOperation()
+: <a class="el" href="kinetic__controller_8c.html#ac9a4252a775e193885639be40bd3d2a0">kinetic_controller.c</a>
+, <a class="el" href="kinetic__controller_8h.html#a317e37adb34e380e2266c764b0becf36">kinetic_controller.h</a>
+</li>
+<li>KineticController_Pause()
+: <a class="el" href="kinetic__controller_8c.html#a0bba3769ca4d689de43b6ba684530c47">kinetic_controller.c</a>
+, <a class="el" href="kinetic__controller_8h.html#a0bba3769ca4d689de43b6ba684530c47">kinetic_controller.h</a>
+</li>
+<li>KineticController_ReceiveThread()
+: <a class="el" href="kinetic__controller_8c.html#a40cdec3b98767b923793edff1bc1f1c5">kinetic_controller.c</a>
+, <a class="el" href="kinetic__controller_8h.html#a40cdec3b98767b923793edff1bc1f1c5">kinetic_controller.h</a>
+</li>
+<li>KineticDeviceInfo_Create()
+: <a class="el" href="kinetic__device__info_8c.html#a5f061838bd7c675301f9a7e9bbee8758">kinetic_device_info.c</a>
+, <a class="el" href="kinetic__device__info_8h.html#a5f061838bd7c675301f9a7e9bbee8758">kinetic_device_info.h</a>
+</li>
+<li>KineticDeviceInfo_Type
+: <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">kinetic_types.h</a>
+</li>
+<li>KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type()
+: <a class="el" href="kinetic__types__internal_8c.html#a38e45c64e90e7b5508743454fd0c0568">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a38e45c64e90e7b5508743454fd0c0568">kinetic_types_internal.h</a>
 </li>
 <li>KineticEntry_GetAlgorithm()
 : <a class="el" href="kinetic__entry_8c.html#a36f0f48918587bd374c67212dc1358eb">kinetic_entry.c</a>
@@ -845,6 +1021,10 @@
 : <a class="el" href="kinetic__hmac_8c.html#aa5f262809b134357770fe1b289797fb7">kinetic_hmac.c</a>
 , <a class="el" href="kinetic__hmac_8h.html#aa5f262809b134357770fe1b289797fb7">kinetic_hmac.h</a>
 </li>
+<li>KineticLogger_ByteArraySliceToCString()
+: <a class="el" href="kinetic__logger_8c.html#a7f04a2ee23e533260754ce515744063f">kinetic_logger.c</a>
+, <a class="el" href="kinetic__logger_8h.html#a7f04a2ee23e533260754ce515744063f">kinetic_logger.h</a>
+</li>
 <li>KineticLogger_Close()
 : <a class="el" href="kinetic__logger_8c.html#a10716dedde03111fb55d990993a3c031">kinetic_logger.c</a>
 , <a class="el" href="kinetic__logger_8h.html#a10716dedde03111fb55d990993a3c031">kinetic_logger.h</a>
@@ -854,24 +1034,24 @@
 , <a class="el" href="kinetic__logger_8h.html#a055eec4603a284c28d78b080bd2402a7">kinetic_logger.h</a>
 </li>
 <li>KineticLogger_Log()
-: <a class="el" href="kinetic__logger_8c.html#ad122c68480fdf25667ee3422a9514938">kinetic_logger.c</a>
-, <a class="el" href="kinetic__logger_8h.html#ad122c68480fdf25667ee3422a9514938">kinetic_logger.h</a>
+: <a class="el" href="kinetic__logger_8h.html#ad122c68480fdf25667ee3422a9514938">kinetic_logger.h</a>
+, <a class="el" href="kinetic__logger_8c.html#ad122c68480fdf25667ee3422a9514938">kinetic_logger.c</a>
 </li>
 <li>KineticLogger_LogByteArray()
 : <a class="el" href="kinetic__logger_8c.html#adeef474b44c9d6e0c08b05b873aaf3ba">kinetic_logger.c</a>
 , <a class="el" href="kinetic__logger_8h.html#adeef474b44c9d6e0c08b05b873aaf3ba">kinetic_logger.h</a>
 </li>
 <li>KineticLogger_LogByteBuffer()
-: <a class="el" href="kinetic__logger_8c.html#a6b725885ac7e8249ee9da46955c03e5e">kinetic_logger.c</a>
-, <a class="el" href="kinetic__logger_8h.html#a6b725885ac7e8249ee9da46955c03e5e">kinetic_logger.h</a>
+: <a class="el" href="kinetic__logger_8h.html#a6b725885ac7e8249ee9da46955c03e5e">kinetic_logger.h</a>
+, <a class="el" href="kinetic__logger_8c.html#a6b725885ac7e8249ee9da46955c03e5e">kinetic_logger.c</a>
 </li>
 <li>KineticLogger_LogHeader()
 : <a class="el" href="kinetic__logger_8c.html#a209382d99015a79632efa289738f6dec">kinetic_logger.c</a>
 , <a class="el" href="kinetic__logger_8h.html#a209382d99015a79632efa289738f6dec">kinetic_logger.h</a>
 </li>
 <li>KineticLogger_LogLocation()
-: <a class="el" href="kinetic__logger_8c.html#afe64352e6aab285bffe78ccf2b2ff595">kinetic_logger.c</a>
-, <a class="el" href="kinetic__logger_8h.html#a072522133050725a79ab31ee2664a740">kinetic_logger.h</a>
+: <a class="el" href="kinetic__logger_8h.html#a072522133050725a79ab31ee2664a740">kinetic_logger.h</a>
+, <a class="el" href="kinetic__logger_8c.html#afe64352e6aab285bffe78ccf2b2ff595">kinetic_logger.c</a>
 </li>
 <li>KineticLogger_LogPrintf()
 : <a class="el" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">kinetic_logger.c</a>
@@ -886,8 +1066,8 @@
 , <a class="el" href="kinetic__logger_8h.html#ae8bf66757a616534b039c31ad863a519">kinetic_logger.h</a>
 </li>
 <li>KineticMessage_ConfigureKeyRange()
-: <a class="el" href="kinetic__message_8c.html#a203eff60f47299f8d08e7bee30fa8b73">kinetic_message.c</a>
-, <a class="el" href="kinetic__message_8h.html#a203eff60f47299f8d08e7bee30fa8b73">kinetic_message.h</a>
+: <a class="el" href="kinetic__message_8h.html#a203eff60f47299f8d08e7bee30fa8b73">kinetic_message.h</a>
+, <a class="el" href="kinetic__message_8c.html#a203eff60f47299f8d08e7bee30fa8b73">kinetic_message.c</a>
 </li>
 <li>KineticMessage_ConfigureKeyValue()
 : <a class="el" href="kinetic__message_8c.html#a9f1d330254f18b6b76e27d43b0381be6">kinetic_message.c</a>
@@ -897,13 +1077,23 @@
 : <a class="el" href="kinetic__message_8h.html#ac6ea752dfd491fffd99d4cad256f679d">kinetic_message.h</a>
 , <a class="el" href="kinetic__message_8c.html#ac6ea752dfd491fffd99d4cad256f679d">kinetic_message.c</a>
 </li>
+<li>KineticMessageType
+: <a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">kinetic_types.h</a>
+</li>
+<li>KineticMessageType_GetName()
+: <a class="el" href="kinetic__types_8h.html#a38e38f8880dedd6a7ba66c374f34b264">kinetic_types.h</a>
+, <a class="el" href="kinetic__types_8c.html#a38e38f8880dedd6a7ba66c374f34b264">kinetic_types.c</a>
+</li>
+<li>KineticMessageTypeNames
+: <a class="el" href="kinetic__types_8c.html#a15947f01729fd71d277a7ac1216c50e9">kinetic_types.c</a>
+</li>
 <li>KineticNBO_FromHostU32()
 : <a class="el" href="kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad">kinetic_nbo.c</a>
 , <a class="el" href="kinetic__nbo_8h.html#ab29859f82a05cd469391e003b4aac3ad">kinetic_nbo.h</a>
 </li>
 <li>KineticNBO_FromHostU64()
-: <a class="el" href="kinetic__nbo_8h.html#a6d46a35964958e880f5acb8674fa79ea">kinetic_nbo.h</a>
-, <a class="el" href="kinetic__nbo_8c.html#a6d46a35964958e880f5acb8674fa79ea">kinetic_nbo.c</a>
+: <a class="el" href="kinetic__nbo_8c.html#a6d46a35964958e880f5acb8674fa79ea">kinetic_nbo.c</a>
+, <a class="el" href="kinetic__nbo_8h.html#a6d46a35964958e880f5acb8674fa79ea">kinetic_nbo.h</a>
 </li>
 <li>KineticNBO_ToHostU32()
 : <a class="el" href="kinetic__nbo_8c.html#a82d5bae248ec3e63c7fd40b55a9293ca">kinetic_nbo.c</a>
@@ -918,8 +1108,8 @@
 , <a class="el" href="kinetic__operation_8h.html#a89e0c50021d088a66e7dd43b5bffdfb6">kinetic_operation.h</a>
 </li>
 <li>KineticOperation_BuildDelete()
-: <a class="el" href="kinetic__operation_8c.html#a5b9d3d9bf8bce1ff0d6ba269994a2a0b">kinetic_operation.c</a>
-, <a class="el" href="kinetic__operation_8h.html#a5b9d3d9bf8bce1ff0d6ba269994a2a0b">kinetic_operation.h</a>
+: <a class="el" href="kinetic__operation_8h.html#a5b9d3d9bf8bce1ff0d6ba269994a2a0b">kinetic_operation.h</a>
+, <a class="el" href="kinetic__operation_8c.html#a5b9d3d9bf8bce1ff0d6ba269994a2a0b">kinetic_operation.c</a>
 </li>
 <li>KineticOperation_BuildGet()
 : <a class="el" href="kinetic__operation_8c.html#ac9154d34805acb4d50877f8b6ae18595">kinetic_operation.c</a>
@@ -929,40 +1119,65 @@
 : <a class="el" href="kinetic__operation_8h.html#ac88b3aa9c05e27f0ede2b4c2465e158b">kinetic_operation.h</a>
 , <a class="el" href="kinetic__operation_8c.html#ac88b3aa9c05e27f0ede2b4c2465e158b">kinetic_operation.c</a>
 </li>
+<li>KineticOperation_BuildGetLog()
+: <a class="el" href="kinetic__operation_8c.html#a8ef4faa6a804f6f69cb9d4cbe040a810">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#a8ef4faa6a804f6f69cb9d4cbe040a810">kinetic_operation.h</a>
+</li>
 <li>KineticOperation_BuildNoop()
 : <a class="el" href="kinetic__operation_8c.html#a19c5d28a27474e8d0830a8b9d23f2231">kinetic_operation.c</a>
 , <a class="el" href="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888">kinetic_operation.h</a>
 </li>
 <li>KineticOperation_BuildPut()
-: <a class="el" href="kinetic__operation_8h.html#a60c586cb8811f4820ec41d421a44797d">kinetic_operation.h</a>
-, <a class="el" href="kinetic__operation_8c.html#a60c586cb8811f4820ec41d421a44797d">kinetic_operation.c</a>
+: <a class="el" href="kinetic__operation_8c.html#a60c586cb8811f4820ec41d421a44797d">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#a60c586cb8811f4820ec41d421a44797d">kinetic_operation.h</a>
+</li>
+<li>KineticOperation_Complete()
+: <a class="el" href="kinetic__operation_8h.html#a8ed174b20d25b186335a498efc3d763e">kinetic_operation.h</a>
+, <a class="el" href="kinetic__operation_8c.html#a8ed174b20d25b186335a498efc3d763e">kinetic_operation.c</a>
 </li>
 <li>KineticOperation_DeleteCallback()
 : <a class="el" href="kinetic__operation_8c.html#a8b2eca1a6f5bf17513598710b08c9888">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#a8b2eca1a6f5bf17513598710b08c9888">kinetic_operation.h</a>
 </li>
 <li>KineticOperation_GetCallback()
-: <a class="el" href="kinetic__operation_8c.html#a275cd19f10ca3d62735ec7376b580273">kinetic_operation.c</a>
+: <a class="el" href="kinetic__operation_8h.html#a275cd19f10ca3d62735ec7376b580273">kinetic_operation.h</a>
+, <a class="el" href="kinetic__operation_8c.html#a275cd19f10ca3d62735ec7376b580273">kinetic_operation.c</a>
 </li>
 <li>KineticOperation_GetKeyRangeCallback()
 : <a class="el" href="kinetic__operation_8c.html#a3a728d31f3840fdc4ee444456bc1ad19">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#a3a728d31f3840fdc4ee444456bc1ad19">kinetic_operation.h</a>
+</li>
+<li>KineticOperation_GetLogCallback()
+: <a class="el" href="kinetic__operation_8h.html#af1a71707ced7ffe124589efa7dd4e8ab">kinetic_operation.h</a>
+, <a class="el" href="kinetic__operation_8c.html#af1a71707ced7ffe124589efa7dd4e8ab">kinetic_operation.c</a>
 </li>
 <li>KineticOperation_GetStatus()
 : <a class="el" href="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0">kinetic_operation.c</a>
 , <a class="el" href="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0">kinetic_operation.h</a>
 </li>
+<li>KineticOperation_GetTimeoutTime()
+: <a class="el" href="kinetic__operation_8c.html#a790389f0f654a43da93c8af714e2f281">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#a790389f0f654a43da93c8af714e2f281">kinetic_operation.h</a>
+</li>
 <li>KineticOperation_NoopCallback()
 : <a class="el" href="kinetic__operation_8c.html#a70633c4e94361df29bf1c32751e476e6">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#a70633c4e94361df29bf1c32751e476e6">kinetic_operation.h</a>
 </li>
 <li>KineticOperation_PutCallback()
-: <a class="el" href="kinetic__operation_8c.html#a268cce69e9c5685227a24d8a7cb41892">kinetic_operation.c</a>
-</li>
-<li>KineticOperation_ReceiveAsync()
-: <a class="el" href="kinetic__operation_8c.html#ae05744703ff1aff004cbe2b9546fe463">kinetic_operation.c</a>
-, <a class="el" href="kinetic__operation_8h.html#ae05744703ff1aff004cbe2b9546fe463">kinetic_operation.h</a>
+: <a class="el" href="kinetic__operation_8h.html#a268cce69e9c5685227a24d8a7cb41892">kinetic_operation.h</a>
+, <a class="el" href="kinetic__operation_8c.html#a268cce69e9c5685227a24d8a7cb41892">kinetic_operation.c</a>
 </li>
 <li>KineticOperation_SendRequest()
 : <a class="el" href="kinetic__operation_8c.html#a267d9481a259bcc26147d166a3fc515a">kinetic_operation.c</a>
 , <a class="el" href="kinetic__operation_8h.html#a267d9481a259bcc26147d166a3fc515a">kinetic_operation.h</a>
+</li>
+<li>KineticOperation_SetTimeoutTime()
+: <a class="el" href="kinetic__operation_8h.html#a2cd218545f9b11b8ffe04efea3b9ab27">kinetic_operation.h</a>
+, <a class="el" href="kinetic__operation_8c.html#a2cd218545f9b11b8ffe04efea3b9ab27">kinetic_operation.c</a>
+</li>
+<li>KineticOperation_TimeoutOperations()
+: <a class="el" href="kinetic__operation_8c.html#a7b6d1724eb75b7c589664fb51865cfb4">kinetic_operation.c</a>
+, <a class="el" href="kinetic__operation_8h.html#a7b6d1724eb75b7c589664fb51865cfb4">kinetic_operation.h</a>
 </li>
 <li>KineticOperationCallback
 : <a class="el" href="kinetic__types__internal_8h.html#a9158ab969103fa3f4d50407bdf9efd46">kinetic_types_internal.h</a>
@@ -972,16 +1187,16 @@
 , <a class="el" href="kinetic__pdu_8h.html#a4125ca7cfcca3196615d1c7ac8b4288e">kinetic_pdu.h</a>
 </li>
 <li>KineticPDU_GetKeyValue()
-: <a class="el" href="kinetic__pdu_8h.html#af7d47d35bb768c734aa33ec1facdb5f5">kinetic_pdu.h</a>
-, <a class="el" href="kinetic__pdu_8c.html#af7d47d35bb768c734aa33ec1facdb5f5">kinetic_pdu.c</a>
+: <a class="el" href="kinetic__pdu_8c.html#af7d47d35bb768c734aa33ec1facdb5f5">kinetic_pdu.c</a>
+, <a class="el" href="kinetic__pdu_8h.html#af7d47d35bb768c734aa33ec1facdb5f5">kinetic_pdu.h</a>
 </li>
 <li>KineticPDU_GetStatus()
 : <a class="el" href="kinetic__pdu_8c.html#a4ea55bc7608cfae0092aebffe0a5f5ee">kinetic_pdu.c</a>
 , <a class="el" href="kinetic__pdu_8h.html#a4ea55bc7608cfae0092aebffe0a5f5ee">kinetic_pdu.h</a>
 </li>
 <li>KineticPDU_GetValueLength()
-: <a class="el" href="kinetic__pdu_8h.html#afbef97b337b85443dddc0e30d13e8cdd">kinetic_pdu.h</a>
-, <a class="el" href="kinetic__pdu_8c.html#afbef97b337b85443dddc0e30d13e8cdd">kinetic_pdu.c</a>
+: <a class="el" href="kinetic__pdu_8c.html#afbef97b337b85443dddc0e30d13e8cdd">kinetic_pdu.c</a>
+, <a class="el" href="kinetic__pdu_8h.html#afbef97b337b85443dddc0e30d13e8cdd">kinetic_pdu.h</a>
 </li>
 <li>KineticPDU_Init()
 : <a class="el" href="kinetic__pdu_8c.html#ac2b45fc01853688e458920a95bf12dda">kinetic_pdu.c</a>
@@ -1009,16 +1224,16 @@
 , <a class="el" href="kinetic__proto_8h.html#afe895a62c806efd640da0e6cca0d79ed">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command__free_unpacked()
-: <a class="el" href="kinetic__proto_8h.html#a0fdd57eebbe700925ba1c154eb43f6f8">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a0fdd57eebbe700925ba1c154eb43f6f8">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a0fdd57eebbe700925ba1c154eb43f6f8">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a0fdd57eebbe700925ba1c154eb43f6f8">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command__get_packed_size()
 : <a class="el" href="kinetic__proto_8c.html#a71882fd1b026396bf063dbea5c22b7b3">kinetic_proto.c</a>
 , <a class="el" href="kinetic__proto_8h.html#a71882fd1b026396bf063dbea5c22b7b3">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command__init()
-: <a class="el" href="kinetic__proto_8h.html#a33d9bc6620e867c10438be07bc83a94b">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a33d9bc6620e867c10438be07bc83a94b">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a33d9bc6620e867c10438be07bc83a94b">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a33d9bc6620e867c10438be07bc83a94b">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command__pack()
 : <a class="el" href="kinetic__proto_8c.html#aa889c5cf49bae7ef1ea413ab324c52de">kinetic_proto.c</a>
@@ -1036,8 +1251,8 @@
 : <a class="el" href="kinetic__proto_8h.html#aa83f51bec77b9ed6f96f40b5e0b2a4c0">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_algorithm__descriptor
-: <a class="el" href="kinetic__proto_8c.html#aa4be7767ecac12b4f28c2aee218ae70a">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#aa4be7767ecac12b4f28c2aee218ae70a">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#aa4be7767ecac12b4f28c2aee218ae70a">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#aa4be7767ecac12b4f28c2aee218ae70a">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_algorithm__enum_values_by_name
 : <a class="el" href="kinetic__proto_8c.html#a4450d3472b4531c87f289f55b972772b">kinetic_proto.c</a>
@@ -1054,8 +1269,8 @@
 , <a class="el" href="kinetic__proto_8h.html#afac45dfce3def0fb0cb4028869b87a69">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_body__init()
-: <a class="el" href="kinetic__proto_8c.html#a31bdf2631268ad658b07a3d3dda457ac">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a31bdf2631268ad658b07a3d3dda457ac">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a31bdf2631268ad658b07a3d3dda457ac">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a31bdf2631268ad658b07a3d3dda457ac">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Command_Body_Closure
 : <a class="el" href="kinetic__proto_8h.html#a5c813f3592c6a40b02a20fce753841da">kinetic_proto.h</a>
@@ -1064,16 +1279,16 @@
 : <a class="el" href="kinetic__proto_8h.html#a84ca551da4f813937ab59d085850ecbf">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log__descriptor
-: <a class="el" href="kinetic__proto_8c.html#aefaee231475fe191546a297fe6e4f398">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#aefaee231475fe191546a297fe6e4f398">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#aefaee231475fe191546a297fe6e4f398">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#aefaee231475fe191546a297fe6e4f398">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_get_log__init()
 : <a class="el" href="kinetic__proto_8c.html#a1c88a671dd641c51e543da1e0ddcfba5">kinetic_proto.c</a>
 , <a class="el" href="kinetic__proto_8h.html#a1c88a671dd641c51e543da1e0ddcfba5">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log_capacity__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a1e7ac907efc424ff949b187f7e6e0528">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a1e7ac907efc424ff949b187f7e6e0528">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a1e7ac907efc424ff949b187f7e6e0528">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a1e7ac907efc424ff949b187f7e6e0528">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_get_log_capacity__init()
 : <a class="el" href="kinetic__proto_8c.html#a53e97bffaee27524e60a416c78a79714">kinetic_proto.c</a>
@@ -1104,16 +1319,16 @@
 , <a class="el" href="kinetic__proto_8h.html#a3fba19464dbd5f758444835be0ea1509">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log_limits__descriptor
-: <a class="el" href="kinetic__proto_8h.html#a8f08524baed5e54c784ff7ed0657e3bf">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a8f08524baed5e54c784ff7ed0657e3bf">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a8f08524baed5e54c784ff7ed0657e3bf">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a8f08524baed5e54c784ff7ed0657e3bf">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log_limits__init()
 : <a class="el" href="kinetic__proto_8c.html#a692912a7092d2c125a662279f774010b">kinetic_proto.c</a>
 , <a class="el" href="kinetic__proto_8h.html#a692912a7092d2c125a662279f774010b">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log_statistics__descriptor
-: <a class="el" href="kinetic__proto_8h.html#a9793db4fbc24624f375dc566bf823a8b">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a9793db4fbc24624f375dc566bf823a8b">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a9793db4fbc24624f375dc566bf823a8b">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a9793db4fbc24624f375dc566bf823a8b">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log_statistics__init()
 : <a class="el" href="kinetic__proto_8c.html#ae6152b81de87d249a527800b29dc6cbd">kinetic_proto.c</a>
@@ -1124,12 +1339,12 @@
 , <a class="el" href="kinetic__proto_8h.html#a4d9202d2fc068dee441be061c962691a">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log_temperature__init()
-: <a class="el" href="kinetic__proto_8h.html#aab5d2285157eaa9cacf61301188ab1f3">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#aab5d2285157eaa9cacf61301188ab1f3">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#aab5d2285157eaa9cacf61301188ab1f3">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#aab5d2285157eaa9cacf61301188ab1f3">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log_type__descriptor
-: <a class="el" href="kinetic__proto_8h.html#a3d3c0e7d5f1667386575986498af0de4">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a3d3c0e7d5f1667386575986498af0de4">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a3d3c0e7d5f1667386575986498af0de4">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a3d3c0e7d5f1667386575986498af0de4">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_get_log_type__enum_values_by_name
 : <a class="el" href="kinetic__proto_8c.html#a18e25af998351f3338970aceb7f247b8">kinetic_proto.c</a>
@@ -1187,19 +1402,19 @@
 : <a class="el" href="kinetic__proto_8h.html#aca7fc3426f453e414508dd9255bb59ee">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_key_value__descriptor
-: <a class="el" href="kinetic__proto_8c.html#aeb9ddc4b268565d06636f1b4d8c64fa6">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#aeb9ddc4b268565d06636f1b4d8c64fa6">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#aeb9ddc4b268565d06636f1b4d8c64fa6">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#aeb9ddc4b268565d06636f1b4d8c64fa6">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_key_value__init()
-: <a class="el" href="kinetic__proto_8h.html#a6be0a1d606a051a3e50f39b46051bcc3">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a6be0a1d606a051a3e50f39b46051bcc3">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a6be0a1d606a051a3e50f39b46051bcc3">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a6be0a1d606a051a3e50f39b46051bcc3">kinetic_proto.h</a>
 </li>
 <li>KineticProto_Command_KeyValue_Closure
 : <a class="el" href="kinetic__proto_8h.html#a0f882e74c433161a5d62c1238e216f68">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_message_type__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a14f3a694d698fadf8ca916af7c0d561e">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a14f3a694d698fadf8ca916af7c0d561e">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a14f3a694d698fadf8ca916af7c0d561e">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a14f3a694d698fadf8ca916af7c0d561e">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_message_type__enum_values_by_name
 : <a class="el" href="kinetic__proto_8c.html#a601d8c5b6aed416d6cf08df98d73d445">kinetic_proto.c</a>
@@ -1209,6 +1424,10 @@
 </li>
 <li>KineticProto_Command_MessageType
 : <a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1">kinetic_proto.h</a>
+</li>
+<li>KineticProto_Command_MessageType_to_KineticMessageType()
+: <a class="el" href="kinetic__types__internal_8c.html#a67187990cf86b81a9b72b93f347d7c41">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a67187990cf86b81a9b72b93f347d7c41">kinetic_types_internal.h</a>
 </li>
 <li>KineticProto_command_p2_poperation__descriptor
 : <a class="el" href="kinetic__proto_8c.html#a3f20c4fd527b729ffadd19a76a566a76">kinetic_proto.c</a>
@@ -1227,8 +1446,8 @@
 , <a class="el" href="kinetic__proto_8h.html#a911518352d31016d613a42b4c2d7ab13">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_p2_poperation_peer__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a3540ad0c82429019206334003d031d46">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a3540ad0c82429019206334003d031d46">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a3540ad0c82429019206334003d031d46">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a3540ad0c82429019206334003d031d46">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_p2_poperation_peer__init()
 : <a class="el" href="kinetic__proto_8c.html#a9601abf441409ec5d421e1f4bfd6b086">kinetic_proto.c</a>
@@ -1244,16 +1463,16 @@
 : <a class="el" href="kinetic__proto_8h.html#ab78c783a3d26c1c5e34f5aa33f7f6be2">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_pin_operation__descriptor
-: <a class="el" href="kinetic__proto_8h.html#aa27e82106f148ee59cf6fc5314f34605">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#aa27e82106f148ee59cf6fc5314f34605">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#aa27e82106f148ee59cf6fc5314f34605">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#aa27e82106f148ee59cf6fc5314f34605">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_pin_operation__init()
-: <a class="el" href="kinetic__proto_8c.html#a347980ea0ef60b9de51ad9a3872b52fc">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a347980ea0ef60b9de51ad9a3872b52fc">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a347980ea0ef60b9de51ad9a3872b52fc">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a347980ea0ef60b9de51ad9a3872b52fc">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_pin_operation_pin_op_type__descriptor
-: <a class="el" href="kinetic__proto_8h.html#a3e64d6b849a04cc692072a089d15f7f7">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a3e64d6b849a04cc692072a089d15f7f7">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a3e64d6b849a04cc692072a089d15f7f7">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a3e64d6b849a04cc692072a089d15f7f7">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_pin_operation_pin_op_type__enum_values_by_name
 : <a class="el" href="kinetic__proto_8c.html#a682820ed11beb2e43707652a17b1f744">kinetic_proto.c</a>
@@ -1285,8 +1504,8 @@
 , <a class="el" href="kinetic__proto_8h.html#ac80c046de93baa190e2fc5728f9e0c28">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_range__init()
-: <a class="el" href="kinetic__proto_8c.html#af6740f2d53948c94a70a6f9afd98130b">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#af6740f2d53948c94a70a6f9afd98130b">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#af6740f2d53948c94a70a6f9afd98130b">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#af6740f2d53948c94a70a6f9afd98130b">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Command_Range_Closure
 : <a class="el" href="kinetic__proto_8h.html#a3637350714e577e8c248c79591229011">kinetic_proto.h</a>
@@ -1300,12 +1519,12 @@
 , <a class="el" href="kinetic__proto_8c.html#adaa025b67511170c353c8fa61cf438fe">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_security_acl__descriptor
-: <a class="el" href="kinetic__proto_8h.html#aab913761ed8c395296d418d675d25050">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#aab913761ed8c395296d418d675d25050">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#aab913761ed8c395296d418d675d25050">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#aab913761ed8c395296d418d675d25050">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_security_acl__init()
-: <a class="el" href="kinetic__proto_8c.html#a43633f22053032dea49028c3d32d5601">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a43633f22053032dea49028c3d32d5601">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a43633f22053032dea49028c3d32d5601">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a43633f22053032dea49028c3d32d5601">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Command_Security_ACL_Closure
 : <a class="el" href="kinetic__proto_8h.html#a09aee195b25e2e4e9e98b2b3d136e92b">kinetic_proto.h</a>
@@ -1337,8 +1556,8 @@
 : <a class="el" href="kinetic__proto_8c.html#a8fa796b75015c52e43da5c7b1a5bf251">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_security_acl_scope__descriptor
-: <a class="el" href="kinetic__proto_8h.html#a869e6fa09916cec570a8731da6a8ab13">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a869e6fa09916cec570a8731da6a8ab13">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a869e6fa09916cec570a8731da6a8ab13">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a869e6fa09916cec570a8731da6a8ab13">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_security_acl_scope__init()
 : <a class="el" href="kinetic__proto_8h.html#ab14e23ff388c150a53cd4f6f777223dc">kinetic_proto.h</a>
@@ -1355,15 +1574,15 @@
 , <a class="el" href="kinetic__proto_8c.html#a2a8669f505e1bb44a66717969899a171">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_setup__init()
-: <a class="el" href="kinetic__proto_8h.html#ab8f00198aa2b7f6cab8f9b8a9360afae">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#ab8f00198aa2b7f6cab8f9b8a9360afae">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#ab8f00198aa2b7f6cab8f9b8a9360afae">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#ab8f00198aa2b7f6cab8f9b8a9360afae">kinetic_proto.h</a>
 </li>
 <li>KineticProto_Command_Setup_Closure
 : <a class="el" href="kinetic__proto_8h.html#a57333053d6bae10b9f949a1aa93d17e1">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_status__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a3b84b39ee54e347a021135e7cfd5d8ed">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a3b84b39ee54e347a021135e7cfd5d8ed">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a3b84b39ee54e347a021135e7cfd5d8ed">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a3b84b39ee54e347a021135e7cfd5d8ed">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_status__init()
 : <a class="el" href="kinetic__proto_8c.html#a43e22752a3c2e7910dbe9831ec7bf5f7">kinetic_proto.c</a>
@@ -1373,8 +1592,8 @@
 : <a class="el" href="kinetic__proto_8h.html#ad1df3e3c4114c80e3bbb0adcb1dfec9d">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_status_status_code__descriptor
-: <a class="el" href="kinetic__proto_8h.html#a6f03786eb3f899755fc0a12a2897e31f">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a6f03786eb3f899755fc0a12a2897e31f">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a6f03786eb3f899755fc0a12a2897e31f">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a6f03786eb3f899755fc0a12a2897e31f">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_status_status_code__enum_values_by_name
 : <a class="el" href="kinetic__proto_8c.html#af4d9be72b4eecbed7e89cd920db6e6e4">kinetic_proto.c</a>
@@ -1389,8 +1608,8 @@
 : <a class="el" href="kinetic__proto_8h.html#a1ee19b34dbd4df10bc722bb6d5b35265">kinetic_proto.h</a>
 </li>
 <li>KineticProto_command_synchronization__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a734fbbd60e5847c800c7e2f5e6d5c294">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a734fbbd60e5847c800c7e2f5e6d5c294">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a734fbbd60e5847c800c7e2f5e6d5c294">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a734fbbd60e5847c800c7e2f5e6d5c294">kinetic_proto.c</a>
 </li>
 <li>KineticProto_command_synchronization__enum_values_by_name
 : <a class="el" href="kinetic__proto_8c.html#ae64dc04585f17caffd01ccd26f0aeed9">kinetic_proto.c</a>
@@ -1399,8 +1618,8 @@
 : <a class="el" href="kinetic__proto_8c.html#ab805c3b1ebcbce27f2543085af7b513c">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Command_Synchronization_from_KineticSynchronization()
-: <a class="el" href="kinetic__types__internal_8c.html#a514ed8ffd194ae8ecb5cd1e33a1845b4">kinetic_types_internal.c</a>
-, <a class="el" href="kinetic__types__internal_8h.html#a514ed8ffd194ae8ecb5cd1e33a1845b4">kinetic_types_internal.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a514ed8ffd194ae8ecb5cd1e33a1845b4">kinetic_types_internal.h</a>
+, <a class="el" href="kinetic__types__internal_8c.html#a514ed8ffd194ae8ecb5cd1e33a1845b4">kinetic_types_internal.c</a>
 </li>
 <li>KineticProto_Local
 : <a class="el" href="kinetic__proto_8h.html#aa6546c073b540ee4cd636b560a05dfeb">kinetic_proto.h</a>
@@ -1410,12 +1629,12 @@
 , <a class="el" href="kinetic__proto_8h.html#a4305f0f6053061ccdf5977cbc2529f6a">kinetic_proto.h</a>
 </li>
 <li>KineticProto_local__free_unpacked()
-: <a class="el" href="kinetic__proto_8c.html#a1efed9081d810c4c97fa9a5acd8a5fc8">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a1efed9081d810c4c97fa9a5acd8a5fc8">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a1efed9081d810c4c97fa9a5acd8a5fc8">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a1efed9081d810c4c97fa9a5acd8a5fc8">kinetic_proto.c</a>
 </li>
 <li>KineticProto_local__get_packed_size()
-: <a class="el" href="kinetic__proto_8h.html#a8915a14daecc13f8e6b2ad7a9820cb9f">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a8915a14daecc13f8e6b2ad7a9820cb9f">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a8915a14daecc13f8e6b2ad7a9820cb9f">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a8915a14daecc13f8e6b2ad7a9820cb9f">kinetic_proto.h</a>
 </li>
 <li>KineticProto_local__init()
 : <a class="el" href="kinetic__proto_8h.html#abfc145104a0945c14ed252680e536e35">kinetic_proto.h</a>
@@ -1426,8 +1645,8 @@
 , <a class="el" href="kinetic__proto_8h.html#a02d286e3d0934945991fba53695ddaf0">kinetic_proto.h</a>
 </li>
 <li>KineticProto_local__pack_to_buffer()
-: <a class="el" href="kinetic__proto_8c.html#a1c19b556391e123b36c3d949adf965b6">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a1c19b556391e123b36c3d949adf965b6">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a1c19b556391e123b36c3d949adf965b6">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a1c19b556391e123b36c3d949adf965b6">kinetic_proto.c</a>
 </li>
 <li>KineticProto_local__unpack()
 : <a class="el" href="kinetic__proto_8h.html#a2a4bc9b4f356ace1485b9000bd2b5d61">kinetic_proto.h</a>
@@ -1437,8 +1656,8 @@
 : <a class="el" href="kinetic__proto_8h.html#a7993b2b75a487cd90db032526bef8714">kinetic_proto.h</a>
 </li>
 <li>KineticProto_local_protocol_version_default_value
-: <a class="el" href="kinetic__proto_8h.html#a1f077f299008fde3e5bb46d8fd2064ef">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a1f077f299008fde3e5bb46d8fd2064ef">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a1f077f299008fde3e5bb46d8fd2064ef">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a1f077f299008fde3e5bb46d8fd2064ef">kinetic_proto.h</a>
 </li>
 <li>KineticProto_Message__descriptor
 : <a class="el" href="kinetic__proto_8c.html#a2b4f080d4acb9068dd9d48ad77b3e694">kinetic_proto.c</a>
@@ -1449,24 +1668,24 @@
 , <a class="el" href="kinetic__proto_8c.html#a236adb6fa7dbee22cdab033a4095e2d4">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Message__get_packed_size()
-: <a class="el" href="kinetic__proto_8c.html#a236b6761d6d7c083f168415570cfb457">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a236b6761d6d7c083f168415570cfb457">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a236b6761d6d7c083f168415570cfb457">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a236b6761d6d7c083f168415570cfb457">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Message__init()
-: <a class="el" href="kinetic__proto_8h.html#a4d8057f8e0f54f9b5eab6ded1bbead78">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a4d8057f8e0f54f9b5eab6ded1bbead78">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a4d8057f8e0f54f9b5eab6ded1bbead78">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a4d8057f8e0f54f9b5eab6ded1bbead78">kinetic_proto.h</a>
 </li>
 <li>KineticProto_Message__pack()
 : <a class="el" href="kinetic__proto_8h.html#a0065ff33b62a6126369a840856810df2">kinetic_proto.h</a>
 , <a class="el" href="kinetic__proto_8c.html#a0065ff33b62a6126369a840856810df2">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Message__pack_to_buffer()
-: <a class="el" href="kinetic__proto_8h.html#a1831bc486703eb04afa4e7f03b239319">kinetic_proto.h</a>
-, <a class="el" href="kinetic__proto_8c.html#a1831bc486703eb04afa4e7f03b239319">kinetic_proto.c</a>
+: <a class="el" href="kinetic__proto_8c.html#a1831bc486703eb04afa4e7f03b239319">kinetic_proto.c</a>
+, <a class="el" href="kinetic__proto_8h.html#a1831bc486703eb04afa4e7f03b239319">kinetic_proto.h</a>
 </li>
 <li>KineticProto_Message__unpack()
-: <a class="el" href="kinetic__proto_8c.html#af2a70dd612b6e627f06d99ec0f39fe19">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#af2a70dd612b6e627f06d99ec0f39fe19">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#af2a70dd612b6e627f06d99ec0f39fe19">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#af2a70dd612b6e627f06d99ec0f39fe19">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Message_auth_type__descriptor
 : <a class="el" href="kinetic__proto_8c.html#af52fc02ba091272c04bdf58f6b1f6717">kinetic_proto.c</a>
@@ -1489,15 +1708,15 @@
 , <a class="el" href="kinetic__proto_8h.html#aceb60fb84ad7fd6a123a41567a178eb1">kinetic_proto.h</a>
 </li>
 <li>KineticProto_Message_hmacauth__init()
-: <a class="el" href="kinetic__proto_8c.html#a232d813b799353cdc5faaf4c78d00574">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a232d813b799353cdc5faaf4c78d00574">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a232d813b799353cdc5faaf4c78d00574">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a232d813b799353cdc5faaf4c78d00574">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Message_HMACauth_Closure
 : <a class="el" href="kinetic__proto_8h.html#a15a3dc08f08b72b4209bc2c326fb718f">kinetic_proto.h</a>
 </li>
 <li>KineticProto_Message_pinauth__descriptor
-: <a class="el" href="kinetic__proto_8c.html#a04330b2fd569dbca5923e5362264c2bb">kinetic_proto.c</a>
-, <a class="el" href="kinetic__proto_8h.html#a04330b2fd569dbca5923e5362264c2bb">kinetic_proto.h</a>
+: <a class="el" href="kinetic__proto_8h.html#a04330b2fd569dbca5923e5362264c2bb">kinetic_proto.h</a>
+, <a class="el" href="kinetic__proto_8c.html#a04330b2fd569dbca5923e5362264c2bb">kinetic_proto.c</a>
 </li>
 <li>KineticProto_Message_pinauth__init()
 : <a class="el" href="kinetic__proto_8c.html#a78ea9a8ab7156f09b6681aef320eeb29">kinetic_proto.c</a>
@@ -1507,8 +1726,24 @@
 : <a class="el" href="kinetic__proto_8h.html#a670eb6cef8f15a37a8d43a13bf0b9d89">kinetic_proto.h</a>
 </li>
 <li>KineticProtoStatusCode_to_KineticStatus()
-: <a class="el" href="kinetic__types__internal_8c.html#afef6c786c0ae708f69144e01b58a9f09">kinetic_types_internal.c</a>
-, <a class="el" href="kinetic__types__internal_8h.html#afef6c786c0ae708f69144e01b58a9f09">kinetic_types_internal.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#afef6c786c0ae708f69144e01b58a9f09">kinetic_types_internal.h</a>
+, <a class="el" href="kinetic__types__internal_8c.html#afef6c786c0ae708f69144e01b58a9f09">kinetic_types_internal.c</a>
+</li>
+<li>KineticSerialAllocator_AllocateChunk()
+: <a class="el" href="kinetic__serial__allocator_8c.html#a5461e7660ca76f2e4df9895d2dc0ed0f">kinetic_serial_allocator.c</a>
+, <a class="el" href="kinetic__serial__allocator_8h.html#a5461e7660ca76f2e4df9895d2dc0ed0f">kinetic_serial_allocator.h</a>
+</li>
+<li>KineticSerialAllocator_Create()
+: <a class="el" href="kinetic__serial__allocator_8h.html#af594292bcd05e13afbef238d31fea362">kinetic_serial_allocator.h</a>
+, <a class="el" href="kinetic__serial__allocator_8c.html#af594292bcd05e13afbef238d31fea362">kinetic_serial_allocator.c</a>
+</li>
+<li>KineticSerialAllocator_GetBuffer()
+: <a class="el" href="kinetic__serial__allocator_8h.html#a652f3b6d0902396612a636381ae435b3">kinetic_serial_allocator.h</a>
+, <a class="el" href="kinetic__serial__allocator_8c.html#a652f3b6d0902396612a636381ae435b3">kinetic_serial_allocator.c</a>
+</li>
+<li>KineticSerialAllocator_TrimBuffer()
+: <a class="el" href="kinetic__serial__allocator_8h.html#a305ba9f4b1446e84cefc09abb6391b32">kinetic_serial_allocator.h</a>
+, <a class="el" href="kinetic__serial__allocator_8c.html#a305ba9f4b1446e84cefc09abb6391b32">kinetic_serial_allocator.c</a>
 </li>
 <li>KineticSessionHandle
 : <a class="el" href="kinetic__types_8h.html#af2747d5f7954601329c11b58757764b9">kinetic_types.h</a>
@@ -1534,16 +1769,16 @@
 , <a class="el" href="kinetic__socket_8h.html#ad82b06cbb8d3c2900d82c2150c65166d">kinetic_socket.h</a>
 </li>
 <li>KineticSocket_WaitUntilDataAvailable()
-: <a class="el" href="kinetic__socket_8h.html#a878d06b782421ad04571d700d345efe7">kinetic_socket.h</a>
-, <a class="el" href="kinetic__socket_8c.html#a878d06b782421ad04571d700d345efe7">kinetic_socket.c</a>
+: <a class="el" href="kinetic__socket_8c.html#a878d06b782421ad04571d700d345efe7">kinetic_socket.c</a>
+, <a class="el" href="kinetic__socket_8h.html#a878d06b782421ad04571d700d345efe7">kinetic_socket.h</a>
 </li>
 <li>KineticSocket_Write()
-: <a class="el" href="kinetic__socket_8c.html#a82dad2d07c5331873418b98d1c9b1f76">kinetic_socket.c</a>
-, <a class="el" href="kinetic__socket_8h.html#a82dad2d07c5331873418b98d1c9b1f76">kinetic_socket.h</a>
+: <a class="el" href="kinetic__socket_8h.html#a82dad2d07c5331873418b98d1c9b1f76">kinetic_socket.h</a>
+, <a class="el" href="kinetic__socket_8c.html#a82dad2d07c5331873418b98d1c9b1f76">kinetic_socket.c</a>
 </li>
 <li>KineticSocket_WriteProtobuf()
-: <a class="el" href="kinetic__socket_8h.html#a99a055b710b2aae0895730e2963a39f5">kinetic_socket.h</a>
-, <a class="el" href="kinetic__socket_8c.html#a99a055b710b2aae0895730e2963a39f5">kinetic_socket.c</a>
+: <a class="el" href="kinetic__socket_8c.html#a99a055b710b2aae0895730e2963a39f5">kinetic_socket.c</a>
+, <a class="el" href="kinetic__socket_8h.html#a99a055b710b2aae0895730e2963a39f5">kinetic_socket.h</a>
 </li>
 <li>KineticStatus
 : <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">kinetic_types.h</a>
@@ -1552,8 +1787,8 @@
 : <a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3">kinetic_types.h</a>
 </li>
 <li>KineticSynchronization_from_KineticProto_Command_Synchronization()
-: <a class="el" href="kinetic__types__internal_8h.html#a38b8ee716c8f48faa81ec0fc20c2ebe5">kinetic_types_internal.h</a>
-, <a class="el" href="kinetic__types__internal_8c.html#a38b8ee716c8f48faa81ec0fc20c2ebe5">kinetic_types_internal.c</a>
+: <a class="el" href="kinetic__types__internal_8c.html#a38b8ee716c8f48faa81ec0fc20c2ebe5">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a38b8ee716c8f48faa81ec0fc20c2ebe5">kinetic_types_internal.h</a>
 </li>
 <li>KineticWaitStatus
 : <a class="el" href="kinetic__socket_8h.html#ab17d289ac26850e85927a83b66334da3">kinetic_socket.h</a>
