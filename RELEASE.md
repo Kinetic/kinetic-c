@@ -24,4 +24,4 @@ v0.8.0
 v0.8.1
 ------
 * Added GETLOG operation.
-* Added thread-safety to allow multiple client threads within the same session.
+* Added thread-safety to allow multiple client threads within the same session. **(IN PROGRESS)**
