@@ -224,7 +224,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
     if (keyValue != NULL && entry != NULL) {
 
         ByteBuffer_Reset(&entry->newVersion);
-        if (keyValue->has_newVersion) {
+        if (keyValue->has_newVersion && keyValue->newVersion.len > 0) {
             if (entry->newVersion.array.data == NULL ||
                 entry->newVersion.array.len < keyValue->newVersion.len) {
                 entry->newVersion.bytesUsed = keyValue->newVersion.len;
@@ -237,7 +237,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
         }
 
         ByteBuffer_Reset(&entry->dbVersion);
-        if (keyValue->has_dbVersion) {
+        if (keyValue->has_dbVersion && keyValue->dbVersion.len > 0) {
             if (entry->dbVersion.array.data == NULL || entry->dbVersion.array.len < keyValue->dbVersion.len) {
                 entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
                 LOG1(" BUFFER_OVERRUN: dbVersion");
@@ -249,7 +249,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
         }
 
         ByteBuffer_Reset(&entry->key);
-        if (keyValue->has_key) {
+        if (keyValue->has_key && keyValue->key.len > 0) {
             if (entry->key.array.data == NULL || entry->key.array.len < keyValue->key.len) {
                 entry->key.bytesUsed = keyValue->key.len;
                 LOG1(" BUFFER_OVERRUN: key");
@@ -261,7 +261,7 @@ bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_Key
         }
 
         ByteBuffer_Reset(&entry->tag);
-        if (keyValue->has_tag) {
+        if (keyValue->has_tag && keyValue->tag.len > 0) {
             if (entry->tag.array.data == NULL || entry->tag.array.len < keyValue->tag.len) {
                 entry->tag.bytesUsed = keyValue->tag.len;
                 LOG1(" BUFFER_OVERRUN: tag");

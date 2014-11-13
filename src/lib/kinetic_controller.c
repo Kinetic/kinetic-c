@@ -175,9 +175,6 @@ void* KineticController_ReceiveThread(void* thread_arg)
                 if (status != KINETIC_STATUS_SUCCESS) {
                     LOGF0("ERROR: PDU receive reported an error: %s", Kinetic_GetStatusDescription(status));
                 }
-                else {
-                    status = KineticPDU_GetStatus(response);
-                }
 
                 if (response->proto != NULL && response->proto->has_authType) {
 
@@ -223,6 +220,8 @@ void* KineticController_ReceiveThread(void* thread_arg)
                             if (status == KINETIC_STATUS_SUCCESS) {
                                 status = KineticPDU_GetStatus(response);
                             }
+                            
+                            LOGF2("Response PDU received w/status %s, %i", Kinetic_GetStatusDescription(status), status);
 
                             KineticOperation_Complete(op, status);
                         }
