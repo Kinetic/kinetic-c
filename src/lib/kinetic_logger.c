@@ -213,7 +213,7 @@ static int KineticLogger_u8toa(char* p_buf, uint8_t val)
     return width;
 }
 
-static int KineticLogger_ByteArraySliceToCString(char* p_buf,
+int KineticLogger_ByteArraySliceToCString(char* p_buf,
         const ByteArray bytes, const int start, const int count)
 {
     int len = 0;
@@ -223,11 +223,6 @@ static int KineticLogger_ByteArraySliceToCString(char* p_buf,
     }
     p_buf[len] = '\0';
     return len;
-}
-
-#define BYTES_TO_CSTRING(_buf_start, _array, _array_start, _count) { \
-    ByteArray __array = {.data = _array.data, .len = (_array).len}; \
-    KineticLogger_ByteArraySliceToCString((char*)(_buf_start), (__array), (_array_start), (_count)); \
 }
 
 // #define Proto_LogBinaryDataOptional(el, attr)

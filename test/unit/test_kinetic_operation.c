@@ -816,14 +816,14 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 
 void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
 {
-    KineticConnection con;
-    KineticPDU response;
-    KineticDeviceInfo* info;
-    KineticOperation op = {
-        .connection = &con,
-        .response = &response,
-        .deviceInfo = &info,
-    };
+    // KineticConnection con;
+    // KineticPDU response;
+    // KineticDeviceInfo* info;
+    // KineticOperation op = {
+    //     .connection = &con,
+    //     .response = &response,
+    //     .deviceInfo = &info,
+    // };
 
     TEST_IGNORE_MESSAGE("TODO: Need to implement!")
 
