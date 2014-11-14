@@ -80,6 +80,9 @@ void store_data(write_args* args)
 
 int main(int argc, char** argv)
 {
+    (void)argc;
+    (void)argv;
+
     // Read in file contents to store
     const char* dataFile = "test/support/data/test.data";
     struct stat st;
@@ -105,6 +108,7 @@ int main(int argc, char** argv)
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
     write_args* writeArgs = calloc(1, sizeof(write_args));
+    KineticClient_Init("stdout", 2);
     status = KineticClient_Connect(&sessionConfig, &writeArgs->sessionHandle);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Connection to host '%s' failed w/ status: %s",
@@ -138,6 +142,9 @@ int main(int argc, char** argv)
 
     // Shutdown client connection and cleanup
     KineticClient_Disconnect(&writeArgs->sessionHandle);
+    KineticClient_Shutdown();
     free(writeArgs);
     free(buf);
+
+    return 0;
 }

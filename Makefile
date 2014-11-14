@@ -78,16 +78,24 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_client.o
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
-default: $(KINETIC_LIB)
+default: makedirs $(KINETIC_LIB)
 
-all: clean test default run
+makedirs:
+	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./out &> /dev/null
 
-clean:
+all: clean test default run examples
+
+clean: makedirs
 	bundle exec rake clobber
-	rm -rf $(BIN_DIR)/* $(OUT_DIR)/*.o *.core *.log
+	find ./bin/**/* -type f | xargs rm $1
+	rm -rf ./bin/**/*.dSYM
+	rm -rf ./bin/**/*.a
+	rm -f $(OUT_DIR)/*.o *.core *.log
 	git submodule update --init
 
-.PHONY: clean
+.PHONY: clean makedirs
+
+.POSIX:
 
 # $(OUT_DIR)/%.o: %.c $(DEPS)
 # 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -229,12 +237,12 @@ start_simulator:
 
 erase_simulator: start_simulator
 	./vendor/kinetic-simulator/eraseSimulator.sh
-	sleep 1
+	sleep 2
 
 stop_simulator:
 	./vendor/kinetic-simulator/stopSimulator.sh
 
-.PHONY: start_simulator erase_simulator stop_simulator
+.PHONY: erase_simulator
 
 
 #===============================================================================
@@ -290,17 +298,41 @@ run: $(UTIL_EXEC) start_simulator
 #===============================================================================
 
 EXAMPLE_SRC = ./src/examples
-EXAMPLE_BIN = $(BIN_DIR)/
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+EXAMPLES = write_file_blocking
 
-# $(OUT_DIR)/%.o: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
-# 	$(CC) -c -o $@ $< $(CFLAGS)
+example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
+example_executables = $(patsubst $(EXAMPLE_SRC)/%.c,$(BIN_DIR)/examples/%,$(example_sources))
 
-$(EXAMPLE_BIN)/write_file_blocking: $(EXAMPLE_SRC)/write_file_blocking.c $(KINETIC_LIB)
+list_examples:
+	echo $(example_executables)
+
+$(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Building example: $@
+	@echo ================================================================================
+	@echo Building example: $<
 	@echo --------------------------------------------------------------------------------
 	$(CC) -o $@ $< $(CFLAGS) -I$(PUB_INC) $(UTIL_LDFLAGS) $(KINETIC_LIB)
+	@echo ================================================================================
+	@echo
 
-examples: $(KINETIC_LIB) $(EXAMPLE_BIN)/write_file_blocking
+build_examples: $(example_executables)
+
+run_example_%: $(BIN_DIR)/examples/%
+	@echo
+	@echo ================================================================================
+	@echo Executing example: '$<'
+	@echo --------------------------------------------------------------------------------;
+	$<
+	@echo ================================================================================
+	@echo
+
+setup_examples: $(example_executables) \
+	build_examples start_simulator erase_simulator
+
+examples: setup_examples \
+	run_example_write_file_blocking \
+	run_example_write_file_blocking_threads \
+	run_example_write_file_nonblocking \
+	run_example_write_file_nonblocking_threads \
+	stop_simulator
