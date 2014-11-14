@@ -289,23 +289,18 @@ run: $(UTIL_EXEC) start_simulator
 # Standalone Example Executables
 #===============================================================================
 
-# EXAMPLE_SRC = ./src/examples
-# EXAMPLE_BIN = $(BIN_DIR)/
-# EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+EXAMPLE_SRC = ./src/examples
+EXAMPLE_BIN = $(BIN_DIR)/
+EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 
-# $(OUT_DIR)/%.o: %.c $(DEPS)
+# $(OUT_DIR)/%.o: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 # 	$(CC) -c -o $@ $< $(CFLAGS)
 
-# $(UTIL_OBJ): $(EXAMPLE_SRC)/*.c
-# 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC)
+$(EXAMPLE_BIN)/write_file_blocking: $(EXAMPLE_SRC)/write_file_blocking.c $(KINETIC_LIB)
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Building example: $@
+	@echo --------------------------------------------------------------------------------
+	$(CC) -o $@ $< $(CFLAGS) -I$(PUB_INC) $(UTIL_LDFLAGS) $(KINETIC_LIB)
 
-# $(UTIL_EXEC): $(UTIL_OBJ) $(KINETIC_LIB)
-# 	@echo
-# 	@echo --------------------------------------------------------------------------------
-# 	@echo Building development test utility: $(UTIL_EXEC)
-# 	@echo --------------------------------------------------------------------------------
-# 	$(CC) -o $@ $< $(CFLAGS) $(UTIL_LDFLAGS) $(KINETIC_LIB)
-
-# utility: $(UTIL_EXEC)
-
-# build: $(KINETIC_LIB) $(KINETIC_SO_DEV) utility
+examples: $(KINETIC_LIB) $(EXAMPLE_BIN)/write_file_blocking

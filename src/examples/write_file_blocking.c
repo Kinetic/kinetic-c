@@ -21,13 +21,12 @@
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "byte_array.h"
-
-#include <string.h>
 #include <stdlib.h>
+#include <getopt.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <sys/param.h>
 #include <sys/stat.h>
+#include <sys/file.h>
 
 typedef struct {
     char ip[16];
@@ -41,9 +40,8 @@ typedef struct {
     ByteBuffer data;
     KineticStatus status;
 } write_args;
-static write_args WriteArgs;
 
-void kinetic_put(write_args* args)
+void store_data(write_args* args)
 {
     KineticEntry* entry = &(args->entry);
     int32_t objIndex = 0;
@@ -52,7 +50,7 @@ void kinetic_put(write_args* args)
 
         // Configure entry meta-data
         ByteBuffer_Reset(&entry->key);
-        ByteBuffer_AppendCString(&entry->key, WriteArgs.keyPrefix);
+        ByteBuffer_AppendCString(&entry->key, args->keyPrefix);
         char keySuffix[8];
         snprintf(keySuffix, sizeof(keySuffix), "%02d", objIndex);
         ByteBuffer_AppendCString(&entry->key, keySuffix);
@@ -80,9 +78,23 @@ void kinetic_put(write_args* args)
     printf("File stored on Kinetic Device across %d entries\n", objIndex);
 }
 
-int main(const char * argc, const int argv)
+int main(int argc, char** argv)
 {
-    KineticSessionHandle kinetic_client;
+    // Read in file contents to store
+    const char* dataFile = "test/support/data/test.data";
+    struct stat st;
+    stat(dataFile, &st);
+    char* buf = malloc(st.st_size);
+    int fd = open(dataFile, O_RDONLY);
+    long dataLen = read(fd, buf, st.st_size);
+    close(fd);
+    if (dataLen <= 0) {
+        fprintf(stderr, "Failed reading data file to store: %s", dataFile);
+        exit(-1);
+    }
+
+    // Establish connection
+    KineticStatus status;
     const char HmacKeyString[] = "asdfasdf";
     const KineticSession sessionConfig = {
         .host = "localhost",
@@ -92,52 +104,40 @@ int main(const char * argc, const int argv)
         .nonBlocking = false,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-
-    // Read in file contents to store
-    const char* dataFile = "test/support/data/test.data";
-    struct stat st;
-    stat(dataFile, &st);
-    char* buf = malloc(st.st_size);
-    int fd = open(dataFile, O_RDONLY);
-    long dataLen = read(fd, buf, BUFSIZE);
-    close(fd);
-    if (dataLen <= 0) {
-        fprinf(stderr, "Failed reading data file to store: %s", dataFile);
-        exit(-1);
+    write_args* writeArgs = calloc(1, sizeof(write_args));
+    status = KineticClient_Connect(&sessionConfig, &writeArgs->sessionHandle);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        fprintf(stderr, "Connection to host '%s' failed w/ status: %s",
+            sessionConfig.host, Kinetic_GetStatusDescription(status));
     }
 
-    // Establish connection
-    KineticClient_Connect(&sessionConfig, &kinetic_client));
-
     // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
-    WriteArgs.data = ByteBuffer_Create(buf, dataLen, 0);
+    writeArgs->data = ByteBuffer_Create(buf, dataLen, 0);
 
     // Configure common meta-data for the entries
     struct timeval now;
     gettimeofday(&now, NULL);
-    snprintf(WriteArgs.keyPrefix, sizeof(WriteArgs.keyPrefix), "%010llu_%02d%02d_",
-        now.tv_sec, iteration, i);
-    ByteBuffer verBuf = ByteBuffer_Create(WriteArgs.version, sizeof(WriteArgs.version), 0);
+    snprintf(writeArgs->keyPrefix, sizeof(writeArgs->keyPrefix), "%010ld_", now.tv_sec);
+    ByteBuffer verBuf = ByteBuffer_Create(writeArgs->version, sizeof(writeArgs->version), 0);
     ByteBuffer_AppendCString(&verBuf, "v1.0");
-    ByteBuffer tagBuf = ByteBuffer_Create(WriteArgs.tag, sizeof(WriteArgs.tag), 0);
+    ByteBuffer tagBuf = ByteBuffer_Create(writeArgs->tag, sizeof(writeArgs->tag), 0);
     ByteBuffer_AppendCString(&tagBuf, "some_value_tag...");
-    WriteArgs.entry = (KineticEntry) {
-        .key = ByteBuffer_Create(WriteArgs.key, sizeof(WriteArgs.key), 0),
+    writeArgs->entry = (KineticEntry) {
+        .key = ByteBuffer_Create(writeArgs->key, sizeof(writeArgs->key), 0),
         // .newVersion = verBuf,
         .tag = tagBuf,
         .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer valBuf = ByteBuffer_Create(WriteArgs.value, sizeof(WriteArgs.value), 0),
+        .value = ByteBuffer_Create(writeArgs->value, sizeof(writeArgs->value), 0),
         .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
     };
-    strcpy(WriteArgs.ip, sessionConfig.host);
+    strcpy(writeArgs->ip, sessionConfig.host);
 
     // Store the data
     printf("\nWriting data file to the Kinetic device...\n");
-    kinetic_put(WriteArgs);
+    store_data(writeArgs);
 
     // Shutdown client connection and cleanup
-    KineticClient_Disconnect(&kinetic_client[i]);
-    free(kinetic_client);
-    free(kt_arg);
+    KineticClient_Disconnect(&writeArgs->sessionHandle);
+    free(writeArgs);
     free(buf);
 }
