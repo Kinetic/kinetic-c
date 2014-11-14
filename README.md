@@ -64,8 +64,8 @@ Example Client/Test Utility
 
 Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.
 
-* 'kinetic-c-util' builds/links against installed Kinetic C static library (.a)
-* 'kinetic-c-util.x.y.z' builds/links against installed Kinetic C dynamic library (.so)
+* `kinetic-c-util` builds/links against Kinetic C static library (.a)
+* `kinetic-c-util.x.y.z` builds/links against Kinetic C dynamic library (.so)
 
 The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.
 

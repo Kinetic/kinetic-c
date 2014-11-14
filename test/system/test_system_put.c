@@ -124,7 +124,6 @@ void test_Delete_old_object_if_exists(void)
     }
 }
 
-#if 0
 void test_Put_should_create_new_object_on_device(void)
 {
     LOG_LOCATION;
@@ -327,9 +326,7 @@ void test_Put_should_be_able_to_store_max_sized_entry(void)
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
 }
-#endif
 
-#if 1
 typedef struct _TestPutClientDataStruct {
     bool called;
     int callbackCount;
@@ -401,7 +398,6 @@ void test_Put_should_use_asynchronous_mode_if_closure_specified(void)
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
 }
-#endif
 
 /*******************************************************************************
 * ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE

@@ -283,3 +283,29 @@ run: $(UTIL_EXEC) start_simulator
 	@echo
 	@echo Stopping simulator...
 	./vendor/kinetic-simulator/stopSimulator.sh
+
+
+#===============================================================================
+# Standalone Example Executables
+#===============================================================================
+
+# EXAMPLE_SRC = ./src/examples
+# EXAMPLE_BIN = $(BIN_DIR)/
+# EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+
+# $(OUT_DIR)/%.o: %.c $(DEPS)
+# 	$(CC) -c -o $@ $< $(CFLAGS)
+
+# $(UTIL_OBJ): $(EXAMPLE_SRC)/*.c
+# 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC)
+
+# $(UTIL_EXEC): $(UTIL_OBJ) $(KINETIC_LIB)
+# 	@echo
+# 	@echo --------------------------------------------------------------------------------
+# 	@echo Building development test utility: $(UTIL_EXEC)
+# 	@echo --------------------------------------------------------------------------------
+# 	$(CC) -o $@ $< $(CFLAGS) $(UTIL_LDFLAGS) $(KINETIC_LIB)
+
+# utility: $(UTIL_EXEC)
+
+# build: $(KINETIC_LIB) $(KINETIC_SO_DEV) utility
