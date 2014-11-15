@@ -160,17 +160,17 @@
 			"name": "kinetic-c - Build and run test utility",
 			"working_dir": "${project_path}"
 		},
+    {
+      "cmd": ["make", "examples"],
+      "file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+      "name": "kinetic-c - Build and run Examples",
+      "working_dir": "${project_path}"
+    },
 		{
 			"cmd": ["make", "all"],
 			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Full CI build",
 			"working_dir": "${project_path}"
 		},
-    {
-      "cmd": ["make", "examples"],
-      "file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
-      "name": "kinetic-c - Build Examples",
-      "working_dir": "${project_path}"
-    },
 	]
 }

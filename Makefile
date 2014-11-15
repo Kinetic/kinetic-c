@@ -86,19 +86,15 @@ makedirs:
 all: clean test default run examples
 
 clean: makedirs
-	bundle exec rake clobber
-	find ./bin/**/* -type f | xargs rm $1
-	rm -rf ./bin/**/*.dSYM
-	rm -rf ./bin/**/*.a
+	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o *.core *.log
+	rake clobber
 	git submodule update --init
 
-.PHONY: clean makedirs
+.PHONY: clean
 
 .POSIX:
 
-# $(OUT_DIR)/%.o: %.c $(DEPS)
-# 	$(CC) -c -o $@ $< $(CFLAGS)
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
@@ -233,14 +229,16 @@ update_simulator:
 
 start_simulator:
 	./vendor/kinetic-simulator/startSimulator.sh &
-	sleep 4
+	sleep 2
 
 erase_simulator: start_simulator
 	./vendor/kinetic-simulator/eraseSimulator.sh
-	sleep 2
+	sleep 1
 
 stop_simulator:
+	sleep 1
 	./vendor/kinetic-simulator/stopSimulator.sh
+	sleep 1
 
 .PHONY: erase_simulator
 
@@ -319,6 +317,8 @@ $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 build_examples: $(example_executables)
 
 run_example_%: $(BIN_DIR)/examples/%
+	./vendor/kinetic-simulator/startSimulator.sh & &> /dev/null; sleep 4
+	./vendor/kinetic-simulator/eraseSimulator.sh &> /dev/null; sleep 2
 	@echo
 	@echo ================================================================================
 	@echo Executing example: '$<'
@@ -326,13 +326,14 @@ run_example_%: $(BIN_DIR)/examples/%
 	$<
 	@echo ================================================================================
 	@echo
+	@echo Stopping simulator...
+	./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null; sleep 2
 
 setup_examples: $(example_executables) \
-	build_examples start_simulator erase_simulator
+	build_examples
 
 examples: setup_examples \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
 	run_example_write_file_nonblocking_threads \
-	stop_simulator
