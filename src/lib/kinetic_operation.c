@@ -207,7 +207,7 @@ void KineticOperation_BuildNoop(KineticOperation* const operation)
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->valueEnabled = false;
-    operation->sendValue = true;
+    operation->sendValue = false;
     operation->callback = &KineticOperation_NoopCallback;
 }
 
@@ -408,6 +408,31 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     operation->deviceInfo = info;
     operation->callback = &KineticOperation_GetLogCallback;
 }
+
+KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* operation)
+{
+    assert(operation != NULL);
+    assert(operation->connection != NULL);
+    LOGF3("IntantSecureErase callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        operation, operation->connection);
+    return KINETIC_STATUS_SUCCESS;
+}
+
+void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+    operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
+    operation->request->protoData.message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->protoData.message.body;
+    operation->request->command->body->pinOp = &operation->request->protoData.message.pinOp;
+    operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP;
+    operation->request->command->body->pinOp->has_pinOpType = true;
+    operation->valueEnabled = false;
+    operation->sendValue = false;
+    operation->callback = &KineticOperation_InstantSecureEraseCallback;
+}
+
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation)
 {

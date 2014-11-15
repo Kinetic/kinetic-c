@@ -33,6 +33,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
 
     memset(fixture, 0, sizeof(SystemTestFixture));
 
+    KineticStatus status;
     ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
     if (!fixture->connected) {
         *fixture = (SystemTestFixture) {
@@ -47,7 +48,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
             .connected = fixture->connected,
             .testIgnored = false,
         };
-        KineticStatus status = KineticClient_Connect(&fixture->config, &fixture->handle);
+        status = KineticClient_Connect(&fixture->config, &fixture->handle);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
@@ -55,6 +56,10 @@ void SystemTestSetup(SystemTestFixture* fixture)
     else {
         fixture->testIgnored = false;
     }
+
+    // Erase the drive
+    status = KineticClient_InstantSecureErase(fixture->handle);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // TEST_ASSERT_EQUAL_MESSAGE(
     //     fixture->expectedSequence,

@@ -211,3 +211,14 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
 }
+
+KineticStatus KineticClient_InstantSecureErase(KineticSessionHandle handle)
+{
+    assert(handle != KINETIC_HANDLE_INVALID);
+
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildInstantSecureErase(operation);
+    return KineticController_ExecuteOperation(operation, NULL);
+}

@@ -131,6 +131,7 @@ typedef struct _KineticMessage {
     KineticProto_Command_Range          keyRange;
     KineticProto_Command_GetLog         getLog;
     KineticProto_Command_GetLog_Type    getLogType;
+    KineticProto_Command_PinOperation   pinOp;
 } KineticMessage;
 
 #define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
@@ -179,6 +180,7 @@ typedef struct _KineticMessage {
     KineticProto_command_key_value__init(&(msg)->keyValue); \
     KineticProto_command_range__init(&(msg)->keyRange); \
     KineticProto_command_get_log__init(&(msg)->getLog); \
+    KineticProto_command_pin_operation__init(&(msg)->pinOp); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
     (msg)->has_command = false; \
 }

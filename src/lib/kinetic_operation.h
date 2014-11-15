@@ -55,6 +55,9 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
                                KineticDeviceInfo_Type type,
                                KineticDeviceInfo** info);
 
+KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* operation);
+void KineticOperation_BuildInstantSecureErase(KineticOperation* operation);
+
 void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);
 void KineticOperation_TimeoutOperations(KineticConnection* const connection);
 

@@ -101,7 +101,15 @@ KineticStatus ExecuteOperation(
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
 
-    if (strcmp("noop", operation) == 0) {
+    if (strcmp("instanterase", operation) == 0) {
+        status = KineticClient_InstantSecureErase(sessionHandle);
+        if (status == 0) {
+            printf("\nInstantSecureErase executed successfully."
+                   " The device has been erased!\n\n");
+        }
+    }
+
+    else if (strcmp("noop", operation) == 0) {
         status = KineticClient_NoOp(sessionHandle);
         if (status == KINETIC_STATUS_SUCCESS) {
             printf("\nNoOp operation completed successfully."

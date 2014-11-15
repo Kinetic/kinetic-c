@@ -231,7 +231,7 @@ Dir['test/integration/test_*.c'].each do |test_file|
   task test_file => ['java_sim:shutdown', 'ruby_sim:start']
 end
 Dir['test/system/test_*.c'].each do |test_file|
-  task test_file => ['ruby_sim:shutdown', 'java_sim:erase', 'java_sim:start']
+  task test_file => ['ruby_sim:shutdown', 'java_sim:start']
 end
 
 namespace :system do
@@ -295,7 +295,6 @@ namespace :tests do
   task :system => ['java_sim:start'] do
     report_banner "Running System Tests"
     shutdown_ruby_server
-    java_sim_erase_drive
     java_sim_start
     Rake::Task['test:path'].reenable
     Rake::Task['test:path'].invoke('test/system')
@@ -308,7 +307,6 @@ namespace :tests do
       desc "Run system test #{basename}"
       task basename do
         shutdown_ruby_server
-        java_sim_erase_drive
         java_sim_start
         Rake::Task[test].reenable
         Rake::Task[test].invoke
@@ -333,7 +331,6 @@ namespace :tests do
     end
 
     task :noop => ['ruby_sim:shutdown'] do
-      java_sim_erase_drive
       with_test_server("Testing NoOp Operation") do
         execute_command "./kinetic-c noop"
         execute_command "./kinetic-c --host localhost noop"
@@ -343,14 +340,12 @@ namespace :tests do
     end
 
     task :put => ['ruby_sim:shutdown'] do
-      java_sim_erase_drive
       with_test_server("Testing Put operation") do
         execute_command "./kinetic-c put"
       end
     end
 
     task :get => ['ruby_sim:shutdown'] do
-      java_sim_erase_drive
       with_test_server("Testing Get operation") do
         execute_command "./kinetic-c put"
         execute_command "./kinetic-c get"
@@ -359,7 +354,6 @@ namespace :tests do
     end
 
     task :delete => ['release', 'ruby_sim:shutdown'] do
-      java_sim_erase_drive
       with_test_server("Testing Get operation") do
         execute_command "./kinetic-c put"
         execute_command "./kinetic-c get"

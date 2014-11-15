@@ -85,45 +85,6 @@ void tearDown(void)
     SystemTestTearDown(&Fixture);
 }
 
-void test_Delete_old_object_if_exists(void)
-{
-    KineticStatus status;
-
-    // Delete the first object, if it exists
-    ByteBuffer_Reset(&TagBuffer);
-    Entry = (KineticEntry) {
-        .key = KeyBuffer,
-        .tag = TagBuffer,
-        .metadataOnly = true
-    };
-    status = KineticClient_Get(Fixture.handle, &Entry, NULL);
-    if (status == KINETIC_STATUS_SUCCESS) {
-        Entry.force = true;
-        status = KineticClient_Delete(Fixture.handle, &Entry, NULL);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    }
-    else {
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
-    }
-
-    // Delete the second object, if it exists
-    ByteBuffer_Reset(&TagBuffer);
-    Entry = (KineticEntry) {
-        .key = OtherKeyBuffer,
-        .tag = TagBuffer,
-        .value = ValueBuffer,
-    };
-    status = KineticClient_Get(Fixture.handle, &Entry, NULL);
-    if (status == KINETIC_STATUS_SUCCESS) {
-        Entry.force = true;
-        status = KineticClient_Delete(Fixture.handle, &Entry, NULL);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    }
-    else {
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
-    }
-}
-
 void test_Put_should_create_new_object_on_device(void)
 {
     LOG_LOCATION;

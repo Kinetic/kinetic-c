@@ -625,6 +625,18 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
                 #endif
                 }
 
+                if (cmd->body->pinOp) {
+                    LOG_PROTO_LEVEL_START("pinOp");
+                    {
+                        if (cmd->body->pinOp->has_pinOpType) {
+                            const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
+                                                                 &KineticProto_command_pin_operation_pin_op_type__descriptor,
+                                                                 cmd->body->pinOp->pinOpType);
+                            KineticLogger_LogPrintf(log_level, "%spinOpType: %s", _indent, eVal->name);
+                        }
+                    }
+                    LOG_PROTO_LEVEL_END();
+                }
 
                 // Get Log
                 //

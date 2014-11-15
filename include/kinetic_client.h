@@ -161,4 +161,13 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
                                    KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure);
 
+/**
+ * @brief Executes an InstantSecureErase command to erase all data from the Kinetic device.
+ *
+ * @param handle        KineticSessionHandle for a connected session.
+ *
+ * @return              Returns the resulting KineticStatus
+ */
+KineticStatus KineticClient_InstantSecureErase(KineticSessionHandle handle);
+
 #endif // _KINETIC_CLIENT_H
