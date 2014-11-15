@@ -90,6 +90,7 @@ clean: makedirs
 	rm -f $(OUT_DIR)/*.o *.core *.log
 	rake clobber
 	git submodule update --init
+	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 
 .PHONY: clean
 
@@ -230,13 +231,13 @@ update_simulator:
 start_simulator:
 	@echo STARTING SIMULATOR...
 	sleep 1
-	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 	./vendor/kinetic-simulator/startSimulator.sh &
 	sleep 3
 	@echo STARTED SIMULATOR!!!
 
 erase_simulator: start_simulator
 	@echo ERASING SIMULATOR...
+	sleep 1
 	./vendor/kinetic-simulator/eraseSimulator.sh
 	sleep 1
 	@echo ERASED SIMULATOR!!!
@@ -285,6 +286,9 @@ SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
 SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
 
 run: $(UTIL_EXEC) start_simulator
+	sleep 1
+	./vendor/kinetic-simulator/eraseSimulator.sh &> /dev/null;
+	sleep 1
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Running test utility: $(UTIL_EXEC)
@@ -295,9 +299,6 @@ run: $(UTIL_EXEC) start_simulator
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
 	@echo
-	@echo Stopping simulator...
-	./vendor/kinetic-simulator/stopSimulator.sh
-
 
 #===============================================================================
 # Standalone Example Executables
@@ -314,6 +315,9 @@ list_examples:
 	echo $(example_executables)
 
 $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
+	sleep 1
+	./vendor/kinetic-simulator/eraseSimulator.sh &> /dev/null;
+	sleep 1
 	@echo
 	@echo ================================================================================
 	@echo Building example: $<
@@ -323,7 +327,6 @@ $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 	@echo
 
 build_examples: $(example_executables)
-	./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 
 test_example_%: $(BIN_DIR)/examples/%
 	sleep 1
@@ -336,18 +339,10 @@ test_example_%: $(BIN_DIR)/examples/%
 	@echo
 
 test_example_%: start_simulator erase_simulator
-	sleep 1
-	@echo
-	@echo ================================================================================
-	@echo Executing example: '$<'
-	@echo --------------------------------------------------------------------------------;
-	$<
-	./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
-	@echo ================================================================================
-	@echo
 
 run_example_%: $(BIN_DIR)/examples/%
 run_example_%: $(BIN_DIR)/examples/%
+	sleep 1
 	./vendor/kinetic-simulator/eraseSimulator.sh &> /dev/null;
 	sleep 1
 	@echo
