@@ -317,8 +317,10 @@ $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 build_examples: $(example_executables)
 
 run_example_%: $(BIN_DIR)/examples/%
-	./vendor/kinetic-simulator/startSimulator.sh & &> /dev/null; sleep 4
-	./vendor/kinetic-simulator/eraseSimulator.sh &> /dev/null; sleep 2
+	./vendor/kinetic-simulator/startSimulator.sh &
+	sleep 4
+	./vendor/kinetic-simulator/eraseSimulator.sh &> /dev/null;
+	sleep 1
 	@echo
 	@echo ================================================================================
 	@echo Executing example: '$<'
@@ -327,7 +329,7 @@ run_example_%: $(BIN_DIR)/examples/%
 	@echo ================================================================================
 	@echo
 	@echo Stopping simulator...
-	./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null; sleep 2
+	./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null; sleep 1
 
 setup_examples: $(example_executables) \
 	build_examples
