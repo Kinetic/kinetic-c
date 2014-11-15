@@ -77,7 +77,7 @@ Options
 Operations
 ----------
 
-* `kinetic-c-util [--host|-h hostname|123.253.253.23] [noop] [put] [get] [delete]`
+* `kinetic-c-util [--host|-h hostname|123.253.253.23] [noop] [put] [get] [delete] [instanterase]`
     * `./bin/kinetic-c-util noop`
         * Execute a NoOp (ping) operation to verify the Kinetic Device is ready
     * `./bin/kinetic-c-util put`
@@ -86,3 +86,5 @@ Operations
         * Execute a Get operation to retrieve a key/value entry
     * `./bin/kinetic-c-util delete`
         * Execute a Delete operation to destroy a key/value entry
+    * `./bin/kinetic-c-util instanterase`
+        * Execute an InstantSecureErase operation to erase ALL content from the device
