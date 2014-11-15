@@ -228,17 +228,25 @@ update_simulator:
 	cp vendor/kinetic-java/kinetic-simulator/target/*.jar vendor/kinetic-java-simulator/
 
 start_simulator:
+	@echo STARTING SIMULATOR...
+	sleep 1
+	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 	./vendor/kinetic-simulator/startSimulator.sh &
-	sleep 2
+	sleep 3
+	@echo STARTED SIMULATOR!!!
 
 erase_simulator: start_simulator
+	@echo ERASING SIMULATOR...
 	./vendor/kinetic-simulator/eraseSimulator.sh
 	sleep 1
+	@echo ERASED SIMULATOR!!!
 
 stop_simulator:
+	@echo STOPPING SIMULATOR...
 	sleep 1
 	./vendor/kinetic-simulator/stopSimulator.sh
 	sleep 1
+	@echo STOPPED SIMULATOR!!!
 
 .PHONY: erase_simulator
 
@@ -315,10 +323,31 @@ $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 	@echo
 
 build_examples: $(example_executables)
+	./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
+
+test_example_%: $(BIN_DIR)/examples/%
+	sleep 1
+	@echo
+	@echo ================================================================================
+	@echo Executing example: '$<'
+	@echo --------------------------------------------------------------------------------;
+	$<
+	@echo ================================================================================
+	@echo
+
+test_example_%: start_simulator erase_simulator
+	sleep 1
+	@echo
+	@echo ================================================================================
+	@echo Executing example: '$<'
+	@echo --------------------------------------------------------------------------------;
+	$<
+	./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
+	@echo ================================================================================
+	@echo
 
 run_example_%: $(BIN_DIR)/examples/%
-	./vendor/kinetic-simulator/startSimulator.sh &
-	sleep 4
+run_example_%: $(BIN_DIR)/examples/%
 	./vendor/kinetic-simulator/eraseSimulator.sh &> /dev/null;
 	sleep 1
 	@echo
@@ -328,14 +357,14 @@ run_example_%: $(BIN_DIR)/examples/%
 	$<
 	@echo ================================================================================
 	@echo
-	@echo Stopping simulator...
-	./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null; sleep 1
 
 setup_examples: $(example_executables) \
 	build_examples
 
 examples: setup_examples \
+	start_simulator \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
 	run_example_write_file_nonblocking_threads \
+	stop_simulator
