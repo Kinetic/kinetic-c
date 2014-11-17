@@ -248,6 +248,6 @@ void* KineticController_ReceiveThread(void* thread_arg)
         KineticOperation_TimeoutOperations(thread->connection);
     }
 
-    LOG1("Worker thread terminated!");
+    LOG3("Worker thread terminated!");
     return (void*)NULL;
 }

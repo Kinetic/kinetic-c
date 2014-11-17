@@ -111,7 +111,7 @@ KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
     // Shutdown the worker thread
     KineticStatus status = KINETIC_STATUS_SUCCESS;
     connection->thread.abortRequested = true;
-    LOG2("\nSent abort request to worker thread!\n");
+    LOG3("\nSent abort request to worker thread!\n");
     int pthreadStatus = pthread_join(connection->threadID, NULL);
     if (pthreadStatus != 0) {
         char errMsg[256];

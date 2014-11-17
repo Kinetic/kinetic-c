@@ -229,18 +229,10 @@ update_simulator:
 	cp vendor/kinetic-java/kinetic-simulator/target/*.jar vendor/kinetic-java-simulator/
 
 start_simulator:
-	@echo STARTING SIMULATOR...
-	sleep 1
-	./vendor/kinetic-simulator/startSimulator.sh &
-	sleep 3
-	@echo STARTED SIMULATOR!!!
+	./vendor/kinetic-simulator/startSimulator.sh
 
 stop_simulator:
-	@echo STOPPING SIMULATOR...
-	sleep 1
 	./vendor/kinetic-simulator/stopSimulator.sh
-	sleep 1
-	@echo STOPPED SIMULATOR!!!
 
 
 #===============================================================================
@@ -322,6 +314,7 @@ test_example_%: $(BIN_DIR)/examples/%
 	$<
 	@echo ================================================================================
 	@echo
+	./vendor/kinetic-simulator/stopSimulator.sh
 test_example_%: start_simulator
 
 run_example_%: $(BIN_DIR)/examples/%
