@@ -164,7 +164,6 @@ int main(int argc, char** argv)
             .value = valBuf,
         };
     }
-    sleep(2); // Give a generous chunk of time for session to be initialized by the target device
 
     // Write all of the copies simultaneously (overlapped)
     for (int i = 0; i < NUM_COPIES; i++) {
