@@ -112,8 +112,6 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
         LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);
     }
 
-    KineticOperation_SetTimeoutTime(operation, KINETIC_OPERATION_TIMEOUT_SECS);
-
     if (closure != NULL)
     {
         operation->closure = *closure;
