@@ -51,7 +51,9 @@ long ByteBuffer_BytesRemaining(const ByteBuffer buffer);
 ByteArray ByteBuffer_Consume(ByteBuffer* buffer, size_t len);
 ByteBuffer* ByteBuffer_Append(ByteBuffer* buffer, const void* data, size_t len);
 ByteBuffer* ByteBuffer_AppendArray(ByteBuffer* buffer, const ByteArray array);
+ByteBuffer* ByteBuffer_AppendBuffer(ByteBuffer* buffer, const ByteBuffer bufferToAppend);
 ByteBuffer* ByteBuffer_AppendCString(ByteBuffer* buffer, const char* data);
+ByteBuffer* ByteBuffer_AppendFormattedCString(ByteBuffer* buffer, const char * format, ...);
 ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len);
 
 #endif // _BYTE_ARRAY_H

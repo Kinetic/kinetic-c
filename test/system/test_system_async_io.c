@@ -25,6 +25,7 @@
 #include "socket99.h"
 #include <string.h>
 #include <stdlib.h>
+#include <sys/file.h>
 
 #include "kinetic_client.h"
 #include "kinetic_types.h"
@@ -45,9 +46,7 @@
 
 #define MAX_ITERATIONS (1)
 #define NUM_COPIES (1)
-#define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
 #define KINETIC_MAX_THREADS (10)
-#define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
 
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
@@ -55,18 +54,18 @@ STATIC KineticSessionHandle* kinetic_client;
 STATIC const char HmacKeyString[] = "asdfasdf";
 STATIC int SourceDataSize;
 
-struct kinetic_put_arg {
-    KineticSessionHandle sessionHandle;
-    char keyPrefix[KINETIC_DEFAULT_KEY_LEN];
-    uint8_t key[KINETIC_DEFAULT_KEY_LEN];
-    uint8_t version[KINETIC_DEFAULT_KEY_LEN];
-    uint8_t tag[KINETIC_DEFAULT_KEY_LEN];
-    uint8_t value[KINETIC_OBJ_SIZE];
-    KineticEntry entry;
-    ByteBuffer data;
-    KineticStatus status;
-    float bandwidth;
-};
+// struct kinetic_put_arg {
+//     KineticSessionHandle sessionHandle;
+//     char keyPrefix[KINETIC_DEFAULT_KEY_LEN];
+//     uint8_t key[KINETIC_DEFAULT_KEY_LEN];
+//     uint8_t version[KINETIC_DEFAULT_KEY_LEN];
+//     uint8_t tag[KINETIC_DEFAULT_KEY_LEN];
+//     uint8_t value[KINETIC_OBJ_SIZE];
+//     KineticEntry entry;
+//     ByteBuffer data;
+//     KineticStatus status;
+//     float bandwidth;
+// };
 
 struct kinetic_thread_arg {
     char ip[16];
@@ -84,26 +83,150 @@ void tearDown(void)
     KineticClient_Shutdown();
 }
 
-typedef struct _TestPutClientDataStruct {
+typedef struct {
     size_t opsInProgress;
-    size_t opsFailed;
-} TestPutClientDataStruct;
+    size_t currentChunk;
+    int fd;
+    ByteBuffer keyPrefix;
+    uint8_t keyPrefixBuffer[KINETIC_DEFAULT_KEY_LEN];
+    pthread_mutex_t completeMutex;
+    pthread_cond_t completeCond;
+    KineticStatus status;
+    KineticSessionHandle sessionHandle;
+} FileTransferProgress;
 
-void put_closure(KineticCompletionData* kinetic_data, void* client_data)
+typedef struct {
+    KineticEntry entry;
+    uint8_t key[KINETIC_DEFAULT_KEY_LEN];
+    uint8_t value[KINETIC_OBJ_SIZE];
+    uint8_t tag[KINETIC_DEFAULT_KEY_LEN];
+    FileTransferProgress* currentTransfer;
+} AsyncWriteClosureData;
+
+
+void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* client_data);
+
+int put_chunk_of_file(FileTransferProgress* transfer)
 {
-    TEST_ASSERT_NOT_NULL(kinetic_data);
-    TEST_ASSERT_NOT_NULL(client_data);
-    KineticCompletionData* kdata = kinetic_data;
-    TestPutClientDataStruct* cdata = client_data;
+    AsyncWriteClosureData* closureData = calloc(1, sizeof(AsyncWriteClosureData));
+    transfer->opsInProgress++;
+
+    ssize_t bytesRead = read(transfer->fd, closureData->value, sizeof(closureData->value));
+
+    if (bytesRead > 0)
+    {
+        transfer->currentChunk++;
+        closureData->entry = (KineticEntry){
+            .key = ByteBuffer_Create(closureData->key, sizeof(closureData->key), 0),
+            .tag = ByteBuffer_Create(closureData->tag, sizeof(closureData->tag), 0),
+            .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = ByteBuffer_Create(closureData->value, sizeof(closureData->value), bytesRead),
+            .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
+        };
+        ByteBuffer_AppendBuffer(&closureData->entry.key, transfer->keyPrefix);
+        ByteBuffer_AppendFormattedCString(&closureData->entry.key, "_%04d", transfer->currentChunk);
+        ByteBuffer_AppendCString(&closureData->entry.tag, "some_value_tag...");
+        KineticStatus status = KineticClient_Put(transfer->sessionHandle,
+                                                 &closureData->entry,
+                                                 &(KineticCompletionClosure) {
+                                                    .callback = put_chunk_of_file_finished,
+                                                    .clientData = closureData,
+                                                 });
+        if (status == KINETIC_STATUS_SUCCESS)
+        {
+        }
+        else
+        {
+
+        }
+    }
+    else if (bytesRead == 0)
+    {
+        // no more data to read
+        // but we're probably not done yet!
+    }
+    else
+    {
+        
+        
+    }
+    transfer->opsInProgress--;
+    free(closureData);
+    return bytesRead;
+}
+
+void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* clientData)
+{
+    AsyncWriteClosureData* closureData = clientData;
+    FileTransferProgress* currentTransfer = closureData->currentTransfer;
+    free(closureData);
+    currentTransfer->opsInProgress--;
+
+    if (kinetic_data->status == KINETIC_STATUS_SUCCESS)
+    {
+        if (put_chunk_of_file() <= 0 && currentTransfer->opsInProgress == 0)
+        {
+            // pthread_cond_signal(&cdata->completeCond);
+        }
+
+    }
+    else
+    {
+        update_with_status(&currentTransfer->status, kinetic_data->status);
+    }
+}
+
+
+// only signal when finished
+// keep track of outstanding operations
+// if there is no more data to read (or error), and no outstanding operations, then signal
+
+void update_with_status(FileTransferProgress* transfer, KineticStatus const status)
+{
+
+}
+
+
+void start_file_transfer(KineticSessionHandle handle, char const * const filename, char const * const keyPrefix)
+{
+    FileTransferProgress * transferState = calloc(1, sizeof(FileTransferProgress));
+    transferState->sessionHandle = handle;
+    transferState->opsInProgress = 0;
+    transferState->currentChunk = 0;
+    pthread_mutex_init(&transferState->completeMutex, NULL); 
+    pthread_cond_init(&transferState->completeCond, NULL); 
     
-    cdata->opsInProgress--;
-    if (kdata->status == KINETIC_STATUS_SUCCESS) {
-        LOG1("  *** KineticClient put to disk successful!");
-    }
-    else {
-        cdata->opsFailed++;
-        LOGF1("  *** KineticClient put to disk FAILED! status=%s", Kinetic_GetStatusDescription(kdata->status));
-    }
+    transferState->keyPrefix = ByteBuffer_Create(transferState->keyPrefixBuffer, sizeof(transferState->keyPrefixBuffer), 0);
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    ByteBuffer_AppendCString(&transferState->keyPrefix, keyPrefix);
+    ByteBuffer_AppendFormattedCString(&transferState->keyPrefix, "_%010llu", (unsigned long long)now.tv_sec);
+
+    transferState->fd = open(filename, O_RDONLY);
+        
+    //start 4 async actions
+    put_chunk_of_file(transferState);
+    put_chunk_of_file(transferState);
+    put_chunk_of_file(transferState);
+    put_chunk_of_file(transferState);
+}
+
+KineticStatus wait_for_put_finish(FileTransferProgress* const transfer)
+{
+    pthread_mutex_lock(&transfer->completeMutex);
+    pthread_cond_wait(&transfer->completeCond, &transfer->completeMutex);
+    pthread_mutex_unlock(&transfer->completeMutex);
+
+    KineticStatus status = transfer->status;
+
+    pthread_mutex_destroy(&transfer->completeMutex);
+    pthread_cond_destroy(&transfer->completeCond);
+
+    close(transfer->fd);
+
+    free(transfer);
+
+    return status;
 }
 
 #if 0

@@ -115,6 +115,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     request->headerNBO.valueLength = KineticNBO_FromHostU32(request->header.valueLength);
 
     pthread_mutex_lock(&operation->connection->writeMutex);
+    KineticOperation_SetTimeoutTime(operation, KINETIC_OPERATION_TIMEOUT_SECS);
     KineticStatus status = WritePDU(operation);
     pthread_mutex_unlock(&operation->connection->writeMutex);
     return status;

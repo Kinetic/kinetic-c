@@ -114,7 +114,7 @@
       // "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/**",
       "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/protobuf-c",
       "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/socket99",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/bundle/ruby/2.0.0/bundler/gems/ceedling-0.15.6/vendor/unity/src",
+      "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/bundle/ruby/2.0.0/gems/ceedling-0.15.6/vendor/unity/src",
       "-I${folder:${project_path:kinetic-c.sublime-project}}/build/test/mocks",
       "-I${folder:${project_path:kinetic-c.sublime-project}}/test/support/stubs",
       "-I${folder:${project_path:kinetic-c.sublime-project}}/test/support"

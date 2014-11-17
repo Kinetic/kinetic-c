@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 ByteArray ByteArray_Create(void* data, size_t len)
 {
@@ -103,6 +104,21 @@ ByteBuffer* ByteBuffer_AppendArray(ByteBuffer* buffer, const ByteArray array)
     return buffer;
 }
 
+ByteBuffer* ByteBuffer_AppendBuffer(ByteBuffer* buffer, const ByteBuffer bufferToAppend)
+{
+    assert(buffer != NULL);
+    assert(buffer->array.data != NULL);
+    assert(bufferToAppend.array.data != NULL);
+    assert(bufferToAppend.bytesUsed <= bufferToAppend.array.len);
+    if ((buffer->bytesUsed + bufferToAppend.bytesUsed) > buffer->array.len) {
+        return NULL;
+    }
+    memcpy(&buffer->array.data[buffer->bytesUsed], bufferToAppend.array.data, bufferToAppend.bytesUsed);
+    buffer->bytesUsed += bufferToAppend.bytesUsed;
+    return buffer;
+}
+
+
 ByteBuffer* ByteBuffer_AppendCString(ByteBuffer* buffer, const char* str)
 {
     assert(buffer != NULL);
@@ -115,6 +131,26 @@ ByteBuffer* ByteBuffer_AppendCString(ByteBuffer* buffer, const char* str)
     memcpy(&buffer->array.data[buffer->bytesUsed], str, len);
     buffer->bytesUsed += len;
     return buffer;
+}
+
+ByteBuffer* ByteBuffer_AppendFormattedCString(ByteBuffer* buffer, const char * format, ...)
+{
+    assert(buffer != NULL);
+    assert(buffer->array.data != NULL);
+
+    va_list args;
+    va_start(args,format);
+
+    uint8_t tmp[256];
+    ByteBuffer tmpBuf = ByteBuffer_Create(tmp, sizeof(tmp), 0);
+
+    int formattedSize = vsnprintf((void*)tmpBuf.array.data, tmpBuf.array.len, format, args);
+    assert(formattedSize >= 0);
+    tmpBuf.bytesUsed = (tmpBuf.array.len <= (size_t)formattedSize) ? formattedSize : tmpBuf.array.len;
+
+    va_end(args);
+
+    return ByteBuffer_AppendBuffer(buffer, tmpBuf);
 }
 
 ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)
