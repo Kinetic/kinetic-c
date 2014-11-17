@@ -20,8 +20,8 @@ for f in $BASE_DIR/*.jar; do
    CLASSPATH=${CLASSPATH}:$f
 done
 
-if ! netstat -an | grep LISTEN | grep "\*\.8123"; then
+if ! netstat -an | grep LISTEN | grep "[\.:].8123"; then
     exec "$JAVA" -classpath "$CLASSPATH" com.seagate.kinetic.simulator.internal.SimulatorRunner "$@" &
-    while ! netstat -an | grep LISTEN | grep "\*\.8123"
+    while ! netstat -an | grep LISTEN | grep "[\.:]8123"
     do sleep 1; done
 fi
