@@ -30,11 +30,7 @@
 #include <pthread.h>
 #include <errno.h>
 
-#define MAX_ITERATIONS (2)
-#define NUM_COPIES (3)
-#define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
-#define KINETIC_MAX_THREADS (10)
-#define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
+#define NUM_FILES (3)
 
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
@@ -56,25 +52,18 @@ void* store_data(void* args)
 {
     write_args* thread_args = (write_args*)args;
     KineticEntry* entry = &(thread_args->entry);
-    int32_t objIndex = 0;
-
-    while (ByteBuffer_BytesRemaining(thread_args->data) > 0) {
+    int32_t objIndex;
+    for (objIndex = 0; ByteBuffer_BytesRemaining(thread_args->data) > 0; objIndex++) {
 
         // Configure meta-data
         char keySuffix[8];
         snprintf(keySuffix, sizeof(keySuffix), "%02d", objIndex);
         entry->key.bytesUsed = strlen(thread_args->keyPrefix);
         ByteBuffer_AppendCString(&entry->key, keySuffix);
+        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
 
         // Prepare the next chunk of data to store
-        ByteBuffer_Reset(&entry->value);
-        ByteBuffer_AppendArray(
-            &entry->value,
-            ByteBuffer_Consume(&thread_args->data, MIN(ByteBuffer_BytesRemaining(thread_args->data), MAX_OBJ_SIZE))
-        );
-
-        // Set operation-specific attributes
-        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
+        ByteBuffer_AppendArray(&entry->value, ByteBuffer_Consume(&thread_args->data, KINETIC_OBJ_SIZE));
 
         // Store the data slice
         KineticStatus status = KineticClient_Put(thread_args->sessionHandle, entry, NULL);
@@ -83,12 +72,8 @@ void* store_data(void* args)
                 objIndex+1, Kinetic_GetStatusDescription(status));
             return (void*)NULL;
         }
-
-        objIndex++;
     }
-
     printf("File stored to successfully to Kinetic Device across %d entries!\n", objIndex);
-
     return (void*)NULL;
 }
 
@@ -112,7 +97,7 @@ int main(int argc, char** argv)
     }
 
     // Allocate session/thread data
-    write_args* writeArgs = calloc(NUM_COPIES, sizeof(write_args));
+    write_args* writeArgs = calloc(NUM_FILES, sizeof(write_args));
     if (writeArgs == NULL) {
         fprintf(stderr, "Failed allocating overlapped thread arguments!\n");
     }
@@ -129,8 +114,8 @@ int main(int argc, char** argv)
     };
     KineticClient_Init("stdout", 0);
 
-    // Establish all of the connection first, so their session can all get initialized first
-    for (int i = 0; i < NUM_COPIES; i++) {
+    // Kick off a thread for each file to store
+    for (int i = 0; i < NUM_FILES; i++) {
 
         // Establish connection
         status = KineticClient_Connect(&sessionConfig, &writeArgs[i].sessionHandle);
@@ -144,31 +129,24 @@ int main(int argc, char** argv)
         // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
         writeArgs[i].data = ByteBuffer_Create(buf, dataLen, 0);
 
-        // Configure the KineticEntry
+        // Configure common entry attributes
         struct timeval now;
         gettimeofday(&now, NULL);
         snprintf(writeArgs[i].keyPrefix, sizeof(writeArgs[i].keyPrefix), "%010llu_%02d_",
             (unsigned long long)now.tv_sec, i);
-        ByteBuffer keyBuf = ByteBuffer_Create(writeArgs[i].key, sizeof(writeArgs[i].key), 0);
-        ByteBuffer_AppendCString(&keyBuf, writeArgs[i].keyPrefix);
-        ByteBuffer verBuf = ByteBuffer_Create(writeArgs[i].version, sizeof(writeArgs[i].version), 0);
-        ByteBuffer_AppendCString(&verBuf, "v1.0");
-        ByteBuffer tagBuf = ByteBuffer_Create(writeArgs[i].tag, sizeof(writeArgs[i].tag), 0);
-        ByteBuffer_AppendCString(&tagBuf, "some_value_tag...");
         ByteBuffer valBuf = ByteBuffer_Create(writeArgs[i].value, sizeof(writeArgs[i].value), 0);
         writeArgs[i].entry = (KineticEntry) {
-            .key = keyBuf,
-            // .newVersion = verBuf,
-            .tag = tagBuf,
+            .key = ByteBuffer_CreateAndAppendCString(
+                writeArgs[i].key, sizeof(writeArgs[i].key), writeArgs[i].keyPrefix),
+            // .newVersion = ByteBuffer_CreateAndAppendCString(
+            //    writeArgs[i].version, sizeof(writeArgs[i].version), "v1.0"),
+            .tag = ByteBuffer_CreateAndAppendCString(
+                writeArgs[i].tag, sizeof(writeArgs[i].tag), "some_value_tag..."),
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .value = valBuf,
         };
-    }
 
-    // Write all of the copies simultaneously (overlapped)
-    for (int i = 0; i < NUM_COPIES; i++) {
-        printf("  *** Overlapped PUT operations (writing copy %d of %d)"
-               " on IP: %s\n", i + 1, NUM_COPIES, sessionConfig.host);
+        // Store the entry
         int threadCreateStatus = pthread_create(&writeArgs[i].threadID, NULL, store_data, &writeArgs[i]);
         REPORT_ERRNO(threadCreateStatus, "pthread_create");
         if (threadCreateStatus != 0) {
@@ -177,9 +155,8 @@ int main(int argc, char** argv)
         }
     }
 
-    // Wait for each overlapped PUT operations to complete and cleanup
-    printf("  *** Waiting for PUT threads to exit...\n");
-    for (int i = 0; i < NUM_COPIES; i++) {
+    // Wait for all PUT operations to complete and cleanup
+    for (int i = 0; i < NUM_FILES; i++) {
         int joinStatus = pthread_join(writeArgs[i].threadID, NULL);
         if (joinStatus != 0) {
             fprintf(stderr, "pthread join failed!\n");

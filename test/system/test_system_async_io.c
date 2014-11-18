@@ -44,10 +44,6 @@
 #include "kinetic_socket.h"
 #include "kinetic_nbo.h"
 
-#define MAX_ITERATIONS (1)
-#define NUM_COPIES (1)
-#define KINETIC_MAX_THREADS (10)
-
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
 STATIC KineticSessionHandle* kinetic_client;
@@ -80,8 +76,11 @@ typedef struct {
     FileTransferProgress* currentTransfer;
 } AsyncWriteClosureData;
 
-
 void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* client_data);
+void update_with_status(FileTransferProgress* transfer, KineticStatus const status);
+FileTransferProgress * start_file_transfer(KineticSessionHandle handle,
+    char const * const filename, char const * const keyPrefix);
+KineticStatus wait_for_put_finish(FileTransferProgress* const transfer);
 
 int put_chunk_of_file(FileTransferProgress* transfer)
 {
@@ -90,20 +89,17 @@ int put_chunk_of_file(FileTransferProgress* transfer)
     closureData->currentTransfer = transfer;
 
     size_t bytesRead = read(transfer->fd, closureData->value, sizeof(closureData->value));
-    LOGF0("[chunk len=%zu]", bytesRead);
-
     if (bytesRead > 0) {
         transfer->currentChunk++;
         closureData->entry = (KineticEntry){
-            .key = ByteBuffer_Create(closureData->key, sizeof(closureData->key), 0),
-            .tag = ByteBuffer_Create(closureData->tag, sizeof(closureData->tag), 0),
+            .key = ByteBuffer_CreateAndAppend(closureData->key, sizeof(closureData->key),
+                transfer->keyPrefix.array.data, transfer->keyPrefix.bytesUsed),
+            .tag = ByteBuffer_CreateAndAppendFormattedCString(closureData->tag, sizeof(closureData->tag),
+                "some_value_tag..._%04d", transfer->currentChunk),
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .value = ByteBuffer_Create(closureData->value, sizeof(closureData->value), bytesRead),
             .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         };
-        ByteBuffer_AppendBuffer(&closureData->entry.key, transfer->keyPrefix);
-        ByteBuffer_AppendFormattedCString(&closureData->entry.key, "_%04d", transfer->currentChunk);
-        ByteBuffer_AppendCString(&closureData->entry.tag, "some_value_tag...");
         KineticStatus status = KineticClient_Put(transfer->sessionHandle,
             &closureData->entry,
             &(KineticCompletionClosure) {
@@ -120,10 +116,9 @@ int put_chunk_of_file(FileTransferProgress* transfer)
                 Kinetic_GetStatusDescription(status));
         }
     }
-    else if (bytesRead == 0) { // no more data to read, but probably not done yet!
+    else if (bytesRead == 0) { // EOF reached
         transfer->opsInProgress--;
         free(closureData);
-        fprintf(stderr, "Failed reading data from file (0 bytes read)!\n");
     }
     else {
         transfer->opsInProgress--;
@@ -135,8 +130,6 @@ int put_chunk_of_file(FileTransferProgress* transfer)
     return bytesRead;
 }
 
-void update_with_status(FileTransferProgress* transfer, KineticStatus const status);
-
 void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* clientData)
 {
     AsyncWriteClosureData* closureData = clientData;
@@ -145,7 +138,6 @@ void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* clien
     currentTransfer->opsInProgress--;
 
     if (kinetic_data->status == KINETIC_STATUS_SUCCESS) {
-        LOGF1("PUT COMPLETED: opsInProgress=%zu", currentTransfer->opsInProgress);
         if (put_chunk_of_file(closureData->currentTransfer) <= 0 && currentTransfer->opsInProgress == 0) {
             if (currentTransfer->status == KINETIC_STATUS_NOT_ATTEMPTED) {
                 currentTransfer->status = KINETIC_STATUS_SUCCESS;
@@ -154,20 +146,14 @@ void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* clien
         }
     }
     else {
-        update_with_status(currentTransfer, kinetic_data->status);
+        currentTransfer->status = kinetic_data->status;
+        // only signal when finished
+        // keep track of outstanding operations
+        // if there is no more data to read (or error), and no outstanding operations,
+        // then signal
+        pthread_cond_signal(&currentTransfer->completeCond);
         fprintf(stderr, "Failed writing chunk! PUT response reported status: %s\n",
             Kinetic_GetStatusDescription(kinetic_data->status));
-    }
-}
-
-// only signal when finished
-// keep track of outstanding operations
-// if there is no more data to read (or error), and no outstanding operations, then signal
-void update_with_status(FileTransferProgress* transfer, KineticStatus const status)
-{
-    if (status != KINETIC_STATUS_SUCCESS) {
-        transfer->status = status;
-        pthread_cond_signal(&transfer->completeCond);
     }
 }
 
@@ -188,9 +174,9 @@ FileTransferProgress * start_file_transfer(KineticSessionHandle handle,
         
     //start 4 async actions (fix concurrency issue)
     put_chunk_of_file(transferState);
-    put_chunk_of_file(transferState);
-    put_chunk_of_file(transferState);
-    put_chunk_of_file(transferState);
+    // put_chunk_of_file(transferState);
+    // put_chunk_of_file(transferState);
+    // put_chunk_of_file(transferState);
     return transferState;
 }
 
