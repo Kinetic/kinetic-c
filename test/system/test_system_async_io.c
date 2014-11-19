@@ -210,7 +210,7 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    KineticClient_Init("stdout", 2);
+    KineticClient_Init("stdout", 0);
 
     // Establish connection
     KineticSessionHandle sessionHandle;

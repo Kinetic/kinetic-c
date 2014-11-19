@@ -79,7 +79,7 @@ struct kinetic_thread_arg {
 
 void setUp(void)
 {
-    KineticClient_Init(NULL, -1);
+    KineticClient_Init("stdout", 0);
 }
 
 void tearDown(void)
