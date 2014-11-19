@@ -138,7 +138,8 @@ void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* clien
     currentTransfer->opsInProgress--;
 
     if (kinetic_data->status == KINETIC_STATUS_SUCCESS) {
-        if (put_chunk_of_file(closureData->currentTransfer) <= 0 && currentTransfer->opsInProgress == 0) {
+        int bytesPut = put_chunk_of_file(currentTransfer);
+        if (bytesPut <= 0 && currentTransfer->opsInProgress == 0) {
             if (currentTransfer->status == KINETIC_STATUS_NOT_ATTEMPTED) {
                 currentTransfer->status = KINETIC_STATUS_SUCCESS;
             }
