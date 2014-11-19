@@ -135,7 +135,7 @@ namespace :java_sim do
   $java_sim = nil
 
   def kinetic_device_listening?
-    `netstat -an` =~ /\*\.8123.+\s+LISTEN\s+/
+    `netstat -an` =~ /[\.:]8123.+\s+LISTEN\s+/
   end
 
   def java_sim_start
