@@ -117,7 +117,7 @@ void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
 void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 {
     LOG_LOCATION;
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }
 
@@ -132,7 +132,7 @@ static KineticPDU PDU;
 void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void)
 {
     LOG_LOCATION;
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
 #if defined(__unix__) && !defined(__APPLE__)
@@ -159,7 +159,7 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     KineticMessage_Init(&PDU.protoData.message);
     PDU.header.protobufLength = KineticProto_Message__get_packed_size(PDU.proto);
 
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
 #if defined(__unix__) && !defined(__APPLE__)
@@ -179,7 +179,7 @@ void test_KineticSocket_DataBytesAvailable_should_report_receive_pipe_status(voi
     LOG_LOCATION;
     TEST_ASSERT_EQUAL(-1, KineticSocket_DataBytesAvailable(123));
 
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     TEST_ASSERT_EQUAL(0, KineticSocket_DataBytesAvailable(FileDesc));
@@ -195,7 +195,7 @@ void test_KineticSocket_DataBytesAvailable_should_report_receive_pipe_status(voi
 void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
 {
     LOG_LOCATION;
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
     const size_t len = 5;
     uint8_t respData[len];
@@ -214,7 +214,7 @@ void test_KineticSocket_Read_should_read_data_from_the_specified_socket(void)
 void test_KineticSocket_Read_should_timeout_if_requested_data_is_not_received_within_configured_timeout(void)
 {
     LOG_LOCATION;
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
     const size_t len = 5;
     uint8_t respData[len + 2];
@@ -239,7 +239,7 @@ void test_KineticSocket_Read_should_read_up_to_the_array_length_into_the_buffer_
     const size_t bytesToRead = bufferLen + 15; // Request more than the size of the allocated array
     ByteBuffer respBuffer = ByteBuffer_Create(respData, bufferLen, 0);
 
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     Socket_RequestBytes(bytesToRead);
@@ -266,7 +266,7 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     KINETIC_CONNECTION_INIT(&connection);
     connection.session = session;
 
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     // Send request to test server to send us a Kinetic protobuf
@@ -312,7 +312,7 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     KINETIC_CONNECTION_INIT(&connection);
     connection.session = session;
 
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort, true);
+    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
     // Send request to test server to send us a Kinetic protobuf

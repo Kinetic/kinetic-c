@@ -43,7 +43,7 @@
 #include <poll.h>
 #include "socket99.h"
 
-int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
+int KineticSocket_Connect(const char* host, int port)
 {
     char port_str[32];
     struct addrinfo hints;
@@ -55,7 +55,7 @@ int KineticSocket_Connect(const char* host, int port, bool nonBlocking)
     socket99_config cfg = {
         .host = (char*)host,
         .port = port,
-        .nonblocking = nonBlocking,
+        .nonblocking = true,
     };
     sprintf(port_str, "%d", port);
 

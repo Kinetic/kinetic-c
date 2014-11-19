@@ -109,7 +109,6 @@ int main(int argc, char** argv)
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
-        .nonBlocking = false,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
     KineticClient_Init("stdout", 0);

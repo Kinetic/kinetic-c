@@ -208,7 +208,6 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
-        .nonBlocking = false,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
     KineticClient_Init("stdout", 2);

@@ -86,8 +86,7 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
     connection->connected = false;
     connection->socket = KineticSocket_Connect(
                              connection->session.host,
-                             connection->session.port,
-                             connection->session.nonBlocking);
+                             connection->session.port);
     connection->connected = (connection->socket >= 0);
     if (!connection->connected) {
         LOG0("Session connection failed!");

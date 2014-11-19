@@ -153,7 +153,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
-        .nonBlocking = false,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
 

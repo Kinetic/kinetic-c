@@ -70,7 +70,6 @@ void setUp(void)
     // Create and configure a new Kinetic protocol instance
     Key = ByteArray_CreateWithCString("some valid HMAC key...");
     Session = (KineticSession) {
-    .nonBlocking = false,
     .port = 1234,
     .host = "valid-host.com",
     .hmacKey = (ByteArray) {.data = &Session.keyData[0], .len = Key.len},

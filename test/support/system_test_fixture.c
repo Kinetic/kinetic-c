@@ -42,7 +42,6 @@ void SystemTestSetup(SystemTestFixture* fixture)
                 .port = KINETIC_PORT,
                 .clusterVersion = 0,
                 .identity =  1,
-                .nonBlocking = false,
                 .hmacKey = hmacArray,
             },
             .connected = fixture->connected,

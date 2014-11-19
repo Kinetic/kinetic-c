@@ -40,7 +40,6 @@ static KineticSessionHandle SessionHandle;
 static const KineticSession SessionConfig = {
     .host = "somehost.com",
     .port = 17,
-    .nonBlocking = false,
 };
 static KineticPDU Request, Response;
 static int OperationCompleteCallbackCount;
@@ -101,7 +100,6 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
     TEST_ASSERT_EQUAL_INT64(0, connection.sequence);
     TEST_ASSERT_EQUAL_INT64(0, connection.connectionID);
     TEST_ASSERT_EQUAL_STRING("", connection.session.host);
-    TEST_ASSERT_FALSE(connection.session.nonBlocking);
     TEST_ASSERT_EQUAL_INT64(0, connection.session.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(0, connection.session.identity);
 
@@ -111,8 +109,7 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 void test_KineticConnection_Connect_should_report_a_failed_connection(void)
 {
     LOG_LOCATION;
-    KineticSocket_Connect_ExpectAndReturn(SessionConfig.host,
-                                          SessionConfig.port, SessionConfig.nonBlocking, -1);
+    KineticSocket_Connect_ExpectAndReturn(SessionConfig.host, SessionConfig.port, -1);
 
     KineticStatus status = KineticConnection_Connect(Connection);
 
@@ -145,7 +142,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host(void)
         .session = (KineticSession) {
             .host = "valid-host.com",
             .port = expected.session.port,
-            .nonBlocking = false,
             .clusterVersion = expected.session.clusterVersion,
             .identity = expected.session.identity,
             .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
@@ -153,8 +149,7 @@ void test_KineticConnection_Connect_should_connect_to_specified_host(void)
     };
     memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
-                                          expected.session.nonBlocking, expected.socket);
+    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port, expected.socket);
 
     // Setup mock expectations for worker thread
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
@@ -168,7 +163,6 @@ void test_KineticConnection_Connect_should_connect_to_specified_host(void)
 
     TEST_ASSERT_EQUAL_STRING(expected.session.host, Connection->session.host);
     TEST_ASSERT_EQUAL(expected.session.port, Connection->session.port);
-    TEST_ASSERT_EQUAL(expected.session.nonBlocking, Connection->session.nonBlocking);
     TEST_ASSERT_EQUAL_INT64(expected.session.clusterVersion, Connection->session.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(expected.session.identity, Connection->session.identity);
     TEST_ASSERT_EQUAL_ByteArray(expected.session.hmacKey, Connection->session.hmacKey);
@@ -198,7 +192,6 @@ void test_KineticConnection_Worker_should_run_fine_while_no_data_arrives(void)
         .session = (KineticSession) {
             .host = "valid-host.com",
             .port = expected.session.port,
-            .nonBlocking = false,
             .clusterVersion = expected.session.clusterVersion,
             .identity = expected.session.identity,
             .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
@@ -206,8 +199,7 @@ void test_KineticConnection_Worker_should_run_fine_while_no_data_arrives(void)
     };
     memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
-                                          expected.session.nonBlocking, expected.socket);
+    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port, expected.socket);
 
     // Setup mock expectations for worker thread so it can run in IDLE mode
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
@@ -248,7 +240,6 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
         .session = (KineticSession) {
             .host = "valid-host.com",
             .port = expected.session.port,
-            .nonBlocking = false,
             .clusterVersion = expected.session.clusterVersion,
             .identity = expected.session.identity,
             .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
@@ -256,8 +247,7 @@ void test_KineticConnection_Worker_should_process_unsolicited_response_PDUs(void
     };
     memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
-                                          expected.session.nonBlocking, expected.socket);
+    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port, expected.socket);
 
     // Setup mock expectations for worker thread
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
@@ -350,7 +340,6 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
         .session = (KineticSession) {
             .host = "valid-host.com",
             .port = expected.session.port,
-            .nonBlocking = false,
             .clusterVersion = expected.session.clusterVersion,
             .identity = expected.session.identity,
             .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
@@ -358,8 +347,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs(void)
     };
     memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
-                                          expected.session.nonBlocking, expected.socket);
+    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port, expected.socket);
 
 
     KineticOperation op;
@@ -431,7 +419,6 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
         .session = (KineticSession) {
             .host = "valid-host.com",
             .port = expected.session.port,
-            .nonBlocking = false,
             .clusterVersion = expected.session.clusterVersion,
             .identity = expected.session.identity,
             .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
@@ -439,8 +426,7 @@ void test_KineticConnection_Worker_should_process_solicited_response_PDUs_with_V
     };
     memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port,
-                                          expected.session.nonBlocking, expected.socket);
+    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port, expected.socket);
 
     KineticOperation op;
     KINETIC_OPERATION_INIT(&op, Connection);
