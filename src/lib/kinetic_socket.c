@@ -345,7 +345,7 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
 KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
 {
     size_t bytesToRead = pdu->header.protobufLength;
-    LOGF2("Reading %zd bytes of protobuf", bytesToRead);
+    LOGF3("Reading %zd bytes of protobuf", bytesToRead);
 
     uint8_t* packed = (uint8_t*)malloc(bytesToRead);
     if (packed == NULL) {
@@ -388,7 +388,7 @@ KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
         int status = write(socket, &src->array.data[bytesSent], bytesRemaining);
         if (status == -1 &&
             ((errno == EINTR) || (errno == EAGAIN) || (errno == EWOULDBLOCK))) {
-            LOG2("Write interrupted. retrying...");
+            LOG3("Write interrupted. retrying...");
             continue;
         }
         else if (status <= 0) {
@@ -400,14 +400,13 @@ KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
             LOGF2("Wrote %d bytes (%d of %zu sent)", status, bytesSent, src->bytesUsed);
         }
     }
-    LOG3("Socket write completed successfully");
     return KINETIC_STATUS_SUCCESS;
 }
 
 KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
 {
     assert(pdu != NULL);
-    LOGF1("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
+    LOGF3("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
 
     uint8_t* packed = (uint8_t*)malloc(pdu->header.protobufLength);
 
