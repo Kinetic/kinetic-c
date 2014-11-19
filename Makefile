@@ -33,7 +33,7 @@ VERSION = ${shell head -n1 $(VERSION_FILE)}
 
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
-LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(VENDOR)
+LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR)
 
 C_SRC=${LIB_DIR}/*.[ch] $(SOCKET99)/socket99.[ch] $(PROTOBUFC)/protobuf-c/protobuf-c.[ch]
 
