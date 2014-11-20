@@ -3,7 +3,7 @@ Kinetic C Client Library
 ========================
 The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
 
-[Code examples](src/utility/examples) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-util`)](src/utility), which builds and links against the installed `kinetic-c-client` static library.
+[Code examples](src/utility/examples/) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-util`)](src/utility/), which builds and links against the installed `kinetic-c-client` static library.
 
 [Additional examples](src/examples) are included for the various types of I/O operations (e.g. blocking/non-blocking, single/multi-threaded)
 
@@ -91,8 +91,8 @@ Operations
     * `./bin/kinetic-c-util instanterase`
         * Execute an InstantSecureErase operation to erase ALL content from the device
 
-Kinetic C Client Examples
-=========================
+Kinetic C Client I/O Examples
+=============================
 
 * [`write_file_blocking`](src/examples/write_file_blocking.c) - Single thread, single connection, blocking operation.
 * [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, blocking operations.
