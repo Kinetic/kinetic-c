@@ -3,9 +3,11 @@ Kinetic C Client Library
 ========================
 The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
 
-[Code examples](https://github.com/Seagate/kinetic-c/tree/master/src/utility/examples) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-util`)](https://github.com/Seagate/kinetic-c/tree/master/src/utility), which builds and links against the installed `kinetic-c-client` static library.
+[Code examples](src/utility/examples) are included for reference as part of the [kinetic-c client library test utility (`kinetic-c-util`)](src/utility), which builds and links against the installed `kinetic-c-client` static library.
 
-The [project Makefile](https://github.com/Seagate/kinetic-c/blob/master/Makefile) can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.
+[Additional examples](src/examples) are included for the various types of I/O operations (e.g. blocking/non-blocking, single/multi-threaded)
+
+The [project Makefile](Makefile) can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.
 
 Kinetic Protocol Support
 ------------------------
@@ -59,7 +61,7 @@ API Documentation
     * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c
         * e.g. object keys, object value data, etc.
 
-Example Client/Test Utility
+Client Test Utility
 ===========================
 
 Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.
@@ -88,3 +90,11 @@ Operations
         * Execute a Delete operation to destroy a key/value entry
     * `./bin/kinetic-c-util instanterase`
         * Execute an InstantSecureErase operation to erase ALL content from the device
+
+Kinetic C Client Examples
+=========================
+
+* [`write_file_blocking`](src/examples/write_file_blocking.c) - Single thread, single connection, blocking operation.
+* [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, blocking operations.
+* [`write_file_nonblocking`](src/examples/write_file_nonblocking.c) - Single thread, single connection, multiple non-blocking operations
+* [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, multiple non-blocking operations.
