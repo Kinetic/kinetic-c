@@ -32,7 +32,7 @@ typedef enum
     KINETIC_WAIT_STATUS_FATAL_ERROR,
 } KineticWaitStatus;
 
-int KineticSocket_Connect(const char* host, int port, bool nonBlocking);
+int KineticSocket_Connect(const char* host, int port);
 void KineticSocket_Close(int socket);
 
 int KineticSocket_DataBytesAvailable(int socket);

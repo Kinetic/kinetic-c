@@ -46,12 +46,18 @@ typedef struct {
 
 ByteBuffer ByteBuffer_Create(void* data, size_t max_len, size_t used);
 ByteBuffer ByteBuffer_CreateWithArray(ByteArray array);
+ByteBuffer ByteBuffer_CreateAndAppend(void* data, size_t max_len, const void* value, size_t value_len);
+ByteBuffer ByteBuffer_CreateAndAppendArray(void* data, size_t max_len, const ByteArray value);
+ByteBuffer ByteBuffer_CreateAndAppendCString(void* data, size_t max_len, const char* value);
+ByteBuffer ByteBuffer_CreateAndAppendFormattedCString(void* data, size_t max_len, const char * format, ...);
 void ByteBuffer_Reset(ByteBuffer* buffer);
 long ByteBuffer_BytesRemaining(const ByteBuffer buffer);
-ByteArray ByteBuffer_Consume(ByteBuffer* buffer, size_t len);
+ByteArray ByteBuffer_Consume(ByteBuffer* buffer, size_t max_len);
 ByteBuffer* ByteBuffer_Append(ByteBuffer* buffer, const void* data, size_t len);
 ByteBuffer* ByteBuffer_AppendArray(ByteBuffer* buffer, const ByteArray array);
+ByteBuffer* ByteBuffer_AppendBuffer(ByteBuffer* buffer, const ByteBuffer bufferToAppend);
 ByteBuffer* ByteBuffer_AppendCString(ByteBuffer* buffer, const char* data);
+ByteBuffer* ByteBuffer_AppendFormattedCString(ByteBuffer* buffer, const char * format, ...);
 ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len);
 
 #endif // _BYTE_ARRAY_H

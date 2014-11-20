@@ -235,7 +235,6 @@ int ParseOptions(
     } cfg = {
         .host = "localhost",
         .port = KINETIC_PORT,
-        .nonBlocking = false,
         .useTls = false,
         .clusterVersion = 0,
         .identity = 1,
@@ -278,7 +277,6 @@ int ParseOptions(
         .port = cfg.port,
         .clusterVersion = cfg.clusterVersion,
         .identity = cfg.identity,
-        .nonBlocking = cfg.nonBlocking,
         .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
     };
     memcpy(HmacData, cfg.hmacKey, strlen(cfg.hmacKey));

@@ -164,8 +164,8 @@ void test_ByteBuffer_Consume(void)
     TEST_ASSERT_EQUAL(totalConsumed, buffer.bytesUsed);
 
     lenToConsume = 2;
-    totalConsumed += lenToConsume;
-    ByteArray consumed2 = ByteBuffer_Consume(&buffer, lenToConsume);
+    totalConsumed += 2;
+    ByteArray consumed2 = ByteBuffer_Consume(&buffer, lenToConsume+1); // request more than available
     TEST_ASSERT_EQUAL_PTR(&array.data[3], consumed2.data);
     TEST_ASSERT_EQUAL(lenToConsume, consumed2.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[3], consumed2.data, lenToConsume);

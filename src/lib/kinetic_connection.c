@@ -86,8 +86,7 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
     connection->connected = false;
     connection->socket = KineticSocket_Connect(
                              connection->session.host,
-                             connection->session.port,
-                             connection->session.nonBlocking);
+                             connection->session.port);
     connection->connected = (connection->socket >= 0);
     if (!connection->connected) {
         LOG0("Session connection failed!");
@@ -111,7 +110,7 @@ KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
     // Shutdown the worker thread
     KineticStatus status = KINETIC_STATUS_SUCCESS;
     connection->thread.abortRequested = true;
-    LOG2("\nSent abort request to worker thread!\n");
+    LOG3("\nSent abort request to worker thread!\n");
     int pthreadStatus = pthread_join(connection->threadID, NULL);
     if (pthreadStatus != 0) {
         char errMsg[256];

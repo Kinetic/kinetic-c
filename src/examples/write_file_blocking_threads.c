@@ -27,8 +27,15 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/file.h>
+#include <pthread.h>
+#include <errno.h>
+
+#define NUM_FILES (3)
+
+#define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
 typedef struct {
+    pthread_t threadID;
     char ip[16];
     KineticSessionHandle sessionHandle;
     char keyPrefix[KINETIC_DEFAULT_KEY_LEN];
@@ -41,41 +48,33 @@ typedef struct {
     KineticStatus status;
 } write_args;
 
-void store_data(write_args* args)
+void* store_data(void* args)
 {
-    KineticEntry* entry = &(args->entry);
-    int32_t objIndex = 0;
+    write_args* thread_args = (write_args*)args;
+    KineticEntry* entry = &(thread_args->entry);
+    int32_t objIndex;
+    for (objIndex = 0; ByteBuffer_BytesRemaining(thread_args->data) > 0; objIndex++) {
 
-    while (ByteBuffer_BytesRemaining(args->data) > 0) {
-
-        // Configure entry meta-data
-        ByteBuffer_Reset(&entry->key);
-        ByteBuffer_AppendCString(&entry->key, args->keyPrefix);
+        // Configure meta-data
         char keySuffix[8];
         snprintf(keySuffix, sizeof(keySuffix), "%02d", objIndex);
+        entry->key.bytesUsed = strlen(thread_args->keyPrefix);
         ByteBuffer_AppendCString(&entry->key, keySuffix);
+        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
 
-        // Prepare entry with the next object to store
-        ByteBuffer_Reset(&entry->value);
-        ByteBuffer_AppendArray(
-            &entry->value,
-            ByteBuffer_Consume(
-                &args->data,
-                MIN(ByteBuffer_BytesRemaining(args->data), KINETIC_OBJ_SIZE))
-        );
+        // Prepare the next chunk of data to store
+        ByteBuffer_AppendArray(&entry->value, ByteBuffer_Consume(&thread_args->data, KINETIC_OBJ_SIZE));
 
-        // Store the object
-        KineticStatus status = KineticClient_Put(args->sessionHandle, entry, NULL);
+        // Store the data slice
+        KineticStatus status = KineticClient_Put(thread_args->sessionHandle, entry, NULL);
         if (status != KINETIC_STATUS_SUCCESS) {
-            fprintf(stderr, "Kinetic PUT of object %d to host %s failed w/ status: %s\n",
-                objIndex, args->ip, Kinetic_GetStatusDescription(status));
-            exit(-1);
+            fprintf(stderr, "Failed writing entry %d to disk w/status: %s",
+                objIndex+1, Kinetic_GetStatusDescription(status));
+            return (void*)NULL;
         }
-
-        objIndex++;
     }
-
-    printf("File stored on Kinetic Device across %d entries\n", objIndex);
+    printf("File stored to successfully to Kinetic Device across %d entries!\n", objIndex);
+    return (void*)NULL;
 }
 
 int main(int argc, char** argv)
@@ -84,6 +83,7 @@ int main(int argc, char** argv)
     (void)argv;
 
     // Read in file contents to store
+    KineticStatus status;
     const char* dataFile = "test/support/data/test.data";
     struct stat st;
     stat(dataFile, &st);
@@ -92,56 +92,78 @@ int main(int argc, char** argv)
     long dataLen = read(fd, buf, st.st_size);
     close(fd);
     if (dataLen <= 0) {
-        fprintf(stderr, "Failed reading data file to store: %s", dataFile);
+        fprintf(stderr, "Failed reading data file to store: %s\n", dataFile);
         exit(-1);
     }
 
-    // Establish connection
-    KineticStatus status;
+    // Allocate session/thread data
+    write_args* writeArgs = calloc(NUM_FILES, sizeof(write_args));
+    if (writeArgs == NULL) {
+        fprintf(stderr, "Failed allocating overlapped thread arguments!\n");
+    }
+
+    // Initialize kinetic-c and configure sessions
     const char HmacKeyString[] = "asdfasdf";
     const KineticSession sessionConfig = {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
-        .nonBlocking = false,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    write_args* writeArgs = calloc(1, sizeof(write_args));
-    KineticClient_Init("stdout", 2);
-    status = KineticClient_Connect(&sessionConfig, &writeArgs->sessionHandle);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Connection to host '%s' failed w/ status: %s",
-            sessionConfig.host, Kinetic_GetStatusDescription(status));
+    KineticClient_Init("stdout", 0);
+
+    // Kick off a thread for each file to store
+    for (int i = 0; i < NUM_FILES; i++) {
+
+        // Establish connection
+        status = KineticClient_Connect(&sessionConfig, &writeArgs[i].sessionHandle);
+        if (status != KINETIC_STATUS_SUCCESS) {
+            fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
+                Kinetic_GetStatusDescription(status));
+            return -1;
+        }
+        strcpy(writeArgs[i].ip, sessionConfig.host);
+
+        // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
+        writeArgs[i].data = ByteBuffer_Create(buf, dataLen, 0);
+
+        // Configure common entry attributes
+        struct timeval now;
+        gettimeofday(&now, NULL);
+        snprintf(writeArgs[i].keyPrefix, sizeof(writeArgs[i].keyPrefix), "%010llu_%02d_",
+            (unsigned long long)now.tv_sec, i);
+        ByteBuffer valBuf = ByteBuffer_Create(writeArgs[i].value, sizeof(writeArgs[i].value), 0);
+        writeArgs[i].entry = (KineticEntry) {
+            .key = ByteBuffer_CreateAndAppendCString(
+                writeArgs[i].key, sizeof(writeArgs[i].key), writeArgs[i].keyPrefix),
+            // .newVersion = ByteBuffer_CreateAndAppendCString(
+            //    writeArgs[i].version, sizeof(writeArgs[i].version), "v1.0"),
+            .tag = ByteBuffer_CreateAndAppendCString(
+                writeArgs[i].tag, sizeof(writeArgs[i].tag), "some_value_tag..."),
+            .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = valBuf,
+        };
+
+        // Store the entry
+        int threadCreateStatus = pthread_create(&writeArgs[i].threadID, NULL, store_data, &writeArgs[i]);
+        REPORT_ERRNO(threadCreateStatus, "pthread_create");
+        if (threadCreateStatus != 0) {
+            fprintf(stderr, "pthread create failed!\n");
+            exit(-2);
+        }
     }
 
-    // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
-    writeArgs->data = ByteBuffer_Create(buf, dataLen, 0);
-
-    // Configure common meta-data for the entries
-    struct timeval now;
-    gettimeofday(&now, NULL);
-    snprintf(writeArgs->keyPrefix, sizeof(writeArgs->keyPrefix), "%010ld_", now.tv_sec);
-    ByteBuffer verBuf = ByteBuffer_Create(writeArgs->version, sizeof(writeArgs->version), 0);
-    ByteBuffer_AppendCString(&verBuf, "v1.0");
-    ByteBuffer tagBuf = ByteBuffer_Create(writeArgs->tag, sizeof(writeArgs->tag), 0);
-    ByteBuffer_AppendCString(&tagBuf, "some_value_tag...");
-    writeArgs->entry = (KineticEntry) {
-        .key = ByteBuffer_Create(writeArgs->key, sizeof(writeArgs->key), 0),
-        // .newVersion = verBuf,
-        .tag = tagBuf,
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ByteBuffer_Create(writeArgs->value, sizeof(writeArgs->value), 0),
-        .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
-    };
-    strcpy(writeArgs->ip, sessionConfig.host);
-
-    // Store the data
-    printf("\nWriting data file to the Kinetic device...\n");
-    store_data(writeArgs);
+    // Wait for all PUT operations to complete and cleanup
+    for (int i = 0; i < NUM_FILES; i++) {
+        int joinStatus = pthread_join(writeArgs[i].threadID, NULL);
+        if (joinStatus != 0) {
+            fprintf(stderr, "pthread join failed!\n");
+        }
+        KineticClient_Disconnect(&writeArgs[i].sessionHandle);
+    }
 
     // Shutdown client connection and cleanup
-    KineticClient_Disconnect(&writeArgs->sessionHandle);
     KineticClient_Shutdown();
     free(writeArgs);
     free(buf);

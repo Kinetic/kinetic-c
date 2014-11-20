@@ -43,7 +43,6 @@ void KineticClient_Shutdown(void);
  * @param config    Session configuration
  *  .host             Host name or IP address to connect to
  *  .port             Port to establish socket connection on
- *  .nonBlocking      Set to true for non-blocking or false for blocking I/O
  *  .clusterVersion   Cluster version to use for the session
  *  .identity         Identity to use for the session
  *  .hmacKey          Key to use for HMAC calculations (NULL-terminated string)

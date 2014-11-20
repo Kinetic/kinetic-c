@@ -134,6 +134,10 @@ namespace :java_sim do
   JAVA_BIN = File.join(JAVA_HOME, 'bin/java')
   $java_sim = nil
 
+  def kinetic_device_listening?
+    `netstat -an` =~ /[\.:]8123.+\s+LISTEN\s+/
+  end
+
   def java_sim_start
 
     return if $java_sim
@@ -150,10 +154,17 @@ namespace :java_sim do
     ENV['CLASSPATH'] = '' unless ENV['CLASSPATH']
     jars += [File.join(JAVA_HOME, 'lib/tools.jar')]
     jars.each {|jar| ENV['CLASSPATH'] += ':' + jar }
-    $java_sim = spawn("#{JAVA_BIN} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner") # &> ./build/kinetic-simulator.log") # &> ./build/kinetic-simulator-test.log")
-    sleep 3 # wait for simulator to start up and server ready to receive connections
-    # TODO: use netstat or something to just wait until the server opens the port
-    #       since it might take longer than the hardcoded sleep(x) above :-/
+    $java_sim = spawn("#{JAVA_BIN} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
+    max_wait_secs = 10
+    sleep_duration = 0.2
+    timeout = false
+    elapsed_secs = 0
+    while !kinetic_device_listening? && !timeout do
+      sleep(sleep_duration)
+      elapsed_secs += sleep_duration
+      timeout = (elapsed_secs > max_wait_secs)
+    end
+    raise "Kinetic Java simulator failed to start within #{max_wait_secs} seconds!" if timeout
   end
 
   def java_sim_shutdown
@@ -169,7 +180,7 @@ namespace :java_sim do
 
   def java_sim_erase_drive
     java_sim_start
-    sh "\"#{JAVA_BIN}\" -classpath \"#{ENV['CLASSPATH']}\" com.seagate.kinetic.admin.cli.KineticAdminCLI -instanterase" # &> ./build/kinetic-simulator-setup.log"
+    sh "\"#{JAVA_BIN}\" -classpath \"#{ENV['CLASSPATH']}\" com.seagate.kinetic.admin.cli.KineticAdminCLI -instanterase"
   end
 
   def java_sim_cleanup

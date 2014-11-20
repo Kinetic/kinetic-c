@@ -104,11 +104,10 @@ int main(int argc, char** argv)
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
-        .nonBlocking = false,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
     write_args* writeArgs = calloc(1, sizeof(write_args));
-    KineticClient_Init("stdout", 2);
+    KineticClient_Init("stdout", 0);
     status = KineticClient_Connect(&sessionConfig, &writeArgs->sessionHandle);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Connection to host '%s' failed w/ status: %s",
