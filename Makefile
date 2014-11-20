@@ -13,7 +13,7 @@ OPTIMIZE = -O3
 WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
-LDFLAGS += -lm -l crypto -l ssl -l pthread
+LDFLAGS += -lm -lcrypto -lssl -lpthread
 
 #===============================================================================
 # Kinetic-C Library Build Support
@@ -34,28 +34,9 @@ VERSION = ${shell head -n1 $(VERSION_FILE)}
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR)
-LIB_DEPS = \
-	$(PROTOBUFC)/protobuf-c/protobuf-c.h \
-	$(SOCKET99)/socket99.h \
-	$(LIB_DIR)/kinetic_allocator.h \
-	$(LIB_DIR)/kinetic_nbo.h \
-	$(LIB_DIR)/kinetic_operation.h \
-	$(LIB_DIR)/kinetic_pdu.h \
-	$(LIB_DIR)/kinetic_proto.h \
-	$(LIB_DIR)/kinetic_socket.h \
-	$(LIB_DIR)/kinetic_message.h \
-	$(LIB_DIR)/kinetic_logger.h \
-	$(LIB_DIR)/kinetic_hmac.h \
-	$(LIB_DIR)/kinetic_controller.h \
-	$(LIB_DIR)/kinetic_device_info.h \
-	$(LIB_DIR)/kinetic_serial_allocator.h \
-	$(LIB_DIR)/kinetic_connection.h \
-	$(LIB_DIR)/kinetic_types_internal.h \
-	$(PUB_INC)/kinetic_types.h \
-	$(PUB_INC)/byte_array.h \
-	$(PUB_INC)/kinetic_client.h
 
-# LIB_OBJ = $(patsubst %,$(OUT_DIR)/%,$(LIB_OBJS))
+C_SRC=${LIB_DIR}/*.[ch] $(SOCKET99)/socket99.[ch] $(PROTOBUFC)/protobuf-c/protobuf-c.[ch]
+
 LIB_OBJS = \
 	$(OUT_DIR)/socket99.o \
 	$(OUT_DIR)/protobuf-c.o \
@@ -76,6 +57,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_types.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o
+
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
 default: makedirs $(KINETIC_LIB)
@@ -83,7 +65,7 @@ default: makedirs $(KINETIC_LIB)
 makedirs:
 	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./out &> /dev/null
 
-all: clean test default run examples
+all: default test run examples
 
 clean: makedirs
 	rm -rf ./bin/**/*
@@ -92,48 +74,28 @@ clean: makedirs
 	git submodule update --init
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 
-.PHONY: clean
+TAGS: ${C_SRC} Makefile
+	@find . -name "*.[ch]" | grep -v vendor | grep -v build | xargs etags
+
+.PHONY: clean run ci
+
+${C_SRC}: Makefile
 
 .POSIX:
 
+# Source files should depend on corresponding .h, if present.
+COMPILE_SOURCE=$(CC) -c -o $@ ${LIB_DIR}/$*.c $(CFLAGS) $(LIB_INCS)
+${OUT_DIR}/%.o: ${LIB_DIR}/%.c ${LIB_DIR}/%.h ${PUB_INC}/*.h Makefile
+	${COMPILE_SOURCE}
+${OUT_DIR}/%.o: ${LIB_DIR}/%.c Makefile ${PUB_INC}/%.h Makefile
+	${COMPILE_SOURCE}
+
+# Sources with atypical paths / dependencies
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
-$(OUT_DIR)/kinetic_allocator.o: $(LIB_DIR)/kinetic_allocator.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_nbo.o: $(LIB_DIR)/kinetic_nbo.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_operation.o: $(LIB_DIR)/kinetic_operation.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_pdu.o: $(LIB_DIR)/kinetic_pdu.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_proto.o: $(LIB_DIR)/kinetic_proto.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_socket.o: $(LIB_DIR)/kinetic_socket.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_message.o: $(LIB_DIR)/kinetic_message.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_logger.o: $(LIB_DIR)/kinetic_logger.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_hmac.o: $(LIB_DIR)/kinetic_hmac.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_controller.o: $(LIB_DIR)/kinetic_controller.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_connection.o: $(LIB_DIR)/kinetic_connection.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_device_info.o: $(LIB_DIR)/kinetic_device_info.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_serial_allocator.o: $(LIB_DIR)/kinetic_serial_allocator.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_types_internal.o: $(LIB_DIR)/kinetic_types_internal.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_types.o: $(LIB_DIR)/kinetic_types.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/byte_array.o: $(LIB_DIR)/byte_array.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
-$(OUT_DIR)/kinetic_client.o: $(LIB_DIR)/kinetic_client.c $(LIB_DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIB_INCS)
+${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
 
 
 ci: uninstall all install
@@ -160,6 +122,8 @@ test: Rakefile $(LIB_OBJS)
 JAVA_HOME ?= /usr
 JAVA_BIN = $(JAVA_HOME)/bin/java
 
+.PHONY: test
+
 
 #-------------------------------------------------------------------------------
 # Static and Dynamic Library Build Support
@@ -182,7 +146,6 @@ $(KINETIC_SO_DEV): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
 	@echo Building dynamic library: $(KINETIC_SO_DEV)
 	@echo --------------------------------------------------------------------------------
 	$(CC) -o $@ -shared $(LDFLAGS) $(LIB_OBJS)
-
 
 
 #-------------------------------------------------------------------------------
@@ -219,6 +182,8 @@ uninstall:
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
 
+.PHONY: install uninstall
+
 
 #===============================================================================
 # Java Simulator Support
@@ -234,6 +199,8 @@ start_simulator:
 stop_simulator:
 	./vendor/kinetic-simulator/stopSimulator.sh
 
+.PHONY: update_simulator start_simulator erase_simulator stop_simulator
+
 
 #===============================================================================
 # Test Utility Build Support
@@ -243,7 +210,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+UTIL_LDFLAGS += -lm -lssl $(KINETIC_LIB) -lcrypto -lpthread
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)
@@ -258,6 +225,7 @@ $(UTIL_EXEC): $(UTIL_OBJ) $(KINETIC_LIB)
 utility: $(UTIL_EXEC)
 
 build: $(KINETIC_LIB) $(KINETIC_SO_DEV) utility
+
 
 #-------------------------------------------------------------------------------
 # Support for Simulator and Exection of Test Utility
