@@ -26,8 +26,8 @@ v0.8.0
 v0.8.1
 ------
 * Added GETLOG operation.
-* Added InstantSecureErase operation.
 * Added thread-safety to allow multiple client threads within the same session.
+* Added I/O examples to demonstrate client write operations for blocking/non-blocking (asynchrounous) and single/multi-threaded.
 * Still using Kinetic Protocol v3.0 (3.0.5)
     * NOT backwards compatible with earlier versions of Kinetic Protocol (< v3.0)
     * Kinetic device firmware must be updated to a release supporting v3.0 protocol!

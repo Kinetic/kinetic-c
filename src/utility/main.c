@@ -67,7 +67,7 @@ int main(int argc, char** argv)
 
     // Establish a session/connection with the Kinetic Device
     KineticSessionHandle sessionHandle;
-    KineticStatus status = KineticClient_Connect(&SessionConfig, &sessionHandle);
+    KineticStatus status = KineticClient_CreateConnection(&SessionConfig, &sessionHandle);
     if (status != KINETIC_STATUS_SUCCESS) {
         printf("Failed connecting to host %s:%d (status: %s)\n\n",
                SessionConfig.host, SessionConfig.port,
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
     }
 
     // Shutdown the Kinetic Device session
-    KineticClient_Disconnect(&sessionHandle);
+    KineticClient_DestroyConnection(&sessionHandle);
     KineticClient_Shutdown();
     printf("\nKinetic client session terminated!\n\n");
 

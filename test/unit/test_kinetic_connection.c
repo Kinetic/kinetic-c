@@ -48,7 +48,7 @@ static KineticStatus LastStatus;
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-    SessionHandle = KineticConnection_NewConnection(&SessionConfig);
+    SessionHandle = KineticConnection_Create(&SessionConfig);
     TEST_ASSERT_TRUE(SessionHandle > KINETIC_HANDLE_INVALID);
     Connection = KineticConnection_FromHandle(SessionHandle);
     TEST_ASSERT_NOT_NULL(Connection);
@@ -67,25 +67,25 @@ void tearDown(void)
             TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
             TEST_ASSERT_FALSE(Connection->connected);
         }
-        KineticConnection_FreeConnection(&SessionHandle);
+        KineticConnection_Destroy(&SessionHandle);
     }
     KineticLogger_Close();
 }
 
-void test_KineticConnection_NewConnection_should_return_HANDLE_INVALID_upon_failure(void)
+void test_KineticConnection_Create_should_return_HANDLE_INVALID_upon_failure(void)
 {
     LOG_LOCATION;
-    TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, KineticConnection_NewConnection(NULL));
+    TEST_ASSERT_EQUAL(KINETIC_HANDLE_INVALID, KineticConnection_Create(NULL));
 }
 
-void test_KineticConnection_NewConnection_should_allocate_a_new_KineticConnection(void)
+void test_KineticConnection_Create_should_allocate_a_new_KineticConnection(void)
 {
     LOG_LOCATION;
-    KineticSessionHandle handle = KineticConnection_NewConnection(&SessionConfig);
+    KineticSessionHandle handle = KineticConnection_Create(&SessionConfig);
     TEST_ASSERT_TRUE(handle > KINETIC_HANDLE_INVALID);
     KineticConnection* connection = KineticConnection_FromHandle(handle);
     TEST_ASSERT_NOT_NULL(connection);
-    KineticConnection_FreeConnection(&handle);
+    KineticConnection_Destroy(&handle);
 }
 
 void test_KineticConnection_Init_should_create_a_default_connection_object(void)

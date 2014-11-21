@@ -44,7 +44,7 @@ void SystemTestSuiteTearDown(SystemTestFixture* fixture);
 void test_Suite_TearDown(void) \
 { \
     if ((_fixture)->handle != KINETIC_HANDLE_INVALID && (_fixture)->connected) { \
-        KineticClient_Disconnect(&(_fixture)->handle); } \
+        KineticClient_DestroyConnection(&(_fixture)->handle); } \
     (_fixture)->connected = false; \
 }
 

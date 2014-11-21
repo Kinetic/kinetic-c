@@ -94,7 +94,7 @@ int main(int argc, char** argv)
 
     // Establish connection
     KineticSessionHandle handle;
-    KineticStatus status = KineticClient_Connect(&sessionConfig, &handle);
+    KineticStatus status = KineticClient_CreateConnection(&sessionConfig, &handle);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -153,7 +153,7 @@ int main(int argc, char** argv)
     printf("Complete!\n");
     
     // Shutdown client connection and cleanup
-    KineticClient_Disconnect(&handle);
+    KineticClient_DestroyConnection(&handle);
     KineticClient_Shutdown();
 
     return success ? 0 : -1;

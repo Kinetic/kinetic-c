@@ -120,6 +120,11 @@ typedef struct _KineticSession {
     // client and the device, used to sign requests.
     uint8_t keyData[KINETIC_MAX_KEY_LEN];
     ByteArray hmacKey;
+
+    // Connection instance which is dynamically allocated upon call to KineticClient_CreateConnection.
+    // Client must call KineticClient_DestroyConnection when finished with a session to shutdown
+    // a session cleanly and free the `connection`.
+    void* connection;
 } KineticSession;
 
 #define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey) { \

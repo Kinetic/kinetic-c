@@ -117,7 +117,7 @@ int main(int argc, char** argv)
     for (int i = 0; i < NUM_FILES; i++) {
 
         // Establish connection
-        status = KineticClient_Connect(&sessionConfig, &writeArgs[i].sessionHandle);
+        status = KineticClient_CreateConnection(&sessionConfig, &writeArgs[i].sessionHandle);
         if (status != KINETIC_STATUS_SUCCESS) {
             fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
                 Kinetic_GetStatusDescription(status));
@@ -160,7 +160,7 @@ int main(int argc, char** argv)
         if (joinStatus != 0) {
             fprintf(stderr, "pthread join failed!\n");
         }
-        KineticClient_Disconnect(&writeArgs[i].sessionHandle);
+        KineticClient_DestroyConnection(&writeArgs[i].sessionHandle);
     }
 
     // Shutdown client connection and cleanup

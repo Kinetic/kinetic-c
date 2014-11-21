@@ -24,7 +24,7 @@
 #include "kinetic_types_internal.h"
 
 KineticStatus KineticController_CreateWorkerThreads(KineticConnection* const connection);
-KineticOperation* KineticController_CreateOperation(KineticSessionHandle handle);
+KineticOperation* KineticController_CreateOperation(KineticConnection* const connection);
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure);
 void KineticController_Pause(KineticConnection* const connection, bool pause);
 void* KineticController_ReceiveThread(void* thread_arg);

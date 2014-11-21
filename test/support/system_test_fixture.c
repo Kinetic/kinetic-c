@@ -47,7 +47,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
             .connected = fixture->connected,
             .testIgnored = false,
         };
-        status = KineticClient_Connect(&fixture->config, &fixture->handle);
+        status = KineticClient_CreateConnection(&fixture->config, &fixture->handle);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
@@ -79,7 +79,7 @@ void SystemTestTearDown(SystemTestFixture* fixture)
         //     "Sequence should post-increment for every operation on the session!");
     }
 
-    KineticStatus status = KineticClient_Disconnect(&fixture->handle);
+    KineticStatus status = KineticClient_DestroyConnection(&fixture->handle);
     TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
 
     KineticClient_Shutdown();

@@ -68,8 +68,6 @@
     int8_t:     INT8
     bool_t:     BOOL
     size_t:     INT
-    KineticSessionHandle: INT
-    KineticOperationHandle: INT
   :callback_include_count: true
 
 :tools:

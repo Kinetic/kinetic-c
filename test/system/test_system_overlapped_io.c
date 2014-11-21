@@ -127,7 +127,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
             // Establish connection
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
-                KineticClient_Connect(&sessionConfig, &kinetic_client[i]));
+                KineticClient_CreateConnection(&sessionConfig, &kinetic_client[i]));
             strcpy(kt_arg[i].ip, sessionConfig.host);
 
             // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
@@ -175,7 +175,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         for (int i = 0; i < NUM_COPIES; i++) {
             int join_status = pthread_join(thread_id[i], NULL);
             TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
-            KineticClient_Disconnect(&kinetic_client[i]);
+            KineticClient_DestroyConnection(&kinetic_client[i]);
 
             // Update results for summary
             bandwidthAccumulator += kt_arg[i].bandwidth;

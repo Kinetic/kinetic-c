@@ -97,7 +97,7 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
 
     // Establish connection
     KineticSessionHandle sessionHandle;
-    KineticStatus status = KineticClient_Connect(&sessionConfig, &sessionHandle);
+    KineticStatus status = KineticClient_CreateConnection(&sessionConfig, &sessionHandle);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -122,7 +122,7 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
     printf("Transfer completed successfully!\n");
 
     // Shutdown client connection and cleanup
-    KineticClient_Disconnect(&sessionHandle);
+    KineticClient_DestroyConnection(&sessionHandle);
     KineticClient_Shutdown();
 }
 

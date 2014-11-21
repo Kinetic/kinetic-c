@@ -50,8 +50,7 @@ void KineticClient_Shutdown(void);
  *
  * @return          Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Connect(const KineticSession* config,
-                                    KineticSessionHandle* handle);
+KineticStatus KineticClient_CreateConnection(KineticSession * const session);
 
 /**
  * @brief Closes the connection to a host.
@@ -60,7 +59,7 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
  *
  * @return          Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle);
+KineticStatus KineticClient_DestroyConnection(KineticSession * const session);
 
 /**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational.
@@ -69,7 +68,7 @@ KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle);
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_NoOp(KineticSessionHandle handle);
+KineticStatus KineticClient_NoOp(KineticSession const * const session);
 
 /**
  * @brief Executes a PUT command to store/update an entry on the Kinetic Device.

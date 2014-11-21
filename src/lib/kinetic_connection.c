@@ -33,14 +33,9 @@
 #include <errno.h>
 #include <sys/time.h>
 
-STATIC KineticConnection ConnectionInstances[KINETIC_SESSIONS_MAX];
-STATIC KineticConnection* Connections[KINETIC_SESSIONS_MAX];
-
-KineticSessionHandle KineticConnection_NewConnection(
-    const KineticSession* const config)
+void KineticConnection_Create(KineticSession* const session)
 {
-    KineticSessionHandle handle = KINETIC_HANDLE_INVALID;
-    if (config == NULL) {
+    if (session == NULL) {
         return KINETIC_HANDLE_INVALID;
     }
     for (int idx = 0; idx < KINETIC_SESSIONS_MAX; idx++) {
@@ -56,7 +51,7 @@ KineticSessionHandle KineticConnection_NewConnection(
     return KINETIC_HANDLE_INVALID;
 }
 
-void KineticConnection_FreeConnection(KineticSessionHandle* const handle)
+void KineticConnection_Destroy(KineticSession* const session)
 {
     assert(handle != NULL);
     assert(*handle != KINETIC_HANDLE_INVALID);
@@ -67,13 +62,6 @@ void KineticConnection_FreeConnection(KineticSessionHandle* const handle)
         .connected = false
     };
     Connections[(int)*handle - 1] = NULL;
-}
-
-KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle)
-{
-    assert(handle > KINETIC_HANDLE_INVALID);
-    assert(handle <= KINETIC_SESSIONS_MAX);
-    return Connections[(int)handle - 1];
 }
 
 KineticStatus KineticConnection_Connect(KineticConnection* const connection)
