@@ -4,6 +4,7 @@
     {
       "follow_symlinks": true,
       "path": ".",
+      "folder_exclude_patterns": ["build", "vendor/bundle"],
       "binary_file_patterns": ["build"]
     }
   ],
@@ -171,6 +172,6 @@
 			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Full CI build",
 			"working_dir": "${project_path}"
-		},
+		}
 	]
 }
