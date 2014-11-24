@@ -89,6 +89,19 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
                                 KineticCompletionClosure* closure);
 
 /**
+ * @brief Executes a FLUSHALLDATA command to flush pending PUTs or DELETEs.
+ *
+ * @param handle        KineticSessionHandle for a connected session.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
+ *                      
+ * @return              Returns the resulting KineticStatus
+ */
+KineticStatus KineticClient_Flush(KineticSessionHandle handle,
+                                  KineticCompletionClosure* closure);
+
+/**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
  *
  * @param handle        KineticSessionHandle for a connected session.

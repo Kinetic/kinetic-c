@@ -138,6 +138,20 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
+KineticStatus KineticClient_Flush(KineticSessionHandle handle,
+                                  KineticCompletionClosure* closure)
+{
+    assert(handle != KINETIC_HANDLE_INVALID);
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
+
+    // Initialize request
+    KineticOperation_BuildFlush(operation);
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
 KineticStatus KineticClient_Get(KineticSessionHandle handle,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure)
