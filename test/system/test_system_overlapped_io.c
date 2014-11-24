@@ -77,6 +77,9 @@ struct kinetic_thread_arg {
     float bandwidth;
 };
 
+static void* kinetic_put(void* kinetic_arg);
+
+
 void setUp(void)
 {
     KineticClient_Init("stdout", 0);
@@ -85,65 +88,6 @@ void setUp(void)
 void tearDown(void)
 {
     KineticClient_Shutdown();
-}
-
-void* kinetic_put(void* kinetic_arg)
-{
-    struct kinetic_thread_arg* arg = kinetic_arg;
-    KineticEntry* entry = &(arg->entry);
-    int32_t objIndex = 0;
-    struct timeval startTime, stopTime;
-    
-    gettimeofday(&startTime, NULL);
-
-    while (ByteBuffer_BytesRemaining(arg->data) > 0) {
-
-        // Configure meta-data
-        char keySuffix[8];
-        snprintf(keySuffix, sizeof(keySuffix), "%02d", objIndex);
-        entry->key.bytesUsed = strlen(arg->keyPrefix);
-        ByteBuffer_AppendCString(&entry->key, keySuffix);
-
-        // Prepare the next chunk of data to store
-        ByteBuffer_Reset(&entry->value);
-        ByteBuffer_AppendArray(
-            &entry->value,
-            ByteBuffer_Consume(&arg->data, MIN(ByteBuffer_BytesRemaining(arg->data), MAX_OBJ_SIZE))
-        );
-
-        // Set operation-specific attributes
-        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
-
-        // Store the data slice
-        LOGF1("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);
-        KineticStatus status = KineticClient_Put(arg->sessionHandle, entry, NULL);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        LOGF1("  *** KineticClient put to disk success, ip:%s", arg->ip);
-
-        objIndex++;
-    }
-
-    gettimeofday(&stopTime, NULL);
-
-    int64_t elapsed_us = ((stopTime.tv_sec - startTime.tv_sec) * 1000000)
-        + (stopTime.tv_usec - startTime.tv_usec);
-    float elapsed_ms = elapsed_us / 1000.0f;
-    arg->bandwidth = (arg->data.array.len * 1000.0f) / (elapsed_ms * 1024 * 1024);
-    fflush(stdout);
-    printf("\n"
-        "Write/Put Performance:\n"
-        "----------------------------------------\n"
-        "wrote:      %.1f kB\n"
-        "duration:   %.3f seconds\n"
-        "entries:    %d entries\n"
-        "throughput: %.2f MB/sec\n\n",
-        arg->data.array.len / 1024.0f,
-        elapsed_ms / 1000.0f,
-        objIndex,
-        arg->bandwidth);
-    fflush(stdout);
-
-    return (void*)0;
 }
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
@@ -267,4 +211,64 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
     printf("Mean aggregate bandwidth: %.2f (MB/sec)\n", meanAggregateBandwidth);
     printf("\n");
     fflush(stdout);
+}
+
+
+static void* kinetic_put(void* kinetic_arg)
+{
+    struct kinetic_thread_arg* arg = kinetic_arg;
+    KineticEntry* entry = &(arg->entry);
+    int32_t objIndex = 0;
+    struct timeval startTime, stopTime;
+    
+    gettimeofday(&startTime, NULL);
+
+    while (ByteBuffer_BytesRemaining(arg->data) > 0) {
+
+        // Configure meta-data
+        char keySuffix[8];
+        snprintf(keySuffix, sizeof(keySuffix), "%02d", objIndex);
+        entry->key.bytesUsed = strlen(arg->keyPrefix);
+        ByteBuffer_AppendCString(&entry->key, keySuffix);
+
+        // Prepare the next chunk of data to store
+        ByteBuffer_Reset(&entry->value);
+        ByteBuffer_AppendArray(
+            &entry->value,
+            ByteBuffer_Consume(&arg->data, MIN(ByteBuffer_BytesRemaining(arg->data), MAX_OBJ_SIZE))
+        );
+
+        // Set operation-specific attributes
+        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
+
+        // Store the data slice
+        LOGF1("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);
+        KineticStatus status = KineticClient_Put(arg->sessionHandle, entry, NULL);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+        LOGF1("  *** KineticClient put to disk success, ip:%s", arg->ip);
+
+        objIndex++;
+    }
+
+    gettimeofday(&stopTime, NULL);
+
+    int64_t elapsed_us = ((stopTime.tv_sec - startTime.tv_sec) * 1000000)
+        + (stopTime.tv_usec - startTime.tv_usec);
+    float elapsed_ms = elapsed_us / 1000.0f;
+    arg->bandwidth = (arg->data.array.len * 1000.0f) / (elapsed_ms * 1024 * 1024);
+    fflush(stdout);
+    printf("\n"
+        "Write/Put Performance:\n"
+        "----------------------------------------\n"
+        "wrote:      %.1f kB\n"
+        "duration:   %.3f seconds\n"
+        "entries:    %d entries\n"
+        "throughput: %.2f MB/sec\n\n",
+        arg->data.array.len / 1024.0f,
+        elapsed_ms / 1000.0f,
+        objIndex,
+        arg->bandwidth);
+    fflush(stdout);
+
+    return (void*)0;
 }

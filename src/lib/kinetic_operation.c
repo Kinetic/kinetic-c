@@ -299,6 +299,30 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
     operation->callback = &KineticOperation_GetCallback;
 }
 
+KineticStatus KineticOperation_FlushCallback(KineticOperation* operation)
+{
+    assert(operation != NULL);
+    assert(operation->connection != NULL);
+    LOGF3("FLUSHALLDATA callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        operation, operation->connection);
+    return KINETIC_STATUS_SUCCESS;
+}
+
+void KineticOperation_BuildFlush(KineticOperation* const operation)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+    operation->request->protoData.message.command.header->messageType =
+      KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA;
+    operation->request->protoData.message.command.header->has_messageType = true;
+    operation->valueEnabled = false;
+    operation->sendValue = false;
+    if (operation->callback == NULL)
+    {
+        operation->callback = &KineticOperation_FlushCallback;
+    }
+}
+
 KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation)
 {
     assert(operation != NULL);
