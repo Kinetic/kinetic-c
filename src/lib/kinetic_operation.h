@@ -42,6 +42,11 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation);
 void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry);
 
+void KineticOperation_BuildGetNext(KineticOperation* const operation,
+                                   KineticEntry* const entry);
+void KineticOperation_BuildGetPrevious(KineticOperation* const operation,
+                                       KineticEntry* const entry);
+
 KineticStatus KineticOperation_FlushCallback(KineticOperation* operation);
 void KineticOperation_BuildFlush(KineticOperation* const operation);
 

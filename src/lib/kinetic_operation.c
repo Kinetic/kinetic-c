@@ -258,12 +258,12 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
     operation->callback = &KineticOperation_PutCallback;
 }
 
-KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
+static KineticStatus get_cb(const char *cmd_name, KineticOperation* operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    LOGF3("GET callback w/ operation (0x%0llX) on connection (0x%0llX)",
-        operation, operation->connection);
+    LOGF3("%s callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        cmd_name, operation, operation->connection);
     assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
@@ -278,13 +278,15 @@ KineticStatus KineticOperation_GetCallback(KineticOperation* operation)
     return KINETIC_STATUS_SUCCESS;
 }
 
-void KineticOperation_BuildGet(KineticOperation* const operation,
-                               KineticEntry* const entry)
+static void build_get_command(KineticOperation* const operation,
+                              KineticEntry* const entry,
+                              KineticOperationCallback cb,
+                              KineticProto_Command_MessageType command_id)
 {
     KineticOperation_ValidateOperation(operation);
     KineticConnection_IncrementSequence(operation->connection);
 
-    operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET;
+    operation->request->protoData.message.command.header->messageType = command_id;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->entry = entry;
 
@@ -296,7 +298,43 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
 
     operation->valueEnabled = !entry->metadataOnly;
     operation->sendValue = false;
-    operation->callback = &KineticOperation_GetCallback;
+    operation->callback = cb;
+}
+
+static KineticStatus get_cmd_cb(KineticOperation* operation)
+{
+    return get_cb("GET", operation);
+}
+
+void KineticOperation_BuildGet(KineticOperation* const operation,
+                               KineticEntry* const entry)
+{
+    return build_get_command(operation, entry, &get_cmd_cb,
+        KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET);
+}
+
+static KineticStatus getprevious_cmd_cb(KineticOperation* operation)
+{
+    return get_cb("GETPREVIOUS", operation);
+}
+
+void KineticOperation_BuildGetPrevious(KineticOperation* const operation,
+                                   KineticEntry* const entry)
+{
+    return build_get_command(operation, entry, &getprevious_cmd_cb,
+        KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS);
+}
+
+static KineticStatus getnext_cmd_cb(KineticOperation* operation)
+{
+    return get_cb("GETNEXT", operation);
+}
+
+void KineticOperation_BuildGetNext(KineticOperation* const operation,
+                                   KineticEntry* const entry)
+{
+    return build_get_command(operation, entry, &getnext_cmd_cb,
+        KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT);
 }
 
 KineticStatus KineticOperation_FlushCallback(KineticOperation* operation)

@@ -32,8 +32,6 @@
 #include "unity.h"
 #include "unity_helper.h"
 
-static ByteArray Value;
-static uint8_t ValueData[64];
 static KineticSessionHandle DummyHandle = 1;
 
 void setUp(void)
@@ -46,32 +44,51 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
+void test_KineticClient_Get_should_get_error_MISSING_KEY_if_called_without_key(void)
+{
+    uint8_t ValueData[64];
+    ByteArray Value = ByteArray_Create(ValueData, sizeof(ValueData));
+    ByteBuffer ValueBuffer = ByteBuffer_CreateWithArray(Value);
+
+    KineticEntry entry = {.value = ValueBuffer};
+    memset(&entry, 0, sizeof(entry));
+
+    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MISSING_KEY, status);
+}
+
+void test_KineticClient_Get_should_get_error_MISSING_VALUE_BUFFER_if_called_without_value_buffer(void)
+{
+    uint8_t KeyData[64];
+    ByteArray Key = ByteArray_Create(KeyData, sizeof(KeyData));
+    ByteBuffer KeyBuffer = ByteBuffer_CreateWithArray(Key);
+
+    KineticEntry entry = { .key = KeyBuffer };
+    memset(&entry, 0, sizeof(entry));
+
+    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MISSING_KEY, status);
+}
+
 void test_KineticClient_Get_should_execute_GET_operation(void)
 {
     LOG_LOCATION;
 
-    Value = ByteArray_Create(ValueData, sizeof(ValueData));
-    ByteBuffer valueBuffer = ByteBuffer_CreateWithArray(Value);
-    KineticEntry entry = {.value = valueBuffer};
-    KineticOperation operation;
+    uint8_t KeyData[64];
+    ByteArray Key = ByteArray_Create(KeyData, sizeof(KeyData));
+    ByteBuffer KeyBuffer = ByteBuffer_CreateWithArray(Key);
 
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
-    KineticOperation_BuildGet_Expect(&operation, &entry);
-    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_DEVICE_BUSY);
+    uint8_t ValueData[64];
+    ByteArray Value = ByteArray_Create(ValueData, sizeof(ValueData));
+    ByteBuffer ValueBuffer = ByteBuffer_CreateWithArray(Value);
 
-    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_BUSY, status);
-}
-
-void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_buffer_with_value(void)
-{
-    LOG_LOCATION;
-
-    Value = ByteArray_Create(ValueData, sizeof(ValueData));
-    ByteBuffer valueBuffer = ByteBuffer_CreateWithArray(Value);
-    ByteBuffer_AppendDummyData(&valueBuffer, Value.len);
-    KineticEntry entry = {.value = valueBuffer};
+    ByteBuffer_AppendDummyData(&KeyBuffer, Key.len);
+    KineticEntry entry = {
+        .key = KeyBuffer,
+        .value = ValueBuffer,
+    };
     KineticOperation operation;
 
     KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
@@ -87,7 +104,16 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
 {
     LOG_LOCATION;
     
-    KineticEntry entry = {.metadataOnly = true};
+    uint8_t KeyData[64];
+    ByteArray Key = ByteArray_Create(KeyData, sizeof(KeyData));
+
+    ByteBuffer KeyBuffer = ByteBuffer_CreateWithArray(Key);
+    ByteBuffer_AppendDummyData(&KeyBuffer, Key.len);
+    KineticEntry entry = {
+        .key = KeyBuffer,
+        .metadataOnly = true,
+    };
+
     KineticOperation operation;
 
     KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
@@ -98,3 +124,4 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
+

@@ -157,6 +157,8 @@ typedef enum {
     KINETIC_STATUS_MEMORY_ERROR,        // Failed allocating/deallocating memory
     KINETIC_STATUS_SOCKET_TIMEOUT,      // A timeout occurred while waiting for a socket operation
     KINETIC_STATUS_SOCKET_ERROR,        // An I/O error occurred during a socket operation
+    KINETIC_STATUS_MISSING_KEY,         // An operation is missing a required key
+    KINETIC_STATUS_MISSING_VALUE_BUFFER,// An operation is missing a required value buffer
     KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 

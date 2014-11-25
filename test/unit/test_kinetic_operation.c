@@ -42,7 +42,6 @@ static KineticPDU Request, Response;
 static KineticPDU Requests[3];
 static KineticOperation Operation;
 
-
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
@@ -59,8 +58,6 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-
-
 void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
 {
     LOG_LOCATION;
@@ -76,7 +73,6 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
     TEST_ASSERT_NULL(op.request);
     TEST_ASSERT_NULL(op.response);
 }
-
 
 void test_KineticOperation_SendRequest_should_transmit_PDU_with_no_value_payload(void)
 {
@@ -230,8 +226,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SOCKET_TIMEOUT, status);
 }
 
-
-
 void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_KineticProto_Command_Status_StatusCode_in_response(void)
 {
     LOG_LOCATION;
@@ -259,8 +253,6 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
 }
-
-
 
 void test_KineticOperation_AssociateResponseWithOperation_should_return_NULL_if_supplied_PDU_is_invalid(void)
 {
@@ -351,8 +343,6 @@ void test_KineticOperation_AssociateResponseWithOperation_should_return_NULL_if_
     TEST_ASSERT_NULL(ops[0].response);
 }
 
-
-
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
     LOG_LOCATION;
@@ -379,6 +369,7 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     // }
     // hmac: "..."
     //
+
     TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, Request.protoData.message.command.header->messageType);
     TEST_ASSERT_NULL(Operation.response);
@@ -546,7 +537,6 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
 }
 
-
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
 {
     LOG_LOCATION;
@@ -600,6 +590,136 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
 }
 
+void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
+{
+    LOG_LOCATION;
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
+    ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .value = ByteBuffer_CreateWithArray(value),
+    };
+    entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
+
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+
+    KineticOperation_BuildGetNext(&Operation, &entry);
+
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
+        Request.protoData.message.command.header->messageType);
+
+    TEST_ASSERT_TRUE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
+}
+
+void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_metadata_only(void)
+{
+    LOG_LOCATION;
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
+    ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .metadataOnly = true,
+        .value = ByteBuffer_CreateWithArray(value),
+    };
+    entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
+
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+
+    KineticOperation_BuildGetNext(&Operation, &entry);
+
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
+        Request.protoData.message.command.header->messageType);
+
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
+}
+
+void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation(void)
+{
+    LOG_LOCATION;
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
+    ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .value = ByteBuffer_CreateWithArray(value),
+    };
+    entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
+
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+
+    KineticOperation_BuildGetPrevious(&Operation, &entry);
+
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
+        Request.protoData.message.command.header->messageType);
+
+    TEST_ASSERT_TRUE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
+}
+
+void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation_with_metadata_only(void)
+{
+    LOG_LOCATION;
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
+    ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .metadataOnly = true,
+        .value = ByteBuffer_CreateWithArray(value),
+    };
+    entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
+
+    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+
+    KineticOperation_BuildGetPrevious(&Operation, &entry);
+
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
+        Request.protoData.message.command.header->messageType);
+
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
+}
+
+void test_KineticOperation_BuildFlush_should_build_a_FLUSHALLDATA_operation(void)
+{
+    KineticConnection_IncrementSequence_Expect(&Connection);
+
+    KineticOperation_BuildFlush(&Operation);
+
+    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA,
+        Request.protoData.message.command.header->messageType);
+
+    TEST_ASSERT_NULL(Operation.response);
+}
 
 void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 {
