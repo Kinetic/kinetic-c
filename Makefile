@@ -256,6 +256,8 @@ run: $(UTIL_EXEC) start_simulator
 EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 EXAMPLES = write_file_blocking
+VALGRIND = valgrind
+VALGRIND_ARGS = --leak-check=full
 
 example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
 example_executables = $(patsubst $(EXAMPLE_SRC)/%.c,$(BIN_DIR)/examples/%,$(example_sources))
@@ -294,6 +296,15 @@ run_example_%: $(BIN_DIR)/examples/%
 	@echo ================================================================================
 	@echo
 
+valgrind_example_%: $(BIN_DIR)/examples/%
+	@echo
+	@echo ================================================================================
+	@echo Executing example: '$<'
+	@echo --------------------------------------------------------------------------------;
+	${VALGRIND} ${VALGRIND_ARGS} $<
+	@echo ================================================================================
+	@echo
+
 setup_examples: $(example_executables) \
 	build_examples
 
@@ -303,4 +314,12 @@ examples: setup_examples \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
 	run_example_write_file_nonblocking_threads \
+	stop_simulator
+
+valgrind_examples: setup_examples \
+	start_simulator \
+	valgrind_example_write_file_blocking \
+	valgrind_example_write_file_blocking_threads \
+	valgrind_example_write_file_nonblocking \
+	valgrind_example_write_file_nonblocking_threads \
 	stop_simulator
