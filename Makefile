@@ -70,7 +70,7 @@ all: default test run examples
 clean: makedirs
 	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o *.core *.log
-	rake clobber
+	bundle exec rake clobber
 	git submodule update --init
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 
@@ -257,7 +257,7 @@ EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 EXAMPLES = write_file_blocking
 VALGRIND = valgrind
-VALGRIND_ARGS = --leak-check=full
+VALGRIND_ARGS = --track-origins=yes #--leak-check=full
 
 example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
 example_executables = $(patsubst $(EXAMPLE_SRC)/%.c,$(BIN_DIR)/examples/%,$(example_sources))
