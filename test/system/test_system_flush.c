@@ -120,7 +120,9 @@ static void no_op_callback(KineticCompletionData* kinetic_data, void* client_dat
 
 void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
 {
-    TEST_IGNORE_MESSAGE("FLUSHALLDATA is a no-op in the simulator.");
+    if (SystemTestIsUnderSimulator()) {
+        TEST_IGNORE_MESSAGE("FLUSHALLDATA is a no-op in the simulator.");
+    }
 
     // Arguments shared between entries
     uint8_t VersionData[1024];
