@@ -309,7 +309,7 @@ static KineticStatus get_cmd_cb(KineticOperation* operation)
 void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry)
 {
-    return build_get_command(operation, entry, &get_cmd_cb,
+    build_get_command(operation, entry, &get_cmd_cb,
         KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET);
 }
 
@@ -321,7 +321,7 @@ static KineticStatus getprevious_cmd_cb(KineticOperation* operation)
 void KineticOperation_BuildGetPrevious(KineticOperation* const operation,
                                    KineticEntry* const entry)
 {
-    return build_get_command(operation, entry, &getprevious_cmd_cb,
+    build_get_command(operation, entry, &getprevious_cmd_cb,
         KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS);
 }
 
@@ -333,7 +333,7 @@ static KineticStatus getnext_cmd_cb(KineticOperation* operation)
 void KineticOperation_BuildGetNext(KineticOperation* const operation,
                                    KineticEntry* const entry)
 {
-    return build_get_command(operation, entry, &getnext_cmd_cb,
+    build_get_command(operation, entry, &getnext_cmd_cb,
         KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT);
 }
 
