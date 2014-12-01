@@ -90,12 +90,11 @@ ByteBuffer ByteBuffer_CreateAndAppendFormattedCString(void* data, size_t max_len
 
     int formattedSize = vsnprintf((void*)tmpBuf.array.data, tmpBuf.array.len, format, args);
     assert(formattedSize >= 0);
-    tmpBuf.bytesUsed = (tmpBuf.array.len <= (size_t)formattedSize) ? formattedSize : tmpBuf.array.len;
+    tmpBuf.bytesUsed = (tmpBuf.array.len <= (size_t)formattedSize) ? tmpBuf.array.len : formattedSize;
 
     va_end(args);
 
     ByteBuffer_AppendBuffer(&buf, tmpBuf);
-
     return buf;
 }
 
@@ -191,7 +190,7 @@ ByteBuffer* ByteBuffer_AppendFormattedCString(ByteBuffer* buffer, const char * f
 
     int formattedSize = vsnprintf((void*)tmpBuf.array.data, tmpBuf.array.len, format, args);
     assert(formattedSize >= 0);
-    tmpBuf.bytesUsed = (tmpBuf.array.len <= (size_t)formattedSize) ? formattedSize : tmpBuf.array.len;
+    tmpBuf.bytesUsed = (tmpBuf.array.len <= (size_t)formattedSize) ? tmpBuf.array.len : formattedSize;
 
     va_end(args);
 
