@@ -84,3 +84,8 @@ void SystemTestTearDown(SystemTestFixture* fixture)
 
     KineticClient_Shutdown();
 }
+
+bool SystemTestIsUnderSimulator(void)
+{
+    return 0 == strncmp(SYSTEM_TEST_HOST, "localhost", strlen("localhost"));
+}

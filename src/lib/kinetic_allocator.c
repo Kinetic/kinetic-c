@@ -110,14 +110,19 @@ static void* KineticAllocator_NewItem(KineticList* const list, size_t size)
     return newItem->data;
 }
 
-static void KineticAllocator_FreeItem(KineticList* const list, void* item)
+static void KineticAllocator_FreeItem(KineticList* const list, void* item, bool lock)
 {
-    KINETIC_LIST_LOCK(list);
+    /* Make locking optional, since the lock may already be owned by the caller. */
+    if (lock) {
+        KINETIC_LIST_LOCK(list);
+    }
     KineticListItem* cur = list->start;
     while (cur->data != item) {
         if (cur->next == NULL) {
             LOG1("  Reached end of list before finding item to free!");
-            KINETIC_LIST_UNLOCK(list);
+            if (lock) {
+                KINETIC_LIST_UNLOCK(list);
+            }
             return;
         }
         else {
@@ -171,7 +176,9 @@ static void KineticAllocator_FreeItem(KineticList* const list, void* item)
         free(cur);
         cur = NULL;
     }
-    KINETIC_LIST_UNLOCK(list);
+    if (lock) {
+        KINETIC_LIST_UNLOCK(list);
+    }
 }
 
 static void KineticAllocator_FreeList(KineticList* const list)
@@ -242,8 +249,14 @@ void KineticAllocator_FreePDU(KineticConnection* connection, KineticPDU* pdu)
         LOG3("Freeing dynamically allocated protobuf");
         KineticProto_Message__free_unpacked(pdu->proto, NULL);
     };
+    
+    /* TODO: We can't unlock until the function below completes, but it
+     *     normally also tries to lock, so pass in a flag indicating
+     *     we already have it locked. The way that the mutexes are
+     *     currently initialized makes adding an attribute of
+     *     PTHREAD_MUTEX_RECURSIVE significantly more trouble. */
+    KineticAllocator_FreeItem(&connection->pdus, (void*)pdu, false);
     KINETIC_LIST_UNLOCK(&connection->pdus);
-    KineticAllocator_FreeItem(&connection->pdus, (void*)pdu);
     LOGF3("Freed PDU (0x%0llX) on connection (0x%0llX)", pdu, connection);
 }
 
@@ -320,7 +333,7 @@ void KineticAllocator_FreeOperation(KineticConnection* const connection, Kinetic
         KineticAllocator_FreePDU(connection, operation->response);
     }
     pthread_mutex_destroy(&operation->timeoutTimeMutex);
-    KineticAllocator_FreeItem(&connection->operations, (void*)operation);
+    KineticAllocator_FreeItem(&connection->operations, (void*)operation, true);
     LOGF3("Freed operation (0x%0llX) on connection (0x%0llX)", operation, connection);
 }
 
@@ -360,7 +373,7 @@ void KineticAllocator_FreeAllOperations(KineticConnection* const connection)
                 }
 
                 current = current->next;
-                KineticAllocator_FreeItem(&connection->operations, (void*)op);
+                KineticAllocator_FreeItem(&connection->operations, (void*)op, true);
             }
         }
     }

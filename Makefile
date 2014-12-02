@@ -257,7 +257,7 @@ EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 EXAMPLES = write_file_blocking
 VALGRIND = valgrind
-VALGRIND_ARGS = --leak-check=full
+VALGRIND_ARGS = --track-origins=yes #--leak-check=full
 
 example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
 example_executables = $(patsubst $(EXAMPLE_SRC)/%.c,$(BIN_DIR)/examples/%,$(example_sources))

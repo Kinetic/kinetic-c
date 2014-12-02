@@ -39,6 +39,7 @@ typedef struct _SystemTestFixture {
 void SystemTestSetup(SystemTestFixture* fixture);
 void SystemTestTearDown(SystemTestFixture* fixture);
 void SystemTestSuiteTearDown(SystemTestFixture* fixture);
+bool SystemTestIsUnderSimulator(void);
 
 #define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) \
 void test_Suite_TearDown(void) \

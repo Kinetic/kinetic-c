@@ -87,7 +87,7 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
     // Initialize kinetic-c and configure sessions
     const char HmacKeyString[] = "asdfasdf";
     const KineticSession sessionConfig = {
-        .host = "localhost",
+        .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
