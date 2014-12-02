@@ -31,14 +31,14 @@ void KineticOperation_SetTimeoutTime(KineticOperation* const operation, uint32_t
 
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 
-KineticStatus KineticOperation_NoopCallback(KineticOperation* operation);
+KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildNoop(KineticOperation* operation);
 
-KineticStatus KineticOperation_PutCallback(KineticOperation* operation);
+KineticStatus KineticOperation_PutCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry);
 
-KineticStatus KineticOperation_GetCallback(KineticOperation* operation);
+KineticStatus KineticOperation_GetCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry);
 
@@ -47,23 +47,27 @@ void KineticOperation_BuildGetNext(KineticOperation* const operation,
 void KineticOperation_BuildGetPrevious(KineticOperation* const operation,
                                        KineticEntry* const entry);
 
-KineticStatus KineticOperation_FlushCallback(KineticOperation* operation);
+KineticStatus KineticOperation_FlushCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildFlush(KineticOperation* const operation);
 
-KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation);
+KineticStatus KineticOperation_DeleteCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry);
 
-KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation);
+KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
                                KineticKeyRange* range, ByteBufferArray* buffers);
 
-KineticStatus KineticOperation_GetLogCallback(KineticOperation* operation);
+KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildGetLog(KineticOperation* const operation,
                                KineticDeviceInfo_Type type,
                                KineticDeviceInfo** info);
 
-KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* operation);
+KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status);
+void KineticOperation_BuildP2POperation(KineticOperation* const operation,
+                                        KineticP2P_Operation* const p2pOp);
+
+KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildInstantSecureErase(KineticOperation* operation);
 
 void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);

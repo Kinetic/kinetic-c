@@ -281,6 +281,23 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
+KineticStatus KineticClient_P2POperation(KineticSessionHandle handle,
+                                         KineticP2P_Operation* const p2pOp,
+                                         KineticCompletionClosure* closure)
+{
+    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(p2pOp != NULL);
+
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    // Initialize request
+    KineticOperation_BuildP2POperation(operation, p2pOp);
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
 KineticStatus KineticClient_InstantSecureErase(KineticSessionHandle handle)
 {
     assert(handle != KINETIC_HANDLE_INVALID);

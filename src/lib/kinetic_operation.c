@@ -192,13 +192,13 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
     return NULL;
 }
 
-KineticStatus KineticOperation_NoopCallback(KineticOperation* operation)
+KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
     LOGF3("NOOP callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    return KINETIC_STATUS_SUCCESS;
+    return status;
 }
 
 void KineticOperation_BuildNoop(KineticOperation* const operation)
@@ -212,7 +212,7 @@ void KineticOperation_BuildNoop(KineticOperation* const operation)
     operation->callback = &KineticOperation_NoopCallback;
 }
 
-KineticStatus KineticOperation_PutCallback(KineticOperation* operation)
+KineticStatus KineticOperation_PutCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
@@ -221,24 +221,27 @@ KineticStatus KineticOperation_PutCallback(KineticOperation* operation)
     assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
-    // Propagate newVersion to dbVersion in metadata, if newVersion specified
-    KineticEntry* entry = operation->entry;
-    if (entry->newVersion.array.data != NULL && entry->newVersion.array.len > 0) {
-        // If both buffers supplied, copy newVersion into dbVersion, and clear newVersion
-        if (entry->dbVersion.array.data != NULL && entry->dbVersion.array.len > 0) {
-            ByteBuffer_Reset(&entry->dbVersion);
-            ByteBuffer_Append(&entry->dbVersion, entry->newVersion.array.data, entry->newVersion.bytesUsed);
-            ByteBuffer_Reset(&entry->newVersion);
-        }
+    if (status == KINETIC_STATUS_SUCCESS)
+    {
+        // Propagate newVersion to dbVersion in metadata, if newVersion specified
+        KineticEntry* entry = operation->entry;
+        if (entry->newVersion.array.data != NULL && entry->newVersion.array.len > 0) {
+            // If both buffers supplied, copy newVersion into dbVersion, and clear newVersion
+            if (entry->dbVersion.array.data != NULL && entry->dbVersion.array.len > 0) {
+                ByteBuffer_Reset(&entry->dbVersion);
+                ByteBuffer_Append(&entry->dbVersion, entry->newVersion.array.data, entry->newVersion.bytesUsed);
+                ByteBuffer_Reset(&entry->newVersion);
+            }
 
-        // If only newVersion buffer supplied, move newVersion buffer into dbVersion,
-        // and set newVersion to NULL buffer
-        else {
-            entry->dbVersion = entry->newVersion;
-            entry->newVersion = BYTE_BUFFER_NONE;
+            // If only newVersion buffer supplied, move newVersion buffer into dbVersion,
+            // and set newVersion to NULL buffer
+            else {
+                entry->dbVersion = entry->newVersion;
+                entry->newVersion = BYTE_BUFFER_NONE;
+            }
         }
     }
-    return KINETIC_STATUS_SUCCESS;
+    return status;
 }
 
 void KineticOperation_BuildPut(KineticOperation* const operation,
@@ -258,7 +261,7 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
     operation->callback = &KineticOperation_PutCallback;
 }
 
-static KineticStatus get_cb(const char *cmd_name, KineticOperation* operation)
+static KineticStatus get_cb(const char *cmd_name, KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
@@ -267,15 +270,18 @@ static KineticStatus get_cb(const char *cmd_name, KineticOperation* operation)
     assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
-    // Update the entry upon success
-    KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation->response);
-    if (keyValue != NULL) {
-        if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, operation->entry)) {
-            return KINETIC_STATUS_BUFFER_OVERRUN;
+    if (status == KINETIC_STATUS_SUCCESS)
+    {
+        // Update the entry upon success
+        KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation->response);
+        if (keyValue != NULL) {
+            if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, operation->entry)) {
+                return KINETIC_STATUS_BUFFER_OVERRUN;
+            }
         }
     }
 
-    return KINETIC_STATUS_SUCCESS;
+    return status;
 }
 
 static void build_get_command(KineticOperation* const operation,
@@ -301,49 +307,50 @@ static void build_get_command(KineticOperation* const operation,
     operation->callback = cb;
 }
 
-static KineticStatus get_cmd_cb(KineticOperation* operation)
+static KineticStatus get_cmd_cb(KineticOperation* const operation, KineticStatus const status)
 {
-    return get_cb("GET", operation);
+    return get_cb("GET", operation, status);
 }
 
 void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry)
 {
-    return build_get_command(operation, entry, &get_cmd_cb,
+    build_get_command(operation, entry, &get_cmd_cb,
         KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET);
 }
 
-static KineticStatus getprevious_cmd_cb(KineticOperation* operation)
+static KineticStatus getprevious_cmd_cb(KineticOperation* const operation, KineticStatus const status)
 {
-    return get_cb("GETPREVIOUS", operation);
+    return get_cb("GETPREVIOUS", operation, status);
 }
 
 void KineticOperation_BuildGetPrevious(KineticOperation* const operation,
                                    KineticEntry* const entry)
 {
-    return build_get_command(operation, entry, &getprevious_cmd_cb,
+    build_get_command(operation, entry, &getprevious_cmd_cb,
         KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS);
 }
 
-static KineticStatus getnext_cmd_cb(KineticOperation* operation)
+static KineticStatus getnext_cmd_cb(KineticOperation* const operation, KineticStatus const status)
 {
-    return get_cb("GETNEXT", operation);
+    return get_cb("GETNEXT", operation, status);
 }
 
 void KineticOperation_BuildGetNext(KineticOperation* const operation,
                                    KineticEntry* const entry)
 {
-    return build_get_command(operation, entry, &getnext_cmd_cb,
+    build_get_command(operation, entry, &getnext_cmd_cb,
         KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT);
 }
 
-KineticStatus KineticOperation_FlushCallback(KineticOperation* operation)
+KineticStatus KineticOperation_FlushCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
     LOGF3("FLUSHALLDATA callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    return KINETIC_STATUS_SUCCESS;
+
+    return status;
 }
 
 void KineticOperation_BuildFlush(KineticOperation* const operation)
@@ -355,13 +362,10 @@ void KineticOperation_BuildFlush(KineticOperation* const operation)
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->valueEnabled = false;
     operation->sendValue = false;
-    if (operation->callback == NULL)
-    {
-        operation->callback = &KineticOperation_FlushCallback;
-    }
+    operation->callback = &KineticOperation_FlushCallback;
 }
 
-KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation)
+KineticStatus KineticOperation_DeleteCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
@@ -369,7 +373,7 @@ KineticStatus KineticOperation_DeleteCallback(KineticOperation* operation)
         operation, operation->connection);
     assert(operation->response != NULL);
     assert(operation->entry != NULL);
-    return KINETIC_STATUS_SUCCESS;
+    return status;
 }
 
 void KineticOperation_BuildDelete(KineticOperation* const operation,
@@ -393,7 +397,7 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
     operation->callback = &KineticOperation_DeleteCallback;
 }
 
-KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation)
+KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
@@ -403,14 +407,17 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* operation)
     assert(operation->buffers != NULL);
     assert(operation->buffers->count > 0);
 
-    // Report the key list upon success
-    KineticProto_Command_Range* keyRange = KineticPDU_GetKeyRange(operation->response);
-    if (keyRange != NULL) {
-        if (!Copy_KineticProto_Command_Range_to_ByteBufferArray(keyRange, operation->buffers)) {
-            return KINETIC_STATUS_BUFFER_OVERRUN;
+    if (status == KINETIC_STATUS_SUCCESS)
+    {
+        // Report the key list upon success
+        KineticProto_Command_Range* keyRange = KineticPDU_GetKeyRange(operation->response);
+        if (keyRange != NULL) {
+            if (!Copy_KineticProto_Command_Range_to_ByteBufferArray(keyRange, operation->buffers)) {
+                return KINETIC_STATUS_BUFFER_OVERRUN;
+            }
         }
     }
-    return KINETIC_STATUS_SUCCESS;
+    return status;
 }
 
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
@@ -432,7 +439,7 @@ void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
     operation->callback = &KineticOperation_GetKeyRangeCallback;
 }
 
-KineticStatus KineticOperation_GetLogCallback(KineticOperation* operation)
+KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
@@ -442,14 +449,18 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* operation)
     assert(operation->response != NULL);
     assert(operation->response->command->body->getLog != NULL);
 
-    // Copy the data from the response protobuf into a new info struct
-    if (operation->response->command->body->getLog == NULL) {
-        return KINETIC_STATUS_OPERATION_FAILED;
+    if (status == KINETIC_STATUS_SUCCESS)
+    {
+        // Copy the data from the response protobuf into a new info struct
+        if (operation->response->command->body->getLog == NULL) {
+            return KINETIC_STATUS_OPERATION_FAILED;
+        }
+        else {
+            *operation->deviceInfo = KineticDeviceInfo_Create(operation->response->command->body->getLog);
+            return KINETIC_STATUS_SUCCESS;
+        }
     }
-    else {
-        *operation->deviceInfo = KineticDeviceInfo_Create(operation->response->command->body->getLog);
-        return KINETIC_STATUS_SUCCESS;
-    }
+    return status;
 }
 
 void KineticOperation_BuildGetLog(KineticOperation* const operation,
@@ -472,13 +483,105 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     operation->callback = &KineticOperation_GetLogCallback;
 }
 
-KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* operation)
+KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status)
+{
+    KineticP2P_Operation* const p2pOp = operation->p2pOp;
+
+    if (status == KINETIC_STATUS_SUCCESS)
+    {
+        for(size_t i = 0; i < p2pOp->numOperations; i++)
+        {
+            if ((operation->response != NULL) &&
+                (operation->response->command != NULL) &&
+                (operation->response->command->body != NULL) &&
+                (operation->request->command->body->p2pOperation != NULL) &&
+                (i < operation->response->command->body->p2pOperation->n_operation) &&
+                (operation->response->command->body->p2pOperation->operation[i]->status != NULL) &&
+                (operation->response->command->body->p2pOperation->operation[i]->status->has_code))
+            {
+                p2pOp->operations[i].resultStatus = KineticProtoStatusCode_to_KineticStatus(
+                    operation->response->command->body->p2pOperation->operation[i]->status->code);
+            }
+            else
+            {
+                p2pOp->operations[i].resultStatus = KINETIC_STATUS_INVALID;
+            }
+        }
+    }
+
+    for(size_t i = 0; i < operation->request->command->body->p2pOperation->n_operation; i++)
+    {
+        free(operation->request->command->body->p2pOperation->operation[i]);
+        operation->request->command->body->p2pOperation->operation[i] = NULL;
+    }
+
+    free(operation->request->command->body->p2pOperation->operation);
+    operation->request->command->body->p2pOperation->operation = NULL;
+
+    return status;
+}
+
+void KineticOperation_BuildP2POperation(KineticOperation* const operation,
+                                        KineticP2P_Operation* const p2pOp)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+        
+    operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH;
+    operation->request->command->header->has_messageType = true;
+    operation->request->command->body = &operation->request->protoData.message.body;
+    operation->request->command->body->p2pOperation = &operation->request->protoData.message.p2pOp;
+
+    operation->request->command->body->p2pOperation->peer = &operation->request->protoData.message.p2pPeer;
+    operation->request->command->body->p2pOperation->peer->hostname = p2pOp->peer.hostname;
+    operation->request->command->body->p2pOperation->peer->has_port = true;
+    operation->request->command->body->p2pOperation->peer->port = p2pOp->peer.port;
+    operation->request->command->body->p2pOperation->peer->has_tls = true;
+    operation->request->command->body->p2pOperation->peer->tls = p2pOp->peer.tls;
+
+    operation->request->command->body->p2pOperation->n_operation = p2pOp->numOperations;
+    operation->request->command->body->p2pOperation->operation = malloc(p2pOp->numOperations * sizeof(KineticProto_Command_P2POperation_Operation*));
+
+    for(size_t i = 0; i < operation->request->command->body->p2pOperation->n_operation; i++)
+    {
+        assert(!ByteBuffer_IsNull(p2pOp->operations[i].key)); // TODO return invalid operand?
+        
+        KineticProto_Command_P2POperation_Operation * p2p_op_op = malloc(sizeof(KineticProto_Command_P2POperation_Operation));
+        (*p2p_op_op) = (KineticProto_Command_P2POperation_Operation){
+            .has_key = true,
+            .key.data = p2pOp->operations[i].key.array.data,
+            .key.len = p2pOp->operations[i].key.bytesUsed,
+
+            .has_newKey = !ByteBuffer_IsNull(p2pOp->operations[i].newKey),
+            .newKey.data = p2pOp->operations[i].newKey.array.data,
+            .newKey.len = p2pOp->operations[i].newKey.bytesUsed,
+
+            .has_version = !ByteBuffer_IsNull(p2pOp->operations[i].version),
+            .version.data = p2pOp->operations[i].version.array.data,
+            .version.len = p2pOp->operations[i].version.bytesUsed,
+
+            // force if no version was specified
+            .has_force = ByteBuffer_IsNull(p2pOp->operations[i].version),
+            .force = ByteBuffer_IsNull(p2pOp->operations[i].version),
+
+            // no nesting for now
+            .p2pop = NULL,
+            .status = NULL,
+        };
+        operation->request->command->body->p2pOperation->operation[i] = p2p_op_op;
+    }
+
+    operation->p2pOp = p2pOp;
+    operation->callback = &KineticOperation_P2POperationCallback;
+}
+
+KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
     LOGF3("IntantSecureErase callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    return KINETIC_STATUS_SUCCESS;
+    return status;
 }
 
 void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
@@ -516,7 +619,8 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
     assert(operation->closure.callback != NULL);
     KineticCompletionData completionData = {.status = status};
-    operation->closure.callback(&completionData, operation->closure.clientData);
+    operation->closure.callback(&completionData, operation->closure.clientData);    
+
     KineticAllocator_FreeOperation(operation->connection, operation);
 }
 

@@ -324,6 +324,25 @@ typedef struct {
     KineticDeviceInfo_Device* device;
 } KineticDeviceInfo;
 
+typedef struct {
+    char*   hostname; // pointer must remain valid until operation completes
+    int32_t port; 
+    bool    tls; // optional, defaults to false
+} KineticP2P_Peer;
+
+typedef struct {
+    ByteBuffer    key;
+    ByteBuffer    version; // optional (defaults to force if not specified)
+    ByteBuffer    newKey;
+    KineticStatus resultStatus; // populated with the result of the operation
+} KineticP2P_OperationData;
+
+typedef struct {
+    KineticP2P_Peer peer; 
+    size_t numOperations;
+    KineticP2P_OperationData* operations; // pointer must remain valid until operations complete
+} KineticP2P_Operation;
+
 const char* KineticMessageType_GetName(KineticMessageType type);
 
 #define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN (1024 * 1024 * 4) // Will get reallocated to actual/used size post-copy

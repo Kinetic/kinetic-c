@@ -211,3 +211,8 @@ ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)
     buffer->bytesUsed += len;
     return buffer;
 }
+
+bool ByteBuffer_IsNull(ByteBuffer const buffer)
+{
+    return buffer.array.data == NULL;
+}

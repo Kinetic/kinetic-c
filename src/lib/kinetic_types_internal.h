@@ -120,18 +120,21 @@ typedef struct _KineticMessage {
     KineticProto_Message_PINauth        pinAuth;
     uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
 
-    bool                                has_command; // Set to `true` to enable command element
-    KineticProto_Command                command;
-    KineticProto_Command_Header         header;
-    KineticProto_Command_Body           body;
-    KineticProto_Command_Status         status;
-    KineticProto_Command_Security       security;
-    KineticProto_Command_Security_ACL   acl;
-    KineticProto_Command_KeyValue       keyValue;
-    KineticProto_Command_Range          keyRange;
-    KineticProto_Command_GetLog         getLog;
-    KineticProto_Command_GetLog_Type    getLogType;
-    KineticProto_Command_PinOperation   pinOp;
+    bool                                         has_command; // Set to `true` to enable command element
+    KineticProto_Command                         command;
+    KineticProto_Command_Header                  header;
+    KineticProto_Command_Body                    body;
+    KineticProto_Command_Status                  status;
+    KineticProto_Command_Security                security;
+    KineticProto_Command_Security_ACL            acl;
+    KineticProto_Command_KeyValue                keyValue;
+    KineticProto_Command_Range                   keyRange;
+    KineticProto_Command_GetLog                  getLog;
+    KineticProto_Command_GetLog_Type             getLogType;
+    KineticProto_Command_PinOperation            pinOp;
+    KineticProto_Command_P2POperation            p2pOp;
+    KineticProto_Command_P2POperation_Operation  p2pOpOp;
+    KineticProto_Command_P2POperation_Peer       p2pPeer;
 } KineticMessage;
 
 #define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
@@ -181,6 +184,9 @@ typedef struct _KineticMessage {
     KineticProto_command_range__init(&(msg)->keyRange); \
     KineticProto_command_get_log__init(&(msg)->getLog); \
     KineticProto_command_pin_operation__init(&(msg)->pinOp); \
+    KineticProto_command_p2_poperation__init(&(msg)->p2pOp); \
+    KineticProto_command_p2_poperation_operation__init(&(msg)->p2pOpOp); \
+    KineticProto_command_p2_poperation_peer__init(&(msg)->p2pPeer); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
     (msg)->has_command = false; \
 }
@@ -257,7 +263,7 @@ struct _KineticPDU {
     (_pdu)->type = KINETIC_PDU_TYPE_REQUEST; \
 }
 
-typedef KineticStatus (*KineticOperationCallback)(KineticOperation* operation);
+typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operation, KineticStatus const status);
 
 // Kinetic Operation
 struct _KineticOperation {
@@ -271,6 +277,7 @@ struct _KineticOperation {
     KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticDeviceInfo** deviceInfo;
+    KineticP2P_Operation* p2pOp;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
 };

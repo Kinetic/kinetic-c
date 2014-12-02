@@ -70,7 +70,7 @@ all: default test run examples
 clean: makedirs
 	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o *.core *.log
-	rake clobber
+	bundle exec rake clobber
 	git submodule update --init
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 

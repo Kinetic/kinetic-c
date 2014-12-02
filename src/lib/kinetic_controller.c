@@ -206,13 +206,22 @@ void* KineticController_ReceiveThread(void* thread_arg)
                             LOG2("Found associated operation/request for response PDU.");
                             size_t valueLength = KineticPDU_GetValueLength(response);
                             if (valueLength > 0) {
-                                status = KineticPDU_ReceiveValue(op->connection->socket,
+                                // we need to try to read the value off the socket, even in the case of an error
+                                //  otherwise the stream will get out of sync
+                                KineticStatus valueStatus = KineticPDU_ReceiveValue(op->connection->socket,
                                     &op->entry->value, valueLength);
+
+                                // so we only care about the status of the value read if the operation
+                                //   succeeded 
+                                if (status == KINETIC_STATUS_SUCCESS)
+                                {
+                                    status = valueStatus;
+                                }
                             }
 
                             // Call operation-specific callback, if configured
-                            if (status == KINETIC_STATUS_SUCCESS && op->callback != NULL) {
-                                status = op->callback(op);
+                            if (op->callback != NULL) {
+                                status = op->callback(op, status);
                             }
 
                             if (status == KINETIC_STATUS_SUCCESS) {

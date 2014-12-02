@@ -59,5 +59,6 @@ ByteBuffer* ByteBuffer_AppendBuffer(ByteBuffer* buffer, const ByteBuffer bufferT
 ByteBuffer* ByteBuffer_AppendCString(ByteBuffer* buffer, const char* data);
 ByteBuffer* ByteBuffer_AppendFormattedCString(ByteBuffer* buffer, const char * format, ...);
 ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len);
+bool ByteBuffer_IsNull(ByteBuffer const buffer);
 
 #endif // _BYTE_ARRAY_H
