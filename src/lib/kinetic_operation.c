@@ -541,12 +541,15 @@ void KineticOperation_BuildP2POperation(KineticOperation* const operation,
 
     operation->request->command->body->p2pOperation->n_operation = p2pOp->numOperations;
     operation->request->command->body->p2pOperation->operation = malloc(p2pOp->numOperations * sizeof(KineticProto_Command_P2POperation_Operation*));
+    assert(operation->request->command->body->p2pOperation->operation != NULL);
 
     for(size_t i = 0; i < operation->request->command->body->p2pOperation->n_operation; i++)
     {
         assert(!ByteBuffer_IsNull(p2pOp->operations[i].key)); // TODO return invalid operand?
         
         KineticProto_Command_P2POperation_Operation * p2p_op_op = malloc(sizeof(KineticProto_Command_P2POperation_Operation));
+        assert(p2p_op_op != NULL);
+
         (*p2p_op_op) = (KineticProto_Command_P2POperation_Operation){
             .has_key = true,
             .key.data = p2pOp->operations[i].key.array.data,
