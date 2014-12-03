@@ -88,23 +88,19 @@ typedef enum _KineticSynchronization {
 
 
 /**
- * @brief Handle for a session instance
+ * @brief Kinetic Connection Instance
  */
-typedef int KineticSessionHandle;
-
+struct _KineticConnection;
 
 /**
- * @brief Structure used to specify the configuration of a session.
+ * @brief Structure used to specify the configuration for a session.
  */
-typedef struct _KineticSession {
+typedef struct _KineticSessionConfig {
     // Host name/IP address of Kinetic Device
     char    host[HOST_NAME_MAX];
 
     // Port for Kinetic Device session
     int     port;
-
-    // Set to true to enable non-blocking/asynchronous I/O
-    bool    nonBlocking;
 
     // The version number of this cluster definition. If this is not equal to
     // the value on the Kinetic Device, the request is rejected and will return
@@ -120,22 +116,30 @@ typedef struct _KineticSession {
     // client and the device, used to sign requests.
     uint8_t keyData[KINETIC_MAX_KEY_LEN];
     ByteArray hmacKey;
+} KineticSessionConfig;
+
+/**
+ * @brief An instance of a session with a Kinetic device.
+ */
+typedef struct _KineticSession {
+    // Session configuration structure which must be configured 
+    KineticSessionConfig config;
 
     // Connection instance which is dynamically allocated upon call to KineticClient_CreateConnection.
     // Client must call KineticClient_DestroyConnection when finished with a session to shutdown
     // a session cleanly and free the `connection`.
-    void* connection;
+    struct _KineticConnection* connection;
 } KineticSession;
 
 #define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey) { \
-    *(_session) = (KineticSession) { \
+    _session.config = (KineticSessionConfig) { \
         .port = KINETIC_PORT, \
         .clusterVersion = (_clusterVersion), \
         .identity = (_identity), \
         .hmacKey = {.data = (_session)->keyData, .len = (_hmacKey).len}, \
     }; \
-    strcpy((_session)->host, (_host)); \
-    memcpy((_session)->hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
+    strcpy(*(_session).config->host, (_host)); \
+    memcpy(*(_session).config->hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
 }
 
 // Kinetic Status Codes

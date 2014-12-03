@@ -33,48 +33,48 @@
 #include <errno.h>
 #include <sys/time.h>
 
-void KineticConnection_Create(KineticSession* const session)
+KineticStatus KineticSession_Create(KineticSession * const session)
 {
     if (session == NULL) {
-        return KINETIC_HANDLE_INVALID;
-    }
-    for (int idx = 0; idx < KINETIC_SESSIONS_MAX; idx++) {
-        if (Connections[idx] == NULL) {
-            KineticConnection* connection = &ConnectionInstances[idx];
-            Connections[idx] = connection;
-            KINETIC_CONNECTION_INIT(connection);
-            connection->session = *config;
-            handle = (KineticSessionHandle)(idx + 1);
-            return handle;
-        }
-    }
-    return KINETIC_HANDLE_INVALID;
-}
-
-void KineticConnection_Destroy(KineticSession* const session)
-{
-    assert(handle != NULL);
-    assert(*handle != KINETIC_HANDLE_INVALID);
-    KineticConnection* connection = KineticConnection_FromHandle(*handle);
-    assert(connection != NULL);
-    pthread_mutex_destroy(&connection->writeMutex);
-    *connection = (KineticConnection) {
-        .connected = false
-    };
-    Connections[(int)*handle - 1] = NULL;
-}
-
-KineticStatus KineticConnection_Connect(KineticConnection* const connection)
-{
-    if (connection == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
+    }
+    session->connection = malloc(sizeof(KineticConnection));
+    if (session->connection == NULL) {
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+    KINETIC_CONNECTION_INIT(session->connection);
+    return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticSession_Destroy(KineticSession * const session)
+{
+    if (session == NULL) {
+        return KINETIC_STATUS_SESSION_EMPTY;
+    }
+    if (session->connection == NULL) {
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
+    pthread_mutex_destroy(&session->connection->writeMutex);
+    session->connection = NULL;
+    return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticSession_Connect(KineticSession const * const session)
+{
+    if (session == NULL) {
+        return KINETIC_STATUS_SESSION_EMPTY;
+    }
+    KineticConnection* connection = session->connection;
+    if (connection == NULL) {
+        return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     // Establish the connection
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    assert(strlen(session->host) > 0);
     connection->connected = false;
-    connection->socket = KineticSocket_Connect(
-                             connection->session.host,
-                             connection->session.port);
+    connection->socket = KineticSocket_Connect(session->host, session->port);
     connection->connected = (connection->socket >= 0);
     if (!connection->connected) {
         LOG0("Session connection failed!");
@@ -83,16 +83,20 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
     }
 
     // Kick off the worker thread
-    connection->thread.connection = connection;
-    KineticController_CreateWorkerThreads(connection);
+    session->connection->thread.connection = connection;
+    KineticController_Init(session);
 
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
+KineticStatus KineticSession_Disconnect(KineticSession const * const session)
 {
-    if (connection == NULL || !connection->connected || connection->socket < 0) {
-        return KINETIC_STATUS_SESSION_INVALID;
+    if (session == NULL) {
+        return KINETIC_STATUS_SESSION_EMPTY;
+    }
+    KineticConnection* connection = session->connection;
+    if (connection == NULL || !session->connection->connected || connection->socket < 0) {
+        return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     // Shutdown the worker thread
@@ -115,8 +119,9 @@ KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
     return status;
 }
 
-void KineticConnection_IncrementSequence(KineticConnection* const connection)
+void KineticSession_IncrementSequence(KineticSession const * const session)
 {
-    assert(connection != NULL);
-    connection->sequence++;
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    session->connection->sequence++;
 }

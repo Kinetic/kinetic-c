@@ -65,7 +65,7 @@ void setUp(void)
     SystemTestSetup(&Fixture);
 
     HmacKey = ByteArray_CreateWithCString(HmacKeyString);
-    Fixture.config.hmacKey = HmacKey;
+    Fixture.session.hmacKey = HmacKey;
 
     Key = ByteArray_Create(KeyData, sizeof(KeyData));
     KeyBuffer = ByteBuffer_CreateWithArray(Key);
@@ -104,7 +104,7 @@ void test_Delete_should_delete_an_object_from_device(void)
         .force = true,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    status = KineticClient_Put(Fixture.handle, &putEntry, NULL);
+    status = KineticClient_Put(&Fixture.session, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteArray(Key, putEntry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(Tag, putEntry.tag.array);
@@ -119,7 +119,7 @@ void test_Delete_should_delete_an_object_from_device(void)
         .force = true,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    status = KineticClient_Get(Fixture.handle, &getEntry, NULL);
+    status = KineticClient_Get(&Fixture.session, &getEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.key.array, getEntry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.tag.array, getEntry.tag.array);
@@ -130,7 +130,7 @@ void test_Delete_should_delete_an_object_from_device(void)
     KineticEntry deleteEntry = {
         .key = KeyBuffer,
     };
-    status = KineticClient_Delete(Fixture.handle, &deleteEntry, NULL);
+    status = KineticClient_Delete(&Fixture.session, &deleteEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(0, deleteEntry.value.bytesUsed);
 
@@ -140,7 +140,7 @@ void test_Delete_should_delete_an_object_from_device(void)
         .dbVersion = VersionBuffer,
         .metadataOnly = true,
     };
-    status = KineticClient_Get(Fixture.handle, &regetEntryMetadata, NULL);
+    status = KineticClient_Get(&Fixture.session, &regetEntryMetadata, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
     TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
 }

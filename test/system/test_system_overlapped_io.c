@@ -59,13 +59,12 @@
 
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
-STATIC KineticSessionHandle* kinetic_client;
 STATIC const char HmacKeyString[] = "asdfasdf";
 STATIC int SourceDataSize;
 
 struct kinetic_thread_arg {
     char ip[16];
-    KineticSessionHandle sessionHandle;
+    KineticSession session;
     char keyPrefix[KINETIC_DEFAULT_KEY_LEN];
     uint8_t key[KINETIC_DEFAULT_KEY_LEN];
     uint8_t version[KINETIC_DEFAULT_KEY_LEN];
@@ -117,18 +116,17 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         // Allocate session/thread data
         struct kinetic_thread_arg* kt_arg;
         pthread_t thread_id[KINETIC_MAX_THREADS];
-        kinetic_client = malloc(sizeof(KineticSessionHandle) * NUM_COPIES);
-        TEST_ASSERT_NOT_NULL_MESSAGE(kinetic_client, "kinetic_client malloc failed");
         kt_arg = malloc(sizeof(struct kinetic_thread_arg) * NUM_COPIES);
         TEST_ASSERT_NOT_NULL_MESSAGE(kt_arg, "kinetic_thread_arg malloc failed");
 
         // Establish all of the connection first, so their session can all get initialized first
         for (int i = 0; i < NUM_COPIES; i++) {
             // Establish connection
+            kinetic_client[i].session = sessionConfig;
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
-                KineticClient_CreateConnection(&sessionConfig, &kinetic_client[i]));
-            strcpy(kt_arg[i].ip, sessionConfig.host);
+                KineticClient_CreateConnection(&kinetic_client[i].session));
+            strcpy(kt_arg[i].ip, session.host);
 
             // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
             kt_arg[i].data = ByteBuffer_Create(buf, SourceDataSize, 0);
@@ -160,10 +158,9 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
             printf("  *** Overlapped PUT operations (writing copy %d of %d)"
                    " on IP (iteration %d of %d):%s\n",
                    i + 1, NUM_COPIES, iteration + 1,
-                   MAX_ITERATIONS, sessionConfig.host);
+                   MAX_ITERATIONS, session.host);
 
             // Spawn the thread
-            kt_arg[i].sessionHandle = kinetic_client[i];
             int pthreadStatus = pthread_create(&thread_id[i], NULL, kinetic_put, &kt_arg[i]);
             REPORT_ERRNO(pthreadStatus, "pthread_create");
             TEST_ASSERT_EQUAL_MESSAGE(0, pthreadStatus, "pthread create failed");

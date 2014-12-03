@@ -33,11 +33,13 @@
 #include "unity.h"
 #include "unity_helper.h"
 
-static KineticSessionHandle DummyHandle = 12;
+static KineticSession Session;
+static KineticConnection Connection;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
+    Session.connection = &Connection;
 }
 
 void tearDown(void)
@@ -52,11 +54,11 @@ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_de
     KineticDeviceInfo* info;
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_GetLog(DummyHandle, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
+    KineticStatus status = KineticClient_GetLog(&Session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

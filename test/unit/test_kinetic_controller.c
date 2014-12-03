@@ -56,9 +56,9 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-// void test_KineticController_CreateWorkerThreads_should_create_and_kickoff_worker_threads(void)
+// void test_KineticController_Init_should_create_and_kickoff_worker_threads(void)
 // {
-//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_CreateWorkerThreads");
+//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Init");
 // }
 
 // void test_KineticController_CreateOperation_should_create_a_new_operation_for_the_specified_session(void)

@@ -23,10 +23,10 @@
 
 #include "kinetic_types_internal.h"
 
-KineticStatus KineticController_CreateWorkerThreads(KineticConnection* const connection);
-KineticOperation* KineticController_CreateOperation(KineticConnection* const connection);
+KineticStatus KineticController_Init(KineticSession const * const session);
+KineticOperation* KineticController_CreateOperation(KineticSession const * const session);
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure);
-void KineticController_Pause(KineticConnection* const connection, bool pause);
+void KineticController_Pause(KineticSession const * const session, bool pause);
 void* KineticController_ReceiveThread(void* thread_arg);
 
 #endif // _KINETIC_CONTROLLER_H

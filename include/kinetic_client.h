@@ -40,13 +40,12 @@ void KineticClient_Shutdown(void);
  * @brief Initializes the Kinetic API, configures logging destination, establishes a
  * connection to the specified Kinetic Device, and establishes a session.
  *
- * @param config    Session configuration
+ * @param session   Configured KineticSession to connect
  *  .host             Host name or IP address to connect to
  *  .port             Port to establish socket connection on
  *  .clusterVersion   Cluster version to use for the session
  *  .identity         Identity to use for the session
  *  .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
- * @param handle    Pointer to KineticSessionHandle (populated upon successful connection)
  *
  * @return          Returns the resulting KineticStatus
  */
@@ -55,7 +54,7 @@ KineticStatus KineticClient_CreateConnection(KineticSession * const session);
 /**
  * @brief Closes the connection to a host.
  *
- * @param handle    KineticSessionHandle for a connected session.
+ * @param session   The KineticSession to destroy.
  *
  * @return          Returns the resulting KineticStatus
  */
@@ -64,7 +63,7 @@ KineticStatus KineticClient_DestroyConnection(KineticSession * const session);
 /**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational.
  *
- * @param handle        KineticSessionHandle for a connected session.
+ * @param session       The connected KineticSession to use for the operation.
  *
  * @return              Returns the resulting KineticStatus
  */
@@ -73,7 +72,7 @@ KineticStatus KineticClient_NoOp(KineticSession const * const session);
 /**
  * @brief Executes a PUT command to store/update an entry on the Kinetic Device.
  *
- * @param handle        KineticSessionHandle for a connected session.
+ * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to store. 'value' must
  *                      specify the data to be stored.
  * @param closure       Optional closure. If specified, operation will be
@@ -83,14 +82,14 @@ KineticStatus KineticClient_NoOp(KineticSession const * const session);
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Put(KineticSessionHandle handle,
+KineticStatus KineticClient_Put(KineticSession const * const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
  *
- * @param handle        KineticSessionHandle for a connected session.
+ * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to retrieve. 'value' will
  *                      be populated unless 'metadataOnly' is set to 'true'.
  * @param closure       Optional closure. If specified, operation will be
@@ -99,14 +98,14 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Get(KineticSessionHandle handle,
+KineticStatus KineticClient_Get(KineticSession const * const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
  *
- * @param handle        KineticSessionHandle for a connected session.
+ * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to delete. 'value' is
  *                      not used for this operation.
  * @param closure       Optional closure. If specified, operation will be
@@ -115,7 +114,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_Delete(KineticSessionHandle handle,
+KineticStatus KineticClient_Delete(KineticSession const * const session,
                                    KineticEntry* const entry,
                                    KineticCompletionClosure* closure);
 
@@ -123,7 +122,7 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
  * @brief Executes a GETKEYRANGE command to retrive a set of keys in the range
  * specified range from the Kinetic Device
  *
- * @param handle        KineticSessionHandle for a connected session
+ * @param session       The connected KineticSession to use for the operation
  * @param range         KineticKeyRange specifying keys to return
  * @param keys          ByteBufferArray to store the retrieved keys
  * @param closure       Optional closure. If specified, operation will be
@@ -134,7 +133,7 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
-KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
+KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
                                         KineticKeyRange* range, ByteBufferArray* keys,
                                         KineticCompletionClosure* closure);
 
@@ -142,7 +141,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
  * @brief Executes a GETLOG command to retrive a set of keys in the range
  * specified range from the Kinetic Device
  *
- * @param handle        KineticSessionHandle for a connected session
+ * @param session       The connected KineticSession to use for the operation
  * @param type          KineticLogDataType specifying data type to retrieve.
  * @param info          KineticDeviceInfo pointer, which will be assigned to
  *                      a dynamically allocated structure populated with
@@ -154,7 +153,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
  * @return              Returns 0 upon succes, -1 or the Kinetic status code
  *                      upon failure
  */
-KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
+KineticStatus KineticClient_GetLog(KineticSession const * const session,
                                    KineticDeviceInfo_Type type,
                                    KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure);
@@ -162,10 +161,10 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
 /**
  * @brief Executes an InstantSecureErase command to erase all data from the Kinetic device.
  *
- * @param handle        KineticSessionHandle for a connected session.
+ * @param session       The connected KineticSession to use for the operation.
  *
  * @return              Returns the resulting KineticStatus
  */
-KineticStatus KineticClient_InstantSecureErase(KineticSessionHandle handle);
+KineticStatus KineticClient_InstantSecureErase(KineticSession const * const session);
 
 #endif // _KINETIC_CLIENT_H

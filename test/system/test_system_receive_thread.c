@@ -58,7 +58,7 @@ void tearDown(void)
 void test_KineticClient_should_process_initial_unsolicited_status_response(void)
 {
     int secondsWaiting = 0, maxWaiting = 2;
-    KineticConnection* connection = KineticConnection_FromHandle(Fixture.handle);
+    KineticConnection* connection = KineticSession_FromHandle(Fixture.handle);
     while(connection->connectionID == 0) {
         LOG0("Waiting for connection ID...");
         sleep(1);

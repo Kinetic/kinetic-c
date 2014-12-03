@@ -33,17 +33,20 @@
 #include "unity.h"
 #include "unity_helper.h"
 
+static KineticSession Session;
+static KineticConnection Connection;
 static const char* StartKeyData[KINETIC_DEFAULT_KEY_LEN];
 static const char* EndKeyData[KINETIC_DEFAULT_KEY_LEN];
 static ByteBuffer StartKey, EndKey;
 #define MAX_KEYS_RETRIEVED (4)
 static uint8_t KeyRangeData[MAX_KEYS_RETRIEVED][KINETIC_MAX_KEY_LEN];
 static ByteBuffer Keys[MAX_KEYS_RETRIEVED];
-static KineticSessionHandle DummyHandle = 1;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
+
+    Session.connection = &Connection;
 
     // Configure start and end key buffers
     StartKey = ByteBuffer_Create(StartKeyData, sizeof(StartKeyData), sizeof(StartKeyData));
@@ -128,11 +131,11 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
     };
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildGetKeyRange_Expect(&operation, &keyRange, &keyArray);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_BUFFER_OVERRUN);
 
-    KineticStatus status = KineticClient_GetKeyRange(DummyHandle, &keyRange, &keyArray, NULL);
+    KineticStatus status = KineticClient_GetKeyRange(&Session, &keyRange, &keyArray, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_BUFFER_OVERRUN, status);
 }

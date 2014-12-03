@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <getopt.h>
 
-static KineticSession SessionConfig;
+static KineticSession Session;
 static uint8_t HmacData[1024];
 static KineticEntry Entry;
 static uint8_t KeyData[1024];
@@ -37,11 +37,11 @@ static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
 static int ParseOptions(
     const int argc,
     char** const argv,
-    KineticSession* config,
+    KineticSession const * const session,
     KineticEntry* entry);
 static KineticStatus ExecuteOperation(
     const char* op,
-    KineticSessionHandle sessionHandle,
+    KineticSession const * const session,
     KineticEntry* entry);
 static void ConfigureEntry(
     KineticEntry* entry,
@@ -63,14 +63,13 @@ int main(int argc, char** argv)
     KineticClient_Init("stdout", 2);
 
     // Parse command line options
-    int operationsArgsIndex = ParseOptions(argc, argv, &SessionConfig, &Entry);
+    int operationsArgsIndex = ParseOptions(argc, argv, &Session, &Entry);
 
     // Establish a session/connection with the Kinetic Device
-    KineticSessionHandle sessionHandle;
-    KineticStatus status = KineticClient_CreateConnection(&SessionConfig, &sessionHandle);
+    KineticStatus status = KineticClient_CreateConnection(&Session);
     if (status != KINETIC_STATUS_SUCCESS) {
         printf("Failed connecting to host %s:%d (status: %s)\n\n",
-               SessionConfig.host, SessionConfig.port,
+               Session.host, Session.port,
                Kinetic_GetStatusDescription(status));
         return -1;
     }
@@ -96,13 +95,13 @@ int main(int argc, char** argv)
 
 KineticStatus ExecuteOperation(
     const char* operation,
-    KineticSessionHandle sessionHandle,
+    KineticSession const * const session,
     KineticEntry* entry)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     if (strcmp("instanterase", operation) == 0) {
-        status = KineticClient_InstantSecureErase(sessionHandle);
+        status = KineticClient_InstantSecureErase(session);
         if (status == 0) {
             printf("\nInstantSecureErase executed successfully."
                    " The device has been erased!\n\n");
@@ -110,7 +109,7 @@ KineticStatus ExecuteOperation(
     }
 
     else if (strcmp("noop", operation) == 0) {
-        status = KineticClient_NoOp(sessionHandle);
+        status = KineticClient_NoOp(session);
         if (status == KINETIC_STATUS_SUCCESS) {
             printf("\nNoOp operation completed successfully."
                    " Kinetic Device is alive and well!\n\n");
@@ -118,7 +117,7 @@ KineticStatus ExecuteOperation(
     }
 
     else if (strcmp("put", operation) == 0) {
-        status = KineticClient_Put(sessionHandle, entry, NULL);
+        status = KineticClient_Put(session, entry, NULL);
         if (status == KINETIC_STATUS_SUCCESS) {
             printf("\nPut operation completed successfully."
                    " Your data has been stored!\n\n");
@@ -126,7 +125,7 @@ KineticStatus ExecuteOperation(
     }
 
     else if (strcmp("get", operation) == 0) {
-        status = KineticClient_Get(sessionHandle, entry, NULL);
+        status = KineticClient_Get(session, entry, NULL);
         if (status == 0) {
             printf("\nGet executed successfully."
                    "The entry has been retrieved!\n\n");
@@ -134,7 +133,7 @@ KineticStatus ExecuteOperation(
     }
 
     else if (strcmp("delete", operation) == 0) {
-        status = KineticClient_Delete(sessionHandle, entry, NULL);
+        status = KineticClient_Delete(session, entry, NULL);
         if (status == 0) {
             printf("\nDelete executed successfully."
                    " The entry has been destroyed!\n\n");
@@ -188,12 +187,12 @@ void ConfigureEntry(
 
 void ReportOperationConfiguration(
     const char* operation,
-    KineticSession* config,
+    KineticSession* session,
     KineticEntry* entry)
 {
     printf("\n\n"
            "================================================================================\n"
-           "Executing '%s' w/configuration:\n"
+           "Executing '%s' w/sessionuration:\n"
            "================================================================================\n"
            "  host: %s\n"
            "  port: %d\n"
@@ -204,11 +203,11 @@ void ReportOperationConfiguration(
            "  value: %zd bytes\n"
            "================================================================================\n",
            operation,
-           config->host,
-           config->port,
-           BOOL_TO_STRING(config->nonBlocking),
-           (long long int)config->clusterVersion,
-           (long long int)config->identity,
+           session->host,
+           session->port,
+           BOOL_TO_STRING(session->nonBlocking),
+           (long long int)session->clusterVersion,
+           (long long int)session->identity,
            entry->key.bytesUsed,
            entry->value.bytesUsed);
 }
@@ -216,7 +215,7 @@ void ReportOperationConfiguration(
 int ParseOptions(
     const int argc,
     char** const argv,
-    KineticSession* sessionConfig,
+    KineticSession* session,
     KineticEntry* entry)
 {
     // Create an ArgP processor to parse arguments
@@ -273,14 +272,14 @@ int ParseOptions(
     }
 
     // Configure session for connection
-    *sessionConfig = (KineticSession) {
+    *session = (KineticSession) {
         .port = cfg.port,
         .clusterVersion = cfg.clusterVersion,
         .identity = cfg.identity,
         .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
     };
     memcpy(HmacData, cfg.hmacKey, strlen(cfg.hmacKey));
-    strncpy(sessionConfig->host, cfg.host, HOST_NAME_MAX);
+    strncpy(session->host, cfg.host, HOST_NAME_MAX);
 
     // Populate and configure the entry to be used for operations
     ConfigureEntry(entry, cfg.key, cfg.tag, cfg.version, cfg.algorithm, TestDataString);

@@ -48,7 +48,7 @@ typedef struct {
     pthread_mutex_t completeMutex;
     pthread_cond_t completeCond;
     KineticStatus status;
-    KineticSessionHandle sessionHandle;
+    KineticSession* session;
 } FileTransferProgress;
 
 typedef struct {
@@ -60,7 +60,7 @@ typedef struct {
 } AsyncWriteClosureData;
 
 typedef struct {
-    KineticSessionHandle handle;
+    KineticSession* session;
     const char* filename;
     const size_t maxOverlappedChunks;
     uint64_t keyPrefix;
@@ -69,7 +69,7 @@ typedef struct {
 } StoreFileOperation;
 
 void* store_file_thread(void* storeArgs);
-FileTransferProgress* start_file_transfer(KineticSessionHandle handle,
+FileTransferProgress* start_file_transfer(KineticSession* session,
     char const * const filename, uint64_t prefix, uint32_t maxOverlappedChunks);
 KineticStatus wait_for_transfer_complete(FileTransferProgress* const transfer);
 
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 
     // Initialize kinetic-c and configure session
     const char HmacKeyString[] = "asdfasdf";
-    const KineticSession sessionConfig = {
+    const KineticSession session = {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
@@ -93,8 +93,7 @@ int main(int argc, char** argv)
     KineticClient_Init("stdout", 0);
 
     // Establish connection
-    KineticSessionHandle handle;
-    KineticStatus status = KineticClient_CreateConnection(&sessionConfig, &handle);
+    KineticStatus status = KineticClient_CreateConnection(&session);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -172,12 +171,12 @@ void* store_file_thread(void* storeArgs)
     return (void*)storeArgs;
 }
 
-FileTransferProgress * start_file_transfer(KineticSessionHandle handle,
+FileTransferProgress * start_file_transfer(KineticSession* session,
     char const * const filename, uint64_t prefix, uint32_t maxOverlappedChunks)
 {
     FileTransferProgress * transferState = malloc(sizeof(FileTransferProgress));
     *transferState = (FileTransferProgress) {
-        .sessionHandle = handle,
+        .session = session,
         .maxOverlappedChunks = maxOverlappedChunks,
         .keyPrefix = ByteBuffer_CreateAndAppend(transferState->keyPrefixBuffer,
             sizeof(transferState->keyPrefixBuffer), &prefix, sizeof(prefix)),

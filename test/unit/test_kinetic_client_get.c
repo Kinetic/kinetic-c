@@ -32,13 +32,15 @@
 #include "unity.h"
 #include "unity_helper.h"
 
+static KineticSession Session;
+static KineticConnection Connection;
 static ByteArray Value;
 static uint8_t ValueData[64];
-static KineticSessionHandle DummyHandle = 1;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
+    Session.connection = &Connection;
 }
 
 void tearDown(void)
@@ -55,11 +57,11 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     KineticEntry entry = {.value = valueBuffer};
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildGet_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_DEVICE_BUSY);
 
-    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
+    KineticStatus status = KineticClient_Get(&Session, &entry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_BUSY, status);
 }
@@ -74,11 +76,11 @@ void test_KineticClient_Get_should_execute_GET_operation_and_populate_supplied_b
     KineticEntry entry = {.value = valueBuffer};
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildGet_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_CLUSTER_MISMATCH);
 
-    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
+    KineticStatus status = KineticClient_Get(&Session, &entry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH, status);
 }
@@ -90,11 +92,11 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
     KineticEntry entry = {.metadataOnly = true};
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildGet_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_Get(DummyHandle, &entry, NULL);
+    KineticStatus status = KineticClient_Get(&Session, &entry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

@@ -32,7 +32,8 @@
 #include "unity.h"
 #include "unity_helper.h"
 
-static KineticSessionHandle DummyHandle = 8;
+static KineticSession Session;
+static KineticConnection Connection;
 
 void setUp(void)
 {
@@ -46,14 +47,15 @@ void tearDown(void)
 
 void test_KineticClient_Delete_should_execute_DELETE_operation(void)
 {
+    Session.connection = &Connection;
     KineticEntry entry;
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildDelete_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_Delete(DummyHandle, &entry, NULL);
+    KineticStatus status = KineticClient_Delete(&Session, &entry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

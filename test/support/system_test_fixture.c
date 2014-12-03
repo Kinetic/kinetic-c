@@ -37,7 +37,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
     ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
     if (!fixture->connected) {
         *fixture = (SystemTestFixture) {
-            .config = (KineticSession) {
+            .session = (KineticSession) {
                 .host = SYSTEM_TEST_HOST,
                 .port = KINETIC_PORT,
                 .clusterVersion = 0,
@@ -47,7 +47,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
             .connected = fixture->connected,
             .testIgnored = false,
         };
-        status = KineticClient_CreateConnection(&fixture->config, &fixture->handle);
+        status = KineticClient_CreateConnection(&fixture->session);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
@@ -57,7 +57,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
     }
 
     // Erase the drive
-    status = KineticClient_InstantSecureErase(fixture->handle);
+    status = KineticClient_InstantSecureErase(&fixture->session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // TEST_ASSERT_EQUAL_MESSAGE(
@@ -79,7 +79,7 @@ void SystemTestTearDown(SystemTestFixture* fixture)
         //     "Sequence should post-increment for every operation on the session!");
     }
 
-    KineticStatus status = KineticClient_DestroyConnection(&fixture->handle);
+    KineticStatus status = KineticClient_DestroyConnection(&fixture->session);
     TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
 
     KineticClient_Shutdown();

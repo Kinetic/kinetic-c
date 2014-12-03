@@ -36,6 +36,7 @@
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_hmac.h"
 
+static KineticSession Session;
 static KineticConnection Connection;
 static int64_t ConnectionID = 12345;
 static KineticPDU Request, Response;
@@ -48,6 +49,7 @@ void setUp(void)
     KineticLogger_Init("stdout", 3);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connectionID = ConnectionID;
+    Session.connection = &Connection;
     KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
     KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
     KINETIC_OPERATION_INIT(&Operation, &Connection);
@@ -248,7 +250,7 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
     // Build a valid NOOP to facilitate testing protobuf structure and status extraction
     Operation.request = &Request;
     Operation.response = &Response;
-    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSession_IncrementSequence_Expect(&Session);
     KineticOperation_BuildNoop(&Operation);
 
     KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
@@ -357,7 +359,7 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
 {
     LOG_LOCATION;
 
-    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSession_IncrementSequence_Expect(&Session);
 
     KineticOperation_BuildNoop(&Operation);
 
@@ -392,7 +394,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
     ByteArray tag = ByteArray_CreateWithCString("some_tag");
 
-    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSession_IncrementSequence_Expect(&Session);
 
     // PUT
     // The PUT operation sets the value and metadata for a given key. If a value
@@ -505,7 +507,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
 
-    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
 
     KineticOperation_BuildGet(&Operation, &entry);
@@ -559,7 +561,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
 
-    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
 
     KineticOperation_BuildGet(&Operation, &entry);
@@ -608,7 +610,7 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {.key = ByteBuffer_CreateWithArray(key), .value = ByteBuffer_CreateWithArray(value)};
 
-    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
 
     KineticOperation_BuildDelete(&Operation, &entry);
@@ -678,7 +680,7 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     }
     ByteBufferArray keys = {.buffers = keyBuffers, .count = numKeysInRange};
 
-    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyRange_Expect(&Request.protoData.message, &range);
 
     KineticOperation_BuildGetKeyRange(&Operation, &range, &keys);
@@ -757,7 +759,7 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 
     KineticDeviceInfo* pInfo;
 
-    KineticConnection_IncrementSequence_Expect(&Connection);
+    KineticSession_IncrementSequence_Expect(&Session);
 
     KineticOperation_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
 

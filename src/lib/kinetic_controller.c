@@ -27,46 +27,43 @@
 #include "kinetic_logger.h"
 #include <pthread.h>
 
-KineticStatus KineticController_CreateWorkerThreads(KineticConnection* const connection)
+KineticStatus KineticController_Init(KineticSession const * const session)
 {
-    KineticStatus status;
+    assert(session != NULL);
+    assert(session->connection != NULL);
 
     int pthreadStatus = pthread_create(
-        &connection->threadID,
+        &session->connection->threadID,
         NULL,
         KineticController_ReceiveThread,
-        &connection->thread);
+        &session->connection->thread);
     if (pthreadStatus != 0) {
         char errMsg[256];
         Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
         LOGF0("Failed creating worker thread w/error: %s", errMsg);
-        status = KINETIC_STATUS_CONNECTION_ERROR;
-    }
-    else {
-        status = KINETIC_STATUS_SUCCESS;
+        return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
-    return status;
+    return KINETIC_STATUS_SUCCESS;
 }
 
-KineticOperation* KineticController_CreateOperation(KineticSessionHandle handle)
+KineticOperation* KineticController_CreateOperation(KineticSession const * const session)
 {
-    if (handle == KINETIC_HANDLE_INVALID) {
-        LOG0("Specified session has invalid handle value");
+    if (session == NULL) {
+        LOG0("Specified session is NULL");
         return NULL;
     }
 
-    KineticConnection* connection = KineticConnection_FromHandle(handle);
-    if (connection == NULL) {
+    if (session->connection == NULL) {
         LOG0("Specified session is not associated with a connection");
         return NULL;
     }
 
     LOGF1("\n"
          "--------------------------------------------------\n"
-         "Building new operation on connection @ 0x%llX", connection);
+         "Building new operation on session @ 0x%llX", session);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL || operation->request == NULL) {
         return NULL;
     }
@@ -143,10 +140,11 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     }
 }
 
-void KineticController_Pause(KineticConnection* const connection, bool pause)
+void KineticController_Pause(KineticSession const * const session, bool pause)
 {
-    assert(connection != NULL);
-    connection->thread.paused = pause;
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    session->connection->thread.paused = pause;
 }
 
 void* KineticController_ReceiveThread(void* thread_arg)

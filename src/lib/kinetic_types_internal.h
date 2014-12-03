@@ -29,7 +29,6 @@
 #include <time.h>
 #include <pthread.h>
 
-#define KINETIC_SESSIONS_MAX (20)
 #define KINETIC_PDUS_PER_SESSION_DEFAULT (2)
 #define KINETIC_PDUS_PER_SESSION_MAX (10)
 #define KINETIC_SOCKET_DESCRIPTOR_INVALID (-1)

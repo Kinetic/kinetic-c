@@ -204,7 +204,7 @@ KineticStatus KineticOperation_NoopCallback(KineticOperation* operation)
 void KineticOperation_BuildNoop(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticConnection_IncrementSequence(operation->connection);
+    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->valueEnabled = false;
@@ -245,7 +245,7 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticConnection_IncrementSequence(operation->connection);
+    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT;
     operation->request->protoData.message.command.header->has_messageType = true;
@@ -282,7 +282,7 @@ void KineticOperation_BuildGet(KineticOperation* const operation,
                                KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticConnection_IncrementSequence(operation->connection);
+    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET;
     operation->request->protoData.message.command.header->has_messageType = true;
@@ -314,7 +314,7 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticConnection_IncrementSequence(operation->connection);
+    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE;
     operation->request->protoData.message.command.header->has_messageType = true;
@@ -357,7 +357,7 @@ void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
     KineticOperation_ValidateOperation(operation);
     assert(range != NULL);
     assert(buffers != NULL);
-    KineticConnection_IncrementSequence(operation->connection);
+    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE;
     operation->request->command->header->has_messageType = true;
@@ -395,7 +395,7 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     KineticDeviceInfo** info)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticConnection_IncrementSequence(operation->connection);
+    KineticSession_IncrementSequence(&operation->connection->session);
     KineticProto_Command_GetLog_Type protoType =
         KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(type);
         
@@ -422,7 +422,7 @@ KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* oper
 void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticConnection_IncrementSequence(operation->connection);
+    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->protoData.message.body;
