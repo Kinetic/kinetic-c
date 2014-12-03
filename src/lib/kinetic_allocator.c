@@ -156,6 +156,7 @@ static void KineticAllocator_FreeItem(KineticList* const list, void* item, bool 
                 if (cur->next != NULL) {
                     LOG3("    Next being reset!");
                     cur->previous->next = cur->next;
+                    cur->next->previous = cur->previous;
                 }
                 else {
                     list->last = cur->previous;
