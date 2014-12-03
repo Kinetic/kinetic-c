@@ -60,7 +60,6 @@ void test_KineticClient_flush_should_get_success_if_no_writes_are_in_progress(vo
 void test_KineticClient_flush_should_expose_memory_error_from_CreateOperation(void)
 {
     KineticSessionHandle DummyHandle = 17;
-    KineticOperation operation;
 
     KineticController_CreateOperation_ExpectAndReturn(DummyHandle, NULL);
     

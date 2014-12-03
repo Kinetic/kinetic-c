@@ -5,6 +5,9 @@
 #include <stdarg.h>
 #include <sys/param.h>
 
+static ByteBuffer* append_formatted_cstring_va_list(ByteBuffer* buffer,
+    const char* format, va_list args);
+
 ByteArray ByteArray_Create(void* data, size_t len)
 {
     return (ByteArray) {
@@ -75,26 +78,6 @@ ByteBuffer ByteBuffer_CreateAndAppendCString(void* data, size_t max_len, const c
 {
     ByteBuffer buf = ByteBuffer_Create(data, max_len, 0);
     ByteBuffer_AppendCString(&buf, value);
-    return buf;
-}
-
-ByteBuffer ByteBuffer_CreateAndAppendFormattedCString(void* data, size_t max_len, const char * format, ...)
-{
-    ByteBuffer buf = ByteBuffer_Create(data, max_len, 0);
-
-    va_list args;
-    va_start(args,format);
-
-    uint8_t tmp[256];
-    ByteBuffer tmpBuf = ByteBuffer_Create(tmp, sizeof(tmp), 0);
-
-    int formattedSize = vsnprintf((void*)tmpBuf.array.data, tmpBuf.array.len, format, args);
-    assert(formattedSize >= 0);
-    tmpBuf.bytesUsed = (tmpBuf.array.len <= (size_t)formattedSize) ? tmpBuf.array.len : formattedSize;
-
-    va_end(args);
-
-    ByteBuffer_AppendBuffer(&buf, tmpBuf);
     return buf;
 }
 
@@ -177,24 +160,49 @@ ByteBuffer* ByteBuffer_AppendCString(ByteBuffer* buffer, const char* str)
     return buffer;
 }
 
+
+static ByteBuffer* append_formatted_cstring_va_list(ByteBuffer* buffer, const char* format, va_list args)
+{
+    char* start = (char*)&buffer->array.data[buffer->bytesUsed];
+    long startLen = (long)buffer->bytesUsed;
+    long maxLen = buffer->array.len;
+    long remainingLen = ByteBuffer_BytesRemaining(*buffer);
+    long extraLen = vsnprintf(start, remainingLen, format, args);
+    if (startLen + extraLen >= maxLen) {
+        return NULL;
+    }
+    buffer->bytesUsed += extraLen;
+    return buffer;
+}
+
 ByteBuffer* ByteBuffer_AppendFormattedCString(ByteBuffer* buffer, const char * format, ...)
 {
     assert(buffer != NULL);
     assert(buffer->array.data != NULL);
 
+    bool failed = false;
     va_list args;
-    va_start(args,format);
+    va_start(args, format);
 
-    uint8_t tmp[256];
-    ByteBuffer tmpBuf = ByteBuffer_Create(tmp, sizeof(tmp), 0);
-
-    int formattedSize = vsnprintf((void*)tmpBuf.array.data, tmpBuf.array.len, format, args);
-    assert(formattedSize >= 0);
-    tmpBuf.bytesUsed = (tmpBuf.array.len <= (size_t)formattedSize) ? tmpBuf.array.len : formattedSize;
+    failed = (append_formatted_cstring_va_list(buffer, format, args) == NULL);
 
     va_end(args);
 
-    return ByteBuffer_AppendBuffer(buffer, tmpBuf);
+    return failed ? NULL : buffer;
+}
+
+ByteBuffer ByteBuffer_CreateAndAppendFormattedCString(void* data, size_t max_len, const char * format, ...)
+{
+    ByteBuffer buf = ByteBuffer_Create(data, max_len, 0);
+
+    va_list args;
+    va_start(args, format);
+    if (append_formatted_cstring_va_list(&buf, format, args) == NULL) {
+        memset(&buf, 0, sizeof(ByteBuffer));
+    }
+    va_end(args);
+
+    return buf;
 }
 
 ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)

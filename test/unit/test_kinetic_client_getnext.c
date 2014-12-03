@@ -88,7 +88,6 @@ void test_KineticClient_GetNext_should_expose_memory_errors(void)
         .key = KeyBuffer,
         .value = ValueBuffer,
     };
-    KineticOperation operation;
 
     KineticController_CreateOperation_ExpectAndReturn(DummyHandle, NULL);
     KineticStatus status = KineticClient_GetNext(DummyHandle, &entry, NULL);
