@@ -97,6 +97,8 @@ $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/proto
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
 
+${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
+
 
 ci: uninstall all install
 	@echo
