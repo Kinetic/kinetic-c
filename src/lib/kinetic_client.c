@@ -83,9 +83,20 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
     }
 
     // Wait for initial unsolicited status to be received in order to obtain connectionID
-    while(connection->connectionID == 0) {sleep(1);}
+    while(connection->connectionID == 0) {
+        if (!KineticClient_AsyncRun(handle))
+        {
+            break;
+        }
+    }
 
     return status;
+}
+
+KineticStatus KineticClient_AsyncRun(KineticSessionHandle* handle)
+{
+    KineticConnection* connection = KineticConnection_FromHandle(*handle);
+    return KineticController_Run(connection);
 }
 
 KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)

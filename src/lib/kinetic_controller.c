@@ -149,9 +149,111 @@ void KineticController_Pause(KineticConnection* const connection, bool pause)
     connection->thread.paused = pause;
 }
 
-void* KineticController_ReceiveThread(void* thread_arg)
+
+KineticStatus KineticController_Run(KineticConnection* const connection)
 {
     KineticStatus status;
+    // Wait for and receive a PDU
+    pthread_mutex_lock(&connection->readMutex);
+    KineticWaitStatus wait_status = KineticSocket_WaitUntilDataAvailable(connection->socket, 100);
+    switch(wait_status)
+    {
+        case KINETIC_WAIT_STATUS_DATA_AVAILABLE:
+        {
+            KineticPDU* response = KineticAllocator_NewPDU(connection);
+            status = KineticPDU_ReceiveMain(response);
+            if (status != KINETIC_STATUS_SUCCESS) {
+                LOGF0("ERROR: PDU receive reported an error: %s", Kinetic_GetStatusDescription(status));
+            }
+
+            if (response->proto != NULL && response->proto->has_authType) {
+
+                // Handle unsolicited status PDUs
+                if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
+                    response->type = KINETIC_PDU_TYPE_UNSOLICITED;
+                    if (response->command != NULL &&
+                        response->command->header != NULL &&
+                        response->command->header->has_connectionID)
+                    {
+                        // Extract connectionID from unsolicited status message
+                        response->connection->connectionID = response->command->header->connectionID;
+                        LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
+                            response->connection->connectionID);
+                    }
+                    else {
+                        LOG0("WARNING: Unsolicited PDU is not recognized!");
+                    }
+                    KineticAllocator_FreePDU(connection, response);
+                }
+
+                // Associate solicited response PDUs with their requests
+                else {
+                    response->type = KINETIC_PDU_TYPE_RESPONSE;
+                    KineticOperation* op = KineticOperation_AssociateResponseWithOperation(response);
+                    if (op == NULL) {
+                        LOG0("Failed to find request matching received response PDU!");
+                        KineticAllocator_FreePDU(connection, response);
+                    }
+                    else {
+                        LOG2("Found associated operation/request for response PDU.");
+                        size_t valueLength = KineticPDU_GetValueLength(response);
+                        if (valueLength > 0) {
+                            // we need to try to read the value off the socket, even in the case of an error
+                            //  otherwise the stream will get out of sync
+                            KineticStatus valueStatus = KineticPDU_ReceiveValue(op->connection->socket,
+                                &op->entry->value, valueLength);
+
+                            // so we only care about the status of the value read if the operation
+                            //   succeeded 
+                            if (status == KINETIC_STATUS_SUCCESS)
+                            {
+                                status = valueStatus;
+                            }
+                        }
+
+                        // Call operation-specific callback, if configured
+                        if (op->callback != NULL) {
+                            status = op->callback(op, status);
+                        }
+
+                        if (status == KINETIC_STATUS_SUCCESS) {
+                            status = KineticPDU_GetStatus(response);
+                        }
+                        
+                        LOGF2("Response PDU received w/status %s, %i", Kinetic_GetStatusDescription(status), status);
+
+                        KineticOperation_Complete(op, status);
+                    }
+                }
+            }
+            else {
+                // Free invalid PDU
+                KineticAllocator_FreePDU(connection, response);
+            }
+        } break;
+        case KINETIC_WAIT_STATUS_TIMED_OUT:
+        case KINETIC_WAIT_STATUS_RETRYABLE_ERROR:
+        {
+            // sleep(0);
+        } break;
+        default:
+        case KINETIC_WAIT_STATUS_FATAL_ERROR:
+        {
+            LOG0("ERROR: Socket error while waiting for PDU to arrive");
+            pthread_mutex_unlock(&connection->readMutex);
+            return KINETIC_STATUS_SOCKET_ERROR;
+        } break;
+    }
+
+    KineticOperation_TimeoutOperations(connection);
+    pthread_mutex_unlock(&connection->readMutex);
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
+
+void* KineticController_ReceiveThread(void* thread_arg)
+{
     KineticThread* thread = thread_arg;
 
     while(!thread->abortRequested && !thread->fatalError) {
@@ -162,97 +264,9 @@ void* KineticController_ReceiveThread(void* thread_arg)
             continue;
         } 
 
-        // Wait for and receive a PDU
-        KineticWaitStatus wait_status = KineticSocket_WaitUntilDataAvailable(thread->connection->socket, 100);
-        switch(wait_status)
-        {
-            case KINETIC_WAIT_STATUS_DATA_AVAILABLE:
-            {
-                KineticPDU* response = KineticAllocator_NewPDU(thread->connection);
-                status = KineticPDU_ReceiveMain(response);
-                if (status != KINETIC_STATUS_SUCCESS) {
-                    LOGF0("ERROR: PDU receive reported an error: %s", Kinetic_GetStatusDescription(status));
-                }
-
-                if (response->proto != NULL && response->proto->has_authType) {
-
-                    // Handle unsolicited status PDUs
-                    if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
-                        response->type = KINETIC_PDU_TYPE_UNSOLICITED;
-                        if (response->command != NULL &&
-                            response->command->header != NULL &&
-                            response->command->header->has_connectionID)
-                        {
-                            // Extract connectionID from unsolicited status message
-                            response->connection->connectionID = response->command->header->connectionID;
-                            LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
-                                response->connection->connectionID);
-                        }
-                        else {
-                            LOG0("WARNING: Unsolicited PDU is not recognized!");
-                        }
-                        KineticAllocator_FreePDU(thread->connection, response);
-                    }
-
-                    // Associate solicited response PDUs with their requests
-                    else {
-                        response->type = KINETIC_PDU_TYPE_RESPONSE;
-                        KineticOperation* op = KineticOperation_AssociateResponseWithOperation(response);
-                        if (op == NULL) {
-                            LOG0("Failed to find request matching received response PDU!");
-                            KineticAllocator_FreePDU(thread->connection, response);
-                        }
-                        else {
-                            LOG2("Found associated operation/request for response PDU.");
-                            size_t valueLength = KineticPDU_GetValueLength(response);
-                            if (valueLength > 0) {
-                                // we need to try to read the value off the socket, even in the case of an error
-                                //  otherwise the stream will get out of sync
-                                KineticStatus valueStatus = KineticPDU_ReceiveValue(op->connection->socket,
-                                    &op->entry->value, valueLength);
-
-                                // so we only care about the status of the value read if the operation
-                                //   succeeded 
-                                if (status == KINETIC_STATUS_SUCCESS)
-                                {
-                                    status = valueStatus;
-                                }
-                            }
-
-                            // Call operation-specific callback, if configured
-                            if (op->callback != NULL) {
-                                status = op->callback(op, status);
-                            }
-
-                            if (status == KINETIC_STATUS_SUCCESS) {
-                                status = KineticPDU_GetStatus(response);
-                            }
-                            
-                            LOGF2("Response PDU received w/status %s, %i", Kinetic_GetStatusDescription(status), status);
-
-                            KineticOperation_Complete(op, status);
-                        }
-                    }
-                }
-                else {
-                    // Free invalid PDU
-                    KineticAllocator_FreePDU(thread->connection, response);
-                }
-            } break;
-            case KINETIC_WAIT_STATUS_TIMED_OUT:
-            case KINETIC_WAIT_STATUS_RETRYABLE_ERROR:
-            {
-                sleep(0);
-            } break;
-            default:
-            case KINETIC_WAIT_STATUS_FATAL_ERROR:
-            {
-                LOG0("ERROR: Socket error while waiting for PDU to arrive");
-                thread->fatalError = true;
-            } break;
+        if (KineticController_Run(thread->connection) != KINETIC_STATUS_SUCCESS) {
+            thread->fatalError = true;
         }
-
-        KineticOperation_TimeoutOperations(thread->connection);
     }
 
     LOG3("Worker thread terminated!");

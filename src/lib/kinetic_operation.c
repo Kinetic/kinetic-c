@@ -174,21 +174,22 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
     }
 
     while (operation != NULL) {
-        LOGF2("Comparing received PDU w/ ackSequence=%lld with request with sequence=%lld",
-            targetSequence, operation->request->command->header->sequence);
         if (operation->request != NULL &&
             operation->request->type == KINETIC_PDU_TYPE_REQUEST &&
             operation->request->command != NULL &&
             operation->request->command->header != NULL &&
-            operation->request->command->header->has_sequence && 
-            operation->request->command->header->sequence == targetSequence)
+            operation->request->command->header->has_sequence)
         {
-            operation->response = response;
-            return operation;
+            LOGF2("Comparing received PDU w/ ackSequence=%lld with request with sequence=%lld",
+            targetSequence, operation->request->command->header->sequence);
+            if (operation->request->command->header->sequence == targetSequence)
+            {
+                operation->response = response;
+                return operation;
+            }
         }
         operation = KineticAllocator_GetNextOperation(response->connection, operation);
     }
-
     return NULL;
 }
 
@@ -540,14 +541,14 @@ void KineticOperation_BuildP2POperation(KineticOperation* const operation,
     operation->request->command->body->p2pOperation->peer->tls = p2pOp->peer.tls;
 
     operation->request->command->body->p2pOperation->n_operation = p2pOp->numOperations;
-    operation->request->command->body->p2pOperation->operation = malloc(p2pOp->numOperations * sizeof(KineticProto_Command_P2POperation_Operation*));
+    operation->request->command->body->p2pOperation->operation = calloc(p2pOp->numOperations, sizeof(KineticProto_Command_P2POperation_Operation*));
     assert(operation->request->command->body->p2pOperation->operation != NULL);
 
     for(size_t i = 0; i < operation->request->command->body->p2pOperation->n_operation; i++)
     {
         assert(!ByteBuffer_IsNull(p2pOp->operations[i].key)); // TODO return invalid operand?
         
-        KineticProto_Command_P2POperation_Operation * p2p_op_op = malloc(sizeof(KineticProto_Command_P2POperation_Operation));
+        KineticProto_Command_P2POperation_Operation * p2p_op_op = calloc(1, sizeof(KineticProto_Command_P2POperation_Operation));
         assert(p2p_op_op != NULL);
 
         (*p2p_op_op) = (KineticProto_Command_P2POperation_Operation){

@@ -361,10 +361,10 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
             } break;
             case PROTOBUF_C_LABEL_OPTIONAL:
             {
-                protobuf_c_boolean const * quantifier = (protobuf_c_boolean const *)&pMsg[fieldDesc->quantifier_offset];
+                protobuf_c_boolean const * quantifier = (protobuf_c_boolean const *)(void*)&pMsg[fieldDesc->quantifier_offset];
                 if ((*quantifier) &&  // only print out if it's there
                     // and a special case: if this is a message, don't show it if the message is NULL
-                    (PROTOBUF_C_TYPE_MESSAGE != fieldDesc->type || ((ProtobufCMessage**)&pMsg[fieldDesc->offset])[0] != NULL)) 
+                    (PROTOBUF_C_TYPE_MESSAGE != fieldDesc->type || ((ProtobufCMessage**)(void*)&pMsg[fieldDesc->offset])[0] != NULL)) 
                 {
                     printf("%s%s: ", _indent, fieldDesc->name);
 
@@ -372,7 +372,7 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
                     if ((protobuf_c_message_descriptor_get_field_by_name(desc, "commandBytes") == fieldDesc ) && 
                         (PROTOBUF_C_TYPE_BYTES == fieldDesc->type)) {
 
-                        ProtobufCBinaryData* value = (ProtobufCBinaryData*)&pMsg[fieldDesc->offset];
+                        ProtobufCBinaryData* value = (ProtobufCBinaryData*)(void*)&pMsg[fieldDesc->offset];
                         if ((value->data != NULL) && (value->len > 0)) {
                             KineticProto_Command * cmd = KineticProto_command__unpack(NULL, value->len, value->data);
 
@@ -390,13 +390,13 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
             } break;
             case PROTOBUF_C_LABEL_REPEATED:
             {
-                unsigned const * quantifier = (unsigned const *)&pMsg[fieldDesc->quantifier_offset];
+                unsigned const * quantifier = (unsigned const *)(void*)&pMsg[fieldDesc->quantifier_offset];
                 if (*quantifier > 0)
                 {
                     LOG_PROTO_LEVEL_START_ARRAY(fieldDesc->name, *quantifier);
                     for (uint32_t i = 0; i < *quantifier; i++)
                     {
-                        void const ** box = (void const **)&pMsg[fieldDesc->offset];
+                        void const ** box = (void const **)(void*)&pMsg[fieldDesc->offset];
                         printf("%s", _indent);
                         LogUnboxed(log_level, *box, fieldDesc, i, _indent);
                     }

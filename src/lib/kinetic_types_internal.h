@@ -84,6 +84,7 @@ struct _KineticConnection {
     bool            connected;      // state of connection
     int             socket;         // socket file descriptor
     pthread_mutex_t writeMutex;     // socket write mutex
+    pthread_mutex_t readMutex;      // socket read mutex
     int64_t         connectionID;   // initialized to seconds since epoch
     int64_t         sequence;       // increments for each request in a session
     KineticList     pdus;           // list of dynamically allocated PDUs
@@ -96,6 +97,7 @@ struct _KineticConnection {
         .connected = false, \
         .socket = -1, \
         .writeMutex = PTHREAD_MUTEX_INITIALIZER, \
+        .readMutex = PTHREAD_MUTEX_INITIALIZER, \
         .operations = KINETIC_LIST_INITIALIZER, \
         .pdus = KINETIC_LIST_INITIALIZER, \
     }; \

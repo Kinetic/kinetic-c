@@ -62,6 +62,8 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
  */
 KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle);
 
+KineticStatus KineticClient_AsyncRun(KineticSessionHandle* handle);
+
 /**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational.
  *

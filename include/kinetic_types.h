@@ -106,6 +106,10 @@ typedef struct _KineticSession {
     // Set to true to enable non-blocking/asynchronous I/O
     bool    nonBlocking;
 
+    // Don't start worker threads, the user will need to call
+    //   KineticClient_AsyncRun() in order for async callbacks to fire
+    bool    no_threads; 
+
     // The version number of this cluster definition. If this is not equal to
     // the value on the Kinetic Device, the request is rejected and will return
     // `KINETIC_STATUS_VERSION_FAILURE`
