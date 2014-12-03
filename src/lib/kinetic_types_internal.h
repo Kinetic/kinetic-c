@@ -58,19 +58,17 @@ typedef struct _KineticConnection KineticConnection;
 typedef struct _KineticListItem KineticListItem;
 struct _KineticListItem {
     KineticListItem* next;
-    KineticListItem* previous;
     void* data;
 };
 
 // Kinetic list
 typedef struct _KineticList {
     KineticListItem* start;
-    KineticListItem* last;
     pthread_mutex_t mutex;
     bool locked;
 } KineticList;
 #define KINETIC_LIST_INITIALIZER (KineticList) { \
-    .mutex = PTHREAD_MUTEX_INITIALIZER, .locked = false, .start = NULL, .last = NULL }
+    .mutex = PTHREAD_MUTEX_INITIALIZER, .locked = false, .start = NULL, }
 
 // Kinetic Thread Instance
 typedef struct _KineticThread {
