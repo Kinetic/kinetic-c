@@ -21,12 +21,6 @@
 #include "kinetic_message.h"
 #include "kinetic_logger.h"
 
-void KineticMessage_Init(KineticMessage* const message)
-{
-    assert(message != NULL);
-    KINETIC_MESSAGE_INIT(message);
-}
-
 // e.g. CONFIG_FIELD_BYTE_BUFFER(key, message->keyValue, entry)
 #define CONFIG_FIELD_BYTE_BUFFER(_name, _field, _entry) { \
     if ((_entry)->_name.array.data != NULL \

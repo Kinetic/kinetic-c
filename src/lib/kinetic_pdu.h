@@ -23,7 +23,6 @@
 
 #include "kinetic_types_internal.h"
 
-void KineticPDU_Init(KineticPDU* const pdu, KineticConnection* const connection);
 KineticStatus KineticPDU_Send(KineticPDU* request);
 KineticStatus KineticPDU_ReceiveMain(KineticPDU* response);
 KineticStatus KineticPDU_ReceiveValue(int socket_desc, ByteBuffer* value, size_t value_length);

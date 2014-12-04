@@ -208,7 +208,7 @@ KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection)
         return NULL;
     }
     assert(newPDU->proto == NULL);
-    KINETIC_PDU_INIT(newPDU, connection);
+    KineticPDU_Init(newPDU, connection);
     LOGF3("Allocated new PDU (0x%0llX) on connection", newPDU, connection);
     return newPDU;
 }
@@ -283,9 +283,9 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
         LOGF0("Failed allocating new operation on connection (0x%0llX)!", connection);
         return NULL;
     }
-    KINETIC_OPERATION_INIT(newOperation, connection);
+    KineticOperation_Init(newOperation, connection);
     newOperation->request = KineticAllocator_NewPDU(connection);
-    KINETIC_PDU_INIT_WITH_COMMAND(newOperation->request, connection);
+    KineticPDU_InitWithCommand(newOperation->request, connection);
     LOGF3("Allocated new operation (0x%0llX) on connection (0x%0llX)", newOperation, connection);
     return newOperation;
 }
