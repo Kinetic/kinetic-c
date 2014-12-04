@@ -109,7 +109,7 @@ KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
     if (connection == NULL || !connection->connected || connection->socket < 0) {
         return KINETIC_STATUS_SESSION_INVALID;
     }
-
+    
     // Shutdown the worker thread
     KineticStatus status = KINETIC_STATUS_SUCCESS;
 
