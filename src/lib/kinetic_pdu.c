@@ -26,13 +26,6 @@
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 
-
-void KineticPDU_Init(KineticPDU* const pdu,
-                     KineticConnection* const connection)
-{
-    KINETIC_PDU_INIT(pdu, connection);
-}
-
 KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
 {
     assert(response != NULL);

@@ -157,8 +157,10 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
         },
         .connection = &connection,
     };
+
     connection.session = session;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection);
+    KineticPDU_InitWithCommand(&PDU, &connection);
+    /* KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection); */
     KineticMessage_Init(&PDU.protoData.message);
     PDU.header.protobufLength = KineticProto_Message__get_packed_size(PDU.proto);
 
@@ -280,7 +282,7 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     Socket_RequestProtobuf();
 
     // Receive the response
-    KINETIC_PDU_INIT(&PDU, &connection);
+    KineticPDU_Init(&PDU, &connection);
     PDU.header.protobufLength = 125;
     TEST_ASSERT_FALSE(PDU.protobufDynamicallyExtracted);
     TEST_ASSERT_NULL(PDU.proto);
@@ -324,7 +326,7 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
 
     // Receive the dummy protobuf response, but expect too much data
     // to force timeout
-    KINETIC_PDU_INIT(&PDU, &connection);
+    KineticPDU_Init(&PDU, &connection);
     PDU.header.protobufLength = 1000;
     TEST_ASSERT_FALSE(PDU.protobufDynamicallyExtracted);
     TEST_ASSERT_NULL(PDU.proto);
