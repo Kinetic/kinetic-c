@@ -35,10 +35,7 @@
 #include <string.h>
 #include <sys/time.h>
 
-static KineticSession Session = {
-    .host = "somehost.com",
-    .port = 17,
-};
+static KineticSession Session;
 static KineticPDU Request, Response;
 static int OperationCompleteCallbackCount;
 static KineticStatus LastStatus;
@@ -46,14 +43,16 @@ static KineticStatus LastStatus;
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-    strcpy(Session.host, "somehost.com");
-    Session.port = 17;
+    Session.config = (KineticSessionConfig) {
+        .host = "somehost.com",
+        .port = 17,
+    };
     KineticStatus status = KineticSession_Create(&Session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_NOT_NULL(Session.connection);
     TEST_ASSERT_FALSE(Session.connection->connected);
-    TEST_ASSERT_EQUAL_STRING(Session.host, "somehost.com");
-    TEST_ASSERT_EQUAL(17, Session.port);
+    TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
+    TEST_ASSERT_EQUAL(17, Session.config.port);
     KINETIC_PDU_INIT_WITH_COMMAND(&Request, Session.connection);
     KINETIC_PDU_INIT_WITH_COMMAND(&Response, Session.connection);
     OperationCompleteCallbackCount = 0;
@@ -99,13 +98,13 @@ void test_KINETIC_CONNECTION_INIT_should_create_a_default_connection_object(void
     KINETIC_CONNECTION_INIT(&connection);
 
     TEST_ASSERT_FALSE(connection.connected);
-    TEST_ASSERT_EQUAL(0, connection.session.port);
+    TEST_ASSERT_EQUAL(0, connection.session.config.port);
     TEST_ASSERT_EQUAL(-1, connection.socket);
     TEST_ASSERT_EQUAL_INT64(0, connection.sequence);
     TEST_ASSERT_EQUAL_INT64(0, connection.connectionID);
-    TEST_ASSERT_EQUAL_STRING("", connection.session.host);
-    TEST_ASSERT_EQUAL_INT64(0, connection.session.clusterVersion);
-    TEST_ASSERT_EQUAL_INT64(0, connection.session.identity);
+    TEST_ASSERT_EQUAL_STRING("", connection.session.config.host);
+    TEST_ASSERT_EQUAL_INT64(0, connection.session.config.clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(0, connection.session.config.identity);
 }
 
 void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_session(void)
@@ -131,8 +130,8 @@ void test_KineticSession_Connect_should_report_a_failed_connection(void)
 {
     LOG_LOCATION;
 
-    TEST_ASSERT_EQUAL_STRING(Session.host, "somehost.com");
-    TEST_ASSERT_EQUAL(17, Session.port);
+    TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
+    TEST_ASSERT_EQUAL(17, Session.config.port);
 
     KineticSocket_Connect_ExpectAndReturn("somehost.com", 17, -1);
 
@@ -147,95 +146,122 @@ void test_KineticSession_Connect_should_connect_to_specified_host(void)
 {
     LOG_LOCATION;
 
-    TEST_IGNORE_MESSAGE("TODO: Get me working!");
-
-    // const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
-
-    // KineticConnection expected = (KineticConnection) {
-    //     .connected = true,
-    //     .socket = 24,
-    //     .session = (KineticSession) {
-    //         .host = "valid-host.com",
-    //         .port = 1234,
-    //         .clusterVersion = 17,
-    //         .identity = 12,
-    //         .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
-    //     },
-    // };
-    // memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
-
-    // *Connection = (KineticConnection) {
-    //     .connected = false,
-    //     .socket = -1,
-    //     .session = (KineticSession) {
-    //         .host = "valid-host.com",
-    //         .port = expected.session.port,
-    //         .clusterVersion = expected.session.clusterVersion,
-    //         .identity = expected.session.identity,
-    //         .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
-    //     },
-    // };
-    // memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
-
-    // KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port, expected.socket);
-
-    // // Setup mock expectations for worker thread
-    // KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
-
-    // // Establish connection
-    // KineticStatus status = KineticSession_Connect(Connection);
-
-    // TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
-    // TEST_ASSERT_TRUE(Connection->connected);
-    // TEST_ASSERT_EQUAL(expected.socket, Connection->socket);
-
-    // TEST_ASSERT_EQUAL_STRING(expected.session.host, Connection->session.host);
-    // TEST_ASSERT_EQUAL(expected.session.port, Connection->session.port);
-    // TEST_ASSERT_EQUAL_INT64(expected.session.clusterVersion, Connection->session.clusterVersion);
-    // TEST_ASSERT_EQUAL_INT64(expected.session.identity, Connection->session.identity);
-    // TEST_ASSERT_EQUAL_ByteArray(expected.session.hmacKey, Connection->session.hmacKey);
-}
-
-#if 0
-void test_KineticSession_Worker_should_run_fine_while_no_data_arrives(void)
-{
-    LOG_LOCATION;
     const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
 
-    KineticConnection expected = (KineticConnection) {
+    KineticConnection expectedConnection = {
         .connected = true,
         .socket = 24,
-        .session = (KineticSession) {
+    };
+
+    KineticSession expected = {
+        .config = (KineticSessionConfig) {
             .host = "valid-host.com",
             .port = 1234,
             .clusterVersion = 17,
             .identity = 12,
-            .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
+            .hmacKey = {
+                .data = expected.config.keyData,
+                .len = sizeof(hmacKey)},
         },
+        .connection = &expectedConnection,
     };
-    memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
+    memcpy(expected.config.hmacKey.data,
+        hmacKey, expected.config.hmacKey.len);
 
-    *Connection = (KineticConnection) {
+    KineticConnection actualConnection = {
         .connected = false,
         .socket = -1,
-        .session = (KineticSession) {
-            .host = "valid-host.com",
-            .port = expected.session.port,
-            .clusterVersion = expected.session.clusterVersion,
-            .identity = expected.session.identity,
-            .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
-        },
     };
-    memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port, expected.socket);
+    Session = (KineticSession) {
+        .config = (KineticSessionConfig) {
+            .host = "valid-host.com",
+            .port = expected.config.port,
+            .clusterVersion = expected.config.clusterVersion,
+            .identity = expected.config.identity,
+            .hmacKey = {
+                .data = Session.config.keyData,
+                .len = sizeof(hmacKey)},
+        },
+        .connection = &actualConnection,
+    };
+    memcpy(Session.config.hmacKey.data,
+        hmacKey, expected.config.hmacKey.len);
+
+    KineticSocket_Connect_ExpectAndReturn(expected.config.host, expected.config.port, expected.connection->socket);
+
+    // Setup mock expectations for worker thread
+    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
+
+    // Establish connection
+    KineticStatus status = KineticSession_Connect(&Session);
+
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_TRUE(Session.connection->connected);
+    TEST_ASSERT_EQUAL(expected.connection->socket, actualConnection.socket);
+
+    TEST_ASSERT_EQUAL_STRING(expected.config.host, Session.config.host);
+    TEST_ASSERT_EQUAL(expected.config.port, Session.config.port);
+    TEST_ASSERT_EQUAL_INT64(expected.config.clusterVersion, Session.config.clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(expected.config.identity, Session.config.identity);
+    TEST_ASSERT_EQUAL_ByteArray(expected.config.hmacKey, Session.config.hmacKey);
+}
+
+void test_KineticSession_Worker_should_run_fine_while_no_data_arrives(void)
+{
+    LOG_LOCATION;
+
+    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+
+    KineticConnection expectedConnection = {
+        .connected = true,
+        .socket = 24,
+    };
+
+    KineticSession expected = {
+        .config = (KineticSessionConfig) {
+            .host = "valid-host.com",
+            .port = 1234,
+            .clusterVersion = 17,
+            .identity = 12,
+            .hmacKey = {
+                .data = expected.config.keyData,
+                .len = sizeof(hmacKey)},
+        },
+        .connection = &expectedConnection,
+    };
+    memcpy(expected.config.hmacKey.data,
+        hmacKey, expected.config.hmacKey.len);
+
+    KineticConnection actualConnection = {
+        .connected = false,
+        .socket = -1,
+    };
+
+    Session = (KineticSession) {
+        .config = (KineticSessionConfig) {
+            .host = "valid-host.com",
+            .port = expected.config.port,
+            .clusterVersion = expected.config.clusterVersion,
+            .identity = expected.config.identity,
+            .hmacKey = {
+                .data = Session.config.keyData,
+                .len = sizeof(hmacKey)},
+        },
+        .connection = &actualConnection,
+    };
+    memcpy(Session.config.hmacKey.data,
+        hmacKey, expected.config.hmacKey.len);
+
+    KineticSocket_Connect_ExpectAndReturn(expected.config.host,
+        expected.config.port, expected.connection->socket);
 
     // Setup mock expectations for worker thread so it can run in IDLE mode
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     KineticOperation_TimeoutOperations_Ignore();
 
     // Establish connection
-    KineticStatus status = KineticSession_Connect(Connection);
+    KineticStatus status = KineticSession_Connect(&Session);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
 
     LOG0("Letting worker thread run for a little bit...");
@@ -246,87 +272,104 @@ void test_KineticSession_Worker_should_run_fine_while_no_data_arrives(void)
 void test_KineticSession_Worker_should_process_unsolicited_response_PDUs(void)
 {
     LOG_LOCATION;
-    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
-    const int socket = 24;
-    const int connectionID = 7263514;
 
-    KineticConnection expected = (KineticConnection) {
+    const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+
+    KineticConnection expectedConnection = {
         .connected = true,
-        .socket = socket,
-        .session = (KineticSession) {
+        .socket = 24,
+        .connectionID = 2834362,
+    };
+
+    KineticSession expected = {
+        .config = (KineticSessionConfig) {
             .host = "valid-host.com",
             .port = 1234,
             .clusterVersion = 17,
             .identity = 12,
-            .hmacKey = {.data = expected.session.keyData, .len = sizeof(hmacKey)},
+            .hmacKey = {
+                .data = expected.config.keyData,
+                .len = sizeof(hmacKey)},
         },
+        .connection = &expectedConnection,
     };
-    memcpy(expected.session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
+    memcpy(expected.config.hmacKey.data,
+        hmacKey, expected.config.hmacKey.len);
 
-    *Connection = (KineticConnection) {
+    KineticConnection actualConnection = {
         .connected = false,
         .socket = -1,
-        .session = (KineticSession) {
-            .host = "valid-host.com",
-            .port = expected.session.port,
-            .clusterVersion = expected.session.clusterVersion,
-            .identity = expected.session.identity,
-            .hmacKey = {.data = Connection->session.keyData, .len = sizeof(hmacKey)},
-        },
     };
-    memcpy(Connection->session.hmacKey.data, hmacKey, expected.session.hmacKey.len);
 
-    KineticSocket_Connect_ExpectAndReturn(expected.session.host, expected.session.port, expected.socket);
+    Session = (KineticSession) {
+        .config = (KineticSessionConfig) {
+            .host = "valid-host.com",
+            .port = expected.config.port,
+            .clusterVersion = expected.config.clusterVersion,
+            .identity = expected.config.identity,
+            .hmacKey = {
+                .data = Session.config.keyData,
+                .len = sizeof(hmacKey)},
+        },
+        .connection = &actualConnection,
+    };
+    memcpy(Session.config.hmacKey.data,
+        hmacKey, expected.config.hmacKey.len);
+
+    KineticSocket_Connect_ExpectAndReturn(expected.config.host,
+        expected.config.port, expected.connection->socket);
 
     // Setup mock expectations for worker thread
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     KineticOperation_TimeoutOperations_Ignore();
 
     Response.type = KINETIC_PDU_TYPE_UNSOLICITED;
-    Response.command->header->connectionID = connectionID;
+    Response.command->header->connectionID = expected.connection->connectionID;
     Response.command->header->has_connectionID = true;
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
     Response.proto->has_authType = true;
 
-    // KineticOperation_TimeoutOperations_Expect(Connection);
+    KineticOperation_TimeoutOperations_Expect(Session.connection);
 
     // Establish connection
-    KineticStatus status = KineticSession_Connect(Connection);
+    KineticStatus status = KineticSession_Connect(&Session);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
 
     // Ensure no PDUs are attempted to be read if some, but not enough, data has been received
     sleep(0);
-    TEST_ASSERT_EQUAL_INT64_MESSAGE(0, Connection->connectionID,
+    TEST_ASSERT_EQUAL_INT64_MESSAGE(0, Session.connection->connectionID,
         "Connection ID should not be assigned yet!");
 
     // Pause worker thread to setup expectations
-    KineticController_Pause(Connection, true);
+    KineticController_Pause(&Session, true);
     sleep(0);
 
     // Prepare the status PDU to be received
-    KineticAllocator_NewPDU_ExpectAndReturn(Connection, &Response);
+    KineticAllocator_NewPDU_ExpectAndReturn(expected.connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_FreePDU_Expect(Connection, &Response);
+    KineticAllocator_FreePDU_Expect(expected.connection, &Response);
 
-    KineticOperation_TimeoutOperations_Expect(Connection);
+    KineticOperation_TimeoutOperations_Expect(expected.connection);
 
     // Must trigger data ready last, in order for mocked simulation to work as desired
-    KineticSocket_WaitUntilDataAvailable_ExpectAndReturn(socket, 100, KINETIC_WAIT_STATUS_DATA_AVAILABLE);
-    KineticOperation_TimeoutOperations_Expect(Connection);
+    KineticSocket_WaitUntilDataAvailable_ExpectAndReturn(expected.connection->socket, 100, KINETIC_WAIT_STATUS_DATA_AVAILABLE);
+    KineticOperation_TimeoutOperations_Expect(expected.connection);
 
     // Make sure to return read thread to IDLE state
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
     KineticOperation_TimeoutOperations_Ignore();
 
-    KineticController_Pause(Connection, false);
+    KineticController_Pause(&expected, false);
 
     // Wait for unsolicited status PDU to be received and processed...
     sleep(1);
-    TEST_ASSERT_EQUAL_INT64_MESSAGE(connectionID, Response.connection->connectionID,
+    TEST_ASSERT_EQUAL_INT64_MESSAGE(Session.connection->connectionID,
+        Response.connection->connectionID,
         "Connection ID should have been extracted from unsolicited status PDU!");
 }
 
 
+#if 0
 struct DummyCompletionClosureData {
     KineticStatus status;
     int callbackCount;

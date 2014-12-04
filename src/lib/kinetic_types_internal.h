@@ -160,7 +160,7 @@ typedef struct _KineticMessage {
     *(_hdr) = (KineticProto_Command_Header) { \
         .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor), \
         .has_clusterVersion = true, \
-        .clusterVersion = (_con)->session.clusterVersion, \
+        .clusterVersion = (_con)->session.config.clusterVersion, \
         .has_connectionID = true, \
         .connectionID = (_con)->connectionID, \
         .has_sequence = true, \
@@ -243,7 +243,7 @@ struct _KineticPDU {
     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
     KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT( \
-            &((_pdu)->protoData.message), (_con)->session.identity, (_con)->session.hmacKey); \
+            &((_pdu)->protoData.message), (_con)->session.config.identity, (_con)->session.config.hmacKey); \
     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
 }
 

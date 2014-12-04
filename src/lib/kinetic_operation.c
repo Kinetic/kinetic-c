@@ -96,7 +96,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 
     // Populate the HMAC for the protobuf
     KineticHMAC_Init(&request->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session.hmacKey);
+    KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session.config.hmacKey);
 
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';

@@ -148,8 +148,8 @@ KineticStatus KineticPDU_GetStatus(KineticPDU* pdu)
     if (pdu != NULL &&
         pdu->command != NULL &&
         pdu->command->status != NULL &&
-        pdu->command->status->has_code != false) {
-
+        pdu->command->status->has_code != false)
+    {
         status = KineticProtoStatusCode_to_KineticStatus(
             pdu->command->status->code);
     }

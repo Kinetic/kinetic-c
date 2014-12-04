@@ -28,5 +28,6 @@ KineticOperation* KineticController_CreateOperation(KineticSession const * const
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure);
 void KineticController_Pause(KineticSession const * const session, bool pause);
 void* KineticController_ReceiveThread(void* thread_arg);
+void KineticController_HandleIncomingPDU(KineticConnection* const connection);
 
 #endif // _KINETIC_CONTROLLER_H

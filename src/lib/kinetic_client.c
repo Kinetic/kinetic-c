@@ -44,12 +44,12 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session)
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
-    if (strlen(session->host) == 0) {
+    if (strlen(session->config.host) == 0) {
         LOG0("Host is empty!");
         return KINETIC_STATUS_HOST_EMPTY;
     }
 
-    if (session->hmacKey.len < 1 || session->hmacKey.data == NULL) {
+    if (session->config.hmacKey.len < 1 || session->config.hmacKey.data == NULL) {
         LOG0("HMAC key is NULL or empty!");
         return KINETIC_STATUS_HMAC_EMPTY;
     }
@@ -63,7 +63,7 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session)
     // Create the connection
     KineticStatus status = KineticSession_Connect(session);
     if (status != KINETIC_STATUS_SUCCESS) {
-        LOGF0("Failed creating connection to %s:%d", session->host, session->port);
+        LOGF0("Failed creating connection to %s:%d", session->config.host, session->config.port);
         KineticSession_Destroy(session);
         session->connection = NULL;
         return status;

@@ -72,9 +72,10 @@ KineticStatus KineticSession_Connect(KineticSession const * const session)
     // Establish the connection
     assert(session != NULL);
     assert(session->connection != NULL);
-    assert(strlen(session->host) > 0);
+    assert(strlen(session->config.host) > 0);
     connection->connected = false;
-    connection->socket = KineticSocket_Connect(session->host, session->port);
+    connection->socket = KineticSocket_Connect(
+        session->config.host, session->config.port);
     connection->connected = (connection->socket >= 0);
     if (!connection->connected) {
         LOG0("Session connection failed!");

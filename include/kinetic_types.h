@@ -132,14 +132,14 @@ typedef struct _KineticSession {
 } KineticSession;
 
 #define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey) { \
-    _session.config = (KineticSessionConfig) { \
+    (*_session).config = (KineticSessionConfig) { \
         .port = KINETIC_PORT, \
         .clusterVersion = (_clusterVersion), \
         .identity = (_identity), \
-        .hmacKey = {.data = (_session)->keyData, .len = (_hmacKey).len}, \
+        .hmacKey = {.data = (_session)->config.keyData, .len = (_hmacKey).len}, \
     }; \
-    strcpy(*(_session).config->host, (_host)); \
-    memcpy(*(_session).config->hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
+    strcpy((_session)->config.host, (_host)); \
+    memcpy((_session)->config.hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
 }
 
 // Kinetic Status Codes
