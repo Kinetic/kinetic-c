@@ -38,11 +38,13 @@ void SystemTestSetup(SystemTestFixture* fixture)
     if (!fixture->connected) {
         *fixture = (SystemTestFixture) {
             .session = (KineticSession) {
-                .host = SYSTEM_TEST_HOST,
-                .port = KINETIC_PORT,
-                .clusterVersion = 0,
-                .identity =  1,
-                .hmacKey = hmacArray,
+                .config = (KineticSessionConfig) {
+                    .host = SYSTEM_TEST_HOST,
+                    .port = KINETIC_PORT,
+                    .clusterVersion = 0,
+                    .identity = 1,
+                    .hmacKey = hmacArray,
+                },
             },
             .connected = fixture->connected,
             .testIgnored = false,

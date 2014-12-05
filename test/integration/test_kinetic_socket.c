@@ -148,12 +148,15 @@ void test_KineticSocket_Write_should_write_the_data_to_the_specified_socket(void
 void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_specified_socket(void)
 {
     LOG_LOCATION;
-    KineticSession session = {
-        .clusterVersion = 12345678,
-        .identity = -12345678,
-    };
     KineticConnection connection;
     KINETIC_CONNECTION_INIT(&connection);
+    KineticSession session = {
+        .config = (KineticSessionConfig) {
+            .clusterVersion = 12345678,
+            .identity = -12345678,
+        },
+        .connection = &connection,
+    };
     connection.session = session;
     KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection);
     KineticMessage_Init(&PDU.protoData.message);
@@ -171,7 +174,6 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
         KINETIC_STATUS_SUCCESS, status, "Failed to write to socket!");
 }
-
 
 
 void test_KineticSocket_DataBytesAvailable_should_report_receive_pipe_status(void)
@@ -253,18 +255,23 @@ void test_KineticSocket_Read_should_read_up_to_the_array_length_into_the_buffer_
         "bytesUsed should reflect full length read upon overflow");
 }
 
-
-
+#if 0
 void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
 {
     LOG_LOCATION;
-    KineticSession session = {
-        .clusterVersion = 12345678,
-        .identity = -12345678,
-    };
+
     KineticConnection connection;
     KINETIC_CONNECTION_INIT(&connection);
+    KineticSession session = {
+        .config = (KineticSessionConfig) {
+            .clusterVersion = 12345678,
+            .identity = -12345678,
+        },
+        .connection = &connection,
+    };
     connection.session = session;
+    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection);
+    KineticMessage_Init(&PDU.protoData.message);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
@@ -289,14 +296,7 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
 
     LOG0("Received Kinetic protobuf:");
     LOGF0("  command: (0x%zX)", (size_t)PDU.command);
-    // LOGF0("    header: (0x%zX)", (size_t)PDU.command->header);
-    // LOGF0("      identity: %016llX",
-    //      (unsigned long long)PDU.command->header->identity);
-    KineticProto_Message__free_unpacked(PDU.proto, NULL);
-    // ByteArray hmacArray = {
-    //     .data = PDU.proto->hmac.data, .len = PDU.proto->hmac.len
-    // };
-    // KineticLogger_LogByteArray(2, "  hmac", hmacArray);
+    LOGF0("    header: (0x%zX)", (size_t)PDU.command->header);
 
     LOG0("Kinetic ProtoBuf read successfully!");
 }
@@ -337,5 +337,6 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     TEST_ASSERT_NULL_MESSAGE(PDU.proto,
                              "Protobuf should not have been allocated because of timeout");
 }
+#endif
 
 #endif // defined(__APPLE__)

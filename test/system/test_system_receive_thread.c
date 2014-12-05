@@ -58,15 +58,14 @@ void tearDown(void)
 void test_KineticClient_should_process_initial_unsolicited_status_response(void)
 {
     int secondsWaiting = 0, maxWaiting = 2;
-    KineticConnection* connection = KineticSession_FromHandle(Fixture.handle);
-    while(connection->connectionID == 0) {
+    while(Fixture.session.connection->connectionID == 0) {
         LOG0("Waiting for connection ID...");
         sleep(1);
         secondsWaiting++;
         TEST_ASSERT_TRUE_MESSAGE(secondsWaiting < maxWaiting,
             "Timed out waiting for initial unsolicited status!");
     }
-    TEST_ASSERT_TRUE_MESSAGE(connection->connectionID > 0, "Invalid connection ID!");
+    TEST_ASSERT_TRUE_MESSAGE(Fixture.session.connection->connectionID > 0, "Invalid connection ID!");
 }
 
 /*******************************************************************************

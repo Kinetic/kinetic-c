@@ -37,7 +37,7 @@
 typedef struct {
     pthread_t threadID;
     char ip[16];
-    KineticSession* session;
+    KineticSession session;
     char keyPrefix[KINETIC_DEFAULT_KEY_LEN];
     uint8_t key[KINETIC_DEFAULT_KEY_LEN];
     uint8_t version[KINETIC_DEFAULT_KEY_LEN];
@@ -66,7 +66,7 @@ void* store_data(void* args)
         ByteBuffer_AppendArray(&entry->value, ByteBuffer_Consume(&thread_args->data, KINETIC_OBJ_SIZE));
 
         // Store the data slice
-        KineticStatus status = KineticClient_Put(thread_args->session, entry, NULL);
+        KineticStatus status = KineticClient_Put(&thread_args->session, entry, NULL);
         if (status != KINETIC_STATUS_SUCCESS) {
             fprintf(stderr, "Failed writing entry %d to disk w/status: %s",
                 objIndex+1, Kinetic_GetStatusDescription(status));
@@ -98,30 +98,32 @@ int main(int argc, char** argv)
 
     // Initialize kinetic-c and configure sessions
     KineticClient_Init("stdout", 0);
+
+    write_args* writeArgs = calloc(NUM_FILES, sizeof(write_args));
+    if (writeArgs == NULL) {
+        fprintf(stderr, "Failed allocating overlapped thread arguments!\n");
+    }
     const char HmacKeyString[] = "asdfasdf";
-    const KineticSession session = {
+    const KineticSessionConfig config = {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    write_args* writeArgs = calloc(NUM_FILES, sizeof(write_args));
-    if (writeArgs == NULL) {
-        fprintf(stderr, "Failed allocating overlapped thread arguments!\n");
-    }
 
     // Kick off a thread for each file to store
     for (int i = 0; i < NUM_FILES; i++) {
 
         // Establish connection
+        writeArgs[i].session = (KineticSession){.config = config};
         status = KineticClient_CreateConnection(&writeArgs[i].session);
         if (status != KINETIC_STATUS_SUCCESS) {
             fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
                 Kinetic_GetStatusDescription(status));
             return -1;
         }
-        strcpy(writeArgs[i].ip, writeArgs[i].session.host);
+        strcpy(writeArgs[i].ip, writeArgs[i].session.config.host);
 
         // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
         writeArgs[i].data = ByteBuffer_Create(buf, dataLen, 0);

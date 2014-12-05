@@ -36,9 +36,10 @@
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_hmac.h"
 
+static KineticSessionConfig SessionConfig;
 static KineticSession Session;
 static KineticConnection Connection;
-static int64_t ConnectionID = 12345;
+static const int64_t ConnectionID = 12345;
 static KineticPDU Request, Response;
 static KineticPDU Requests[3];
 static KineticOperation Operation;
@@ -54,6 +55,10 @@ void setUp(void)
     KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
     KINETIC_OPERATION_INIT(&Operation, &Connection);
     Operation.request = &Request;
+    Operation.connection = &Connection;
+    SessionConfig = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
+    Session = (KineticSession) {.config = SessionConfig, .connection = &Connection};
+    Connection.session = Session;
 }
 
 void tearDown(void)
@@ -84,13 +89,7 @@ void test_KineticOperation_SendRequest_should_transmit_PDU_with_no_value_payload
 {
     LOG_LOCATION;
     KineticProto_Message* msg = &Request.protoData.message.message;
-
-    // KineticProto_Message__init(msg);
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
     ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-    // KineticEntry entry = {.value = BYTE_BUFFER_NONE};
-    KINETIC_OPERATION_INIT(&Operation, &Connection);
-    Operation.request = &Request;
 
     uint8_t packedCommandBytes[1024];
 
@@ -129,15 +128,11 @@ void test_KineticOperation_SendRequest_should_send_PDU_with_value_payload(void)
 {
     LOG_LOCATION;
     ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
     uint8_t valueData[128];
     ByteBuffer valueBuffer = ByteBuffer_Create(valueData, sizeof(valueData), 0);
     ByteBuffer_AppendCString(&valueBuffer, "Some arbitrary value");
     KineticEntry entry = {.value = valueBuffer};
-    KINETIC_OPERATION_INIT(&Operation, &Connection);
-
     Operation.entry = &entry;
-    Operation.request = &Request;
     Operation.valueEnabled = true;
     Operation.sendValue = true;
 
@@ -157,10 +152,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
 {
     LOG_LOCATION;
     ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    KINETIC_OPERATION_INIT(&Operation, &Connection);
-    Operation.request = &Request;
     char valueData[] = "Some arbitrary value";
     KineticEntry entry = {
         .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
@@ -183,9 +174,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
 {
     LOG_LOCATION;
     ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    KINETIC_OPERATION_INIT(&Operation, &Connection);
     char valueData[] = "Some arbitrary value";
     KineticEntry entry = {
         .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
@@ -210,9 +198,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
 {
     LOG_LOCATION;
     ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    KINETIC_OPERATION_INIT(&Operation, &Connection);
     uint8_t valueData[128];
     KineticEntry entry = {
         .value = ByteBuffer_Create(valueData, sizeof(valueData), 0)
@@ -253,6 +238,7 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
     // Build a valid NOOP to facilitate testing protobuf structure and status extraction
     Operation.request = &Request;
     Operation.response = &Response;
+    Operation.connection->session = Session;
     KineticSession_IncrementSequence_Expect(&Session);
     KineticOperation_BuildNoop(&Operation);
 
@@ -264,7 +250,6 @@ void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_
     status = KineticOperation_GetStatus(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
 }
-
 
 
 void test_KineticOperation_AssociateResponseWithOperation_should_return_NULL_if_supplied_PDU_is_invalid(void)

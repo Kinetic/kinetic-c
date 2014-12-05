@@ -91,7 +91,7 @@ void tearDown(void)
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
 {
-    const KineticSession sessionConfig = {
+    const KineticSessionConfig sessionConfig = {
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = 0,
@@ -122,11 +122,11 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         // Establish all of the connection first, so their session can all get initialized first
         for (int i = 0; i < NUM_COPIES; i++) {
             // Establish connection
-            kinetic_client[i].session = sessionConfig;
+            kt_arg[i].session.config = sessionConfig;
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
-                KineticClient_CreateConnection(&kinetic_client[i].session));
-            strcpy(kt_arg[i].ip, session.host);
+                KineticClient_CreateConnection(&kt_arg[i].session));
+            strcpy(kt_arg[i].ip, sessionConfig.host);
 
             // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
             kt_arg[i].data = ByteBuffer_Create(buf, SourceDataSize, 0);
@@ -151,14 +151,14 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                 .value = valBuf,
             };
         }
-        sleep(2); // Give a generous chunk of time for session to be initialized by the target device
+        sleep(1); // Give a generous chunk of time for session to be initialized by the target device
 
         // Write all of the copies simultaneously (overlapped)
         for (int i = 0; i < NUM_COPIES; i++) {
             printf("  *** Overlapped PUT operations (writing copy %d of %d)"
                    " on IP (iteration %d of %d):%s\n",
                    i + 1, NUM_COPIES, iteration + 1,
-                   MAX_ITERATIONS, session.host);
+                   MAX_ITERATIONS, sessionConfig.host);
 
             // Spawn the thread
             int pthreadStatus = pthread_create(&thread_id[i], NULL, kinetic_put, &kt_arg[i]);
@@ -172,7 +172,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         for (int i = 0; i < NUM_COPIES; i++) {
             int join_status = pthread_join(thread_id[i], NULL);
             TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
-            KineticClient_DestroyConnection(&kinetic_client[i]);
+            KineticClient_DestroyConnection(&kt_arg[i].session);
 
             // Update results for summary
             bandwidthAccumulator += kt_arg[i].bandwidth;
@@ -182,7 +182,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         }
 
         // Cleanup the rest of the reources
-        free(kinetic_client);
         free(kt_arg);
         free(buf);
 
@@ -240,7 +239,7 @@ static void* kinetic_put(void* kinetic_arg)
 
         // Store the data slice
         LOGF1("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);
-        KineticStatus status = KineticClient_Put(arg->sessionHandle, entry, NULL);
+        KineticStatus status = KineticClient_Put(&arg->session, entry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         LOGF1("  *** KineticClient put to disk success, ip:%s", arg->ip);
 

@@ -63,21 +63,13 @@ static ByteBuffer ValueBuffer;
 void setUp(void)
 {
     SystemTestSetup(&Fixture);
-
-    KeyBuffer = ByteBuffer_Create(KeyData, sizeof(KeyData), 0);
-    ByteBuffer_AppendCString(&KeyBuffer, "PUT test key");
-    OtherKeyBuffer = ByteBuffer_Create(OtherKeyData, sizeof(OtherKeyData), 0);;
-    ByteBuffer_AppendCString(&OtherKeyBuffer, "Some other PUT test key");
-    TagBuffer = ByteBuffer_Create(TagData, sizeof(TagData), 0);
-    ByteBuffer_AppendCString(&TagBuffer, "SomeTagValue");
-    VersionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData), 0);
-    ByteBuffer_AppendCString(&VersionBuffer, "v1.0");
-    NewVersionBuffer = ByteBuffer_Create(NewVersionData, sizeof(NewVersionData), 0);
-    ByteBuffer_AppendCString(&NewVersionBuffer, "v2.0");
-    OtherVersionBuffer = ByteBuffer_Create(OtherVersionData, sizeof(OtherVersionData), 0);
-    ByteBuffer_AppendCString(&OtherVersionBuffer, "v3.0");
-    ValueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData), 0);
-    ByteBuffer_AppendCString(&ValueBuffer, "lorem ipsum... blah blah blah... etc.");
+    KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "PUT test key");
+    OtherKeyBuffer = ByteBuffer_CreateAndAppendCString(OtherKeyData, sizeof(OtherKeyData), "Some other PUT test key");
+    TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
+    VersionBuffer = ByteBuffer_CreateAndAppendCString(VersionData, sizeof(VersionData), "v1.0");
+    NewVersionBuffer = ByteBuffer_CreateAndAppendCString(NewVersionData, sizeof(NewVersionData), "v2.0");
+    OtherVersionBuffer = ByteBuffer_CreateAndAppendCString(OtherVersionData, sizeof(OtherVersionData), "v3.0");
+    ValueBuffer = ByteBuffer_CreateAndAppendCString(ValueData, sizeof(ValueData), "lorem ipsum... blah blah blah... etc.");
 }
 
 void tearDown(void)
@@ -97,7 +89,7 @@ void test_Put_should_create_new_object_on_device(void)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
@@ -120,7 +112,7 @@ void test_Put_should_create_another_new_object_on_device(void)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
@@ -147,7 +139,7 @@ void test_Put_should_update_object_data_on_device_and_update_version(void)
         .value = ValueBuffer,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_ByteBuffer_EMPTY(Entry.newVersion);
@@ -174,7 +166,7 @@ void test_Put_should_update_object_data_on_device_and_with_FLUSH_sync_mode_enabl
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
@@ -201,7 +193,7 @@ void test_Put_should_update_object_data_on_device_and_with_WRITETHROUGH_sync_mod
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(NewVersionBuffer, Entry.dbVersion);
@@ -227,7 +219,7 @@ void test_Put_should_update_object_data_on_device_via_FORCE_write_mode_enabled(v
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
@@ -252,7 +244,7 @@ void test_Put_should_update_object_data_on_device_again_via_FORCE_with_garbage_v
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
@@ -281,7 +273,7 @@ void test_Put_should_be_able_to_store_max_sized_entry(void)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
@@ -338,7 +330,7 @@ void test_Put_should_use_asynchronous_mode_if_closure_specified(void)
         .clientData = &TestPutClientData,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &Entry, &closure);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, &closure);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     const long maxWaitMicrosecs = 2000000;

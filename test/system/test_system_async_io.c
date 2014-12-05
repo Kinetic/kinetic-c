@@ -87,11 +87,13 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
     // Initialize kinetic-c and configure sessions
     const char HmacKeyString[] = "asdfasdf";
     KineticSession session = {
-        .host = "localhost",
-        .port = KINETIC_PORT,
-        .clusterVersion = 0,
-        .identity = 1,
-        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+        .config = (KineticSessionConfig) {
+            .host = "localhost",
+            .port = KINETIC_PORT,
+            .clusterVersion = 0,
+            .identity = 1,
+            .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+        },
     };
     KineticClient_Init("stdout", 0);
 

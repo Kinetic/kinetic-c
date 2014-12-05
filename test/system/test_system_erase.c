@@ -65,21 +65,14 @@ void setUp(void)
 { LOG_LOCATION;
     SystemTestSetup(&Fixture);
 
-    KeyBuffer = ByteBuffer_Create(KeyData, sizeof(KeyData), 0);
-    ByteBuffer_AppendCString(&KeyBuffer, strKey);
-    ExpectedKeyBuffer = ByteBuffer_Create(ExpectedKeyData, sizeof(ExpectedKeyData), 0);
-    ByteBuffer_AppendCString(&ExpectedKeyBuffer, strKey);
-    TagBuffer = ByteBuffer_Create(TagData, sizeof(TagData), 0);
-    ByteBuffer_AppendCString(&TagBuffer, "SomeTagValue");
-    ExpectedTagBuffer = ByteBuffer_Create(ExpectedTagData, sizeof(ExpectedTagData), 0);
-    ByteBuffer_AppendCString(&ExpectedTagBuffer, "SomeTagValue");
-    VersionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData), 0);
-    ByteBuffer_AppendCString(&VersionBuffer, "v1.0");
-    ExpectedVersionBuffer = ByteBuffer_Create(ExpectedVersionData, sizeof(ExpectedVersionData), 0);
-    ByteBuffer_AppendCString(&ExpectedVersionBuffer, "v1.0");
+    KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
+    ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);
+    TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
+    ExpectedTagBuffer = ByteBuffer_CreateAndAppendCString(ExpectedTagData, sizeof(ExpectedTagData), "SomeTagValue");
+    VersionBuffer = ByteBuffer_CreateAndAppendCString(VersionData, sizeof(VersionData), "v1.0");
+    ExpectedVersionBuffer = ByteBuffer_CreateAndAppendCString(ExpectedVersionData, sizeof(ExpectedVersionData), "v1.0");
     TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
-    ValueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData), 0);
-    ByteBuffer_AppendArray(&ValueBuffer, TestValue);
+    ValueBuffer = ByteBuffer_CreateAndAppendArray(ValueData, sizeof(ValueData), TestValue);
 
     // Setup to write some test data
     KineticEntry putEntry = {
@@ -89,9 +82,10 @@ void setUp(void)
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
         .force = true,
+        .synchronization = KINETIC_SYNCHRONIZATION_FLUSH,
     };
 
-    KineticStatus status = KineticClient_Put(Fixture.handle, &putEntry, NULL);
+    KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, putEntry.key);
@@ -101,7 +95,6 @@ void setUp(void)
     TEST_ASSERT_ByteBuffer_NULL(putEntry.newVersion);
 
     Fixture.expectedSequence++;
-    sleep(1);
 }
 
 void tearDown(void)
@@ -111,7 +104,7 @@ void tearDown(void)
 
 void test_InstantSecureErase_should_erase_device_contents(void)
 { LOG_LOCATION;
-    KineticStatus status = KineticClient_InstantSecureErase(Fixture.handle);
+    KineticStatus status = KineticClient_InstantSecureErase(&Fixture.session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 

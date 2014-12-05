@@ -37,7 +37,7 @@ static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
 static int ParseOptions(
     const int argc,
     char** const argv,
-    KineticSession const * const session,
+    KineticSession * const session,
     KineticEntry* entry);
 static KineticStatus ExecuteOperation(
     const char* op,
@@ -52,7 +52,7 @@ static void ConfigureEntry(
     const char* value);
 static void ReportOperationConfiguration(
     const char* operation,
-    KineticSession* config,
+    KineticSession* session,
     KineticEntry* entry);
 
 
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
     KineticStatus status = KineticClient_CreateConnection(&Session);
     if (status != KINETIC_STATUS_SUCCESS) {
         printf("Failed connecting to host %s:%d (status: %s)\n\n",
-               Session.host, Session.port,
+               Session.config.host, Session.config.port,
                Kinetic_GetStatusDescription(status));
         return -1;
     }
@@ -77,12 +77,12 @@ int main(int argc, char** argv)
     // Execute all specified operations in order
     for (int optionIndex = operationsArgsIndex; optionIndex < argc; optionIndex++) {
         const char* operation = argv[optionIndex];
-        ReportOperationConfiguration(operation, &SessionConfig, &Entry);
-        ExecuteOperation(operation, sessionHandle, &Entry);
+        ReportOperationConfiguration(operation, &Session, &Entry);
+        ExecuteOperation(operation, &Session, &Entry);
     }
 
     // Shutdown the Kinetic Device session
-    KineticClient_DestroyConnection(&sessionHandle);
+    KineticClient_DestroyConnection(&Session);
     KineticClient_Shutdown();
     printf("\nKinetic client session terminated!\n\n");
 
@@ -164,15 +164,11 @@ void ConfigureEntry(
 {
     assert(entry != NULL);
 
-    ByteBuffer keyBuffer = ByteBuffer_Create(KeyData, sizeof(KeyData), 0);
-    ByteBuffer_AppendCString(&keyBuffer, key);
-    ByteBuffer tagBuffer = ByteBuffer_Create(TagData, sizeof(TagData), 0);
-    ByteBuffer_AppendCString(&tagBuffer, tag);
-    ByteBuffer newVersionBuffer = ByteBuffer_Create(NewVersionData, sizeof(NewVersionData), 0);
-    ByteBuffer_AppendCString(&newVersionBuffer, version);
+    ByteBuffer keyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), key);
+    ByteBuffer tagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), tag);
+    ByteBuffer newVersionBuffer = ByteBuffer_CreateAndAppendCString(NewVersionData, sizeof(NewVersionData), version);
     ByteBuffer versionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData), 0);
-    ByteBuffer valueBuffer = ByteBuffer_Create(ValueData, sizeof(ValueData), 0);
-    ByteBuffer_AppendCString(&valueBuffer, value);
+    ByteBuffer valueBuffer = ByteBuffer_CreateAndAppendCString(ValueData, sizeof(ValueData), value);
 
     // Setup to write some test data
     *entry = (KineticEntry) {
@@ -196,18 +192,16 @@ void ReportOperationConfiguration(
            "================================================================================\n"
            "  host: %s\n"
            "  port: %d\n"
-           "  non-blocking: %s\n"
            "  clusterVersion: %lld\n"
            "  identity: %lld\n"
            "  key: %zd bytes\n"
            "  value: %zd bytes\n"
            "================================================================================\n",
            operation,
-           session->host,
-           session->port,
-           BOOL_TO_STRING(session->nonBlocking),
-           (long long int)session->clusterVersion,
-           (long long int)session->identity,
+           session->config.host,
+           session->config.port,
+           (long long int)session->config.clusterVersion,
+           (long long int)session->config.identity,
            entry->key.bytesUsed,
            entry->value.bytesUsed);
 }
@@ -215,7 +209,7 @@ void ReportOperationConfiguration(
 int ParseOptions(
     const int argc,
     char** const argv,
-    KineticSession* session,
+    KineticSession * const session,
     KineticEntry* entry)
 {
     // Create an ArgP processor to parse arguments
@@ -273,13 +267,15 @@ int ParseOptions(
 
     // Configure session for connection
     *session = (KineticSession) {
-        .port = cfg.port,
-        .clusterVersion = cfg.clusterVersion,
-        .identity = cfg.identity,
-        .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
+        .config = (KineticSessionConfig) {
+            .port = cfg.port,
+            .clusterVersion = cfg.clusterVersion,
+            .identity = cfg.identity,
+            .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
+        }
     };
     memcpy(HmacData, cfg.hmacKey, strlen(cfg.hmacKey));
-    strncpy(session->host, cfg.host, HOST_NAME_MAX);
+    strncpy(session->config.host, cfg.host, HOST_NAME_MAX);
 
     // Populate and configure the entry to be used for operations
     ConfigureEntry(entry, cfg.key, cfg.tag, cfg.version, cfg.algorithm, TestDataString);

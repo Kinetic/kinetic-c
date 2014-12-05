@@ -43,6 +43,7 @@ KineticStatus KineticSession_Create(KineticSession * const session)
         return KINETIC_STATUS_MEMORY_ERROR;
     }
     KINETIC_CONNECTION_INIT(session->connection);
+    session->connection->session = *session; // TODO: KILL ME!!!
     return KINETIC_STATUS_SUCCESS;
 }
 
