@@ -41,20 +41,30 @@ void KineticClient_Shutdown(void);
  * connection to the specified Kinetic Device, and establishes a session.
  *
  * @param session   Configured KineticSession to connect
- *  .host             Host name or IP address to connect to
- *  .port             Port to establish socket connection on
- *  .clusterVersion   Cluster version to use for the session
- *  .identity         Identity to use for the session
- *  .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
+ *  .config           `KineticSessionConfig` structure which must be configured
+ *                    by the client prior to creating the device connection.
+ *    .host             Host name or IP address to connect to
+ *    .port             Port to establish socket connection on
+ *    .clusterVersion   Cluster version to use for the session
+ *    .identity         Identity to use for the session
+ *    .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
+ *  .connection     Pointer to dynamically allocated connection which will be
+ *                  populated upon establishment of a connection.
  *
- * @return          Returns the resulting KineticStatus.
+ * @return          Returns the resulting `KineticStatus`, and `session->connection`
+ *                  will be populated with a session instance pointer upon success.
+ *                  The client should call KineticClient_DestroyConnection() in
+ *                  order to shutdown a connection and cleanup resources when
+ *                  done using a KineticSession.
  */
 KineticStatus KineticClient_CreateConnection(KineticSession * const session);
 
 /**
  * @brief Closes the connection to a host.
  *
- * @param session   The KineticSession to destroy.
+ * @param session   The connected `KineticSession` to close. The connection
+ *                  instance will be freed by this call after closing the
+ *                  connection.
  *
  * @return          Returns the resulting KineticStatus.
  */
@@ -197,7 +207,9 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
  * @param type          KineticLogDataType specifying data type to retrieve.
  * @param info          KineticDeviceInfo pointer, which will be assigned to
  *                      a dynamically allocated structure populated with
- *                      the requested data, if successful.
+ *                      the requested data, if successful. The client should
+ *                      call free() on this pointer in order to free the root
+ *                      and any nested structures.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion in another thread.
