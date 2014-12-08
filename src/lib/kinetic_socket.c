@@ -33,9 +33,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <sys/select.h>
 #include <sys/ioctl.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <signal.h>
@@ -431,7 +432,7 @@ void KineticSocket_CorkPacket(int socket)
     (void)socket;
 #else
     int on = 1;
-    setsockopt(socket, SOL_TCP, TCP_CORK, &on, sizeof(on));
+    setsockopt(socket, IPPROTO_TCP, TCP_CORK, &on, sizeof(on));
 #endif
 }
 
@@ -440,8 +441,7 @@ void KineticSocket_UncorkPacket(int socket)
 #if defined(__APPLE__)
     (void)socket;
 #else
-    int on = 1;
     int off = 0;
-    setsockopt(socket, SOL_TCP, TCP_CORK, &on, sizeof(on));
+    setsockopt(socket, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));
 #endif
 }
