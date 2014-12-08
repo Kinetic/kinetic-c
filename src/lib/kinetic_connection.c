@@ -38,10 +38,12 @@ KineticStatus KineticSession_Create(KineticSession * const session)
     if (session == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
     }
-    session->connection = malloc(sizeof(KineticConnection));
+
+    session->connection = KineticAllocator_NewConnection();
     if (session->connection == NULL) {
         return KINETIC_STATUS_MEMORY_ERROR;
     }
+
     KINETIC_CONNECTION_INIT(session->connection);
     session->connection->session = *session; // TODO: KILL ME!!!
     return KINETIC_STATUS_SUCCESS;
@@ -56,6 +58,7 @@ KineticStatus KineticSession_Destroy(KineticSession * const session)
         return KINETIC_STATUS_SESSION_INVALID;
     }
     pthread_mutex_destroy(&session->connection->writeMutex);
+    KineticAllocator_FreeConnection(session->connection);
     session->connection = NULL;
     return KINETIC_STATUS_SUCCESS;
 }
@@ -88,6 +91,21 @@ KineticStatus KineticSession_Connect(KineticSession const * const session)
     session->connection->thread.connection = connection;
     KineticController_Init(session);
 
+    connection->session = *session;
+
+    // Wait for initial unsolicited status to be received in order to obtain connectionID
+    const long maxWaitMicrosecs = 2000000;
+    long microsecsWaiting = 0;
+    struct timespec sleepDuration = {.tv_nsec = 500000};
+    while(connection->connectionID == 0) {
+        if (microsecsWaiting > maxWaitMicrosecs) {
+            LOG0("Timed out waiting for connection ID from device!");
+            return KINETIC_STATUS_SOCKET_TIMEOUT;
+        }
+        nanosleep(&sleepDuration, NULL);
+        microsecsWaiting += (sleepDuration.tv_nsec / 1000);
+    }
+
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -100,7 +118,7 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
     if (connection == NULL || !session->connection->connected || connection->socket < 0) {
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
-
+    
     // Shutdown the worker thread
     KineticStatus status = KINETIC_STATUS_SUCCESS;
     connection->thread.abortRequested = true;

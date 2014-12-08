@@ -25,6 +25,9 @@
 
 void KineticAllocator_InitLists(KineticConnection* connection);
 
+KineticConnection* KineticAllocator_NewConnection(void);
+void KineticAllocator_FreeConnection(KineticConnection* connection);
+
 KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection);
 void KineticAllocator_FreePDU(KineticConnection* connection, KineticPDU* pdu);
 KineticPDU* KineticAllocator_GetFirstPDU(KineticConnection* connection);

@@ -24,7 +24,7 @@
 #include "kinetic_types.h"
 
 /**
- * Initializes the Kinetic API andcsonfigures logging destination.
+ * Initializes the Kinetic API and configures logging destination.
  *
  * @param log_file (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
  * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
@@ -47,7 +47,7 @@ void KineticClient_Shutdown(void);
  *  .identity         Identity to use for the session
  *  .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
  *
- * @return          Returns the resulting KineticStatus
+ * @return          Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_CreateConnection(KineticSession * const session);
 
@@ -56,7 +56,7 @@ KineticStatus KineticClient_CreateConnection(KineticSession * const session);
  *
  * @param session   The KineticSession to destroy.
  *
- * @return          Returns the resulting KineticStatus
+ * @return          Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_DestroyConnection(KineticSession * const session);
 
@@ -65,7 +65,7 @@ KineticStatus KineticClient_DestroyConnection(KineticSession * const session);
  *
  * @param session       The connected KineticSession to use for the operation.
  *
- * @return              Returns the resulting KineticStatus
+ * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_NoOp(KineticSession const * const session);
 
@@ -79,15 +79,27 @@ KineticStatus KineticClient_NoOp(KineticSession const * const session);
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion.
  * 
- *
- * @return              Returns the resulting KineticStatus
+ * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_Put(KineticSession const * const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GET command to retrieve and entry from the Kinetic Device.
+ * @brief Executes a FLUSHALLDATA command to flush pending PUTs or DELETEs.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
+ *                      
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticClient_Flush(KineticSession const * const session,
+                                  KineticCompletionClosure* closure);
+
+/**
+ * @brief Executes a GET command to retrieve an entry from the Kinetic Device.
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to retrieve. 'value' will
@@ -96,11 +108,51 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion.
  *
- * @return              Returns the resulting KineticStatus
+ * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_Get(KineticSession const * const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure);
+
+/**
+ * @brief Executes a GETPREVIOUS command to retrieve the next entry from the Kinetic Device.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ * @param entry         Key/value entry for object to retrieve. 'value' will
+ *                      be populated unless 'metadataOnly' is set to 'true'.
+ *                      The key and value fields will be populated with the
+ *                      previous key and its corresponding value, according to
+ *                      lexicographical byte order.
+ *                      
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticClient_GetPrevious(KineticSession const * const session,
+                                        KineticEntry* const entry,
+                                        KineticCompletionClosure* closure);
+
+/**
+ * @brief Executes a GETNEXT command to retrieve the next entry from the Kinetic Device.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ * @param entry         Key/value entry for object to retrieve. 'value' will
+ *                      be populated unless 'metadataOnly' is set to 'true'.
+ *                      The key and value fields will be populated with the
+ *                      next key and its corresponding value, according to
+ *                      lexicographical byte order.
+ *                      
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticClient_GetNext(KineticSession const * const session,
+                                    KineticEntry* const entry,
+                                    KineticCompletionClosure* closure);
 
 /**
  * @brief Executes a DELETE command to delete an entry from the Kinetic Device
@@ -112,14 +164,14 @@ KineticStatus KineticClient_Get(KineticSession const * const session,
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion.
  *
- * @return              Returns the resulting KineticStatus
+ * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_Delete(KineticSession const * const session,
                                    KineticEntry* const entry,
                                    KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GETKEYRANGE command to retrive a set of keys in the range
+ * @brief Executes a GETKEYRANGE command to retrieve a set of keys in the range
  * specified range from the Kinetic Device
  *
  * @param session       The connected KineticSession to use for the operation
@@ -130,7 +182,7 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
  *                      will be called upon completion.
  *
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ * @return              Returns 0 upon success, -1 or the Kinetic status code
  *                      upon failure
  */
 KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
@@ -138,7 +190,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
                                         KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GETLOG command to retrive a set of keys in the range
+ * @brief Executes a GETLOG command to retrieve a set of keys in the range
  * specified range from the Kinetic Device
  *
  * @param session       The connected KineticSession to use for the operation
@@ -150,20 +202,42 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion.
  *
- * @return              Returns 0 upon succes, -1 or the Kinetic status code
+ * @return              Returns 0 upon success, -1 or the Kinetic status code
  *                      upon failure
  */
 KineticStatus KineticClient_GetLog(KineticSession const * const session,
                                    KineticDeviceInfo_Type type,
                                    KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure);
+/**
+ * @brief Executes a PEER2PEERPUSH command to retrieve a set of keys in the range
+ * specified range from the Kinetic Device
+ *
+ * @param session       The connected KineticSession to use for the operation
+ * @param p2pOp         KineticP2P_Operation pointer. This pointer needs to remain
+ *                      valid during the duration of the operation. The results of 
+ *                      P2P operation(s) will be stored in the resultStatus field of
+ *                      this structure.
+ * @param closure       Optional closure. If specified, operation will be
+ *                      executed in asynchronous mode, and closure callback
+ *                      will be called upon completion.
+ *
+ * @return              Returns 0 upon success, -1 or the Kinetic status code
+ *                      upon failure. Note that P2P operations can be nested. This
+ *                      status code pertains to the initial top-level P2P operation. 
+ *                      You'll need to check the resultStatus in the p2pOp structure
+ *                      to check the status of the individual P2P operations.
+ */
+KineticStatus KineticClient_P2POperation(KineticSession const * const session,
+                                         KineticP2P_Operation* const p2pOp,
+                                         KineticCompletionClosure* closure);
 
 /**
  * @brief Executes an InstantSecureErase command to erase all data from the Kinetic device.
  *
  * @param session       The connected KineticSession to use for the operation.
  *
- * @return              Returns the resulting KineticStatus
+ * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_InstantSecureErase(KineticSession const * const session);
 

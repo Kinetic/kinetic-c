@@ -140,6 +140,22 @@ KineticStatus ExecuteOperation(
         }
     }
 
+    else if (strcmp("getnext", operation) == 0) {
+        status = KineticClient_GetNext(session, entry, NULL);
+        if (status == 0) {
+            printf("\nGetNext executed successfully."
+                   "The entry has been retrieved!\n\n");
+        }
+    }
+
+    else if (strcmp("getprevious", operation) == 0) {
+        status = KineticClient_GetPrevious(session, entry, NULL);
+        if (status == 0) {
+            printf("\nGetPrevious executed successfully."
+                   "The entry has been retrieved!\n\n");
+        }
+    }
+
     else {
         printf("\nSpecified operation '%s' is invalid!\n\n", operation);
         return -1;

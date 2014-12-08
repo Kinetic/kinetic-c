@@ -95,7 +95,6 @@ KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
     }
     else if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
         KineticLogger_LogProtobuf(3, response->proto);
-        LOG3("Unsolicited status message is not authenticated");
     }
 
     // Extract embedded command, if supplied

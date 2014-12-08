@@ -1,3 +1,7 @@
+v0.8.2
+------
+* Added FLUSHALLDATA operation.
+
 v0.8.1 (kinetic-protocol 3.0.5)
 -------------------------------
 * Added GETLOG operation.

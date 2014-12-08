@@ -92,7 +92,7 @@ int main(int argc, char** argv)
     long dataLen = read(fd, buf, st.st_size);
     close(fd);
     if (dataLen <= 0) {
-        fprintf(stderr, "Failed reading data file to store: %s", dataFile);
+        fprintf(stderr, "Failed reading data file to store: %s\n", dataFile);
         exit(-1);
     }
 
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
     KineticClient_Init("stdout", 0);
     status = KineticClient_CreateConnection(&session);
     if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Connection to host '%s' failed w/ status: %s",
+        fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
             session.config.host, Kinetic_GetStatusDescription(status));
     }
     writeArgs->session = &session;

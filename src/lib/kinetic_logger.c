@@ -28,8 +28,6 @@
 #include <pthread.h>
 #include <time.h>
 
-// #define USE_GENERIC_LOGGER 1 (not ready yet!)
-
 #define KINETIC_LOGGER_BUFFER_STR_MAX_LEN 256
 #define KINETIC_LOGGER_BUFFER_SIZE (0x1 << 12)
 #define KINETIC_LOGGER_FLUSH_INTERVAL_SEC 180
@@ -64,6 +62,7 @@ static inline void KineticLogger_FinishBuffer(void);
 static void* KineticLogger_FlushThread(void* arg);
 static void KineticLogger_InitFlushThread(void);
 #endif
+static void KineticLogger_LogProtobufMessage(int log_level, const ProtobufCMessage *msg, char* _indent);
 
 
 //------------------------------------------------------------------------------
@@ -182,12 +181,15 @@ void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header)
 #define LOG_PROTO_LEVEL_START(__name) \
     KineticLogger_LogPrintf(2, "%s%s {", (_indent), (__name)); \
     strcat(_indent, "  ");
+#define LOG_PROTO_LEVEL_START_NO_INDENT() \
+    KineticLogger_LogPrintf(2, "{"); \
+    strcat(_indent, "  ");
 #define LOG_PROTO_LEVEL_END() \
     _indent[strlen(_indent) - 2] = '\0'; \
     KineticLogger_LogPrintf(2, "%s}", _indent);
 
-#define LOG_PROTO_LEVEL_START_ARRAY(__name) \
-    KineticLogger_LogPrintf(2, "%s%s [", (_indent), (__name)); \
+#define LOG_PROTO_LEVEL_START_ARRAY(__name, __quantity) \
+    KineticLogger_LogPrintf(2, "%s%s: (%u elements) [", (_indent), (__name), (__quantity)); \
     strcat(_indent, "  ");
 #define LOG_PROTO_LEVEL_END_ARRAY() \
     _indent[strlen(_indent) - 2] = '\0'; \
@@ -225,813 +227,196 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
     return len;
 }
 
-// #define Proto_LogBinaryDataOptional(el, attr)
-// if ((el)->has_##(attr)) {
-//     KineticLogger_LogByteArray(1, #attr, (el)->(attr));
-// }
+static void LogUnboxed(int log_level,
+                void const * const fieldData,
+                ProtobufCFieldDescriptor const * const fieldDesc,
+                size_t const i,
+                char* _indent)
+{
+    switch (fieldDesc->type) {
+    case PROTOBUF_C_TYPE_INT32:
+    case PROTOBUF_C_TYPE_SINT32:
+    case PROTOBUF_C_TYPE_SFIXED32:
+        {
+            int32_t const * value = (int32_t const *)fieldData;
+            KineticLogger_LogPrintf(log_level, "%ld", value[i]);
+        }
+        break;
 
-#if 0
-static void KineticLogger_LogProtobufMessage(int log_level, const ProtobufCMessage *msg, char* _indent)
+    case PROTOBUF_C_TYPE_INT64:
+    case PROTOBUF_C_TYPE_SINT64:
+    case PROTOBUF_C_TYPE_SFIXED64:
+        {
+            int64_t* value = (int64_t*)fieldData;
+            KineticLogger_LogPrintf(log_level, "%lld", value[i]);
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_UINT32:
+    case PROTOBUF_C_TYPE_FIXED32:
+        {
+            uint32_t* value = (uint32_t*)fieldData;
+            KineticLogger_LogPrintf(log_level, "%lu", value[i]);
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_UINT64:
+    case PROTOBUF_C_TYPE_FIXED64:
+        {
+            uint64_t* value = (uint64_t*)fieldData;
+            KineticLogger_LogPrintf(log_level, "%llu", value[i]);
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_FLOAT:
+        {
+            float* value = (float*)fieldData;
+            KineticLogger_LogPrintf(log_level, "%f", value[i]);
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_DOUBLE:
+        {
+            double* value = (double*)fieldData;
+            KineticLogger_LogPrintf(log_level, "%f", value[i]);
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_BOOL:
+        {
+            protobuf_c_boolean* value = (protobuf_c_boolean*)fieldData;
+            KineticLogger_LogPrintf(log_level, "%s", BOOL_TO_STRING(value[i]));
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_STRING:
+        {
+            char** strings = (char**)fieldData;
+            KineticLogger_LogPrintf(log_level, "%s", strings[i]);
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_BYTES:
+        {
+            ProtobufCBinaryData* value = (ProtobufCBinaryData*)fieldData;
+            LOG_PROTO_LEVEL_START_NO_INDENT();
+            KineticLogger_LogByteArray(log_level, _indent,
+                                       (ByteArray){.data = value[i].data,
+                                                   .len = value[i].len});
+            LOG_PROTO_LEVEL_END();
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_ENUM:
+        {
+            int * value = (int*)fieldData;
+            ProtobufCEnumDescriptor const * enumDesc = fieldDesc->descriptor;
+            ProtobufCEnumValue const * enumVal = protobuf_c_enum_descriptor_get_value(enumDesc, value[i]);
+            KineticLogger_LogPrintf(log_level, "%s", enumVal->name);
+        }
+        break;
+
+    case PROTOBUF_C_TYPE_MESSAGE:  // nested message
+        {
+            ProtobufCMessage** msg = (ProtobufCMessage**)fieldData;
+
+            if (msg[i] != NULL)
+            {
+                LOG_PROTO_LEVEL_START_NO_INDENT();
+                KineticLogger_LogProtobufMessage(log_level, msg[i], _indent);
+                LOG_PROTO_LEVEL_END();
+            }
+        } break;
+
+    default:
+        KineticLogger_LogPrintf(log_level, "Invalid message field type!: %d", fieldDesc->type);
+        assert(false); // should never get here!
+        break;
+    };
+}
+
+static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage const * msg, char* _indent)
 {
     if (msg == NULL || msg->descriptor == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
 
-    const ProtobufCMessageDescriptor* desc = msg->descriptor;
-    const uint8_t* pMsg = (const uint8_t*)msg;
-    // char tmpBuf[1024];
-
-    LOG_PROTO_LEVEL_START(desc->short_name);
-    // KineticLogger_LogPrintf(log_level, "%s* ProtobufMessage: msg=0x%0llX, _indent, range=0x%0llX, name=%s, fields=%u",
-    //     _indent, msg, pMsg, desc->short_name, desc->n_fields);
+    ProtobufCMessageDescriptor const * desc = msg->descriptor;
+    uint8_t const * pMsg = (uint8_t const *)msg;
 
     for (unsigned int i = 0; i < desc->n_fields; i++) {
-        bool indexed = false;
-        const ProtobufCFieldDescriptor* fieldDesc =
-            (const ProtobufCFieldDescriptor*)((uint8_t*)&desc->fields[i]);
-        // const uint8_t* pVal = pMsg + fieldDesc->offset;
-        const uint32_t quantity = *((uint32_t*)(unsigned long)pMsg + fieldDesc->quantifier_offset);
+        ProtobufCFieldDescriptor const * fieldDesc = &desc->fields[i];
 
         if (fieldDesc == NULL) {
             continue;
         }
 
-        // KineticLogger_LogPrintf(log_level, "%s * ProtobufField[%s]: descriptor=0x%0llX",
-        //     _indent, fieldDesc->name, fieldDesc);
-        // KineticLogger_LogPrintf(log_level, "%s   * value: field=0x%0llX, offset=%u, value=?, type=%d",
-        //     _indent, pVal, fieldDesc->offset, fieldDesc->type);
-        // KineticLogger_LogPrintf(log_level, "%s   * quantifier: quantifier=0x%0llX, offset=%u, quantity=%u",
-        //     _indent, quantifier, fieldDesc->quantifier_offset, quantity);
+        switch(fieldDesc->label)
+        {
+            case PROTOBUF_C_LABEL_REQUIRED:
+            {
+                printf("%s%s: ", _indent, fieldDesc->name);
 
-        switch (fieldDesc->type) {
-        case PROTOBUF_C_TYPE_INT32:
-        case PROTOBUF_C_TYPE_SINT32:
-        case PROTOBUF_C_TYPE_SFIXED32:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                int32_t* value = (int32_t*)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %ld", _indent, fieldDesc->name, suffix, value[i]);
-            }
-            break;
+                LogUnboxed(log_level, &pMsg[fieldDesc->offset], fieldDesc, 0, _indent);
+            } break;
+            case PROTOBUF_C_LABEL_OPTIONAL:
+            {
+                protobuf_c_boolean const * quantifier = (protobuf_c_boolean const *)(void*)&pMsg[fieldDesc->quantifier_offset];
+                if ((*quantifier) &&  // only print out if it's there
+                    // and a special case: if this is a message, don't show it if the message is NULL
+                    (PROTOBUF_C_TYPE_MESSAGE != fieldDesc->type || ((ProtobufCMessage**)(void*)&pMsg[fieldDesc->offset])[0] != NULL)) 
+                {
+                    printf("%s%s: ", _indent, fieldDesc->name);
 
-        case PROTOBUF_C_TYPE_INT64:
-        case PROTOBUF_C_TYPE_SINT64:
-        case PROTOBUF_C_TYPE_SFIXED64:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                int64_t* value = (int64_t*)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %lld", _indent, fieldDesc->name, suffix, value[i]);
-            }
-            break;
+                    /* special case for nested command packed into commandBytes field */
+                    if ((protobuf_c_message_descriptor_get_field_by_name(desc, "commandBytes") == fieldDesc ) && 
+                        (PROTOBUF_C_TYPE_BYTES == fieldDesc->type)) {
 
-        case PROTOBUF_C_TYPE_UINT32:
-        case PROTOBUF_C_TYPE_FIXED32:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                uint32_t* value = (uint32_t*)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %lu", _indent, fieldDesc->name, suffix, value[i]);
-            }
-            break;
+                        ProtobufCBinaryData* value = (ProtobufCBinaryData*)(void*)&pMsg[fieldDesc->offset];
+                        if ((value->data != NULL) && (value->len > 0)) {
+                            KineticProto_Command * cmd = KineticProto_command__unpack(NULL, value->len, value->data);
 
-        case PROTOBUF_C_TYPE_UINT64:
-        case PROTOBUF_C_TYPE_FIXED64:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                uint64_t* value = (uint64_t*)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %llu", _indent, fieldDesc->name, suffix, value[i]);
-            }
-            break;
-
-        case PROTOBUF_C_TYPE_FLOAT:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                float* value = (float*)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %f", _indent, fieldDesc->name, suffix, value[i]);
-            }
-            break;
-
-        case PROTOBUF_C_TYPE_DOUBLE:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                double* value = (double*)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %f", _indent, fieldDesc->name, suffix, value[i]);
-            }
-            break;
-
-        case PROTOBUF_C_TYPE_BOOL:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                protobuf_c_boolean* value = (protobuf_c_boolean*)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %s", _indent, fieldDesc->name, suffix, BOOL_TO_STRING(value[i]));
-            }
-            break;
-
-        case PROTOBUF_C_TYPE_STRING:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                char** strings = (char**)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %s", _indent, fieldDesc->name, suffix, strings[i]);
-            }
-            break;
-
-        case PROTOBUF_C_TYPE_BYTES:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                ProtobufCBinaryData* array = (ProtobufCBinaryData*)(msg + fieldDesc->offset + (i * sizeof(ProtobufCBinaryData)));
-                KineticLogger_LogPrintf(log_level, "%s%s%s: addr=0x%0llX, data=0x%0llX, len=%zu",
-                    _indent, fieldDesc->name, suffix, array, array->data, array->len);
-            }
-            break;
-
-            // if (quantity > 0) {
-            //     KineticLogger_LogPrintf(log_level, "%s* TYPE: PROTOBUF_C_TYPE_BYTES (incomplete!)", _indent);
-            //     // ProtobufCBinaryData* pArray = *(ProtobufCBinaryData**)((unsigned long)(pVal));
-            //     // KineticLogger_LogPrintf(log_level, "%s    * pArray=0x%0llX, points to: 0x%0llX", _indent, pArray, *pArray);
-            //     // ProtobufCBinaryData* arrays = (ProtobufCBinaryData*)pArray;
-            //     // // arrays++;
-            //     // KineticLogger_LogPrintf(log_level, "%s    * BYTE_ARRAYS: raw=0x%0llX, arrays=0x%0llX, quantity=%u, &[0]=0x%0llX, &[1]=0x%0llX",
-            //     //     _indent, pVal, arrays, quantity, &arrays[0], &arrays[1]);
-            //     // for (unsigned int i = 0; i < quantity; i++) {
-            //     //     ProtobufCBinaryData* myArray = (ProtobufCBinaryData*)&arrays[i];
-            //     //     myArray += i;
-            //     //     KineticLogger_LogPrintf(log_level, "%s     * data=0x%0llX, len=%u", _indent, myArray->data, myArray->len);
-            //     //     if (myArray->data != NULL && myArray->len > 0) {
-            //     //         char suffix[32] = {'\0'};
-            //     //         if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-            //     //         // BYTES_TO_CSTRING(tmpBuf, &myArray, 0, myArray->len);
-            //     //         // KineticLogger_LogPrintf(log_level, "%s%s%s: %s", _indent, fieldDesc->name, suffix, tmpBuf);
-            //     //     }
-            //     // }
-            // }
-            // break;
-
-        case PROTOBUF_C_TYPE_ENUM:
-            for (unsigned int i = 0; i < quantity; i++) {
-                char suffix[32] = {'\0'};
-                if (indexed) {snprintf(suffix, sizeof(suffix), "[%u]", i);}
-                ProtobufCEnumValue* enumVal = (ProtobufCEnumValue*)(msg + fieldDesc->offset);
-                KineticLogger_LogPrintf(log_level, "%s%s%s: %s", _indent, fieldDesc->name, suffix, enumVal[i].name);
-            }
-            break;
-
-        case PROTOBUF_C_TYPE_MESSAGE:  // nested message
-            KineticLogger_Log(log_level, "Nested messages not yet supported!");
-            assert(false); // nested messages not yet handled!
-            break;
-
-        default:
-            KineticLogger_Log(log_level, "Invalid message field type!");
-            assert(false); // should never get here!
-            break;
-        };
+                            LOG_PROTO_LEVEL_START_NO_INDENT();
+                            KineticLogger_LogProtobufMessage(log_level, &cmd->base, _indent);
+                            LOG_PROTO_LEVEL_END();
+                            free(cmd);
+                        }
+                    }
+                    else
+                    {
+                        LogUnboxed(log_level, &pMsg[fieldDesc->offset], fieldDesc, 0, _indent);
+                    }
+                }
+            } break;
+            case PROTOBUF_C_LABEL_REPEATED:
+            {
+                unsigned const * quantifier = (unsigned const *)(void*)&pMsg[fieldDesc->quantifier_offset];
+                if (*quantifier > 0)
+                {
+                    LOG_PROTO_LEVEL_START_ARRAY(fieldDesc->name, *quantifier);
+                    for (uint32_t i = 0; i < *quantifier; i++)
+                    {
+                        void const ** box = (void const **)(void*)&pMsg[fieldDesc->offset];
+                        printf("%s", _indent);
+                        LogUnboxed(log_level, *box, fieldDesc, i, _indent);
+                    }
+                    LOG_PROTO_LEVEL_END_ARRAY();
+                }
+            } break;
+        }
     }
-
-    LOG_PROTO_LEVEL_END();
 }
-#endif
 
 void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
 {
     if (msg == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
         return;
     }
-
     LOG_PROTO_INIT();
-    char tmpBuf[1024];
 
     KineticLogger_Log(log_level, "Kinetic Protobuf:");
 
-    if (msg->has_authType) {
-        const ProtobufCEnumValue* eVal = 
-            protobuf_c_enum_descriptor_get_value(
-                &KineticProto_Message_auth_type__descriptor,
-                msg->authType);
-        KineticLogger_LogPrintf(log_level, "%sauthType: %s", _indent, eVal->name);
-
-        if (msg->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH && msg->hmacAuth != NULL) {
-        #if USE_GENERIC_LOGGER
-            KineticLogger_LogProtobufMessage(log_level, (ProtobufCMessage*)msg->hmacAuth, _indent);
-        #else
-            LOG_PROTO_LEVEL_START("hmacAuth");
-            if (msg->hmacAuth->has_identity) {
-                KineticLogger_LogPrintf(log_level, "%sidentity: %lld", _indent, msg->hmacAuth->identity);
-            }
-
-            if (msg->hmacAuth->has_hmac) {
-                BYTES_TO_CSTRING(tmpBuf, msg->hmacAuth->hmac, 0, msg->hmacAuth->hmac.len);
-                KineticLogger_LogPrintf(log_level, "%shmac: '%s'", _indent, tmpBuf);
-            }
-
-            LOG_PROTO_LEVEL_END();
-        #endif
-        }
-        else if (msg->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH && msg->pinAuth != NULL) {
-        #if USE_GENERIC_LOGGER
-            KineticLogger_LogProtobufMessage(log_level, (ProtobufCMessage*)msg->hmacAuth, _indent);
-        #else
-            LOG_PROTO_LEVEL_START("pinAuth");
-
-            if (msg->pinAuth->has_pin) {
-                BYTES_TO_CSTRING(tmpBuf, msg->pinAuth->pin, 0, msg->pinAuth->pin.len);
-                KineticLogger_LogPrintf(log_level, "%spin: '%s'", _indent, tmpBuf);
-            }
-
-            LOG_PROTO_LEVEL_END();
-        #endif
-        }
-    }
-
-    if (msg->has_commandBytes
-      && msg->commandBytes.data != NULL
-      && msg->commandBytes.len > 0) {
-        LOG_PROTO_LEVEL_START("commandBytes");
-        KineticProto_Command* cmd = KineticProto_command__unpack(NULL, msg->commandBytes.len, msg->commandBytes.data);
-
-        if (cmd->header) {
-        #if 0 //USE_GENERIC_LOGGER
-            KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->header, _indent);
-        #else
-            LOG_PROTO_LEVEL_START("header");
-            {
-                if (cmd->header->has_clusterVersion) {
-                    KineticLogger_LogPrintf(log_level, "%sclusterVersion: %lld", _indent,
-                         cmd->header->clusterVersion);
-                }
-                if (cmd->header->has_connectionID) {
-                    KineticLogger_LogPrintf(log_level, "%sconnectionID: %lld", _indent,
-                         cmd->header->connectionID);
-                }
-                if (cmd->header->has_sequence) {
-                    KineticLogger_LogPrintf(log_level, "%ssequence: %lld", _indent,
-                         cmd->header->sequence);
-                }
-                if (cmd->header->has_ackSequence) {
-                    KineticLogger_LogPrintf(log_level, "%sackSequence: %lld", _indent,
-                         cmd->header->ackSequence);
-                }
-                if (cmd->header->has_messageType) {
-                    const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                                         &KineticProto_command_message_type__descriptor,
-                                                         cmd->header->messageType);
-                    KineticLogger_LogPrintf(log_level, "%smessageType: %s", _indent, eVal->name);
-                }
-                if (cmd->header->has_timeout) {
-                    KineticLogger_LogPrintf(log_level, "%stimeout: %lld", _indent,
-                         cmd->header->ackSequence);
-                }
-                if (cmd->header->has_earlyExit) {
-                    KineticLogger_LogPrintf(log_level, "%searlyExit: %s", _indent,
-                         BOOL_TO_STRING(cmd->header->earlyExit));
-                }
-                if (cmd->header->has_priority) {
-                    const ProtobufCEnumValue* eVal = 
-                        protobuf_c_enum_descriptor_get_value(
-                            &KineticProto_command_priority__descriptor,
-                            cmd->header->messageType);
-                    KineticLogger_LogPrintf(log_level, "%spriority: %s", _indent, eVal->name);
-                }
-                if (cmd->header->has_TimeQuanta) {
-                    KineticLogger_LogPrintf(log_level, "%sTimeQuanta: %s", _indent,
-                         BOOL_TO_STRING(cmd->header->TimeQuanta));
-                }
-            }
-            LOG_PROTO_LEVEL_END();
-        #endif
-        }
-
-        if (cmd->body) {
-            LOG_PROTO_LEVEL_START("body");
-            {
-                if (cmd->body->keyValue) {
-                #if USE_GENERIC_LOGGER
-                        KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->body->keyValue, _indent);
-                #else
-                    LOG_PROTO_LEVEL_START("keyValue");
-                    {
-                        if (cmd->body->keyValue->has_key) {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                             cmd->body->keyValue->key, 0,
-                                             cmd->body->keyValue->key.len);
-                            KineticLogger_LogPrintf(log_level, "%skey: '%s'", _indent, tmpBuf);
-                        }
-                        if (cmd->body->keyValue->has_newVersion) {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                             cmd->body->keyValue->newVersion,
-                                             0, cmd->body->keyValue->newVersion.len);
-                            KineticLogger_LogPrintf(log_level, "%snewVersion: '%s'", _indent, tmpBuf);
-                        }
-                        if (cmd->body->keyValue->has_dbVersion) {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                             cmd->body->keyValue->dbVersion,
-                                             0, cmd->body->keyValue->dbVersion.len);
-                            KineticLogger_LogPrintf(log_level, "%sdbVersion: '%s'", _indent, tmpBuf);
-                        }
-                        if (cmd->body->keyValue->has_tag) {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                             cmd->body->keyValue->tag,
-                                             0, cmd->body->keyValue->tag.len);
-                            KineticLogger_LogPrintf(log_level, "%stag: '%s'", _indent, tmpBuf);
-                        }
-                        if (cmd->body->keyValue->has_force) {
-                            KineticLogger_LogPrintf(log_level, "%sforce: %s", _indent,
-                                 BOOL_TO_STRING(cmd->body->keyValue->force));
-                        }
-                        if (cmd->body->keyValue->has_algorithm) {
-                            const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                                                 &KineticProto_command_algorithm__descriptor,
-                                                                 cmd->body->keyValue->algorithm);
-                            KineticLogger_LogPrintf(log_level, "%salgorithm: %s", _indent, eVal->name);
-                        }
-                        if (cmd->body->keyValue->has_metadataOnly) {
-                            KineticLogger_LogPrintf(log_level, "%smetadataOnly: %s", _indent,
-                                 BOOL_TO_STRING(cmd->body->keyValue->metadataOnly));
-                        }
-                        if (cmd->body->keyValue->has_synchronization) {
-                            const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                                                 &KineticProto_command_synchronization__descriptor,
-                                                                 cmd->body->keyValue->synchronization);
-                            KineticLogger_LogPrintf(log_level, "%ssynchronization: %s", _indent, eVal->name);
-                        }
-                    }
-                    LOG_PROTO_LEVEL_END();
-                #endif
-                }
-
-                if (cmd->body->range) {
-                #if USE_GENERIC_LOGGER
-                    KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->body->range, _indent);
-                #else
-                    LOG_PROTO_LEVEL_START("keyRange");
-                    {
-                        if (cmd->body->range->has_startKey) {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                             cmd->body->range->startKey,
-                                             0, cmd->body->range->startKey.len);
-                            KineticLogger_LogPrintf(log_level, "%sstartKey: '%s'", _indent, tmpBuf);
-                        }
-
-                        if (cmd->body->range->has_endKey) {
-                            BYTES_TO_CSTRING(tmpBuf,
-                                             cmd->body->range->endKey,
-                                             0, cmd->body->range->endKey.len);
-                            KineticLogger_LogPrintf(log_level, "%sendKey: '%s'", _indent, tmpBuf);
-                        }
-
-                        if (cmd->body->range->has_startKeyInclusive) {
-                            KineticLogger_LogPrintf(log_level, "%sstartKeyInclusive: %s", _indent,
-                                 BOOL_TO_STRING(cmd->body->range->startKeyInclusive));
-                        }
-
-                        if (cmd->body->range->has_endKeyInclusive) {
-                            KineticLogger_LogPrintf(log_level, "%sendKeyInclusive: %s", _indent,
-                                 BOOL_TO_STRING(cmd->body->range->endKeyInclusive));
-                        }
-
-                        if (cmd->body->range->has_maxReturned) {
-                            KineticLogger_LogPrintf(log_level, "%smaxReturned: %d", _indent, cmd->body->range->maxReturned);
-                        }
-
-                        if (cmd->body->range->has_reverse) {
-                            KineticLogger_LogPrintf(log_level, "%sreverse: %s", _indent,
-                                 BOOL_TO_STRING(cmd->body->range->reverse));
-                        }
-
-                        if (cmd->body->range->n_keys == 0 || cmd->body->range->keys == NULL) {
-                            KineticLogger_LogPrintf(log_level, "%skeys: NONE", _indent);
-                        }
-                        else {
-                            KineticLogger_LogPrintf(log_level, "%skeys: %d", _indent, cmd->body->range->n_keys);
-                            // KineticLogger_LogPrintf(log_level, "XXXX BYTE_ARRAYS: range=0x%0llX, keys=0x%0llX, count=%u",
-                            //     cmd->body->range, cmd->body->range->keys, cmd->body->range->n_keys);
-                            for (unsigned int j = 0; j < cmd->body->range->n_keys; j++) {
-                                // KineticLogger_LogPrintf(log_level, "XXXX  w/ key[%u] @ 0x%0llX", j, &cmd->body->range->keys[j]);
-                                BYTES_TO_CSTRING(tmpBuf,
-                                                 cmd->body->range->keys[j],
-                                                 0, cmd->body->range->keys[j].len);
-                                KineticLogger_LogPrintf(log_level, "%skeys[%d]: '%s'", _indent, j, tmpBuf);
-                            }
-                        }
-                    }
-                    LOG_PROTO_LEVEL_END();
-                #endif
-                }
-
-                if (cmd->body->pinOp) {
-                    LOG_PROTO_LEVEL_START("pinOp");
-                    {
-                        if (cmd->body->pinOp->has_pinOpType) {
-                            const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                                                 &KineticProto_command_pin_operation_pin_op_type__descriptor,
-                                                                 cmd->body->pinOp->pinOpType);
-                            KineticLogger_LogPrintf(log_level, "%spinOpType: %s", _indent, eVal->name);
-                        }
-                    }
-                    LOG_PROTO_LEVEL_END();
-                }
-
-                // Get Log
-                //
-                // The GETLOG operation gives the client access to log information.
-                // The request message must include at least one type and can have many types. The supported types are:
-                //     UTILIZATIONS
-                //     TEMPERATURES
-                //     CAPACITIES
-                //     CONFIGURATION
-                //     STATISTICS
-                //     MESSAGES
-                //     LIMITS
-                // Below we will show the message structure used to request all types in a single GETLOG request.
-                // 
-                // Request Message
-                // ---------------
-                // command {
-                //   header {
-                //     clusterVersion: ...
-                //     identity: ...
-                //     connectionID: ...
-                //     sequence: ...
-                //     // The messageType should be GETLOG
-                //     messageType: GETLOG
-                //   }
-                //   body {
-                //     // The body should contain a getLog message, which must have
-                //     // at least one value for type. Multiple are allowed. 
-                //     // Here all types are requested.
-                //     getLog {
-                //       type: CAPACITIES
-                //       type: CONFIGURATION
-                //       type: MESSAGES
-                //       type: STATISTICS
-                //       type: TEMPERATURES
-                //       type: UTILIZATIONS
-                //     }
-                //   }
-                // }
-                // hmac: "..."
-                if (cmd->body->getLog) {
-                #if USE_GENERIC_LOGGER
-                    KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->body->getLog, _indent);
-                #else
-                    // struct  _KineticProto_Command_GetLog {
-                    LOG_PROTO_LEVEL_START("getLog");
-                    {
-                        // * size_t n_types;
-                        // * KineticProto_Command_GetLog_Type* types;
-                        if (cmd->body->getLog->n_types > 0) {
-                            LOG_PROTO_LEVEL_START_ARRAY("types");
-                            for(size_t i = 0; i < cmd->body->getLog->n_types; i++) {
-                                const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                    &KineticProto_command_get_log_type__descriptor,
-                                    cmd->body->getLog->types[i]);
-                                KineticLogger_LogPrintf(log_level, "%s  %s", _indent, eVal->name);
-                            }
-                            LOG_PROTO_LEVEL_END_ARRAY();
-                        }
-                        // * size_t n_utilizations;
-                        // * KineticProto_Command_GetLog_Utilization** utilizations;
-                        if (cmd->body->getLog->n_utilizations > 0) {
-                            LOG_PROTO_LEVEL_START_ARRAY("utilizations");
-                            for(size_t i = 0; i < cmd->body->getLog->n_utilizations; i++) {
-                                if (cmd->body->getLog->utilizations[i]->has_value) {    
-                                    // * KineticProto_Command_GetLog_Utilization {
-                                    //   * char* name;
-                                    //   * protobuf_c_boolean has_value;
-                                    //   * float value;
-                                    KineticLogger_LogPrintf(log_level, "%s%s: %.3f",
-                                        _indent,
-                                        cmd->body->getLog->utilizations[i]->name,
-                                        cmd->body->getLog->utilizations[i]->value);
-                                }
-                            }
-                            LOG_PROTO_LEVEL_END_ARRAY();
-                        }
-                        // * size_t n_temperatures;
-                        // * KineticProto_Command_GetLog_Temperature** temperatures;
-                        if (cmd->body->getLog->n_temperatures > 0) {
-                            LOG_PROTO_LEVEL_START_ARRAY("temperatures");
-                            for(size_t i = 0; i < cmd->body->getLog->n_temperatures; i++) {
-                                KineticLogger_LogPrintf(log_level, "%s[", _indent); {
-                                    // * char* name;
-                                    if (cmd->body->getLog->temperatures[i]->name != NULL) {
-                                        KineticLogger_LogPrintf(log_level, "%s  %s:", _indent,
-                                            cmd->body->getLog->temperatures[i]->name);
-                                    }
-                                    // * protobuf_c_boolean has_current;
-                                    // * float current;
-                                    if (cmd->body->getLog->temperatures[i]->has_current) {
-                                        KineticLogger_LogPrintf(log_level, "%s  current: %.2f", _indent,
-                                            cmd->body->getLog->temperatures[i]->current);
-                                    }
-                                    // * protobuf_c_boolean has_minimum;
-                                    // * float minimum;
-                                    if (cmd->body->getLog->temperatures[i]->has_minimum) {
-                                        KineticLogger_LogPrintf(log_level, "%s  minimum: %.2f", _indent,
-                                            cmd->body->getLog->temperatures[i]->minimum);
-                                    }
-                                    // * protobuf_c_boolean has_maximum;
-                                    // * float maximum;
-                                    if (cmd->body->getLog->temperatures[i]->has_maximum) {
-                                        KineticLogger_LogPrintf(log_level, "%s  maximum: %.2f", _indent,
-                                            cmd->body->getLog->temperatures[i]->maximum);
-                                    }
-                                    // * protobuf_c_boolean has_target;
-                                    // * float target;
-                                    if (cmd->body->getLog->temperatures[i]->has_target) {
-                                        KineticLogger_LogPrintf(log_level, "%s  target: %.2f", _indent,
-                                            cmd->body->getLog->temperatures[i]->target);
-                                    }
-                                }
-                                KineticLogger_LogPrintf(log_level, "%s]", _indent);
-                            }
-                            LOG_PROTO_LEVEL_END_ARRAY();
-                        }
-                        // * KineticProto_Command_GetLog_Capacity* capacity;
-                        if (cmd->body->getLog->capacity != NULL) {
-                            LOG_PROTO_LEVEL_START("capacity"); {
-                                // * protobuf_c_boolean has_nominalCapacityInBytes;
-                                // * uint64_t nominalCapacityInBytes;
-                                if (cmd->body->getLog->capacity->has_nominalCapacityInBytes) {
-                                    KineticLogger_LogPrintf(log_level, "%snominalCapacityInBytes: %llu",
-                                        _indent,
-                                        cmd->body->getLog->capacity->nominalCapacityInBytes);
-                                }
-                                // * protobuf_c_boolean has_portionFull;
-                                // * float portionFull;
-                                if (cmd->body->getLog->capacity->has_portionFull) {
-                                    KineticLogger_LogPrintf(log_level, "%sportionFull: %.3f",
-                                        _indent,
-                                        cmd->body->getLog->capacity->portionFull);
-                                }
-                            }
-                        }
-                        
-                        // * KineticProto_Command_GetLog_Configuration* configuration;
-                        if (cmd->body->getLog->configuration != NULL) {
-                            LOG_PROTO_LEVEL_START("configuration"); {
-                                // * char* vendor;
-                                if (cmd->body->getLog->configuration->vendor != NULL) {
-                                    KineticLogger_LogPrintf(log_level, "%svendor: '%s'", _indent,
-                                        cmd->body->getLog->configuration->vendor);
-                                }
-                                // * char* model;
-                                if (cmd->body->getLog->configuration->model != NULL) {
-                                    KineticLogger_LogPrintf(log_level, "%smodel: '%s'", _indent,
-                                        cmd->body->getLog->configuration->model);
-                                }
-                                // * protobuf_c_boolean has_serialNumber;
-                                // * ProtobufCBinaryData serialNumber;
-                                if (cmd->body->getLog->configuration->has_serialNumber) {
-                                    BYTES_TO_CSTRING(tmpBuf,
-                                        cmd->body->getLog->configuration->serialNumber,
-                                        0, cmd->body->getLog->configuration->serialNumber.len);
-                                    KineticLogger_LogPrintf(log_level, "%sserialNumber: '%s'", _indent, tmpBuf);
-                                }
-                                // * protobuf_c_boolean has_worldWideName;
-                                // * ProtobufCBinaryData worldWideName;
-                                if (cmd->body->getLog->configuration->has_worldWideName) {
-                                    BYTES_TO_CSTRING(tmpBuf,
-                                        cmd->body->getLog->configuration->worldWideName,
-                                        0, cmd->body->getLog->configuration->worldWideName.len);
-                                    KineticLogger_LogPrintf(log_level, "%sworldWideName: '%s'", _indent, tmpBuf);
-                                }
-                                // * char* version;
-                                if (cmd->body->getLog->configuration->version != NULL) {
-                                    KineticLogger_LogPrintf(log_level, "%sversion: '%s'", _indent,
-                                        cmd->body->getLog->configuration->version);
-                                }
-                                // * char* compilationDate;
-                                if (cmd->body->getLog->configuration->compilationDate != NULL) {
-                                    KineticLogger_LogPrintf(log_level, "%scompilationDate: '%s'", _indent,
-                                        cmd->body->getLog->configuration->compilationDate);
-                                }
-                                // * char* sourceHash;
-                                if (cmd->body->getLog->configuration->sourceHash != NULL) {
-                                    KineticLogger_LogPrintf(log_level, "%ssourceHash: '%s'", _indent,
-                                        cmd->body->getLog->configuration->sourceHash);
-                                }
-                                // * char* protocolVersion;
-                                if (cmd->body->getLog->configuration->protocolVersion != NULL) {
-                                    KineticLogger_LogPrintf(log_level, "%sprotocolVersion: '%s'", _indent,
-                                        cmd->body->getLog->configuration->protocolVersion);
-                                }
-                                // * char* protocolCompilationDate;
-                                if (cmd->body->getLog->configuration->protocolCompilationDate != NULL) {
-                                    KineticLogger_LogPrintf(log_level, "%sprotocolCompilationDate: '%s'", _indent,
-                                        cmd->body->getLog->configuration->protocolCompilationDate);
-                                }
-                                // * char* protocolSourceHash;
-                                if (cmd->body->getLog->configuration->protocolSourceHash != NULL) {
-                                    KineticLogger_LogPrintf(log_level, "%sprotocolSourceHash: '%s'", _indent,
-                                        cmd->body->getLog->configuration->protocolSourceHash);
-                                }
-                                // * size_t n_interface;
-                                // * KineticProto_Command_GetLog_Configuration_Interface** interface;
-                                if (cmd->body->getLog->configuration->n_interface > 0) {
-                                    LOG_PROTO_LEVEL_START("interfaces"); {
-                                        for (size_t i = 0; i < cmd->body->getLog->configuration->n_interface; i++) {
-                                            KineticLogger_LogPrintf(log_level, "%s[", _indent); {
-                                                // * char* name;
-                                                KineticLogger_LogPrintf(log_level, "%s  name: %s", _indent,
-                                                    cmd->body->getLog->configuration->interface[i]->name);
-                                                // * protobuf_c_boolean has_MAC;
-                                                // * ProtobufCBinaryData MAC;
-                                                if (cmd->body->getLog->configuration->interface[i]->has_MAC) {
-                                                    BYTES_TO_CSTRING(tmpBuf,
-                                                        cmd->body->getLog->configuration->interface[i]->MAC,
-                                                        0, cmd->body->getLog->configuration->interface[i]->MAC.len);
-                                                    KineticLogger_LogPrintf(log_level, "%s  MAC: '%s'", _indent, tmpBuf);
-                                                }
-                                                // * protobuf_c_boolean has_ipv4Address;
-                                                // * ProtobufCBinaryData ipv4Address;
-                                                if (cmd->body->getLog->configuration->interface[i]->has_ipv4Address) {
-                                                    BYTES_TO_CSTRING(tmpBuf,
-                                                        cmd->body->getLog->configuration->interface[i]->ipv4Address,
-                                                        0, cmd->body->getLog->configuration->interface[i]->ipv4Address.len);
-                                                    KineticLogger_LogPrintf(log_level, "%s  ipv4Address: '%s'", _indent, tmpBuf);
-                                                }
-                                                // * protobuf_c_boolean has_ipv6Address;
-                                                // * ProtobufCBinaryData ipv6Address;
-                                                if (cmd->body->getLog->configuration->interface[i]->has_ipv6Address) {
-                                                    BYTES_TO_CSTRING(tmpBuf,
-                                                        cmd->body->getLog->configuration->interface[i]->ipv6Address,
-                                                        0, cmd->body->getLog->configuration->interface[i]->ipv6Address.len);
-                                                    KineticLogger_LogPrintf(log_level, "%s  ipv6Address: '%s'", _indent, tmpBuf);
-                                                }
-                                            }
-                                            KineticLogger_LogPrintf(log_level, "%s]", _indent);
-                                        }
-                                    }
-                                    LOG_PROTO_LEVEL_END();
-                                }
-                                // * protobuf_c_boolean has_port;
-                                // * int32_t port;
-                                if (cmd->body->getLog->configuration->has_port) {
-                                    KineticLogger_LogPrintf(log_level, "%sport: %d",
-                                        _indent,
-                                        cmd->body->getLog->configuration->port);
-                                }
-                                // * protobuf_c_boolean has_tlsPort;
-                                // * int32_t tlsPort;
-                                if (cmd->body->getLog->configuration->has_tlsPort) {
-                                    KineticLogger_LogPrintf(log_level, "%stlsPort: %d",
-                                        _indent,
-                                        cmd->body->getLog->configuration->tlsPort);
-                                }
-                            }
-                            LOG_PROTO_LEVEL_END();
-                        }
-                    
-                        // * size_t n_statistics;
-                        // * KineticProto_Command_GetLog_Statistics** statistics;
-                        if (cmd->body->getLog->n_statistics > 0) {
-                            LOG_PROTO_LEVEL_START_ARRAY("statistics");
-                            for(size_t i = 0; i < cmd->body->getLog->n_statistics; i++) {
-                                KineticLogger_LogPrintf(log_level, "%s[", _indent); {
-                                    // * protobuf_c_boolean has_messageType;
-                                    // * KineticProto_Command_MessageType messageType;
-                                    if (cmd->body->getLog->statistics[i]->has_messageType) {
-                                        const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                            &KineticProto_command_message_type__descriptor,
-                                            cmd->body->getLog->statistics[i]->messageType);
-                                        KineticLogger_LogPrintf(log_level, "%s  messageType: %s", _indent, eVal->name);
-                                    }
-                                    // * protobuf_c_boolean has_count;
-                                    // * uint64_t count;
-                                    if (cmd->body->getLog->statistics[i]->has_count) {
-                                        KineticLogger_LogPrintf(log_level, "%s  count: %llu", _indent,
-                                            cmd->body->getLog->statistics[i]->count);
-                                    }
-
-                                    // * protobuf_c_boolean has_bytes;
-                                    // * uint64_t bytes;
-                                    if (cmd->body->getLog->statistics[i]->has_bytes) {
-                                        KineticLogger_LogPrintf(log_level, "%s  bytes: %llu", _indent,
-                                            cmd->body->getLog->statistics[i]->bytes);
-                                    }
-                                }
-                                KineticLogger_LogPrintf(log_level, "%s]", _indent);
-                            }
-                            LOG_PROTO_LEVEL_END_ARRAY();
-                        }
-
-                        // * protobuf_c_boolean has_messages;
-                        // * ProtobufCBinaryData messages;
-                        if (cmd->body->getLog->has_messages) {
-                            uint8_t* buf = malloc(cmd->body->getLog->messages.len * 4);
-                            BYTES_TO_CSTRING(buf,
-                                cmd->body->getLog->messages,
-                                0, cmd->body->getLog->messages.len);
-                            KineticLogger_LogPrintf(log_level, "%smessages: '%s'", _indent, buf);
-                            free(buf);
-                        }
-                            
-                        // * KineticProto_Command_GetLog_Limits* limits;
-                        if (cmd->body->getLog->limits != NULL) {
-                        #if 0
-                            KineticLogger_LogProtobufMessage(log_level, (ProtobufCMessage*)cmd->body->getLog->limits, _indent);
-                        #else
-                            const ProtobufCMessageDescriptor* msgDesc =
-                                cmd->body->getLog->limits->base.descriptor;
-                            LOG_PROTO_LEVEL_START(msgDesc->short_name);
-
-                            // * protobuf_c_boolean has_maxKeySize;
-                            // * uint32_t maxKeySize;
-                            // * protobuf_c_boolean has_maxValueSize;
-                            // * uint32_t maxValueSize;
-                            // * protobuf_c_boolean has_maxVersionSize;
-                            // * uint32_t maxVersionSize;
-                            // * protobuf_c_boolean has_maxTagSize;
-                            // * uint32_t maxTagSize;
-                            // * protobuf_c_boolean has_maxConnections;
-                            // * uint32_t maxConnections;
-                            // * protobuf_c_boolean has_maxOutstandingReadRequests;
-                            // * uint32_t maxOutstandingReadRequests;
-                            // * protobuf_c_boolean has_maxOutstandingWriteRequests;
-                            // * uint32_t maxOutstandingWriteRequests;
-                            // * protobuf_c_boolean has_maxMessageSize;
-                            // * uint32_t maxMessageSize;
-                            // * protobuf_c_boolean has_maxKeyRangeCount;
-                            // * uint32_t maxKeyRangeCount;
-                            // * protobuf_c_boolean has_maxIdentityCount;
-                            // * uint32_t maxIdentityCount;
-                            // * protobuf_c_boolean has_maxPinSize;
-                            // * uint32_t maxPinSize;
-                            unsigned long base_addr = (unsigned long)cmd->body->getLog->limits;
-                            const ProtobufCFieldDescriptor* fieldDesc = msgDesc->fields;
-                            for(size_t i = 0; i < msgDesc->n_fields; i++) {
-                                unsigned* quantifier = (unsigned*)(base_addr + fieldDesc[i].quantifier_offset);
-                                if (*quantifier > 0) {
-                                    uint32_t* value = (uint32_t*)(base_addr + fieldDesc[i].offset);
-                                    KineticLogger_LogPrintf(log_level, "%s%s: %lu", _indent, fieldDesc[i].name, *value);
-                                }
-                            }
-                            LOG_PROTO_LEVEL_END();
-                        #endif
-                        }
-                            
-                        // * KineticProto_Command_GetLog_Device* device;
-                        if (cmd->body->getLog->device != NULL) {
-                            LOG_PROTO_LEVEL_START("device");
-                            // * protobuf_c_boolean has_name;
-                            // * ProtobufCBinaryData name;
-                            if (cmd->body->getLog->device->has_name) {
-                                BYTES_TO_CSTRING(tmpBuf,
-                                    cmd->body->getLog->device->name,
-                                    0, cmd->body->getLog->device->name.len);
-                                KineticLogger_LogPrintf(log_level, "%sname: '%s'", _indent, tmpBuf);
-                            }
-                            LOG_PROTO_LEVEL_END();
-                        }
-
-                    }
-                    LOG_PROTO_LEVEL_END();
-                #endif
-                }
-            }
-
-            LOG_PROTO_LEVEL_END();
-        }
-
-        if (cmd->status) {
-        // #if USE_GENERIC_LOGGER
-        //     KineticLogger_LogProtobufMessage((ProtobufCMessage*)cmd->status, _indent);
-        // #else
-            LOG_PROTO_LEVEL_START("status");
-            {
-                if (cmd->status->has_code) {
-                    const ProtobufCEnumValue* eVal = protobuf_c_enum_descriptor_get_value(
-                                                         &KineticProto_command_status_status_code__descriptor,
-                                                         cmd->status->code);
-                    KineticLogger_LogPrintf(log_level, "%scode: %s", _indent, eVal->name);
-                }
-        
-                if (cmd->status->statusMessage) {
-                    KineticLogger_LogPrintf(log_level, "%sstatusMessage: '%s'", _indent, cmd->status->statusMessage);
-                }
-                if (cmd->status->has_detailedMessage) {
-                    BYTES_TO_CSTRING(tmpBuf,
-                                     cmd->status->detailedMessage,
-                                     0, cmd->status->detailedMessage.len);
-                    KineticLogger_LogPrintf(log_level, "%sdetailedMessage: '%s'", _indent, tmpBuf);
-                }
-            }
-            LOG_PROTO_LEVEL_END();
-        // #endif
-        }
-
-        free(cmd);
-
-        LOG_PROTO_LEVEL_END();
-    }
+    KineticLogger_LogProtobufMessage(log_level, &msg->base, _indent);
 }
 
 void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
@@ -1040,7 +425,7 @@ void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
         return;
     }
 
-    ProtobufCMessage* protoMessage = (ProtobufCMessage*)status;
+    ProtobufCMessage* protoMessage = &status->base;
     KineticProto_Command_Status_StatusCode code = status->code;
 
     if (code == KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS) {
@@ -1131,7 +516,7 @@ void KineticLogger_LogByteArray(int log_level, const char* title, ByteArray byte
             }
             strcat(ascii, byAscii);
         }
-        KineticLogger_LogPrintf(log_level, "  %s : %s", hex, ascii);
+        KineticLogger_LogPrintf(log_level, "%s:  %s : %s", title, hex, ascii);
     }
 }
 

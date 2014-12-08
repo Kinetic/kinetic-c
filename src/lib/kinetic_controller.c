@@ -171,7 +171,7 @@ void KineticController_HandleIncomingPDU(KineticConnection* const connection)
                     response->connection->connectionID);
             }
             else {
-                LOG0("WARNING: Unsolicited PDU is not recognized!");
+                LOG0("WARNING: Unsolicited PDU in invalid. Does not specify connection ID!");
             }
             KineticAllocator_FreePDU(connection, response);
         }
@@ -188,13 +188,21 @@ void KineticController_HandleIncomingPDU(KineticConnection* const connection)
                 LOG2("Found associated operation/request for response PDU.");
                 size_t valueLength = KineticPDU_GetValueLength(response);
                 if (valueLength > 0) {
-                    status = KineticPDU_ReceiveValue(op->connection->socket,
+                    // we need to try to read the value off the socket, even in the case of an error
+                    //  otherwise the stream will get out of sync
+                    KineticStatus valueStatus = KineticPDU_ReceiveValue(op->connection->socket,
                         &op->entry->value, valueLength);
+
+                    // so we only care about the status of the value read if the operation
+                    //   succeeded 
+                    if (status == KINETIC_STATUS_SUCCESS) {
+                        status = valueStatus;
+                    }
                 }
 
                 // Call operation-specific callback, if configured
                 if (status == KINETIC_STATUS_SUCCESS && op->callback != NULL) {
-                    status = op->callback(op);
+                    status = op->callback(op, KINETIC_STATUS_SUCCESS);
                 }
 
                 if (status == KINETIC_STATUS_SUCCESS) {
@@ -214,6 +222,32 @@ void KineticController_HandleIncomingPDU(KineticConnection* const connection)
     }
 }
 
+static KineticStatus service_controller(KineticConnection* const connection)
+{
+    // Wait for and receive a PDU
+    KineticWaitStatus wait_status = KineticSocket_WaitUntilDataAvailable(connection->socket, 100);
+    switch(wait_status)
+    {
+        case KINETIC_WAIT_STATUS_DATA_AVAILABLE:
+        {
+            KineticController_HandleIncomingPDU(connection);
+        } break;
+        case KINETIC_WAIT_STATUS_TIMED_OUT:
+        case KINETIC_WAIT_STATUS_RETRYABLE_ERROR:
+            break; // Break upon rcoverable/retryable conditions in order to retry 
+        default:
+        case KINETIC_WAIT_STATUS_FATAL_ERROR:
+        {
+            LOG0("ERROR: Socket error while waiting for PDU to arrive");
+            return KINETIC_STATUS_SOCKET_ERROR;
+        } break;
+    }
+
+    KineticOperation_TimeoutOperations(connection);
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
 void* KineticController_ReceiveThread(void* thread_arg)
 {
     KineticThread* thread = thread_arg;
@@ -222,36 +256,14 @@ void* KineticController_ReceiveThread(void* thread_arg)
 
         // Do not service PDUs if thread paused
         if (thread->paused) {
-            sleep(0);
+            struct timespec sleepDuration = {.tv_nsec = 500000};
+            nanosleep(&sleepDuration, NULL);
             continue;
+        } 
+
+        if (service_controller(thread->connection) != KINETIC_STATUS_SUCCESS) {
+            thread->fatalError = true;
         }
-
-        // Wait for and receive a PDU
-        KineticWaitStatus wait_status = KineticSocket_WaitUntilDataAvailable(
-            thread->connection->socket, 100);
-
-        // Handle wait completion events
-        switch(wait_status)
-        {
-            case KINETIC_WAIT_STATUS_DATA_AVAILABLE:
-            {
-                KineticController_HandleIncomingPDU(thread->connection);
-            } break;
-            case KINETIC_WAIT_STATUS_TIMED_OUT:
-            case KINETIC_WAIT_STATUS_RETRYABLE_ERROR:
-            {
-                sleep(0);
-            } break;
-            default:
-            case KINETIC_WAIT_STATUS_FATAL_ERROR:
-            {
-                LOG0("ERROR: Socket error while waiting for PDU to arrive");
-                thread->fatalError = true;
-            } break;
-        }
-
-
-        KineticOperation_TimeoutOperations(thread->connection);
     }
 
     LOG3("Worker thread terminated!");

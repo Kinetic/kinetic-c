@@ -424,3 +424,24 @@ KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
     free(packed);
     return status;
 }
+
+void KineticSocket_CorkPacket(int socket)
+{
+#if defined(__APPLE__)
+    (void)socket;
+#else
+    int on = 1;
+    setsockopt(socket, SOL_TCP, TCP_CORK, &on, sizeof(on));
+#endif
+}
+
+void KineticSocket_UncorkPacket(int socket)
+{
+#if defined(__APPLE__)
+    (void)socket;
+#else
+    int on = 1;
+    int off = 0;
+    setsockopt(socket, SOL_TCP, TCP_CORK, &on, sizeof(on));
+#endif
+}

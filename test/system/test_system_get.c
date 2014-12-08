@@ -82,7 +82,7 @@ void setUp(void)
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
         .force = true,
-        .synchronization = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH,
+        .synchronization = KINETIC_SYNCHRONIZATION_FLUSH,
     };
 
     KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry, NULL);

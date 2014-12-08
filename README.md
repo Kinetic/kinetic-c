@@ -26,7 +26,7 @@ Getting Started
 
 **Clone the repo**
 
-    > git clone --recursive https://github.com/atomicobject/kinetic-c.git
+    > git clone --recursive https://github.com/seagate/kinetic-c.git
     > cd kinetic-c
     > bundle install # ensure you have all RubyGems at the proper versions
 

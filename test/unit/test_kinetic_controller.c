@@ -135,9 +135,10 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
 
 
 static int DummyOpCallbackCalls;
-static KineticStatus DummyOpCallback(KineticOperation* op)
+static KineticStatus DummyOpCallback(KineticOperation* op, const KineticStatus status)
 {
-    assert(op);
+    TEST_ASSERT_NOT_NULL(op);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     DummyOpCallbackCalls++;
     return KINETIC_STATUS_SUCCESS;
 }
