@@ -49,6 +49,8 @@
 #endif
 
 
+#define NUM_ELEMENTS(ARRAY) (sizeof(ARRAY)/sizeof((ARRAY)[0]))
+
 typedef struct _KineticPDU KineticPDU;
 typedef struct _KineticOperation KineticOperation;
 typedef struct _KineticConnection KineticConnection;

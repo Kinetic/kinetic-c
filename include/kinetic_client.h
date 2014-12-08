@@ -81,7 +81,7 @@ KineticStatus KineticClient_NoOp(KineticSessionHandle handle);
  *                      specify the data to be stored.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  * 
  * @return              Returns the resulting KineticStatus.
  */
@@ -95,7 +95,7 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
  * @param handle        KineticSessionHandle for a connected session.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  *                      
  * @return              Returns the resulting KineticStatus.
  */
@@ -110,7 +110,7 @@ KineticStatus KineticClient_Flush(KineticSessionHandle handle,
  *                      be populated unless 'metadataOnly' is set to 'true'.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  *
  * @return              Returns the resulting KineticStatus.
  */
@@ -130,7 +130,7 @@ KineticStatus KineticClient_Get(KineticSessionHandle handle,
  *                      
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  *
  * @return              Returns the resulting KineticStatus.
  */
@@ -150,7 +150,7 @@ KineticStatus KineticClient_GetPrevious(KineticSessionHandle handle,
  *                      
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  *
  * @return              Returns the resulting KineticStatus.
  */
@@ -166,7 +166,7 @@ KineticStatus KineticClient_GetNext(KineticSessionHandle handle,
  *                      not used for this operation.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  *
  * @return              Returns the resulting KineticStatus.
  */
@@ -183,7 +183,7 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
  * @param keys          ByteBufferArray to store the retrieved keys
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  *
  *
  * @return              Returns 0 upon success, -1 or the Kinetic status code
@@ -204,7 +204,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
  *                      the requested data, if successful.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  *
  * @return              Returns 0 upon success, -1 or the Kinetic status code
  *                      upon failure
@@ -224,7 +224,7 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
  *                      this structure.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion.
+ *                      will be called upon completion in another thread.
  *
  * @return              Returns 0 upon success, -1 or the Kinetic status code
  *                      upon failure. Note that P2P operations can be nested. This

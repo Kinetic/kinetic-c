@@ -551,27 +551,28 @@ void KineticOperation_BuildP2POperation(KineticOperation* const operation,
         KineticProto_Command_P2POperation_Operation * p2p_op_op = calloc(1, sizeof(KineticProto_Command_P2POperation_Operation));
         assert(p2p_op_op != NULL);
 
-        (*p2p_op_op) = (KineticProto_Command_P2POperation_Operation){
-            .has_key = true,
-            .key.data = p2pOp->operations[i].key.array.data,
-            .key.len = p2pOp->operations[i].key.bytesUsed,
+        KineticProto_command_p2_poperation_operation__init(p2p_op_op);
 
-            .has_newKey = !ByteBuffer_IsNull(p2pOp->operations[i].newKey),
-            .newKey.data = p2pOp->operations[i].newKey.array.data,
-            .newKey.len = p2pOp->operations[i].newKey.bytesUsed,
+        p2p_op_op->has_key = true;
+        p2p_op_op->key.data = p2pOp->operations[i].key.array.data;
+        p2p_op_op->key.len = p2pOp->operations[i].key.bytesUsed;
 
-            .has_version = !ByteBuffer_IsNull(p2pOp->operations[i].version),
-            .version.data = p2pOp->operations[i].version.array.data,
-            .version.len = p2pOp->operations[i].version.bytesUsed,
+        p2p_op_op->has_newKey = !ByteBuffer_IsNull(p2pOp->operations[i].newKey);
+        p2p_op_op->newKey.data = p2pOp->operations[i].newKey.array.data;
+        p2p_op_op->newKey.len = p2pOp->operations[i].newKey.bytesUsed;
 
-            // force if no version was specified
-            .has_force = ByteBuffer_IsNull(p2pOp->operations[i].version),
-            .force = ByteBuffer_IsNull(p2pOp->operations[i].version),
+        p2p_op_op->has_version = !ByteBuffer_IsNull(p2pOp->operations[i].version);
+        p2p_op_op->version.data = p2pOp->operations[i].version.array.data;
+        p2p_op_op->version.len = p2pOp->operations[i].version.bytesUsed;
 
-            // no nesting for now
-            .p2pop = NULL,
-            .status = NULL,
-        };
+        // force if no version was specified
+        p2p_op_op->has_force = ByteBuffer_IsNull(p2pOp->operations[i].version);
+        p2p_op_op->force = ByteBuffer_IsNull(p2pOp->operations[i].version);
+
+        // no nesting for now
+        p2p_op_op->p2pop = NULL;
+        p2p_op_op->status = NULL;
+
         operation->request->command->body->p2pOperation->operation[i] = p2p_op_op;
     }
 
