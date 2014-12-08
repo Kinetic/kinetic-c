@@ -200,8 +200,8 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
                                         KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GETLOG command to retrieve a set of keys in the range
- * specified range from the Kinetic Device
+ * @brief Executes a GETLOG command to retrieve specific configuration and/or
+ * operational data from the Kinetic Device.
  *
  * @param session       The connected KineticSession to use for the operation
  * @param type          KineticLogDataType specifying data type to retrieve.
@@ -221,9 +221,11 @@ KineticStatus KineticClient_GetLog(KineticSession const * const session,
                                    KineticDeviceInfo_Type type,
                                    KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure);
+
 /**
- * @brief Executes a PEER2PEERPUSH command to retrieve a set of keys in the range
- * specified range from the Kinetic Device
+ * @brief Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic
+ * Device to copy a set of keys (and associated value and metadata) to another
+ * Kinetic Device.
  *
  * @param session       The connected KineticSession to use for the operation
  * @param p2pOp         KineticP2P_Operation pointer. This pointer needs to remain

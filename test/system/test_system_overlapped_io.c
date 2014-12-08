@@ -81,7 +81,6 @@ static void* kinetic_put(void* kinetic_arg);
 
 void setUp(void)
 {
-    sleep(1);
     KineticClient_Init("stdout", 0);
 }
 
@@ -152,7 +151,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                 .value = valBuf,
             };
         }
-        sleep(1); // Give a generous chunk of time for session to be initialized by the target device
 
         // Write all of the copies simultaneously (overlapped)
         for (int i = 0; i < NUM_COPIES; i++) {
