@@ -81,6 +81,7 @@ static void* kinetic_put(void* kinetic_arg);
 
 void setUp(void)
 {
+    sleep(1);
     KineticClient_Init("stdout", 0);
 }
 

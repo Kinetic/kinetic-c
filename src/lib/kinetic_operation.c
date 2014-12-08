@@ -38,14 +38,14 @@ static KineticStatus WritePDU(KineticOperation* const operation)
     KineticPDU* request = operation->request;
 
     // Cork the PDU to begin aggregation
-    KineticSocket_CorkPacket(request->connection->socket);
+    KineticSocket_BeginPacket(request->connection->socket);
 
     // Pack and send the PDU header
     ByteBuffer hdr = ByteBuffer_Create(&request->headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
     KineticStatus status = KineticSocket_Write(request->connection->socket, &hdr);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG0("Failed to send PDU header!");
-        KineticSocket_UncorkPacket(request->connection->socket);
+        KineticSocket_FinishPacket(request->connection->socket);
         return status;
     }
 
@@ -55,7 +55,7 @@ static KineticStatus WritePDU(KineticOperation* const operation)
     status = KineticSocket_WriteProtobuf(request->connection->socket, request);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG0("Failed to send PDU protobuf message!");
-        KineticSocket_UncorkPacket(request->connection->socket);
+        KineticSocket_FinishPacket(request->connection->socket);
         return status;
     }
 
@@ -65,13 +65,13 @@ static KineticStatus WritePDU(KineticOperation* const operation)
         status = KineticSocket_Write(request->connection->socket, &operation->entry->value);
         if (status != KINETIC_STATUS_SUCCESS) {
             LOG0("Failed to send PDU value payload!");
-            KineticSocket_UncorkPacket(request->connection->socket);
+            KineticSocket_FinishPacket(request->connection->socket);
             return status;
         }
     }
 
     // Uncork the PDU to begin transmission
-    KineticSocket_UncorkPacket(request->connection->socket);
+    KineticSocket_FinishPacket(request->connection->socket);
 
     LOG2("PDU sent successfully!");
     return KINETIC_STATUS_SUCCESS;

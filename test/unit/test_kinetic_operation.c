@@ -111,10 +111,10 @@ void test_KineticOperation_SendRequest_should_transmit_PDU_with_no_value_payload
     // Setup expectations for interaction
     KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message, Request.connection->session.config.hmacKey);
-    KineticSocket_CorkPacket_Expect(Connection.socket);
+    KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
-    KineticSocket_UncorkPacket_Expect(Connection.socket);
+    KineticSocket_FinishPacket_Expect(Connection.socket);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
 
@@ -136,11 +136,11 @@ void test_KineticOperation_SendRequest_should_send_PDU_with_value_payload(void)
     KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate_Expect(&Request.hmac,
         &Request.protoData.message.message, Request.connection->session.config.hmacKey);
-    KineticSocket_CorkPacket_Expect(Connection.socket);
+    KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &entry.value, KINETIC_STATUS_SUCCESS);
-    KineticSocket_UncorkPacket_Expect(Connection.socket);
+    KineticSocket_FinishPacket_Expect(Connection.socket);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
 
@@ -162,9 +162,9 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message,
         Request.connection->session.config.hmacKey);
-    KineticSocket_CorkPacket_Expect(Connection.socket);
+    KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SOCKET_ERROR);
-    KineticSocket_UncorkPacket_Expect(Connection.socket);
+    KineticSocket_FinishPacket_Expect(Connection.socket);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
 
@@ -187,10 +187,10 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate_Expect(&Request.hmac,
         &Request.protoData.message.message, Request.connection->session.config.hmacKey);
-    KineticSocket_CorkPacket_Expect(Connection.socket);
+    KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SOCKET_TIMEOUT);
-    KineticSocket_UncorkPacket_Expect(Connection.socket);
+    KineticSocket_FinishPacket_Expect(Connection.socket);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
 
@@ -213,11 +213,11 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
 
     KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message, Request.connection->session.config.hmacKey);
-    KineticSocket_CorkPacket_Expect(Connection.socket);
+    KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &entry.value, KINETIC_STATUS_SOCKET_TIMEOUT);
-    KineticSocket_UncorkPacket_Expect(Connection.socket);
+    KineticSocket_FinishPacket_Expect(Connection.socket);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
 

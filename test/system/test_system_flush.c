@@ -101,9 +101,8 @@ void test_Flush_should_call_callback_after_completion(void)
 
     /* Wait up to 10 seconds for the callback to fire. */
     struct timeval tv;
-    struct timespec ts;
     gettimeofday(&tv, NULL);
-    ts.tv_sec = tv.tv_sec + 10;
+    struct timespec ts = {ts.tv_sec = tv.tv_sec + 10};
     int res = pthread_cond_timedwait(&env.cond, &env.mutex, &ts);
     TEST_ASSERT_EQUAL(0, res);
 

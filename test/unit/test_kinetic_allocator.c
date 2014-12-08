@@ -311,12 +311,10 @@ void test_KineticAllocator_FreeAllOperations_should_free_full_list_of_Operations
 {
     LOG_LOCATION;
     KINETIC_CONNECTION_INIT(&Connection);
-    KineticOperation* operations[3] = {0, 0, 0};
 
-    operations[2] = KineticAllocator_NewOperation(&Connection);
-    operations[1] = KineticAllocator_NewOperation(&Connection);
-    operations[0] = KineticAllocator_NewOperation(&Connection);
-
+    TEST_ASSERT_NOT_NULL(KineticAllocator_NewOperation(&Connection));
+    TEST_ASSERT_NOT_NULL(KineticAllocator_NewOperation(&Connection));
+    TEST_ASSERT_NOT_NULL(KineticAllocator_NewOperation(&Connection));
     TEST_ASSERT_FALSE(KineticAllocator_ValidateAllMemoryFreed(&Connection));
 
     KineticAllocator_FreeAllOperations(&Connection);

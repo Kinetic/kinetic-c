@@ -42,7 +42,7 @@ KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu);
 
 KineticStatus KineticSocket_Write(int socket, ByteBuffer* src);
 KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu);
-void KineticSocket_CorkPacket(int socket);
-void KineticSocket_UncorkPacket(int socket);
+void KineticSocket_BeginPacket(int socket);
+void KineticSocket_FinishPacket(int socket);
 
 #endif // _KINETIC_SOCKET_H

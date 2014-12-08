@@ -426,22 +426,22 @@ KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
     return status;
 }
 
-void KineticSocket_CorkPacket(int socket)
+void KineticSocket_BeginPacket(int socket)
 {
-#if defined(__APPLE__)
-    (void)socket;
-#else
+#if !defined(__APPLE__) /* TCP_CORK is NOT available on OSX */
     int on = 1;
     setsockopt(socket, IPPROTO_TCP, TCP_CORK, &on, sizeof(on));
+#else
+    (void)socket;
 #endif
 }
 
-void KineticSocket_UncorkPacket(int socket)
+void KineticSocket_FinishPacket(int socket)
 {
-#if defined(__APPLE__)
-    (void)socket;
-#else
+#if !defined(__APPLE__) /* TCP_CORK is NOT available on OSX */
     int off = 0;
     setsockopt(socket, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));
 #endif
+    int on = 1;
+    setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on));
 }
