@@ -311,3 +311,25 @@ KineticStatus KineticClient_InstantSecureErase(KineticSession const * const sess
     KineticOperation_BuildInstantSecureErase(operation);
     return KineticController_ExecuteOperation(operation, NULL);
 }
+
+KineticStatus KineticClient_SetClusterVersion(KineticSessionHandle handle,
+                                              int64_t clusterVersion,
+                                              int64_t newClusterVersion)
+{
+
+// KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH
+    (void)handle;
+    (void)clusterVersion;
+    (void)newClusterVersion;
+
+#if 0
+    assert(handle != KINETIC_HANDLE_INVALID);
+
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildSetClusterVersion(operation, newClusterVersion);
+    return KineticController_ExecuteOperation(operation, NULL);
+#endif
+    return KINETIC_STATUS_INVALID;
+}
