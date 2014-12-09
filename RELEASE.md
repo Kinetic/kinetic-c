@@ -4,6 +4,10 @@ v0.9.0 (kinetic-protocol 3.0.5)
 * Added `FLUSHALLDATA` operation via `KineticClient_Flush()`
 * Added `GETPREVIOUS`/`GETNEXT` operations via `KineticClient_GetPrevious()`/`KineticClient_GetNext()`
 * Replaced `KinticClient_Connect()`/`Disconnect()` with `KineticClient_CreateConnection()`/`DestroyConnection()`, since the connection structure is dynamically allocated and populated in the provided `KineticSession`. `KineticClient_DestroyConnection()` MUST be called on the an established `KineticSession` in order to shutdown the connection and free up resources.
+* Added initial implementation of PEER2PEERPUSH which does NOT yet support chaining via KineticClient_P2POperation().
+* Fixed bug with mutex locking causing an assert failure and subsequent crash.
+* Fixed leaking of destroyed connections and they are now properly freed upon call to KineticClient_DestoryConnection().
+* Fixed bug where some unrecoverable socket errors could cause retries when unintended.
 
 v0.8.1 (kinetic-protocol 3.0.5)
 -------------------------------
