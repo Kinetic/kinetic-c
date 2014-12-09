@@ -72,6 +72,36 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>ByteBuffer_CreateAndAppend</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8c.html</Path>
+    <Anchor>a87178b5390ee8e9f9e5926dd87400077</Anchor>
+    <DeclaredIn>byte_array.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteBuffer_CreateAndAppendArray</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8c.html</Path>
+    <Anchor>a97165010b376a19e05156502e2aeee3b</Anchor>
+    <DeclaredIn>byte_array.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteBuffer_CreateAndAppendCString</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8c.html</Path>
+    <Anchor>a0c83202d1364452aabb4ca367f0d00f5</Anchor>
+    <DeclaredIn>byte_array.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>ByteBuffer_BytesRemaining</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -87,7 +117,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>byte__array_8c.html</Path>
-    <Anchor>a423e5b22c1f264f8e58f208f9443badd</Anchor>
+    <Anchor>ae38b9b3aacf94d37ccbbb2b238b8f502</Anchor>
     <DeclaredIn>byte_array.c</DeclaredIn>
   </Token>
   <Token>
@@ -112,6 +142,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>ByteBuffer_AppendBuffer</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8c.html</Path>
+    <Anchor>a8a2c9b3a72619f16a1ab79bb6a5fa254</Anchor>
+    <DeclaredIn>byte_array.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>ByteBuffer_AppendCString</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -122,12 +162,42 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>ByteBuffer_AppendFormattedCString</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8c.html</Path>
+    <Anchor>a5e38219f5c8c12454449c0bafc878994</Anchor>
+    <DeclaredIn>byte_array.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteBuffer_CreateAndAppendFormattedCString</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8c.html</Path>
+    <Anchor>ad8a04a9ba648ea429ac1e0671857db0f</Anchor>
+    <DeclaredIn>byte_array.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>ByteBuffer_AppendDummyData</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>byte__array_8c.html</Path>
     <Anchor>a79508f7b5ab71930a01221f6d1276592</Anchor>
+    <DeclaredIn>byte_array.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteBuffer_IsNull</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8c.html</Path>
+    <Anchor>af56f0bdfd4ecebd1a4d9026fd9c8cd03</Anchor>
     <DeclaredIn>byte_array.c</DeclaredIn>
   </Token>
   <Token>
@@ -214,6 +284,46 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>ByteBuffer_CreateAndAppend</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8h.html</Path>
+    <Anchor>a87178b5390ee8e9f9e5926dd87400077</Anchor>
+    <DeclaredIn>byte_array.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteBuffer_CreateAndAppendArray</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8h.html</Path>
+    <Anchor>a97165010b376a19e05156502e2aeee3b</Anchor>
+    <DeclaredIn>byte_array.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteBuffer_CreateAndAppendCString</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8h.html</Path>
+    <Anchor>a0c83202d1364452aabb4ca367f0d00f5</Anchor>
+    <DeclaredIn>byte_array.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteBuffer_CreateAndAppendFormattedCString</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8h.html</Path>
+    <Anchor>ad8a04a9ba648ea429ac1e0671857db0f</Anchor>
+    <DeclaredIn>byte_array.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>ByteBuffer_Reset</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -239,7 +349,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>byte__array_8h.html</Path>
-    <Anchor>a423e5b22c1f264f8e58f208f9443badd</Anchor>
+    <Anchor>ae38b9b3aacf94d37ccbbb2b238b8f502</Anchor>
     <DeclaredIn>byte_array.h</DeclaredIn>
   </Token>
   <Token>
@@ -264,6 +374,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>ByteBuffer_AppendBuffer</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8h.html</Path>
+    <Anchor>a8a2c9b3a72619f16a1ab79bb6a5fa254</Anchor>
+    <DeclaredIn>byte_array.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>ByteBuffer_AppendCString</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -274,12 +394,32 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>ByteBuffer_AppendFormattedCString</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8h.html</Path>
+    <Anchor>a5e38219f5c8c12454449c0bafc878994</Anchor>
+    <DeclaredIn>byte_array.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>ByteBuffer_AppendDummyData</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>byte__array_8h.html</Path>
     <Anchor>a79508f7b5ab71930a01221f6d1276592</Anchor>
+    <DeclaredIn>byte_array.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ByteBuffer_IsNull</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>byte__array_8h.html</Path>
+    <Anchor>af56f0bdfd4ecebd1a4d9026fd9c8cd03</Anchor>
     <DeclaredIn>byte_array.h</DeclaredIn>
   </Token>
   <Token>
@@ -310,6 +450,26 @@
     </TokenIdentifier>
     <Path>kinetic__allocator_8c.html</Path>
     <Anchor>ade87a99a948224add0a96d09b0f62cd9</Anchor>
+    <DeclaredIn>kinetic_allocator.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticAllocator_NewConnection</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__allocator_8c.html</Path>
+    <Anchor>a03e3395fdbd9a30fd9f9621b8909a365</Anchor>
+    <DeclaredIn>kinetic_allocator.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticAllocator_FreeConnection</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__allocator_8c.html</Path>
+    <Anchor>a870468e22b2d0dac6f7dc86f9ad5e92f</Anchor>
     <DeclaredIn>kinetic_allocator.c</DeclaredIn>
   </Token>
   <Token>
@@ -434,6 +594,26 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticAllocator_NewConnection</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__allocator_8h.html</Path>
+    <Anchor>a03e3395fdbd9a30fd9f9621b8909a365</Anchor>
+    <DeclaredIn>kinetic_allocator.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticAllocator_FreeConnection</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__allocator_8h.html</Path>
+    <Anchor>a870468e22b2d0dac6f7dc86f9ad5e92f</Anchor>
+    <DeclaredIn>kinetic_allocator.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticAllocator_NewPDU</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -550,7 +730,7 @@
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
     <Anchor>ab3839aed7b68c5bdc63c79ac90f4084b</Anchor>
-    <Abstract>Initializes the Kinetic API andcsonfigures logging destination. </Abstract>
+    <Abstract>Initializes the Kinetic API and configures logging destination. </Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
@@ -566,23 +746,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticClient_Connect</Name>
+      <Name>KineticClient_CreateConnection</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
-    <Anchor>a14d992076049d9f477417d9ea8d876b0</Anchor>
+    <Anchor>ae91ebf7674febe5a603df0f87c5252e2</Anchor>
     <Abstract>Initializes the Kinetic API, configures logging destination, establishes a connection to the specifie...</Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticClient_Disconnect</Name>
+      <Name>KineticClient_DestroyConnection</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
-    <Anchor>a69647a75c370454e5812faff4387b3af</Anchor>
+    <Anchor>ad755b6ed9c732797c40d654fe12eb1cd</Anchor>
     <Abstract>Closes the connection to a host. </Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
@@ -593,7 +773,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
-    <Anchor>a0ca8114ed5806ded8d9fdd68b36ee0bf</Anchor>
+    <Anchor>a277c2a4466cada1736801ffb473ace13</Anchor>
     <Abstract>Executes a NOOP command to test whether the Kinetic Device is operational. </Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
@@ -604,8 +784,19 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
-    <Anchor>a76a871e9acc5b36f104c1a5db8aba7f1</Anchor>
+    <Anchor>a58c9dfb7db6c42f6f85c16b1e5a29eab</Anchor>
     <Abstract>Executes a PUT command to store/update an entry on the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_Flush</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a6e37c5adefd0a463b11c324caec4f209</Anchor>
+    <Abstract>Executes a FLUSHALLDATA command to flush pending PUTs or DELETEs. </Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
@@ -615,8 +806,30 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
-    <Anchor>a9fc0fb280064f4b9a9a0fdbfd27c2149</Anchor>
-    <Abstract>Executes a GET command to retrieve and entry from the Kinetic Device. </Abstract>
+    <Anchor>a3b700cb923a3ad66cfbee6f93809713c</Anchor>
+    <Abstract>Executes a GET command to retrieve an entry from the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_GetPrevious</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a7830a04ecda2e40cea89a169480a31a0</Anchor>
+    <Abstract>Executes a GETPREVIOUS command to retrieve the next entry from the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_GetNext</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>aca3fcd36f1086ba4d33ac152c7e01686</Anchor>
+    <Abstract>Executes a GETNEXT command to retrieve the next entry from the Kinetic Device. </Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
@@ -626,7 +839,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
-    <Anchor>a4ed9fc4897388b1d8fec21a0d0498498</Anchor>
+    <Anchor>ade4cb599dfc5a89b24e5db51f6ee79e8</Anchor>
     <Abstract>Executes a DELETE command to delete an entry from the Kinetic Device. </Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
@@ -637,8 +850,8 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
-    <Anchor>aa45452dad04a72b7e51ceed31321bc00</Anchor>
-    <Abstract>Executes a GETKEYRANGE command to retrive a set of keys in the range specified range from the Kinetic...</Abstract>
+    <Anchor>a2ded4406328e52e2e5e9e3e7f7cd0689</Anchor>
+    <Abstract>Executes a GETKEYRANGE command to retrieve a set of keys in the range specified range from the Kineti...</Abstract>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
@@ -648,8 +861,60 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8c.html</Path>
-    <Anchor>a9526ad964e0d25da9aa51c8748cf7b47</Anchor>
-    <Abstract>Executes a GETLOG command to retrive a set of keys in the range specified range from the Kinetic Devi...</Abstract>
+    <Anchor>a92a9e91b13877a38b2e5facb5f0cacb3</Anchor>
+    <Abstract>Executes a GETLOG command to retrieve specific configuration and/or operational data from the Kinetic...</Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_P2POperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>af165b75323e1451b31e773cb13255745</Anchor>
+    <Abstract>Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic Device to copy a set of keys...</Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_InstantSecureErase</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a8a3620eb346c4a710546ef225c75c71f</Anchor>
+    <Abstract>Executes an InstantSecureErase command to erase all data from the Kinetic device. ...</Abstract>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>CMD_GET</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a8b5e7ada617be4214a95ff7958bfade5a45c21ca83f2e20fbfd255d9c23552b48</Anchor>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>CMD_GET_NEXT</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a8b5e7ada617be4214a95ff7958bfade5a20d38dae5d427d8960826c6840082cbb</Anchor>
+    <DeclaredIn>kinetic_client.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>CMD_GET_PREVIOUS</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8c.html</Path>
+    <Anchor>a8b5e7ada617be4214a95ff7958bfade5acfe07764da33aa846965748eb0339367</Anchor>
     <DeclaredIn>kinetic_client.c</DeclaredIn>
   </Token>
   <Token>
@@ -660,7 +925,7 @@
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
     <Anchor>ab3839aed7b68c5bdc63c79ac90f4084b</Anchor>
-    <Abstract>Initializes the Kinetic API andcsonfigures logging destination. </Abstract>
+    <Abstract>Initializes the Kinetic API and configures logging destination. </Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
@@ -676,23 +941,23 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticClient_Connect</Name>
+      <Name>KineticClient_CreateConnection</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
-    <Anchor>a14d992076049d9f477417d9ea8d876b0</Anchor>
+    <Anchor>ae91ebf7674febe5a603df0f87c5252e2</Anchor>
     <Abstract>Initializes the Kinetic API, configures logging destination, establishes a connection to the specifie...</Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticClient_Disconnect</Name>
+      <Name>KineticClient_DestroyConnection</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
-    <Anchor>a69647a75c370454e5812faff4387b3af</Anchor>
+    <Anchor>ad755b6ed9c732797c40d654fe12eb1cd</Anchor>
     <Abstract>Closes the connection to a host. </Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
@@ -703,7 +968,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
-    <Anchor>a0ca8114ed5806ded8d9fdd68b36ee0bf</Anchor>
+    <Anchor>a277c2a4466cada1736801ffb473ace13</Anchor>
     <Abstract>Executes a NOOP command to test whether the Kinetic Device is operational. </Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
@@ -714,8 +979,19 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
-    <Anchor>a76a871e9acc5b36f104c1a5db8aba7f1</Anchor>
+    <Anchor>a58c9dfb7db6c42f6f85c16b1e5a29eab</Anchor>
     <Abstract>Executes a PUT command to store/update an entry on the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_Flush</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>a6e37c5adefd0a463b11c324caec4f209</Anchor>
+    <Abstract>Executes a FLUSHALLDATA command to flush pending PUTs or DELETEs. </Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
@@ -725,8 +1001,30 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
-    <Anchor>a9fc0fb280064f4b9a9a0fdbfd27c2149</Anchor>
-    <Abstract>Executes a GET command to retrieve and entry from the Kinetic Device. </Abstract>
+    <Anchor>a3b700cb923a3ad66cfbee6f93809713c</Anchor>
+    <Abstract>Executes a GET command to retrieve an entry from the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_GetPrevious</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>a7830a04ecda2e40cea89a169480a31a0</Anchor>
+    <Abstract>Executes a GETPREVIOUS command to retrieve the next entry from the Kinetic Device. </Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_GetNext</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>aca3fcd36f1086ba4d33ac152c7e01686</Anchor>
+    <Abstract>Executes a GETNEXT command to retrieve the next entry from the Kinetic Device. </Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
@@ -736,7 +1034,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
-    <Anchor>a4ed9fc4897388b1d8fec21a0d0498498</Anchor>
+    <Anchor>ade4cb599dfc5a89b24e5db51f6ee79e8</Anchor>
     <Abstract>Executes a DELETE command to delete an entry from the Kinetic Device. </Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
@@ -747,8 +1045,8 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
-    <Anchor>aa45452dad04a72b7e51ceed31321bc00</Anchor>
-    <Abstract>Executes a GETKEYRANGE command to retrive a set of keys in the range specified range from the Kinetic...</Abstract>
+    <Anchor>a2ded4406328e52e2e5e9e3e7f7cd0689</Anchor>
+    <Abstract>Executes a GETKEYRANGE command to retrieve a set of keys in the range specified range from the Kineti...</Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
@@ -758,138 +1056,140 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__client_8h.html</Path>
-    <Anchor>a9526ad964e0d25da9aa51c8748cf7b47</Anchor>
-    <Abstract>Executes a GETLOG command to retrive a set of keys in the range specified range from the Kinetic Devi...</Abstract>
+    <Anchor>a92a9e91b13877a38b2e5facb5f0cacb3</Anchor>
+    <Abstract>Executes a GETLOG command to retrieve specific configuration and/or operational data from the Kinetic...</Abstract>
     <DeclaredIn>kinetic_client.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_NewConnection</Name>
+      <Name>KineticClient_P2POperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>af165b75323e1451b31e773cb13255745</Anchor>
+    <Abstract>Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic Device to copy a set of keys...</Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticClient_InstantSecureErase</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__client_8h.html</Path>
+    <Anchor>a8a3620eb346c4a710546ef225c75c71f</Anchor>
+    <Abstract>Executes an InstantSecureErase command to erase all data from the Kinetic device. ...</Abstract>
+    <DeclaredIn>kinetic_client.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticSession_Create</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8c.html</Path>
-    <Anchor>aff1bcc17fa93954da47498bed3cac9d6</Anchor>
+    <Anchor>a7ed82ca9eba354134ec89537d7d0ff97</Anchor>
     <DeclaredIn>kinetic_connection.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_FreeConnection</Name>
+      <Name>KineticSession_Destroy</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8c.html</Path>
-    <Anchor>afb8d43381c70334834141a0250c060d6</Anchor>
+    <Anchor>a6233dbc9bb9a8f6cd88f648638cd78fb</Anchor>
     <DeclaredIn>kinetic_connection.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_FromHandle</Name>
+      <Name>KineticSession_Connect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8c.html</Path>
-    <Anchor>afe150a31e9d865c903efa9ec57ea1a16</Anchor>
+    <Anchor>aa55d1175dd76bdbf3e9a9bd7df393c90</Anchor>
     <DeclaredIn>kinetic_connection.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_Connect</Name>
+      <Name>KineticSession_Disconnect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8c.html</Path>
-    <Anchor>aa4f86528211aa385ab97097f02a91292</Anchor>
+    <Anchor>afb3ef9466d871b3065ceb0c8a950ed6f</Anchor>
     <DeclaredIn>kinetic_connection.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_Disconnect</Name>
+      <Name>KineticSession_IncrementSequence</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8c.html</Path>
-    <Anchor>a1db4c9dc98b070a29847463728915e25</Anchor>
+    <Anchor>a44e7320a40bc06a68387969d90da5840</Anchor>
     <DeclaredIn>kinetic_connection.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_IncrementSequence</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__connection_8c.html</Path>
-    <Anchor>ab3cd8fa23a61ea1c982a50e13d6dac5d</Anchor>
-    <DeclaredIn>kinetic_connection.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticConnection_NewConnection</Name>
+      <Name>KineticSession_Create</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8h.html</Path>
-    <Anchor>aff1bcc17fa93954da47498bed3cac9d6</Anchor>
+    <Anchor>a7ed82ca9eba354134ec89537d7d0ff97</Anchor>
     <DeclaredIn>kinetic_connection.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_FreeConnection</Name>
+      <Name>KineticSession_Destroy</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8h.html</Path>
-    <Anchor>afb8d43381c70334834141a0250c060d6</Anchor>
+    <Anchor>a6233dbc9bb9a8f6cd88f648638cd78fb</Anchor>
     <DeclaredIn>kinetic_connection.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_FromHandle</Name>
+      <Name>KineticSession_Connect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8h.html</Path>
-    <Anchor>afe150a31e9d865c903efa9ec57ea1a16</Anchor>
+    <Anchor>aa55d1175dd76bdbf3e9a9bd7df393c90</Anchor>
     <DeclaredIn>kinetic_connection.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_Connect</Name>
+      <Name>KineticSession_Disconnect</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8h.html</Path>
-    <Anchor>aa4f86528211aa385ab97097f02a91292</Anchor>
+    <Anchor>afb3ef9466d871b3065ceb0c8a950ed6f</Anchor>
     <DeclaredIn>kinetic_connection.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_Disconnect</Name>
+      <Name>KineticSession_IncrementSequence</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__connection_8h.html</Path>
-    <Anchor>a1db4c9dc98b070a29847463728915e25</Anchor>
+    <Anchor>a44e7320a40bc06a68387969d90da5840</Anchor>
     <DeclaredIn>kinetic_connection.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticConnection_IncrementSequence</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__connection_8h.html</Path>
-    <Anchor>ab3cd8fa23a61ea1c982a50e13d6dac5d</Anchor>
-    <DeclaredIn>kinetic_connection.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticController_CreateWorkerThreads</Name>
+      <Name>KineticController_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8c.html</Path>
-    <Anchor>a93df5b6cabb255fca90d347cdbad46eb</Anchor>
+    <Anchor>a2696cec04d495fb25499052ef0d35a42</Anchor>
     <DeclaredIn>kinetic_controller.c</DeclaredIn>
   </Token>
   <Token>
@@ -899,7 +1199,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8c.html</Path>
-    <Anchor>a36c4acc3923b06bb2fd6a4566bc6cd89</Anchor>
+    <Anchor>ad4fe27fac91b48a17326954619478f44</Anchor>
     <DeclaredIn>kinetic_controller.c</DeclaredIn>
   </Token>
   <Token>
@@ -919,7 +1219,17 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8c.html</Path>
-    <Anchor>a0bba3769ca4d689de43b6ba684530c47</Anchor>
+    <Anchor>a2dd33ab2356015636ca1476ab8d2981f</Anchor>
+    <DeclaredIn>kinetic_controller.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticController_HandleIncomingPDU</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__controller_8c.html</Path>
+    <Anchor>a8cf14cbf7279bb5d8259f784c2e05a2c</Anchor>
     <DeclaredIn>kinetic_controller.c</DeclaredIn>
   </Token>
   <Token>
@@ -934,12 +1244,12 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticController_CreateWorkerThreads</Name>
+      <Name>KineticController_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8h.html</Path>
-    <Anchor>a93df5b6cabb255fca90d347cdbad46eb</Anchor>
+    <Anchor>a2696cec04d495fb25499052ef0d35a42</Anchor>
     <DeclaredIn>kinetic_controller.h</DeclaredIn>
   </Token>
   <Token>
@@ -949,7 +1259,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8h.html</Path>
-    <Anchor>a36c4acc3923b06bb2fd6a4566bc6cd89</Anchor>
+    <Anchor>ad4fe27fac91b48a17326954619478f44</Anchor>
     <DeclaredIn>kinetic_controller.h</DeclaredIn>
   </Token>
   <Token>
@@ -969,7 +1279,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8h.html</Path>
-    <Anchor>a0bba3769ca4d689de43b6ba684530c47</Anchor>
+    <Anchor>a2dd33ab2356015636ca1476ab8d2981f</Anchor>
     <DeclaredIn>kinetic_controller.h</DeclaredIn>
   </Token>
   <Token>
@@ -980,6 +1290,16 @@
     </TokenIdentifier>
     <Path>kinetic__controller_8h.html</Path>
     <Anchor>a40cdec3b98767b923793edff1bc1f1c5</Anchor>
+    <DeclaredIn>kinetic_controller.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticController_HandleIncomingPDU</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__controller_8h.html</Path>
+    <Anchor>a8cf14cbf7279bb5d8259f784c2e05a2c</Anchor>
     <DeclaredIn>kinetic_controller.h</DeclaredIn>
   </Token>
   <Token>
@@ -1304,6 +1624,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>LOG_PROTO_LEVEL_START_NO_INDENT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a14b8efce9c53f61f1f878c2571937c5b</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>LOG_PROTO_LEVEL_END</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
@@ -1319,7 +1649,7 @@
       <Type>macro</Type>
     </TokenIdentifier>
     <Path>kinetic__logger_8c.html</Path>
-    <Anchor>af91f573a8304bdef3cc1b01739c92095</Anchor>
+    <Anchor>aa604fb43091d3870e2d74ab8248c3f2c</Anchor>
     <DeclaredIn>kinetic_logger.c</DeclaredIn>
   </Token>
   <Token>
@@ -1889,7 +2219,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8c.html</Path>
-    <Anchor>a70633c4e94361df29bf1c32751e476e6</Anchor>
+    <Anchor>a46daff6d8cff869d0036a59a7a09d603</Anchor>
     <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
@@ -1909,7 +2239,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8c.html</Path>
-    <Anchor>a268cce69e9c5685227a24d8a7cb41892</Anchor>
+    <Anchor>abb01363082088d09ba223f5151ec2530</Anchor>
     <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
@@ -1924,16 +2254,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticOperation_GetCallback</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>kinetic__operation_8c.html</Path>
-    <Anchor>a275cd19f10ca3d62735ec7376b580273</Anchor>
-    <DeclaredIn>kinetic_operation.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>KineticOperation_BuildGet</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -1944,12 +2264,52 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticOperation_BuildGetPrevious</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>a9684d8df50abd171ca69a284f744e6da</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildGetNext</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>a9c7a6245711f28ddc4e51056e2ef22f1</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_FlushCallback</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>a2ce19a3752bb12152d86259eab6f95c4</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildFlush</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>aa895b78d6fca03a6b3c848d6a2b4020a</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticOperation_DeleteCallback</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8c.html</Path>
-    <Anchor>a8b2eca1a6f5bf17513598710b08c9888</Anchor>
+    <Anchor>a6de60256280eaea5b8f2d521a3ba6f62</Anchor>
     <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
@@ -1969,7 +2329,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8c.html</Path>
-    <Anchor>a3a728d31f3840fdc4ee444456bc1ad19</Anchor>
+    <Anchor>aa2d3ea66edac0c72301191feef5fe693</Anchor>
     <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
@@ -1989,7 +2349,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8c.html</Path>
-    <Anchor>af1a71707ced7ffe124589efa7dd4e8ab</Anchor>
+    <Anchor>a92287f17ac6de8b67a70936f33401c7c</Anchor>
     <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
@@ -2000,6 +2360,46 @@
     </TokenIdentifier>
     <Path>kinetic__operation_8c.html</Path>
     <Anchor>a8ef4faa6a804f6f69cb9d4cbe040a810</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_P2POperationCallback</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>ae9e64484dd1c76a00846528d5bde3818</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildP2POperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>a4fadbc047ad4b44617e2176fe02f9cd8</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_InstantSecureEraseCallback</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>a4ef26e667f80b1720096c352abdf0bef</Anchor>
+    <DeclaredIn>kinetic_operation.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildInstantSecureErase</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8c.html</Path>
+    <Anchor>aa70394e99f79cf3f08dd7b1b5dde6795</Anchor>
     <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
@@ -2079,7 +2479,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
-    <Anchor>a70633c4e94361df29bf1c32751e476e6</Anchor>
+    <Anchor>a46daff6d8cff869d0036a59a7a09d603</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -2099,7 +2499,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
-    <Anchor>a268cce69e9c5685227a24d8a7cb41892</Anchor>
+    <Anchor>abb01363082088d09ba223f5151ec2530</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -2119,7 +2519,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
-    <Anchor>a275cd19f10ca3d62735ec7376b580273</Anchor>
+    <Anchor>acdd537b48c4b4f3977f484b119ba9b85</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -2134,12 +2534,52 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticOperation_BuildGetNext</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a9c7a6245711f28ddc4e51056e2ef22f1</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildGetPrevious</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a9684d8df50abd171ca69a284f744e6da</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_FlushCallback</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a2ce19a3752bb12152d86259eab6f95c4</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildFlush</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>aa895b78d6fca03a6b3c848d6a2b4020a</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticOperation_DeleteCallback</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
-    <Anchor>a8b2eca1a6f5bf17513598710b08c9888</Anchor>
+    <Anchor>a6de60256280eaea5b8f2d521a3ba6f62</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -2159,7 +2599,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
-    <Anchor>a3a728d31f3840fdc4ee444456bc1ad19</Anchor>
+    <Anchor>aa2d3ea66edac0c72301191feef5fe693</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -2179,7 +2619,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
-    <Anchor>af1a71707ced7ffe124589efa7dd4e8ab</Anchor>
+    <Anchor>a92287f17ac6de8b67a70936f33401c7c</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -2190,6 +2630,46 @@
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
     <Anchor>a8ef4faa6a804f6f69cb9d4cbe040a810</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_P2POperationCallback</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>ae9e64484dd1c76a00846528d5bde3818</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildP2POperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a4fadbc047ad4b44617e2176fe02f9cd8</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_InstantSecureEraseCallback</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a4ef26e667f80b1720096c352abdf0bef</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_BuildInstantSecureErase</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>aa70394e99f79cf3f08dd7b1b5dde6795</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -5799,7 +6279,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8c.html</Path>
-    <Anchor>a55e73e990b4844af842f19380342c0d8</Anchor>
+    <Anchor>af9fb590d8d58c37b2f9b38b13da321cd</Anchor>
     <DeclaredIn>kinetic_socket.c</DeclaredIn>
   </Token>
   <Token>
@@ -5870,6 +6350,26 @@
     </TokenIdentifier>
     <Path>kinetic__socket_8c.html</Path>
     <Anchor>a99a055b710b2aae0895730e2963a39f5</Anchor>
+    <DeclaredIn>kinetic_socket.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticSocket_BeginPacket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__socket_8c.html</Path>
+    <Anchor>a0c7a2dfa5948c6fbab5f24db1bf9a23e</Anchor>
+    <DeclaredIn>kinetic_socket.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticSocket_FinishPacket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__socket_8c.html</Path>
+    <Anchor>a5d809bbbdae2345672fe0a8364ac7733</Anchor>
     <DeclaredIn>kinetic_socket.c</DeclaredIn>
   </Token>
   <Token>
@@ -5879,7 +6379,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__socket_8h.html</Path>
-    <Anchor>a55e73e990b4844af842f19380342c0d8</Anchor>
+    <Anchor>af9fb590d8d58c37b2f9b38b13da321cd</Anchor>
     <DeclaredIn>kinetic_socket.h</DeclaredIn>
   </Token>
   <Token>
@@ -5950,6 +6450,26 @@
     </TokenIdentifier>
     <Path>kinetic__socket_8h.html</Path>
     <Anchor>a99a055b710b2aae0895730e2963a39f5</Anchor>
+    <DeclaredIn>kinetic_socket.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticSocket_BeginPacket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__socket_8h.html</Path>
+    <Anchor>a0c7a2dfa5948c6fbab5f24db1bf9a23e</Anchor>
+    <DeclaredIn>kinetic_socket.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticSocket_FinishPacket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__socket_8h.html</Path>
+    <Anchor>a5d809bbbdae2345672fe0a8364ac7733</Anchor>
     <DeclaredIn>kinetic_socket.h</DeclaredIn>
   </Token>
   <Token>
@@ -6170,17 +6690,6 @@
     </TokenIdentifier>
     <Path>kinetic__types_8h.html</Path>
     <Anchor>a19eed82e573d877a85b41792b553b1df</Anchor>
-    <DeclaredIn>kinetic_types.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>KineticSessionHandle</Name>
-      <APILanguage>c</APILanguage>
-      <Type>tdef</Type>
-    </TokenIdentifier>
-    <Path>kinetic__types_8h.html</Path>
-    <Anchor>af2747d5f7954601329c11b58757764b9</Anchor>
-    <Abstract>Handle for a session instance. </Abstract>
     <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -6531,6 +7040,26 @@
     </TokenIdentifier>
     <Path>kinetic__types_8h.html</Path>
     <Anchor>a455d29140e6816c61eba35e8f52b0d57a062cab06528a8ff0e145fd33fe7e6789</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_STATUS_MISSING_KEY</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a455d29140e6816c61eba35e8f52b0d57ae082ebc2e1ee44ec1c6690bd370e4962</Anchor>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_STATUS_MISSING_VALUE_BUFFER</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a455d29140e6816c61eba35e8f52b0d57af35c62d5b12c10b6362d6bb1d5dff2de</Anchor>
     <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -7115,16 +7644,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_SESSIONS_MAX</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__types__internal_8h.html</Path>
-    <Anchor>a7d725a2545f43f46932801f583149e2a</Anchor>
-    <DeclaredIn>kinetic_types_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>KINETIC_PDUS_PER_SESSION_DEFAULT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
@@ -7191,6 +7710,16 @@
     </TokenIdentifier>
     <Path>kinetic__types__internal_8h.html</Path>
     <Anchor>a10b2d890d871e1489bb02b7e70d9bdfb</Anchor>
+    <DeclaredIn>kinetic_types_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>NUM_ELEMENTS</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types__internal_8h.html</Path>
+    <Anchor>a1e09b3fd88a184b0bfd9d60d62d14ffc</Anchor>
     <DeclaredIn>kinetic_types_internal.h</DeclaredIn>
   </Token>
   <Token>
@@ -7330,7 +7859,7 @@
       <Type>tdef</Type>
     </TokenIdentifier>
     <Path>kinetic__types__internal_8h.html</Path>
-    <Anchor>a9158ab969103fa3f4d50407bdf9efd46</Anchor>
+    <Anchor>ad7cb98485e75dd8a5aa4d9a866e3a9d8</Anchor>
     <DeclaredIn>kinetic_types_internal.h</DeclaredIn>
   </Token>
   <Token>
@@ -7562,6 +8091,156 @@
     <Path>main_8c.html</Path>
     <Anchor>a3c04138a5bfe5d72780bb7e82a18e627</Anchor>
     <DeclaredIn>main.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>store_data</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__blocking_8c.html</Path>
+    <Anchor>af4bd70c5ec166142c87bbc3825a4721c</Anchor>
+    <DeclaredIn>write_file_blocking.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>main</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__blocking_8c.html</Path>
+    <Anchor>a3c04138a5bfe5d72780bb7e82a18e627</Anchor>
+    <DeclaredIn>write_file_blocking.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>NUM_FILES</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>write__file__blocking__threads_8c.html</Path>
+    <Anchor>a7e72e0268904c2467ce256cc0f78925c</Anchor>
+    <DeclaredIn>write_file_blocking_threads.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>REPORT_ERRNO</Name>
+      <APILanguage>c</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>write__file__blocking__threads_8c.html</Path>
+    <Anchor>a88823d2711cfc178d2bd88a3b63a5880</Anchor>
+    <DeclaredIn>write_file_blocking_threads.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>store_data</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__blocking__threads_8c.html</Path>
+    <Anchor>a00a83f21359d473f900cf9dcb394708f</Anchor>
+    <DeclaredIn>write_file_blocking_threads.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>main</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__blocking__threads_8c.html</Path>
+    <Anchor>a3c04138a5bfe5d72780bb7e82a18e627</Anchor>
+    <DeclaredIn>write_file_blocking_threads.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>REPORT_ERRNO</Name>
+      <APILanguage>c</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking_8c.html</Path>
+    <Anchor>a88823d2711cfc178d2bd88a3b63a5880</Anchor>
+    <DeclaredIn>write_file_nonblocking.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>start_file_transfer</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking_8c.html</Path>
+    <Anchor>ade333bfe61779fd62ab4e8de17446153</Anchor>
+    <DeclaredIn>write_file_nonblocking.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>wait_for_put_finish</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking_8c.html</Path>
+    <Anchor>acbc92f8a729c18505d7150f48597146b</Anchor>
+    <DeclaredIn>write_file_nonblocking.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>main</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking_8c.html</Path>
+    <Anchor>a3c04138a5bfe5d72780bb7e82a18e627</Anchor>
+    <DeclaredIn>write_file_nonblocking.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>REPORT_ERRNO</Name>
+      <APILanguage>c</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking__threads_8c.html</Path>
+    <Anchor>a88823d2711cfc178d2bd88a3b63a5880</Anchor>
+    <DeclaredIn>write_file_nonblocking_threads.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>store_file_thread</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking__threads_8c.html</Path>
+    <Anchor>a788f655be4fe2f9981008928666cb8b0</Anchor>
+    <DeclaredIn>write_file_nonblocking_threads.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>start_file_transfer</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking__threads_8c.html</Path>
+    <Anchor>a70f276cd3141bbc76f787c4ac6e7ca1e</Anchor>
+    <DeclaredIn>write_file_nonblocking_threads.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>wait_for_transfer_complete</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking__threads_8c.html</Path>
+    <Anchor>aca3a5f2009874733b5c4c2d0ccb92d49</Anchor>
+    <DeclaredIn>write_file_nonblocking_threads.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>main</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>write__file__nonblocking__threads_8c.html</Path>
+    <Anchor>a3c04138a5bfe5d72780bb7e82a18e627</Anchor>
+    <DeclaredIn>write_file_nonblocking_threads.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -8748,16 +9427,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>last</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticList</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_list.html</Path>
-    <Anchor>aeec9079bec13d3ab2db444273a1740ac</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>mutex</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
@@ -8795,16 +9464,6 @@
     </TokenIdentifier>
     <Path>struct___kinetic_list_item.html</Path>
     <Anchor>a3cfb3f92689dc401df42bbc6c5c69e74</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>previous</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>_KineticListItem</Scope>
-    </TokenIdentifier>
-    <Path>struct___kinetic_list_item.html</Path>
-    <Anchor>a76aa1001e895a8361713c2051a58020f</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -8978,6 +9637,46 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>pinOp</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticMessage</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_message.html</Path>
+    <Anchor>ac62c902ab451f19204ceb10cffca45ae</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>p2pOp</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticMessage</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_message.html</Path>
+    <Anchor>ab64ed09ffaa7a104965ad76d306f3d25</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>p2pOpOp</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticMessage</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_message.html</Path>
+    <Anchor>a72f6083bbd55bcba9d39c1ffa9aa10b3</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>p2pPeer</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticMessage</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_message.html</Path>
+    <Anchor>a9fe18626df1710498b9aaf71fd078464</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>_KineticOperation</Name>
       <APILanguage>c</APILanguage>
       <Type>cl</Type>
@@ -9088,6 +9787,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>p2pOp</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>_KineticOperation</Scope>
+    </TokenIdentifier>
+    <Path>struct___kinetic_operation.html</Path>
+    <Anchor>ad1043af5af3efffd0e576a63d8ee4cd1</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>callback</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
@@ -9105,6 +9814,136 @@
     </TokenIdentifier>
     <Path>struct___kinetic_operation.html</Path>
     <Anchor>abf2c244091c0989d5028a13d2176a59a</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticP2P_Operation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>KineticP2P_Operation</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation.html</Path>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>peer</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_Operation</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation.html</Path>
+    <Anchor>ac32205ac1a2f8be70c83f0480e38fb33</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>numOperations</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_Operation</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation.html</Path>
+    <Anchor>a46218f8ac795492bc5f7ac039cf9f747</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>operations</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_Operation</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation.html</Path>
+    <Anchor>a23d01a5165cb95eeea77ab3c4e647c5a</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticP2P_OperationData</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>KineticP2P_OperationData</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation_data.html</Path>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>key</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_OperationData</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation_data.html</Path>
+    <Anchor>ac0c7f7873ee117e8534aabb03afe830c</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>version</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_OperationData</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation_data.html</Path>
+    <Anchor>a80449fc987b09e2c3b8ca9c9da485c71</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>newKey</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_OperationData</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation_data.html</Path>
+    <Anchor>a655db34f7fbd01248948efc23e42064b</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>resultStatus</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_OperationData</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___operation_data.html</Path>
+    <Anchor>af6b00c80dc8649a7ac42f29977c27178</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticP2P_Peer</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>KineticP2P_Peer</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___peer.html</Path>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>hostname</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_Peer</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___peer.html</Path>
+    <Anchor>ad05f29013880464048d139696f4ad598</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>port</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_Peer</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___peer.html</Path>
+    <Anchor>a7aca8a7cb0c77dd219553896c836cec5</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>tls</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticP2P_Peer</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_p2_p___peer.html</Path>
+    <Anchor>ac83f1d2226108f58c6cd63aa3d9b5d83</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -11924,7 +12763,38 @@
       <Scope>KineticSession</Scope>
     </TokenIdentifier>
     <Path>struct_kinetic_session.html</Path>
-    <Abstract>Structure used to specify the configuration of a session. </Abstract>
+    <Abstract>An instance of a session with a Kinetic device. </Abstract>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>config</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticSession</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_session.html</Path>
+    <Anchor>a45587886059c9f68db0fb36a6b692b7d</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>connection</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>KineticSession</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_session.html</Path>
+    <Anchor>a57d1d01861409e3f9a3651cad67138d2</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticSessionConfig</Name>
+      <APILanguage>c</APILanguage>
+      <Type>cl</Type>
+      <Scope>KineticSessionConfig</Scope>
+    </TokenIdentifier>
+    <Path>struct_kinetic_session_config.html</Path>
+    <Abstract>Structure used to specify the configuration for a session. </Abstract>
     <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -11932,70 +12802,60 @@
       <Name>host</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticSession</Scope>
+      <Scope>KineticSessionConfig</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_session.html</Path>
-    <Anchor>aa4cfddfaf641f3d2c44660f84fc0d8d0</Anchor>
+    <Path>struct_kinetic_session_config.html</Path>
+    <Anchor>a6006141d44982fdf8748c65fe45946f3</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
       <Name>port</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticSession</Scope>
+      <Scope>KineticSessionConfig</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_session.html</Path>
-    <Anchor>aacdf546b5311feab6f8dcce3adbe6bfe</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>nonBlocking</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticSession</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_session.html</Path>
-    <Anchor>a4aa7bfbebfd1b59b2846f32f52dc2407</Anchor>
+    <Path>struct_kinetic_session_config.html</Path>
+    <Anchor>ab3c117e8a53fb2bc7c14fc45dd0a38d2</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
       <Name>clusterVersion</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticSession</Scope>
+      <Scope>KineticSessionConfig</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_session.html</Path>
-    <Anchor>a8a59b5498aca354c6a59397061e61a2c</Anchor>
+    <Path>struct_kinetic_session_config.html</Path>
+    <Anchor>a070d1fe65b78cc2b731717a077a69640</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
       <Name>identity</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticSession</Scope>
+      <Scope>KineticSessionConfig</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_session.html</Path>
-    <Anchor>aa0a6a0194f037dafc474a33143f48685</Anchor>
+    <Path>struct_kinetic_session_config.html</Path>
+    <Anchor>aa8b4e198ae98bf699cb102350c8587da</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
       <Name>keyData</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticSession</Scope>
+      <Scope>KineticSessionConfig</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_session.html</Path>
-    <Anchor>a3fb8c118787f0136df6841a49e21bed6</Anchor>
+    <Path>struct_kinetic_session_config.html</Path>
+    <Anchor>a0821f028dffd8e2e237aee0f4ed57189</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
       <Name>hmacKey</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
-      <Scope>KineticSession</Scope>
+      <Scope>KineticSessionConfig</Scope>
     </TokenIdentifier>
-    <Path>struct_kinetic_session.html</Path>
-    <Anchor>a79593eff70959813a05a3d1ebb287069</Anchor>
+    <Path>struct_kinetic_session_config.html</Path>
+    <Anchor>acb9f1d3dceb9739eb3c88db1f8150198</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>

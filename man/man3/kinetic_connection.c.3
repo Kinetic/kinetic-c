@@ -1,4 +1,4 @@
-.TH "kinetic_connection.c" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_connection.c" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -37,60 +37,53 @@ kinetic_connection.c \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticSessionHandle\fP \fBKineticConnection_NewConnection\fP (const \fBKineticSession\fP *const config)"
+.RI "\fBKineticStatus\fP \fBKineticSession_Create\fP (\fBKineticSession\fP *const session)"
 .br
 .ti -1c
-.RI "void \fBKineticConnection_FreeConnection\fP (\fBKineticSessionHandle\fP *const handle)"
+.RI "\fBKineticStatus\fP \fBKineticSession_Destroy\fP (\fBKineticSession\fP *const session)"
 .br
 .ti -1c
-.RI "KineticConnection * \fBKineticConnection_FromHandle\fP (\fBKineticSessionHandle\fP handle)"
+.RI "\fBKineticStatus\fP \fBKineticSession_Connect\fP (\fBKineticSession\fP const *const session)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticConnection_Connect\fP (KineticConnection *const connection)"
+.RI "\fBKineticStatus\fP \fBKineticSession_Disconnect\fP (\fBKineticSession\fP const *const session)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticConnection_Disconnect\fP (KineticConnection *const connection)"
-.br
-.ti -1c
-.RI "void \fBKineticConnection_IncrementSequence\fP (KineticConnection *const connection)"
+.RI "void \fBKineticSession_IncrementSequence\fP (\fBKineticSession\fP const *const session)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticSessionHandle\fP KineticConnection_NewConnection (const \fBKineticSession\fP *constconfig)"
+.SS "\fBKineticStatus\fP KineticSession_Create (\fBKineticSession\fP *constsession)"
 
 .PP
-Definition at line 39 of file kinetic_connection\&.c\&.
+Definition at line 36 of file kinetic_connection\&.c\&.
 .PP
-References KINETIC_CONNECTION_INIT, KINETIC_HANDLE_INVALID, and KINETIC_SESSIONS_MAX\&.
-.SS "void KineticConnection_FreeConnection (\fBKineticSessionHandle\fP *consthandle)"
+References KineticSession::connection, KINETIC_CONNECTION_INIT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticAllocator_NewConnection(), and KineticConnection::session\&.
+.SS "\fBKineticStatus\fP KineticSession_Destroy (\fBKineticSession\fP *constsession)"
 
 .PP
-Definition at line 59 of file kinetic_connection\&.c\&.
+Definition at line 52 of file kinetic_connection\&.c\&.
 .PP
-References KINETIC_HANDLE_INVALID, and KineticConnection_FromHandle()\&.
-.SS "KineticConnection* KineticConnection_FromHandle (\fBKineticSessionHandle\fPhandle)"
+References KineticSession::connection, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeConnection(), and KineticConnection::writeMutex\&.
+.SS "\fBKineticStatus\fP KineticSession_Connect (\fBKineticSession\fP const *constsession)"
 
 .PP
-Definition at line 72 of file kinetic_connection\&.c\&.
+Definition at line 66 of file kinetic_connection\&.c\&.
 .PP
-References KINETIC_HANDLE_INVALID, and KINETIC_SESSIONS_MAX\&.
-.SS "\fBKineticStatus\fP KineticConnection_Connect (KineticConnection *constconnection)"
+References KineticSession::config, KineticThread::connection, KineticSession::connection, KineticSessionConfig::host, KINETIC_SOCKET_DESCRIPTOR_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SOCKET_TIMEOUT, KINETIC_STATUS_SUCCESS, KineticController_Init(), KineticSocket_Connect(), LOG0, KineticSessionConfig::port, and KineticConnection::thread\&.
+.SS "\fBKineticStatus\fP KineticSession_Disconnect (\fBKineticSession\fP const *constsession)"
 
 .PP
-Definition at line 79 of file kinetic_connection\&.c\&.
+Definition at line 112 of file kinetic_connection\&.c\&.
 .PP
-References KINETIC_SOCKET_DESCRIPTOR_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticController_CreateWorkerThreads(), KineticSocket_Connect(), and LOG0\&.
-.SS "\fBKineticStatus\fP KineticConnection_Disconnect (KineticConnection *constconnection)"
+References KineticConnection::connected, KineticSession::connection, Kinetic_GetErrnoDescription(), KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, LOG3, and LOGF0\&.
+.SS "void KineticSession_IncrementSequence (\fBKineticSession\fP const *constsession)"
 
 .PP
-Definition at line 105 of file kinetic_connection\&.c\&.
+Definition at line 142 of file kinetic_connection\&.c\&.
 .PP
-References Kinetic_GetErrnoDescription(), KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, LOG2, and LOGF0\&.
-.SS "void KineticConnection_IncrementSequence (KineticConnection *constconnection)"
-
-.PP
-Definition at line 131 of file kinetic_connection\&.c\&.
+References KineticSession::connection, and KineticConnection::sequence\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

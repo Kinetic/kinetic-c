@@ -1,0 +1,70 @@
+.TH "KineticSessionConfig" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+KineticSessionConfig \- 
+.PP
+Structure used to specify the configuration for a session\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <kinetic_types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "char \fBhost\fP [256]"
+.br
+.ti -1c
+.RI "int \fBport\fP"
+.br
+.ti -1c
+.RI "int64_t \fBclusterVersion\fP"
+.br
+.ti -1c
+.RI "int64_t \fBidentity\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBkeyData\fP [(4096)]"
+.br
+.ti -1c
+.RI "\fBByteArray\fP \fBhmacKey\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Structure used to specify the configuration for a session\&. 
+.PP
+Definition at line 98 of file kinetic_types\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "char KineticSessionConfig::host[256]"
+
+.PP
+Definition at line 100 of file kinetic_types\&.h\&.
+.SS "int KineticSessionConfig::port"
+
+.PP
+Definition at line 103 of file kinetic_types\&.h\&.
+.SS "int64_t KineticSessionConfig::clusterVersion"
+
+.PP
+Definition at line 108 of file kinetic_types\&.h\&.
+.SS "int64_t KineticSessionConfig::identity"
+
+.PP
+Definition at line 113 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticSessionConfig::keyData[(4096)]"
+
+.PP
+Definition at line 117 of file kinetic_types\&.h\&.
+.SS "\fBByteArray\fP KineticSessionConfig::hmacKey"
+
+.PP
+Definition at line 118 of file kinetic_types\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

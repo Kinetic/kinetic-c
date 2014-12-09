@@ -1,0 +1,78 @@
+.TH "write_file_blocking_threads.c" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+write_file_blocking_threads.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_client\&.h'\fP
+.br
+\fC#include 'kinetic_types\&.h'\fP
+.br
+\fC#include 'byte_array\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <getopt\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <sys/param\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <sys/file\&.h>\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBNUM_FILES\fP   (3)"
+.br
+.ti -1c
+.RI "#define \fBREPORT_ERRNO\fP(en, msg)   if(en != 0){errno = en; perror(msg);}"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void * \fBstore_data\fP (void *args)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define NUM_FILES   (3)"
+
+.PP
+Definition at line 33 of file write_file_blocking_threads\&.c\&.
+.SS "#define REPORT_ERRNO(en, msg)   if(en != 0){errno = en; perror(msg);}"
+
+.PP
+Definition at line 35 of file write_file_blocking_threads\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "void* store_data (void *args)"
+
+.PP
+Definition at line 51 of file write_file_blocking_threads\&.c\&.
+.PP
+References ByteBuffer_AppendArray(), ByteBuffer_AppendCString(), ByteBuffer_BytesRemaining(), ByteBuffer_Consume(), ByteBuffer::bytesUsed, KineticEntry::key, Kinetic_GetStatusDescription(), KINETIC_OBJ_SIZE, KINETIC_STATUS_SUCCESS, KINETIC_SYNCHRONIZATION_WRITEBACK, KineticClient_Put(), KineticEntry::synchronization, and KineticEntry::value\&.
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 80 of file write_file_blocking_threads\&.c\&.
+.PP
+References ByteArray_CreateWithCString(), ByteBuffer_Create(), ByteBuffer_CreateAndAppendCString(), KineticSessionConfig::host, KINETIC_ALGORITHM_SHA1, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), NUM_FILES, REPORT_ERRNO, and store_data()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

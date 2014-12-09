@@ -1,4 +1,4 @@
-.TH "kinetic_client.h" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_client.h" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,50 +15,70 @@ kinetic_client.h \-
 .ti -1c
 .RI "void \fBKineticClient_Init\fP (const char *log_file, int log_level)"
 .br
-.RI "\fIInitializes the Kinetic API andcsonfigures logging destination\&. \fP"
+.RI "\fIInitializes the Kinetic API and configures logging destination\&. \fP"
 .ti -1c
 .RI "void \fBKineticClient_Shutdown\fP (void)"
 .br
 .RI "\fIPerforms shutdown/cleanup of the kinetic-c client lib\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticClient_Connect\fP (const \fBKineticSession\fP *config, \fBKineticSessionHandle\fP *handle)"
+.RI "\fBKineticStatus\fP \fBKineticClient_CreateConnection\fP (\fBKineticSession\fP *const session)"
 .br
 .RI "\fIInitializes the Kinetic API, configures logging destination, establishes a connection to the specified Kinetic Device, and establishes a session\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticClient_Disconnect\fP (\fBKineticSessionHandle\fP *const handle)"
+.RI "\fBKineticStatus\fP \fBKineticClient_DestroyConnection\fP (\fBKineticSession\fP *const session)"
 .br
 .RI "\fICloses the connection to a host\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticClient_NoOp\fP (\fBKineticSessionHandle\fP handle)"
+.RI "\fBKineticStatus\fP \fBKineticClient_NoOp\fP (\fBKineticSession\fP const *const session)"
 .br
 .RI "\fIExecutes a NOOP command to test whether the Kinetic Device is operational\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticClient_Put\fP (\fBKineticSessionHandle\fP handle, \fBKineticEntry\fP *const entry, \fBKineticCompletionClosure\fP *closure)"
+.RI "\fBKineticStatus\fP \fBKineticClient_Put\fP (\fBKineticSession\fP const *const session, \fBKineticEntry\fP *const entry, \fBKineticCompletionClosure\fP *closure)"
 .br
 .RI "\fIExecutes a PUT command to store/update an entry on the Kinetic Device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticClient_Get\fP (\fBKineticSessionHandle\fP handle, \fBKineticEntry\fP *const entry, \fBKineticCompletionClosure\fP *closure)"
+.RI "\fBKineticStatus\fP \fBKineticClient_Flush\fP (\fBKineticSession\fP const *const session, \fBKineticCompletionClosure\fP *closure)"
 .br
-.RI "\fIExecutes a GET command to retrieve and entry from the Kinetic Device\&. \fP"
+.RI "\fIExecutes a FLUSHALLDATA command to flush pending PUTs or DELETEs\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticClient_Delete\fP (\fBKineticSessionHandle\fP handle, \fBKineticEntry\fP *const entry, \fBKineticCompletionClosure\fP *closure)"
+.RI "\fBKineticStatus\fP \fBKineticClient_Get\fP (\fBKineticSession\fP const *const session, \fBKineticEntry\fP *const entry, \fBKineticCompletionClosure\fP *closure)"
+.br
+.RI "\fIExecutes a GET command to retrieve an entry from the Kinetic Device\&. \fP"
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticClient_GetPrevious\fP (\fBKineticSession\fP const *const session, \fBKineticEntry\fP *const entry, \fBKineticCompletionClosure\fP *closure)"
+.br
+.RI "\fIExecutes a GETPREVIOUS command to retrieve the next entry from the Kinetic Device\&. \fP"
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticClient_GetNext\fP (\fBKineticSession\fP const *const session, \fBKineticEntry\fP *const entry, \fBKineticCompletionClosure\fP *closure)"
+.br
+.RI "\fIExecutes a GETNEXT command to retrieve the next entry from the Kinetic Device\&. \fP"
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticClient_Delete\fP (\fBKineticSession\fP const *const session, \fBKineticEntry\fP *const entry, \fBKineticCompletionClosure\fP *closure)"
 .br
 .RI "\fIExecutes a DELETE command to delete an entry from the Kinetic Device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticClient_GetKeyRange\fP (\fBKineticSessionHandle\fP handle, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *keys, \fBKineticCompletionClosure\fP *closure)"
+.RI "\fBKineticStatus\fP \fBKineticClient_GetKeyRange\fP (\fBKineticSession\fP const *const session, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *keys, \fBKineticCompletionClosure\fP *closure)"
 .br
-.RI "\fIExecutes a GETKEYRANGE command to retrive a set of keys in the range specified range from the Kinetic Device\&. \fP"
+.RI "\fIExecutes a GETKEYRANGE command to retrieve a set of keys in the range specified range from the Kinetic Device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticClient_GetLog\fP (\fBKineticSessionHandle\fP handle, \fBKineticDeviceInfo_Type\fP type, \fBKineticDeviceInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
+.RI "\fBKineticStatus\fP \fBKineticClient_GetLog\fP (\fBKineticSession\fP const *const session, \fBKineticDeviceInfo_Type\fP type, \fBKineticDeviceInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
 .br
-.RI "\fIExecutes a GETLOG command to retrive a set of keys in the range specified range from the Kinetic Device\&. \fP"
+.RI "\fIExecutes a GETLOG command to retrieve specific configuration and/or operational data from the Kinetic Device\&. \fP"
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticClient_P2POperation\fP (\fBKineticSession\fP const *const session, \fBKineticP2P_Operation\fP *const p2pOp, \fBKineticCompletionClosure\fP *closure)"
+.br
+.RI "\fIExecutes a PEER2PEERPUSH operation allows a client to instruct a Kinetic Device to copy a set of keys (and associated value and metadata) to another Kinetic Device\&. \fP"
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticClient_InstantSecureErase\fP (\fBKineticSession\fP const *const session)"
+.br
+.RI "\fIExecutes an InstantSecureErase command to erase all data from the Kinetic device\&. \fP"
 .in -1c
 .SH "Function Documentation"
 .PP 
 .SS "void KineticClient_Init (const char *log_file, intlog_level)"
 
 .PP
-Initializes the Kinetic API andcsonfigures logging destination\&. 
+Initializes the Kinetic API and configures logging destination\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -80,192 +100,304 @@ Performs shutdown/cleanup of the kinetic-c client lib\&.
 Definition at line 35 of file kinetic_client\&.c\&.
 .PP
 References KineticLogger_Close()\&.
-.SS "\fBKineticStatus\fP KineticClient_Connect (const \fBKineticSession\fP *config, \fBKineticSessionHandle\fP *handle)"
+.SS "\fBKineticStatus\fP KineticClient_CreateConnection (\fBKineticSession\fP *constsession)"
 
 .PP
 Initializes the Kinetic API, configures logging destination, establishes a connection to the specified Kinetic Device, and establishes a session\&. 
 .PP
 \fBParameters:\fP
 .RS 4
-\fIconfig\fP Session configuration \&.host Host name or IP address to connect to \&.port Port to establish socket connection on \&.nonBlocking Set to true for non-blocking or false for blocking I/O \&.clusterVersion Cluster version to use for the session \&.identity Identity to use for the session \&.hmacKey Key to use for HMAC calculations (NULL-terminated string) 
-.br
-\fIhandle\fP Pointer to KineticSessionHandle (populated upon successful connection)
+\fIsession\fP Configured \fBKineticSession\fP to connect \&.config \fC\fBKineticSessionConfig\fP\fP structure which must be configured by the client prior to creating the device connection\&. \&.host Host name or IP address to connect to \&.port Port to establish socket connection on \&.clusterVersion Cluster version to use for the session \&.identity Identity to use for the session \&.hmacKey Key to use for HMAC calculations (NULL-terminated string) \&.connection Pointer to dynamically allocated connection which will be populated upon establishment of a connection\&.
 .RE
 .PP
 \fBReturns:\fP
 .RS 4
-Returns the resulting KineticStatus 
+Returns the resulting \fCKineticStatus\fP, and \fCsession->connection\fP will be populated with a session instance pointer upon success\&. The client should call \fBKineticClient_DestroyConnection()\fP in order to shutdown a connection and cleanup resources when done using a \fBKineticSession\fP\&. 
 .RE
 .PP
 
 .PP
 Definition at line 40 of file kinetic_client\&.c\&.
 .PP
-References ByteArray::data, KineticSession::hmacKey, KineticSession::host, KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_HMAC_EMPTY, KINETIC_STATUS_HOST_EMPTY, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticConnection_Connect(), KineticConnection_FreeConnection(), KineticConnection_FromHandle(), KineticConnection_NewConnection(), ByteArray::len, LOG0, LOGF0, and KineticSession::port\&.
-.SS "\fBKineticStatus\fP KineticClient_Disconnect (\fBKineticSessionHandle\fP *consthandle)"
+References KineticSession::config, KineticSession::connection, ByteArray::data, KineticSessionConfig::hmacKey, KineticSessionConfig::host, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_HMAC_EMPTY, KINETIC_STATUS_HOST_EMPTY, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticSession_Connect(), KineticSession_Create(), KineticSession_Destroy(), ByteArray::len, LOG0, LOGF0, and KineticSessionConfig::port\&.
+.SS "\fBKineticStatus\fP KineticClient_DestroyConnection (\fBKineticSession\fP *constsession)"
 
 .PP
 Closes the connection to a host\&. 
 .PP
 \fBParameters:\fP
 .RS 4
-\fIhandle\fP KineticSessionHandle for a connected session\&.
+\fIsession\fP The connected \fC\fBKineticSession\fP\fP to close\&. The connection instance will be freed by this call after closing the connection\&.
 .RE
 .PP
 \fBReturns:\fP
 .RS 4
-Returns the resulting KineticStatus 
+Returns the resulting KineticStatus\&. 
 .RE
 .PP
 
 .PP
-Definition at line 91 of file kinetic_client\&.c\&.
+Definition at line 75 of file kinetic_client\&.c\&.
 .PP
-References KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticConnection_Disconnect(), KineticConnection_FreeConnection(), KineticConnection_FromHandle(), and LOG0\&.
-.SS "\fBKineticStatus\fP KineticClient_NoOp (\fBKineticSessionHandle\fPhandle)"
+References KineticSession::connection, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticSession_Destroy(), KineticSession_Disconnect(), and LOG0\&.
+.SS "\fBKineticStatus\fP KineticClient_NoOp (\fBKineticSession\fP const *constsession)"
 
 .PP
 Executes a NOOP command to test whether the Kinetic Device is operational\&. 
 .PP
 \fBParameters:\fP
 .RS 4
-\fIhandle\fP KineticSessionHandle for a connected session\&.
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation\&.
 .RE
 .PP
 \fBReturns:\fP
 .RS 4
-Returns the resulting KineticStatus 
+Returns the resulting KineticStatus\&. 
 .RE
 .PP
 
 .PP
-Definition at line 112 of file kinetic_client\&.c\&.
+Definition at line 95 of file kinetic_client\&.c\&.
 .PP
-References KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildNoop()\&.
-.SS "\fBKineticStatus\fP KineticClient_Put (\fBKineticSessionHandle\fPhandle, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
+References KineticSession::connection, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildNoop()\&.
+.SS "\fBKineticStatus\fP KineticClient_Put (\fBKineticSession\fP const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
 
 .PP
 Executes a PUT command to store/update an entry on the Kinetic Device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
-\fIhandle\fP KineticSessionHandle for a connected session\&. 
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation\&. 
 .br
 \fIentry\fP Key/value entry for object to store\&. 'value' must specify the data to be stored\&. 
 .br
-\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion\&.
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
 .RE
 .PP
 \fBReturns:\fP
 .RS 4
-Returns the resulting KineticStatus 
+Returns the resulting KineticStatus\&. 
 .RE
 .PP
 
 .PP
-Definition at line 123 of file kinetic_client\&.c\&.
+Definition at line 107 of file kinetic_client\&.c\&.
 .PP
-References ByteBuffer::array, ByteArray::data, KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), KineticOperation_BuildPut(), and KineticEntry::value\&.
-.SS "\fBKineticStatus\fP KineticClient_Get (\fBKineticSessionHandle\fPhandle, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
+References ByteBuffer::array, KineticSession::connection, ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), KineticOperation_BuildPut(), and KineticEntry::value\&.
+.SS "\fBKineticStatus\fP KineticClient_Flush (\fBKineticSession\fP const *constsession, \fBKineticCompletionClosure\fP *closure)"
 
 .PP
-Executes a GET command to retrieve and entry from the Kinetic Device\&. 
+Executes a FLUSHALLDATA command to flush pending PUTs or DELETEs\&. 
 .PP
 \fBParameters:\fP
 .RS 4
-\fIhandle\fP KineticSessionHandle for a connected session\&. 
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation\&. 
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns the resulting KineticStatus\&. 
+.RE
+.PP
+
+.PP
+Definition at line 126 of file kinetic_client\&.c\&.
+.PP
+References KineticSession::connection, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildFlush()\&.
+.SS "\fBKineticStatus\fP KineticClient_Get (\fBKineticSession\fP const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a GET command to retrieve an entry from the Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation\&. 
 .br
 \fIentry\fP Key/value entry for object to retrieve\&. 'value' will be populated unless 'metadataOnly' is set to 'true'\&. 
 .br
-\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion\&.
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
 .RE
 .PP
 \fBReturns:\fP
 .RS 4
-Returns the resulting KineticStatus 
-.RE
-.PP
-
-.PP
-Definition at line 141 of file kinetic_client\&.c\&.
-.PP
-References ByteBuffer::array, ByteArray::data, KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), KineticOperation_BuildGet(), KineticEntry::metadataOnly, and KineticEntry::value\&.
-.SS "\fBKineticStatus\fP KineticClient_Delete (\fBKineticSessionHandle\fPhandle, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
-
-.PP
-Executes a DELETE command to delete an entry from the Kinetic Device\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIhandle\fP KineticSessionHandle for a connected session\&. 
-.br
-\fIentry\fP Key/value entry for object to delete\&. 'value' is not used for this operation\&. 
-.br
-\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion\&.
-.RE
-.PP
-\fBReturns:\fP
-.RS 4
-Returns the resulting KineticStatus 
-.RE
-.PP
-
-.PP
-Definition at line 159 of file kinetic_client\&.c\&.
-.PP
-References KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildDelete()\&.
-.SS "\fBKineticStatus\fP KineticClient_GetKeyRange (\fBKineticSessionHandle\fPhandle, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *keys, \fBKineticCompletionClosure\fP *closure)"
-
-.PP
-Executes a GETKEYRANGE command to retrive a set of keys in the range specified range from the Kinetic Device\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIhandle\fP KineticSessionHandle for a connected session 
-.br
-\fIrange\fP \fBKineticKeyRange\fP specifying keys to return 
-.br
-\fIkeys\fP \fBByteBufferArray\fP to store the retrieved keys 
-.br
-\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion\&.
-.RE
-.PP
-\fBReturns:\fP
-.RS 4
-Returns 0 upon succes, -1 or the Kinetic status code upon failure 
-.RE
-.PP
-
-.PP
-Definition at line 176 of file kinetic_client\&.c\&.
-.PP
-References ByteBufferArray::buffers, ByteBufferArray::count, KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildGetKeyRange()\&.
-.SS "\fBKineticStatus\fP KineticClient_GetLog (\fBKineticSessionHandle\fPhandle, \fBKineticDeviceInfo_Type\fPtype, \fBKineticDeviceInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
-
-.PP
-Executes a GETLOG command to retrive a set of keys in the range specified range from the Kinetic Device\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIhandle\fP KineticSessionHandle for a connected session 
-.br
-\fItype\fP KineticLogDataType specifying data type to retrieve\&. 
-.br
-\fIinfo\fP \fBKineticDeviceInfo\fP pointer, which will be assigned to a dynamically allocated structure populated with the requested data, if successful\&. 
-.br
-\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion\&.
-.RE
-.PP
-\fBReturns:\fP
-.RS 4
-Returns 0 upon succes, -1 or the Kinetic status code upon failure 
+Returns the resulting KineticStatus\&. 
 .RE
 .PP
 
 .PP
 Definition at line 197 of file kinetic_client\&.c\&.
 .PP
-References KINETIC_HANDLE_INVALID, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildGetLog()\&.
+References CMD_GET\&.
+.SS "\fBKineticStatus\fP KineticClient_GetPrevious (\fBKineticSession\fP const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a GETPREVIOUS command to retrieve the next entry from the Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation\&. 
+.br
+\fIentry\fP Key/value entry for object to retrieve\&. 'value' will be populated unless 'metadataOnly' is set to 'true'\&. The key and value fields will be populated with the previous key and its corresponding value, according to lexicographical byte order\&.
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns the resulting KineticStatus\&. 
+.RE
+.PP
+
+.PP
+Definition at line 204 of file kinetic_client\&.c\&.
+.PP
+References CMD_GET_PREVIOUS\&.
+.SS "\fBKineticStatus\fP KineticClient_GetNext (\fBKineticSession\fP const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a GETNEXT command to retrieve the next entry from the Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation\&. 
+.br
+\fIentry\fP Key/value entry for object to retrieve\&. 'value' will be populated unless 'metadataOnly' is set to 'true'\&. The key and value fields will be populated with the next key and its corresponding value, according to lexicographical byte order\&.
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns the resulting KineticStatus\&. 
+.RE
+.PP
+
+.PP
+Definition at line 211 of file kinetic_client\&.c\&.
+.PP
+References CMD_GET_NEXT\&.
+.SS "\fBKineticStatus\fP KineticClient_Delete (\fBKineticSession\fP const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a DELETE command to delete an entry from the Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation\&. 
+.br
+\fIentry\fP Key/value entry for object to delete\&. 'value' is not used for this operation\&. 
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns the resulting KineticStatus\&. 
+.RE
+.PP
+
+.PP
+Definition at line 218 of file kinetic_client\&.c\&.
+.PP
+References KineticSession::connection, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildDelete()\&.
+.SS "\fBKineticStatus\fP KineticClient_GetKeyRange (\fBKineticSession\fP const *constsession, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *keys, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a GETKEYRANGE command to retrieve a set of keys in the range specified range from the Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation 
+.br
+\fIrange\fP \fBKineticKeyRange\fP specifying keys to return 
+.br
+\fIkeys\fP \fBByteBufferArray\fP to store the retrieved keys 
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns 0 upon success, -1 or the Kinetic status code upon failure 
+.RE
+.PP
+
+.PP
+Definition at line 236 of file kinetic_client\&.c\&.
+.PP
+References ByteBufferArray::buffers, KineticSession::connection, ByteBufferArray::count, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildGetKeyRange()\&.
+.SS "\fBKineticStatus\fP KineticClient_GetLog (\fBKineticSession\fP const *constsession, \fBKineticDeviceInfo_Type\fPtype, \fBKineticDeviceInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a GETLOG command to retrieve specific configuration and/or operational data from the Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation 
+.br
+\fItype\fP KineticLogDataType specifying data type to retrieve\&. 
+.br
+\fIinfo\fP \fBKineticDeviceInfo\fP pointer, which will be assigned to a dynamically allocated structure populated with the requested data, if successful\&. The client should call free() on this pointer in order to free the root and any nested structures\&. 
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns 0 upon success, -1 or the Kinetic status code upon failure 
+.RE
+.PP
+
+.PP
+Definition at line 258 of file kinetic_client\&.c\&.
+.PP
+References KineticSession::connection, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildGetLog()\&.
+.SS "\fBKineticStatus\fP KineticClient_P2POperation (\fBKineticSession\fP const *constsession, \fBKineticP2P_Operation\fP *constp2pOp, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic Device to copy a set of keys (and associated value and metadata) to another Kinetic Device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation 
+.br
+\fIp2pOp\fP \fBKineticP2P_Operation\fP pointer\&. This pointer needs to remain valid during the duration of the operation\&. The results of P2P operation(s) will be stored in the resultStatus field of this structure\&. 
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns 0 upon success, -1 or the Kinetic status code upon failure\&. Note that P2P operations can be nested\&. This status code pertains to the initial top-level P2P operation\&. You'll need to check the resultStatus in the p2pOp structure to check the status of the individual P2P operations\&. 
+.RE
+.PP
+
+.PP
+Definition at line 277 of file kinetic_client\&.c\&.
+.PP
+References KineticSession::connection, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildP2POperation()\&.
+.SS "\fBKineticStatus\fP KineticClient_InstantSecureErase (\fBKineticSession\fP const *constsession)"
+
+.PP
+Executes an InstantSecureErase command to erase all data from the Kinetic device\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected \fBKineticSession\fP to use for the operation\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns the resulting KineticStatus\&. 
+.RE
+.PP
+
+.PP
+Definition at line 295 of file kinetic_client\&.c\&.
+.PP
+References KineticSession::connection, KINETIC_STATUS_MEMORY_ERROR, KineticController_CreateOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildInstantSecureErase()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "kinetic_types_internal.h" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types_internal.h" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -56,9 +56,6 @@ kinetic_types_internal.h \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBKINETIC_SESSIONS_MAX\fP   (20)"
-.br
-.ti -1c
 .RI "#define \fBKINETIC_PDUS_PER_SESSION_DEFAULT\fP   (2)"
 .br
 .ti -1c
@@ -78,6 +75,9 @@ kinetic_types_internal.h \-
 .br
 .ti -1c
 .RI "#define \fBSTATIC\fP   static"
+.br
+.ti -1c
+.RI "#define \fBNUM_ELEMENTS\fP(ARRAY)   (sizeof(ARRAY)/sizeof((ARRAY)[0]))"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_LIST_INITIALIZER\fP"
@@ -123,7 +123,7 @@ kinetic_types_internal.h \-
 
 .in +1c
 .ti -1c
-.RI "typedef \fBKineticStatus\fP(* \fBKineticOperationCallback\fP )(KineticOperation *operation)"
+.RI "typedef \fBKineticStatus\fP(* \fBKineticOperationCallback\fP )(KineticOperation *const operation, \fBKineticStatus\fP const status)"
 .br
 .in -1c
 .SS "Enumerations"
@@ -197,47 +197,47 @@ kinetic_types_internal.h \-
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define KINETIC_SESSIONS_MAX   (20)"
-
-.PP
-Definition at line 32 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_PDUS_PER_SESSION_DEFAULT   (2)"
 
 .PP
-Definition at line 33 of file kinetic_types_internal\&.h\&.
+Definition at line 32 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_PDUS_PER_SESSION_MAX   (10)"
 
 .PP
-Definition at line 34 of file kinetic_types_internal\&.h\&.
+Definition at line 33 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_SOCKET_DESCRIPTOR_INVALID   (-1)"
 
 .PP
-Definition at line 35 of file kinetic_types_internal\&.h\&.
+Definition at line 34 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS   (3)"
 
 .PP
-Definition at line 36 of file kinetic_types_internal\&.h\&.
+Definition at line 35 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_OPERATION_TIMEOUT_SECS   (20)"
 
 .PP
-Definition at line 37 of file kinetic_types_internal\&.h\&.
+Definition at line 36 of file kinetic_types_internal\&.h\&.
 .SS "#define __func__   __FUNCTION__"
 
 .PP
-Definition at line 41 of file kinetic_types_internal\&.h\&.
+Definition at line 40 of file kinetic_types_internal\&.h\&.
 .SS "#define STATIC   static"
 
 .PP
-Definition at line 48 of file kinetic_types_internal\&.h\&.
+Definition at line 47 of file kinetic_types_internal\&.h\&.
+.SS "#define NUM_ELEMENTS(ARRAY)   (sizeof(ARRAY)/sizeof((ARRAY)[0]))"
+
+.PP
+Definition at line 51 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_LIST_INITIALIZER"
 \fBValue:\fP
 .PP
 .nf
 (KineticList) { \
-    \&.mutex = PTHREAD_MUTEX_INITIALIZER, \&.locked = false, \&.start = NULL, \&.last = NULL }
+    \&.mutex = PTHREAD_MUTEX_INITIALIZER, \&.locked = false, \&.start = NULL, }
 .fi
 .PP
-Definition at line 72 of file kinetic_types_internal\&.h\&.
+Definition at line 71 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_CONNECTION_INIT(_con)"
 \fBValue:\fP
 .PP
@@ -252,7 +252,7 @@ Definition at line 72 of file kinetic_types_internal\&.h\&.
 }
 .fi
 .PP
-Definition at line 97 of file kinetic_types_internal\&.h\&.
+Definition at line 96 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac)"
 \fBValue:\fP
 .PP
@@ -279,7 +279,7 @@ Definition at line 97 of file kinetic_types_internal\&.h\&.
 }
 .fi
 .PP
-Definition at line 136 of file kinetic_types_internal\&.h\&.
+Definition at line 139 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con)"
 \fBValue:\fP
 .PP
@@ -290,7 +290,7 @@ Definition at line 136 of file kinetic_types_internal\&.h\&.
     *(_hdr) = (KineticProto_Command_Header) { \
         \&.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor), \
         \&.has_clusterVersion = true, \
-        \&.clusterVersion = (_con)->session\&.clusterVersion, \
+        \&.clusterVersion = (_con)->session\&.config\&.clusterVersion, \
         \&.has_connectionID = true, \
         \&.connectionID = (_con)->connectionID, \
         \&.has_sequence = true, \
@@ -299,7 +299,7 @@ Definition at line 136 of file kinetic_types_internal\&.h\&.
 }
 .fi
 .PP
-Definition at line 157 of file kinetic_types_internal\&.h\&.
+Definition at line 160 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_MESSAGE_INIT(msg)"
 \fBValue:\fP
 .PP
@@ -315,24 +315,28 @@ Definition at line 157 of file kinetic_types_internal\&.h\&.
     KineticProto_command_key_value__init(&(msg)->keyValue); \\
     KineticProto_command_range__init(&(msg)->keyRange); \\
     KineticProto_command_get_log__init(&(msg)->getLog); \\
+    KineticProto_command_pin_operation__init(&(msg)->pinOp); \\
+    KineticProto_command_p2_poperation__init(&(msg)->p2pOp); \\
+    KineticProto_command_p2_poperation_operation__init(&(msg)->p2pOpOp); \\
+    KineticProto_command_p2_poperation_peer__init(&(msg)->p2pPeer); \\
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
     (msg)->has_command = false; \
 }
 .fi
 .PP
-Definition at line 171 of file kinetic_types_internal\&.h\&.
+Definition at line 174 of file kinetic_types_internal\&.h\&.
 .SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int32_t)))"
 
 .PP
-Definition at line 187 of file kinetic_types_internal\&.h\&.
+Definition at line 194 of file kinetic_types_internal\&.h\&.
 .SS "#define PDU_PROTO_MAX_LEN   (1024 * 1024)"
 
 .PP
-Definition at line 188 of file kinetic_types_internal\&.h\&.
+Definition at line 195 of file kinetic_types_internal\&.h\&.
 .SS "#define PDU_PROTO_MAX_UNPACKED_LEN   (\fBPDU_PROTO_MAX_LEN\fP * 2)"
 
 .PP
-Definition at line 189 of file kinetic_types_internal\&.h\&.
+Definition at line 196 of file kinetic_types_internal\&.h\&.
 .SS "#define PDU_MAX_LEN"
 \fBValue:\fP
 .PP
@@ -341,11 +345,11 @@ Definition at line 189 of file kinetic_types_internal\&.h\&.
                                     PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE)
 .fi
 .PP
-Definition at line 190 of file kinetic_types_internal\&.h\&.
+Definition at line 197 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_PDU_HEADER_INIT   (\fBKineticPDUHeader\fP) {\&.versionPrefix = 'F'}"
 
 .PP
-Definition at line 197 of file kinetic_types_internal\&.h\&.
+Definition at line 204 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_PDU_INIT(_pdu, _con)"
 \fBValue:\fP
 .PP
@@ -359,12 +363,12 @@ Definition at line 197 of file kinetic_types_internal\&.h\&.
     (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \\
     KINETIC_MESSAGE_INIT(&((_pdu)->protoData\&.message)); \\
     KINETIC_MESSAGE_AUTH_HMAC_INIT( \
-            &((_pdu)->protoData\&.message), (_con)->session\&.identity, (_con)->session\&.hmacKey); \\
+            &((_pdu)->protoData\&.message), (_con)->session\&.config\&.identity, (_con)->session\&.config\&.hmacKey); \\
     KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData\&.message\&.header), (_con)); \
 }
 .fi
 .PP
-Definition at line 236 of file kinetic_types_internal\&.h\&.
+Definition at line 243 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con)"
 \fBValue:\fP
 .PP
@@ -379,7 +383,7 @@ Definition at line 236 of file kinetic_types_internal\&.h\&.
 }
 .fi
 .PP
-Definition at line 249 of file kinetic_types_internal\&.h\&.
+Definition at line 256 of file kinetic_types_internal\&.h\&.
 .SS "#define KINETIC_OPERATION_INIT(_op, _con)"
 \fBValue:\fP
 .PP
@@ -392,13 +396,13 @@ assert((_op) != NULL); \
     }
 .fi
 .PP
-Definition at line 275 of file kinetic_types_internal\&.h\&.
+Definition at line 283 of file kinetic_types_internal\&.h\&.
 .SH "Typedef Documentation"
 .PP 
-.SS "typedef \fBKineticStatus\fP(* KineticOperationCallback)(KineticOperation *operation)"
+.SS "typedef \fBKineticStatus\fP(* KineticOperationCallback)(KineticOperation *const operation, \fBKineticStatus\fP const status)"
 
 .PP
-Definition at line 258 of file kinetic_types_internal\&.h\&.
+Definition at line 265 of file kinetic_types_internal\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBKineticPDUType\fP"
@@ -415,13 +419,13 @@ Definition at line 258 of file kinetic_types_internal\&.h\&.
 .TP
 \fB\fIKINETIC_PDU_TYPE_UNSOLICITED \fP\fP
 .PP
-Definition at line 200 of file kinetic_types_internal\&.h\&.
+Definition at line 207 of file kinetic_types_internal\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "struct __attribute__ ((__packed__))"
 
 .PP
-Definition at line 192 of file kinetic_types_internal\&.h\&.
+Definition at line 199 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticProto_Command_Algorithm\fP KineticProto_Command_Algorithm_from_KineticAlgorithm (\fBKineticAlgorithm\fPkinteicAlgorithm)"
 
 .PP
@@ -511,7 +515,7 @@ Definition at line 398 of file kinetic_types_internal\&.c\&.
 .SS "KineticPDUHeader"
 
 .PP
-Definition at line 196 of file kinetic_types_internal\&.h\&.
+Definition at line 203 of file kinetic_types_internal\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

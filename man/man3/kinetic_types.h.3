@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,9 +35,13 @@ kinetic_types.h \-
 
 .in +1c
 .ti -1c
+.RI "struct \fBKineticSessionConfig\fP"
+.br
+.RI "\fIStructure used to specify the configuration for a session\&. \fP"
+.ti -1c
 .RI "struct \fBKineticSession\fP"
 .br
-.RI "\fIStructure used to specify the configuration of a session\&. \fP"
+.RI "\fIAn instance of a session with a Kinetic device\&. \fP"
 .ti -1c
 .RI "struct \fBKineticCompletionData\fP"
 .br
@@ -76,6 +80,15 @@ kinetic_types.h \-
 .br
 .ti -1c
 .RI "struct \fBKineticDeviceInfo\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticP2P_Peer\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticP2P_OperationData\fP"
+.br
+.ti -1c
+.RI "struct \fBKineticP2P_Operation\fP"
 .br
 .in -1c
 .SS "Macros"
@@ -130,10 +143,6 @@ kinetic_types.h \-
 .SS "Typedefs"
 
 .in +1c
-.ti -1c
-.RI "typedef int \fBKineticSessionHandle\fP"
-.br
-.RI "\fIHandle for a session instance\&. \fP"
 .ti -1c
 .RI "typedef void(* \fBKineticCompletionCallback\fP )(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
 .br
@@ -228,34 +237,28 @@ Definition at line 64 of file kinetic_types\&.h\&.
 .PP
 .nf
 { \
-    *(_session) = (KineticSession) { \
+    (*_session)\&.config = (KineticSessionConfig) { \
         \&.port = KINETIC_PORT, \
         \&.clusterVersion = (_clusterVersion), \
         \&.identity = (_identity), \
-        \&.hmacKey = {\&.data = (_session)->keyData, \&.len = (_hmacKey)\&.len}, \
+        \&.hmacKey = {\&.data = (_session)->config\&.keyData, \&.len = (_hmacKey)\&.len}, \
     }; \
-    strcpy((_session)->host, (_host)); \
-    memcpy((_session)->hmacKey\&.data, (_hmacKey)\&.data, (_hmacKey)\&.len); \
+    strcpy((_session)->config\&.host, (_host)); \
+    memcpy((_session)->config\&.hmacKey\&.data, (_hmacKey)\&.data, (_hmacKey)\&.len); \
 }
 .fi
 .PP
-Definition at line 125 of file kinetic_types\&.h\&.
+Definition at line 134 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN   (1024 * 1024 * 4)"
 
 .PP
-Definition at line 327 of file kinetic_types\&.h\&.
+Definition at line 357 of file kinetic_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
-.SS "typedef int \fBKineticSessionHandle\fP"
-
-.PP
-Handle for a session instance\&. 
-.PP
-Definition at line 93 of file kinetic_types\&.h\&.
 .SS "typedef void(* KineticCompletionCallback)(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
 
 .PP
-Definition at line 172 of file kinetic_types\&.h\&.
+Definition at line 183 of file kinetic_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBKineticAlgorithm\fP"
@@ -346,9 +349,13 @@ Definition at line 82 of file kinetic_types\&.h\&.
 .TP
 \fB\fIKINETIC_STATUS_SOCKET_ERROR \fP\fP
 .TP
+\fB\fIKINETIC_STATUS_MISSING_KEY \fP\fP
+.TP
+\fB\fIKINETIC_STATUS_MISSING_VALUE_BUFFER \fP\fP
+.TP
 \fB\fIKINETIC_STATUS_COUNT \fP\fP
 .PP
-Definition at line 137 of file kinetic_types\&.h\&.
+Definition at line 146 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticDeviceInfo_Type\fP"
 
 .PP
@@ -371,7 +378,7 @@ Definition at line 137 of file kinetic_types\&.h\&.
 .TP
 \fB\fIKINETIC_DEVICE_INFO_TYPE_DEVICE \fP\fP
 .PP
-Definition at line 207 of file kinetic_types\&.h\&.
+Definition at line 218 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticMessageType\fP"
 
 .PP
@@ -444,19 +451,19 @@ Definition at line 207 of file kinetic_types\&.h\&.
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE \fP\fP
 .PP
-Definition at line 254 of file kinetic_types\&.h\&.
+Definition at line 265 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
 
 .PP
-Definition at line 54 of file kinetic_types\&.c\&.
+Definition at line 56 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_STATUS_COUNT\&.
 .SS "const char* KineticMessageType_GetName (\fBKineticMessageType\fPtype)"
 
 .PP
-Definition at line 99 of file kinetic_types\&.c\&.
+Definition at line 101 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_MESSAGE_TYPE_DELETE, KINETIC_MESSAGE_TYPE_DELETE_RESPONSE, KINETIC_MESSAGE_TYPE_FLUSHALLDATA, KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE, KINETIC_MESSAGE_TYPE_GET, KINETIC_MESSAGE_TYPE_GET_RESPONSE, KINETIC_MESSAGE_TYPE_GETKEYRANGE, KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE, KINETIC_MESSAGE_TYPE_GETLOG, KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE, KINETIC_MESSAGE_TYPE_GETNEXT, KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE, KINETIC_MESSAGE_TYPE_GETPREVIOUS, KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE, KINETIC_MESSAGE_TYPE_GETVERSION, KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE, KINETIC_MESSAGE_TYPE_INVALID, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE, KINETIC_MESSAGE_TYPE_MEDIASCAN, KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE, KINETIC_MESSAGE_TYPE_NOOP, KINETIC_MESSAGE_TYPE_NOOP_RESPONSE, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE, KINETIC_MESSAGE_TYPE_PINOP, KINETIC_MESSAGE_TYPE_PINOP_RESPONSE, KINETIC_MESSAGE_TYPE_PUT, KINETIC_MESSAGE_TYPE_PUT_RESPONSE, KINETIC_MESSAGE_TYPE_SECURITY, KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE, KINETIC_MESSAGE_TYPE_SETUP, and KINETIC_MESSAGE_TYPE_SETUP_RESPONSE\&.
 .SH "Author"

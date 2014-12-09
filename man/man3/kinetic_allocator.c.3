@@ -1,4 +1,4 @@
-.TH "kinetic_allocator.c" 3 "Thu Nov 13 2014" "Version v0.8.1-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_allocator.c" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,6 +30,12 @@ kinetic_allocator.c \-
 .in +1c
 .ti -1c
 .RI "void \fBKineticAllocator_InitLists\fP (KineticConnection *connection)"
+.br
+.ti -1c
+.RI "KineticConnection * \fBKineticAllocator_NewConnection\fP (void)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeConnection\fP (KineticConnection *connection)"
 .br
 .ti -1c
 .RI "KineticPDU * \fBKineticAllocator_NewPDU\fP (KineticConnection *connection)"
@@ -100,62 +106,72 @@ Definition at line 37 of file kinetic_allocator\&.c\&.
 Definition at line 44 of file kinetic_allocator\&.c\&.
 .PP
 References KINETIC_LIST_INITIALIZER\&.
+.SS "KineticConnection* KineticAllocator_NewConnection (void)"
+
+.PP
+Definition at line 51 of file kinetic_allocator\&.c\&.
+.PP
+References KINETIC_CONNECTION_INIT\&.
+.SS "void KineticAllocator_FreeConnection (KineticConnection *connection)"
+
+.PP
+Definition at line 58 of file kinetic_allocator\&.c\&.
 .SS "KineticPDU* KineticAllocator_NewPDU (KineticConnection *connection)"
 
 .PP
-Definition at line 221 of file kinetic_allocator\&.c\&.
+Definition at line 200 of file kinetic_allocator\&.c\&.
 .PP
 References KINETIC_PDU_INIT, LOG0, and LOGF3\&.
 .SS "void KineticAllocator_FreePDU (KineticConnection *connection, KineticPDU *pdu)"
 
 .PP
-Definition at line 237 of file kinetic_allocator\&.c\&.
+Definition at line 216 of file kinetic_allocator\&.c\&.
 .PP
 References KINETIC_LIST_LOCK, KINETIC_LIST_UNLOCK, KineticProto_Message__free_unpacked(), LOG3, and LOGF3\&.
 .SS "KineticPDU* KineticAllocator_GetFirstPDU (KineticConnection *connection)"
 
 .PP
-Definition at line 250 of file kinetic_allocator\&.c\&.
+Definition at line 236 of file kinetic_allocator\&.c\&.
 .SS "KineticPDU* KineticAllocator_GetNextPDU (KineticConnection *connection, KineticPDU *pdu)"
 
 .PP
-Definition at line 256 of file kinetic_allocator\&.c\&.
+Definition at line 242 of file kinetic_allocator\&.c\&.
 .SS "void KineticAllocator_FreeAllPDUs (KineticConnection *connection)"
 
 .PP
-Definition at line 262 of file kinetic_allocator\&.c\&.
+Definition at line 248 of file kinetic_allocator\&.c\&.
 .PP
 References KINETIC_LIST_LOCK, KINETIC_LIST_UNLOCK, KineticProto_Message__free_unpacked(), LOG1, and LOG3\&.
 .SS "KineticOperation* KineticAllocator_NewOperation (KineticConnection *constconnection)"
 
 .PP
-Definition at line 290 of file kinetic_allocator\&.c\&.
+Definition at line 276 of file kinetic_allocator\&.c\&.
 .PP
 References KINETIC_OPERATION_INIT, KINETIC_PDU_INIT_WITH_COMMAND, KineticAllocator_NewPDU(), LOGF0, and LOGF3\&.
 .SS "void KineticAllocator_FreeOperation (KineticConnection *constconnection, KineticOperation *operation)"
 
 .PP
-Definition at line 307 of file kinetic_allocator\&.c\&.
+Definition at line 293 of file kinetic_allocator\&.c\&.
 .PP
 References KineticAllocator_FreePDU(), and LOGF3\&.
 .SS "KineticOperation* KineticAllocator_GetFirstOperation (KineticConnection *constconnection)"
 
 .PP
-Definition at line 327 of file kinetic_allocator\&.c\&.
+Definition at line 315 of file kinetic_allocator\&.c\&.
 .SS "KineticOperation* KineticAllocator_GetNextOperation (KineticConnection *constconnection, KineticOperation *operation)"
 
 .PP
-Definition at line 333 of file kinetic_allocator\&.c\&.
+Definition at line 321 of file kinetic_allocator\&.c\&.
 .SS "void KineticAllocator_FreeAllOperations (KineticConnection *constconnection)"
 
 .PP
-Definition at line 339 of file kinetic_allocator\&.c\&.
+Definition at line 327 of file kinetic_allocator\&.c\&.
 .PP
-References KineticAllocator_FreePDU(), LOG1, and LOGF3\&.
+References KineticAllocator_FreeOperation(), and KineticAllocator_GetFirstOperation()\&.
 .SS "bool KineticAllocator_ValidateAllMemoryFreed (KineticConnection *constconnection)"
 
 .PP
-Definition at line 372 of file kinetic_allocator\&.c\&.
+Definition at line 336 of file kinetic_allocator\&.c\&.
 .PP
 References BOOL_TO_STRING, and LOGF3\&.
 .SH "Author"

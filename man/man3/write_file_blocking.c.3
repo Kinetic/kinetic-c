@@ -1,0 +1,54 @@
+.TH "write_file_blocking.c" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+write_file_blocking.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_client\&.h'\fP
+.br
+\fC#include 'kinetic_types\&.h'\fP
+.br
+\fC#include 'byte_array\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <getopt\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <sys/param\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <sys/file\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBstore_data\fP (write_args *args)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void store_data (write_args *args)"
+
+.PP
+Definition at line 44 of file write_file_blocking\&.c\&.
+.PP
+References ByteBuffer_AppendArray(), ByteBuffer_AppendCString(), ByteBuffer_BytesRemaining(), ByteBuffer_Consume(), ByteBuffer_Reset(), KineticEntry::key, Kinetic_GetStatusDescription(), KINETIC_OBJ_SIZE, KINETIC_STATUS_SUCCESS, KineticClient_Put(), and KineticEntry::value\&.
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 81 of file write_file_blocking\&.c\&.
+.PP
+References ByteArray_CreateWithCString(), ByteBuffer_AppendCString(), ByteBuffer_Create(), KineticSession::config, KineticSessionConfig::host, KINETIC_ALGORITHM_SHA1, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KINETIC_SYNCHRONIZATION_WRITEBACK, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), and store_data()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

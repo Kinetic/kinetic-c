@@ -1,0 +1,76 @@
+.TH "write_file_nonblocking.c" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+write_file_nonblocking.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_client\&.h'\fP
+.br
+\fC#include 'kinetic_types\&.h'\fP
+.br
+\fC#include 'byte_array\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <getopt\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <sys/param\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <sys/file\&.h>\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBREPORT_ERRNO\fP(en, msg)   if(en != 0){errno = en; perror(msg);}"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "FileTransferProgress * \fBstart_file_transfer\fP (\fBKineticSession\fP *session, char const *const filename, uint64_t keyPrefix, uint32_t maxOverlappedChunks)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBwait_for_put_finish\fP (FileTransferProgress *const transfer)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define REPORT_ERRNO(en, msg)   if(en != 0){errno = en; perror(msg);}"
+
+.PP
+Definition at line 13 of file write_file_nonblocking\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "FileTransferProgress * start_file_transfer (\fBKineticSession\fP *session, char const *constfilename, uint64_tkeyPrefix, uint32_tmaxOverlappedChunks)"
+
+.PP
+Definition at line 170 of file write_file_nonblocking\&.c\&.
+.SS "\fBKineticStatus\fP wait_for_put_finish (FileTransferProgress *consttransfer)"
+
+.PP
+Definition at line 191 of file write_file_nonblocking\&.c\&.
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 50 of file write_file_nonblocking\&.c\&.
+.PP
+References ByteArray_CreateWithCString(), KineticSession::config, KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), start_file_transfer(), and wait_for_put_finish()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.
