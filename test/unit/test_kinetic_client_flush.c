@@ -21,9 +21,9 @@
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
+#include "mock_kinetic_operation.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_controller.h"
-#include "mock_kinetic_operation.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -31,9 +31,6 @@
 #include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
-
-static KineticSession Session;
-static KineticConnection Connection;
 
 void setUp(void)
 {
@@ -45,17 +42,30 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KineticClient_Delete_should_execute_DELETE_operation(void)
-{
-    Session.connection = &Connection;
-    KineticEntry entry;
-    KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
-    KineticOperation_BuildDelete_Expect(&operation, &entry);
+void test_KineticClient_flush_should_get_success_if_no_writes_are_in_progress(void)
+{
+    KineticConnection connection;
+    KineticOperation operation;
+    KineticSession session = {.connection = &connection};
+
+    KineticController_CreateOperation_ExpectAndReturn(&session, &operation);
+    KineticOperation_BuildFlush_Expect(&operation);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_Delete(&Session, &entry, NULL);
+    KineticStatus status = KineticClient_Flush(&session, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticClient_flush_should_expose_memory_error_from_CreateOperation(void)
+{
+    KineticConnection connection;
+    KineticSession session = {.connection = &connection};
+
+    KineticController_CreateOperation_ExpectAndReturn(&session, NULL);
+    
+    KineticStatus status = KineticClient_Flush(&session, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MEMORY_ERROR, status);
 }

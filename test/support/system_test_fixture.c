@@ -37,17 +37,19 @@ void SystemTestSetup(SystemTestFixture* fixture)
     ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
     if (!fixture->connected) {
         *fixture = (SystemTestFixture) {
-            .config = (KineticSession) {
-                .host = SYSTEM_TEST_HOST,
-                .port = KINETIC_PORT,
-                .clusterVersion = 0,
-                .identity =  1,
-                .hmacKey = hmacArray,
+            .session = (KineticSession) {
+                .config = (KineticSessionConfig) {
+                    .host = SYSTEM_TEST_HOST,
+                    .port = KINETIC_PORT,
+                    .clusterVersion = 0,
+                    .identity = 1,
+                    .hmacKey = hmacArray,
+                },
             },
             .connected = fixture->connected,
             .testIgnored = false,
         };
-        status = KineticClient_Connect(&fixture->config, &fixture->handle);
+        status = KineticClient_CreateConnection(&fixture->session);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
@@ -57,7 +59,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
     }
 
     // Erase the drive
-    status = KineticClient_InstantSecureErase(fixture->handle);
+    status = KineticClient_InstantSecureErase(&fixture->session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // TEST_ASSERT_EQUAL_MESSAGE(
@@ -79,8 +81,13 @@ void SystemTestTearDown(SystemTestFixture* fixture)
         //     "Sequence should post-increment for every operation on the session!");
     }
 
-    KineticStatus status = KineticClient_Disconnect(&fixture->handle);
+    KineticStatus status = KineticClient_DestroyConnection(&fixture->session);
     TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
 
     KineticClient_Shutdown();
+}
+
+bool SystemTestIsUnderSimulator(void)
+{
+    return 0 == strncmp(SYSTEM_TEST_HOST, "localhost", strlen("localhost"));
 }

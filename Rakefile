@@ -4,6 +4,7 @@ compiler = ENV.fetch('CC', 'gcc')
 compiler_location = `which #{compiler}`.strip
 compiler_info = `#{compiler} --version 2>&1`.strip
 
+SYSTEM_TEST_HOST = ENV.fetch('SYSTEM_TEST_HOST', "localhost")
 
 task :report_toolchain do
   report_banner("Toolchain Configuration")

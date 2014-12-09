@@ -32,7 +32,8 @@
 #include "unity.h"
 #include "unity_helper.h"
 
-static KineticSessionHandle DummyHandle = 27;
+static KineticSession Session;
+static KineticConnection Connection;
 
 void setUp(void)
 {
@@ -46,15 +47,16 @@ void tearDown(void)
 
 void test_KineticClient_Put_should_execute_PUT_operation(void)
 {
+    Session.connection = &Connection;
     ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
     KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
     KineticOperation operation;
     
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildPut_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
 
-    KineticStatus status = KineticClient_Put(DummyHandle, &entry, NULL);
+    KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
 }

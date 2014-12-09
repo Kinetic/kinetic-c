@@ -23,11 +23,10 @@
 
 #include "kinetic_types_internal.h"
 
-KineticSessionHandle KineticConnection_NewConnection(const KineticSession* const config);
-void KineticConnection_FreeConnection(KineticSessionHandle* const handle);
-KineticConnection* KineticConnection_FromHandle(KineticSessionHandle handle);
-KineticStatus KineticConnection_Connect(KineticConnection* const connection);
-KineticStatus KineticConnection_Disconnect(KineticConnection* const connection);
-void KineticConnection_IncrementSequence(KineticConnection* const connection);
+KineticStatus KineticSession_Create(KineticSession * const session);
+KineticStatus KineticSession_Destroy(KineticSession * const session);
+KineticStatus KineticSession_Connect(KineticSession const * const session);
+KineticStatus KineticSession_Disconnect(KineticSession const * const session);
+void KineticSession_IncrementSequence(KineticSession const * const session);
 
 #endif // _KINETIC_CONNECTION_H

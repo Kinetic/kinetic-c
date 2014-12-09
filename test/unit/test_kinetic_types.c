@@ -38,8 +38,7 @@ void test_kinetic_types_should_be_defined(void)
     ByteBuffer buffer; (void)buffer;
     KineticAlgorithm algorithm; (void)algorithm;
     KineticSynchronization synchronization; (void)synchronization;
-    KineticSessionHandle sessionHandle; (void)sessionHandle;
-    KineticSession sessionConfig; (void)sessionConfig;
+    KineticSession session; (void)session;
     KineticStatus status; (void)status;
 }
 

@@ -29,8 +29,7 @@
 #endif
 
 typedef struct _SystemTestFixture {
-    KineticSession config;
-    KineticSessionHandle handle;
+    KineticSession session;
     bool testIgnored;
     bool connected;
     int64_t expectedSequence;
@@ -39,12 +38,13 @@ typedef struct _SystemTestFixture {
 void SystemTestSetup(SystemTestFixture* fixture);
 void SystemTestTearDown(SystemTestFixture* fixture);
 void SystemTestSuiteTearDown(SystemTestFixture* fixture);
+bool SystemTestIsUnderSimulator(void);
 
 #define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) \
 void test_Suite_TearDown(void) \
 { \
-    if ((_fixture)->handle != KINETIC_HANDLE_INVALID && (_fixture)->connected) { \
-        KineticClient_Disconnect(&(_fixture)->handle); } \
+    if ((_fixture)->session.connection != NULL && (_fixture)->connected) { \
+        KineticClient_DestroyConnection(&(_fixture)->session); } \
     (_fixture)->connected = false; \
 }
 

@@ -164,8 +164,8 @@ void test_ByteBuffer_Consume(void)
     TEST_ASSERT_EQUAL(totalConsumed, buffer.bytesUsed);
 
     lenToConsume = 2;
-    totalConsumed += 2;
-    ByteArray consumed2 = ByteBuffer_Consume(&buffer, lenToConsume+1); // request more than available
+    totalConsumed += lenToConsume;
+    ByteArray consumed2 = ByteBuffer_Consume(&buffer, lenToConsume);
     TEST_ASSERT_EQUAL_PTR(&array.data[3], consumed2.data);
     TEST_ASSERT_EQUAL(lenToConsume, consumed2.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(&data[3], consumed2.data, lenToConsume);
@@ -189,13 +189,13 @@ void test_ByteBuffer_Append_should_append_bytes_to_the_buffer(void)
     uint8_t appendData[len];
 
     appendData[0] = 0xFCu;
-    TEST_ASSERT_TRUE(ByteBuffer_Append(&buffer, appendData, 1));
+    TEST_ASSERT_NOT_NULL(ByteBuffer_Append(&buffer, appendData, 1));
     TEST_ASSERT_EQUAL(1, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(appendData, buffer.array.data, 1);
 
     appendData[1] = 0xABu;
     appendData[2] = 0x8Cu;
-    TEST_ASSERT_TRUE(ByteBuffer_Append(&buffer, &appendData[1], 2));
+    TEST_ASSERT_NOT_NULL(ByteBuffer_Append(&buffer, &appendData[1], 2));
     TEST_ASSERT_EQUAL(3, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(appendData, buffer.array.data, 3);
 
@@ -216,13 +216,13 @@ void test_ByteBuffer_AppendArray_should_append_an_array_to_the_buffer(void)
     ByteArray appendArray0 = (ByteArray) {
         .data = appendData, .len = 1
     };
-    TEST_ASSERT_TRUE(ByteBuffer_AppendArray(&buffer, appendArray0));
+    TEST_ASSERT_NOT_NULL(ByteBuffer_AppendArray(&buffer, appendArray0));
     TEST_ASSERT_EQUAL(1, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(appendData, buffer.array.data, 1);
 
     appendData[1] = 0xABu;
     appendData[2] = 0x8Cu;
-    TEST_ASSERT_TRUE(ByteBuffer_Append(&buffer, &appendData[1], 2));
+    TEST_ASSERT_NOT_NULL(ByteBuffer_Append(&buffer, &appendData[1], 2));
     TEST_ASSERT_EQUAL(3, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(appendData, buffer.array.data, 3);
 
@@ -238,11 +238,11 @@ void test_ByteBuffer_AppendCString_should_append_a_C_string(void)
     size_t len = sizeof(data);
     ByteBuffer buffer = ByteBuffer_Create(data, len, 0);
 
-    TEST_ASSERT_TRUE(ByteBuffer_AppendCString(&buffer, "Co"));
+    TEST_ASSERT_NOT_NULL(ByteBuffer_AppendCString(&buffer, "Co"));
     TEST_ASSERT_EQUAL(2, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY("Co", buffer.array.data, 2);
 
-    TEST_ASSERT_TRUE(ByteBuffer_AppendCString(&buffer, "d"));
+    TEST_ASSERT_NOT_NULL(ByteBuffer_AppendCString(&buffer, "d"));
     TEST_ASSERT_EQUAL(3, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY("Cod", buffer.array.data, 3);
 
@@ -250,6 +250,55 @@ void test_ByteBuffer_AppendCString_should_append_a_C_string(void)
     TEST_ASSERT_FALSE(ByteBuffer_AppendCString(&buffer, "!"));
     TEST_ASSERT_EQUAL(3, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY("Cod", buffer.array.data, 3);
+}
+
+void test_ByteBuffer_AppendFormattedCString_should_append_a_generated_C_string_using_args(void)
+{
+    uint8_t data[42];
+    size_t len = sizeof(data);
+    ByteBuffer buffer = ByteBuffer_Create(data, len, 0);
+
+    TEST_ASSERT_NOT_NULL(ByteBuffer_AppendFormattedCString(&buffer, "Stuff: value=%d desc='%s'", 12, "foo"));
+    const char* expected0 = "Stuff: value=12 desc='foo'";
+    TEST_ASSERT_EQUAL_STRING(expected0, buffer.array.data);
+    TEST_ASSERT_EQUAL(strlen(expected0), buffer.bytesUsed);
+
+    TEST_ASSERT_NOT_NULL(ByteBuffer_AppendFormattedCString(&buffer, "; stuff=0x%04X", 0x34));
+    const char* expected1 = "Stuff: value=12 desc='foo'; stuff=0x0034";
+    TEST_ASSERT_EQUAL(strlen(expected1), buffer.bytesUsed);
+    TEST_ASSERT_EQUAL_STRING(expected1, buffer.array.data);
+
+    // This is too long to append, so NULL should be returned along with bytesUsed being unmodified
+    TEST_ASSERT_NULL(ByteBuffer_AppendFormattedCString(&buffer, " maximum=%.6f", 0.123456789f));
+    TEST_ASSERT_EQUAL(strlen(expected1), buffer.bytesUsed);
+}
+
+void test_ByteBuffer_CreateAndAppendFormattedCString_should_append_a_generated_C_string_using_args(void)
+{
+    uint8_t data[1024];
+    size_t len = sizeof(data);
+    memset(data, 0, len);
+    ByteBuffer buffer = 
+        ByteBuffer_CreateAndAppendFormattedCString(data, sizeof(data),
+            "Stuff: value=%d desc='%s'", 12, "foo");
+    TEST_ASSERT_EQUAL_PTR(data, buffer.array.data);
+    TEST_ASSERT_EQUAL(sizeof(data), buffer.array.len);
+    const char* expected = "Stuff: value=12 desc='foo'";
+    TEST_ASSERT_EQUAL_STRING(expected, buffer.array.data);
+    TEST_ASSERT_EQUAL_INT(strlen(expected), buffer.bytesUsed);
+}
+
+void test_ByteBuffer_CreateAndAppendFormattedCString_should_return_NULL_if_formatted_string_could_not_fit_into_buffer(void)
+{
+    uint8_t data[39];
+    size_t len = sizeof(data);
+    memset(data, 0, len);
+    ByteBuffer buffer = 
+        ByteBuffer_CreateAndAppendFormattedCString(data, sizeof(data),
+            "Stuff: value=%d desc='%s' fizzle=%0.4f", 12, "foo", 1.23456);
+    TEST_ASSERT_EQUAL(0, buffer.bytesUsed);
+    TEST_ASSERT_EQUAL(0, buffer.array.len);
+    TEST_ASSERT_NULL(buffer.array.data);
 }
 
 void test_ByteBuffer_AppendDummyData_should_append_dummy_data_to_buffer(void)
@@ -261,11 +310,11 @@ void test_ByteBuffer_AppendDummyData_should_append_dummy_data_to_buffer(void)
 
     TEST_ASSERT_EQUAL(0, buffer.bytesUsed);
 
-    TEST_ASSERT_TRUE(ByteBuffer_AppendDummyData(&buffer, 2));
+    TEST_ASSERT_NOT_NULL(ByteBuffer_AppendDummyData(&buffer, 2));
     TEST_ASSERT_EQUAL(2, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expectedData, buffer.array.data, 2);
 
-    TEST_ASSERT_TRUE(ByteBuffer_AppendDummyData(&buffer, 1));
+    TEST_ASSERT_NOT_NULL(ByteBuffer_AppendDummyData(&buffer, 1));
     TEST_ASSERT_EQUAL(3, buffer.bytesUsed);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expectedData, buffer.array.data, 3);
 

@@ -10,8 +10,9 @@ PUB_INC = ./include
 #===============================================================================
 CC ?= gcc
 OPTIMIZE = -O3
-WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers
-CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1
+SYSTEM_TEST_HOST ?= \"localhost\"
+WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -lcrypto -lssl -lpthread
 
@@ -70,7 +71,7 @@ all: default test run examples
 clean: makedirs
 	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o *.core *.log
-	rake clobber
+	bundle exec rake clobber
 	git submodule update --init
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 
@@ -96,6 +97,8 @@ $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
+
+${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 
 ci: uninstall all install
@@ -256,6 +259,8 @@ run: $(UTIL_EXEC) start_simulator
 EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 EXAMPLES = write_file_blocking
+VALGRIND = valgrind
+VALGRIND_ARGS = --track-origins=yes #--leak-check=full
 
 example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
 example_executables = $(patsubst $(EXAMPLE_SRC)/%.c,$(BIN_DIR)/examples/%,$(example_sources))
@@ -294,6 +299,15 @@ run_example_%: $(BIN_DIR)/examples/%
 	@echo ================================================================================
 	@echo
 
+valgrind_example_%: $(BIN_DIR)/examples/%
+	@echo
+	@echo ================================================================================
+	@echo Executing example: '$<'
+	@echo --------------------------------------------------------------------------------;
+	${VALGRIND} ${VALGRIND_ARGS} $<
+	@echo ================================================================================
+	@echo
+
 setup_examples: $(example_executables) \
 	build_examples
 
@@ -303,4 +317,12 @@ examples: setup_examples \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
 	run_example_write_file_nonblocking_threads \
+	stop_simulator
+
+valgrind_examples: setup_examples \
+	start_simulator \
+	valgrind_example_write_file_blocking \
+	valgrind_example_write_file_blocking_threads \
+	valgrind_example_write_file_nonblocking \
+	valgrind_example_write_file_nonblocking_threads \
 	stop_simulator

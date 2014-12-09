@@ -44,6 +44,8 @@ STATIC const char* KineticStatusDescriptor[] = {
     "MEMORY_ERROR",
     "SOCKET_TIMEOUT",
     "SOCKET_ERROR",
+    "MISSING_KEY",
+    "MISSING_VALUE_BUFFER",
 };
 
 #ifdef TEST

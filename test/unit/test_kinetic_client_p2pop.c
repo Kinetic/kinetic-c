@@ -1,3 +1,4 @@
+
 /*
 * kinetic-c
 * Copyright (C) 2014 Seagate Technology.
@@ -14,7 +15,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
@@ -32,8 +33,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 
-static KineticSession Session;
-static KineticConnection Connection;
+
 
 void setUp(void)
 {
@@ -45,17 +45,20 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KineticClient_Delete_should_execute_DELETE_operation(void)
+void test_KineticClient_P2POperation_should_execute_a_p2p_operation(void)
 {
-    Session.connection = &Connection;
-    KineticEntry entry;
+    LOG_LOCATION;
+    KineticSession session;
+    KineticConnection connection;
+    session.connection = &connection;
     KineticOperation operation;
+    KineticP2P_Operation p2pOp;
 
-    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
-    KineticOperation_BuildDelete_Expect(&operation, &entry);
+    KineticController_CreateOperation_ExpectAndReturn(&session, &operation);
+    KineticOperation_BuildP2POperation_Expect(&operation, &p2pOp);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_Delete(&Session, &entry, NULL);
+    KineticStatus status = KineticClient_P2POperation(&session, &p2pOp, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

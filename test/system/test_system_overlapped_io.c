@@ -59,13 +59,12 @@
 
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
-STATIC KineticSessionHandle* kinetic_client;
 STATIC const char HmacKeyString[] = "asdfasdf";
 STATIC int SourceDataSize;
 
 struct kinetic_thread_arg {
     char ip[16];
-    KineticSessionHandle sessionHandle;
+    KineticSession session;
     char keyPrefix[KINETIC_DEFAULT_KEY_LEN];
     uint8_t key[KINETIC_DEFAULT_KEY_LEN];
     uint8_t version[KINETIC_DEFAULT_KEY_LEN];
@@ -92,7 +91,7 @@ void tearDown(void)
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
 {
-    const KineticSession sessionConfig = {
+    const KineticSessionConfig sessionConfig = {
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = 0,
@@ -117,17 +116,16 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         // Allocate session/thread data
         struct kinetic_thread_arg* kt_arg;
         pthread_t thread_id[KINETIC_MAX_THREADS];
-        kinetic_client = malloc(sizeof(KineticSessionHandle) * NUM_COPIES);
-        TEST_ASSERT_NOT_NULL_MESSAGE(kinetic_client, "kinetic_client malloc failed");
         kt_arg = malloc(sizeof(struct kinetic_thread_arg) * NUM_COPIES);
         TEST_ASSERT_NOT_NULL_MESSAGE(kt_arg, "kinetic_thread_arg malloc failed");
 
         // Establish all of the connection first, so their session can all get initialized first
         for (int i = 0; i < NUM_COPIES; i++) {
             // Establish connection
+            kt_arg[i].session.config = sessionConfig;
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
-                KineticClient_Connect(&sessionConfig, &kinetic_client[i]));
+                KineticClient_CreateConnection(&kt_arg[i].session));
             strcpy(kt_arg[i].ip, sessionConfig.host);
 
             // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
@@ -153,7 +151,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                 .value = valBuf,
             };
         }
-        sleep(2); // Give a generous chunk of time for session to be initialized by the target device
 
         // Write all of the copies simultaneously (overlapped)
         for (int i = 0; i < NUM_COPIES; i++) {
@@ -163,7 +160,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
                    MAX_ITERATIONS, sessionConfig.host);
 
             // Spawn the thread
-            kt_arg[i].sessionHandle = kinetic_client[i];
             int pthreadStatus = pthread_create(&thread_id[i], NULL, kinetic_put, &kt_arg[i]);
             REPORT_ERRNO(pthreadStatus, "pthread_create");
             TEST_ASSERT_EQUAL_MESSAGE(0, pthreadStatus, "pthread create failed");
@@ -175,7 +171,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         for (int i = 0; i < NUM_COPIES; i++) {
             int join_status = pthread_join(thread_id[i], NULL);
             TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
-            KineticClient_Disconnect(&kinetic_client[i]);
+            KineticClient_DestroyConnection(&kt_arg[i].session);
 
             // Update results for summary
             bandwidthAccumulator += kt_arg[i].bandwidth;
@@ -185,7 +181,6 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         }
 
         // Cleanup the rest of the reources
-        free(kinetic_client);
         free(kt_arg);
         free(buf);
 
@@ -243,7 +238,7 @@ static void* kinetic_put(void* kinetic_arg)
 
         // Store the data slice
         LOGF1("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);
-        KineticStatus status = KineticClient_Put(arg->sessionHandle, entry, NULL);
+        KineticStatus status = KineticClient_Put(&arg->session, entry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         LOGF1("  *** KineticClient put to disk success, ip:%s", arg->ip);
 

@@ -57,7 +57,7 @@ void tearDown(void)
 
 void test_NoOp_should_succeed(void)
 {
-    KineticStatus status = KineticClient_NoOp(Fixture.handle);
+    KineticStatus status = KineticClient_NoOp(&Fixture.session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 

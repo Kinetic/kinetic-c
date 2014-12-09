@@ -18,8 +18,8 @@
 *
 */
 
-#include "kinetic_client.h"
 #include "kinetic_types_internal.h"
+#include "kinetic_client.h"
 #include "kinetic_connection.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
@@ -37,98 +37,83 @@ void KineticClient_Shutdown(void)
     KineticLogger_Close();
 }
 
-KineticStatus KineticClient_Connect(const KineticSession* config,
-                                    KineticSessionHandle* handle)
+KineticStatus KineticClient_CreateConnection(KineticSession* const session)
 {
-    if (handle == NULL) {
-        LOG0("Session handle is NULL!");
-        return KINETIC_STATUS_SESSION_EMPTY;
-    }
-    *handle = KINETIC_HANDLE_INVALID;
-
-    if (config == NULL) {
+    if (session == NULL) {
         LOG0("KineticSession is NULL!");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
-    if (strlen(config->host) == 0) {
+    if (strlen(session->config.host) == 0) {
         LOG0("Host is empty!");
         return KINETIC_STATUS_HOST_EMPTY;
     }
 
-    if (config->hmacKey.len < 1 || config->hmacKey.data == NULL) {
+    if (session->config.hmacKey.len < 1 || session->config.hmacKey.data == NULL) {
         LOG0("HMAC key is NULL or empty!");
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
-    // Obtain a new connection/handle
-    *handle = KineticConnection_NewConnection(config);
-    if (*handle == KINETIC_HANDLE_INVALID) {
-        LOG0("Failed connecting to device!");
-        return KINETIC_STATUS_SESSION_INVALID;
-    }
-    KineticConnection* connection = KineticConnection_FromHandle(*handle);
-    if (connection == NULL) {
-        LOG0("Failed getting valid connection from handle!");
+    KineticSession_Create(session);
+    if (session->connection == NULL) {
+        LOG0("Failed to create connection instance!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     // Create the connection
-    KineticStatus status = KineticConnection_Connect(connection);
+    KineticStatus status = KineticSession_Connect(session);
     if (status != KINETIC_STATUS_SUCCESS) {
-        LOGF0("Failed creating connection to %s:%d", config->host, config->port);
-        KineticConnection_FreeConnection(handle);
-        *handle = KINETIC_HANDLE_INVALID;
+        LOGF0("Failed creating connection to %s:%d", session->config.host, session->config.port);
+        KineticSession_Destroy(session);
+        session->connection = NULL;
         return status;
     }
 
-    // Wait for initial unsolicited status to be received in order to obtain connectionID
-    while(connection->connectionID == 0) {sleep(1);}
-
     return status;
 }
 
-KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)
+KineticStatus KineticClient_DestroyConnection(KineticSession* const session)
 {
-    if (*handle == KINETIC_HANDLE_INVALID) {
-        LOG0("Invalid KineticSessionHandle specified!");
+    if (session == NULL) {
+        LOG0("KineticSession is NULL!");
         return KINETIC_STATUS_SESSION_INVALID;
     }
-    KineticConnection* connection = KineticConnection_FromHandle(*handle);
-    if (connection == NULL) {
-        LOG0("Failed getting valid connection from handle!");
+
+    if (session->connection == NULL) {
+        LOG0("Connection instance is NULL!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
-    // Disconnect
-    KineticStatus status = KineticConnection_Disconnect(connection);
+    KineticStatus status = KineticSession_Disconnect(session);
     if (status != KINETIC_STATUS_SUCCESS) {LOG0("Disconnection failed!");}
-    KineticConnection_FreeConnection(handle);
-    *handle = KINETIC_HANDLE_INVALID;
+    KineticSession_Destroy(session);
+    session->connection = NULL;
 
     return status;
 }
 
-KineticStatus KineticClient_NoOp(KineticSessionHandle handle)
+KineticStatus KineticClient_NoOp(KineticSession const * const session)
 {
-    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(session != NULL);
+    assert(session->connection != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(handle);
+    KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildNoop(operation);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticClient_Put(KineticSessionHandle handle,
+KineticStatus KineticClient_Put(KineticSession const * const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure)
 {
-    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(session != NULL);
+    assert(session->connection != NULL);
     assert(entry != NULL);
     assert(entry->value.array.data != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(handle);
+    KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -138,32 +123,107 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_Get(KineticSessionHandle handle,
-                                KineticEntry* const entry,
-                                KineticCompletionClosure* closure)
+KineticStatus KineticClient_Flush(KineticSession const * const session,
+                                  KineticCompletionClosure* closure)
 {
-    assert(handle != KINETIC_HANDLE_INVALID);
-    assert(entry != NULL);
-    if (!entry->metadataOnly) {assert(entry->value.array.data != NULL);}
+    assert(session != NULL);
+    assert(session->connection != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(handle);
-    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+    KineticOperation* operation = KineticController_CreateOperation(session);
+    if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
 
     // Initialize request
-    KineticOperation_BuildGet(operation, entry);
+    KineticOperation_BuildFlush(operation);
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_Delete(KineticSessionHandle handle,
+static bool has_key(KineticEntry* const entry)
+{
+    return entry->key.array.data != NULL;
+}
+
+static bool has_value_buffer(KineticEntry* const entry)
+{
+    return entry->value.array.data != NULL;
+}
+
+typedef enum {
+    CMD_GET,
+    CMD_GET_NEXT,
+    CMD_GET_PREVIOUS,
+} GET_COMMAND;
+
+static KineticStatus handle_get_command(GET_COMMAND cmd,
+                                        KineticSession const * const session,
+                                        KineticEntry* const entry,
+                                        KineticCompletionClosure* closure)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    assert(entry != NULL);
+
+    if (!has_key(entry)) {return KINETIC_STATUS_MISSING_KEY;}
+    if (!has_value_buffer(entry) && !entry->metadataOnly) {
+        return KINETIC_STATUS_MISSING_VALUE_BUFFER;
+    }
+
+    KineticOperation* operation = KineticController_CreateOperation(session);
+    if (operation == NULL) {
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+
+    // Initialize request
+    switch (cmd)
+    {
+    case CMD_GET:
+        KineticOperation_BuildGet(operation, entry);
+        break;
+    case CMD_GET_NEXT:
+        KineticOperation_BuildGetNext(operation, entry);
+        break;
+    case CMD_GET_PREVIOUS:
+        KineticOperation_BuildGetPrevious(operation, entry);
+        break;
+    default:
+        assert(false);
+    }
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
+KineticStatus KineticClient_Get(KineticSession const * const session,
+                                KineticEntry* const entry,
+                                KineticCompletionClosure* closure)
+{
+    return handle_get_command(CMD_GET, session, entry, closure);
+}
+
+KineticStatus KineticClient_GetPrevious(KineticSession const * const session,
+                                        KineticEntry* const entry,
+                                        KineticCompletionClosure* closure)
+{
+    return handle_get_command(CMD_GET_PREVIOUS, session, entry, closure);
+}
+
+KineticStatus KineticClient_GetNext(KineticSession const * const session,
+                                    KineticEntry* const entry,
+                                    KineticCompletionClosure* closure)
+{
+    return handle_get_command(CMD_GET_NEXT, session, entry, closure);
+}
+
+KineticStatus KineticClient_Delete(KineticSession const * const session,
                                    KineticEntry* const entry,
                                    KineticCompletionClosure* closure)
 {
-    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(session != NULL);
+    assert(session->connection != NULL);
     assert(entry != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(handle);
+    KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -173,18 +233,19 @@ KineticStatus KineticClient_Delete(KineticSessionHandle handle,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
+KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
                                         KineticKeyRange* range,
                                         ByteBufferArray* keys,
                                         KineticCompletionClosure* closure)
 {
-    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(session != NULL);
+    assert(session->connection != NULL);
     assert(range != NULL);
     assert(keys != NULL);
     assert(keys->buffers != NULL);
     assert(keys->count > 0);
 
-    KineticOperation* operation = KineticController_CreateOperation(handle);
+    KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -194,15 +255,16 @@ KineticStatus KineticClient_GetKeyRange(KineticSessionHandle handle,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
+KineticStatus KineticClient_GetLog(KineticSession const * const session,
                                    KineticDeviceInfo_Type type,
                                    KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure)
 {
-    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(session != NULL);
+    assert(session->connection != NULL);
     assert(info != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(handle);
+    KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -212,11 +274,30 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_InstantSecureErase(KineticSessionHandle handle)
+KineticStatus KineticClient_P2POperation(KineticSession const * const session,
+                                         KineticP2P_Operation* const p2pOp,
+                                         KineticCompletionClosure* closure)
 {
-    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    assert(p2pOp != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(handle);
+    KineticOperation* operation = KineticController_CreateOperation(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    // Initialize request
+    KineticOperation_BuildP2POperation(operation, p2pOp);
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
+KineticStatus KineticClient_InstantSecureErase(KineticSession const * const session)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+
+    KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildInstantSecureErase(operation);

@@ -32,6 +32,9 @@
 #include "unity.h"
 #include "unity_helper.h"
 
+static KineticSession Session;
+static KineticConnection Connection;
+
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
@@ -44,14 +47,14 @@ void tearDown(void)
 
 void test_KineticClient_NoOp_should_execute_NOOP_operation_in_asynchronous_mode(void)
 {
-    KineticSessionHandle DummyHandle = 17;
+    Session.connection = &Connection;
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(DummyHandle, &operation);
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildNoop_Expect(&operation);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_NoOp(DummyHandle);
+    KineticStatus status = KineticClient_NoOp(&Session);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

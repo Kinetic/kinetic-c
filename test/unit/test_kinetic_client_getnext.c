@@ -21,9 +21,9 @@
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
+#include "mock_kinetic_operation.h"
 #include "mock_kinetic_connection.h"
 #include "mock_kinetic_controller.h"
-#include "mock_kinetic_operation.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -38,6 +38,7 @@ static KineticConnection Connection;
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
+    Session.connection = &Connection;
 }
 
 void tearDown(void)
@@ -45,17 +46,52 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KineticClient_Delete_should_execute_DELETE_operation(void)
+void test_KineticClient_GetNext_should_get_error_MISSING_KEY_if_called_without_key(void)
 {
-    Session.connection = &Connection;
     KineticEntry entry;
+    memset(&entry, 0, sizeof(entry));
+
+    KineticStatus status = KineticClient_GetNext(&Session, &entry, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MISSING_KEY, status);
+}
+
+void test_KineticClient_GetNext_should_execute_GETNEXT(void)
+{
+    uint8_t key[] = "schlage";
+    ByteBuffer KeyBuffer = ByteBuffer_Create(key, sizeof(key), sizeof(key));
+
+    uint8_t value[1024];
+    ByteBuffer ValueBuffer = ByteBuffer_Create(value, sizeof(value), 0);
+
+    KineticEntry entry = {
+        .key = KeyBuffer,
+        .value = ValueBuffer,
+    };
     KineticOperation operation;
 
     KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
-    KineticOperation_BuildDelete_Expect(&operation, &entry);
+    KineticOperation_BuildGetNext_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_Delete(&Session, &entry, NULL);
-
+    KineticStatus status = KineticClient_GetNext(&Session, &entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticClient_GetNext_should_expose_memory_errors(void)
+{
+    uint8_t key[] = "schlage";
+    ByteBuffer KeyBuffer = ByteBuffer_Create(key, sizeof(key), sizeof(key));
+
+    uint8_t value[1024];
+    ByteBuffer ValueBuffer = ByteBuffer_Create(value, sizeof(value), 0);
+
+    KineticEntry entry = {
+        .key = KeyBuffer,
+        .value = ValueBuffer,
+    };
+
+    KineticController_CreateOperation_ExpectAndReturn(&Session, NULL);
+    KineticStatus status = KineticClient_GetNext(&Session, &entry, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MEMORY_ERROR, status);
 }

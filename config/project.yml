@@ -35,6 +35,7 @@
 :defines:
   :commmon: &common_defines
     - TEST
+    - SYSTEM_TEST_HOST=\"<%= ENV.fetch('SYSTEM_TEST_HOST', 'localhost') %>\"
   :test:
     - *common_defines
   :test_preprocess:
@@ -68,8 +69,6 @@
     int8_t:     INT8
     bool_t:     BOOL
     size_t:     INT
-    KineticSessionHandle: INT
-    KineticOperationHandle: INT
   :callback_include_count: true
 
 :tools:
@@ -113,8 +112,8 @@
       - -Wstrict-prototypes
       # - -Werror=strict-prototypes
       - -Werror=implicit-function-declaration
-      # - -Werror=incompatible-pointer-types
       # - -Wincompatible-pointer-types
+      # - -Werror=incompatible-pointer-types
       # - -Wcast-align
       - -D_POSIX_C_SOURCE=199309L
       - -D_C99_SOURCE=1

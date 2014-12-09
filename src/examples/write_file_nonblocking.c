@@ -1,22 +1,3 @@
-/*
-* kinetic-c
-* Copyright (C) 2014 Seagate Technology.
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*
-*/
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "byte_array.h"
@@ -47,7 +28,7 @@ typedef struct {
     pthread_mutex_t completeMutex;
     pthread_cond_t completeCond;
     KineticStatus status;
-    KineticSessionHandle sessionHandle;
+    KineticSession* session;
 } FileTransferProgress;
 
 typedef struct {
@@ -58,7 +39,7 @@ typedef struct {
     FileTransferProgress* currentTransfer;
 } AsyncWriteClosureData;
 
-FileTransferProgress * start_file_transfer(KineticSessionHandle handle,
+FileTransferProgress * start_file_transfer(KineticSession* session,
     char const * const filename, uint64_t keyPrefix, uint32_t maxOverlappedChunks);
 KineticStatus wait_for_put_finish(FileTransferProgress* const transfer);
 
@@ -71,20 +52,18 @@ int main(int argc, char** argv)
     (void)argc;
     (void)argv;
 
-    // Initialize kinetic-c and configure sessions
+    // Initialize kinetic-c and establish session
+    KineticClient_Init("stdout", 0);
     const char HmacKeyString[] = "asdfasdf";
-    const KineticSession sessionConfig = {
+    const KineticSessionConfig config = {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    KineticClient_Init("stdout", 0);
-
-    // Establish connection
-    KineticSessionHandle sessionHandle;
-    KineticStatus status = KineticClient_Connect(&sessionConfig, &sessionHandle);
+    KineticSession session = {.config = config};
+    KineticStatus status = KineticClient_CreateConnection(&session);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -99,7 +78,7 @@ int main(int argc, char** argv)
     // Kick off the chained write/PUT operations and wait for completion
     const uint32_t maxOverlappedChunks = 4;
     const char* dataFile = "test/support/data/test.data";
-    FileTransferProgress* transfer = start_file_transfer(sessionHandle, dataFile, prefix, maxOverlappedChunks);
+    FileTransferProgress* transfer = start_file_transfer(&session, dataFile, prefix, maxOverlappedChunks);
     printf("Waiting for transfer to complete...\n");
     status = wait_for_put_finish(transfer);
     if (status != KINETIC_STATUS_SUCCESS) {
@@ -109,7 +88,7 @@ int main(int argc, char** argv)
     printf("Transfer completed successfully!\n");
 
     // Shutdown client connection and cleanup
-    KineticClient_Disconnect(&sessionHandle);
+    KineticClient_DestroyConnection(&session);
     KineticClient_Shutdown();
 
     return 0;
@@ -133,7 +112,7 @@ static int put_chunk_of_file(FileTransferProgress* transfer)
             .value = ByteBuffer_Create(closureData->value, sizeof(closureData->value), (size_t)bytesRead),
             .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         };
-        KineticStatus status = KineticClient_Put(transfer->sessionHandle,
+        KineticStatus status = KineticClient_Put(transfer->session,
             &closureData->entry,
             &(KineticCompletionClosure) {
                 .callback = put_chunk_of_file_finished,
@@ -188,12 +167,12 @@ static void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void
     }
 }
 
-FileTransferProgress * start_file_transfer(KineticSessionHandle handle,
+FileTransferProgress * start_file_transfer(KineticSession* session,
     char const * const filename, uint64_t keyPrefix, uint32_t maxOverlappedChunks)
 {
     FileTransferProgress * transferState = malloc(sizeof(FileTransferProgress));
     *transferState = (FileTransferProgress) {
-        .sessionHandle = handle,
+        .session = session,
         .maxOverlappedChunks = maxOverlappedChunks,
         .keyPrefix = keyPrefix,
         .fd = open(filename, O_RDONLY),
