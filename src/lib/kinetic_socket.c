@@ -176,7 +176,7 @@ KineticWaitStatus KineticSocket_WaitUntilDataAvailable(int socket, int timeout)
     {
         return KINETIC_WAIT_STATUS_TIMED_OUT;
     }
-    else if ((errno & (EAGAIN | EINTR)) != 0)
+    else if ((errno == EAGAIN) || (errno == EINTR))
     {
         return KINETIC_WAIT_STATUS_RETRYABLE_ERROR;
     }
