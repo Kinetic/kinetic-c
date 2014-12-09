@@ -162,8 +162,11 @@ KineticWaitStatus KineticSocket_WaitUntilDataAvailable(int socket, int timeout)
     int res = poll(&fd, 1, timeout);
 
     if (res > 0) {
-        //if (fd.revents & POLLHUP) // hung up
-        if (fd.revents & POLLIN)
+        if ((fd.revents & POLLERR) || (fd.revents & POLLHUP))
+        {
+            return KINETIC_WAIT_STATUS_FATAL_ERROR;
+        }
+        else if (fd.revents & POLLIN)
         {
             return KINETIC_WAIT_STATUS_DATA_AVAILABLE;
         }
@@ -270,6 +273,7 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
         while (!abortFlush && dest->bytesUsed < len) {
             int opStatus;
             fd_set readSet;
+            fd_set errorSet;
             struct timeval timeout;
             size_t remainingLen = len - dest->bytesUsed;
 
@@ -295,7 +299,7 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
                 status = KINETIC_STATUS_SOCKET_TIMEOUT;
                 continue;
             }
-            else if (opStatus > 0) { // Data available to read
+            else if (opStatus > 0) { // Data available to read or error
                 // The socket is ready for reading
                 opStatus = read(socket, discardedBytes, remainingLen);
                 // Retry if no data yet...

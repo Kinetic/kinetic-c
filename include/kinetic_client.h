@@ -255,4 +255,16 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
  */
 KineticStatus KineticClient_InstantSecureErase(KineticSession const * const session);
 
+/**
+ * @brief Updates the cluster version.
+ *
+ * @param clusterVersion      Current cluster version.
+ * @param newClusterVersion   New cluster version.
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticClient_SetClusterVersion(KineticSessionHandle handle,
+                                              int64_t clusterVersion,
+                                              int64_t newClusterVersion);
+
 #endif // _KINETIC_CLIENT_H

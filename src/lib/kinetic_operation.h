@@ -70,6 +70,8 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
 KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildInstantSecureErase(KineticOperation* operation);
 
+void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion);
+
 void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);
 void KineticOperation_TimeoutOperations(KineticConnection* const connection);
 

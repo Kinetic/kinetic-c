@@ -1,0 +1,33 @@
+digraph {
+        rankdir=LR
+
+        // client. blocks until sender has released message over the wire.
+        // max pending outgoing messages: 10-ish.
+        client0 -> sender [label="block / pushback"]
+        client1 -> sender [label="block / pushback"]
+
+        client0 -> listener [label="assign listener"]
+        client1 -> listener [label="assign listener"]
+
+        client0 [label="client"]
+        client1 [label="client"]
+
+        // asynchronously flushes outgoing messages to drives
+        sender [peripheries=2]    // many
+        
+        drives [shape=box, peripheries=2]
+        sender -> drives [label="write"]
+
+        sender -> listener [label="awaiting response"]
+        sender -> threadpool [label="write fail / timeout"]
+
+        listener [peripheries=2]  // many
+
+        drives -> listener [label="response"]
+        drives -> listener [label="unsolicited status msgs"]
+
+        listener -> threadpool [label="timeout, failed"]
+        listener -> threadpool [label="handle response"]
+
+        threadpool [peripheries=3]  // many many
+}

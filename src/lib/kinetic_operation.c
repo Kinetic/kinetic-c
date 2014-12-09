@@ -104,9 +104,18 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
         });
     }
 
-    // Populate the HMAC for the protobuf
-    KineticHMAC_Init(&request->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session.config.hmacKey);
+    switch (operation->request->proto->authType) {
+    case KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH:
+        /* TODO: If operation uses PIN AUTH, then init that */
+        break;
+    case KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH:
+        // Populate the HMAC for the protobuf
+        KineticHMAC_Init(&request->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+        KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session.hmacKey);
+        break;
+    default:
+        break;
+    }
 
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
@@ -693,13 +702,65 @@ void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->protoData.message.body;
     operation->request->command->body->pinOp = &operation->request->protoData.message.pinOp;
+ 
+#if 1
+    /* Replace HMAC auth with pin auth */
+    KineticProto_Message* pdu = operation->request->proto;
+    pdu->has_authType = true;
+    pdu->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH;
+    //ProtobufCBinaryData pin_bd = { .data="pin", .len=3 };
+    ProtobufCBinaryData pin_bd = { .data="", .len=0 };
+
+    pdu->hmacAuth = NULL;
+#if 0
+    pdu->hmacAuth->has_hmac = false;
+    pdu->hmacAuth->has_identity = false;
+    pdu->hmacAuth->hmac = (ProtobufCBinaryData) {
+        .data = NULL, .len = 0,
+    };
+#endif
+
+    pdu->pinAuth = &operation->request->protoData.message.pinAuth;
+    pdu->pinAuth->pin = pin_bd;
+    pdu->pinAuth->has_pin = true;
+#endif
+    
     operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP;
+    //operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP;
     operation->request->command->body->pinOp->has_pinOpType = true;
+    
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_InstantSecureEraseCallback;
 }
 
+KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* operation,
+    KineticStatus const status)
+{
+    assert(operation != NULL);
+    assert(operation->connection != NULL);
+    LOGF3("SetClusterVersion callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        operation, operation->connection);
+    (void)status;
+    return KINETIC_STATUS_SUCCESS;
+}
+
+void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticConnection_IncrementSequence(operation->connection);
+    operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
+    operation->request->protoData.message.command.header->has_messageType = true;
+    
+    operation->request->command->body->setup->newClusterVersion = newClusterVersion;
+    operation->request->command->body->setup->has_newClusterVersion = true;
+
+    operation->request->command->body = &operation->request->protoData.message.body;
+
+    operation->valueEnabled = false;
+    operation->sendValue = false;
+    operation->callback = &KineticOperation_SetClusterVersionCallback;
+}
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation)
 {
@@ -735,7 +796,7 @@ void KineticOperation_TimeoutOperations(KineticConnection* const connection)
          operation = KineticAllocator_GetNextOperation(connection, operation)) {
 
         struct timeval timeoutTime = KineticOperation_GetTimeoutTime(operation);
-
+        
         // if this operation has a nonzero timeout
         //   and it's timed out
         if (!Kinetic_TimevalIsZero(timeoutTime) &&
