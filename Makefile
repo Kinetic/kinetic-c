@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 #===============================================================================
 # Configuration of Shared Paths
 #===============================================================================
@@ -64,9 +66,9 @@ KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 default: makedirs $(KINETIC_LIB)
 
 makedirs:
-	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./out &> /dev/null
+	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
 
-all: default test run examples
+all: default test system_tests run examples
 
 clean: makedirs
 	rm -rf ./bin/**/*
@@ -202,7 +204,90 @@ start_simulator:
 stop_simulator:
 	./vendor/kinetic-simulator/stopSimulator.sh
 
-.PHONY: update_simulator start_simulator erase_simulator stop_simulator
+.PHONY: update_simulator erase_simulator stop_simulator
+
+
+
+#===============================================================================
+# System Tests
+#===============================================================================
+
+SYSTEST_SRC = ./test/system
+SYSTEST_OUT = $(BIN_DIR)/systest
+SYSTEST_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
+UNITY_INC = ./vendor/unity/src
+UNITY_SRC = ./vendor/unity/src/unity.c
+
+systest_sources = $(wildcard $(SYSTEST_SRC)/*.c)
+systest_executables = $(patsubst $(SYSTEST_SRC)/%.c,$(SYSTEST_OUT)/run_%,$(systest_sources))
+systest_results = $(patsubst $(SYSTEST_OUT)/run_%,$(SYSTEST_OUT)/%.log,$(systest_executables))
+systest_passfiles = $(patsubst $(SYSTEST_OUT)/run_%,$(SYSTEST_OUT)/%.testpass,$(systest_executables))
+systest_names = $(patsubst $(SYSTEST_OUT)/run_%,%,$(systest_executables))
+
+list_system_tests:
+	echo $(systest_names)
+
+$(SYSTEST_OUT)/%_runner.c: $(SYSTEST_SRC)/%.c
+	./test/support/generate_test_runner.sh $< > $@
+
+$(SYSTEST_OUT)/run_%: $(SYSTEST_SRC)/%.c $(SYSTEST_OUT)/%_runner.c $(KINETIC_LIB)
+	@echo
+	@echo ================================================================================
+	@echo System test: '$<'
+	@echo --------------------------------------------------------------------------------
+	$(CC) -o $@ $< $(word 2,$^) ./test/support/system_test_fixture.c $(UNITY_SRC) $(SYSTEST_CFLAGS) $(LIB_INCS) -I$(UNITY_INC) -I./test/support $(SYSTEST_LDFLAGS) $(KINETIC_LIB)
+
+$(SYSTEST_OUT)/%.testpass : $(SYSTEST_OUT)/run_%
+	./scripts/runSystemTest.sh $*
+
+$(systest_names) : % : $(SYSTEST_OUT)/%.testpass
+
+# system_tests: start_simulator $(systest_results)
+system_tests: start_simulator $(systest_passfiles)
+
+
+# run_systest_%: $(SYSTEST_OUT)/%
+# 	@echo
+# 	@echo ================================================================================
+# 	@echo Executing system test: '$<'
+# 	@echo --------------------------------------------------------------------------------;
+# 	$<
+# 	@echo ================================================================================
+# 	@echo
+# 	./vendor/kinetic-simulator/stopSimulator.sh
+# run_systest_%: start_simulator
+
+# valgrind_systest_%: $(SYSTEST_OUT)/%
+# 	@echo
+# 	@echo ================================================================================
+# 	@echo Executing system test: '$<'
+# 	@echo --------------------------------------------------------------------------------;
+# 	${VALGRIND} ${VALGRIND_ARGS} $<
+# 	@echo ================================================================================
+# 	@echo
+
+# setup_system_tests: $(systest_executables) \
+# 	build_system_tests
+
+# system_tests: setup_system_tests \
+# 	start_simulator \
+# 	run_example_write_file_blocking \
+# 	run_example_write_file_blocking_threads \
+# 	run_example_write_file_nonblocking \
+# 	run_example_write_file_nonblocking_threads \
+# 	stop_simulator
+
+# valgrind_system_tests: setup_system_tests \
+# 	start_simulator \
+# 	valgrind_example_write_file_blocking \
+# 	valgrind_example_write_file_blocking_threads \
+# 	valgrind_example_write_file_nonblocking \
+# 	valgrind_example_write_file_nonblocking_threads \
+# 	stop_simulator
+
+
 
 
 #===============================================================================
@@ -264,9 +349,6 @@ VALGRIND_ARGS = --track-origins=yes #--leak-check=full
 
 example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
 example_executables = $(patsubst $(EXAMPLE_SRC)/%.c,$(BIN_DIR)/examples/%,$(example_sources))
-
-list_examples:
-	echo $(example_executables)
 
 $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 	@echo

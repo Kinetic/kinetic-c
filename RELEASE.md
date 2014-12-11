@@ -8,6 +8,7 @@ v0.9.0 (kinetic-protocol 3.0.5)
 * Fixed bug with mutex locking causing an assert failure and subsequent crash.
 * Fixed leaking of destroyed connections and they are now properly freed upon call to KineticClient_DestoryConnection().
 * Fixed bug where some unrecoverable socket errors could cause retries when unintended.
+* Modified PDU flow control in order not stall transmission on request PDUs when Value payload is empty or of small size.
 
 v0.8.1 (kinetic-protocol 3.0.5)
 -------------------------------
