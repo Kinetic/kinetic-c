@@ -10,3 +10,6 @@
 	path = vendor/socket99
 	url = https://github.com/silentbicycle/socket99.git
 	branch = master
+[submodule "vendor/unity"]
+	path = vendor/unity
+	url = https://github.com/ThrowTheSwitch/Unity.git
