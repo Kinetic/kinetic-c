@@ -5,7 +5,7 @@
   <filterSection>
     <filterAttribute>doxygen</filterAttribute>
     <toc>
-      <section title="kinetic-c v0.9.0" ref="index.html">
+      <section title="kinetic-c v0.9.1" ref="index.html">
         <section title="Kinetic-C Library Developer Reference" ref="md__d_e_v_e_l_o_p.html" />
         <section title="Data Structures">
           <section title="Data Structures" ref="annotated.html">
@@ -23,7 +23,8 @@
             </section>
             <section title="ByteBufferArray" ref="struct_byte_buffer_array.html">
               <section title="buffers" ref="struct_byte_buffer_array.html#a922d96cfe901de9e63e8263bd0604c2e" />
-              <section title="count" ref="struct_byte_buffer_array.html#ac69bfb88d2b4cf02813fb945398bb3d1" />
+              <section title="count" ref="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c" />
+              <section title="used" ref="struct_byte_buffer_array.html#af6423547071ca14bcbd0a5d160fcba88" />
             </section>
             <section title="KineticCompletionClosure" ref="struct_kinetic_completion_closure.html">
               <section title="callback" ref="struct_kinetic_completion_closure.html#a2ea6123356b9bb8306031ec1d65d7d49" />
@@ -618,7 +619,8 @@
               </section>
               <section title="ByteBufferArray" ref="struct_byte_buffer_array.html">
                 <section title="buffers" ref="struct_byte_buffer_array.html#a922d96cfe901de9e63e8263bd0604c2e" />
-                <section title="count" ref="struct_byte_buffer_array.html#ac69bfb88d2b4cf02813fb945398bb3d1" />
+                <section title="count" ref="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c" />
+                <section title="used" ref="struct_byte_buffer_array.html#af6423547071ca14bcbd0a5d160fcba88" />
               </section>
               <section title="BYTE_ARRAY_NONE" ref="byte__array_8h.html#a284b2fa610ec1be5d86406563d8107ce" />
               <section title="BYTE_BUFFER_NONE" ref="byte__array_8h.html#a9da5f8699370d9eb7841f4b13ebb54cb" />
@@ -642,6 +644,9 @@
               <section title="ByteBuffer_AppendFormattedCString" ref="byte__array_8h.html#a5e38219f5c8c12454449c0bafc878994" />
               <section title="ByteBuffer_AppendDummyData" ref="byte__array_8h.html#a79508f7b5ab71930a01221f6d1276592" />
               <section title="ByteBuffer_IsNull" ref="byte__array_8h.html#af56f0bdfd4ecebd1a4d9026fd9c8cd03" />
+            </section>
+            <section title="get_key_range.c" ref="get__key__range_8c.html">
+              <section title="main" ref="get__key__range_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
             </section>
             <section title="kinetic_allocator.c" ref="kinetic__allocator_8c.html">
               <section title="KINETIC_LIST_LOCK" ref="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f" />
@@ -2127,6 +2132,7 @@
       <keyword name="ByteBuffer_AppendFormattedCString" id="byte_array.h::ByteBuffer_AppendFormattedCString" ref="byte__array_8h.html#a5e38219f5c8c12454449c0bafc878994" />
       <keyword name="ByteBuffer_AppendDummyData" id="byte_array.h::ByteBuffer_AppendDummyData" ref="byte__array_8h.html#a79508f7b5ab71930a01221f6d1276592" />
       <keyword name="ByteBuffer_IsNull" id="byte_array.h::ByteBuffer_IsNull" ref="byte__array_8h.html#af56f0bdfd4ecebd1a4d9026fd9c8cd03" />
+      <keyword name="main" id="get_key_range.c::main" ref="get__key__range_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
       <keyword name="KINETIC_LIST_LOCK" id="kinetic_allocator.c::KINETIC_LIST_LOCK" ref="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f" />
       <keyword name="KINETIC_LIST_UNLOCK" id="kinetic_allocator.c::KINETIC_LIST_UNLOCK" ref="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567" />
       <keyword name="KineticAllocator_InitLists" id="kinetic_allocator.c::KineticAllocator_InitLists" ref="kinetic__allocator_8c.html#ade87a99a948224add0a96d09b0f62cd9" />
@@ -2918,7 +2924,8 @@
       <keyword name="bytesUsed" id="ByteBuffer::bytesUsed" ref="struct_byte_buffer.html#ac8b4d499aec3223045e239e80f7e49c8" />
       <keyword name="ByteBufferArray" id="ByteBufferArray" ref="struct_byte_buffer_array.html" />
       <keyword name="buffers" id="ByteBufferArray::buffers" ref="struct_byte_buffer_array.html#a922d96cfe901de9e63e8263bd0604c2e" />
-      <keyword name="count" id="ByteBufferArray::count" ref="struct_byte_buffer_array.html#ac69bfb88d2b4cf02813fb945398bb3d1" />
+      <keyword name="count" id="ByteBufferArray::count" ref="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c" />
+      <keyword name="used" id="ByteBufferArray::used" ref="struct_byte_buffer_array.html#af6423547071ca14bcbd0a5d160fcba88" />
       <keyword name="KineticCompletionClosure" id="KineticCompletionClosure" ref="struct_kinetic_completion_closure.html" />
       <keyword name="callback" id="KineticCompletionClosure::callback" ref="struct_kinetic_completion_closure.html#a2ea6123356b9bb8306031ec1d65d7d49" />
       <keyword name="clientData" id="KineticCompletionClosure::clientData" ref="struct_kinetic_completion_closure.html#a88ae597d19a8e9c16060a2bbe0bddaf4" />
@@ -3408,6 +3415,7 @@
       <file>byte__array_8c_source.html</file>
       <file>byte__array_8h_source.html</file>
       <file>_d_e_v_e_l_o_p_8md_source.html</file>
+      <file>get__key__range_8c_source.html</file>
       <file>kinetic__allocator_8c_source.html</file>
       <file>kinetic__allocator_8h_source.html</file>
       <file>kinetic__client_8c_source.html</file>
@@ -3451,6 +3459,7 @@
       <file>byte__array_8c.html</file>
       <file>byte__array_8h.html</file>
       <file>_d_e_v_e_l_o_p_8md.html</file>
+      <file>get__key__range_8c.html</file>
       <file>kinetic__allocator_8c.html</file>
       <file>kinetic__allocator_8h.html</file>
       <file>kinetic__client_8c.html</file>

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>kinetic-c: main.c File Reference</title>
+<title>kinetic-c: get_key_range.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -45,25 +45,31 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_0619a8f54b4fad7043a6de45be8fde0b.html">utility</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_e931c1a3f0014e624d0645a271726ad2.html">examples</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">main.c File Reference</div>  </div>
+<div class="title">get_key_range.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__client_8h_source.html">kinetic_client.h</a>&quot;</code><br />
-<code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="byte__array_8h_source.html">byte_array.h</a>&quot;</code><br />
+<code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;getopt.h&gt;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;sys/param.h&gt;</code><br />
+<code>#include &lt;sys/stat.h&gt;</code><br />
+<code>#include &lt;sys/file.h&gt;</code><br />
 </div>
-<p><a href="main_8c_source.html">Go to the source code of this file.</a></p>
+<p><a href="get__key__range_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
+<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="get__key__range_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -91,9 +97,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="main_8c_source.html#l00061">61</a> of file <a class="el" href="main_8c_source.html">main.c</a>.</p>
+<p>Definition at line <a class="el" href="get__key__range_8c_source.html#l00033">33</a> of file <a class="el" href="get__key__range_8c_source.html">get_key_range.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00126">KineticSession::config</a>, <a class="el" href="kinetic__types_8h_source.html#l00100">KineticSessionConfig::host</a>, <a class="el" href="kinetic__types_8c_source.html#l00056">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00040">KineticClient_CreateConnection()</a>, <a class="el" href="kinetic__client_8c_source.html#l00075">KineticClient_DestroyConnection()</a>, <a class="el" href="kinetic__client_8c_source.html#l00030">KineticClient_Init()</a>, <a class="el" href="kinetic__client_8c_source.html#l00035">KineticClient_Shutdown()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00103">KineticSessionConfig::port</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00040">ByteBufferArray::buffers</a>, <a class="el" href="byte__array_8c_source.html#l00018">ByteArray_CreateWithCString()</a>, <a class="el" href="byte__array_8c_source.html#l00048">ByteBuffer_Create()</a>, <a class="el" href="byte__array_8c_source.html#l00077">ByteBuffer_CreateAndAppendCString()</a>, <a class="el" href="kinetic__types_8h_source.html#l00126">KineticSession::config</a>, <a class="el" href="kinetic__types_8h_source.html#l00100">KineticSessionConfig::host</a>, <a class="el" href="kinetic__types_8c_source.html#l00056">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00040">KINETIC_PORT</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00040">KineticClient_CreateConnection()</a>, <a class="el" href="kinetic__client_8c_source.html#l00075">KineticClient_DestroyConnection()</a>, <a class="el" href="kinetic__client_8c_source.html#l00236">KineticClient_GetKeyRange()</a>, <a class="el" href="kinetic__client_8c_source.html#l00030">KineticClient_Init()</a>, <a class="el" href="kinetic__client_8c_source.html#l00035">KineticClient_Shutdown()</a>, <a class="el" href="kinetic__types_8h_source.html#l00209">KineticKeyRange::startKey</a>, and <a class="el" href="byte__array_8h_source.html#l00042">ByteBufferArray::used</a>.</p>
 
 </div>
 </div>

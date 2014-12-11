@@ -77,7 +77,12 @@
              <Node>
               <Name>count</Name>
               <Path>struct_byte_buffer_array.html</Path>
-              <Anchor>ac69bfb88d2b4cf02813fb945398bb3d1</Anchor>
+              <Anchor>a7393d4a746768e5a69219677a7d9f18c</Anchor>
+             </Node>
+             <Node>
+              <Name>used</Name>
+              <Path>struct_byte_buffer_array.html</Path>
+              <Anchor>af6423547071ca14bcbd0a5d160fcba88</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -2761,7 +2766,12 @@
                <Node>
                 <Name>count</Name>
                 <Path>struct_byte_buffer_array.html</Path>
-                <Anchor>ac69bfb88d2b4cf02813fb945398bb3d1</Anchor>
+                <Anchor>a7393d4a746768e5a69219677a7d9f18c</Anchor>
+               </Node>
+               <Node>
+                <Name>used</Name>
+                <Path>struct_byte_buffer_array.html</Path>
+                <Anchor>af6423547071ca14bcbd0a5d160fcba88</Anchor>
                </Node>
               </Subnodes>
              </Node>
@@ -2874,6 +2884,17 @@
               <Name>ByteBuffer_IsNull</Name>
               <Path>byte__array_8h.html</Path>
               <Anchor>af56f0bdfd4ecebd1a4d9026fd9c8cd03</Anchor>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>get_key_range.c</Name>
+            <Path>get__key__range_8c.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>main</Name>
+              <Path>get__key__range_8c.html</Path>
+              <Anchor>a3c04138a5bfe5d72780bb7e82a18e627</Anchor>
              </Node>
             </Subnodes>
            </Node>

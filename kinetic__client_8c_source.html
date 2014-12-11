@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.0</span>
+   &#160;<span id="projectnumber">v0.9.1</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -298,7 +298,7 @@
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    assert(range != NULL);</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    assert(keys != NULL);</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    assert(keys-&gt;<a class="code" href="struct_byte_buffer_array.html#a922d96cfe901de9e63e8263bd0604c2e">buffers</a> != NULL);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    assert(keys-&gt;<a class="code" href="struct_byte_buffer_array.html#ac69bfb88d2b4cf02813fb945398bb3d1">count</a> &gt; 0);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    assert(keys-&gt;<a class="code" href="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c">count</a> &gt; 0);</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    KineticOperation* operation = <a class="code" href="kinetic__controller_8c.html#ad4fe27fac91b48a17326954619478f44">KineticController_CreateOperation</a>(session);</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordflow">if</span> (operation == NULL) {<span class="keywordflow">return</span> <a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ac0f79301a35ae3a53e979f69012bf5a3">KINETIC_STATUS_MEMORY_ERROR</a>;}</div>
@@ -360,6 +360,7 @@
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;}</div>
 <div class="ttc" id="kinetic__client_8c_html_a58c9dfb7db6c42f6f85c16b1e5a29eab"><div class="ttname"><a href="kinetic__client_8c.html#a58c9dfb7db6c42f6f85c16b1e5a29eab">KineticClient_Put</a></div><div class="ttdeci">KineticStatus KineticClient_Put(KineticSession const *const session, KineticEntry *const entry, KineticCompletionClosure *closure)</div><div class="ttdoc">Executes a PUT command to store/update an entry on the Kinetic Device. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__client_8c_source.html#l00107">kinetic_client.c:107</a></div></div>
 <div class="ttc" id="struct_kinetic_device_info_html"><div class="ttname"><a href="struct_kinetic_device_info.html">KineticDeviceInfo</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00321">kinetic_types.h:321</a></div></div>
+<div class="ttc" id="struct_byte_buffer_array_html_a7393d4a746768e5a69219677a7d9f18c"><div class="ttname"><a href="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c">ByteBufferArray::count</a></div><div class="ttdeci">size_t count</div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00041">byte_array.h:41</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html"><div class="ttname"><a href="kinetic__logger_8h.html">kinetic_logger.h</a></div></div>
 <div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e">KINETIC_STATUS_SUCCESS</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00149">kinetic_types.h:149</a></div></div>
@@ -398,7 +399,6 @@
 <div class="ttc" id="struct_kinetic_key_range_html"><div class="ttname"><a href="struct_kinetic_key_range.html">KineticKeyRange</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00208">kinetic_types.h:208</a></div></div>
 <div class="ttc" id="struct_kinetic_session_html_a57d1d01861409e3f9a3651cad67138d2"><div class="ttname"><a href="struct_kinetic_session.html#a57d1d01861409e3f9a3651cad67138d2">KineticSession::connection</a></div><div class="ttdeci">struct _KineticConnection * connection</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00131">kinetic_types.h:131</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018">KINETIC_STATUS_CONNECTION_ERROR</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00156">kinetic_types.h:156</a></div></div>
-<div class="ttc" id="struct_byte_buffer_array_html_ac69bfb88d2b4cf02813fb945398bb3d1"><div class="ttname"><a href="struct_byte_buffer_array.html#ac69bfb88d2b4cf02813fb945398bb3d1">ByteBufferArray::count</a></div><div class="ttdeci">int count</div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00041">byte_array.h:41</a></div></div>
 <div class="ttc" id="kinetic__client_8c_html_a277c2a4466cada1736801ffb473ace13"><div class="ttname"><a href="kinetic__client_8c.html#a277c2a4466cada1736801ffb473ace13">KineticClient_NoOp</a></div><div class="ttdeci">KineticStatus KineticClient_NoOp(KineticSession const *const session)</div><div class="ttdoc">Executes a NOOP command to test whether the Kinetic Device is operational. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__client_8c_source.html#l00095">kinetic_client.c:95</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html_aa65b0516ca90f3ef1cda5feab07e239c"><div class="ttname"><a href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a></div><div class="ttdeci">#define LOG0(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00052">kinetic_logger.h:52</a></div></div>
 <div class="ttc" id="struct_kinetic_session_config_html_acb9f1d3dceb9739eb3c88db1f8150198"><div class="ttname"><a href="struct_kinetic_session_config.html#acb9f1d3dceb9739eb3c88db1f8150198">KineticSessionConfig::hmacKey</a></div><div class="ttdeci">ByteArray hmacKey</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00118">kinetic_types.h:118</a></div></div>

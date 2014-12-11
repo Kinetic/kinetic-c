@@ -1,4 +1,4 @@
-.TH "ByteBufferArray" 3 "Tue Dec 9 2014" "Version v0.9.0" "kinetic-c" \" -*- nroff -*-
+.TH "ByteBufferArray" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,7 +15,10 @@ ByteBufferArray \-
 .RI "\fBByteBuffer\fP * \fBbuffers\fP"
 .br
 .ti -1c
-.RI "int \fBcount\fP"
+.RI "size_t \fBcount\fP"
+.br
+.ti -1c
+.RI "size_t \fBused\fP"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -27,10 +30,14 @@ Definition at line 39 of file byte_array\&.h\&.
 
 .PP
 Definition at line 40 of file byte_array\&.h\&.
-.SS "int ByteBufferArray::count"
+.SS "size_t ByteBufferArray::count"
 
 .PP
 Definition at line 41 of file byte_array\&.h\&.
+.SS "size_t ByteBufferArray::used"
+
+.PP
+Definition at line 42 of file byte_array\&.h\&.
 
 .SH "Author"
 .PP 

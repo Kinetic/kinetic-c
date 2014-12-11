@@ -16,7 +16,8 @@
       </topic>
       <topic label="ByteBufferArray" href="struct_byte_buffer_array.html">
         <topic label="buffers" href="struct_byte_buffer_array.html#a922d96cfe901de9e63e8263bd0604c2e"/>
-        <topic label="count" href="struct_byte_buffer_array.html#ac69bfb88d2b4cf02813fb945398bb3d1"/>
+        <topic label="count" href="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c"/>
+        <topic label="used" href="struct_byte_buffer_array.html#af6423547071ca14bcbd0a5d160fcba88"/>
       </topic>
       <topic label="KineticCompletionClosure" href="struct_kinetic_completion_closure.html">
         <topic label="callback" href="struct_kinetic_completion_closure.html#a2ea6123356b9bb8306031ec1d65d7d49"/>
@@ -611,7 +612,8 @@
         </topic>
         <topic label="ByteBufferArray" href="struct_byte_buffer_array.html">
           <topic label="buffers" href="struct_byte_buffer_array.html#a922d96cfe901de9e63e8263bd0604c2e"/>
-          <topic label="count" href="struct_byte_buffer_array.html#ac69bfb88d2b4cf02813fb945398bb3d1"/>
+          <topic label="count" href="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c"/>
+          <topic label="used" href="struct_byte_buffer_array.html#af6423547071ca14bcbd0a5d160fcba88"/>
         </topic>
         <topic label="BYTE_ARRAY_NONE" href="byte__array_8h.html#a284b2fa610ec1be5d86406563d8107ce"/>
         <topic label="BYTE_BUFFER_NONE" href="byte__array_8h.html#a9da5f8699370d9eb7841f4b13ebb54cb"/>
@@ -635,6 +637,9 @@
         <topic label="ByteBuffer_AppendFormattedCString" href="byte__array_8h.html#a5e38219f5c8c12454449c0bafc878994"/>
         <topic label="ByteBuffer_AppendDummyData" href="byte__array_8h.html#a79508f7b5ab71930a01221f6d1276592"/>
         <topic label="ByteBuffer_IsNull" href="byte__array_8h.html#af56f0bdfd4ecebd1a4d9026fd9c8cd03"/>
+      </topic>
+      <topic label="get_key_range.c" href="get__key__range_8c.html">
+        <topic label="main" href="get__key__range_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="kinetic_allocator.c" href="kinetic__allocator_8c.html">
         <topic label="KINETIC_LIST_LOCK" href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f"/>
