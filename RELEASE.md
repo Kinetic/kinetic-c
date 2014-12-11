@@ -1,3 +1,7 @@
+v0.9.1 (kinetic-protocol 3.0.5)
+-------------------------------
+* Added get_key_range.c example for KineticClient_GetKeyRange().
+
 v0.9.0 (kinetic-protocol 3.0.5)
 -------------------------------
 * Changed API to use a `KineticSession` with a pointer to private session/connection info in place of the old `KineticSessionHandle`.

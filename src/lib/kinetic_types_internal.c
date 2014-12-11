@@ -303,6 +303,7 @@ bool Copy_KineticProto_Command_Range_to_ByteBufferArray(KineticProto_Command_Ran
                 bufferOverflow = true;
             }
         }
+        keys->used = keyRange->n_keys;
     }
     return !bufferOverflow;
 }

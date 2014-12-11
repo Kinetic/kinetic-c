@@ -110,6 +110,7 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device(void)
     KineticStatus status = KineticClient_GetKeyRange(&Fixture.session, &range, &keys, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL(2, keys.used);
     TEST_ASSERT_EQUAL_STRING("mykey_00", keyBuff[0].array.data);
     TEST_ASSERT_EQUAL(strlen("mykey_00"), keyBuff[0].bytesUsed);
     TEST_ASSERT_EQUAL_STRING("mykey_01", keyBuff[1].array.data);
@@ -125,10 +126,10 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device_in_reverse_ord
     KineticKeyRange range = {
         .startKey = ByteBuffer_CreateAndAppendCString(startKeyData, sizeof(startKeyData), "mykey_00"),
         .endKey = ByteBuffer_CreateAndAppendCString(endKeyData, sizeof(endKeyData), "mykey_02"),
-        .startKeyInclusive = false,
-        .endKeyInclusive = false,
-        .maxReturned = 2,
-        // .reverse = true,
+        .startKeyInclusive = true,
+        .endKeyInclusive = true,
+        .maxReturned = 3,
+        .reverse = true,
     };
     uint8_t keysData[numKeys][keyLen];
     for (size_t i = 0; i < numKeys; i++) {
@@ -144,10 +145,13 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device_in_reverse_ord
     KineticStatus status = KineticClient_GetKeyRange(&Fixture.session, &range, &keys, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL_STRING("mykey_01", keyBuff[0].array.data);
-    TEST_ASSERT_EQUAL(strlen("mykey_01"), keyBuff[0].bytesUsed);
-    TEST_ASSERT_ByteBuffer_EMPTY(keyBuff[1]);
-    TEST_ASSERT_ByteBuffer_EMPTY(keyBuff[2]);
+    TEST_ASSERT_EQUAL(3, keys.used);
+    TEST_ASSERT_EQUAL_STRING("mykey_02", keyBuff[0].array.data);
+    TEST_ASSERT_EQUAL(strlen("mykey_02"), keyBuff[0].bytesUsed);
+    TEST_ASSERT_EQUAL_STRING("mykey_01", keyBuff[1].array.data);
+    TEST_ASSERT_EQUAL(strlen("mykey_01"), keyBuff[1].bytesUsed);
+    TEST_ASSERT_EQUAL_STRING("mykey_00", keyBuff[2].array.data);
+    TEST_ASSERT_EQUAL(strlen("mykey_00"), keyBuff[2].bytesUsed);
 }
 
 void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device_with_start_and_end_keys_excluded(void)
@@ -176,6 +180,7 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device_with_start_and
     KineticStatus status = KineticClient_GetKeyRange(&Fixture.session, &range, &keys, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL(1, keys.used);
     TEST_ASSERT_EQUAL_STRING("mykey_01", keyBuff[0].array.data);
     TEST_ASSERT_EQUAL(strlen("mykey_01"), keyBuff[0].bytesUsed);
     TEST_ASSERT_ByteBuffer_EMPTY(keyBuff[1]);

@@ -79,11 +79,17 @@ int main(int argc, char** argv)
         ByteBuffer_Create(&keysData[2], keyLen, 0),
     };
     ByteBufferArray keys = {.buffers = &keyBuff[0], .count = numKeys};
+
     status = KineticClient_GetKeyRange(&session, &range, &keys, NULL);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "FAILURE: Failed retrieving key range from device!\n");
         return 3;
     }
+    
+    if (keys.used != 2) {
+        fprintf(stderr, "FAILURE: Unexpected number of keys in returned range!\n");
+        return 4;
+    };
     if (keyBuff[0].bytesUsed != strlen("key_prefix_00")) {
         fprintf(stderr, "FAILURE: Key 0 length check failed!\n");
         return 4;

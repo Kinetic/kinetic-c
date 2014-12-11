@@ -38,7 +38,8 @@ typedef struct {
 
 typedef struct {
     ByteBuffer* buffers;
-    int count;
+    size_t count;
+    size_t used;
 } ByteBufferArray;
 
 /** @brief Convenience macro to represent an empty buffer with no data */
