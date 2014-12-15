@@ -172,7 +172,6 @@ static bool populate_tx_info(struct sender *s,
     info->box = box;
     info->fd = box->fd;
     info->retries = 0;
-    /* TODO: set other fields? */
 
     int fd = info->box->fd;
 
@@ -371,7 +370,8 @@ static void attempt_write(sender *s, int available) {
             tx_info_t *info = get_last_info_for_socket(s, pfd->fd);
             if (info == NULL) {
                 /* TODO: polling is telling us a socket is writeable and
-                 * we haven't realized we no longer care about it yet */
+                 * we haven't realized we no longer care about it yet.
+                 * Should not get here. */
                 printf(" *** NULL INFO ***\n");
                 continue;
             }

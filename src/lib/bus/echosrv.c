@@ -18,7 +18,7 @@
 #include <poll.h>
 
 #define BUF_SZ (16 * 1024)
-#define MAX_CLIENTS 10
+#define MAX_CLIENTS 100
 
 #define NO_CLIENT ((int)-1)
 
@@ -49,6 +49,7 @@ typedef struct {
     int ticks;
     time_t last_second;
     int successful_writes;
+    int last_successful_writes;
 
     struct pollfd *accept_fds;
     struct pollfd *client_fds;
@@ -202,9 +203,11 @@ static void open_ports(config *cfg) {
 
 static void tick_handler(config *cfg) {
     cfg->ticks++;
-    LOG(1, "%ld -- client_count: %d, successful writes: %d (avg %d/sec)\n",
+    LOG(1, "%ld -- client_count: %d, successful writes: %d (avg %d/sec, delta %d)\n",
         cfg->last_second, cfg->client_count, cfg->successful_writes,
-        cfg->successful_writes / cfg->ticks);
+        cfg->successful_writes / cfg->ticks,
+        cfg->successful_writes - cfg->last_successful_writes);
+    cfg->last_successful_writes = cfg->successful_writes;
 }
 
 static void listen_loop_poll(config *cfg) {

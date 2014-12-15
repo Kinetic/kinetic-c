@@ -70,10 +70,6 @@ typedef struct {
 
     size_t to_read_size;
 
-    /* Read buffer and it's size. Will be grown on demand. */
-    size_t read_buf_size;
-    uint8_t *read_buf;
-
     void *udata;                /* user connection data */
 } connection_info;
 

@@ -46,7 +46,6 @@ typedef struct rx_info_t {
 
 /* Max number of partially processed messages.
  * TODO: We may want this significantly higher. */
-//#define MAX_PENDING_MESSAGES (16*32)
 #define MAX_PENDING_MESSAGES (1024)
 
 /* Max number of unprocessed queue messages */
@@ -62,7 +61,6 @@ typedef struct listener {
     rx_info_t rx_info[MAX_PENDING_MESSAGES];
     int info_available;
     rx_info_t *rx_info_freelist;
-    //rx_info_t *rx_info_usedlist;
     uint16_t rx_info_in_use;
 
     listener_msg msgs[MAX_QUEUE_MESSAGES];
@@ -74,6 +72,10 @@ typedef struct listener {
     uint8_t tracked_fds;
     struct pollfd fds[MAX_FDS];
     connection_info *fd_info[MAX_FDS];
+
+    /* Read buffer and it's size. Will be grown on demand. */
+    size_t read_buf_size;
+    uint8_t *read_buf;
 } listener;
 
 static void tick_handler(listener *l);
@@ -90,6 +92,7 @@ static void notify_message_failure(listener *l,
     rx_info_t *info, bus_send_status_t status);
 static void clean_up_completed_info(listener *l, rx_info_t *info);
 static void observe_backpressure(listener *l, size_t backpressure);
+static bool grow_read_buf(listener *l, size_t nsize);
 
 static void msg_handler(listener *l, listener_msg *msg);
 static void add_socket(listener *l, connection_info *ci, int notify_fd);
