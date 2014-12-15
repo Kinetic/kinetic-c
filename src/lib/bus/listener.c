@@ -99,8 +99,10 @@ bool listener_close_socket(struct listener *l, int fd) {
 }
 
 /* Coefficients for backpressure based on certain conditions. */
+#define MSG_BP_1QTR       (0)
 #define MSG_BP_HALF       (0.5)
 #define MSG_BP_3QTR       (2.0)
+#define RX_INFO_BP_1QTR   (0)
 #define RX_INFO_BP_HALF   (0.5)
 #define RX_INFO_BP_3QTR   (2.0)
 #define THREADPOOL_BP     (1.0)
@@ -108,8 +110,10 @@ bool listener_close_socket(struct listener *l, int fd) {
 static uint16_t get_backpressure(struct listener *l) {
     uint16_t msg_fill_pressure = 0;
     
-    if (l->msgs_in_use < MAX_QUEUE_MESSAGES / 2) {
+    if (l->msgs_in_use < 0.25 * MAX_QUEUE_MESSAGES) {
         msg_fill_pressure = 0;
+    } else if (l->msgs_in_use < 0.5 * MAX_QUEUE_MESSAGES) {
+        msg_fill_pressure = MSG_BP_1QTR * l->msgs_in_use;
     } else if (l->msgs_in_use < 0.75 * MAX_QUEUE_MESSAGES) {
         msg_fill_pressure = MSG_BP_HALF * l->msgs_in_use;
     } else {
@@ -117,8 +121,10 @@ static uint16_t get_backpressure(struct listener *l) {
     }
 
     uint16_t rx_info_fill_pressure = 0;
-    if (l->rx_info_in_use < MAX_PENDING_MESSAGES / 2) {
+    if (l->rx_info_in_use < 0.25 * MAX_PENDING_MESSAGES) {
         rx_info_fill_pressure = 0;
+    } else if (l->rx_info_in_use < 0.5 * MAX_PENDING_MESSAGES) {
+        rx_info_fill_pressure = RX_INFO_BP_1QTR * l->rx_info_in_use;
     } else if (l->rx_info_in_use < 0.75 * MAX_PENDING_MESSAGES) {
         rx_info_fill_pressure = RX_INFO_BP_HALF * l->rx_info_in_use;
     } else {

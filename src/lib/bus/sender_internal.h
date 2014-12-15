@@ -56,6 +56,8 @@ typedef struct {
 #define MAX_CONCURRENT_SENDS 32
 typedef uint32_t tx_flag_t;
 
+#define HASH_TABLE_SIZE2 6 /* should be > log2(MAX_CONCURRENT_SENDS) */
+
 typedef struct sender {
     struct bus *bus;
     bool shutdown;
@@ -74,6 +76,9 @@ typedef struct sender {
     pthread_mutex_t watch_set_mutex;
     uint8_t active_fds;
     struct pollfd fds[MAX_CONCURRENT_SENDS];
+
+    /* Hash table for file descriptors in use. */
+    struct yacht *fd_hash_table;
 } sender;
 
 static tx_info_t *get_free_tx_info(struct sender *s);

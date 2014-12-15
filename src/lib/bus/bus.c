@@ -236,6 +236,7 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg)
 
     /* Pass boxed message to the sender */
     if (!sender_enqueue_message(s, box, &complete_fd)) {
+        BUS_LOG(b, 3, LOG_SENDING_REQUEST, "sender_enqueue_message failed", b->udata);
         return false;
     }
 
@@ -256,10 +257,11 @@ static bool poll_on_completion(struct bus *b, int fd) {
     const int ONE_SECOND = 1000;  // msec
 
     for (int i = 0; i < TIMEOUT_SECONDS; i++) {
-        BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Polling on completion...tick...", b->udata);
+        BUS_LOG(b, 5, LOG_SENDING_REQUEST, "Polling on completion...tick...", b->udata);
         int res = poll(fds, 1, ONE_SECOND);
         if (res == -1) {
             if (is_resumable_io_error(errno)) {
+                BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Polling on completion...EAGAIN", b->udata);
                 errno = 0;
             } else {
                 assert(false);
@@ -275,8 +277,8 @@ static bool poll_on_completion(struct bus *b, int fd) {
                 /* Payload: little-endian uint16_t, msec of backpressure. */
                 uint16_t msec = (read_buf[0] << 0) + (read_buf[1] << 8);
                 if (msec > 0) {
-                    BUS_LOG_SNPRINTF(b, 0, LOG_SENDING_REQUEST, b->udata, 64,
-                        " -- countpressure of %d msec", msec);
+                    BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
+                        " -- backpressure of %d msec", msec);
                     usleep(1000L * msec);
                     //(void)poll(fds, 0, msec);
                 }
