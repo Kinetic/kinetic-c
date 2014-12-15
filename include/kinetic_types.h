@@ -106,6 +106,10 @@ typedef struct _KineticSession {
     // Set to true to enable non-blocking/asynchronous I/O
     bool    nonBlocking;
 
+    // Don't start worker threads, the user will need to call
+    //   KineticClient_AsyncRun() in order for async callbacks to fire
+    bool    no_threads; 
+
     // The version number of this cluster definition. If this is not equal to
     // the value on the Kinetic Device, the request is rejected and will return
     // `KINETIC_STATUS_VERSION_FAILURE`
@@ -157,6 +161,8 @@ typedef enum {
     KINETIC_STATUS_MEMORY_ERROR,        // Failed allocating/deallocating memory
     KINETIC_STATUS_SOCKET_TIMEOUT,      // A timeout occurred while waiting for a socket operation
     KINETIC_STATUS_SOCKET_ERROR,        // An I/O error occurred during a socket operation
+    KINETIC_STATUS_MISSING_KEY,         // An operation is missing a required key
+    KINETIC_STATUS_MISSING_VALUE_BUFFER,// An operation is missing a required value buffer
     KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 
@@ -321,6 +327,25 @@ typedef struct {
     KineticDeviceInfo_Limits* limits;
     KineticDeviceInfo_Device* device;
 } KineticDeviceInfo;
+
+typedef struct {
+    char*   hostname; // pointer must remain valid until operation completes
+    int32_t port; 
+    bool    tls; // optional, defaults to false
+} KineticP2P_Peer;
+
+typedef struct {
+    ByteBuffer    key;
+    ByteBuffer    version; // optional (defaults to force if not specified)
+    ByteBuffer    newKey;
+    KineticStatus resultStatus; // populated with the result of the operation
+} KineticP2P_OperationData;
+
+typedef struct {
+    KineticP2P_Peer peer; 
+    size_t numOperations;
+    KineticP2P_OperationData* operations; // pointer must remain valid until operations complete
+} KineticP2P_Operation;
 
 const char* KineticMessageType_GetName(KineticMessageType type);
 

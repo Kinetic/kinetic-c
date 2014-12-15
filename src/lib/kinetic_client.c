@@ -83,9 +83,20 @@ KineticStatus KineticClient_Connect(const KineticSession* config,
     }
 
     // Wait for initial unsolicited status to be received in order to obtain connectionID
-    while(connection->connectionID == 0) {sleep(1);}
+    while(connection->connectionID == 0) {
+        if (!KineticClient_AsyncRun(handle))
+        {
+            break;
+        }
+    }
 
     return status;
+}
+
+KineticStatus KineticClient_AsyncRun(KineticSessionHandle* handle)
+{
+    KineticConnection* connection = KineticConnection_FromHandle(*handle);
+    return KineticController_Run(connection);
 }
 
 KineticStatus KineticClient_Disconnect(KineticSessionHandle* const handle)
@@ -138,22 +149,91 @@ KineticStatus KineticClient_Put(KineticSessionHandle handle,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_Get(KineticSessionHandle handle,
-                                KineticEntry* const entry,
-                                KineticCompletionClosure* closure)
+KineticStatus KineticClient_Flush(KineticSessionHandle handle,
+                                  KineticCompletionClosure* closure)
+{
+    assert(handle != KINETIC_HANDLE_INVALID);
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
+
+    // Initialize request
+    KineticOperation_BuildFlush(operation);
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
+static bool has_key(KineticEntry* const entry)
+{
+    return entry->key.array.data != NULL;
+}
+
+static bool has_value_buffer(KineticEntry* const entry)
+{
+    return entry->value.array.data != NULL;
+}
+
+typedef enum {
+    CMD_GET,
+    CMD_GET_NEXT,
+    CMD_GET_PREVIOUS,
+} GET_COMMAND;
+
+static KineticStatus handle_get_command(GET_COMMAND cmd,
+                                        KineticSessionHandle handle,
+                                        KineticEntry* const entry,
+                                        KineticCompletionClosure* closure)
 {
     assert(handle != KINETIC_HANDLE_INVALID);
     assert(entry != NULL);
-    if (!entry->metadataOnly) {assert(entry->value.array.data != NULL);}
+
+    if (!has_key(entry)) { return KINETIC_STATUS_MISSING_KEY; }
+    if (!has_value_buffer(entry) && !entry->metadataOnly) {
+        return KINETIC_STATUS_MISSING_VALUE_BUFFER;
+    }
 
     KineticOperation* operation = KineticController_CreateOperation(handle);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticOperation_BuildGet(operation, entry);
+    switch (cmd)
+    {
+    case CMD_GET:
+        KineticOperation_BuildGet(operation, entry);
+        break;
+    case CMD_GET_NEXT:
+        KineticOperation_BuildGetNext(operation, entry);
+        break;
+    case CMD_GET_PREVIOUS:
+        KineticOperation_BuildGetPrevious(operation, entry);
+        break;
+    default:
+        assert(false);
+    }
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
+}
+
+KineticStatus KineticClient_Get(KineticSessionHandle handle,
+                                KineticEntry* const entry,
+                                KineticCompletionClosure* closure)
+{
+    return handle_get_command(CMD_GET, handle, entry, closure);
+}
+
+KineticStatus KineticClient_GetPrevious(KineticSessionHandle handle,
+                                        KineticEntry* const entry,
+                                        KineticCompletionClosure* closure)
+{
+    return handle_get_command(CMD_GET_PREVIOUS, handle, entry, closure);
+}
+
+KineticStatus KineticClient_GetNext(KineticSessionHandle handle,
+                                    KineticEntry* const entry,
+                                    KineticCompletionClosure* closure)
+{
+    return handle_get_command(CMD_GET_NEXT, handle, entry, closure);
 }
 
 KineticStatus KineticClient_Delete(KineticSessionHandle handle,
@@ -207,6 +287,23 @@ KineticStatus KineticClient_GetLog(KineticSessionHandle handle,
 
     // Initialize request
     KineticOperation_BuildGetLog(operation, type, info);
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
+KineticStatus KineticClient_P2POperation(KineticSessionHandle handle,
+                                         KineticP2P_Operation* const p2pOp,
+                                         KineticCompletionClosure* closure)
+{
+    assert(handle != KINETIC_HANDLE_INVALID);
+    assert(p2pOp != NULL);
+
+    KineticOperation* operation = KineticController_CreateOperation(handle);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    // Initialize request
+    KineticOperation_BuildP2POperation(operation, p2pOp);
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);

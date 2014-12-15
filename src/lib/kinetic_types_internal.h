@@ -49,6 +49,8 @@
 #endif
 
 
+#define NUM_ELEMENTS(ARRAY) (sizeof(ARRAY)/sizeof((ARRAY)[0]))
+
 typedef struct _KineticPDU KineticPDU;
 typedef struct _KineticOperation KineticOperation;
 typedef struct _KineticConnection KineticConnection;
@@ -58,19 +60,17 @@ typedef struct _KineticConnection KineticConnection;
 typedef struct _KineticListItem KineticListItem;
 struct _KineticListItem {
     KineticListItem* next;
-    KineticListItem* previous;
     void* data;
 };
 
 // Kinetic list
 typedef struct _KineticList {
     KineticListItem* start;
-    KineticListItem* last;
     pthread_mutex_t mutex;
     bool locked;
 } KineticList;
 #define KINETIC_LIST_INITIALIZER (KineticList) { \
-    .mutex = PTHREAD_MUTEX_INITIALIZER, .locked = false, .start = NULL, .last = NULL }
+    .mutex = PTHREAD_MUTEX_INITIALIZER, .locked = false, .start = NULL, }
 
 // Kinetic Thread Instance
 typedef struct _KineticThread {
@@ -86,6 +86,7 @@ struct _KineticConnection {
     bool            connected;      // state of connection
     int             socket;         // socket file descriptor
     pthread_mutex_t writeMutex;     // socket write mutex
+    pthread_mutex_t readMutex;      // socket read mutex
     int64_t         connectionID;   // initialized to seconds since epoch
     int64_t         sequence;       // increments for each request in a session
     KineticList     pdus;           // list of dynamically allocated PDUs
@@ -98,6 +99,7 @@ struct _KineticConnection {
         .connected = false, \
         .socket = -1, \
         .writeMutex = PTHREAD_MUTEX_INITIALIZER, \
+        .readMutex = PTHREAD_MUTEX_INITIALIZER, \
         .operations = KINETIC_LIST_INITIALIZER, \
         .pdus = KINETIC_LIST_INITIALIZER, \
     }; \
@@ -120,18 +122,21 @@ typedef struct _KineticMessage {
     KineticProto_Message_PINauth        pinAuth;
     uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
 
-    bool                                has_command; // Set to `true` to enable command element
-    KineticProto_Command                command;
-    KineticProto_Command_Header         header;
-    KineticProto_Command_Body           body;
-    KineticProto_Command_Status         status;
-    KineticProto_Command_Security       security;
-    KineticProto_Command_Security_ACL   acl;
-    KineticProto_Command_KeyValue       keyValue;
-    KineticProto_Command_Range          keyRange;
-    KineticProto_Command_GetLog         getLog;
-    KineticProto_Command_GetLog_Type    getLogType;
-    KineticProto_Command_PinOperation   pinOp;
+    bool                                         has_command; // Set to `true` to enable command element
+    KineticProto_Command                         command;
+    KineticProto_Command_Header                  header;
+    KineticProto_Command_Body                    body;
+    KineticProto_Command_Status                  status;
+    KineticProto_Command_Security                security;
+    KineticProto_Command_Security_ACL            acl;
+    KineticProto_Command_KeyValue                keyValue;
+    KineticProto_Command_Range                   keyRange;
+    KineticProto_Command_GetLog                  getLog;
+    KineticProto_Command_GetLog_Type             getLogType;
+    KineticProto_Command_PinOperation            pinOp;
+    KineticProto_Command_P2POperation            p2pOp;
+    KineticProto_Command_P2POperation_Operation  p2pOpOp;
+    KineticProto_Command_P2POperation_Peer       p2pPeer;
 } KineticMessage;
 
 #define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
@@ -181,6 +186,9 @@ typedef struct _KineticMessage {
     KineticProto_command_range__init(&(msg)->keyRange); \
     KineticProto_command_get_log__init(&(msg)->getLog); \
     KineticProto_command_pin_operation__init(&(msg)->pinOp); \
+    KineticProto_command_p2_poperation__init(&(msg)->p2pOp); \
+    KineticProto_command_p2_poperation_operation__init(&(msg)->p2pOpOp); \
+    KineticProto_command_p2_poperation_peer__init(&(msg)->p2pPeer); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
     (msg)->has_command = false; \
 }
@@ -257,7 +265,7 @@ struct _KineticPDU {
     (_pdu)->type = KINETIC_PDU_TYPE_REQUEST; \
 }
 
-typedef KineticStatus (*KineticOperationCallback)(KineticOperation* operation);
+typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operation, KineticStatus const status);
 
 // Kinetic Operation
 struct _KineticOperation {
@@ -271,6 +279,7 @@ struct _KineticOperation {
     KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticDeviceInfo** deviceInfo;
+    KineticP2P_Operation* p2pOp;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
 };

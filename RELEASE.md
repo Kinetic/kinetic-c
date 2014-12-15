@@ -31,3 +31,7 @@ v0.8.1
 * Still using Kinetic Protocol v3.0 (3.0.5)
     * NOT backwards compatible with earlier versions of Kinetic Protocol (< v3.0)
     * Kinetic device firmware must be updated to a release supporting v3.0 protocol!
+
+v0.8.2
+------
+* Added FLUSHALLDATA operation.

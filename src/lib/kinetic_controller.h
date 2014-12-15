@@ -27,6 +27,7 @@ KineticStatus KineticController_CreateWorkerThreads(KineticConnection* const con
 KineticOperation* KineticController_CreateOperation(KineticSessionHandle handle);
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure);
 void KineticController_Pause(KineticConnection* const connection, bool pause);
+KineticStatus KineticController_Run(KineticConnection* const connection);
 void* KineticController_ReceiveThread(void* thread_arg);
 
 #endif // _KINETIC_CONTROLLER_H

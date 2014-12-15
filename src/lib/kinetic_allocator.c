@@ -94,14 +94,8 @@ static void* KineticAllocator_NewItem(KineticList* const list, size_t size)
 
     // Add the new item to the list
     KINETIC_LIST_LOCK(list);
-    if (list->start == NULL) {
-        list->start = newItem;
-    }
-    else {
-        newItem->previous = list->last;
-        list->last->next = newItem;
-    }
-    list->last = newItem;
+    newItem->next = list->start;
+    list->start = newItem;
     KINETIC_LIST_UNLOCK(list);
 
     LOGF3("  Allocated new list item (0x%0llX) w/data (0x%0llX)",
@@ -110,17 +104,25 @@ static void* KineticAllocator_NewItem(KineticList* const list, size_t size)
     return newItem->data;
 }
 
-static void KineticAllocator_FreeItem(KineticList* const list, void* item)
+static void KineticAllocator_FreeItem(KineticList* const list, void* item, bool lock)
 {
-    KINETIC_LIST_LOCK(list);
+    /* Make locking optional, since the lock may already be owned by the caller. */
+    if (lock) {
+        KINETIC_LIST_LOCK(list);
+    }
     KineticListItem* cur = list->start;
+    KineticListItem* prev = NULL;
+
     while (cur->data != item) {
         if (cur->next == NULL) {
             LOG1("  Reached end of list before finding item to free!");
-            KINETIC_LIST_UNLOCK(list);
+            if (lock) {
+                KINETIC_LIST_UNLOCK(list);
+            }
             return;
         }
         else {
+            prev = cur;
             cur = cur->next;
         }
     }
@@ -129,40 +131,12 @@ static void KineticAllocator_FreeItem(KineticList* const list, void* item)
     if ((cur != NULL) && (cur->data == item)) {
         LOG3("  item found! freeing it.");
 
-        // Handle PDU list emptied
-        if (cur->previous == NULL) {
+        if (prev == NULL) {
             LOG3("  At start of list.");
-            if (cur->next == NULL) {
-                LOG3("  Making it empty, since all deallocated!");
-                list->start = NULL;
-                list->last = NULL;
-            }
-            else {
-                LOG3("  Moving current item to head, since head deallocated!");
-                list->start = cur->next;
-                list->start->previous = NULL;
-            }
-        }
-        else {
-            // Relink from previous to next, if avaliable
+            list->start = cur->next;
+        } else {
             LOG3("  Not at list start, so relinking list to free item.");
-            if (cur->previous->next != NULL) {
-                LOG3("  Relinking previous to next");
-                if (cur->next != NULL) {
-                    LOG3("    Next being reset!");
-                    cur->previous->next = cur->next;
-                }
-                else {
-                    list->last = cur->previous;
-                    list->last->next = NULL;
-                    LOGF3("    Next is NULL. End of list now @ 0x%0llX",
-                         (long long)list->last);
-                }
-            }
-            else {
-                LOG1("  This shouldn't happen!");
-                list->last = cur->previous;
-            }
+            prev->next = cur->next;
         }
 
         LOGF3("  Freeing item (0x%0llX) w/data (0x%0llX)", cur, &cur->data);
@@ -171,7 +145,9 @@ static void KineticAllocator_FreeItem(KineticList* const list, void* item)
         free(cur);
         cur = NULL;
     }
-    KINETIC_LIST_UNLOCK(list);
+    if (lock) {
+        KINETIC_LIST_UNLOCK(list);
+    }
 }
 
 static void KineticAllocator_FreeList(KineticList* const list)
@@ -179,33 +155,23 @@ static void KineticAllocator_FreeList(KineticList* const list)
     if (list != NULL) {
         LOGF3("  Freeing list (0x%0llX) of all items...", list);
         KINETIC_LIST_LOCK(list);
-        KineticListItem* current = list->start;
 
-        while (current->next != NULL) {
-            LOG3("  Advancing to next list item...");
-            current = current->next;
-        }
-
-        while (current != NULL) {
-            KineticListItem* curItem = current;
-            KineticListItem* prevItem = current->previous;
-            if (curItem != NULL) {
-                LOGF3("  Freeing list item (0x%0llX) w/ data (0x%llX)",
-                    (long long)current,
-                    (long long)&current->data,
-                    (long long)current->previous);
-                if (curItem->data != NULL) {
-                    free(curItem->data);
+        KineticListItem* next = NULL;
+        for (KineticListItem* item = list->start; item; item = next) {
+            next = item->next;
+            
+            LOGF3("  Freeing list item (0x%0llX) w/ data (0x%llX)",
+                    (long long)item, (long long)&item->data);
+                if (item->data != NULL) {
+                    free(item->data);
+                    item->data = NULL;
                 }
-                free(curItem);
-            }
-            current = prevItem;
-            LOGF3("  on to previous list item (0x%llX)...", current);
+                free(item);
         }
 
         // Make list empty, but leave mutex alone so the state is retained!
         list->start = NULL;
-        list->last = NULL;
+        /* list->last = NULL; */
         KINETIC_LIST_UNLOCK(list);
     }
     else {
@@ -238,12 +204,19 @@ void KineticAllocator_FreePDU(KineticConnection* connection, KineticPDU* pdu)
 {
     LOGF3("Freeing PDU (0x%0llX) on connection (0x%0llX)", pdu, connection);
     KINETIC_LIST_LOCK(&connection->pdus);
-    if ((pdu->proto != NULL) && pdu->protobufDynamicallyExtracted) {
+    if (pdu && (pdu->proto != NULL) && pdu->protobufDynamicallyExtracted) {
         LOG3("Freeing dynamically allocated protobuf");
         KineticProto_Message__free_unpacked(pdu->proto, NULL);
+        pdu->proto = NULL;
     };
+    
+    /* TODO: We can't unlock until the function below completes, but it
+     *     normally also tries to lock, so pass in a flag indicating
+     *     we already have it locked. The way that the mutexes are
+     *     currently initialized makes adding an attribute of
+     *     PTHREAD_MUTEX_RECURSIVE significantly more trouble. */
+    KineticAllocator_FreeItem(&connection->pdus, (void*)pdu, false);
     KINETIC_LIST_UNLOCK(&connection->pdus);
-    KineticAllocator_FreeItem(&connection->pdus, (void*)pdu);
     LOGF3("Freed PDU (0x%0llX) on connection (0x%0llX)", pdu, connection);
 }
 
@@ -313,14 +286,16 @@ void KineticAllocator_FreeOperation(KineticConnection* const connection, Kinetic
         LOGF3("Freeing request PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)",
             operation->request, operation, connection);
         KineticAllocator_FreePDU(connection, operation->request);
+        operation->request = NULL;
     }
     if (operation->response != NULL) {
         LOGF3("Freeing response PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)",
             operation->response, operation, connection);
         KineticAllocator_FreePDU(connection, operation->response);
+        operation->response = NULL;
     }
     pthread_mutex_destroy(&operation->timeoutTimeMutex);
-    KineticAllocator_FreeItem(&connection->operations, (void*)operation);
+    KineticAllocator_FreeItem(&connection->operations, (void*)operation, true);
     LOGF3("Freed operation (0x%0llX) on connection (0x%0llX)", operation, connection);
 }
 
@@ -338,34 +313,10 @@ KineticOperation* KineticAllocator_GetNextOperation(KineticConnection* const con
 
 void KineticAllocator_FreeAllOperations(KineticConnection* const connection)
 {
-    assert(connection != NULL);
-    KineticListItem* current = connection->operations.start;
-    if (current != NULL) {
-        LOGF3("Freeing operations list (0x%0llX) from connection (0x%0llX)...",
-            &connection->operations, connection);
-        while (current != NULL) {
-            KineticOperation* op = (KineticOperation*)current->data;
-            if (op != NULL) {
-
-                if (op->request != NULL) {
-                    LOGF3("Freeing request PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)",
-                        op->request, op, connection);
-                    KineticAllocator_FreePDU(connection, op->request);
-                }
-
-                if (op->response != NULL) {
-                    LOGF3("Freeing response PDU (0x%0llX) from op (0x%0llX) on connection (0x%0llX)",
-                        op->response, op, connection);
-                    KineticAllocator_FreePDU(connection, op->response);
-                }
-
-                current = current->next;
-                KineticAllocator_FreeItem(&connection->operations, (void*)op);
-            }
-        }
-    }
-    else {
-        LOG1("  Nothing to free!");
+    KineticOperation* op = KineticAllocator_GetFirstOperation(connection);
+    while (op) {
+        KineticAllocator_FreeOperation(connection, op);
+        op = KineticAllocator_GetFirstOperation(connection);
     }
 }
 

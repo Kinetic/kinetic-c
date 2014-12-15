@@ -63,6 +63,7 @@ void KineticConnection_FreeConnection(KineticSessionHandle* const handle)
     KineticConnection* connection = KineticConnection_FromHandle(*handle);
     assert(connection != NULL);
     pthread_mutex_destroy(&connection->writeMutex);
+    pthread_mutex_destroy(&connection->readMutex);
     *connection = (KineticConnection) {
         .connected = false
     };
@@ -94,9 +95,11 @@ KineticStatus KineticConnection_Connect(KineticConnection* const connection)
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
-    // Kick off the worker thread
-    connection->thread.connection = connection;
-    KineticController_CreateWorkerThreads(connection);
+    if (!connection->session.no_threads) {
+        // Kick off the worker thread
+        connection->thread.connection = connection;
+        KineticController_CreateWorkerThreads(connection);
+    }
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -106,17 +109,20 @@ KineticStatus KineticConnection_Disconnect(KineticConnection* const connection)
     if (connection == NULL || !connection->connected || connection->socket < 0) {
         return KINETIC_STATUS_SESSION_INVALID;
     }
-
+    
     // Shutdown the worker thread
     KineticStatus status = KINETIC_STATUS_SUCCESS;
-    connection->thread.abortRequested = true;
-    LOG3("\nSent abort request to worker thread!\n");
-    int pthreadStatus = pthread_join(connection->threadID, NULL);
-    if (pthreadStatus != 0) {
-        char errMsg[256];
-        Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
-        LOGF0("Failed terminating worker thread w/error: %s", errMsg);
-        status = KINETIC_STATUS_CONNECTION_ERROR;
+
+    if (!connection->session.no_threads) {
+        connection->thread.abortRequested = true;
+        LOG3("\nSent abort request to worker thread!\n");
+        int pthreadStatus = pthread_join(connection->threadID, NULL);
+        if (pthreadStatus != 0) {
+            char errMsg[256];
+            Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
+            LOGF0("Failed terminating worker thread w/error: %s", errMsg);
+            status = KINETIC_STATUS_CONNECTION_ERROR;
+        }
     }
 
     // Close the connection
