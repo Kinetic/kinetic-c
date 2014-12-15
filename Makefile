@@ -68,7 +68,7 @@ default: makedirs $(KINETIC_LIB)
 makedirs:
 	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
 
-all: default test system_tests run examples
+all: default test system_tests test_internals run examples
 
 clean: makedirs
 	rm -rf ./bin/**/*
@@ -76,6 +76,8 @@ clean: makedirs
 	bundle exec rake clobber
 	git submodule update --init
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
+	cd ${LIB_DIR}/threadpool && make clean
+	cd ${LIB_DIR}/bus && make clean
 
 TAGS: ${C_SRC} Makefile
 	@find . -name "*.[ch]" | grep -v vendor | grep -v build | xargs etags
@@ -103,7 +105,7 @@ ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 
-ci: uninstall all install
+ci: uninstall all test_internals install
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!
@@ -129,6 +131,9 @@ JAVA_BIN = $(JAVA_HOME)/bin/java
 
 .PHONY: test
 
+test_internals:
+	cd ${LIB_DIR}/threadpool && make test
+	cd ${LIB_DIR}/bus && make test
 
 #-------------------------------------------------------------------------------
 # Static and Dynamic Library Build Support
