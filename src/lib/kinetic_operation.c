@@ -111,7 +111,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     case KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH:
         // Populate the HMAC for the protobuf
         KineticHMAC_Init(&request->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-        KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session.hmacKey);
+        KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session.config.hmacKey);
         break;
     default:
         break;
@@ -703,7 +703,7 @@ void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
     operation->request->command->body = &operation->request->protoData.message.body;
     operation->request->command->body->pinOp = &operation->request->protoData.message.pinOp;
  
-#if 1
+#if 0
     /* Replace HMAC auth with pin auth */
     KineticProto_Message* pdu = operation->request->proto;
     pdu->has_authType = true;
@@ -748,7 +748,7 @@ KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* opera
 void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticConnection_IncrementSequence(operation->connection);
+    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->protoData.message.command.header->has_messageType = true;
     

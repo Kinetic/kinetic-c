@@ -50,9 +50,9 @@ void setUp(void)
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connectionID = ConnectionID;
     Session.connection = &Connection;
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
-    KINETIC_OPERATION_INIT(&Operation, &Connection);
+    KineticPDU_InitWithCommand(&Request, &Connection);
+    KineticPDU_InitWithCommand(&Response, &Connection);
+    KineticOperation_Init(&Operation, &Connection);
     Operation.request = &Request;
     Operation.connection = &Connection;
     SessionConfig = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
@@ -65,7 +65,7 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
+void test_KineticOperation_Init_should_configure_the_operation(void)
 {
     LOG_LOCATION;
     KineticOperation op = {
@@ -74,7 +74,7 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
         .response = NULL,
     };
 
-    KINETIC_OPERATION_INIT(&op, &Connection);
+    KineticOperation_Init(&op, &Connection);
 
     TEST_ASSERT_EQUAL_PTR(&Connection, op.connection);
     TEST_ASSERT_NULL(op.request);
@@ -293,10 +293,10 @@ void test_KineticOperation_AssociateResponseWithOperation_should_return_NULL_if_
 
     KineticOperation ops[3];
     for(int i = 0; i < 3; i++) {
-        KINETIC_PDU_INIT_WITH_COMMAND(&Requests[i], &Connection);
+        KineticPDU_InitWithCommand(&Requests[i], &Connection);
         Requests[i].command->header->has_sequence = true;
         Requests[i].type = KINETIC_PDU_TYPE_REQUEST;
-        KINETIC_OPERATION_INIT(&ops[i], &Connection);
+        KineticOperation_Init(&ops[i], &Connection);
     }
 
     // Empty operations list should result in NULL being returned (no match)

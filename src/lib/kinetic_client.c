@@ -312,7 +312,7 @@ KineticStatus KineticClient_InstantSecureErase(KineticSession const * const sess
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticClient_SetClusterVersion(KineticSessionHandle handle,
+KineticStatus KineticClient_SetClusterVersion(KineticSession handle,
                                               int64_t clusterVersion,
                                               int64_t newClusterVersion)
 {
