@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <pthread.h>
 
 #include "casq.h"
 #include "atomic.h"
@@ -14,24 +13,10 @@ struct casq {
     casq_link *accum;
     casq_link *free_links;
     int is_reversing;
-    pthread_mutex_t lock;
 };
-
-#if 0
-#define LOCK(X) pthread_mutex_lock(&X->lock)
-#define UNLOCK(X) pthread_mutex_unlock(&X->lock)
-#else
-#define LOCK(X)
-#define UNLOCK(X)
-#endif
 
 struct casq *casq_new(void) {
     struct casq *q = calloc(1, sizeof(*q));
-    if (q) {
-        if (0 != pthread_mutex_init(&q->lock, NULL)) {
-            free(q);
-        }
-    }
     return q;
 }
 
@@ -52,11 +37,8 @@ static casq_link *get_link(struct casq *q) {
 }
 
 bool casq_push(struct casq *q, void *data) {
-    LOCK(q);
-
     casq_link *l = get_link(q);
     if (l == NULL) {
-        UNLOCK(q);
         return false;
     }
 
@@ -66,7 +48,6 @@ bool casq_push(struct casq *q, void *data) {
         casq_link *cur_head = q->accum;
         l->next = cur_head;
         if (ATOMIC_BOOL_COMPARE_AND_SWAP(&q->accum, cur_head, l)) {
-            UNLOCK(q);
             return true;
         }
     }
@@ -94,14 +75,11 @@ static void reverse(struct casq *q) {
 }
 
 bool casq_empty(struct casq *q) {
-    LOCK(q);
     bool res = q->head == NULL && q->accum == NULL;
-    UNLOCK(q);
     return res;
 }
 
 void *casq_pop(struct casq *q) {
-    LOCK(q);
     for (;;) {
         if (q->head != NULL) {
             casq_link *l = NULL;
@@ -119,7 +97,6 @@ void *casq_pop(struct casq *q) {
                     break;
                 }
             }
-            UNLOCK(q);
             return res;
         } else if (q->accum != NULL) {
             /* If no more links are available, reverse the accumulated ones on demand. */
@@ -130,7 +107,6 @@ void *casq_pop(struct casq *q) {
                 continue;
             }
         } else {                    /* empty */
-            UNLOCK(q);
             return NULL;
         }
     }
@@ -147,7 +123,6 @@ static void free_ll(casq_link *l, casq_free_cb *cb, void *udata) {
 }
 
 void casq_free(struct casq *q, casq_free_cb *cb, void *udata) {
-    LOCK(q);
     casq_link *head = NULL;
     casq_link *accum = NULL;
     casq_link *free_links = NULL;
@@ -171,8 +146,6 @@ void casq_free(struct casq *q, casq_free_cb *cb, void *udata) {
     free_ll(accum, cb, udata);
     free_ll(free_links, cb, udata);
 
-    UNLOCK(q);
-    pthread_mutex_destroy(&q->lock);
     free(q);
 }
 

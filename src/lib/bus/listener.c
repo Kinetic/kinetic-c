@@ -175,6 +175,10 @@ void listener_free(struct listener *l) {
             forget_socket(l, l->fds[0].fd);
         }
 
+        if (l->read_buf) {
+            free(l->read_buf);
+        }                
+
         free(l);
     }
 }
@@ -213,9 +217,10 @@ void *listener_mainloop(void *arg) {
         listener_msg *msg = casq_pop(self->q);
         while (msg && self->info_available > 0) {
             msg_handler(self, msg);
-            timeout = 1;
             listener_msg *nmsg = casq_pop(self->q);
             msg = nmsg;
+            timeout = 1;
+            work_done = true;
         }
 
         int res = poll(self->fds, self->tracked_fds, timeout);
@@ -240,7 +245,6 @@ void *listener_mainloop(void *arg) {
         if (work_done) {
             timeout = 1;
         } else {
-            /* TODO: wake-on-msg vs. exponential back-off */
             timeout <<= 1;
             if (timeout > MAX_TIMEOUT) {
                 timeout = MAX_TIMEOUT;
@@ -293,10 +297,10 @@ static void attempt_recv(listener *l, int available) {
         } else if (fd->revents & POLLIN) {
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                 "reading %zd bytes from socket (buf is %zd)",
-                ci->to_read_size, ci->read_buf_size);
-            assert(ci->read_buf_size >= ci->to_read_size);
+                ci->to_read_size, l->read_buf_size);
+            assert(l->read_buf_size >= ci->to_read_size);
 
-            ssize_t size = read(fd->fd, ci->read_buf, ci->to_read_size);
+            ssize_t size = read(fd->fd, l->read_buf, ci->to_read_size);
 
             if (size == -1) {
                 if (util_is_resumable_io_error(errno)) {
@@ -311,7 +315,7 @@ static void attempt_recv(listener *l, int available) {
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                     "read %zd bytes, calling sink CB", size);
 
-                bus_sink_cb_res_t sres = b->sink_cb(ci->read_buf, size, ci->udata);
+                bus_sink_cb_res_t sres = b->sink_cb(l->read_buf, size, ci->udata);
                 if (sres.full_msg_buffer) {
                     BUS_LOG(b, 3, LOG_LISTENER, "calling unpack CB", b->udata);
                     bus_unpack_cb_res_t ures = b->unpack_cb(sres.full_msg_buffer, ci->udata);
@@ -324,25 +328,13 @@ static void attempt_recv(listener *l, int available) {
                     "expecting next read to have %zd bytes", ci->to_read_size);
 
                 /* Grow read buffer if necessary. */
-                if (ci->to_read_size > ci->read_buf_size) {
-                    uint8_t *nbuf = realloc(ci->read_buf, ci->to_read_size);
-                    if (nbuf) {
-                        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-                            "Read buffer realloc success, %p (%zd) to %p (%zd)",
-                            ci->read_buf, ci->read_buf_size,
-                            nbuf, ci->to_read_size);
-                        ci->read_buf = nbuf;
-                        ci->read_buf_size = ci->to_read_size;
-                        ci->to_read_size = sres.next_read;
-                    } else {
-                        /* FIXME: realloc failure, requested buffer too large. Drop? */
+                if (ci->to_read_size > l->read_buf_size) {
+                    if (!grow_read_buf(l, ci->to_read_size)) {
                         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
                             "Read buffer realloc failure for %p (%zd to %zd)",
-                            ci->read_buf, ci->read_buf_size, ci->to_read_size);
+                            l->read_buf, l->read_buf_size, ci->to_read_size);
                         assert(false);
                     }
-                } else {
-                    ci->to_read_size = sres.next_read;
                 }
             }
         }
@@ -720,6 +712,22 @@ static void notify_caller(int fd) {
     }
 }
 
+static bool grow_read_buf(listener *l, size_t nsize) {
+    uint8_t *nbuf = realloc(l->read_buf, nsize);
+    if (nbuf) {
+        struct bus *b = l->bus;
+        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
+            "Read buffer realloc success, %p (%zd) to %p (%zd)",
+            l->read_buf, l->read_buf_size,
+            nbuf, nsize);
+        l->read_buf = nbuf;
+        l->read_buf_size = nsize;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 static void add_socket(listener *l, connection_info *ci, int notify_fd) {
     /* TODO: if epoll, just register with the OS. */
     struct bus *b = l->bus;
@@ -744,32 +752,22 @@ static void add_socket(listener *l, connection_info *ci, int notify_fd) {
     l->tracked_fds++;
 
     /* Prime the pump by sinking 0 bytes and getting a size to expect. */
-    bus_sink_cb_res_t sink_res = b->sink_cb(ci->read_buf, 0, ci->udata);
+    bus_sink_cb_res_t sink_res = b->sink_cb(l->read_buf, 0, ci->udata);
     assert(sink_res.full_msg_buffer == NULL);  // should have nothing to handle yet
     ci->to_read_size = sink_res.next_read;
 
-    /* Allocate read buffer for connection */
-    ci->read_buf = malloc(ci->to_read_size);
-    if (ci->read_buf == NULL) {
+    if (!grow_read_buf(l, ci->to_read_size)) {
         free(ci);
         notify_caller(notify_fd);
         return;             /* alloc failure */
-    } else {
-        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-            "Allocated read buffer %p (%zd bytes)",
-            ci->read_buf, ci->to_read_size);
-        ci->read_buf_size = ci->to_read_size;
     }
-    
+
     BUS_LOG(b, 3, LOG_LISTENER, "added socket", b->udata);
     notify_caller(notify_fd);
 }
 
 static void free_ci(connection_info *ci) {
     if (ci) {
-        if (ci->read_buf) {
-            free(ci->read_buf);
-        }
         free(ci);
     }
 }

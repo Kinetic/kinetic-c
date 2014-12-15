@@ -18,6 +18,7 @@
 
 #define MAX_SOCKETS 1000
 #define DEFAULT_BUF_SIZE (32 * 1024)
+#define PRINT_RESPONSES 0
 
 enum socket_state {
     STATE_UNINIT = 0,
@@ -153,7 +154,7 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     prot_header_t *header = (prot_header_t *)&si->buf[0];
     uint8_t *payload = (uint8_t *)&si->buf[sizeof(prot_header_t)];
 
-#if 0
+#if PRINT_RESPONSES
     for (int i = 0; i < si->used; i++) {
         if ((i & 15) == 0 && i > 0) { printf("\n"); }
         printf("%02x ", si->buf[i]);
@@ -340,6 +341,7 @@ static void completion_cb(bus_msg_result_t *res, void *udata) {
     switch (res->status) {
     case BUS_SEND_SUCCESS:
     {
+#if 1
         /* CAS completion? or what? */
         size_t cur = s->completed_deliveries;
         for (;;) {
@@ -350,6 +352,7 @@ static void completion_cb(bus_msg_result_t *res, void *udata) {
                 break;
             }
         }
+#endif
     }
     break;
     case BUS_SEND_TX_TIMEOUT:

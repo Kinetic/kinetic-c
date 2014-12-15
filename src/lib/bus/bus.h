@@ -14,14 +14,11 @@ bool bus_init(bus_config *config, struct bus_result *res);
 
 /* Send a request. Blocks until the request has been transmitted.
  *
- * TODO: liveness of msg
+ * TODO: liveness of msg: copy or take ownership?
  * 
  * Assumes the FD has been registered with bus_register_socket;
  * sending to an unregistered socket is an error. */
 bool bus_send_request(struct bus *b, bus_user_msg *msg);
-
-/* FIXME: config callback for status msgs */
-
 
 /* Get the string key for a log event ID. */
 const char *bus_log_event_str(log_event_t event);

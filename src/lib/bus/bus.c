@@ -21,8 +21,6 @@ static bool poll_on_completion(struct bus *b, int fd);
 static int sender_id_of_socket(struct bus *b, int fd);
 static int listener_id_of_socket(struct bus *b, int fd);
 
-static int live_box_count = 0; // NOCOMMIT
-
 static void set_defaults(bus_config *cfg) {
     if (cfg->sender_count == 0) { cfg->sender_count = 1; }
     if (cfg->listener_count == 0) { cfg->listener_count = 1; }
@@ -185,8 +183,6 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 64,
         "Allocated boxed message -- %p", box);
 
-    live_box_count++;
-
     box->fd = msg->fd;
     assert(msg->fd != 0);
     box->out_seq_id = msg->seq_id;
@@ -247,7 +243,7 @@ static bool poll_on_completion(struct bus *b, int fd) {
             if (is_resumable_io_error(errno)) {
                 errno = 0;
             } else {
-                assert(false);  /* FIXME: classify error conditions */
+                assert(false);
                 break;
             }
         } else if (res > 0) {
@@ -271,7 +267,7 @@ static bool poll_on_completion(struct bus *b, int fd) {
                 if (is_resumable_io_error(errno)) {
                     errno = 0;
                 } else {
-                    assert(false);  /* FIXME: classify error conditions */
+                    assert(false);
                     break;
                 }
             }
@@ -340,8 +336,6 @@ bool bus_register_socket(struct bus *b, int fd, void *udata) {
 
     ci->fd = fd;
     ci->to_read_size = 0;
-    ci->read_buf_size = 0;      /* will be realloc'd on demand */
-    ci->read_buf = NULL;
     ci->udata = udata;
 
     bool res = listener_add_socket(l, ci, pipe_in);
@@ -420,7 +414,6 @@ static void box_execute_cb(void *udata) {
     bus_msg_cb *cb = box->cb;
 
     free(box);
-    live_box_count--;
     cb(&res, out_udata);
 }
 
