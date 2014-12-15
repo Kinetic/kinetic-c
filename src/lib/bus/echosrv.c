@@ -36,6 +36,7 @@ static uint8_t read_buf[BUF_SZ];
 typedef struct {
     int fd;
     size_t out_bytes;
+    size_t written_bytes;
     uint8_t buf[BUF_SZ];
 } out_buf;
 
@@ -354,7 +355,8 @@ static void handle_client_io(config *cfg, int available) {
             checked++;
             out_buf *buf = &cfg->out_bufs[i];
             LOG(2, "writing %zd bytes to %d\n", buf->out_bytes, buf->fd);
-            ssize_t wres = write(buf->fd, buf->buf, buf->out_bytes);
+            size_t wr_size = buf->out_bytes - buf->written_bytes;
+            ssize_t wres = write(buf->fd, &buf->buf[buf->written_bytes], wr_size);
             if (wres == -1) {
                 if (util_is_resumable_io_error(errno)) {
                     errno = 0;
@@ -363,14 +365,15 @@ static void handle_client_io(config *cfg, int available) {
                 } else {
                     err(1, "write");
                 }
-            } else if (wres == buf->out_bytes) { /* success */
-                buf->out_bytes = 0;
-                cfg->successful_writes++;
-                fd->events = POLLIN;
-            } else {            /* TODO: incomplete write */
-                assert(false);
+            } else {
+                buf->written_bytes += wres;
+                if (buf->written_bytes == buf->out_bytes) {
+                    buf->out_bytes = 0;
+                    buf->written_bytes = 0;
+                    cfg->successful_writes++;
+                    fd->events = POLLIN;
+                }
             }
-
         } else if (fd->revents & POLLIN) {
             checked++;
             /* if we can read, then queue up same as a write */
