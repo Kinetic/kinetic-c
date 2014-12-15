@@ -56,8 +56,8 @@ void setUp(void)
     TEST_ASSERT_FALSE(Session.connection->connected);
     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
     TEST_ASSERT_EQUAL(17, Session.config.port);
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, Session.connection);
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, Session.connection);
+    KineticPDU_InitWithCommand(&Request, Session.connection);
+    KineticPDU_InitWithCommand(&Response, Session.connection);
     OperationCompleteCallbackCount = 0;
     LastStatus = KINETIC_STATUS_INVALID;
 }

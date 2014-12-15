@@ -93,6 +93,7 @@ struct _KineticConnection {
     KineticThread   thread;         // worker thread instance struct
     pthread_t       threadID;       // worker pthread
 };
+
 #define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
         .connected = false, \
         .socket = -1, \

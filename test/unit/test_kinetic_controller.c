@@ -45,9 +45,9 @@ void setUp(void)
     KineticLogger_Init("stdout", 3);
     // KINETIC_CONNECTION_INIT(&Connection);
     // Connection.connectionID = ConnectionID;
-    // KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    // KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
-    // KINETIC_OPERATION_INIT(&Operation, &Connection);
+    // KineticPDU_InitWithCommand(&Request, &Connection);
+    // KineticPDU_InitWithCommand(&Response, &Connection);
+    // KineticOperation_Init(&Operation, &Connection);
     // Operation.request = &Request;
 }
 
@@ -65,7 +65,7 @@ void test_KineticController_HandleIncomingPDU_should_process_unsolicited_respons
         .connectionID = 0,
     };
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection);
+    KineticPDU_InitWithCommand(&Response, &connection);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
     Response.command->header->has_connectionID = true;
     Response.command->header->connectionID = 11223344;
@@ -88,9 +88,9 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
     };
 
     KineticOperation op;
-    KINETIC_OPERATION_INIT(&op, &connection);
+    KineticOperation_Init(&op, &connection);
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection);
+    KineticPDU_InitWithCommand(&Response, &connection);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);
@@ -112,14 +112,14 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
     };
 
     KineticOperation op;
-    KINETIC_OPERATION_INIT(&op, &connection);
+    KineticOperation_Init(&op, &connection);
     op.callback = NULL;
 
     uint8_t valueData[10];
     KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
     op.entry = &entry;
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection);
+    KineticPDU_InitWithCommand(&Response, &connection);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);
@@ -152,7 +152,7 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
     };
 
     KineticOperation op;
-    KINETIC_OPERATION_INIT(&op, &connection);
+    KineticOperation_Init(&op, &connection);
     op.callback = &DummyOpCallback;
     DummyOpCallbackCalls = 0;
 
@@ -160,7 +160,7 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
     KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
     op.entry = &entry;
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection);
+    KineticPDU_InitWithCommand(&Response, &connection);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);

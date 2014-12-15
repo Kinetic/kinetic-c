@@ -263,7 +263,7 @@ KineticStatus KineticClient_InstantSecureErase(KineticSession const * const sess
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_SetClusterVersion(KineticSessionHandle handle,
+KineticStatus KineticClient_SetClusterVersion(KineticSession handle,
                                               int64_t clusterVersion,
                                               int64_t newClusterVersion);
 

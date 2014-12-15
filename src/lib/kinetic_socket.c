@@ -273,7 +273,6 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
         while (!abortFlush && dest->bytesUsed < len) {
             int opStatus;
             fd_set readSet;
-            fd_set errorSet;
             struct timeval timeout;
             size_t remainingLen = len - dest->bytesUsed;
 
