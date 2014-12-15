@@ -104,6 +104,9 @@ void tearDown(void)
 
 void test_InstantSecureErase_should_erase_device_contents(void)
 { LOG_LOCATION;
+    if (strcmp(SYSTEM_TEST_HOST, "localhost") != 0) {
+        TEST_IGNORE_MESSAGE("TODO: Need to implement PIN authentication in order to get erase working on HW!")
+    }
     KineticStatus status = KineticClient_InstantSecureErase(&Fixture.session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

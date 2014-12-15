@@ -41,6 +41,7 @@
 #define KINETIC_TLS_PORT        (8443)
 #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
+#define KINETIC_MAX_PIN_LEN     (1024)
 #define KINETIC_DEFAULT_KEY_LEN (1024)
 #define KINETIC_MAX_KEY_LEN     (4096)
 #define KINETIC_MAX_VERSION_LEN (256)
@@ -116,6 +117,14 @@ typedef struct _KineticSessionConfig {
     // client and the device, used to sign requests.
     uint8_t keyData[KINETIC_MAX_KEY_LEN];
     ByteArray hmacKey;
+
+    // Set to `true' to enable SSL for for this session
+    bool useSsl;
+
+    // This is the PIN to use for the session. If a PIN is set, then PIN-based
+    // authentication is assumend for the session (rather than HMAC)
+    uint8_t pinData[KINETIC_MAX_PIN_LEN];
+    ByteArray pin;
 } KineticSessionConfig;
 
 /**
@@ -168,6 +177,8 @@ typedef enum {
     KINETIC_STATUS_SOCKET_ERROR,        // An I/O error occurred during a socket operation
     KINETIC_STATUS_MISSING_KEY,         // An operation is missing a required key
     KINETIC_STATUS_MISSING_VALUE_BUFFER,// An operation is missing a required value buffer
+    KINETIC_STATUS_PIN_REQUIRED,        // The operation requires a PIN and one was not specified
+    KINETIC_STATUS_SSL_REQUIRED,        // The operation requires an SSL connection and the specified connection is non-SSL
     KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 

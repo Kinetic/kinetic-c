@@ -46,6 +46,8 @@ STATIC const char* KineticStatusDescriptor[] = {
     "SOCKET_ERROR",
     "MISSING_KEY",
     "MISSING_VALUE_BUFFER",
+    "PIN_REQUIRED",
+    "SSL_REQUIRED",
 };
 
 #ifdef TEST

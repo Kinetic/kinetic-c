@@ -41,7 +41,7 @@ void SystemTestSetup(SystemTestFixture* fixture)
                 .config = (KineticSessionConfig) {
                     .host = SYSTEM_TEST_HOST,
                     .port = KINETIC_PORT,
-                    .clusterVersion = 0,
+                    .clusterVersion = CLUSTER_VERSION,
                     .identity = 1,
                     .hmacKey = hmacArray,
                 },
@@ -59,8 +59,8 @@ void SystemTestSetup(SystemTestFixture* fixture)
     }
 
     // Erase the drive
-    status = KineticClient_InstantSecureErase(&fixture->session);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    // status = KineticClient_InstantSecureErase(&fixture->session);
+    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // TEST_ASSERT_EQUAL_MESSAGE(
     //     fixture->expectedSequence,

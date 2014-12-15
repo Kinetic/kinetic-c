@@ -255,25 +255,6 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_GetLog(KineticSession const * const session,
-                                   KineticDeviceInfo_Type type,
-                                   KineticDeviceInfo** info,
-                                   KineticCompletionClosure* closure)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    assert(info != NULL);
-
-    KineticOperation* operation = KineticController_CreateOperation(session);
-    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
-
-    // Initialize request
-    KineticOperation_BuildGetLog(operation, type, info);
-
-    // Execute the operation
-    return KineticController_ExecuteOperation(operation, closure);
-}
-
 KineticStatus KineticClient_P2POperation(KineticSession const * const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure)
@@ -290,16 +271,4 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
-}
-
-KineticStatus KineticClient_InstantSecureErase(KineticSession const * const session)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
-
-    KineticOperation* operation = KineticController_CreateOperation(session);
-    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
-
-    KineticOperation_BuildInstantSecureErase(operation);
-    return KineticController_ExecuteOperation(operation, NULL);
 }

@@ -200,29 +200,6 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
                                         KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GETLOG command to retrieve specific configuration and/or
- * operational data from the Kinetic Device.
- *
- * @param session       The connected KineticSession to use for the operation
- * @param type          KineticLogDataType specifying data type to retrieve.
- * @param info          KineticDeviceInfo pointer, which will be assigned to
- *                      a dynamically allocated structure populated with
- *                      the requested data, if successful. The client should
- *                      call free() on this pointer in order to free the root
- *                      and any nested structures.
- * @param closure       Optional closure. If specified, operation will be
- *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion in another thread.
- *
- * @return              Returns 0 upon success, -1 or the Kinetic status code
- *                      upon failure
- */
-KineticStatus KineticClient_GetLog(KineticSession const * const session,
-                                   KineticDeviceInfo_Type type,
-                                   KineticDeviceInfo** info,
-                                   KineticCompletionClosure* closure);
-
-/**
  * @brief Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic
  * Device to copy a set of keys (and associated value and metadata) to another
  * Kinetic Device.
@@ -245,14 +222,5 @@ KineticStatus KineticClient_GetLog(KineticSession const * const session,
 KineticStatus KineticClient_P2POperation(KineticSession const * const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure);
-
-/**
- * @brief Executes an InstantSecureErase command to erase all data from the Kinetic device.
- *
- * @param session       The connected KineticSession to use for the operation.
- *
- * @return              Returns the resulting KineticStatus.
- */
-KineticStatus KineticClient_InstantSecureErase(KineticSession const * const session);
 
 #endif // _KINETIC_CLIENT_H

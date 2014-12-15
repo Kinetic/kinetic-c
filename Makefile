@@ -13,8 +13,9 @@ PUB_INC = ./include
 CC ?= gcc
 OPTIMIZE = -O3
 SYSTEM_TEST_HOST ?= \"localhost\"
+CLUSTER_VERSION ?= 0
 WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
-CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
+CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=\"${SYSTEM_TEST_HOST}\" -DCLUSTER_VERSION=${CLUSTER_VERSION}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -lcrypto -lssl -lpthread
 
@@ -23,17 +24,14 @@ LDFLAGS += -lm -lcrypto -lssl -lpthread
 #===============================================================================
 
 PROJECT = kinetic-c-client
-
 PREFIX ?= /usr/local
 LIBDIR ?= /lib
-
 LIB_DIR = ./src/lib
 VENDOR = ./vendor
 PROTOBUFC = $(VENDOR)/protobuf-c
 SOCKET99 = $(VENDOR)/socket99
 VERSION_FILE = ./config/VERSION
 VERSION = ${shell head -n1 $(VERSION_FILE)}
-
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR)
@@ -63,10 +61,11 @@ LIB_OBJS = \
 
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
+
 default: makedirs $(KINETIC_LIB)
 
 makedirs:
-	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
+	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/unit &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
 
 all: default test system_tests run examples
 
@@ -110,24 +109,6 @@ ci: uninstall all install
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) v$(VERSION) is in working order
 	@echo
-
-
-#-------------------------------------------------------------------------------
-# Test Support
-#-------------------------------------------------------------------------------
-
-test: Rakefile $(LIB_OBJS)
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Testing $(PROJECT)
-	@echo --------------------------------------------------------------------------------
-	bundle install
-	bundle exec rake test_all
-
-JAVA_HOME ?= /usr
-JAVA_BIN = $(JAVA_HOME)/bin/java
-
-.PHONY: test
 
 
 #-------------------------------------------------------------------------------
@@ -207,6 +188,57 @@ stop_simulator:
 .PHONY: update_simulator erase_simulator stop_simulator
 
 
+#===============================================================================
+# Unity Test Framework Support
+#===============================================================================
+UNITY_INC = ./vendor/unity/src
+UNITY_SRC = ./vendor/unity/src/unity.c
+
+test: Rakefile $(LIB_OBJS)
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Testing $(PROJECT)
+	@echo --------------------------------------------------------------------------------
+	bundle install
+	bundle exec rake test_all
+
+
+#===============================================================================
+# CMock Tests
+#===============================================================================
+
+UNIT_SRC = ./test/unit
+UNIT_OUT = $(BIN_DIR)/unit
+UNIT_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+UNIT_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+UNIT_CFLAGS += -std=c99 -fPIC -g $(UNIT_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
+
+unit_sources = $(wildcard $(UNIT_SRC)/*.c)
+unit_executables = $(patsubst $(UNIT_SRC)/%.c,$(UNIT_OUT)/run_%,$(unit_sources))
+unit_results = $(patsubst $(UNIT_OUT)/run_%,$(UNIT_OUT)/%.log,$(unit_executables))
+unit_passfiles = $(patsubst $(UNIT_OUT)/run_%,$(UNIT_OUT)/%.testpass,$(unit_executables))
+unit_names = $(patsubst $(UNIT_OUT)/run_%,%,$(unit_executables))
+
+list_unit_tests:
+	echo $(unit_names)
+
+$(UNIT_OUT)/%_runner.c: $(UNIT_SRC)/%.c
+	./test/support/generate_unit_runner.sh $< > $@
+
+$(UNIT_OUT)/run_%: $(UNIT_SRC)/%.c $(UNIT_OUT)/%_runner.c $(KINETIC_LIB)
+	@echo
+	@echo ================================================================================
+	@echo System test: '$<'
+	@echo --------------------------------------------------------------------------------
+	$(CC) -o $@ $< $(word 2,$^) ./test/support/unit_unit_fixture.c $(UNITY_SRC) $(UNIT_CFLAGS) $(LIB_INCS) -I$(UNITY_INC) -I./test/support $(UNIT_LDFLAGS) $(KINETIC_LIB)
+
+$(UNIT_OUT)/%.testpass : $(UNIT_OUT)/run_%
+	./scripts/runSystemTest.sh $*
+
+$(unit_names) : % : $(UNIT_OUT)/%.testpass
+
+unit_tests: start_simulator $(unit_passfiles)
+
 
 #===============================================================================
 # System Tests
@@ -217,8 +249,6 @@ SYSTEST_OUT = $(BIN_DIR)/systest
 SYSTEST_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
-UNITY_INC = ./vendor/unity/src
-UNITY_SRC = ./vendor/unity/src/unity.c
 
 systest_sources = $(wildcard $(SYSTEST_SRC)/*.c)
 systest_executables = $(patsubst $(SYSTEST_SRC)/%.c,$(SYSTEST_OUT)/run_%,$(systest_sources))
@@ -243,21 +273,7 @@ $(SYSTEST_OUT)/%.testpass : $(SYSTEST_OUT)/run_%
 	./scripts/runSystemTest.sh $*
 
 $(systest_names) : % : $(SYSTEST_OUT)/%.testpass
-
-# system_tests: start_simulator $(systest_results)
 system_tests: start_simulator $(systest_passfiles)
-
-
-# run_systest_%: $(SYSTEST_OUT)/%
-# 	@echo
-# 	@echo ================================================================================
-# 	@echo Executing system test: '$<'
-# 	@echo --------------------------------------------------------------------------------;
-# 	$<
-# 	@echo ================================================================================
-# 	@echo
-# 	./vendor/kinetic-simulator/stopSimulator.sh
-# run_systest_%: start_simulator
 
 # valgrind_systest_%: $(SYSTEST_OUT)/%
 # 	@echo
@@ -267,27 +283,6 @@ system_tests: start_simulator $(systest_passfiles)
 # 	${VALGRIND} ${VALGRIND_ARGS} $<
 # 	@echo ================================================================================
 # 	@echo
-
-# setup_system_tests: $(systest_executables) \
-# 	build_system_tests
-
-# system_tests: setup_system_tests \
-# 	start_simulator \
-# 	run_example_write_file_blocking \
-# 	run_example_write_file_blocking_threads \
-# 	run_example_write_file_nonblocking \
-# 	run_example_write_file_nonblocking_threads \
-# 	stop_simulator
-
-# valgrind_system_tests: setup_system_tests \
-# 	start_simulator \
-# 	valgrind_example_write_file_blocking \
-# 	valgrind_example_write_file_blocking_threads \
-# 	valgrind_example_write_file_nonblocking \
-# 	valgrind_example_write_file_nonblocking_threads \
-# 	stop_simulator
-
-
 
 
 #===============================================================================
@@ -319,6 +314,8 @@ build: $(KINETIC_LIB) $(KINETIC_SO_DEV) utility
 # Support for Simulator and Exection of Test Utility
 #-------------------------------------------------------------------------------
 # JAVA=$(JAVA_HOME)/bin/java
+JAVA_HOME ?= /usr
+JAVA_BIN = $(JAVA_HOME)/bin/java
 SIM_JARS_PREFIX = vendor/kinetic-java/kinetic-simulator-0.7.0.2-kinetic-proto-2.0.6-SNAPSHOT
 CLASSPATH = $(JAVA_HOME)/lib/tools.jar:$(SIM_JARS_PREFIX)-jar-with-dependencies.jar:$(SIM_JARS_PREFIX)-sources.jar:$(SIM_JARS_PREFIX).jar
 SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
@@ -337,6 +334,7 @@ run: $(UTIL_EXEC) start_simulator
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
 	@echo
 
+
 #===============================================================================
 # Standalone Example Executables
 #===============================================================================
@@ -344,8 +342,6 @@ run: $(UTIL_EXEC) start_simulator
 EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 EXAMPLES = write_file_blocking
-VALGRIND = valgrind
-VALGRIND_ARGS = --track-origins=yes #--leak-check=full
 
 example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
 example_executables = $(patsubst $(EXAMPLE_SRC)/%.c,$(BIN_DIR)/examples/%,$(example_sources))

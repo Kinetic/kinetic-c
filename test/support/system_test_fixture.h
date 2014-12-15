@@ -28,6 +28,10 @@
 #define SYSTEM_TEST_HOST "localhost"
 #endif
 
+#ifndef CLUSTER_VERSION
+#define CLUSTER_VERSION 0
+#endif
+
 typedef struct _SystemTestFixture {
     KineticSession session;
     bool testIgnored;

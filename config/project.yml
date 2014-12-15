@@ -36,7 +36,6 @@
 :defines:
   :commmon: &common_defines
     - TEST
-    - SYSTEM_TEST_HOST=\"<%= ENV.fetch('SYSTEM_TEST_HOST', 'localhost') %>\"
   :test:
     - *common_defines
   :test_preprocess:
