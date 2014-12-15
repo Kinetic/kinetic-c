@@ -353,6 +353,10 @@ static size_t construct_msg(uint8_t *buf, size_t buf_size, size_t payload_size, 
     return header_size + payload_size;
 }
 
+/* Should it CAS on the completion counter?
+ * This should account for nearly all CPU usage. */
+#define INCREMENT_COMPLETION_COUNTER 1
+
 static void completion_cb(bus_msg_result_t *res, void *udata) {
     example_state *s = &state;
     socket_info *si = (socket_info *)udata;
@@ -360,8 +364,7 @@ static void completion_cb(bus_msg_result_t *res, void *udata) {
     switch (res->status) {
     case BUS_SEND_SUCCESS:
     {
-#if 1
-        /* CAS completion? or what? */
+#if INCREMENT_COMPLETION_COUNTER
         size_t cur = s->completed_deliveries;
         for (;;) {
             if (ATOMIC_BOOL_COMPARE_AND_SWAP(&s->completed_deliveries, cur, cur + 1)) {

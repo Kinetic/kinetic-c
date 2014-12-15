@@ -34,6 +34,7 @@
 #include "casq.h"
 #include "util.h"
 #include "atomic.h"
+#include "yacht.h"
 #include "sender_internal.h"
 
 static void set_error_for_socket(sender *s, int fd, tx_error_t error);
@@ -57,9 +58,16 @@ struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
 
     int res = pthread_mutex_init(&s->watch_set_mutex, NULL);
 
+    s->fd_hash_table = yacht_init(HASH_TABLE_SIZE2);
+    if (s->fd_hash_table == NULL) {
+        free(s);
+        return NULL;
+    }
+
     if (res != 0) {
         fprintf(stderr, "pthread_mutex_init: %s\n", strerror(res));
         free(s);
+        yacht_free(s->fd_hash_table);
         return NULL;
     }
 
@@ -104,8 +112,22 @@ bool sender_enqueue_message(struct sender *s,
     }
 }
 
+/* Should the hash table be used to check for active file descriptors?
+ * Doing so saves CPU usage when sending several requests on the same
+ * FD.
+ *
+ * TODO: It also appears to mask a condition that leads to the "NULL
+ * INFO" warning in attempt_write below. Revisit during hardware stress
+ * testing. */
+#define USE_HASH_TABLE 1
+
 /* Check if FD is being watched. If info is non-NULL, then ignore that record. */
 static bool is_watched(struct sender *s, int fd, tx_info_t *ignore_info) {
+#if USE_HASH_TABLE
+    if (ignore_info == NULL) {
+        return yacht_member(s->fd_hash_table, fd);
+    }
+#endif
     /* ASSERT: s->watch_set_mutex is locked. */
 
     for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
@@ -142,6 +164,9 @@ static bool add_fd_to_watch_set(struct sender *s, int fd) {
         s->fds[idx].fd = fd;
         s->fds[idx].events |= POLLOUT;
         s->active_fds++;
+        if (!yacht_add(s->fd_hash_table, fd)) {
+            assert(false);
+        }
     }
 
     if (0 != pthread_mutex_unlock(&s->watch_set_mutex)) {
@@ -168,11 +193,13 @@ static bool remove_fd_from_watch_set(struct sender *s, tx_info_t *info) {
         BUS_LOG(b, 3, LOG_SENDER, "removing FD from watch set", b->udata);
         for (int i = 0; i < s->active_fds; i++) {
             if (s->fds[i].fd == info->fd) {
-                s->fds[i].events &= ~POLLOUT;
                 if (s->active_fds > 1) {
                     s->fds[i].fd = s->fds[s->active_fds - 1].fd;
                 }
                 s->active_fds--;
+                if (!yacht_remove(s->fd_hash_table, info->fd)) {
+                    assert(false);
+                }
                 break;
             }
         }
@@ -187,6 +214,7 @@ static bool remove_fd_from_watch_set(struct sender *s, tx_info_t *info) {
 
 static bool populate_tx_info(struct sender *s,
         tx_info_t *info, boxed_msg *box) {
+    struct bus *b = s->bus;
     assert(info->box == NULL);
     info->box = box;
     info->fd = box->fd;
@@ -195,6 +223,7 @@ static bool populate_tx_info(struct sender *s,
     int fd = info->box->fd;
 
     if (!add_fd_to_watch_set(s, fd)) {
+        BUS_LOG(b, /*3*/0, LOG_SENDER, "add_fd_to_watch_set FAILED", b->udata);
         return false;
     }
 
@@ -236,7 +265,7 @@ static tx_info_t *get_free_tx_info(struct sender *s) {
     struct bus *b = s->bus;
     const tx_flag_t NO_MSG = (1L << MAX_CONCURRENT_SENDS) - 1;
     if (s->tx_flags == NO_MSG) {
-        BUS_LOG(b, 6, LOG_SENDER, "No tx_info cells left!", b->udata);
+        BUS_LOG(b, /*6*/ 0, LOG_SENDER, "No tx_info cells left!", b->udata);
         return NULL;           /* no messages left */
     }
 
@@ -265,6 +294,7 @@ static tx_info_t *get_free_tx_info(struct sender *s) {
         }
     }
 
+    BUS_LOG(b, /*6*/ 0, LOG_SENDER, "No tx_info cells left!", b->udata);
     return NULL;
 }
 
@@ -304,8 +334,10 @@ void *sender_mainloop(void *arg) {
          * appear *after self->fds[self->active_fds], and time-outs will
          * only remove them inside tick_handler above. */
         BUS_LOG(b, 7, LOG_SENDER, "polling", b->udata);
+        
         int res = poll(self->fds, self->active_fds, delay);
-        BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_SENDER, b->udata, 64, "poll res %d", res);
+        BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_SENDER, b->udata, 64, "poll res %d, active fds %d",
+            res, self->active_fds);
 
         if (res == -1) {
             if (util_is_resumable_io_error(errno)) {
@@ -362,7 +394,7 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
             if (info->box->fd == fd && info->error == 0) {
                 info->error = error;
                 struct bus *b = s->bus;
-                BUS_LOG(b, 2, LOG_SENDER, "setting error on socket", b->udata);
+                BUS_LOG(b, /*2*/ 1, LOG_SENDER, "setting error on socket", b->udata);
             }
         }
     }
@@ -388,14 +420,16 @@ static void attempt_write(sender *s, int available) {
             written++;
             tx_info_t *info = get_last_info_for_socket(s, pfd->fd);
             if (info == NULL) {
-                /* TODO: polling is telling us a socket is writeable and
+                /* Polling is telling us a socket is writeable and
                  * we haven't realized we no longer care about it yet.
                  * Should not get here. */
                 printf(" *** NULL INFO ***\n");
                 continue;
             }
-            //assert(info);
+            assert(info);
             if (info->error != 0) {
+                BUS_LOG_SNPRINTF(b, /*4*/0, LOG_SENDER, b->udata, 64,
+                    "socket has failed, let it time out: %d", info->error);
                 continue;       /* socket has failed, let it time out */
             }
 
@@ -424,10 +458,6 @@ static void attempt_write(sender *s, int available) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64, "wrote %zd", wrsz);
                     if (rem - wrsz == 0) { /* completed! */
                         enqueue_message_to_listener(s, info);
-
-                        /* No longer interested in writing to this FD, unless
-                         * another adds it again */
-                        s->fds[i].events &= ~POLLOUT;
                     }
                 }
             }
@@ -483,6 +513,9 @@ static void tick_handler(sender *s) {
                 notify_message_failure(s, info, BUS_SEND_TX_TIMEOUT);
             } else {
                 info->timeout_sec--;
+                BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+                    "decrementing tx_info %d -- %ld (status %d, box %p)",
+                    info->id, info->timeout_sec, info->error, info->box);
             }
         }
     }
@@ -516,6 +549,8 @@ static void enqueue_message_to_listener(sender *s, tx_info_t *info) {
         }
     }
 }
+
+/* FIXME: refactor ^ and v because they're largely identical */
 
 static void attempt_to_resend_success(sender *s, tx_info_t *info) {
     struct bus *b = s->bus;
@@ -557,6 +592,7 @@ void sender_free(struct sender *s) {
     if (s) {
         int res = pthread_mutex_destroy(&s->watch_set_mutex);
         /* Must call sender_shutdown and wait for phtread_join first. */
+        yacht_free(s->fd_hash_table);
         assert(res == 0);
         free(s);
     }
