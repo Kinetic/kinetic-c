@@ -286,7 +286,9 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticOperation_BuildP2POperation(operation, p2pOp);
+    KineticStatus status = KineticOperation_BuildP2POperation(operation, p2pOp);
+    if (status != KINETIC_STATUS_SUCCESS) {return status; }
+    // TODO I probably need to call the callback here?
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);

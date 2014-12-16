@@ -180,17 +180,17 @@ void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header)
 
 #define LOG_PROTO_LEVEL_START(__name) \
     KineticLogger_LogPrintf(2, "%s%s {", (_indent), (__name)); \
-    strcat(_indent, "  ");
+    (strlen(_indent) < (sizeof(_indent) - 3 )) ? strcat(_indent, "  ") : 0;
 #define LOG_PROTO_LEVEL_START_NO_INDENT() \
     KineticLogger_LogPrintf(2, "{"); \
-    strcat(_indent, "  ");
+    (strlen(_indent) < (sizeof(_indent) - 3)) ? strcat(_indent, "  ") : 0;
 #define LOG_PROTO_LEVEL_END() \
     _indent[strlen(_indent) - 2] = '\0'; \
     KineticLogger_LogPrintf(2, "%s}", _indent);
 
 #define LOG_PROTO_LEVEL_START_ARRAY(__name, __quantity) \
     KineticLogger_LogPrintf(2, "%s%s: (%u elements) [", (_indent), (__name), (__quantity)); \
-    strcat(_indent, "  ");
+    (strlen(_indent) < (sizeof(_indent) - 3)) ? strcat(_indent, "  ") : 0;
 #define LOG_PROTO_LEVEL_END_ARRAY() \
     _indent[strlen(_indent) - 2] = '\0'; \
     KineticLogger_LogPrintf(2, "%s]", _indent);

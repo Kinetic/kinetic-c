@@ -131,9 +131,6 @@ typedef struct _KineticMessage {
     KineticProto_Command_GetLog                  getLog;
     KineticProto_Command_GetLog_Type             getLogType;
     KineticProto_Command_PinOperation            pinOp;
-    KineticProto_Command_P2POperation            p2pOp;
-    KineticProto_Command_P2POperation_Operation  p2pOpOp;
-    KineticProto_Command_P2POperation_Peer       p2pPeer;
 } KineticMessage;
 
 #define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
@@ -183,9 +180,6 @@ typedef struct _KineticMessage {
     KineticProto_command_range__init(&(msg)->keyRange); \
     KineticProto_command_get_log__init(&(msg)->getLog); \
     KineticProto_command_pin_operation__init(&(msg)->pinOp); \
-    KineticProto_command_p2_poperation__init(&(msg)->p2pOp); \
-    KineticProto_command_p2_poperation_operation__init(&(msg)->p2pOpOp); \
-    KineticProto_command_p2_poperation_peer__init(&(msg)->p2pPeer); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
     (msg)->has_command = false; \
 }
