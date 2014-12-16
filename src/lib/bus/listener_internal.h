@@ -52,7 +52,7 @@ typedef struct listener_msg {
 
 /* Record in table for partially processed messages. */
 typedef struct rx_info_t {
-    const uint8_t id;
+    const uint16_t id;
     struct rx_info_t *next;
     bool active;
     time_t timeout_sec;
@@ -88,7 +88,7 @@ typedef struct listener {
 
     size_t upstream_backpressure;
 
-    uint8_t tracked_fds;
+    uint16_t tracked_fds;
     struct pollfd fds[MAX_FDS];
     connection_info *fd_info[MAX_FDS];
 
