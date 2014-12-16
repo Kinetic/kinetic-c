@@ -287,8 +287,14 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
 
     // Initialize request
     KineticStatus status = KineticOperation_BuildP2POperation(operation, p2pOp);
-    if (status != KINETIC_STATUS_SUCCESS) {return status; }
-    // TODO I probably need to call the callback here?
+    if (status != KINETIC_STATUS_SUCCESS) {
+        // TODO we need to find a more generic way to handle errors on command construction
+        if (closure != NULL) {
+            operation->closure = *closure;
+        }
+        KineticOperation_Complete(operation, status);
+        return status;
+    }
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);

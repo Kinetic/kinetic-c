@@ -718,7 +718,7 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
 {
     assert(operation != NULL);
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
-    assert(operation->closure.callback != NULL);
+    if (operation->closure.callback == NULL) { return; }
     KineticCompletionData completionData = {.status = status};
     operation->closure.callback(&completionData, operation->closure.clientData);    
 
