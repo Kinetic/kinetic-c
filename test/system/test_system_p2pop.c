@@ -142,7 +142,7 @@ void tearDown(void)
 // These tests are disabled until we have a way of running them on travis CI
 //  Currently we can only run these by starting a simulator on two different computers
 #if 0
-void test_P2P_should_copy_keys_from_one_device_to_another(void)
+void disabled_test_P2P_should_copy_keys_from_one_device_to_another(void)
 { LOG_LOCATION;
 
 
@@ -307,7 +307,7 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
 
 
 
-void test_P2P_should_support_nesting_of_p2p_operations(void)
+void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
 { LOG_LOCATION;
     ByteBuffer_Reset(&ReadValueBuffer);
     ByteBuffer_Reset(&ReadTagBuffer);
