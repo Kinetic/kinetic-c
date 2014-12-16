@@ -416,9 +416,6 @@ void KineticMessage_Init(KineticMessage* const message)
     KineticProto_command_range__init(&message->keyRange);
     KineticProto_command_get_log__init(&message->getLog);
     KineticProto_command_pin_operation__init(&message->pinOp);
-    KineticProto_command_p2_poperation__init(&message->p2pOp);
-    KineticProto_command_p2_poperation_operation__init(&message->p2pOpOp);
-    KineticProto_command_p2_poperation_peer__init(&message->p2pPeer);
     
     Kinetic_auth_init_hmac(message, 0, BYTE_ARRAY_NONE);
     (void)Kinetic_auth_init_pinop;
