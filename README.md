@@ -96,3 +96,4 @@ Kinetic C Client I/O Examples
 * [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, blocking operations.
 * [`write_file_nonblocking`](src/examples/write_file_nonblocking.c) - Single thread, single connection, multiple non-blocking operations
 * [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, multiple non-blocking operations.
+* [`get_key_range`](src/examples/get_key_range.c) - Query a range of keys from a device.

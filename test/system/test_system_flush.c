@@ -214,4 +214,4 @@ void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
 /*******************************************************************************
 * ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
 *******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture);
+SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

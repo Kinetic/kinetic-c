@@ -204,7 +204,7 @@ void ReportOperationConfiguration(
 {
     printf("\n\n"
            "================================================================================\n"
-           "Executing '%s' w/sessionuration:\n"
+           "Executing '%s' w/session configuration:\n"
            "================================================================================\n"
            "  host: %s\n"
            "  port: %d\n"
