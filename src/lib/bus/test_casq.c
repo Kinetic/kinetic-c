@@ -83,6 +83,7 @@ TEST casq_empty_should_return_whether_data_is_available(void) {
     for (uintptr_t i = 1; i < 10; i++) {
         ASSERT_EQ(false, casq_empty(q));
         uintptr_t v = (uintptr_t)casq_pop(q);
+        (void)v;
         ASSERT_EQ(i == 9, casq_empty(q));
     }
     
