@@ -263,7 +263,6 @@ static void usage(void) {
 }
 
 static void parse_args(int argc, char **argv, example_state *s) {
-    int i = 0;
     int a = 0;
 
     s->buf_size = DEFAULT_BUF_SIZE;
@@ -337,9 +336,6 @@ static size_t construct_msg(uint8_t *buf, size_t buf_size, size_t payload_size, 
     size_t header_size = sizeof(prot_header_t);
     assert(buf_size > header_size);
     prot_header_t *header = (prot_header_t *)buf;
-
-    size_t rem = buf_size - header_size;
-    const size_t start_fill = 8; /* start off with a couple bytes */
 
     uint8_t *payload = &buf[header_size];
     for (int i = 0; i < payload_size; i++) {

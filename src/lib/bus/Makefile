@@ -3,8 +3,8 @@ THREADPOOL_PATH=	../threadpool
 
 OPT=		-O3
 LIB_INC =	-I${SOCKET99_PATH} -I${THREADPOOL_PATH}
-CFLAGS +=	-std=c99 ${OPT} -g ${LIB_INC}
-LDFLAGS +=	-L. -lcasq -L${SOCKET99_PATH} -lsocket99 -L${THREADPOOL_PATH} -lthreadpool
+CFLAGS +=	-std=c99 ${OPT} -Wall -g ${LIB_INC}
+LDFLAGS +=	-L. -L${SOCKET99_PATH} -lsocket99 -L${THREADPOOL_PATH} -lthreadpool
 
 BUS_OBJS = \
 	bus.o \
@@ -29,7 +29,7 @@ test: test_casq test_yacht
 libcasq.a: casq.o
 	ar -rcs $@ $^
 
-test_casq: libcasq.a test_casq.o
+test_casq: libcasq.a test_casq.o casq.o
 	${CC} -o $@ ${LDFLAGS} $^
 
 test_yacht: test_yacht.o yacht.o

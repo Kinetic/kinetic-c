@@ -99,7 +99,6 @@ bool sender_enqueue_message(struct sender *s,
     struct bus *b = s->bus;
     BUS_LOG(b, 6, LOG_SENDER, "get_free_tx_info", b->udata);
     tx_info_t *tx_info = get_free_tx_info(s);
-    int dest_pipe = -1;
 
     if (tx_info == NULL) {  /* No messages left. */
         BUS_LOG(b, 3, LOG_SENDER, "enqueue: no messages left", b->udata);

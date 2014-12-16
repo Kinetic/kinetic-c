@@ -97,7 +97,6 @@ static void usage(void) {
 }
 
 static void parse_args(int argc, char **argv, config *cfg) {
-    int i = 0;
     int a = 0;
     
     while ((a = getopt(argc, argv, "l:h:v")) != -1) {
@@ -444,7 +443,6 @@ static void enqueue_write(config *cfg, int fd,
 }
 
 static void disconnect_client(config *cfg, int fd) {
-    int client_index = 0;
     for (int i = 0; i < MAX_CLIENTS; i++) {
         if (cfg->client_fds[i].fd == fd) {
             LOG(3, "disconnecting client %d\n", fd);

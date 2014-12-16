@@ -167,8 +167,6 @@ bool listener_shutdown(struct listener *l) {
 }
 
 static void free_queue_cb(void *data, void *udata) {
-    struct listener *l = (struct listener *)udata;
-
     listener_msg *msg = (listener_msg *)data;
     switch (msg->type) {
     case MSG_ADD_SOCKET:
