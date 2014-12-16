@@ -131,7 +131,10 @@ JAVA_BIN = $(JAVA_HOME)/bin/java
 
 .PHONY: test
 
-test_internals:
+${SOCKET99}/libsocket99.a:
+	cd ${SOCKET99} && make libsocket99.a
+
+test_internals: ${SOCKET99}/libsocket99.a
 	cd ${LIB_DIR}/threadpool && make test
 	cd ${LIB_DIR}/bus && make test
 
