@@ -51,6 +51,7 @@ typedef struct bus {
     bus_sink_cb *sink_cb;
     bus_unpack_cb *unpack_cb;
     bus_unexpected_msg_cb *unexpected_msg_cb;
+    bus_error_cb *error_cb;
     void *udata;
 
     int log_level;

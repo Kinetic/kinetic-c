@@ -394,7 +394,7 @@ static rx_info_t *find_info_by_sequence_id(listener *l,
 static void process_unpacked_message(listener *l,
         connection_info *ci, bus_unpack_cb_res_t result) {
     struct bus *b = l->bus;
-    size_t backpressure;
+    size_t backpressure = 0;
 
     /* NOTE: message may be an unsolicited status message */
 
@@ -451,7 +451,10 @@ static void process_unpacked_message(listener *l,
             "Got opaque_error_id of %lu (0x%08lx)",
             e_id, e_id);
 
-        /* Timeouts will clean up after it, and user code already knows there was an error. */
+        /* Timeouts will clean up after it; give user code a chance to
+         * clean up after it here, though technically speaking they
+         * could in the unpack_cb above. */
+        b->error_cb(result, ci->udata);
     }
 };
 

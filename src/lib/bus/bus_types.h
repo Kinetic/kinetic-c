@@ -39,7 +39,7 @@ struct boxed_msg;
         log_event_t event_key = EVENT_KEY;                             \
         char *msg = MSG;                                               \
         void *udata = UDATA;                                           \
-        if (_b->log_level >= level) {                                  \
+        if (_b->log_level >= level && _b->log_cb != NULL) {            \
             bus_lock_log(_b);                                          \
             _b->log_cb(event_key, level, msg, udata);                  \
             bus_unlock_log(_b);                                        \
@@ -54,7 +54,7 @@ struct boxed_msg;
         int level = LEVEL;                                             \
         log_event_t event_key = EVENT_KEY;                             \
         void *udata = UDATA;                                           \
-        if (_b->log_level >= level) {                                  \
+        if (_b->log_level >= level && _b->log_cb != NULL) {            \
             bus_lock_log(_b);                                          \
             char log_buf[MAX_SZ];                                      \
             if (MAX_SZ < snprintf(log_buf, MAX_SZ,                     \
@@ -128,6 +128,9 @@ typedef struct {
  * Note that the udata pointer is socket-specific, NOT client-specific. */
 typedef bus_unpack_cb_res_t (bus_unpack_cb)(void *msg, void *socket_udata);
 
+/* Handle a result from bus_unpack_cb that is marked as an error. */
+typedef void (bus_error_cb)(bus_unpack_cb_res_t result, void *socket_udata);
+
 /* Process a message that was successfully unpacked, but does not have
  * an expected sequence ID. This is likely a keepalive message, status
  * message, etc. */
@@ -145,6 +148,7 @@ typedef struct bus_config {
     bus_sink_cb *sink_cb;       /* required */
     bus_unpack_cb *unpack_cb;   /* required */
     bus_unexpected_msg_cb *unexpected_msg_cb;
+    bus_error_cb *error_cb;
 
     int log_level;
     bus_log_cb *log_cb;         /* optional */

@@ -25,6 +25,7 @@
 #include <poll.h>
 #include <errno.h>
 #include <assert.h>
+#include <limits.h>
 
 #include "bus.h"
 #include "sender.h"
@@ -39,6 +40,9 @@ void *sender_mainloop(void *arg);
 static bool poll_on_completion(struct bus *b, int fd);
 static int sender_id_of_socket(struct bus *b, int fd);
 static int listener_id_of_socket(struct bus *b, int fd);
+static void noop_log_cb(log_event_t event,
+        int log_level, const char *msg, void *udata);
+static void noop_error_cb(bus_unpack_cb_res_t result, void *socket_udata);
 
 static void set_defaults(bus_config *cfg) {
     if (cfg->sender_count == 0) { cfg->sender_count = 1; }
@@ -60,6 +64,13 @@ bool bus_init(bus_config *config, struct bus_result *res) {
         res->status = BUS_INIT_ERROR_MISSING_UNPACK_CB;
         return false;
     }
+    if (config->log_cb == NULL) {
+        config->log_cb = noop_log_cb;
+        config->log_level = INT_MIN;
+    }
+    if (config->error_cb == NULL) {
+        config->error_cb = noop_error_cb;
+    }
 
     res->status = BUS_INIT_ERROR_ALLOC_FAIL;
 
@@ -76,6 +87,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     b->sink_cb = config->sink_cb;
     b->unpack_cb = config->unpack_cb;
     b->unexpected_msg_cb = config->unexpected_msg_cb;
+    b->error_cb = config->error_cb;
     b->log_cb = config->log_cb;
     b->log_level = config->log_level;
     b->udata = config->bus_udata;
@@ -483,4 +495,17 @@ void bus_free(bus *b) {
     pthread_mutex_destroy(&b->log_lock);
 
     free(b);
+}
+
+static void noop_log_cb(log_event_t event,
+        int log_level, const char *msg, void *udata) {
+    (void)event;
+    (void)log_level;
+    (void)msg;
+    (void)udata;
+}
+
+static void noop_error_cb(bus_unpack_cb_res_t result, void *socket_udata) {
+    (void)result;
+    (void)socket_udata;
 }
