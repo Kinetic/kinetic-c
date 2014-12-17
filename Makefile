@@ -70,14 +70,17 @@ makedirs:
 
 all: default test system_tests test_internals run examples
 
-clean: makedirs
-	rm -rf ./bin/**
-	rm -f $(OUT_DIR)/*.o *.core *.log
+clean: makedirs update_git_submodules
+	rm -rf ./bin/**/*
+	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber
-	git submodule update --init
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
+	cd ${SOCKET99} && make clean
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
+
+update_git_submodules:
+	git submodule update --init
 
 TAGS: ${C_SRC} Makefile
 	@find . -name "*.[ch]" | grep -v vendor | grep -v build | xargs etags
@@ -131,12 +134,28 @@ JAVA_BIN = $(JAVA_HOME)/bin/java
 
 .PHONY: test
 
-${SOCKET99}/libsocket99.a:
-	cd ${SOCKET99} && make libsocket99.a
-
-test_internals: ${SOCKET99}/libsocket99.a
+test_internals: internal_libs
 	cd ${LIB_DIR}/threadpool && make test
 	cd ${LIB_DIR}/bus && make test
+
+#-------------------------------------------------------------------------------
+# Internal Libraries
+#-------------------------------------------------------------------------------
+
+internal_libs: ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a ${OUT_DIR}/libbus.a
+
+${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
+	cd ${SOCKET99} && make all
+	cp ${SOCKET99}/libsocket99.a $@
+
+${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
+	cd ${LIB_DIR}/threadpool && make all
+	cp ${LIB_DIR}/threadpool/libthreadpool.a $@
+
+${OUT_DIR}/libbus.a: ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a ${LIB_DIR}/bus/*.[ch]
+	cd ${LIB_DIR}/bus && make all
+	cp ${LIB_DIR}/bus/libbus.a $@
+
 
 #-------------------------------------------------------------------------------
 # Static and Dynamic Library Build Support
