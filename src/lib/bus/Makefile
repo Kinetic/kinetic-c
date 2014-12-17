@@ -19,7 +19,7 @@ ECHOSRV_OBJS = \
 	echosrv.o \
 	util.o \
 
-all: bus.png test_casq test_yacht echosrv bus_example libbus.a
+all: bus.png test_casq test_yacht echosrv bus_example
 
 test: test_casq test_yacht
 	./test_casq

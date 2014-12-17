@@ -33,10 +33,13 @@ PROTOBUFC = $(VENDOR)/protobuf-c
 SOCKET99 = $(VENDOR)/socket99
 VERSION_FILE = ./config/VERSION
 VERSION = ${shell head -n1 $(VERSION_FILE)}
+THREADPOOL_PATH = ${LIB_DIR}/threadpool
+BUS_PATH = ${LIB_DIR}/bus
 
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
-LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR)
+LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR) \
+	-I$(THREADPOOL_PATH) -I$(BUS_PATH)
 
 C_SRC=${LIB_DIR}/*.[ch] $(SOCKET99)/socket99.[ch] $(PROTOBUFC)/protobuf-c/protobuf-c.[ch]
 
@@ -59,7 +62,16 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
 	$(OUT_DIR)/byte_array.o \
-	$(OUT_DIR)/kinetic_client.o
+	$(OUT_DIR)/kinetic_client.o \
+	$(OUT_DIR)/threadpool.o \
+	$(OUT_DIR)/bus.o \
+	$(OUT_DIR)/casq.o \
+	$(OUT_DIR)/listener.o \
+	$(OUT_DIR)/sender.o \
+	$(OUT_DIR)/util.o \
+	$(OUT_DIR)/yacht.o \
+
+
 
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
@@ -105,6 +117,12 @@ $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/proto
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
 
+$(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpool/threadpool.h
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+$(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
+	$(CC) -o $@ -c $< $(CFLAGS) -I${THREADPOOL_PATH} -I${BUS_PATH}
+
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 
@@ -134,15 +152,17 @@ JAVA_BIN = $(JAVA_HOME)/bin/java
 
 .PHONY: test
 
-test_internals: internal_libs
+test_internals: test_threadpool test_bus
+
+test_threadpool:
 	cd ${LIB_DIR}/threadpool && make test
+
+test_bus: test_threadpool ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a
 	cd ${LIB_DIR}/bus && make test
 
 #-------------------------------------------------------------------------------
 # Internal Libraries
 #-------------------------------------------------------------------------------
-
-internal_libs: ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a ${OUT_DIR}/libbus.a
 
 ${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
 	cd ${SOCKET99} && make all
@@ -151,10 +171,6 @@ ${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
 ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
 	cd ${LIB_DIR}/threadpool && make all
 	cp ${LIB_DIR}/threadpool/libthreadpool.a $@
-
-${OUT_DIR}/libbus.a: ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a ${LIB_DIR}/bus/*.[ch]
-	cd ${LIB_DIR}/bus && make all
-	cp ${LIB_DIR}/bus/libbus.a $@
 
 
 #-------------------------------------------------------------------------------
