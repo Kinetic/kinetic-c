@@ -54,14 +54,17 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session)
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
-    KineticSession_Create(session);
+    KineticStatus status = KineticSession_Create(session);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOGF0("Failed establishing session w/ status: %s", Kinetic_GetStatusDescription(status));
+    }
     if (session->connection == NULL) {
         LOG0("Failed to create connection instance!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     // Create the connection
-    KineticStatus status = KineticSession_Connect(session);
+    status = KineticSession_Connect(session);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOGF0("Failed creating connection to %s:%d", session->config.host, session->config.port);
         KineticSession_Destroy(session);

@@ -26,13 +26,6 @@
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 
-
-void KineticPDU_Init(KineticPDU* const pdu,
-                     KineticConnection* const connection)
-{
-    KINETIC_PDU_INIT(pdu, connection);
-}
-
 KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
 {
     assert(response != NULL);
@@ -77,7 +70,7 @@ KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
     if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH) {
         KineticLogger_LogProtobuf(2, response->proto);
         if(!KineticHMAC_Validate(
-          response->proto, response->connection->session.config.hmacKey)) {
+          response->proto, response->connection->session->config.hmacKey)) {
             LOG0("Received PDU protobuf message has invalid HMAC!");
             msg->has_command = true;
             msg->command.status = &msg->status;

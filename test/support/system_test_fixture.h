@@ -25,7 +25,7 @@
 #include "kinetic_logger.h"
 
 #ifndef SYSTEM_TEST_HOST
-#define SYSTEM_TEST_HOST "localhost"
+#define SYSTEM_TEST_HOST localhost
 #endif
 
 #ifndef CLUSTER_VERSION
@@ -34,22 +34,19 @@
 
 typedef struct _SystemTestFixture {
     KineticSession session;
+    KineticSession adminSession;
     bool testIgnored;
     bool connected;
     int64_t expectedSequence;
 } SystemTestFixture;
 
-void SystemTestSetup(SystemTestFixture* fixture);
+extern KineticSessionConfig SessionConfig;
+
+void SystemTestSetup(SystemTestFixture* fixture, int log_level);
 void SystemTestTearDown(SystemTestFixture* fixture);
 void SystemTestSuiteTearDown(SystemTestFixture* fixture);
 bool SystemTestIsUnderSimulator(void);
 
-#define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) \
-void test_Suite_TearDown(void) \
-{ \
-    if ((_fixture)->session.connection != NULL && (_fixture)->connected) { \
-        KineticClient_DestroyConnection(&(_fixture)->session); } \
-    (_fixture)->connected = false; \
-}
+#define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) void test_Suite_TearDown(void) {SystemTestTearDown(_fixture);}
 
 #endif // _SYSTEM_TEST_FIXTURE

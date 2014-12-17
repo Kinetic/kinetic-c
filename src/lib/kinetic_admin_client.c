@@ -18,16 +18,11 @@
 *
 */
 
-#include "kinetic_types_internal.h"
 #include "kinetic_admin_client.h"
-#include "kinetic_client.h"
-#include "kinetic_auth.h"
-#include "kinetic_connection.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
-#include "kinetic_logger.h"
-#include <stdlib.h>
-#include <sys/time.h>
+#include "kinetic_auth.h"
 
 void KineticAdminClient_Init(const char* log_file, int log_level)
 {

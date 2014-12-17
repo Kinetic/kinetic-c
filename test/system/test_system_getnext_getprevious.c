@@ -48,7 +48,7 @@ static SystemTestFixture Fixture;
 void setUp(void)
 {
     LOG_LOCATION;
-    SystemTestSetup(&Fixture);
+    SystemTestSetup(&Fixture, 2);
 }
 
 void tearDown(void)

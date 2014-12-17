@@ -22,6 +22,7 @@
 #define _KINETIC_ADMIN_CLIENT_H
 
 #include "kinetic_types.h"
+#include "kinetic_client.h"
 
 /**
  * Initializes the Kinetic API and configures logging destination.

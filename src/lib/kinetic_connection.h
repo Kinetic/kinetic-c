@@ -25,7 +25,7 @@
 
 KineticStatus KineticSession_Create(KineticSession * const session);
 KineticStatus KineticSession_Destroy(KineticSession * const session);
-KineticStatus KineticSession_Connect(KineticSession const * const session);
+KineticStatus KineticSession_Connect(KineticSession * const session);
 KineticStatus KineticSession_Disconnect(KineticSession const * const session);
 void KineticSession_IncrementSequence(KineticSession const * const session);
 

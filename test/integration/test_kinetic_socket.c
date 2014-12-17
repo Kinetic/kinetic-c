@@ -157,9 +157,7 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
         },
         .connection = &connection,
     };
-    connection.session = session;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection);
-    KineticMessage_Init(&PDU.protoData.message);
+    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection, session.config.identity);
     PDU.header.protobufLength = KineticProto_Message__get_packed_size(PDU.proto);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
@@ -255,7 +253,6 @@ void test_KineticSocket_Read_should_read_up_to_the_array_length_into_the_buffer_
         "bytesUsed should reflect full length read upon overflow");
 }
 
-#if 0
 void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_encoded_protobuf_from_the_specified_socket(void)
 {
     LOG_LOCATION;
@@ -269,29 +266,29 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
         },
         .connection = &connection,
     };
-    connection.session = session;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection);
-    KineticMessage_Init(&PDU.protoData.message);
+    connection.session = &session;
+    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection, session.config.identity);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
+
+
+    TEST_IGNORE_MESSAGE("TODO: fix protobuf read from socket test!");
+
 
     // Send request to test server to send us a Kinetic protobuf
     Socket_RequestProtobuf();
 
     // Receive the response
     KINETIC_PDU_INIT(&PDU, &connection);
-    PDU.header.protobufLength = 125;
     TEST_ASSERT_FALSE(PDU.protobufDynamicallyExtracted);
     TEST_ASSERT_NULL(PDU.proto);
     KineticStatus status = KineticSocket_ReadProtobuf(FileDesc, &PDU);
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(KINETIC_STATUS_SUCCESS, status,
                                             "Failed receiving protobuf response");
-    TEST_ASSERT_NOT_NULL_MESSAGE(
-        PDU.proto,
+    TEST_ASSERT_NOT_NULL_MESSAGE(PDU.proto,
         "Protobuf pointer was NULL, but expected dynamic memory allocation!");
-    TEST_ASSERT_TRUE_MESSAGE(
-        PDU.protobufDynamicallyExtracted,
+    TEST_ASSERT_TRUE_MESSAGE(PDU.protobufDynamicallyExtracted,
         "Flag was not set per dynamically allocated/extracted protobuf");
 
     LOG0("Received Kinetic protobuf:");
@@ -304,14 +301,9 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
 void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_specified_length_fails_to_be_read_within_timeout(void)
 {
     LOG_LOCATION;
-    KineticSession session = {
-        .clusterVersion = 12345678,
-        .identity = -12345678,
-    };
+
     KineticConnection connection;
     KINETIC_CONNECTION_INIT(&connection);
-    connection.session = session;
-
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
@@ -322,21 +314,18 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(KINETIC_STATUS_SUCCESS, status,
                                             "Failed sending protobuf read request");
 
-    // Receive the dummy protobuf response, but expect too much data
-    // to force timeout
+    // Receive the dummy protobuf response, but expect too much data to force timeout
     KINETIC_PDU_INIT(&PDU, &connection);
     PDU.header.protobufLength = 1000;
     TEST_ASSERT_FALSE(PDU.protobufDynamicallyExtracted);
     TEST_ASSERT_NULL(PDU.proto);
     status = KineticSocket_ReadProtobuf(FileDesc, &PDU);
-    TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
-        KINETIC_STATUS_SOCKET_TIMEOUT, status,
+    TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(KINETIC_STATUS_SOCKET_TIMEOUT, status,
         "Expected socket to timeout waiting on protobuf data!");
     TEST_ASSERT_FALSE_MESSAGE(PDU.protobufDynamicallyExtracted,
                               "Protobuf should not have been extracted because of timeout");
     TEST_ASSERT_NULL_MESSAGE(PDU.proto,
                              "Protobuf should not have been allocated because of timeout");
 }
-#endif
 
 #endif // defined(__APPLE__)

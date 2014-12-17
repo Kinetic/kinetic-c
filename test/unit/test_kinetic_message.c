@@ -66,13 +66,12 @@ void tearDown(void)
 }
 
 
-void test_KineticMessage_Init_should_initialize_the_message_and_required_protobuf_fields(void)
+void TEST_KI_NETICMESSAGE_INIT_should_initialize_the_message_and_required_protobuf_fields(void)
 {
     KineticMessage protoMsg;
 
-    KineticMessage_Init(&protoMsg);
+    KINETIC_MESSAGE_INIT(&protoMsg);
 
-    TEST_ASSERT_EQUAL_PTR(&protoMsg.header, protoMsg.command.header);
     TEST_ASSERT_TRUE(protoMsg.message.has_authType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, protoMsg.message.authType);
     TEST_ASSERT_EQUAL_PTR(&protoMsg.hmacAuth, protoMsg.message.hmacAuth);
@@ -97,7 +96,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
     memset(&message, 0, sizeof(KineticMessage));
-    KineticMessage_Init(&message);
+    KINETIC_MESSAGE_INIT(&message);
 
     KineticMessage_ConfigureKeyValue(&message, &entry);
 
@@ -128,7 +127,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
         .metadataOnly = false
     };
     memset(&message, 0, sizeof(KineticMessage));
-    KineticMessage_Init(&message);
+    KINETIC_MESSAGE_INIT(&message);
 
     KineticMessage_ConfigureKeyValue(&message, &entry);
 
@@ -171,7 +170,7 @@ void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticPro
     };
 
     memset(&message, 0, sizeof(KineticMessage));
-    KineticMessage_Init(&message);
+    KINETIC_MESSAGE_INIT(&message);
 
     KineticMessage_ConfigureKeyRange(&message, &range);
 
@@ -197,9 +196,6 @@ void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticPro
     TEST_ASSERT_EQUAL(0, message.command.body->range->n_keys);
     TEST_ASSERT_NULL(message.command.body->range->keys);
 
-
-
-
     range = (KineticKeyRange) {
         .startKey = startKey,
         .endKey = endKey,
@@ -210,7 +206,7 @@ void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticPro
     };
 
     memset(&message, 0, sizeof(KineticMessage));
-    KineticMessage_Init(&message);
+    KINETIC_MESSAGE_INIT(&message);
 
     KineticMessage_ConfigureKeyRange(&message, &range);
 

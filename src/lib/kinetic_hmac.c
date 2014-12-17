@@ -49,9 +49,11 @@ void KineticHMAC_Populate(KineticHMAC* hmac,
                           const ByteArray key)
 {
     assert(hmac != NULL);
+    assert(hmac->data != NULL);
     assert(msg != NULL);
     assert(key.data != NULL);
     assert(key.len > 0);
+    assert(msg->hmacAuth->hmac.data != NULL);
 
     KineticHMAC_Init(hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Compute(hmac, msg, key);

@@ -73,7 +73,7 @@ static bool add_keys(int count)
 void setUp(void)
 {
     if (!suiteInitialized) {
-        SystemTestSetup(&Fixture);
+        SystemTestSetup(&Fixture, 2);
         add_keys(3);
     }
 }
@@ -81,7 +81,7 @@ void setUp(void)
 void tearDown(void)
 {
     LOG_LOCATION;
-    // SystemTestTearDown(&Fixture);
+    SystemTestTearDown(&Fixture);
 }
 
 void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device(void)

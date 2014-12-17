@@ -27,6 +27,7 @@
 #include "kinetic_proto.h"
 #include "protobuf-c.h"
 #include "mock_kinetic_connection.h"
+#include "mock_kinetic_auth.h"
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_pdu.h"
@@ -34,21 +35,12 @@
 #include <pthread.h>
 
 
-// static KineticConnection Connection;
-// static int64_t ConnectionID = 12345;
-static KineticPDU Response;
-// static KineticPDU Requests[3];
-// static KineticOperation Operation;
+static KineticPDU Request, Response;
+static const int64_t clusterVersion = 7;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-    // KINETIC_CONNECTION_INIT(&Connection);
-    // Connection.connectionID = ConnectionID;
-    // KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    // KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
-    // KINETIC_OPERATION_INIT(&Operation, &Connection);
-    // Operation.request = &Request;
 }
 
 void tearDown(void)
@@ -65,7 +57,7 @@ void test_KineticController_HandleIncomingPDU_should_process_unsolicited_respons
         .connectionID = 0,
     };
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection);
+    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection, clusterVersion);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
     Response.command->header->has_connectionID = true;
     Response.command->header->connectionID = 11223344;
@@ -90,7 +82,7 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
     KineticOperation op;
     KINETIC_OPERATION_INIT(&op, &connection);
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection);
+    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection, clusterVersion);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);
@@ -119,7 +111,7 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
     KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
     op.entry = &entry;
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection);
+    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection, clusterVersion);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);
@@ -160,7 +152,7 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
     KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
     op.entry = &entry;
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection);
+    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection, clusterVersion);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);
@@ -181,10 +173,78 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
 //     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Init");
 // }
 
-// void test_KineticController_CreateOperation_should_create_a_new_operation_for_the_specified_session(void)
-// {
-//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_CreateOperation");
-// }
+void test_KineticController_CreateOperation_should_create_a_new_operation_for_the_specified_session(void)
+{
+    KineticSessionConfig config;
+    KineticConnection connection;
+    KineticSession session = {.config = config, .connection = &connection};
+    KineticOperation op = {.request = &Request};
+
+    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
+    KineticAuth_Populate_ExpectAndReturn(&session, &Request, KINETIC_STATUS_SUCCESS);
+
+    KineticOperation* pop = KineticController_CreateOperation(&session);
+
+    TEST_ASSERT_EQUAL_PTR(&op, pop);
+}
+
+void test_KineticController_CreateOperation_should_return_NULL_upon_NULL_session(void)
+{
+    KineticOperation* pop = KineticController_CreateOperation(NULL);
+    TEST_ASSERT_NULL(pop);
+}
+
+void test_KineticController_CreateOperation_should_return_NULL_upon_NULL_connection(void)
+{
+    KineticSessionConfig config;
+    KineticSession session = {.config = config, .connection = NULL};
+    KineticOperation* pop = KineticController_CreateOperation(&session);
+    TEST_ASSERT_NULL(pop);
+}
+
+void test_KineticController_CreateOperation_should_return_NULL_if_operation_could_not_be_allocated(void)
+{
+    KineticSessionConfig config;
+    KineticConnection connection;
+    KineticSession session = {.config = config, .connection = &connection};
+
+    KineticAllocator_NewOperation_ExpectAndReturn(&connection, NULL);
+
+    KineticOperation* pop = KineticController_CreateOperation(&session);
+
+    TEST_ASSERT_NULL(pop);
+}
+
+void test_KineticController_CreateOperation_should_return_NULL_if_allocated_operation_has_no_associated_request_PDU(void)
+{
+    KineticSessionConfig config;
+    KineticConnection connection;
+    KineticSession session = {.config = config, .connection = &connection};
+    KineticOperation op = {.request = NULL};
+
+    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
+    KineticAllocator_FreeOperation_Expect(&connection, &op);
+
+    KineticOperation* pop = KineticController_CreateOperation(&session);
+
+    TEST_ASSERT_NULL(pop);
+}
+
+void test_KineticController_CreateOperation_should_return_NULL_if_allocated_operation_could_not_be_populated_with_authentication_info_and_free_operation(void)
+{
+    KineticSessionConfig config;
+    KineticConnection connection;
+    KineticSession session = {.config = config, .connection = &connection};
+    KineticOperation op = {.request = &Request};
+
+    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
+    KineticAuth_Populate_ExpectAndReturn(&session, &Request, KINETIC_STATUS_HMAC_EMPTY);
+    KineticAllocator_FreeOperation_Expect(&connection, &op);
+
+    KineticOperation* pop = KineticController_CreateOperation(&session);
+
+    TEST_ASSERT_NULL(pop);
+}
 
 // void test_KineticController_ExecuteOperation_should_execute_the_specified_operation(void)
 // {

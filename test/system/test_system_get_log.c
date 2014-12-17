@@ -27,22 +27,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "kinetic_admin_client.h"
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_controller.h"
-#include "kinetic_device_info.h"
-#include "kinetic_serial_allocator.h"
-#include "kinetic_proto.h"
-#include "kinetic_allocator.h"
-#include "kinetic_message.h"
-#include "kinetic_pdu.h"
-#include "kinetic_logger.h"
-#include "kinetic_operation.h"
-#include "kinetic_hmac.h"
-#include "kinetic_connection.h"
-#include "kinetic_socket.h"
-#include "kinetic_nbo.h"
 
 static SystemTestFixture Fixture;
 static KineticStatus Status;
@@ -50,7 +38,7 @@ static KineticDeviceInfo* Info;
 
 void setUp(void)
 { LOG_LOCATION;
-    SystemTestSetup(&Fixture);
+    SystemTestSetup(&Fixture, 2);
     Info = NULL;
 }
 
@@ -66,7 +54,7 @@ void tearDown(void)
 
 void test_GetLog_should_retrieve_utilizations_from_device(void)
 { LOG_LOCATION;
-    Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &Info, NULL);
+    Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info);
     TEST_ASSERT_NOT_NULL(Info->utilizations);
@@ -80,7 +68,7 @@ void test_GetLog_should_retrieve_utilizations_from_device(void)
 
 void test_GetLog_should_retrieve_capacity_from_device(void)
 { LOG_LOCATION;
-    Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, &Info, NULL);
+    Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info->capacity);
 
@@ -90,7 +78,7 @@ void test_GetLog_should_retrieve_capacity_from_device(void)
 
 void test_GetLog_should_retrieve_temeratures_from_device(void)
 { LOG_LOCATION;
-    Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, &Info, NULL);
+    Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_TRUE(Info->numTemperatures >= 2);
 
@@ -107,7 +95,7 @@ void test_GetLog_should_retrieve_configuration_from_device(void)
 { LOG_LOCATION;
     char buf[1024];
     
-    Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, &Info, NULL);
+    Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, &Info, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info);
@@ -143,7 +131,7 @@ void test_GetLog_should_retrieve_configuration_from_device(void)
 
 void test_GetLog_should_retrieve_statistics_from_device(void)
 { LOG_LOCATION;
-    Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &Info, NULL);
+    Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info->statistics);
     TEST_ASSERT_TRUE(Info->numStatistics > 0);
@@ -161,7 +149,7 @@ uint8_t* Buffer[1024 * 1024 * 10];
 
 void test_GetLog_should_retrieve_messages_from_device(void)
 { LOG_LOCATION;
-    Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_MESSAGES, &Info, NULL);
+    Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_MESSAGES, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info->messages.data);
     TEST_ASSERT_TRUE(Info->messages.len > 0);
@@ -173,7 +161,7 @@ void test_GetLog_should_retrieve_messages_from_device(void)
 
 void test_GetLog_should_retrieve_limits_from_device(void)
 { LOG_LOCATION;
-    Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_LIMITS, &Info, NULL);
+    Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_LIMITS, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info->limits);
 
@@ -193,7 +181,7 @@ void test_GetLog_should_retrieve_limits_from_device(void)
 
 void test_GetLog_should_retrieve_device_info_from_device(void)
 { LOG_LOCATION;
-    Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_DEVICE, &Info, NULL);
+    Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_DEVICE, &Info, NULL);
     if (Status == KINETIC_STATUS_NOT_FOUND) {
         TEST_IGNORE_MESSAGE("Java simulator currently does NOT support GETLOG 'DEVICE' info attribute!");
     }

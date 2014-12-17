@@ -47,6 +47,7 @@ void setUp(void)
     Session.config = (KineticSessionConfig) {
         .host = "somehost.com",
         .port = 17,
+        .clusterVersion = 6,
     };
     KINETIC_CONNECTION_INIT(&Connection);
     KineticAllocator_NewConnection_ExpectAndReturn(&Connection);
@@ -56,8 +57,8 @@ void setUp(void)
     TEST_ASSERT_FALSE(Session.connection->connected);
     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
     TEST_ASSERT_EQUAL(17, Session.config.port);
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, Session.connection);
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, Session.connection);
+    KINETIC_PDU_INIT_WITH_COMMAND(&Request, Session.connection, Session.config.clusterVersion);
+    KINETIC_PDU_INIT_WITH_COMMAND(&Response, Session.connection, Session.config.clusterVersion);
     OperationCompleteCallbackCount = 0;
     LastStatus = KINETIC_STATUS_INVALID;
 }
@@ -97,13 +98,9 @@ void test_KINETIC_CONNECTION_INIT_should_create_a_default_connection_object(void
     KINETIC_CONNECTION_INIT(&connection);
 
     TEST_ASSERT_FALSE(connection.connected);
-    TEST_ASSERT_EQUAL(0, connection.session.config.port);
     TEST_ASSERT_EQUAL(-1, connection.socket);
     TEST_ASSERT_EQUAL_INT64(0, connection.sequence);
     TEST_ASSERT_EQUAL_INT64(0, connection.connectionID);
-    TEST_ASSERT_EQUAL_STRING("", connection.session.config.host);
-    TEST_ASSERT_EQUAL_INT64(0, connection.session.config.clusterVersion);
-    TEST_ASSERT_EQUAL_INT64(0, connection.session.config.identity);
 }
 
 void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_session(void)

@@ -12,7 +12,7 @@ PUB_INC = ./include
 #===============================================================================
 CC ?= gcc
 OPTIMIZE = -O3
-SYSTEM_TEST_HOST ?= \"localhost\"
+SYSTEM_TEST_HOST ?= localhost
 CLUSTER_VERSION ?= 0
 WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=\"${SYSTEM_TEST_HOST}\" -DCLUSTER_VERSION=${CLUSTER_VERSION}
@@ -45,6 +45,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
 	$(OUT_DIR)/kinetic_pdu.o \
+	$(OUT_DIR)/kinetic_auth.o \
 	$(OUT_DIR)/kinetic_proto.o \
 	$(OUT_DIR)/kinetic_socket.o \
 	$(OUT_DIR)/kinetic_message.o \
@@ -57,7 +58,8 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
 	$(OUT_DIR)/byte_array.o \
-	$(OUT_DIR)/kinetic_client.o
+	$(OUT_DIR)/kinetic_client.o \
+	$(OUT_DIR)/kinetic_admin_client.o
 
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
@@ -274,6 +276,9 @@ $(SYSTEST_OUT)/%.testpass : $(SYSTEST_OUT)/run_%
 
 $(systest_names) : % : $(SYSTEST_OUT)/%.testpass
 system_tests: start_simulator $(systest_passfiles)
+
+.SECONDARY: $(systest_executables) $(systest_sources)
+
 
 # valgrind_systest_%: $(SYSTEST_OUT)/%
 # 	@echo

@@ -19,6 +19,8 @@
 */
 
 #include "kinetic_auth.h"
+#include "kinetic_proto.h"
+#include "kinetic_logger.h"
 
 KineticStatus KineticAuth_EnsurePinSupplied(KineticSession const * const session)
 {
@@ -34,31 +36,77 @@ KineticStatus KineticAuth_EnsureSslEnabled(KineticSession const * const session)
     return KINETIC_STATUS_SUCCESS;
 }
 
-// #define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
-//     assert((_msg) != NULL); \
-//     (_msg)->message.has_authType = true; \
-//     (_msg)->message.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH; \
-//     KineticProto_Message_hmacauth__init(&(_msg)->hmacAuth); \
-//     (_msg)->message.hmacAuth = &(_msg)->hmacAuth; \
-//     KineticProto_Message_pinauth__init(&(_msg)->pinAuth); \
-//     (_msg)->message.pinAuth = NULL; \
-//     (_msg)->command.header = &(_msg)->header; \
-//     memset((_msg)->hmacData, 0, KINETIC_HMAC_MAX_LEN); \
-//     if ((_hmac).len <= KINETIC_HMAC_MAX_LEN \
-//         && (_hmac).data != NULL && (_hmac).len > 0 \
-//         && (_msg)->hmacData != NULL) { \
-//         memcpy((_msg)->hmacData, (_hmac).data, (_hmac).len);} \
-//     (_msg)->message.hmacAuth->has_identity = true; \
-//     (_msg)->message.hmacAuth->identity = (_identity); \
-//     (_msg)->message.hmacAuth->has_hmac = true; \
-//     (_msg)->message.hmacAuth->hmac = (ProtobufCBinaryData) { \
-//         .data = (_msg)->hmacData, .len = SHA_DIGEST_LENGTH}; \
-// }
+void auth_add_pin(KineticSession const * const session, KineticPDU * const pdu)
+{
+    LOG3("Adding PIN auth info");
+    KineticMessage* msg = &pdu->protoData.message;
+
+    // Add PIN authentication struct
+    KineticProto_Message_pinauth__init(&msg->pinAuth);
+    msg->message.pinAuth = &msg->pinAuth;
+    msg->message.hmacAuth = NULL;
+    msg->message.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH;
+    msg->message.has_authType = true;
+    msg->command.header = &msg->header;
+    
+    // Configure PIN support
+    ByteArray const * const pin = &session->config.pin;
+    assert(pin->len <= KINETIC_PIN_MAX_LEN);
+    assert(pin->data != NULL);
+    msg->message.pinAuth->pin = (ProtobufCBinaryData) {
+        .data = session->config.pin.data,
+        .len = session->config.pin.len,
+    };
+    msg->message.pinAuth->has_pin = true;
+}
+
+void auth_add_hmac(KineticSession const * const session, KineticPDU * const pdu)
+{
+    LOG3("Adding HMAC auth info");
+    KineticProto_Message* msg = &pdu->protoData.message.message;
+
+    // Add HMAC authentication struct
+    msg->hmacAuth = &pdu->protoData.message.hmacAuth;
+    KineticProto_Message_hmacauth__init(msg->hmacAuth);
+    msg->hmacAuth = msg->hmacAuth;
+    msg->pinAuth = NULL;
+    msg->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    msg->has_authType = true;
+
+    // Configure HMAC support
+    ByteArray const * const hmac = &session->config.hmacKey;
+    assert(hmac->len <= KINETIC_HMAC_MAX_LEN);
+    assert(hmac->data != NULL);
+    msg->hmacAuth = &pdu->protoData.message.hmacAuth;
+    msg->hmacAuth->hmac = (ProtobufCBinaryData) {
+        .data = pdu->hmac.data,
+        .len = pdu->hmac.len,
+    };
+    msg->hmacAuth->has_hmac = true;
+    msg->hmacAuth->identity = session->config.identity;
+    msg->hmacAuth->has_identity = true;
+}
 
 KineticStatus KineticAuth_Populate(KineticSession const * const session, KineticPDU * const pdu)
 {
     assert(session);
     assert(pdu);
 
-    return KINETIC_STATUS_INVALID;
+    if ((session->config.pin.data == NULL) && (session->config.hmacKey.data == NULL)) {
+        return KINTEIC_STATUS_AUTH_INFO_MISSING;
+    }
+
+    // PIN auth takes precedence over HMAC, if both specified
+    if (session->config.pin.data != NULL) {
+        if (!session->config.useSsl) {
+            return KINETIC_STATUS_SSL_REQUIRED;
+        }
+        auth_add_pin(session, pdu);
+    }
+    else
+    {
+        auth_add_hmac(session, pdu);
+    }
+
+    return KINETIC_STATUS_SUCCESS;
 }

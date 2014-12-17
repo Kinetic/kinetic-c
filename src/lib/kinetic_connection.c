@@ -45,7 +45,7 @@ KineticStatus KineticSession_Create(KineticSession * const session)
     }
 
     KINETIC_CONNECTION_INIT(session->connection);
-    session->connection->session = *session; // TODO: KILL ME!!!
+    session->connection->session = session;
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -63,7 +63,7 @@ KineticStatus KineticSession_Destroy(KineticSession * const session)
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticSession_Connect(KineticSession const * const session)
+KineticStatus KineticSession_Connect(KineticSession * const session)
 {
     if (session == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
@@ -91,7 +91,7 @@ KineticStatus KineticSession_Connect(KineticSession const * const session)
     session->connection->thread.connection = connection;
     KineticController_Init(session);
 
-    connection->session = *session;
+    connection->session = session; // TODO: refactor out this duplicate pointer/reference to session
 
     // Wait for initial unsolicited status to be received in order to obtain connectionID
     const long maxWaitMicrosecs = 2000000;

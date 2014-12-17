@@ -106,7 +106,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 
     // Populate the HMAC for the protobuf
     KineticHMAC_Init(&request->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session.config.hmacKey);
+    KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session->config.hmacKey);
 
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
@@ -214,7 +214,7 @@ KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, K
 void KineticOperation_BuildNoop(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->valueEnabled = false;
@@ -258,7 +258,7 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
 
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT;
     operation->request->protoData.message.command.header->has_messageType = true;
@@ -300,7 +300,7 @@ static void build_get_command(KineticOperation* const operation,
                               KineticProto_Command_MessageType command_id)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
 
     operation->request->protoData.message.command.header->messageType = command_id;
     operation->request->protoData.message.command.header->has_messageType = true;
@@ -366,7 +366,7 @@ KineticStatus KineticOperation_FlushCallback(KineticOperation* const operation, 
 void KineticOperation_BuildFlush(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
     operation->request->protoData.message.command.header->messageType =
       KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA;
     operation->request->protoData.message.command.header->has_messageType = true;
@@ -390,7 +390,7 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
 
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE;
     operation->request->protoData.message.command.header->has_messageType = true;
@@ -436,7 +436,7 @@ void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
     KineticOperation_ValidateOperation(operation);
     assert(range != NULL);
     assert(buffers != NULL);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
 
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE;
     operation->request->command->header->has_messageType = true;
@@ -478,7 +478,7 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     KineticDeviceInfo** info)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
     KineticProto_Command_GetLog_Type protoType =
         KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(type);
         
@@ -535,7 +535,7 @@ void KineticOperation_BuildP2POperation(KineticOperation* const operation,
                                         KineticP2P_Operation* const p2pOp)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
         
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH;
     operation->request->command->header->has_messageType = true;
@@ -601,7 +601,7 @@ KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* cons
 void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->protoData.message.body;

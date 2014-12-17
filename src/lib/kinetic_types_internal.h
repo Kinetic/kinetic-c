@@ -89,7 +89,7 @@ struct _KineticConnection {
     int64_t         sequence;       // increments for each request in a session
     KineticList     pdus;           // list of dynamically allocated PDUs
     KineticList     operations;     // list of dynamically allocated operations
-    KineticSession  session;        // session configuration
+    KineticSession* session;        // session configuration
     KineticThread   thread;         // worker thread instance struct
     pthread_t       threadID;       // worker pthread
 };
@@ -144,7 +144,7 @@ typedef struct _KineticMessage {
     (_msg)->message.hmacAuth = &(_msg)->hmacAuth; \
     KineticProto_Message_pinauth__init(&(_msg)->pinAuth); \
     (_msg)->message.pinAuth = NULL; \
-    (_msg)->command.header = &(_msg)->header; \
+    /*(_msg)->command.header = &(_msg)->header;*/ \
     memset((_msg)->hmacData, 0, KINETIC_HMAC_MAX_LEN); \
     if ((_hmac).len <= KINETIC_HMAC_MAX_LEN \
         && (_hmac).data != NULL && (_hmac).len > 0 \
@@ -155,20 +155,6 @@ typedef struct _KineticMessage {
     (_msg)->message.hmacAuth->has_hmac = true; \
     (_msg)->message.hmacAuth->hmac = (ProtobufCBinaryData) { \
         .data = (_msg)->hmacData, .len = SHA_DIGEST_LENGTH}; \
-}
-
-#define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con) { \
-    assert((_hdr) != NULL); \
-    assert((_con) != NULL); \
-    *(_hdr) = (KineticProto_Command_Header) { \
-        .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor), \
-        .has_clusterVersion = true, \
-        .clusterVersion = (_con)->session.config.clusterVersion, \
-        .has_connectionID = true, \
-        .connectionID = (_con)->connectionID, \
-        .has_sequence = true, \
-        .sequence = (_con)->sequence, \
-    }; \
 }
 
 #define KINETIC_MESSAGE_INIT(msg) { \
@@ -187,7 +173,6 @@ typedef struct _KineticMessage {
     KineticProto_command_p2_poperation_operation__init(&(msg)->p2pOpOp); \
     KineticProto_command_p2_poperation_peer__init(&(msg)->p2pPeer); \
     KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
-    (msg)->has_command = false; \
 }
 
 // Kinetic PDU Header
@@ -201,8 +186,6 @@ typedef struct __attribute__((__packed__)) _KineticPDUHeader {
     uint32_t    protobufLength;
     uint32_t    valueLength;
 } KineticPDUHeader;
-#define KINETIC_PDU_HEADER_INIT \
-    (KineticPDUHeader) {.versionPrefix = 'F'}
 
 typedef enum {
     KINETIC_PDU_TYPE_INVALID = 0,
@@ -245,21 +228,26 @@ struct _KineticPDU {
     assert((_con) != NULL); \
     memset((_pdu), 0, sizeof(KineticPDU)); \
     (_pdu)->connection = (_con); \
-    (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
-    (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \
     KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
-    KINETIC_MESSAGE_AUTH_HMAC_INIT( \
-            &((_pdu)->protoData.message), (_con)->session.config.identity, (_con)->session.config.hmacKey); \
-    KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData.message.header), (_con)); \
 }
 
-#define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con) { \
+#define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con, _cluster) { \
     KINETIC_PDU_INIT((_pdu), (_con)) \
+    (_pdu)->type = KINETIC_PDU_TYPE_REQUEST; \
     (_pdu)->proto = &(_pdu)->protoData.message.message; \
     (_pdu)->protoData.message.has_command = true; \
+    (_pdu)->protoData.message.message.has_commandBytes = false; \
+    (_pdu)->protoData.message.message.commandBytes.len = 0; \
+    (_pdu)->protoData.message.message.commandBytes.data = NULL; \
     (_pdu)->command = &(_pdu)->protoData.message.command; \
     (_pdu)->command->header = &(_pdu)->protoData.message.header; \
-    (_pdu)->type = KINETIC_PDU_TYPE_REQUEST; \
+    KineticProto_command_header__init((_pdu)->command->header); \
+    (_pdu)->command->header->has_clusterVersion = true, \
+    (_pdu)->command->header->has_connectionID = true; \
+    (_pdu)->command->header->connectionID = (_con)->connectionID; \
+    (_pdu)->command->header->has_sequence = true; \
+    (_pdu)->command->header->sequence = (_con)->sequence; \
+    (_pdu)->command->header->clusterVersion = (_cluster); \
 }
 
 typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operation, KineticStatus const status);

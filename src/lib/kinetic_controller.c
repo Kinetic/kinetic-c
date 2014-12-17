@@ -22,6 +22,7 @@
 #include "kinetic_connection.h"
 #include "kinetic_operation.h"
 #include "kinetic_pdu.h"
+#include "kinetic_auth.h"
 #include "kinetic_socket.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
@@ -64,7 +65,16 @@ KineticOperation* KineticController_CreateOperation(KineticSession const * const
          "Building new operation on session @ 0x%llX", session);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
-    if (operation == NULL || operation->request == NULL) {
+    if (operation == NULL) {return NULL;}
+    if (operation->request == NULL) {
+        KineticAllocator_FreeOperation(session->connection, operation);
+        return NULL;
+    }
+    KINETIC_PDU_INIT_WITH_COMMAND(operation->request, session->connection, session->config.clusterVersion);
+    KineticStatus status = KineticAuth_Populate(session, operation->request);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOG0("Failed populating authentication info for new request!");
+        KineticAllocator_FreeOperation(session->connection, operation);
         return NULL;
     }
 

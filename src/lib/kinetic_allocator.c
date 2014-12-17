@@ -58,6 +58,7 @@ KineticConnection* KineticAllocator_NewConnection(void)
 void KineticAllocator_FreeConnection(KineticConnection* connection)
 {
     assert(connection != NULL);
+    KineticAllocator_FreeAll(connection);
     free(connection);
 }
 
@@ -184,7 +185,6 @@ static void KineticAllocator_FreeList(KineticList* const list)
 
         // Make list empty, but leave mutex alone so the state is retained!
         list->start = NULL;
-        /* list->last = NULL; */
         KINETIC_LIST_UNLOCK(list);
     }
     else {
@@ -245,29 +245,6 @@ KineticPDU* KineticAllocator_GetNextPDU(KineticConnection* connection, KineticPD
     return (KineticPDU*)KineticAllocator_GetNextListItem(&connection->pdus, pdu);
 }
 
-void KineticAllocator_FreeAllPDUs(KineticConnection* connection)
-{
-    assert(connection != NULL);
-    if (connection->pdus.start != NULL) {
-        LOG3("Freeing all PDUs...");
-        KINETIC_LIST_LOCK(&connection->pdus);
-        KineticListItem* current = connection->pdus.start;
-        while (current != NULL) {
-            KineticPDU* pdu = (KineticPDU*)current->data;
-            if (pdu != NULL && pdu->proto != NULL
-                && pdu->protobufDynamicallyExtracted) {
-                KineticProto_Message__free_unpacked(pdu->proto, NULL);
-            }
-            current = current->next;
-        }
-        KINETIC_LIST_UNLOCK(&connection->pdus);
-        KineticAllocator_FreeList(&connection->pdus);
-    }
-    else {
-        LOG1("  Nothing to free!");
-    }
-}
-
 
 //==============================================================================
 // Operation List Support
@@ -285,7 +262,7 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
     }
     KINETIC_OPERATION_INIT(newOperation, connection);
     newOperation->request = KineticAllocator_NewPDU(connection);
-    KINETIC_PDU_INIT_WITH_COMMAND(newOperation->request, connection);
+    KINETIC_PDU_INIT_WITH_COMMAND(newOperation->request, connection, connection->session->config.clusterVersion);
     LOGF3("Allocated new operation (0x%0llX) on connection (0x%0llX)", newOperation, connection);
     return newOperation;
 }
@@ -324,12 +301,30 @@ KineticOperation* KineticAllocator_GetNextOperation(KineticConnection* const con
     return (KineticOperation*)KineticAllocator_GetNextListItem(&connection->operations, operation);
 }
 
-void KineticAllocator_FreeAllOperations(KineticConnection* const connection)
+void KineticAllocator_FreeAll(KineticConnection* const connection)
 {
+    assert(connection != NULL);
+
     KineticOperation* op = KineticAllocator_GetFirstOperation(connection);
     while (op) {
         KineticAllocator_FreeOperation(connection, op);
         op = KineticAllocator_GetFirstOperation(connection);
+    }
+
+    if (connection->pdus.start != NULL) {
+        LOG3("Freeing all PDUs...");
+        KINETIC_LIST_LOCK(&connection->pdus);
+        KineticListItem* current = connection->pdus.start;
+        while (current != NULL) {
+            KineticPDU* pdu = (KineticPDU*)current->data;
+            if (pdu != NULL && pdu->proto != NULL
+                && pdu->protobufDynamicallyExtracted) {
+                KineticProto_Message__free_unpacked(pdu->proto, NULL);
+            }
+            current = current->next;
+        }
+        KINETIC_LIST_UNLOCK(&connection->pdus);
+        KineticAllocator_FreeList(&connection->pdus);
     }
 }
 
