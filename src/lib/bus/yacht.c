@@ -43,7 +43,7 @@ struct yacht *yacht_init(uint8_t sz2) {
         y->size = size;
         y->mask = size - 1;
         LOG(" -- init with size %zd\n", size);
-        for (int i = 0; i < size; i++) {
+        for (size_t i = 0; i < size; i++) {
             y->buckets[i] = YACHT_NO_KEY;
         }
         return y;
@@ -60,17 +60,17 @@ static int hash(int key) {
 
 /* Check if KEY is in the table. */
 bool yacht_member(struct yacht *y, int key) {
-    int b = hash(key) & y->mask;
+    size_t b = hash(key) & y->mask;
     LOG(" -- checking membership for %d with bucket %d\n", key, b);
 
-    for (int i = b; i < y->size; i++) {
+    for (size_t i = b; i < y->size; i++) {
         int bv = y->buckets[i];
         LOG(" -- b %d: %d\n", i, bv);
         if (bv == key) { return true; }
         if (bv == YACHT_NO_KEY) { return false; }
     }
 
-    for (int i = 0; i < b; i++) { /* wrap, if necessary */
+    for (size_t i = 0; i < b; i++) { /* wrap, if necessary */
         int bv = y->buckets[i];
         LOG(" -- b %d: %d\n", i, bv);
         if (bv == key) { return true; }
@@ -82,10 +82,10 @@ bool yacht_member(struct yacht *y, int key) {
 
 /* Add KEY to the table. */
 bool yacht_add(struct yacht *y, int key) {
-    int b = hash(key) & y->mask;
+    size_t b = hash(key) & y->mask;
     LOG(" -- adding %d with bucket %d\n", key, b);
 
-    for (int i = b; i < y->size; i++) {
+    for (size_t i = b; i < y->size; i++) {
         int bv = y->buckets[i];
         LOG(" -- b %d: %d\n", i, bv);
         if (bv == key) {
@@ -95,7 +95,7 @@ bool yacht_add(struct yacht *y, int key) {
             return true;
         } else {
             /* Brent's variation -- bump out key if not in its main spot  */
-            int oh = hash(bv) & y->mask;
+            size_t oh = hash(bv) & y->mask;
             if (oh != i) {
                 y->buckets[i] = key;
                 key = oh;
@@ -103,7 +103,7 @@ bool yacht_add(struct yacht *y, int key) {
         }
     }
 
-    for (int i = 0; i < b; i++) { /* wrap, if necessary */
+    for (size_t i = 0; i < b; i++) { /* wrap, if necessary */
         int bv = y->buckets[i];
         LOG(" -- b %d: %d\n", i, bv);
         if (bv == key) {
@@ -113,7 +113,7 @@ bool yacht_add(struct yacht *y, int key) {
             return true;
         } else {
             /* Brent's variation -- bump out key if not in its main spot  */
-            int oh = hash(bv) & y->mask;
+            size_t oh = hash(bv) & y->mask;
             if (oh != i) {
                 y->buckets[i] = key;
                 key = oh;
@@ -126,10 +126,10 @@ bool yacht_add(struct yacht *y, int key) {
 
 /* Remove KEY from the table. */
 bool yacht_remove(struct yacht *y, int key) {
-    int b = hash(key) & y->mask;
+    size_t b = hash(key) & y->mask;
     LOG(" -- removing %d with bucket %d\n", key, b);
 
-    for (int i = b; i < y->size; i++) {
+    for (size_t i = b; i < y->size; i++) {
         int bv = y->buckets[i];
         LOG(" -- b %d: %d\n", i, bv);
         if (bv == key) {
@@ -144,7 +144,7 @@ bool yacht_remove(struct yacht *y, int key) {
         }
     }
 
-    for (int i = 0; i < b; i++) { /* wrap, if necessary */
+    for (size_t i = 0; i < b; i++) { /* wrap, if necessary */
         int bv = y->buckets[i];
         LOG(" -- b %d: %d\n", i, bv);
         if (bv == key) {

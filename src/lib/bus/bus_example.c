@@ -370,6 +370,9 @@ static void completion_cb(bus_msg_result_t *res, void *udata) {
                 break;
             }
         }
+#else
+        (void)s;
+        (void)si;
 #endif
     }
     break;

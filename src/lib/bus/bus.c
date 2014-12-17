@@ -291,8 +291,7 @@ static bool poll_on_completion(struct bus *b, int fd) {
                 if (msec > 0) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
                         " -- backpressure of %d msec", msec);
-                    usleep(1000L * msec);
-                    //(void)poll(fds, 0, msec);
+                    (void)poll(fds, 0, msec);
                 }
                 BUS_LOG(b, 3, LOG_SENDING_REQUEST, "sent!", b->udata);
                 return true;
