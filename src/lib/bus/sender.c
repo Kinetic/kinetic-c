@@ -88,6 +88,7 @@ struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
 
     BUS_LOG(b, 2, LOG_SENDER, "init success", b->udata);
 
+    (void)cfg;
     return s;
 }
 

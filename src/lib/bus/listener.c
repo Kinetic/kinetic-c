@@ -73,6 +73,7 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     }
     l->msg_freelist = &l->msgs[0];
 
+    (void)cfg;
     return l;
 }
 
@@ -178,6 +179,7 @@ static void free_queue_cb(void *data, void *udata) {
     default:
         break;
     }
+    (void)udata;
 }
 
 void listener_free(struct listener *l) {
@@ -456,7 +458,7 @@ static void process_unpacked_message(listener *l,
          * could in the unpack_cb above. */
         b->error_cb(result, ci->udata);
     }
-};
+}
 
 static void tick_handler(listener *l) {
     struct bus *b = l->bus;
