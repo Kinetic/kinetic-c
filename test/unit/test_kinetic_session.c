@@ -20,7 +20,7 @@
 
 #include "unity.h"
 #include "unity_helper.h"
-#include "kinetic_connection.h"
+#include "kinetic_session.h"
 #include "kinetic_proto.h"
 #include "protobuf-c/protobuf-c.h"
 #include "kinetic_logger.h"

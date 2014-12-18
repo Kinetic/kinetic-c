@@ -18,8 +18,8 @@
 *
 */
 
-#ifndef _KINETIC_CONNECTION_H
-#define _KINETIC_CONNECTION_H
+#ifndef _KINETIC_SESSION_H
+#define _KINETIC_SESSION_H
 
 #include "kinetic_types_internal.h"
 
@@ -29,4 +29,4 @@ KineticStatus KineticSession_Connect(KineticSession const * const session);
 KineticStatus KineticSession_Disconnect(KineticSession const * const session);
 void KineticSession_IncrementSequence(KineticSession const * const session);
 
-#endif // _KINETIC_CONNECTION_H
+#endif // _KINETIC_SESSION_H

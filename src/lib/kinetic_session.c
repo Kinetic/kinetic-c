@@ -18,7 +18,7 @@
 *
 */
 
-#include "kinetic_connection.h"
+#include "kinetic_session.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_socket.h"
