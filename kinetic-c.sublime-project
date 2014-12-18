@@ -99,6 +99,7 @@
       "-Werror=implicit-function-declaration",
       "-D_POSIX_C_SOURCE=199309L",
       "-D_C99_SOURCE=1",
+      "-DSYSTEM_TEST_HOST2=\"\"",
       "-Wno-nonnull",
       "-Wno-address",
       "-Wno-missing-field-initializers",

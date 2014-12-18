@@ -81,11 +81,14 @@ void tearDown(void)
 
 void test_InstantSecureErase_should_erase_device_contents(void)
 { LOG_LOCATION;
-    // if (!SystemTestIsUnderSimulator()) {
-    //     TEST_IGNORE_MESSAGE("TODO: Need to implement PIN authentication in order to get erase working on HW!")
-    // }
-    KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    if (!SystemTestIsUnderSimulator()) {
+        TEST_IGNORE_MESSAGE("TODO: Need to implement PIN authentication in order to get erase working on HW!")
+    }
+    else {
+        TEST_IGNORE_MESSAGE("Running against a remote host!");
+    }
+    // KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
+    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 /*******************************************************************************

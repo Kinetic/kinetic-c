@@ -40,7 +40,7 @@ static const char strKey[] = "GET system test blob";
 
 void setUp(void)
 { LOG_LOCATION;
-    SystemTestSetup(&Fixture, 2);
+    SystemTestSetup(&Fixture, 1);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);

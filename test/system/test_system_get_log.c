@@ -17,7 +17,6 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
 #include <stdlib.h>
@@ -28,7 +27,7 @@ static KineticDeviceInfo* Info;
 
 void setUp(void)
 { LOG_LOCATION;
-    SystemTestSetup(&Fixture, 2);
+    SystemTestSetup(&Fixture, 1);
     Info = NULL;
 }
 

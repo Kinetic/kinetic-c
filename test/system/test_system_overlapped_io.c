@@ -19,10 +19,10 @@
 */
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <sys/param.h>
 #include <sys/time.h>

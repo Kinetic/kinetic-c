@@ -106,5 +106,7 @@ void SystemTestTearDown(SystemTestFixture* fixture)
 
 bool SystemTestIsUnderSimulator(void)
 {
-    return (0 == strncmp(SYSTEM_TEST_HOST, "localhost", strlen("localhost")));
+    LOGF0("SYSTEM_TEST_HOST: %s", SYSTEM_TEST_HOST);
+    const char* host = SYSTEM_TEST_HOST;
+    return (0 == strcmp("localhost", host));
 }

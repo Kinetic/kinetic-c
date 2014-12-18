@@ -25,6 +25,8 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include "kinetic_logger.h"
+#include "unity.h"
+#include "unity_helper.h"
 
 #ifndef SYSTEM_TEST_HOST
 #define SYSTEM_TEST_HOST "localhost"
@@ -53,8 +55,6 @@ typedef struct _SystemTestFixture {
     bool connected;
     int64_t expectedSequence;
 } SystemTestFixture;
-
-extern KineticSessionConfig SessionConfig;
 
 void SystemTestSetup(SystemTestFixture* fixture, int log_level);
 void SystemTestTearDown(SystemTestFixture* fixture);

@@ -27,7 +27,7 @@
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
 #include "mock_kinetic_allocator.h"
-#include "mock_kinetic_connection.h"
+#include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"

@@ -30,7 +30,7 @@
 #include "kinetic_device_info.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_serial_allocator.h"
-#include "mock_kinetic_connection.h"
+#include "mock_kinetic_session.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_socket.h"
@@ -958,11 +958,26 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
     ByteBuffer oldKey2 = ByteBuffer_Create((void*)0x5678, 12, 12);
     ByteBuffer newKey2 = ByteBuffer_Create((void*)0x8765, 200, 200);
 
-    KineticP2P_OperationData ops[] = {
+    KineticP2P_OperationData ops2[] ={
+        {
+            .key = oldKey2,
+            .newKey = newKey2,
+        }
+    };
+
+    KineticP2P_Operation chained_p2pOp = {
+        .peer.hostname = "hostname1",
+        .peer.port = 4321,
+        .numOperations = 1,
+        .operations = ops2
+    };
+
+    KineticP2P_OperationData ops[] ={
         {
             .key = oldKey1,
             .version = version1,
             .newKey = newKey1,
+            .chainedOperation = &chained_p2pOp,
         },
         {
             .key = oldKey2,
@@ -988,17 +1003,23 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH,
         Request.protoData.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.body, Request.command->body);
-    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.p2pOp, Request.command->body->p2pOperation);
-    TEST_ASSERT_EQUAL("hostname", Request.command->body->p2pOperation->peer->hostname);
-    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->peer->has_port);
-    TEST_ASSERT_EQUAL(1234, Request.command->body->p2pOperation->peer->port);
+    
+    TEST_ASSERT_NOT_NULL(Request.command->body->p2pOperation);
 
+    TEST_ASSERT_EQUAL("hostname",
+        Request.command->body->p2pOperation->peer->hostname);
+
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->peer->has_port);
+
+    TEST_ASSERT_EQUAL(1234,
+        Request.command->body->p2pOperation->peer->port);
     TEST_ASSERT_TRUE(Request.command->body->p2pOperation->peer->has_tls);
     TEST_ASSERT_TRUE(Request.command->body->p2pOperation->peer->tls);
     TEST_ASSERT_FALSE(Request.command->body->p2pOperation->allChildOperationsSucceeded);
     TEST_ASSERT_FALSE(Request.command->body->p2pOperation->has_allChildOperationsSucceeded);
 
-    TEST_ASSERT_EQUAL(2, Request.command->body->p2pOperation->n_operation);
+    TEST_ASSERT_EQUAL(2,
+        Request.command->body->p2pOperation->n_operation);
 
     TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->has_key);
     TEST_ASSERT_EQUAL(oldKey1.array.data,
@@ -1017,9 +1038,29 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
         Request.command->body->p2pOperation->operation[0]->version.len);
     TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->has_force);
     TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->force);
-    TEST_ASSERT_NULL(Request.command->body->p2pOperation->operation[0]->p2pop);
+
+    TEST_ASSERT_NOT_NULL(Request.command->body->p2pOperation->operation[0]->p2pop);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->peer->has_port);
+    TEST_ASSERT_EQUAL(4321,
+        Request.command->body->p2pOperation->operation[0]->p2pop->peer->port);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->peer->has_tls);
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->p2pop->peer->tls);
+    TEST_ASSERT_EQUAL(1,
+        Request.command->body->p2pOperation->operation[0]->p2pop->n_operation);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->has_key);
+    TEST_ASSERT_EQUAL(oldKey2.array.data,
+        Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->key.data);
+    TEST_ASSERT_EQUAL(oldKey2.bytesUsed,
+        Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->key.len);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->has_newKey);
+    TEST_ASSERT_EQUAL(newKey2.array.data,
+        Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->newKey.data);
+    TEST_ASSERT_EQUAL(newKey2.bytesUsed,
+        Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->newKey.len);
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->has_version);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->has_force);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->force);
     TEST_ASSERT_NULL(Request.command->body->p2pOperation->operation[0]->status);
-    TEST_ASSERT_EQUAL(0, p2pOp.operations[0].resultStatus);
 
     TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[1]->has_key);
     TEST_ASSERT_EQUAL(oldKey2.array.data,
@@ -1036,7 +1077,6 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
     TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[1]->force);
     TEST_ASSERT_NULL(Request.command->body->p2pOperation->operation[1]->p2pop);
     TEST_ASSERT_NULL(Request.command->body->p2pOperation->operation[1]->status);
-    TEST_ASSERT_EQUAL(0, p2pOp.operations[1].resultStatus);
 
     TEST_ASSERT_EQUAL_PTR(&p2pOp, Operation.p2pOp);
 

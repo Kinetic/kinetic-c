@@ -20,7 +20,7 @@
 
 #include "kinetic_types_internal.h"
 #include "kinetic_client.h"
-#include "kinetic_connection.h"
+#include "kinetic_session.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
 #include "kinetic_logger.h"
@@ -272,7 +272,15 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticOperation_BuildP2POperation(operation, p2pOp);
+    KineticStatus status = KineticOperation_BuildP2POperation(operation, p2pOp);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        // TODO we need to find a more generic way to handle errors on command construction
+        if (closure != NULL) {
+            operation->closure = *closure;
+        }
+        KineticOperation_Complete(operation, status);
+        return status;
+    }
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);

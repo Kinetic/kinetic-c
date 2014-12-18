@@ -29,7 +29,7 @@
 #include "mock_kinetic_client.h"
 #include "mock_kinetic_auth.h"
 #include "mock_kinetic_allocator.h"
-#include "mock_kinetic_connection.h"
+#include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"

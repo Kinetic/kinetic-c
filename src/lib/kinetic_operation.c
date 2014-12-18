@@ -19,7 +19,7 @@
 */
 
 #include "kinetic_operation.h"
-#include "kinetic_connection.h"
+#include "kinetic_session.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
 #include "kinetic_nbo.h"
@@ -120,8 +120,20 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
     request->header.protobufLength = KineticProto_Message__get_packed_size(request->proto);
+
+    if (request->header.protobufLength > PDU_PROTO_MAX_LEN) {
+        // Packed message exceeds max size.
+        LOGF2("\nPacked protobuf exceeds maximum size. Packed size is: %d, Max size is: %d", request->header.protobufLength, PDU_PROTO_MAX_LEN);
+        return KINETIC_STATUS_BUFFER_OVERRUN;
+    }
+
     if (operation->entry != NULL && operation->sendValue) {
         request->header.valueLength = operation->entry->value.bytesUsed;
+        if (request->header.valueLength > PDU_PROTO_MAX_LEN) {
+            // Packed value exceeds max size.
+            LOGF2("\nPacked value exceeds maximum size. Packed size is: %d, Max size is: %d", request->header.valueLength, PDU_PROTO_MAX_LEN);
+            return KINETIC_STATUS_BUFFER_OVERRUN;
+        }
     }
     else {
         request->header.valueLength = 0;
@@ -502,72 +514,70 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     operation->callback = &KineticOperation_GetLogCallback;
 }
 
-KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status)
+
+void destroy_p2pOp(KineticProto_Command_P2POperation* proto_p2pOp)
 {
-    KineticP2P_Operation* const p2pOp = operation->p2pOp;
-
-    if (status == KINETIC_STATUS_SUCCESS)
-    {
-        for(size_t i = 0; i < p2pOp->numOperations; i++)
-        {
-            if ((operation->response != NULL) &&
-                (operation->response->command != NULL) &&
-                (operation->response->command->body != NULL) &&
-                (operation->request->command->body->p2pOperation != NULL) &&
-                (i < operation->response->command->body->p2pOperation->n_operation) &&
-                (operation->response->command->body->p2pOperation->operation[i]->status != NULL) &&
-                (operation->response->command->body->p2pOperation->operation[i]->status->has_code))
-            {
-                p2pOp->operations[i].resultStatus = KineticProtoStatusCode_to_KineticStatus(
-                    operation->response->command->body->p2pOperation->operation[i]->status->code);
-            }
-            else
-            {
-                p2pOp->operations[i].resultStatus = KINETIC_STATUS_INVALID;
-            }
+    if (proto_p2pOp != NULL) {
+        if (proto_p2pOp->peer != NULL) {
+            free(proto_p2pOp->peer);
+            proto_p2pOp->peer = NULL;
         }
+        if (proto_p2pOp->operation != NULL) {
+            for(size_t i = 0; i < proto_p2pOp->n_operation; i++) {
+                if (proto_p2pOp->operation[i] != NULL) {
+                    if (proto_p2pOp->operation[i]->p2pop != NULL) {
+                        destroy_p2pOp(proto_p2pOp->operation[i]->p2pop);
+                        proto_p2pOp->operation[i]->p2pop = NULL;
+                    }
+                    if (proto_p2pOp->operation[i]->status != NULL) {
+                        free(proto_p2pOp->operation[i]->status);
+                        proto_p2pOp->operation[i]->status = NULL;
+                    }
+                    free(proto_p2pOp->operation[i]);
+                    proto_p2pOp->operation[i] = NULL;
+                }
+            }
+            free(proto_p2pOp->operation);
+            proto_p2pOp->operation = NULL;
+        }
+        free(proto_p2pOp);
     }
-
-    for(size_t i = 0; i < operation->request->command->body->p2pOperation->n_operation; i++)
-    {
-        free(operation->request->command->body->p2pOperation->operation[i]);
-        operation->request->command->body->p2pOperation->operation[i] = NULL;
-    }
-
-    free(operation->request->command->body->p2pOperation->operation);
-    operation->request->command->body->p2pOperation->operation = NULL;
-
-    return status;
 }
 
-void KineticOperation_BuildP2POperation(KineticOperation* const operation,
-                                        KineticP2P_Operation* const p2pOp)
+
+KineticProto_Command_P2POperation* build_p2pOp(uint32_t nestingLevel, KineticP2P_Operation const * const p2pOp)
 {
-    KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(operation->connection->session);
-        
-    operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH;
-    operation->request->command->header->has_messageType = true;
-    operation->request->command->body = &operation->request->protoData.message.body;
-    operation->request->command->body->p2pOperation = &operation->request->protoData.message.p2pOp;
+    // limit nesting level to 10000
+    if (nestingLevel == 1000) {
+        LOG0("P2P operation nesting level is too deep. Max is 1000.");
+        return NULL;
+    }
 
-    operation->request->command->body->p2pOperation->peer = &operation->request->protoData.message.p2pPeer;
-    operation->request->command->body->p2pOperation->peer->hostname = p2pOp->peer.hostname;
-    operation->request->command->body->p2pOperation->peer->has_port = true;
-    operation->request->command->body->p2pOperation->peer->port = p2pOp->peer.port;
-    operation->request->command->body->p2pOperation->peer->has_tls = true;
-    operation->request->command->body->p2pOperation->peer->tls = p2pOp->peer.tls;
+    KineticProto_Command_P2POperation* proto_p2pOp = calloc(1, sizeof(KineticProto_Command_P2POperation));
+    if (proto_p2pOp == NULL) { goto error_cleanup; }
 
-    operation->request->command->body->p2pOperation->n_operation = p2pOp->numOperations;
-    operation->request->command->body->p2pOperation->operation = calloc(p2pOp->numOperations, sizeof(KineticProto_Command_P2POperation_Operation*));
-    assert(operation->request->command->body->p2pOperation->operation != NULL);
+    KineticProto_command_p2_poperation__init(proto_p2pOp);
 
-    for(size_t i = 0; i < operation->request->command->body->p2pOperation->n_operation; i++)
-    {
+    proto_p2pOp->peer = calloc(1, sizeof(KineticProto_Command_P2POperation_Peer));
+    if (proto_p2pOp->peer == NULL) { goto error_cleanup; }
+
+    KineticProto_command_p2_poperation_peer__init(proto_p2pOp->peer);
+
+    proto_p2pOp->peer->hostname = p2pOp->peer.hostname;
+    proto_p2pOp->peer->has_port = true;
+    proto_p2pOp->peer->port = p2pOp->peer.port;
+    proto_p2pOp->peer->has_tls = true;
+    proto_p2pOp->peer->tls = p2pOp->peer.tls;
+
+    proto_p2pOp->n_operation = p2pOp->numOperations;
+    proto_p2pOp->operation = calloc(p2pOp->numOperations, sizeof(KineticProto_Command_P2POperation_Operation*));
+    if (proto_p2pOp->operation == NULL) { goto error_cleanup; }
+
+    for(size_t i = 0; i < proto_p2pOp->n_operation; i++) {
         assert(!ByteBuffer_IsNull(p2pOp->operations[i].key)); // TODO return invalid operand?
         
         KineticProto_Command_P2POperation_Operation * p2p_op_op = calloc(1, sizeof(KineticProto_Command_P2POperation_Operation));
-        assert(p2p_op_op != NULL);
+        if (p2p_op_op == NULL) { goto error_cleanup; }
 
         KineticProto_command_p2_poperation_operation__init(p2p_op_op);
 
@@ -587,15 +597,92 @@ void KineticOperation_BuildP2POperation(KineticOperation* const operation,
         p2p_op_op->has_force = ByteBuffer_IsNull(p2pOp->operations[i].version);
         p2p_op_op->force = ByteBuffer_IsNull(p2pOp->operations[i].version);
 
-        // no nesting for now
-        p2p_op_op->p2pop = NULL;
+        if (p2pOp->operations[i].chainedOperation == NULL) {
+            p2p_op_op->p2pop = NULL;
+        } else {
+            p2p_op_op->p2pop = build_p2pOp(nestingLevel + 1, p2pOp->operations[i].chainedOperation);
+            if (p2p_op_op->p2pop == NULL) { goto error_cleanup; }
+        }
+
         p2p_op_op->status = NULL;
 
-        operation->request->command->body->p2pOperation->operation[i] = p2p_op_op;
+        proto_p2pOp->operation[i] = p2p_op_op;
+    }
+    return proto_p2pOp;
+
+error_cleanup:
+    destroy_p2pOp(proto_p2pOp);
+    return NULL;
+}
+
+static void populateP2PStatusCodes(KineticP2P_Operation* const p2pOp, KineticProto_Command_P2POperation const * const p2pOperation)
+{
+    if (p2pOperation == NULL) { return; }
+    for(size_t i = 0; i < p2pOp->numOperations; i++)
+    {
+        if (i < p2pOperation->n_operation)
+        {
+            if ((p2pOperation->operation[i]->status != NULL) &&
+                (p2pOperation->operation[i]->status->has_code))
+            {
+                p2pOp->operations[i].resultStatus = KineticProtoStatusCode_to_KineticStatus(
+                    p2pOperation->operation[i]->status->code);
+            }
+            else
+            {
+                p2pOp->operations[i].resultStatus = KINETIC_STATUS_INVALID;
+            }
+            if ((p2pOp->operations[i].chainedOperation != NULL) &&
+                 (p2pOperation->operation[i]->p2pop != NULL)) {
+                populateP2PStatusCodes(p2pOp->operations[i].chainedOperation, p2pOperation->operation[i]->p2pop);
+            }
+        }
+        else
+        {
+            p2pOp->operations[i].resultStatus = KINETIC_STATUS_INVALID;
+        }
+    }
+}
+
+
+KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status)
+{
+    KineticP2P_Operation* const p2pOp = operation->p2pOp;
+
+    if (status == KINETIC_STATUS_SUCCESS)
+    {
+        if ((operation->response != NULL) &&
+            (operation->response->command != NULL) &&
+            (operation->response->command->body != NULL) &&
+            (operation->response->command->body->p2pOperation != NULL)) {
+            populateP2PStatusCodes(p2pOp, operation->response->command->body->p2pOperation);
+        }
+    }
+
+    destroy_p2pOp(operation->request->command->body->p2pOperation);
+
+    return status;
+}
+
+KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operation,
+                                                 KineticP2P_Operation* const p2pOp)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticSession_IncrementSequence(operation->connection->session);
+        
+    operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH;
+    operation->request->command->header->has_messageType = true;
+    operation->request->command->body = &operation->request->protoData.message.body;
+
+    operation->request->command->body->p2pOperation = build_p2pOp(0, p2pOp);
+    
+    if (operation->request->command->body->p2pOperation == NULL) {
+        return KINETIC_STATUS_OPERATION_INVALID;
     }
 
     operation->p2pOp = p2pOp;
     operation->callback = &KineticOperation_P2POperationCallback;
+    return KINETIC_STATUS_SUCCESS;
 }
 
 KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* const operation, KineticStatus const status)
@@ -641,7 +728,7 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
 {
     assert(operation != NULL);
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
-    assert(operation->closure.callback != NULL);
+    if (operation->closure.callback == NULL) { return; }
     KineticCompletionData completionData = {.status = status};
     operation->closure.callback(&completionData, operation->closure.clientData);    
 

@@ -350,18 +350,21 @@ typedef struct {
     bool    tls; // optional, defaults to false
 } KineticP2P_Peer;
 
+typedef struct _KineticP2P_Operation KineticP2P_Operation;
+
 typedef struct {
     ByteBuffer    key;
     ByteBuffer    version; // optional (defaults to force if not specified)
     ByteBuffer    newKey;
+    KineticP2P_Operation* chainedOperation;
     KineticStatus resultStatus; // populated with the result of the operation
 } KineticP2P_OperationData;
 
-typedef struct {
+struct _KineticP2P_Operation {
     KineticP2P_Peer peer; 
     size_t numOperations;
     KineticP2P_OperationData* operations; // pointer must remain valid until operations complete
-} KineticP2P_Operation;
+};
 
 const char* KineticMessageType_GetName(KineticMessageType type);
 
