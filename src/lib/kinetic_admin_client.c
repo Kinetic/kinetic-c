@@ -70,9 +70,9 @@ KineticStatus KineticAdminClient_InstantSecureErase(KineticSession const * const
     assert(session->connection != NULL);
 
     KineticStatus status;
-    status = KineticAuth_EnsurePinSupplied(session);
+    status = KineticAuth_EnsurePinSupplied(&session->config);
     if (status != KINETIC_STATUS_SUCCESS) {return status;}
-    status = KineticAuth_EnsureSslEnabled(session);
+    status = KineticAuth_EnsureSslEnabled(&session->config);
     if (status != KINETIC_STATUS_SUCCESS) {return status;}
 
     KineticOperation* operation = KineticController_CreateOperation(session);

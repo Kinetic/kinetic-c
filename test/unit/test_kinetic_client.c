@@ -98,7 +98,7 @@ void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_HOST_EMPTY
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HOST_EMPTY, status);
 }
 
-void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_HMAC_EMPTY_upon_NULL_HMAC_key(void)
+void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_HMAC_REQUIRED_upon_NULL_HMAC_key(void)
 {
     ByteArray key = {.len = 4, .data = NULL};
     KineticSession session = {
@@ -107,7 +107,7 @@ void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_HMAC_EMPTY
     };
 
     KineticStatus status = KineticClient_CreateConnection(&session);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
 void test_KineticClient_CreateConnection_should_return_false_upon_empty_HMAC_key(void)
@@ -120,7 +120,7 @@ void test_KineticClient_CreateConnection_should_return_false_upon_empty_HMAC_key
     };
 
     KineticStatus status = KineticClient_CreateConnection(&session);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
 void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_connection(void)
@@ -146,11 +146,11 @@ void test_KineticClient_CreateConnection_should_return_status_from_a_failed_conn
     };
 
     KineticSession_Create_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
-    KineticSession_Connect_ExpectAndReturn(&session, KINETIC_STATUS_HMAC_EMPTY);
+    KineticSession_Connect_ExpectAndReturn(&session, KINETIC_STATUS_HMAC_REQUIRED);
     KineticSession_Destroy_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_CreateConnection(&session);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
 

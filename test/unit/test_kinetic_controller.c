@@ -181,7 +181,6 @@ void test_KineticController_CreateOperation_should_create_a_new_operation_for_th
     KineticOperation op = {.request = &Request};
 
     KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
-    KineticAuth_Populate_ExpectAndReturn(&session, &Request, KINETIC_STATUS_SUCCESS);
 
     KineticOperation* pop = KineticController_CreateOperation(&session);
 
@@ -223,22 +222,6 @@ void test_KineticController_CreateOperation_should_return_NULL_if_allocated_oper
     KineticOperation op = {.request = NULL};
 
     KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
-    KineticAllocator_FreeOperation_Expect(&connection, &op);
-
-    KineticOperation* pop = KineticController_CreateOperation(&session);
-
-    TEST_ASSERT_NULL(pop);
-}
-
-void test_KineticController_CreateOperation_should_return_NULL_if_allocated_operation_could_not_be_populated_with_authentication_info_and_free_operation(void)
-{
-    KineticSessionConfig config;
-    KineticConnection connection;
-    KineticSession session = {.config = config, .connection = &connection};
-    KineticOperation op = {.request = &Request};
-
-    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
-    KineticAuth_Populate_ExpectAndReturn(&session, &Request, KINETIC_STATUS_HMAC_EMPTY);
     KineticAllocator_FreeOperation_Expect(&connection, &op);
 
     KineticOperation* pop = KineticController_CreateOperation(&session);

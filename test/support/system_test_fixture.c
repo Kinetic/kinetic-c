@@ -25,6 +25,7 @@
 
 uint8_t data[KINETIC_OBJ_SIZE];
 KineticSessionConfig SessionConfig;
+const char* SystemTestHostVal = SYSTEM_TEST_HOST;
 
 void SystemTestSetup(SystemTestFixture* fixture, int log_level)
 {
@@ -32,28 +33,29 @@ void SystemTestSetup(SystemTestFixture* fixture, int log_level)
     KineticClient_Init("stdout", log_level);
     memset(fixture, 0, sizeof(SystemTestFixture));
     KineticStatus status;
-    ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
+
+    KineticSessionConfig config = {
+        .port = KINETIC_PORT,
+        .clusterVersion = SESSION_CLUSTER_VERSION,
+        .identity = SESSION_IDENTITY,
+        .hmacKey = ByteArray_Create(config.keyData, strlen(SESSION_HMAC_KEY)),
+    };
+    strcpy(config.host, SystemTestHostVal);
+    strcpy((char*)config.keyData, SESSION_HMAC_KEY);
+
+    KineticSessionConfig adminConfig = {
+        .port = KINETIC_PORT,
+        .clusterVersion = SESSION_CLUSTER_VERSION,
+        .pin = ByteArray_Create(adminConfig.pinData, strlen(SESSION_PIN)),
+        .useSsl = true,
+    };
+    strcpy(adminConfig.host, SystemTestHostVal);
+    strcpy((char*)adminConfig.pinData, SESSION_PIN);
 
     if (!fixture->connected) {
         *fixture = (SystemTestFixture) {
-            .session = (KineticSession) {
-                .config = (KineticSessionConfig) {
-                    .host = SYSTEM_TEST_HOST,
-                    .port = KINETIC_PORT,
-                    .clusterVersion = CLUSTER_VERSION,
-                    .identity = 1,
-                    .hmacKey = hmacArray,
-                }
-            },
-            .adminSession = (KineticSession) {
-                .config = (KineticSessionConfig) {
-                    .host = SYSTEM_TEST_HOST,
-                    .port = KINETIC_PORT,
-                    .clusterVersion = CLUSTER_VERSION,
-                    .identity = 1,
-                    .hmacKey = hmacArray,
-                }
-            },
+            .session = (KineticSession) {.config = config},
+            .adminSession = (KineticSession) {.config = adminConfig},
             .connected = fixture->connected,
             .testIgnored = false,
         };

@@ -13,7 +13,8 @@ PUB_INC = ./include
 CC ?= gcc
 OPTIMIZE = -O3
 SYSTEM_TEST_HOST ?= localhost
-CLUSTER_VERSION ?= 0
+SESSION_HMAC_KEY ?= \"asdfasdf\"
+SESSION_PIN ?= \"1234\"
 WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=\"${SYSTEM_TEST_HOST}\" -DCLUSTER_VERSION=${CLUSTER_VERSION}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
@@ -165,6 +166,7 @@ uninstall:
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.a
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
 	$(RM) -f $(PREFIX)/include/${API_NAME}.h
+	$(RM) -f $(PREFIX)/include/kinetic_admin_api.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h

@@ -49,9 +49,11 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session)
         return KINETIC_STATUS_HOST_EMPTY;
     }
 
-    if (session->config.hmacKey.len < 1 || session->config.hmacKey.data == NULL) {
+    if (    (session->config.hmacKey.len < 1 || session->config.hmacKey.data == NULL)
+        && !(session->config.pin.data != NULL) ) 
+    {
         LOG0("HMAC key is NULL or empty!");
-        return KINETIC_STATUS_HMAC_EMPTY;
+        return KINETIC_STATUS_HMAC_REQUIRED;
     }
 
     KineticStatus status = KineticSession_Create(session);

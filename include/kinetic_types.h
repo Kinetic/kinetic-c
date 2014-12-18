@@ -159,7 +159,7 @@ typedef enum {
     KINETIC_STATUS_SESSION_EMPTY,       // Session was NULL in request
     KINETIC_STATUS_SESSION_INVALID,     // Session configuration was invalid or NULL
     KINETIC_STATUS_HOST_EMPTY,          // Host was empty in request
-    KINETIC_STATUS_HMAC_EMPTY,          // HMAC key is empty or NULL
+    KINETIC_STATUS_HMAC_REQUIRED,          // HMAC key is empty or NULL
     KINETIC_STATUS_NO_PDUS_AVAVILABLE,  // All PDUs for the session have been allocated
     KINETIC_STATUS_DEVICE_BUSY,         // Device busy (retry later)
     KINETIC_STATUS_CONNECTION_ERROR,    // No connection/disconnected
@@ -179,7 +179,6 @@ typedef enum {
     KINETIC_STATUS_MISSING_VALUE_BUFFER,// An operation is missing a required value buffer
     KINETIC_STATUS_PIN_REQUIRED,        // The operation requires a PIN and one was not specified
     KINETIC_STATUS_SSL_REQUIRED,        // The operation requires an SSL connection and the specified connection is non-SSL
-    KINTEIC_STATUS_AUTH_INFO_MISSING,   // The specified session contains no authentication info
     KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 

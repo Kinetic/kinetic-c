@@ -29,13 +29,13 @@
 //==============================================================================
 
 #define KINETIC_LIST_LOCK(_list) { \
-    /*LOG_LOCATION; LOGF3("Locking list! (list_addr=0x%llX)", (_list));*/ \
+    /*LOG_LOCATION; LOGF3("Locking list! (list_addr=%p)", (_list));*/ \
     pthread_mutex_lock(&((_list)->mutex)); \
     ((_list)->locked) = true; \
 }
 
 #define KINETIC_LIST_UNLOCK(_list) { \
-    /*LOG_LOCATION; LOGF3("Unlocking list! (list_addr=0x%llX)", (_list));*/ \
+    /*LOG_LOCATION; LOGF3("Unlocking list! (list_addr=%p)", (_list));*/ \
     assert(((_list)->locked)); \
     pthread_mutex_unlock(&((_list)->mutex)); \
     ((_list)->locked) = false; \
@@ -174,7 +174,7 @@ static void KineticAllocator_FreeList(KineticList* const list)
         for (KineticListItem* item = list->start; item; item = next) {
             next = item->next;
             
-            LOGF3("  Freeing list item (0x%0llX) w/ data (0x%llX)",
+            LOGF3("  Freeing list item (0x%0llX) w/ data (%p)",
                     (long long)item, (long long)&item->data);
                 if (item->data != NULL) {
                     free(item->data);

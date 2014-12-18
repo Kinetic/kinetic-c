@@ -17,17 +17,8 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#include "byte_array.h"
-#include "unity.h"
-#include "unity_helper.h"
 #include "system_test_fixture.h"
-#include "socket99.h"
-#include <string.h>
-#include <stdlib.h>
-
 #include "kinetic_client.h"
-#include "kinetic_types.h"
-#include "kinetic_types_internal.h"
 
 static SystemTestFixture Fixture;
 

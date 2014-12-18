@@ -22,14 +22,28 @@
 #define _SYSTEM_TEST_FIXTURE
 
 #include "kinetic_types.h"
+#include "unity.h"
+#include "unity_helper.h"
 #include "kinetic_logger.h"
 
 #ifndef SYSTEM_TEST_HOST
-#define SYSTEM_TEST_HOST localhost
+#define SYSTEM_TEST_HOST "localhost"
 #endif
 
-#ifndef CLUSTER_VERSION
-#define CLUSTER_VERSION 0
+#ifndef SESSION_CLUSTER_VERSION
+#define SESSION_CLUSTER_VERSION 0
+#endif
+
+#ifndef SESSION_HMAC_KEY
+#define SESSION_HMAC_KEY "asdfasdf"
+#endif
+
+#ifndef SESSION_PIN
+#define SESSION_PIN "1234"
+#endif
+
+#ifndef SESSION_IDENTITY
+#define SESSION_IDENTITY 1
 #endif
 
 typedef struct _SystemTestFixture {

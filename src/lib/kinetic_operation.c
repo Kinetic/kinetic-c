@@ -27,6 +27,8 @@
 #include "kinetic_device_info.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
+#include "kinetic_hmac.h"
+#include "kinetic_auth.h"
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/time.h>
@@ -104,9 +106,16 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
         });
     }
 
-    // Populate the HMAC for the protobuf
-    KineticHMAC_Init(&request->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session->config.hmacKey);
+    // Populate the HMAC for the protobuf, if appropriate
+    KineticStatus status = KineticAuth_Populate(&operation->connection->session->config, operation->request);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOG0("Failed populating authentication info for new request!");
+        return status;
+    }
+    if (request->protoData.message.message.authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH) {
+        KineticHMAC_Init(&request->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+        KineticHMAC_Populate(&request->hmac, request->proto, request->connection->session->config.hmacKey);
+    }
 
     // Configure PDU header length fields
     request->header.versionPrefix = 'F';
@@ -126,7 +135,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 
     pthread_mutex_lock(&operation->connection->writeMutex);
     KineticOperation_SetTimeoutTime(operation, KINETIC_OPERATION_TIMEOUT_SECS);
-    KineticStatus status = WritePDU(operation);
+    status = WritePDU(operation);
     pthread_mutex_unlock(&operation->connection->writeMutex);
     return status;
 }
@@ -602,6 +611,7 @@ void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
 {
     KineticOperation_ValidateOperation(operation);
     KineticSession_IncrementSequence(operation->connection->session);
+    operation->request->pinOp = true;
     operation->request->protoData.message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->protoData.message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->protoData.message.body;

@@ -51,14 +51,14 @@ void test_KineticAuth_EnsurePinSupplied_should_return_SUCCESS_if_pin_supplied(vo
     };
     strcpy((char*)session.config.pinData, "192736aHUx@*G!Q");
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, KineticAuth_EnsurePinSupplied(&session));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, KineticAuth_EnsurePinSupplied(&session.config));
 }
 
 void test_KineticAuth_EnsurePinSupplied_should_return_PIN_REQUIRED_if_pin_not_supplied(void)
 {
     KineticSession session = {.config = (KineticSessionConfig) {.port = 1234}};
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_PIN_REQUIRED, KineticAuth_EnsurePinSupplied(&session));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_PIN_REQUIRED, KineticAuth_EnsurePinSupplied(&session.config));
 }
 
 
@@ -73,16 +73,15 @@ void test_KineticAuth_EnsureSslEnabled_should_return_SUCCESS_if_pin_supplied(voi
     };
     strcpy((char*)session.config.pinData, "192736aHUx@*G!Q");
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, KineticAuth_EnsureSslEnabled(&session));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, KineticAuth_EnsureSslEnabled(&session.config));
 }
 
 void test_KineticAuth_EnsureSslEnabled_should_return_SSL_REQUIRED_if_pin_not_supplied(void)
 {
     KineticSession session = {.config = (KineticSessionConfig) {.port = 1234}};
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SSL_REQUIRED, KineticAuth_EnsureSslEnabled(&session));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SSL_REQUIRED, KineticAuth_EnsureSslEnabled(&session.config));
 }
-
 
 
 void test_KineticAuth_Populate_should_return_SSL_REQUIRED_if_PIN_if_specified_in_session_configuration_but_not_SSL(void)
@@ -96,12 +95,11 @@ void test_KineticAuth_Populate_should_return_SSL_REQUIRED_if_PIN_if_specified_in
         }
     };
     strcpy((char*)session.config.pinData, testPin);
+    PDU.pinOp = true;
 
-    KineticStatus status = KineticAuth_Populate(&session, &PDU);
+    KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SSL_REQUIRED, status);
-
-    TEST_IGNORE_MESSAGE("TODO: validate protobuf authentication fields");
 }
 
 void test_KineticAuth_Populate_should_return_AUTH_INFO_MISSING_if_neither_HMAC_key_nor_PIN_specified_in_the_session_config(void)
@@ -109,15 +107,46 @@ void test_KineticAuth_Populate_should_return_AUTH_INFO_MISSING_if_neither_HMAC_k
     KineticSession session = {
         .config = (KineticSessionConfig) {
             .port = 1234,
+
         }
     };
 
-    KineticStatus status = KineticAuth_Populate(&session, &PDU);
+    KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINTEIC_STATUS_AUTH_INFO_MISSING, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
 
+
+void test_KineticAuth_Populate_should_return_PIN_REQUIRED_if_pinOp_specified_but_no_PIN_supplied(void)
+{
+    const char* hmacKey = "asdfasdf";
+    KineticSession session = {
+        .config = (KineticSessionConfig) {
+            .port = 1234,
+            .hmacKey = ByteArray_Create(session.config.keyData, strlen(hmacKey)),
+        }
+    };
+    PDU.pinOp = true;
+
+    KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_PIN_REQUIRED, status);
+}
+
+void test_KineticAuth_Populate_should_return_HMAC_EMPTY_if_pinOp_false_and_no_HMAC_supplied(void)
+{
+    KineticSession session = {
+        .config = (KineticSessionConfig) {
+            .port = 1234,
+        }
+    };
+    PDU.pinOp = false;
+
+    KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
+}
 
 void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication_if_PIN_and_SSL_specified_in_session_configuration(void)
 {
@@ -130,19 +159,48 @@ void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication_if_PIN
         }
     };
     strcpy((char*)session.config.pinData, testPin);
+    PDU.pinOp = true;
 
-    KineticStatus status = KineticAuth_Populate(&session, &PDU);
+    KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    TEST_IGNORE_MESSAGE("TODO: validate protobuf authentication fields");
+    TEST_ASSERT_NULL(PDU.protoData.message.message.hmacAuth);
+    TEST_ASSERT_TRUE(PDU.protoData.message.message.has_authType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, PDU.protoData.message.message.authType);
+    TEST_ASSERT_TRUE(PDU.protoData.message.message.pinAuth->has_pin);
+    TEST_ASSERT_EQUAL_PTR(session.config.pin.data, PDU.protoData.message.message.pinAuth->pin.data);
+    TEST_ASSERT_EQUAL(session.config.pin.len, PDU.protoData.message.message.pinAuth->pin.len);
 }
 
+#if 0
 void test_KineticAuth_Populate_should_add_and_populate_PIN_if_specified_and_HMAC_specified_as_well_in_session_configuration(void)
 {
-    TEST_IGNORE_MESSAGE("Implement me!");
-}
+    const char* testPin = "192736aHUx@*G!Q";
+    const char* hmacKey = "asdfasdf";
+    KineticSession session = {
+        .config = (KineticSessionConfig) {
+            .useSsl = true,
+            .port = 1234,
+            .pin = ByteArray_Create(session.config.pinData, sizeof(session.config.pinData)),
+            .hmacKey = ByteArray_Create(session.config.keyData, strlen(hmacKey)),
+            .identity = 1,
+        }
+    };
+    strcpy((char*)session.config.pinData, testPin);
+    strcpy((char*)session.config.keyData, hmacKey);
 
+    KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_NULL(PDU.protoData.message.message.hmacAuth);
+    TEST_ASSERT_TRUE(PDU.protoData.message.message.has_authType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, PDU.protoData.message.message.authType);
+    TEST_ASSERT_TRUE(PDU.protoData.message.message.pinAuth->has_pin);
+    TEST_ASSERT_EQUAL_PTR(session.config.pin.data, PDU.protoData.message.message.pinAuth->pin.data);
+    TEST_ASSERT_EQUAL(session.config.pin.len, PDU.protoData.message.message.pinAuth->pin.len);
+}
 
 void test_KineticAuth_Populate_should_add_and_populate_HMAC_if_PIN_not_specified_in_session_configuration(void)
 {
@@ -156,18 +214,18 @@ void test_KineticAuth_Populate_should_add_and_populate_HMAC_if_PIN_not_specified
     };
     strcpy((char*)session.config.keyData, hmacKey);
 
-    KineticStatus status = KineticAuth_Populate(&session, &PDU);
-
+    KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    TEST_ASSERT_EQUAL_PTR(&PDU.protoData.message.hmacAuth, PDU.protoData.message.message.hmacAuth);
     TEST_ASSERT_NULL(PDU.protoData.message.message.pinAuth);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, PDU.protoData.message.message.authType);
     TEST_ASSERT_TRUE(PDU.protoData.message.message.has_authType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, PDU.protoData.message.message.authType);
+    TEST_ASSERT_TRUE(PDU.protoData.message.message.hmacAuth->has_hmac);
+    TEST_ASSERT_EQUAL_PTR(PDU.protoData.message.hmacAuth.hmac.data, PDU.protoData.message.message.hmacAuth->hmac.data);
+    TEST_ASSERT_EQUAL(0, PDU.protoData.message.message.hmacAuth->hmac.len);
     TEST_ASSERT_EQUAL_PTR(PDU.hmac.data, PDU.protoData.message.hmacAuth.hmac.data);
     TEST_ASSERT_EQUAL(PDU.hmac.len, PDU.protoData.message.hmacAuth.hmac.len);
     TEST_ASSERT_TRUE(PDU.protoData.message.hmacAuth.has_identity);
     TEST_ASSERT_EQUAL(1, PDU.protoData.message.hmacAuth.identity);
-
-    TEST_IGNORE_MESSAGE("TODO: validate protobuf authentication fields");
 }
+#endif

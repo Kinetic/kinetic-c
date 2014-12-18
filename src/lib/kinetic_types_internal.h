@@ -219,6 +219,9 @@ struct _KineticPDU {
     // The type of this PDU (request, response or unsolicited)
     KineticPDUType type;
 
+    // PIN enabled (non-HMAC if true)
+    bool pinOp;
+
     // Kinetic operation associated with this PDU, if any
     KineticOperation* operation;
 };

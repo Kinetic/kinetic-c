@@ -28,7 +28,7 @@ STATIC const char* KineticStatusDescriptor[] = {
     "SESSION_EMPTY",
     "SESSION_INVALID",
     "HOST_EMPTY",
-    "HMAC_EMPTY",
+    "HMAC_REQUIRED",
     "NO_PDUS_AVAVILABLE",
     "DEVICE_BUSY",
     "CONNECTION_ERROR",
@@ -48,7 +48,6 @@ STATIC const char* KineticStatusDescriptor[] = {
     "MISSING_VALUE_BUFFER",
     "PIN_REQUIRED",
     "SSL_REQUIRED",
-    "AUTH_INFO_MISSING",
 };
 
 #ifdef TEST

@@ -18,19 +18,9 @@
 *
 */
 
-#include "byte_array.h"
-#include "unity.h"
-#include "unity_helper.h"
 #include "system_test_fixture.h"
-#include "protobuf-c/protobuf-c.h"
-#include "socket99.h"
-#include <string.h>
-#include <stdlib.h>
-
 #include "kinetic_admin_client.h"
-#include "kinetic_client.h"
-#include "kinetic_types.h"
-#include "kinetic_types_internal.h"
+#include <stdlib.h>
 
 static SystemTestFixture Fixture;
 static KineticStatus Status;

@@ -108,8 +108,8 @@ void test_KineticAdminClient_InstantSecureErase_should_build_and_execute_an_INST
     };
     KineticOperation operation;
 
-    KineticAuth_EnsurePinSupplied_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
-    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
+    KineticAuth_EnsurePinSupplied_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
     KineticController_CreateOperation_ExpectAndReturn(&session, &operation);
     KineticOperation_BuildInstantSecureErase_Expect(&operation);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
@@ -127,7 +127,7 @@ void test_KineticAdminClient_InstantSecureErase_should_forward_erroneous_status_
         .connection = &connection
     };
 
-    KineticAuth_EnsurePinSupplied_ExpectAndReturn(&session, KINETIC_STATUS_PIN_REQUIRED);
+    KineticAuth_EnsurePinSupplied_ExpectAndReturn(&session.config, KINETIC_STATUS_PIN_REQUIRED);
 
     KineticStatus status = KineticAdminClient_InstantSecureErase(&session);
 
@@ -142,8 +142,8 @@ void test_KineticAdminClient_InstantSecureErase_should_forward_erroneous_status_
         .connection = &connection
     };
 
-    KineticAuth_EnsurePinSupplied_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
-    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session, KINETIC_STATUS_SSL_REQUIRED);
+    KineticAuth_EnsurePinSupplied_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
 
     KineticStatus status = KineticAdminClient_InstantSecureErase(&session);
 

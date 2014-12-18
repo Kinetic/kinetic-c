@@ -62,7 +62,7 @@ KineticOperation* KineticController_CreateOperation(KineticSession const * const
 
     LOGF1("\n"
          "--------------------------------------------------\n"
-         "Building new operation on session @ 0x%llX", session);
+         "Building new operation on session @ %p", session);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return NULL;}
@@ -71,12 +71,6 @@ KineticOperation* KineticController_CreateOperation(KineticSession const * const
         return NULL;
     }
     KINETIC_PDU_INIT_WITH_COMMAND(operation->request, session->connection, session->config.clusterVersion);
-    KineticStatus status = KineticAuth_Populate(session, operation->request);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        LOG0("Failed populating authentication info for new request!");
-        KineticAllocator_FreeOperation(session->connection, operation);
-        return NULL;
-    }
 
     return operation;
 }
@@ -107,7 +101,7 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     assert(operation != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
 
-    LOGF1("Executing operation: 0x%llX", operation);
+    LOGF1("Executing operation: %p", operation);
     if (operation->entry != NULL &&
         operation->entry->value.array.data != NULL &&
         operation->entry->value.bytesUsed > 0)

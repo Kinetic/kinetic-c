@@ -17,31 +17,8 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#include "byte_array.h"
-#include "unity.h"
-#include "unity_helper.h"
 #include "system_test_fixture.h"
-#include "protobuf-c/protobuf-c.h"
-#include "socket99.h"
-#include <string.h>
-#include <stdlib.h>
-
 #include "kinetic_client.h"
-#include "kinetic_types.h"
-#include "kinetic_types_internal.h"
-#include "kinetic_controller.h"
-#include "kinetic_device_info.h"
-#include "kinetic_serial_allocator.h"
-#include "kinetic_proto.h"
-#include "kinetic_allocator.h"
-#include "kinetic_message.h"
-#include "kinetic_pdu.h"
-#include "kinetic_logger.h"
-#include "kinetic_operation.h"
-#include "kinetic_hmac.h"
-#include "kinetic_connection.h"
-#include "kinetic_socket.h"
-#include "kinetic_nbo.h"
 
 static SystemTestFixture Fixture;
 
