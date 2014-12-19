@@ -26,7 +26,7 @@
 #include "kinetic_nbo.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
-#include "mock_kinetic_connection.h"
+#include "mock_kinetic_session.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_hmac.h"

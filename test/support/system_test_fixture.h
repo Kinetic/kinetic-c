@@ -23,6 +23,8 @@
 
 #include "kinetic_types.h"
 #include "kinetic_logger.h"
+#include "unity.h"
+#include "unity_helper.h"
 
 #ifndef SYSTEM_TEST_HOST
 #define SYSTEM_TEST_HOST "localhost"
@@ -35,7 +37,7 @@ typedef struct _SystemTestFixture {
     int64_t expectedSequence;
 } SystemTestFixture;
 
-void SystemTestSetup(SystemTestFixture* fixture);
+void SystemTestSetup(SystemTestFixture* fixture, int log_level);
 void SystemTestTearDown(SystemTestFixture* fixture);
 void SystemTestSuiteTearDown(SystemTestFixture* fixture);
 bool SystemTestIsUnderSimulator(void);

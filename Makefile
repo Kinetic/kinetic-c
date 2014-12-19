@@ -58,7 +58,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_controller.o \
 	$(OUT_DIR)/kinetic_device_info.o \
 	$(OUT_DIR)/kinetic_serial_allocator.o \
-	$(OUT_DIR)/kinetic_connection.o \
+	$(OUT_DIR)/kinetic_session.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
 	$(OUT_DIR)/byte_array.o \
@@ -83,7 +83,7 @@ makedirs:
 all: default test system_tests test_internals run examples
 
 clean: makedirs update_git_submodules
-	rm -rf ./bin/**/*
+	rm -rf ./bin/**
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;

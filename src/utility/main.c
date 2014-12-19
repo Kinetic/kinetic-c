@@ -60,7 +60,7 @@ static void ReportOperationConfiguration(
 // Main Entry Point Definition
 int main(int argc, char** argv)
 {
-    KineticClient_Init("stdout", 2);
+    KineticClient_Init("stdout", 0);
 
     // Parse command line options
     int operationsArgsIndex = ParseOptions(argc, argv, &Session, &Entry);

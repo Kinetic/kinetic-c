@@ -19,7 +19,7 @@
 */
 
 #include "kinetic_operation.h"
-#include "kinetic_connection.h"
+#include "kinetic_session.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
 #include "kinetic_nbo.h"
