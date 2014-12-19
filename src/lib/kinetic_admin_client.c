@@ -54,7 +54,7 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(info != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -75,7 +75,7 @@ KineticStatus KineticAdminClient_InstantSecureErase(KineticSession const * const
     status = KineticAuth_EnsureSslEnabled(&session->config);
     if (status != KINETIC_STATUS_SUCCESS) {return status;}
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildInstantSecureErase(operation);

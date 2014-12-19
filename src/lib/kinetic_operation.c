@@ -33,6 +33,34 @@
 #include <errno.h>
 #include <sys/time.h>
 
+
+KineticOperation* KineticOperation_Create(KineticSession const * const session)
+{
+    if (session == NULL) {
+        LOG0("Specified session is NULL");
+        return NULL;
+    }
+
+    if (session->connection == NULL) {
+        LOG0("Specified session is not associated with a connection");
+        return NULL;
+    }
+
+    LOGF1("\n"
+         "--------------------------------------------------\n"
+         "Building new operation on session @ %p", session);
+
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    if (operation == NULL) {return NULL;}
+    if (operation->request == NULL) {
+        KineticAllocator_FreeOperation(session->connection, operation);
+        return NULL;
+    }
+    KINETIC_PDU_INIT_WITH_COMMAND(operation->request, session->connection, session->config.clusterVersion);
+
+    return operation;
+}
+
 static void KineticOperation_ValidateOperation(KineticOperation* operation);
 
 static KineticStatus WritePDU(KineticOperation* const operation)

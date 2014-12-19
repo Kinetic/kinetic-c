@@ -82,6 +82,63 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
     TEST_ASSERT_NULL(op.response);
 }
 
+
+void test_KineticOperation_Create_should_create_a_new_operation_for_the_specified_session(void)
+{
+    KineticSessionConfig config;
+    KineticConnection connection;
+    KineticSession session = {.config = config, .connection = &connection};
+    KineticOperation op = {.request = &Request};
+
+    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
+
+    KineticOperation* pop = KineticOperation_Create(&session);
+
+    TEST_ASSERT_EQUAL_PTR(&op, pop);
+}
+
+void test_KineticOperation_Create_should_return_NULL_upon_NULL_session(void)
+{
+    KineticOperation* pop = KineticOperation_Create(NULL);
+    TEST_ASSERT_NULL(pop);
+}
+
+void test_KineticOperation_Create_should_return_NULL_upon_NULL_connection(void)
+{
+    KineticSessionConfig config;
+    KineticSession session = {.config = config, .connection = NULL};
+    KineticOperation* pop = KineticOperation_Create(&session);
+    TEST_ASSERT_NULL(pop);
+}
+
+void test_KineticOperation_Create_should_return_NULL_if_operation_could_not_be_allocated(void)
+{
+    KineticSessionConfig config;
+    KineticConnection connection;
+    KineticSession session = {.config = config, .connection = &connection};
+
+    KineticAllocator_NewOperation_ExpectAndReturn(&connection, NULL);
+
+    KineticOperation* pop = KineticOperation_Create(&session);
+
+    TEST_ASSERT_NULL(pop);
+}
+
+void test_KineticOperation_Create_should_return_NULL_if_allocated_operation_has_no_associated_request_PDU(void)
+{
+    KineticSessionConfig config;
+    KineticConnection connection;
+    KineticSession session = {.config = config, .connection = &connection};
+    KineticOperation op = {.request = NULL};
+
+    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
+    KineticAllocator_FreeOperation_Expect(&connection, &op);
+
+    KineticOperation* pop = KineticOperation_Create(&session);
+
+    TEST_ASSERT_NULL(pop);
+}
+
 void test_KineticOperation_SendRequest_should_transmit_PDU_with_no_value_payload(void)
 {
     KineticProto_Message* msg = &Request.protoData.message.message;

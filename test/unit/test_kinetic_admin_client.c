@@ -89,7 +89,7 @@ void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_t
     KineticDeviceInfo* info;
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(&session, &operation);
+    KineticOperation_Create_ExpectAndReturn(&session, &operation);
     KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -110,7 +110,7 @@ void test_KineticAdminClient_InstantSecureErase_should_build_and_execute_an_INST
 
     KineticAuth_EnsurePinSupplied_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticController_CreateOperation_ExpectAndReturn(&session, &operation);
+    KineticOperation_Create_ExpectAndReturn(&session, &operation);
     KineticOperation_BuildInstantSecureErase_Expect(&operation);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

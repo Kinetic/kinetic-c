@@ -35,7 +35,7 @@
 #include <pthread.h>
 
 
-static KineticPDU Request, Response;
+static KineticPDU Response;
 static const int64_t clusterVersion = 7;
 
 void setUp(void)
@@ -172,62 +172,6 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
 // {
 //     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Init");
 // }
-
-void test_KineticController_CreateOperation_should_create_a_new_operation_for_the_specified_session(void)
-{
-    KineticSessionConfig config;
-    KineticConnection connection;
-    KineticSession session = {.config = config, .connection = &connection};
-    KineticOperation op = {.request = &Request};
-
-    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
-
-    KineticOperation* pop = KineticController_CreateOperation(&session);
-
-    TEST_ASSERT_EQUAL_PTR(&op, pop);
-}
-
-void test_KineticController_CreateOperation_should_return_NULL_upon_NULL_session(void)
-{
-    KineticOperation* pop = KineticController_CreateOperation(NULL);
-    TEST_ASSERT_NULL(pop);
-}
-
-void test_KineticController_CreateOperation_should_return_NULL_upon_NULL_connection(void)
-{
-    KineticSessionConfig config;
-    KineticSession session = {.config = config, .connection = NULL};
-    KineticOperation* pop = KineticController_CreateOperation(&session);
-    TEST_ASSERT_NULL(pop);
-}
-
-void test_KineticController_CreateOperation_should_return_NULL_if_operation_could_not_be_allocated(void)
-{
-    KineticSessionConfig config;
-    KineticConnection connection;
-    KineticSession session = {.config = config, .connection = &connection};
-
-    KineticAllocator_NewOperation_ExpectAndReturn(&connection, NULL);
-
-    KineticOperation* pop = KineticController_CreateOperation(&session);
-
-    TEST_ASSERT_NULL(pop);
-}
-
-void test_KineticController_CreateOperation_should_return_NULL_if_allocated_operation_has_no_associated_request_PDU(void)
-{
-    KineticSessionConfig config;
-    KineticConnection connection;
-    KineticSession session = {.config = config, .connection = &connection};
-    KineticOperation op = {.request = NULL};
-
-    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &op);
-    KineticAllocator_FreeOperation_Expect(&connection, &op);
-
-    KineticOperation* pop = KineticController_CreateOperation(&session);
-
-    TEST_ASSERT_NULL(pop);
-}
 
 // void test_KineticController_ExecuteOperation_should_execute_the_specified_operation(void)
 // {

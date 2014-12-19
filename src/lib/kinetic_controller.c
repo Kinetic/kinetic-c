@@ -48,33 +48,6 @@ KineticStatus KineticController_Init(KineticSession const * const session)
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticOperation* KineticController_CreateOperation(KineticSession const * const session)
-{
-    if (session == NULL) {
-        LOG0("Specified session is NULL");
-        return NULL;
-    }
-
-    if (session->connection == NULL) {
-        LOG0("Specified session is not associated with a connection");
-        return NULL;
-    }
-
-    LOGF1("\n"
-         "--------------------------------------------------\n"
-         "Building new operation on session @ %p", session);
-
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
-    if (operation == NULL) {return NULL;}
-    if (operation->request == NULL) {
-        KineticAllocator_FreeOperation(session->connection, operation);
-        return NULL;
-    }
-    KINETIC_PDU_INIT_WITH_COMMAND(operation->request, session->connection, session->config.clusterVersion);
-
-    return operation;
-}
-
 typedef struct {
     pthread_mutex_t receiveCompleteMutex;
     pthread_cond_t receiveComplete;

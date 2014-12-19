@@ -51,7 +51,7 @@ void test_KineticClient_Delete_should_execute_DELETE_operation(void)
     KineticEntry entry;
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
+    KineticOperation_Create_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildDelete_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

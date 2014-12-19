@@ -132,7 +132,7 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
     }
 
     // Close the connection
-    close(connection->socket);
+    KineticSocket_Close(connection->socket);
     connection->socket = KINETIC_HANDLE_INVALID;
     connection->connected = false;
 

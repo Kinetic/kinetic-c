@@ -29,10 +29,6 @@ static uint8_t TagData[1024];
 static ByteBuffer TagBuffer;
 static uint8_t ExpectedTagData[1024];
 static ByteBuffer ExpectedTagBuffer;
-static uint8_t VersionData[1024];
-static ByteBuffer VersionBuffer;
-static uint8_t ExpectedVersionData[1024];
-static ByteBuffer ExpectedVersionBuffer;
 static ByteArray TestValue;
 static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
@@ -46,8 +42,6 @@ void setUp(void)
     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
     ExpectedTagBuffer = ByteBuffer_CreateAndAppendCString(ExpectedTagData, sizeof(ExpectedTagData), "SomeTagValue");
-    VersionBuffer = ByteBuffer_CreateAndAppendCString(VersionData, sizeof(VersionData), "v1.0");
-    ExpectedVersionBuffer = ByteBuffer_CreateAndAppendCString(ExpectedVersionData, sizeof(ExpectedVersionData), "v1.0");
     TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
     ValueBuffer = ByteBuffer_CreateAndAppendArray(ValueData, sizeof(ValueData), TestValue);
 
@@ -55,7 +49,6 @@ void setUp(void)
     KineticEntry putEntry = {
         .key = KeyBuffer,
         .tag = TagBuffer,
-        .newVersion = VersionBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
         .force = true,
@@ -64,12 +57,6 @@ void setUp(void)
 
     KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, putEntry.key);
-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, putEntry.tag);
-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, putEntry.dbVersion);
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
-    TEST_ASSERT_ByteBuffer_NULL(putEntry.newVersion);
 
     Fixture.expectedSequence++;
 }
@@ -81,14 +68,10 @@ void tearDown(void)
 
 void test_InstantSecureErase_should_erase_device_contents(void)
 { LOG_LOCATION;
-    if (!SystemTestIsUnderSimulator()) {
-        TEST_IGNORE_MESSAGE("TODO: Need to implement PIN authentication in order to get erase working on HW!")
-    }
-    else {
-        TEST_IGNORE_MESSAGE("Running against a remote host!");
-    }
-    // KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
-    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_IGNORE_MESSAGE("TODO: Need to implement PIN authentication in order to get erase working!")
+
+    KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 /*******************************************************************************

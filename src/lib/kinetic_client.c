@@ -102,7 +102,7 @@ KineticStatus KineticClient_NoOp(KineticSession const * const session)
     assert(session != NULL);
     assert(session->connection != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildNoop(operation);
@@ -118,7 +118,7 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     assert(entry != NULL);
     assert(entry->value.array.data != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -134,7 +134,7 @@ KineticStatus KineticClient_Flush(KineticSession const * const session,
     assert(session != NULL);
     assert(session->connection != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
 
     // Initialize request
@@ -174,7 +174,7 @@ static KineticStatus handle_get_command(GET_COMMAND cmd,
         return KINETIC_STATUS_MISSING_VALUE_BUFFER;
     }
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {
         return KINETIC_STATUS_MEMORY_ERROR;
     }
@@ -228,7 +228,7 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(entry != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -250,7 +250,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
     assert(keys->buffers != NULL);
     assert(keys->count > 0);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -268,7 +268,7 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(p2pOp != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
