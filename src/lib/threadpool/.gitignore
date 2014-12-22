@@ -1,4 +1,4 @@
 *.a
-test_threadpool
+test_threadpool*
 *.o
 *.dSYM/

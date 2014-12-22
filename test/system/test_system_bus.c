@@ -39,7 +39,7 @@
 #include "kinetic_logger.h"
 #include "kinetic_operation.h"
 #include "kinetic_hmac.h"
-#include "kinetic_connection.h"
+#include "kinetic_session.h"
 #include "kinetic_socket.h"
 #include "kinetic_nbo.h"
 
