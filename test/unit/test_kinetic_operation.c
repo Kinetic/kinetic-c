@@ -46,7 +46,7 @@ static KineticOperation Operation;
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout", 3);
+    KineticLogger_Init("stdout", 1);
     KINETIC_CONNECTION_INIT(&Connection);
     Connection.connectionID = ConnectionID;
     Session.connection = &Connection;
