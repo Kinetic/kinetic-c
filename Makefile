@@ -7,6 +7,13 @@ OUT_DIR = ./obj
 BIN_DIR = ./bin
 PUB_INC = ./include
 
+#-------------------------------------------------------------------------------
+# SSL/TLS Library Options
+#-------------------------------------------------------------------------------
+
+# FIXME: Currently OSX/homebrew specific, rework before integration.
+OPENSSL_PATH ?=	/usr/local/Cellar/openssl/1.0.1j_1
+
 #===============================================================================
 # Shared Build Variables
 #===============================================================================
@@ -16,7 +23,7 @@ SYSTEM_TEST_HOST ?= \"localhost\"
 WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
-LDFLAGS += -lm -lcrypto -lssl -lpthread
+LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread
 
 #===============================================================================
 # Kinetic-C Library Build Support
@@ -172,14 +179,6 @@ ${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
 ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
 	cd ${LIB_DIR}/threadpool && make all
 	cp ${LIB_DIR}/threadpool/libthreadpool.a $@
-
-
-#-------------------------------------------------------------------------------
-# SSL/TLS Library Options
-#-------------------------------------------------------------------------------
-
-# FIXME: Currently OSX specific, rework before integration.
-OPENSSL_PATH=	/usr/local/Cellar/openssl/1.0.1j_1
 
 
 #-------------------------------------------------------------------------------
