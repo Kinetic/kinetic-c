@@ -12,7 +12,7 @@ PUB_INC = ./include
 #-------------------------------------------------------------------------------
 
 # FIXME: Currently OSX/homebrew specific, rework before integration.
-OPENSSL_PATH ?=	/usr/local/Cellar/openssl/1.0.1j_1
+#OPENSSL_PATH ?=	/usr/local/Cellar/openssl/1.0.1j_1
 
 #===============================================================================
 # Shared Build Variables
