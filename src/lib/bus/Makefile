@@ -44,7 +44,7 @@ bus_example: bus_example.o libbus.a
 	${CC} -o $@ $^ ${LDFLAGS} -lbus
 
 clean:
-	rm -f *.a *.o test_casq echosrv bus_example
+	rm -f *.a *.o test_casq test_yacht echosrv bus_example
 
 tags: TAGS
 
