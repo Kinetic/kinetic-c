@@ -294,6 +294,7 @@ void test_that_we_can_register_sockets(void)
     sleep(5);
 
     bus_shutdown(res.bus);
+    bus_free(res.bus);
 
     free(si);
 
