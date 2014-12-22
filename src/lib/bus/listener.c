@@ -438,9 +438,8 @@ static void process_unpacked_message(listener *l,
              *     not flush them out as unsolicited until the queue of messages
              *     is fully processed. Otherwise, they sit in the queue stuck and
              *     slowing things down. */
-            
             BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
-                "ACHTUNG! Couldn't find info for seq_id %lld, msg %p",
+                "Couldn't find info for seq_id %lld, msg %p",
                 seq_id, opaque_msg);
    
             if (b->unexpected_msg_cb) {
