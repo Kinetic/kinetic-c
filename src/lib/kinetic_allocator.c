@@ -51,7 +51,7 @@ void KineticAllocator_InitLists(KineticConnection* connection)
 KineticConnection* KineticAllocator_NewConnection(void)
 {
     KineticConnection* connection = calloc(1, sizeof(KineticConnection));
-    KINETIC_CONNECTION_INIT(connection);
+    KineticConnection_Init(connection);
     return connection;
 }
 
@@ -200,6 +200,7 @@ static void KineticAllocator_FreeList(KineticList* const list)
 KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection)
 {
     assert(connection != NULL);
+    assert(connection->session != NULL);
     LOGF3("Allocating new PDU on connection (0x%0llX)", connection);
     KineticPDU* newPDU = (KineticPDU*)KineticAllocator_NewItem(
                              &connection->pdus, sizeof(KineticPDU));
@@ -208,7 +209,7 @@ KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection)
         return NULL;
     }
     assert(newPDU->proto == NULL);
-    KINETIC_PDU_INIT(newPDU, connection);
+    KineticPDU_Init(newPDU, connection->session);
     LOGF3("Allocated new PDU (0x%0llX) on connection", newPDU, connection);
     return newPDU;
 }
@@ -253,6 +254,7 @@ KineticPDU* KineticAllocator_GetNextPDU(KineticConnection* connection, KineticPD
 KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connection)
 {
     assert(connection != NULL);
+    assert(connection->session != NULL);
     LOGF3("Allocating new operation on connection (0x%0llX)", connection);
     KineticOperation* newOperation =
         (KineticOperation*)KineticAllocator_NewItem(&connection->operations, sizeof(KineticOperation));
@@ -260,9 +262,9 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
         LOGF0("Failed allocating new operation on connection (0x%0llX)!", connection);
         return NULL;
     }
-    KINETIC_OPERATION_INIT(newOperation, connection);
+    KineticOperation_Init(newOperation, connection->session);
     newOperation->request = KineticAllocator_NewPDU(connection);
-    KINETIC_PDU_INIT_WITH_COMMAND(newOperation->request, connection, connection->session->config.clusterVersion);
+    KineticPDU_InitWithCommand(newOperation->request, connection->session);
     LOGF3("Allocated new operation (0x%0llX) on connection (0x%0llX)", newOperation, connection);
     return newOperation;
 }

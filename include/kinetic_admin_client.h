@@ -124,4 +124,16 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
  */
 KineticStatus KineticAdminClient_InstantSecureErase(KineticSession const * const session);
 
+/**
+ * @brief Updates the cluster version.
+ *
+ * @param clusterVersion      Current cluster version.
+ * @param newClusterVersion   New cluster version.
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
+                                              int64_t clusterVersion,
+                                              int64_t newClusterVersion);
+
 #endif // _KINETIC_ADMIN_CLIENT_H

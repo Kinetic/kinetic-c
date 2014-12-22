@@ -311,8 +311,7 @@ bool Copy_KineticProto_Command_Range_to_ByteBufferArray(KineticProto_Command_Ran
 int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len)
 {
     static pthread_mutex_t strerror_lock = PTHREAD_MUTEX_INITIALIZER;
-    if (!len)
-    {
+    if (!len) {
         errno = ENOSPC;
         return -1;
     }
@@ -399,4 +398,117 @@ KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_
 KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type)
 {
     return (KineticMessageType)type;
+}
+
+void KineticSessionConfig_Copy(KineticSessionConfig* dest, KineticSessionConfig* src)
+{
+    assert(dest != NULL);
+    assert(src != NULL);
+    if (dest == src) {return;}
+    *dest = *src;
+    if (src->hmacKey.data != NULL) {
+        memcpy(dest->keyData, src->hmacKey.data, src->hmacKey.len);
+    }
+    if (src->pin.data != NULL) {
+        memcpy(dest->pinData, src->pin.data, src->pin.len);
+    }
+}
+
+void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con)
+{
+    assert(session != NULL);
+    KineticSessionConfig destConfig = {.host = "google.com"};
+    if (config != NULL) {
+        KineticSessionConfig_Copy(&destConfig, config);
+    }
+    if (con != NULL) {
+        KineticConnection_Init(con);
+    }
+    *session = (KineticSession) {
+        .config = destConfig,
+        .connection = con,
+    };
+    con->session = session;
+}
+
+void KineticConnection_Init(KineticConnection* const con)
+{
+    assert(con != NULL);
+    *con = (KineticConnection) {
+        .connected = false, // Just to clarify
+        .socket = -1,
+        .writeMutex = PTHREAD_MUTEX_INITIALIZER,
+        .operations = KINETIC_LIST_INITIALIZER,
+        .pdus = KINETIC_LIST_INITIALIZER,
+    };
+}
+
+void KineticMessage_Init(KineticMessage* const message)
+{
+    assert(message != NULL);
+
+    KineticProto_Message__init(&message->message);
+    KineticProto_command__init(&message->command);
+    KineticProto_Message_hmacauth__init(&message->hmacAuth);
+    KineticProto_Message_pinauth__init(&message->pinAuth);
+    KineticProto_command_header__init(&message->header);
+    KineticProto_command_status__init(&message->status);
+    KineticProto_command_body__init(&message->body);
+    KineticProto_command_key_value__init(&message->keyValue);
+    KineticProto_command_range__init(&message->keyRange);
+    KineticProto_command_get_log__init(&message->getLog);
+    KineticProto_command_pin_operation__init(&message->pinOp);
+}
+
+static void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr, KineticSession const * const session)
+{
+    assert(hdr != NULL);
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    *hdr = (KineticProto_Command_Header) {
+        .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor),
+        .has_clusterVersion = true,
+        .clusterVersion = session->config.clusterVersion,
+        .has_connectionID = true,
+        .connectionID = session->connection->connectionID,
+        .has_sequence = true,
+        .sequence = session->connection->sequence,
+    };
+}
+
+void KineticOperation_Init(KineticOperation* op, KineticSession const * const session)
+{
+    assert(op != NULL);
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    *op = (KineticOperation) {
+        .connection = session->connection,
+        .timeoutTimeMutex = PTHREAD_MUTEX_INITIALIZER,
+    };
+}
+
+void KineticPDU_Init(KineticPDU* pdu, KineticSession const * const session)
+{
+    assert(pdu != NULL);
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    memset(pdu, 0, sizeof(KineticPDU));
+    pdu->connection = session->connection;
+    pdu->header = (KineticPDUHeader) {.versionPrefix = 'F'};
+    pdu->headerNBO = (KineticPDUHeader) {.versionPrefix = 'F'};
+}
+
+void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session)
+{
+    KineticPDU_Init(pdu, session);
+    KineticMessage_Init(&pdu->protoData.message);
+    KineticMessage_HeaderInit(&pdu->protoData.message.header, session);
+
+    pdu->proto = &pdu->protoData.message.message;
+    pdu->protoData.message.has_command = true;
+
+    pdu->command = &pdu->protoData.message.command;
+    pdu->command->header = &pdu->protoData.message.header;
+
+    pdu->type = KINETIC_PDU_TYPE_REQUEST;
 }

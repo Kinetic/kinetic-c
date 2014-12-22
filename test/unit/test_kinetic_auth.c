@@ -21,6 +21,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include "kinetic_auth.h"
+#include "mock_kinetic_hmac.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
 #include "kinetic_types.h"
@@ -28,12 +29,16 @@
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
 
+KineticConnection Connection;
+KineticSession Session;
 KineticPDU PDU;
 
 void setUp(void)
 {
+    KineticSessionConfig config = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
+    KineticSession_Init(&Session, &config, &Connection);
     KineticLogger_Init("stdout", 3);
-    memset(&PDU, 0, sizeof(PDU));
+    KineticPDU_InitWithCommand(&PDU, &Session);
 }
 
 void tearDown(void)
@@ -148,8 +153,8 @@ void test_KineticAuth_Populate_should_return_HMAC_EMPTY_if_pinOp_false_and_no_HM
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
-void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication_if_PIN_and_SSL_specified_in_session_configuration(void)
-{
+void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication(void)
+{ LOG_LOCATION;
     const char* testPin = "192736aHUx@*G!Q";
     KineticSession session = {
         .config = (KineticSessionConfig) {
@@ -173,37 +178,8 @@ void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication_if_PIN
     TEST_ASSERT_EQUAL(session.config.pin.len, PDU.protoData.message.message.pinAuth->pin.len);
 }
 
-#if 0
-void test_KineticAuth_Populate_should_add_and_populate_PIN_if_specified_and_HMAC_specified_as_well_in_session_configuration(void)
-{
-    const char* testPin = "192736aHUx@*G!Q";
-    const char* hmacKey = "asdfasdf";
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .useSsl = true,
-            .port = 1234,
-            .pin = ByteArray_Create(session.config.pinData, sizeof(session.config.pinData)),
-            .hmacKey = ByteArray_Create(session.config.keyData, strlen(hmacKey)),
-            .identity = 1,
-        }
-    };
-    strcpy((char*)session.config.pinData, testPin);
-    strcpy((char*)session.config.keyData, hmacKey);
-
-    KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    TEST_ASSERT_NULL(PDU.protoData.message.message.hmacAuth);
-    TEST_ASSERT_TRUE(PDU.protoData.message.message.has_authType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, PDU.protoData.message.message.authType);
-    TEST_ASSERT_TRUE(PDU.protoData.message.message.pinAuth->has_pin);
-    TEST_ASSERT_EQUAL_PTR(session.config.pin.data, PDU.protoData.message.message.pinAuth->pin.data);
-    TEST_ASSERT_EQUAL(session.config.pin.len, PDU.protoData.message.message.pinAuth->pin.len);
-}
-
-void test_KineticAuth_Populate_should_add_and_populate_HMAC_if_PIN_not_specified_in_session_configuration(void)
-{
+void test_KineticAuth_Populate_should_add_and_populate_HMAC_authentication(void)
+{ LOG_LOCATION;
     const char* hmacKey = "asdfasdf";
     KineticSession session = {
         .config = (KineticSessionConfig) {
@@ -213,6 +189,12 @@ void test_KineticAuth_Populate_should_add_and_populate_HMAC_if_PIN_not_specified
         }
     };
     strcpy((char*)session.config.keyData, hmacKey);
+    PDU.pinOp = false;
+
+    KineticHMAC_Init_Expect(&PDU.hmac,
+        KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Populate_Expect(&PDU.hmac,
+        &PDU.protoData.message.message, session.config.hmacKey);
 
     KineticStatus status = KineticAuth_Populate(&session.config, &PDU);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -228,4 +210,3 @@ void test_KineticAuth_Populate_should_add_and_populate_HMAC_if_PIN_not_specified
     TEST_ASSERT_TRUE(PDU.protoData.message.hmacAuth.has_identity);
     TEST_ASSERT_EQUAL(1, PDU.protoData.message.hmacAuth.identity);
 }
-#endif

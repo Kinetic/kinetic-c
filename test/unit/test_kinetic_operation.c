@@ -34,13 +34,11 @@
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_socket.h"
-#include "mock_kinetic_hmac.h"
 #include "mock_kinetic_auth.h"
 
 static KineticSessionConfig SessionConfig;
 static KineticSession Session;
 static KineticConnection Connection;
-static const int64_t ClusterVersion = 888777;
 static const int64_t ConnectionID = 12345;
 static KineticPDU Request, Response;
 static KineticPDU Requests[3];
@@ -49,17 +47,15 @@ static KineticOperation Operation;
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-    KINETIC_CONNECTION_INIT(&Connection);
-    Connection.connectionID = ConnectionID;
-    Session.connection = &Connection;
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection, ClusterVersion);
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection, ClusterVersion);
-    KINETIC_OPERATION_INIT(&Operation, &Connection);
-    Operation.request = &Request;
-    Operation.connection = &Connection;
+
+    KineticConnection_Init(&Connection);
     SessionConfig = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
-    Session = (KineticSession) {.config = SessionConfig, .connection = &Connection};
-    Connection.session = &Session;
+    KineticSession_Init(&Session, &SessionConfig, &Connection);
+    Connection.connectionID = ConnectionID;
+    KineticPDU_InitWithCommand(&Request, &Session);
+    KineticPDU_InitWithCommand(&Response, &Session);
+    KineticOperation_Init(&Operation, &Session);
+    Operation.request = &Request;
 }
 
 void tearDown(void)
@@ -67,7 +63,7 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
+void test_KineticOperation_Init_should_configure_the_operation(void)
 {
     KineticOperation op = {
         .connection = NULL,
@@ -75,7 +71,7 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
         .response = NULL,
     };
 
-    KINETIC_OPERATION_INIT(&op, &Connection);
+    KineticOperation_Init(&op, &Session);
 
     TEST_ASSERT_EQUAL_PTR(&Connection, op.connection);
     TEST_ASSERT_NULL(op.request);
@@ -167,8 +163,6 @@ void test_KineticOperation_SendRequest_should_transmit_PDU_with_no_value_payload
 
     // Setup expectations for interaction
     KineticAuth_Populate_ExpectAndReturn(&Request.connection->session->config, &Request, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message, Request.connection->session->config.hmacKey);
     KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
@@ -191,9 +185,6 @@ void test_KineticOperation_SendRequest_should_send_PDU_with_value_payload(void)
     Operation.sendValue = true;
 
     KineticAuth_Populate_ExpectAndReturn(&Request.connection->session->config, &Request, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac,
-        &Request.protoData.message.message, Request.connection->session->config.hmacKey);
     KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
@@ -217,9 +208,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     Operation.sendValue = true;
 
     KineticAuth_Populate_ExpectAndReturn(&Request.connection->session->config, &Request, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message,
-        Request.connection->session->config.hmacKey);
     KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SOCKET_ERROR);
     KineticSocket_FinishPacket_Expect(Connection.socket);
@@ -242,9 +230,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     Operation.sendValue = true;
 
     KineticAuth_Populate_ExpectAndReturn(&Request.connection->session->config, &Request, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac,
-        &Request.protoData.message.message, Request.connection->session->config.hmacKey);
     KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SOCKET_TIMEOUT);
@@ -269,8 +254,6 @@ void test_KineticOperation_SendRequest_should_send_the_specified_message_and_ret
     Operation.sendValue = true;
 
     KineticAuth_Populate_ExpectAndReturn(&Request.connection->session->config, &Request, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message, Request.connection->session->config.hmacKey);
     KineticSocket_BeginPacket_Expect(Connection.socket);
     KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
     KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
@@ -347,10 +330,10 @@ void test_KineticOperation_AssociateResponseWithOperation_should_return_NULL_if_
 
     KineticOperation ops[3];
     for(int i = 0; i < 3; i++) {
-        KINETIC_PDU_INIT_WITH_COMMAND(&Requests[i], &Connection, ClusterVersion);
+        KineticPDU_InitWithCommand(&Requests[i], &Session);
         Requests[i].command->header->has_sequence = true;
         Requests[i].type = KINETIC_PDU_TYPE_REQUEST;
-        KINETIC_OPERATION_INIT(&ops[i], &Connection);
+        KineticOperation_Init(&ops[i], &Session);
     }
 
     // Empty operations list should result in NULL being returned (no match)

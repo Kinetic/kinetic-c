@@ -238,7 +238,7 @@ void* KineticController_ReceiveThread(void* thread_arg)
             continue;
         } 
 
-        if (service_controller(thread->connection) != KINETIC_STATUS_SUCCESS) {
+        if (service_controller(thread->session->connection) != KINETIC_STATUS_SUCCESS) {
             thread->fatalError = true;
         }
     }

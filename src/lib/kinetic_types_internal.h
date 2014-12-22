@@ -76,7 +76,7 @@ typedef struct _KineticThread {
     bool abortRequested;
     bool fatalError;
     bool paused;
-    KineticConnection* connection;
+    KineticSession* session;
 } KineticThread;
 
 
@@ -89,18 +89,10 @@ struct _KineticConnection {
     int64_t         sequence;       // increments for each request in a session
     KineticList     pdus;           // list of dynamically allocated PDUs
     KineticList     operations;     // list of dynamically allocated operations
-    KineticSession* session;        // session configuration
+    KineticSession const * session;        // session configuration
     KineticThread   thread;         // worker thread instance struct
     pthread_t       threadID;       // worker pthread
 };
-#define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
-        .connected = false, \
-        .socket = -1, \
-        .writeMutex = PTHREAD_MUTEX_INITIALIZER, \
-        .operations = KINETIC_LIST_INITIALIZER, \
-        .pdus = KINETIC_LIST_INITIALIZER, \
-    }; \
-}
 
 
 // Kinetic Message HMAC
@@ -132,42 +124,6 @@ typedef struct _KineticMessage {
     KineticProto_Command_GetLog_Type             getLogType;
     KineticProto_Command_PinOperation            pinOp;
 } KineticMessage;
-
-#define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac) { \
-    assert((_msg) != NULL); \
-    (_msg)->message.has_authType = true; \
-    (_msg)->message.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH; \
-    KineticProto_Message_hmacauth__init(&(_msg)->hmacAuth); \
-    (_msg)->message.hmacAuth = &(_msg)->hmacAuth; \
-    KineticProto_Message_pinauth__init(&(_msg)->pinAuth); \
-    (_msg)->message.pinAuth = NULL; \
-    /*(_msg)->command.header = &(_msg)->header;*/ \
-    memset((_msg)->hmacData, 0, KINETIC_HMAC_MAX_LEN); \
-    if ((_hmac).len <= KINETIC_HMAC_MAX_LEN \
-        && (_hmac).data != NULL && (_hmac).len > 0 \
-        && (_msg)->hmacData != NULL) { \
-        memcpy((_msg)->hmacData, (_hmac).data, (_hmac).len);} \
-    (_msg)->message.hmacAuth->has_identity = true; \
-    (_msg)->message.hmacAuth->identity = (_identity); \
-    (_msg)->message.hmacAuth->has_hmac = true; \
-    (_msg)->message.hmacAuth->hmac = (ProtobufCBinaryData) { \
-        .data = (_msg)->hmacData, .len = SHA_DIGEST_LENGTH}; \
-}
-
-#define KINETIC_MESSAGE_INIT(msg) { \
-    KineticProto_Message__init(&(msg)->message); \
-    KineticProto_command__init(&(msg)->command); \
-    KineticProto_Message_hmacauth__init(&(msg)->hmacAuth); \
-    KineticProto_Message_pinauth__init(&(msg)->pinAuth); \
-    KineticProto_command_header__init(&(msg)->header); \
-    KineticProto_command_status__init(&(msg)->status); \
-    KineticProto_command_body__init(&(msg)->body); \
-    KineticProto_command_key_value__init(&(msg)->keyValue); \
-    KineticProto_command_range__init(&(msg)->keyRange); \
-    KineticProto_command_get_log__init(&(msg)->getLog); \
-    KineticProto_command_pin_operation__init(&(msg)->pinOp); \
-    KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
-}
 
 // Kinetic PDU Header
 #define PDU_HEADER_LEN              (1 + (2 * sizeof(int32_t)))
@@ -220,33 +176,6 @@ struct _KineticPDU {
     KineticOperation* operation;
 };
 
-#define KINETIC_PDU_INIT(_pdu, _con) { \
-    assert((_pdu) != NULL); \
-    assert((_con) != NULL); \
-    memset((_pdu), 0, sizeof(KineticPDU)); \
-    (_pdu)->connection = (_con); \
-    KINETIC_MESSAGE_INIT(&((_pdu)->protoData.message)); \
-}
-
-#define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con, _cluster) { \
-    KINETIC_PDU_INIT((_pdu), (_con)) \
-    (_pdu)->type = KINETIC_PDU_TYPE_REQUEST; \
-    (_pdu)->proto = &(_pdu)->protoData.message.message; \
-    (_pdu)->protoData.message.has_command = true; \
-    (_pdu)->protoData.message.message.has_commandBytes = false; \
-    (_pdu)->protoData.message.message.commandBytes.len = 0; \
-    (_pdu)->protoData.message.message.commandBytes.data = NULL; \
-    (_pdu)->command = &(_pdu)->protoData.message.command; \
-    (_pdu)->command->header = &(_pdu)->protoData.message.header; \
-    KineticProto_command_header__init((_pdu)->command->header); \
-    (_pdu)->command->header->has_clusterVersion = true, \
-    (_pdu)->command->header->has_connectionID = true; \
-    (_pdu)->command->header->connectionID = (_con)->connectionID; \
-    (_pdu)->command->header->has_sequence = true; \
-    (_pdu)->command->header->sequence = (_con)->sequence; \
-    (_pdu)->command->header->clusterVersion = (_cluster); \
-}
-
 typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operation, KineticStatus const status);
 
 // Kinetic Operation
@@ -265,13 +194,6 @@ struct _KineticOperation {
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
 };
-#define KINETIC_OPERATION_INIT(_op, _con) \
-    assert((_op) != NULL); \
-    assert((_con) != NULL); \
-    *(_op) = (KineticOperation) { \
-        .connection = (_con), \
-        .timeoutTimeMutex = PTHREAD_MUTEX_INITIALIZER, \
-    }
 
 // Kintic Serial Allocator
 // Used for allocating a contiguous hunk of memory to hold arbitrary variable-length response data
@@ -311,5 +233,12 @@ int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b);
 KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type);
 
 KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type);
+
+void KineticConnection_Init(KineticConnection* const con);
+void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con);
+void KineticMessage_Init(KineticMessage* const message);
+void KineticOperation_Init(KineticOperation* op, KineticSession const * const session);
+void KineticPDU_Init(KineticPDU* pdu, KineticSession const * const session);
+void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

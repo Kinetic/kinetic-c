@@ -25,8 +25,6 @@ static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
 static uint8_t TagData[1024];
 static ByteBuffer TagBuffer;
-static uint8_t VersionData[1024];
-static ByteBuffer VersionBuffer;
 static ByteArray TestValue;
 static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
@@ -37,7 +35,6 @@ void setUp(void)
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "DELETE test key");
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
-    VersionBuffer = ByteBuffer_CreateAndAppendCString(VersionData, sizeof(VersionData), "v1.0");
     TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
     ValueBuffer = ByteBuffer_CreateAndAppendCString(ValueData, sizeof(ValueData), "lorem ipsum... blah blah blah... etc.");
 }
@@ -94,7 +91,6 @@ void test_Delete_should_delete_an_object_from_device(void)
     // Validate the object no longer exists
     KineticEntry regetEntryMetadata = {
         .key = KeyBuffer,
-        .dbVersion = VersionBuffer,
         .metadataOnly = true,
     };
     status = KineticClient_Get(&Fixture.session, &regetEntryMetadata, NULL);

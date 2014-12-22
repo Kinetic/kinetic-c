@@ -149,16 +149,20 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
 {
     LOG_LOCATION;
     KineticConnection connection;
-    KINETIC_CONNECTION_INIT(&connection);
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .clusterVersion = 12345678,
-            .identity = -12345678,
-        },
-        .connection = &connection,
+    KineticSessionConfig config = {
+        .clusterVersion = 12345678,
+        .identity = -12345678,
     };
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection, session.config.identity);
+    KineticSession session;
+    KineticSession_Init(&session, &config, &connection);
+    KineticPDU_InitWithCommand(&PDU, &session);
+    KineticMessage_Init(&PDU.protoData.message);
+
+    // Populate some arbitrary part of the proto to get some data
+    PDU.protoData.message.message.has_authType = true;
+    PDU.protoData.message.message.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH;
     PDU.header.protobufLength = KineticProto_Message__get_packed_size(PDU.proto);
+    TEST_ASSERT_TRUE_MESSAGE(PDU.header.protobufLength > 0, "Must have some data in the protobuf for this test!");
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
@@ -172,7 +176,6 @@ void test_KineticSocket_WriteProtobuf_should_write_serialized_protobuf_to_the_sp
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(
         KINETIC_STATUS_SUCCESS, status, "Failed to write to socket!");
 }
-
 
 void test_KineticSocket_DataBytesAvailable_should_report_receive_pipe_status(void)
 {
@@ -257,17 +260,14 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
 {
     LOG_LOCATION;
 
-    KineticConnection connection;
-    KINETIC_CONNECTION_INIT(&connection);
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .clusterVersion = 12345678,
-            .identity = -12345678,
-        },
-        .connection = &connection,
+    KineticSessionConfig config = {
+        .clusterVersion = 12345678,
+        .identity = -12345678,
     };
-    connection.session = &session;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &connection, session.config.identity);
+    KineticConnection connection;
+    KineticSession session;
+    KineticSession_Init(&session, &config, &connection);
+    KineticPDU_InitWithCommand(&PDU, &session);
 
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
@@ -280,7 +280,8 @@ void test_KineticSocket_ReadProtobuf_should_read_the_specified_length_of_an_enco
     Socket_RequestProtobuf();
 
     // Receive the response
-    KINETIC_PDU_INIT(&PDU, &connection);
+    KineticPDU_Init(&PDU, &session);
+    PDU.header.protobufLength = 125;
     TEST_ASSERT_FALSE(PDU.protobufDynamicallyExtracted);
     TEST_ASSERT_NULL(PDU.proto);
     KineticStatus status = KineticSocket_ReadProtobuf(FileDesc, &PDU);
@@ -302,8 +303,14 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
 {
     LOG_LOCATION;
 
+    KineticSessionConfig config = {
+        .clusterVersion = 12345678,
+        .identity = -12345678,
+    };
     KineticConnection connection;
-    KINETIC_CONNECTION_INIT(&connection);
+    KineticSession session;
+    KineticSession_Init(&session, &config, &connection);
+
     FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
     TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 
@@ -314,8 +321,9 @@ void test_KineticSocket_ReadProtobuf_should_return_false_if_KineticProto_of_spec
     TEST_ASSERT_EQUAL_KineticStatus_MESSAGE(KINETIC_STATUS_SUCCESS, status,
                                             "Failed sending protobuf read request");
 
-    // Receive the dummy protobuf response, but expect too much data to force timeout
-    KINETIC_PDU_INIT(&PDU, &connection);
+    // Receive the dummy protobuf response, but expect too much data
+    // to cause timeout
+    KineticPDU_Init(&PDU, &session);
     PDU.header.protobufLength = 1000;
     TEST_ASSERT_FALSE(PDU.protobufDynamicallyExtracted);
     TEST_ASSERT_NULL(PDU.proto);

@@ -19,6 +19,7 @@
 */
 
 #include "kinetic_auth.h"
+#include "kinetic_hmac.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
 
@@ -85,6 +86,10 @@ void auth_add_hmac(KineticSessionConfig const * const config, KineticPDU * const
     msg->hmacAuth->has_hmac = true;
     msg->hmacAuth->identity = config->identity;
     msg->hmacAuth->has_identity = true;
+
+    // Populate with hashed HMAC
+    KineticHMAC_Init(&pdu->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Populate(&pdu->hmac, pdu->proto, config->hmacKey);
 }
 
 KineticStatus KineticAuth_Populate(KineticSessionConfig const * const config, KineticPDU * const pdu)

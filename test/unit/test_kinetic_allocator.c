@@ -29,14 +29,15 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+KineticSessionConfig Config;
 KineticConnection Connection;
 KineticSession Session;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-    KINETIC_CONNECTION_INIT(&Connection);
-
+    KineticSessionConfig config = {};
+    KineticSession_Init(&Session, &config, &Connection);
     KineticAllocator_InitLists(&Connection);
 
     pthread_mutex_t expectedMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -75,8 +76,6 @@ void test_KineticAllocator_can_create_and_destroy_connections_dynamically(void)
     TEST_ASSERT_EQUAL(-1, connection->socket);
     KineticAllocator_FreeConnection(connection);
 }
-
-
 
 void test_KineticAllocator_ValidateAllMemoryFreed_should_return_true_if_all_allocated_things_have_been_freed(void)
 {
@@ -145,7 +144,6 @@ void test_KineticAllocator_GetNextPDU_should_return_the_next_PDU_in_the_list(voi
 void test_KineticAllocator_FreeAll_should_free_full_list_of_PDUs(void)
 {
     LOG_LOCATION;
-    KINETIC_CONNECTION_INIT(&Connection);
 
     KineticAllocator_NewPDU(&Connection);
     KineticAllocator_NewPDU(&Connection);

@@ -67,7 +67,9 @@ KineticStatus KineticPDU_ReceiveMain(KineticPDU* const response)
     }
 
     // Validate the HMAC for the recevied protobuf message
-    if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH) {
+    if (response->proto->has_authType &&
+        response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH) 
+    {
         KineticLogger_LogProtobuf(2, response->proto);
         if(!KineticHMAC_Validate(
           response->proto, response->connection->session->config.hmacKey)) {

@@ -40,7 +40,6 @@ static KineticPDU PDU;
 static const int64_t ClusterVersion = 8;
 static KineticConnection Connection;
 static KineticSession Session;
-static ByteArray Key;
 static uint8_t ValueBuffer[KINETIC_OBJ_SIZE];
 static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 
@@ -69,22 +68,16 @@ void setUp(void)
     KineticLogger_Init("stdout", 3);
 
     // Create and configure a new Kinetic protocol instance
-    Key = ByteArray_CreateWithCString("some valid HMAC key...");
-    Session = (KineticSession) {
-        .config = (KineticSessionConfig) {
-            .port = 1234,
-            .host = "valid-host.com",
-            .hmacKey = (ByteArray) {.data = &Session.config.keyData[0], .len = Key.len},
-        }
+    KineticSessionConfig config = {
+        .port = 1234,
+        .host = "valid-host.com",
+        .hmacKey = ByteArray_CreateWithCString("some valid HMAC key..."),
+        .clusterVersion = ClusterVersion,
     };
-    memcpy(Session.config.hmacKey.data, Key.data, Key.len);
-
-    KINETIC_CONNECTION_INIT(&Connection);
+    KineticSession_Init(&Session, &config, &Connection);
     Connection.connected = true;
     Connection.socket = 456;
-    Connection.session = &Session;
-
-    KINETIC_PDU_INIT(&PDU, &Connection);
+    KineticPDU_Init(&PDU, &Session);
     ByteArray_FillWithDummyData(Value);
 }
 
@@ -119,53 +112,44 @@ void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_v
 }
 
 
-void test_KINETIC_PDU_INIT_should_populate_the_PDU_and_buffer_with_the_supplied_buffer(void)
+void test_KineticPDU_Init_should_populate_the_PDU_and_buffer_with_the_supplied_buffer(void)
 {
     LOG_LOCATION;
 
-    KINETIC_PDU_INIT(&PDU, &Connection);
+    KineticPDU_Init(&PDU, &Session);
 
-    // Validate KineticExchange associated
     TEST_ASSERT_EQUAL_PTR(&Connection, PDU.connection);
 }
 
-// void test_KINETIC_PDU_INIT_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
-// {
-//     LOG_LOCATION;
-//     KINETIC_CONNECTION_INIT(&Connection);
-//     Connection.sequence = 24;
-//     Connection.connectionID = 8765432;
-//     Session = (KineticSession) {
-//         .config = (KineticSessionConfig) {
-//             .clusterVersion = 1122334455667788,
-//             .identity = 37,
-//         }
-//     };
-//     Connection.session = &Session;
-//     KINETIC_PDU_INIT(&PDU, &Connection);
 
-//     TEST_ASSERT_TRUE(PDU.protoData.message.header.has_clusterVersion);
-//     TEST_ASSERT_EQUAL_INT64(1122334455667788, PDU.protoData.message.header.clusterVersion);
-//     TEST_ASSERT_TRUE(PDU.protoData.message.header.has_connectionID);
-//     TEST_ASSERT_EQUAL_INT64(8765432, PDU.protoData.message.header.connectionID);
-//     TEST_ASSERT_TRUE(PDU.protoData.message.header.has_sequence);
-//     TEST_ASSERT_EQUAL_INT64(24, PDU.protoData.message.header.sequence);
-// }
-
-
-
-void test_KINETIC_PDU_INIT_WITH_COMMAND_should_initialize_PDU_and_protobuf_message(void)
+void test_KineticPDU_Init_should_initialize_PDU(void)
 {
     LOG_LOCATION;
-    memset(&PDU, 0, sizeof(KineticPDU));
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &Connection, ClusterVersion);
+    KineticPDU_Init(&PDU, &Session);
+}
 
-    PDU.protoData.message.status.code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY;
-    PDU.protoData.message.command.status = &PDU.protoData.message.status;
+void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
+{
+    LOG_LOCATION;
+    KineticConnection_Init(&Connection);
+    Connection.sequence = 24;
+    Connection.connectionID = 8765432;
+    Session = (KineticSession) {
+        .config = (KineticSessionConfig) {
+            .clusterVersion = 1122334455667788,
+            .identity = 37,
+        }
+    };
+    Connection.session = &Session;
+    Session.connection = &Connection;
+    KineticPDU_InitWithCommand(&PDU, &Session);
 
-    TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY,
-        PDU.protoData.message.command.status->code);
+    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(1122334455667788, PDU.protoData.message.header.clusterVersion);
+    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_connectionID);
+    TEST_ASSERT_EQUAL_INT64(8765432, PDU.protoData.message.header.connectionID);
+    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_sequence);
+    TEST_ASSERT_EQUAL_INT64(24, PDU.protoData.message.header.sequence);
 }
 
 
@@ -174,9 +158,11 @@ void test_KineticPDU_ReceiveMain_should_return_true_upon_receipt_of_valid_header
 {
     LOG_LOCATION;
     Connection.connectionID = 98765;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &Connection, ClusterVersion);
+    KineticPDU_InitWithCommand(&PDU, &Session);
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
     int32_t valueLen = 123;
+    PDU.proto->has_authType = true;
+    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
     KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
@@ -197,8 +183,10 @@ void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_value_payload_
 {
     LOG_LOCATION;
     Connection.connectionID = 98765;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &Connection, ClusterVersion);
+    KineticPDU_InitWithCommand(&PDU, &Session);
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
+    PDU.proto->has_authType = true;
+    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
     KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
@@ -217,7 +205,9 @@ void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_value_payload_
 void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_payload_and_return_PDU_status_upon_successful_receipt_of_PDU(void)
 {
     LOG_LOCATION;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &Connection, ClusterVersion);
+    KineticPDU_InitWithCommand(&PDU, &Session);
+    PDU.proto->has_authType = true;
+    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
     PDU.protoData.message.status.code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR;
     PDU.protoData.message.status.has_code = true;
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
@@ -239,7 +229,7 @@ void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_payload_and_re
 void test_KineticPDU_ReceiveMain_should_receive_a_message_for_the_exchange_and_return_false_upon_failure_to_read_header(void)
 {
     LOG_LOCATION;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &Connection, ClusterVersion);
+    KineticPDU_InitWithCommand(&PDU, &Session);
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
 
     KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_CONNECTION_ERROR);
@@ -252,15 +242,7 @@ void test_KineticPDU_ReceiveMain_should_receive_a_message_for_the_exchange_and_r
 void test_KineticPDU_ReceiveMain_should_receive_a_message_for_the_exchange_and_return_false_upon_failure_to_read_protobuf(void)
 {
     LOG_LOCATION;
-
-    PDU.protoData.message.status.code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR;
-    PDU.protoData.message.status.has_code = true;
-
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
-    PDU.headerNBO = (KineticPDUHeader) {
-        .versionPrefix = (uint8_t)'F',
-        .protobufLength = KineticNBO_FromHostU32(12),
-    };
 
     KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
     KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_DEVICE_BUSY);
@@ -273,7 +255,7 @@ void test_KineticPDU_ReceiveMain_should_receive_a_message_for_the_exchange_and_r
 void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_authentication_type(void)
 {
     LOG_LOCATION;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &Connection, ClusterVersion);
+    KineticPDU_InitWithCommand(&PDU, &Session);
     EnableAndSetPDUStatus(&PDU, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS);
     PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
     PDU.proto->hmacAuth = NULL;
@@ -299,15 +281,15 @@ void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_authentication
     KineticStatus status = KineticPDU_ReceiveMain(&PDU);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS,
-        PDU.protoData.message.status.code);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS, PDU.protoData.message.status.code);
 }
 
 void test_KineticPDU_ReceiveMain_should_receive_a_message_for_the_exchange_and_return_false_upon_HMAC_validation_failure(void)
 {
     LOG_LOCATION;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &Connection, ClusterVersion);
+    KineticPDU_InitWithCommand(&PDU, &Session);
+    PDU.proto->has_authType = true;
+    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
     ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
 
     KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
@@ -440,7 +422,7 @@ void test_KineticPDU_GetKeyValue_should_return_NULL_message_has_no_KeyValue(void
 
 void test_KineticPDU_GetKeyRange_should_return_the_KineticProto_Command_Range_from_the_message_if_avaliable(void)
 { LOG_LOCATION;
-    KINETIC_PDU_INIT_WITH_COMMAND(&PDU, &Connection, ClusterVersion);
+    KineticPDU_InitWithCommand(&PDU, &Session);
     KineticProto_Command_Range* range;
 
     PDU.command->body = NULL;

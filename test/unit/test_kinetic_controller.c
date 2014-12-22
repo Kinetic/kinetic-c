@@ -36,7 +36,6 @@
 
 
 static KineticPDU Response;
-static const int64_t clusterVersion = 7;
 
 void setUp(void)
 {
@@ -51,14 +50,13 @@ void tearDown(void)
 
 void test_KineticController_HandleIncomingPDU_should_process_unsolicited_response_PDUs(void)
 {
-    KineticConnection connection = {
-        .connected = true,
-        .socket = 123,
-        .connectionID = 0,
-    };
-
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection, clusterVersion);
+    KineticSessionConfig config = {};
+    KineticConnection connection;
+    KineticSession session;
+    KineticSession_Init(&session, &config, &connection);
+    KineticPDU_InitWithCommand(&Response, &session);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
+    Response.proto->has_authType = true;
     Response.command->header->has_connectionID = true;
     Response.command->header->connectionID = 11223344;
 
@@ -68,22 +66,21 @@ void test_KineticController_HandleIncomingPDU_should_process_unsolicited_respons
 
     KineticController_HandleIncomingPDU(&connection);
 
-    TEST_ASSERT_EQUAL_INT64(connection.connectionID, 11223344);
+    TEST_ASSERT_EQUAL_INT64(11223344, connection.connectionID);
 }
 
 void test_KineticController_HandleIncomingPDU_should_process_solicited_response_PDUs_without_value_payload(void)
 {
-    KineticConnection connection = {
-        .connected = true,
-        .socket = 123,
-        .connectionID = 11223344,
-    };
+    KineticSessionConfig config = {};
+    KineticConnection connection;
+    KineticSession session;
+    KineticSession_Init(&session, &config, &connection);
 
     KineticOperation op;
-    KINETIC_OPERATION_INIT(&op, &connection);
-
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection, clusterVersion);
+    KineticOperation_Init(&op, &session);
+    KineticPDU_InitWithCommand(&Response, &session);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    Response.proto->has_authType = true;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
@@ -97,22 +94,23 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
 
 void test_KineticController_HandleIncomingPDU_should_process_solicited_response_PDUs_with_value_payload_with_no_callback_configured(void)
 {
-    KineticConnection connection = {
-        .connected = true,
-        .socket = 123,
-        .connectionID = 11223344,
-    };
+    KineticSessionConfig config = {};
+    KineticConnection connection;
+    KineticSession session;
+    KineticSession_Init(&session, &config, &connection);
 
     KineticOperation op;
-    KINETIC_OPERATION_INIT(&op, &connection);
+    KineticOperation_Init(&op, &session);
     op.callback = NULL;
 
     uint8_t valueData[10];
     KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
     op.entry = &entry;
 
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection, clusterVersion);
+    // TODO: need to supply clusterVersion via session/config
+    KineticPDU_InitWithCommand(&Response, &session);
     Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    Response.proto->has_authType = true;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
@@ -142,18 +140,20 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
         .socket = 123,
         .connectionID = 11223344,
     };
+    KineticSession session = {
+        .connection = &connection,
+    };
 
     KineticOperation op;
-    KINETIC_OPERATION_INIT(&op, &connection);
+    KineticOperation_Init(&op, &session);
     op.callback = &DummyOpCallback;
     DummyOpCallbackCalls = 0;
-
+    KineticPDU_InitWithCommand(&Response, &session);
+    Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    Response.proto->has_authType = true;
     uint8_t valueData[10];
     KineticEntry entry = {.value = ByteBuffer_Create(valueData, sizeof(valueData), 0)};
     op.entry = &entry;
-
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &connection, clusterVersion);
-    Response.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
 
     KineticAllocator_NewPDU_ExpectAndReturn(&connection, &Response);
     KineticPDU_ReceiveMain_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
@@ -168,27 +168,27 @@ void test_KineticController_HandleIncomingPDU_should_process_solicited_response_
     TEST_ASSERT_EQUAL(1, DummyOpCallbackCalls);
 }
 
-// void test_KineticController_Init_should_create_and_kickoff_worker_threads(void)
-// {
-//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Init");
-// }
-
-// void test_KineticController_ExecuteOperation_should_execute_the_specified_operation(void)
-// {
-//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_ExecuteOperation");
-// }
-
-// void test_KineticController_Pause_should_pause_worker_threads_when_paused(void)
-// {
-//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Pause");
-// }
-
-// void test_KineticController_ReceiveThread_should_service_response_PDUs(void)
-// {
-//     TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_ReceiveThread");
-// }
-
 #if 0
+void test_KineticController_Init_should_create_and_kickoff_worker_threads(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Init");
+}
+
+void test_KineticController_ExecuteOperation_should_execute_the_specified_operation(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_ExecuteOperation");
+}
+
+void test_KineticController_Pause_should_pause_worker_threads_when_paused(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_Pause");
+}
+
+void test_KineticController_ReceiveThread_should_service_response_PDUs(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Add unit tests for KineticController_ReceiveThread");
+}
+
 void test_KineticSession_Worker_should_run_fine_while_no_data_arrives(void)
 {
     LOG_LOCATION;

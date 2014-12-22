@@ -171,18 +171,14 @@ void test_GetLog_should_retrieve_limits_from_device(void)
 void test_GetLog_should_retrieve_device_info_from_device(void)
 { LOG_LOCATION;
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_DEVICE, &Info, NULL);
-    if (Status == KINETIC_STATUS_NOT_FOUND) {
-        TEST_IGNORE_MESSAGE("Java simulator currently does NOT support GETLOG 'DEVICE' info attribute!");
-    }
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, Status);
+    // TEST_ASSERT_NOT_NULL(Info->device);
+    // TEST_ASSERT_NOT_NULL(Info->device->name.data);
+    // TEST_ASSERT_TRUE(Info->device->name.len > 0);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
-    TEST_ASSERT_NOT_NULL(Info->device);
-    TEST_ASSERT_NOT_NULL(Info->device->name.data);
-    TEST_ASSERT_TRUE(Info->device->name.len > 0);
-
-    LOG0("Device Data:");
-    BYTES_TO_CSTRING(Buffer, Info->device->name, 0, Info->device->name.len);
-    LOGF0("  name: %s", Buffer);
+    // LOG0("Device Data:");
+    // BYTES_TO_CSTRING(Buffer, Info->device->name, 0, Info->device->name.len);
+    // LOGF0("  name: %s", Buffer);
 }
 
 /*******************************************************************************

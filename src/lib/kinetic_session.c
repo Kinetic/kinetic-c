@@ -44,8 +44,9 @@ KineticStatus KineticSession_Create(KineticSession * const session)
         return KINETIC_STATUS_MEMORY_ERROR;
     }
 
-    KINETIC_CONNECTION_INIT(session->connection);
+    KineticConnection_Init(session->connection);
     session->connection->session = session;
+    session->connection->thread.session = session;
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -88,7 +89,6 @@ KineticStatus KineticSession_Connect(KineticSession * const session)
     }
 
     // Kick off the worker thread
-    session->connection->thread.connection = connection;
     KineticController_Init(session);
 
     connection->session = session; // TODO: refactor out this duplicate pointer/reference to session

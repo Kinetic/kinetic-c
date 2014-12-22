@@ -61,11 +61,14 @@ void test_KineticClient_Init_should_initialize_the_logger(void)
 
 static void ConnectSession(void)
 {
-    KINETIC_CONNECTION_INIT(&Connection);
-    Connection.connected = false; // Ensure gets set appropriately by internal connect call
-    HmacKey = ByteArray_CreateWithCString("some hmac key");
-    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
-    Session.connection = &Connection;
+    KineticSessionConfig config = {
+        .port = 1234,
+        .host = "somehost.com",
+        .hmacKey = ByteArray_CreateWithCString("some valid HMAC key..."),
+        .clusterVersion = ClusterVersion,
+        .identity = Identity,
+    };
+    KineticSession_Init(&Session, &config, &Connection);
 
     KineticSession_Create_ExpectAndReturn(&Session, KINETIC_STATUS_SUCCESS);
     KineticSession_Connect_ExpectAndReturn(&Session, KINETIC_STATUS_SUCCESS);
