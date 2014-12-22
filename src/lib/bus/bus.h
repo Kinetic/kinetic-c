@@ -42,13 +42,15 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg);
 /* Get the string key for a log event ID. */
 const char *bus_log_event_str(log_event_t event);
 
-
 /* Register a socket connected to an endpoint, and data that will be passed
- * to all interactions on that socket. 
+ * to all interactions on that socket.
  * 
  * The socket will have request -> response messages with timeouts, as
- * well as unsolicited status messages. */
-bool bus_register_socket(struct bus *b, int fd, void *socket_udata);
+ * well as unsolicited status messages.
+ *
+ * If USES_SSL is true, then the function will block until the initial
+ * SSL/TLS connection handshake has completed. */
+bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *socket_udata);
 
 /* Begin shutting the system down. Returns true once everything pending
  * has resolved. */

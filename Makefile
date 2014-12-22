@@ -39,7 +39,7 @@ BUS_PATH = ${LIB_DIR}/bus
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR) \
-	-I$(THREADPOOL_PATH) -I$(BUS_PATH)
+	-I$(THREADPOOL_PATH) -I$(BUS_PATH) -I${OPENSSL_PATH}/include
 
 C_SRC=${LIB_DIR}/*.[ch] $(SOCKET99)/socket99.[ch] $(PROTOBUFC)/protobuf-c/protobuf-c.[ch]
 
@@ -65,6 +65,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/threadpool.o \
 	$(OUT_DIR)/bus.o \
+	$(OUT_DIR)/bus_ssl.o \
 	$(OUT_DIR)/casq.o \
 	$(OUT_DIR)/listener.o \
 	$(OUT_DIR)/sender.o \
@@ -121,7 +122,7 @@ $(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpoo
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 $(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
-	$(CC) -o $@ -c $< $(CFLAGS) -I${THREADPOOL_PATH} -I${BUS_PATH}
+	$(CC) -o $@ -c $< $(CFLAGS) -I${THREADPOOL_PATH} -I${BUS_PATH} ${LIB_INCS}
 
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
@@ -171,6 +172,14 @@ ${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
 ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
 	cd ${LIB_DIR}/threadpool && make all
 	cp ${LIB_DIR}/threadpool/libthreadpool.a $@
+
+
+#-------------------------------------------------------------------------------
+# SSL/TLS Library Options
+#-------------------------------------------------------------------------------
+
+# FIXME: Currently OSX specific, rework before integration.
+OPENSSL_PATH=	/usr/local/Cellar/openssl/1.0.1j_1
 
 
 #-------------------------------------------------------------------------------
@@ -257,7 +266,7 @@ stop_simulator:
 
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
-SYSTEST_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+SYSTEST_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl -lcrypto $(KINETIC_LIB) -l pthread
 SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
 UNITY_INC = ./vendor/unity/src
@@ -341,7 +350,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm -lssl $(KINETIC_LIB) -lcrypto -lpthread
+UTIL_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl $(KINETIC_LIB) -lcrypto -lpthread
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)

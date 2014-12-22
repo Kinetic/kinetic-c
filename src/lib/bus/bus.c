@@ -32,6 +32,7 @@
 #include "listener.h"
 #include "threadpool.h"
 #include "bus_internal_types.h"
+#include "bus_ssl.h"
 
 /* Function pointers for pthreads. */
 void *listener_mainloop(void *arg);
@@ -83,6 +84,8 @@ bool bus_init(bus_config *config, struct bus_result *res) {
 
     bus *b = calloc(1, sizeof(*b));
     if (b == NULL) { goto cleanup; }
+
+    if (!bus_ssl_init(b)) { goto cleanup; }
 
     b->sink_cb = config->sink_cb;
     b->unpack_cb = config->unpack_cb;
@@ -344,7 +347,7 @@ const char *bus_log_event_str(log_event_t event) {
     }
 }
 
-bool bus_register_socket(struct bus *b, int fd, void *udata) {
+bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) {
     /* Register a socket internally with a listener. */
     int l_id = listener_id_of_socket(b, fd);
 
@@ -366,9 +369,17 @@ bool bus_register_socket(struct bus *b, int fd, void *udata) {
     connection_info *ci = malloc(sizeof(*ci));
     if (ci == NULL) { goto cleanup; }
 
+    ci->type = type;
     ci->fd = fd;
     ci->to_read_size = 0;
     ci->udata = udata;
+
+    if (type == BUS_SOCKET_SSL) {
+        if (!bus_ssl_connect(b, ci)) {
+            free(ci);
+            return false;
+        }
+    }
 
     bool res = listener_add_socket(l, ci, pipe_in);
     if (!res) { goto cleanup; }
@@ -492,6 +503,8 @@ void bus_free(bus *b) {
     free(b->threads);
 
     pthread_mutex_destroy(&b->log_lock);
+
+    bus_ssl_free(b);
 
     free(b);
 }

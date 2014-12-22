@@ -411,7 +411,7 @@ static void run_bus(example_state *s, struct bus *b) {
     open_sockets(s);
 
     for (int i = 0; i < s->sockets_used; i++) {
-        bus_register_socket(b, s->sockets[i], s->info[i]);
+        bus_register_socket(b, BUS_SOCKET_PLAIN, s->sockets[i], s->info[i]);
     }
 
     bool should_send = true;

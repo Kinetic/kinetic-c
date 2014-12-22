@@ -9,6 +9,7 @@ LDFLAGS +=	-L. -lsocket99 -L${LIB_PATH} -lthreadpool
 
 BUS_OBJS = \
 	bus.o \
+	bus_ssl.o \
 	casq.o \
 	listener.o \
 	sender.o \

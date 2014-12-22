@@ -253,7 +253,7 @@ void *listener_mainloop(void *arg) {
             "poll res %d", res);
 
         if (res < 0) {
-            if (util_is_resumable_io_error) {
+            if (util_is_resumable_io_error(errno)) {
                 errno = 0;
             } else {
                 /* unrecoverable poll error -- FD count is bad

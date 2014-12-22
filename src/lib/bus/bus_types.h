@@ -202,8 +202,15 @@ typedef struct {
 
 typedef void (bus_msg_cb)(bus_msg_result_t *res, void *udata);
 
+typedef enum {
+    BUS_SOCKET_PLAIN,
+    BUS_SOCKET_SSL,
+} bus_socket_t;
+
 typedef struct {
     int fd;
+    bus_socket_t type;
+    bool use_SSL;
     uint64_t seq_id;
     uint8_t *msg;
     size_t msg_size;

@@ -38,9 +38,8 @@
 #include "sender_internal.h"
 
 static void set_error_for_socket(sender *s, int fd, tx_error_t error);
-static void attempt_to_resend_success(sender *s, tx_info_t *info);
 static void notify_message_failure(sender *s, tx_info_t *info, bus_send_status_t status);
-static void enqueue_message_to_listener(sender *s, tx_info_t *info);
+static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info);
 
 struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
     struct sender *s = calloc(1, sizeof(*s));
@@ -457,7 +456,7 @@ static void attempt_write(sender *s, int available) {
                     info->sent_size += wrsz;
                     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64, "wrote %zd", wrsz);
                     if (rem - wrsz == 0) { /* completed! */
-                        enqueue_message_to_listener(s, info);
+                        attempt_to_enqueue_message_to_listener(s, info);
                     }
                 }
             }
@@ -507,7 +506,7 @@ static void tick_handler(sender *s) {
                 notify_message_failure(s, info, BUS_SEND_TX_FAILURE);
             } else if (info->sent_size == info->box->out_msg_size) {
                 BUS_LOG(b, 5, LOG_SENDER, "attempting to re-send success", b->udata);
-                attempt_to_resend_success(s, info);
+                attempt_to_enqueue_message_to_listener(s, info);
             } else if (info->timeout_sec == 1) {
                 BUS_LOG(b, 2, LOG_SENDER, "notifying of tx failure -- timeout", b->udata);
                 notify_message_failure(s, info, BUS_SEND_TX_TIMEOUT);
@@ -521,51 +520,24 @@ static void tick_handler(sender *s) {
     }
 }
 
-static void enqueue_message_to_listener(sender *s, tx_info_t *info) {
+static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info) {
+    struct bus *b = s->bus;
     /* Notify listener that it should expect a response to a
      * successfully sent message. */
-    struct listener *l = bus_get_listener_for_socket(s->bus, info->fd);
-
-    uint16_t backpressure = 0;
-
-    struct bus *b = s->bus;
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
         "telling listener to expect response, with box %p", info->box);
+
+    struct listener *l = bus_get_listener_for_socket(s->bus, info->fd);
 
     struct boxed_msg *box = info->box;
     info->box = NULL;           /* passed on to listener */
 
+    uint16_t backpressure = 0;
     if (listener_expect_response(l, box, &backpressure)) {
         write_backpressure(s, info, backpressure);   /* alert blocked client thread */
         BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
         release_tx_info(s, info);
     } else {
-        BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);
-        info->box = box;    /* return it since we need to keep managing it */
-        info->retries++;
-        if (info->retries == SENDER_MAX_DELIVERY_RETRIES) {
-            notify_message_failure(s, info, BUS_SEND_RX_FAILURE);
-            BUS_LOG(b, 2, LOG_SENDER, "failed delivery, several retries", b->udata);
-        }
-    }
-}
-
-/* FIXME: refactor ^ and v because they're largely identical */
-
-static void attempt_to_resend_success(sender *s, tx_info_t *info) {
-    struct bus *b = s->bus;
-    BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
-    struct listener *l = bus_get_listener_for_socket(s->bus, info->fd);
-
-    struct boxed_msg *box = info->box;
-    info->box = NULL;           /* passed on to listener */
-
-    uint16_t backpressure = 0;
-    if (listener_expect_response(l, box, &backpressure)) {
-        write_backpressure(s, info, backpressure);   /* alert blocked client thread */
-        BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
-        release_tx_info(s, info);
-    } else {    /* failed to enqueue - retry N times and then cancel */
         BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);
         info->box = box;    /* return it since we need to keep managing it */
         info->retries++;
