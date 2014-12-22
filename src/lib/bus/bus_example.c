@@ -319,7 +319,7 @@ static void open_sockets(example_state *s) {
         socket99_result res;
 
         if (!socket99_open(&cfg, &res)) {
-            socket99_fprintf(stderr, &res);
+            // socket99_fprintf(stderr, &res);
             exit(1);
         }
 
