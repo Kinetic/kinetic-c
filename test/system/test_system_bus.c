@@ -288,7 +288,7 @@ void test_that_we_can_register_sockets(void)
 
     socket_info * si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     assert(si != NULL);
-    bool result = bus_register_socket(res.bus, fd, si);
+    bool result = bus_register_socket(res.bus, BUS_SOCKET_PLAIN, fd, si);
     assert(result);
 
     sleep(5);
