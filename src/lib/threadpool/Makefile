@@ -35,7 +35,7 @@ test: lib${PROJECT}.a ./test_${PROJECT}
 	./test_${PROJECT}
 
 clean:
-	rm -f ${PROJECT} test_${PROJECT} test_${PROJECT}_stress test_${PROJECT}_sequencing.c *.o *.a *.core
+	rm -f ${PROJECT} test_${PROJECT} test_${PROJECT}_stress test_${PROJECT}_sequencing *.o *.a *.core
 
 # Installation
 PREFIX ?=	/usr/local

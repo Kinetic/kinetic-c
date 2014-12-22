@@ -39,7 +39,6 @@ static KineticSession Session;
 static KineticConnection Connection;
 static const int64_t ClusterVersion = 1234;
 static const int64_t Identity = 47;
-static ByteArray HmacKey;
 
 void setUp(void)
 {

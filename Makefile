@@ -166,7 +166,7 @@ test_bus: test_threadpool ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a
 #-------------------------------------------------------------------------------
 
 ${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
-	cd ${SOCKET99} && make all
+	cd ${SOCKET99} && make CDEFS=\"-D_C99_SOURCE=1\" all
 	cp ${SOCKET99}/libsocket99.a $@
 
 ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
@@ -311,7 +311,7 @@ unit_tests: start_simulator $(unit_passfiles)
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
 SYSTEST_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
-SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes -Wno-nonnull
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
 
 systest_sources = $(wildcard $(SYSTEST_SRC)/*.c)
