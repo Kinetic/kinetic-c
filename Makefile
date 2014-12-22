@@ -166,7 +166,7 @@ test_bus: test_threadpool ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a
 #-------------------------------------------------------------------------------
 
 ${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
-	cd ${SOCKET99} && make CDEFS=\"-D_C99_SOURCE=1\" all
+	cd ${SOCKET99} && make CDEFS=-D_C99_SOURCE=1 all
 	cp ${SOCKET99}/libsocket99.a $@
 
 ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
