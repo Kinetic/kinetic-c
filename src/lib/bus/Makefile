@@ -5,7 +5,7 @@ LIB_PATH=		../../../obj
 OPT=		-O3
 LIB_INC =	-I${SOCKET99_PATH} -I${THREADPOOL_PATH}
 CFLAGS +=	-std=c99 ${OPT} -Wall -g ${LIB_INC}
-LDFLAGS +=	-L. -lsocket99 -L${LIB_PATH} -lthreadpool
+LDFLAGS +=	-L. -lsocket99 -L${LIB_PATH}
 
 BUS_OBJS = \
 	bus.o \
@@ -42,7 +42,7 @@ echosrv: ${ECHOSRV_OBJS}
 	${CC} -o $@ $^ ${LDFLAGS}
 
 bus_example: bus_example.o libbus.a
-	${CC} -o $@ $^ ${LDFLAGS} -lbus
+	${CC} -o $@ $^ ${LDFLAGS} -lbus -lthreadpool
 
 clean:
 	rm -f *.a *.o test_casq echosrv bus_example

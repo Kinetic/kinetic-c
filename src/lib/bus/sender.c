@@ -66,7 +66,7 @@ struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
     if (res != 0) {
         fprintf(stderr, "pthread_mutex_init: %s\n", strerror(res));
         free(s);
-        yacht_free(s->fd_hash_table);
+        yacht_free(s->fd_hash_table, NULL, NULL);
         return NULL;
     }
 
@@ -163,9 +163,19 @@ static bool add_fd_to_watch_set(struct sender *s, int fd) {
         s->fds[idx].fd = fd;
         s->fds[idx].events |= POLLOUT;
         s->active_fds++;
-        if (!yacht_add(s->fd_hash_table, fd)) {
+        fd_info *info = malloc(sizeof(*info));
+        if (info == NULL) {
+            if (0 != pthread_mutex_unlock(&s->watch_set_mutex)) {
+                assert(false);
+            }
+            return false;
+        }
+        info->ssl = NULL;       /* FIXME: determine dataflow */
+        void *old = NULL;
+        if (!yacht_set(s->fd_hash_table, fd, info, &old)) {
             assert(false);
         }
+        assert(old == NULL);
     }
 
     if (0 != pthread_mutex_unlock(&s->watch_set_mutex)) {
@@ -196,9 +206,13 @@ static bool remove_fd_from_watch_set(struct sender *s, tx_info_t *info) {
                     s->fds[i].fd = s->fds[s->active_fds - 1].fd;
                 }
                 s->active_fds--;
-                if (!yacht_remove(s->fd_hash_table, info->fd)) {
+                void *old = NULL;
+                if (!yacht_remove(s->fd_hash_table, info->fd, &old)) {
                     assert(false);
                 }
+                fd_info *info = (fd_info *)old;
+                assert(info);
+                free(info);
                 break;
             }
         }
@@ -441,7 +455,14 @@ static void attempt_write(sender *s, int available) {
             } else {
                 BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
                     "writing %zd", rem);
-                ssize_t wrsz = write(pfd->fd, &msg[info->sent_size], rem);
+
+                /* TODO: if is_ssl according to fd_info
+                 * . int wr_sz = SSL_write(ci->ssl, buf, buf_sz)
+                 * . ssize_t wr_sz = write(ci->fd, buf, buf_sz) */
+                
+                ssize_t wrsz = 0;
+
+                wrsz = write(pfd->fd, &msg[info->sent_size], rem);
                 if (wrsz == -1) {
                     if (util_is_resumable_io_error(errno)) {
                         errno = 0;
@@ -560,11 +581,18 @@ static void notify_message_failure(sender *s, tx_info_t *info, bus_send_status_t
     release_tx_info(s, info);
 }
 
+static void free_fd_info_cb(void *value, void *udata) {
+    fd_info *info = (fd_info *)value;
+    /* Note: info->ssl will be freed by the listener. */
+    (void)udata;
+    free(info);
+}
+
 void sender_free(struct sender *s) {
     if (s) {
         int res = pthread_mutex_destroy(&s->watch_set_mutex);
         /* Must call sender_shutdown and wait for phtread_join first. */
-        yacht_free(s->fd_hash_table);
+        yacht_free(s->fd_hash_table, free_fd_info_cb, NULL);
         assert(res == 0);
         free(s);
     }

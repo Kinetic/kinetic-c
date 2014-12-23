@@ -271,7 +271,7 @@ void test_that_we_can_register_sockets(void)
     KineticLogger_Init("stdout", 3);
     bus_config cfg = {
         .log_cb = log_cb,
-        .log_level = 2,
+        .log_level = /*2,*/ 5,
         .sink_cb = sink_cb,
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = unexpected_msg_cb,
@@ -282,12 +282,51 @@ void test_that_we_can_register_sockets(void)
         LOGF1(0, "failed to init bus: %d\n", res.status);
         return;
     }
-    int fd = KineticSocket_Connect("localhost", 8123);
-    assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
 
     socket_info * si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     assert(si != NULL);
+
+    int fd = KineticSocket_Connect("localhost", KINETIC_PORT);
+    assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
     bool result = bus_register_socket(res.bus, BUS_SOCKET_PLAIN, fd, si);
+    assert(result);
+
+    sleep(5);
+
+    bus_shutdown(res.bus);
+    bus_free(res.bus);
+
+    free(si);
+
+    KineticSocket_Close(fd);
+
+    KineticLogger_Close();
+}
+
+void test_that_we_can_register_SSL_sockets(void)
+{ LOG_LOCATION;
+
+    KineticLogger_Init("stdout", 3);
+    bus_config cfg = {
+        .log_cb = log_cb,
+        .log_level = /*2,*/ 5,
+        .sink_cb = sink_cb,
+        .unpack_cb = unpack_cb,
+        .unexpected_msg_cb = unexpected_msg_cb,
+        .bus_udata = NULL,
+    };
+    bus_result res = {0};
+    if (!bus_init(&cfg, &res)) {
+        LOGF1(0, "failed to init bus: %d\n", res.status);
+        return;
+    }
+
+    socket_info * si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
+    assert(si != NULL);
+
+    int fd = KineticSocket_Connect("localhost", KINETIC_TLS_PORT);
+    assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
+    bool result = bus_register_socket(res.bus, BUS_SOCKET_SSL, fd, si);
     assert(result);
 
     sleep(5);

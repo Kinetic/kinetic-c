@@ -29,8 +29,6 @@ bool bus_ssl_init(struct bus *b) {
 /* Do an SSL / TLS shake for a connection. Blocking.
  * Returns whether the connection succeeded. */
 bool bus_ssl_connect(struct bus *b, connection_info *ci) {
-    //if (!init_client_SSL_CTX(b, ci)) { return false; }
-
     SSL *ssl = NULL;
 
     ssl = SSL_new(b->ssl_ctx);
@@ -38,8 +36,11 @@ bool bus_ssl_connect(struct bus *b, connection_info *ci) {
         ERR_print_errors_fp(stderr);
         return false;
     }
-
     ci->ssl = ssl;
+
+    if (!SSL_set_fd(ci->ssl, ci->fd)) {
+        return false;;
+    }
 
     if (do_blocking_connection(b, ci)) {
         return true;
@@ -62,12 +63,15 @@ static bool init_client_SSL_CTX(SSL_CTX **ctx_out) {
     assert(ctx_out);
 
     /* Create TLS context */
-#if KINETIC_USE_TLS_1_2
-    const SSL_METHOD *method = TLSv1_2_client_method();
-#else
-    const SSL_METHOD *method = TLSv1_1_client_method();
-#endif
+    const SSL_METHOD *method = NULL;
 
+    if (KINETIC_USE_TLS_1_2) {
+        method = TLSv1_2_client_method();
+    } else {
+        method = TLSv1_1_client_method();
+    }
+
+    assert(method);
     ctx = SSL_CTX_new(method);
     if (ctx == NULL) {
         ERR_print_errors_fp(stderr);
@@ -123,6 +127,8 @@ static bool do_blocking_connection(struct bus *b, connection_info *ci) {
         } else if (pres > 0) {
             if (fds[0].revents & (POLLOUT | POLLIN)) {
                 int connect_res = SSL_connect(ci->ssl);
+                BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
+                    "socket %d: connect_res %d", ci->fd, connect_res);
 
                 if (connect_res == 1) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
@@ -157,12 +163,10 @@ static bool do_blocking_connection(struct bus *b, connection_info *ci) {
                     break;
                     default:
                     {
-                        BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
-                            "socket %d: ERROR -- reason %d", ci->fd, reason);
                         unsigned long errval = ERR_get_error();
                         char ebuf[256];
                         BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
-                            "socket %d: ERROR -- %s", ci->fd, ERR_error_string(errval, ebuf));
+                            "socket %d: ERROR %d -- %s", ci->fd, reason, ERR_error_string(errval, ebuf));
                         assert(false);
                     }
                     }
@@ -186,6 +190,7 @@ static bool do_blocking_connection(struct bus *b, connection_info *ci) {
             BUS_LOG(b, 4, LOG_SOCKET_REGISTERED, "poll timeout", b->udata);
             elapsed += TIMEOUT_MSEC;
             if (elapsed > MAX_TIMEOUT) {
+                BUS_LOG(b, 2, LOG_SOCKET_REGISTERED, "timed out", b->udata);
                 return false;
             }
         }

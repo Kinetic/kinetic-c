@@ -35,16 +35,23 @@ struct yacht;
 /* Init a hash table with approx. 2 ** sz2 buckets. */
 struct yacht *yacht_init(uint8_t sz2);
 
-/* Add KEY to the table. */
-bool yacht_add(struct yacht *y, int key);
+/* Set KEY to VALUE in the table. */
+bool yacht_set(struct yacht *y, int key, void *value, void **old_value);
+
+/* Get KEY from the table, setting *value if found. */
+bool yacht_get(struct yacht *y, int key, void **value);
 
 /* Check if KEY is in the table. */
 bool yacht_member(struct yacht *y, int key);
 
-/* Remove KEY from the table. */
-bool yacht_remove(struct yacht *y, int key);
+/* Remove KEY from the table. Return the old value in *old_value,
+ * if non-NULL. */
+bool yacht_remove(struct yacht *y, int key, void **old_value);
+
+/* Callback to free values associated with keys. */
+typedef void (yacht_free_cb)(void *value, void *udata);
 
 /* Free the table. */
-void yacht_free(struct yacht *y);
+void yacht_free(struct yacht *y, yacht_free_cb *cb, void *udata);
 
 #endif
