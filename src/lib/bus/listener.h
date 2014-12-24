@@ -32,7 +32,7 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg);
 
 /* Add/remove sockets' metadata from internal info. */
 bool listener_add_socket(struct listener *l, connection_info *ci, int notify_fd);
-bool listener_close_socket(struct listener *l, int fd);
+bool listener_remove_socket(struct listener *l, int fd);
 
 bool listener_expect_response(struct listener *l, boxed_msg *box,
     uint16_t *backpressure);

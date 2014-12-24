@@ -118,6 +118,32 @@ TEST yacht_set_should_return_old_keys(uint8_t sz2) {
     PASS();
 }
 
+TEST yacht_should_grow_and_add_and_remove_accurately_out_of_order(uint8_t sz2) {
+    yacht *y = yacht_init(0);   /* start at default small size */
+    ASSERT(y);
+
+    const uint64_t other_large_prime = 4294967279L; /* (2 ** 32) - 17 */
+
+    for (int i = 0; i < (1 << (sz2 - 1)); i++) {
+        int iv = i * other_large_prime;
+        ASSERT(yacht_set(y, iv, NULL, NULL));
+        ASSERT(yacht_member(y, iv));
+        ASSERT(yacht_remove(y, iv, NULL));
+        ASSERT(!yacht_member(y, iv));
+        /* Add it back, to ensure it isn't disturbed by other removes */
+        ASSERT(yacht_set(y, iv, NULL, NULL));
+        ASSERT(yacht_member(y, iv));
+
+        for (int j = 0; j < i; j++) {
+            int jv = j * other_large_prime;
+            ASSERT(yacht_member(y, jv));
+        }
+    }
+
+    yacht_free(y, NULL, NULL);
+    PASS();
+}
+
 SUITE(suite) {
     RUN_TEST(yacht_should_cleanly_init_and_free);
     RUN_TEST(yacht_should_add_and_have_accurate_membership);
@@ -130,6 +156,10 @@ SUITE(suite) {
     RUN_TESTp(yacht_set_should_return_old_keys, 8);
     RUN_TESTp(yacht_set_should_return_old_keys, 10);
     RUN_TESTp(yacht_set_should_return_old_keys, 14);
+    RUN_TESTp(yacht_should_grow_and_add_and_remove_accurately_out_of_order, 8);
+    RUN_TESTp(yacht_should_grow_and_add_and_remove_accurately_out_of_order, 10);
+    RUN_TESTp(yacht_should_grow_and_add_and_remove_accurately_out_of_order, 14);
+
 }
 
 /* Add all the definitions that need to be in the test runner's main file. */

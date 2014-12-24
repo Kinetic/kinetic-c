@@ -89,7 +89,7 @@ bool listener_add_socket(struct listener *l,
     return push_message(l, msg);
 }
 
-bool listener_close_socket(struct listener *l, int fd) {
+bool listener_remove_socket(struct listener *l, int fd) {
     listener_msg *msg = get_free_msg(l);
     if (msg == NULL) { return false; }
 
@@ -376,6 +376,7 @@ static bool socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_
 }
 
 static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
+    assert(ci->ssl);
     for (;;) {
         ssize_t pending = SSL_pending(ci->ssl);
         ssize_t size = (ssize_t)SSL_read(ci->ssl, l->read_buf, ci->to_read_size);
@@ -897,6 +898,8 @@ static void add_socket(listener *l, connection_info *ci, int notify_fd) {
 
 static void free_ci(connection_info *ci) {
     if (ci) {
+        /* If using SSL, the handle will be freed in the client thread. */
+        ci->ssl = NULL;
         free(ci);
     }
 }

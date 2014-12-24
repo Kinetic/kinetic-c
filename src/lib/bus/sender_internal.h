@@ -88,7 +88,7 @@ typedef struct sender {
 static tx_info_t *get_free_tx_info(struct sender *s);
 static void tick_handler(sender *s);
 static bool populate_tx_info(struct sender *s, tx_info_t *info, boxed_msg *box);
-static bool add_fd_to_watch_set(struct sender *s, int fd);
+static bool add_fd_to_watch_set(struct sender *s, int fd, SSL *ssl);
 static bool remove_fd_from_watch_set(struct sender *s, tx_info_t *info);
 static void attempt_write(sender *s, int available);
 

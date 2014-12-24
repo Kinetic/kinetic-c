@@ -144,7 +144,7 @@ static bool is_watched(struct sender *s, int fd, tx_info_t *ignore_info) {
 /* Add a file descriptor to the watch set, if not already present.
  * This will only be called via sender_enqueue_message, on the
  * client / bus thread. */
-static bool add_fd_to_watch_set(struct sender *s, int fd) {
+static bool add_fd_to_watch_set(struct sender *s, int fd, SSL *ssl) {
     /* Lock watch set, to ensure that if any FDs are added or removed,
      * they are done based on the whole state. */
     int res = pthread_mutex_lock(&s->watch_set_mutex);
@@ -170,7 +170,7 @@ static bool add_fd_to_watch_set(struct sender *s, int fd) {
             }
             return false;
         }
-        info->ssl = NULL;       /* FIXME: determine dataflow */
+        info->ssl = ssl;
         void *old = NULL;
         if (!yacht_set(s->fd_hash_table, fd, info, &old)) {
             assert(false);
@@ -235,7 +235,7 @@ static bool populate_tx_info(struct sender *s,
 
     int fd = info->box->fd;
 
-    if (!add_fd_to_watch_set(s, fd)) {
+    if (!add_fd_to_watch_set(s, fd, box->ssl)) {
         BUS_LOG(b, /*3*/0, LOG_SENDER, "add_fd_to_watch_set FAILED", b->udata);
         return false;
     }
@@ -413,6 +413,10 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
     }
 }
 
+static ssize_t socket_write_plain(sender *s, tx_info_t *info);
+static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl);
+static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent);
+
 static void attempt_write(sender *s, int available) {
     int written = 0;
     struct bus *b = s->bus;
@@ -447,43 +451,115 @@ static void attempt_write(sender *s, int available) {
             }
 
             assert(info->box);
-            uint8_t *msg = info->box->out_msg;
             size_t msg_size = info->box->out_msg_size;
             size_t rem = msg_size - info->sent_size;
+            SSL *ssl = info->box->ssl;
+
             if (rem == 0) {     /* send completed! shouldn't get here */
                 assert(false);
             } else {
                 BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
                     "writing %zd", rem);
 
-                /* TODO: if is_ssl according to fd_info
-                 * . int wr_sz = SSL_write(ci->ssl, buf, buf_sz)
-                 * . ssize_t wr_sz = write(ci->fd, buf, buf_sz) */
-                
                 ssize_t wrsz = 0;
-
-                wrsz = write(pfd->fd, &msg[info->sent_size], rem);
-                if (wrsz == -1) {
-                    if (util_is_resumable_io_error(errno)) {
-                        errno = 0;
-                    } else {
-                        /* close socket */
-                        BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                            "write: socket error writing, %d", errno);
-                        set_error_for_socket(s, pfd->fd, TX_ERROR_WRITE_FAILURE);
-                        errno = 0;
-                    }
+                if (ssl == BUS_NO_SSL) {
+                    wrsz = socket_write_plain(s, info);
                 } else {
-                    info->sent_size += wrsz;
-                    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64, "wrote %zd", wrsz);
-                    if (rem - wrsz == 0) { /* completed! */
-                        attempt_to_enqueue_message_to_listener(s, info);
-                    }
+                    assert(ssl);
+                    wrsz = socket_write_ssl(s, info, ssl);
                 }
+                BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
+                    "wrote %zd", wrsz);
             }
         }
     }
 }
+
+static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
+    struct bus *b = s->bus;
+    uint8_t *msg = info->box->out_msg;
+    size_t msg_size = info->box->out_msg_size;
+    size_t rem = msg_size - info->sent_size;
+    ssize_t wrsz = write(info->fd, &msg[info->sent_size], rem);
+    if (wrsz == -1) {
+        if (util_is_resumable_io_error(errno)) {
+            errno = 0;
+            return 0;
+        } else {
+            /* close socket */
+            BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                "write: socket error writing, %d", errno);
+            set_error_for_socket(s, info->fd, TX_ERROR_WRITE_FAILURE);
+            errno = 0;
+            return 0;
+        }
+    } else {
+        update_sent(b, s, info, wrsz);
+        return wrsz;
+    }
+}
+
+static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl) {
+    struct bus *b = s->bus;
+    uint8_t *msg = info->box->out_msg;
+    size_t msg_size = info->box->out_msg_size;
+    size_t rem = msg_size - info->sent_size;
+    ssize_t written = 0;
+    for (;;) {
+        ssize_t wrsz = SSL_write(ssl, &msg[info->sent_size], rem);
+        if (wrsz > 0) {
+            update_sent(b, s, info, wrsz);
+            written += wrsz;
+        } else if (wrsz < 0) {
+            int reason = SSL_get_error(ssl, wrsz);
+            switch (reason) {
+            case SSL_ERROR_WANT_WRITE:
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                    "SSL_write: socket %d: WANT_WRITE", info->fd);
+                break;
+                
+            case SSL_ERROR_WANT_READ:
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                    "SSL_write: socket %d: WANT_READ", info->fd);
+                assert(false);  // shouldn't get this; we're writing.
+                break;
+                
+            case SSL_ERROR_SYSCALL:
+            {
+                if (util_is_resumable_io_error(errno)) {
+                    errno = 0;
+                    /* don't break; we want to retry on EINTR etc. until
+                     * we get WANT_WRITE, otherwise poll(2) may not retry
+                     * the socket for too long */
+                } else {
+                    set_error_for_socket(s, info->fd, TX_ERROR_WRITE_FAILURE);
+                }
+            }
+            default:
+            {
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                    "SSL_write: socket %d: error %d", info->fd, reason);
+                break;
+            }
+            }
+        } else {
+            /* SSL_write should give SSL_ERROR_WANT_WRITE when unable
+             * to write further. */
+        }
+    }
+    return written;
+}
+
+static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent) {
+    size_t msg_size = info->box->out_msg_size;
+    size_t rem = msg_size - info->sent_size;
+    info->sent_size += sent;
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64, "wrote %zd", sent);
+    if (rem - sent == 0) { /* completed! */
+        attempt_to_enqueue_message_to_listener(s, info);
+    }
+}
+
 
 static bool write_backpressure(sender *s, tx_info_t *info, uint16_t bp) {
     uint8_t buf[2];
@@ -557,6 +633,7 @@ static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info) {
     if (listener_expect_response(l, box, &backpressure)) {
         write_backpressure(s, info, backpressure);   /* alert blocked client thread */
         BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
+        box->out_msg = NULL;    /* release value, pointer will be stale after returning */
         release_tx_info(s, info);
     } else {
         BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);

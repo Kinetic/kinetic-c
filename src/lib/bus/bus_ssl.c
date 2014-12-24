@@ -51,6 +51,14 @@ bool bus_ssl_connect(struct bus *b, connection_info *ci) {
     }
 }
 
+/* Disconnect and free an individual SSL handle. */
+bool bus_ssl_disconnect(struct bus *b, SSL *ssl) {
+    SSL_free(ssl);
+    (void)b;
+    return true;
+}
+
+/* Free all internal data for using SSL. */
 void bus_ssl_free(struct bus *b) {
     if (b && b->ssl_ctx) {
         SSL_CTX_free(b->ssl_ctx);

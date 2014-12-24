@@ -14,6 +14,10 @@ bool bus_ssl_init(struct bus *b);
  * Returns whether the connection succeeded. */
 bool bus_ssl_connect(struct bus *b, connection_info *ci);
 
+/* Disconnect and free an individual SSL handle. */
+bool bus_ssl_disconnect(struct bus *b, SSL *ssl);
+
+/* Free all internal data for using SSL. */
 void bus_ssl_free(struct bus *b);
 
 #endif

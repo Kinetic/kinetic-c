@@ -32,8 +32,6 @@
 bool bus_init(bus_config *config, struct bus_result *res);
 
 /* Send a request. Blocks until the request has been transmitted.
- *
- * TODO: liveness of msg: copy or take ownership?
  * 
  * Assumes the FD has been registered with bus_register_socket;
  * sending to an unregistered socket is an error. */
@@ -51,6 +49,9 @@ const char *bus_log_event_str(log_event_t event);
  * If USES_SSL is true, then the function will block until the initial
  * SSL/TLS connection handshake has completed. */
 bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *socket_udata);
+
+/* Free metadata about a socket that has been disconnected. */
+bool bus_release_socket(struct bus *b, int fd);
 
 /* Begin shutting the system down. Returns true once everything pending
  * has resolved. */

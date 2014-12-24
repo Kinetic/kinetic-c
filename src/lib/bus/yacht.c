@@ -28,7 +28,8 @@
 #endif
 
 /* Yet Another C Hash Table:
- *   An (int set) hash table for tracking active file descriptors. */
+ *   An (int set) hash table for tracking active file descriptors
+ *   and their metadata. */
 struct yacht {
     size_t size;
     size_t mask;
@@ -36,8 +37,17 @@ struct yacht {
     void **values;
 };
 
+static bool insert(int *buckets, void **values,
+    size_t mask, size_t max_fill,
+    int key, void *value, void **old_value);
+static bool grow(struct yacht *y);
+
+#define DEF_SZ2 4
+#define MAX_PROBES 16
+
 /* Init a hash table with approx. 2 ** sz2 buckets. */
 struct yacht *yacht_init(uint8_t sz2) {
+    if (sz2 == 0) { sz2 = DEF_SZ2; }
     size_t size = 1 << sz2;
     struct yacht *y = calloc(1, sizeof(*y));
     int *buckets = calloc(size, sizeof(*buckets));
@@ -62,7 +72,7 @@ struct yacht *yacht_init(uint8_t sz2) {
 
 #define LARGE_PRIME (4294967291L /* (2 ** 32) - 5 */)
 
-static int hash(int key) {
+static size_t hash(int key) {
     return key * LARGE_PRIME;
 }
 
@@ -87,59 +97,91 @@ bool yacht_get(struct yacht *y, int key, void **value) {
 bool yacht_member(struct yacht *y, int key) {
     LOG(" -- checking membership for %d\n", key);
     return yacht_get(y, key, NULL);
-#if 0    
-    size_t b = hash(key) & y->mask;
-
-    for (size_t i = b; i < y->size; i++) {
-        int bv = y->buckets[i];
-        LOG(" -- b %d: %d\n", i, bv);
-        if (bv == key) { return true; }
-        if (bv == YACHT_NO_KEY) { return false; }
-    }
-
-    for (size_t i = 0; i < b; i++) { /* wrap, if necessary */
-        int bv = y->buckets[i];
-        LOG(" -- b %d: %d\n", i, bv);
-        if (bv == key) { return true; }
-        if (bv == YACHT_NO_KEY) { return false; }
-    }
-
-    return false;
-#endif
 }
 
 /* Set KEY to VALUE in the table. */
 bool yacht_set(struct yacht *y, int key, void *value, void **old_value) {
-    size_t b = hash(key) & y->mask;
     LOG(" -- adding %d with bucket %d\n", key, b);
 
-    for (size_t o = 0; o < y->size; o++) {
-        size_t i = (b + o) & y->mask;  // wrap as necessary
-        //for (size_t i = b; i < y->size; i++) {
-        int bv = y->buckets[i];
+    for (;;) {
+        size_t max = y->size / 2;
+        if (max > 16) { max = MAX_PROBES; }
+        if (insert(y->buckets, y->values, y->mask, max, key, value, old_value)) {
+            return true;
+        } else {
+            if (!grow(y)) { return false; }
+        }
+    }
+}
+
+static bool insert(int *buckets, void **values,
+        size_t mask, size_t max_fill,
+        int key, void *value, void **old_value) {
+    size_t b = hash(key) & mask;
+
+    for (size_t o = 0; o < max_fill; o++) {
+        if (o > 0) { LOG(" -- o %zd (max_fill %zd)\n", o, max_fill); }
+        size_t i = (b + o) & mask;  // wrap as necessary
+        int bv = buckets[i];
         LOG(" -- b %d: %d\n", i, bv);
         if (bv == key) {
-            if (old_value) { *old_value = y->values[i]; }
-            y->values[i] = value;
+            if (old_value) { *old_value = values[i]; }
+            values[i] = value;
             return true;        /* already present */
         } else if (bv == YACHT_NO_KEY || bv == YACHT_DELETED) {
-            y->buckets[i] = key;
-            y->values[i] = value;
+            buckets[i] = key;
+            values[i] = value;
             return true;
         } else {
             /* Brent's variation -- bump out key if not in its main spot  */
-            size_t oh = hash(bv) & y->mask;
-            if (oh != i) {
-                int okey = y->buckets[i];
-                y->buckets[i] = key;
+            size_t ob = hash(bv) & mask;  /* other's primary bucket */
+            if (ob == i) {      /* keep looking for an open spot */
+                continue;
+            } else {            /* refile it instead */
+                int okey = buckets[i];
+                buckets[i] = key;
                 key = okey;
-                void *oval = y->values[i];
-                y->values[i] = value;
+                void *oval = values[i];
+                values[i] = value;
                 value = oval;
             }
         }
     }
+    return false;               /* too full */
+}
 
+static bool grow(struct yacht *y) {
+    size_t nsize = 2 * y->size;
+    printf(" -- growing %zd => %zd\n", y->size, nsize);
+    size_t nmask = nsize - 1;
+    int *nbuckets = NULL;
+    void **nvalues = NULL;
+    nbuckets = calloc(nsize, sizeof(*nbuckets));
+    if (nbuckets == NULL) { return false; }
+    nvalues = calloc(nsize, sizeof(*nvalues));
+    if (nvalues == NULL) {
+        free(nbuckets);
+        return false;
+    }
+
+    for (size_t i = 0; i < y->size; i++) {
+        int key = y->buckets[i];
+        if (key != YACHT_NO_KEY && key != YACHT_DELETED) {
+            if (!insert(nbuckets, nvalues, nmask, y->size, key, y->values[i], NULL)) {
+                goto cleanup;
+            }
+        }
+    }
+    y->size = nsize;
+    free(y->buckets);
+    free(y->values);
+    y->buckets = nbuckets;
+    y->values = nvalues;
+    y->mask = nmask;
+    return true;
+cleanup:
+    if (nbuckets) { free(nbuckets); }
+    if (nvalues) { free(nvalues); }
     return false;
 }
 
@@ -149,7 +191,6 @@ bool yacht_remove(struct yacht *y, int key, void **old_value) {
     LOG(" -- removing %d with bucket %d\n", key, b);
 
     for (size_t o = 0; o < y->size; o++) {
-        //for (size_t i = b; i < y->size; i++) {
         size_t i = (b + o) & y->mask;  // wrap as necessary
         int bv = y->buckets[i];
         LOG(" -- b %d: %d\n", i, bv);
