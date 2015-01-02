@@ -1,4 +1,6 @@
 *.a
 test_threadpool
+test_threadpool_sequencing
+test_threadpool_stress
 *.o
 *.dSYM/

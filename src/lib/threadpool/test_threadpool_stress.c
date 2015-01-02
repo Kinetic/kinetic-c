@@ -27,13 +27,18 @@
 
 #include "threadpool.h"
 
+/* Stress maximum throughput of no-op tasks */
+
 static size_t task_count = 0;
+static size_t last_count = 0;
 
 static void dump_stats(const char *prefix, struct threadpool_info *stats, size_t ticks) {
-    printf("%s  -- %8ld thread tasks / sec -- (at %d, dt %d, ta %zd, tc %zd, bl %zd)\n",
-        prefix, stats->tasks_completed / ticks,
+    size_t delta = task_count - last_count;
+    printf("%s  -- %8ld thread tasks / sec -- (at %d, dt %d, bl %zd) -- delta %zd\n",
+        prefix, task_count / ticks,
         stats->active_threads, stats->dormant_threads,
-        stats->tasks_assigned, stats->tasks_completed, stats->backlog_size);
+        stats->backlog_size, delta);
+    last_count = task_count;
 }
 
 #define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)     \
@@ -56,16 +61,14 @@ static size_t fibs(size_t arg) {
 }
 
 static void task_cb(void *udata) {
-    //SPIN_ADJ(task_count, 1);
-    //task_count++;
-    /* fibs(10); */
+    SPIN_ADJ(task_count, 1);
     (void)fibs;
     (void)udata;
     (void)task_count;
 }
 
 int main(int argc, char **argv) {
-    uint8_t sz2 = 8;
+    uint8_t sz2 = 12;
     uint8_t max_threads = 8;
 
     char *sz2_env = getenv("SZ2");
@@ -101,11 +104,14 @@ int main(int argc, char **argv) {
             dump_stats("tick...", &stats, ticks);
         }
 
-        if (!threadpool_schedule(t, &task, &counterpressure)) {
-            size_t msec = 1 * 1000 * counterpressure;
-            usleep(msec);
+        for (size_t i = 0; i < 1000; i++) {
+            if (!threadpool_schedule(t, &task, &counterpressure)) {
+                size_t msec = i * 1000 * counterpressure;
+                usleep(msec >> 12);
+            } else {
+                break;
+            }
         }
-
     }
 
     return 0;

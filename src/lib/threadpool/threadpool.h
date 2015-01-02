@@ -55,8 +55,6 @@ struct threadpool_task {
 struct threadpool_info {
     uint8_t active_threads;
     uint8_t dormant_threads;
-    size_t tasks_assigned;
-    size_t tasks_completed;
     size_t backlog_size;
 };
 

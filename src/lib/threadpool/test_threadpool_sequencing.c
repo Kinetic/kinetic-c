@@ -29,14 +29,15 @@
 
 #include "threadpool.h"
 
+/* Start a task that starts another task that starts another task that ... */
+
 static size_t completed_count = 0;
 #define MAX_TASKS 32
 
 static void dump_stats(const char *prefix, struct threadpool_info *stats, size_t ticks) {
-    printf("%s  -- %8ld thread tasks / sec -- (at %d, dt %d, ta %zd, tc %zd, bl %zd) -- %zd\n",
-        prefix, stats->tasks_completed / ticks,
-        stats->active_threads, stats->dormant_threads,
-        stats->tasks_assigned, stats->tasks_completed, stats->backlog_size,
+    printf("%s  -- %8ld thread tasks / sec -- (at %d, dt %d, bl %zd) -- %zd\n",
+        prefix, completed_count / ticks,
+        stats->active_threads, stats->dormant_threads, stats->backlog_size,
         completed_count);
 }
 
@@ -60,7 +61,7 @@ typedef struct {
     size_t count;
 } env;
 
-static size_t limit = 10000000;
+static size_t limit = 1000000;
 
 static void task_cb(void *udata) {
     env *e = (env *)udata;
