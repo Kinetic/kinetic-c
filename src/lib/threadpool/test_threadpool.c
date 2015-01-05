@@ -34,9 +34,9 @@ static size_t fibs(size_t arg) {
 }
 
 static void dump_stats(const char *prefix, struct threadpool_info *stats) {
-    printf("%s(at %d, dt %d, ta %zd, tc %zd, bl %zd)\n",
+    printf("%s(at %d, dt %d, bl %zd)\n",
         prefix, stats->active_threads, stats->dormant_threads,
-        stats->tasks_assigned, stats->tasks_completed, stats->backlog_size);
+        stats->backlog_size);
 }
 
 #define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)     \
