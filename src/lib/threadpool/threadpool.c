@@ -184,7 +184,6 @@ void threadpool_free(struct threadpool *t) {
 }
 
 static void notify_new_task(struct threadpool *t) {
-    /* FIXME: should this be 'if any are sleeping'? needs benchmarking. */
     for (int i = 0; i < t->live_threads; i++) {
         struct thread_info *ti = &t->threads[i];
         if (ti->status == STATUS_ASLEEP) {
