@@ -210,7 +210,6 @@ typedef enum {
 typedef struct {
     int fd;
     bus_socket_t type;
-    bool use_SSL;
     uint64_t seq_id;
     uint8_t *msg;
     size_t msg_size;
