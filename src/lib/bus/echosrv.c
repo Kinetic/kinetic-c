@@ -158,40 +158,6 @@ static void init_polling(config *cfg) {
     memset(cfg->out_bufs, 0, out_bufs_sz);
 }
 
-static void print_socket99_error(FILE *f, socket99_result *res) {
-    switch (res->status) {
-    case SOCKET99_OK:
-        break;
-    case SOCKET99_ERROR_GETADDRINFO:
-        fprintf(f, "GETADDRINFO: %s", gai_strerror(res->getaddrinfo_error));
-        break;
-    case SOCKET99_ERROR_SOCKET:
-        fprintf(f, "SOCKET: %s", strerror(res->saved_errno));
-        break;
-    case SOCKET99_ERROR_BIND:
-        fprintf(f, "BIND: %s", strerror(res->saved_errno));
-        break;
-    case SOCKET99_ERROR_LISTEN:
-        fprintf(f, "LISTEN: %s", strerror(res->saved_errno));
-        break;
-    case SOCKET99_ERROR_CONNECT:
-        fprintf(f, "CONNECT: %s", strerror(res->saved_errno));
-        break;
-    case SOCKET99_ERROR_FCNTL:
-        fprintf(f, "FCNTL: %s", strerror(res->saved_errno));
-        break;
-    case SOCKET99_ERROR_SNPRINTF:
-        fprintf(f, "SNPRINTF");
-        break;
-    case SOCKET99_ERROR_CONFIGURATION:
-        fprintf(f, "CONFIGURATION");
-        break;
-    case SOCKET99_ERROR_UNKNOWN:
-        fprintf(f, "UNKNOWN");
-        break;
-    }
-}
-
 static void open_ports(config *cfg) {
     socket99_config scfg = {
         .host = "127.0.0.1",
@@ -207,8 +173,7 @@ static void open_ports(config *cfg) {
         bool ok = socket99_open(&scfg, &res);
         if (!ok) {
             fprintf(stderr, "Error opening port %d: ", i + cfg->port_low);
-            print_socket99_error(stderr, &res);
-            fprintf(stderr, "\n");
+            socket99_fprintf(stderr, &res);
             exit(1);
         } else {
             cfg->accept_fds[i].fd = res.fd;
