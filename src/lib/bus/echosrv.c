@@ -36,8 +36,8 @@
 /* TODO: Linux => epoll */
 #include <poll.h>
 
-#define BUF_SZ (16 * 1024)
-#define MAX_CLIENTS 100
+#define BUF_SZ (2 * 1024L * 1024)
+#define MAX_CLIENTS 10
 
 #define NO_CLIENT ((int)-1)
 
@@ -56,7 +56,7 @@ typedef struct {
     int fd;
     size_t out_bytes;
     size_t written_bytes;
-    uint8_t buf[BUF_SZ];
+    uint8_t buf[2*BUF_SZ];
 } out_buf;
 
 typedef struct {
@@ -397,8 +397,11 @@ static void enqueue_write(config *cfg, int fd,
             LOG(2, "%ld -- enqueing write of %zd bytes\n",
                 cfg->last_second, write_size);
 
-            memcpy(out->buf, buf, write_size);
-            out->out_bytes = write_size;
+            size_t free_space = BUF_SZ - out->out_bytes;
+            assert(free_space >= write_size);
+            memcpy(&out->buf[out->out_bytes], buf, write_size);
+            out->out_bytes += write_size;
+
             cfg->client_fds[i].events = POLLOUT;   /* write only */
             return;
         }

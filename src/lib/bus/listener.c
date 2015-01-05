@@ -369,6 +369,9 @@ static bool socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_
     }
     
     if (size > 0) {
+        BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 64,
+            "read: %zd", size);
+        
         return sink_socket_read(b, l, ci, size);
     } else {
         return false;

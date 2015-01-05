@@ -495,6 +495,8 @@ static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
         }
     } else {
         update_sent(b, s, info, wrsz);
+        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+                "sent: %zd\n", wrsz);
         return wrsz;
     }
 }
@@ -631,9 +633,9 @@ static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info) {
 
     uint16_t backpressure = 0;
     if (listener_expect_response(l, box, &backpressure)) {
+        box->out_msg = NULL;    /* release value, pointer will be stale after returning */
         write_backpressure(s, info, backpressure);   /* alert blocked client thread */
         BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
-        box->out_msg = NULL;    /* release value, pointer will be stale after returning */
         release_tx_info(s, info);
     } else {
         BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);

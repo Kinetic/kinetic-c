@@ -35,8 +35,16 @@
 #include "atomic.h"
 #include "socket99.h"
 
+typedef struct {
+    uint32_t magic_number;
+    uint32_t size;
+    int64_t seq_id;
+} prot_header_t;
+
+#define MAGIC_NUMBER 3
+
 #define MAX_SOCKETS 1000
-#define DEFAULT_BUF_SIZE (32 * 1024)
+#define DEFAULT_BUF_SIZE (1024 * 1024 + sizeof(prot_header_t))
 #define PRINT_RESPONSES 0
 
 enum socket_state {
@@ -86,14 +94,6 @@ static void log_cb(log_event_t event, int log_level, const char *msg, void *udat
 #define LOG(VERBOSITY, ...)                     \
     do { if (state.verbosity >= VERBOSITY) { printf(__VA_ARGS__); } } while(0)
 
-typedef struct {
-    uint32_t magic_number;
-    uint32_t size;
-    int64_t seq_id;
-} prot_header_t;
-
-#define MAGIC_NUMBER 3
-
 static const char *executable_name = NULL;
 
 static bus_sink_cb_res_t reset_transfer(socket_info *si) {
@@ -126,6 +126,7 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         if (read_size != sizeof(prot_header_t)) {
             valid_header = false;
         } else if (header->magic_number != MAGIC_NUMBER) {
+            printf("INVALID HEADER B: magic number 0x%08x\n", header->magic_number);
             valid_header = false;
         }
 
@@ -133,7 +134,7 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
             uint8_t *buf = si->buf;
             prot_header_t *header = (prot_header_t *)read_buf;
             si->cur_payload_size = header->size;
-            memcpy(buf, read_buf, sizeof(prot_header_t));
+            memcpy(buf, header, sizeof(*header));
             si->used = sizeof(*header);
 
             bus_sink_cb_res_t res = {
@@ -149,17 +150,24 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
     }
     case STATE_AWAITING_BODY:
     {
-        if (read_size == si->cur_payload_size) {
+        assert(DEFAULT_BUF_SIZE - si->used >= read_size);
+        memcpy(&si->buf[si->used], read_buf, read_size);
+        si->used += read_size;
+        size_t rem = si->cur_payload_size + sizeof(prot_header_t) - si->used;
+
+        if (rem == 0) {
             bus_sink_cb_res_t res = {
                 .next_read = sizeof(prot_header_t),
                 .full_msg_buffer = read_buf,
             };
-            memcpy(&si->buf[si->used], read_buf, read_size);
-            si->used += read_size;
             si->state = STATE_AWAITING_HEADER;
+            si->used = 0;
             return res;
         } else {
-            return reset_transfer(si);
+            bus_sink_cb_res_t res = {
+                .next_read = rem,
+            };
+            return res;
         }
     }
     default:
@@ -364,7 +372,7 @@ static void completion_cb(bus_msg_result_t *res, void *udata) {
         size_t cur = s->completed_deliveries;
         for (;;) {
             if (ATOMIC_BOOL_COMPARE_AND_SWAP(&s->completed_deliveries, cur, cur + 1)) {
-                LOG(4, " -- ! got %zd bytes, seq_id 0x%08llx, %p\n",
+                LOG(3, " -- ! got %zd bytes, seq_id 0x%08llx, %p\n",
                     si->cur_payload_size, res->u.response.seq_id,
                     res->u.response.opaque_msg);
                 break;
@@ -430,13 +438,15 @@ static void run_bus(example_state *s, struct bus *b) {
             tick_handler(s);
             s->last_second = cur_second;
             payload_size = 8;
+            should_send = true;
         } else {
             should_send = true;
         }
 
         if (should_send) {
             should_send = false;
-            size_t msg_size = construct_msg(msg_buf, buf_size, 10*payload_size, seq_id);
+            size_t msg_size = construct_msg(msg_buf, buf_size,
+                10 * payload_size /* * 1024L*/, seq_id);
             LOG(3, " @@ sending message with %zd bytes\n", msg_size);
             bus_user_msg msg = {
                 .fd = s->sockets[cur_socket_i],
