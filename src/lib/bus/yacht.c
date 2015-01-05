@@ -152,7 +152,7 @@ static bool insert(int *buckets, void **values,
 
 static bool grow(struct yacht *y) {
     size_t nsize = 2 * y->size;
-    printf(" -- growing %zd => %zd\n", y->size, nsize);
+    LOG(" -- growing %zd => %zd\n", y->size, nsize);
     size_t nmask = nsize - 1;
     int *nbuckets = NULL;
     void **nvalues = NULL;
