@@ -155,6 +155,20 @@ void threadpool_stats(struct threadpool *t, struct threadpool_info *ti) {
 bool threadpool_shutdown(struct threadpool *t, bool kill_all) {
     size_t mask = t->task_ringbuf_mask;
 
+    if (kill_all) {
+        for (int i = 0; i < t->live_threads; i++) {
+            struct thread_info *ti = &t->threads[i];
+            if (ti->status < STATUS_SHUTDOWN) {
+                ti->status = STATUS_SHUTDOWN;
+                if (0 != pthread_cancel(ti->t)) {
+                    assert(false);
+                }
+            }
+        }
+    }
+
+    notify_shutdown(t);
+
     while (t->task_commit_head > t->task_request_head) {
         size_t rh = t->task_request_head;
 
@@ -168,11 +182,7 @@ bool threadpool_shutdown(struct threadpool *t, bool kill_all) {
         }
     }
 
-    notify_shutdown(t);
-    if (kill_all) {
-        /* TODO: pthread_cancel threads and set STATUS_SHUTDOWN ... */
-    }
-    return true;
+    return notify_shutdown(t);
 }
 
 void threadpool_free(struct threadpool *t) {

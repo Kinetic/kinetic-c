@@ -562,6 +562,9 @@ bool bus_process_boxed_message(struct bus *b,
     return bus_schedule_threadpool_task(b, &task, backpressure);
 }
 
+/* How many seconds should it give the thread pool to shut down? */
+#define THREAD_SHUTDOWN_SECONDS 5
+
 void bus_free(bus *b) {
     if (b == NULL) { return; }
     bus_shutdown(b);
@@ -576,6 +579,15 @@ void bus_free(bus *b) {
     }
     free(b->listeners);
 
+    int limit = (1000 * THREAD_SHUTDOWN_SECONDS)/10;
+    for (int i = 0; i < limit; i++) {
+        if (threadpool_shutdown(b->threadpool, false)) { break; }
+        (void)poll(NULL, 0, 10);
+
+        if (i == limit - 1) {
+            threadpool_shutdown(b->threadpool, true);
+        }
+    }
     threadpool_free(b->threadpool);
 
     free(b->joined);
