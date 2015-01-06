@@ -483,21 +483,15 @@ void KineticPDU_Init(KineticPDU* pdu, KineticConnection* con)
     assert(pdu != NULL);
     assert(con != NULL);
     memset(pdu, 0, sizeof(KineticPDU));
-    pdu->connection = con;
-    pdu->header = KINETIC_PDU_HEADER_INIT;
-    pdu->headerNBO = KINETIC_PDU_HEADER_INIT;
-    KineticMessage_Init(&(pdu->protoData.message));
+    KineticMessage_Init(&(pdu->message));
     Kinetic_auth_init_hmac(
-            &(pdu->protoData.message), con->session.config.identity, con->session.config.hmacKey);
-    KineticMessage_HeaderInit(&(pdu->protoData.message.header), con);
+            &(pdu->message), con->session.config.identity, con->session.config.hmacKey);
+    KineticMessage_HeaderInit(&(pdu->message.header), con);
 }
 
 void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticConnection* con)
 {
     KineticPDU_Init(pdu, con);
-    pdu->proto = &pdu->protoData.message.message;
-    pdu->protoData.message.has_command = true;
-    pdu->command = &pdu->protoData.message.command;
-    pdu->command->header = &pdu->protoData.message.header;
-    pdu->type = KINETIC_PDU_TYPE_REQUEST;
+    pdu->command = &pdu->message.command;
+    pdu->command->header = &pdu->message.header;
 }
