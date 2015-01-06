@@ -172,6 +172,7 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -d $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
 
 uninstall:
 	@echo
