@@ -19,6 +19,7 @@
 */
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
+#include <stdlib.h>
 
 static SystemTestFixture Fixture;
 

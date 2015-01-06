@@ -60,7 +60,6 @@ KineticStatus wait_for_put_finish(FileTransferProgress* const transfer);
 static int put_chunk_of_file(FileTransferProgress* transfer);
 static void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* client_data);
 
-
 void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
 {
     // Initialize kinetic-c and configure sessions
@@ -74,10 +73,10 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         },
     };
-    KineticClient_Init("stdout", 0);
+    KineticClient * client = KineticClient_Init("stdout", 0);
 
     // Establish connection
-    KineticStatus status = KineticClient_CreateConnection(&session);
+    KineticStatus status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -103,7 +102,7 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
 
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(&session);
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
 }
 
 

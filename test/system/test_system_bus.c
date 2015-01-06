@@ -53,27 +53,6 @@ void tearDown(void)
 
 }
 
-enum socket_state {
-    STATE_UNINIT = 0,
-    STATE_AWAITING_HEADER,
-    STATE_AWAITING_BODY,
-};
-
-enum unpack_error {
-    UNPACK_ERROR_UNDEFINED,
-    UNPACK_ERROR_SUCCESS,
-    UNPACK_ERROR_INVALID_HEADER,
-    UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
-};
-
-typedef struct {
-    enum socket_state state;
-    KineticPDUHeader header;
-    enum unpack_error unpack_status;
-    size_t accumulated;
-    uint8_t buf[];
-} socket_info;
-
 static void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
     const char *event_str = bus_log_event_str(event);
