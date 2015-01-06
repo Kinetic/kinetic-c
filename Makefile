@@ -295,7 +295,7 @@ system_tests: start_simulator $(systest_passfiles)
 # Test Utility Build Support
 #===============================================================================
 
-UTILITY = kinetic-c-util
+UTILITY = main
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o

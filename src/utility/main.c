@@ -60,7 +60,8 @@ static void ReportOperationConfiguration(
 // Main Entry Point Definition
 int main(int argc, char** argv)
 {
-    KineticClient_Init("stdout", 2);
+    //KineticClient_Init("stdout", 2);
+    KineticClient_Init(NULL, 0);
 
     // Parse command line options
     int operationsArgsIndex = ParseOptions(argc, argv, &Session, &Entry);
@@ -156,6 +157,15 @@ KineticStatus ExecuteOperation(
         }
     }
 
+    else if (strcmp("list", operation) == 0) {
+      int i =0;
+        while ((status = KineticClient_GetNext(session, entry, NULL)) == KINETIC_STATUS_SUCCESS) {
+	  printf("\nID:%d\tDataLength:%d\tKey:%s\n", i++, entry->value.bytesUsed, KeyData);
+	}
+        printf("\nKeys List extracted completed \n");
+	status = KINETIC_STATUS_SUCCESS;
+    }
+
     else {
         printf("\nSpecified operation '%s' is invalid!\n\n", operation);
         return -1;
@@ -179,7 +189,7 @@ void ConfigureEntry(
     const char* value)
 {
     assert(entry != NULL);
-
+    memset(KeyData, 0x00, sizeof(KeyData));
     ByteBuffer keyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), key);
     ByteBuffer tagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), tag);
     ByteBuffer newVersionBuffer = ByteBuffer_CreateAndAppendCString(NewVersionData, sizeof(NewVersionData), version);
