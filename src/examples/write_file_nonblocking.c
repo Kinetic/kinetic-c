@@ -53,7 +53,8 @@ int main(int argc, char** argv)
     (void)argv;
 
     // Initialize kinetic-c and establish session
-    KineticClient_Init("stdout", 0);
+    KineticClient * client = KineticClient_Init("stdout", 0);
+    if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
     const KineticSessionConfig config = {
         .host = "localhost",
@@ -63,7 +64,7 @@ int main(int argc, char** argv)
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
     KineticSession session = {.config = config};
-    KineticStatus status = KineticClient_CreateConnection(&session);
+    KineticStatus status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -89,7 +90,7 @@ int main(int argc, char** argv)
 
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(&session);
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
 
     return 0;
 }

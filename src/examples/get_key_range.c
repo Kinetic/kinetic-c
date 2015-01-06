@@ -47,8 +47,9 @@ int main(int argc, char** argv)
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString)
         }
     };
-    KineticClient_Init("stdout", 0);
-    status = KineticClient_CreateConnection(&session);
+    KineticClient * client = KineticClient_Init("stdout", 0);
+    if (client == NULL) { return 1; }
+    status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
             session.config.host, Kinetic_GetStatusDescription(status));
@@ -105,7 +106,7 @@ int main(int argc, char** argv)
 
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(&session);
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
     printf("Key range retrieved successfully!\n");
 
     return 0;

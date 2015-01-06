@@ -60,18 +60,21 @@ static void ReportOperationConfiguration(
 // Main Entry Point Definition
 int main(int argc, char** argv)
 {
-    KineticClient_Init("stdout", 0);
+    KineticClient * client = KineticClient_Init("stdout", 0);
+    if (client == NULL) {
+        return 1;
+    }
 
     // Parse command line options
     int operationsArgsIndex = ParseOptions(argc, argv, &Session, &Entry);
 
     // Establish a session/connection with the Kinetic Device
-    KineticStatus status = KineticClient_CreateConnection(&Session);
+    KineticStatus status = KineticClient_CreateConnection(&Session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         printf("Failed connecting to host %s:%d (status: %s)\n\n",
                Session.config.host, Session.config.port,
                Kinetic_GetStatusDescription(status));
-        return -1;
+        return 1;
     }
 
     // Execute all specified operations in order
@@ -83,7 +86,7 @@ int main(int argc, char** argv)
 
     // Shutdown the Kinetic Device session
     KineticClient_DestroyConnection(&Session);
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
     printf("\nKinetic client session terminated!\n\n");
 
     return 0;
