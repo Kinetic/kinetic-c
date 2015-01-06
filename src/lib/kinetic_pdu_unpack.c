@@ -27,5 +27,5 @@ KineticProto_Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
 
 KineticProto_Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
         size_t len, const uint8_t* data) {
-    return KineticProto_command__unpack(allocator, len, data);
+    return KineticProto_Message__unpack(allocator, len, data);
 }
