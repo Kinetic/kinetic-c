@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <sys/time.h>
 
-KineticStatus KineticSession_Create(KineticSession * const session)
+KineticStatus KineticSession_Create(KineticSession * const session, KineticClient * const client)
 {
     if (session == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
@@ -46,6 +46,7 @@ KineticStatus KineticSession_Create(KineticSession * const session)
 
     KINETIC_CONNECTION_INIT(session->connection);
     session->connection->session = *session; // TODO: KILL ME!!!
+    session->connection->messageBus = client->bus;
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -57,7 +58,6 @@ KineticStatus KineticSession_Destroy(KineticSession * const session)
     if (session->connection == NULL) {
         return KINETIC_STATUS_SESSION_INVALID;
     }
-    pthread_mutex_destroy(&session->connection->writeMutex);
     KineticAllocator_FreeConnection(session->connection);
     session->connection = NULL;
     return KINETIC_STATUS_SUCCESS;
@@ -88,10 +88,16 @@ KineticStatus KineticSession_Connect(KineticSession const * const session)
     }
 
     // Kick off the worker thread
-    session->connection->thread.connection = connection;
-    KineticController_Init(session);
+    connection->si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
+    if (connection->si == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
+    bool success = bus_register_socket(connection->messageBus, BUS_SOCKET_PLAIN, connection->socket, connection);
+    if (!success) {
+        free(connection->si);
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
 
     connection->session = *session;
+    // #TODO what to do if we time out here? I think the bus should timeout by itself or something
 
     // Wait for initial unsolicited status to be received in order to obtain connectionID
     const long maxWaitMicrosecs = 2000000;
@@ -119,24 +125,14 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
     
-    // Shutdown the worker thread
-    KineticStatus status = KINETIC_STATUS_SUCCESS;
-    connection->thread.abortRequested = true;
-    LOG3("\nSent abort request to worker thread!\n");
-    int pthreadStatus = pthread_join(connection->threadID, NULL);
-    if (pthreadStatus != 0) {
-        char errMsg[256];
-        Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
-        LOGF0("Failed terminating worker thread w/error: %s", errMsg);
-        status = KINETIC_STATUS_CONNECTION_ERROR;
-    }
-
     // Close the connection
-    close(connection->socket);
+    bus_release_socket(connection->messageBus, connection->socket);
+    free(connection->si);
+
     connection->socket = KINETIC_HANDLE_INVALID;
     connection->connected = false;
 
-    return status;
+    return KINETIC_STATUS_SUCCESS;
 }
 
 void KineticSession_IncrementSequence(KineticSession const * const session)

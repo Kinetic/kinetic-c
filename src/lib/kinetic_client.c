@@ -24,20 +24,34 @@
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
 #include "kinetic_logger.h"
+#include "kinetic_pdu.h"
 #include <stdlib.h>
 #include <sys/time.h>
 
-void KineticClient_Init(const char* log_file, int log_level)
+KineticClient * KineticClient_Init(const char* log_file, int log_level)
 {
+    KineticClient * client = calloc(1, sizeof(*client));
+    if (client == NULL) { return NULL; }
     KineticLogger_Init(log_file, log_level);
+    bool success = KineticPDU_InitBus(1, client);
+    if (!success)
+    {
+        free(client);
+        return NULL;
+    }
+    return client;
 }
 
-void KineticClient_Shutdown(void)
+void KineticClient_Shutdown(KineticClient * const client)
 {
+    bus_shutdown(client->bus);
+    bus_free(client->bus);
+    free(client);
     KineticLogger_Close();
+
 }
 
-KineticStatus KineticClient_CreateConnection(KineticSession* const session)
+KineticStatus KineticClient_CreateConnection(KineticSession* const session, KineticClient * const client)
 {
     if (session == NULL) {
         LOG0("KineticSession is NULL!");
@@ -54,7 +68,7 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session)
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
-    KineticSession_Create(session);
+    KineticSession_Create(session, client);
     if (session->connection == NULL) {
         LOG0("Failed to create connection instance!");
         return KINETIC_STATUS_CONNECTION_ERROR;

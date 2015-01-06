@@ -54,52 +54,52 @@ typedef struct _KineticPDU KineticPDU;
 typedef struct _KineticOperation KineticOperation;
 typedef struct _KineticConnection KineticConnection;
 
-
-// Kinetic list item
-typedef struct _KineticListItem KineticListItem;
-struct _KineticListItem {
-    KineticListItem* next;
-    void* data;
+struct _KineticClient {
+    struct bus *bus;
 };
 
-// Kinetic list
-typedef struct _KineticList {
-    KineticListItem* start;
-    pthread_mutex_t mutex;
-    bool locked;
-} KineticList;
-#define KINETIC_LIST_INITIALIZER (KineticList) { \
-    .mutex = PTHREAD_MUTEX_INITIALIZER, .locked = false, .start = NULL, }
 
-// Kinetic Thread Instance
-typedef struct _KineticThread {
-    bool abortRequested;
-    bool fatalError;
-    bool paused;
-    KineticConnection* connection;
-} KineticThread;
+// #TODO remove packed attribute and replace uses of sizeof(KineticPDUHeader)
+//  with a constant
+typedef struct __attribute__((__packed__)) _KineticPDUHeader {
+    uint8_t     versionPrefix;
+    uint32_t    protobufLength;
+    uint32_t    valueLength;
+} KineticPDUHeader;
 
+enum socket_state {
+    STATE_UNINIT = 0,
+    STATE_AWAITING_HEADER,
+    STATE_AWAITING_BODY,
+};
 
+enum unpack_error {
+    UNPACK_ERROR_UNDEFINED,
+    UNPACK_ERROR_SUCCESS,
+    UNPACK_ERROR_INVALID_HEADER,
+    UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
+};
+
+typedef struct {
+    enum socket_state state;
+    KineticPDUHeader header;
+    enum unpack_error unpack_status;
+    size_t accumulated;
+    uint8_t buf[];
+} socket_info;
 // Kinetic Device Client Connection
 struct _KineticConnection {
     bool            connected;      // state of connection
     int             socket;         // socket file descriptor
-    pthread_mutex_t writeMutex;     // socket write mutex
     int64_t         connectionID;   // initialized to seconds since epoch
     int64_t         sequence;       // increments for each request in a session
-    KineticList     pdus;           // list of dynamically allocated PDUs
-    KineticList     operations;     // list of dynamically allocated operations
     KineticSession  session;        // session configuration
-    KineticThread   thread;         // worker thread instance struct
-    pthread_t       threadID;       // worker pthread
+    struct bus *    messageBus;
+    socket_info *   si;   
 };
 
 #define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
         .connected = false, \
-        .socket = -1, \
-        .writeMutex = PTHREAD_MUTEX_INITIALIZER, \
-        .operations = KINETIC_LIST_INITIALIZER, \
-        .pdus = KINETIC_LIST_INITIALIZER, \
     }; \
 }
 
@@ -140,11 +140,7 @@ typedef struct _KineticMessage {
 #define PDU_PROTO_MAX_UNPACKED_LEN  (PDU_PROTO_MAX_LEN * 2)
 #define PDU_MAX_LEN                 (PDU_HEADER_LEN + \
                                     PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE)
-typedef struct __attribute__((__packed__)) _KineticPDUHeader {
-    uint8_t     versionPrefix;
-    uint32_t    protobufLength;
-    uint32_t    valueLength;
-} KineticPDUHeader;
+
 typedef enum {
     KINETIC_PDU_TYPE_INVALID = 0,
     KINETIC_PDU_TYPE_REQUEST,
@@ -181,15 +177,22 @@ struct _KineticPDU {
     KineticOperation* operation;
 };
 
+typedef struct _KineticResponse
+{
+    KineticPDUHeader header;
+    KineticProto_Message* proto;
+    KineticProto_Command* command;
+    uint8_t value[];
+} KineticResponse;
+
+
 typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operation, KineticStatus const status);
 
 // Kinetic Operation
 struct _KineticOperation {
     KineticConnection* connection;
     KineticPDU* request;
-    KineticPDU* response;
-    pthread_mutex_t timeoutTimeMutex;
-    struct timeval timeoutTime;
+    KineticResponse* response;
     bool valueEnabled;
     bool sendValue;
     KineticEntry* entry;

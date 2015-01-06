@@ -472,7 +472,6 @@ void KineticOperation_Init(KineticOperation* op, KineticConnection* con)
     assert(con != NULL);
     *op = (KineticOperation) {
         .connection = con,
-        .timeoutTimeMutex = PTHREAD_MUTEX_INITIALIZER,
     };
 }
 

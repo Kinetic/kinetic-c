@@ -87,6 +87,10 @@ typedef enum _KineticSynchronization {
 } KineticSynchronization;
 
 
+struct _KineticClient;
+typedef struct _KineticClient KineticClient;
+
+
 /**
  * @brief Kinetic Connection Instance
  */

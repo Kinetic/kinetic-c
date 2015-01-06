@@ -189,13 +189,13 @@ typedef struct bus_result {
 typedef struct {
     bus_send_status_t status; // request_status
     union {
-        struct {
+    struct {
             const char *err_str;
         } error_minutiae;
         struct {
             // user needs to free *msg
             int64_t seq_id;
-            uint8_t *opaque_msg;
+            void *opaque_msg;
         } response;
     } u;
 } bus_msg_result_t;

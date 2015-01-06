@@ -29,17 +29,12 @@ KineticConnection* KineticAllocator_NewConnection(void);
 void KineticAllocator_FreeConnection(KineticConnection* connection);
 
 KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection);
-void KineticAllocator_FreePDU(KineticConnection* connection, KineticPDU* pdu);
-KineticPDU* KineticAllocator_GetFirstPDU(KineticConnection* connection);
-KineticPDU* KineticAllocator_GetNextPDU(KineticConnection* connection, KineticPDU* pdu);
-void KineticAllocator_FreeAllPDUs(KineticConnection* connection);
+void KineticAllocator_FreePDU(KineticPDU* pdu);
 
 KineticOperation* KineticAllocator_NewOperation(KineticConnection* connection);
-void KineticAllocator_FreeOperation(KineticConnection* connection, KineticOperation* operation);
-KineticOperation* KineticAllocator_GetFirstOperation(KineticConnection* connection);
-KineticOperation* KineticAllocator_GetNextOperation(KineticConnection* connection, KineticOperation* operation);
-void KineticAllocator_FreeAllOperations(KineticConnection* connection);
+void KineticAllocator_FreeOperation(KineticOperation* operation);
 
-bool KineticAllocator_ValidateAllMemoryFreed(KineticConnection* connection);
+KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength);
+void KineticAllocator_FreeKineticResponse(KineticResponse * response);
 
 #endif // _KINETIC_ALLOCATOR

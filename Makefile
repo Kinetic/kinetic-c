@@ -263,6 +263,7 @@ stop_simulator:
 # System Tests
 #===============================================================================
 
+
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
 SYSTEST_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl -lcrypto $(KINETIC_LIB) -l pthread
@@ -276,6 +277,8 @@ systest_executables = $(patsubst $(SYSTEST_SRC)/%.c,$(SYSTEST_OUT)/run_%,$(syste
 systest_results = $(patsubst $(SYSTEST_OUT)/run_%,$(SYSTEST_OUT)/%.log,$(systest_executables))
 systest_passfiles = $(patsubst $(SYSTEST_OUT)/run_%,$(SYSTEST_OUT)/%.testpass,$(systest_executables))
 systest_names = $(patsubst $(SYSTEST_OUT)/run_%,%,$(systest_executables))
+
+.SECONDARY: $(systest_executables)
 
 list_system_tests:
 	echo $(systest_names)

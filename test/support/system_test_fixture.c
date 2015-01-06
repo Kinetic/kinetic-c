@@ -24,10 +24,11 @@
 #include "kinetic_logger.h"
 
 uint8_t data[KINETIC_OBJ_SIZE];
+KineticClient * client;
 
 void SystemTestSetup(SystemTestFixture* fixture, int log_level)
 {
-    KineticClient_Init("stdout", log_level);
+    client = KineticClient_Init("stdout", log_level);
 
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
 
@@ -49,7 +50,7 @@ void SystemTestSetup(SystemTestFixture* fixture, int log_level)
             .connected = fixture->connected,
             .testIgnored = false,
         };
-        status = KineticClient_CreateConnection(&fixture->session);
+        status = KineticClient_CreateConnection(&fixture->session, client);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         fixture->expectedSequence = 0;
         fixture->connected = true;
@@ -84,7 +85,7 @@ void SystemTestTearDown(SystemTestFixture* fixture)
     KineticStatus status = KineticClient_DestroyConnection(&fixture->session);
     TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
 
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
 }
 
 bool SystemTestIsUnderSimulator(void)
