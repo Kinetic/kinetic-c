@@ -31,6 +31,9 @@
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_allocator.h"
+#include "mock_kinetic_client.h"
+
+#include "mock_bus.h"
 #include "byte_array.h"
 #include <string.h>
 #include <sys/time.h>
@@ -40,17 +43,18 @@ static KineticSession Session;
 static KineticPDU Request, Response;
 static int OperationCompleteCallbackCount;
 static KineticStatus LastStatus;
+static struct _KineticClient Client;
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout", 3);
     Session.config = (KineticSessionConfig) {
         .host = "somehost.com",
         .port = 17,
     };
     KINETIC_CONNECTION_INIT(&Connection);
     KineticAllocator_NewConnection_ExpectAndReturn(&Connection);
-    KineticStatus status = KineticSession_Create(&Session);
+    
+    KineticStatus status = KineticSession_Create(&Session, &Client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_NOT_NULL(Session.connection);
     TEST_ASSERT_FALSE(Session.connection->connected);
@@ -70,7 +74,13 @@ void tearDown(void)
 void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_session(void)
 {
     LOG_LOCATION;
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, KineticSession_Create(NULL));
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, KineticSession_Create(NULL, NULL));
+}
+
+void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_client(void)
+{
+    LOG_LOCATION;
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, KineticSession_Create(&Session, NULL));
 }
 
 void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(void)
@@ -79,7 +89,7 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
     KineticSession session;
     KineticConnection connection;
     KineticAllocator_NewConnection_ExpectAndReturn(&connection);
-    KineticStatus status = KineticSession_Create(&session);
+    KineticStatus status = KineticSession_Create(&session, &Client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, session.connection);
     TEST_ASSERT_FALSE(session.connection->connected);
@@ -188,7 +198,8 @@ void test_KineticSession_Connect_should_connect_to_specified_host(void)
         hmacKey, expected.config.hmacKey.len);
 
     KineticSocket_Connect_ExpectAndReturn(expected.config.host, expected.config.port, expected.connection->socket);
-    KineticController_Init_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
+    bus_register_socket_ExpectAndReturn(NULL, BUS_SOCKET_PLAIN,
+        expectedConnection.socket, &actualConnection, true);
 
     // Setup mock expectations for worker thread
     KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
@@ -205,7 +216,6 @@ void test_KineticSession_Connect_should_connect_to_specified_host(void)
     TEST_ASSERT_EQUAL_INT64(expected.config.identity, session.config.identity);
     TEST_ASSERT_EQUAL_ByteArray(expected.config.hmacKey, session.config.hmacKey);
 }
-
 
 void test_KineticSession_IncrementSequence_should_increment_the_sequence_count(void)
 {

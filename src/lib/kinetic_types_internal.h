@@ -100,6 +100,7 @@ struct _KineticConnection {
 
 #define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
         .connected = false, \
+        .socket = -1,       \
     }; \
 }
 

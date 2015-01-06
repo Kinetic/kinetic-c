@@ -267,4 +267,8 @@ KineticStatus KineticClient_SetClusterVersion(KineticSession handle,
                                               int64_t clusterVersion,
                                               int64_t newClusterVersion);
 
+#if TEST
+#include "kinetic_types_internal.h"
+#endif
+
 #endif // _KINETIC_CLIENT_H
