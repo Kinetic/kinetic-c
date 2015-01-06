@@ -25,17 +25,19 @@
 #include "kinetic_hmac.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
-
-
-
-
 #include "kinetic_nbo.h"
 #include "kinetic_allocator.h"
 #include "kinetic_controller.h"
 #include "bus.h"
+#include "kinetic_pdu_unpack.h"
 
+#ifdef TEST
+#define STATIC
+#else
+#define STATIC static
+#endif
 
-static void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
+STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
     const char *event_str = bus_log_event_str(event);
     fprintf(stderr, "%s[%d] -- %s\n",
@@ -54,32 +56,33 @@ static bus_sink_cb_res_t reset_transfer(socket_info *si) {
     return res;
 }
 
-
-static bool unpack_header(uint8_t const * const read_buf, size_t const read_size, KineticPDUHeader * const header)
+STATIC bool unpack_header(uint8_t const * const read_buf, size_t const read_size, KineticPDUHeader * const header)
 {
     if (read_size != sizeof(KineticPDUHeader)) {
         return false;
         // TODO this will fail if we don't get all of the header bytes in one read
         // we should fix this
-    } 
+    }
     KineticPDUHeader const * const buf_header = (KineticPDUHeader const * const)read_buf;
     uint32_t protobufLength = KineticNBO_ToHostU32(buf_header->protobufLength);
     uint32_t valueLength = KineticNBO_ToHostU32(buf_header->valueLength);
     uint8_t versionPrefix = buf_header->versionPrefix;
 
-    *header = (KineticPDUHeader){
-        .versionPrefix = versionPrefix,
-        .protobufLength = protobufLength,
-        .valueLength = valueLength,
-    };
-    if (header->protobufLength <= PDU_PROTO_MAX_LEN &&
-        header->valueLength <= PDU_PROTO_MAX_LEN) {
+    if (protobufLength <= PDU_PROTO_MAX_LEN &&
+        valueLength <= PDU_PROTO_MAX_LEN) {
+
+        *header = (KineticPDUHeader){
+            .versionPrefix = versionPrefix,
+            .protobufLength = protobufLength,
+            .valueLength = valueLength,
+        };
         return true;
     } else {
         return false;
     }
 }
-static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
+
+STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         size_t read_size, void *socket_udata) {
 
     KineticConnection * connection = (KineticConnection *)socket_udata;
@@ -145,7 +148,7 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
     }
 }
 
-static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
+STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     (void)socket_udata;
     /* just got .full_msg_buffer from sink_cb -- pass it along as-is */
     socket_info *si = (socket_info *)msg;
@@ -158,36 +161,43 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         };
     }
 
-    KineticResponse * reponse = KineticAllocator_NewKineticResponse(si->header.valueLength);
+    KineticResponse * response = KineticAllocator_NewKineticResponse(si->header.valueLength);
 
-    if (reponse == NULL) {
+    if (response == NULL) {
         bus_unpack_cb_res_t res = {
             .ok = false,
             .u.error.opaque_error_id = UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
         };
         return res;
     } else {
-        reponse->header = si->header;
-        reponse->proto = KineticProto_Message__unpack(NULL, si->header.protobufLength, si->buf);
-        if (reponse->proto->has_commandBytes &&
-            reponse->proto->commandBytes.data != NULL &&
-            reponse->proto->commandBytes.len > 0)
+        response->header = si->header;
+
+        response->proto = KineticPDU_unpack_message(NULL, si->header.protobufLength, si->buf);
+        if (response->proto->has_commandBytes &&
+            response->proto->commandBytes.data != NULL &&
+            response->proto->commandBytes.len > 0)
         {
-            reponse->command = KineticProto_command__unpack(NULL, reponse->proto->commandBytes.len, reponse->proto->commandBytes.data);
+            response->command = KineticPDU_unpack_command(NULL,
+                response->proto->commandBytes.len, response->proto->commandBytes.data);
         } else {
-            reponse->command = NULL;
+            response->command = NULL;
         }
 
-        if (reponse->header.valueLength > 0)
+        if (response->header.valueLength > 0)
         {
-            memcpy(reponse->value, &si->buf[si->header.protobufLength], si->header.valueLength);
+            memcpy(response->value, &si->buf[si->header.protobufLength], si->header.valueLength);
+        }
+
+        int64_t seq_id = 0;
+        if (response->command) {
+            seq_id = response->command->header->ackSequence;
         }
 
         bus_unpack_cb_res_t res = {
             .ok = true,
             .u.success = {
-                .seq_id = reponse->command->header->ackSequence,
-                .msg = reponse,
+                .seq_id = seq_id,
+                .msg = response,
             },
         };
         return res;
@@ -232,8 +242,8 @@ KineticStatus KineticPDU_GetStatus(KineticResponse* response)
 KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticResponse* response)
 {
     KineticProto_Command_KeyValue* keyValue = NULL;
+
     if (response != NULL &&
-        response->command != NULL &&
         response->command != NULL &&
         response->command->body != NULL)
     {

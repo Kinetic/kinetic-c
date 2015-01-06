@@ -57,6 +57,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
 	$(OUT_DIR)/kinetic_pdu.o \
+	$(OUT_DIR)/kinetic_pdu_unpack.o \
 	$(OUT_DIR)/kinetic_proto.o \
 	$(OUT_DIR)/kinetic_socket.o \
 	$(OUT_DIR)/kinetic_message.o \

@@ -32,6 +32,7 @@
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_client.h"
+#include "mock_kinetic_pdu_unpack.h"
 
 #include "mock_bus.h"
 #include "byte_array.h"
