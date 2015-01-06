@@ -37,8 +37,8 @@
 #define KINETIC_LIST_UNLOCK(_list) { \
     /*LOG_LOCATION; LOGF3("Unlocking list! (list_addr=0x%llX)", (_list));*/ \
     assert(((_list)->locked)); \
-    pthread_mutex_unlock(&((_list)->mutex)); \
     ((_list)->locked) = false; \
+    pthread_mutex_unlock(&((_list)->mutex)); \
 }
 
 void KineticAllocator_InitLists(KineticConnection* connection)
