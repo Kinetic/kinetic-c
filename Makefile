@@ -11,7 +11,7 @@ PUB_INC = ./include
 # Shared Build Variables
 #===============================================================================
 CC ?= gcc
-OPTIMIZE = -O3
+# OPTIMIZE = -O3
 SYSTEM_TEST_HOST ?= \"localhost\"
 WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
