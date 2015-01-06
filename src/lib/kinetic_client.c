@@ -30,9 +30,9 @@
 
 KineticClient * KineticClient_Init(const char* log_file, int log_level)
 {
+    KineticLogger_Init(log_file, log_level);
     KineticClient * client = calloc(1, sizeof(*client));
     if (client == NULL) { return NULL; }
-    KineticLogger_Init(log_file, log_level);
     bool success = KineticPDU_InitBus(1, client);
     if (!success)
     {
@@ -44,11 +44,9 @@ KineticClient * KineticClient_Init(const char* log_file, int log_level)
 
 void KineticClient_Shutdown(KineticClient * const client)
 {
-    bus_shutdown(client->bus);
-    bus_free(client->bus);
+    KineticPDU_DeinitBus(client);
     free(client);
     KineticLogger_Close();
-
 }
 
 KineticStatus KineticClient_CreateConnection(KineticSession* const session, KineticClient * const client)

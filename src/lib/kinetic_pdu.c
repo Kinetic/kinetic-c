@@ -223,6 +223,12 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
     return true;
 }
 
+void KineticPDU_DeinitBus(KineticClient * const client)
+{
+    bus_shutdown(client->bus);
+    bus_free(client->bus);
+}
+
 KineticStatus KineticPDU_GetStatus(KineticResponse* response)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
