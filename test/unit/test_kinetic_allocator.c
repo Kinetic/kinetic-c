@@ -58,6 +58,14 @@ void test_KineticAllocator_NewConnection_should_return_a_connection_with_connect
     TEST_ASSERT_FALSE(connection->connected);
 }
 
+void test_KineticAllocator_NewConnection_should_return_a_connection_with_a_minus1_fd(void)
+{
+    calloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
+    KineticConnection* connection =  KineticAllocator_NewConnection();
+    TEST_ASSERT_NOT_NULL(connection);
+    TEST_ASSERT_EQUAL(-1, connection->socket);
+}
+
 void test_KineticAllocator_NewKineticResponse_should_return_null_if_calloc_return_null(void)
 {
     calloc_ExpectAndReturn(1, sizeof(KineticResponse) + 1234, NULL);

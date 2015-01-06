@@ -51,7 +51,7 @@ void setUp(void)
         .host = "somehost.com",
         .port = 17,
     };
-    KINETIC_CONNECTION_INIT(&Connection);
+    memset(&Connection, 0, sizeof(Connection));
     KineticAllocator_NewConnection_ExpectAndReturn(&Connection);
     
     KineticStatus status = KineticSession_Create(&Session, &Client);
@@ -98,22 +98,6 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
     status = KineticSession_Destroy(&session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_NULL(session.connection);
-}
-
-void test_KINETIC_CONNECTION_INIT_should_create_a_default_connection_object(void)
-{
-    LOG_LOCATION;
-    KineticConnection connection;
-    KINETIC_CONNECTION_INIT(&connection);
-
-    TEST_ASSERT_FALSE(connection.connected);
-    TEST_ASSERT_EQUAL(0, connection.session.config.port);
-    TEST_ASSERT_EQUAL(-1, connection.socket);
-    TEST_ASSERT_EQUAL_INT64(0, connection.sequence);
-    TEST_ASSERT_EQUAL_INT64(0, connection.connectionID);
-    TEST_ASSERT_EQUAL_STRING("", connection.session.config.host);
-    TEST_ASSERT_EQUAL_INT64(0, connection.session.config.clusterVersion);
-    TEST_ASSERT_EQUAL_INT64(0, connection.session.config.identity);
 }
 
 void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_session(void)
@@ -200,9 +184,6 @@ void test_KineticSession_Connect_should_connect_to_specified_host(void)
     KineticSocket_Connect_ExpectAndReturn(expected.config.host, expected.config.port, expected.connection->socket);
     bus_register_socket_ExpectAndReturn(NULL, BUS_SOCKET_PLAIN,
         expectedConnection.socket, &actualConnection, true);
-
-    // Setup mock expectations for worker thread
-    KineticSocket_WaitUntilDataAvailable_IgnoreAndReturn(KINETIC_WAIT_STATUS_TIMED_OUT);
 
     // Establish connection
     KineticStatus status = KineticSession_Connect(&session);
