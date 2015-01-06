@@ -114,7 +114,6 @@ typedef struct _KineticMessage {
     KineticProto_Message_PINauth        pinAuth;
     uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
 
-    bool                                         has_command; // Set to `true` to enable command element
     KineticProto_Command                         command;
     KineticProto_Command_Header                  header;
     KineticProto_Command_Body                    body;

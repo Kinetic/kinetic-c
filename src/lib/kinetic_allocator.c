@@ -23,10 +23,6 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-
-//==============================================================================
-// Generic List Support (INTERNAL)
-//==============================================================================
 KineticConnection* KineticAllocator_NewConnection(void)
 {
     KineticConnection* connection = calloc(1, sizeof(KineticConnection));
@@ -43,31 +39,6 @@ void KineticAllocator_FreeConnection(KineticConnection* connection)
     free(connection);
 }
 
-//==============================================================================
-// PDU List Support
-//==============================================================================
-
-KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection)
-{
-    assert(connection != NULL);
-    LOGF3("Allocating new PDU on connection (0x%0llX)", connection);
-    KineticPDU* newPDU = (KineticPDU*)calloc(1, sizeof(KineticPDU));
-    if (newPDU == NULL) {
-        LOG0("Failed allocating new PDU!");
-        return NULL;
-    }
-    KineticPDU_Init(newPDU, connection);
-    LOGF3("Allocated new PDU (0x%0llX) on connection", newPDU, connection);
-    return newPDU;
-}
-
-void KineticAllocator_FreePDU(KineticPDU* pdu)
-{
-    free(pdu);
-    LOGF3("Freed PDU (0x%0llX)", pdu);
-}
-
-
 KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength)
 {
     KineticResponse * response = calloc(1, sizeof(*response) + valueLength);
@@ -80,20 +51,16 @@ KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength)
 
 void KineticAllocator_FreeKineticResponse(KineticResponse * response)
 {
-    if (response != NULL) {
-        if (response->command != NULL) {
-            protobuf_c_message_free_unpacked(&response->command->base, NULL);
-        }
-        if (response->proto != NULL) {
-            protobuf_c_message_free_unpacked(&response->proto->base, NULL);
-        }
-        free(response);
-    }
-}
+    assert(response != NULL);
 
-//==============================================================================
-// Operation List Support
-//==============================================================================
+    if (response->command != NULL) {
+        protobuf_c_message_free_unpacked(&response->command->base, NULL);
+    }
+    if (response->proto != NULL) {
+        protobuf_c_message_free_unpacked(&response->proto->base, NULL);
+    }
+    free(response);
+}
 
 KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connection)
 {
@@ -106,7 +73,13 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
         return NULL;
     }
     KineticOperation_Init(newOperation, connection);
-    newOperation->request = KineticAllocator_NewPDU(connection);
+    LOGF3("Allocating new PDU on connection (0x%0llX)", connection);
+    newOperation->request = (KineticPDU*)calloc(1, sizeof(KineticPDU));
+    if (newOperation->request == NULL) {
+        LOG0("Failed allocating new PDU!");
+        free(newOperation);
+        return NULL;
+    }
     KineticPDU_InitWithCommand(newOperation->request, connection);
     LOGF3("Allocated new operation (0x%0llX) on connection (0x%0llX)", newOperation, connection);
     return newOperation;
@@ -120,7 +93,8 @@ void KineticAllocator_FreeOperation(KineticOperation* operation)
     if (operation->request != NULL) {
         LOGF3("Freeing request PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)",
             operation->request, operation, connection);
-        KineticAllocator_FreePDU(operation->request);
+        free(operation->request);
+        LOGF3("Freed PDU (0x%0llX)", operation->request);
         operation->request = NULL;
     }
     if (operation->response != NULL) {

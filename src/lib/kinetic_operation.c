@@ -45,21 +45,23 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     KineticProto_Message* proto = &operation->request->message.message;
 
     // Pack the command, if available
-    if (request->message.has_command) {
-        size_t expectedLen = KineticProto_command__get_packed_size(&request->message.command);
-        request->message.message.commandBytes.data = (uint8_t*)malloc(expectedLen);
-        assert(request->message.message.commandBytes.data != NULL);
-        size_t packedLen = KineticProto_command__pack(
-            &request->message.command,
-            request->message.message.commandBytes.data);
-        assert(packedLen == expectedLen);
-        request->message.message.commandBytes.len = packedLen;
-        request->message.message.has_commandBytes = true;
-        KineticLogger_LogByteArray(2, "commandBytes", (ByteArray){
-            .data = request->message.message.commandBytes.data,
-            .len = request->message.message.commandBytes.len,
-        });
+    size_t expectedLen = KineticProto_command__get_packed_size(&request->message.command);
+    request->message.message.commandBytes.data = (uint8_t*)malloc(expectedLen);
+    if(request->message.message.commandBytes.data == NULL)
+    {
+        LOG0("Failed to allocate command bytes!");
+        return KINETIC_STATUS_MEMORY_ERROR;
     }
+    size_t packedLen = KineticProto_command__pack(
+        &request->message.command,
+        request->message.message.commandBytes.data);
+    assert(packedLen == expectedLen);
+    request->message.message.commandBytes.len = packedLen;
+    request->message.message.has_commandBytes = true;
+    KineticLogger_LogByteArray(2, "commandBytes", (ByteArray){
+        .data = request->message.message.commandBytes.data,
+        .len = request->message.message.commandBytes.len,
+    });
 
     switch (proto->authType) {
     case KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH:
@@ -110,11 +112,8 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     uint8_t * msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
     if (msg == NULL)
     {
-        if (request->message.has_command)
-        {
-            free(request->message.message.commandBytes.data);
-            request->message.message.commandBytes.data = NULL;
-        }
+        free(request->message.message.commandBytes.data);
+        request->message.message.commandBytes.data = NULL;
 
         LOG0("Failed to allocate outgoing message!");
         return KINETIC_STATUS_MEMORY_ERROR;
@@ -132,11 +131,8 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     assert(len == header.protobufLength);
     offset += header.protobufLength;
 
-    if (request->message.has_command)
-    {
-        free(request->message.message.commandBytes.data);
-        request->message.message.commandBytes.data = NULL;
-    }
+    free(request->message.message.commandBytes.data);
+    request->message.message.commandBytes.data = NULL;
 
     // Send the value/payload, if specified
     if (header.valueLength > 0) {
@@ -720,7 +716,6 @@ static void KineticOperation_ValidateOperation(KineticOperation* operation)
     assert(operation != NULL);
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
-    assert(operation->request->message.has_command);
     assert(operation->request->command != NULL);
     assert(operation->request->command->header != NULL);
     assert(operation->request->command->header->has_sequence);

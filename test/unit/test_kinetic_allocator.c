@@ -23,7 +23,7 @@
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include "byte_array.h"
-#include "protobuf-c/protobuf-c.h"
+#include "mock_protobuf-c.h"
 #include "unity.h"
 #include "unity_helper.h"
 #include "mock_memory_stubs.h"
@@ -58,25 +58,113 @@ void test_KineticAllocator_NewConnection_should_return_a_connection_with_connect
     TEST_ASSERT_FALSE(connection->connected);
 }
 
-void test_KineticAllocator_NewPDU_should_return_null_if_calloc_returns_null(void)
-{
-    calloc_ExpectAndReturn(1, sizeof(KineticPDU), NULL);
-    KineticPDU * pdu = KineticAllocator_NewPDU(&Connection);
-    TEST_ASSERT_NULL(pdu);
-}
-
-void test_KineticAllocator_NewPDU_should_initialize_pdu(void)
-{
-    KineticPDU pdu;
-    calloc_ExpectAndReturn(1, sizeof(KineticPDU), &pdu);
-    KineticPDU_Init_Expect(&pdu, &Connection);
-    KineticPDU * pdu_pointer = KineticAllocator_NewPDU(&Connection);
-    TEST_ASSERT_NOT_NULL(pdu_pointer);
-}
-
 void test_KineticAllocator_NewKineticResponse_should_return_null_if_calloc_return_null(void)
 {
     calloc_ExpectAndReturn(1, sizeof(KineticResponse) + 1234, NULL);
     KineticResponse * response = KineticAllocator_NewKineticResponse(1234);
     TEST_ASSERT_NULL(response);
 }
+
+void test_KineticAllocator_FreeKineticResponse_should_free_the_command_if_its_not_null(void)
+{
+    KineticProto_Command command;
+
+    KineticResponse rsp = { .command = &command};
+    protobuf_c_message_free_unpacked_Expect(&command.base, NULL);
+
+    free_Expect(&rsp);
+
+    KineticAllocator_FreeKineticResponse(&rsp);
+}
+
+void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_if_its_not_null(void)
+{
+    KineticProto_Message proto;
+
+    KineticResponse rsp = { .proto = &proto};
+    protobuf_c_message_free_unpacked_Expect(&proto.base, NULL);
+
+    free_Expect(&rsp);
+
+    KineticAllocator_FreeKineticResponse(&rsp);
+}
+
+void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_and_command_if_they_are_not_null(void)
+{
+    KineticProto_Message proto;
+    KineticProto_Command command;
+
+    KineticResponse rsp = {
+        .proto = &proto,
+        .command = &command
+    };
+    protobuf_c_message_free_unpacked_Expect(&command.base, NULL);
+    protobuf_c_message_free_unpacked_Expect(&proto.base, NULL);
+
+    free_Expect(&rsp);
+
+    KineticAllocator_FreeKineticResponse(&rsp);
+}
+
+
+void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_null_for_operation(void)
+{
+    calloc_ExpectAndReturn(1, sizeof(KineticOperation), NULL);
+    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+    TEST_ASSERT_NULL(operation);
+}
+
+
+void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if_calloc_returns_null_for_pdu(void)
+{
+    KineticOperation op;
+    calloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
+    KineticOperation_Init_Expect(&op, &Connection);
+    calloc_ExpectAndReturn(1, sizeof(KineticPDU), NULL);
+    free_Expect(&op);
+
+    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+
+    TEST_ASSERT_NULL(operation);
+}
+
+void test_KineticAllocator_NewOperation_should_initialize_operation_and_pdu(void)
+{
+    KineticOperation op;
+    KineticPDU pdu;
+    calloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
+    KineticOperation_Init_Expect(&op, &Connection);
+    calloc_ExpectAndReturn(1, sizeof(KineticPDU), &pdu);
+
+    KineticPDU_InitWithCommand_Expect(&pdu, &Connection);
+    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+
+    TEST_ASSERT_NOT_NULL(operation);
+}
+
+void test_KineticAllocator_FreeOperation_should_free_request_if_its_not_null(void)
+{
+    KineticPDU pdu;
+    memset(&pdu, 0x00, sizeof(pdu));
+
+    KineticOperation op = { .request = &pdu };
+
+    free_Expect(&pdu);
+    free_Expect(&op);
+
+    KineticAllocator_FreeOperation(&op);
+}
+
+void test_KineticAllocator_FreeOperation_should_free_response_if_its_not_null(void)
+{
+    KineticResponse response;
+    memset(&response, 0x00, sizeof(response));
+
+    KineticOperation op = { .response = &response };
+
+    free_Expect(&response);
+    free_Expect(&op);
+
+    KineticAllocator_FreeOperation(&op);
+}
+

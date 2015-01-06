@@ -492,7 +492,6 @@ void KineticPDU_Init(KineticPDU* pdu, KineticConnection* con)
 void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticConnection* con)
 {
     KineticPDU_Init(pdu, con);
-    pdu->message.has_command = true;
     pdu->command = &pdu->message.command;
     pdu->command->header = &pdu->message.header;
 }
