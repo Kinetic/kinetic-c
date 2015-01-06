@@ -1,4 +1,3 @@
 *.a
-test_threadpool*
 *.o
 *.dSYM/
