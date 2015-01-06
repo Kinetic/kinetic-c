@@ -194,11 +194,13 @@ KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* re
             targetSequence, operation->request->command->header->sequence);
             if (operation->request->command->header->sequence == targetSequence) {
                 operation->response = response;
+		LOGF3("Received Matching Response %p", operation);
                 return operation;
             }
         }
         operation = KineticAllocator_GetNextOperation(response->connection, operation);
     }
+    LOGF3("No matching response found for response %p", response);
     return NULL;
 }
 

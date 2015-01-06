@@ -26,6 +26,7 @@
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <pthread.h>
+#include <malloc.h>
 
 KineticStatus KineticController_Init(KineticSession const * const session)
 {
@@ -80,8 +81,11 @@ typedef struct {
 static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
 {
     DefaultCallbackData * data = client_data;
+    LOGF1("  Callback invoked for (0x%0llX) ", data);
     data->status = kinetic_data->status;
+    pthread_mutex_lock(&data->receiveCompleteMutex);
     pthread_cond_signal(&data->receiveComplete);
+    pthread_mutex_unlock(&data->receiveCompleteMutex);
 }
 
 static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
@@ -116,25 +120,30 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     }
     else
     {
-        DefaultCallbackData data;
-        pthread_mutex_init(&data.receiveCompleteMutex, NULL);
-        pthread_cond_init(&data.receiveComplete, NULL);
-        data.status = KINETIC_STATUS_INVALID;
+        DefaultCallbackData *data = malloc(sizeof(*data)) ;
+	assert(data);
+        pthread_mutex_init(&data->receiveCompleteMutex, NULL);
+        pthread_cond_init(&data->receiveComplete, NULL);
+        data->status = KINETIC_STATUS_INVALID;
 
-        operation->closure = DefaultClosure(&data);
+        operation->closure.callback = DefaultCallback;
+        operation->closure.clientData = data;
 
         // Send the request
+        pthread_mutex_lock(&data->receiveCompleteMutex);
         status = KineticOperation_SendRequest(operation);
 
         if (status == KINETIC_STATUS_SUCCESS) {
-            pthread_mutex_lock(&data.receiveCompleteMutex);
-            pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex);
-            pthread_mutex_unlock(&data.receiveCompleteMutex);
-            status = data.status;
+	    LOGF1("  Waiting for completion of operation (0x%0llX) ", operation);
+            pthread_cond_wait(&data->receiveComplete, &data->receiveCompleteMutex);
+            status = data->status;
+	    LOGF1("  Wait ended for operation (0x%0llX) ", operation);
         }
+        pthread_mutex_unlock(&data->receiveCompleteMutex);
 
-        pthread_cond_destroy(&data.receiveComplete);
-        pthread_mutex_destroy(&data.receiveCompleteMutex);
+        pthread_cond_destroy(&data->receiveComplete);
+        pthread_mutex_destroy(&data->receiveCompleteMutex);
+	free(data);
 
         return status;
     }
