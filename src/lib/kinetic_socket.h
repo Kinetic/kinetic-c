@@ -35,11 +35,6 @@ typedef enum
 int KineticSocket_Connect(const char* host, int port);
 void KineticSocket_Close(int socket);
 
-int KineticSocket_DataBytesAvailable(int socket);
-KineticWaitStatus KineticSocket_WaitUntilDataAvailable(int socket, int timeout);
-KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len);
-
-KineticStatus KineticSocket_Write(int socket, ByteBuffer* src);
 void KineticSocket_BeginPacket(int socket);
 void KineticSocket_FinishPacket(int socket);
 
