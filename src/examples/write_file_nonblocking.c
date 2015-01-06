@@ -103,6 +103,8 @@ static int put_chunk_of_file(FileTransferProgress* transfer)
     int bytesRead = read(transfer->fd, closureData->value, sizeof(closureData->value));
     if (bytesRead > 0) {
         transfer->currentChunk++;
+
+        // Configure the entry to store
         closureData->entry = (KineticEntry){
             .key = ByteBuffer_CreateAndAppend(closureData->key, sizeof(closureData->key),
                 &transfer->keyPrefix, sizeof(transfer->keyPrefix)),
@@ -110,8 +112,15 @@ static int put_chunk_of_file(FileTransferProgress* transfer)
                 "some_value_tag..._%04d", transfer->currentChunk),
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .value = ByteBuffer_Create(closureData->value, sizeof(closureData->value), (size_t)bytesRead),
-            .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
+            .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
         };
+
+        // Ensure last PUT triggers flush to disk for completion
+        if ((size_t)bytesRead < sizeof(closureData->value)) {
+            closureData->entry.synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
+        }
+
+        // Store the current entry
         KineticStatus status = KineticClient_Put(transfer->session,
             &closureData->entry,
             &(KineticCompletionClosure) {

@@ -59,10 +59,13 @@ void store_data(write_args* args)
         ByteBuffer_Reset(&entry->value);
         ByteBuffer_AppendArray(
             &entry->value,
-            ByteBuffer_Consume(
-                &args->data,
-                MIN(ByteBuffer_BytesRemaining(args->data), KINETIC_OBJ_SIZE))
+            ByteBuffer_Consume(&args->data, KINETIC_OBJ_SIZE)
         );
+
+        // Ensure last PUT triggers flush to disk for completion
+        if (ByteBuffer_BytesRemaining(args->data) == 0) {
+            entry->synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
+        }
 
         // Store the object
         KineticStatus status = KineticClient_Put(args->session, entry, NULL);
