@@ -307,44 +307,6 @@ KineticStatus KineticSocket_Read(int socket, ByteBuffer* dest, size_t len)
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticSocket_ReadProtobuf(int socket, KineticPDU* pdu)
-{
-    size_t bytesToRead = pdu->header.protobufLength;
-    LOGF3("Reading %zd bytes of protobuf", bytesToRead);
-
-    uint8_t* packed = (uint8_t*)malloc(bytesToRead);
-    if (packed == NULL) {
-        LOG0("Failed allocating memory for protocol buffer");
-        return KINETIC_STATUS_MEMORY_ERROR;
-    }
-
-    ByteBuffer recvBuffer = ByteBuffer_Create(packed, bytesToRead, 0);
-    KineticStatus status = KineticSocket_Read(socket, &recvBuffer, bytesToRead);
-
-    if (status != KINETIC_STATUS_SUCCESS) {
-        LOG0("Protobuf read failed!");
-        free(packed);
-        return status;
-    }
-    else {
-        pdu->proto = KineticProto_Message__unpack(
-                         NULL, recvBuffer.bytesUsed, recvBuffer.array.data);
-    }
-
-    free(packed);
-
-    if (pdu->proto == NULL) {
-        pdu->protobufDynamicallyExtracted = false;
-        LOG0("Error unpacking incoming Kinetic protobuf message!");
-        return KINETIC_STATUS_DATA_ERROR;
-    }
-    else {
-        pdu->protobufDynamicallyExtracted = true;
-        LOG3("Protobuf unpacked successfully!");
-        return KINETIC_STATUS_SUCCESS;
-    }
-}
-
 KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
 {
     LOGF3("Writing %zu bytes to socket...", src->bytesUsed);
@@ -366,28 +328,6 @@ KineticStatus KineticSocket_Write(int socket, ByteBuffer* src)
         }
     }
     return KINETIC_STATUS_SUCCESS;
-}
-
-KineticStatus KineticSocket_WriteProtobuf(int socket, KineticPDU* pdu)
-{
-    assert(pdu != NULL);
-    LOGF3("Writing protobuf (%zd bytes)...", pdu->header.protobufLength);
-
-    uint8_t* packed = (uint8_t*)malloc(pdu->header.protobufLength);
-
-    if (packed == NULL) {
-        LOG0("Failed allocating memory for protocol buffer");
-        return KINETIC_STATUS_MEMORY_ERROR;
-    }
-    size_t len = KineticProto_Message__pack(&pdu->protoData.message.message, packed);
-    assert(len == pdu->header.protobufLength);
-
-    ByteBuffer buffer = ByteBuffer_Create(packed, len, len);
-
-    KineticStatus status = KineticSocket_Write(socket, &buffer);
-
-    free(packed);
-    return status;
 }
 
 void KineticSocket_BeginPacket(int socket)

@@ -30,7 +30,10 @@
 KineticConnection* KineticAllocator_NewConnection(void)
 {
     KineticConnection* connection = calloc(1, sizeof(KineticConnection));
-    KINETIC_CONNECTION_INIT(connection);
+    if (connection == NULL) {
+        LOG0("Failed allocating new Connection!");
+        return NULL;
+    }
     return connection;
 }
 
@@ -53,7 +56,6 @@ KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection)
         LOG0("Failed allocating new PDU!");
         return NULL;
     }
-    assert(newPDU->proto == NULL);
     KineticPDU_Init(newPDU, connection);
     LOGF3("Allocated new PDU (0x%0llX) on connection", newPDU, connection);
     return newPDU;
@@ -61,16 +63,8 @@ KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection)
 
 void KineticAllocator_FreePDU(KineticPDU* pdu)
 {
-    KineticConnection* connection = pdu->connection;
-    LOGF3("Freeing PDU (0x%0llX) on connection (0x%0llX)", pdu, connection);
-    if (pdu && (pdu->proto != NULL) && pdu->protobufDynamicallyExtracted) {
-        LOG3("Freeing dynamically allocated protobuf");
-        KineticProto_Message__free_unpacked(pdu->proto, NULL);
-        pdu->proto = NULL;
-    };
-    
     free(pdu);
-    LOGF3("Freed PDU (0x%0llX) on connection (0x%0llX)", pdu, connection);
+    LOGF3("Freed PDU (0x%0llX)", pdu);
 }
 
 

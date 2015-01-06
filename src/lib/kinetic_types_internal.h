@@ -98,12 +98,6 @@ struct _KineticConnection {
     socket_info *   si;   
 };
 
-#define KINETIC_CONNECTION_INIT(_con) { (*_con) = (KineticConnection) { \
-        .connected = false, \
-    }; \
-}
-
-
 // Kinetic Message HMAC
 typedef struct _KineticHMAC {
     KineticProto_Command_Security_ACL_HMACAlgorithm algorithm;
@@ -151,30 +145,10 @@ typedef enum {
 
 // Kinetic PDU
 struct _KineticPDU {
-    // Binary PDU header
-    KineticPDUHeader header;    // Header struct in native byte order
-    KineticPDUHeader headerNBO; // Header struct in network-byte-order
-
     // Message associated with this PDU instance
-    union {
-        KineticProto_Message base;
-        KineticMessage message;
-    } protoData;        // Proto will always be first
-    KineticProto_Message* proto;
-    bool protobufDynamicallyExtracted;
+    KineticMessage message;
+
     KineticProto_Command* command;
-
-    // Embedded HMAC instance
-    KineticHMAC hmac;
-
-    // Exchange associated with this PDU instance (info gets embedded in protobuf message)
-    KineticConnection* connection;
-
-    // The type of this PDU (request, response or unsolicited)
-    KineticPDUType type;
-
-    // Kinetic operation associated with this PDU, if any
-    KineticOperation* operation;
 };
 
 typedef struct _KineticResponse
