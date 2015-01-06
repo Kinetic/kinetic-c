@@ -172,6 +172,8 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -d $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
+
 
 uninstall:
 	@echo
@@ -186,6 +188,7 @@ uninstall:
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
+	$(RM) -f $(PREFIX)/include/byte_array.h
 
 .PHONY: install uninstall
 
