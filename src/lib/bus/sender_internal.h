@@ -32,11 +32,14 @@ typedef enum {
     TX_ERROR_WRITE_FAILURE = -3,
 } tx_error_t;
 
+#define SENDER_FD_NOT_IN_USE (-1)
+
 /* Metadata for a message in-flight. */
 typedef struct {
     /* Set during initialization only. */
     const int id;
-    int fd;
+    /* must be SENDER_FD_NOT_IN_USE when not in use */
+    int fd;                     
 
     /* Should be either TIMEOUT_NOT_YET_SET or a number of seconds, which
      * will count down to 0, triggering a timeout event. */
@@ -69,7 +72,6 @@ typedef struct sender {
     /* Outgoing message data. */
     tx_flag_t tx_flags;
     tx_info_t tx_info[MAX_CONCURRENT_SENDS];
-    int16_t tx_info_in_use;
 
     int pipes[MAX_CONCURRENT_SENDS][2];
 
