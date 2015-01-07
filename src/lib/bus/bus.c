@@ -279,7 +279,7 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg)
         return false;
     }
 
-    int complete_fd = 0;
+    int complete_fd = -1;
 
     int s_id = sender_id_of_socket(b, msg->fd);
     struct sender *s = b->senders[s_id];
@@ -312,25 +312,28 @@ static bool poll_on_completion(struct bus *b, int fd) {
         if (res == -1) {
             if (is_resumable_io_error(errno)) {
                 BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Polling on completion...EAGAIN", b->udata);
+                if (errno == EINTR && i > 0) { i--; }
                 errno = 0;
             } else {
                 assert(false);
                 break;
             }
         } else if (res > 0) {
-            uint8_t read_buf[2];
+            uint16_t msec = 0;
+            uint8_t read_buf[sizeof(msec)];
             
             BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Reading alert pipe...", b->udata);
-            ssize_t sz = read(fd, read_buf, 2);
+            ssize_t sz = read(fd, read_buf, sizeof(read_buf));
 
-            if (sz == 2) {
+            if (sz == sizeof(read_buf)) {
                 /* Payload: little-endian uint16_t, msec of backpressure. */
-                uint16_t msec = (read_buf[0] << 0) + (read_buf[1] << 8);
+                msec = (read_buf[0] << 0) + (read_buf[1] << 8);
                 if (msec > 0) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
-                        " -- backpressure of %d msec", msec);
+                        " -- awakening client thread with backpressure of %d msec", msec);
                     (void)poll(fds, 0, msec);
                 }
+
                 BUS_LOG(b, 3, LOG_SENDING_REQUEST, "sent!", b->udata);
                 return true;
             } else if (sz == -1) {
@@ -343,7 +346,12 @@ static bool poll_on_completion(struct bus *b, int fd) {
             }
         }
     }
-    BUS_LOG(b, 2, LOG_SENDING_REQUEST, "failed to send (timeout)", b->udata);
+    BUS_LOG(b, 2, LOG_SENDING_REQUEST, "failed to send (timeout on sender)", b->udata);
+
+    #if 0
+    assert(false);
+    #endif
+
     return false;
 }
 

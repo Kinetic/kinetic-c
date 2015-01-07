@@ -830,11 +830,11 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
 }
 
 static void notify_caller(int fd) {
-    uint8_t reply_buf[2] = {0x00, 0x00};
+    uint8_t reply_buf[sizeof(uint16_t)] = {0x00};
 
     for (;;) {
-        ssize_t wres = write(fd, reply_buf, 2);
-        if (wres == 2) { break; }
+        ssize_t wres = write(fd, reply_buf, sizeof(reply_buf));
+        if (wres == sizeof(reply_buf)) { break; }
         if (wres == -1) {
             if (errno == EINTR) {
                 errno = 0;

@@ -105,7 +105,9 @@ bool sender_enqueue_message(struct sender *s,
         BUS_LOG(b, 3, LOG_SENDER, "enqueue: no messages left", b->udata);
         return false;
     } else {
+        assert(*response_fd == SENDER_FD_NOT_IN_USE);
         *response_fd = s->pipes[tx_info->id][0];
+        assert(*response_fd != SENDER_FD_NOT_IN_USE);
         /* Message is queued for delivery once TX info is populated. */
         BUS_LOG(b, 4, LOG_SENDER, "enqueue: messages enqueued", b->udata);
         return populate_tx_info(s, tx_info, box);
@@ -489,7 +491,7 @@ static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
     size_t msg_size = info->box->out_msg_size;
     size_t rem = msg_size - info->sent_size;
 
-    BUS_LOG_SNPRINTF(b, 9, LOG_SENDER, b->udata, 64,
+    BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
         "write %p to %d, %zd bytes (info %d)",
         &msg[info->sent_size], info->fd, rem, info->id);
     ssize_t wrsz = write(info->fd, &msg[info->sent_size], rem);
@@ -582,9 +584,10 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
 }
 
 static bool write_backpressure(sender *s, tx_info_t *info, uint16_t bp) {
-    uint8_t buf[2];
+    uint8_t buf[sizeof(bp)];
     buf[0] = (uint8_t)((bp & 0x00FF) >> 0);
     buf[1] = (uint8_t)((bp & 0xFF00) >> 8);
+
     int pipe_fd = s->pipes[info->id][1];
 
     ssize_t res = write(pipe_fd, buf, sizeof(buf));
@@ -594,7 +597,7 @@ static bool write_backpressure(sender *s, tx_info_t *info, uint16_t bp) {
          *     But, under what circumstances can it even fail? */
         errno = 0;
         return false;
-    } else if (res == 2) {
+    } else if (res == sizeof(buf)) {
         return true;
     } else {
         assert(false);
@@ -663,10 +666,14 @@ static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info) {
     uint16_t backpressure = 0;
     /* If this succeeds, then this thread cannot touch the box anymore. */
     if (listener_expect_response(l, box, &backpressure)) {
-        BUS_LOG_SNPRINTF(b, 9, LOG_SENDER, b->udata, 64,
+        BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
             "unblocking listener, releasing msg: %p, backpressure %u\n", out_msg, backpressure);
+
         write_backpressure(s, info, backpressure);   /* alert blocked client thread */
         BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
+        /* Note: We are not releasing the TX INFO until _after_ we've
+         * done the write to unblock the backpressure, because we need to prevent
+         * one write from unblocking another. */
         release_tx_info(s, info);
     } else {
         BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);
