@@ -237,8 +237,4 @@ typedef enum {
     BUS_RESPONSE_FAILURE_HUP,
 } bus_status_res_t;
 
-#ifdef TEST
-#include "bus_internal_types.h"
-#endif
-
 #endif
