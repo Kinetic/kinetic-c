@@ -63,8 +63,9 @@ int KineticSocket_Connect(const char* host, int port)
     // Open socket
     LOGF0("Connecting to %s:%d", host, port);
     if (!socket99_open(&cfg, &result)) {
-        LOGF0("Failed to open socket connection with host: status %d, errno %d",
-             result.status, result.saved_errno);
+        char err_buf[256];
+        socket99_snprintf(err_buf, 256, &result);
+        LOGF0("Failed to open socket connection with host: %s", err_buf);
         return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
 
