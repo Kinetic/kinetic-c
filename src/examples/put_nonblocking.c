@@ -58,6 +58,8 @@ int main(int argc, char** argv)
     SHA1(value.array.data, value.bytesUsed, &sha1[0]);
     ByteBuffer_Append(&tag, sha1, sizeof(sha1));
 
+    // Because I'm passing a pointer to this entry to KineticClient_Put(), this entry must not
+    //   go out of scope until the PUT completes
     KineticEntry entry = {
         .key = key,
         .tag = tag,

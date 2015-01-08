@@ -109,7 +109,7 @@ static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .metadataOnly = metadataOnly,
         };
-        KineticStatus status;
+        KineticStatus status = KINETIC_STATUS_INVALID;
 
         switch (cmd) {
         case CMD_NEXT:
