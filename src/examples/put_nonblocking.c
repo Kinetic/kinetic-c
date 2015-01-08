@@ -78,18 +78,18 @@ int main(int argc, char** argv)
     );
 
     if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Put failed w/status: %s\n", Kinetic_GetStatusDescription(status));
+        fprintf(stderr, "PUT failed w/status: %s\n", Kinetic_GetStatusDescription(status));
         return 1;
     }
 
-    // Wait for put to finish
+    // Wait for PUT to finish
     KineticSemaphore_WaitForSignalAndDestroy(put_status.sem);
 
     if (put_status.status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Transfer failed w/status: %s\n", Kinetic_GetStatusDescription(put_status.status));
+        fprintf(stderr, "PUT failed w/status: %s\n", Kinetic_GetStatusDescription(put_status.status));
         return 1;
     }
-    printf("Transfer completed successfully!\n");
+    printf("PUT completed successfully!\n");
 
     // Free malloc'd buffers
     ByteBuffer_Free(value);

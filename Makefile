@@ -458,6 +458,7 @@ setup_examples: $(example_executables) \
 examples: setup_examples \
 	start_simulator \
 	run_example_put_nonblocking \
+	run_example_get_nonblocking \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
@@ -468,6 +469,7 @@ examples: setup_examples \
 valgrind_examples: setup_examples \
 	start_simulator \
 	valgrind_put_nonblocking \
+	valgrind_get_nonblocking \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \
