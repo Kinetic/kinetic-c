@@ -148,6 +148,7 @@ bool sender_send_request(struct sender *s, boxed_msg *box) {
 }
 
 bool sender_shutdown(struct sender *s) {
+    if (s->fd_hash_table == NULL) { return true; }
     struct bus *b = s->bus;
     tx_info_t *info = get_free_tx_info(s);
     if (info == NULL) { return false; }
@@ -381,6 +382,8 @@ static void cleanup(sender *s) {
     struct bus *b = s->bus;
     BUS_LOG(b, 2, LOG_SHUTDOWN, "sender_cleanup", b->udata);
     if (s->fd_hash_table) {     /* make idempotent */
+        struct yacht *y = s->fd_hash_table;
+        s->fd_hash_table = NULL;
         int shutdown_id = -1;
         
         for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
@@ -404,8 +407,7 @@ static void cleanup(sender *s) {
             close(s->pipes[shutdown_id][1]);
         }
         
-        yacht_free(s->fd_hash_table, free_fd_info_cb, NULL);
-        s->fd_hash_table = NULL;
+        yacht_free(y, free_fd_info_cb, NULL);
     }
 }
 
