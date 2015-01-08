@@ -24,20 +24,32 @@
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
 #include "kinetic_logger.h"
+#include "kinetic_pdu.h"
 #include <stdlib.h>
 #include <sys/time.h>
 
-void KineticClient_Init(const char* log_file, int log_level)
+KineticClient * KineticClient_Init(const char* log_file, int log_level)
 {
     KineticLogger_Init(log_file, log_level);
+    KineticClient * client = calloc(1, sizeof(*client));
+    if (client == NULL) { return NULL; }
+    bool success = KineticPDU_InitBus(1, client);
+    if (!success)
+    {
+        free(client);
+        return NULL;
+    }
+    return client;
 }
 
-void KineticClient_Shutdown(void)
+void KineticClient_Shutdown(KineticClient * const client)
 {
+    KineticPDU_DeinitBus(client);
+    free(client);
     KineticLogger_Close();
 }
 
-KineticStatus KineticClient_CreateConnection(KineticSession* const session)
+KineticStatus KineticClient_CreateConnection(KineticSession* const session, KineticClient * const client)
 {
     if (session == NULL) {
         LOG0("KineticSession is NULL!");
@@ -56,17 +68,14 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session)
         return KINETIC_STATUS_HMAC_REQUIRED;
     }
 
-    KineticStatus status = KineticSession_Create(session);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        LOGF0("Failed establishing session w/ status: %s", Kinetic_GetStatusDescription(status));
-    }
+    KineticSession_Create(session, client);
     if (session->connection == NULL) {
         LOG0("Failed to create connection instance!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     // Create the connection
-    status = KineticSession_Connect(session);
+    KineticStatus status = KineticSession_Connect(session);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOGF0("Failed creating connection to %s:%d", session->config.host, session->config.port);
         KineticSession_Destroy(session);

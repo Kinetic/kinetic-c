@@ -18,21 +18,16 @@
 *
 */
 
-#ifndef _KINETIC_ALLOCATOR_H
-#define _KINETIC_ALLOCATOR_H
+#ifndef KINETIC_PDU_UNPACK_H
+#define KINETIC_PDU_UNPACK_H
 
-#include "kinetic_types_internal.h"
+#include "kinetic_proto.h"
 
-KineticConnection* KineticAllocator_NewConnection(void);
-void KineticAllocator_FreeConnection(KineticConnection* connection);
+/* This wrapper only exists for mocking purposes. */
+KineticProto_Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
+    size_t len, const uint8_t* data);
 
-KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection);
-void KineticAllocator_FreePDU(KineticPDU* pdu);
+KineticProto_Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
+    size_t len, const uint8_t* data);
 
-KineticOperation* KineticAllocator_NewOperation(KineticConnection* connection);
-void KineticAllocator_FreeOperation(KineticOperation* operation);
-
-KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength);
-void KineticAllocator_FreeKineticResponse(KineticResponse * response);
-
-#endif // _KINETIC_ALLOCATOR
+#endif

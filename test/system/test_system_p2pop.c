@@ -87,6 +87,7 @@ void setUp(void)
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = Value1Buffer,
         .force = true,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
 
     KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry1, NULL);
@@ -99,13 +100,11 @@ void setUp(void)
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = Value2Buffer,
         .force = true,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
 
     status = KineticClient_Put(&Fixture.session, &putEntry2, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    Fixture.expectedSequence++;
-    sleep(1);
 }
 
 void tearDown(void)

@@ -30,38 +30,27 @@
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_hmac.h"
+#include "mock_kinetic_controller.h"
+#include "mock_kinetic_allocator.h"
+#include "mock_kinetic_pdu_unpack.h"
+#include "mock_bus.h"
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
+
 #include <arpa/inet.h>
 #include <string.h>
 #include <stdlib.h>
 
+static uint32_t ClusterVersion = 7;
 static KineticPDU PDU;
-static const int64_t ClusterVersion = 8;
 static KineticConnection Connection;
+static KineticResponse Response;
 static KineticSession Session;
 static uint8_t ValueBuffer[KINETIC_OBJ_SIZE];
 static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 
-void EnableAndSetPDUConnectionID(KineticPDU* pdu, int64_t connectionID)
-{
-    assert(pdu != NULL);
-    pdu->proto = &PDU.protoData.message.message;
-    pdu->protoData.message.has_command = true;
-    pdu->protoData.message.command.header = &PDU.protoData.message.header;
-    pdu->protoData.message.command.header->connectionID = connectionID;
-}
-
-void EnableAndSetPDUStatus(KineticPDU* pdu, KineticProto_Command_Status_StatusCode status)
-{
-    assert(pdu != NULL);
-    pdu->proto = &PDU.protoData.message.message;
-    pdu->protoData.message.has_command = true;
-    pdu->protoData.message.command.status = &PDU.protoData.message.status;
-    pdu->protoData.message.command.status->code = status;
-    pdu->protoData.message.command.status->has_code = true;
-}
-
+#define SI_BUF_SIZE (sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN)
+static uint8_t si_buf[SI_BUF_SIZE];
 
 void setUp(void)
 {
@@ -77,12 +66,15 @@ void setUp(void)
     KineticSession_Init(&Session, &config, &Connection);
     Connection.connected = true;
     Connection.socket = 456;
-    KineticPDU_Init(&PDU, &Session);
+    KineticPDU_InitWithCommand(&PDU, &Session);
     ByteArray_FillWithDummyData(Value);
+
+    memset(si_buf, 0, SI_BUF_SIZE);
 }
 
 void tearDown(void)
 {
+    memset(&Response, 0, sizeof(Response));
     KineticLogger_Close();
 }
 
@@ -112,20 +104,10 @@ void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_v
 }
 
 
-void test_KineticPDU_Init_should_populate_the_PDU_and_buffer_with_the_supplied_buffer(void)
-{
-    LOG_LOCATION;
-
-    KineticPDU_Init(&PDU, &Session);
-
-    TEST_ASSERT_EQUAL_PTR(&Connection, PDU.connection);
-}
-
-
 void test_KineticPDU_Init_should_initialize_PDU(void)
 {
     LOG_LOCATION;
-    KineticPDU_Init(&PDU, &Session);
+    KineticPDU_InitWithCommand(&PDU, &Session);
 }
 
 void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
@@ -144,297 +126,331 @@ void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embed
     Session.connection = &Connection;
     KineticPDU_InitWithCommand(&PDU, &Session);
 
-    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_clusterVersion);
-    TEST_ASSERT_EQUAL_INT64(1122334455667788, PDU.protoData.message.header.clusterVersion);
-    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_connectionID);
-    TEST_ASSERT_EQUAL_INT64(8765432, PDU.protoData.message.header.connectionID);
-    TEST_ASSERT_TRUE(PDU.protoData.message.header.has_sequence);
-    TEST_ASSERT_EQUAL_INT64(24, PDU.protoData.message.header.sequence);
+    TEST_ASSERT_TRUE(PDU.message.header.has_clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(1122334455667788, PDU.message.header.clusterVersion);
+    TEST_ASSERT_TRUE(PDU.message.header.has_connectionID);
+    TEST_ASSERT_EQUAL_INT64(8765432, PDU.message.header.connectionID);
+    TEST_ASSERT_TRUE(PDU.message.header.has_sequence);
+    TEST_ASSERT_EQUAL_INT64(24, PDU.message.header.sequence);
 }
 
 
 
-void test_KineticPDU_ReceiveMain_should_return_true_upon_receipt_of_valid_header_and_protobuf(void)
-{
-    LOG_LOCATION;
-    Connection.connectionID = 98765;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-    ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
-    int32_t valueLen = 123;
-    PDU.proto->has_authType = true;
-    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
-
-    KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->config.hmacKey, true);
-
-    PDU.headerNBO.valueLength = KineticNBO_FromHostU32(valueLen);
-    EnableAndSetPDUConnectionID(&PDU, 12345);
-    EnableAndSetPDUStatus(&PDU, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS);
-
-    KineticStatus status = KineticPDU_ReceiveMain(&PDU);
-
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS,
-                      PDU.protoData.message.status.code);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-}
-
-void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_value_payload_and_return_true_upon_successful_receipt_of_valid_PDU(void)
-{
-    LOG_LOCATION;
-    Connection.connectionID = 98765;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-    ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
-    PDU.proto->has_authType = true;
-    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
-
-    KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->config.hmacKey, true);
-    EnableAndSetPDUConnectionID(&PDU, 12345);
-    EnableAndSetPDUStatus(&PDU, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS);
-
-    KineticStatus status = KineticPDU_ReceiveMain(&PDU);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS,
-        PDU.protoData.message.status.code);
-}
-
-void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_payload_and_return_PDU_status_upon_successful_receipt_of_PDU(void)
-{
-    LOG_LOCATION;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-    PDU.proto->has_authType = true;
-    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
-    PDU.protoData.message.status.code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR;
-    PDU.protoData.message.status.has_code = true;
-    ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
-
-    PDU.headerNBO.valueLength = KineticNBO_FromHostU32(0);
-    KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->config.hmacKey, true);
-    EnableAndSetPDUStatus(&PDU, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR);
-
-    KineticStatus status = KineticPDU_ReceiveMain(&PDU);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
-    TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR,
-        PDU.protoData.message.status.code);
-}
-
-void test_KineticPDU_ReceiveMain_should_receive_a_message_for_the_exchange_and_return_false_upon_failure_to_read_header(void)
-{
-    LOG_LOCATION;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-    ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
-
-    KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_CONNECTION_ERROR);
-
-    KineticStatus status = KineticPDU_ReceiveMain(&PDU);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR, status);
-}
-
-void test_KineticPDU_ReceiveMain_should_receive_a_message_for_the_exchange_and_return_false_upon_failure_to_read_protobuf(void)
-{
-    LOG_LOCATION;
-    ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
-
-    KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_DEVICE_BUSY);
-
-    KineticStatus status = KineticPDU_ReceiveMain(&PDU);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_BUSY, status)
-}
-
-void test_KineticPDU_ReceiveMain_should_receive_a_message_with_no_authentication_type(void)
-{
-    LOG_LOCATION;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-    EnableAndSetPDUStatus(&PDU, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS);
-    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS;
-    PDU.proto->hmacAuth = NULL;
-    PDU.proto->pinAuth = NULL;
-    ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
-    PDU.headerNBO.valueLength = KineticNBO_FromHostU32(0);
-
-    // Pack message `command` element in order to precalculate fully packed message size 
-    uint8_t packedCommandBytes[1024];
-    size_t expectedCommandLen = KineticProto_command__get_packed_size(&PDU.protoData.message.command);
-    PDU.protoData.message.message.commandBytes.data = packedCommandBytes;
-    assert(PDU.protoData.message.message.commandBytes.data != NULL);
-    size_t packedCommandLen = KineticProto_command__pack(
-        &PDU.protoData.message.command,
-        PDU.protoData.message.message.commandBytes.data);
-    assert(packedCommandLen == expectedCommandLen);
-    PDU.protoData.message.message.commandBytes.len = packedCommandLen;
-    PDU.protoData.message.message.has_commandBytes = true;
-
-    KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
-
-    KineticStatus status = KineticPDU_ReceiveMain(&PDU);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS, PDU.protoData.message.status.code);
-}
-
-void test_KineticPDU_ReceiveMain_should_receive_a_message_for_the_exchange_and_return_false_upon_HMAC_validation_failure(void)
-{
-    LOG_LOCATION;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-    PDU.proto->has_authType = true;
-    PDU.proto->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
-    ByteBuffer headerNBO = ByteBuffer_Create(&PDU.headerNBO, sizeof(KineticPDUHeader), 0);
-
-    KineticSocket_Read_ExpectAndReturn(Connection.socket, &headerNBO, sizeof(KineticPDUHeader), KINETIC_STATUS_SUCCESS);
-    KineticSocket_ReadProtobuf_ExpectAndReturn(Connection.socket, &PDU, KINETIC_STATUS_SUCCESS);
-    KineticHMAC_Validate_ExpectAndReturn(PDU.proto, PDU.connection->session->config.hmacKey, false);
-
-    KineticStatus status = KineticPDU_ReceiveMain(&PDU);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
-}
-
-
-void test_KineticPDU_ReceiveValue_should_receive_value_payload_into_specified_buffer(void)
-{
-    uint8_t valueData[64];
-    ByteBuffer value = ByteBuffer_Create(valueData, sizeof(valueData), 0);
-    KineticSocket_Read_ExpectAndReturn(7, &value, 57, KINETIC_STATUS_SUCCESS);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, KineticPDU_ReceiveValue(7, &value, 57));
-}
-
-void test_KineticPDU_ReceiveValue_should_report_any_socket_receive_error(void)
-{
-    uint8_t valueData[64];
-    ByteBuffer value = ByteBuffer_Create(valueData, sizeof(valueData), 0);
-    KineticSocket_Read_ExpectAndReturn(134, &value, 26, KINETIC_STATUS_DEVICE_BUSY);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_BUSY, KineticPDU_ReceiveValue(134, &value, 26));
-}
-
-
-void test_KineticPDU_GetValueLength_should_return_the_valueLength_field_of_the_PDU_header(void)
-{
-    PDU.header.valueLength = 183;
-    TEST_ASSERT_EQUAL(183, KineticPDU_GetValueLength(&PDU));
-    PDU.header.valueLength = 0;
-    TEST_ASSERT_EQUAL(0, KineticPDU_GetValueLength(&PDU));
-}
-
-
-void test_KineticPDU_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_KineticProto_Command_Status_StatusCode_in_response(void)
-{
-    LOG_LOCATION;
-    KineticStatus status;
-
-    status = KineticPDU_GetStatus(NULL);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    PDU.proto = NULL;
-    status = KineticPDU_GetStatus(&PDU);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    PDU.proto = &PDU.protoData.message.message;
-    PDU.protoData.message.has_command = false;
-    status = KineticPDU_GetStatus(&PDU);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    PDU.protoData.message.has_command = true;
-    PDU.protoData.message.command.status = NULL;
-    status = KineticPDU_GetStatus(&PDU);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    PDU.protoData.message.command.status = &PDU.protoData.message.status;
-    PDU.protoData.message.command.status->has_code = false;
-    status = KineticPDU_GetStatus(&PDU);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    PDU.protoData.message.command.status->has_code = true;
-    PDU.protoData.message.command.status->code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE;
-    status = KineticPDU_GetStatus(&PDU);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-}
-
-void test_KineticPDU_GetStatus_should_return_appropriate_KineticStatus_based_on_KineticProto_Command_Status_StatusCode_in_response(void)
-{
-    LOG_LOCATION;
-    KineticStatus status;
-
-    PDU.proto = &PDU.protoData.message.message;
-    PDU.protoData.message.has_command = true;
-    PDU.command = &PDU.protoData.message.command;
-    PDU.protoData.message.command.status = &PDU.protoData.message.status;
-    PDU.protoData.message.command.status->has_code = true;
-
-    PDU.protoData.message.command.status->code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS;
-    status = KineticPDU_GetStatus(&PDU);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
-
-    PDU.protoData.message.command.status->code = KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR;
-    status = KineticPDU_GetStatus(&PDU);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
-}
-
-void test_KineticPDU_GetKeyValue_should_return_NULL_message_has_no_KeyValue(void)
+void test_KineticPDU_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(void)
 {
     LOG_LOCATION;
 
-    KineticProto_Command_KeyValue* keyValue;
+    KineticProto_Command Command;
+    memset(&Command, 0, sizeof(Command));
+    KineticProto_Command_KeyValue* keyValue = NULL;
 
-    PDU.proto = NULL;
-    keyValue = KineticPDU_GetKeyValue(&PDU);
+    keyValue = KineticPDU_GetKeyValue(NULL);
     TEST_ASSERT_NULL(keyValue);
 
-    PDU.proto = &PDU.protoData.message.message;
-    PDU.protoData.message.has_command = false;
-    keyValue = KineticPDU_GetKeyValue(&PDU);
+    Response.command = NULL;
+    keyValue = KineticPDU_GetKeyValue(&Response);
     TEST_ASSERT_NULL(keyValue);
 
-    PDU.protoData.message.has_command = true;
-    PDU.command = NULL;
-    keyValue = KineticPDU_GetKeyValue(&PDU);
+    Response.command = &Command;
+    Command.body = NULL;
+    keyValue = KineticPDU_GetKeyValue(&Response);
     TEST_ASSERT_NULL(keyValue);
-
-    PDU.protoData.message.has_command = true;
-    PDU.command = &PDU.protoData.message.command;
-    keyValue = KineticPDU_GetKeyValue(&PDU);
-    TEST_ASSERT_NULL(keyValue);
-
-    PDU.protoData.message.command.body = NULL;
-    keyValue = KineticPDU_GetKeyValue(&PDU);
-    TEST_ASSERT_NULL(keyValue);
-
-    PDU.protoData.message.command.body = &PDU.protoData.message.body;
-    keyValue = KineticPDU_GetKeyValue(&PDU);
-    TEST_ASSERT_NULL(keyValue);
-
-    PDU.protoData.message.command.body->keyValue = &PDU.protoData.message.keyValue;
-    keyValue = KineticPDU_GetKeyValue(&PDU);
-    TEST_ASSERT_NOT_NULL(keyValue);
 }
 
 
 void test_KineticPDU_GetKeyRange_should_return_the_KineticProto_Command_Range_from_the_message_if_avaliable(void)
 { LOG_LOCATION;
+    Connection.session = &Session;
+    Session.connection = &Connection;
+
     KineticPDU_InitWithCommand(&PDU, &Session);
-    KineticProto_Command_Range* range;
+    KineticProto_Command_Range* range = NULL;
 
-    PDU.command->body = NULL;
-    range = KineticPDU_GetKeyRange(&PDU);
+    range = KineticPDU_GetKeyRange(NULL);
     TEST_ASSERT_NULL(range);
 
-    PDU.command->body = &PDU.protoData.message.body;
-    PDU.command->body->range = NULL;
-    range = KineticPDU_GetKeyRange(&PDU);
+    range = KineticPDU_GetKeyRange(&Response);
+    TEST_ASSERT_NULL(range);
+    
+    KineticProto_Message Message;
+    memset(&Message, 0, sizeof(Message));
+    Response.proto = &Message;
+    range = KineticPDU_GetKeyRange(&Response);
     TEST_ASSERT_NULL(range);
 
-    PDU.command->body->range = &PDU.protoData.message.keyRange;
-    range = KineticPDU_GetKeyRange(&PDU);
-    TEST_ASSERT_EQUAL_PTR(&PDU.protoData.message.keyRange, range);
+    KineticProto_Command Command;
+    memset(&Command, 0, sizeof(Command));
+    Response.command = &Command;
+    range = KineticPDU_GetKeyRange(&Response);
+    TEST_ASSERT_NULL(range);
+
+    KineticProto_Command_Body Body;
+    memset(&Body, 0, sizeof(Body));
+    Response.command->body = &Body;
+
+    KineticProto_Command_Range Range;
+    memset(&Range, 0, sizeof(Range));
+    Body.range = &Range;
+    range = KineticPDU_GetKeyRange(&Response);
+    TEST_ASSERT_EQUAL_PTR(&Range, range);
+}
+
+bool unpack_header(uint8_t const * const read_buf,
+    size_t const read_size, KineticPDUHeader * const header);
+
+void test_unpack_header_should_fail_if_the_header_is_the_wrong_size(void)
+{
+    KineticPDUHeader header = {0};
+    KineticPDUHeader header_out = {0};
+    TEST_ASSERT_FALSE(unpack_header((uint8_t *)&header, sizeof(header) - 1, &header_out));
+    TEST_ASSERT_FALSE(unpack_header((uint8_t *)&header, sizeof(header) + 1, &header_out));
+}
+
+void test_unpack_header_should_reject_header_with_excessively_large_sizes(void)
+{
+    KineticPDUHeader header = {0};
+    KineticPDUHeader header_out = {0};
+
+    header.protobufLength = PDU_PROTO_MAX_LEN + 1;
+    TEST_ASSERT_FALSE(unpack_header((uint8_t *)&header, sizeof(header), &header_out));
+
+    header.protobufLength = PDU_PROTO_MAX_LEN;
+    header.valueLength = PDU_PROTO_MAX_LEN + 1;
+    TEST_ASSERT_FALSE(unpack_header((uint8_t *)&header, sizeof(header), &header_out));
+}
+
+void test_unpack_header_should_unpack_header_fields_from_read_buf(void)
+{
+    uint8_t read_buf[] = {
+        0xa0,                       // version prefix
+        0x00, 0x01, 0x23, 0x45,     // protobuf length
+        0x00, 0x02, 0x34, 0x56,     // value length
+    };
+    KineticPDUHeader header_out = {0};
+
+    TEST_ASSERT(unpack_header(read_buf, sizeof(header_out), &header_out));
+    TEST_ASSERT_EQUAL(0xa0, header_out.versionPrefix);
+    TEST_ASSERT_EQUAL(0x12345, header_out.protobufLength);
+    TEST_ASSERT_EQUAL(0x23456, header_out.valueLength);
+}
+
+bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
+    size_t read_size, void *socket_udata);
+
+void test_sink_cb_should_reset_uninitialized_socket_state(void)
+{
+    socket_info si = {
+        .state = STATE_UNINIT,
+        .accumulated = 0xFFFFFFFF,
+    };
+    KineticConnection connection = { .si = &si };
+    
+    bus_sink_cb_res_t res = sink_cb(NULL, 0, &connection);
+
+    TEST_ASSERT_EQUAL(0, si.accumulated);
+    TEST_ASSERT_EQUAL(UNPACK_ERROR_UNDEFINED, si.unpack_status);
+
+    /* Expect next read to be a header. */
+    TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
+    TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si.state);
+}
+
+void test_sink_cb_should_expose_invalid_header_error(void)
+{
+    socket_info si = {
+        .state = STATE_AWAITING_HEADER,
+        .accumulated = 0xFFFFFFFF,
+    };
+    KineticConnection connection = { .si = &si };
+    KineticPDUHeader bad_header;
+    memset(&bad_header, 0xFF, sizeof(bad_header));
+
+    bus_sink_cb_res_t res = sink_cb((uint8_t *)&bad_header, sizeof(bad_header), &connection);
+    TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
+    TEST_ASSERT_EQUAL(UNPACK_ERROR_INVALID_HEADER, si.unpack_status);
+    TEST_ASSERT_EQUAL(&si, res.full_msg_buffer);
+    
+    TEST_ASSERT_EQUAL(0, si.accumulated);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si.state);
+}
+
+void test_sink_cb_should_transition_to_awaiting_body_state_with_good_header(void)
+{
+    socket_info si = {
+        .state = STATE_AWAITING_HEADER,
+        .accumulated = 0xFFFFFFFF,
+    };
+    KineticConnection connection = { .si = &si };
+    uint8_t read_buf[] = {
+        0xa0,                       // version prefix
+        0x00, 0x00, 0x00, 0x7b,     // protobuf length
+        0x00, 0x00, 0x01, 0xc8,     // value length
+    };
+
+    bus_sink_cb_res_t res = sink_cb(read_buf, sizeof(read_buf), &connection);
+    TEST_ASSERT_EQUAL(123 + 456, res.next_read);
+    TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si.state);
+    TEST_ASSERT_EQUAL(0, si.accumulated);
+    TEST_ASSERT_EQUAL(UNPACK_ERROR_SUCCESS, si.unpack_status);
+}
+
+void test_sink_cb_should_accumulate_partially_received_body(void)
+{
+    /* Include trailing memory for si's .buf[]. */
+    socket_info *si = (socket_info *)si_buf;
+
+    si->state = STATE_AWAITING_BODY;
+    si->header.protobufLength = 0x01;
+    si->header.valueLength = 0x02;
+
+    KineticConnection connection = { .si = si };
+    uint8_t buf[] = {0xaa, 0xbb};
+
+    bus_sink_cb_res_t res = sink_cb((uint8_t *)&buf, sizeof(buf), &connection);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
+    TEST_ASSERT_EQUAL(2, si->accumulated);
+    TEST_ASSERT_EQUAL(1, res.next_read);
+    TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
+}
+
+void test_sink_cb_should_yield_fully_received_body(void)
+{
+    socket_info *si = (socket_info *)si_buf;
+    si->state = STATE_AWAITING_BODY;
+    si->header.protobufLength = 0x01;
+    si->header.valueLength = 0x02;
+
+    KineticConnection connection = { .si = si };
+    uint8_t buf[] = {0xaa, 0xbb, 0xcc};
+
+    bus_sink_cb_res_t res = sink_cb((uint8_t *)&buf, sizeof(buf), &connection);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
+    TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
+    TEST_ASSERT_EQUAL(si, res.full_msg_buffer);
+}
+
+bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata);
+
+void test_unpack_cb_should_expose_error_codes(void)
+{
+    socket_info si = {
+        .state = STATE_AWAITING_HEADER,
+        .accumulated = 0xFFFFFFFF,
+        .unpack_status = UNPACK_ERROR_UNDEFINED,
+    };
+    
+    enum unpack_error error_states[] = {
+        UNPACK_ERROR_UNDEFINED,
+        UNPACK_ERROR_INVALID_HEADER,
+        UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
+    };
+
+    for (size_t i = 0; i < sizeof(error_states) / sizeof(error_states[0]); i++) {
+        si.unpack_status = error_states[i];
+        bus_unpack_cb_res_t res = unpack_cb((void *)&si, NULL);
+        TEST_ASSERT_FALSE(res.ok);
+        TEST_ASSERT_EQUAL(error_states[i], res.u.error.opaque_error_id);
+    }
+}
+
+void test_unpack_cb_should_expose_alloc_failure(void)
+{
+    socket_info si = {
+        .state = STATE_AWAITING_HEADER,
+        .accumulated = 0xFFFFFFFF,
+        .unpack_status = UNPACK_ERROR_SUCCESS,
+        .header = {
+            .valueLength = 8,
+        },
+    };
+    
+    KineticAllocator_NewKineticResponse_ExpectAndReturn(8, NULL);
+    bus_unpack_cb_res_t res = unpack_cb((void*)&si, NULL);
+    TEST_ASSERT_FALSE(res.ok);
+    TEST_ASSERT_EQUAL(UNPACK_ERROR_PAYLOAD_MALLOC_FAIL, res.u.error.opaque_error_id);
+}
+
+void test_unpack_cb_should_skip_empty_commands(void)
+{
+    LOG_LOCATION;
+    /* Include trailing memory for si's .buf[]. */
+
+    socket_info *si = (socket_info *)si_buf;
+    si->state = STATE_AWAITING_HEADER;
+    si->unpack_status = UNPACK_ERROR_SUCCESS,
+    si->header.protobufLength = 0x01;
+    si->header.valueLength = 0x01;
+    si->header.protobufLength = 0x01;
+    si->buf[0] = 0x00;
+    si->buf[1] = 0xee;
+
+    uint8_t response_buf[sizeof(KineticResponse) + 128];
+    memset(response_buf, 0, sizeof(response_buf));
+    KineticResponse *response = (KineticResponse *)response_buf;
+
+    KineticAllocator_NewKineticResponse_ExpectAndReturn(1, response);
+
+    KineticProto_Message Proto;
+    memset(&Proto, 0, sizeof(Proto));
+    Proto.has_commandBytes = false;
+
+    KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
+        si->buf, &Proto);
+
+    bus_unpack_cb_res_t res = unpack_cb(si, NULL);
+
+    TEST_ASSERT_EQUAL(0xee, response->value[0]);
+
+    TEST_ASSERT(res.ok);
+    TEST_ASSERT_EQUAL(response, res.u.success.msg);
+}
+
+void test_unpack_cb_should_unpack_command_bytes(void)
+{
+    LOG_LOCATION;
+    socket_info *si = (socket_info *)si_buf;
+    si->state = STATE_AWAITING_HEADER;
+    si->unpack_status = UNPACK_ERROR_SUCCESS,
+    si->header.protobufLength = 0x01;
+    si->header.valueLength = 0x08;
+    si->header.protobufLength = 0x02;
+    si->buf[0] = 0x00;
+    si->buf[1] = 0x01;
+    si->buf[2] = 0xee;
+
+    uint8_t response_buf[sizeof(KineticResponse) + 1];
+    memset(response_buf, 0, sizeof(response_buf));
+    KineticResponse *response = (KineticResponse *)response_buf;
+
+    KineticAllocator_NewKineticResponse_ExpectAndReturn(8, response);
+
+    KineticProto_Message Proto;
+    memset(&Proto, 0, sizeof(Proto));
+    Proto.has_commandBytes = true;
+    Proto.commandBytes.data = (uint8_t *)"data";
+    Proto.commandBytes.len = 4;
+
+    KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
+        si->buf, &Proto);
+
+    KineticProto_Command Command;
+    memset(&Command, 0, sizeof(Command));
+    KineticProto_Command_Header Header;
+    memset(&Header, 0, sizeof(Header));
+    Command.header = &Header;
+    response->header.valueLength = 1;
+    Header.ackSequence = 0x12345678;
+
+    KineticPDU_unpack_command_ExpectAndReturn(NULL, Proto.commandBytes.len,
+        Proto.commandBytes.data, &Command);
+
+    bus_unpack_cb_res_t res = unpack_cb(si, NULL);
+
+    TEST_ASSERT_EQUAL(0xee, response->value[0]);
+
+    TEST_ASSERT(res.ok);
+    TEST_ASSERT_EQUAL(response, res.u.success.msg);
+    TEST_ASSERT_EQUAL(0x12345678, res.u.success.seq_id);
 }

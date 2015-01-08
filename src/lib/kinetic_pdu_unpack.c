@@ -18,21 +18,14 @@
 *
 */
 
-#ifndef _KINETIC_ALLOCATOR_H
-#define _KINETIC_ALLOCATOR_H
+#include "kinetic_pdu_unpack.h"
 
-#include "kinetic_types_internal.h"
+KineticProto_Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
+        size_t len, const uint8_t* data) {
+    return KineticProto_command__unpack(allocator, len, data);
+}
 
-KineticConnection* KineticAllocator_NewConnection(void);
-void KineticAllocator_FreeConnection(KineticConnection* connection);
-
-KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection);
-void KineticAllocator_FreePDU(KineticPDU* pdu);
-
-KineticOperation* KineticAllocator_NewOperation(KineticConnection* connection);
-void KineticAllocator_FreeOperation(KineticOperation* operation);
-
-KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength);
-void KineticAllocator_FreeKineticResponse(KineticResponse * response);
-
-#endif // _KINETIC_ALLOCATOR
+KineticProto_Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
+        size_t len, const uint8_t* data) {
+    return KineticProto_Message__unpack(allocator, len, data);
+}

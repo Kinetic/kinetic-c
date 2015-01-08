@@ -109,8 +109,9 @@ int main(int argc, char** argv)
         }
     };
     write_args* writeArgs = calloc(1, sizeof(write_args));
-    KineticClient_Init("stdout", 0);
-    status = KineticClient_CreateConnection(&session);
+    KineticClient * client = KineticClient_Init("stdout", 0);
+    if (client == NULL) { return 1; }
+    status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
             session.config.host, Kinetic_GetStatusDescription(status));
@@ -144,7 +145,7 @@ int main(int argc, char** argv)
 
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(writeArgs->session);
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
     free(writeArgs);
     free(buf);
 

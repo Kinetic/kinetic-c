@@ -32,6 +32,8 @@
 #include "listener.h"
 #include "threadpool.h"
 #include "bus_internal_types.h"
+#include "bus_ssl.h"
+#include "yacht.h"
 
 /* Function pointers for pthreads. */
 void *listener_mainloop(void *arg);
@@ -48,6 +50,8 @@ static void set_defaults(bus_config *cfg) {
     if (cfg->sender_count == 0) { cfg->sender_count = 1; }
     if (cfg->listener_count == 0) { cfg->listener_count = 1; }
 }
+
+#define DEF_FD_SET_SIZE2 4
 
 bool bus_init(bus_config *config, struct bus_result *res) {
     if (res == NULL) { return false; }
@@ -80,9 +84,12 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     struct threadpool *tp = NULL;
     bool *j = NULL;
     pthread_t *pts = NULL;
+    struct yacht *fd_set = NULL;
 
     bus *b = calloc(1, sizeof(*b));
     if (b == NULL) { goto cleanup; }
+
+    if (!bus_ssl_init(b)) { goto cleanup; }
 
     b->sink_cb = config->sink_cb;
     b->unpack_cb = config->unpack_cb;
@@ -95,13 +102,15 @@ bool bus_init(bus_config *config, struct bus_result *res) {
         res->status = BUS_INIT_ERROR_MUTEX_INIT_FAIL;
         goto cleanup;
     }
+    if (0 != pthread_mutex_init(&b->fd_set_lock, NULL)) {
+        res->status = BUS_INIT_ERROR_MUTEX_INIT_FAIL;
+        goto cleanup;
+    }
+
     log_lock_init = true;
 
     BUS_LOG_SNPRINTF(b, 3, LOG_INITIALIZATION, b->udata, 64,
         "Initialized bus at %p", b);
-
-    pthread_mutex_lock(&b->log_lock);
-    pthread_mutex_unlock(&b->log_lock);
 
     ss = calloc(config->sender_count, sizeof(*ss));
     if (ss == NULL) {
@@ -123,6 +132,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     if (ls == NULL) {
         goto cleanup;
     }
+
     for (int i = 0; i < config->listener_count; i++) {
         ls[i] = listener_init(b, config);
         if (ls[i] == NULL) {
@@ -144,6 +154,11 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     j = calloc(thread_count, sizeof(bool));
     pts = calloc(thread_count, sizeof(pthread_t));
     if (j == NULL || pts == NULL) {
+        goto cleanup;
+    }
+
+    fd_set = yacht_init(DEF_FD_SET_SIZE2);
+    if (fd_set == NULL) {
         goto cleanup;
     }
 
@@ -173,6 +188,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
         }
     }
 
+    b->fd_set = fd_set;
     res->bus = b;
     BUS_LOG(b, 1, LOG_INITIALIZATION, "initialized", config->bus_udata);
     return true;
@@ -193,12 +209,14 @@ cleanup:
     if (j) { free(j); }
     if (b) {
         if (log_lock_init) {
+            pthread_mutex_destroy(&b->fd_set_lock);
             pthread_mutex_destroy(&b->log_lock);
         }
         free(b);
     }
 
     if (pts) { free(pts); }
+    if (fd_set) { yacht_free(fd_set, NULL, NULL); }
 
     return false;
 }
@@ -216,9 +234,29 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
 
     box->fd = msg->fd;
     assert(msg->fd != 0);
+
+    /* Lock hash table and check whether this FD uses SSL. */
+    if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
+    void *value = NULL;
+    SSL *ssl = NULL;
+    if (yacht_get(b->fd_set, box->fd, &value)) {
+        ssl = (SSL *)value;
+        assert(ssl != NULL);
+        box->ssl = ssl;
+    }
+    if (0 != pthread_mutex_unlock(&b->fd_set_lock)) { assert(false); }
+
+    if (ssl == NULL) {
+        /* socket isn't registered, fail out */
+        free(box);
+        return NULL;
+    }
+
     box->out_seq_id = msg->seq_id;
     box->out_msg_size = msg->msg_size;
-    /* FIXME: should this be copied by pointer or value? */
+
+    /* Store message by pointer, since the client thread using it is blocked
+     * until we are done sending. */
     box->out_msg = msg->msg;
 
     box->cb = msg->cb;
@@ -344,7 +382,7 @@ const char *bus_log_event_str(log_event_t event) {
     }
 }
 
-bool bus_register_socket(struct bus *b, int fd, void *udata) {
+bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) {
     /* Register a socket internally with a listener. */
     int l_id = listener_id_of_socket(b, fd);
 
@@ -366,9 +404,29 @@ bool bus_register_socket(struct bus *b, int fd, void *udata) {
     connection_info *ci = malloc(sizeof(*ci));
     if (ci == NULL) { goto cleanup; }
 
+    ci->type = type;
     ci->fd = fd;
     ci->to_read_size = 0;
     ci->udata = udata;
+
+    if (type == BUS_SOCKET_SSL) {
+        if (!bus_ssl_connect(b, ci)) { goto cleanup; }
+    } else {
+        ci->ssl = BUS_NO_SSL;
+    }
+
+    void *old_value = NULL;
+
+    /* Lock hash table and save whether this FD uses SSL. */
+    if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
+    bool set_ok = yacht_set(b->fd_set, fd, (void *)ci->ssl, &old_value);
+    if (0 != pthread_mutex_unlock(&b->fd_set_lock)) { assert(false); }
+
+    if (set_ok) {
+        assert(old_value == NULL);
+    } else {
+        goto cleanup;
+    }
 
     bool res = listener_add_socket(l, ci, pipe_in);
     if (!res) { goto cleanup; }
@@ -390,6 +448,38 @@ cleanup:
     close(pipe_in);
     BUS_LOG(b, 2, LOG_SOCKET_REGISTERED, "failed to add socket", b->udata);
     return false;
+}
+
+/* Free metadata about a socket that has been disconnected. */
+bool bus_release_socket(struct bus *b, int fd) {
+    /* Register a socket internally with a listener. */
+    int l_id = listener_id_of_socket(b, fd);
+
+    BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 64,
+        "forgetting socket %d", fd);
+
+    /* Spread sockets throughout the different listener processes. */
+    struct listener *l = b->listeners[l_id];
+
+    if (!listener_remove_socket(l, fd)) {
+        return false;           /* couldn't send msg to listener */
+    }
+
+    /* Lock hash table and forget whether this FD uses SSL. */
+    void *old_value = NULL;
+    if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
+    bool rm_ok = yacht_remove(b->fd_set, fd, &old_value);
+    if (0 != pthread_mutex_unlock(&b->fd_set_lock)) { assert(false); }
+    assert(rm_ok);
+
+    SSL *ssl = (SSL *)old_value;
+    assert(ssl != NULL);
+
+    if (ssl == BUS_NO_SSL) {
+        return true;            /* nothing else to do */
+    } else {
+        return bus_ssl_disconnect(b, ssl);
+    }
 }
 
 bool bus_schedule_threadpool_task(struct bus *b, struct threadpool_task *task,
@@ -472,6 +562,9 @@ bool bus_process_boxed_message(struct bus *b,
     return bus_schedule_threadpool_task(b, &task, backpressure);
 }
 
+/* How many seconds should it give the thread pool to shut down? */
+#define THREAD_SHUTDOWN_SECONDS 5
+
 void bus_free(bus *b) {
     if (b == NULL) { return; }
     bus_shutdown(b);
@@ -486,12 +579,23 @@ void bus_free(bus *b) {
     }
     free(b->listeners);
 
+    int limit = (1000 * THREAD_SHUTDOWN_SECONDS)/10;
+    for (int i = 0; i < limit; i++) {
+        if (threadpool_shutdown(b->threadpool, false)) { break; }
+        (void)poll(NULL, 0, 10);
+
+        if (i == limit - 1) {
+            threadpool_shutdown(b->threadpool, true);
+        }
+    }
     threadpool_free(b->threadpool);
 
     free(b->joined);
     free(b->threads);
 
     pthread_mutex_destroy(&b->log_lock);
+
+    bus_ssl_free(b);
 
     free(b);
 }

@@ -27,6 +27,7 @@
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_auth.h"
+#include "mock_kinetic_pdu.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"

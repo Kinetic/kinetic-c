@@ -22,11 +22,16 @@
 #define _KINETIC_CONTROLLER_H
 
 #include "kinetic_types_internal.h"
+#include "bus.h"
 
 KineticStatus KineticController_Init(KineticSession const * const session);
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure);
-void KineticController_Pause(KineticSession const * const session, bool pause);
-void* KineticController_ReceiveThread(void* thread_arg);
-void KineticController_HandleIncomingPDU(KineticConnection* const connection);
+
+void KineticController_HandleUnexecpectedResponse(void *msg,
+                                                  int64_t seq_id,
+                                                  void *bus_udata,
+                                                  void *socket_udata);
+
+void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata);
 
 #endif // _KINETIC_CONTROLLER_H

@@ -40,7 +40,7 @@ KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const co
 void auth_add_pin(KineticSessionConfig const * const config, KineticPDU * const pdu)
 {
     LOG3("Adding PIN auth info");
-    KineticMessage* msg = &pdu->protoData.message;
+    KineticMessage* msg = &pdu->message;
 
     // Add PIN authentication struct
     KineticProto_Message_pinauth__init(&msg->pinAuth);
@@ -64,10 +64,10 @@ void auth_add_pin(KineticSessionConfig const * const config, KineticPDU * const 
 void auth_add_hmac(KineticSessionConfig const * const config, KineticPDU * const pdu)
 {
     LOG3("Adding HMAC auth info");
-    KineticProto_Message* msg = &pdu->protoData.message.message;
+    KineticProto_Message* msg = &pdu->message.message;
 
     // Add HMAC authentication struct
-    msg->hmacAuth = &pdu->protoData.message.hmacAuth;
+    msg->hmacAuth = &pdu->message.hmacAuth;
     KineticProto_Message_hmacauth__init(msg->hmacAuth);
     msg->hmacAuth = msg->hmacAuth;
     msg->pinAuth = NULL;
@@ -75,21 +75,25 @@ void auth_add_hmac(KineticSessionConfig const * const config, KineticPDU * const
     msg->has_authType = true;
 
     // Configure HMAC support
-    ByteArray const * const hmac = &config->hmacKey;
-    assert(hmac->len <= KINETIC_HMAC_MAX_LEN);
-    assert(hmac->data != NULL);
-    msg->hmacAuth = &pdu->protoData.message.hmacAuth;
+    ByteArray const * const hmacKey = &config->hmacKey;
+    assert(hmacKey->len <= KINETIC_HMAC_MAX_LEN);
+    assert(hmacKey->data != NULL);
+
+    msg->hmacAuth = &pdu->message.hmacAuth;
+
     msg->hmacAuth->hmac = (ProtobufCBinaryData) {
-        .data = pdu->hmac.data,
-        .len = pdu->hmac.len,
+        .data = pdu->message.hmacData,
+        .len = KINETIC_HMAC_SHA1_LEN,
     };
+
     msg->hmacAuth->has_hmac = true;
     msg->hmacAuth->identity = config->identity;
     msg->hmacAuth->has_identity = true;
 
     // Populate with hashed HMAC
-    KineticHMAC_Init(&pdu->hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate(&pdu->hmac, pdu->proto, config->hmacKey);
+    KineticHMAC hmac;
+    KineticHMAC_Init(&hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Populate(&hmac, &pdu->message.message, config->hmacKey);
 }
 
 KineticStatus KineticAuth_Populate(KineticSessionConfig const * const config, KineticPDU * const pdu)

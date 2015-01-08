@@ -1,127 +1,4 @@
 {
-  "folders":
-  [
-    {
-      "follow_symlinks": true,
-      "path": ".",
-      "folder_exclude_patterns": ["build", "vendor/bundle"],
-      "binary_file_patterns": ["build"]
-    }
-  ],
-  "settings":
-  {
-    "binary_file_patterns":
-    [
-      "*.jpg",
-      "*.jpeg",
-      "*.png",
-      "*.gif",
-      "*.ttf",
-      "*.tga",
-      "*.dds",
-      "*.ico",
-      "*.eot",
-      "*.pdf",
-      "*.swf",
-      "*.jar",
-      "*.zip"
-    ],
-    "ensure_newline_at_eof_on_save": true,
-    "file_exclude_patterns":
-    [
-      "*.pyc",
-      "*.pyo",
-      "*.exe",
-      "*.dll",
-      "*.obj",
-      "*.o",
-      "*.a",
-      "*.lib",
-      "*.so",
-      "*.dylib",
-      "*.ncb",
-      "*.sdf",
-      "*.suo",
-      "*.pdb",
-      "*.idb",
-      ".DS_Store",
-      "*.class",
-      "*.psd",
-      "*.d",
-      "*.db",
-      "*.dirstamp",
-      "*.sublime-workspace"
-    ],
-    "folder_exclude_patterns":
-    [
-      ".svn",
-      ".git",
-      ".hg",
-      "CVS",
-      "cache",
-      "out"
-    ],
-    "index_exclude_patterns":
-    [
-      "*.log",
-      ".svn",
-      ".git",
-      ".hg",
-      "CVS",
-      "cache",
-      "out",
-      "build"
-    ],
-    "index_files": true,
-    // "rulers":
-    // [
-    //  80,
-    //  100
-    // ],
-    "tab_size": 4,
-    "translate_tabs_to_spaces": true,
-    "trim_automatic_white_space": true,
-    "word_wrap": "true",
-    "wrap_width": 0,
-    "sublimeclang_dont_prepend_clang_includes": true,
-    "sublimeclang_options":
-    [
-      "-Wcast-align",
-      "-g",
-      "-DGNU_COMPILER",
-      "-std=c99",
-      "-g",
-      "-Wall",
-      "-Wextra",
-      "-pedantic",
-      "-Wstrict-prototypes",
-      "-Werror=strict-prototypes",
-      "-Werror=implicit-function-declaration",
-      "-D_POSIX_C_SOURCE=199309L",
-      "-D_C99_SOURCE=1",
-      "-DSYSTEM_TEST_HOST2=\"\"",
-      "-Wno-nonnull",
-      "-Wno-address",
-      "-Wno-missing-field-initializers",
-      "-O",
-      "-xc",
-      "-isystem", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/",
-      // "-isystem", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/c++/4.2.1",
-      // "-isystem", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/c++/4.2.1/tr1",
-      "-isystem", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Kernel.framework/Versions/A/Headers",
-
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/src/**",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/include",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/test/**",
-      // "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/**",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/protobuf-c",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/socket99",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/bundle/ruby/2.0.0/gems/ceedling-0.15.6/vendor/unity/src",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/build/test/mocks",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/test/support/stubs",
-      "-I${folder:${project_path:kinetic-c.sublime-project}}/test/support"
-    ]
-  },
 	"build_systems":
 	[
 		{
@@ -131,54 +8,214 @@
 			"working_dir": "${project_path}"
 		},
 		{
-			"cmd": ["make", "test"],
+			"cmd":
+			[
+				"make",
+				"test"
+			],
 			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Run all tests (full)",
 			"working_dir": "${project_path}"
 		},
 		{
-			"cmd": ["rake", "CC=/usr/bin/CC", "test:${file_name}"],
+			"cmd":
+			[
+				"rake",
+				"CC=/usr/bin/CC",
+				"test:${file_name}"
+			],
 			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Test current module w/Clang",
-			"selector": ["source.c", "source.c++"],
+			"selector":
+			[
+				"source.c",
+				"source.c++"
+			],
 			"working_dir": "${project_path}"
 		},
 		{
-			"cmd": ["rake", "CC=gcc-4.9", "test:${file_name}"],
+			"cmd":
+			[
+				"rake",
+				"CC=gcc-4.9",
+				"test:${file_name}"
+			],
 			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Test current module w/GCC",
-			"selector": ["source.c", "source.c++"],
+			"selector":
+			[
+				"source.c",
+				"source.c++"
+			],
 			"working_dir": "${project_path}"
 		},
 		{
-			"cmd": ["make", "utility"],
+			"cmd":
+			[
+				"make",
+				"utility"
+			],
 			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Build test utility",
 			"working_dir": "${project_path}"
 		},
-    {
-      "cmd": ["make", "${file_base_name}"],
-      "file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
-      "name": "kinetic-c - Build and run system test",
-      "working_dir": "${project_path}"
-    },
 		{
-			"cmd": ["make", "run"],
+			"cmd":
+			[
+				"make",
+				"${file_base_name}"
+			],
+			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"name": "kinetic-c - Build and run system test",
+			"working_dir": "${project_path}"
+		},
+		{
+			"cmd":
+			[
+				"make",
+				"run"
+			],
 			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Build and run test utility",
 			"working_dir": "${project_path}"
 		},
-    {
-      "cmd": ["make", "examples"],
-      "file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
-      "name": "kinetic-c - Build and run examples",
-      "working_dir": "${project_path}"
-    },
 		{
-			"cmd": ["make", "all"],
+			"cmd":
+			[
+				"make",
+				"examples"
+			],
+			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"name": "kinetic-c - Build and run examples",
+			"working_dir": "${project_path}"
+		},
+		{
+			"cmd":
+			[
+				"make",
+				"all"
+			],
 			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Full CI build",
 			"working_dir": "${project_path}"
 		}
-	]
+	],
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				"build",
+				"vendor/bundle"
+			],
+			"path": "."
+		}
+	],
+	"settings":
+	{
+		"binary_file_patterns":
+		[
+			"*.jpg",
+			"*.jpeg",
+			"*.png",
+			"*.gif",
+			"*.ttf",
+			"*.tga",
+			"*.dds",
+			"*.ico",
+			"*.eot",
+			"*.pdf",
+			"*.swf",
+			"*.jar",
+			"*.zip"
+		],
+		"ensure_newline_at_eof_on_save": true,
+		"file_exclude_patterns":
+		[
+			"*.pyc",
+			"*.pyo",
+			"*.exe",
+			"*.dll",
+			"*.obj",
+			"*.o",
+			"*.a",
+			"*.lib",
+			"*.so",
+			"*.dylib",
+			"*.ncb",
+			"*.sdf",
+			"*.suo",
+			"*.pdb",
+			"*.idb",
+			".DS_Store",
+			"*.class",
+			"*.psd",
+			"*.d",
+			"*.db",
+			"*.dirstamp",
+			"*.sublime-workspace"
+		],
+		"folder_exclude_patterns":
+		[
+			".svn",
+			".git",
+			".hg",
+			"CVS",
+			"cache",
+			"out"
+		],
+		"index_exclude_patterns":
+		[
+			"*.log",
+			".svn",
+			".git",
+			".hg",
+			"CVS",
+			"cache",
+			"out",
+			"build"
+		],
+		"index_files": true,
+		"sublimeclang_dont_prepend_clang_includes": true,
+		"sublimeclang_options":
+		[
+			"-Wcast-align",
+			"-g",
+			"-DGNU_COMPILER",
+			"-std=c99",
+			"-g",
+			"-Wall",
+			"-Wextra",
+			"-pedantic",
+			"-Wstrict-prototypes",
+			"-Werror=strict-prototypes",
+			"-Werror=implicit-function-declaration",
+			"-D_POSIX_C_SOURCE=199309L",
+			"-D_C99_SOURCE=1",
+			"-DSYSTEM_TEST_HOST2=\"\"",
+			"-Wno-nonnull",
+			"-Wno-address",
+			"-Wno-missing-field-initializers",
+			"-O",
+			"-xc",
+			"-isystem",
+			"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/include/",
+			"-isystem",
+			"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Kernel.framework/Versions/A/Headers",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/src/**",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/include",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/test/**",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/protobuf-c",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/socket99",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/vendor/bundle/ruby/2.0.0/gems/ceedling-0.15.6/vendor/unity/src",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/build/test/mocks",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/test/support/stubs",
+			"-I${folder:${project_path:kinetic-c.sublime-project}}/test/support"
+		],
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true,
+		"trim_automatic_white_space": true,
+		"word_wrap": "true",
+		"wrap_width": 0
+	}
 }

@@ -24,7 +24,11 @@
 #include <stdint.h>
 #include <pthread.h>
 
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
 #include "bus.h"
+#include "yacht.h"
 
 /* Struct for a message that will be passed from sender to listener to
  * threadpool, proceeding directly to the threadpool if there is an error
@@ -41,10 +45,13 @@ typedef struct boxed_msg {
 
     /* Destination filename and message body. */
     int fd;
+    SSL *ssl;                   /* valid pointer or BUS_BOXED_MSG_NO_SSL */
     int64_t out_seq_id;
     uint8_t *out_msg;
     size_t out_msg_size;
 } boxed_msg;
+
+#define BUS_NO_SSL ((SSL *)-2)
 
 /* Message bus. */
 typedef struct bus {
@@ -68,6 +75,11 @@ typedef struct bus {
     pthread_t *threads;
 
     struct threadpool *threadpool;
+    SSL_CTX *ssl_ctx;
+
+    /* Locked hash table for fd -> (SSL * | BUS_NO_SSL) */
+    struct yacht *fd_set;
+    pthread_mutex_t fd_set_lock;
 } bus;
 
 /* Special timeout value indicating UNBOUND. */
@@ -87,9 +99,11 @@ typedef enum {
 typedef struct {
     int fd;
     rx_error_t error;
-
     size_t to_read_size;
 
+    SSL *ssl;                   /* SSL handle. Must be valid or BUS_NO_SSL. */
+
+    bus_socket_t type;
     void *udata;                /* user connection data */
 } connection_info;
 

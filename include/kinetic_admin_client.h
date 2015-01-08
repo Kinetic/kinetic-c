@@ -35,7 +35,7 @@ void KineticAdminClient_Init(const char* log_file, int log_level);
 /**
  * @brief Performs shutdown/cleanup of the kinetic-c client lib
  */
-void KineticAdminClient_Shutdown(void);
+void KineticAdminClient_Shutdown(KineticClient * const client);
 
 /**
  * @brief Initializes the Kinetic API, configures logging destination, establishes a
@@ -58,7 +58,7 @@ void KineticAdminClient_Shutdown(void);
  *                  order to shutdown a connection and cleanup resources when
  *                  done using a KineticSession.
  */
-KineticStatus KineticAdminClient_CreateConnection(KineticSession * const session);
+KineticStatus KineticAdminClient_CreateConnection(KineticSession * const session, KineticClient * const client);
 
 /**
  * @brief Closes the connection to a host.

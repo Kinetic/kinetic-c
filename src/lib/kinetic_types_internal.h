@@ -54,46 +54,49 @@ typedef struct _KineticPDU KineticPDU;
 typedef struct _KineticOperation KineticOperation;
 typedef struct _KineticConnection KineticConnection;
 
-
-// Kinetic list item
-typedef struct _KineticListItem KineticListItem;
-struct _KineticListItem {
-    KineticListItem* next;
-    void* data;
+struct _KineticClient {
+    struct bus *bus;
 };
 
-// Kinetic list
-typedef struct _KineticList {
-    KineticListItem* start;
-    pthread_mutex_t mutex;
-    bool locked;
-} KineticList;
-#define KINETIC_LIST_INITIALIZER (KineticList) { \
-    .mutex = PTHREAD_MUTEX_INITIALIZER, .locked = false, .start = NULL, }
+// #TODO remove packed attribute and replace uses of sizeof(KineticPDUHeader)
+//  with a constant
+typedef struct __attribute__((__packed__)) _KineticPDUHeader {
+    uint8_t     versionPrefix;
+    uint32_t    protobufLength;
+    uint32_t    valueLength;
+} KineticPDUHeader;
 
-// Kinetic Thread Instance
-typedef struct _KineticThread {
-    bool abortRequested;
-    bool fatalError;
-    bool paused;
-    KineticSession* session;
-} KineticThread;
+enum socket_state {
+    STATE_UNINIT = 0,
+    STATE_AWAITING_HEADER,
+    STATE_AWAITING_BODY,
+};
 
+enum unpack_error {
+    UNPACK_ERROR_UNDEFINED,
+    UNPACK_ERROR_SUCCESS,
+    UNPACK_ERROR_INVALID_HEADER,
+    UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
+};
+
+typedef struct {
+    enum socket_state state;
+    KineticPDUHeader header;
+    enum unpack_error unpack_status;
+    size_t accumulated;
+    uint8_t buf[];
+} socket_info;
 
 // Kinetic Device Client Connection
 struct _KineticConnection {
     bool            connected;      // state of connection
     int             socket;         // socket file descriptor
-    pthread_mutex_t writeMutex;     // socket write mutex
     int64_t         connectionID;   // initialized to seconds since epoch
     int64_t         sequence;       // increments for each request in a session
-    KineticList     pdus;           // list of dynamically allocated PDUs
-    KineticList     operations;     // list of dynamically allocated operations
-    KineticSession const * session;        // session configuration
-    KineticThread   thread;         // worker thread instance struct
-    pthread_t       threadID;       // worker pthread
+    KineticSession  const *session; // session configuration
+    struct bus *    messageBus;
+    socket_info *   si;   
 };
-
 
 // Kinetic Message HMAC
 typedef struct _KineticHMAC {
@@ -106,23 +109,25 @@ typedef struct _KineticHMAC {
 // Kinetic Device Message Request
 typedef struct _KineticMessage {
     // Kinetic Protocol Buffer Elements
+
+    // Base Message
     KineticProto_Message                message;
     KineticProto_Message_HMACauth       hmacAuth;
     KineticProto_Message_PINauth        pinAuth;
     uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
 
-    bool                                         has_command; // Set to `true` to enable command element
-    KineticProto_Command                         command;
-    KineticProto_Command_Header                  header;
-    KineticProto_Command_Body                    body;
-    KineticProto_Command_Status                  status;
-    KineticProto_Command_Security                security;
-    KineticProto_Command_Security_ACL            acl;
-    KineticProto_Command_KeyValue                keyValue;
-    KineticProto_Command_Range                   keyRange;
-    KineticProto_Command_GetLog                  getLog;
-    KineticProto_Command_GetLog_Type             getLogType;
-    KineticProto_Command_PinOperation            pinOp;
+    // Internal Command
+    KineticProto_Command                command;
+    KineticProto_Command_Header         header;
+    KineticProto_Command_Body           body;
+    KineticProto_Command_Status         status;
+    KineticProto_Command_Security       security;
+    KineticProto_Command_Security_ACL   acl;
+    KineticProto_Command_KeyValue       keyValue;
+    KineticProto_Command_Range          keyRange;
+    KineticProto_Command_GetLog         getLog;
+    KineticProto_Command_GetLog_Type    getLogType;
+    KineticProto_Command_PinOperation   pinOp;
 } KineticMessage;
 
 // Kinetic PDU Header
@@ -131,11 +136,6 @@ typedef struct _KineticMessage {
 #define PDU_PROTO_MAX_UNPACKED_LEN  (PDU_PROTO_MAX_LEN * 2)
 #define PDU_MAX_LEN                 (PDU_HEADER_LEN + \
                                     PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE)
-typedef struct __attribute__((__packed__)) _KineticPDUHeader {
-    uint8_t     versionPrefix;
-    uint32_t    protobufLength;
-    uint32_t    valueLength;
-} KineticPDUHeader;
 
 typedef enum {
     KINETIC_PDU_TYPE_INVALID = 0,
@@ -147,34 +147,21 @@ typedef enum {
 
 // Kinetic PDU
 struct _KineticPDU {
-    // Binary PDU header
-    KineticPDUHeader header;    // Header struct in native byte order
-    KineticPDUHeader headerNBO; // Header struct in network-byte-order
-
     // Message associated with this PDU instance
-    union {
-        KineticProto_Message base;
-        KineticMessage message;
-    } protoData;        // Proto will always be first
-    KineticProto_Message* proto;
-    bool protobufDynamicallyExtracted;
+    KineticMessage message;
     KineticProto_Command* command;
 
-    // Embedded HMAC instance
-    KineticHMAC hmac;
-
-    // Exchange associated with this PDU instance (info gets embedded in protobuf message)
-    KineticConnection* connection;
-
-    // The type of this PDU (request, response or unsolicited)
-    KineticPDUType type;
-
-    // PIN enabled (non-HMAC if true)
+    // PIN enabled (true=PIN, false=HMAC)
     bool pinOp;
-
-    // Kinetic operation associated with this PDU, if any
-    KineticOperation* operation;
 };
+
+typedef struct _KineticResponse
+{
+    KineticPDUHeader header;
+    KineticProto_Message* proto;
+    KineticProto_Command* command;
+    uint8_t value[];
+} KineticResponse;
 
 typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operation, KineticStatus const status);
 
@@ -182,9 +169,7 @@ typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operat
 struct _KineticOperation {
     KineticConnection* connection;
     KineticPDU* request;
-    KineticPDU* response;
-    pthread_mutex_t timeoutTimeMutex;
-    struct timeval timeoutTime;
+    KineticResponse* response;
     bool valueEnabled;
     bool sendValue;
     KineticEntry* entry;
@@ -238,7 +223,6 @@ void KineticConnection_Init(KineticConnection* const con);
 void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con);
 void KineticMessage_Init(KineticMessage* const message);
 void KineticOperation_Init(KineticOperation* op, KineticSession const * const session);
-void KineticPDU_Init(KineticPDU* pdu, KineticSession const * const session);
 void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

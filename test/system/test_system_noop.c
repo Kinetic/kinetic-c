@@ -24,7 +24,7 @@ static SystemTestFixture Fixture;
 
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 1);
+    SystemTestSetup(&Fixture, 3);
 }
 
 void tearDown(void)
@@ -32,8 +32,13 @@ void tearDown(void)
     SystemTestTearDown(&Fixture);
 }
 
-
 void test_NoOp_should_succeed(void)
+{
+    KineticStatus status = KineticClient_NoOp(&Fixture.session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_NoOp_should_succeed_again(void)
 {
     KineticStatus status = KineticClient_NoOp(&Fixture.session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -42,4 +47,4 @@ void test_NoOp_should_succeed(void)
 /*******************************************************************************
 * ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
 *******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)
+// SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

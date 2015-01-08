@@ -189,21 +189,27 @@ typedef struct bus_result {
 typedef struct {
     bus_send_status_t status; // request_status
     union {
-        struct {
+    struct {
             const char *err_str;
         } error_minutiae;
         struct {
             // user needs to free *msg
             int64_t seq_id;
-            uint8_t *opaque_msg;
+            void *opaque_msg;
         } response;
     } u;
 } bus_msg_result_t;
 
 typedef void (bus_msg_cb)(bus_msg_result_t *res, void *udata);
 
+typedef enum {
+    BUS_SOCKET_PLAIN,
+    BUS_SOCKET_SSL,
+} bus_socket_t;
+
 typedef struct {
     int fd;
+    bus_socket_t type;
     uint64_t seq_id;
     uint8_t *msg;
     size_t msg_size;
@@ -231,5 +237,8 @@ typedef enum {
     BUS_RESPONSE_FAILURE_HUP,
 } bus_status_res_t;
 
+#ifdef TEST
+#include "bus_internal_types.h"
+#endif
 
 #endif

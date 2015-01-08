@@ -92,10 +92,11 @@ int main(int argc, char** argv)
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         }
     };
-    KineticClient_Init("stdout", 0);
+    KineticClient * client = KineticClient_Init("stdout", 0);
+    if (client == NULL) { return 1; }
 
     // Establish connection
-    KineticStatus status = KineticClient_CreateConnection(&session);
+    KineticStatus status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stdout, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -157,7 +158,7 @@ int main(int argc, char** argv)
     
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(&session);
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
 
     return success ? 0 : -1;
 }

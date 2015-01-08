@@ -56,15 +56,15 @@ struct kinetic_thread_arg {
 
 static void* kinetic_put(void* kinetic_arg);
 
-
+KineticClient * client;
 void setUp(void)
 {
-    KineticClient_Init("stdout", 0);
+    client = KineticClient_Init("stdout", 0);
 }
 
 void tearDown(void)
 {
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
 }
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
@@ -103,7 +103,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
             kt_arg[i].session.config = sessionConfig;
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
-                KineticClient_CreateConnection(&kt_arg[i].session));
+                KineticClient_CreateConnection(&kt_arg[i].session, client));
             strcpy(kt_arg[i].ip, sessionConfig.host);
 
             // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs

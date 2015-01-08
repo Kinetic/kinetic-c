@@ -59,21 +59,29 @@ KineticStatus wait_for_put_finish(FileTransferProgress* const transfer);
 static int put_chunk_of_file(FileTransferProgress* transfer);
 static void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* client_data);
 
-static SystemTestFixture Fixture;
-
-void setUp(void)
-{
-    SystemTestSetup(&Fixture, 1);
-}
-
-void tearDown(void)
-{
-    SystemTestTearDown(&Fixture);
-}
-
-
 void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
 {
+    // Initialize kinetic-c and configure sessions
+    const char HmacKeyString[] = "asdfasdf";
+    KineticSession session = {
+        .config = (KineticSessionConfig) {
+            .host = "localhost",
+            .port = KINETIC_PORT,
+            .clusterVersion = 0,
+            .identity = 1,
+            .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+        },
+    };
+    KineticClient * client = KineticClient_Init("stdout", 0);
+
+    // Establish connection
+    KineticStatus status = KineticClient_CreateConnection(&session, client);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
+            Kinetic_GetStatusDescription(status));
+        TEST_FAIL();
+    }
+
     // Create a unique/common key prefix
     struct timeval now;
     gettimeofday(&now, NULL);
@@ -81,15 +89,19 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
 
     // Kick off the chained write/PUT operations and wait for completion
     const char* dataFile = "test/support/data/test.data";
-    FileTransferProgress* transfer = start_file_transfer(&Fixture.session, dataFile, prefix, 4);
+    FileTransferProgress* transfer = start_file_transfer(&session, dataFile, prefix, 4);
     printf("Waiting for transfer to complete...\n");
-    KineticStatus status = wait_for_put_finish(transfer);
+    status = wait_for_put_finish(transfer);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Transfer failed w/status: %s\n",
             Kinetic_GetStatusDescription(status));
         TEST_FAIL();
     }
     printf("Transfer completed successfully!\n");
+
+    // Shutdown client connection and cleanup
+    KineticClient_DestroyConnection(&session);
+    KineticClient_Shutdown(client);
 }
 
 

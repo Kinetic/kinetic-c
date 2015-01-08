@@ -437,9 +437,6 @@ void KineticConnection_Init(KineticConnection* const con)
     *con = (KineticConnection) {
         .connected = false, // Just to clarify
         .socket = -1,
-        .writeMutex = PTHREAD_MUTEX_INITIALIZER,
-        .operations = KINETIC_LIST_INITIALIZER,
-        .pdus = KINETIC_LIST_INITIALIZER,
     };
 }
 
@@ -483,32 +480,17 @@ void KineticOperation_Init(KineticOperation* op, KineticSession const * const se
     assert(session->connection != NULL);
     *op = (KineticOperation) {
         .connection = session->connection,
-        .timeoutTimeMutex = PTHREAD_MUTEX_INITIALIZER,
     };
 }
 
-void KineticPDU_Init(KineticPDU* pdu, KineticSession const * const session)
+void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session)
 {
     assert(pdu != NULL);
     assert(session != NULL);
     assert(session->connection != NULL);
     memset(pdu, 0, sizeof(KineticPDU));
-    pdu->connection = session->connection;
-    pdu->header = (KineticPDUHeader) {.versionPrefix = 'F'};
-    pdu->headerNBO = (KineticPDUHeader) {.versionPrefix = 'F'};
-}
-
-void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session)
-{
-    KineticPDU_Init(pdu, session);
-    KineticMessage_Init(&pdu->protoData.message);
-    KineticMessage_HeaderInit(&pdu->protoData.message.header, session);
-
-    pdu->proto = &pdu->protoData.message.message;
-    pdu->protoData.message.has_command = true;
-
-    pdu->command = &pdu->protoData.message.command;
-    pdu->command->header = &pdu->protoData.message.header;
-
-    pdu->type = KINETIC_PDU_TYPE_REQUEST;
+    KineticMessage_Init(&(pdu->message));
+    KineticMessage_HeaderInit(&(pdu->message.header), session);
+    pdu->command = &pdu->message.command;
+    pdu->command->header = &pdu->message.header;
 }

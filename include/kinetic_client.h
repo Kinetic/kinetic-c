@@ -29,12 +29,12 @@
  * @param log_file (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
  * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
  */
-void KineticClient_Init(const char* log_file, int log_level);
+KineticClient * KineticClient_Init(const char* log_file, int log_level);
 
 /**
  * @brief Performs shutdown/cleanup of the kinetic-c client lib
  */
-void KineticClient_Shutdown(void);
+void KineticClient_Shutdown(KineticClient * const client);
 
 /**
  * @brief Initializes the Kinetic API, configures logging destination, establishes a
@@ -57,7 +57,7 @@ void KineticClient_Shutdown(void);
  *                  order to shutdown a connection and cleanup resources when
  *                  done using a KineticSession.
  */
-KineticStatus KineticClient_CreateConnection(KineticSession * const session);
+KineticStatus KineticClient_CreateConnection(KineticSession * const session, KineticClient * const client);
 
 /**
  * @brief Closes the connection to a host.
@@ -222,5 +222,9 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
 KineticStatus KineticClient_P2POperation(KineticSession const * const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure);
+
+#ifdef TEST
+#include "kinetic_types_internal.h"
+#endif
 
 #endif // _KINETIC_CLIENT_H

@@ -50,23 +50,26 @@ void tearDown(void)
 
 void test_KineticAdminClient_Init_should_delegate_to_base_client(void)
 {
-    KineticClient_Init_Expect("console", 2);
+    KineticClient client;
+    KineticClient_Init_ExpectAndReturn("console", 2, &client);
     KineticAdminClient_Init("console", 2);
 }
 
 void test_KineticAdminClient_Shutdown_should_delegate_to_base_client(void)
 {
-    KineticClient_Shutdown_Expect();
-    KineticAdminClient_Shutdown();
+    KineticClient client;
+    KineticClient_Shutdown_Expect(&client);
+    KineticAdminClient_Shutdown(&client);
 }
 
 void test_KineticAdminClient_CreateConnection_should_delegate_to_base_client(void)
 {
+    KineticClient client;
     KineticSession session = {.config = (KineticSessionConfig) {.port = 8765}};
 
-    KineticClient_CreateConnection_ExpectAndReturn(&session, KINETIC_STATUS_CLUSTER_MISMATCH);
+    KineticClient_CreateConnection_ExpectAndReturn(&session, &client, KINETIC_STATUS_CLUSTER_MISMATCH);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH, KineticAdminClient_CreateConnection(&session));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH, KineticAdminClient_CreateConnection(&session, &client));
 }
 
 void test_KineticAdminClient_DestroyConnection_should_delegate_to_base_client(void)

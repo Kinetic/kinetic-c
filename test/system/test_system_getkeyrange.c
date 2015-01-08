@@ -49,8 +49,8 @@ static bool add_keys(int count)
 
 void setUp(void)
 {
+    SystemTestSetup(&Fixture, 1);
     if (!suiteInitialized) {
-        SystemTestSetup(&Fixture, 1);
         add_keys(3);
     }
 }

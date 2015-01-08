@@ -55,8 +55,6 @@ struct threadpool_task {
 struct threadpool_info {
     uint8_t active_threads;
     uint8_t dormant_threads;
-    size_t tasks_assigned;
-    size_t tasks_completed;
     size_t backlog_size;
 };
 
@@ -81,7 +79,7 @@ void threadpool_stats(struct threadpool *t, struct threadpool_info *ti);
  * Returns whether all previously active threads have shut down.
  *
  * kill_all will eventually permit immediately shutting down all active threads
- * (memory leaks be damned), but is not yet implemented.
+ * (possibly with memory leaks), but is not yet implemented.
  *
  * Returns whether everything has halted. */
 bool threadpool_shutdown(struct threadpool *t, bool kill_all);

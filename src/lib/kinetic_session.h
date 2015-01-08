@@ -23,7 +23,7 @@
 
 #include "kinetic_types_internal.h"
 
-KineticStatus KineticSession_Create(KineticSession * const session);
+KineticStatus KineticSession_Create(KineticSession * const session, KineticClient * const client);
 KineticStatus KineticSession_Destroy(KineticSession * const session);
 KineticStatus KineticSession_Connect(KineticSession * const session);
 KineticStatus KineticSession_Disconnect(KineticSession const * const session);

@@ -38,9 +38,8 @@
 #include "sender_internal.h"
 
 static void set_error_for_socket(sender *s, int fd, tx_error_t error);
-static void attempt_to_resend_success(sender *s, tx_info_t *info);
 static void notify_message_failure(sender *s, tx_info_t *info, bus_send_status_t status);
-static void enqueue_message_to_listener(sender *s, tx_info_t *info);
+static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info);
 
 struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
     struct sender *s = calloc(1, sizeof(*s));
@@ -67,7 +66,7 @@ struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
     if (res != 0) {
         fprintf(stderr, "pthread_mutex_init: %s\n", strerror(res));
         free(s);
-        yacht_free(s->fd_hash_table);
+        yacht_free(s->fd_hash_table, NULL, NULL);
         return NULL;
     }
 
@@ -145,7 +144,7 @@ static bool is_watched(struct sender *s, int fd, tx_info_t *ignore_info) {
 /* Add a file descriptor to the watch set, if not already present.
  * This will only be called via sender_enqueue_message, on the
  * client / bus thread. */
-static bool add_fd_to_watch_set(struct sender *s, int fd) {
+static bool add_fd_to_watch_set(struct sender *s, int fd, SSL *ssl) {
     /* Lock watch set, to ensure that if any FDs are added or removed,
      * they are done based on the whole state. */
     int res = pthread_mutex_lock(&s->watch_set_mutex);
@@ -164,9 +163,19 @@ static bool add_fd_to_watch_set(struct sender *s, int fd) {
         s->fds[idx].fd = fd;
         s->fds[idx].events |= POLLOUT;
         s->active_fds++;
-        if (!yacht_add(s->fd_hash_table, fd)) {
+        fd_info *info = malloc(sizeof(*info));
+        if (info == NULL) {
+            if (0 != pthread_mutex_unlock(&s->watch_set_mutex)) {
+                assert(false);
+            }
+            return false;
+        }
+        info->ssl = ssl;
+        void *old = NULL;
+        if (!yacht_set(s->fd_hash_table, fd, info, &old)) {
             assert(false);
         }
+        assert(old == NULL);
     }
 
     if (0 != pthread_mutex_unlock(&s->watch_set_mutex)) {
@@ -197,9 +206,13 @@ static bool remove_fd_from_watch_set(struct sender *s, tx_info_t *info) {
                     s->fds[i].fd = s->fds[s->active_fds - 1].fd;
                 }
                 s->active_fds--;
-                if (!yacht_remove(s->fd_hash_table, info->fd)) {
+                void *old = NULL;
+                if (!yacht_remove(s->fd_hash_table, info->fd, &old)) {
                     assert(false);
                 }
+                fd_info *info = (fd_info *)old;
+                assert(info);
+                free(info);
                 break;
             }
         }
@@ -222,7 +235,7 @@ static bool populate_tx_info(struct sender *s,
 
     int fd = info->box->fd;
 
-    if (!add_fd_to_watch_set(s, fd)) {
+    if (!add_fd_to_watch_set(s, fd, box->ssl)) {
         BUS_LOG(b, /*3*/0, LOG_SENDER, "add_fd_to_watch_set FAILED", b->udata);
         return false;
     }
@@ -400,6 +413,10 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
     }
 }
 
+static ssize_t socket_write_plain(sender *s, tx_info_t *info);
+static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl);
+static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent);
+
 static void attempt_write(sender *s, int available) {
     int written = 0;
     struct bus *b = s->bus;
@@ -434,36 +451,117 @@ static void attempt_write(sender *s, int available) {
             }
 
             assert(info->box);
-            uint8_t *msg = info->box->out_msg;
             size_t msg_size = info->box->out_msg_size;
             size_t rem = msg_size - info->sent_size;
+            SSL *ssl = info->box->ssl;
+
             if (rem == 0) {     /* send completed! shouldn't get here */
                 assert(false);
             } else {
                 BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
                     "writing %zd", rem);
-                ssize_t wrsz = write(pfd->fd, &msg[info->sent_size], rem);
-                if (wrsz == -1) {
-                    if (util_is_resumable_io_error(errno)) {
-                        errno = 0;
-                    } else {
-                        /* close socket */
-                        BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                            "write: socket error writing, %d", errno);
-                        set_error_for_socket(s, pfd->fd, TX_ERROR_WRITE_FAILURE);
-                        errno = 0;
-                    }
+
+                ssize_t wrsz = 0;
+                if (ssl == BUS_NO_SSL) {
+                    wrsz = socket_write_plain(s, info);
                 } else {
-                    info->sent_size += wrsz;
-                    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64, "wrote %zd", wrsz);
-                    if (rem - wrsz == 0) { /* completed! */
-                        enqueue_message_to_listener(s, info);
-                    }
+                    assert(ssl);
+                    wrsz = socket_write_ssl(s, info, ssl);
                 }
+                BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
+                    "wrote %zd", wrsz);
             }
         }
     }
 }
+
+static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
+    struct bus *b = s->bus;
+    uint8_t *msg = info->box->out_msg;
+    size_t msg_size = info->box->out_msg_size;
+    size_t rem = msg_size - info->sent_size;
+    ssize_t wrsz = write(info->fd, &msg[info->sent_size], rem);
+    if (wrsz == -1) {
+        if (util_is_resumable_io_error(errno)) {
+            errno = 0;
+            return 0;
+        } else {
+            /* close socket */
+            BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                "write: socket error writing, %d", errno);
+            set_error_for_socket(s, info->fd, TX_ERROR_WRITE_FAILURE);
+            errno = 0;
+            return 0;
+        }
+    } else {
+        update_sent(b, s, info, wrsz);
+        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+                "sent: %zd\n", wrsz);
+        return wrsz;
+    }
+}
+
+static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl) {
+    struct bus *b = s->bus;
+    uint8_t *msg = info->box->out_msg;
+    size_t msg_size = info->box->out_msg_size;
+    size_t rem = msg_size - info->sent_size;
+    ssize_t written = 0;
+    for (;;) {
+        ssize_t wrsz = SSL_write(ssl, &msg[info->sent_size], rem);
+        if (wrsz > 0) {
+            update_sent(b, s, info, wrsz);
+            written += wrsz;
+        } else if (wrsz < 0) {
+            int reason = SSL_get_error(ssl, wrsz);
+            switch (reason) {
+            case SSL_ERROR_WANT_WRITE:
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                    "SSL_write: socket %d: WANT_WRITE", info->fd);
+                break;
+                
+            case SSL_ERROR_WANT_READ:
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                    "SSL_write: socket %d: WANT_READ", info->fd);
+                assert(false);  // shouldn't get this; we're writing.
+                break;
+                
+            case SSL_ERROR_SYSCALL:
+            {
+                if (util_is_resumable_io_error(errno)) {
+                    errno = 0;
+                    /* don't break; we want to retry on EINTR etc. until
+                     * we get WANT_WRITE, otherwise poll(2) may not retry
+                     * the socket for too long */
+                } else {
+                    set_error_for_socket(s, info->fd, TX_ERROR_WRITE_FAILURE);
+                }
+            }
+            default:
+            {
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                    "SSL_write: socket %d: error %d", info->fd, reason);
+                break;
+            }
+            }
+        } else {
+            /* SSL_write should give SSL_ERROR_WANT_WRITE when unable
+             * to write further. */
+        }
+    }
+    return written;
+}
+
+static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent) {
+    size_t msg_size = info->box->out_msg_size;
+    size_t rem = msg_size - info->sent_size;
+    info->sent_size += sent;
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64, "wrote %zd", sent);
+    if (rem - sent == 0) { /* completed! */
+        attempt_to_enqueue_message_to_listener(s, info);
+    }
+}
+
 
 static bool write_backpressure(sender *s, tx_info_t *info, uint16_t bp) {
     uint8_t buf[2];
@@ -507,7 +605,7 @@ static void tick_handler(sender *s) {
                 notify_message_failure(s, info, BUS_SEND_TX_FAILURE);
             } else if (info->sent_size == info->box->out_msg_size) {
                 BUS_LOG(b, 5, LOG_SENDER, "attempting to re-send success", b->udata);
-                attempt_to_resend_success(s, info);
+                attempt_to_enqueue_message_to_listener(s, info);
             } else if (info->timeout_sec == 1) {
                 BUS_LOG(b, 2, LOG_SENDER, "notifying of tx failure -- timeout", b->udata);
                 notify_message_failure(s, info, BUS_SEND_TX_TIMEOUT);
@@ -521,51 +619,25 @@ static void tick_handler(sender *s) {
     }
 }
 
-static void enqueue_message_to_listener(sender *s, tx_info_t *info) {
+static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info) {
+    struct bus *b = s->bus;
     /* Notify listener that it should expect a response to a
      * successfully sent message. */
-    struct listener *l = bus_get_listener_for_socket(s->bus, info->fd);
-
-    uint16_t backpressure = 0;
-
-    struct bus *b = s->bus;
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
         "telling listener to expect response, with box %p", info->box);
+
+    struct listener *l = bus_get_listener_for_socket(s->bus, info->fd);
 
     struct boxed_msg *box = info->box;
     info->box = NULL;           /* passed on to listener */
 
+    uint16_t backpressure = 0;
     if (listener_expect_response(l, box, &backpressure)) {
+        box->out_msg = NULL;    /* release value, pointer will be stale after returning */
         write_backpressure(s, info, backpressure);   /* alert blocked client thread */
         BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
         release_tx_info(s, info);
     } else {
-        BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);
-        info->box = box;    /* return it since we need to keep managing it */
-        info->retries++;
-        if (info->retries == SENDER_MAX_DELIVERY_RETRIES) {
-            notify_message_failure(s, info, BUS_SEND_RX_FAILURE);
-            BUS_LOG(b, 2, LOG_SENDER, "failed delivery, several retries", b->udata);
-        }
-    }
-}
-
-/* FIXME: refactor ^ and v because they're largely identical */
-
-static void attempt_to_resend_success(sender *s, tx_info_t *info) {
-    struct bus *b = s->bus;
-    BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
-    struct listener *l = bus_get_listener_for_socket(s->bus, info->fd);
-
-    struct boxed_msg *box = info->box;
-    info->box = NULL;           /* passed on to listener */
-
-    uint16_t backpressure = 0;
-    if (listener_expect_response(l, box, &backpressure)) {
-        write_backpressure(s, info, backpressure);   /* alert blocked client thread */
-        BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 128, "release_tx_info %d", __LINE__);
-        release_tx_info(s, info);
-    } else {    /* failed to enqueue - retry N times and then cancel */
         BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);
         info->box = box;    /* return it since we need to keep managing it */
         info->retries++;
@@ -588,11 +660,18 @@ static void notify_message_failure(sender *s, tx_info_t *info, bus_send_status_t
     release_tx_info(s, info);
 }
 
+static void free_fd_info_cb(void *value, void *udata) {
+    fd_info *info = (fd_info *)value;
+    /* Note: info->ssl will be freed by the listener. */
+    (void)udata;
+    free(info);
+}
+
 void sender_free(struct sender *s) {
     if (s) {
         int res = pthread_mutex_destroy(&s->watch_set_mutex);
         /* Must call sender_shutdown and wait for phtread_join first. */
-        yacht_free(s->fd_hash_table);
+        yacht_free(s->fd_hash_table, free_fd_info_cb, NULL);
         assert(res == 0);
         free(s);
     }

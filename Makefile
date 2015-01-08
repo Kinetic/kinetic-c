@@ -7,6 +7,13 @@ OUT_DIR = ./obj
 BIN_DIR = ./bin
 PUB_INC = ./include
 
+#-------------------------------------------------------------------------------
+# SSL/TLS Library Options
+#-------------------------------------------------------------------------------
+
+# FIXME: Currently OSX/homebrew specific, rework before integration.
+OPENSSL_PATH ?=	.
+
 #===============================================================================
 # Shared Build Variables
 #===============================================================================
@@ -18,7 +25,7 @@ SESSION_PIN ?= \"1234\"
 WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=\"${SYSTEM_TEST_HOST}\" -DCLUSTER_VERSION=${CLUSTER_VERSION}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
-LDFLAGS += -lm -lcrypto -lssl -lpthread
+LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread
 
 #===============================================================================
 # Kinetic-C Library Build Support
@@ -35,10 +42,11 @@ VERSION_FILE = ./config/VERSION
 VERSION = ${shell head -n1 $(VERSION_FILE)}
 THREADPOOL_PATH = ${LIB_DIR}/threadpool
 BUS_PATH = ${LIB_DIR}/bus
+
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR) \
-	-I$(THREADPOOL_PATH) -I$(BUS_PATH)
+	-I$(THREADPOOL_PATH) -I$(BUS_PATH) -I${OPENSSL_PATH}/include
 
 C_SRC=${LIB_DIR}/*.[ch] $(SOCKET99)/socket99.[ch] $(PROTOBUFC)/protobuf-c/protobuf-c.[ch]
 
@@ -50,6 +58,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_operation.o \
 	$(OUT_DIR)/kinetic_pdu.o \
 	$(OUT_DIR)/kinetic_auth.o \
+	$(OUT_DIR)/kinetic_pdu_unpack.o \
 	$(OUT_DIR)/kinetic_proto.o \
 	$(OUT_DIR)/kinetic_socket.o \
 	$(OUT_DIR)/kinetic_message.o \
@@ -66,11 +75,13 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_admin_client.o \
 	$(OUT_DIR)/threadpool.o \
 	$(OUT_DIR)/bus.o \
+	$(OUT_DIR)/bus_ssl.o \
 	$(OUT_DIR)/casq.o \
 	$(OUT_DIR)/listener.o \
 	$(OUT_DIR)/sender.o \
 	$(OUT_DIR)/util.o \
 	$(OUT_DIR)/yacht.o \
+
 
 
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
@@ -84,7 +95,8 @@ makedirs:
 all: default test system_tests test_internals run examples
 
 clean: makedirs update_git_submodules
-	rm -rf ./bin/**
+	rm -rf ./bin/**/*
+	rm ./bin/*.*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
@@ -122,7 +134,7 @@ $(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpoo
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 $(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
-	$(CC) -o $@ -c $< $(CFLAGS) -I${THREADPOOL_PATH} -I${BUS_PATH}
+	$(CC) -o $@ -c $< $(CFLAGS) -I${THREADPOOL_PATH} -I${BUS_PATH} ${LIB_INCS}
 
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
@@ -166,7 +178,7 @@ test_bus: test_threadpool ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a
 #-------------------------------------------------------------------------------
 
 ${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
-	cd ${SOCKET99} && make CDEFS=-D_C99_SOURCE=1 all
+	cd ${SOCKET99} && make all
 	cp ${SOCKET99}/libsocket99.a $@
 
 ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
@@ -214,8 +226,10 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -d $(PREFIX)${LIBDIR}
 	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)${LIBDIR}/
 	$(INSTALL) -d $(PREFIX)/include/
-	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/kinetic_client.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/kinetic_admin_client.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
 
 uninstall:
 	@echo
@@ -225,12 +239,10 @@ uninstall:
 	@echo
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.a
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
-	$(RM) -f $(PREFIX)/include/${API_NAME}.h
-	$(RM) -f $(PREFIX)/include/kinetic_admin_api.h
+	$(RM) -f $(PREFIX)/include/kinetic_client.h
+	$(RM) -f $(PREFIX)/include/kinetic_admin_client.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
-	$(RM) -f $(PREFIX)/include/kinetic_proto.h
-	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
-	$(RM) -f $(PREFIX)/include/protobuf-c.h
+	$(RM) -f $(PREFIX)/include/byte_array.h
 
 .PHONY: install uninstall
 
@@ -308,9 +320,10 @@ unit_tests: start_simulator $(unit_passfiles)
 # System Tests
 #===============================================================================
 
+
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
-SYSTEST_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+SYSTEST_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl -lcrypto $(KINETIC_LIB) -l pthread
 SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes -Wno-nonnull
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
 
@@ -319,6 +332,8 @@ systest_executables = $(patsubst $(SYSTEST_SRC)/%.c,$(SYSTEST_OUT)/run_%,$(syste
 systest_results = $(patsubst $(SYSTEST_OUT)/run_%,$(SYSTEST_OUT)/%.log,$(systest_executables))
 systest_passfiles = $(patsubst $(SYSTEST_OUT)/run_%,$(SYSTEST_OUT)/%.testpass,$(systest_executables))
 systest_names = $(patsubst $(SYSTEST_OUT)/run_%,%,$(systest_executables))
+
+.SECONDARY: $(systest_executables)
 
 list_system_tests:
 	echo $(systest_names)
@@ -360,7 +375,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm -lssl $(KINETIC_LIB) -lcrypto -lpthread
+UTIL_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl $(KINETIC_LIB) -lcrypto -lpthread
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)

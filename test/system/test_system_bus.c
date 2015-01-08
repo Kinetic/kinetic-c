@@ -39,7 +39,6 @@
 #include "kinetic_logger.h"
 #include "kinetic_operation.h"
 #include "kinetic_hmac.h"
-#include "kinetic_session.h"
 #include "kinetic_socket.h"
 #include "kinetic_nbo.h"
 
@@ -53,27 +52,6 @@ void tearDown(void)
 { LOG_LOCATION;
 
 }
-
-enum socket_state {
-    STATE_UNINIT = 0,
-    STATE_AWAITING_HEADER,
-    STATE_AWAITING_BODY,
-};
-
-enum unpack_error {
-    UNPACK_ERROR_UNDEFINED,
-    UNPACK_ERROR_SUCCESS,
-    UNPACK_ERROR_INVALID_HEADER,
-    UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
-};
-
-typedef struct {
-    enum socket_state state;
-    KineticPDUHeader header;
-    enum unpack_error unpack_status;
-    size_t accumulated;
-    uint8_t buf[];
-} socket_info;
 
 static void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
@@ -272,7 +250,7 @@ void test_that_we_can_register_sockets(void)
     KineticLogger_Init("stdout", 3);
     bus_config cfg = {
         .log_cb = log_cb,
-        .log_level = 2,
+        .log_level = /*2,*/ 5,
         .sink_cb = sink_cb,
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = unexpected_msg_cb,
@@ -283,17 +261,57 @@ void test_that_we_can_register_sockets(void)
         LOGF1(0, "failed to init bus: %d\n", res.status);
         return;
     }
-    int fd = KineticSocket_Connect("localhost", 8123);
-    assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
 
     socket_info * si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     assert(si != NULL);
-    bool result = bus_register_socket(res.bus, fd, si);
+
+    int fd = KineticSocket_Connect("localhost", KINETIC_PORT);
+    assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
+    bool result = bus_register_socket(res.bus, BUS_SOCKET_PLAIN, fd, si);
     assert(result);
 
     sleep(5);
 
     bus_shutdown(res.bus);
+    bus_free(res.bus);
+
+    free(si);
+
+    KineticSocket_Close(fd);
+
+    KineticLogger_Close();
+}
+
+void test_that_we_can_register_SSL_sockets(void)
+{ LOG_LOCATION;
+
+    KineticLogger_Init("stdout", 3);
+    bus_config cfg = {
+        .log_cb = log_cb,
+        .log_level = /*2,*/ 5,
+        .sink_cb = sink_cb,
+        .unpack_cb = unpack_cb,
+        .unexpected_msg_cb = unexpected_msg_cb,
+        .bus_udata = NULL,
+    };
+    bus_result res = {0};
+    if (!bus_init(&cfg, &res)) {
+        LOGF1(0, "failed to init bus: %d\n", res.status);
+        return;
+    }
+
+    socket_info * si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
+    assert(si != NULL);
+
+    int fd = KineticSocket_Connect("localhost", KINETIC_TLS_PORT);
+    assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
+    bool result = bus_register_socket(res.bus, BUS_SOCKET_SSL, fd, si);
+    assert(result);
+
+    sleep(5);
+
+    bus_shutdown(res.bus);
+    bus_free(res.bus);
 
     free(si);
 

@@ -24,32 +24,31 @@
 #include "kinetic_admin_client.h"
 
 uint8_t data[KINETIC_OBJ_SIZE];
-KineticSessionConfig SessionConfig;
-const char* SystemTestHostVal = SYSTEM_TEST_HOST;
+KineticClient * client;
 
 void SystemTestSetup(SystemTestFixture* fixture, int log_level)
 {
-    TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
-    KineticClient_Init("stdout", log_level);
+    LOG_LOCATION;
+    client = KineticClient_Init("stdout", log_level);
+
     memset(fixture, 0, sizeof(SystemTestFixture));
-    KineticStatus status;
 
     KineticSessionConfig config = {
+        .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = SESSION_CLUSTER_VERSION,
         .identity = SESSION_IDENTITY,
         .hmacKey = ByteArray_Create(config.keyData, strlen(SESSION_HMAC_KEY)),
     };
-    strcpy(config.host, SystemTestHostVal);
     strcpy((char*)config.keyData, SESSION_HMAC_KEY);
 
     KineticSessionConfig adminConfig = {
+        .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = SESSION_CLUSTER_VERSION,
         .pin = ByteArray_Create(adminConfig.pinData, strlen(SESSION_PIN)),
         .useSsl = true,
     };
-    strcpy(adminConfig.host, SystemTestHostVal);
     strcpy((char*)adminConfig.pinData, SESSION_PIN);
 
     if (!fixture->connected) {
@@ -57,51 +56,34 @@ void SystemTestSetup(SystemTestFixture* fixture, int log_level)
             .session = (KineticSession) {.config = config},
             .adminSession = (KineticSession) {.config = adminConfig},
             .connected = fixture->connected,
-            .testIgnored = false,
         };
-        status = KineticClient_CreateConnection(&fixture->session);
+        KineticStatus status = KineticClient_CreateConnection(&fixture->session, client);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        status = KineticAdminClient_CreateConnection(&fixture->adminSession);
+        status = KineticAdminClient_CreateConnection(&fixture->adminSession, client);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         
-        fixture->expectedSequence = 0;
         fixture->connected = true;
-    }
-    else {
-        fixture->testIgnored = false;
     }
 
     // Erase the drive
     // status = KineticAdminClient_InstantSecureErase(&fixture->adminSession);
     // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    // TEST_ASSERT_EQUAL_MESSAGE(
-    //     fixture->expectedSequence,
-    //     fixture->connection.sequence,
-    //     "Failed validating starting sequence count for the"
-    //     " operation w/session!");
+    LOG_LOCATION;
 }
 
 void SystemTestTearDown(SystemTestFixture* fixture)
 {
+    LOG_LOCATION;
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
-
-    if (!fixture->testIgnored) {
-        fixture->expectedSequence++;
-        // TEST_ASSERT_EQUAL_MESSAGE(
-        //     fixture->expectedSequence,
-        //     fixture->connection.sequence,
-        //     "Sequence should post-increment for every operation on the session!");
-    }
 
     if (fixture->connected) {
         KineticStatus status = KineticClient_DestroyConnection(&fixture->session);
         TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying client!");
         status = KineticAdminClient_DestroyConnection(&fixture->adminSession);
         TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying admin client!");
+        KineticClient_Shutdown(client);
     }
-
-    KineticClient_Shutdown();
+    LOG_LOCATION;
 }
 
 bool SystemTestIsUnderSimulator(void)

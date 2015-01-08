@@ -51,9 +51,7 @@
 typedef struct _SystemTestFixture {
     KineticSession session;
     KineticSession adminSession;
-    bool testIgnored;
     bool connected;
-    int64_t expectedSequence;
 } SystemTestFixture;
 
 void SystemTestSetup(SystemTestFixture* fixture, int log_level);

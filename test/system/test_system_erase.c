@@ -57,8 +57,6 @@ void setUp(void)
 
     KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    Fixture.expectedSequence++;
 }
 
 void tearDown(void)

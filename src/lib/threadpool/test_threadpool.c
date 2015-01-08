@@ -34,9 +34,9 @@ static size_t fibs(size_t arg) {
 }
 
 static void dump_stats(const char *prefix, struct threadpool_info *stats) {
-    printf("%s(at %d, dt %d, ta %zd, tc %zd, bl %zd)\n",
+    printf("%s(at %d, dt %d, bl %zd)\n",
         prefix, stats->active_threads, stats->dormant_threads,
-        stats->tasks_assigned, stats->tasks_completed, stats->backlog_size);
+        stats->backlog_size);
 }
 
 #define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)     \
@@ -63,6 +63,13 @@ static void task_cb(void *udata) {
     struct threadpool_info stats;
     threadpool_stats(t, &stats);
     dump_stats("", &stats);
+}
+
+static void inf_loop_cb(void *env) {
+    (void)env;
+    for (;;) {
+        sleep(1);
+    }
 }
 
 int main(int argc, char **argv) {
@@ -112,11 +119,28 @@ int main(int argc, char **argv) {
         sleep(1);
     }
 
-    printf("shutting down...\n");
-    while (!threadpool_shutdown(t, false)) {
-        printf("shutting down...\n");
-        sleep(1);
+    task.task = inf_loop_cb;
+    size_t counterpressure = 0;
+    while (!threadpool_schedule(t, &task, &counterpressure)) {
+        usleep(10 * 1000);
     }
+
+    sleep(1);
+
+    const int THREAD_SHUTDOWN_SECONDS = 5;
+    printf("shutting down...\n");
+
+    int limit = (1000 * THREAD_SHUTDOWN_SECONDS)/10;
+    for (int i = 0; i < limit; i++) {
+        if (threadpool_shutdown(t, false)) { break; }
+        (void)poll(NULL, 0, 10);
+
+        if (i == limit - 1) {
+            printf("cancelling thread in intentional infinite loop\n");
+            threadpool_shutdown(t, true);
+        }
+    }
+    threadpool_free(t);
 
     return 0;
 }

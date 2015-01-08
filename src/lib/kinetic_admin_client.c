@@ -29,14 +29,14 @@ void KineticAdminClient_Init(const char* log_file, int log_level)
     KineticClient_Init(log_file, log_level);
 }
 
-void KineticAdminClient_Shutdown(void)
+void KineticAdminClient_Shutdown(KineticClient * const client)
 {
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
 }
 
-KineticStatus KineticAdminClient_CreateConnection(KineticSession* const session)
+KineticStatus KineticAdminClient_CreateConnection(KineticSession* const session, KineticClient * const client)
 {
-    return KineticClient_CreateConnection(session);
+    return KineticClient_CreateConnection(session, client);
 }
 
 KineticStatus KineticAdminClient_DestroyConnection(KineticSession* const session)

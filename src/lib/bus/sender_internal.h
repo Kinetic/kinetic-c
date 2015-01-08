@@ -58,6 +58,10 @@ typedef uint32_t tx_flag_t;
 
 #define HASH_TABLE_SIZE2 6 /* should be > log2(MAX_CONCURRENT_SENDS) */
 
+typedef struct {
+    SSL *ssl;                   /* SSL handle. Can be NULL. */
+} fd_info;
+
 typedef struct sender {
     struct bus *bus;
     bool shutdown;
@@ -77,14 +81,14 @@ typedef struct sender {
     uint8_t active_fds;
     struct pollfd fds[MAX_CONCURRENT_SENDS];
 
-    /* Hash table for file descriptors in use. */
+    /* Hash table for file descriptors in use -> fd_info. */
     struct yacht *fd_hash_table;
 } sender;
 
 static tx_info_t *get_free_tx_info(struct sender *s);
 static void tick_handler(sender *s);
 static bool populate_tx_info(struct sender *s, tx_info_t *info, boxed_msg *box);
-static bool add_fd_to_watch_set(struct sender *s, int fd);
+static bool add_fd_to_watch_set(struct sender *s, int fd, SSL *ssl);
 static bool remove_fd_from_watch_set(struct sender *s, tx_info_t *info);
 static void attempt_write(sender *s, int available);
 
