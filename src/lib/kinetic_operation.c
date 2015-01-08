@@ -214,11 +214,11 @@ KineticStatus KineticOperation_PutCallback(KineticOperation* const operation, Ki
     assert(operation->connection != NULL);
     LOGF3("PUT callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
     if (status == KINETIC_STATUS_SUCCESS)
     {
+        assert(operation->response != NULL);
         // Propagate newVersion to dbVersion in metadata, if newVersion specified
         KineticEntry* entry = operation->entry;
         if (entry->newVersion.array.data != NULL && entry->newVersion.array.len > 0) {

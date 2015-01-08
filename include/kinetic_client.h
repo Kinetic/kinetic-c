@@ -223,8 +223,4 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure);
 
-#ifdef TEST
-#include "kinetic_types_internal.h"
-#endif
-
 #endif // _KINETIC_CLIENT_H

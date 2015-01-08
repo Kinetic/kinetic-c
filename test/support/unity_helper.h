@@ -24,6 +24,8 @@
 #include "unity.h"
 #include "unity_byte_array_helper.h"
 #include "kinetic_types.h"
+#include "kinetic_types_internal.h"
+#include "bus_internal_types.h"
 #include <stdio.h>
 #include <string.h>
 
