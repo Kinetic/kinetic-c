@@ -110,7 +110,7 @@ bool sender_register_socket(struct sender *s, int fd, SSL *ssl) {
     info->u.add_socket.fd = fd;
     info->u.add_socket.ssl = ssl;
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "registering socket %d with SSL %p", fd, ssl);
+        "registering socket %d with SSL %p", fd, (void*)ssl);
     bool res = commit_event_and_block(s, info);
     release_tx_info(s, info);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
@@ -139,7 +139,7 @@ bool sender_send_request(struct sender *s, boxed_msg *box) {
     info->u.enqueue.box = box;
     
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "sending request on %d: box %p", box->fd, box);
+        "sending request on %d: box %p", box->fd, (void*)box);
     bool res = commit_event_and_block(s, info);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending request: releasing tx_info, res %d", res);
@@ -148,6 +148,7 @@ bool sender_send_request(struct sender *s, boxed_msg *box) {
 }
 
 bool sender_shutdown(struct sender *s) {
+    if (s->fd_hash_table == NULL) { return true; }
     struct bus *b = s->bus;
     tx_info_t *info = get_free_tx_info(s);
     if (info == NULL) { return false; }
@@ -381,6 +382,8 @@ static void cleanup(sender *s) {
     struct bus *b = s->bus;
     BUS_LOG(b, 2, LOG_SHUTDOWN, "sender_cleanup", b->udata);
     if (s->fd_hash_table) {     /* make idempotent */
+        struct yacht *y = s->fd_hash_table;
+        s->fd_hash_table = NULL;
         int shutdown_id = -1;
         
         for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
@@ -404,8 +407,7 @@ static void cleanup(sender *s) {
             close(s->pipes[shutdown_id][1]);
         }
         
-        yacht_free(s->fd_hash_table, free_fd_info_cb, NULL);
-        s->fd_hash_table = NULL;
+        yacht_free(y, free_fd_info_cb, NULL);
     }
 }
 
@@ -728,7 +730,7 @@ static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
 
     BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
         "write %p to %d, %zd bytes (info %d)",
-        &msg[sent_size], fd, rem, info->id);
+        (void*)&msg[sent_size], fd, rem, info->id);
     ssize_t wrsz = write(fd, &msg[sent_size], rem);
     if (wrsz == -1) {
         if (util_is_resumable_io_error(errno)) {
@@ -815,7 +817,7 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
     
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
         "wrote %zd, msg_size %zd (%p)",
-        sent, msg_size, box->out_msg);
+        sent, msg_size, (void*)box->out_msg);
     if (rem == 0) { /* completed! */
         fd_info *fdi = info->u.write.fdi;
 
@@ -835,7 +837,7 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
         decrement_fd_refcount(s, fdi);
 
         BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-            "wrote all of %p, clearing", box->out_msg);
+            "wrote all of %p, clearing", (void*)box->out_msg);
         attempt_to_enqueue_message_to_listener(s, info);
     }
 }
@@ -1027,7 +1029,7 @@ static void notify_message_failure(sender *s, tx_info_t *info, bus_send_status_t
         if (bus_process_boxed_message(s->bus, box, &backpressure)) {
             BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
                 "deleting box %p for info->id %d (msg failure)",
-                info->u.error.box, info->id);
+                (void*)info->u.error.box, info->id);
             info->u.error.box = NULL;
             info->u.error.backpressure = backpressure;
             notify_caller(s, info, false);

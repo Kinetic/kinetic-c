@@ -118,8 +118,10 @@ void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_HOST_EMPTY
     KineticClient client;
     ByteArray key = ByteArray_CreateWithCString("some_key");
     KineticSession session = {
-        .config.host = "",
-        .config.hmacKey = key,
+        .config = {
+            .host = "",
+            .hmacKey = key,
+        },
     };
 
     KineticStatus status = KineticClient_CreateConnection(&session, &client);
