@@ -546,7 +546,7 @@ static void process_unpacked_message(listener *l,
              *     slowing things down. */
             BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
                 "Couldn't find info for seq_id %lld, msg %p",
-                seq_id, opaque_msg);
+                (long long)seq_id, opaque_msg);
    
             if (b->unexpected_msg_cb) {
                 b->unexpected_msg_cb(opaque_msg, seq_id, b->udata, ci->udata);
@@ -653,7 +653,7 @@ static void clean_up_completed_info(listener *l, rx_info_t *info) {
             printf("    info->box == %p\n", info->box);
             printf("    info->box->result.status == %d\n", info->box->result.status);
             printf("    info->box->fd %d\n", info->box->fd);
-            printf("    info->box->out_seq_id %lld\n", info->box->out_seq_id);
+            printf("    info->box->out_seq_id %lld\n", (long long)info->box->out_seq_id);
             printf("    info->box->out_msg %p\n", info->box->out_msg);
 
         }
