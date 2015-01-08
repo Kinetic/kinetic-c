@@ -214,6 +214,7 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
         .unexpected_msg_cb = KineticController_HandleUnexecpectedResponse,
         .bus_udata = NULL,
     };
+    (void)log_level;
     bus_result res = {0};
     if (!bus_init(&cfg, &res)) {
         LOGF0("failed to init bus: %d\n", res.status);
