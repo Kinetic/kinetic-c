@@ -109,7 +109,8 @@
       - -g
       - -Wall
       - -Wextra
-      - -Werror
+      #- -Werror
+      - -Wno-pragmas
       # - -pedantic
       - -Wstrict-prototypes
       # - -Werror=strict-prototypes
