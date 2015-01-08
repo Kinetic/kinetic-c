@@ -369,8 +369,8 @@ static void completion_cb(bus_msg_result_t *res, void *udata) {
     case BUS_SEND_SUCCESS:
     {
 #if INCREMENT_COMPLETION_COUNTER
-        size_t cur = s->completed_deliveries;
         for (;;) {
+            size_t cur = s->completed_deliveries;
             if (ATOMIC_BOOL_COMPARE_AND_SWAP(&s->completed_deliveries, cur, cur + 1)) {
                 LOG(3, " -- ! got %zd bytes, seq_id 0x%08llx, %p\n",
                     si->cur_payload_size, res->u.response.seq_id,
