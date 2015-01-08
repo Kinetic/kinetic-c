@@ -110,7 +110,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     log_lock_init = true;
 
     BUS_LOG_SNPRINTF(b, 3, LOG_INITIALIZATION, b->udata, 64,
-        "Initialized bus at %p", b);
+        "Initialized bus at %p", (void*)b);
 
     ss = calloc(config->sender_count, sizeof(*ss));
     if (ss == NULL) {
@@ -124,7 +124,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
             goto cleanup;
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_INITIALIZATION, b->udata, 64,
-                "Initialized sender %d at %p", i, ss[i]);
+                "Initialized sender %d at %p", i, (void*)ss[i]);
         }
     }
 
@@ -140,7 +140,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
             goto cleanup;
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_INITIALIZATION, b->udata, 64,
-                "Initialized listener %d at %p", i, ls[i]);
+                "Initialized listener %d at %p", i, (void*)ls[i]);
         }
     }
 
@@ -230,7 +230,7 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
     if (box == NULL) { return NULL; }
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 64,
-        "Allocated boxed message -- %p", box);
+        "Allocated boxed message -- %p", (void*)box);
 
     box->fd = msg->fd;
     assert(msg->fd != 0);
@@ -566,7 +566,7 @@ bool bus_process_boxed_message(struct bus *b,
     };
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-        "Scheduling boxed message -- %p -- where it will be freed", box);
+        "Scheduling boxed message -- %p -- where it will be freed", (void*)box);
     return bus_schedule_threadpool_task(b, &task, backpressure);
 }
 

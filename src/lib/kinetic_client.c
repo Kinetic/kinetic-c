@@ -25,18 +25,19 @@
 #include "kinetic_operation.h"
 #include "kinetic_logger.h"
 #include "kinetic_pdu.h"
+#include "kinetic_memory.h"
 #include <stdlib.h>
 #include <sys/time.h>
 
 KineticClient * KineticClient_Init(const char* log_file, int log_level)
 {
     KineticLogger_Init(log_file, log_level);
-    KineticClient * client = calloc(1, sizeof(*client));
+    KineticClient * client = KineticCalloc(1, sizeof(*client));
     if (client == NULL) { return NULL; }
     bool success = KineticPDU_InitBus(1, client);
     if (!success)
     {
-        free(client);
+        KineticFree(client);
         return NULL;
     }
     return client;
@@ -45,7 +46,7 @@ KineticClient * KineticClient_Init(const char* log_file, int log_level)
 void KineticClient_Shutdown(KineticClient * const client)
 {
     KineticPDU_DeinitBus(client);
-    free(client);
+    KineticFree(client);
     KineticLogger_Close();
 }
 
@@ -324,24 +325,3 @@ KineticStatus KineticClient_InstantSecureErase(KineticSession const * const sess
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticClient_SetClusterVersion(KineticSession handle,
-                                              int64_t clusterVersion,
-                                              int64_t newClusterVersion)
-{
-
-// KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH
-    (void)handle;
-    (void)clusterVersion;
-    (void)newClusterVersion;
-
-#if 0
-    assert(handle != KINETIC_HANDLE_INVALID);
-
-    KineticOperation* operation = KineticController_CreateOperation(handle);
-    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
-
-    KineticOperation_BuildSetClusterVersion(operation, newClusterVersion);
-    return KineticController_ExecuteOperation(operation, NULL);
-#endif
-    return KINETIC_STATUS_INVALID;
-}

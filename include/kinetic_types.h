@@ -88,6 +88,9 @@ typedef enum _KineticSynchronization {
 
 
 struct _KineticClient;
+/**
+ * @brief Handle to the kinetic client, which is shared by all connections
+ */
 typedef struct _KineticClient KineticClient;
 
 

@@ -615,7 +615,7 @@ static void tick_handler(sender *s) {
     
     BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
         "tick... %p -- %d of %d tx_info in use, %d active FDs\n",
-        s, tx_info_in_use, MAX_CONCURRENT_SENDS, s->active_fds);
+        (void*)s, s->tx_info_in_use, MAX_CONCURRENT_SENDS, s->active_fds);
 
     /* Walk table and expire timeouts & items which have been sent.
      *
@@ -641,7 +641,7 @@ static void tick_handler(sender *s) {
                 info->timeout_sec--;
                 BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
                     "decrementing tx_info %d -- %ld (status %d, box %p)",
-                    info->id, info->timeout_sec, info->error, info->box);
+                    info->id, info->timeout_sec, info->error, (void*)info->box);
             }
         }
     }
@@ -652,7 +652,7 @@ static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info) {
     /* Notify listener that it should expect a response to a
      * successfully sent message. */
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-        "telling listener to expect response, with box %p", info->box);
+        "telling listener to expect response, with box %p", (void*)info->box);
 
     struct listener *l = bus_get_listener_for_socket(s->bus, info->fd);
 

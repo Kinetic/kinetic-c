@@ -209,7 +209,12 @@ static void* kinetic_put(void* kinetic_arg)
         );
 
         // Set operation-specific attributes
-        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
+        if (ByteBuffer_BytesRemaining(arg->data) == 0) {
+            entry->synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
+        }
+        else {
+            entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
+        }
 
         // Store the data slice
         LOGF1("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);

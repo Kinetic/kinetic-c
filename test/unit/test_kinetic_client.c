@@ -34,7 +34,7 @@
 #include "mock_kinetic_operation.h"
 #include "protobuf-c/protobuf-c.h"
 #include "mock_bus.h"
-#include "mock_memory_stubs.h"
+#include "mock_kinetic_memory.h"
 #include <stdio.h>
 
 static KineticSession Session;
@@ -58,7 +58,7 @@ void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_
 {
     KineticClient client;
     
-    calloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
 
     KineticPDU_InitBus_ExpectAndReturn(1, &client, true);    
     KineticClient * result = KineticClient_Init("./some_file.log", 3);
@@ -67,7 +67,7 @@ void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_
 
 void test_KineticClient_Init_should_return_null_if_calloc_returns_null(void)
 {
-    calloc_ExpectAndReturn(1, sizeof(KineticClient), NULL);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), NULL);
     
     KineticClient * result = KineticClient_Init("./some_file.log", 3);
     TEST_ASSERT_NULL(result);
@@ -78,9 +78,9 @@ void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
 {
     KineticClient client;
 
-    calloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
     KineticPDU_InitBus_ExpectAndReturn(1, &client, false);
-    free_Expect(&client);
+    KineticFree_Expect(&client);
 
     KineticClient * result = KineticClient_Init("./some_file.log", 3);
     TEST_ASSERT_NULL(result);

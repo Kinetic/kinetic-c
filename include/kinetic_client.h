@@ -28,11 +28,21 @@
  *
  * @param log_file (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
  * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
+ *
+ * @return          Returns a pointer to a `KineticClient`. You need to pass 
+ *                  this pointer to KineticClient_CreateConnection() to create 
+ *                  new connections. 
+ *                  Once you are finished will the `KineticClient`, and there
+ *                  are no active connections. The pointer should be release
+ *                  with KineticClient_Shutdown()
  */
 KineticClient * KineticClient_Init(const char* log_file, int log_level);
 
 /**
  * @brief Performs shutdown/cleanup of the kinetic-c client lib
+ * 
+ * @param client The pointer returned from `KineticClient_Init`
+ * 
  */
 void KineticClient_Shutdown(KineticClient * const client);
 
@@ -50,6 +60,8 @@ void KineticClient_Shutdown(KineticClient * const client);
  *    .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
  *  .connection     Pointer to dynamically allocated connection which will be
  *                  populated upon establishment of a connection.
+ *
+ * @param client    The KineticClient pointer returned from KineticClient_Init()
  *
  * @return          Returns the resulting `KineticStatus`, and `session->connection`
  *                  will be populated with a session instance pointer upon success.
@@ -84,7 +96,10 @@ KineticStatus KineticClient_NoOp(KineticSession const * const session);
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to store. 'value' must
- *                      specify the data to be stored.
+ *                      specify the data to be stored. If a closure is provided
+ *                      this pointer must remain valid until the closure callback
+ *                      is called.
+ *
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion in another thread.
@@ -114,6 +129,8 @@ KineticStatus KineticClient_Flush(KineticSession const * const session,
  * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to retrieve. 'value' will
  *                      be populated unless 'metadataOnly' is set to 'true'.
+ *                      If a closure is provided this pointer must remain
+ *                      valid until the closure callback is called.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion in another thread.
@@ -132,7 +149,9 @@ KineticStatus KineticClient_Get(KineticSession const * const session,
  *                      be populated unless 'metadataOnly' is set to 'true'.
  *                      The key and value fields will be populated with the
  *                      previous key and its corresponding value, according to
- *                      lexicographical byte order.
+ *                      lexicographical byte order. If a closure is provided
+ *                      this pointer must remain valid until the closure callback
+ *                      is called.
  *                      
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
@@ -152,7 +171,9 @@ KineticStatus KineticClient_GetPrevious(KineticSession const * const session,
  *                      be populated unless 'metadataOnly' is set to 'true'.
  *                      The key and value fields will be populated with the
  *                      next key and its corresponding value, according to
- *                      lexicographical byte order.
+ *                      lexicographical byte order. If a closure is provided
+ *                      this pointer must remain valid until the closure callback
+ *                      is called.
  *                      
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
@@ -186,7 +207,9 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
  *
  * @param session       The connected KineticSession to use for the operation
  * @param range         KineticKeyRange specifying keys to return
- * @param keys          ByteBufferArray to store the retrieved keys
+ * @param keys          ByteBufferArray to store the retrieved keys. If a 
+ *                      closure is provided, this must point to valid memory
+ *                      until the closure callback is called.
  * @param closure       Optional closure. If specified, operation will be
  *                      executed in asynchronous mode, and closure callback
  *                      will be called upon completion in another thread.
@@ -254,21 +277,5 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
  * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_InstantSecureErase(KineticSession const * const session);
-
-/**
- * @brief Updates the cluster version.
- *
- * @param clusterVersion      Current cluster version.
- * @param newClusterVersion   New cluster version.
- *
- * @return              Returns the resulting KineticStatus.
- */
-KineticStatus KineticClient_SetClusterVersion(KineticSession handle,
-                                              int64_t clusterVersion,
-                                              int64_t newClusterVersion);
-
-#if TEST
-#include "kinetic_types_internal.h"
-#endif
 
 #endif // _KINETIC_CLIENT_H

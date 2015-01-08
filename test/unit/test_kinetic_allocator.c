@@ -26,7 +26,7 @@
 #include "mock_protobuf-c.h"
 #include "unity.h"
 #include "unity_helper.h"
-#include "mock_memory_stubs.h"
+#include "mock_kinetic_memory.h"
 #include <stdlib.h>
 #include <pthread.h>
 
@@ -45,14 +45,14 @@ void tearDown(void)
 
 void test_KineticAllocator_NewConnection_should_return_null_if_calloc_returns_null(void)
 {
-    calloc_ExpectAndReturn(1, sizeof(KineticConnection), NULL);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), NULL);
     KineticConnection* connection =  KineticAllocator_NewConnection();
     TEST_ASSERT_NULL(connection);
 }
 
 void test_KineticAllocator_NewConnection_should_return_a_connection_with_connected_flag_set_to_false(void)
 {
-    calloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
     KineticConnection* connection =  KineticAllocator_NewConnection();
     TEST_ASSERT_NOT_NULL(connection);
     TEST_ASSERT_FALSE(connection->connected);
@@ -60,7 +60,7 @@ void test_KineticAllocator_NewConnection_should_return_a_connection_with_connect
 
 void test_KineticAllocator_NewConnection_should_return_a_connection_with_a_minus1_fd(void)
 {
-    calloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
     KineticConnection* connection =  KineticAllocator_NewConnection();
     TEST_ASSERT_NOT_NULL(connection);
     TEST_ASSERT_EQUAL(-1, connection->socket);
@@ -68,7 +68,7 @@ void test_KineticAllocator_NewConnection_should_return_a_connection_with_a_minus
 
 void test_KineticAllocator_NewKineticResponse_should_return_null_if_calloc_return_null(void)
 {
-    calloc_ExpectAndReturn(1, sizeof(KineticResponse) + 1234, NULL);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticResponse) + 1234, NULL);
     KineticResponse * response = KineticAllocator_NewKineticResponse(1234);
     TEST_ASSERT_NULL(response);
 }
@@ -80,7 +80,7 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_command_if_its_no
     KineticResponse rsp = { .command = &command};
     protobuf_c_message_free_unpacked_Expect(&command.base, NULL);
 
-    free_Expect(&rsp);
+    KineticFree_Expect(&rsp);
 
     KineticAllocator_FreeKineticResponse(&rsp);
 }
@@ -92,7 +92,7 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_if_its_not_
     KineticResponse rsp = { .proto = &proto};
     protobuf_c_message_free_unpacked_Expect(&proto.base, NULL);
 
-    free_Expect(&rsp);
+    KineticFree_Expect(&rsp);
 
     KineticAllocator_FreeKineticResponse(&rsp);
 }
@@ -109,7 +109,7 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_and_command
     protobuf_c_message_free_unpacked_Expect(&command.base, NULL);
     protobuf_c_message_free_unpacked_Expect(&proto.base, NULL);
 
-    free_Expect(&rsp);
+    KineticFree_Expect(&rsp);
 
     KineticAllocator_FreeKineticResponse(&rsp);
 }
@@ -117,7 +117,7 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_and_command
 
 void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_null_for_operation(void)
 {
-    calloc_ExpectAndReturn(1, sizeof(KineticOperation), NULL);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), NULL);
     KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
     TEST_ASSERT_NULL(operation);
 }
@@ -126,10 +126,10 @@ void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_nul
 void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if_calloc_returns_null_for_pdu(void)
 {
     KineticOperation op;
-    calloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
     KineticOperation_Init_Expect(&op, &Connection);
-    calloc_ExpectAndReturn(1, sizeof(KineticPDU), NULL);
-    free_Expect(&op);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticPDU), NULL);
+    KineticFree_Expect(&op);
 
     KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
 
@@ -140,9 +140,9 @@ void test_KineticAllocator_NewOperation_should_initialize_operation_and_pdu(void
 {
     KineticOperation op;
     KineticPDU pdu;
-    calloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
     KineticOperation_Init_Expect(&op, &Connection);
-    calloc_ExpectAndReturn(1, sizeof(KineticPDU), &pdu);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticPDU), &pdu);
 
     KineticPDU_InitWithCommand_Expect(&pdu, &Connection);
     KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
@@ -157,8 +157,8 @@ void test_KineticAllocator_FreeOperation_should_free_request_if_its_not_null(voi
 
     KineticOperation op = { .request = &pdu };
 
-    free_Expect(&pdu);
-    free_Expect(&op);
+    KineticFree_Expect(&pdu);
+    KineticFree_Expect(&op);
 
     KineticAllocator_FreeOperation(&op);
 }
@@ -170,8 +170,8 @@ void test_KineticAllocator_FreeOperation_should_free_response_if_its_not_null(vo
 
     KineticOperation op = { .response = &response };
 
-    free_Expect(&response);
-    free_Expect(&op);
+    KineticFree_Expect(&response);
+    KineticFree_Expect(&op);
 
     KineticAllocator_FreeOperation(&op);
 }
