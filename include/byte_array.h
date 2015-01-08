@@ -51,6 +51,7 @@ ByteBuffer ByteBuffer_CreateAndAppend(void* data, size_t max_len, const void* va
 ByteBuffer ByteBuffer_CreateAndAppendArray(void* data, size_t max_len, const ByteArray value);
 ByteBuffer ByteBuffer_CreateAndAppendCString(void* data, size_t max_len, const char* value);
 ByteBuffer ByteBuffer_CreateAndAppendFormattedCString(void* data, size_t max_len, const char * format, ...);
+ByteBuffer ByteBuffer_CreateAndAppendDummyData(void* data, size_t max_len, size_t len);
 void ByteBuffer_Reset(ByteBuffer* buffer);
 long ByteBuffer_BytesRemaining(const ByteBuffer buffer);
 ByteArray ByteBuffer_Consume(ByteBuffer* buffer, size_t max_len);

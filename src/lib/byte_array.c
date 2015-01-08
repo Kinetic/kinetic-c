@@ -82,6 +82,13 @@ ByteBuffer ByteBuffer_CreateAndAppendCString(void* data, size_t max_len, const c
     return buf;
 }
 
+ByteBuffer ByteBuffer_CreateAndAppendDummyData(void* data, size_t max_len, size_t len)
+{
+    ByteBuffer buf = ByteBuffer_Create(data, max_len, 0);
+    ByteBuffer_AppendDummyData(&buf, len);
+    return buf;
+}
+
 long ByteBuffer_BytesRemaining(const ByteBuffer buffer)
 {
     assert(buffer.array.data != NULL);
