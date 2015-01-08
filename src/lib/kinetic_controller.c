@@ -126,8 +126,6 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
     switch(status)
     {
         // TODO fix all these mappings
-        case BUS_SEND_UNDEFINED:
-            assert(false);
         case BUS_SEND_SUCCESS:
             return KINETIC_STATUS_SUCCESS;
         case BUS_SEND_TX_TIMEOUT:
@@ -140,6 +138,10 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
             return KINETIC_STATUS_SOCKET_ERROR;
         case BUS_SEND_BAD_RESPONSE:
             return KINETIC_STATUS_SOCKET_ERROR;
+        case BUS_SEND_UNDEFINED:
+        default:
+            assert(false);
+            return KINETIC_STATUS_INVALID;
     }
 }
 
