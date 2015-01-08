@@ -24,6 +24,8 @@
 #include <sys/time.h>
 #include <errno.h>
 
+STATIC const int TestDataSize = 100 * (1024*1024);
+
 struct kinetic_thread_arg {
     char ip[16];
     struct kinetic_put_arg* opArgs;
