@@ -238,7 +238,7 @@ static void unexpected_msg_cb(void *msg,
     KineticLogger_LogProtobuf(3, payload->protoBuf);
 
     printf("\n\n\nUNEXPECTED MESSAGE: %p, seq_id %lld, bus_udata %p, socket_udata %p\n\n\n\n",
-        msg, seq_id, bus_udata, socket_udata);
+        msg, (long long)seq_id, bus_udata, socket_udata);
 
     free_payload(payload);
 }
