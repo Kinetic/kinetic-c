@@ -36,12 +36,15 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    // Create structure to populate with PUT status in callback
+    //   a semaphore is used to notify the main thread that it's
+    //   safe to proceed.
     PutStatus put_status = {
         .sem = KineticSemaphore_Create(),
         .status = KINETIC_STATUS_INVALID,
     };
 
-    // some dummy data to put
+    // some dummy data to PUT
     uint8_t value_data[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
     ByteBuffer value = ByteBuffer_MallocAndAppend(value_data, sizeof(value_data));
 
@@ -49,6 +52,7 @@ int main(int argc, char** argv)
     uint8_t key_data[] = {0x00, 0x01, 0x02, 0x03, 0x04};
     ByteBuffer key = ByteBuffer_MallocAndAppend(key_data, sizeof(key_data));
 
+    // Populate tag with SHA1
     ByteBuffer tag = ByteBuffer_Malloc(20);
     uint8_t sha1[20];
     SHA1(value.array.data, value.bytesUsed, &sha1[0]);
@@ -61,7 +65,7 @@ int main(int argc, char** argv)
         .value = value,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    
+
     KineticStatus status = KineticClient_Put(
         &session,
         &entry,
@@ -76,6 +80,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    // Wait for put to finish
     KineticSemaphore_WaitForSignalAndDestroy(put_status.sem);
 
     if (put_status.status != KINETIC_STATUS_SUCCESS) {
@@ -84,6 +89,7 @@ int main(int argc, char** argv)
     }
     printf("Transfer completed successfully!\n");
 
+    // Free malloc'd buffers
     ByteBuffer_Free(value);
     ByteBuffer_Free(key);
     ByteBuffer_Free(tag);
@@ -100,7 +106,9 @@ static void put_finished(KineticCompletionData* kinetic_data, void* clientData)
     PutStatus * put_status = clientData;
 
     KineticSemaphore_Lock(put_status->sem);
+    // Save PUT result status
     put_status->status = kinetic_data->status;
+    // Signal that we're done
     KineticSemaphore_Signal(put_status->sem);
     KineticSemaphore_Unlock(put_status->sem);
 }
