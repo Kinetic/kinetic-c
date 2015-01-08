@@ -177,6 +177,7 @@ typedef enum {
     BUS_SEND_RX_TIMEOUT = -3,
     BUS_SEND_RX_FAILURE = -4,
     BUS_SEND_BAD_RESPONSE = -5,
+    BUS_SEND_UNREGISTERED_SOCKET = -6,
 } bus_send_status_t;
 
 /* Result from attempting to configure a message bus. */

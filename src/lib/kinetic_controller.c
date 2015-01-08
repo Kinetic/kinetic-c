@@ -140,6 +140,8 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
             return KINETIC_STATUS_SOCKET_ERROR;
         case BUS_SEND_BAD_RESPONSE:
             return KINETIC_STATUS_SOCKET_ERROR;
+        case BUS_SEND_UNREGISTERED_SOCKET:
+            return KINETIC_STATUS_SOCKET_ERROR;
     }
 }
 
