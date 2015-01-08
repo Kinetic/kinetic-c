@@ -20,7 +20,7 @@ OPENSSL_PATH ?=	.
 CC ?= gcc
 OPTIMIZE = -O3
 SYSTEM_TEST_HOST ?= \"localhost\"
-WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread
@@ -69,6 +69,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_session.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
+	$(OUT_DIR)/kinetic_memory.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/threadpool.o \
@@ -123,7 +124,7 @@ ${OUT_DIR}/%.o: ${LIB_DIR}/%.c Makefile ${PUB_INC}/%.h Makefile
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
-	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
+	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Werror -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
 
 $(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpool/threadpool.h
@@ -268,7 +269,7 @@ stop_simulator:
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
 SYSTEST_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl -lcrypto $(KINETIC_LIB) -l pthread
-SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+SYSTEST_WARN = -Wall -Wextra -Werror -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
 UNITY_INC = ./vendor/unity/src
 UNITY_SRC = ./vendor/unity/src/unity.c
