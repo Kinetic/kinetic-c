@@ -3,9 +3,9 @@ THREADPOOL_PATH=	../threadpool
 LIB_PATH=		../../../obj
 
 OPT=		-O3
-LIB_INC =	-I${SOCKET99_PATH} -I${THREADPOOL_PATH}
+LIB_INC =	-I${SOCKET99_PATH} -I${THREADPOOL_PATH} -I${OPENSSL_PATH}/include
 CFLAGS +=	-std=c99 ${OPT} -Wall -g ${LIB_INC}
-LDFLAGS +=	-L. -lsocket99 -L${LIB_PATH}
+LDFLAGS +=	-L. -lsocket99 -L${LIB_PATH} -L${THREADPOOL_PATH} -L${OPENSSL_PATH}/lib -lssl -lcrypto
 
 BUS_OBJS = \
 	bus.o \
