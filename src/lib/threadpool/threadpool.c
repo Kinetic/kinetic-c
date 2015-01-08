@@ -247,7 +247,7 @@ static bool spawn(struct threadpool *t) {
 
     int pipe_fds[2];
     if (0 != pipe(pipe_fds)) {
-        printf("PIPE failed!\n");
+        printf("pipe(2) failure\n");
         free(tc);
         return false;
     }

@@ -283,7 +283,6 @@ void *listener_mainloop(void *arg) {
 
 static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
     /* Mark all pending messages on this socket as being failed due to error. */
-
     for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
         rx_info_t *info = &l->rx_info[i];
         if (!info->active) {
@@ -544,6 +543,7 @@ static void process_unpacked_message(listener *l,
              *     not flush them out as unsolicited until the queue of messages
              *     is fully processed. Otherwise, they sit in the queue stuck and
              *     slowing things down. */
+            /* TODO: Do unsolicited status messages always have a seq_id of 0? */
             BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
                 "Couldn't find info for seq_id %lld, msg %p",
                 (long long)seq_id, opaque_msg);
