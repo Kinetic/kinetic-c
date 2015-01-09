@@ -45,7 +45,6 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <sys/param.h>
 #include <sys/time.h>
 #include <pthread.h>
@@ -60,7 +59,7 @@
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
 STATIC const char HmacKeyString[] = "asdfasdf";
-STATIC int SourceDataSize;
+STATIC const int SourceDataSize = 50 * KINETIC_OBJ_SIZE;
 
 struct kinetic_thread_arg {
     char ip[16];
@@ -107,13 +106,8 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         printf("\n*** Overlapped PUT operation (iteration %d of %d)\n",
                iteration + 1, MAX_ITERATIONS);
 
-        char* buf = malloc(sizeof(char) * BUFSIZE);
-        int fd = open("test/support/data/test.data", O_RDONLY);
-        SourceDataSize = read(fd, buf, BUFSIZE);
-        close(fd);
-        TEST_ASSERT_MESSAGE(SourceDataSize > 0, "read error");
-
         // Allocate session/thread data
+        char* buf = malloc(sizeof(char) * BUFSIZE);
         struct kinetic_thread_arg* kt_arg;
         pthread_t thread_id[KINETIC_MAX_THREADS];
         kt_arg = malloc(sizeof(struct kinetic_thread_arg) * NUM_COPIES);
@@ -130,25 +124,24 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
             // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
             kt_arg[i].data = ByteBuffer_Create(buf, SourceDataSize, 0);
+            ByteBuffer_AppendDummyData(&kt_arg[i].data, SourceDataSize);
+            ByteBuffer_Reset(&kt_arg[i].data);
 
             // Configure the KineticEntry
             struct timeval now;
             gettimeofday(&now, NULL);
             snprintf(kt_arg[i].keyPrefix, sizeof(kt_arg[i].keyPrefix), "%010llu_%02d%02d_",
                 (unsigned long long)now.tv_sec, iteration, i);
-            ByteBuffer keyBuf = ByteBuffer_Create(kt_arg[i].key, sizeof(kt_arg[i].key), 0);
-            ByteBuffer_AppendCString(&keyBuf, kt_arg[i].keyPrefix);
-            ByteBuffer verBuf = ByteBuffer_Create(kt_arg[i].version, sizeof(kt_arg[i].version), 0);
-            ByteBuffer_AppendCString(&verBuf, "v1.0");
-            ByteBuffer tagBuf = ByteBuffer_Create(kt_arg[i].tag, sizeof(kt_arg[i].tag), 0);
-            ByteBuffer_AppendCString(&tagBuf, "some_value_tag...");
+            ByteBuffer keyBuf = ByteBuffer_CreateAndAppendCString(
+                kt_arg[i].key, sizeof(kt_arg[i].key), kt_arg[i].keyPrefix);
+            ByteBuffer tagBuf = ByteBuffer_CreateAndAppendCString(kt_arg[i].tag, sizeof(kt_arg[i].tag), "some_value_tag...");
             ByteBuffer valBuf = ByteBuffer_Create(kt_arg[i].value, sizeof(kt_arg[i].value), 0);
             kt_arg[i].entry = (KineticEntry) {
                 .key = keyBuf,
-                // .newVersion = verBuf,
                 .tag = tagBuf,
                 .algorithm = KINETIC_ALGORITHM_SHA1,
                 .value = valBuf,
+                .force = true,
             };
         }
 
@@ -234,7 +227,12 @@ static void* kinetic_put(void* kinetic_arg)
         );
 
         // Set operation-specific attributes
-        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
+        if (ByteBuffer_BytesRemaining(arg->data) == 0) {
+            entry->synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
+        }
+        else {
+            entry->synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK;
+        }
 
         // Store the data slice
         LOGF1("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);

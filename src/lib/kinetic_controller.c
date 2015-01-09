@@ -81,7 +81,9 @@ static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_da
 {
     DefaultCallbackData * data = client_data;
     data->status = kinetic_data->status;
+    pthread_mutex_lock(&data->receiveCompleteMutex);
     pthread_cond_signal(&data->receiveComplete);
+    pthread_mutex_unlock(&data->receiveCompleteMutex);
 }
 
 static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)

@@ -64,6 +64,11 @@ void* store_data(void* args)
 
         // Prepare the next chunk of data to store
         ByteBuffer_AppendArray(&entry->value, ByteBuffer_Consume(&thread_args->data, KINETIC_OBJ_SIZE));
+        
+        // Ensure last PUT triggers flush to disk for completion
+        if (ByteBuffer_BytesRemaining(thread_args->data) == 0) {
+            entry->synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
+        }
 
         // Store the data slice
         KineticStatus status = KineticClient_Put(&thread_args->session, entry, NULL);

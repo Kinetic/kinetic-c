@@ -1,3 +1,8 @@
+v0.9.2 (kinetic-protocol 3.0.5)
+-------------------------------
+* Added missing mutex lock causing a concurrency issue.
+* Added profiling to test/system/test_system_async_io.c
+
 v0.9.1 (kinetic-protocol 3.0.5)
 -------------------------------
 * Added `keys->used` to ByteBufferArray to reflect the number of buffers actually used, and updated `KineticClient_GetKeyRange()` to populate it.

@@ -235,6 +235,12 @@ int put_chunk_of_file(FileTransferProgress* transfer)
             .value = ByteBuffer_Create(closureData->value, sizeof(closureData->value), (size_t)bytesRead),
             .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         };
+
+        // Ensure last PUT triggers flush to disk for completion
+        if ((size_t)bytesRead < sizeof(closureData->value)) {
+            closureData->entry.synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
+        }
+
         KineticStatus status = KineticClient_Put(transfer->session, &closureData->entry,
             &(KineticCompletionClosure) {
                 .callback = put_chunk_of_file_finished,
