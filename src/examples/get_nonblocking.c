@@ -23,7 +23,7 @@ int main(int argc, char** argv)
     if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
     KineticSession session = {.config = {
-        .host = "localhost",
+        .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
