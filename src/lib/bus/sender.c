@@ -269,10 +269,13 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
                 backpressure += (buf[2] << 8);
 
                 /* Push back if message bus is too busy. */
-                backpressure >>= 0;  // TODO: tuning
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                    "reading done_pipe: backpressure %d", backpressure);
-                if (backpressure > 0) { poll(NULL, 0, backpressure); }
+                backpressure >>= 7;  // TODO: further tuning
+
+                if (backpressure > 0) {
+                    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+                        "reading done_pipe: backpressure %d", backpressure);
+                    poll(NULL, 0, backpressure);
+                }
 
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
                     "reading done_pipe: success %d", 1);
@@ -843,6 +846,7 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
 }
 
 static void notify_caller(sender *s, tx_info_t *info, bool success) {
+    struct bus *b = s->bus;
     uint16_t bp = 0;
 
     switch (info->state) {
@@ -866,7 +870,6 @@ static void notify_caller(sender *s, tx_info_t *info, bool success) {
     
     ssize_t res = 0;
 
-    struct bus *b = s->bus;
     for (;;) {                  /* for loop because of EINTR */
         res = write(pipe_fd, buf, sizeof(buf));
         BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,

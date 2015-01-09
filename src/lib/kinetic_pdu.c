@@ -37,10 +37,16 @@
 #define STATIC static
 #endif
 
+#include <time.h>
+
 STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
     const char *event_str = bus_log_event_str(event);
-    fprintf(stderr, "%s[%d] -- %s\n",
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    FILE *f = stdout; /* stderr */
+    fprintf(f, "%ld.%06d: %s[%d] -- %s\n",
+        tv.tv_sec, tv.tv_usec,
         event_str, log_level, msg);
 }
 

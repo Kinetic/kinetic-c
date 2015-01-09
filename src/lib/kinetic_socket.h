@@ -37,5 +37,6 @@ void KineticSocket_Close(int socket);
 
 void KineticSocket_BeginPacket(int socket);
 void KineticSocket_FinishPacket(int socket);
+void KineticSocket_EnableTCPNoDelay(int socket);
 
 #endif // _KINETIC_SOCKET_H
