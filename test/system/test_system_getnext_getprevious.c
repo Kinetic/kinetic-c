@@ -25,7 +25,7 @@ static SystemTestFixture Fixture;
 void setUp(void)
 {
     LOG_LOCATION;
-    SystemTestSetup(&Fixture, 1);
+    SystemTestSetup(&Fixture, 3);
 }
 
 void tearDown(void)
@@ -38,28 +38,21 @@ static bool add_keys(int count)
 {
     static const ssize_t sz = 10;
     char key_buf[sz];
+    char tag_buf[sz];
     char value_buf[sz];
 
     for (int i = 0; i < count; i++) {
-        #if 0
-        if (sz < snprintf(key_buf, sz, "key_%d", i)) { return false; }
-        if (sz < snprintf(value_buf, sz, "val_%d", i)) { return false; }
-        ByteBuffer KeyBuffer = ByteBuffer_CreateWithArray(ByteArray_CreateWithCString(key_buf));
-        ByteBuffer ValueBuffer = ByteBuffer_CreateWithArray(ByteArray_CreateWithCString(value_buf));
-        #endif
-
-        ByteBuffer KeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "key_%d", i);
-        ByteBuffer ValueBuffer = ByteBuffer_CreateAndAppendFormattedCString(value_buf, sz, "val_%d", i);
 
         KineticEntry entry = {
-            .key = KeyBuffer,
-            .value = ValueBuffer,
+            .key = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "key_%d", i),
+            .tag = ByteBuffer_CreateAndAppendFormattedCString(tag_buf, sz, "tag_%d", i),
+            .value = ByteBuffer_CreateAndAppendFormattedCString(value_buf, sz, "val_%d", i),
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .force = true,
         };
 
         KineticStatus status = KineticClient_Put(&Fixture.session, &entry, NULL);
-        if (KINETIC_STATUS_SUCCESS != status) { return false; }
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     }
     return true;
 }
@@ -71,6 +64,7 @@ static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
     LOG_LOCATION;
     static const ssize_t sz = 10;
     char key_buf[sz];
+    char tag_buf[sz];
     char value_buf[sz];
     char key_exp_buf[sz];
     char value_exp_buf[sz];
@@ -97,15 +91,16 @@ static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
     }
 
     for (int i = low; i < high; i++) {
-        ByteBuffer KeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "key_%d", i + offset);
-
-        ByteBuffer ValueBuffer = ByteBuffer_Create(value_buf, sz, 0);
+        ByteBuffer keyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "key_%d", i + offset);
+        ByteBuffer tagBuffer = ByteBuffer_CreateAndAppendFormattedCString(tag_buf, sz, "tag_%d", i + offset);
+        ByteBuffer valueBuffer = ByteBuffer_Create(value_buf, sz, 0);
 
         printf("KEY '%s'\n", key_buf);
 
         KineticEntry entry = {
-            .key = KeyBuffer,
-            .value = ValueBuffer,
+            .key = keyBuffer,
+            .tag = tagBuffer,
+            .value = valueBuffer,
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .metadataOnly = metadataOnly,
         };
@@ -124,18 +119,12 @@ static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
 
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-#if 0
-        TEST_ASSERT_FALSE(sz < snprintf(key_exp_buf, sz, "key_%d", i));
-        TEST_ASSERT_FALSE(sz < snprintf(value_exp_buf, sz, "val_%d", i));
-        ByteBuffer ExpectedKeyBuffer = ByteBuffer_CreateWithArray(ByteArray_CreateWithCString(key_exp_buf));
-        ByteBuffer ExpectedValueBuffer = ByteBuffer_CreateWithArray(ByteArray_CreateWithCString(value_exp_buf));
-#endif
-        ByteBuffer ExpectedKeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_exp_buf, sz, "key_%d", i);
-        ByteBuffer ExpectedValueBuffer = ByteBuffer_CreateAndAppendFormattedCString(value_exp_buf, sz, "val_%d", i);
+        ByteBuffer expectedKeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_exp_buf, sz, "key_%d", i);
+        ByteBuffer expectedValueBuffer = ByteBuffer_CreateAndAppendFormattedCString(value_exp_buf, sz, "val_%d", i);
 
-        TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, entry.key);
+        TEST_ASSERT_EQUAL_ByteBuffer(expectedKeyBuffer, entry.key);
         if (!metadataOnly) {
-            TEST_ASSERT_EQUAL_ByteBuffer(ExpectedValueBuffer, entry.value);
+            TEST_ASSERT_EQUAL_ByteBuffer(expectedValueBuffer, entry.value);
         }
     }
 }

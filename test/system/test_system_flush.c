@@ -104,7 +104,7 @@ void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
     uint8_t VersionData[1024];
     ByteBuffer VersionBuffer = ByteBuffer_Create(VersionData, sizeof(VersionData), 0);
     uint8_t TagData[1024];
-    ByteBuffer TagBuffer = ByteBuffer_Create(TagData, sizeof(TagData), 0);
+    ByteBuffer TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "tag_val");
 
     uint8_t key1[] = "key1";
     uint8_t value1[] = "value1";
