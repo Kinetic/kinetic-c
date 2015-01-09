@@ -136,10 +136,8 @@ static void get_finished(KineticCompletionData* kinetic_data, void* clientData)
 {
     GetStatus * get_status = clientData;
 
-    KineticSemaphore_Lock(get_status->sem);
     // Save GET result status
     get_status->status = kinetic_data->status;
     // Signal that we're done
     KineticSemaphore_Signal(get_status->sem);
-    KineticSemaphore_Unlock(get_status->sem);
 }
