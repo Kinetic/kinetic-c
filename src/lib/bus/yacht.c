@@ -27,6 +27,8 @@
 #define LOG(...)
 #endif
 
+#define USE_BRENTS_VARIATION 0
+
 /* Yet Another C Hash Table:
  *   An (int set) hash table for tracking active file descriptors
  *   and their metadata. */
@@ -78,7 +80,7 @@ static size_t hash(int key) {
 
 bool yacht_get(struct yacht *y, int key, void **value) {
     size_t b = hash(key) & y->mask;
-    LOG(" -- getting %d with bucket %d\n", key, b);
+    LOG(" -- getting key %d with bucket %zd\n", key, b);
 
     for (size_t o = 0; o < y->size; o++) {
         size_t i = (b + o) & y->mask;  // wrap as necessary
@@ -101,7 +103,7 @@ bool yacht_member(struct yacht *y, int key) {
 
 /* Set KEY to VALUE in the table. */
 bool yacht_set(struct yacht *y, int key, void *value, void **old_value) {
-    LOG(" -- adding %d with bucket %d\n", key, b);
+    LOG(" -- setting key %d\n", key);
 
     for (;;) {
         size_t max = y->size / 2;
@@ -123,7 +125,7 @@ static bool insert(int *buckets, void **values,
         if (o > 0) { LOG(" -- o %zd (max_fill %zd)\n", o, max_fill); }
         size_t i = (b + o) & mask;  // wrap as necessary
         int bv = buckets[i];
-        LOG(" -- b %d: %d\n", i, bv);
+        LOG(" -- b %zd: %d\n", i, bv);
         if (bv == key) {
             if (old_value) { *old_value = values[i]; }
             values[i] = value;
@@ -133,18 +135,26 @@ static bool insert(int *buckets, void **values,
             values[i] = value;
             return true;
         } else {
+#if USE_BRENTS_VARIATION
+            /* FIXME: This is not speeding things up significantly, and
+             *     during a grow the key / value being refiled need to
+             *     be updated in yacht_set or this will drop values.
+             *     Disable it for now. */
+
             /* Brent's variation -- bump out key if not in its main spot  */
             size_t ob = hash(bv) & mask;  /* other's primary bucket */
             if (ob == i) {      /* keep looking for an open spot */
                 continue;
             } else {            /* refile it instead */
                 int okey = buckets[i];
+                LOG(" -- SWAPPING KEYS, %d => %d\n", key, bv);
                 buckets[i] = key;
                 key = okey;
                 void *oval = values[i];
                 values[i] = value;
                 value = oval;
             }
+#endif
         }
     }
     return false;               /* too full */
@@ -156,8 +166,11 @@ static bool grow(struct yacht *y) {
     size_t nmask = nsize - 1;
     int *nbuckets = NULL;
     void **nvalues = NULL;
-    nbuckets = calloc(nsize, sizeof(*nbuckets));
+    nbuckets = malloc(nsize * sizeof(*nbuckets));
     if (nbuckets == NULL) { return false; }
+    for (int i = 0; i < nsize; i++) {
+        nbuckets[i] = YACHT_NO_KEY;
+    }
     nvalues = calloc(nsize, sizeof(*nvalues));
     if (nvalues == NULL) {
         free(nbuckets);
@@ -167,7 +180,7 @@ static bool grow(struct yacht *y) {
     for (size_t i = 0; i < y->size; i++) {
         int key = y->buckets[i];
         if (key != YACHT_NO_KEY && key != YACHT_DELETED) {
-            if (!insert(nbuckets, nvalues, nmask, y->size, key, y->values[i], NULL)) {
+            if (!insert(nbuckets, nvalues, nmask, nsize, key, y->values[i], NULL)) {
                 goto cleanup;
             }
         }
@@ -182,18 +195,19 @@ static bool grow(struct yacht *y) {
 cleanup:
     if (nbuckets) { free(nbuckets); }
     if (nvalues) { free(nvalues); }
+
     return false;
 }
 
 /* Remove KEY from the table. */
 bool yacht_remove(struct yacht *y, int key, void **old_value) {
     size_t b = hash(key) & y->mask;
-    LOG(" -- removing %d with bucket %d\n", key, b);
+    LOG(" -- removing %d with bucket %zd\n", key, b);
 
     for (size_t o = 0; o < y->size; o++) {
         size_t i = (b + o) & y->mask;  // wrap as necessary
         int bv = y->buckets[i];
-        LOG(" -- b %d: %d\n", i, bv);
+        LOG(" -- b %zd: %d\n", i, bv);
         if (bv == key) {
             if (y->buckets[(i + 1) & y->mask] == YACHT_NO_KEY) {
                 y->buckets[i] = YACHT_NO_KEY;

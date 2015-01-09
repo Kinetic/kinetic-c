@@ -94,6 +94,7 @@ makedirs:
 all: default test system_tests test_internals run examples
 
 clean: makedirs update_git_submodules
+	rm -rf ./bin/*.a ./bin/*.so
 	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber

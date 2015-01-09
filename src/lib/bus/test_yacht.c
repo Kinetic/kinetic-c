@@ -48,9 +48,14 @@ TEST yacht_should_add_and_remove_accurately(uint8_t sz2) {
     ASSERT(y);
 
     for (int i = 0; i < (1 << (sz2 - 1)); i++) {
-        ASSERT(yacht_set(y, i, NULL, NULL));
+        uintptr_t v = 1;
+        void *old = NULL;
+        ASSERT(yacht_set(y, i, (void *)v, &old));
+        ASSERT_EQ(NULL, old);
         ASSERT(yacht_member(y, i));
-        ASSERT(yacht_remove(y, i, NULL));
+        void *old2 = NULL;
+        ASSERT(yacht_remove(y, i, &old2));
+        ASSERT_EQ((void *)1, old2);
         ASSERT(!yacht_member(y, i));
         /* Add it back, to ensure it isn't disturbed by other removes */
         ASSERT(yacht_set(y, i, NULL, NULL));
@@ -126,9 +131,17 @@ TEST yacht_should_grow_and_add_and_remove_accurately_out_of_order(uint8_t sz2) {
 
     for (int i = 0; i < (1 << (sz2 - 1)); i++) {
         int iv = i * other_large_prime;
-        ASSERT(yacht_set(y, iv, NULL, NULL));
+        uintptr_t v = 1;
+        void *old = NULL;
+        ASSERT(yacht_set(y, iv, (void *)v, &old));
+        ASSERT_EQ(NULL, old);
+
         ASSERT(yacht_member(y, iv));
-        ASSERT(yacht_remove(y, iv, NULL));
+
+        void *old2 = NULL;
+        ASSERT(yacht_remove(y, iv, &old2));
+        ASSERT_EQ((void*)v, old2);
+
         ASSERT(!yacht_member(y, iv));
         /* Add it back, to ensure it isn't disturbed by other removes */
         ASSERT(yacht_set(y, iv, NULL, NULL));
