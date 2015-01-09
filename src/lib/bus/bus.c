@@ -191,7 +191,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
 
     b->fd_set = fd_set;
     res->bus = b;
-    BUS_LOG(b, 1, LOG_INITIALIZATION, "initialized", config->bus_udata);
+    BUS_LOG(b, 2, LOG_INITIALIZATION, "initialized", config->bus_udata);
     return true;
 
 cleanup:

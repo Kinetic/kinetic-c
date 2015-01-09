@@ -195,7 +195,9 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         }
 
         int64_t seq_id = 0;
-        if (response->command) {
+        if (response->command != NULL &&
+            response->command->header != NULL) {
+
             seq_id = response->command->header->ackSequence;
         }
 
@@ -219,6 +221,8 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = KineticController_HandleUnexecpectedResponse,
         .bus_udata = NULL,
+        .sender_count = 4,
+        .listener_count = 4,
     };
     (void)log_level;
     bus_result res = {0};

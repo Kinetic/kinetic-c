@@ -103,7 +103,7 @@ KineticStatus KineticSession_Connect(KineticSession const * const session)
     // #TODO what to do if we time out here? I think the bus should timeout by itself or something
 
     // Wait for initial unsolicited status to be received in order to obtain connectionID
-    const long maxWaitMicrosecs = 2000000;
+    const long maxWaitMicrosecs = 10000000;
     long microsecsWaiting = 0;
     struct timespec sleepDuration = {.tv_nsec = 500000};
     while(connection->connectionID == 0) {

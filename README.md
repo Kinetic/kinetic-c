@@ -92,6 +92,8 @@ Operations
 Kinetic C Client I/O Examples
 =============================
 
+* [`put_nonblocking`](src/examples/put_nonblocking.c) - Single thread, single connection, nonblocking put operation.
+* [`get_nonblocking`](src/examples/get_nonblocking.c) - Single thread, single connection, nonblocking get operation.
 * [`write_file_blocking`](src/examples/write_file_blocking.c) - Single thread, single connection, blocking operation.
 * [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, blocking operations.
 * [`write_file_nonblocking`](src/examples/write_file_nonblocking.c) - Single thread, single connection, multiple non-blocking operations

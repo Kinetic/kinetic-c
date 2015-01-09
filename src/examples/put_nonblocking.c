@@ -107,10 +107,8 @@ static void put_finished(KineticCompletionData* kinetic_data, void* clientData)
 {
     PutStatus * put_status = clientData;
 
-    KineticSemaphore_Lock(put_status->sem);
     // Save PUT result status
     put_status->status = kinetic_data->status;
     // Signal that we're done
     KineticSemaphore_Signal(put_status->sem);
-    KineticSemaphore_Unlock(put_status->sem);
 }

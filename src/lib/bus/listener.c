@@ -549,7 +549,7 @@ static void process_unpacked_message(listener *l,
              *     is fully processed. Otherwise, they sit in the queue stuck and
              *     slowing things down. */
             /* TODO: Do unsolicited status messages always have a seq_id of 0? */
-            BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
+            BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
                 "Couldn't find info for seq_id %lld, msg %p",
                 (long long)seq_id, opaque_msg);
    
@@ -573,7 +573,7 @@ static void process_unpacked_message(listener *l,
 static void tick_handler(listener *l) {
     struct bus *b = l->bus;
 
-    BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
+    BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
         "tick... %p: %d of %d msgs in use, %d of %d rx_info in use, %d tracked_fds",
         (void*)l, l->msgs_in_use, MAX_QUEUE_MESSAGES,
         l->rx_info_in_use, MAX_PENDING_MESSAGES, l->tracked_fds);
@@ -914,7 +914,7 @@ static void free_ci(connection_info *ci) {
 
 static void forget_socket(listener *l, int fd) {
     struct bus *b = l->bus;
-    BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
+    BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
         "forgetting socket %d", fd);
 
     /* don't really close it, just drop info about it in the listener */

@@ -30,7 +30,7 @@
 
 #define DEFAULT_MAX_DELAY 1000   /* msec */
 #define DEFAULT_TASK_RINGBUF_SIZE2 8
-#define DEFAULT_MAX_THREADS 4
+#define DEFAULT_MAX_THREADS 8
 
 static void set_defaults(struct threadpool_config *cfg) {
     if (cfg->task_ringbuf_size2 == 0) {

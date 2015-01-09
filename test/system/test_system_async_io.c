@@ -78,11 +78,11 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
         };
     };
 
-    struct timeval start_time;
-    gettimeofday(&start_time, NULL);
-
     uint32_t keys[NUM_PUTS];
     KineticEntry entries[NUM_PUTS];
+
+    struct timeval start_time;
+    gettimeofday(&start_time, NULL);
 
     for (uint32_t put = 0; put < NUM_PUTS; put++) {
         keys[put] = put;
@@ -158,10 +158,8 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
 static void put_finished(KineticCompletionData* kinetic_data, void* clientData)
 {
     PutStatus * put_status = clientData;
-    KineticSemaphore_Lock(put_status->sem);
     // Save PUT result status
     put_status->status = kinetic_data->status;
     // Signal that we're done
     KineticSemaphore_Signal(put_status->sem);
-    KineticSemaphore_Unlock(put_status->sem);
 }

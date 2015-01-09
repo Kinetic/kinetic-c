@@ -22,20 +22,12 @@ KineticSemaphore * KineticSemaphore_Create(void)
     return sem;
 }
 
-void KineticSemaphore_Lock(KineticSemaphore * sem)
-{
-    pthread_mutex_lock(&sem->mutex);
-}
-
-void KineticSemaphore_Unlock(KineticSemaphore * sem)
-{
-    pthread_mutex_unlock(&sem->mutex); 
-}
-
 void KineticSemaphore_Signal(KineticSemaphore * sem)
 {
-    pthread_cond_signal(&sem->complete);
+    pthread_mutex_lock(&sem->mutex);
     sem->signaled = true;
+    pthread_cond_signal(&sem->complete);
+    pthread_mutex_unlock(&sem->mutex); 
 }
 
 void KineticSemaphore_WaitForSignalAndDestroy(KineticSemaphore * sem)
