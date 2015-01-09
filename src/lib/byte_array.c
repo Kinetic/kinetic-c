@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <sys/param.h>
 
 static ByteBuffer* append_formatted_cstring_va_list(ByteBuffer* buffer,
@@ -81,6 +82,13 @@ ByteBuffer ByteBuffer_CreateAndAppendCString(void* data, size_t max_len, const c
     return buf;
 }
 
+ByteBuffer ByteBuffer_CreateAndAppendDummyData(void* data, size_t max_len, size_t len)
+{
+    ByteBuffer buf = ByteBuffer_Create(data, max_len, 0);
+    ByteBuffer_AppendDummyData(&buf, len);
+    return buf;
+}
+
 long ByteBuffer_BytesRemaining(const ByteBuffer buffer)
 {
     assert(buffer.array.data != NULL);
@@ -110,7 +118,7 @@ ByteBuffer* ByteBuffer_Append(ByteBuffer* buffer, const void* data, size_t len)
     assert(buffer != NULL);
     assert(buffer->array.data != NULL);
     assert(data != NULL);
-    if (len == 0 || ((buffer->bytesUsed + len) > buffer->array.len)) {
+    if ((buffer->bytesUsed + len) > buffer->array.len) {
         return NULL;
     }
     memcpy(&buffer->array.data[buffer->bytesUsed], data, len);
@@ -124,7 +132,7 @@ ByteBuffer* ByteBuffer_AppendArray(ByteBuffer* buffer, const ByteArray array)
     assert(buffer != NULL);
     assert(buffer->array.data != NULL);
     assert(array.data != NULL);
-    if (array.len == 0 || ((buffer->bytesUsed + array.len) > buffer->array.len)) {
+    if ((buffer->bytesUsed + array.len) > buffer->array.len) {
         return NULL;
     }
     memcpy(&buffer->array.data[buffer->bytesUsed], array.data, array.len);
@@ -222,4 +230,28 @@ ByteBuffer* ByteBuffer_AppendDummyData(ByteBuffer* buffer, size_t len)
 bool ByteBuffer_IsNull(ByteBuffer const buffer)
 {
     return buffer.array.data == NULL;
+}
+
+ByteBuffer ByteBuffer_Malloc(size_t size)
+{
+    // There is not check on the return value from calloc by design
+    //  the intention is that you can check for malloc failure by
+    //  calling ByteBuffer_IsNull on the returned ByteBuffer
+    return ByteBuffer_Create(calloc(1, size), size, 0);
+}
+
+ByteBuffer ByteBuffer_MallocAndAppend(const void* data, size_t len)
+{
+    assert(data != NULL);
+    assert(len != 0);
+    ByteBuffer buffer = ByteBuffer_Malloc(len);
+    if (ByteBuffer_IsNull(buffer)) { return buffer; }
+    ByteBuffer_Append(&buffer, data, len);
+    return buffer;
+}
+
+void ByteBuffer_Free(ByteBuffer buffer)
+{
+    assert(buffer.array.data != NULL);
+    free(buffer.array.data);
 }

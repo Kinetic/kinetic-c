@@ -70,6 +70,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
 	$(OUT_DIR)/kinetic_memory.o \
+	$(OUT_DIR)/kinetic_semaphore.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/threadpool.o \
@@ -226,6 +227,8 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -d $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/kinetic_semaphore.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
 
 uninstall:
 	@echo
@@ -237,6 +240,8 @@ uninstall:
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
 	$(RM) -f $(PREFIX)/include/${API_NAME}.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
+	$(RM) -f $(PREFIX)/include/kinetic_semaphore.h
+	$(RM) -f $(PREFIX)/include/byte_array.h
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
@@ -269,7 +274,7 @@ stop_simulator:
 
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
-SYSTEST_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl -lcrypto $(KINETIC_LIB) -l pthread
+SYSTEST_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
 SYSTEST_WARN = -Wall -Wextra -Werror -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
 UNITY_INC = ./vendor/unity/src
@@ -355,7 +360,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl $(KINETIC_LIB) -lcrypto -lpthread
+UTIL_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)
@@ -400,6 +405,7 @@ run: $(UTIL_EXEC) start_simulator
 
 EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+EXAMPLE_CFLAGS += -Wno-deprecated-declarations
 EXAMPLES = write_file_blocking
 VALGRIND = valgrind
 VALGRIND_ARGS = --track-origins=yes #--leak-check=full
@@ -412,7 +418,7 @@ $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 	@echo ================================================================================
 	@echo Building example: '$<'
 	@echo --------------------------------------------------------------------------------
-	$(CC) -o $@ $< $(CFLAGS) -I$(PUB_INC) $(UTIL_LDFLAGS) $(KINETIC_LIB)
+	$(CC) -o $@ $< $(CFLAGS) $(EXAMPLE_CFLAGS) -I$(PUB_INC) $(UTIL_LDFLAGS) $(KINETIC_LIB)
 	@echo ================================================================================
 	@echo
 
@@ -452,6 +458,8 @@ setup_examples: $(example_executables) \
 
 examples: setup_examples \
 	start_simulator \
+	run_example_put_nonblocking \
+	run_example_get_nonblocking \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
@@ -461,6 +469,8 @@ examples: setup_examples \
 
 valgrind_examples: setup_examples \
 	start_simulator \
+	valgrind_put_nonblocking \
+	valgrind_get_nonblocking \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \
