@@ -77,6 +77,8 @@ int KineticSocket_Connect(const char* host, int port)
         return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
 
+    KineticSocket_EnableTCPNoDelay(result.fd);
+
     for (ai = ai_result; ai != NULL; ai = ai->ai_next) {
         int setsockopt_result;
         int buffer_size = KINETIC_OBJ_SIZE;
@@ -151,6 +153,11 @@ void KineticSocket_Close(int socket)
     }
 }
 
+void KineticSocket_EnableTCPNoDelay(int socket)
+{
+    int on = 1;
+    setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on));
+}
 
 void KineticSocket_BeginPacket(int socket)
 {
@@ -167,7 +174,7 @@ void KineticSocket_FinishPacket(int socket)
 #if !defined(__APPLE__) /* TCP_CORK is NOT available on OSX */
     int off = 0;
     setsockopt(socket, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));
+#else
+    (void)socket;
 #endif
-    int on = 1;
-    setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on));
 }
