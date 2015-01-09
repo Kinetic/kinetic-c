@@ -25,7 +25,14 @@
 #include <sys/time.h>
 #include <errno.h>
 
+// Smaller number of large payloads
 #define NUM_PUTS (500)
+#define PAYLOAD_SIZE (KINETIC_OBJ_SIZE)
+
+// Large number of very small payloads
+//#define NUM_PUTS (10000)
+//#define PAYLOAD_SIZE (20)
+
 
 typedef struct {
     KineticSemaphore * sem;
@@ -36,7 +43,7 @@ static void put_finished(KineticCompletionData* kinetic_data, void* clientData);
 
 void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
 {
-    ByteBuffer test_data = ByteBuffer_Malloc(KINETIC_OBJ_SIZE);
+    ByteBuffer test_data = ByteBuffer_Malloc(PAYLOAD_SIZE);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
 
     // Initialize kinetic-c and configure sessions
@@ -109,7 +116,6 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
     }
 
     printf("Waiting for put finish\n");
-
 
     for (size_t i = 0; i < NUM_PUTS; i++)
     {
