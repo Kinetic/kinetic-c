@@ -168,7 +168,7 @@ static bool grow(struct yacht *y) {
     void **nvalues = NULL;
     nbuckets = malloc(nsize * sizeof(*nbuckets));
     if (nbuckets == NULL) { return false; }
-    for (int i = 0; i < nsize; i++) {
+    for (size_t i = 0; i < nsize; i++) {
         nbuckets[i] = YACHT_NO_KEY;
     }
     nvalues = calloc(nsize, sizeof(*nvalues));
