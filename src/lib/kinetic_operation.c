@@ -103,7 +103,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     else {
         header.valueLength = 0;
     }
-    KineticLogger_LogHeader(1, &header);
+    KineticLogger_LogHeader(2, &header);
 
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
     uint32_t nboValueLength = KineticNBO_FromHostU32(header.valueLength);
@@ -136,7 +136,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 
     // Send the value/payload, if specified
     if (header.valueLength > 0) {
-        LOGF1("Sending PDU Value Payload (%zu bytes)", operation->entry->value.bytesUsed);
+        LOGF2("Sending PDU Value Payload (%zu bytes)", operation->entry->value.bytesUsed);
         memcpy(&msg[offset], operation->entry->value.array.data, operation->entry->value.bytesUsed);
         offset += operation->entry->value.bytesUsed;
     }
