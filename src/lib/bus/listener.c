@@ -100,10 +100,10 @@ bool listener_remove_socket(struct listener *l, int fd) {
 }
 
 /* Coefficients for backpressure based on certain conditions. */
-#define MSG_BP_1QTR       (0)
+#define MSG_BP_1QTR       (0.25)
 #define MSG_BP_HALF       (0.5)
 #define MSG_BP_3QTR       (2.0)
-#define RX_INFO_BP_1QTR   (0)
+#define RX_INFO_BP_1QTR   (0.5)
 #define RX_INFO_BP_HALF   (0.5)
 #define RX_INFO_BP_3QTR   (2.0)
 #define THREADPOOL_BP     (1.0)
@@ -133,6 +133,11 @@ static uint16_t get_backpressure(struct listener *l) {
     }
     
     uint16_t threadpool_fill_pressure = THREADPOOL_BP * l->upstream_backpressure;
+
+    struct bus *b = l->bus;
+    BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
+        "lbp: %u, %u (iu %u), %u",
+        msg_fill_pressure, rx_info_fill_pressure, l->rx_info_in_use, threadpool_fill_pressure);
 
     return msg_fill_pressure + rx_info_fill_pressure
       + threadpool_fill_pressure;
