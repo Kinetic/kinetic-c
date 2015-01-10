@@ -46,7 +46,7 @@ STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udat
     gettimeofday(&tv, NULL);
     FILE *f = stdout; /* stderr */
     fprintf(f, "%ld.%06d: %s[%d] -- %s\n",
-        tv.tv_sec, tv.tv_usec,
+        tv.tv_sec, (int)tv.tv_usec,
         event_str, log_level, msg);
 }
 
