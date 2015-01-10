@@ -177,7 +177,7 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
     (void)seq_id;
     (void)bus_udata;
 
-    KineticLogger_LogProtobuf(3, response->proto);
+    KineticLogger_LogProtobuf(2, response->proto);
 
 
     // Handle unsolicited status PDUs

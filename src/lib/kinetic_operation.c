@@ -243,11 +243,11 @@ static KineticStatus get_cb(const char *cmd_name, KineticOperation* const operat
     assert(operation->connection != NULL);
     LOGF3("%s callback w/ operation (0x%0llX) on connection (0x%0llX)",
         cmd_name, operation, operation->connection);
-    assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
     if (status == KINETIC_STATUS_SUCCESS)
     {
+        assert(operation->response != NULL);
         // Update the entry upon success
         KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation->response);
         if (keyValue != NULL) {
@@ -351,7 +351,6 @@ KineticStatus KineticOperation_DeleteCallback(KineticOperation* const operation,
     assert(operation->connection != NULL);
     LOGF3("DELETE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->response != NULL);
     assert(operation->entry != NULL);
     return status;
 }
@@ -383,12 +382,12 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* const opera
     assert(operation->connection != NULL);
     LOGF3("GETKEYRANGE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->response != NULL);
     assert(operation->buffers != NULL);
     assert(operation->buffers->count > 0);
 
     if (status == KINETIC_STATUS_SUCCESS)
     {
+        assert(operation->response != NULL);
         // Report the key list upon success
         KineticProto_Command_Range* keyRange = KineticPDU_GetKeyRange(operation->response);
         if (keyRange != NULL) {
@@ -426,11 +425,10 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation,
     assert(operation->deviceInfo != NULL);
     LOGF3("GETLOG callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->response != NULL);
-    assert(operation->response->command->body->getLog != NULL);
 
     if (status == KINETIC_STATUS_SUCCESS)
     {
+        assert(operation->response != NULL);
         // Copy the data from the response protobuf into a new info struct
         if (operation->response->command->body->getLog == NULL) {
             return KINETIC_STATUS_OPERATION_FAILED;
