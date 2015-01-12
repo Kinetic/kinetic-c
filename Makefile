@@ -11,7 +11,7 @@ PUB_INC = ./include
 # SSL/TLS Library Options
 #-------------------------------------------------------------------------------
 
-# FIXME: Currently OSX/homebrew specific, rework before integration.
+# This may need to be set if OpenSSL is in a nonstandard place.
 OPENSSL_PATH ?=	.
 
 #===============================================================================
@@ -71,6 +71,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_types.o \
 	$(OUT_DIR)/kinetic_memory.o \
 	$(OUT_DIR)/kinetic_semaphore.o \
+	$(OUT_DIR)/kinetic_countingsemaphore.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/threadpool.o \
@@ -463,7 +464,6 @@ examples: setup_examples \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
-	run_example_write_file_nonblocking_threads \
 	run_example_get_key_range \
 	stop_simulator
 
@@ -474,6 +474,5 @@ valgrind_examples: setup_examples \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \
-	valgrind_example_write_file_nonblocking_threads \
 	valgrind_example_get_key_range \
 	stop_simulator

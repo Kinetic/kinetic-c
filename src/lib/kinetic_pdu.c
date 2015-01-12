@@ -217,7 +217,6 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
         .sender_count = 4,
         .listener_count = 4,
     };
-    (void)log_level;
     bus_result res = {0};
     if (!bus_init(&cfg, &res)) {
         LOGF0("failed to init bus: %d\n", res.status);

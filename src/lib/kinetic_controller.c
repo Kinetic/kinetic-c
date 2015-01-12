@@ -60,8 +60,10 @@ typedef struct {
 static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
 {
     DefaultCallbackData * data = client_data;
+    pthread_mutex_lock(&data->receiveCompleteMutex);
     data->status = kinetic_data->status;
     pthread_cond_signal(&data->receiveComplete);
+    pthread_mutex_unlock(&data->receiveCompleteMutex);
 }
 
 static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)

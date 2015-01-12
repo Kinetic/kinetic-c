@@ -258,38 +258,52 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
         BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
             "polling done_pipe: %d", res);
         if (res == 1) {
-            uint16_t backpressure = 0;
-            uint8_t buf[sizeof(bool) + sizeof(backpressure)];
-            ssize_t rd = read(info->done_pipe, buf, sizeof(buf));
-            BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                "reading done_pipe: %zd", rd);
-            if (rd == sizeof(buf)) {
-                bool success = buf[0] == 0 ? false : true;
-                backpressure = (buf[1] << 0);
-                backpressure += (buf[2] << 8);
-
-                /* Push back if message bus is too busy. */
-                backpressure >>= 7;  // TODO: further tuning
-
-                if (backpressure > 0) {
-                    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-                        "reading done_pipe: backpressure %d", backpressure);
-                    poll(NULL, 0, backpressure);
-                }
-
+            short ev = fds[0].revents;
+            BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 64,
+                "poll: ev %d, errno %d", ev, errno);
+            if ((ev & POLLHUP) || (ev & POLLERR) || (ev & POLLNVAL)) {
+                /* We've been hung up on due to a shutdown event. */
+                close(info->done_pipe);
+                return true;
+            } else if (ev & POLLIN) {
+                uint16_t backpressure = 0;
+                uint8_t buf[sizeof(bool) + sizeof(backpressure)];
+                ssize_t rd = read(info->done_pipe, buf, sizeof(buf));
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                    "reading done_pipe: success %d", 1);
-                return success;
-            } else if (rd == -1) {
-                if (errno == EINTR) {
-                    errno = 0;
-                    continue;
-                } else {
-                    BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
-                        "blocking read on done_pipe: errno %d", errno);
-                    errno = 0;
-                    return false;
+                    "reading done_pipe: %zd", rd);
+                if (rd == sizeof(buf)) {
+                    bool success = buf[0] == 0 ? false : true;
+                    backpressure = (buf[1] << 0);
+                    backpressure += (buf[2] << 8);
+                    
+                    /* Push back if message bus is too busy. */
+                    backpressure >>= 7;  // TODO: further tuning
+                    
+                    if (backpressure > 0) {
+                        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+                            "reading done_pipe: backpressure %d", backpressure);
+                        poll(NULL, 0, backpressure);
+                    }
+                    
+                    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                        "reading done_pipe: success %d", 1);
+                    return success;
+                } else if (rd == -1) {
+                    if (errno == EINTR) {
+                        errno = 0;
+                        continue;
+                    } else {
+                        BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
+                            "blocking read on done_pipe: errno %d", errno);
+                        errno = 0;
+                        return false;
+                    }
                 }
+            } else {
+                /* Shouldn't happen -- blocking. */
+                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
+                    "shouldn't happen: ev %d, errno %d", ev, errno);
+                assert(false);
             }
         } else if (res == -1) {
             BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
@@ -348,10 +362,11 @@ void *sender_mainloop(void *arg) {
             }
         } else if (res > 0) {
             if (self->fds[0].revents & POLLIN) {
-                BUS_LOG(b, 5, LOG_SENDER, "got command(s)", b->udata);
                 work = check_incoming_commands(self);
                 res--;
             }
+
+            if (self->shutdown) { break; }
 
             /* If the incoming command pipe isn't the only active FD: */
             if (res > 0) {
@@ -368,7 +383,8 @@ void *sender_mainloop(void *arg) {
         }
     }
     
-    BUS_LOG(b, 4, LOG_SENDER, "shutting down", b->udata);
+    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+        "shutting down, shutdown == %d", self->shutdown);
     cleanup(self);
 
     return NULL;
@@ -401,12 +417,9 @@ static void cleanup(sender *s) {
         BUS_LOG_SNPRINTF(b, 6 , LOG_SENDER, b->udata, 64,
             "shutdown_id: %d", shutdown_id);
         if (shutdown_id != -1) {
-            /* TODO: The sender_shutdown caller should be notified
-             * and unblocked from here, but it doesn't appears to unblock
-             * correctly. */
-            //notify_caller(s, &s->tx_info[shutdown_id], true);
-
-            close(s->pipes[shutdown_id][0]);
+            /* Notify the sender about the shutdown via POLLHUP / POLLNVAL. */
+            BUS_LOG(b, 3, LOG_SENDER, "closing to notify shutdown", b->udata);
+            /* Client thread will close the other end. */
             close(s->pipes[shutdown_id][1]);
         }
         
@@ -415,6 +428,7 @@ static void cleanup(sender *s) {
 }
 
 static bool register_socket_info(sender *s, int fd, SSL *ssl) {
+    if (s->shutdown) { return false; }
     fd_info *info = malloc(sizeof(*info));
     if (info == NULL) { 
         return false;
@@ -474,6 +488,8 @@ static void decrement_fd_refcount(sender *s, fd_info *fdi) {
 }
 
 static bool release_socket_info(sender *s, int fd) {
+    if (s->shutdown) { return false; }
+
     void *old = NULL;
     if (!yacht_remove(s->fd_hash_table, fd, &old)) {
         return false;
@@ -521,10 +537,8 @@ static void handle_command(sender *s, int id) {
     case TIS_SHUTDOWN:
     {
         s->shutdown = true;
-        notify_caller(s, info, true);
-
-        /* TODO: caller should be notified from cleanup(), blocking
-         * until shutdown is complete. */
+        /* Caller should be notified from cleanup(), by closing the
+         * notification pipe. Block until shutdown is complete. */
         break;
     }
     case TIS_REQUEST_ENQUEUE:

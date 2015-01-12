@@ -23,14 +23,14 @@
 
 #include "kinetic_types.h"
 #include "kinetic_proto.h"
+#include "kinetic_countingsemaphore.h"
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <openssl/sha.h>
 #include <time.h>
 #include <pthread.h>
 
-#define KINETIC_PDUS_PER_SESSION_DEFAULT (2)
-#define KINETIC_PDUS_PER_SESSION_MAX (10)
+#define KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION (10)
 #define KINETIC_SOCKET_DESCRIPTOR_INVALID (-1)
 #define KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS (3)
 #define KINETIC_OPERATION_TIMEOUT_SECS (20)
@@ -95,7 +95,8 @@ struct _KineticConnection {
     int64_t         sequence;       // increments for each request in a session
     KineticSession  session;        // session configuration
     struct bus *    messageBus;
-    socket_info *   si;   
+    socket_info *   si;
+    KineticCountingSemaphore * outstandingOperations;
 };
 
 // Kinetic Message HMAC
