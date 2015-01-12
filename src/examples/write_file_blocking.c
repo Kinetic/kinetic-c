@@ -59,13 +59,10 @@ void store_data(write_args* args)
         ByteBuffer_Reset(&entry->value);
         ByteBuffer_AppendArray(
             &entry->value,
-            ByteBuffer_Consume(&args->data, KINETIC_OBJ_SIZE)
+            ByteBuffer_Consume(
+                &args->data,
+                MIN(ByteBuffer_BytesRemaining(args->data), KINETIC_OBJ_SIZE))
         );
-
-        // Ensure last PUT triggers flush to disk for completion
-        if (ByteBuffer_BytesRemaining(args->data) == 0) {
-            entry->synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
-        }
 
         // Store the object
         KineticStatus status = KineticClient_Put(args->session, entry, NULL);
@@ -112,8 +109,9 @@ int main(int argc, char** argv)
         }
     };
     write_args* writeArgs = calloc(1, sizeof(write_args));
-    KineticClient_Init("stdout", 0);
-    status = KineticClient_CreateConnection(&session);
+    KineticClient * client = KineticClient_Init("stdout", 0);
+    if (client == NULL) { return 1; }
+    status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
             session.config.host, Kinetic_GetStatusDescription(status));
@@ -147,7 +145,7 @@ int main(int argc, char** argv)
 
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(writeArgs->session);
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
     free(writeArgs);
     free(buf);
 

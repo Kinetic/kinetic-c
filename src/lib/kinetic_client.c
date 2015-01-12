@@ -20,24 +20,37 @@
 
 #include "kinetic_types_internal.h"
 #include "kinetic_client.h"
-#include "kinetic_connection.h"
+#include "kinetic_session.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
 #include "kinetic_logger.h"
+#include "kinetic_pdu.h"
+#include "kinetic_memory.h"
 #include <stdlib.h>
 #include <sys/time.h>
 
-void KineticClient_Init(const char* log_file, int log_level)
+KineticClient * KineticClient_Init(const char* log_file, int log_level)
 {
     KineticLogger_Init(log_file, log_level);
+    KineticClient * client = KineticCalloc(1, sizeof(*client));
+    if (client == NULL) { return NULL; }
+    bool success = KineticPDU_InitBus(1, client);
+    if (!success)
+    {
+        KineticFree(client);
+        return NULL;
+    }
+    return client;
 }
 
-void KineticClient_Shutdown(void)
+void KineticClient_Shutdown(KineticClient * const client)
 {
+    KineticPDU_DeinitBus(client);
+    KineticFree(client);
     KineticLogger_Close();
 }
 
-KineticStatus KineticClient_CreateConnection(KineticSession* const session)
+KineticStatus KineticClient_CreateConnection(KineticSession* const session, KineticClient * const client)
 {
     if (session == NULL) {
         LOG0("KineticSession is NULL!");
@@ -54,7 +67,7 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session)
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
-    KineticSession_Create(session);
+    KineticSession_Create(session, client);
     if (session->connection == NULL) {
         LOG0("Failed to create connection instance!");
         return KINETIC_STATUS_CONNECTION_ERROR;
@@ -286,7 +299,15 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticOperation_BuildP2POperation(operation, p2pOp);
+    KineticStatus status = KineticOperation_BuildP2POperation(operation, p2pOp);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        // TODO we need to find a more generic way to handle errors on command construction
+        if (closure != NULL) {
+            operation->closure = *closure;
+        }
+        KineticOperation_Complete(operation, status);
+        return status;
+    }
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
@@ -303,3 +324,4 @@ KineticStatus KineticClient_InstantSecureErase(KineticSession const * const sess
     KineticOperation_BuildInstantSecureErase(operation);
     return KineticController_ExecuteOperation(operation, NULL);
 }
+

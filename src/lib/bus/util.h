@@ -1,5 +1,5 @@
 /*
-* kinetic-c
+* kinetic-c-client
 * Copyright (C) 2014 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
@@ -17,16 +17,11 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
+#ifndef UTIL_H
+#define UTIL_H
 
-#ifndef _KINETIC_CONNECTION_H
-#define _KINETIC_CONNECTION_H
+#include <stdbool.h>
 
-#include "kinetic_types_internal.h"
+bool util_is_resumable_io_error(int errno_);
 
-KineticStatus KineticSession_Create(KineticSession * const session);
-KineticStatus KineticSession_Destroy(KineticSession * const session);
-KineticStatus KineticSession_Connect(KineticSession const * const session);
-KineticStatus KineticSession_Disconnect(KineticSession const * const session);
-void KineticSession_IncrementSequence(KineticSession const * const session);
-
-#endif // _KINETIC_CONNECTION_H
+#endif

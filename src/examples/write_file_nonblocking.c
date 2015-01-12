@@ -53,7 +53,8 @@ int main(int argc, char** argv)
     (void)argv;
 
     // Initialize kinetic-c and establish session
-    KineticClient_Init("stdout", 0);
+    KineticClient * client = KineticClient_Init("stdout", 0);
+    if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
     const KineticSessionConfig config = {
         .host = "localhost",
@@ -63,7 +64,7 @@ int main(int argc, char** argv)
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
     KineticSession session = {.config = config};
-    KineticStatus status = KineticClient_CreateConnection(&session);
+    KineticStatus status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -89,7 +90,7 @@ int main(int argc, char** argv)
 
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(&session);
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
 
     return 0;
 }
@@ -103,8 +104,6 @@ static int put_chunk_of_file(FileTransferProgress* transfer)
     int bytesRead = read(transfer->fd, closureData->value, sizeof(closureData->value));
     if (bytesRead > 0) {
         transfer->currentChunk++;
-
-        // Configure the entry to store
         closureData->entry = (KineticEntry){
             .key = ByteBuffer_CreateAndAppend(closureData->key, sizeof(closureData->key),
                 &transfer->keyPrefix, sizeof(transfer->keyPrefix)),
@@ -112,15 +111,8 @@ static int put_chunk_of_file(FileTransferProgress* transfer)
                 "some_value_tag..._%04d", transfer->currentChunk),
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .value = ByteBuffer_Create(closureData->value, sizeof(closureData->value), (size_t)bytesRead),
-            .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
+            .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         };
-
-        // Ensure last PUT triggers flush to disk for completion
-        if ((size_t)bytesRead < sizeof(closureData->value)) {
-            closureData->entry.synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
-        }
-
-        // Store the current entry
         KineticStatus status = KineticClient_Put(transfer->session,
             &closureData->entry,
             &(KineticCompletionClosure) {

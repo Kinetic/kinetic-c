@@ -17,34 +17,10 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#include "byte_array.h"
-#include "unity.h"
-#include "unity_helper.h"
 #include "system_test_fixture.h"
-#include "protobuf-c/protobuf-c.h"
-#include "socket99.h"
-#include <string.h>
-#include <stdlib.h>
-
 #include "kinetic_client.h"
-#include "kinetic_types.h"
-#include "kinetic_types_internal.h"
-#include "kinetic_controller.h"
-#include "kinetic_device_info.h"
-#include "kinetic_serial_allocator.h"
-#include "kinetic_proto.h"
-#include "kinetic_allocator.h"
-#include "kinetic_message.h"
-#include "kinetic_pdu.h"
-#include "kinetic_logger.h"
-#include "kinetic_operation.h"
-#include "kinetic_hmac.h"
-#include "kinetic_connection.h"
-#include "kinetic_socket.h"
-#include "kinetic_nbo.h"
-
-#include <stdio.h>
-#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
 #include <sys/param.h>
 #include <sys/time.h>
 #include <pthread.h>
@@ -52,14 +28,12 @@
 
 #define MAX_ITERATIONS (2)
 #define NUM_COPIES (3)
-#define BUFSIZE  (128 * KINETIC_OBJ_SIZE)
-#define KINETIC_MAX_THREADS (10)
 #define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
 
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
 STATIC const char HmacKeyString[] = "asdfasdf";
-STATIC const int SourceDataSize = 50 * KINETIC_OBJ_SIZE;
+STATIC const int TestDataSize = 50 * (1024*1024);
 
 struct kinetic_thread_arg {
     char ip[16];
@@ -77,15 +51,15 @@ struct kinetic_thread_arg {
 
 static void* kinetic_put(void* kinetic_arg);
 
-
+KineticClient * client;
 void setUp(void)
 {
-    KineticClient_Init("stdout", 0);
+    client = KineticClient_Init("stdout", 0);
 }
 
 void tearDown(void)
 {
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
 }
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
@@ -105,13 +79,16 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
         printf("\n*** Overlapped PUT operation (iteration %d of %d)\n",
                iteration + 1, MAX_ITERATIONS);
+        TEST_ASSERT_MESSAGE(TestDataSize > 0, "read error");
 
         // Allocate session/thread data
-        char* buf = malloc(sizeof(char) * BUFSIZE);
         struct kinetic_thread_arg* kt_arg;
-        pthread_t thread_id[KINETIC_MAX_THREADS];
+        pthread_t thread_id[NUM_COPIES];
         kt_arg = malloc(sizeof(struct kinetic_thread_arg) * NUM_COPIES);
         TEST_ASSERT_NOT_NULL_MESSAGE(kt_arg, "kinetic_thread_arg malloc failed");
+        uint8_t* testData = malloc(TestDataSize);
+        ByteBuffer testBuf = ByteBuffer_CreateAndAppendDummyData(testData, TestDataSize, TestDataSize);
+        ByteBuffer_Reset(&testBuf);
 
         // Establish all of the connection first, so their session can all get initialized first
         for (int i = 0; i < NUM_COPIES; i++) {
@@ -119,29 +96,28 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
             kt_arg[i].session.config = sessionConfig;
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
-                KineticClient_CreateConnection(&kt_arg[i].session));
+                KineticClient_CreateConnection(&kt_arg[i].session, client));
             strcpy(kt_arg[i].ip, sessionConfig.host);
-
-            // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
-            kt_arg[i].data = ByteBuffer_Create(buf, SourceDataSize, 0);
-            ByteBuffer_AppendDummyData(&kt_arg[i].data, SourceDataSize);
-            ByteBuffer_Reset(&kt_arg[i].data);
+            kt_arg[i].data = testBuf;
 
             // Configure the KineticEntry
             struct timeval now;
             gettimeofday(&now, NULL);
             snprintf(kt_arg[i].keyPrefix, sizeof(kt_arg[i].keyPrefix), "%010llu_%02d%02d_",
                 (unsigned long long)now.tv_sec, iteration, i);
-            ByteBuffer keyBuf = ByteBuffer_CreateAndAppendCString(
-                kt_arg[i].key, sizeof(kt_arg[i].key), kt_arg[i].keyPrefix);
-            ByteBuffer tagBuf = ByteBuffer_CreateAndAppendCString(kt_arg[i].tag, sizeof(kt_arg[i].tag), "some_value_tag...");
+            ByteBuffer keyBuf = ByteBuffer_Create(kt_arg[i].key, sizeof(kt_arg[i].key), 0);
+            ByteBuffer_AppendCString(&keyBuf, kt_arg[i].keyPrefix);
+            ByteBuffer verBuf = ByteBuffer_Create(kt_arg[i].version, sizeof(kt_arg[i].version), 0);
+            ByteBuffer_AppendCString(&verBuf, "v1.0");
+            ByteBuffer tagBuf = ByteBuffer_Create(kt_arg[i].tag, sizeof(kt_arg[i].tag), 0);
+            ByteBuffer_AppendCString(&tagBuf, "some_value_tag...");
             ByteBuffer valBuf = ByteBuffer_Create(kt_arg[i].value, sizeof(kt_arg[i].value), 0);
             kt_arg[i].entry = (KineticEntry) {
                 .key = keyBuf,
+                // .newVersion = verBuf,
                 .tag = tagBuf,
                 .algorithm = KINETIC_ALGORITHM_SHA1,
                 .value = valBuf,
-                .force = true,
             };
         }
 
@@ -175,7 +151,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
 
         // Cleanup the rest of the reources
         free(kt_arg);
-        free(buf);
+        free(testData);
 
         fflush(stdout);
         printf("  *** Iteration complete!\n");
@@ -223,7 +199,7 @@ static void* kinetic_put(void* kinetic_arg)
         ByteBuffer_Reset(&entry->value);
         ByteBuffer_AppendArray(
             &entry->value,
-            ByteBuffer_Consume(&arg->data, MIN(ByteBuffer_BytesRemaining(arg->data), MAX_OBJ_SIZE))
+            ByteBuffer_Consume(&arg->data, MAX_OBJ_SIZE)
         );
 
         // Set operation-specific attributes
@@ -245,8 +221,10 @@ static void* kinetic_put(void* kinetic_arg)
 
     gettimeofday(&stopTime, NULL);
 
+
     int64_t elapsed_us = ((stopTime.tv_sec - startTime.tv_sec) * 1000000)
         + (stopTime.tv_usec - startTime.tv_usec);
+        LOGF0("elapsed us = %lu", elapsed_us);
     float elapsed_ms = elapsed_us / 1000.0f;
     arg->bandwidth = (arg->data.array.len * 1000.0f) / (elapsed_ms * 1024 * 1024);
     fflush(stdout);

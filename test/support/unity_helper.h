@@ -24,6 +24,9 @@
 #include "unity.h"
 #include "unity_byte_array_helper.h"
 #include "kinetic_types.h"
+#include "kinetic_types_internal.h"
+#include "kinetic_countingsemaphore_types.h"
+#include "bus_internal_types.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -89,7 +92,8 @@ if ((expected) != (actual)) { \
         statusDescActual = Kinetic_GetStatusDescription(actual); } \
     sprintf(err, "Expected Kinetic status code of %s(%d), Was %s(%d) ", \
         statusDescExpected, (expected), statusDescActual, (actual)); \
-    if (msg != NULL) { strcat(err, " : "); strcat(err, msg); } \
+    char * p_msg = msg; \
+    if (p_msg != NULL) { strcat(err, " : "); strcat(err, p_msg); } \
     TEST_FAIL_MESSAGE(err); \
 }
 #define TEST_ASSERT_EQUAL_KineticStatus(expected, actual) \

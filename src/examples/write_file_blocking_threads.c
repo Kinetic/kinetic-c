@@ -64,11 +64,6 @@ void* store_data(void* args)
 
         // Prepare the next chunk of data to store
         ByteBuffer_AppendArray(&entry->value, ByteBuffer_Consume(&thread_args->data, KINETIC_OBJ_SIZE));
-        
-        // Ensure last PUT triggers flush to disk for completion
-        if (ByteBuffer_BytesRemaining(thread_args->data) == 0) {
-            entry->synchronization = KINETIC_SYNCHRONIZATION_FLUSH;
-        }
 
         // Store the data slice
         KineticStatus status = KineticClient_Put(&thread_args->session, entry, NULL);
@@ -102,7 +97,8 @@ int main(int argc, char** argv)
     }
 
     // Initialize kinetic-c and configure sessions
-    KineticClient_Init("stdout", 0);
+    KineticClient * client = KineticClient_Init("stdout", 0);
+    if (client == NULL) { return 1; }
 
     write_args* writeArgs = calloc(NUM_FILES, sizeof(write_args));
     if (writeArgs == NULL) {
@@ -122,7 +118,7 @@ int main(int argc, char** argv)
 
         // Establish connection
         writeArgs[i].session = (KineticSession){.config = config};
-        status = KineticClient_CreateConnection(&writeArgs[i].session);
+        status = KineticClient_CreateConnection(&writeArgs[i].session, client);
         if (status != KINETIC_STATUS_SUCCESS) {
             fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
                 Kinetic_GetStatusDescription(status));
@@ -169,7 +165,7 @@ int main(int argc, char** argv)
     }
 
     // Shutdown client connection and cleanup
-    KineticClient_Shutdown();
+    KineticClient_Shutdown(client);
     free(writeArgs);
     free(buf);
 

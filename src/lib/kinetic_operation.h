@@ -64,11 +64,13 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
                                KineticDeviceInfo** info);
 
 KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildP2POperation(KineticOperation* const operation,
-                                        KineticP2P_Operation* const p2pOp);
+KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operation,
+                                                 KineticP2P_Operation* const p2pOp);
 
 KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildInstantSecureErase(KineticOperation* operation);
+
+void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion);
 
 void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);
 void KineticOperation_TimeoutOperations(KineticConnection* const connection);

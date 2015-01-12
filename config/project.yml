@@ -36,7 +36,6 @@
 :defines:
   :commmon: &common_defines
     - TEST
-    - SYSTEM_TEST_HOST=\"<%= ENV.fetch('SYSTEM_TEST_HOST', 'localhost') %>\"
   :test:
     - *common_defines
   :test_preprocess:
@@ -88,6 +87,7 @@
       - -g
       - -Wall
       - -Wextra
+      - -Werror
       - -pedantic
       - -Wstrict-prototypes
       # - -Werror=strict-prototypes
@@ -109,6 +109,8 @@
       - -g
       - -Wall
       - -Wextra
+      #- -Werror
+      - -Wno-pragmas
       # - -pedantic
       - -Wstrict-prototypes
       # - -Werror=strict-prototypes

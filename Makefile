@@ -7,16 +7,23 @@ OUT_DIR = ./obj
 BIN_DIR = ./bin
 PUB_INC = ./include
 
+#-------------------------------------------------------------------------------
+# SSL/TLS Library Options
+#-------------------------------------------------------------------------------
+
+# This may need to be set if OpenSSL is in a nonstandard place.
+OPENSSL_PATH ?=	.
+
 #===============================================================================
 # Shared Build Variables
 #===============================================================================
 CC ?= gcc
 OPTIMIZE = -O3
 SYSTEM_TEST_HOST ?= \"localhost\"
-WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
-LDFLAGS += -lm -lcrypto -lssl -lpthread
+LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread
 
 #===============================================================================
 # Kinetic-C Library Build Support
@@ -33,10 +40,13 @@ PROTOBUFC = $(VENDOR)/protobuf-c
 SOCKET99 = $(VENDOR)/socket99
 VERSION_FILE = ./config/VERSION
 VERSION = ${shell head -n1 $(VERSION_FILE)}
+THREADPOOL_PATH = ${LIB_DIR}/threadpool
+BUS_PATH = ${LIB_DIR}/bus
 
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
-LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR)
+LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR) \
+	-I$(THREADPOOL_PATH) -I$(BUS_PATH) -I${OPENSSL_PATH}/include
 
 C_SRC=${LIB_DIR}/*.[ch] $(SOCKET99)/socket99.[ch] $(PROTOBUFC)/protobuf-c/protobuf-c.[ch]
 
@@ -47,6 +57,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
 	$(OUT_DIR)/kinetic_pdu.o \
+	$(OUT_DIR)/kinetic_pdu_unpack.o \
 	$(OUT_DIR)/kinetic_proto.o \
 	$(OUT_DIR)/kinetic_socket.o \
 	$(OUT_DIR)/kinetic_message.o \
@@ -55,11 +66,24 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_controller.o \
 	$(OUT_DIR)/kinetic_device_info.o \
 	$(OUT_DIR)/kinetic_serial_allocator.o \
-	$(OUT_DIR)/kinetic_connection.o \
+	$(OUT_DIR)/kinetic_session.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
+	$(OUT_DIR)/kinetic_memory.o \
+	$(OUT_DIR)/kinetic_semaphore.o \
+	$(OUT_DIR)/kinetic_countingsemaphore.o \
 	$(OUT_DIR)/byte_array.o \
-	$(OUT_DIR)/kinetic_client.o
+	$(OUT_DIR)/kinetic_client.o \
+	$(OUT_DIR)/threadpool.o \
+	$(OUT_DIR)/bus.o \
+	$(OUT_DIR)/bus_ssl.o \
+	$(OUT_DIR)/casq.o \
+	$(OUT_DIR)/listener.o \
+	$(OUT_DIR)/sender.o \
+	$(OUT_DIR)/util.o \
+	$(OUT_DIR)/yacht.o \
+
+
 
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
@@ -68,14 +92,20 @@ default: makedirs $(KINETIC_LIB)
 makedirs:
 	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
 
-all: default test system_tests run examples
+all: default test system_tests test_internals run examples
 
-clean: makedirs
+clean: makedirs update_git_submodules
+	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util
 	rm -rf ./bin/**/*
-	rm -f $(OUT_DIR)/*.o *.core *.log
+	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber
-	git submodule update --init
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
+	cd ${SOCKET99} && make clean
+	cd ${LIB_DIR}/threadpool && make clean
+	cd ${LIB_DIR}/bus && make clean
+
+update_git_submodules:
+	git submodule update --init
 
 TAGS: ${C_SRC} Makefile
 	@find . -name "*.[ch]" | grep -v vendor | grep -v build | xargs etags
@@ -97,13 +127,19 @@ ${OUT_DIR}/%.o: ${LIB_DIR}/%.c Makefile ${PUB_INC}/%.h Makefile
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
-	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
+	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Werror -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
+
+$(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpool/threadpool.h
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+$(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
+	$(CC) -o $@ -c $< $(CFLAGS) -I${THREADPOOL_PATH} -I${BUS_PATH} ${LIB_INCS}
 
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 
-ci: uninstall all install
+ci: uninstall all test_internals install
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!
@@ -128,6 +164,26 @@ JAVA_HOME ?= /usr
 JAVA_BIN = $(JAVA_HOME)/bin/java
 
 .PHONY: test
+
+test_internals: test_threadpool test_bus
+
+test_threadpool:
+	cd ${LIB_DIR}/threadpool && make test
+
+test_bus: test_threadpool ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a
+	cd ${LIB_DIR}/bus && make test
+
+#-------------------------------------------------------------------------------
+# Internal Libraries
+#-------------------------------------------------------------------------------
+
+${OUT_DIR}/libsocket99.a: ${SOCKET99}/*.[ch]
+	cd ${SOCKET99} && make all
+	cp ${SOCKET99}/libsocket99.a $@
+
+${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
+	cd ${LIB_DIR}/threadpool && make all
+	cp ${LIB_DIR}/threadpool/libthreadpool.a $@
 
 
 #-------------------------------------------------------------------------------
@@ -172,8 +228,8 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -d $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/kinetic_semaphore.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
-
 
 uninstall:
 	@echo
@@ -185,10 +241,11 @@ uninstall:
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
 	$(RM) -f $(PREFIX)/include/${API_NAME}.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
+	$(RM) -f $(PREFIX)/include/kinetic_semaphore.h
+	$(RM) -f $(PREFIX)/include/byte_array.h
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
-	$(RM) -f $(PREFIX)/include/byte_array.h
 
 .PHONY: install uninstall
 
@@ -215,10 +272,11 @@ stop_simulator:
 # System Tests
 #===============================================================================
 
+
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
-SYSTEST_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
-SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+SYSTEST_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
+SYSTEST_WARN = -Wall -Wextra -Werror -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
 UNITY_INC = ./vendor/unity/src
 UNITY_SRC = ./vendor/unity/src/unity.c
@@ -228,6 +286,8 @@ systest_executables = $(patsubst $(SYSTEST_SRC)/%.c,$(SYSTEST_OUT)/run_%,$(syste
 systest_results = $(patsubst $(SYSTEST_OUT)/run_%,$(SYSTEST_OUT)/%.log,$(systest_executables))
 systest_passfiles = $(patsubst $(SYSTEST_OUT)/run_%,$(SYSTEST_OUT)/%.testpass,$(systest_executables))
 systest_names = $(patsubst $(SYSTEST_OUT)/run_%,%,$(systest_executables))
+
+.SECONDARY: $(systest_executables)
 
 list_system_tests:
 	echo $(systest_names)
@@ -301,7 +361,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm -lssl $(KINETIC_LIB) -lcrypto -lpthread
+UTIL_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)
@@ -346,6 +406,7 @@ run: $(UTIL_EXEC) start_simulator
 
 EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+EXAMPLE_CFLAGS += -Wno-deprecated-declarations
 EXAMPLES = write_file_blocking
 VALGRIND = valgrind
 VALGRIND_ARGS = --track-origins=yes #--leak-check=full
@@ -358,7 +419,7 @@ $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 	@echo ================================================================================
 	@echo Building example: '$<'
 	@echo --------------------------------------------------------------------------------
-	$(CC) -o $@ $< $(CFLAGS) -I$(PUB_INC) $(UTIL_LDFLAGS) $(KINETIC_LIB)
+	$(CC) -o $@ $< $(CFLAGS) $(EXAMPLE_CFLAGS) -I$(PUB_INC) $(UTIL_LDFLAGS) $(KINETIC_LIB)
 	@echo ================================================================================
 	@echo
 
@@ -398,18 +459,20 @@ setup_examples: $(example_executables) \
 
 examples: setup_examples \
 	start_simulator \
+	run_example_put_nonblocking \
+	run_example_get_nonblocking \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
-	run_example_write_file_nonblocking_threads \
 	run_example_get_key_range \
 	stop_simulator
 
 valgrind_examples: setup_examples \
 	start_simulator \
+	valgrind_put_nonblocking \
+	valgrind_get_nonblocking \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \
-	valgrind_example_write_file_nonblocking_threads \
 	valgrind_example_get_key_range \
 	stop_simulator

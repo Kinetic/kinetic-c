@@ -24,7 +24,6 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_hmac.h"
 
-void KineticMessage_Init(KineticMessage* const message);
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
                                       const KineticEntry* entry);
 void KineticMessage_ConfigureKeyRange(KineticMessage* const message,

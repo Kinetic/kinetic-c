@@ -22,8 +22,10 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "mock_kinetic_operation.h"
-#include "mock_kinetic_connection.h"
+#include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_memory.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"

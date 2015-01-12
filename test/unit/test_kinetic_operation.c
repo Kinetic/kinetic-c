@@ -30,29 +30,30 @@
 #include "kinetic_device_info.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_serial_allocator.h"
-#include "mock_kinetic_connection.h"
+#include "mock_kinetic_session.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_socket.h"
 #include "mock_kinetic_hmac.h"
+#include "mock_bus.h"
+#include "mock_kinetic_controller.h"
+#include "mock_kinetic_countingsemaphore.h"
 
 static KineticSessionConfig SessionConfig;
 static KineticSession Session;
 static KineticConnection Connection;
 static const int64_t ConnectionID = 12345;
 static KineticPDU Request, Response;
-static KineticPDU Requests[3];
 static KineticOperation Operation;
 
 void setUp(void)
 {
-    KineticLogger_Init("stdout", 3);
-    KINETIC_CONNECTION_INIT(&Connection);
+    KineticLogger_Init("stdout", 1);
     Connection.connectionID = ConnectionID;
     Session.connection = &Connection;
-    KINETIC_PDU_INIT_WITH_COMMAND(&Request, &Connection);
-    KINETIC_PDU_INIT_WITH_COMMAND(&Response, &Connection);
-    KINETIC_OPERATION_INIT(&Operation, &Connection);
+    KineticPDU_InitWithCommand(&Request, &Connection);
+    KineticPDU_InitWithCommand(&Response, &Connection);
+    KineticOperation_Init(&Operation, &Connection);
     Operation.request = &Request;
     Operation.connection = &Connection;
     SessionConfig = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
@@ -65,7 +66,7 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
+void test_KineticOperation_Init_should_configure_the_operation(void)
 {
     LOG_LOCATION;
     KineticOperation op = {
@@ -74,273 +75,13 @@ void test_KINETIC_OPERATION_INIT_should_configure_the_operation(void)
         .response = NULL,
     };
 
-    KINETIC_OPERATION_INIT(&op, &Connection);
+    KineticOperation_Init(&op, &Connection);
 
     TEST_ASSERT_EQUAL_PTR(&Connection, op.connection);
     TEST_ASSERT_NULL(op.request);
     TEST_ASSERT_NULL(op.response);
 }
 
-void test_KineticOperation_SendRequest_should_transmit_PDU_with_no_value_payload(void)
-{
-    LOG_LOCATION;
-    KineticProto_Message* msg = &Request.protoData.message.message;
-    ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-
-    uint8_t packedCommandBytes[1024];
-
-    // Pack message `command` element in order to precalculate fully packed message size 
-    size_t expectedCommandLen = KineticProto_command__get_packed_size(&Request.protoData.message.command);
-    Request.protoData.message.message.commandBytes.data = packedCommandBytes;
-    assert(Request.protoData.message.message.commandBytes.data != NULL);
-    size_t packedCommandLen = KineticProto_command__pack(
-        &Request.protoData.message.command,
-        Request.protoData.message.message.commandBytes.data);
-    assert(packedCommandLen == expectedCommandLen);
-    Request.protoData.message.message.commandBytes.len = packedCommandLen;
-    Request.protoData.message.message.has_commandBytes = true;
-
-    // Create NBO copy of header for sending
-    Request.header.versionPrefix = 'F';
-    Request.header.protobufLength = KineticProto_Message__get_packed_size(msg);
-    Request.header.valueLength = 0;
-    Request.headerNBO.versionPrefix = Request.header.versionPrefix;
-    Request.headerNBO.protobufLength = KineticNBO_FromHostU32(Request.header.protobufLength);
-    Request.headerNBO.valueLength = KineticNBO_FromHostU32(Request.header.valueLength);
-
-    // Setup expectations for interaction
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message, Request.connection->session.config.hmacKey);
-    KineticSocket_BeginPacket_Expect(Connection.socket);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
-    KineticSocket_FinishPacket_Expect(Connection.socket);
-
-    KineticStatus status = KineticOperation_SendRequest(&Operation);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-}
-
-void test_KineticOperation_SendRequest_should_send_PDU_with_value_payload(void)
-{
-    LOG_LOCATION;
-    ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-    uint8_t valueData[128];
-    ByteBuffer valueBuffer = ByteBuffer_Create(valueData, sizeof(valueData), 0);
-    ByteBuffer_AppendCString(&valueBuffer, "Some arbitrary value");
-    KineticEntry entry = {.value = valueBuffer};
-    Operation.entry = &entry;
-    Operation.valueEnabled = true;
-    Operation.sendValue = true;
-
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac,
-        &Request.protoData.message.message, Request.connection->session.config.hmacKey);
-    KineticSocket_BeginPacket_Expect(Connection.socket);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &entry.value, KINETIC_STATUS_SUCCESS);
-    KineticSocket_FinishPacket_Expect(Connection.socket);
-
-    KineticStatus status = KineticOperation_SendRequest(&Operation);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-}
-
-void test_KineticOperation_SendRequest_should_send_the_specified_message_and_return_false_upon_failure_to_send_header(void)
-{
-    LOG_LOCATION;
-    ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-    char valueData[] = "Some arbitrary value";
-    KineticEntry entry = {
-        .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
-    };
-    Operation.entry = &entry;
-    Operation.valueEnabled = true;
-    Operation.sendValue = true;
-
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message,
-        Request.connection->session.config.hmacKey);
-    KineticSocket_BeginPacket_Expect(Connection.socket);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SOCKET_ERROR);
-    KineticSocket_FinishPacket_Expect(Connection.socket);
-
-    KineticStatus status = KineticOperation_SendRequest(&Operation);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SOCKET_ERROR, status);
-}
-
-void test_KineticOperation_SendRequest_should_send_the_specified_message_and_return_false_upon_failure_to_send_protobuf(void)
-{
-    LOG_LOCATION;
-    ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-    char valueData[] = "Some arbitrary value";
-    KineticEntry entry = {
-        .value = ByteBuffer_Create(valueData, strlen(valueData), strlen(valueData))
-    };
-    Operation.entry = &entry;
-    Operation.request = &Request;
-    Operation.valueEnabled = true;
-    Operation.sendValue = true;
-
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac,
-        &Request.protoData.message.message, Request.connection->session.config.hmacKey);
-    KineticSocket_BeginPacket_Expect(Connection.socket);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SOCKET_TIMEOUT);
-    KineticSocket_FinishPacket_Expect(Connection.socket);
-
-    KineticStatus status = KineticOperation_SendRequest(&Operation);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SOCKET_TIMEOUT, status);
-}
-
-void test_KineticOperation_SendRequest_should_send_the_specified_message_and_return_KineticStatus_if_value_write_fails(void)
-{
-    LOG_LOCATION;
-    ByteBuffer headerNBO = ByteBuffer_Create(&Request.headerNBO, sizeof(KineticPDUHeader), sizeof(KineticPDUHeader));
-    uint8_t valueData[128];
-    KineticEntry entry = {
-        .value = ByteBuffer_Create(valueData, sizeof(valueData), 0)
-    };
-    ByteBuffer_AppendCString(&entry.value, "Some arbitrary value");
-    Operation.entry = &entry;
-    Operation.request = &Request;
-    Operation.valueEnabled = true;
-    Operation.sendValue = true;
-
-    KineticHMAC_Init_Expect(&Request.hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-    KineticHMAC_Populate_Expect(&Request.hmac, &Request.protoData.message.message, Request.connection->session.config.hmacKey);
-    KineticSocket_BeginPacket_Expect(Connection.socket);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &headerNBO, KINETIC_STATUS_SUCCESS);
-    KineticSocket_WriteProtobuf_ExpectAndReturn(Connection.socket, &Request, KINETIC_STATUS_SUCCESS);
-    KineticSocket_Write_ExpectAndReturn(Connection.socket, &entry.value, KINETIC_STATUS_SOCKET_TIMEOUT);
-    KineticSocket_FinishPacket_Expect(Connection.socket);
-
-    KineticStatus status = KineticOperation_SendRequest(&Operation);
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SOCKET_TIMEOUT, status);
-}
-
-void test_KineticOperation_GetStatus_should_return_KINETIC_STATUS_INVALID_if_no_KineticProto_Command_Status_StatusCode_in_response(void)
-{
-    LOG_LOCATION;
-    KineticStatus status;
-
-    status = KineticOperation_GetStatus(NULL);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    Operation.response = NULL;
-    KineticPDU_GetStatus_ExpectAndReturn(NULL, KINETIC_STATUS_INVALID);
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID, status);
-
-    // Build a valid NOOP to facilitate testing protobuf structure and status extraction
-    Operation.request = &Request;
-    Operation.response = &Response;
-    Operation.connection->session = Session;
-    KineticSession_IncrementSequence_Expect(&Session);
-    KineticOperation_BuildNoop(&Operation);
-
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_SUCCESS);
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
-
-    KineticPDU_GetStatus_ExpectAndReturn(&Response, KINETIC_STATUS_CONNECTION_ERROR);
-    status = KineticOperation_GetStatus(&Operation);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
-}
-
-void test_KineticOperation_AssociateResponseWithOperation_should_return_NULL_if_supplied_PDU_is_invalid(void)
-{
-    LOG_LOCATION;
-    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithOperation(NULL));
-
-    Response.type = KINETIC_PDU_TYPE_RESPONSE;
-    TEST_ASSERT_NOT_NULL(Response.command);
-    TEST_ASSERT_NOT_NULL(Response.command->header);
-    TEST_ASSERT_FALSE(Response.command->header->has_ackSequence);
-
-    Response.type = KINETIC_PDU_TYPE_REQUEST;
-    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithOperation(&Response));
-
-    Response.type = KINETIC_PDU_TYPE_UNSOLICITED;
-    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithOperation(&Response));
-
-    Response.type = KINETIC_PDU_TYPE_RESPONSE;
-    Response.command->header->has_ackSequence = false;
-    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithOperation(&Response));
-
-    Response.command->header = NULL;
-    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithOperation(&Response));
-
-    Response.command = NULL;
-    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithOperation(&Response));
-}
-
-void test_KineticOperation_AssociateResponseWithOperation_should_return_NULL_if_no_matching_request_was_found_in_PDU_list(void)
-{
-    LOG_LOCATION;
-
-    Response.type = KINETIC_PDU_TYPE_RESPONSE;
-    Response.command->header->has_ackSequence = true;
-    Response.command->header->ackSequence = 9876543210;
-    TEST_ASSERT_EQUAL_PTR(&Connection, Response.connection);
-    TEST_ASSERT_NOT_NULL(Response.command);
-    TEST_ASSERT_NOT_NULL(Response.command->header);
-
-    KineticOperation ops[3];
-    for(int i = 0; i < 3; i++) {
-        KINETIC_PDU_INIT_WITH_COMMAND(&Requests[i], &Connection);
-        Requests[i].command->header->has_sequence = true;
-        Requests[i].type = KINETIC_PDU_TYPE_REQUEST;
-        KINETIC_OPERATION_INIT(&ops[i], &Connection);
-    }
-
-    // Empty operations list should result in NULL being returned (no match)
-    KineticAllocator_GetFirstOperation_ExpectAndReturn(&Connection, NULL);
-    TEST_ASSERT_NULL(KineticOperation_AssociateResponseWithOperation(&Response));
-
-    // A list with only the expected operation w/ matching request PDU
-    Requests[0].command->header->sequence = 9876543210;
-    ops[0].request = &Requests[0];
-    KineticAllocator_GetFirstOperation_ExpectAndReturn(&Connection, &ops[0]);
-    TEST_ASSERT_EQUAL_PTR(&ops[0], KineticOperation_AssociateResponseWithOperation(&Response));
-    TEST_ASSERT_EQUAL_PTR(&Response, ops[0].response);
-
-    // A list starting with a non-matching PDU, followed by the expected PDU
-    Requests[0].command->header->sequence = 12345;
-    ops[0].request = &Requests[0];
-    ops[0].response = NULL;
-    Requests[1].command->header->sequence = 9876543210;
-    ops[1].request = &Requests[1];
-    ops[1].response = NULL;
-    KineticAllocator_GetFirstOperation_ExpectAndReturn(&Connection, &ops[0]);
-    KineticAllocator_GetNextOperation_ExpectAndReturn(&Connection, &ops[0], &ops[1]);
-    TEST_ASSERT_EQUAL_PTR(&ops[1], KineticOperation_AssociateResponseWithOperation(&Response));
-    TEST_ASSERT_EQUAL_PTR(&Response, ops[1].response);
-    TEST_ASSERT_NULL(ops[0].response);
-
-    // A list starting with with multiple non-matching PDUs, followed by the expected PDU
-    Requests[0].command->header->sequence = 12345;
-    ops[0].request = &Requests[0];
-    ops[0].response = NULL;
-    Requests[1].command->header->sequence = 45678;
-    ops[1].request = &Requests[1];
-    ops[1].response = NULL;
-    Requests[2].command->header->sequence = 9876543210;
-    ops[2].request = &Requests[2];
-    ops[2].response = NULL;
-    KineticAllocator_GetFirstOperation_ExpectAndReturn(&Connection, &ops[0]);
-    KineticAllocator_GetNextOperation_ExpectAndReturn(&Connection, &ops[0], &ops[1]);
-    KineticAllocator_GetNextOperation_ExpectAndReturn(&Connection, &ops[1], &ops[2]);
-    TEST_ASSERT_EQUAL_PTR(&ops[2], KineticOperation_AssociateResponseWithOperation(&Response));
-    TEST_ASSERT_EQUAL_PTR(&Response, ops[2].response);
-    TEST_ASSERT_NULL(ops[1].response);
-    TEST_ASSERT_NULL(ops[0].response);
-}
 
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
@@ -369,8 +110,8 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     // hmac: "..."
     //
 
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, Request.protoData.message.command.header->messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, Request.message.command.header->messageType);
     TEST_ASSERT_NULL(Operation.response);
 }
 
@@ -462,7 +203,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ByteBuffer_CreateWithArray(value),
     };
-    KineticMessage_ConfigureKeyValue_Expect(&Operation.request->protoData.message, &entry);
+    KineticMessage_ConfigureKeyValue_Expect(&Operation.request->message, &entry);
     //   }
     // }
     // hmac: "..."
@@ -474,9 +215,9 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     // Ensure proper message type
     TEST_ASSERT_TRUE(Operation.valueEnabled);
     TEST_ASSERT_TRUE(Operation.sendValue);
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
-        Request.protoData.message.command.header->messageType);
+        Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry->value.array);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
     TEST_ASSERT_NULL(Operation.response);
@@ -496,7 +237,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
 
     KineticSession_IncrementSequence_Expect(&Session);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGet(&Operation, &entry);
 
@@ -514,8 +255,8 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     //
     //     // The mesageType should be GET
     //     messageType: GET
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.protoData.message.command.header->messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
     //   }
     //   body {
     //     keyValue {
@@ -549,7 +290,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
 
     KineticSession_IncrementSequence_Expect(&Session);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGet(&Operation, &entry);
 
@@ -567,8 +308,8 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     //
     //     // The mesageType should be GET
     //     messageType: GET
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.protoData.message.command.header->messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
     //   }
     //   body {
     //     keyValue {
@@ -601,13 +342,13 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
 
     KineticSession_IncrementSequence_Expect(&Session);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetNext(&Operation, &entry);
 
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
-        Request.protoData.message.command.header->messageType);
+        Request.message.command.header->messageType);
 
     TEST_ASSERT_TRUE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
@@ -631,13 +372,13 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_me
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
 
     KineticSession_IncrementSequence_Expect(&Session);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetNext(&Operation, &entry);
 
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
-        Request.protoData.message.command.header->messageType);
+        Request.message.command.header->messageType);
 
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
@@ -660,13 +401,13 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
 
     KineticSession_IncrementSequence_Expect(&Session);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetPrevious(&Operation, &entry);
 
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
-        Request.protoData.message.command.header->messageType);
+        Request.message.command.header->messageType);
 
     TEST_ASSERT_TRUE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
@@ -690,13 +431,13 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
 
     KineticSession_IncrementSequence_Expect(&Session);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetPrevious(&Operation, &entry);
 
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
-        Request.protoData.message.command.header->messageType);
+        Request.message.command.header->messageType);
 
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
@@ -713,9 +454,9 @@ void test_KineticOperation_BuildFlush_should_build_a_FLUSHALLDATA_operation(void
 
     KineticOperation_BuildFlush(&Operation);
 
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA,
-        Request.protoData.message.command.header->messageType);
+        Request.message.command.header->messageType);
 
     TEST_ASSERT_NULL(Operation.response);
 }
@@ -728,7 +469,7 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     KineticEntry entry = {.key = ByteBuffer_CreateWithArray(key), .value = ByteBuffer_CreateWithArray(value)};
 
     KineticSession_IncrementSequence_Expect(&Session);
-    KineticMessage_ConfigureKeyValue_Expect(&Request.protoData.message, &entry);
+    KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildDelete(&Operation, &entry);
 
@@ -746,8 +487,8 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     //     sequence: ...
     //     // messageType should be DELETE
     //     messageType: DELETE
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE, Request.protoData.message.command.header->messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE, Request.message.command.header->messageType);
     //   }
     //   body {
     //     keyValue {
@@ -798,7 +539,7 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     ByteBufferArray keys = {.buffers = keyBuffers, .count = numKeysInRange};
 
     KineticSession_IncrementSequence_Expect(&Session);
-    KineticMessage_ConfigureKeyRange_Expect(&Request.protoData.message, &range);
+    KineticMessage_ConfigureKeyRange_Expect(&Request.message, &range);
 
     KineticOperation_BuildGetKeyRange(&Operation, &range, &keys);
 
@@ -865,8 +606,7 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     TEST_ASSERT_NULL(Operation.entry);
     TEST_ASSERT_EQUAL_PTR(&Request, Operation.request);
     TEST_ASSERT_NULL(Operation.response);
-    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message, Request.proto);
-    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.command, Request.command);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.command, Request.command);
 }
 
 
@@ -919,11 +659,11 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
     //   }
     // }
     // hmac: "..."
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG,
-        Request.protoData.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.body, Request.command->body);
-    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.getLog, Request.command->body->getLog);
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.getLog, Request.command->body->getLog);
     TEST_ASSERT_NOT_NULL(Request.command->body->getLog->types);
     TEST_ASSERT_EQUAL(1, Request.command->body->getLog->n_types);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
@@ -962,11 +702,26 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
     ByteBuffer oldKey2 = ByteBuffer_Create((void*)0x5678, 12, 12);
     ByteBuffer newKey2 = ByteBuffer_Create((void*)0x8765, 200, 200);
 
+    KineticP2P_OperationData ops2[] ={
+        {
+            .key = oldKey2,
+            .newKey = newKey2,
+        }
+    };
+
+    KineticP2P_Operation chained_p2pOp = {
+        .peer.hostname = "hostname1",
+        .peer.port = 4321,
+        .numOperations = 1,
+        .operations = ops2
+    };
+
     KineticP2P_OperationData ops[] ={
         {
             .key = oldKey1,
             .version = version1,
             .newKey = newKey1,
+            .chainedOperation = &chained_p2pOp,
         },
         {
             .key = oldKey2,
@@ -987,109 +742,83 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
 
     KineticOperation_BuildP2POperation(&Operation, &p2pOp);
 
-    TEST_ASSERT_TRUE(Request.protoData.message.command.header->has_messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH,
-        Request.protoData.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.body, Request.command->body);
-    TEST_ASSERT_EQUAL_PTR(&Request.protoData.message.p2pOp, Request.command->body->p2pOperation);
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    
+    TEST_ASSERT_NOT_NULL(Request.command->body->p2pOperation);
+
     TEST_ASSERT_EQUAL("hostname",
         Request.command->body->p2pOperation->peer->hostname);
 
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->peer->has_port);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->peer->has_port);
 
     TEST_ASSERT_EQUAL(1234,
         Request.command->body->p2pOperation->peer->port);
-
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->peer->has_tls);
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->peer->tls);
-
-    TEST_ASSERT_EQUAL(false,
-        Request.command->body->p2pOperation->allChildOperationsSucceeded);
-
-    TEST_ASSERT_EQUAL(false,
-        Request.command->body->p2pOperation->has_allChildOperationsSucceeded);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->peer->has_tls);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->peer->tls);
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->allChildOperationsSucceeded);
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->has_allChildOperationsSucceeded);
 
     TEST_ASSERT_EQUAL(2,
         Request.command->body->p2pOperation->n_operation);
 
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->operation[0]->has_key);
-
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->has_key);
     TEST_ASSERT_EQUAL(oldKey1.array.data,
         Request.command->body->p2pOperation->operation[0]->key.data);
-
     TEST_ASSERT_EQUAL(oldKey1.bytesUsed,
         Request.command->body->p2pOperation->operation[0]->key.len);
-
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->operation[0]->has_newKey);
-
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->has_newKey);
     TEST_ASSERT_EQUAL(newKey1.array.data,
         Request.command->body->p2pOperation->operation[0]->newKey.data);
-
     TEST_ASSERT_EQUAL(newKey1.bytesUsed,
         Request.command->body->p2pOperation->operation[0]->newKey.len);
-
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->operation[0]->has_version);
-
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->has_version);
     TEST_ASSERT_EQUAL(version1.array.data,
         Request.command->body->p2pOperation->operation[0]->version.data);
-
     TEST_ASSERT_EQUAL(version1.bytesUsed,
         Request.command->body->p2pOperation->operation[0]->version.len);
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->has_force);
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->force);
+    TEST_ASSERT_NOT_NULL(Request.command->body->p2pOperation->operation[0]->p2pop);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->peer->has_port);
+    TEST_ASSERT_EQUAL(4321,
+        Request.command->body->p2pOperation->operation[0]->p2pop->peer->port);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->peer->has_tls);
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->p2pop->peer->tls);
+    TEST_ASSERT_EQUAL(1,
+        Request.command->body->p2pOperation->operation[0]->p2pop->n_operation);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->has_key);
+    TEST_ASSERT_EQUAL(oldKey2.array.data,
+        Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->key.data);
+    TEST_ASSERT_EQUAL(oldKey2.bytesUsed,
+        Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->key.len);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->has_newKey);
+    TEST_ASSERT_EQUAL(newKey2.array.data,
+        Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->newKey.data);
+    TEST_ASSERT_EQUAL(newKey2.bytesUsed,
+        Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->newKey.len);
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->has_version);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->has_force);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->operation[0]->force);
+    TEST_ASSERT_NULL(Request.command->body->p2pOperation->operation[0]->status);
 
-    TEST_ASSERT_EQUAL(false,
-        Request.command->body->p2pOperation->operation[0]->has_force);
-
-    TEST_ASSERT_EQUAL(false,
-        Request.command->body->p2pOperation->operation[0]->force);
-
-    TEST_ASSERT_EQUAL(NULL,
-        Request.command->body->p2pOperation->operation[0]->p2pop);
-
-    TEST_ASSERT_EQUAL(NULL,
-        Request.command->body->p2pOperation->operation[0]->status);
-
-
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->operation[1]->has_key);
-
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[1]->has_key);
     TEST_ASSERT_EQUAL(oldKey2.array.data,
         Request.command->body->p2pOperation->operation[1]->key.data);
-
     TEST_ASSERT_EQUAL(oldKey2.bytesUsed,
         Request.command->body->p2pOperation->operation[1]->key.len);
-
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->operation[1]->has_newKey);
-
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[1]->has_newKey);
     TEST_ASSERT_EQUAL(newKey2.array.data,
         Request.command->body->p2pOperation->operation[1]->newKey.data);
-
     TEST_ASSERT_EQUAL(newKey2.bytesUsed,
         Request.command->body->p2pOperation->operation[1]->newKey.len);
-
-    TEST_ASSERT_EQUAL(false,
-        Request.command->body->p2pOperation->operation[1]->has_version);
-
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->operation[1]->has_force);
-
-    TEST_ASSERT_EQUAL(true,
-        Request.command->body->p2pOperation->operation[1]->force);
-
-    TEST_ASSERT_EQUAL(NULL,
-        Request.command->body->p2pOperation->operation[1]->p2pop);
-
-    TEST_ASSERT_EQUAL(NULL,
-        Request.command->body->p2pOperation->operation[1]->status);
-    
-
-
+    TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[1]->has_version);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[1]->has_force);
+    TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[1]->force);
+    TEST_ASSERT_NULL(Request.command->body->p2pOperation->operation[1]->p2pop);
+    TEST_ASSERT_NULL(Request.command->body->p2pOperation->operation[1]->status);
 
     TEST_ASSERT_EQUAL_PTR(&p2pOp, Operation.p2pOp);
     TEST_ASSERT_NULL(Operation.response);
@@ -1097,11 +826,10 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
     // This just free's the malloc'd memory and sets statuses to "invalid" (since no operation was actually performed)
     KineticOperation_P2POperationCallback(&Operation, KINETIC_STATUS_SUCCESS);
 
-
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID,
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_NOT_ATTEMPTED,
         p2pOp.operations[0].resultStatus);
-
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID,
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_NOT_ATTEMPTED,
         p2pOp.operations[1].resultStatus);
-
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_NOT_ATTEMPTED,
+        p2pOp.operations[0].chainedOperation->operations[0].resultStatus);
 }

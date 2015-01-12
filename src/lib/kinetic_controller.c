@@ -19,33 +19,14 @@
 */
 
 #include "kinetic_controller.h"
-#include "kinetic_connection.h"
+#include "kinetic_session.h"
 #include "kinetic_operation.h"
 #include "kinetic_pdu.h"
 #include "kinetic_socket.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include <pthread.h>
-
-KineticStatus KineticController_Init(KineticSession const * const session)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
-
-    int pthreadStatus = pthread_create(
-        &session->connection->threadID,
-        NULL,
-        KineticController_ReceiveThread,
-        &session->connection->thread);
-    if (pthreadStatus != 0) {
-        char errMsg[256];
-        Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
-        LOGF0("Failed creating worker thread w/error: %s", errMsg);
-        return KINETIC_STATUS_CONNECTION_ERROR;
-    }
-
-    return KINETIC_STATUS_SUCCESS;
-}
+#include "bus.h"
 
 KineticOperation* KineticController_CreateOperation(KineticSession const * const session)
 {
@@ -59,8 +40,7 @@ KineticOperation* KineticController_CreateOperation(KineticSession const * const
         return NULL;
     }
 
-    LOGF1("\n"
-         "--------------------------------------------------\n"
+    LOGF3("--------------------------------------------------\n"
          "Building new operation on session @ 0x%llX", session);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
@@ -80,8 +60,8 @@ typedef struct {
 static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
 {
     DefaultCallbackData * data = client_data;
-    data->status = kinetic_data->status;
     pthread_mutex_lock(&data->receiveCompleteMutex);
+    data->status = kinetic_data->status;
     pthread_cond_signal(&data->receiveComplete);
     pthread_mutex_unlock(&data->receiveCompleteMutex);
 }
@@ -97,19 +77,9 @@ static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* const closure)
 {
     assert(operation != NULL);
+    assert(operation->connection != NULL);
+    assert(&operation->connection->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
-
-    LOGF1("Executing operation: 0x%llX", operation);
-    if (operation->entry != NULL &&
-        operation->entry->value.array.data != NULL &&
-        operation->entry->value.bytesUsed > 0)
-    {
-        LOGF1("  Sending PDU (0x%0llX) w/value (%zu bytes)",
-            operation->request, operation->entry->value.bytesUsed);
-    }
-    else {
-        LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);
-    }
 
     if (closure != NULL)
     {
@@ -142,132 +112,131 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     }
 }
 
-void KineticController_Pause(KineticSession const * const session, bool pause)
+KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
 {
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    session->connection->thread.paused = pause;
+    switch(status)
+    {
+        // TODO fix all these mappings
+        case BUS_SEND_SUCCESS:
+            return KINETIC_STATUS_SUCCESS;
+        case BUS_SEND_TX_TIMEOUT:
+            return KINETIC_STATUS_SOCKET_TIMEOUT;
+        case BUS_SEND_TX_FAILURE:
+            return KINETIC_STATUS_SOCKET_ERROR;
+        case BUS_SEND_RX_TIMEOUT:
+            return KINETIC_STATUS_OPERATION_TIMEDOUT;
+        case BUS_SEND_RX_FAILURE:
+            return KINETIC_STATUS_SOCKET_ERROR;
+        case BUS_SEND_BAD_RESPONSE:
+            return KINETIC_STATUS_SOCKET_ERROR;
+        case BUS_SEND_UNREGISTERED_SOCKET:
+            return KINETIC_STATUS_SOCKET_ERROR;
+        case BUS_SEND_UNDEFINED:
+        default:
+            assert(false);
+            return KINETIC_STATUS_INVALID;
+    }
 }
 
-void KineticController_HandleIncomingPDU(KineticConnection* const connection)
+static const char *bus_error_string(bus_send_status_t t) {
+    switch (t) {
+    default:
+    case BUS_SEND_UNDEFINED:
+        return "undefined";
+    case BUS_SEND_SUCCESS:
+        return "success";
+    case BUS_SEND_TX_TIMEOUT:
+        return "tx_timeout";
+    case BUS_SEND_TX_FAILURE:
+        return "tx_failure";
+    case BUS_SEND_RX_TIMEOUT:
+        return "rx_timeout";
+    case BUS_SEND_RX_FAILURE:
+        return "rx_failure";
+    case BUS_SEND_BAD_RESPONSE:
+        return "bad_response";
+    }
+}
+void KineticController_HandleUnexecpectedResponse(void *msg,
+                                                  int64_t seq_id,
+                                                  void *bus_udata,
+                                                  void *socket_udata)
 {
-    KineticPDU* response = KineticAllocator_NewPDU(connection);
-    KineticStatus status = KineticPDU_ReceiveMain(response);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        LOGF0("ERROR: PDU receive reported an error: %s",
+    KineticResponse * response = msg;
+    KineticConnection* connection = socket_udata;
+
+    (void)seq_id;
+    (void)bus_udata;
+
+    KineticLogger_LogProtobuf(2, response->proto);
+
+
+    // Handle unsolicited status PDUs
+    if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
+        if (response->command != NULL &&
+            response->command->header != NULL &&
+            response->command->header->has_connectionID)
+        {
+            LOGF1("[PDU RX UNSOLICTED] pdu: 0x%0llX, session: 0x%llX, bus: 0x%llX, "
+                "protoLen: %u, valueLen: %u",
+                response, &connection->session, connection->messageBus,
+                response->header.protobufLength, response->header.valueLength);
+
+            // Extract connectionID from unsolicited status message
+            connection->connectionID = response->command->header->connectionID;
+            LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
+                connection->connectionID);
+        }
+        else {
+            LOG0("WARNING: Unsolicited PDU in invalid. Does not specify connection ID!");
+        }
+        KineticAllocator_FreeKineticResponse(response);
+    }
+    else
+    {
+        LOG0("WARNING: Received unexpected response that was not an unsolicited status.");
+    }
+}
+
+void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata)
+{
+    KineticOperation* op = udata;
+
+    KineticStatus status = bus_to_kinetic_status(res->status);
+
+    if (status == KINETIC_STATUS_SUCCESS) {
+
+        KineticResponse * response = res->u.response.opaque_msg;
+        if (response->command != NULL &&
+            response->command->status != NULL &&
+            response->command->status->has_code)
+        {
+            status = KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
+            KineticLogger_LogProtobuf(3, response->proto);
+            op->response = response;
+        }
+        else
+        {
+            status = KINETIC_STATUS_INVALID;
+        }
+
+        LOGF1("[PDU RX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, "
+            "protoLen: %u, valueLen: %u, status: %s",
+            response, op, &op->connection->session, op->connection->messageBus,
+            response->header.protobufLength, response->header.valueLength,
             Kinetic_GetStatusDescription(status));
     }
-
-    if (response->proto != NULL && response->proto->has_authType) {
-
-        // Handle unsolicited status PDUs
-        if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
-            response->type = KINETIC_PDU_TYPE_UNSOLICITED;
-            if (response->command != NULL &&
-                response->command->header != NULL &&
-                response->command->header->has_connectionID)
-            {
-                // Extract connectionID from unsolicited status message
-                response->connection->connectionID = response->command->header->connectionID;
-                LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
-                    response->connection->connectionID);
-            }
-            else {
-                LOG0("WARNING: Unsolicited PDU in invalid. Does not specify connection ID!");
-            }
-            KineticAllocator_FreePDU(connection, response);
-        }
-
-        // Associate solicited response PDUs with their requests
-        else {
-            response->type = KINETIC_PDU_TYPE_RESPONSE;
-            KineticOperation* op = KineticOperation_AssociateResponseWithOperation(response);
-            if (op == NULL) {
-                LOG0("Failed to find request matching received response PDU!");
-                KineticAllocator_FreePDU(connection, response);
-            }
-            else {
-                LOG2("Found associated operation/request for response PDU.");
-                size_t valueLength = KineticPDU_GetValueLength(response);
-                if (valueLength > 0) {
-                    // we need to try to read the value off the socket, even in the case of an error
-                    //  otherwise the stream will get out of sync
-                    KineticStatus valueStatus = KineticPDU_ReceiveValue(op->connection->socket,
-                        &op->entry->value, valueLength);
-
-                    // so we only care about the status of the value read if the operation
-                    //   succeeded 
-                    if (status == KINETIC_STATUS_SUCCESS) {
-                        status = valueStatus;
-                    }
-                }
-
-                // Call operation-specific callback, if configured
-                if (status == KINETIC_STATUS_SUCCESS && op->callback != NULL) {
-                    status = op->callback(op, KINETIC_STATUS_SUCCESS);
-                }
-
-                if (status == KINETIC_STATUS_SUCCESS) {
-                    status = KineticPDU_GetStatus(response);
-                }
-                
-                LOGF2("Response PDU received w/status %s, %i",
-                    Kinetic_GetStatusDescription(status), status);
-
-                KineticOperation_Complete(op, status);
-            }
-        }
-    }
-    else {
-        // Free invalid PDU
-        KineticAllocator_FreePDU(connection, response);
-    }
-}
-
-static KineticStatus service_controller(KineticConnection* const connection)
-{
-    // Wait for and receive a PDU
-    KineticWaitStatus wait_status = KineticSocket_WaitUntilDataAvailable(connection->socket, 100);
-    switch(wait_status)
+    else
     {
-        case KINETIC_WAIT_STATUS_DATA_AVAILABLE:
-        {
-            KineticController_HandleIncomingPDU(connection);
-        } break;
-        case KINETIC_WAIT_STATUS_TIMED_OUT:
-        case KINETIC_WAIT_STATUS_RETRYABLE_ERROR:
-            break; // Break upon rcoverable/retryable conditions in order to retry 
-        default:
-        case KINETIC_WAIT_STATUS_FATAL_ERROR:
-        {
-            LOG0("ERROR: Socket error while waiting for PDU to arrive");
-            return KINETIC_STATUS_SOCKET_ERROR;
-        } break;
+        // pull out bus error?
+        LOGF1("Error receiving response, got message bus error: %s", bus_error_string(res->status));
     }
 
-    KineticOperation_TimeoutOperations(connection);
-
-    return KINETIC_STATUS_SUCCESS;
-}
-
-void* KineticController_ReceiveThread(void* thread_arg)
-{
-    KineticThread* thread = thread_arg;
-
-    while(!thread->abortRequested && !thread->fatalError) {
-
-        // Do not service PDUs if thread paused
-        if (thread->paused) {
-            struct timespec sleepDuration = {.tv_nsec = 500000};
-            nanosleep(&sleepDuration, NULL);
-            continue;
-        } 
-
-        if (service_controller(thread->connection) != KINETIC_STATUS_SUCCESS) {
-            thread->fatalError = true;
-        }
+    // Call operation-specific callback, if configured
+    if (op->callback != NULL) {
+        status = op->callback(op, status);
     }
 
-    LOG3("Worker thread terminated!");
-    return (void*)NULL;
+    KineticOperation_Complete(op, status);
 }
+

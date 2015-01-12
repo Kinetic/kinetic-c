@@ -23,13 +23,10 @@
 
 #include "kinetic_types_internal.h"
 
-void KineticPDU_Init(KineticPDU* const pdu, KineticConnection* const connection);
-KineticStatus KineticPDU_Send(KineticPDU* request);
-KineticStatus KineticPDU_ReceiveMain(KineticPDU* response);
-KineticStatus KineticPDU_ReceiveValue(int socket_desc, ByteBuffer* value, size_t value_length);
-size_t KineticPDU_GetValueLength(KineticPDU* const pdu);
-KineticStatus KineticPDU_GetStatus(KineticPDU* pdu);
-KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticPDU* pdu);
-KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticPDU* pdu);
+bool KineticPDU_InitBus(int log_level, KineticClient * client);
+void KineticPDU_DeinitBus(KineticClient * const client);
+KineticStatus KineticPDU_GetStatus(KineticResponse* pdu);
+KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticResponse* pdu);
+KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticResponse* pdu);
 
 #endif // _KINETIC_PDU_H

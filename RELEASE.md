@@ -1,3 +1,12 @@
+v0.10.0 (kinetic-protocol 3.0.5)
+-------------------------------
+* Added put_nonblocking and get_nonblocking examples
+* Added KineticSemaphore API to provide a simpler wrapper around a common use of pthread condition variables as a thread safe way to signal when an async operation has finished
+* Switched internal message infrastructure to use a threadpool. This will allow for a much higher number active connections and outstanding commands.
+* KineticClient_Init now returns a KineticClient pointer (internally, it's a handle to the threadpool) that must be passed to KineticClient_CreateConnection() in order to create new connections and must also be passed to KineticClient_Shutdown() on shutdown
+* Improved I/O examples to demonstrate client write operations for blocking/non-blocking (asynchrounous) and single/multi-threaded.
+* Added consolidated performance test which reports metrics on PUT/GET/DELETE seqeunces (test/system/test_system_async_throughput.c).
+
 v0.9.2 (kinetic-protocol 3.0.5)
 -------------------------------
 * Added missing mutex lock causing a concurrency issue.
@@ -5,8 +14,7 @@ v0.9.2 (kinetic-protocol 3.0.5)
 
 v0.9.1 (kinetic-protocol 3.0.5)
 -------------------------------
-* Added `keys->used` to ByteBufferArray to reflect the number of buffers actually used, and updated `KineticClient_GetKeyRange()` to populate it.
-* Added `get_key_range.c` example for `KineticClient_GetKeyRange()`.
+* Added get_key_range.c example for KineticClient_GetKeyRange().
 
 v0.9.0 (kinetic-protocol 3.0.5)
 -------------------------------

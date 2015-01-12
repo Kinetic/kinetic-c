@@ -17,31 +17,8 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#include "byte_array.h"
-#include "unity.h"
-#include "unity_helper.h"
 #include "system_test_fixture.h"
-#include "protobuf-c/protobuf-c.h"
-#include "socket99.h"
-#include <string.h>
-#include <stdlib.h>
-
 #include "kinetic_client.h"
-#include "kinetic_types.h"
-#include "kinetic_types_internal.h"
-#include "kinetic_controller.h"
-#include "kinetic_device_info.h"
-#include "kinetic_serial_allocator.h"
-#include "kinetic_proto.h"
-#include "kinetic_allocator.h"
-#include "kinetic_message.h"
-#include "kinetic_pdu.h"
-#include "kinetic_logger.h"
-#include "kinetic_operation.h"
-#include "kinetic_hmac.h"
-#include "kinetic_connection.h"
-#include "kinetic_socket.h"
-#include "kinetic_nbo.h"
 
 static bool suiteInitialized = false;
 static SystemTestFixture Fixture;
@@ -50,16 +27,15 @@ static bool add_keys(int count)
 {
     static const ssize_t sz = 10;
     char key_buf[sz];
+    char tag_buf[sz];
     char value_buf[sz];
 
     for (int i = 0; i < count; i++) {
 
-        ByteBuffer KeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "mykey_%02d", i);
-        ByteBuffer ValueBuffer = ByteBuffer_CreateAndAppendFormattedCString(value_buf, sz, "val_%02d", i);
-
         KineticEntry entry = {
-            .key = KeyBuffer,
-            .value = ValueBuffer,
+            .key = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "mykey_%02d", i),
+            .tag = ByteBuffer_CreateAndAppendFormattedCString(tag_buf, sz, "mytag_%02d", i),
+            .value = ByteBuffer_CreateAndAppendFormattedCString(value_buf, sz, "val_%02d", i),
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .force = true,
         };
@@ -73,7 +49,7 @@ static bool add_keys(int count)
 void setUp(void)
 {
     if (!suiteInitialized) {
-        SystemTestSetup(&Fixture);
+        SystemTestSetup(&Fixture, 3);
         add_keys(3);
     }
 }
@@ -81,7 +57,7 @@ void setUp(void)
 void tearDown(void)
 {
     LOG_LOCATION;
-    // SystemTestTearDown(&Fixture);
+    SystemTestTearDown(&Fixture);
 }
 
 void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device(void)
@@ -90,7 +66,7 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device(void)
     const size_t keyLen = 64;
     uint8_t startKeyData[keyLen], endKeyData[keyLen];
     KineticKeyRange range = {
-        .startKey = ByteBuffer_CreateAndAppendCString(startKeyData, sizeof(startKeyData), "mykey_00"),
+        .startKey = ByteBuffer_CreateAndAppendCString(startKeyData, sizeof(startKeyData), "mykey_"),
         .endKey = ByteBuffer_CreateAndAppendCString(endKeyData, sizeof(endKeyData), "mykey_01"),
         .startKeyInclusive = true,
         .endKeyInclusive = true,

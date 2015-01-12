@@ -200,9 +200,13 @@ KineticDeviceInfo* KineticDeviceInfo_Create(const KineticProto_Command_GetLog* g
     KineticDeviceInfo_ExtractLimits(info, getLog, &allocator);
     KineticDeviceInfo_ExtractDevice(info, getLog, &allocator);
 
+    size_t totalLength = KineticSerialAllocator_TrimBuffer(&allocator);
+
+    /* Update stale pointer, since it may have been realloc'd during trim. */
+    info = (KineticDeviceInfo*) KineticSerialAllocator_GetBuffer(&allocator);
+
     // Trim the buffer prior to returning in order to free up unused memory
-    info->totalLength = allocator.used;
-    info->totalLength = KineticSerialAllocator_TrimBuffer(&allocator);
+    info->totalLength = totalLength;
     info = KineticSerialAllocator_GetBuffer(&allocator);
     LOGF2("Created KineticDeviceInfo @ 0x%0llX w/ length=%zu", info, info->totalLength);
     return info;

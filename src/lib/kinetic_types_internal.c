@@ -400,3 +400,98 @@ KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(Kineti
 {
     return (KineticMessageType)type;
 }
+
+void KineticMessage_Init(KineticMessage* const message)
+{
+    assert(message != NULL);
+
+    KineticProto_Message__init(&message->message);
+    KineticProto_command__init(&message->command);
+    KineticProto_Message_hmacauth__init(&message->hmacAuth);
+    KineticProto_Message_pinauth__init(&message->pinAuth);
+    KineticProto_command_header__init(&message->header);
+    KineticProto_command_status__init(&message->status);
+    KineticProto_command_body__init(&message->body);
+    KineticProto_command_key_value__init(&message->keyValue);
+    KineticProto_command_range__init(&message->keyRange);
+    KineticProto_command_get_log__init(&message->getLog);
+    KineticProto_command_pin_operation__init(&message->pinOp);
+    
+    Kinetic_auth_init_hmac(message, 0, BYTE_ARRAY_NONE);
+    (void)Kinetic_auth_init_pinop;
+}
+
+void Kinetic_auth_init_hmac(KineticMessage* const msg,
+    int identity, ByteArray hmac)
+{
+    assert(msg != NULL);
+    msg->message.has_authType = true;
+    msg->message.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    KineticProto_Message_hmacauth__init(&msg->hmacAuth);
+    msg->message.hmacAuth = &msg->hmacAuth;
+    KineticProto_Message_pinauth__init(&msg->pinAuth);
+    msg->message.pinAuth = NULL;
+    msg->command.header = &msg->header;
+    memset(msg->hmacData, 0, KINETIC_HMAC_MAX_LEN);
+    if (hmac.len <= KINETIC_HMAC_MAX_LEN
+        && hmac.data != NULL && hmac.len > 0
+        && msg->hmacData != NULL) {
+        memcpy(msg->hmacData, hmac.data, hmac.len);}
+    msg->message.hmacAuth->has_identity = true;
+    msg->message.hmacAuth->identity = (identity);
+    msg->message.hmacAuth->has_hmac = true;
+    msg->message.hmacAuth->hmac = (ProtobufCBinaryData) {
+        .data = msg->hmacData, .len = SHA_DIGEST_LENGTH};
+}
+
+void Kinetic_auth_init_pinop(KineticMessage* const msg)
+{
+    /* Not yet implemented. */
+    (void)msg;
+}
+
+void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr,
+    KineticConnection* con)
+{
+    assert(hdr != NULL);
+    assert(con != NULL);
+    *hdr = (KineticProto_Command_Header) {
+        .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor),
+        .has_clusterVersion = true,
+        .clusterVersion = con->session.config.clusterVersion,
+        .has_connectionID = true,
+        .connectionID = con->connectionID,
+        .has_sequence = true,
+        .sequence = con->sequence,
+    };
+}
+
+void KineticOperation_Init(KineticOperation* op, KineticConnection* con)
+{
+    assert(op != NULL);
+    assert(con != NULL);
+    *op = (KineticOperation) {
+        .connection = con,
+    };
+}
+
+#define KINETIC_PDU_HEADER_INIT \
+    (KineticPDUHeader) {.versionPrefix = 'F'}
+
+void KineticPDU_Init(KineticPDU* pdu, KineticConnection* con)
+{
+    assert(pdu != NULL);
+    assert(con != NULL);
+    memset(pdu, 0, sizeof(KineticPDU));
+    KineticMessage_Init(&(pdu->message));
+    Kinetic_auth_init_hmac(
+            &(pdu->message), con->session.config.identity, con->session.config.hmacKey);
+    KineticMessage_HeaderInit(&(pdu->message.header), con);
+}
+
+void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticConnection* con)
+{
+    KineticPDU_Init(pdu, con);
+    pdu->command = &pdu->message.command;
+    pdu->command->header = &pdu->message.header;
+}
