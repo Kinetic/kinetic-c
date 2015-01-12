@@ -38,6 +38,7 @@
 #include "mock_kinetic_hmac.h"
 #include "mock_bus.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_countingsemaphore.h"
 
 static KineticSessionConfig SessionConfig;
 static KineticSession Session;

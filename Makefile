@@ -72,6 +72,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_types.o \
 	$(OUT_DIR)/kinetic_memory.o \
 	$(OUT_DIR)/kinetic_semaphore.o \
+	$(OUT_DIR)/kinetic_countingsemaphore.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/kinetic_admin_client.o \
