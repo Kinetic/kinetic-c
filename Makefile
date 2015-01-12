@@ -464,7 +464,6 @@ examples: setup_examples \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
-	run_example_write_file_nonblocking_threads \
 	run_example_get_key_range \
 	stop_simulator
 
@@ -475,6 +474,5 @@ valgrind_examples: setup_examples \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \
-	valgrind_example_write_file_nonblocking_threads \
 	valgrind_example_get_key_range \
 	stop_simulator

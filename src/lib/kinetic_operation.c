@@ -747,8 +747,10 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
     if (operation->closure.callback == NULL) { return; }
     KineticCompletionData completionData = {.status = status};
-    operation->closure.callback(&completionData, operation->closure.clientData);
 
     KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
+
+    operation->closure.callback(&completionData, operation->closure.clientData);
+
     KineticAllocator_FreeOperation(operation);
 }

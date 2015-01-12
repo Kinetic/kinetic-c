@@ -56,7 +56,7 @@ void setUp(void)
     };
     memset(&Connection, 0, sizeof(Connection));
     KineticAllocator_NewConnection_ExpectAndReturn(&Connection);
-    KineticCountingSemaphore_Create_ExpectAndReturn(64, &Semaphore);
+    KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
     
     KineticStatus status = KineticSession_Create(&Session, &Client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -93,7 +93,7 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
     KineticSession session;
     KineticConnection connection;
     KineticAllocator_NewConnection_ExpectAndReturn(&connection);
-    KineticCountingSemaphore_Create_ExpectAndReturn(64, &Semaphore);
+    KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
     KineticStatus status = KineticSession_Create(&session, &Client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, session.connection);
