@@ -34,9 +34,16 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
 void run_throghput_tests(size_t num_ops, size_t value_size)
 {
+    printf("\n"
+        "========================================\n"
+        "Throughput Tests\n"
+        "========================================\n"
+        "Entry Size: %zu bytes\n"
+        "Count:      %zu entries",
+        value_size, num_ops );
+
     ByteBuffer test_data = ByteBuffer_Malloc(value_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
-
 
     // Initialize kinetic-c and configure sessions
     const char HmacKeyString[] = "asdfasdf";
@@ -111,7 +118,7 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             }
         }
 
-        printf("Waiting for PUT to finish\n");
+        printf("Waiting for PUTs to finish\n");
 
         for (size_t i = 0; i < num_ops; i++)
         {
@@ -187,7 +194,7 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             }
         }
 
-        printf("Waiting for GET to finish\n");
+        printf("Waiting for GETs to finish\n");
 
         size_t bytes_read = 0;
         for (size_t i = 0; i < num_ops; i++)
@@ -202,7 +209,6 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             {
                 bytes_read += entries[i].value.bytesUsed;
             }
-
         }
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
@@ -223,6 +229,78 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             bandwidth);
     }
 
+    // Measure DELETE performance
+    {
+        OpStatus delete_statuses[num_ops];
+        for (size_t i = 0; i < num_ops; i++) {
+            delete_statuses[i] = (OpStatus){
+                .sem = KineticSemaphore_Create(),
+                .status = KINETIC_STATUS_INVALID,
+            };
+        };
+
+        struct timeval start_time;
+        gettimeofday(&start_time, NULL);
+
+        for (uint32_t del = 0; del < num_ops; del++) {
+            ByteBuffer key = ByteBuffer_Create(&keys[del], sizeof(keys[del]), sizeof(keys[del]));
+
+            KineticSynchronization sync = (del == num_ops - 1)
+                ? KINETIC_SYNCHRONIZATION_FLUSH
+                : KINETIC_SYNCHRONIZATION_WRITEBACK;
+
+            entries[del] = (KineticEntry) {
+                .key = key,
+                .tag = tag,
+                .synchronization = sync,
+                .force = true,
+            };
+
+            KineticStatus status = KineticClient_Delete(
+                &session,
+                &entries[del],
+                &(KineticCompletionClosure) {
+                    .callback = op_finished,
+                    .clientData = &delete_statuses[del],
+                }
+            );
+
+            if (status != KINETIC_STATUS_SUCCESS) {
+                fprintf(stderr, "DELETE failed w/status: %s\n", Kinetic_GetStatusDescription(status));
+                TEST_FAIL();
+            }
+        }
+
+        printf("Waiting for DELETEs to finish\n");
+
+        for (size_t i = 0; i < num_ops; i++)
+        {
+            KineticSemaphore_WaitForSignalAndDestroy(delete_statuses[i].sem);
+            if (delete_statuses[i].status != KINETIC_STATUS_SUCCESS) {
+
+                fprintf(stderr, "DELETE failed w/status: %s\n", Kinetic_GetStatusDescription(delete_statuses[i].status));
+                TEST_FAIL();
+            }
+        }
+        struct timeval stop_time;
+        gettimeofday(&stop_time, NULL);
+
+        int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
+            + (stop_time.tv_usec - start_time.tv_usec);
+        float elapsed_ms = elapsed_us / 1000.0f;
+        float throughput = (num_ops * 1000.0f) / elapsed_ms;
+        fflush(stdout);
+        printf("\n"
+            "Delete Performance:\n"
+            "----------------------------------------\n"
+            "count:      %zu entries\n"
+            "duration:   %.3f seconds\n"
+            "throughput: %.2f entries/sec\n\n",
+            num_ops,
+            elapsed_ms / 1000.0f,
+            throughput);
+    }
+
     ByteBuffer_Free(test_data);
 
     // Shutdown client connection and cleanup
@@ -232,7 +310,7 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
 
 void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
 {
-    run_throghput_tests(100, KINETIC_OBJ_SIZE);
+    run_throghput_tests(500, KINETIC_OBJ_SIZE);
 }
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData)
