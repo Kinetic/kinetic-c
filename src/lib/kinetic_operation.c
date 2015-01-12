@@ -40,7 +40,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     assert(operation != NULL);
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
-    LOGF2("\nSending PDU via fd=%d", operation->connection->messageBus);
+
     KineticPDU* request = operation->request;
     KineticProto_Message* proto = &operation->request->message.message;
 
@@ -103,6 +103,11 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     else {
         header.valueLength = 0;
     }
+
+    LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, protoLen: %u, valueLen: %u",
+        operation->request, operation, &operation->connection->session,
+        operation->connection->messageBus, header.protobufLength, header.valueLength);
+
     KineticLogger_LogHeader(2, &header);
 
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
@@ -136,7 +141,6 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 
     // Send the value/payload, if specified
     if (header.valueLength > 0) {
-        LOGF2("Sending PDU Value Payload (%zu bytes)", operation->entry->value.bytesUsed);
         memcpy(&msg[offset], operation->entry->value.array.data, operation->entry->value.bytesUsed);
         offset += operation->entry->value.bytesUsed;
     }
@@ -243,11 +247,11 @@ static KineticStatus get_cb(const char *cmd_name, KineticOperation* const operat
     assert(operation->connection != NULL);
     LOGF3("%s callback w/ operation (0x%0llX) on connection (0x%0llX)",
         cmd_name, operation, operation->connection);
-    assert(operation->response != NULL);
     assert(operation->entry != NULL);
 
     if (status == KINETIC_STATUS_SUCCESS)
     {
+        assert(operation->response != NULL);
         // Update the entry upon success
         KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation->response);
         if (keyValue != NULL) {
@@ -351,7 +355,6 @@ KineticStatus KineticOperation_DeleteCallback(KineticOperation* const operation,
     assert(operation->connection != NULL);
     LOGF3("DELETE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->response != NULL);
     assert(operation->entry != NULL);
     return status;
 }
@@ -383,12 +386,12 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* const opera
     assert(operation->connection != NULL);
     LOGF3("GETKEYRANGE callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->response != NULL);
     assert(operation->buffers != NULL);
     assert(operation->buffers->count > 0);
 
     if (status == KINETIC_STATUS_SUCCESS)
     {
+        assert(operation->response != NULL);
         // Report the key list upon success
         KineticProto_Command_Range* keyRange = KineticPDU_GetKeyRange(operation->response);
         if (keyRange != NULL) {
@@ -426,11 +429,10 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation,
     assert(operation->deviceInfo != NULL);
     LOGF3("GETLOG callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    assert(operation->response != NULL);
-    assert(operation->response->command->body->getLog != NULL);
 
     if (status == KINETIC_STATUS_SUCCESS)
     {
+        assert(operation->response != NULL);
         // Copy the data from the response protobuf into a new info struct
         if (operation->response->command->body->getLog == NULL) {
             return KINETIC_STATUS_OPERATION_FAILED;
