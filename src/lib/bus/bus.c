@@ -26,6 +26,7 @@
 #include <errno.h>
 #include <assert.h>
 #include <limits.h>
+#include <sys/resource.h>
 
 #include "bus.h"
 #include "sender.h"
@@ -46,6 +47,7 @@ static int listener_id_of_socket(struct bus *b, int fd);
 static void noop_log_cb(log_event_t event,
         int log_level, const char *msg, void *udata);
 static void noop_error_cb(bus_unpack_cb_res_t result, void *socket_udata);
+static bool attempt_to_increase_resource_limits(struct bus *b);
 
 static void set_defaults(bus_config *cfg) {
     if (cfg->sender_count == 0) { cfg->sender_count = 1; }
@@ -109,6 +111,8 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     }
 
     log_lock_init = true;
+
+    attempt_to_increase_resource_limits(b);
 
     BUS_LOG_SNPRINTF(b, 3, LOG_INITIALIZATION, b->udata, 64,
         "Initialized bus at %p", (void*)b);
@@ -221,6 +225,31 @@ cleanup:
     if (fd_set) { yacht_free(fd_set, NULL, NULL); }
 
     return false;
+}
+
+static bool attempt_to_increase_resource_limits(struct bus *b) {
+    struct rlimit info;
+    if (-1 == getrlimit(RLIMIT_NOFILE, &info)) {
+        fprintf(stderr, "getrlimit: %s", strerror(errno));
+        errno = 0;
+        return false;
+    }
+
+    const int nval = 1024;
+
+    BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+        "Current FD resource limits, [%lld, %lld], changing to %d",
+        info.rlim_cur, info.rlim_max, nval);
+
+    if (info.rlim_cur < nval && info.rlim_max > nval) {
+        info.rlim_cur = nval;
+        if (-1 == setrlimit(RLIMIT_NOFILE, &info)) {
+            fprintf(stderr, "getrlimit: %s", strerror(errno));
+            errno = 0;
+            return false;
+        }
+    }
+    return true;
 }
 
 /* Pack message to deliver on behalf of the user into an envelope
