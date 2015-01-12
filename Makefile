@@ -11,7 +11,7 @@ PUB_INC = ./include
 # SSL/TLS Library Options
 #-------------------------------------------------------------------------------
 
-# FIXME: Currently OSX/homebrew specific, rework before integration.
+# This may need to be set if OpenSSL is in a nonstandard place.
 OPENSSL_PATH ?=	.
 
 #===============================================================================
