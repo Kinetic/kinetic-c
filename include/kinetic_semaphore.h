@@ -1,12 +1,11 @@
 #ifndef _KINETIC_SEMAPHORE_H
 #define _KINETIC_SEMAPHORE_H
 
-struct _KineticSemaphore;
 typedef struct _KineticSemaphore KineticSemaphore;
 
 /**
  * @brief Creates a KineticSemaphore. The KineticSemaphore is a simple wrapper 
- *        around a pthread condition variable and provides a a thread safe 
+ *        around a pthread condition variable and provides a a thread-safe
  *        way to block a thread and wait for notification from another thread.
  *
  * @return          Returns a pointer to a KineticSemaphore

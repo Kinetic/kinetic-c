@@ -532,7 +532,10 @@ static void process_unpacked_message(listener *l,
                     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
                         "successfully delivered box %p, marking info %p as DONE", (void*)box, (void*)info);
                     info->error = RX_ERROR_DONE;
-                    assert(info->box == NULL);
+                    BUS_LOG_SNPRINTF(b, 4, LOG_LISTENER, b->udata, 128,
+                        "initial clean-up attempt for completed RX event at info %p", (void*)info);
+                    clean_up_completed_info(l, info);
+                    info = NULL; /* drop out of scope, likely to be stale */
                 } else {
                     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
                         "returning box %p at line %d", (void*)box, __LINE__);
@@ -609,7 +612,7 @@ static void tick_handler(listener *l) {
                     "notifying of rx failure -- timeout (info %p)", (void*)info);
                 notify_message_failure(l, info, BUS_SEND_RX_TIMEOUT);
             } else {
-                BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                     "decrementing countdown on info %p [%u]: %ld",
                     (void*)info, info->id, info->timeout_sec - 1);
                 info->timeout_sec--;

@@ -33,6 +33,7 @@
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_client.h"
 #include "mock_kinetic_pdu_unpack.h"
+#include "mock_kinetic_countingsemaphore.h"
 
 #include "mock_bus.h"
 #include "byte_array.h"
@@ -40,6 +41,7 @@
 #include <sys/time.h>
 
 static KineticConnection Connection;
+static KineticCountingSemaphore Semaphore;
 static KineticSession Session;
 static KineticPDU Request, Response;
 static int OperationCompleteCallbackCount;
@@ -54,6 +56,7 @@ void setUp(void)
     };
     memset(&Connection, 0, sizeof(Connection));
     KineticAllocator_NewConnection_ExpectAndReturn(&Connection);
+    KineticCountingSemaphore_Create_ExpectAndReturn(64, &Semaphore);
     
     KineticStatus status = KineticSession_Create(&Session, &Client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -90,11 +93,13 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
     KineticSession session;
     KineticConnection connection;
     KineticAllocator_NewConnection_ExpectAndReturn(&connection);
+    KineticCountingSemaphore_Create_ExpectAndReturn(64, &Semaphore);
     KineticStatus status = KineticSession_Create(&session, &Client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, session.connection);
     TEST_ASSERT_FALSE(session.connection->connected);
 
+    KineticCountingSemaphore_Destroy_Expect(&Semaphore);
     KineticAllocator_FreeConnection_Expect(&connection);
     status = KineticSession_Destroy(&session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);

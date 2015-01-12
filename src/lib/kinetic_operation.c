@@ -34,12 +34,31 @@
 #include "bus.h"
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation);
+static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation);
 
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
+
+    KineticCountingSemaphore_Take(operation->connection->outstandingOperations);
+    KineticStatus status = KineticOperation_SendRequestInner(operation);
+    if (status != KINETIC_STATUS_SUCCESS)
+    {
+        //cleanup
+        KineticPDU* request = operation->request;
+        if (request->message.message.commandBytes.data != NULL) {
+            free(request->message.message.commandBytes.data);
+            request->message.message.commandBytes.data = NULL;
+        }
+        KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
+    }
+    return status;
+}
+
+static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation)
+{
     LOGF2("\nSending PDU via fd=%d", operation->connection->messageBus);
     KineticPDU* request = operation->request;
     KineticProto_Message* proto = &operation->request->message.message;
@@ -94,15 +113,17 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 
     if (operation->entry != NULL && operation->sendValue) {
         header.valueLength = operation->entry->value.bytesUsed;
-        if (header.valueLength > PDU_PROTO_MAX_LEN) {
-            // Packed value exceeds max size.
-            LOGF2("\nPacked value exceeds maximum size. Packed size is: %d, Max size is: %d", header.valueLength, PDU_PROTO_MAX_LEN);
-            return KINETIC_STATUS_BUFFER_OVERRUN;
-        }
     }
     else {
         header.valueLength = 0;
     }
+
+    if (header.valueLength > PDU_PROTO_MAX_LEN) {
+        // Packed value exceeds max size.
+        LOGF2("\nPacked value exceeds maximum size. Packed size is: %d, Max size is: %d", header.valueLength, PDU_PROTO_MAX_LEN);
+        return KINETIC_STATUS_BUFFER_OVERRUN;
+    }
+
     KineticLogger_LogHeader(2, &header);
 
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
@@ -112,9 +133,6 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     uint8_t * msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
     if (msg == NULL)
     {
-        free(request->message.message.commandBytes.data);
-        request->message.message.commandBytes.data = NULL;
-
         LOG0("Failed to allocate outgoing message!");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
@@ -725,7 +743,8 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
     if (operation->closure.callback == NULL) { return; }
     KineticCompletionData completionData = {.status = status};
-    operation->closure.callback(&completionData, operation->closure.clientData);    
+    operation->closure.callback(&completionData, operation->closure.clientData);
 
+    KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
     KineticAllocator_FreeOperation(operation);
 }
