@@ -92,7 +92,7 @@ Operations
         * Execute a Get operation to retrieve a key/value entry
     * `./bin/kinetic-c-util delete`
         * Execute a Delete operation to destroy a key/value entry
-    * `./bin/kinetic-c-util instanterase`
+    * `./bin/kinetic-c-util instanterase` *INCOMPLETE*
         * Execute an InstantSecureErase operation to erase ALL content from the device
 
 Kinetic C Client I/O Examples
