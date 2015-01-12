@@ -26,6 +26,7 @@
 #include <errno.h>
 #include <assert.h>
 #include <limits.h>
+#include <sys/resource.h>
 
 #include "bus.h"
 #include "sender.h"
@@ -33,6 +34,7 @@
 #include "threadpool.h"
 #include "bus_internal_types.h"
 #include "bus_ssl.h"
+#include "util.h"
 #include "yacht.h"
 
 /* Function pointers for pthreads. */
@@ -45,6 +47,7 @@ static int listener_id_of_socket(struct bus *b, int fd);
 static void noop_log_cb(log_event_t event,
         int log_level, const char *msg, void *udata);
 static void noop_error_cb(bus_unpack_cb_res_t result, void *socket_udata);
+static bool attempt_to_increase_resource_limits(struct bus *b);
 
 static void set_defaults(bus_config *cfg) {
     if (cfg->sender_count == 0) { cfg->sender_count = 1; }
@@ -109,8 +112,10 @@ bool bus_init(bus_config *config, struct bus_result *res) {
 
     log_lock_init = true;
 
+    attempt_to_increase_resource_limits(b);
+
     BUS_LOG_SNPRINTF(b, 3, LOG_INITIALIZATION, b->udata, 64,
-        "Initialized bus at %p", b);
+        "Initialized bus at %p", (void*)b);
 
     ss = calloc(config->sender_count, sizeof(*ss));
     if (ss == NULL) {
@@ -124,7 +129,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
             goto cleanup;
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_INITIALIZATION, b->udata, 64,
-                "Initialized sender %d at %p", i, ss[i]);
+                "Initialized sender %d at %p", i, (void*)ss[i]);
         }
     }
 
@@ -140,7 +145,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
             goto cleanup;
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_INITIALIZATION, b->udata, 64,
-                "Initialized listener %d at %p", i, ls[i]);
+                "Initialized listener %d at %p", i, (void*)ls[i]);
         }
     }
 
@@ -190,8 +195,9 @@ bool bus_init(bus_config *config, struct bus_result *res) {
 
     b->fd_set = fd_set;
     res->bus = b;
-    BUS_LOG(b, 1, LOG_INITIALIZATION, "initialized", config->bus_udata);
+    BUS_LOG(b, 2, LOG_INITIALIZATION, "initialized", config->bus_udata);
     return true;
+
 cleanup:
     if (ss) {
         for (int i = 0; i < config->sender_count; i++) {
@@ -221,6 +227,31 @@ cleanup:
     return false;
 }
 
+static bool attempt_to_increase_resource_limits(struct bus *b) {
+    struct rlimit info;
+    if (-1 == getrlimit(RLIMIT_NOFILE, &info)) {
+        fprintf(stderr, "getrlimit: %s", strerror(errno));
+        errno = 0;
+        return false;
+    }
+
+    const unsigned int nval = 1024;
+
+    BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+        "Current FD resource limits, [%lu, %lu], changing to %u",
+        (unsigned long)info.rlim_cur, (unsigned long)info.rlim_max, nval);
+
+    if (info.rlim_cur < nval && info.rlim_max > nval) {
+        info.rlim_cur = nval;
+        if (-1 == setrlimit(RLIMIT_NOFILE, &info)) {
+            fprintf(stderr, "getrlimit: %s", strerror(errno));
+            errno = 0;
+            return false;
+        }
+    }
+    return true;
+}
+
 /* Pack message to deliver on behalf of the user into an envelope
  * that can track status / routing along the way.
  *
@@ -230,7 +261,7 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
     if (box == NULL) { return NULL; }
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 64,
-        "Allocated boxed message -- %p", box);
+        "Allocated boxed message -- %p", (void*)box);
 
     box->fd = msg->fd;
     assert(msg->fd != 0);
@@ -264,10 +295,6 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
     return box;
 }
 
-static bool is_resumable_io_error(int errno_) {
-    return errno_ == EAGAIN || errno_ == EINTR || errno_ == EWOULDBLOCK;
-}
-
 bool bus_send_request(struct bus *b, bus_user_msg *msg)
 {
     if (b == NULL || msg == NULL || msg->fd == 0) {
@@ -279,20 +306,14 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg)
         return false;
     }
 
-    int complete_fd = 0;
-
     int s_id = sender_id_of_socket(b, msg->fd);
     struct sender *s = b->senders[s_id];
 
-    /* Pass boxed message to the sender */
-    if (!sender_enqueue_message(s, box, &complete_fd)) {
-        BUS_LOG(b, 3, LOG_SENDING_REQUEST, "sender_enqueue_message failed", b->udata);
-        return false;
-    }
-
-    /* block until delivery status */
     BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Sending request...", b->udata);
-    return poll_on_completion(b, complete_fd);
+    bool res = sender_send_request(s, box);
+    BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
+        "...request sent, result %d", res);
+    return res;
 }
 
 static bool poll_on_completion(struct bus *b, int fd) {
@@ -300,6 +321,10 @@ static bool poll_on_completion(struct bus *b, int fd) {
     struct pollfd fds[1];
     fds[0].fd = fd;
     fds[0].events = POLLIN;
+
+    /* TODO REFACTOR this should be reused between bus, sender, and listener,
+     *     or be moved into the listener.
+     *     The sender has its own blocking polling for commands. */
 
     /* FIXME: compare this to TCP timeouts -- try to prevent sender
      * succeeding but failing to notify client. */
@@ -310,31 +335,34 @@ static bool poll_on_completion(struct bus *b, int fd) {
         BUS_LOG(b, 5, LOG_SENDING_REQUEST, "Polling on completion...tick...", b->udata);
         int res = poll(fds, 1, ONE_SECOND);
         if (res == -1) {
-            if (is_resumable_io_error(errno)) {
+            if (util_is_resumable_io_error(errno)) {
                 BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Polling on completion...EAGAIN", b->udata);
+                if (errno == EINTR && i > 0) { i--; }
                 errno = 0;
             } else {
                 assert(false);
                 break;
             }
         } else if (res > 0) {
-            uint8_t read_buf[2];
+            uint16_t msec = 0;
+            uint8_t read_buf[sizeof(msec)];
             
             BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Reading alert pipe...", b->udata);
-            ssize_t sz = read(fd, read_buf, 2);
+            ssize_t sz = read(fd, read_buf, sizeof(read_buf));
 
-            if (sz == 2) {
+            if (sz == sizeof(read_buf)) {
                 /* Payload: little-endian uint16_t, msec of backpressure. */
-                uint16_t msec = (read_buf[0] << 0) + (read_buf[1] << 8);
+                msec = (read_buf[0] << 0) + (read_buf[1] << 8);
                 if (msec > 0) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
-                        " -- backpressure of %d msec", msec);
+                        " -- awakening client thread with backpressure of %d msec", msec);
                     (void)poll(fds, 0, msec);
                 }
+
                 BUS_LOG(b, 3, LOG_SENDING_REQUEST, "sent!", b->udata);
                 return true;
             } else if (sz == -1) {
-                if (is_resumable_io_error(errno)) {
+                if (util_is_resumable_io_error(errno)) {
                     errno = 0;
                 } else {
                     assert(false);
@@ -343,7 +371,12 @@ static bool poll_on_completion(struct bus *b, int fd) {
             }
         }
     }
-    BUS_LOG(b, 2, LOG_SENDING_REQUEST, "failed to send (timeout)", b->udata);
+    BUS_LOG(b, 2, LOG_SENDING_REQUEST, "failed (timeout)", b->udata);
+
+    #if 0
+    assert(false);
+    #endif
+
     return false;
 }
 
@@ -383,13 +416,15 @@ const char *bus_log_event_str(log_event_t event) {
 }
 
 bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) {
-    /* Register a socket internally with a listener. */
+    /* Register a socket internally with a sender and listener. */
+    int s_id = sender_id_of_socket(b, fd);
     int l_id = listener_id_of_socket(b, fd);
 
     BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 64,
         "registering socket %d", fd);
 
-    /* Spread sockets throughout the different listener processes. */
+    /* Spread sockets throughout the different sender & listener processes. */
+    struct sender *s = b->senders[s_id];
     struct listener *l = b->listeners[l_id];
     
     int pipes[2];
@@ -428,9 +463,14 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
         goto cleanup;
     }
 
-    bool res = listener_add_socket(l, ci, pipe_in);
+    bool res = false;
+    res = sender_register_socket(s, fd, ci->ssl);
     if (!res) { goto cleanup; }
 
+    res = listener_add_socket(l, ci, pipe_in);
+    if (!res) { goto cleanup; }
+
+    /* FIXME: Move this into listener_add_socket? */
     BUS_LOG(b, 2, LOG_SOCKET_REGISTERED, "polling on socket add...", b->udata);
     bool completed = poll_on_completion(b, pipe_out);
     if (!completed) { goto cleanup; }
@@ -452,14 +492,18 @@ cleanup:
 
 /* Free metadata about a socket that has been disconnected. */
 bool bus_release_socket(struct bus *b, int fd) {
-    /* Register a socket internally with a listener. */
+    int s_id = sender_id_of_socket(b, fd);
     int l_id = listener_id_of_socket(b, fd);
 
     BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 64,
         "forgetting socket %d", fd);
 
-    /* Spread sockets throughout the different listener processes. */
+    struct sender *s = b->senders[s_id];
     struct listener *l = b->listeners[l_id];
+
+    if (!sender_remove_socket(s, fd)) {
+        return false;
+    }
 
     if (!listener_remove_socket(l, fd)) {
         return false;           /* couldn't send msg to listener */
@@ -492,7 +536,9 @@ bool bus_shutdown(bus *b) {
     for (int i = 0; i < b->sender_count; i++) {
         int off = 0;
         if (!b->joined[i + off]) {
+            BUS_LOG(b, 2, LOG_SHUTDOWN, "sender_shutdown...", b->udata);
             while (!sender_shutdown(b->senders[i])) {
+                BUS_LOG(b, 2, LOG_SHUTDOWN, "sender_shutdown... (retry)", b->udata);
                 sleep(1);
             }
             void *unused = NULL;
@@ -558,7 +604,7 @@ bool bus_process_boxed_message(struct bus *b,
     };
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-        "Scheduling boxed message -- %p -- where it will be freed", box);
+        "Scheduling boxed message -- %p -- where it will be freed", (void*)box);
     return bus_schedule_threadpool_task(b, &task, backpressure);
 }
 

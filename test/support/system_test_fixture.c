@@ -28,7 +28,6 @@ KineticClient * client;
 
 void SystemTestSetup(SystemTestFixture* fixture, int log_level)
 {
-    LOG_LOCATION;
     client = KineticClient_Init("stdout", log_level);
 
     memset(fixture, 0, sizeof(SystemTestFixture));
@@ -68,12 +67,10 @@ void SystemTestSetup(SystemTestFixture* fixture, int log_level)
     // Erase the drive
     // status = KineticAdminClient_InstantSecureErase(&fixture->adminSession);
     // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    LOG_LOCATION;
 }
 
 void SystemTestTearDown(SystemTestFixture* fixture)
 {
-    LOG_LOCATION;
     TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
 
     if (fixture->connected) {
@@ -83,7 +80,6 @@ void SystemTestTearDown(SystemTestFixture* fixture)
         TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying admin client!");
         KineticClient_Shutdown(client);
     }
-    LOG_LOCATION;
 }
 
 bool SystemTestIsUnderSimulator(void)

@@ -18,25 +18,12 @@
 *
 */
 
-#ifndef _KINETIC_SOCKET_H
-#define _KINETIC_SOCKET_H
+#ifndef _KINETIC_MEMORY_H
+#define _KINETIC_MEMORY_H
 
-#include "kinetic_types_internal.h"
-#include "kinetic_message.h"
+#include <stddef.h>
 
-typedef enum
-{
-    KINETIC_WAIT_STATUS_DATA_AVAILABLE,
-    KINETIC_WAIT_STATUS_TIMED_OUT,
-    KINETIC_WAIT_STATUS_RETRYABLE_ERROR,
-    KINETIC_WAIT_STATUS_FATAL_ERROR,
-} KineticWaitStatus;
+void * KineticCalloc(size_t count, size_t size);
+void KineticFree(void * pointer);
 
-int KineticSocket_Connect(const char* host, int port);
-void KineticSocket_Close(int socket);
-
-void KineticSocket_BeginPacket(int socket);
-void KineticSocket_FinishPacket(int socket);
-void KineticSocket_EnableTCPNoDelay(int socket);
-
-#endif // _KINETIC_SOCKET_H
+#endif // _KINETIC_MEMORY_H

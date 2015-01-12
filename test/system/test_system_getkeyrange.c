@@ -27,16 +27,15 @@ static bool add_keys(int count)
 {
     static const ssize_t sz = 10;
     char key_buf[sz];
+    char tag_buf[sz];
     char value_buf[sz];
 
     for (int i = 0; i < count; i++) {
 
-        ByteBuffer KeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "mykey_%02d", i);
-        ByteBuffer ValueBuffer = ByteBuffer_CreateAndAppendFormattedCString(value_buf, sz, "val_%02d", i);
-
         KineticEntry entry = {
-            .key = KeyBuffer,
-            .value = ValueBuffer,
+            .key = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "mykey_%02d", i),
+            .tag = ByteBuffer_CreateAndAppendFormattedCString(tag_buf, sz, "mytag_%02d", i),
+            .value = ByteBuffer_CreateAndAppendFormattedCString(value_buf, sz, "val_%02d", i),
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .force = true,
         };
@@ -51,6 +50,7 @@ void setUp(void)
 {
     SystemTestSetup(&Fixture, 1);
     if (!suiteInitialized) {
+        SystemTestSetup(&Fixture, 3);
         add_keys(3);
     }
 }
@@ -67,7 +67,7 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device(void)
     const size_t keyLen = 64;
     uint8_t startKeyData[keyLen], endKeyData[keyLen];
     KineticKeyRange range = {
-        .startKey = ByteBuffer_CreateAndAppendCString(startKeyData, sizeof(startKeyData), "mykey_00"),
+        .startKey = ByteBuffer_CreateAndAppendCString(startKeyData, sizeof(startKeyData), "mykey_"),
         .endKey = ByteBuffer_CreateAndAppendCString(endKeyData, sizeof(endKeyData), "mykey_01"),
         .startKeyInclusive = true,
         .endKeyInclusive = true,

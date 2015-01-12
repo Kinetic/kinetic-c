@@ -28,12 +28,22 @@ struct sender;
 
 struct sender *sender_init(struct bus *b, struct bus_config *cfg);
 
+/* Sender commands.
+ *
+ * These all block until the message has been processed (a command
+ * has been sent over an outgoing socket, a socket has been registered
+ * or unregistered, or the sender has shut down) or delivery has
+ * failed.
+ *
+ * Backpressure is handled internally. */
+bool sender_register_socket(struct sender *s, int fd, SSL *ssl);
+bool sender_remove_socket(struct sender *s, int fd);
+
 /* Send an outgoing message.
  * 
  * This blocks until the message has either been sent over a outgoing
  * socket or delivery has failed, to provide counterpressure. */
-bool sender_enqueue_message(struct sender *s,
-    boxed_msg *msg, int *response_fd);
+bool sender_send_request(struct sender *s, boxed_msg *box);
 
 bool sender_shutdown(struct sender *s);
 

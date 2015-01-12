@@ -19,11 +19,11 @@ OPENSSL_PATH ?=	.
 #===============================================================================
 CC ?= gcc
 OPTIMIZE = -O3
-SYSTEM_TEST_HOST ?= localhost
+SYSTEM_TEST_HOST ?= \"localhost\"
 SESSION_HMAC_KEY ?= \"asdfasdf\"
 SESSION_PIN ?= \"1234\"
-WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
-CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=\"${SYSTEM_TEST_HOST}\" -DCLUSTER_VERSION=${CLUSTER_VERSION}
+WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread
 
@@ -70,6 +70,8 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_session.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \
+	$(OUT_DIR)/kinetic_memory.o \
+	$(OUT_DIR)/kinetic_semaphore.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/kinetic_admin_client.o \
@@ -95,6 +97,7 @@ makedirs:
 all: default test system_tests test_internals run examples
 
 clean: makedirs update_git_submodules
+	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util
 	rm -rf ./bin/**/*
 	rm ./bin/*.*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
@@ -127,7 +130,7 @@ ${OUT_DIR}/%.o: ${LIB_DIR}/%.c Makefile ${PUB_INC}/%.h Makefile
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
-	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
+	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Werror -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
 
 $(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpool/threadpool.h
@@ -229,6 +232,7 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -c $(PUB_INC)/kinetic_client.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_admin_client.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/kinetic_semaphore.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
 
 uninstall:
@@ -242,7 +246,11 @@ uninstall:
 	$(RM) -f $(PREFIX)/include/kinetic_client.h
 	$(RM) -f $(PREFIX)/include/kinetic_admin_client.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
+	$(RM) -f $(PREFIX)/include/kinetic_semaphore.h
 	$(RM) -f $(PREFIX)/include/byte_array.h
+	$(RM) -f $(PREFIX)/include/kinetic_proto.h
+	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
+	$(RM) -f $(PREFIX)/include/protobuf-c.h
 
 .PHONY: install uninstall
 
@@ -323,8 +331,8 @@ unit_tests: start_simulator $(unit_passfiles)
 
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
-SYSTEST_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl -lcrypto $(KINETIC_LIB) -l pthread
-SYSTEST_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes -Wno-nonnull
+SYSTEST_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
+SYSTEST_WARN = -Wall -Wextra -Werror -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
 
 systest_sources = $(wildcard $(SYSTEST_SRC)/*.c)
@@ -375,7 +383,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lssl $(KINETIC_LIB) -lcrypto -lpthread
+UTIL_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)
@@ -423,6 +431,7 @@ run: $(UTIL_EXEC) start_simulator
 
 EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
+EXAMPLE_CFLAGS += -Wno-deprecated-declarations
 EXAMPLES = write_file_blocking
 
 example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
@@ -433,7 +442,7 @@ $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 	@echo ================================================================================
 	@echo Building example: '$<'
 	@echo --------------------------------------------------------------------------------
-	$(CC) -o $@ $< $(CFLAGS) -I$(PUB_INC) $(UTIL_LDFLAGS) $(KINETIC_LIB)
+	$(CC) -o $@ $< $(CFLAGS) $(EXAMPLE_CFLAGS) -I$(PUB_INC) $(UTIL_LDFLAGS) $(KINETIC_LIB)
 	@echo ================================================================================
 	@echo
 
@@ -473,6 +482,8 @@ setup_examples: $(example_executables) \
 
 examples: setup_examples \
 	start_simulator \
+	run_example_put_nonblocking \
+	run_example_get_nonblocking \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
@@ -482,6 +493,8 @@ examples: setup_examples \
 
 valgrind_examples: setup_examples \
 	start_simulator \
+	valgrind_put_nonblocking \
+	valgrind_get_nonblocking \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \

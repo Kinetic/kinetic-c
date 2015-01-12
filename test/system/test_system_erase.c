@@ -36,7 +36,7 @@ static const char strKey[] = "GET system test blob";
 
 void setUp(void)
 { LOG_LOCATION;
-    SystemTestSetup(&Fixture, 2);
+    SystemTestSetup(&Fixture, 3);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);
@@ -66,10 +66,13 @@ void tearDown(void)
 
 void test_InstantSecureErase_should_erase_device_contents(void)
 { LOG_LOCATION;
-    TEST_IGNORE_MESSAGE("TODO: Need to implement PIN authentication in order to get erase working!")
-
-    KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    // if (SystemTestIsUnderSimulator()) {
+    //     KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
+    //     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status); 
+    // }
+    // else {
+    //     TEST_IGNORE_MESSAGE("Test disabled against HW until PIN auth completed!");
+    // }
 }
 
 /*******************************************************************************

@@ -63,8 +63,9 @@ int KineticSocket_Connect(const char* host, int port)
     // Open socket
     LOGF0("Connecting to %s:%d", host, port);
     if (!socket99_open(&cfg, &result)) {
-        LOGF0("Failed to open socket connection with host: status %d, errno %d",
-             result.status, result.saved_errno);
+        char err_buf[256];
+        socket99_snprintf(err_buf, 256, &result);
+        LOGF0("Failed to open socket connection with host: %s", err_buf);
         return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
 
@@ -75,6 +76,8 @@ int KineticSocket_Connect(const char* host, int port)
         close(result.fd);
         return KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
+
+    KineticSocket_EnableTCPNoDelay(result.fd);
 
     for (ai = ai_result; ai != NULL; ai = ai->ai_next) {
         int setsockopt_result;
@@ -150,6 +153,12 @@ void KineticSocket_Close(int socket)
     }
 }
 
+void KineticSocket_EnableTCPNoDelay(int socket)
+{
+    int on = 1;
+    setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on));
+}
+
 void KineticSocket_BeginPacket(int socket)
 {
 #if !defined(__APPLE__) /* TCP_CORK is NOT available on OSX */
@@ -165,7 +174,7 @@ void KineticSocket_FinishPacket(int socket)
 #if !defined(__APPLE__) /* TCP_CORK is NOT available on OSX */
     int off = 0;
     setsockopt(socket, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));
+#else
+    (void)socket;
 #endif
-    int on = 1;
-    setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on));
 }

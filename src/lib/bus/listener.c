@@ -100,10 +100,10 @@ bool listener_remove_socket(struct listener *l, int fd) {
 }
 
 /* Coefficients for backpressure based on certain conditions. */
-#define MSG_BP_1QTR       (0)
+#define MSG_BP_1QTR       (0.25)
 #define MSG_BP_HALF       (0.5)
 #define MSG_BP_3QTR       (2.0)
-#define RX_INFO_BP_1QTR   (0)
+#define RX_INFO_BP_1QTR   (0.5)
 #define RX_INFO_BP_HALF   (0.5)
 #define RX_INFO_BP_3QTR   (2.0)
 #define THREADPOOL_BP     (1.0)
@@ -134,6 +134,11 @@ static uint16_t get_backpressure(struct listener *l) {
     
     uint16_t threadpool_fill_pressure = THREADPOOL_BP * l->upstream_backpressure;
 
+    struct bus *b = l->bus;
+    BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
+        "lbp: %u, %u (iu %u), %u",
+        msg_fill_pressure, rx_info_fill_pressure, l->rx_info_in_use, threadpool_fill_pressure);
+
     return msg_fill_pressure + rx_info_fill_pressure
       + threadpool_fill_pressure;
 }
@@ -150,7 +155,7 @@ bool listener_expect_response(struct listener *l, boxed_msg *box,
     if (msg == NULL) { return false; }
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-        "listener_expect_response with box of %p", box);
+        "listener_expect_response with box of %p", (void*)box);
 
     msg->type = MSG_EXPECT_RESPONSE;
     msg->u.expect.box = box;
@@ -283,7 +288,6 @@ void *listener_mainloop(void *arg) {
 
 static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
     /* Mark all pending messages on this socket as being failed due to error. */
-
     for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
         rx_info_t *info = &l->rx_info[i];
         if (!info->active) {
@@ -486,7 +490,7 @@ static rx_info_t *find_info_by_sequence_id(listener *l,
         struct bus *b = l->bus;
         BUS_LOG_SNPRINTF(b, 4, LOG_MEMORY, b->udata, 128,
             "find_info_by_sequence_id: info (%p) at +%d [s %d]: box is %p",
-            info, info->id, info->error, box);
+            (void*)info, info->id, info->error, (void*)box);
         
         if (box == NULL) {
             continue;
@@ -517,7 +521,7 @@ static void process_unpacked_message(listener *l,
                 info->error = RX_ERROR_READY_FOR_DELIVERY;
                 
                 BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-                    "releasing box %p at line %d", box, __LINE__);
+                    "releasing box %p at line %d", (void*)box, __LINE__);
                 info->box = NULL;  /* release */
                 bus_msg_result_t *result = &box->result;
                 result->status = BUS_SEND_SUCCESS;
@@ -526,12 +530,12 @@ static void process_unpacked_message(listener *l,
                 if (bus_process_boxed_message(b, box, &backpressure)) {
                     /* success */
                     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-                        "successfully delivered box %p, marking info %p as DONE", box, info);
+                        "successfully delivered box %p, marking info %p as DONE", (void*)box, (void*)info);
                     info->error = RX_ERROR_DONE;
                     assert(info->box == NULL);
                 } else {
                     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-                        "returning box %p at line %d", box, __LINE__);
+                        "returning box %p at line %d", (void*)box, __LINE__);
                     info->box = box; /* retry in tick_handler */
                 }
 
@@ -544,9 +548,10 @@ static void process_unpacked_message(listener *l,
              *     not flush them out as unsolicited until the queue of messages
              *     is fully processed. Otherwise, they sit in the queue stuck and
              *     slowing things down. */
-            BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
+            /* TODO: Do unsolicited status messages always have a seq_id of 0? */
+            BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
                 "Couldn't find info for seq_id %lld, msg %p",
-                seq_id, opaque_msg);
+                (long long)seq_id, opaque_msg);
    
             if (b->unexpected_msg_cb) {
                 b->unexpected_msg_cb(opaque_msg, seq_id, b->udata, ci->udata);
@@ -568,9 +573,9 @@ static void process_unpacked_message(listener *l,
 static void tick_handler(listener *l) {
     struct bus *b = l->bus;
 
-    BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
+    BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
         "tick... %p: %d of %d msgs in use, %d of %d rx_info in use, %d tracked_fds",
-        l, l->msgs_in_use, MAX_QUEUE_MESSAGES,
+        (void*)l, l->msgs_in_use, MAX_QUEUE_MESSAGES,
         l->rx_info_in_use, MAX_PENDING_MESSAGES, l->tracked_fds);
 
     if (b->log_level > 5 || 0) {  /* dump rx_info table */
@@ -578,7 +583,7 @@ static void tick_handler(listener *l) {
             printf(" -- in_use: %d, info[%d]: timeout %ld, error %d, box %p\n",
                 l->rx_info[i].active,
                 l->rx_info[i].id, l->rx_info[i].timeout_sec,
-                l->rx_info[i].error, l->rx_info[i].box);
+                l->rx_info[i].error, (void*)l->rx_info[i].box);
         }
     }
 
@@ -593,20 +598,20 @@ static void tick_handler(listener *l) {
                 retry_delivery(l, info);
             } else if (info->error == RX_ERROR_DONE) {
                 BUS_LOG_SNPRINTF(b, 4, LOG_LISTENER, b->udata, 64,
-                    "cleaning up completed RX event at info %p", info);
+                    "cleaning up completed RX event at info %p", (void*)info);
                 clean_up_completed_info(l, info);
             } else if (info->error != RX_ERROR_NONE) {
                 BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
-                    "notifying of rx failure -- error %d (info %p)", info->error, info);
+                    "notifying of rx failure -- error %d (info %p)", info->error, (void*)info);
                 notify_message_failure(l, info, BUS_SEND_RX_FAILURE);
             } else if (info->timeout_sec == 1) {
                 BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 64,
-                    "notifying of rx failure -- timeout (info %p)", info);
+                    "notifying of rx failure -- timeout (info %p)", (void*)info);
                 notify_message_failure(l, info, BUS_SEND_RX_TIMEOUT);
             } else {
                 BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 64,
                     "decrementing countdown on info %p [%u]: %ld",
-                    info, info->id, info->timeout_sec - 1);
+                    (void*)info, info->id, info->timeout_sec - 1);
                 info->timeout_sec--;
             }
         }
@@ -621,18 +626,18 @@ static void retry_delivery(listener *l, rx_info_t *info) {
     assert(info->box->result.status == BUS_SEND_SUCCESS);
     struct boxed_msg *box = info->box;
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-        "releasing box %p at line %d", box, __LINE__);
+        "releasing box %p at line %d", (void*)box, __LINE__);
     info->box = NULL;       /* release */
     size_t backpressure = 0;
     if (bus_process_boxed_message(l->bus, box, &backpressure)) {
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
             "successfully delivered box %p from info %p at line %d (retry)",
-            box, info, __LINE__);
+            (void*)box, (void*)info, __LINE__);
         info->error = RX_ERROR_DONE;
         release_rx_info(l, info);
     } else {
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-            "returning box %p at line %d", box, __LINE__);
+            "returning box %p at line %d", (void*)box, __LINE__);
         info->box = box;    /* retry in tick_handler */
     }
 
@@ -643,18 +648,18 @@ static void clean_up_completed_info(listener *l, rx_info_t *info) {
     assert(info->error == RX_ERROR_DONE);
     struct bus *b = l->bus;
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-        "info %p, box is %p at line %d", info, info->box, __LINE__);
+        "info %p, box is %p at line %d", (void*)info, (void*)info->box, __LINE__);
     size_t backpressure = 0;
     if (info->box) {
         if (info->box->result.status != BUS_SEND_SUCCESS) {
             printf("*** info %d: info->timeout %ld\n",
                 info->id, info->timeout_sec);
             printf("    info->error %d\n", info->error);
-            printf("    info->box == %p\n", info->box);
+            printf("    info->box == %p\n", (void*)info->box);
             printf("    info->box->result.status == %d\n", info->box->result.status);
             printf("    info->box->fd %d\n", info->box->fd);
-            printf("    info->box->out_seq_id %lld\n", info->box->out_seq_id);
-            printf("    info->box->out_msg %p\n", info->box->out_msg);
+            printf("    info->box->out_seq_id %lld\n", (long long)info->box->out_seq_id);
+            printf("    info->box->out_msg %p\n", (void*)info->box->out_msg);
 
         }
         assert(info->box == NULL);
@@ -662,13 +667,13 @@ static void clean_up_completed_info(listener *l, rx_info_t *info) {
         assert(info->box->result.status == BUS_SEND_SUCCESS);
         struct boxed_msg *box = info->box;
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-            "releasing box %p at line %d", box, __LINE__);
+            "releasing box %p at line %d", (void*)box, __LINE__);
         info->box = NULL;       /* release */
         if (bus_process_boxed_message(l->bus, box, &backpressure)) {
             release_rx_info(l, info);
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-                "returning box %p at line %d", box, __LINE__);
+                "returning box %p at line %d", (void*)box, __LINE__);
             info->box = box;    /* retry in tick_handler */
         }
     } else {                    /* already processed, just release it */
@@ -687,12 +692,12 @@ static void notify_message_failure(listener *l,
     
     boxed_msg *box = info->box;
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-        "releasing box %p at line %d", box, __LINE__);
+        "releasing box %p at line %d", (void*)box, __LINE__);
     info->box = NULL;
     if (bus_process_boxed_message(l->bus, box, &backpressure)) {
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
             "delivered box %p with failure message %d at line %d (info %p)",
-            box, status, __LINE__, info);
+            (void*)box, status, __LINE__, (void*)info);
         info->error = RX_ERROR_DONE;
         release_rx_info(l, info);
     } else {
@@ -789,12 +794,12 @@ static bool push_message(struct listener *l, listener_msg *msg) {
   
     if (casq_push(l->q, msg)) {
         BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
-            "Pushed message -- %p -- of type %d", msg, msg->type);
+            "Pushed message -- %p -- of type %d", (void*)msg, msg->type);
         /* TODO: write a wake message to a pipe? */
         return true;
     } else {
         BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
-            "Failed to pushed message -- %p", msg);
+            "Failed to pushed message -- %p", (void*)msg);
         return false;
     }
 }
@@ -802,7 +807,7 @@ static bool push_message(struct listener *l, listener_msg *msg) {
 static void msg_handler(listener *l, listener_msg *pmsg) {
     struct bus *b = l->bus;
     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
-        "Handling message -- %p", pmsg);
+        "Handling message -- %p", (void*)pmsg);
 
     listener_msg msg = *pmsg;
     release_msg(l, pmsg);
@@ -830,11 +835,11 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
 }
 
 static void notify_caller(int fd) {
-    uint8_t reply_buf[2] = {0x00, 0x00};
+    uint8_t reply_buf[sizeof(uint16_t)] = {0x00};
 
     for (;;) {
-        ssize_t wres = write(fd, reply_buf, 2);
-        if (wres == 2) { break; }
+        ssize_t wres = write(fd, reply_buf, sizeof(reply_buf));
+        if (wres == sizeof(reply_buf)) { break; }
         if (wres == -1) {
             if (errno == EINTR) {
                 errno = 0;
@@ -846,6 +851,8 @@ static void notify_caller(int fd) {
 }
 
 static bool grow_read_buf(listener *l, size_t nsize) {
+    if (nsize < l->read_buf_size) { return true; }
+
     uint8_t *nbuf = realloc(l->read_buf, nsize);
     if (nbuf) {
         struct bus *b = l->bus;
@@ -909,7 +916,7 @@ static void free_ci(connection_info *ci) {
 
 static void forget_socket(listener *l, int fd) {
     struct bus *b = l->bus;
-    BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
+    BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
         "forgetting socket %d", fd);
 
     /* don't really close it, just drop info about it in the listener */
@@ -942,7 +949,7 @@ static void expect_response(listener *l, boxed_msg *box) {
     assert(info);
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
         "Setting info %p (+%d)'s box to %p",
-        info, info->id, box);
+        (void*)info, info->id, (void*)box);
     assert(info->box == NULL);
     info->box = box;
     info->timeout_sec = RESPONSE_TIMEOUT;

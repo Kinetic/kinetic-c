@@ -19,53 +19,36 @@
 */
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
+#include "kinetic_semaphore.h"
 #include <stdlib.h>
 #include <sys/file.h>
+#include <sys/time.h>
 #include <errno.h>
+// Smaller number of large payloads
+#define NUM_PUTS (500)
+#define PAYLOAD_SIZE (KINETIC_OBJ_SIZE)
 
-#define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
-
-struct kinetic_thread_arg {
-    char ip[16];
-    struct kinetic_put_arg* opArgs;
-    int opCount;
-};
+// Large number of very small payloads
+//#define NUM_PUTS (10000)
+//#define PAYLOAD_SIZE (20)
 
 typedef struct {
-    size_t opsInProgress;
-    size_t currentChunk;
-    size_t maxOverlappedChunks;
-    int fd;
-    uint64_t keyPrefix;
-    pthread_mutex_t transferMutex;
-    pthread_mutex_t completeMutex;
-    pthread_cond_t completeCond;
+    KineticSemaphore * sem;
     KineticStatus status;
-    KineticSession* session;
-} FileTransferProgress;
+} PutStatus;
 
-typedef struct {
-    KineticEntry entry;
-    uint8_t key[KINETIC_DEFAULT_KEY_LEN];
-    uint8_t value[KINETIC_OBJ_SIZE];
-    uint8_t tag[KINETIC_DEFAULT_KEY_LEN];
-    FileTransferProgress* currentTransfer;
-} AsyncWriteClosureData;
-
-FileTransferProgress * start_file_transfer(KineticSession * const session,
-    char const * const filename, uint64_t keyPrefix, uint32_t maxOverlappedChunks);
-KineticStatus wait_for_put_finish(FileTransferProgress* const transfer);
-
-static int put_chunk_of_file(FileTransferProgress* transfer);
-static void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* client_data);
+static void put_finished(KineticCompletionData* kinetic_data, void* clientData);
 
 void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
 {
+    ByteBuffer test_data = ByteBuffer_Malloc(PAYLOAD_SIZE);
+    ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
+
     // Initialize kinetic-c and configure sessions
     const char HmacKeyString[] = "asdfasdf";
     KineticSession session = {
         .config = (KineticSessionConfig) {
-            .host = "localhost",
+            .host = SYSTEM_TEST_HOST,
             .port = KINETIC_PORT,
             .clusterVersion = 0,
             .identity = 1,
@@ -82,137 +65,100 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
         TEST_FAIL();
     }
 
-    // Create a unique/common key prefix
-    struct timeval now;
-    gettimeofday(&now, NULL);
-    uint64_t prefix = (uint64_t)now.tv_sec << sizeof(8);
+    uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
+    ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
 
-    // Kick off the chained write/PUT operations and wait for completion
-    const char* dataFile = "test/support/data/test.data";
-    FileTransferProgress* transfer = start_file_transfer(&session, dataFile, prefix, 4);
-    printf("Waiting for transfer to complete...\n");
-    status = wait_for_put_finish(transfer);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Transfer failed w/status: %s\n",
-            Kinetic_GetStatusDescription(status));
-        TEST_FAIL();
+    PutStatus put_statuses[NUM_PUTS];
+    for (size_t i = 0; i < NUM_PUTS; i++) {
+        put_statuses[i] = (PutStatus){
+            .sem = KineticSemaphore_Create(),
+            .status = KINETIC_STATUS_INVALID,
+        };
+    };
+
+    uint32_t keys[NUM_PUTS];
+    KineticEntry entries[NUM_PUTS];
+
+    struct timeval start_time;
+    gettimeofday(&start_time, NULL);
+
+    for (uint32_t put = 0; put < NUM_PUTS; put++) {
+        keys[put] = put;
+        ByteBuffer key = ByteBuffer_Create(&keys[put], sizeof(keys[put]), sizeof(keys[put]));
+
+        KineticSynchronization sync = (put == NUM_PUTS - 1)
+            ? KINETIC_SYNCHRONIZATION_FLUSH
+            : KINETIC_SYNCHRONIZATION_WRITEBACK;
+
+        entries[put] = (KineticEntry) {
+            .key = key,
+            .tag = tag,
+            .algorithm = KINETIC_ALGORITHM_SHA1,
+            .value = test_data,
+            .synchronization = sync,
+        };
+
+        KineticStatus status = KineticClient_Put(
+            &session,
+            &entries[put],
+            &(KineticCompletionClosure) {
+                .callback = put_finished,
+                .clientData = &put_statuses[put],
+            }
+        );
+
+        if (status != KINETIC_STATUS_SUCCESS) {
+            fprintf(stderr, "PUT failed w/status: %s\n", Kinetic_GetStatusDescription(status));
+            TEST_FAIL();
+        }
     }
+
+    printf("Waiting for put finish\n");
+
+    for (size_t i = 0; i < NUM_PUTS; i++)
+    {
+        KineticSemaphore_WaitForSignalAndDestroy(put_statuses[i].sem);
+        if (put_statuses[i].status != KINETIC_STATUS_SUCCESS) {
+            fprintf(stderr, "PUT failed w/status: %s\n", Kinetic_GetStatusDescription(put_statuses[i].status));
+            TEST_FAIL();
+        }
+    }
+
+    struct timeval stop_time;
+    gettimeofday(&stop_time, NULL);
+
+    size_t bytes_written = NUM_PUTS * test_data.array.len;
+    int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
+        + (stop_time.tv_usec - start_time.tv_usec);
+    float elapsed_ms = elapsed_us / 1000.0f;
+    float bandwidth = (bytes_written * 1000.0f) / (elapsed_ms * 1024 * 1024);
+    fflush(stdout);
+    printf("\n"
+        "Write/Put Performance:\n"
+        "----------------------------------------\n"
+        "wrote:      %.1f kB\n"
+        "duration:   %.3f seconds\n"
+        "throughput: %.2f MB/sec\n\n",
+        bytes_written / 1024.0f,
+        elapsed_ms / 1000.0f,
+        bandwidth);
+
+
     printf("Transfer completed successfully!\n");
+
+    ByteBuffer_Free(test_data);
 
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(&session);
     KineticClient_Shutdown(client);
 }
 
-
-static int put_chunk_of_file(FileTransferProgress* transfer)
+static void put_finished(KineticCompletionData* kinetic_data, void* clientData)
 {
-    AsyncWriteClosureData* closureData = calloc(1, sizeof(AsyncWriteClosureData));
-    transfer->opsInProgress++;
-    closureData->currentTransfer = transfer;
-
-    int bytesRead = read(transfer->fd, closureData->value, sizeof(closureData->value));
-    if (bytesRead > 0) {
-        transfer->currentChunk++;
-        closureData->entry = (KineticEntry){
-            .key = ByteBuffer_CreateAndAppend(closureData->key, sizeof(closureData->key),
-                &transfer->keyPrefix, sizeof(transfer->keyPrefix)),
-            .tag = ByteBuffer_CreateAndAppendFormattedCString(closureData->tag, sizeof(closureData->tag),
-                "some_value_tag..._%04d", transfer->currentChunk),
-            .algorithm = KINETIC_ALGORITHM_SHA1,
-            .value = ByteBuffer_Create(closureData->value, sizeof(closureData->value), (size_t)bytesRead),
-            .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
-        };
-        KineticStatus status = KineticClient_Put(transfer->session,
-            &closureData->entry,
-            &(KineticCompletionClosure) {
-                .callback = put_chunk_of_file_finished,
-                .clientData = closureData,
-            });
-        if (status != KINETIC_STATUS_SUCCESS) {
-            transfer->opsInProgress--;
-            free(closureData);
-            fprintf(stderr, "Failed writing chunk! PUT request reported status: %s\n",
-                Kinetic_GetStatusDescription(status));
-        }
-    }
-    else if (bytesRead == 0) { // EOF reached
-        transfer->opsInProgress--;
-        free(closureData);
-    }
-    else {
-        transfer->opsInProgress--;
-        free(closureData);
-        fprintf(stderr, "Failed reading data from file!\n");
-        REPORT_ERRNO(bytesRead, "read");
-    }
-    
-    return bytesRead;
-}
-
-static void put_chunk_of_file_finished(KineticCompletionData* kinetic_data, void* clientData)
-{
-    AsyncWriteClosureData* closureData = clientData;
-    FileTransferProgress* currentTransfer = closureData->currentTransfer;
-    free(closureData);
-    currentTransfer->opsInProgress--;
-
-    if (kinetic_data->status == KINETIC_STATUS_SUCCESS) {
-        int bytesPut = put_chunk_of_file(currentTransfer);
-        if (bytesPut <= 0 && currentTransfer->opsInProgress == 0) {
-            if (currentTransfer->status == KINETIC_STATUS_NOT_ATTEMPTED) {
-                currentTransfer->status = KINETIC_STATUS_SUCCESS;
-            }
-            pthread_cond_signal(&currentTransfer->completeCond);
-        }
-    }
-    else {
-        currentTransfer->status = kinetic_data->status;
-        // only signal when finished
-        // keep track of outstanding operations
-        // if there is no more data to read (or error), and no outstanding operations,
-        // then signal
-        pthread_cond_signal(&currentTransfer->completeCond);
-        fprintf(stderr, "Failed writing chunk! PUT response reported status: %s\n",
-            Kinetic_GetStatusDescription(kinetic_data->status));
-    }
-}
-
-FileTransferProgress * start_file_transfer(KineticSession * const session,
-    char const * const filename, uint64_t keyPrefix, uint32_t maxOverlappedChunks)
-{
-    FileTransferProgress * transferState = malloc(sizeof(FileTransferProgress));
-    *transferState = (FileTransferProgress) {
-        .session = session,
-        .maxOverlappedChunks = maxOverlappedChunks,
-        .keyPrefix = keyPrefix,
-        .fd = open(filename, O_RDONLY),
-    };
-    pthread_mutex_init(&transferState->transferMutex, NULL);
-    pthread_mutex_init(&transferState->completeMutex, NULL);
-    pthread_cond_init(&transferState->completeCond, NULL);
-        
-    // Start max overlapped PUT operations
-    for (size_t i = 0; i < transferState->maxOverlappedChunks; i++) {
-        put_chunk_of_file(transferState);
-    }
-    return transferState;
-}
-
-KineticStatus wait_for_put_finish(FileTransferProgress* const transfer)
-{
-    pthread_mutex_lock(&transfer->completeMutex);
-    pthread_cond_wait(&transfer->completeCond, &transfer->completeMutex);
-    pthread_mutex_unlock(&transfer->completeMutex);
-
-    KineticStatus status = transfer->status;
-
-    pthread_mutex_destroy(&transfer->completeMutex);
-    pthread_cond_destroy(&transfer->completeCond);
-
-    close(transfer->fd);
-
-    free(transfer);
-
-    return status;
+    // LOGF1("DONE w/ status: %s", kinetic_data->status);
+    PutStatus * put_status = clientData;
+    // Save PUT result status
+    put_status->status = kinetic_data->status;
+    // Signal that we're done
+    KineticSemaphore_Signal(put_status->sem);
 }

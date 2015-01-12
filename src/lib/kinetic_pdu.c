@@ -31,16 +31,15 @@
 #include "bus.h"
 #include "kinetic_pdu_unpack.h"
 
-#ifdef TEST
-#define STATIC
-#else
-#define STATIC static
-#endif
+#include <time.h>
 
 STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
     const char *event_str = bus_log_event_str(event);
-    fprintf(stderr, "%s[%d] -- %s\n",
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    LOGF1("%ld.%06ld: %s[%d] -- %s\n",
+        tv.tv_sec, (long)tv.tv_usec,
         event_str, log_level, msg);
 }
 
@@ -189,7 +188,9 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         }
 
         int64_t seq_id = 0;
-        if (response->command) {
+        if (response->command != NULL &&
+            response->command->header != NULL) {
+
             seq_id = response->command->header->ackSequence;
         }
 
@@ -208,12 +209,15 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
 {
     bus_config cfg = {
         .log_cb = log_cb,
-        .log_level = log_level,
+        .log_level = (log_level > 1) ? 1 : 0,
         .sink_cb = sink_cb,
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = KineticController_HandleUnexecpectedResponse,
         .bus_udata = NULL,
+        .sender_count = 4,
+        .listener_count = 4,
     };
+    (void)log_level;
     bus_result res = {0};
     if (!bus_init(&cfg, &res)) {
         LOGF0("failed to init bus: %d\n", res.status);

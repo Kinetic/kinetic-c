@@ -102,15 +102,26 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
     TEST_IGNORE_MESSAGE("Need to track down some odd test failures here...");
 
     // Arguments shared between entries
-    uint8_t tagData[1024];
-    uint8_t keyData[1024];
-    uint8_t valueData[1024];
-    
-    KineticEntry Entry = {
-        .key = ByteBuffer_CreateAndAppendCString(keyData, sizeof(keyData), "key1"),
-        .tag = ByteBuffer_CreateAndAppendCString(tagData, sizeof(tagData), "some_tag_hash"),
-        .value = ByteBuffer_CreateAndAppendCString(valueData, sizeof(valueData), "value1"),
+
+    uint8_t TagData[1024];
+    ByteBuffer tagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "tag_val");
+
+    uint8_t key1[10];
+    ByteBuffer keyBuffer1 = ByteBuffer_CreateAndAppendCString(key1, sizeof(key1), "key1");
+    uint8_t value1[10];
+    ByteBuffer valueBuffer1 = ByteBuffer_CreateAndAppendCString(value1, sizeof(value1), "value1");
+
+    uint8_t key2[10];
+    ByteBuffer keyBuffer2 = ByteBuffer_CreateAndAppendCString(key2, sizeof(key2), "key2");
+    uint8_t value2[10];
+    ByteBuffer valueBuffer2 = ByteBuffer_CreateAndAppendCString(value2, sizeof(value2), "value2");
+
+    // Do a blocking PUT ("key1" => "value1") so we can delete it later
+    KineticEntry Entry = (KineticEntry) {
+        .key = keyBuffer1,
+        .tag = tagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = valueBuffer1,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
         .force = true,
     };
@@ -118,50 +129,48 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     Entry = (KineticEntry) {
-        .key = ByteBuffer_CreateAndAppendCString(keyData, sizeof(keyData), "key2"),
-        .tag = ByteBuffer_CreateAndAppendCString(tagData, sizeof(tagData), "some_tag_hash"),
-        .value = ByteBuffer_CreateAndAppendCString(valueData, sizeof(valueData), "value1"),
+        .key = keyBuffer2,
+        .tag = tagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = valueBuffer2,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
         .force = true,
     };
+
     status = KineticClient_Put(&Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // // Do an async DELETE so we can flush to complete it
-    // KineticEntry deleteEntry = {
-    //     .key = KeyBuffer1,
-    // };
-    // status = KineticClient_Delete(&Fixture.session, &deleteEntry, &no_op_closure);
+    // Do an async DELETE so we can flush to complete it
+    KineticEntry deleteEntry = {
+        .key = keyBuffer1,
+    };
+    KineticCompletionClosure no_op_closure = {
+        .callback = &no_op_callback,
+    };
+    status = KineticClient_Delete(&Fixture.session, &deleteEntry, &no_op_closure);
 
-    // /* Now do a blocking flush and confirm that (key1,value1) has been
-    //  * DELETEd and (key2,value2) have been PUT. */
-    // status = KineticClient_Flush(&Fixture.session, NULL);
-    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    /* Now do a blocking flush and confirm that (key1,value1) has been
+     * DELETEd and (key2,value2) have been PUT. */
+    status = KineticClient_Flush(&Fixture.session, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // // GET key1 --> expect NOT FOUND
-    // KineticEntry getEntry1 = {
-    //     .key = KeyBuffer1,
-    //     .dbVersion = VersionBuffer,
-    //     .tag = TagBuffer,
-    //     .algorithm = KINETIC_ALGORITHM_SHA1,
-    //     .value = ValueBuffer1,
-    //     .force = true,
-    // };
-    // status = KineticClient_Get(&Fixture.session, &getEntry1, NULL);
-    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
+    // GET key1 --> expect NOT FOUND
+    KineticEntry getEntry1 = {
+        .key = keyBuffer1,
+        .tag = tagBuffer,
+        .value = valueBuffer1,
+    };
+    status = KineticClient_Get(&Fixture.session, &getEntry1, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
 
-    // // GET key2 --> present
-    // KineticEntry getEntry2 = {
-    //     .key = KeyBuffer2,
-    //     .dbVersion = VersionBuffer,
-    //     .tag = TagBuffer,
-    //     .algorithm = KINETIC_ALGORITHM_SHA1,
-    //     .value = ValueBuffer2,
-    //     .force = true,
-    // };
-    // status = KineticClient_Get(&Fixture.session, &getEntry2, NULL);
-    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    // GET key2 --> present
+    KineticEntry getEntry2 = {
+        .key = keyBuffer2,
+        .tag = tagBuffer,
+        .value = valueBuffer2,
+    };
+    status = KineticClient_Get(&Fixture.session, &getEntry2, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 /*******************************************************************************
