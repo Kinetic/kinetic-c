@@ -235,11 +235,11 @@ static bool attempt_to_increase_resource_limits(struct bus *b) {
         return false;
     }
 
-    const int nval = 1024;
+    const unsigned int nval = 1024;
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
-        "Current FD resource limits, [%lld, %lld], changing to %d",
-        info.rlim_cur, info.rlim_max, nval);
+        "Current FD resource limits, [%lu, %lu], changing to %u",
+        (unsigned long)info.rlim_cur, (unsigned long)info.rlim_max, nval);
 
     if (info.rlim_cur < nval && info.rlim_max > nval) {
         info.rlim_cur = nval;
