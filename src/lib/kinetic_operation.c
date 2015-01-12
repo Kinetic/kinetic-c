@@ -60,6 +60,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation)
 {
     LOGF2("\nSending PDU via fd=%d", operation->connection->messageBus);
+
     KineticPDU* request = operation->request;
     KineticProto_Message* proto = &operation->request->message.message;
 
@@ -124,6 +125,10 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         return KINETIC_STATUS_BUFFER_OVERRUN;
     }
 
+    LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, protoLen: %u, valueLen: %u",
+        operation->request, operation, &operation->connection->session,
+        operation->connection->messageBus, header.protobufLength, header.valueLength);
+
     KineticLogger_LogHeader(2, &header);
 
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
@@ -154,7 +159,6 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     // Send the value/payload, if specified
     if (header.valueLength > 0) {
-        LOGF2("Sending PDU Value Payload (%zu bytes)", operation->entry->value.bytesUsed);
         memcpy(&msg[offset], operation->entry->value.array.data, operation->entry->value.bytesUsed);
         offset += operation->entry->value.bytesUsed;
     }

@@ -57,6 +57,7 @@ struct threadpool {
     size_t max_delay;           /* ceil of exponential sleep back-off */
     uint8_t task_ringbuf_size2;
 
+    bool shutting_down;
     uint8_t live_threads;
     uint8_t max_threads;
     struct thread_info *threads;

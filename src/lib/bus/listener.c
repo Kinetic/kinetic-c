@@ -854,6 +854,8 @@ static void notify_caller(int fd) {
 }
 
 static bool grow_read_buf(listener *l, size_t nsize) {
+    if (nsize < l->read_buf_size) { return true; }
+
     uint8_t *nbuf = realloc(l->read_buf, nsize);
     if (nbuf) {
         struct bus *b = l->bus;

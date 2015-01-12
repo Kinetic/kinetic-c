@@ -62,7 +62,8 @@ struct threadpool_info {
 struct threadpool *threadpool_init(struct threadpool_config *cfg);
 
 /* Schedule a task in the threadpool. Returns whether the task was successfully
- * registered or not.
+ * registered or not. If threadpool_shutdown has been called, this
+ * function will always return false, due to API misuse.
  *
  * If *pushback is non-NULL, it will be set to the number of tasks
  * in the backlog, so code upstream can provide counterpressure.

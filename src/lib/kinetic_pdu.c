@@ -31,12 +31,6 @@
 #include "bus.h"
 #include "kinetic_pdu_unpack.h"
 
-#ifdef TEST
-#define STATIC
-#else
-#define STATIC static
-#endif
-
 #include <time.h>
 
 STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
@@ -44,9 +38,8 @@ STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udat
     const char *event_str = bus_log_event_str(event);
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    FILE *f = stdout; /* stderr */
-    fprintf(f, "%ld.%06d: %s[%d] -- %s\n",
-        tv.tv_sec, (int)tv.tv_usec,
+    LOGF1("%ld.%06ld: %s[%d] -- %s\n",
+        tv.tv_sec, (long)tv.tv_usec,
         event_str, log_level, msg);
 }
 
@@ -216,7 +209,7 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
 {
     bus_config cfg = {
         .log_cb = log_cb,
-        .log_level = log_level,
+        .log_level = (log_level > 1) ? 1 : 0,
         .sink_cb = sink_cb,
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = KineticController_HandleUnexecpectedResponse,

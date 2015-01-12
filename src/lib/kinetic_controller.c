@@ -40,8 +40,7 @@ KineticOperation* KineticController_CreateOperation(KineticSession const * const
         return NULL;
     }
 
-    LOGF1("\n"
-         "--------------------------------------------------\n"
+    LOGF3("--------------------------------------------------\n"
          "Building new operation on session @ 0x%llX", session);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
@@ -78,19 +77,9 @@ static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* const closure)
 {
     assert(operation != NULL);
+    assert(operation->connection != NULL);
+    assert(&operation->connection->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
-
-    LOGF1("Executing operation: 0x%llX", operation);
-    if (operation->entry != NULL &&
-        operation->entry->value.array.data != NULL &&
-        operation->entry->value.bytesUsed > 0)
-    {
-        LOGF1("  Sending PDU (0x%0llX) w/value (%zu bytes)",
-            operation->request, operation->entry->value.bytesUsed);
-    }
-    else {
-        LOGF1("  Sending PDU (0x%0llX) w/o value", operation->request);
-    }
 
     if (closure != NULL)
     {
@@ -188,6 +177,11 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
             response->command->header != NULL &&
             response->command->header->has_connectionID)
         {
+            LOGF1("[PDU RX UNSOLICTED] pdu: 0x%0llX, session: 0x%llX, bus: 0x%llX, "
+                "protoLen: %u, valueLen: %u",
+                response, &connection->session, connection->messageBus,
+                response->header.protobufLength, response->header.valueLength);
+
             // Extract connectionID from unsolicited status message
             connection->connectionID = response->command->header->connectionID;
             LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
@@ -218,16 +212,19 @@ void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata
             response->command->status->has_code)
         {
             status = KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
-            LOGF2("Response PDU received w/status %s, %i",
-                Kinetic_GetStatusDescription(status), status);
             KineticLogger_LogProtobuf(3, response->proto);
             op->response = response;
         }
         else
         {
             status = KINETIC_STATUS_INVALID;
-            LOG0("Error: received a response with a nonexistent command or status");
         }
+
+        LOGF1("[PDU RX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, "
+            "protoLen: %u, valueLen: %u, status: %s",
+            response, op, &op->connection->session, op->connection->messageBus,
+            response->header.protobufLength, response->header.valueLength,
+            Kinetic_GetStatusDescription(status));
     }
     else
     {
