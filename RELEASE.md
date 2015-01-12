@@ -5,6 +5,12 @@ v0.10.0 (kinetic-protocol 3.0.5)
 * Switched internal message infrastructure to use a threadpool. This will allow for a much higher number active connections and outstanding commands.
 * KineticClient_Init now returns a KineticClient pointer (internally, it's a handle to the threadpool) that must be passed to KineticClient_CreateConnection() in order to create new connections and must also be passed to KineticClient_Shutdown() on shutdown
 * Improved I/O examples to demonstrate client write operations for blocking/non-blocking (asynchrounous) and single/multi-threaded.
+* Added consolidated performance test which reports metrics on PUT/GET/DELETE seqeunces (test/system/test_system_async_throughput.c).
+
+v0.9.2 (kinetic-protocol 3.0.5)
+-------------------------------
+* Added missing mutex lock causing a concurrency issue.
+* Added profiling to test/system/test_system_async_io.c
 
 v0.9.1 (kinetic-protocol 3.0.5)
 -------------------------------
