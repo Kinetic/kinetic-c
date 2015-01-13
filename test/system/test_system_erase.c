@@ -66,13 +66,8 @@ void tearDown(void)
 
 void test_InstantSecureErase_should_erase_device_contents(void)
 { LOG_LOCATION;
-    // if (SystemTestIsUnderSimulator()) {
-    //     KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
-    //     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status); 
-    // }
-    // else {
-    //     TEST_IGNORE_MESSAGE("Test disabled against HW until PIN auth completed!");
-    // }
+    KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status); 
 }
 
 /*******************************************************************************

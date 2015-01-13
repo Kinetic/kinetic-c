@@ -98,10 +98,10 @@ KineticStatus KineticSession_Connect(KineticSession * const session)
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
-
+    bus_socket_t socket_type = session->config.useSsl ? BUS_SOCKET_SSL : BUS_SOCKET_PLAIN;
     connection->si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     if (connection->si == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
-    bool success = bus_register_socket(connection->messageBus, BUS_SOCKET_PLAIN, connection->socket, connection);
+    bool success = bus_register_socket(connection->messageBus, socket_type, connection->socket, connection);
     if (!success) {
         free(connection->si);
         return KINETIC_STATUS_SESSION_INVALID;

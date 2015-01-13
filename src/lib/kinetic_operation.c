@@ -688,7 +688,7 @@ void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
 {
     KineticOperation_ValidateOperation(operation);
     KineticSession_IncrementSequence(operation->connection->session);
-    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
+    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP;
     operation->request->message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->message.body;
     operation->request->command->body->pinOp = &operation->request->message.pinOp;

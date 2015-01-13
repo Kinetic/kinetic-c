@@ -34,7 +34,7 @@ KineticClient * KineticClient_Init(const char* log_file, int log_level)
     KineticLogger_Init(log_file, log_level);
     KineticClient * client = KineticCalloc(1, sizeof(*client));
     if (client == NULL) { return NULL; }
-    bool success = KineticPDU_InitBus(1, client);
+    bool success = KineticPDU_InitBus(log_level, client);
     if (!success)
     {
         KineticFree(client);

@@ -43,7 +43,7 @@ void SystemTestSetup(SystemTestFixture* fixture, int log_level)
 
     KineticSessionConfig adminConfig = {
         .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_PORT,
+        .port = KINETIC_TLS_PORT,
         .clusterVersion = SESSION_CLUSTER_VERSION,
         .pin = ByteArray_Create(adminConfig.pinData, strlen(SESSION_PIN)),
         .useSsl = true,

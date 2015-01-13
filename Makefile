@@ -100,7 +100,7 @@ all: default test system_tests test_internals run examples
 clean: makedirs update_git_submodules
 	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util
 	rm -rf ./bin/**/*
-	rm ./bin/*.*
+	rm -f ./bin/*.*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber
 	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
