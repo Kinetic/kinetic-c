@@ -424,6 +424,8 @@ static void cleanup(sender *s) {
         }
         
         yacht_free(y, free_fd_info_cb, NULL);
+        close(s->incoming_command_pipe);
+        close(s->commit_pipe);
     }
 }
 
