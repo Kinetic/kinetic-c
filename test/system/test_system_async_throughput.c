@@ -308,9 +308,14 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
     KineticClient_Shutdown(client);
 }
 
-void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
+void test_kinetic_client_throughput_for_maximum_sized_objects(void)
 {
     run_throghput_tests(500, KINETIC_OBJ_SIZE);
+}
+
+void test_kinetic_client_throughput_for_small_sized_objects(void)
+{
+    run_throghput_tests(2000, 120);
 }
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData)

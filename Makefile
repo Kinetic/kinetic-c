@@ -139,7 +139,7 @@ $(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 
-ci: uninstall all test_internals install
+ci: uninstall all stop_simulator test_internals install
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!
@@ -307,50 +307,7 @@ $(SYSTEST_OUT)/%.testpass : $(SYSTEST_OUT)/run_%
 
 $(systest_names) : % : $(SYSTEST_OUT)/%.testpass
 
-# system_tests: start_simulator $(systest_results)
-system_tests: start_simulator $(systest_passfiles)
-
-
-# run_systest_%: $(SYSTEST_OUT)/%
-# 	@echo
-# 	@echo ================================================================================
-# 	@echo Executing system test: '$<'
-# 	@echo --------------------------------------------------------------------------------;
-# 	$<
-# 	@echo ================================================================================
-# 	@echo
-# 	./vendor/kinetic-simulator/stopSimulator.sh
-# run_systest_%: start_simulator
-
-# valgrind_systest_%: $(SYSTEST_OUT)/%
-# 	@echo
-# 	@echo ================================================================================
-# 	@echo Executing system test: '$<'
-# 	@echo --------------------------------------------------------------------------------;
-# 	${VALGRIND} ${VALGRIND_ARGS} $<
-# 	@echo ================================================================================
-# 	@echo
-
-# setup_system_tests: $(systest_executables) \
-# 	build_system_tests
-
-# system_tests: setup_system_tests \
-# 	start_simulator \
-# 	run_example_write_file_blocking \
-# 	run_example_write_file_blocking_threads \
-# 	run_example_write_file_nonblocking \
-# 	run_example_write_file_nonblocking_threads \
-# 	stop_simulator
-
-# valgrind_system_tests: setup_system_tests \
-# 	start_simulator \
-# 	valgrind_example_write_file_blocking \
-# 	valgrind_example_write_file_blocking_threads \
-# 	valgrind_example_write_file_nonblocking \
-# 	valgrind_example_write_file_nonblocking_threads \
-# 	stop_simulator
-
-
+system_tests: $(systest_passfiles)
 
 
 #===============================================================================
@@ -387,7 +344,7 @@ CLASSPATH = $(JAVA_HOME)/lib/tools.jar:$(SIM_JARS_PREFIX)-jar-with-dependencies.
 SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
 SIM_ADMIN = com.seagate.kinetic.admin.cli.KineticAdminCLI
 
-run: $(UTIL_EXEC) start_simulator
+run: $(UTIL_EXEC)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Running test utility: $(UTIL_EXEC)
@@ -425,17 +382,6 @@ $(BIN_DIR)/examples/%: $(EXAMPLE_SRC)/%.c $(KINETIC_LIB)
 
 build_examples: $(example_executables)
 
-test_example_%: $(BIN_DIR)/examples/%
-	@echo
-	@echo ================================================================================
-	@echo Executing example: '$<'
-	@echo --------------------------------------------------------------------------------;
-	$<
-	@echo ================================================================================
-	@echo
-	./vendor/kinetic-simulator/stopSimulator.sh
-test_example_%: start_simulator
-
 run_example_%: $(BIN_DIR)/examples/%
 	@echo
 	@echo ================================================================================
@@ -458,21 +404,17 @@ setup_examples: $(example_executables) \
 	build_examples
 
 examples: setup_examples \
-	start_simulator \
 	run_example_put_nonblocking \
 	run_example_get_nonblocking \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
 	run_example_get_key_range \
-	stop_simulator
 
 valgrind_examples: setup_examples \
-	start_simulator \
 	valgrind_put_nonblocking \
 	valgrind_get_nonblocking \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \
 	valgrind_example_get_key_range \
-	stop_simulator
