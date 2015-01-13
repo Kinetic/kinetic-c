@@ -2,6 +2,7 @@ v0.10.1 (kinetic-protocol 3.0.5)
 --------------------------------
 * Fixed regression in 0.10.0 where a GET with metadataOnly=true would result in a crash if a value field was not provided
 * Added system tests for P2P operations which are now fully validated and working on HW
+* Fixed misue of pthread_join status in thread pool which was causing shutdown issues in GCC builds
 
 v0.10.0 (kinetic-protocol 3.0.5)
 --------------------------------
