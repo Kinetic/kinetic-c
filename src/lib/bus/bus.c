@@ -237,17 +237,26 @@ static bool attempt_to_increase_resource_limits(struct bus *b) {
 
     const unsigned int nval = 1024;
 
-    BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
-        "Current FD resource limits, [%lu, %lu], changing to %u",
-        (unsigned long)info.rlim_cur, (unsigned long)info.rlim_max, nval);
-
     if (info.rlim_cur < nval && info.rlim_max > nval) {
         info.rlim_cur = nval;
+        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+            "Current FD resource limits, [%lu, %lu], changing to %u",
+            (unsigned long)info.rlim_cur, (unsigned long)info.rlim_max, nval);
         if (-1 == setrlimit(RLIMIT_NOFILE, &info)) {
+            BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+                "Failed to increase FD resource limit to %u, %s",
+                nval, strerror(errno));
             fprintf(stderr, "getrlimit: %s", strerror(errno));
             errno = 0;
             return false;
+        } else {
+            BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+                "Successfully increased FD resource limit to %u", nval);
         }
+    } else {
+        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+            "Current FD resource limits [%lu, %lu] are acceptable",
+            (unsigned long)info.rlim_cur, (unsigned long)info.rlim_max);
     }
     return true;
 }
