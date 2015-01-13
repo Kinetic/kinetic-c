@@ -777,36 +777,16 @@ static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl) {
     boxed_msg *box = info->u.write.box;
     uint8_t *msg = box->out_msg;
     size_t msg_size = box->out_msg_size;
-    size_t sent_size = info->u.write.sent_size;
-    size_t rem = msg_size - sent_size;
+    size_t rem = msg_size - info->u.write.sent_size;
     int fd = info->u.write.fd;
     ssize_t written = 0;
-    for (;;) {
-        BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-            "SSL write %p to %d, %zd bytes (info %d)",
-            (void*)&msg[sent_size], fd, rem, info->id);
 
+    while (rem > 0) {
         ssize_t wrsz = SSL_write(ssl, &msg[info->u.write.sent_size], rem);
-
-        BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-            "SSL wrote %zd bytes to %d (info %d)",
-            wrsz, fd, info->id);
-
         if (wrsz > 0) {
             update_sent(b, s, info, wrsz);
-
             written += wrsz;
-            size_t rem = msg_size - written;
-            
-            BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-                "SSL has sent %zd w/ %zd bytes remaining to send to %d (info %d)",
-                written, rem, fd, info->id);
-
-            if (rem == 0) {
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-                    "SSL has sent all data for current packet! (%zd bytes)", written);
-                break;
-            }
+            rem -= wrsz;
         } else if (wrsz < 0) {
             int reason = SSL_get_error(ssl, wrsz);
             switch (reason) {
@@ -855,7 +835,7 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
     size_t rem = msg_size - info->u.write.sent_size;
     
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-        "wrote %zd, msg_size %zu (%p)",
+        "wrote %zd, msg_size %zd (%p)",
         sent, msg_size, (void*)box->out_msg);
     if (rem == 0) { /* completed! */
         fd_info *fdi = info->u.write.fdi;
