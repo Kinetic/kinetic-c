@@ -259,7 +259,7 @@ update_simulator:
 	cp vendor/kinetic-java/kinetic-simulator/target/*.jar vendor/kinetic-java-simulator/
 
 start_simulator:
-	./vendor/kinetic-simulator/startSimulator.sh
+	./vendor/kinetic-simulator/start2Simulators.sh
 
 stop_simulator:
 	./vendor/kinetic-simulator/stopSimulator.sh

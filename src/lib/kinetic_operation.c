@@ -277,10 +277,15 @@ static KineticStatus get_cb(const char *cmd_name, KineticOperation* const operat
                 return KINETIC_STATUS_BUFFER_OVERRUN;
             }
         }
-        ByteBuffer_AppendArray(&operation->entry->value, (ByteArray){
-            .data = operation->response->value,
-            .len = operation->response->header.valueLength,
-        });
+
+        if (!operation->entry->metadataOnly &&
+            !ByteBuffer_IsNull(operation->entry->value))
+        {
+            ByteBuffer_AppendArray(&operation->entry->value, (ByteArray){
+                .data = operation->response->value,
+                .len = operation->response->header.valueLength,
+            });
+        }
     }
 
     return status;

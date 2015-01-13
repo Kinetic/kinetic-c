@@ -85,9 +85,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
         .key = KeyBuffer,
         .dbVersion = VersionBuffer,
         .tag = TagBuffer,
-        .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
-        .force = true,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
 
@@ -111,9 +109,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
         .key = KeyBuffer,
         .dbVersion = VersionBuffer,
         .tag = TagBuffer,
-        .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
-        .force = true,
     };
 
     KineticStatus status = KineticClient_Get(&Fixture.session, &getEntry, NULL);
@@ -127,6 +123,26 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
     uint8_t expectedValueData[128];
     ByteBuffer expectedValue = ByteBuffer_CreateAndAppendArray(expectedValueData, sizeof(expectedValueData), TestValue);
     TEST_ASSERT_EQUAL_ByteBuffer(expectedValue, getEntry.value);
+}
+
+void test_Get_should_be_able_to_retrieve_just_metadata_from_device(void)
+{ LOG_LOCATION;
+
+    KineticEntry getEntry = {
+        .key = KeyBuffer,
+        .dbVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .metadataOnly = true,
+    };
+
+    KineticStatus status = KineticClient_Get(&Fixture.session, &getEntry, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, getEntry.key);
+    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, getEntry.tag);
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
 }
 
 /*******************************************************************************

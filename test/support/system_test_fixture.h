@@ -35,6 +35,7 @@ typedef struct _SystemTestFixture {
     bool testIgnored;
     bool connected;
     int64_t expectedSequence;
+    KineticClient * client;
 } SystemTestFixture;
 
 void SystemTestSetup(SystemTestFixture* fixture, int log_level);
