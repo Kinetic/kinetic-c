@@ -262,7 +262,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
             short ev = fds[0].revents;
             BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 64,
                 "poll: ev %d, errno %d", ev, errno);
-            if (ev & (POLLHUP | POLLERR | POLLNVAL) {
+            if (ev & (POLLHUP | POLLERR | POLLNVAL)) {
                 /* We've been hung up on due to a shutdown event. */
                 close(info->done_pipe);
                 return true;
