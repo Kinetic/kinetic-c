@@ -657,6 +657,7 @@ void bus_free(bus *b) {
 
     free(b->joined);
     free(b->threads);
+    yacht_free(b->fd_set, NULL, NULL);
 
     pthread_mutex_destroy(&b->log_lock);
 

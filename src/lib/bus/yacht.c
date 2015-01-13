@@ -236,6 +236,8 @@ void yacht_free(struct yacht *y, yacht_free_cb *cb, void *udata) {
                 cb(y->values[i], udata);
             }
         }
+        free(y->buckets);
+        free(y->values);
         free(y);
     }
 }
