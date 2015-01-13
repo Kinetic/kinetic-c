@@ -39,7 +39,7 @@ STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udat
     struct timeval tv;
     gettimeofday(&tv, NULL);
     LOGF1("%ld.%06ld: %s[%d] -- %s\n",
-        tv.tv_sec, (long)tv.tv_usec,
+        (long)tv.tv_sec, (long)tv.tv_usec,
         event_str, log_level, msg);
 }
 
