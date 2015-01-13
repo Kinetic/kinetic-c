@@ -156,7 +156,7 @@ namespace :java_sim do
     jars += [File.join(JAVA_HOME, 'lib/tools.jar')]
     jars.each {|jar| ENV['CLASSPATH'] += ':' + jar }
     $java_sim = spawn("#{JAVA_BIN} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
-    max_wait_secs = 10
+    max_wait_secs = 20
     sleep_duration = 0.2
     timeout = false
     elapsed_secs = 0
