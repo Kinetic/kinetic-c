@@ -412,6 +412,7 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL");
                     set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
                 }
+                break;
             }
             case SSL_ERROR_ZERO_RETURN:
             {
