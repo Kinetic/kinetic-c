@@ -8,4 +8,5 @@ compiler:
 install:
   - bundle install
 script:
+  - make start_simulator
   - make all
