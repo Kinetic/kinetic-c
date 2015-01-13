@@ -20,6 +20,12 @@ Prerequisites
             * `> sudo apt-get install openssl`
         * OSX (using [Homebrew](http://brew.sh/))
             * `> brew install openssl`
+            
+A release of OpenSSL that provides TLS 1.1 or newer is required.
+
+If the OpenSSL installation is not found, the `OPENSSL_PATH` environment
+variable may need to be set to its base path, e.g.
+`/usr/local/openssl/1.0.1k/`.
 
 Getting Started
 ---------------
@@ -86,7 +92,7 @@ Operations
         * Execute a Get operation to retrieve a key/value entry
     * `./bin/kinetic-c-util delete`
         * Execute a Delete operation to destroy a key/value entry
-    * `./bin/kinetic-c-util instanterase`
+    * `./bin/kinetic-c-util instanterase` *INCOMPLETE*
         * Execute an InstantSecureErase operation to erase ALL content from the device
 
 Kinetic C Client I/O Examples

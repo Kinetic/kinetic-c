@@ -536,13 +536,17 @@ bool bus_shutdown(bus *b) {
     for (int i = 0; i < b->sender_count; i++) {
         int off = 0;
         if (!b->joined[i + off]) {
-            BUS_LOG(b, 2, LOG_SHUTDOWN, "sender_shutdown...", b->udata);
+            BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+                "sender_shutdown -- %d", i);
             while (!sender_shutdown(b->senders[i])) {
-                BUS_LOG(b, 2, LOG_SHUTDOWN, "sender_shutdown... (retry)", b->udata);
+                BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+                    "sender_shutdown -- retry %d", i);
                 sleep(1);
             }
             void *unused = NULL;
             int res = pthread_join(b->threads[i + off], &unused);
+            BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+                "sender_shutdown -- joined %d", i);
             assert(res == 0);
             b->joined[i + off] = true;
         }
@@ -552,11 +556,17 @@ bool bus_shutdown(bus *b) {
     for (int i = 0; i < b->listener_count; i++) {
         int off = b->sender_count;
         if (!b->joined[i + off]) {
+            BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+                "listener_shutdown -- %d", i);
             while (!listener_shutdown(b->listeners[i])) {
                 sleep(1);
             }
+            BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+                "listener_shutdown -- joining %d", i);
             void *unused = NULL;
             int res = pthread_join(b->threads[i + off], &unused);
+            BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+                "listener_shutdown -- joined %d", i);
             assert(res == 0);
             b->joined[i + off] = true;
         }
@@ -616,24 +626,33 @@ void bus_free(bus *b) {
     bus_shutdown(b);
 
     for (int i = 0; i < b->sender_count; i++) {
+        BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+            "sender_free -- %d", i);
         sender_free(b->senders[i]);
     }
     free(b->senders);
 
     for (int i = 0; i < b->listener_count; i++) {
+        BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+            "listener_free -- %d", i);
         listener_free(b->listeners[i]);
     }
     free(b->listeners);
 
     int limit = (1000 * THREAD_SHUTDOWN_SECONDS)/10;
     for (int i = 0; i < limit; i++) {
+        BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+            "threadpool_shutdown -- %d", i);
         if (threadpool_shutdown(b->threadpool, false)) { break; }
         (void)poll(NULL, 0, 10);
 
         if (i == limit - 1) {
+            BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
+                "threadpool_shutdown -- %d (forced)", i);
             threadpool_shutdown(b->threadpool, true);
         }
     }
+    BUS_LOG(b, 3, LOG_SHUTDOWN, "threadpool_free", b->udata);
     threadpool_free(b->threadpool);
 
     free(b->joined);
