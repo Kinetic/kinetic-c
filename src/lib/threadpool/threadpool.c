@@ -165,8 +165,11 @@ bool threadpool_shutdown(struct threadpool *t, bool kill_all) {
             struct thread_info *ti = &t->threads[i];
             if (ti->status < STATUS_SHUTDOWN) {
                 ti->status = STATUS_SHUTDOWN;
-                if (0 != pthread_cancel(ti->t)) {
-                    assert(false);
+                int pcres = pthread_cancel(ti->t);
+                if (pcres != 0) {
+                    /* If this fails, tolerate the failure that the
+                     * pthread has already shut down. */
+                    assert(pcres == ESRCH);
                 }
             }
         }
@@ -304,7 +307,7 @@ static void *thread_task(void *arg) {
 
             int res = poll(pfd, 1, delay);
             if (res == 1) {
-                if ((pfd[0].revents & POLLHUP) || (pfd[0].revents & POLLERR)) {
+                if (pfd[0].revents & (POLLHUP | POLLERR | POLLNVAL)) {
                     /* TODO: HUP should be distinct from ERR -- hup is
                      * intentional shutdown, ERR probably isn't. */
                     ti->status = STATUS_SHUTDOWN;

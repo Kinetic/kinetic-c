@@ -329,9 +329,9 @@ static void attempt_recv(listener *l, int available) {
         connection_info *ci = l->fd_info[i];
         assert(ci->fd == fd->fd);
         
-        if (fd->revents & POLLERR) {
+        if (fd->revents & (POLLERR | POLLNVAL)) {
             read_from++;
-            BUS_LOG(b, 2, LOG_LISTENER, "pollfd: socket error POLLERR", b->udata);
+            BUS_LOG(b, 2, LOG_LISTENER, "pollfd: socket error (POLLERR | POLLNVAL)", b->udata);
             set_error_for_socket(l, i, ci->fd, RX_ERROR_POLLERR);
         } else if (fd->revents & POLLHUP) {
             read_from++;
