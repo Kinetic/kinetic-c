@@ -235,9 +235,13 @@ static bool notify_shutdown(struct threadpool *t) {
             done++;
         } else if (ti->status == STATUS_SHUTDOWN) {
             void *v = NULL;
-            if (pthread_join(ti->t, &v)) {
+            int joinres = pthread_join(ti->t, &v);
+            if (0 == joinres) {
                 ti->status = STATUS_JOINED;
                 done++;
+            } else {
+                fprintf(stderr, "pthread_join: %d\n", joinres);
+                assert(joinres == ESRCH);
             }
         } else {
             close(ti->parent_fd);
