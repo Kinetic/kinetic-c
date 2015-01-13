@@ -91,6 +91,7 @@ typedef struct {
 
         struct u_enqueue {
             int fd;
+            time_t timeout_sec;
             boxed_msg *box;
         } enqueue;
 

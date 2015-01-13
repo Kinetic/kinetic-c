@@ -137,6 +137,7 @@ bool sender_send_request(struct sender *s, boxed_msg *box) {
     info->state = TIS_REQUEST_ENQUEUE;
     info->u.enqueue.fd = box->fd;
     info->u.enqueue.box = box;
+    info->u.enqueue.timeout_sec = box->timeout_sec;
     
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending request on %d: box %p", box->fd, (void*)box);
@@ -568,7 +569,7 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
         
         struct u_write uw = {
             .fd = info->u.enqueue.fd,
-            .timeout_sec = TX_TIMEOUT,
+            .timeout_sec = info->u.enqueue.timeout_sec,
             .box = info->u.enqueue.box,
             .fdi = fdi,
         };

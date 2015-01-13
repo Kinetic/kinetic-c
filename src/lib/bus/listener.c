@@ -34,7 +34,6 @@
 #include "atomic.h"
 
 #define DEFAULT_READ_BUF_SIZE (1024L * 1024L)
-#define RESPONSE_TIMEOUT 10
 
 static void retry_delivery(listener *l, rx_info_t *info);
 
@@ -955,7 +954,7 @@ static void expect_response(listener *l, boxed_msg *box) {
         (void*)info, info->id, (void*)box);
     assert(info->box == NULL);
     info->box = box;
-    info->timeout_sec = RESPONSE_TIMEOUT;
+    info->timeout_sec = box->timeout_sec;
 }
 
 static void shutdown(listener *l) {

@@ -292,6 +292,11 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
         return NULL;
     }
 
+    box->timeout_sec = (time_t)msg->timeout_sec;
+    if (box->timeout_sec == 0) {
+        box->timeout_sec = BUS_DEFAULT_TIMEOUT_SEC;
+    }
+
     box->out_seq_id = msg->seq_id;
     box->out_msg_size = msg->msg_size;
 
