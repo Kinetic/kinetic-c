@@ -361,6 +361,11 @@ static bool poll_on_completion(struct bus *b, int fd) {
             uint16_t msec = 0;
             uint8_t read_buf[sizeof(msec)];
             
+            if (fds[0].revents & (POLLERR | POLLHUP | POLLNVAL)) {
+                BUS_LOG(b, 1, LOG_SENDING_REQUEST, "failed (broken alert pipe)", b->udata);
+                return false;
+            }
+
             BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Reading alert pipe...", b->udata);
             ssize_t sz = read(fd, read_buf, sizeof(read_buf));
 
@@ -370,7 +375,7 @@ static bool poll_on_completion(struct bus *b, int fd) {
                 if (msec > 0) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
                         " -- awakening client thread with backpressure of %d msec", msec);
-                    (void)poll(fds, 0, msec);
+                    (void)poll(NULL, 0, msec);
                 }
 
                 BUS_LOG(b, 3, LOG_SENDING_REQUEST, "sent!", b->udata);

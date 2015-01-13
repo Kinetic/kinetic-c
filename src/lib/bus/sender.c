@@ -262,7 +262,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
             short ev = fds[0].revents;
             BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 64,
                 "poll: ev %d, errno %d", ev, errno);
-            if ((ev & POLLHUP) || (ev & POLLERR) || (ev & POLLNVAL)) {
+            if (ev & (POLLHUP | POLLERR | POLLNVAL) {
                 /* We've been hung up on due to a shutdown event. */
                 close(info->done_pipe);
                 return true;
@@ -712,7 +712,7 @@ static void attempt_write(sender *s, int available) {
         BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
             "attempting write on %d (revents 0x%08x)", pfd->fd, pfd->revents);
         
-        if (pfd->revents & POLLERR) {
+        if (pfd->revents & (POLLERR | POLLNVAL)) {
             written++;
             set_error_for_socket(s, pfd->fd, TX_ERROR_POLLERR);
         } else if (pfd->revents & POLLHUP) {
