@@ -617,7 +617,15 @@ static tx_info_t *get_info_to_write_for_socket(sender *s, int fd) {
             tx_info_t *info = &s->tx_info[i];
             if (info->state != TIS_REQUEST_WRITE) { continue; }
             if (info->u.write.fd == fd) {
-                res = info;
+                if (res == NULL) {
+                    res = info;
+                } else {
+                    int64_t cur_seq_id = res->u.write.box->out_seq_id;
+                    int64_t new_seq_id = info->u.write.box->out_seq_id;
+                    if (new_seq_id < cur_seq_id) {
+                        res = info;
+                    }
+                }
                 /* If we've already sent part of a message, send the rest
                  * before starting another, otherwise arbitrarily choose
                  * the one with the highest tx_info->id. */
