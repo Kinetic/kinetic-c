@@ -4,7 +4,7 @@ os:
   - osx
 compiler:
   - clang
-  - gcc-4.8
+  - gcc
 before_script:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -qq
