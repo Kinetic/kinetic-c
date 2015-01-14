@@ -854,7 +854,7 @@ void test_KineticOperation_BuildInstantSecureErase_should_build_an_INSTANT_SECUR
     //
     TEST_ASSERT_TRUE(Request.pinOp);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP, Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP, Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);

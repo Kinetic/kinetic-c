@@ -237,17 +237,26 @@ static bool attempt_to_increase_resource_limits(struct bus *b) {
 
     const unsigned int nval = 1024;
 
-    BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
-        "Current FD resource limits, [%lu, %lu], changing to %u",
-        (unsigned long)info.rlim_cur, (unsigned long)info.rlim_max, nval);
-
     if (info.rlim_cur < nval && info.rlim_max > nval) {
         info.rlim_cur = nval;
+        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+            "Current FD resource limits, [%lu, %lu], changing to %u",
+            (unsigned long)info.rlim_cur, (unsigned long)info.rlim_max, nval);
         if (-1 == setrlimit(RLIMIT_NOFILE, &info)) {
+            BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+                "Failed to increase FD resource limit to %u, %s",
+                nval, strerror(errno));
             fprintf(stderr, "getrlimit: %s", strerror(errno));
             errno = 0;
             return false;
+        } else {
+            BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+                "Successfully increased FD resource limit to %u", nval);
         }
+    } else {
+        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+            "Current FD resource limits [%lu, %lu] are acceptable",
+            (unsigned long)info.rlim_cur, (unsigned long)info.rlim_max);
     }
     return true;
 }
@@ -281,6 +290,11 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
         /* socket isn't registered, fail out */
         free(box);
         return NULL;
+    }
+
+    box->timeout_sec = (time_t)msg->timeout_sec;
+    if (box->timeout_sec == 0) {
+        box->timeout_sec = BUS_DEFAULT_TIMEOUT_SEC;
     }
 
     box->out_seq_id = msg->seq_id;
@@ -347,6 +361,11 @@ static bool poll_on_completion(struct bus *b, int fd) {
             uint16_t msec = 0;
             uint8_t read_buf[sizeof(msec)];
             
+            if (fds[0].revents & (POLLERR | POLLHUP | POLLNVAL)) {
+                BUS_LOG(b, 1, LOG_SENDING_REQUEST, "failed (broken alert pipe)", b->udata);
+                return false;
+            }
+
             BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Reading alert pipe...", b->udata);
             ssize_t sz = read(fd, read_buf, sizeof(read_buf));
 
@@ -356,7 +375,7 @@ static bool poll_on_completion(struct bus *b, int fd) {
                 if (msec > 0) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
                         " -- awakening client thread with backpressure of %d msec", msec);
-                    (void)poll(fds, 0, msec);
+                    (void)poll(NULL, 0, msec);
                 }
 
                 BUS_LOG(b, 3, LOG_SENDING_REQUEST, "sent!", b->udata);
@@ -657,6 +676,7 @@ void bus_free(bus *b) {
 
     free(b->joined);
     free(b->threads);
+    yacht_free(b->fd_set, NULL, NULL);
 
     pthread_mutex_destroy(&b->log_lock);
 

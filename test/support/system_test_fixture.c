@@ -24,13 +24,11 @@
 #include "kinetic_admin_client.h"
 
 uint8_t data[KINETIC_OBJ_SIZE];
-KineticClient * client;
 
 void SystemTestSetup(SystemTestFixture* fixture, int log_level)
 {
-    client = KineticClient_Init("stdout", log_level);
-
     memset(fixture, 0, sizeof(SystemTestFixture));
+    fixture->client = KineticClient_Init("stdout", log_level);
 
     KineticSessionConfig config = {
         .host = SYSTEM_TEST_HOST,
@@ -56,17 +54,13 @@ void SystemTestSetup(SystemTestFixture* fixture, int log_level)
             .adminSession = (KineticSession) {.config = adminConfig},
             .connected = fixture->connected,
         };
-        KineticStatus status = KineticClient_CreateConnection(&fixture->session, client);
+        KineticStatus status = KineticClient_CreateConnection(&fixture->session, fixture->client);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        status = KineticAdminClient_CreateConnection(&fixture->adminSession, client);
+        status = KineticAdminClient_CreateConnection(&fixture->adminSession, fixture->client);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         
         fixture->connected = true;
     }
-
-    // Erase the drive
-    // status = KineticAdminClient_InstantSecureErase(&fixture->adminSession);
-    // TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 void SystemTestTearDown(SystemTestFixture* fixture)
@@ -78,7 +72,7 @@ void SystemTestTearDown(SystemTestFixture* fixture)
         TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying client!");
         status = KineticAdminClient_DestroyConnection(&fixture->adminSession);
         TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying admin client!");
-        KineticClient_Shutdown(client);
+        KineticClient_Shutdown(fixture->client);
     }
 }
 

@@ -75,7 +75,8 @@ void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
 
 void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 {
-    LOG_LOCATION;
-    FileDesc = KineticSocket_Connect("localhost", KineticTestPort);
-    TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
+    TEST_IGNORE_MESSAGE("Reinstantiate this test once test host is rewired in");
+    // LOG_LOCATION;
+    // FileDesc = KineticSocket_Connect(SYSTEM_TEST_HOST, KineticTestPort);
+    // TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }

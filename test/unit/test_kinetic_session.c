@@ -92,7 +92,9 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
 {
     LOG_LOCATION;
     KineticSession session;
+    memset(&session, 0, sizeof(session));
     KineticConnection connection;
+    memset(&connection, 0, sizeof(connection));
     KineticAllocator_NewConnection_ExpectAndReturn(&connection);
     KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
     KineticStatus status = KineticSession_Create(&session, &Client);

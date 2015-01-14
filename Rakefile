@@ -1,5 +1,3 @@
-require 'kinetic-ruby'
-
 compiler = ENV.fetch('CC', 'gcc')
 compiler_location = `which #{compiler}`.strip
 compiler_info = `#{compiler} --version 2>&1`.strip
@@ -15,7 +13,6 @@ task :report_toolchain do
     "      " + compiler_info.gsub(/\n/, "\n      ") + "\n"
 end
 
-KineticRuby::Rake::load_tasks
 require 'ceedling'
 Ceedling.load_project(config: './config/project.yml')
 
@@ -130,152 +127,11 @@ namespace :doxygen do
 
 end
 
-namespace :java_sim do
-  JAVA_HOME = ENV.fetch('JAVA_HOME', '/usr')
-  JAVA_BIN = File.join(JAVA_HOME, 'bin/java')
-  $java_sim = nil
-
-  def kinetic_device_listening?
-    `netstat -an` =~ /[\.:]8123.+\s+LISTEN\s+/
-  end
-
-  def java_sim_start
-
-    return if $java_sim
-
-    report_banner "Starting Kinetic Java Simulator"
-
-    java_sim_cleanup
-
-    # Find the java simulator jar
-    jars = Dir["vendor/kinetic-simulator/kinetic-simulator*.jar"]
-    raise "No Kinetic Java simulator .jar files found!" if jars.empty?
-
-    # Configure the classpath
-    ENV['CLASSPATH'] = '' unless ENV['CLASSPATH']
-    jars += [File.join(JAVA_HOME, 'lib/tools.jar')]
-    jars.each {|jar| ENV['CLASSPATH'] += ':' + jar }
-    $java_sim = spawn("#{JAVA_BIN} -classpath #{ENV['CLASSPATH']} com.seagate.kinetic.simulator.internal.SimulatorRunner")
-    max_wait_secs = 10
-    sleep_duration = 0.2
-    timeout = false
-    elapsed_secs = 0
-    while !kinetic_device_listening? && !timeout do
-      sleep(sleep_duration)
-      elapsed_secs += sleep_duration
-      timeout = (elapsed_secs > max_wait_secs)
-    end
-    raise "Kinetic Java simulator failed to start within #{max_wait_secs} seconds!" if timeout
-  end
-
-  def java_sim_shutdown
-    if $java_sim
-      report_banner "Shutting down Kinetic Java Simulator"
-      Process.kill("INT", $java_sim)
-      Process.wait($java_sim)
-      $java_sim = nil
-      sleep 0.5
-      java_sim_cleanup
-    end
-  end
-
-  def java_sim_erase_drive
-    java_sim_start
-    sh "\"#{JAVA_BIN}\" -classpath \"#{ENV['CLASSPATH']}\" com.seagate.kinetic.admin.cli.KineticAdminCLI -instanterase"
-  end
-
-  def java_sim_cleanup
-    # Ensure stray simulators are not still running
-    `ps -ef | grep kinetic-simulator`.each_line do |l|
-      next if l =~ /grep kinetic-simulator/
-      pid = l.match /^\s*\d+\s+(\d+)/
-      if pid
-        sh "kill -9 #{pid[1]}"
-        report "Killed Java simulator with PID: #{pid[1]}"
-      else
-        report "Did not find any running Java Kinetic simulators"
-      end
-    end
-  end
-
-  task :start do
-    java_sim_start
-  end
-
-  task :shutdown do
-    java_sim_shutdown
-  end
-
-  desc "Erase Java simulator contents"
-  task :erase do
-    java_sim_erase_drive
-  end
-
-end
-
-namespace :ruby_sim do
-
-  def start_ruby_server
-    return if $kinetic_server
-
-    port = KineticRuby::DEFAULT_KINETIC_PORT
-    # port = KineticRuby::TEST_KINETIC_PORT
-    $kinetic_server ||= KineticRuby::Server.new(port)
-    $kinetic_server.start
-  end
-
-  def shutdown_ruby_server
-    $kinetic_server.shutdown unless $kinetic_server.nil?
-    $kinetic_server = nil
-  end
-
-  task :start do
-    start_ruby_server
-  end
-
-  task :shutdown do
-    shutdown_ruby_server
-  end
-end
-
-# Setup ruby and java simulators for integration and system tests
-Dir['test/integration/test_*.c'].each do |test_file|
-  task test_file => ['java_sim:shutdown', 'ruby_sim:start']
-end
-Dir['test/system/test_*.c'].each do |test_file|
-  task test_file => ['ruby_sim:shutdown', 'java_sim:start']
-end
-
-namespace :system do
-  desc "Run system tests w/KineticRuby for message inspection"
-  task :test_sniff do
-    [
-      'java_sim:shutdown',
-      'ruby_sim:start',
-    ].each do |task|
-      Rake::Task[task].reenable
-      Rake::Task[task].invoke
-    end
-
-    Dir['test/system/test_*.c'].each do |test_task|
-      p test_task
-      Rake::Task[test_task].clear_prerequisites
-      Rake::Task[test_task].invoke
-    end
-
-  end
-end
-
 desc "Prepend license to source files"
 task :apply_license do
   Dir['include/**/*.h', 'src/**/*.h', 'src/**/*.c', 'test/**/*.h', 'test/**/*.c'].each do |f|
     sh "config/apply_license.sh #{f}"
   end
-end
-
-desc "Enable verbose output"
-task :verbose do
-  Rake::Task[:verbosity].invoke(3) # Set verbosity to 3:semi-obnoxious for debugging
 end
 
 namespace :tests do
@@ -288,108 +144,14 @@ namespace :tests do
   end
 
   desc "Run integration tests"
-  task :integration => ['ruby_sim:start'] do
+  task :integration do
     report_banner "Running Integration Tests"
-    java_sim_shutdown
-    start_ruby_server
     Rake::Task['test:path'].reenable
     Rake::Task['test:path'].invoke('test/integration')
-    shutdown_ruby_server
-  end
-
-  namespace :integration do
-    task :noop do
-      ####### ???
-    end
-  end
-
-  desc "Run system tests"
-  task :system => ['java_sim:start'] do
-    report_banner "Running System Tests"
-    shutdown_ruby_server
-    java_sim_start
-    Rake::Task['test:path'].reenable
-    Rake::Task['test:path'].invoke('test/system')
-    java_sim_shutdown
-  end
-
-  namespace :system do
-    FileList['test/system/test_*.c'].each do |test|
-      basename = File.basename(test, '.*')
-      desc "Run system test #{basename}"
-      task basename do
-        shutdown_ruby_server
-        java_sim_start
-        Rake::Task[test].reenable
-        Rake::Task[test].invoke
-      end
-    end
-  end
-
-  desc "Run Kinetic Client Utility tests"
-  task :utility => ['ruby_sim:shutdown'] do
-    sh "make run"
-  end
-
-  namespace :utility do
-
-    def with_test_server(banner)
-      report_banner(banner)
-      shutdown_ruby_server
-      java_sim_start
-      cd "./build/artifacts/release/" do
-        yield if block_given?
-      end
-    end
-
-    task :noop => ['ruby_sim:shutdown'] do
-      with_test_server("Testing NoOp Operation") do
-        execute_command "./kinetic-c noop"
-        execute_command "./kinetic-c --host localhost noop"
-        execute_command "./kinetic-c --host 127.0.0.1 noop"
-        execute_command "./kinetic-c --blocking --host 127.0.0.1 noop"
-      end
-    end
-
-    task :put => ['ruby_sim:shutdown'] do
-      with_test_server("Testing Put operation") do
-        execute_command "./kinetic-c put"
-      end
-    end
-
-    task :get => ['ruby_sim:shutdown'] do
-      with_test_server("Testing Get operation") do
-        execute_command "./kinetic-c put"
-        execute_command "./kinetic-c get"
-        execute_command "./kinetic-c --host localhost get"
-      end
-    end
-
-    task :delete => ['release', 'ruby_sim:shutdown'] do
-      with_test_server("Testing Get operation") do
-        execute_command "./kinetic-c put"
-        execute_command "./kinetic-c get"
-        execute_command "./kinetic-c delete"
-      end
-    end
-
   end
 
 end
 
-task :test_all => ['report_toolchain', 'tests:unit', 'tests:integration', 'tests:system']
-
-desc "Build all and run test utility"
-task :all => ['test_all']
-
-desc "Run full CI build"
-task :ci => ['clobber', 'all']
+task :test_all => ['report_toolchain', 'tests:unit', 'tests:integration']
 
 task :default => ['test:delta']
-
-END {
-  # Ensure java simlator is shutdown prior to rake exiting
-  java_sim_shutdown
-  $stdout.flush
-  $stderr.flush
-}

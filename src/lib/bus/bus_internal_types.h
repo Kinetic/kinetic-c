@@ -39,6 +39,9 @@ typedef struct boxed_msg {
      * has completed or failed due to timeout / unrecoverable error. */
     bus_msg_result_t result;
 
+    /* Message send timeout. */
+    time_t timeout_sec;
+
     /* Callback and userdata to which the bus_msg_result_t above will be sunk. */
     bus_msg_cb *cb;
     void *udata;

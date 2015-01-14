@@ -1,5 +1,11 @@
+v0.10.1 (kinetic-protocol 3.0.5)
+--------------------------------
+* Fixed regression in 0.10.0 where a GET with metadataOnly=true would result in a crash if a value field was not provided
+* Added system tests for P2P operations which are now fully validated and working on HW
+* Fixed misue of pthread_join status in thread pool which was causing shutdown issues in GCC builds
+
 v0.10.0 (kinetic-protocol 3.0.5)
--------------------------------
+--------------------------------
 * Added put_nonblocking and get_nonblocking examples
 * Added KineticSemaphore API to provide a simpler wrapper around a common use of pthread condition variables as a thread safe way to signal when an async operation has finished
 * Switched internal message infrastructure to use a threadpool. This will allow for a much higher number active connections and outstanding commands.

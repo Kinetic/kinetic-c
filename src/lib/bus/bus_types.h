@@ -32,6 +32,9 @@ struct boxed_msg;
 /* Max number of concurrent sends that can be active. */
 #define BUS_MAX_CONCURRENT_SENDS 10
 
+/* Default number of seconds before a message response times out. */
+#define BUS_DEFAULT_TIMEOUT_SEC 10
+
 #define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA)                       \
     do {                                                               \
         struct bus *_b = (B);                                          \
@@ -214,6 +217,7 @@ typedef struct {
     uint64_t seq_id;
     uint8_t *msg;
     size_t msg_size;
+    uint16_t timeout_sec;
 
     bus_msg_cb *cb;
     void *udata;

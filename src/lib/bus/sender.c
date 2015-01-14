@@ -137,6 +137,7 @@ bool sender_send_request(struct sender *s, boxed_msg *box) {
     info->state = TIS_REQUEST_ENQUEUE;
     info->u.enqueue.fd = box->fd;
     info->u.enqueue.box = box;
+    info->u.enqueue.timeout_sec = box->timeout_sec;
     
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending request on %d: box %p", box->fd, (void*)box);
@@ -261,7 +262,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
             short ev = fds[0].revents;
             BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 64,
                 "poll: ev %d, errno %d", ev, errno);
-            if ((ev & POLLHUP) || (ev & POLLERR) || (ev & POLLNVAL)) {
+            if (ev & (POLLHUP | POLLERR | POLLNVAL)) {
                 /* We've been hung up on due to a shutdown event. */
                 close(info->done_pipe);
                 return true;
@@ -424,6 +425,8 @@ static void cleanup(sender *s) {
         }
         
         yacht_free(y, free_fd_info_cb, NULL);
+        close(s->incoming_command_pipe);
+        close(s->commit_pipe);
     }
 }
 
@@ -566,7 +569,7 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
         
         struct u_write uw = {
             .fd = info->u.enqueue.fd,
-            .timeout_sec = TX_TIMEOUT,
+            .timeout_sec = info->u.enqueue.timeout_sec,
             .box = info->u.enqueue.box,
             .fdi = fdi,
         };
@@ -615,7 +618,15 @@ static tx_info_t *get_info_to_write_for_socket(sender *s, int fd) {
             tx_info_t *info = &s->tx_info[i];
             if (info->state != TIS_REQUEST_WRITE) { continue; }
             if (info->u.write.fd == fd) {
-                res = info;
+                if (res == NULL) {
+                    res = info;
+                } else {
+                    int64_t cur_seq_id = res->u.write.box->out_seq_id;
+                    int64_t new_seq_id = info->u.write.box->out_seq_id;
+                    if (new_seq_id < cur_seq_id) {
+                        res = info;
+                    }
+                }
                 /* If we've already sent part of a message, send the rest
                  * before starting another, otherwise arbitrarily choose
                  * the one with the highest tx_info->id. */
@@ -701,7 +712,7 @@ static void attempt_write(sender *s, int available) {
         BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
             "attempting write on %d (revents 0x%08x)", pfd->fd, pfd->revents);
         
-        if (pfd->revents & POLLERR) {
+        if (pfd->revents & (POLLERR | POLLNVAL)) {
             written++;
             set_error_for_socket(s, pfd->fd, TX_ERROR_POLLERR);
         } else if (pfd->revents & POLLHUP) {

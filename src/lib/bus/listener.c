@@ -34,7 +34,6 @@
 #include "atomic.h"
 
 #define DEFAULT_READ_BUF_SIZE (1024L * 1024L)
-#define RESPONSE_TIMEOUT 10
 
 static void retry_delivery(listener *l, rx_info_t *info);
 
@@ -330,9 +329,9 @@ static void attempt_recv(listener *l, int available) {
         connection_info *ci = l->fd_info[i];
         assert(ci->fd == fd->fd);
         
-        if (fd->revents & POLLERR) {
+        if (fd->revents & (POLLERR | POLLNVAL)) {
             read_from++;
-            BUS_LOG(b, 2, LOG_LISTENER, "pollfd: socket error POLLERR", b->udata);
+            BUS_LOG(b, 2, LOG_LISTENER, "pollfd: socket error (POLLERR | POLLNVAL)", b->udata);
             set_error_for_socket(l, i, ci->fd, RX_ERROR_POLLERR);
         } else if (fd->revents & POLLHUP) {
             read_from++;
@@ -956,7 +955,7 @@ static void expect_response(listener *l, boxed_msg *box) {
         (void*)info, info->id, (void*)box);
     assert(info->box == NULL);
     info->box = box;
-    info->timeout_sec = RESPONSE_TIMEOUT;
+    info->timeout_sec = box->timeout_sec;
 }
 
 static void shutdown(listener *l) {

@@ -57,29 +57,28 @@ void tearDown(void)
 void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_client(void)
 {
     KineticClient client;
-    
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
 
-    KineticPDU_InitBus_ExpectAndReturn(1, &client, true);    
-    KineticClient * result = KineticClient_Init("./some_file.log", 3);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
+    KineticPDU_InitBus_ExpectAndReturn(1, &client, true);
+
+    KineticClient * result = KineticClient_Init("./some_file.log", 1);
     TEST_ASSERT_EQUAL(&client, result);
 }
 
 void test_KineticClient_Init_should_return_null_if_calloc_returns_null(void)
 {
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), NULL);
-    
+
     KineticClient * result = KineticClient_Init("./some_file.log", 3);
     TEST_ASSERT_NULL(result);
 }
-
 
 void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
 {
     KineticClient client;
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
-    KineticPDU_InitBus_ExpectAndReturn(1, &client, false);
+    KineticPDU_InitBus_ExpectAndReturn(3, &client, false);
     KineticFree_Expect(&client);
 
     KineticClient * result = KineticClient_Init("./some_file.log", 3);
