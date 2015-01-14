@@ -7,7 +7,7 @@ compiler:
   - gcc
 install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y gcc-4.8.2
+  - sudo apt-get install -y gcc-4.8
   - bundle install
 script:
   - make start_simulator
