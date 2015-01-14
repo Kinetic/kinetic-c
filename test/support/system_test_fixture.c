@@ -23,13 +23,10 @@
 #include "kinetic_client.h"
 #include "kinetic_admin_client.h"
 
-uint8_t data[KINETIC_OBJ_SIZE];
+SystemTestFixture Fixture = {.connected = false};
 
-void SystemTestSetup(SystemTestFixture* fixture, int log_level)
+void SystemTestSetup(int log_level)
 {
-    memset(fixture, 0, sizeof(SystemTestFixture));
-    fixture->client = KineticClient_Init("stdout", log_level);
-
     KineticSessionConfig config = {
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
@@ -48,31 +45,30 @@ void SystemTestSetup(SystemTestFixture* fixture, int log_level)
     };
     strcpy((char*)adminConfig.pinData, SESSION_PIN);
 
-    if (!fixture->connected) {
-        *fixture = (SystemTestFixture) {
-            .session = (KineticSession) {.config = config},
-            .adminSession = (KineticSession) {.config = adminConfig},
-            .connected = fixture->connected,
-        };
-        KineticStatus status = KineticClient_CreateConnection(&fixture->session, fixture->client);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        status = KineticAdminClient_CreateConnection(&fixture->adminSession, fixture->client);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        
-        fixture->connected = true;
-    }
+    Fixture = (SystemTestFixture) {
+        .session = (KineticSession) {.config = config},
+        .adminSession = (KineticSession) {.config = adminConfig},
+        .connected = false,
+        .client = KineticClient_Init("stdout", log_level),
+    };
+
+    KineticStatus status = KineticClient_CreateConnection(&Fixture.session, Fixture.client);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    status = KineticAdminClient_CreateConnection(&Fixture.adminSession, Fixture.client);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+
+    Fixture.connected = true;
 }
 
-void SystemTestTearDown(SystemTestFixture* fixture)
+void SystemTestShutDown(void)
 {
-    TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
-
-    if (fixture->connected) {
-        KineticStatus status = KineticClient_DestroyConnection(&fixture->session);
+    if (Fixture.connected) {
+        KineticStatus status = KineticClient_DestroyConnection(&Fixture.session);
         TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying client!");
-        status = KineticAdminClient_DestroyConnection(&fixture->adminSession);
+        status = KineticAdminClient_DestroyConnection(&Fixture.adminSession);
         TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying admin client!");
-        KineticClient_Shutdown(fixture->client);
+        KineticClient_Shutdown(Fixture.client);
+        memset(&Fixture, 0, sizeof(Fixture));
     }
 }
 

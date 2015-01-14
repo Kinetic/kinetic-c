@@ -21,19 +21,18 @@
 #include "kinetic_admin_client.h"
 #include <stdlib.h>
 
-static SystemTestFixture Fixture;
 static KineticStatus Status;
 static KineticDeviceInfo* Info;
 
 void setUp(void)
-{ LOG_LOCATION;
-    SystemTestSetup(&Fixture, 1);
+{
+    SystemTestSetup(1);
     Info = NULL;
 }
 
 void tearDown(void)
-{ LOG_LOCATION;
-    SystemTestTearDown(&Fixture);
+{
+    SystemTestShutDown();
     if (Info != NULL) {
         free(Info);
         Info = NULL;
@@ -42,7 +41,7 @@ void tearDown(void)
 
 
 void test_GetLog_should_retrieve_utilizations_from_device(void)
-{ LOG_LOCATION;
+{
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info);
@@ -56,7 +55,7 @@ void test_GetLog_should_retrieve_utilizations_from_device(void)
 }
 
 void test_GetLog_should_retrieve_capacity_from_device(void)
-{ LOG_LOCATION;
+{
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info->capacity);
@@ -66,7 +65,7 @@ void test_GetLog_should_retrieve_capacity_from_device(void)
 }
 
 void test_GetLog_should_retrieve_temeratures_from_device(void)
-{ LOG_LOCATION;
+{
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_TRUE(Info->numTemperatures >= 2);
@@ -81,7 +80,7 @@ void test_GetLog_should_retrieve_temeratures_from_device(void)
 }
 
 void test_GetLog_should_retrieve_configuration_from_device(void)
-{ LOG_LOCATION;
+{
     char buf[1024];
     
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, &Info, NULL);
@@ -119,7 +118,7 @@ void test_GetLog_should_retrieve_configuration_from_device(void)
 }
 
 void test_GetLog_should_retrieve_statistics_from_device(void)
-{ LOG_LOCATION;
+{
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info->statistics);
@@ -137,7 +136,7 @@ void test_GetLog_should_retrieve_statistics_from_device(void)
 uint8_t* Buffer[1024 * 1024 * 10];
 
 void test_GetLog_should_retrieve_messages_from_device(void)
-{ LOG_LOCATION;
+{
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_MESSAGES, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info->messages.data);
@@ -149,7 +148,7 @@ void test_GetLog_should_retrieve_messages_from_device(void)
 }
 
 void test_GetLog_should_retrieve_limits_from_device(void)
-{ LOG_LOCATION;
+{
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_LIMITS, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
     TEST_ASSERT_NOT_NULL(Info->limits);
@@ -169,7 +168,7 @@ void test_GetLog_should_retrieve_limits_from_device(void)
 }
 
 void test_GetLog_should_retrieve_device_info_from_device(void)
-{ LOG_LOCATION;
+{
     Status = KineticAdminClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_DEVICE, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, Status);
     // TEST_ASSERT_NOT_NULL(Info->device);
@@ -180,8 +179,3 @@ void test_GetLog_should_retrieve_device_info_from_device(void)
     // BYTES_TO_CSTRING(Buffer, Info->device->name, 0, Info->device->name.len);
     // LOGF0("  name: %s", Buffer);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

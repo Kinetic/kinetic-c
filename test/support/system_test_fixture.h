@@ -56,11 +56,12 @@ typedef struct _SystemTestFixture {
     KineticClient * client;
 } SystemTestFixture;
 
-void SystemTestSetup(SystemTestFixture* fixture, int log_level);
-void SystemTestTearDown(SystemTestFixture* fixture);
-void SystemTestSuiteTearDown(SystemTestFixture* fixture);
+extern SystemTestFixture Fixture;
+
+void SystemTestSetup(int log_level);
+void SystemTestShutDown(void);
 bool SystemTestIsUnderSimulator(void);
 
-#define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) void test_Suite_TearDown(void) {SystemTestTearDown(_fixture);}
+#define SYSTEM_TEST_SUITE_TEARDOWN void test_Suite_TearDown(void) {SystemTestShutDown();}
 
 #endif // _SYSTEM_TEST_FIXTURE

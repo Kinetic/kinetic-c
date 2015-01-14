@@ -20,7 +20,6 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
 static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
 static uint8_t ExpectedKeyData[1024];
@@ -42,7 +41,7 @@ static bool initialized = false;
 
 void setUp(void)
 { LOG_LOCATION;
-    SystemTestSetup(&Fixture, 2);
+    SystemTestSetup(2);
 
     if (!initialized) {
         KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
@@ -79,7 +78,7 @@ void setUp(void)
 
 void tearDown(void)
 { LOG_LOCATION;
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_Get_should_retrieve_object_and_metadata_from_device(void)
@@ -148,8 +147,3 @@ void test_Get_should_be_able_to_retrieve_just_metadata_from_device(void)
     TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, getEntry.tag);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

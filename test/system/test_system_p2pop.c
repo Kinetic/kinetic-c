@@ -19,6 +19,7 @@
 */
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
+#include "kinetic_admin_client.h"
 #include <stdlib.h>
 
 // static SystemTestFixture Fixture;
@@ -56,6 +57,8 @@ static uint8_t readTagData[1024];
 
 #define KINETIC_TEST_PORT1            (8123)
 #define KINETIC_TEST_PORT2            (8124)
+#define KINETIC_TEST_ADMIN_PORT1      (8443)
+#define KINETIC_TEST_ADMIN_PORT2      (8444)
 
 #define KINETIC_TEST_HOST1  "localhost"
 #define KINETIC_TEST_HOST2  "localhost"
@@ -68,7 +71,7 @@ static uint8_t readTagData[1024];
 // #define KINETIC_TEST_HOST2  "10.138.123.128"
 
 KineticClient * client;
-KineticSession session1;
+KineticSession session1, adminSession;
 
 const char HmacKeyString[] = "asdfasdf";
 
@@ -87,10 +90,21 @@ void setUp(void)
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         },
     };
-
     KineticStatus status = KineticClient_CreateConnection(&session1, client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
+    adminSession = (KineticSession){
+        .config = (KineticSessionConfig) {
+            .host = KINETIC_TEST_HOST1,
+            .port = KINETIC_TEST_ADMIN_PORT1,
+            .clusterVersion = 0,
+            .identity = 1,
+            .pin = ByteArray_Create(adminSession.config.pinData, strlen(SESSION_PIN)),
+            .useSsl = true,
+        },
+    };
+    status = KineticAdminClient_CreateConnection(&adminSession, client);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     Key1Buffer    = ByteBuffer_Create(key1Data, sizeof(key1Data), sizeof(key1Data));
     Value1Buffer  = ByteBuffer_Create(value1Data, sizeof(value1Data), sizeof(value1Data));
@@ -135,9 +149,10 @@ void setUp(void)
 
 void tearDown(void)
 { LOG_LOCATION;
-    // SystemTestTearDown(&Fixture);
     KineticStatus status = KineticClient_DestroyConnection(&session1);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    status = KineticAdminClient_DestroyConnection(&adminSession);
+    TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying admin client!");
 
     KineticClient_Shutdown(client);
 }
@@ -195,8 +210,20 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
     status = KineticClient_CreateConnection(&session, client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // Erase the drive
-    status = KineticClient_InstantSecureErase(&session);
+    // Erase the peer drive we are copying to
+    KineticSession adminSession2 = (KineticSession){
+        .config = (KineticSessionConfig) {
+            .host = KINETIC_TEST_HOST2,
+            .port = KINETIC_TEST_ADMIN_PORT2,
+            .clusterVersion = 0,
+            .identity = 1,
+            .pin = ByteArray_Create(adminSession2.config.pinData, strlen(SESSION_PIN)),
+            .useSsl = true,
+        },
+    };
+    status = KineticAdminClient_CreateConnection(&adminSession2, client);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    status = KineticAdminClient_InstantSecureErase(&adminSession2);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
 
@@ -228,9 +255,6 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
 
 
 
-    ByteBuffer_Reset(&ReadValueBuffer);
-    ByteBuffer_Reset(&ReadTagBuffer);
-
     KineticEntry getEntry1Copy = {
         .key = Key3Buffer,
         .tag = ReadTagBuffer,
@@ -242,7 +266,6 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_ByteBuffer_NULL(getEntry1Copy.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(Key3Buffer, getEntry1Copy.key);
-    // TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry1Copy.algorithm);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry1Copy.tag);
 
 
@@ -257,7 +280,6 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteBuffer(Key4Buffer, getEntry2Copy.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry2Copy.tag);
-    // TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry2Copy.algorithm);
     TEST_ASSERT_EQUAL_ByteBuffer(Value2Buffer, getEntry2Copy.value);
 
 
@@ -286,7 +308,6 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
     TEST_ASSERT_ByteBuffer_NULL(getEntry1.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(Key1Buffer, getEntry1.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry1.tag);
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry1.algorithm);
     TEST_ASSERT_EQUAL_ByteBuffer(Value1Buffer, getEntry1.value);
 
 
@@ -302,7 +323,6 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
     TEST_ASSERT_ByteBuffer_NULL(getEntry2.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(Key2Buffer, getEntry2.key);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, getEntry2.tag);
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry2.algorithm);
     TEST_ASSERT_EQUAL_ByteBuffer(Value2Buffer, getEntry2.value);
 
 
@@ -320,13 +340,23 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
         },
     };
     status = KineticClient_CreateConnection(&session2, client);
-
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // Erase the drive
-    status = KineticClient_InstantSecureErase(&session2);
+    // Erase the peer drive we are copying to
+    KineticSession adminSession2 = (KineticSession){
+        .config = (KineticSessionConfig) {
+            .host = KINETIC_TEST_HOST2,
+            .port = KINETIC_TEST_ADMIN_PORT2,
+            .clusterVersion = 0,
+            .identity = 1,
+            .pin = ByteArray_Create(adminSession2.config.pinData, strlen(SESSION_PIN)),
+            .useSsl = true,
+        },
+    };
+    status = KineticAdminClient_CreateConnection(&adminSession2, client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    
+    status = KineticAdminClient_InstantSecureErase(&adminSession2);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
 
     KineticP2P_OperationData ops_copy_back1[] = {

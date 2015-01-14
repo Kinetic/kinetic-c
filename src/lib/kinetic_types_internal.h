@@ -173,6 +173,7 @@ struct _KineticOperation {
     KineticResponse* response;
     bool valueEnabled;
     bool sendValue;
+    uint16_t timeoutSeconds;
     KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticDeviceInfo** deviceInfo;

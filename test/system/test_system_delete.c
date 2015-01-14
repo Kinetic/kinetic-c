@@ -20,7 +20,6 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
 static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
 static uint8_t TagData[1024];
@@ -31,7 +30,7 @@ static ByteBuffer ValueBuffer;
 
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 1);
+    SystemTestSetup(1);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "DELETE test key");
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
@@ -41,7 +40,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_Delete_should_delete_an_object_from_device(void)
@@ -97,8 +96,3 @@ void test_Delete_should_delete_an_object_from_device(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
     TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

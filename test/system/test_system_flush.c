@@ -20,16 +20,14 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
-
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 2);
+    SystemTestSetup(2);
 }
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_Flush_should_succeed(void)
@@ -97,20 +95,14 @@ static void no_op_callback(KineticCompletionData* kinetic_data, void* client_dat
 void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
 {
     LOG_LOCATION;
-    LOG0("Need to figure out why this test is failing to do a basic PUT!");
-
-    TEST_IGNORE_MESSAGE("Need to track down some odd test failures here...");
 
     // Arguments shared between entries
-
     uint8_t TagData[1024];
     ByteBuffer tagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "tag_val");
-
     uint8_t key1[10];
     ByteBuffer keyBuffer1 = ByteBuffer_CreateAndAppendCString(key1, sizeof(key1), "key1");
     uint8_t value1[10];
     ByteBuffer valueBuffer1 = ByteBuffer_CreateAndAppendCString(value1, sizeof(value1), "value1");
-
     uint8_t key2[10];
     ByteBuffer keyBuffer2 = ByteBuffer_CreateAndAppendCString(key2, sizeof(key2), "key2");
     uint8_t value2[10];
@@ -172,8 +164,3 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
     status = KineticClient_Get(&Fixture.session, &getEntry2, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

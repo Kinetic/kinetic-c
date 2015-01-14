@@ -35,16 +35,20 @@
 
 KineticStatus KineticSession_Create(KineticSession * const session, KineticClient * const client)
 {
+    LOG_LOCATION;
     if (session == NULL) {
+        LOG0("Session is NULL");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
     if (client == NULL) {
+        LOG0("Client is NULL");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
     session->connection = KineticAllocator_NewConnection();
     if (session->connection == NULL) {
+        LOG0("Failed allocating a new connection instance");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
 

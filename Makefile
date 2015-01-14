@@ -362,7 +362,8 @@ $(SYSTEST_OUT)/%.testpass : $(SYSTEST_OUT)/run_%
 
 $(systest_names) : % : $(SYSTEST_OUT)/%.testpass
 
-system_tests: $(systest_passfiles)
+system_tests: $(systest_passfiles) $(KINETIC_LIB)
+
 
 #===============================================================================
 # Test Utility Build Support

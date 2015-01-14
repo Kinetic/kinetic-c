@@ -20,16 +20,14 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
-
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 1);
+    SystemTestSetup(1);
 }
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_KineticClient_should_process_initial_unsolicited_status_response(void)
@@ -44,8 +42,3 @@ void test_KineticClient_should_process_initial_unsolicited_status_response(void)
     }
     TEST_ASSERT_TRUE_MESSAGE(Fixture.session.connection->connectionID > 0, "Invalid connection ID!");
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

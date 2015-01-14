@@ -20,8 +20,7 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static bool suiteInitialized = false;
-static SystemTestFixture Fixture;
+static bool SuiteInitialized = false;
 
 static bool add_keys(int count)
 {
@@ -48,17 +47,16 @@ static bool add_keys(int count)
 
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 1);
-    if (!suiteInitialized) {
-        SystemTestSetup(&Fixture, 3);
-        add_keys(3);
+    SystemTestSetup(1);
+    if (!SuiteInitialized) {
+        SuiteInitialized = add_keys(3);
     }
 }
 
 void tearDown(void)
 {
     LOG_LOCATION;
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device(void)
@@ -163,8 +161,3 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device_with_start_and
     TEST_ASSERT_ByteBuffer_EMPTY(keyBuff[1]);
     TEST_ASSERT_ByteBuffer_EMPTY(keyBuff[2]);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

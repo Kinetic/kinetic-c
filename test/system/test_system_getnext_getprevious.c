@@ -20,18 +20,16 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
-
 void setUp(void)
 {
     LOG_LOCATION;
-    SystemTestSetup(&Fixture, 3);
+    SystemTestSetup(3);
 }
 
 void tearDown(void)
 {
     LOG_LOCATION;
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 static bool add_keys(int count)
@@ -148,8 +146,3 @@ void test_GetPrevious_should_retrieve_only_metadata_with_metadataOnly(void)
 {
     compare_against_offset_key(CMD_PREVIOUS, true);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

@@ -20,7 +20,6 @@
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
 
-static SystemTestFixture Fixture;
 static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
 static uint8_t ExpectedKeyData[1024];
@@ -35,8 +34,8 @@ static ByteBuffer ValueBuffer;
 static const char strKey[] = "GET system test blob";
 
 void setUp(void)
-{ LOG_LOCATION;
-    SystemTestSetup(&Fixture, 3);
+{
+    SystemTestSetup(3);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);
@@ -60,19 +59,12 @@ void setUp(void)
 }
 
 void tearDown(void)
-{ LOG_LOCATION;
-    SystemTestTearDown(&Fixture);
+{
+    SystemTestShutDown();
 }
 
 void test_InstantSecureErase_should_erase_device_contents(void)
-{ LOG_LOCATION;
-    for(int i = 0; i < 10; i++) {
-        KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    }
+{
+    KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

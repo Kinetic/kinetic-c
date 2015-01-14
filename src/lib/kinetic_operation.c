@@ -194,6 +194,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         .msg_size = offset,
         .cb       = KineticController_HandleExpectedResponse,
         .udata    = operation,
+        .timeout_sec = operation->timeoutSeconds,
     });
 
     free(msg);
@@ -705,6 +706,7 @@ void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
     operation->sendValue = false;
     operation->callback = &KineticOperation_InstantSecureEraseCallback;
     operation->request->pinOp = true;
+    operation->timeoutSeconds = 180;
 }
 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* operation,

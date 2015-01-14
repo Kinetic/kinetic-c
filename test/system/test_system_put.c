@@ -20,7 +20,6 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
 static KineticEntry Entry;
 static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
@@ -36,10 +35,9 @@ static uint8_t OtherVersionData[1024];
 static ByteBuffer OtherVersionBuffer;
 static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
-
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 2);
+    SystemTestSetup(2);
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "PUT test key");
     OtherKeyBuffer = ByteBuffer_CreateAndAppendCString(OtherKeyData, sizeof(OtherKeyData), "Some other PUT test key");
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
@@ -51,7 +49,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_Put_should_create_new_object_on_device(void)
@@ -106,8 +104,3 @@ void test_Put_should_create_another_new_object_on_device(void)
 
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

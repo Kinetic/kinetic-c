@@ -44,15 +44,6 @@
 
 #include "bus.h"
 
-void setUp(void)
-{ LOG_LOCATION;
-}
-
-void tearDown(void)
-{ LOG_LOCATION;
-
-}
-
 static void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
     const char *event_str = bus_log_event_str(event);
