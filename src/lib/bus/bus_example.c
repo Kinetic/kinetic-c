@@ -231,7 +231,7 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
 static void unexpected_msg_cb(void *msg,
         int64_t seq_id, void *bus_udata, void *socket_udata) {
     printf("\n\n\nUNEXPECTED MESSAGE: %p, seq_id %lld, bus_udata %p, socket_udata %p\n\n\n\n",
-        msg, seq_id, bus_udata, socket_udata);
+        msg, (long long)seq_id, bus_udata, socket_udata);
 
     assert(false);
 }

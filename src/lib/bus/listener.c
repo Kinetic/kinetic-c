@@ -66,7 +66,7 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
 
     for (int i = 0; i < MAX_QUEUE_MESSAGES; i++) {
         listener_msg *msg = &l->msgs[i];
-        uint8_t *p_id = &msg->id;
+        uint8_t *p_id = (uint8_t *)&msg->id;
         *p_id = i;
         if (i < MAX_QUEUE_MESSAGES - 1) { /* forward link */
             msg->next = &l->msgs[i + 1];

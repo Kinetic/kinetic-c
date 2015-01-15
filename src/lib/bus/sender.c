@@ -1022,7 +1022,7 @@ static void attempt_to_enqueue_sending_request_message_to_listener(sender *s,
     struct bus *b = s->bus;
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
       "telling listener to expect response, with fd %d, seq_id %lld",
-        fd, seq_id);
+        fd, (long long)seq_id);
 
     struct listener *l = bus_get_listener_for_socket(s->bus, fd);
 
@@ -1048,7 +1048,7 @@ static void attempt_to_enqueue_request_sent_message_to_listener(sender *s, tx_in
      * successfully sent message. */
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
       "telling listener to expect sent response, with box %p, seq_id %lld",
-        (void *)info->u.notify.box, info->u.notify.box->out_seq_id);
+        (void *)info->u.notify.box, (long long)info->u.notify.box->out_seq_id);
     
     struct listener *l = bus_get_listener_for_socket(s->bus, info->u.notify.fd);
     
