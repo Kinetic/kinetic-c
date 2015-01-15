@@ -97,22 +97,36 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
     }
     case STATE_AWAITING_HEADER:
     {
-        if (unpack_header(read_buf, read_size, &si->header))
+        memcpy(&si->buf[si->accumulated], read_buf, read_size);
+        si->accumulated += read_size;
+
+        uint32_t remaining = PDU_HEADER_LEN - si->accumulated;
+
+        if (remaining == 0) {
+            if (unpack_header(&si->buf[0], PDU_HEADER_LEN, &si->header))
+            {
+                si->accumulated = 0;
+                si->unpack_status = UNPACK_ERROR_SUCCESS;
+                si->state = STATE_AWAITING_BODY;
+                bus_sink_cb_res_t res = {
+                    .next_read = si->header.protobufLength + si->header.valueLength,
+                };
+                return res;
+            } else {
+                si->accumulated = 0;
+                si->unpack_status = UNPACK_ERROR_INVALID_HEADER;
+                si->state = STATE_AWAITING_HEADER;
+                bus_sink_cb_res_t res = {
+                    .next_read = sizeof(KineticPDUHeader),
+                    .full_msg_buffer = si,
+                };
+                return res;
+            }
+        }
+        else
         {
-            si->accumulated = 0;
-            si->unpack_status = UNPACK_ERROR_SUCCESS;
-            si->state = STATE_AWAITING_BODY;
             bus_sink_cb_res_t res = {
-                .next_read = si->header.protobufLength + si->header.valueLength,
-            };
-            return res;
-        } else {
-            si->accumulated = 0;
-            si->unpack_status = UNPACK_ERROR_INVALID_HEADER;
-            si->state = STATE_AWAITING_HEADER;
-            bus_sink_cb_res_t res = {
-                .next_read = sizeof(KineticPDUHeader),
-                .full_msg_buffer = si,
+                .next_read = remaining,
             };
             return res;
         }
@@ -127,6 +141,7 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
 
         if (remaining == 0) {
             si->state = STATE_AWAITING_HEADER;
+            si->accumulated = 0;
             bus_sink_cb_res_t res = {
                 .next_read = sizeof(KineticPDUHeader),
                 // returning the whole si, because we need access to the pdu header as well 
