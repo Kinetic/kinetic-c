@@ -430,6 +430,7 @@ void KineticMessage_Init(KineticMessage* const message)
     KineticProto_command_body__init(&message->body);
     KineticProto_command_key_value__init(&message->keyValue);
     KineticProto_command_range__init(&message->keyRange);
+    KineticProto_command_setup__init(&message->setup);
     KineticProto_command_get_log__init(&message->getLog);
     KineticProto_command_pin_operation__init(&message->pinOp);
 }

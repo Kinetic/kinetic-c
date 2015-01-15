@@ -681,19 +681,20 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* const operation, KineticStatus const status)
+KineticStatus KineticOperation_SecureEraseCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    LOGF3("IntantSecureErase callback w/ operation (0x%0llX) on connection (0x%0llX)",
+    LOGF3("SecureErase callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     return status;
 }
 
-void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
+void KineticOperation_BuildSecureErase(KineticOperation* operation)
 {
     KineticOperation_ValidateOperation(operation);
     KineticSession_IncrementSequence(operation->connection->session);
+
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP;
     operation->request->message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->message.body;
@@ -704,13 +705,41 @@ void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
     
     operation->valueEnabled = false;
     operation->sendValue = false;
-    operation->callback = &KineticOperation_InstantSecureEraseCallback;
+    operation->callback = &KineticOperation_SecureEraseCallback;
     operation->request->pinOp = true;
     operation->timeoutSeconds = 180;
 }
 
-KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* operation,
-    KineticStatus const status)
+KineticStatus KineticOperation_InstantEraseCallback(KineticOperation* const operation, KineticStatus const status)
+{
+    assert(operation != NULL);
+    assert(operation->connection != NULL);
+    LOGF3("InstantErase callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        operation, operation->connection);
+    return status;
+}
+
+void KineticOperation_BuildInstantErase(KineticOperation* operation)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticSession_IncrementSequence(operation->connection->session);
+
+    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP;
+    operation->request->message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->message.body;
+    operation->request->command->body->pinOp = &operation->request->message.pinOp;
+    
+    operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP;
+    operation->request->command->body->pinOp->has_pinOpType = true;
+    
+    operation->valueEnabled = false;
+    operation->sendValue = false;
+    operation->callback = &KineticOperation_InstantEraseCallback;
+    operation->request->pinOp = true;
+    operation->timeoutSeconds = 180;
+}
+
+KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
@@ -723,10 +752,12 @@ KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* opera
 void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence((KineticSession const * const)&operation->connection->session);
+    KineticSession_IncrementSequence(operation->connection->session);
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->message.body;
     
+    operation->request->command->body->setup = &operation->request->message.setup;
     operation->request->command->body->setup->newClusterVersion = newClusterVersion;
     operation->request->command->body->setup->has_newClusterVersion = true;
 
@@ -735,7 +766,7 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetClusterVersionCallback;
-    operation->request->pinOp = true;
+    operation->request->pinOp = false;
 }
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation)

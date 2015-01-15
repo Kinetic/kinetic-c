@@ -59,7 +59,7 @@ void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_
     KineticClient client;
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
-    KineticPDU_InitBus_ExpectAndReturn(1, &client, true);
+    KineticPDU_InitBus_ExpectAndReturn(0, &client, true);
 
     KineticClient * result = KineticClient_Init("./some_file.log", 1);
     TEST_ASSERT_EQUAL(&client, result);
@@ -78,7 +78,7 @@ void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
     KineticClient client;
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
-    KineticPDU_InitBus_ExpectAndReturn(3, &client, false);
+    KineticPDU_InitBus_ExpectAndReturn(2, &client, false);
     KineticFree_Expect(&client);
 
     KineticClient * result = KineticClient_Init("./some_file.log", 3);

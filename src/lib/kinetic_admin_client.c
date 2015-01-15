@@ -64,7 +64,7 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticAdminClient_InstantSecureErase(KineticSession const * const session)
+KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
@@ -78,28 +78,41 @@ KineticStatus KineticAdminClient_InstantSecureErase(KineticSession const * const
     KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildInstantSecureErase(operation);
+    KineticOperation_BuildSecureErase(operation);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticClient_SetClusterVersion(KineticSession handle,
-                                              int64_t clusterVersion,
+KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+
+    KineticStatus status;
+    status = KineticAuth_EnsurePinSupplied(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticOperation_Create(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildInstantErase(operation);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
                                               int64_t newClusterVersion)
 {
+    assert(session != NULL);
+    assert(session->connection != NULL);
 
-// KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH
-    (void)handle;
-    (void)clusterVersion;
-    (void)newClusterVersion;
+    KineticStatus status;
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
 
-#if 0
-    assert(handle != KINETIC_HANDLE_INVALID);
-
-    KineticOperation* operation = KineticController_CreateOperation(handle);
+    KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildSetClusterVersion(operation, newClusterVersion);
     return KineticController_ExecuteOperation(operation, NULL);
-#endif
-    return KINETIC_STATUS_INVALID;
 }

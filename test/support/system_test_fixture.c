@@ -40,9 +40,11 @@ void SystemTestSetup(int log_level)
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_TLS_PORT,
         .clusterVersion = SESSION_CLUSTER_VERSION,
+        .hmacKey = ByteArray_Create(config.keyData, strlen(SESSION_HMAC_KEY)),
         .pin = ByteArray_Create(adminConfig.pinData, strlen(SESSION_PIN)),
         .useSsl = true,
     };
+    strcpy((char*)config.keyData, SESSION_HMAC_KEY);
     strcpy((char*)adminConfig.pinData, SESSION_PIN);
 
     Fixture = (SystemTestFixture) {

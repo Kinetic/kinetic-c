@@ -55,16 +55,48 @@ void setUp(void)
     };
 
     KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry, NULL);
+
+    // Validate the object exists initially
+    KineticEntry getEntry = {
+        .key = KeyBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
+        .force = true,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
+    };
+    status = KineticClient_Get(&Fixture.session, &getEntry, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_ByteArray(putEntry.key.array, getEntry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(putEntry.tag.array, getEntry.tag.array);
+    TEST_ASSERT_EQUAL(putEntry.algorithm, getEntry.algorithm);
+    TEST_ASSERT_EQUAL_ByteBuffer(putEntry.value, getEntry.value);
+
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 void tearDown(void)
 {
+    // Validate the object no longer exists
+    KineticEntry regetEntryMetadata = {
+        .key = KeyBuffer,
+        .metadataOnly = true,
+    };
+    KineticStatus status = KineticClient_Get(&Fixture.session, &regetEntryMetadata, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
+    TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
+
     SystemTestShutDown();
 }
 
-void test_InstantSecureErase_should_erase_device_contents(void)
+void test_SecureErase_should_erase_device_contents(void)
 {
-    KineticStatus status = KineticAdminClient_InstantSecureErase(&Fixture.adminSession);
+    KineticStatus status = KineticAdminClient_SecureErase(&Fixture.adminSession);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_InstantErase_should_erase_device_contents(void)
+{
+    KineticStatus status = KineticAdminClient_InstantErase(&Fixture.adminSession);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

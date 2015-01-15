@@ -69,9 +69,13 @@ KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const oper
 KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operation,
                                                  KineticP2P_Operation* const p2pOp);
 
-KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildInstantSecureErase(KineticOperation* operation);
+KineticStatus KineticOperation_SecureEraseCallback(KineticOperation* const operation, KineticStatus const status);
+void KineticOperation_BuildSecureErase(KineticOperation* operation);
 
+KineticStatus KineticOperation_InstantEraseCallback(KineticOperation* const operation, KineticStatus const status);
+void KineticOperation_BuildInstantErase(KineticOperation* operation);
+
+KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion);
 
 void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);

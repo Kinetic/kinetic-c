@@ -116,24 +116,31 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
 // def setSecurity(self, *args, **kwargs):
 
 /**
- * @brief Executes an InstantSecureErase command to erase all data from the Kinetic device.
+ * @brief Executes a SecureErase command to erase all data from the Kinetic device.
  *
  * @param session       The connected KineticSession to use for the operation.
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_InstantSecureErase(KineticSession const * const session);
+KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session);
+
+/**
+ * @brief Executes an InstantErase command to erase all data from the Kinetic device.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session);
 
 /**
  * @brief Updates the cluster version.
  *
- * @param clusterVersion      Current cluster version.
  * @param newClusterVersion   New cluster version.
  *
  * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
-                                              int64_t clusterVersion,
-                                              int64_t newClusterVersion);
+    int64_t newClusterVersion);
 
 #endif // _KINETIC_ADMIN_CLIENT_H

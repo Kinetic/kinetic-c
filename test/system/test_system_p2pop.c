@@ -223,7 +223,7 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
     };
     status = KineticAdminClient_CreateConnection(&adminSession2, client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    status = KineticAdminClient_InstantSecureErase(&adminSession2);
+    status = KineticAdminClient_SecureErase(&adminSession2);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
 
@@ -355,7 +355,7 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
     };
     status = KineticAdminClient_CreateConnection(&adminSession2, client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    status = KineticAdminClient_InstantSecureErase(&adminSession2);
+    status = KineticAdminClient_SecureErase(&adminSession2);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
 

@@ -126,6 +126,7 @@ typedef struct _KineticMessage {
     KineticProto_Command_Security_ACL   acl;
     KineticProto_Command_KeyValue       keyValue;
     KineticProto_Command_Range          keyRange;
+    KineticProto_Command_Setup          setup;
     KineticProto_Command_GetLog         getLog;
     KineticProto_Command_GetLog_Type    getLogType;
     KineticProto_Command_PinOperation   pinOp;
