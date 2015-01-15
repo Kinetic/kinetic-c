@@ -552,7 +552,12 @@ static void handle_command(sender *s, int id) {
 
    /* Should not get anything else as an incoming command.  */
     default:
+    {
+        struct bus *b = s->bus;
+        BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
+            "match_fail: %d", info->state);
         assert(false);
+    }
     }
 }
 
@@ -563,6 +568,17 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
     fd_info *fdi = NULL;
     if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
         assert(fdi);
+
+        int64_t out_seq_id = info->u.enqueue.box->out_seq_id;
+
+        /* Notify the listener that we're about to start writing to a drive,
+         * because (in rare cases) the response may arrive between finishing
+         * the write and the listener processing the notification. In that
+         * case, it should hold onto the unrecognized response until the
+         * sender notifies it (and passes it the callback). */
+        attempt_to_enqueue_sending_request_message_to_listener(s,
+            fd, out_seq_id, info->u.enqueue.timeout_sec + 1);
+        
         /* Increment the refcount. This will cause poll to watch for the
          * socket being writable, if it isn't already being watched. */
         increment_fd_refcount(s, fdi);
@@ -692,7 +708,7 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
 
             if (notify) {
                 BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                    "setting error on socket %d", fd);
+                    "setting error on socket %d, reason %d", fd, error);
                 info->state = TIS_ERROR;
                 info->u.error = ue;
                 notify_message_failure(s, info, status);
@@ -866,7 +882,7 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
 
         BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
             "wrote all of %p, clearing", (void*)box->out_msg);
-        attempt_to_enqueue_message_to_listener(s, info);
+        attempt_to_enqueue_request_sent_message_to_listener(s, info);
     }
 }
 
@@ -952,7 +968,7 @@ static void tick_handler(sender *s) {
 
                 /* if not timed out, attempt to re-send */
                 if (info->state == TIS_RESPONSE_NOTIFY) {
-                    attempt_to_enqueue_message_to_listener(s, info);
+                    attempt_to_enqueue_request_sent_message_to_listener(s, info);
                 }
                 break;
 
@@ -998,13 +1014,41 @@ static void tick_timeout(sender *s, tx_info_t *info) {
     }
 }
 
-static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info) {
+/* Notify the listener that the sender is about to send a message, and to hold
+ * on to the response if it arrives before the sender transfers the destination
+ * callback and other info to it.*/
+static void attempt_to_enqueue_sending_request_message_to_listener(sender *s,
+    int fd, int64_t seq_id, int16_t timeout_sec) {
+    struct bus *b = s->bus;
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
+      "telling listener to expect response, with fd %d, seq_id %lld",
+        fd, seq_id);
+
+    struct listener *l = bus_get_listener_for_socket(s->bus, fd);
+
+    int delay = 1;
+    for (;;) {
+        if (listener_hold_response(l, fd, seq_id, timeout_sec)) {
+            return;
+        } else {
+            /* Don't apply much backpressure since this will be running on the sender. */
+            poll(NULL, 0, delay);
+            if (delay < 5) { delay++; }
+        }
+    }
+    assert(false);
+}
+
+/* Notify the listener that the sender has finished sending a message, and
+ * transfer all details for handling the response to it. */
+static void attempt_to_enqueue_request_sent_message_to_listener(sender *s, tx_info_t *info) {
     assert(info->state == TIS_RESPONSE_NOTIFY);
     struct bus *b = s->bus;
     /* Notify listener that it should expect a response to a
      * successfully sent message. */
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-      "telling listener to expect response, with box %p", (void *)info->u.notify.box);
+      "telling listener to expect sent response, with box %p, seq_id %lld",
+        (void *)info->u.notify.box, info->u.notify.box->out_seq_id);
     
     struct listener *l = bus_get_listener_for_socket(s->bus, info->u.notify.fd);
     
