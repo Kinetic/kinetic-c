@@ -26,6 +26,7 @@
 #include <assert.h>
 #include <poll.h>
 #include <err.h>
+#include <time.h>
 
 #include "bus_internal_types.h"
 #include "listener.h"
@@ -740,7 +741,7 @@ static void dump_rx_info_table(listener *l) {
         {
             struct boxed_msg *box = info->u.expect.box;
             printf(", box %p (fd:%d, seq_id:%lld), error %d, has_result? %d\n",
-                box, box ? box->fd : -1, box ? box->out_seq_id : -1,
+                (void *)box, box ? box->fd : -1, box ? box->out_seq_id : -1,
                 info->u.expect.error, info->u.expect.has_result);
             break;
         }
@@ -946,7 +947,13 @@ static listener_msg *get_free_msg(listener *l) {
                     /* Add counterpressure between the sender and the listener.
                      * 10 * ((n >> 1) ** 2) microseconds */
                     int16_t delay = 10 * (miu >> 1) * (miu >> 1);
-                    if (delay > 0) { usleep(10 * delay); }
+                    if (delay > 0) {
+                        struct timespec ts = {
+                            .tv_sec = 0,
+                            .tv_nsec = 1000L * delay,
+                        };
+                        nanosleep(&ts, NULL);
+                    }
                     assert(head->type == MSG_NONE);
                     return head;
                 }
