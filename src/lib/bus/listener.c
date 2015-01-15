@@ -589,7 +589,7 @@ static rx_info_t *find_info_by_sequence_id(listener *l,
         }
     }
 
-    if (b->log_level > 5 || 1) {
+    if (b->log_level > 5 || 0) {
         BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
             "==== Could not find <fd: %d, seq_id: %lld>, dumping table ====\n", 
             fd, (long long)seq_id);
