@@ -25,15 +25,22 @@
 #include "kinetic_client.h"
 
 /**
- * Initializes the Kinetic API and configures logging destination.
+ * Initializes the Kinetic Admin API and configures logging.
  *
  * @param log_file (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
  * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
+ *
+ * @return          Returns a pointer to a `KineticClient`. You need to pass 
+ *                  this pointer to KineticClient_CreateConnection() to create 
+ *                  new connections. 
+ *                  Once you are finished will the `KineticClient`, and there
+ *                  are no active connections. The pointer should be release
+ *                  with KineticClient_Shutdown()
  */
-void KineticAdminClient_Init(const char* log_file, int log_level);
+KineticClient * KineticAdminClient_Init(const char* log_file, int log_level);
 
 /**
- * @brief Performs shutdown/cleanup of the kinetic-c client lib
+ * @brief Performs shutdown/cleanup of the kinetic-c client library
  */
 void KineticAdminClient_Shutdown(KineticClient * const client);
 
@@ -49,8 +56,8 @@ void KineticAdminClient_Shutdown(KineticClient * const client);
  *    .clusterVersion   Cluster version to use for the session
  *    .identity         Identity to use for the session
  *    .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
- *  .connection     Pointer to dynamically allocated connection which will be
- *                  populated upon establishment of a connection.
+ *  .connection       Pointer to dynamically allocated connection which will be
+ *                    populated upon establishment of a connection.
  *
  * @return          Returns the resulting `KineticStatus`, and `session->connection`
  *                  will be populated with a session instance pointer upon success.
@@ -58,7 +65,8 @@ void KineticAdminClient_Shutdown(KineticClient * const client);
  *                  order to shutdown a connection and cleanup resources when
  *                  done using a KineticSession.
  */
-KineticStatus KineticAdminClient_CreateConnection(KineticSession * const session, KineticClient * const client);
+KineticStatus KineticAdminClient_CreateConnection(KineticSession * const session,
+    KineticClient * const client);
 
 /**
  * @brief Closes the connection to a host.
@@ -72,75 +80,115 @@ KineticStatus KineticAdminClient_CreateConnection(KineticSession * const session
 KineticStatus KineticAdminClient_DestroyConnection(KineticSession * const session);
 
 /**
- * @brief Executes a GETLOG command to retrieve specific configuration and/or
- * operational data from the Kinetic Device.
+ * @brief Sets the erase PIN of the Kinetic Device.
  *
- * @param session       The connected KineticSession to use for the operation
- * @param type          KineticLogDataType specifying data type to retrieve.
- * @param info          KineticDeviceInfo pointer, which will be assigned to
- *                      a dynamically allocated structure populated with
- *                      the requested data, if successful. The client should
- *                      call free() on this pointer in order to free the root
- *                      and any nested structures.
- * @param closure       Optional closure. If specified, operation will be
- *                      executed in asynchronous mode, and closure callback
- *                      will be called upon completion in another thread.
+ * @param pin       New erase PIN to set.
  *
- * @return              Returns 0 upon success, -1 or the Kinetic status code
- *                      upon failure
+ * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
-                                   KineticDeviceInfo_Type type,
-                                   KineticDeviceInfo** info,
-                                   KineticCompletionClosure* closure);
-
-// def setClusterVersion(self, *args, **kwargs):
-
-// def updateFirmware(self, *args, **kwargs):
-
-// @withPin @requiresSsl
-// def unlock(self, *args, **kwargs):
-
-// @withPin @requiresSsl
-// def lock(self, *args, **kwargs):
-
-// @withPin @requiresSsl
-// def erase(self, *args, **kwargs):
-
-// @withPin @requiresSsl
-// def instantSecureErase(self, *args, **kwargs):
-
-// @requiresSsl
-// Set the access control lists to lock users out of different permissions.
-// Arguments: aclList -> A list of ACL (Access Control List) objects.
-// def setSecurity(self, *args, **kwargs):
+KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const session,
+    ByteArray pin);
 
 /**
  * @brief Executes a SecureErase command to erase all data from the Kinetic device.
  *
- * @param session       The connected KineticSession to use for the operation.
+ * @param session   The connected KineticSession to use for the operation.
  *
- * @return              Returns the resulting KineticStatus.
+ * @return          Returns the resulting KineticStatus.
  */
 KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session);
 
 /**
  * @brief Executes an InstantErase command to erase all data from the Kinetic device.
  *
- * @param session       The connected KineticSession to use for the operation.
+ * @param session   The connected KineticSession to use for the operation.
  *
- * @return              Returns the resulting KineticStatus.
+ * @return          Returns the resulting KineticStatus.
  */
 KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session);
 
 /**
- * @brief Updates the cluster version.
+ * @brief Sets the lock PIN of the Kinetic Device.
  *
- * @param newClusterVersion   New cluster version.
+ * @param pin       New lock PIN to set.
+ *
+ * @return          Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session,
+    ByteArray pin);
+
+/**
+ * @brief Executes a LOCK command to lock the Kinetic device.
+ *
+ * @param session   The connected KineticSession to use for the operation.
+ *
+ * @return          Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session);
+
+/**
+ * @brief Executes an UNLOCK command to unlock the Kinetic device.
+ *
+ * @param session   The connected KineticSession to use for the operation.
+ *
+ * @return          Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const session);
+
+/**
+ * @brief Executes a GETLOG command to retrieve specific configuration and/or
+ * operational data from the Kinetic Device.
+ *
+ * @param session   The connected KineticSession to use for the operation
+ * @param type      KineticLogDataType specifying data type to retrieve.
+ * @param info      KineticDeviceInfo pointer, which will be assigned to
+ *                  a dynamically allocated structure populated with
+ *                  the requested data, if successful. The client should
+ *                  call free() on this pointer in order to free the root
+ *                  and any nested structures.
+ * @param closure   Optional closure. If specified, operation will be
+ *                  executed in asynchronous mode, and closure callback
+ *                  will be called upon completion in another thread.
+ *
+ * @return          Returns 0 upon success, -1 or the Kinetic status code
+ *                  upon failure
+ */
+KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
+                                   KineticDeviceInfo_Type type,
+                                   KineticDeviceInfo** info,
+                                   KineticCompletionClosure* closure);
+
+/**
+ * @brief Executes a SECURITY command to define/set the access control list
+ * (ACL) for the Kinetic device.
+ *
+ * @param session   The connected KineticSession to use for the operation.
+ * @param acl_path  Path to ACL definitions per identity in JSON format.
+ *
+ * @return          Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_SetAcl(KineticSession const * const session,
+    char const * const acl_path);
+
+/**
+ * @brief Updates the cluster version of the Kinetic Device.
+ *
+ * @param version   New cluster version.
+ *
+ * @return          Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
+    int64_t version);
+
+/**
+ * @brief Executes a Firmware Download command to update the firmware on the Kinetic device.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ * @param fw_path       Path to firmware update image file.
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
-    int64_t newClusterVersion);
+KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
+    char const * const fw_path);
 
 #endif // _KINETIC_ADMIN_CLIENT_H

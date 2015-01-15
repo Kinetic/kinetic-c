@@ -39,7 +39,7 @@
 KineticClient * KineticClient_Init(const char* log_file, int log_level);
 
 /**
- * @brief Performs shutdown/cleanup of the kinetic-c client lib
+ * @brief Performs shutdown/cleanup of the kinetic-c client library
  * 
  * @param client The pointer returned from `KineticClient_Init`
  * 
@@ -58,8 +58,9 @@ void KineticClient_Shutdown(KineticClient * const client);
  *    .clusterVersion   Cluster version to use for the session
  *    .identity         Identity to use for the session
  *    .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
- *  .connection     Pointer to dynamically allocated connection which will be
- *                  populated upon establishment of a connection.
+ *    .pin              PIN to use for PIN-based operations
+ *  .connection       Pointer to dynamically allocated connection which will be
+ *                    populated upon establishment of a connection.
  *
  * @param client    The KineticClient pointer returned from KineticClient_Init()
  *

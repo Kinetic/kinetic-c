@@ -24,9 +24,9 @@
 #include "kinetic_operation.h"
 #include "kinetic_auth.h"
 
-void KineticAdminClient_Init(const char* log_file, int log_level)
+KineticClient * KineticAdminClient_Init(const char* log_file, int log_level)
 {
-    KineticClient_Init(log_file, log_level);
+    return KineticClient_Init(log_file, log_level);
 }
 
 void KineticAdminClient_Shutdown(KineticClient * const client)
@@ -34,7 +34,8 @@ void KineticAdminClient_Shutdown(KineticClient * const client)
     KineticClient_Shutdown(client);
 }
 
-KineticStatus KineticAdminClient_CreateConnection(KineticSession* const session, KineticClient * const client)
+KineticStatus KineticAdminClient_CreateConnection(KineticSession* const session,
+    KineticClient * const client)
 {
     return KineticClient_CreateConnection(session, client);
 }
@@ -44,6 +45,98 @@ KineticStatus KineticAdminClient_DestroyConnection(KineticSession* const session
     return KineticClient_DestroyConnection(session);
 }
 
+
+KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const session,
+    ByteArray pin)
+{
+    (void)pin;
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    return KINETIC_STATUS_INVALID;
+}
+
+KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+
+    KineticStatus status;
+    status = KineticAuth_EnsurePinSupplied(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticOperation_Create(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildErase(operation, true);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+
+    KineticStatus status;
+    status = KineticAuth_EnsurePinSupplied(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticOperation_Create(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildErase(operation, false);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+
+KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session,
+    ByteArray pin)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    (void)session;
+    (void)pin;
+    return KINETIC_STATUS_INVALID;
+}
+
+KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+
+    KineticStatus status;
+    status = KineticAuth_EnsurePinSupplied(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticOperation_Create(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildLockUnlock(operation, true);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const session)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+
+    KineticStatus status;
+    status = KineticAuth_EnsurePinSupplied(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticOperation_Create(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildLockUnlock(operation, false);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
 
 KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
                                    KineticDeviceInfo_Type type,
@@ -64,44 +157,18 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session)
+KineticStatus KineticAdminClient_SetAcl(KineticSession const * const session,
+    char const * const acl_path)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
-
-    KineticStatus status;
-    status = KineticAuth_EnsurePinSupplied(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
-    status = KineticAuth_EnsureSslEnabled(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
-
-    KineticOperation* operation = KineticOperation_Create(session);
-    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
-
-    KineticOperation_BuildSecureErase(operation);
-    return KineticController_ExecuteOperation(operation, NULL);
-}
-
-KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
-
-    KineticStatus status;
-    status = KineticAuth_EnsurePinSupplied(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
-    status = KineticAuth_EnsureSslEnabled(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
-
-    KineticOperation* operation = KineticOperation_Create(session);
-    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
-
-    KineticOperation_BuildInstantErase(operation);
-    return KineticController_ExecuteOperation(operation, NULL);
+    (void)session;
+    (void)acl_path;
+    return KINETIC_STATUS_INVALID;
 }
 
 KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
-                                              int64_t newClusterVersion)
+    int64_t version)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
@@ -113,6 +180,16 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const 
     KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildSetClusterVersion(operation, newClusterVersion);
+    KineticOperation_BuildSetClusterVersion(operation, version);
     return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
+    char const * const fw_path)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    (void)session;
+    (void)fw_path;
+    return KINETIC_STATUS_INVALID;
 }

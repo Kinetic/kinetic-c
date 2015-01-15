@@ -24,14 +24,14 @@
 #include "kinetic_types_internal.h"
 
 KineticOperation* KineticOperation_Create(KineticSession const * const session);
-
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation);
-KineticOperation* KineticOperation_AssociateResponseWithOperation(KineticPDU* response);
-
-struct timeval KineticOperation_GetTimeoutTime(KineticOperation* const operation);
-void KineticOperation_SetTimeoutTime(KineticOperation* const operation, uint32_t const timeout_in_sec);
-
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
+void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);
+
+
+/*******************************************************************************
+ * Client Operations
+*******************************************************************************/
 
 KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildNoop(KineticOperation* operation);
@@ -60,25 +60,35 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* const opera
 void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
                                KineticKeyRange* range, ByteBufferArray* buffers);
 
+KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status);
+KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operation,
+                                                 KineticP2P_Operation* const p2pOp);
+
+
+/*******************************************************************************
+ * Admin Client Operations
+*******************************************************************************/
+
+KineticStatus KineticOperation_SetPinCallback(KineticOperation* const operation, KineticStatus const status);
+void KineticOperation_BuildSetPin(KineticOperation* const operation, bool unlock);
+
+KineticStatus KineticOperation_EraseCallback(KineticOperation* const operation, KineticStatus const status);
+void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_erase);
+
+KineticStatus KineticOperation_LockUnlockCallback(KineticOperation* const operation, KineticStatus const status);
+void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lock);
+
 KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildGetLog(KineticOperation* const operation,
                                KineticDeviceInfo_Type type,
                                KineticDeviceInfo** info);
 
-KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status);
-KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operation,
-                                                 KineticP2P_Operation* const p2pOp);
-
-KineticStatus KineticOperation_SecureEraseCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildSecureErase(KineticOperation* operation);
-
-KineticStatus KineticOperation_InstantEraseCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildInstantErase(KineticOperation* operation);
+KineticStatus KineticOperation_SetAclCallback(KineticOperation* const operation, KineticStatus const status);
+void KineticOperation_BuildSetAcl(KineticOperation* const operation,
+                               KineticDeviceInfo_Type type,
+                               KineticDeviceInfo** info);
 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion);
-
-void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);
-void KineticOperation_TimeoutOperations(KineticConnection* const connection);
+void KineticOperation_BuildSetClusterVersion(KineticOperation* const operation, int64_t newClusterVersion);
 
 #endif // _KINETIC_OPERATION_H

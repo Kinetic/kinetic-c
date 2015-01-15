@@ -63,7 +63,6 @@ KineticOperation* KineticOperation_Create(KineticSession const * const session)
     return operation;
 }
 
-static void KineticOperation_ValidateOperation(KineticOperation* operation);
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation);
 
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
@@ -210,6 +209,35 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
     }
     return status;
 }
+
+static void KineticOperation_ValidateOperation(KineticOperation* operation)
+{
+    assert(operation != NULL);
+    assert(operation->connection != NULL);
+    assert(operation->request != NULL);
+    assert(operation->request->command != NULL);
+    assert(operation->request->command->header != NULL);
+    assert(operation->request->command->header->has_sequence);
+}
+
+void KineticOperation_Complete(KineticOperation* operation, KineticStatus status)
+{
+    assert(operation != NULL);
+    // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
+    if (operation->closure.callback == NULL) { return; }
+    KineticCompletionData completionData = {.status = status};
+
+    KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
+
+    operation->closure.callback(&completionData, operation->closure.clientData);
+
+    KineticAllocator_FreeOperation(operation);
+}
+
+
+/*******************************************************************************
+ * Client Operations
+*******************************************************************************/
 
 KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, KineticStatus const status)
 {
@@ -510,7 +538,6 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     operation->callback = &KineticOperation_GetLogCallback;
 }
 
-
 void destroy_p2pOp(KineticProto_Command_P2POperation* proto_p2pOp)
 {
     if (proto_p2pOp != NULL) {
@@ -539,7 +566,6 @@ void destroy_p2pOp(KineticProto_Command_P2POperation* proto_p2pOp)
         free(proto_p2pOp);
     }
 }
-
 
 KineticProto_Command_P2POperation* build_p2pOp(uint32_t nestingLevel, KineticP2P_Operation const * const p2pOp)
 {
@@ -640,7 +666,6 @@ static void populateP2PStatusCodes(KineticP2P_Operation* const p2pOp, KineticPro
     }
 }
 
-
 KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status)
 {
     KineticP2P_Operation* const p2pOp = operation->p2pOp;
@@ -681,7 +706,13 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticOperation_SecureEraseCallback(KineticOperation* const operation, KineticStatus const status)
+
+
+/*******************************************************************************
+ * Admin Client Operations
+*******************************************************************************/
+
+KineticStatus KineticOperation_EraseCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
@@ -690,7 +721,7 @@ KineticStatus KineticOperation_SecureEraseCallback(KineticOperation* const opera
     return status;
 }
 
-void KineticOperation_BuildSecureErase(KineticOperation* operation)
+void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_erase)
 {
     KineticOperation_ValidateOperation(operation);
     KineticSession_IncrementSequence(operation->connection->session);
@@ -700,26 +731,28 @@ void KineticOperation_BuildSecureErase(KineticOperation* operation)
     operation->request->command->body = &operation->request->message.body;
     operation->request->command->body->pinOp = &operation->request->message.pinOp;
     
-    operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP;
+    operation->request->command->body->pinOp->pinOpType = secure_erase ?
+        KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP :
+        KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP;
     operation->request->command->body->pinOp->has_pinOpType = true;
     
     operation->valueEnabled = false;
     operation->sendValue = false;
-    operation->callback = &KineticOperation_SecureEraseCallback;
+    operation->callback = &KineticOperation_EraseCallback;
     operation->request->pinOp = true;
     operation->timeoutSeconds = 180;
 }
 
-KineticStatus KineticOperation_InstantEraseCallback(KineticOperation* const operation, KineticStatus const status)
+KineticStatus KineticOperation_LockUnlockCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    LOGF3("InstantErase callback w/ operation (0x%0llX) on connection (0x%0llX)",
+    LOGF3("LockUnlockCallback callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     return status;
 }
 
-void KineticOperation_BuildInstantErase(KineticOperation* operation)
+void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lock)
 {
     KineticOperation_ValidateOperation(operation);
     KineticSession_IncrementSequence(operation->connection->session);
@@ -729,14 +762,15 @@ void KineticOperation_BuildInstantErase(KineticOperation* operation)
     operation->request->command->body = &operation->request->message.body;
     operation->request->command->body->pinOp = &operation->request->message.pinOp;
     
-    operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP;
+    operation->request->command->body->pinOp->pinOpType = lock ?
+        KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_LOCK_PINOP :
+        KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP;
     operation->request->command->body->pinOp->has_pinOpType = true;
     
     operation->valueEnabled = false;
     operation->sendValue = false;
-    operation->callback = &KineticOperation_InstantEraseCallback;
+    operation->callback = &KineticOperation_LockUnlockCallback;
     operation->request->pinOp = true;
-    operation->timeoutSeconds = 180;
 }
 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status)
@@ -767,28 +801,4 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetClusterVersionCallback;
     operation->request->pinOp = false;
-}
-
-static void KineticOperation_ValidateOperation(KineticOperation* operation)
-{
-    assert(operation != NULL);
-    assert(operation->connection != NULL);
-    assert(operation->request != NULL);
-    assert(operation->request->command != NULL);
-    assert(operation->request->command->header != NULL);
-    assert(operation->request->command->header->has_sequence);
-}
-
-void KineticOperation_Complete(KineticOperation* operation, KineticStatus status)
-{
-    assert(operation != NULL);
-    // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
-    if (operation->closure.callback == NULL) { return; }
-    KineticCompletionData completionData = {.status = status};
-
-    KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
-
-    operation->closure.callback(&completionData, operation->closure.clientData);
-
-    KineticAllocator_FreeOperation(operation);
 }

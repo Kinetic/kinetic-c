@@ -47,7 +47,7 @@
 #include "socket99.h"
 
 static int FileDesc;
-static int KineticTestPort = KINETIC_PORT;
+// static int KineticTestPort = KINETIC_PORT;
 
 void setUp(void)
 {
