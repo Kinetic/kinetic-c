@@ -32,7 +32,7 @@ typedef struct {
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
-void run_throghput_tests(size_t num_ops, size_t value_size)
+void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_size)
 {
     printf("\n"
         "========================================\n"
@@ -56,8 +56,6 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         },
     };
-    KineticClient * client = KineticClient_Init("stdout", 0);
-
     // Establish connection
     KineticStatus status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
@@ -69,10 +67,14 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
     uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
     ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
 
+    uint64_t r = rand();
 
-
-    uint32_t keys[num_ops];
+    uint64_t keys[num_ops];
     KineticEntry entries[num_ops];
+
+    for (uint32_t put = 0; put < num_ops; put++) {
+        keys[put] = put | (r << 16);
+    }
 
     // Measure PUT performance
     {
@@ -88,7 +90,6 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
         gettimeofday(&start_time, NULL);
 
         for (uint32_t put = 0; put < num_ops; put++) {
-            keys[put] = put;
             ByteBuffer key = ByteBuffer_Create(&keys[put], sizeof(keys[put]), sizeof(keys[put]));
 
             KineticSynchronization sync = (put == num_ops - 1)
@@ -213,11 +214,6 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
 
-        for (size_t i = 0; i < num_ops; i++)
-        {
-            ByteBuffer_Free(test_get_datas[i]);
-        }
-
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
@@ -232,6 +228,11 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             bytes_read / 1024.0f,
             elapsed_ms / 1000.0f,
             bandwidth);
+
+        for (size_t i = 0; i < num_ops; i++)
+        {
+            ByteBuffer_Free(test_get_datas[i]);
+        }
     }
 
     // Measure DELETE performance
@@ -310,17 +311,56 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
 
     // Shutdown client connection and cleanup
     KineticClient_DestroyConnection(&session);
-    KineticClient_Shutdown(client);
 }
 
-void test_kinetic_client_throughput_for_maximum_sized_objects(void)
+
+typedef struct {
+    KineticClient * client;
+    uint32_t num_ops;
+    uint32_t obj_size;
+    uint32_t thread_iters;
+} TestParams;
+
+static void* test_thread(void* test_params)
 {
-    run_throghput_tests(500, KINETIC_OBJ_SIZE);
+    TestParams * params = test_params;
+    for (uint32_t i = 0; i < params->thread_iters; i++)
+    {
+        run_throghput_tests(params->client, params->num_ops, params->obj_size);
+    }
+    return NULL;
 }
+
+void run_tests(KineticClient * client)
+{
+    TestParams params[] = { { .client = client, .num_ops = 100, .obj_size = KINETIC_OBJ_SIZE, .thread_iters = 2 }
+                          , { .client = client, .num_ops = 1000, .obj_size = 120, .thread_iters = 2 }
+                          , { .client = client, .num_ops = 500, .obj_size = 70000, .thread_iters = 2 } };
+                          // , { .client = client, .num_ops = 1000, .obj_size = 120, .thread_iters = 2 }
+                          // , { .client = client, .num_ops = 100, .obj_size = KINETIC_OBJ_SIZE, .thread_iters = 2 } };
+    pthread_t thread_id[NUM_ELEMENTS(params)];
+
+    for (uint32_t i = 0; i < NUM_ELEMENTS(params); i ++)
+    {
+        int pthreadStatus = pthread_create(&thread_id[i], NULL, test_thread, &params[i]);
+        TEST_ASSERT_EQUAL_MESSAGE(0, pthreadStatus, "pthread create failed");
+    }
+
+    for (uint32_t i = 0; i < NUM_ELEMENTS(params); i++) {
+        int join_status = pthread_join(thread_id[i], NULL);
+        TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
+    }
+}
+
 
 void test_kinetic_client_throughput_for_small_sized_objects(void)
 {
-    run_throghput_tests(2000, 120);
+    srand(time(NULL));
+    for (uint32_t i = 0; i < 2; i++) {
+        KineticClient * client = KineticClient_Init("stdout", 0);
+        run_tests(client);
+        KineticClient_Shutdown(client);
+    }
 }
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData)
