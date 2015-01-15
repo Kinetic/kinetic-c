@@ -87,7 +87,7 @@ static time_t get_cur_second(void);
 static void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     example_state *s = (example_state *)udata;
     const char *event_str = bus_log_event_str(event);
-    fprintf(stderr, "%ld -- %s[%d] -- %s\n",
+    fprintf(/*stderr*/stdout, "%ld -- %s[%d] -- %s\n",
         s->last_second, event_str, log_level, msg);
 }
 
@@ -103,6 +103,7 @@ static bus_sink_cb_res_t reset_transfer(socket_info *si) {
     };
     
     si->state = STATE_AWAITING_HEADER;
+    si->used = 0;
     return res;
 }
 
@@ -121,9 +122,38 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
     case STATE_AWAITING_HEADER:
     {
         bool valid_header = true;
+        bool split_header = false;
 
-        prot_header_t *header = (prot_header_t *)read_buf;
-        if (read_size != sizeof(prot_header_t)) {
+        size_t header_rem = sizeof(prot_header_t) - si->used;
+        if (read_size > header_rem) {
+            printf("surplus read_size %zd\n", read_size);
+            printf("header_rem %zd (sizeof(prot_header_t) %zd)\n", header_rem, sizeof(prot_header_t));
+            assert(false);
+        } else if (read_size < sizeof(prot_header_t)) {
+            //printf("split header, %zd\n", read_size);
+            split_header = true;
+        }
+
+        size_t copied = read_size;
+        if (copied > header_rem) { copied = header_rem; }
+
+        memcpy(&si->buf[si->used], read_buf, copied);
+        si->used += copied;
+
+        if (si->used < sizeof(prot_header_t)) {
+            bus_sink_cb_res_t res = {
+                .next_read = sizeof(prot_header_t) - si->used,
+            };
+            si->state = STATE_AWAITING_HEADER;
+            return res;
+        }
+
+        assert(si->used == sizeof(prot_header_t));
+
+        prot_header_t *header = (prot_header_t *)&si->buf[0];
+
+        if (si->used < sizeof(prot_header_t)) {
+            printf("INVALID HEADER A: read_size %zd\n", si->used);
             valid_header = false;
         } else if (header->magic_number != MAGIC_NUMBER) {
             printf("INVALID HEADER B: magic number 0x%08x\n", header->magic_number);
@@ -131,18 +161,17 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         }
 
         if (valid_header) {
-            uint8_t *buf = si->buf;
-            prot_header_t *header = (prot_header_t *)read_buf;
+            prot_header_t *header = (prot_header_t *)&si->buf[0];
             si->cur_payload_size = header->size;
-            memcpy(buf, header, sizeof(*header));
-            si->used = sizeof(*header);
-
+            memcpy(&si->buf[si->used], read_buf + copied, read_size - copied);
+            si->used += read_size - copied;
             bus_sink_cb_res_t res = {
                 .next_read = header->size,
             };
             si->state = STATE_AWAITING_BODY;
             return res;
         } else {
+            assert(false);
             return reset_transfer(si);
         }
         
@@ -153,6 +182,7 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         assert(DEFAULT_BUF_SIZE - si->used >= read_size);
         memcpy(&si->buf[si->used], read_buf, read_size);
         si->used += read_size;
+        assert(si->used <= si->cur_payload_size + sizeof(prot_header_t));
         size_t rem = si->cur_payload_size + sizeof(prot_header_t) - si->used;
 
         if (rem == 0) {
@@ -201,7 +231,9 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
 static void unexpected_msg_cb(void *msg,
         int64_t seq_id, void *bus_udata, void *socket_udata) {
     printf("\n\n\nUNEXPECTED MESSAGE: %p, seq_id %lld, bus_udata %p, socket_udata %p\n\n\n\n",
-        msg, seq_id, bus_udata, socket_udata);
+        msg, (long long)seq_id, bus_udata, socket_udata);
+
+    assert(false);
 }
 
 int main(int argc, char **argv) {
@@ -327,7 +359,7 @@ static void open_sockets(example_state *s) {
         socket99_result res;
 
         if (!socket99_open(&cfg, &res)) {
-            // socket99_fprintf(stderr, &res);
+            socket99_fprintf(stderr, &res);
             exit(1);
         }
 
@@ -446,7 +478,7 @@ static void run_bus(example_state *s, struct bus *b) {
         if (should_send) {
             should_send = false;
             size_t msg_size = construct_msg(msg_buf, buf_size,
-                10 * payload_size /* * 1024L*/, seq_id);
+                100 * /*payload_size * */ 1024L, seq_id);
             LOG(3, " @@ sending message with %zd bytes\n", msg_size);
             bus_user_msg msg = {
                 .fd = s->sockets[cur_socket_i],

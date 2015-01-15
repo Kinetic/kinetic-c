@@ -76,6 +76,7 @@ static void reverse(struct casq *q) {
     casq_link *to_reverse = NULL;
     for (;;) {                  /* spin, unlink */
         to_reverse = q->accum;
+        if (q->accum == NULL) { return; }
         if (ATOMIC_BOOL_COMPARE_AND_SWAP(&q->accum, to_reverse, NULL)) {
             break;
         }

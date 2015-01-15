@@ -239,49 +239,52 @@ bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
 
 void test_sink_cb_should_reset_uninitialized_socket_state(void)
 {
-    socket_info si = {
+    socket_info *si = (socket_info *)si_buf;
+    *si = (socket_info){
         .state = STATE_UNINIT,
         .accumulated = 0xFFFFFFFF,
     };
-    KineticConnection connection = { .si = &si };
+    KineticConnection connection = { .si = si };
     
     bus_sink_cb_res_t res = sink_cb(NULL, 0, &connection);
 
-    TEST_ASSERT_EQUAL(0, si.accumulated);
-    TEST_ASSERT_EQUAL(UNPACK_ERROR_UNDEFINED, si.unpack_status);
+    TEST_ASSERT_EQUAL(0, si->accumulated);
+    TEST_ASSERT_EQUAL(UNPACK_ERROR_UNDEFINED, si->unpack_status);
 
     /* Expect next read to be a header. */
     TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
     TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
-    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si.state);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
 }
 
 void test_sink_cb_should_expose_invalid_header_error(void)
 {
-    socket_info si = {
+    socket_info *si = (socket_info *)si_buf;
+    *si = (socket_info){
         .state = STATE_AWAITING_HEADER,
-        .accumulated = 0xFFFFFFFF,
+        .accumulated = 0,
     };
-    KineticConnection connection = { .si = &si };
+    KineticConnection connection = { .si = si };
     KineticPDUHeader bad_header;
     memset(&bad_header, 0xFF, sizeof(bad_header));
 
     bus_sink_cb_res_t res = sink_cb((uint8_t *)&bad_header, sizeof(bad_header), &connection);
     TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
-    TEST_ASSERT_EQUAL(UNPACK_ERROR_INVALID_HEADER, si.unpack_status);
-    TEST_ASSERT_EQUAL(&si, res.full_msg_buffer);
+    TEST_ASSERT_EQUAL(UNPACK_ERROR_INVALID_HEADER, si->unpack_status);
+    TEST_ASSERT_EQUAL(si, res.full_msg_buffer);
     
-    TEST_ASSERT_EQUAL(0, si.accumulated);
-    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si.state);
+    TEST_ASSERT_EQUAL(0, si->accumulated);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
 }
 
 void test_sink_cb_should_transition_to_awaiting_body_state_with_good_header(void)
 {
-    socket_info si = {
+    socket_info *si = (socket_info *)si_buf;
+    *si = (socket_info){
         .state = STATE_AWAITING_HEADER,
-        .accumulated = 0xFFFFFFFF,
+        .accumulated = 0,
     };
-    KineticConnection connection = { .si = &si };
+    KineticConnection connection = { .si = si };
     uint8_t read_buf[] = {
         0xa0,                       // version prefix
         0x00, 0x00, 0x00, 0x7b,     // protobuf length
@@ -291,9 +294,37 @@ void test_sink_cb_should_transition_to_awaiting_body_state_with_good_header(void
     bus_sink_cb_res_t res = sink_cb(read_buf, sizeof(read_buf), &connection);
     TEST_ASSERT_EQUAL(123 + 456, res.next_read);
     TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
-    TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si.state);
-    TEST_ASSERT_EQUAL(0, si.accumulated);
-    TEST_ASSERT_EQUAL(UNPACK_ERROR_SUCCESS, si.unpack_status);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
+    TEST_ASSERT_EQUAL(0, si->accumulated);
+    TEST_ASSERT_EQUAL(UNPACK_ERROR_SUCCESS, si->unpack_status);
+}
+
+void test_sink_cb_should_accumulate_partially_recieved_header(void)
+{
+    socket_info *si = (socket_info *)si_buf;
+    *si = (socket_info){
+        .state = STATE_AWAITING_HEADER,
+        .accumulated = 0,
+    };
+    KineticConnection connection = { .si = si };
+    uint8_t read_buf1[] = {
+        0xa0,                       // version prefix
+        0x00, 0x00, 0x00, 0x7b,     // protobuf length
+    };
+    uint8_t read_buf2[] = {
+        0x00, 0x00, 0x01, 0xc8,     // value length
+    };
+
+    bus_sink_cb_res_t res = sink_cb(read_buf1, sizeof(read_buf1), &connection);
+    TEST_ASSERT_EQUAL(4, res.next_read);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
+    TEST_ASSERT_EQUAL(5, si->accumulated);
+    res = sink_cb(read_buf2, sizeof(read_buf2), &connection);
+    TEST_ASSERT_EQUAL(123 + 456, res.next_read);
+    TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
+    TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
+    TEST_ASSERT_EQUAL(0, si->accumulated);
+    TEST_ASSERT_EQUAL(UNPACK_ERROR_SUCCESS, si->unpack_status);
 }
 
 void test_sink_cb_should_accumulate_partially_received_body(void)
@@ -335,9 +366,10 @@ bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata);
 
 void test_unpack_cb_should_expose_error_codes(void)
 {
-    socket_info si = {
+    socket_info *si = (socket_info *)si_buf;
+    *si = (socket_info){
         .state = STATE_AWAITING_HEADER,
-        .accumulated = 0xFFFFFFFF,
+        .accumulated = 0,
         .unpack_status = UNPACK_ERROR_UNDEFINED,
     };
     
@@ -348,8 +380,8 @@ void test_unpack_cb_should_expose_error_codes(void)
     };
 
     for (size_t i = 0; i < sizeof(error_states) / sizeof(error_states[0]); i++) {
-        si.unpack_status = error_states[i];
-        bus_unpack_cb_res_t res = unpack_cb((void *)&si, NULL);
+        si->unpack_status = error_states[i];
+        bus_unpack_cb_res_t res = unpack_cb((void *)si, NULL);
         TEST_ASSERT_FALSE(res.ok);
         TEST_ASSERT_EQUAL(error_states[i], res.u.error.opaque_error_id);
     }
@@ -359,7 +391,7 @@ void test_unpack_cb_should_expose_alloc_failure(void)
 {
     socket_info si = {
         .state = STATE_AWAITING_HEADER,
-        .accumulated = 0xFFFFFFFF,
+        .accumulated = 0,
         .unpack_status = UNPACK_ERROR_SUCCESS,
         .header = {
             .valueLength = 8,

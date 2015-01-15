@@ -179,8 +179,10 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
 static void attempt_write(sender *s, int available);
 
 static void tick_handler(sender *s);
-static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info);
 static void notify_message_failure(sender *s, tx_info_t *info, bus_send_status_t status);
+static void attempt_to_enqueue_sending_request_message_to_listener(sender *s,
+    int fd, int64_t seq_id, int16_t timeout_sec);
+static void attempt_to_enqueue_request_sent_message_to_listener(sender *s, tx_info_t *info);
 
 static void notify_caller(sender *s, tx_info_t *info, bool success);
 static void tick_timeout(sender *s, tx_info_t *info);

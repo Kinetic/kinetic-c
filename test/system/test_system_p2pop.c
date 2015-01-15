@@ -239,9 +239,10 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
     };
 
     KineticP2P_Operation p2pOp = {
-        .peer.hostname = KINETIC_TEST_HOST2,
-        .peer.port = KINETIC_TEST_PORT2,
-        .peer.tls = false,
+        .peer = { .hostname = KINETIC_TEST_HOST2,
+                  .port = KINETIC_TEST_PORT2,
+                  .tls = false,
+                },
         .numOperations = NUM_ELEMENTS(ops),
         .operations = ops
     };
@@ -374,17 +375,19 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
     };
 
     KineticP2P_Operation p2pOp_copy_back1 = {
-        .peer.hostname = KINETIC_TEST_HOST1,
-        .peer.port = KINETIC_TEST_PORT1,
-        .peer.tls = false,
+        .peer = { .hostname = KINETIC_TEST_HOST1,
+                  .port = KINETIC_TEST_PORT1,
+                  .tls = false,
+                },
         .numOperations = NUM_ELEMENTS(ops_copy_back1),
         .operations = ops_copy_back1
     };
 
     KineticP2P_Operation p2pOp_copy_back2 = {
-        .peer.hostname = KINETIC_TEST_HOST1,
-        .peer.port = KINETIC_TEST_PORT1,
-        .peer.tls = false,
+        .peer = { .hostname = KINETIC_TEST_HOST1,
+                  .port = KINETIC_TEST_PORT1,
+                  .tls = false,
+                },
         .numOperations = NUM_ELEMENTS(ops_copy_back2),
         .operations = ops_copy_back2
     };
@@ -404,9 +407,10 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
 
 
     KineticP2P_Operation p2pOp = {
-        .peer.hostname = KINETIC_TEST_HOST2,
-        .peer.port = KINETIC_TEST_PORT2,
-        .peer.tls = false,
+        .peer = { .hostname = KINETIC_TEST_HOST2,
+                  .port = KINETIC_TEST_PORT2,
+                  .tls = false,
+                },
         .numOperations = NUM_ELEMENTS(ops_copy_there),
         .operations = ops_copy_there
     };
@@ -477,9 +481,10 @@ void test_P2P_should_fail_with_a_buffer_overrun_error_if_to_many_operations_spec
     }
 
     KineticP2P_Operation p2pOp = {
-        .peer.hostname = KINETIC_TEST_HOST1,
-        .peer.port = KINETIC_TEST_PORT1,
-        .peer.tls = false,
+        .peer = { .hostname = KINETIC_TEST_HOST1,
+                  .port = KINETIC_TEST_PORT1,
+                  .tls = false,
+                },
         .numOperations = to_many_operations,
         .operations = ops
     };
@@ -506,9 +511,10 @@ void test_P2P_should_fail_with_a_operation_invalid_if_to_many_chained_p2p_operat
             .chainedOperation = (i == (to_many_operations - 1)) ? NULL : &chained_ops[i + 1],
         };
         chained_ops[i] = (KineticP2P_Operation){
-            .peer.hostname = KINETIC_TEST_HOST1,
-            .peer.port = KINETIC_TEST_PORT1,
-            .peer.tls = false,
+            .peer = { .hostname = KINETIC_TEST_HOST1,
+                      .port = KINETIC_TEST_PORT1,
+                      .tls = false,
+                    },
             .numOperations = 1,
             .operations = &ops[i],
         };

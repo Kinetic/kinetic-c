@@ -213,6 +213,11 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
 
+        for (size_t i = 0; i < num_ops; i++)
+        {
+            ByteBuffer_Free(test_get_datas[i]);
+        }
+
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
