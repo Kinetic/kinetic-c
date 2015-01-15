@@ -134,9 +134,11 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
         }
 
         KineticP2P_Operation p2pOp = {
-            .peer.hostname = KINETIC_TEST_HOST2,
-            .peer.port = KINETIC_TEST_PORT2,
-            .peer.tls = false,
+            .peer = {
+                .hostname = KINETIC_TEST_HOST2,
+                .port = KINETIC_TEST_PORT2,
+                .tls = false,
+            },
             .numOperations = num_ops,
             .operations = ops
         };
