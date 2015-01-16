@@ -13,3 +13,6 @@
 [submodule "vendor/unity"]
 	path = vendor/unity
 	url = https://github.com/ThrowTheSwitch/Unity.git
+[submodule "vendor/FlameGraph"]
+	path = vendor/FlameGraph
+	url = git@github.com:brendangregg/FlameGraph.git
