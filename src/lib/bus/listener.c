@@ -288,7 +288,7 @@ void *listener_mainloop(void *arg) {
 
     while (!self->shutdown) {
         bool work_done = false;
-        gettimeofday(&tv, NULL);
+        gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
             tick_handler(self);

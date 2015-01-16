@@ -442,7 +442,7 @@ static void tick_handler(example_state *s) {
 
 static time_t get_cur_second(void) {
     struct timeval tv;
-    gettimeofday(&tv, 0);
+    gettimeofday(&tv, 0);  // TODO: clock_gettime
     return tv.tv_sec;
 }
 

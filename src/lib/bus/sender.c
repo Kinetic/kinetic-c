@@ -333,7 +333,7 @@ void *sender_mainloop(void *arg) {
     while (!self->shutdown) {
         bool work = false;
         
-        gettimeofday(&tv, NULL);
+        gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
             BUS_LOG(b, 5, LOG_SENDER, "entering tick handler", b->udata);

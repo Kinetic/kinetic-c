@@ -206,7 +206,7 @@ static void listen_loop_poll(config *cfg) {
     int delay = 1;
 
     for (;;) {
-        gettimeofday(&tv, 0);
+        gettimeofday(&tv, 0);  // TODO: clock_gettime
         if (tv.tv_sec != cfg->last_second) {
             tick_handler(cfg);
             cfg->last_second = tv.tv_sec;
