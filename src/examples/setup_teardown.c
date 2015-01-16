@@ -27,16 +27,36 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/file.h>
+#include <getopt.h>
+
+static char *kinetic_host = "localhost";
+static long idle_seconds = 0;
+
+static void usage(void) {
+    fprintf(stderr, "usage: setup_teardown [-h KINETIC_HOST] [-i IDLE_SECONDS]\n");
+    exit(1);
+}
+
+static void handle_args(int argc, char **argv) {
+    int fl = 0;
+    while ((fl = getopt(argc, argv, "i:h:")) != -1) {
+        switch (fl) {
+        case 'h':               /* host */
+            kinetic_host = optarg;
+            break;
+        case 'i':               /* idle seconds */
+            idle_seconds = strtol(optarg, NULL, 10);
+            break;
+        case '?':
+        default:
+            usage();
+        }
+    }
+}
 
 int main(int argc, char** argv)
 {
-    (void)argc;
-    (void)argv;
-
-    char *kinetic_host = getenv("KINETIC_HOST");
-    if (kinetic_host == NULL) {
-        kinetic_host = "localhost";
-    }
+    handle_args(argc, argv);
 
     // Establish connection
     KineticStatus status;
@@ -60,12 +80,6 @@ int main(int argc, char** argv)
         fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
             session.config.host, Kinetic_GetStatusDescription(status));
         exit(1);
-    }
-
-    char *idle_seconds_var = getenv("IDLE_SECONDS");
-    long idle_seconds = 0;
-    if (idle_seconds_var) {
-        strtol(idle_seconds_var, NULL, 10);
     }
 
     if (idle_seconds > 0) {
