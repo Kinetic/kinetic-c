@@ -33,19 +33,26 @@ int main(int argc, char** argv)
     (void)argc;
     (void)argv;
 
+    char *kinetic_host = getenv("KINETIC_HOST");
+    if (kinetic_host == NULL) {
+        kinetic_host = "localhost";
+    }
+
     // Establish connection
     KineticStatus status;
     const char HmacKeyString[] = "asdfasdf";
     KineticSession session = {
         .config = (KineticSessionConfig) {
-            .host = "localhost",
             .port = KINETIC_PORT,
             .clusterVersion = 0,
             .identity = 1,
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString)
         }
     };
-    
+
+    strncpy(session.config.host, kinetic_host, HOST_NAME_MAX - 1);
+    session.config.host[HOST_NAME_MAX - 1] = '\0';
+
     KineticClient * client = KineticClient_Init("stdout", 1);
     if (client == NULL) { return 1; }
     status = KineticClient_CreateConnection(&session, client);
