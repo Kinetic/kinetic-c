@@ -665,7 +665,7 @@ static void tick_handler(listener *l) {
         (void*)l, l->msgs_in_use, MAX_QUEUE_MESSAGES,
         l->rx_info_in_use, MAX_PENDING_MESSAGES, l->tracked_fds);
 
-    if (b->log_level > 5 || l->msgs_in_use > 5) {  /* dump msg table types */
+    if (b->log_level > 5) {  /* dump msg table types */
         for (int i = 0; i < l->msgs_in_use; i++) {
             printf(" -- msg %d: type %d\n", i, l->msgs[i].type);
         }
@@ -885,7 +885,7 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
     case RIS_HOLD:
         if (info->u.hold.has_result) {
             /* FIXME: If we have a message that timed out, we need to
-             * free it, but don't know howx. We should never get here,
+             * free it, but don't know how. We should never get here,
              * because it means the sender finished sending the message,
              * but the listener never got the handler callback. */
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
