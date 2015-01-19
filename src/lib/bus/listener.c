@@ -367,7 +367,6 @@ static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
         }
         default:
         {
-            struct bus *b = l->bus;
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                 "match fail %d on line %d", info->state, __LINE__);
             assert(false);
@@ -1256,7 +1255,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             info->timeout_sec = box->timeout_sec;
         }
     } else {                    /* use free info */
-        rx_info_t *info = get_free_rx_info(l);
+        info = get_free_rx_info(l);
         assert(info);
         assert(info->state == RIS_INACTIVE);
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,

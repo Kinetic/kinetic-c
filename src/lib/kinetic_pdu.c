@@ -237,7 +237,8 @@ bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
             .max_threads = config->maxThreadpoolThreads,
         },
     };
-    bus_result res = {0};
+    bus_result res;
+    memset(res, 0, sizeof(res));
     if (!bus_init(&cfg, &res)) {
         LOGF0("failed to init bus: %d\n", res.status);
         return false;
