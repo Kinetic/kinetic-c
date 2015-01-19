@@ -362,6 +362,33 @@ struct _KineticP2P_Operation {
     KineticP2P_OperationData* operations; // pointer must remain valid until operations complete
 };
 
+/* Default values for the KineticClientConfig struct, which will be used
+ * if the corresponding field in the struct is 0. */
+#define KINETIC_CLIENT_DEFAULT_LOG_LEVEL 0
+#define KINETIC_CLIENT_DEFAULT_WRITER_THREADS 4
+#define KINETIC_CLIENT_DEFAULT_READER_THREADS 4
+#define KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS 8
+
+/**
+ * @brief Configuration values for the KineticClient connection.
+ *
+ * Configuration for the KineticClient connection. If fields are zeroed out, default
+ * values will be used.
+ * 
+ * @var logFile (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
+ * @var logLevel Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
+ * @var writerThreads Number of threads used for handling outgoing requests
+ * @var readerThreads Number of threads used for handling incoming responses and status messages
+ * @var maxThreadpoolThreads Max number of threads to use for the threadpool that handles response callbacks.
+ */
+typedef struct {
+    const char *logFile;
+    int logLevel;
+    uint8_t writerThreads;
+    uint8_t readerThreads;
+    uint8_t maxThreadpoolThreads;
+} KineticClientConfig;
+
 const char* KineticMessageType_GetName(KineticMessageType type);
 
 #define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN (1024 * 1024 * 4) // Will get reallocated to actual/used size post-copy

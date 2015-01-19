@@ -29,12 +29,24 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-KineticClient * KineticClient_Init(const char* log_file, int log_level)
+KineticClient * KineticClient_Init(KineticClientConfig *config)
 {
-    KineticLogger_Init(log_file, log_level);
+    KineticLogger_Init(config->logFile, config->logLevel);
     KineticClient * client = KineticCalloc(1, sizeof(*client));
     if (client == NULL) { return NULL; }
-    bool success = KineticPDU_InitBus(1, client);
+
+    /* Use defaults if set to 0. */
+    if (config->writerThreads == 0) {
+        config->writerThreads = KINETIC_CLIENT_DEFAULT_WRITER_THREADS;
+    }
+    if (config->readerThreads == 0) {
+        config->readerThreads = KINETIC_CLIENT_DEFAULT_READER_THREADS;
+    }
+    if (config->maxThreadpoolThreads == 0) {
+        config->maxThreadpoolThreads = KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS;
+    }
+
+    bool success = KineticPDU_InitBus(client, config);
     if (!success)
     {
         KineticFree(client);

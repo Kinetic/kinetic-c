@@ -56,7 +56,11 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         },
     };
-    KineticClient * client = KineticClient_Init("stdout", 0);
+    KineticClientConfig config = {
+        .logFile = "stdout",
+        .logLevel = 0,
+    };
+    KineticClient * client = KineticClient_Init(&config);
 
     // Establish connection
     KineticStatus status = KineticClient_CreateConnection(&session, client);

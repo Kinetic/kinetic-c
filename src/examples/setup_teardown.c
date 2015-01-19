@@ -73,7 +73,11 @@ int main(int argc, char** argv)
     strncpy(session.config.host, kinetic_host, HOST_NAME_MAX - 1);
     session.config.host[HOST_NAME_MAX - 1] = '\0';
 
-    KineticClient * client = KineticClient_Init("stdout", 1);
+    KineticClientConfig client_config = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    KineticClient * client = KineticClient_Init(&client_config);
     if (client == NULL) { return 1; }
     status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {

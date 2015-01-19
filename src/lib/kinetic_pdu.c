@@ -220,8 +220,10 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     }
 }
 
-bool KineticPDU_InitBus(int log_level, KineticClient * client)
+bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
 {
+    int log_level = config->logLevel;
+
     bus_config cfg = {
         .log_cb = log_cb,
         .log_level = (log_level > 1) ? 1 : 0,
@@ -229,8 +231,11 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = KineticController_HandleUnexecpectedResponse,
         .bus_udata = NULL,
-        .sender_count = 4,
-        .listener_count = 4,
+        .sender_count = config->writerThreads,
+        .listener_count = config->readerThreads,
+        .threadpool_cfg = {
+            .max_threads = config->maxThreadpoolThreads,
+        },
     };
     bus_result res = {0};
     if (!bus_init(&cfg, &res)) {
@@ -243,8 +248,10 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
 
 void KineticPDU_DeinitBus(KineticClient * const client)
 {
-    bus_shutdown(client->bus);
-    bus_free(client->bus);
+    if (client) {
+        bus_shutdown(client->bus);
+        bus_free(client->bus);
+    }
 }
 
 KineticStatus KineticPDU_GetStatus(KineticResponse* response)

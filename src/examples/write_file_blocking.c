@@ -109,7 +109,12 @@ int main(int argc, char** argv)
         }
     };
     write_args* writeArgs = calloc(1, sizeof(write_args));
-    KineticClient * client = KineticClient_Init("stdout", 0);
+
+    KineticClientConfig client_config = {
+        .logFile = "stdout",
+        .logLevel = 0,
+    };
+    KineticClient * client = KineticClient_Init(&client_config);
     if (client == NULL) { return 1; }
     status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {

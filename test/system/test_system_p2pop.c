@@ -76,7 +76,12 @@ const char HmacKeyString[] = "asdfasdf";
 void setUp(void)
 { LOG_LOCATION;
     // SystemTestSetup(&Fixture, 1);
-    client = KineticClient_Init("stdout", 1);
+
+    KineticClientConfig config = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    client = KineticClient_Init(&config);
 
     session1 = (KineticSession){
         .config = (KineticSessionConfig) {

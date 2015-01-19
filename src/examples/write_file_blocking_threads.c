@@ -97,7 +97,11 @@ int main(int argc, char** argv)
     }
 
     // Initialize kinetic-c and configure sessions
-    KineticClient * client = KineticClient_Init("stdout", 0);
+    KineticClientConfig client_config = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    KineticClient * client = KineticClient_Init(&client_config);
     if (client == NULL) { return 1; }
 
     write_args* writeArgs = calloc(NUM_FILES, sizeof(write_args));

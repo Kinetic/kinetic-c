@@ -357,7 +357,12 @@ void test_kinetic_client_throughput_for_small_sized_objects(void)
 {
     srand(time(NULL));
     for (uint32_t i = 0; i < 2; i++) {
-        KineticClient * client = KineticClient_Init("stdout", 0);
+
+        KineticClientConfig config = {
+            .logFile = "stdout",
+            .logLevel = 0,
+        };
+        KineticClient * client = KineticClient_Init(&config);
         run_tests(client);
         KineticClient_Shutdown(client);
     }

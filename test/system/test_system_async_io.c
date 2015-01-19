@@ -57,7 +57,12 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         },
     };
-    KineticClient * client = KineticClient_Init("stdout", 0);
+
+    KineticClientConfig config = {
+        .logFile = "stdout",
+        .logLevel = 0,
+    };
+    KineticClient * client = KineticClient_Init(&config);
 
     // Establish connection
     KineticStatus status = KineticClient_CreateConnection(&session, client);
