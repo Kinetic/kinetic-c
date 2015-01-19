@@ -1,3 +1,8 @@
+v0.11.0 (kinetic-protocol 3.0.5)
+--------------------------------
+* Changed API to use a `KineticClientConfig` struct, to keep future configuration changes from breaking the source API.
+* Added options for the number of writer, reader, and max threadpool threads, with defaults.
+
 v0.10.1 (kinetic-protocol 3.0.5)
 --------------------------------
 * Fixed regression in 0.10.0 where a GET with metadataOnly=true would result in a crash if a value field was not provided
