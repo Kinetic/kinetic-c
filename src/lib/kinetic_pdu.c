@@ -238,7 +238,7 @@ bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
         },
     };
     bus_result res;
-    memset(res, 0, sizeof(res));
+    memset(&res, 0, sizeof(res));
     if (!bus_init(&cfg, &res)) {
         LOGF0("failed to init bus: %d\n", res.status);
         return false;
