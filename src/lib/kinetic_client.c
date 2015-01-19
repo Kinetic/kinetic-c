@@ -67,7 +67,13 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session, Kine
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
-    KineticSession_Create(session, client);
+    KineticStatus res = KineticSession_Create(session, client);
+    if (res != KINETIC_STATUS_SUCCESS) {
+        LOGF0("Failed to create connection instance: %s",
+            Kinetic_GetStatusDescription(res));
+        return res;
+    }
+
     if (session->connection == NULL) {
         LOG0("Failed to create connection instance!");
         return KINETIC_STATUS_CONNECTION_ERROR;
