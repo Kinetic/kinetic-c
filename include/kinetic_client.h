@@ -245,6 +245,15 @@ KineticStatus KineticClient_GetLog(KineticSession const * const session,
                                    KineticCompletionClosure* closure);
 
 /**
+ * @brief Free the KineticDeviceInfo result from KineticClient_GetLog.
+ *
+ * @param session       The connected KineticSession to use for the operation
+ * @param info          The KineticDeviceInfo result to free.
+ */
+void KineticClient_FreeDeviceInfo(KineticSession const * const session,
+                                  KineticDeviceInfo* info);
+
+/**
  * @brief Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic
  * Device to copy a set of keys (and associated value and metadata) to another
  * Kinetic Device.

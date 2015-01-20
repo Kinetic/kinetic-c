@@ -2,6 +2,8 @@ v0.11.0 (kinetic-protocol 3.0.5)
 --------------------------------
 * Changed API to use a `KineticClientConfig` struct, to keep future configuration changes from breaking the source API.
 * Added options for the number of writer, reader, and max threadpool threads, with defaults.
+* Added KineticClient_FreeDeviceInfo to free the `KineticDeviceInfo` structure allocated by `KineticClient_GetLog`.
+* Added several new examples under src/examples/.
 
 v0.10.1 (kinetic-protocol 3.0.5)
 --------------------------------

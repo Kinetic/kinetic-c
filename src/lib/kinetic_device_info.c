@@ -19,195 +19,363 @@
 */
 
 #include "kinetic_device_info.h"
-#include "kinetic_serial_allocator.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
+#include <string.h>
 
-#define COPY_VALUE_OPTIONAL(_attr, _dest, _src) { \
-    if (_src->has_##_attr) { _dest->_attr = _src->_attr; } }
-#define COPY_CSTRING(_attr, _dest, _src, _allocator) \
-    if (_src->_attr != NULL) { \
-        size_t len = strlen(_src->_attr)+1; \
-        _dest->_attr = KineticSerialAllocator_AllocateChunk(_allocator, len); \
-        memcpy(_dest->_attr, _src->_attr, len); \
-    }
-#define COPY_BYTES_OPTIONAL(_attr, _dest, _src, _allocator) \
-    if (_src->has_##_attr) { \
-        _dest->_attr.data = KineticSerialAllocator_AllocateChunk(_allocator, _src->_attr.len); \
-        memcpy(_dest->_attr.data, _src->_attr.data, _src->_attr.len); \
-        _dest->_attr.len = _src->_attr.len; \
+/* Using copy_str instead of strdup since it's not necessarily available. */
+static char *copy_str(const char *s) {
+    if (s == NULL) { return NULL; }
+
+    int len = strlen(s);
+    char *res = calloc(len + 1, sizeof(char));
+    if (res) {
+        memcpy(res, s, len);
+        res[len] = '\0';
     }
 
-static void KineticDeviceInfo_ExtractUtilizations(
-    KineticDeviceInfo* info,
+    return res;
+}
+
+/* Copy a byte array. Returns one with res.data == NULL on alloc fail. */
+static ByteArray copy_to_byte_array(uint8_t *data, size_t length) {
+    ByteArray res = { .len = length, };
+    res.data = calloc(res.len, sizeof(uint8_t));
+    if (res.data) {
+        memcpy(res.data, data, res.len);
+    }
+    return res;
+}
+
+static void free_byte_array(ByteArray ba) {
+    free(ba.data);
+}
+
+static KineticDeviceInfo_Utilization* KineticDeviceInfo_GetUtilizations(
     const KineticProto_Command_GetLog* getLog,
-    KineticSerialAllocator* allocator)
+    size_t *numUtilizations)
 {
-    info->numUtilizations = getLog->n_utilizations;
-    if (info->numUtilizations > 0) {
-        info->utilizations = KineticSerialAllocator_AllocateChunk(allocator,
-            info->numUtilizations * sizeof(KineticDeviceInfo_Utilization));
-        for (size_t i = 0; i < info->numUtilizations; i++) {
-            KineticDeviceInfo_Utilization* destUtilization = &(info->utilizations[i]);
-            COPY_CSTRING(name,         destUtilization, getLog->utilizations[i], allocator);
-            COPY_VALUE_OPTIONAL(value, destUtilization, getLog->utilizations[i]);
+    *numUtilizations = 0;
+    size_t num_util = getLog->n_utilizations;
+
+    KineticDeviceInfo_Utilization * util = calloc(num_util, sizeof(*util));
+
+    if (util) {
+        for (size_t i = 0; i < num_util; i++) {
+            util[i].name = copy_str(getLog->utilizations[i]->name);
+            if (util[i].name == NULL) {
+                for (size_t j = 0; j < i; j++) { free(util[j].name); }
+                free(util);
+                util = NULL;
+                break;
+            }
+            util[i].value = getLog->utilizations[i]->value;
         }
+
+        *numUtilizations = num_util;
     }
+    return util;
 }
 
-static void KineticDeviceInfo_ExtractTemperatures(
-    KineticDeviceInfo* info,
+static KineticDeviceInfo_Temperature *KineticDeviceInfo_GetTemperatures(
     const KineticProto_Command_GetLog* getLog,
-    KineticSerialAllocator* allocator)
+    size_t *numTemperatures)
 {
-    if (getLog->n_temperatures > 0) {
-        info->numTemperatures = getLog->n_temperatures;
-        info->temperatures = KineticSerialAllocator_AllocateChunk(allocator,
-            info->numTemperatures * sizeof(KineticDeviceInfo_Temperature));
-        for (size_t i = 0; i < info->numTemperatures; i++) {
-            KineticDeviceInfo_Temperature* destTemp = &info->temperatures[i];
-            COPY_CSTRING(name,  destTemp, getLog->temperatures[i], allocator);
-            COPY_VALUE_OPTIONAL(current, destTemp, getLog->temperatures[i]);
-            COPY_VALUE_OPTIONAL(minimum, destTemp, getLog->temperatures[i]);
-            COPY_VALUE_OPTIONAL(maximum, destTemp, getLog->temperatures[i]);
-            COPY_VALUE_OPTIONAL(target,  destTemp, getLog->temperatures[i]);
+    size_t num_temp = getLog->n_temperatures;
+    *numTemperatures = 0;
+    KineticDeviceInfo_Temperature *temp = calloc(num_temp, sizeof(*temp));
+    if (temp) {
+        for (size_t i = 0; i < num_temp; i++) {
+            temp[i].name = copy_str(getLog->temperatures[i]->name);
+            temp[i].current = getLog->temperatures[i]->current;
+            temp[i].minimum = getLog->temperatures[i]->minimum;
+            temp[i].maximum = getLog->temperatures[i]->maximum;
+            temp[i].target = getLog->temperatures[i]->target;
         }
+
+        *numTemperatures = num_temp;
     }
+    return temp;
 }
 
-static void KineticDeviceInfo_ExtractCapacity(
-    KineticDeviceInfo* info,
-    const KineticProto_Command_GetLog* getLog,
-    KineticSerialAllocator* allocator)
+static KineticDeviceInfo_Capacity *KineticDeviceInfo_GetCapacity(
+    const KineticProto_Command_GetLog* getLog)
 {
-    if (getLog->capacity != NULL) {
-        info->capacity = KineticSerialAllocator_AllocateChunk(allocator, sizeof(KineticDeviceInfo_Capacity));
-        COPY_VALUE_OPTIONAL(nominalCapacityInBytes, info->capacity, getLog->capacity);
-        COPY_VALUE_OPTIONAL(portionFull,            info->capacity, getLog->capacity);
+    KineticDeviceInfo_Capacity *cap = calloc(1, sizeof(*cap));
+    if (cap && getLog->capacity) {
+        cap->nominalCapacityInBytes = getLog->capacity->nominalCapacityInBytes;
+        cap->portionFull = getLog->capacity->portionFull;
     }
+    return cap;
 }
 
-static void KineticDeviceInfo_ExtractConfiguration(
-    KineticDeviceInfo* info,
-    const KineticProto_Command_GetLog* getLog,
-    KineticSerialAllocator* allocator)
+static KineticDeviceInfo_Configuration * KineticDeviceInfo_GetConfiguration(
+    const KineticProto_Command_GetLog* getLog)
 {
-    if (getLog->configuration != NULL) {
-        info->configuration = KineticSerialAllocator_AllocateChunk(allocator,
-            sizeof(KineticDeviceInfo_Configuration));
-        COPY_CSTRING(vendor,                  info->configuration, getLog->configuration, allocator);
-        COPY_CSTRING(model,                   info->configuration, getLog->configuration, allocator);
-        COPY_BYTES_OPTIONAL(serialNumber,     info->configuration, getLog->configuration, allocator);
-        COPY_BYTES_OPTIONAL(worldWideName,    info->configuration, getLog->configuration, allocator);
-        COPY_CSTRING(version,                 info->configuration, getLog->configuration, allocator);
-        COPY_CSTRING(compilationDate,         info->configuration, getLog->configuration, allocator);
-        COPY_CSTRING(sourceHash,              info->configuration, getLog->configuration, allocator);
-        COPY_CSTRING(protocolVersion,         info->configuration, getLog->configuration, allocator);
-        COPY_CSTRING(protocolCompilationDate, info->configuration, getLog->configuration, allocator);
-        COPY_CSTRING(protocolSourceHash,      info->configuration, getLog->configuration, allocator);
-        if (getLog->configuration->n_interface > 0) {
-            info->configuration->interfaces = KineticSerialAllocator_AllocateChunk(allocator,
-                sizeof(KineticDeviceInfo_Interface) * getLog->configuration->n_interface);
-            info->configuration->numInterfaces = getLog->configuration->n_interface;
-            for (size_t i = 0; i < getLog->configuration->n_interface; i++) {
-                KineticDeviceInfo_Interface* destIface = &info->configuration->interfaces[i];
-                KineticProto_Command_GetLog_Configuration_Interface* srcIface = getLog->configuration->interface[i];
-                COPY_CSTRING(name,               destIface, srcIface, allocator);
-                COPY_BYTES_OPTIONAL(MAC,         destIface, srcIface, allocator);
-                COPY_BYTES_OPTIONAL(ipv4Address, destIface, srcIface, allocator);
-                COPY_BYTES_OPTIONAL(ipv6Address, destIface, srcIface, allocator);
+    KineticProto_Command_GetLog_Configuration const *gcfg = getLog->configuration;
+
+    KineticDeviceInfo_Configuration *cfg = calloc(1, sizeof(*cfg));
+    if (cfg) {
+        if (gcfg->has_serialNumber) {
+            cfg->serialNumber = (ByteArray){0, 0};
+        }
+        if (gcfg->has_worldWideName) {
+            cfg->worldWideName = (ByteArray){0, 0};
+        }
+
+        cfg->vendor = copy_str(gcfg->vendor);
+        if (cfg->vendor == NULL) { goto cleanup; }
+        cfg->model = copy_str(gcfg->model);
+        if (cfg->model == NULL) { goto cleanup; }
+        cfg->version = copy_str(gcfg->version);
+        if (cfg->version == NULL) { goto cleanup; }
+        cfg->compilationDate = copy_str(gcfg->compilationDate);
+        if (cfg->compilationDate == NULL) { goto cleanup; }
+        cfg->sourceHash = copy_str(gcfg->sourceHash);
+        if (cfg->sourceHash == NULL) { goto cleanup; }
+        cfg->protocolVersion = copy_str(gcfg->protocolVersion);
+        if (cfg->protocolVersion == NULL) { goto cleanup; }
+        cfg->protocolCompilationDate = copy_str(gcfg->protocolCompilationDate);
+        if (cfg->protocolCompilationDate == NULL) { goto cleanup; }
+        cfg->protocolSourceHash = copy_str(gcfg->protocolSourceHash);
+        if (cfg->protocolSourceHash == NULL) { goto cleanup; }
+
+        cfg->numInterfaces = gcfg->n_interface;
+        cfg->interfaces = calloc(cfg->numInterfaces, sizeof(*cfg->interfaces));
+        if (cfg->interfaces == NULL) { goto cleanup; }
+        for (size_t i = 0; i < cfg->numInterfaces; i++) {
+            KineticDeviceInfo_Interface *inf = &cfg->interfaces[i];
+            inf->name = copy_str(gcfg->interface[i]->name);
+            if (inf->name == NULL) { goto cleanup; }
+
+            if (gcfg->interface[i]->has_MAC) {
+                inf->MAC = copy_to_byte_array((uint8_t *)gcfg->interface[i]->MAC.data,
+                    gcfg->interface[i]->MAC.len);
+                if (inf->MAC.data == NULL) { goto cleanup; }
+            }
+
+            if (gcfg->interface[i]->has_ipv4Address) {
+                inf->ipv4Address = copy_to_byte_array(gcfg->interface[i]->ipv4Address.data,
+                    gcfg->interface[i]->ipv4Address.len);
+                if (inf->ipv4Address.data == NULL) { goto cleanup; }
+            }
+
+            if (gcfg->interface[i]->has_ipv6Address) {
+                inf->ipv6Address = copy_to_byte_array(gcfg->interface[i]->ipv6Address.data,
+                    gcfg->interface[i]->ipv6Address.len);
+                if (inf->ipv6Address.data == NULL) { goto cleanup; }
             }
         }
-        COPY_VALUE_OPTIONAL(port,    info->configuration, getLog->configuration);
-        COPY_VALUE_OPTIONAL(tlsPort, info->configuration, getLog->configuration);
     }
+    return cfg;
+cleanup:
+    if (cfg->vendor) { free(cfg->vendor); }
+    if (cfg->model) { free(cfg->model); }
+    if (cfg->version) { free(cfg->version); }
+    if (cfg->compilationDate) { free(cfg->compilationDate); }
+    if (cfg->sourceHash) { free(cfg->sourceHash); }
+    if (cfg->protocolVersion) { free(cfg->protocolVersion); }
+    if (cfg->protocolCompilationDate) { free(cfg->protocolCompilationDate); }
+    if (cfg->protocolSourceHash) { free(cfg->protocolSourceHash); }
+
+    if (cfg->interfaces) {
+        for (size_t i = 0; i < cfg->numInterfaces; i++) {
+            if (cfg->interfaces[i].name) { free(cfg->interfaces[i].name); }
+            free_byte_array(cfg->interfaces[i].MAC);
+            free_byte_array(cfg->interfaces[i].ipv4Address);
+            free_byte_array(cfg->interfaces[i].ipv6Address);
+        }
+        free(cfg->interfaces);
+    }
+
+    free(cfg);
+    return NULL;
 }
 
-static void KineticDeviceInfo_ExtractStatistics(
-    KineticDeviceInfo* info,
+static KineticDeviceInfo_Statistics *KineticDeviceInfo_GetStatistics(
     const KineticProto_Command_GetLog* getLog,
-    KineticSerialAllocator* allocator)
+    size_t *numStatistics)
 {
-    if (getLog->statistics != NULL && getLog->n_statistics > 0) {
-        info->numStatistics = getLog->n_statistics;
-        info->statistics = KineticSerialAllocator_AllocateChunk(allocator,
-            sizeof(KineticDeviceInfo_Statistics) * getLog->n_statistics);
-        for (size_t i = 0; i < getLog->n_statistics; i++) {
-            KineticDeviceInfo_Statistics* destStats = &info->statistics[i];
-            KineticProto_Command_GetLog_Statistics* srcStats = getLog->statistics[i];
-            destStats->messageType = KineticProto_Command_MessageType_to_KineticMessageType(srcStats->messageType);
-            COPY_VALUE_OPTIONAL(count, destStats, srcStats);
-            COPY_VALUE_OPTIONAL(bytes, destStats, srcStats);
+    size_t num_stats = getLog->n_statistics;
+    KineticDeviceInfo_Statistics *stats = calloc(num_stats, sizeof(*stats));
+    *numStatistics = 0;
+    if (stats) {
+        for (size_t i = 0; i < num_stats; i++) {
+            stats[i].messageType = getLog->statistics[i]->messageType;
+            if (getLog->statistics[i]->has_count) {
+                stats[i].count = getLog->statistics[i]->count;
+            }
+            if (getLog->statistics[i]->has_bytes) {
+                stats[i].bytes = getLog->statistics[i]->bytes;
+            }
+        }
+        *numStatistics = num_stats;
+    }
+    return stats;
+}
+
+static ByteArray KineticDeviceInfo_GetMessages(
+    const KineticProto_Command_GetLog* getLog)
+{
+    return copy_to_byte_array(getLog->messages.data, getLog->messages.len);
+    //COPY_BYTES_OPTIONAL(messages, info, getLog, allocator);
+}
+
+static KineticDeviceInfo_Limits * KineticDeviceInfo_GetLimits(
+    const KineticProto_Command_GetLog* getLog)
+{
+    KineticDeviceInfo_Limits * limits = calloc(1, sizeof(*limits));
+    if (limits) {
+        limits->maxKeySize = getLog->limits->maxKeySize;
+        limits->maxValueSize = getLog->limits->maxValueSize;
+        limits->maxVersionSize = getLog->limits->maxVersionSize;
+        limits->maxTagSize = getLog->limits->maxTagSize;
+        limits->maxConnections = getLog->limits->maxConnections;
+        limits->maxOutstandingReadRequests = getLog->limits->maxOutstandingReadRequests;
+        limits->maxOutstandingWriteRequests = getLog->limits->maxOutstandingWriteRequests;
+        limits->maxMessageSize = getLog->limits->maxMessageSize;
+        limits->maxKeyRangeCount = getLog->limits->maxKeyRangeCount;
+        limits->maxIdentityCount = getLog->limits->maxIdentityCount;
+        limits->maxPinSize = getLog->limits->maxPinSize;
+    }
+    return limits;
+}
+
+static KineticDeviceInfo_Device * KineticDeviceInfo_GetDevice(
+    const KineticProto_Command_GetLog* getLog)
+{
+    KineticDeviceInfo_Device *device = calloc(1, sizeof(*device));
+    if (device && getLog->device) {
+        if (getLog->device->has_name) {
+            device->name = copy_to_byte_array(getLog->device->name.data,
+                getLog->device->name.len);
         }
     }
-}
-
-static void KineticDeviceInfo_ExtractMessages(
-    KineticDeviceInfo* info,
-    const KineticProto_Command_GetLog* getLog,
-    KineticSerialAllocator* allocator)
-{
-    COPY_BYTES_OPTIONAL(messages, info, getLog, allocator);
-}
-
-static void KineticDeviceInfo_ExtractLimits(
-    KineticDeviceInfo* info,
-    const KineticProto_Command_GetLog* getLog,
-    KineticSerialAllocator* allocator)
-{
-    if (getLog->limits != NULL) {
-        info->limits = KineticSerialAllocator_AllocateChunk(allocator, sizeof(KineticDeviceInfo_Limits));
-        info->limits->maxKeySize = getLog->limits->maxKeySize;
-        info->limits->maxValueSize = getLog->limits->maxValueSize;
-        info->limits->maxVersionSize = getLog->limits->maxVersionSize;
-        info->limits->maxTagSize = getLog->limits->maxTagSize;
-        info->limits->maxConnections = getLog->limits->maxConnections;
-        info->limits->maxOutstandingReadRequests = getLog->limits->maxOutstandingReadRequests;
-        info->limits->maxOutstandingWriteRequests = getLog->limits->maxOutstandingWriteRequests;
-        info->limits->maxMessageSize = getLog->limits->maxMessageSize;
-        info->limits->maxKeyRangeCount = getLog->limits->maxKeyRangeCount;
-        info->limits->maxIdentityCount = getLog->limits->maxIdentityCount;
-        info->limits->maxPinSize = getLog->limits->maxPinSize;
-    }
-}
-
-static void KineticDeviceInfo_ExtractDevice(
-    KineticDeviceInfo* info,
-    const KineticProto_Command_GetLog* getLog,
-    KineticSerialAllocator* allocator)
-{
-    if (getLog->device != NULL) {
-        info->device = KineticSerialAllocator_AllocateChunk(allocator, sizeof(KineticDeviceInfo_Device));
-        COPY_BYTES_OPTIONAL(name, info->device, getLog->device, allocator);
-    }
+    return device;
 }
 
 KineticDeviceInfo* KineticDeviceInfo_Create(const KineticProto_Command_GetLog* getLog)
 {
     assert(getLog != NULL);
 
-    // Allocate the data
-    KineticSerialAllocator allocator = KineticSerialAllocator_Create(KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN);
-
     // Copy data into the nested allocated structure tree
-    KineticDeviceInfo* info = KineticSerialAllocator_AllocateChunk(&allocator, sizeof(KineticDeviceInfo));
-    KineticDeviceInfo_ExtractUtilizations(info, getLog, &allocator);
-    KineticDeviceInfo_ExtractCapacity(info, getLog, &allocator);
-    KineticDeviceInfo_ExtractTemperatures(info, getLog, &allocator);
-    KineticDeviceInfo_ExtractConfiguration(info, getLog, &allocator);
-    KineticDeviceInfo_ExtractStatistics(info, getLog, &allocator);
-    KineticDeviceInfo_ExtractMessages(info, getLog, &allocator);
-    KineticDeviceInfo_ExtractLimits(info, getLog, &allocator);
-    KineticDeviceInfo_ExtractDevice(info, getLog, &allocator);
+    KineticDeviceInfo* info = calloc(1, sizeof(*info));
+    if (info == NULL) { return NULL; }
+    memset(info, 0, sizeof(*info));
 
-    size_t totalLength = KineticSerialAllocator_TrimBuffer(&allocator);
+    KineticDeviceInfo_Utilization* utilizations = NULL;
+    KineticDeviceInfo_Temperature* temperatures = NULL;
+    KineticDeviceInfo_Capacity* capacity = NULL;
+    KineticDeviceInfo_Configuration* configuration = NULL;
+    KineticDeviceInfo_Statistics* statistics = NULL;
+    KineticDeviceInfo_Limits* limits = NULL;
+    KineticDeviceInfo_Device* device = NULL;    
 
-    /* Update stale pointer, since it may have been realloc'd during trim. */
-    info = (KineticDeviceInfo*) KineticSerialAllocator_GetBuffer(&allocator);
+    utilizations = KineticDeviceInfo_GetUtilizations(getLog, &info->numUtilizations);
+    if (utilizations == NULL) { goto cleanup; }
+    capacity = KineticDeviceInfo_GetCapacity(getLog);
+    if (capacity == NULL) { goto cleanup; }
+    temperatures = KineticDeviceInfo_GetTemperatures(getLog, &info->numTemperatures);
+    if (temperatures == NULL) { goto cleanup; }
 
-    // Trim the buffer prior to returning in order to free up unused memory
-    info->totalLength = totalLength;
-    info = KineticSerialAllocator_GetBuffer(&allocator);
-    LOGF2("Created KineticDeviceInfo @ 0x%0llX w/ length=%zu", info, info->totalLength);
+    if (getLog->configuration != NULL) {
+        configuration = KineticDeviceInfo_GetConfiguration(getLog);
+        if (configuration == NULL) { goto cleanup; }
+    }
+
+    statistics = KineticDeviceInfo_GetStatistics(getLog, &info->numStatistics);
+    if (statistics == NULL) { goto cleanup; }
+    ByteArray messages = KineticDeviceInfo_GetMessages(getLog);
+    if (messages.data == NULL) { goto cleanup; }
+
+    if (getLog->limits != NULL) {
+        limits = KineticDeviceInfo_GetLimits(getLog);
+        if (limits == NULL) { goto cleanup; }
+    }
+
+    device = KineticDeviceInfo_GetDevice(getLog);
+    if (device == NULL) { goto cleanup; }
+
+    info->utilizations = utilizations;
+    info->temperatures = temperatures;
+    info->capacity = capacity;
+    info->configuration = configuration;
+    info->statistics = statistics;
+    info->limits = limits;
+    info->device = device;
+    info->messages = messages;
+
+    LOGF2("Created KineticDeviceInfo @ 0x%0llX", info);
     return info;
+
+cleanup:
+    if (info) { free(info); }
+    if (utilizations) { free(utilizations); }
+    if (temperatures) { free(temperatures); }
+    if (capacity) { free(capacity); }
+    if (configuration) { free(configuration); }
+    if (statistics) { free(statistics); }
+    if (limits) { free(limits); }
+    if (device) { free(device); }
+    return NULL;
+}
+
+void KineticDeviceInfo_Free(KineticDeviceInfo* kdi) {
+    if (kdi) {
+        if (kdi->utilizations) {
+            for (size_t i = 0; i < kdi->numUtilizations; i++) {
+                free(kdi->utilizations[i].name);
+            }
+            free(kdi->utilizations);
+        }
+        
+        if (kdi->temperatures) {
+            for (size_t i = 0; i < kdi->numTemperatures; i++) {
+                free(kdi->temperatures[i].name);
+            }
+            free(kdi->temperatures);
+        }
+        
+        if (kdi->capacity) { free(kdi->capacity); }
+        
+        if (kdi->configuration) {
+            KineticDeviceInfo_Configuration *cfg = kdi->configuration;
+
+            if (cfg->vendor) { free(cfg->vendor); }
+            if (cfg->model) { free(cfg->model); }
+            if (cfg->version) { free(cfg->version); }
+            if (cfg->compilationDate) { free(cfg->compilationDate); }
+            if (cfg->sourceHash) { free(cfg->sourceHash); }
+            if (cfg->protocolVersion) { free(cfg->protocolVersion); }
+            if (cfg->protocolCompilationDate) { free(cfg->protocolCompilationDate); }
+            if (cfg->protocolSourceHash) { free(cfg->protocolSourceHash); }
+
+            if (cfg->serialNumber.data) { free(cfg->serialNumber.data); }
+            if (cfg->worldWideName.data) { free(cfg->worldWideName.data); }
+
+            if (cfg->interfaces) {
+                for (size_t i = 0; i < cfg->numInterfaces; i++) {
+                    KineticDeviceInfo_Interface *inf = &cfg->interfaces[i];
+                    if (inf->name) { free(inf->name); }
+                    if (inf->MAC.data) { free(inf->MAC.data); }
+                    if (inf->ipv4Address.data) { free(inf->ipv4Address.data); }
+                    if (inf->ipv6Address.data) { free(inf->ipv6Address.data); }
+                }
+                free(cfg->interfaces);
+            }
+            free(cfg);
+        }
+        
+        if (kdi->statistics) { free(kdi->statistics); }
+        if (kdi->limits) { free(kdi->limits); }
+        
+        if (kdi->device) {
+            if (kdi->device->name.data) { free(kdi->device->name.data); }
+            free(kdi->device);
+        }
+
+        if (kdi->messages.data) { free(kdi->messages.data); }
+
+        free(kdi);
+    }
 }

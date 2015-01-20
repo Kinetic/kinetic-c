@@ -326,7 +326,6 @@ typedef struct {
     ByteArray name;
 } KineticDeviceInfo_Device;
 typedef struct {
-    size_t totalLength;
     KineticDeviceInfo_Utilization* utilizations;
     size_t numUtilizations;
     KineticDeviceInfo_Temperature* temperatures;

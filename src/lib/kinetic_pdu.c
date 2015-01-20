@@ -38,9 +38,13 @@ STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udat
     const char *event_str = bus_log_event_str(event);
     struct timeval tv;
     gettimeofday(&tv, NULL);
+#if 0
+    KineticLogger_Log(log_level, msg);
+#else
     LOGF1("%ld.%06ld: %s[%d] -- %s\n",
         (long)tv.tv_sec, (long)tv.tv_usec,
         event_str, log_level, msg);
+#endif
 }
 
 static bus_sink_cb_res_t reset_transfer(socket_info *si) {
@@ -252,6 +256,7 @@ void KineticPDU_DeinitBus(KineticClient * const client)
     if (client) {
         bus_shutdown(client->bus);
         bus_free(client->bus);
+        client->bus = NULL;
     }
 }
 

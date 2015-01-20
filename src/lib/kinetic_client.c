@@ -23,6 +23,7 @@
 #include "kinetic_session.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
+#include "kinetic_device_info.h"
 #include "kinetic_logger.h"
 #include "kinetic_pdu.h"
 #include "kinetic_memory.h"
@@ -304,6 +305,18 @@ KineticStatus KineticClient_GetLog(KineticSession const * const session,
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
 }
+
+void KineticClient_FreeDeviceInfo(KineticSession const * const session,
+                                  KineticDeviceInfo* info)
+{
+    assert(session != NULL);
+    if (info) { KineticDeviceInfo_Free(info); }
+
+    /* The session is not currently used, but part of the API to allow
+     * a different memory management strategy. */
+    (void)session;
+}
+
 
 KineticStatus KineticClient_P2POperation(KineticSession const * const session,
                                          KineticP2P_Operation* const p2pOp,

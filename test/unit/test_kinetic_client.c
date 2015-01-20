@@ -24,6 +24,7 @@
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
 #include "kinetic_types.h"
+#include "kinetic_device_info.h"
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
 #include "mock_kinetic_allocator.h"

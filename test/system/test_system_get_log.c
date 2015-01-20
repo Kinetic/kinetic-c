@@ -19,6 +19,7 @@
 */
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
+#include "kinetic_device_info.h"
 #include <stdlib.h>
 
 static SystemTestFixture Fixture;
@@ -35,7 +36,7 @@ void tearDown(void)
 { LOG_LOCATION;
     SystemTestTearDown(&Fixture);
     if (Info != NULL) {
-        free(Info);
+        KineticDeviceInfo_Free(Info);
         Info = NULL;
     };
 }
@@ -65,7 +66,7 @@ void test_GetLog_should_retrieve_capacity_from_device(void)
     LOGF0("info->capacity['portionFull']: %.3f", Info->capacity->portionFull);
 }
 
-void test_GetLog_should_retrieve_temeratures_from_device(void)
+void test_GetLog_should_retrieve_temperatures_from_device(void)
 { LOG_LOCATION;
     Status = KineticClient_GetLog(&Fixture.session, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, &Info, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
