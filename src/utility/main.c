@@ -22,7 +22,8 @@
 #include <stdio.h>
 #include <getopt.h>
 
-static KineticSession Session;
+static KineticSessionConfig Config;
+static KineticSession* Session;
 static uint8_t HmacData[1024];
 static KineticEntry Entry;
 static uint8_t KeyData[1024];
@@ -37,7 +38,7 @@ static const char* TestDataString = "lorem ipsum... blah blah blah... etc.";
 static int ParseOptions(
     const int argc,
     char** const argv,
-    KineticSession * const session,
+    KineticSessionConfig * const config,
     KineticEntry* entry);
 static KineticStatus ExecuteOperation(
     const char* op,
@@ -52,7 +53,7 @@ static void ConfigureEntry(
     const char* value);
 static void ReportOperationConfiguration(
     const char* operation,
-    KineticSession* session,
+    KineticSessionConfig* config,
     KineticEntry* entry);
 
 
@@ -66,13 +67,13 @@ int main(int argc, char** argv)
     }
 
     // Parse command line options
-    int operationsArgsIndex = ParseOptions(argc, argv, &Session, &Entry);
+    int operationsArgsIndex = ParseOptions(argc, argv, &Config, &Entry);
 
     // Establish a session/connection with the Kinetic Device
-    KineticStatus status = KineticClient_CreateConnection(&Session, client);
+    KineticStatus status = KineticClient_CreateSession(&Config, client, &Session);
     if (status != KINETIC_STATUS_SUCCESS) {
         printf("Failed connecting to host %s:%d (status: %s)\n\n",
-               Session.config.host, Session.config.port,
+               Config.host, Config.port,
                Kinetic_GetStatusDescription(status));
         return 1;
     }
@@ -80,12 +81,17 @@ int main(int argc, char** argv)
     // Execute all specified operations in order
     for (int optionIndex = operationsArgsIndex; optionIndex < argc; optionIndex++) {
         const char* operation = argv[optionIndex];
-        ReportOperationConfiguration(operation, &Session, &Entry);
-        ExecuteOperation(operation, &Session, &Entry);
+        ReportOperationConfiguration(operation, &Config, &Entry);
+        status = ExecuteOperation(operation, Session, &Entry);
+        if (status != KINETIC_STATUS_SUCCESS) {
+            printf("\nFailed executing operation! Kinetic-c returned status: %s\n",
+                Kinetic_GetStatusDescription(status));
+            return 1;
+        }
     }
 
     // Shutdown the Kinetic Device session
-    KineticClient_DestroyConnection(&Session);
+    KineticClient_DestroySession(Session);
     KineticClient_Shutdown(client);
     printf("\nKinetic client session terminated!\n\n");
 
@@ -106,48 +112,48 @@ KineticStatus ExecuteOperation(
     if (strcmp("noop", operation) == 0) {
         status = KineticClient_NoOp(session);
         if (status == KINETIC_STATUS_SUCCESS) {
-            printf("\nNoOp operation completed successfully."
-                   " Kinetic Device is alive and well!\n\n");
+            printf("NoOp operation completed successfully."
+                   " Kinetic Device is alive and well!\n");
         }
     }
 
     else if (strcmp("put", operation) == 0) {
         status = KineticClient_Put(session, entry, NULL);
         if (status == KINETIC_STATUS_SUCCESS) {
-            printf("\nPut operation completed successfully."
-                   " Your data has been stored!\n\n");
+            printf("Put operation completed successfully."
+                   " Your data has been stored!\n");
         }
     }
 
     else if (strcmp("get", operation) == 0) {
         status = KineticClient_Get(session, entry, NULL);
-        if (status == 0) {
-            printf("\nGet executed successfully."
-                   "The entry has been retrieved!\n\n");
+        if (status == KINETIC_STATUS_SUCCESS) {
+            printf("Get executed successfully."
+                   " The entry has been retrieved!\n");
         }
     }
 
     else if (strcmp("delete", operation) == 0) {
         status = KineticClient_Delete(session, entry, NULL);
-        if (status == 0) {
-            printf("\nDelete executed successfully."
-                   " The entry has been destroyed!\n\n");
+        if (status == KINETIC_STATUS_SUCCESS) {
+            printf("Delete executed successfully."
+                   " The entry has been destroyed!\n");
         }
     }
 
     else if (strcmp("getnext", operation) == 0) {
         status = KineticClient_GetNext(session, entry, NULL);
-        if (status == 0) {
-            printf("\nGetNext executed successfully."
-                   "The entry has been retrieved!\n\n");
+        if (status == KINETIC_STATUS_SUCCESS) {
+            printf("GetNext executed successfully."
+                   "The entry has been retrieved!\n");
         }
     }
 
     else if (strcmp("getprevious", operation) == 0) {
         status = KineticClient_GetPrevious(session, entry, NULL);
-        if (status == 0) {
-            printf("\nGetPrevious executed successfully."
-                   "The entry has been retrieved!\n\n");
+        if (status == KINETIC_STATUS_SUCCESS) {
+            printf("GetPrevious executed successfully."
+                   "The entry has been retrieved!\n");
         }
     }
 
@@ -159,7 +165,7 @@ KineticStatus ExecuteOperation(
     // Print out status code description if operation was not successful
     if (status != KINETIC_STATUS_SUCCESS) {
         printf("\nERROR: Operation '%s' failed! with status = %s)\n\n",
-               operation, Kinetic_GetStatusDescription(status));
+            operation, Kinetic_GetStatusDescription(status));
     }
 
     return status;
@@ -194,7 +200,7 @@ void ConfigureEntry(
 
 void ReportOperationConfiguration(
     const char* operation,
-    KineticSession* session,
+    KineticSessionConfig* config,
     KineticEntry* entry)
 {
     printf("\n\n"
@@ -209,10 +215,10 @@ void ReportOperationConfiguration(
            "  value: %zd bytes\n"
            "================================================================================\n",
            operation,
-           session->config.host,
-           session->config.port,
-           (long long int)session->config.clusterVersion,
-           (long long int)session->config.identity,
+           config->host,
+           config->port,
+           (long long)config->clusterVersion,
+           (long long)config->identity,
            entry->key.bytesUsed,
            entry->value.bytesUsed);
 }
@@ -220,7 +226,7 @@ void ReportOperationConfiguration(
 int ParseOptions(
     const int argc,
     char** const argv,
-    KineticSession * const session,
+    KineticSessionConfig * const config,
     KineticEntry* entry)
 {
     // Create an ArgP processor to parse arguments
@@ -277,16 +283,14 @@ int ParseOptions(
     }
 
     // Configure session for connection
-    *session = (KineticSession) {
-        .config = (KineticSessionConfig) {
-            .port = cfg.port,
-            .clusterVersion = cfg.clusterVersion,
-            .identity = cfg.identity,
-            .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
-        }
+    *config = (KineticSessionConfig) {
+        .port = cfg.port,
+        .clusterVersion = cfg.clusterVersion,
+        .identity = cfg.identity,
+        .hmacKey = ByteArray_Create(HmacData, strlen(cfg.hmacKey)),
     };
     memcpy(HmacData, cfg.hmacKey, strlen(cfg.hmacKey));
-    strncpy(session->config.host, cfg.host, HOST_NAME_MAX);
+    strncpy(config->host, cfg.host, HOST_NAME_MAX);
 
     // Populate and configure the entry to be used for operations
     ConfigureEntry(entry, cfg.key, cfg.tag, cfg.version, cfg.algorithm, TestDataString);

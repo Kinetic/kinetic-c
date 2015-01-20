@@ -152,9 +152,7 @@ struct _KineticPDU {
     // Message associated with this PDU instance
     KineticMessage message;
     KineticProto_Command* command;
-
-    // PIN enabled (true=PIN, false=HMAC)
-    bool pinOp;
+    bool pinAuth;
 };
 
 typedef struct _KineticResponse
@@ -175,6 +173,7 @@ struct _KineticOperation {
     bool valueEnabled;
     bool sendValue;
     uint16_t timeoutSeconds;
+    ByteArray* pin;
     KineticEntry* entry;
     ByteBufferArray* buffers;
     KineticDeviceInfo** deviceInfo;

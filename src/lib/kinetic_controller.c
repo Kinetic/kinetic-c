@@ -170,7 +170,12 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
     (void)seq_id;
     (void)bus_udata;
 
-    KineticLogger_LogProtobuf(2, response->proto);
+    LOGF1("[PDU RX UNSOLICTED] pdu: 0x%0llX, session: 0x%llX, bus: 0x%llX, "
+        "protoLen: %u, valueLen: %u",
+        response, &connection->session, connection->messageBus,
+        response->header.protobufLength, response->header.valueLength);
+    KineticLogger_LogHeader(3, &response->header);
+    KineticLogger_LogProtobuf(3, response->proto);
 
     // Handle unsolicited status PDUs
     if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
@@ -178,11 +183,6 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
             response->command->header != NULL &&
             response->command->header->has_connectionID)
         {
-            LOGF1("[PDU RX UNSOLICTED] pdu: 0x%0llX, session: 0x%llX, bus: 0x%llX, "
-                "protoLen: %u, valueLen: %u",
-                response, &connection->session, connection->messageBus,
-                response->header.protobufLength, response->header.valueLength);
-
             // Extract connectionID from unsolicited status message
             connection->connectionID = response->command->header->connectionID;
             LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
@@ -207,24 +207,26 @@ void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata
 
     if (status == KINETIC_STATUS_SUCCESS) {
         KineticResponse * response = res->u.response.opaque_msg;
-        if (response->command != NULL &&
-            response->command->status != NULL &&
-            response->command->status->has_code)
-        {
-            status = KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
-            KineticLogger_LogProtobuf(3, response->proto);
-            op->response = response;
-        }
-        else
-        {
-            status = KINETIC_STATUS_INVALID;
-        }
 
         LOGF1("[PDU RX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, "
             "protoLen: %u, valueLen: %u, status: %s",
             response, op, &op->connection->session, op->connection->messageBus,
             response->header.protobufLength, response->header.valueLength,
             Kinetic_GetStatusDescription(status));
+        KineticLogger_LogHeader(3, &response->header);
+        KineticLogger_LogProtobuf(3, response->proto);
+
+        if (response->command != NULL &&
+            response->command->status != NULL &&
+            response->command->status->has_code)
+        {
+            status = KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
+            op->response = response;
+        }
+        else
+        {
+            status = KINETIC_STATUS_INVALID;
+        }
     }
     else
     {

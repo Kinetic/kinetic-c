@@ -39,7 +39,7 @@ static bool add_keys(int count)
             .force = true,
         };
 
-        KineticStatus status = KineticClient_Put(&Fixture.session, &entry, NULL);
+        KineticStatus status = KineticClient_Put(Fixture.session, &entry, NULL);
         if (KINETIC_STATUS_SUCCESS != status) { return false; }
     }
     return true;
@@ -82,7 +82,7 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device(void)
     };
     ByteBufferArray keys = {.buffers = &keyBuff[0], .count = numKeys};
 
-    KineticStatus status = KineticClient_GetKeyRange(&Fixture.session, &range, &keys, NULL);
+    KineticStatus status = KineticClient_GetKeyRange(Fixture.session, &range, &keys, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(2, keys.used);
@@ -117,7 +117,7 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device_in_reverse_ord
     };
     ByteBufferArray keys = {.buffers = &keyBuff[0], .count = numKeys};
 
-    KineticStatus status = KineticClient_GetKeyRange(&Fixture.session, &range, &keys, NULL);
+    KineticStatus status = KineticClient_GetKeyRange(Fixture.session, &range, &keys, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(3, keys.used);
@@ -152,8 +152,8 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device_with_start_and
     };
     ByteBufferArray keys = {.buffers = &keyBuff[0], .count = numKeys};
 
-    KineticStatus status = KineticClient_GetKeyRange(&Fixture.session, &range, &keys, NULL);
-
+    KineticStatus status = KineticClient_GetKeyRange(Fixture.session, &range, &keys, NULL);
+    
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(1, keys.used);
     TEST_ASSERT_EQUAL_STRING("mykey_01", keyBuff[0].array.data);

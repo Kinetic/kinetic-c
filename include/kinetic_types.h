@@ -127,22 +127,18 @@ typedef struct _KineticSessionConfig {
 
     // Set to `true' to enable SSL for for this session
     bool useSsl;
-
-    // This is the PIN to use for the session. If a PIN is set, then PIN-based
-    // authentication is assumend for the session (rather than HMAC)
-    uint8_t pinData[KINETIC_PIN_MAX_LEN];
-    ByteArray pin;
 } KineticSessionConfig;
 
 /**
  * @brief An instance of a session with a Kinetic device.
  */
+// FIXME: Internalize session w/ copy of config
 typedef struct _KineticSession {
     // Session configuration structure which must be configured 
     KineticSessionConfig config;
 
-    // Connection instance which is dynamically allocated upon call to KineticClient_CreateConnection.
-    // Client must call KineticClient_DestroyConnection when finished with a session to shutdown
+    // Connection instance which is dynamically allocated upon call to KineticClient_CreateSession.
+    // Client must call KineticAdminClient_DestroySession when finished with a session to shutdown
     // a session cleanly and free the `connection`.
     struct _KineticConnection* connection;
 } KineticSession;
@@ -166,7 +162,7 @@ typedef enum {
     KINETIC_STATUS_SESSION_EMPTY,       // Session was NULL in request
     KINETIC_STATUS_SESSION_INVALID,     // Session configuration was invalid or NULL
     KINETIC_STATUS_HOST_EMPTY,          // Host was empty in request
-    KINETIC_STATUS_HMAC_REQUIRED,          // HMAC key is empty or NULL
+    KINETIC_STATUS_HMAC_REQUIRED,       // HMAC key is empty or NULL
     KINETIC_STATUS_NO_PDUS_AVAVILABLE,  // All PDUs for the session have been allocated
     KINETIC_STATUS_DEVICE_BUSY,         // Device busy (retry later)
     KINETIC_STATUS_CONNECTION_ERROR,    // No connection/disconnected
@@ -184,7 +180,7 @@ typedef enum {
     KINETIC_STATUS_SOCKET_ERROR,        // An I/O error occurred during a socket operation
     KINETIC_STATUS_MISSING_KEY,         // An operation is missing a required key
     KINETIC_STATUS_MISSING_VALUE_BUFFER,// An operation is missing a required value buffer
-    KINETIC_STATUS_PIN_REQUIRED,        // The operation requires a PIN and one was not specified
+    KINETIC_STATUS_MISSING_PIN,         // An operation is missing a PIN
     KINETIC_STATUS_SSL_REQUIRED,        // The operation requires an SSL connection and the specified connection is non-SSL
     KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
 } KineticStatus;

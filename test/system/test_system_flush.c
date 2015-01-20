@@ -32,15 +32,15 @@ void tearDown(void)
 
 void test_Flush_should_succeed(void)
 {
-    KineticStatus status = KineticClient_Flush(&Fixture.session, NULL);
+    KineticStatus status = KineticClient_Flush(Fixture.session, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 void test_Flush_should_be_idempotent(void)
 {
-    KineticStatus status = KineticClient_Flush(&Fixture.session, NULL);
+    KineticStatus status = KineticClient_Flush(Fixture.session, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    status = KineticClient_Flush(&Fixture.session, NULL);
+    status = KineticClient_Flush(Fixture.session, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
@@ -72,7 +72,7 @@ void test_Flush_should_call_callback_after_completion(void)
         .clientData = (void *)&env
     };
 
-    KineticStatus status = KineticClient_Flush(&Fixture.session, &closure);
+    KineticStatus status = KineticClient_Flush(Fixture.session, &closure);
 
     /* Wait up to 10 seconds for the callback to fire. */
     struct timeval tv;
@@ -117,7 +117,7 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
         .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
         .force = true,
     };
-    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     Entry = (KineticEntry) {
@@ -129,7 +129,7 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
         .force = true,
     };
 
-    status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Do an async DELETE so we can flush to complete it
@@ -139,11 +139,11 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
     KineticCompletionClosure no_op_closure = {
         .callback = &no_op_callback,
     };
-    status = KineticClient_Delete(&Fixture.session, &deleteEntry, &no_op_closure);
+    status = KineticClient_Delete(Fixture.session, &deleteEntry, &no_op_closure);
 
     /* Now do a blocking flush and confirm that (key1,value1) has been
      * DELETEd and (key2,value2) have been PUT. */
-    status = KineticClient_Flush(&Fixture.session, NULL);
+    status = KineticClient_Flush(Fixture.session, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // GET key1 --> expect NOT FOUND
@@ -152,7 +152,7 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
         .tag = tagBuffer,
         .value = valueBuffer1,
     };
-    status = KineticClient_Get(&Fixture.session, &getEntry1, NULL);
+    status = KineticClient_Get(Fixture.session, &getEntry1, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
 
     // GET key2 --> present
@@ -161,6 +161,6 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
         .tag = tagBuffer,
         .value = valueBuffer2,
     };
-    status = KineticClient_Get(&Fixture.session, &getEntry2, NULL);
+    status = KineticClient_Get(Fixture.session, &getEntry2, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

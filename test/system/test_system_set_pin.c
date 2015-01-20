@@ -20,22 +20,48 @@
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
 
+char OldPinData[4];
+char NewPinData[4];
+ByteArray OldPin, NewPin;
+bool ErasePinSet, LockPinSet;
+
 void setUp(void)
 {
     SystemTestSetup(3);
+    ErasePinSet = false;
+    LockPinSet = false;
+    strcpy(NewPinData, "123");
+    OldPin = ByteArray_Create(OldPinData, 0);
+    NewPin = ByteArray_Create(NewPinData, strlen(NewPinData));
 }
 
 void tearDown(void)
 {
+    if (ErasePinSet) {
+        KineticStatus status = KineticAdminClient_SetErasePin(Fixture.adminSession,
+            NewPin, OldPin);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
+    if (LockPinSet) {
+        KineticStatus status = KineticAdminClient_SetLockPin(Fixture.adminSession,
+            NewPin, OldPin);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
     SystemTestShutDown();
 }
 
-void test_SetClusterVersion_should_succeed(void)
+void test_SetErasePin_should_succeed(void)
 {
-    KineticStatus status = KineticAdminClient_SetClusterVersion(&Fixture.adminSession, 1981);
+    KineticStatus status = KineticAdminClient_SetErasePin(Fixture.adminSession,
+        OldPin, NewPin);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    ErasePinSet = (status == KINETIC_STATUS_SUCCESS);
+}
 
-    sleep(2);
-
-    TEST_FAIL_MESSAGE("FIXME: Not getting a valid response from the drive, and threadpool should be marking as a failure, but we are getting KINETIC_STATUS_SUCCESS");
+void test_SetLockPin_should_succeed(void)
+{
+    KineticStatus status = KineticAdminClient_SetLockPin(Fixture.adminSession,
+        OldPin, NewPin);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    LockPinSet = (status == KINETIC_STATUS_SUCCESS);
 }

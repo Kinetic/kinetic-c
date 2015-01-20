@@ -97,26 +97,25 @@ int main(int argc, char** argv)
     }
 
     // Establish connection
-    KineticStatus status;
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .host = "localhost",
-            .port = KINETIC_PORT,
-            .clusterVersion = 0,
-            .identity = 1,
-            .hmacKey = ByteArray_CreateWithCString(HmacKeyString)
-        }
-    };
-    write_args* writeArgs = calloc(1, sizeof(write_args));
+    KineticSession* session;
     KineticClient * client = KineticClient_Init("stdout", 0);
     if (client == NULL) { return 1; }
-    status = KineticClient_CreateConnection(&session, client);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
-            session.config.host, Kinetic_GetStatusDescription(status));
+    const char HmacKeyString[] = "asdfasdf";
+    KineticSessionConfig config = {
+        .host = SYSTEM_TEST_HOST,
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+    };
+    KineticStatus connect_status = KineticClient_CreateSession(&config, client, &session);
+    if (connect_status != KINETIC_STATUS_SUCCESS) {
+        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
+            Kinetic_GetStatusDescription(connect_status));
+        return 1;
     }
-    writeArgs->session = &session;
+    write_args* writeArgs = calloc(1, sizeof(write_args));
+    writeArgs->session = session;
     
     // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
     writeArgs->data = ByteBuffer_Create(buf, dataLen, 0);
@@ -137,14 +136,14 @@ int main(int argc, char** argv)
         .value = ByteBuffer_Create(writeArgs->value, sizeof(writeArgs->value), 0),
         .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
     };
-    strcpy(writeArgs->ip, session.config.host);
+    strcpy(writeArgs->ip, config.host);
 
     // Store the data
     printf("\nWriting data file to the Kinetic device...\n");
     store_data(writeArgs);
 
     // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(writeArgs->session);
+    KineticClient_DestroySession(writeArgs->session);
     KineticClient_Shutdown(client);
     free(writeArgs);
     free(buf);

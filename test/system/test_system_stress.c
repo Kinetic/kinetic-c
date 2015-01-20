@@ -34,30 +34,28 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
 void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_size)
 {
-    printf("\n"
+    printf("\n\n\n"
         "========================================\n"
-        "Throughput Tests\n"
+        "Throughput Test Run\n"
         "========================================\n"
         "Entry Size: %zu bytes\n"
         "Count:      %zu entries",
-        value_size, num_ops );
+        value_size, num_ops);
 
     ByteBuffer test_data = ByteBuffer_Malloc(value_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
 
-    // Initialize kinetic-c and configure sessions
+    // Configure and esatblish a session with the specified device
     const char HmacKeyString[] = "asdfasdf";
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .host = SYSTEM_TEST_HOST,
-            .port = KINETIC_PORT,
-            .clusterVersion = 0,
-            .identity = 1,
-            .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-        },
+    KineticSessionConfig config = {
+        .host = SYSTEM_TEST_HOST,
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    // Establish connection
-    KineticStatus status = KineticClient_CreateConnection(&session, client);
+    KineticSession* session;
+    KineticStatus status = KineticClient_CreateSession(&config, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -105,7 +103,7 @@ void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_si
             };
 
             KineticStatus status = KineticClient_Put(
-                &session,
+                session,
                 &entries[put],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -148,8 +146,6 @@ void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_si
             bytes_written / 1024.0f,
             elapsed_ms / 1000.0f,
             bandwidth);
-
-
     }
 
     // Measure GET performance
@@ -181,7 +177,7 @@ void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_si
             };
 
             KineticStatus status = KineticClient_Get(
-                &session,
+                session,
                 &entries[get],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -263,7 +259,7 @@ void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_si
             };
 
             KineticStatus status = KineticClient_Delete(
-                &session,
+                session,
                 &entries[del],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -310,7 +306,7 @@ void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_si
     ByteBuffer_Free(test_data);
 
     // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(&session);
+    KineticClient_DestroySession(session);
 }
 
 

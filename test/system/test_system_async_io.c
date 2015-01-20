@@ -44,21 +44,18 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
     ByteBuffer test_data = ByteBuffer_Malloc(PAYLOAD_SIZE);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
 
-    // Initialize kinetic-c and configure sessions
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .host = SYSTEM_TEST_HOST,
-            .port = KINETIC_PORT,
-            .clusterVersion = 0,
-            .identity = 1,
-            .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-        },
-    };
+    // Establish session with device
     KineticClient * client = KineticClient_Init("stdout", 0);
-
-    // Establish connection
-    KineticStatus status = KineticClient_CreateConnection(&session, client);
+    const char HmacKeyString[] = "asdfasdf";
+    KineticSessionConfig config = {
+        .host = SYSTEM_TEST_HOST,
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+    };
+    KineticSession* session;
+    KineticStatus status = KineticClient_CreateSession(&config, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -98,8 +95,7 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
             .synchronization = sync,
         };
 
-        KineticStatus status = KineticClient_Put(
-            &session,
+        KineticStatus status = KineticClient_Put(session,
             &entries[put],
             &(KineticCompletionClosure) {
                 .callback = put_finished,
@@ -142,20 +138,18 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
         bytes_written / 1024.0f,
         elapsed_ms / 1000.0f,
         bandwidth);
-
-
+    
     printf("Transfer completed successfully!\n");
 
     ByteBuffer_Free(test_data);
 
     // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(&session);
+    KineticClient_DestroySession(session);
     KineticClient_Shutdown(client);
 }
 
 static void put_finished(KineticCompletionData* kinetic_data, void* clientData)
 {
-    // LOGF1("DONE w/ status: %s", kinetic_data->status);
     PutStatus * put_status = clientData;
     // Save PUT result status
     put_status->status = kinetic_data->status;

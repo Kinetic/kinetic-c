@@ -70,13 +70,13 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
 *******************************************************************************/
 
 KineticStatus KineticOperation_SetPinCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildSetPin(KineticOperation* const operation, bool unlock);
+void KineticOperation_BuildSetPin(KineticOperation* const operation, ByteArray old_pin, ByteArray new_pin, bool lock);
 
 KineticStatus KineticOperation_EraseCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_erase);
+void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_erase, ByteArray* pin);
 
 KineticStatus KineticOperation_LockUnlockCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lock);
+void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lock, ByteArray* pin);
 
 KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildGetLog(KineticOperation* const operation,

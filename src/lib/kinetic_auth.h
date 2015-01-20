@@ -23,8 +23,8 @@
 
 #include "kinetic_types_internal.h"
 
-KineticStatus KineticAuth_EnsurePinSupplied(KineticSessionConfig const * const config);
 KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const config);
-KineticStatus KineticAuth_Populate(KineticSessionConfig const * const config, KineticPDU * const pdu);
+KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticPDU * const pdu);
+KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticPDU * const pdu, ByteArray pin);
 
 #endif // _KINETIC_AUTH_H

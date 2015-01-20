@@ -30,7 +30,7 @@
  * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
  *
  * @return          Returns a pointer to a `KineticClient`. You need to pass 
- *                  this pointer to KineticClient_CreateConnection() to create 
+ *                  this pointer to KineticClient_CreateSession() to create 
  *                  new connections. 
  *                  Once you are finished will the `KineticClient`, and there
  *                  are no active connections. The pointer should be release
@@ -47,41 +47,40 @@ KineticClient * KineticClient_Init(const char* log_file, int log_level);
 void KineticClient_Shutdown(KineticClient * const client);
 
 /**
- * @brief Initializes the Kinetic API, configures logging destination, establishes a
- * connection to the specified Kinetic Device, and establishes a session.
+ * @brief Creates a session with the Kinetic Device per specified configuration.
  *
- * @param session   Configured KineticSession to connect
- *  .config           `KineticSessionConfig` structure which must be configured
- *                    by the client prior to creating the device connection.
- *    .host             Host name or IP address to connect to
- *    .port             Port to establish socket connection on
- *    .clusterVersion   Cluster version to use for the session
- *    .identity         Identity to use for the session
- *    .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
- *    .pin              PIN to use for PIN-based operations
- *  .connection       Pointer to dynamically allocated connection which will be
- *                    populated upon establishment of a connection.
+ * @param config   `KineticSessionConfig` structure which must be configured
+ *                 by the client prior to creating the device connection.
+ *   .host             Host name or IP address to connect to
+ *   .port             Port to establish socket connection on
+ *   .clusterVersion   Cluster version to use for the session
+ *   .identity         Identity to use for the session
+ *   .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
+ *   .pin              PIN to use for PIN-based operations
+ * @param client    The `KineticClient` pointer returned from KineticClient_Init()
+ * @param session   Pointer to a KineticSession pointer that will be populated
+ *                  with the allocated/created session upon success.
  *
- * @param client    The KineticClient pointer returned from KineticClient_Init()
- *
- * @return          Returns the resulting `KineticStatus`, and `session->connection`
- *                  will be populated with a session instance pointer upon success.
- *                  The client should call KineticClient_DestroyConnection() in
- *                  order to shutdown a connection and cleanup resources when
- *                  done using a KineticSession.
+ * @return          Returns the resulting `KineticStatus`, and `session`
+ *                  will be populated with a pointer to the session instance
+ *                  upon success. The client should call
+ *                  KineticClient_DestroySession() in order to shutdown a
+ *                  connection and cleanup resources when done using a
+ *                  `KineticSession`.
  */
-KineticStatus KineticClient_CreateConnection(KineticSession * const session, KineticClient * const client);
+KineticStatus KineticClient_CreateSession(KineticSessionConfig * const config,
+    KineticClient * const client, KineticSession** session);
 
 /**
  * @brief Closes the connection to a host.
  *
- * @param session   The connected `KineticSession` to close. The connection
+ * @param session   The connected `KineticSession` to close. The session
  *                  instance will be freed by this call after closing the
- *                  connection.
+ *                  connection, so the pointer should not longer be used.
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_DestroyConnection(KineticSession * const session);
+KineticStatus KineticClient_DestroySession(KineticSession * const session);
 
 /**
  * @brief Executes a NOOP command to test whether the Kinetic Device is operational.

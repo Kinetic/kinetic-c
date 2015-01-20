@@ -143,7 +143,7 @@ $(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 
-ci: uninstall all stop_simulator test_internals install
+ci: uninstall stop_simulator start_simulator all stop_simulator install uninstall
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!
@@ -407,7 +407,7 @@ run: $(UTIL_EXEC)
 	@echo Running test utility: $(UTIL_EXEC)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	$(UTIL_EXEC) instanterase
+	# $(UTIL_EXEC) instanterase
 	$(UTIL_EXEC) noop
 	exec $(UTIL_EXEC) put get delete
 	@echo

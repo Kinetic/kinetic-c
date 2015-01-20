@@ -36,30 +36,29 @@ int main(int argc, char** argv)
     (void)argv;
 
     // Establish connection
+    KineticSession* session;
     KineticStatus status;
     const char HmacKeyString[] = "asdfasdf";
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .host = "localhost",
-            .port = KINETIC_PORT,
-            .clusterVersion = 0,
-            .identity = 1,
-            .hmacKey = ByteArray_CreateWithCString(HmacKeyString)
-        }
+    KineticSessionConfig config = {
+        .host = "localhost",
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString)
     };
     KineticClient * client = KineticClient_Init("stdout", 0);
     if (client == NULL) { return 1; }
-    status = KineticClient_CreateConnection(&session, client);
+    status = KineticClient_CreateSession(&config, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
-            session.config.host, Kinetic_GetStatusDescription(status));
+            config.host, Kinetic_GetStatusDescription(status));
         return 1;
     }
 
     // Create some entries so that we can query the keys
     printf("Storing some entries on the device...\n");
     const size_t numKeys = 3;
-    if (!create_entries(&session, numKeys)) {
+    if (!create_entries(session, numKeys)) {
         return 2;
     }
 
@@ -81,7 +80,7 @@ int main(int argc, char** argv)
     };
     ByteBufferArray keys = {.buffers = &keyBuff[0], .count = numKeys};
 
-    status = KineticClient_GetKeyRange(&session, &range, &keys, NULL);
+    status = KineticClient_GetKeyRange(session, &range, &keys, NULL);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "FAILURE: Failed retrieving key range from device!\n");
         return 3;
@@ -105,7 +104,7 @@ int main(int argc, char** argv)
     }
 
     // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(&session);
+    KineticClient_DestroySession(session);
     KineticClient_Shutdown(client);
     printf("Key range retrieved successfully!\n");
 

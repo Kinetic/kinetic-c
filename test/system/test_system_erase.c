@@ -20,6 +20,11 @@
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
 
+static char OldPinData[4];
+static char NewPinData[4];
+static ByteArray OldPin, NewPin;
+static bool ErasePinSet;
+
 static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
 static uint8_t ExpectedKeyData[1024];
@@ -54,7 +59,7 @@ void setUp(void)
         .synchronization = KINETIC_SYNCHRONIZATION_FLUSH,
     };
 
-    KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &putEntry, NULL);
 
     // Validate the object exists initially
     KineticEntry getEntry = {
@@ -65,7 +70,7 @@ void setUp(void)
         .force = true,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    status = KineticClient_Get(&Fixture.session, &getEntry, NULL);
+    status = KineticClient_Get(Fixture.session, &getEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.key.array, getEntry.key.array);
     TEST_ASSERT_EQUAL_ByteArray(putEntry.tag.array, getEntry.tag.array);
@@ -73,16 +78,36 @@ void setUp(void)
     TEST_ASSERT_EQUAL_ByteBuffer(putEntry.value, getEntry.value);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+
+    // Set the erase PIN to something non-empty
+    ErasePinSet = false;
+    strcpy(NewPinData, "123");
+    OldPin = ByteArray_Create(OldPinData, 0);
+    NewPin = ByteArray_Create(NewPinData, strlen(NewPinData));
+    status = KineticAdminClient_SetErasePin(Fixture.adminSession,
+        OldPin, NewPin);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    ErasePinSet = (status == KINETIC_STATUS_SUCCESS);
 }
 
 void tearDown(void)
 {
+    KineticStatus status;
+    
+    // Restore erase PIN
+    if (ErasePinSet) {
+        status = KineticAdminClient_SetErasePin(Fixture.adminSession,
+            NewPin, OldPin);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
+    
     // Validate the object no longer exists
     KineticEntry regetEntryMetadata = {
         .key = KeyBuffer,
+        .tag = TagBuffer,
         .metadataOnly = true,
     };
-    KineticStatus status = KineticClient_Get(&Fixture.session, &regetEntryMetadata, NULL);
+    status = KineticClient_Get(Fixture.session, &regetEntryMetadata, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
     TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
 
@@ -91,12 +116,12 @@ void tearDown(void)
 
 void test_SecureErase_should_erase_device_contents(void)
 {
-    KineticStatus status = KineticAdminClient_SecureErase(&Fixture.adminSession);
+    KineticStatus status = KineticAdminClient_SecureErase(Fixture.adminSession, NewPin);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 void test_InstantErase_should_erase_device_contents(void)
 {
-    KineticStatus status = KineticAdminClient_InstantErase(&Fixture.adminSession);
+    KineticStatus status = KineticAdminClient_InstantErase(Fixture.adminSession, NewPin);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

@@ -51,44 +51,63 @@ void KineticClient_Shutdown(KineticClient * const client)
     KineticLogger_Close();
 }
 
-KineticStatus KineticClient_CreateConnection(KineticSession* const session, KineticClient * const client)
+KineticStatus KineticClient_CreateSession(KineticSessionConfig* const config,
+    KineticClient * const client, KineticSession** session)
 {
+    if (config == NULL) {
+        LOG0("KineticSessionConfig is NULL!");
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
+
     if (session == NULL) {
-        LOG0("KineticSession is NULL!");
+        LOG0("Pointer to KineticSession pointer is NULL!");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
-    if (strlen(session->config.host) == 0) {
+    if (strlen(config->host) == 0) {
         LOG0("Host is empty!");
         return KINETIC_STATUS_HOST_EMPTY;
     }
 
-    if (    (session->config.hmacKey.len < 1 || session->config.hmacKey.data == NULL)
-        && !(session->config.pin.data != NULL) ) 
+    if (config->hmacKey.len < 1 || config->hmacKey.data == NULL)
     {
         LOG0("HMAC key is NULL or empty!");
         return KINETIC_STATUS_HMAC_REQUIRED;
     }
 
-    KineticSession_Create(session, client);
-    if (session->connection == NULL) {
+    // Allocate a new session
+    KineticSession* s = KineticCalloc(1, sizeof(KineticSession));
+    if (s == NULL) {
+        LOG0("Failed allocating a new session!");
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+
+    // Copy the supplied config into the session config
+    s->config = *config;
+    strncpy(s->config.host, config->host, sizeof(s->config.host));
+
+    // Initialize the session instance
+    KineticSession_Create(s, client);
+    if (s->connection == NULL) {
         LOG0("Failed to create connection instance!");
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
     // Create the connection
-    KineticStatus status = KineticSession_Connect(session);
+    KineticStatus status = KineticSession_Connect(s);
     if (status != KINETIC_STATUS_SUCCESS) {
-        LOGF0("Failed creating connection to %s:%d", session->config.host, session->config.port);
-        KineticSession_Destroy(session);
-        session->connection = NULL;
+        LOGF0("Failed creating connection to %s:%d", config->host, config->port);
+        KineticSession_Destroy(s);
+        s->connection = NULL;
         return status;
     }
+
+    *session = s;
 
     return status;
 }
 
-KineticStatus KineticClient_DestroyConnection(KineticSession* const session)
+KineticStatus KineticClient_DestroySession(KineticSession* const session)
 {
     if (session == NULL) {
         LOG0("KineticSession is NULL!");

@@ -40,7 +40,7 @@ STATIC const int TestDataSize = 50 * (1024*1024);
 
 struct kinetic_thread_arg {
     char ip[16];
-    KineticSession session;
+    KineticSession* session;
     char keyPrefix[KINETIC_DEFAULT_KEY_LEN];
     uint8_t key[KINETIC_DEFAULT_KEY_LEN];
     uint8_t version[KINETIC_DEFAULT_KEY_LEN];
@@ -67,7 +67,7 @@ void tearDown(void)
 
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
 {
-    const KineticSessionConfig sessionConfig = {
+    KineticSessionConfig sessionConfig = {
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = 0,
@@ -96,10 +96,9 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         // Establish all of the connection first, so their session can all get initialized first
         for (int i = 0; i < NUM_COPIES; i++) {
             // Establish connection
-            kt_arg[i].session.config = sessionConfig;
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
-                KineticClient_CreateConnection(&kt_arg[i].session, client));
+                KineticClient_CreateSession(&sessionConfig, client, &kt_arg[i].session));
             strcpy(kt_arg[i].ip, sessionConfig.host);
             kt_arg[i].data = testBuf;
 
@@ -143,7 +142,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         for (int i = 0; i < NUM_COPIES; i++) {
             int join_status = pthread_join(thread_id[i], NULL);
             TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
-            KineticClient_DestroyConnection(&kt_arg[i].session);
+            KineticClient_DestroySession(kt_arg[i].session);
 
             // Update results for summary
             bandwidthAccumulator += kt_arg[i].bandwidth;
@@ -215,7 +214,7 @@ static void* kinetic_put(void* kinetic_arg)
 
         // Store the data slice
         LOGF1("  *** Storing a data slice (%zu bytes)", entry->value.bytesUsed);
-        KineticStatus status = KineticClient_Put(&arg->session, entry, NULL);
+        KineticStatus status = KineticClient_Put(arg->session, entry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         LOGF1("  *** KineticClient put to disk success, ip:%s", arg->ip);
 

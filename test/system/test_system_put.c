@@ -64,7 +64,7 @@ void test_Put_should_create_new_object_on_device(void)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
@@ -93,7 +93,7 @@ void test_Put_should_create_another_new_object_on_device(void)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);

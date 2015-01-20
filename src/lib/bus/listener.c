@@ -459,9 +459,9 @@ static bool socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_
 static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
     assert(ci->ssl);
     for (;;) {
-        ssize_t pending = SSL_pending(ci->ssl);
+        // ssize_t pending = SSL_pending(ci->ssl);
         ssize_t size = (ssize_t)SSL_read(ci->ssl, l->read_buf, ci->to_read_size);
-        fprintf(stderr, "=== PENDING: %zd, got %zd ===\n", pending, size);
+        // fprintf(stderr, "=== PENDING: %zd, got %zd ===\n", pending, size);
         
         if (size == -1) {
             int reason = SSL_get_error(ci->ssl, size);

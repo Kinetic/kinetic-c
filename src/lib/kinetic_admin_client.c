@@ -34,107 +34,144 @@ void KineticAdminClient_Shutdown(KineticClient * const client)
     KineticClient_Shutdown(client);
 }
 
-KineticStatus KineticAdminClient_CreateConnection(KineticSession* const session,
-    KineticClient * const client)
+KineticStatus KineticAdminClient_CreateSession(KineticSessionConfig * const config,
+    KineticClient * const client, KineticSession** session)
 {
-    return KineticClient_CreateConnection(session, client);
+    return KineticClient_CreateSession(config, client, session);
 }
 
-KineticStatus KineticAdminClient_DestroyConnection(KineticSession* const session)
+KineticStatus KineticAdminClient_DestroySession(KineticSession * const session)
 {
-    return KineticClient_DestroyConnection(session);
+    return KineticClient_DestroySession(session);
 }
 
 
 KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const session,
-    ByteArray pin)
+    ByteArray old_pin, ByteArray new_pin)
 {
-    (void)pin;
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    return KINETIC_STATUS_INVALID;
-}
-
-KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
-
     KineticStatus status;
-    status = KineticAuth_EnsurePinSupplied(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
     status = KineticAuth_EnsureSslEnabled(&session->config);
     if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    // Ensure PIN arrays have data if non-empty
+    if ((old_pin.len > 0 && old_pin.data == NULL) ||
+        (new_pin.len > 0 && new_pin.data == NULL)) {
+        return KINETIC_STATUS_MISSING_PIN;
+    }
 
     KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildErase(operation, true);
+    KineticOperation_BuildSetPin(operation, old_pin, new_pin, false);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session)
+KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session,
+    ByteArray pin)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
 
     KineticStatus status;
-    status = KineticAuth_EnsurePinSupplied(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
     status = KineticAuth_EnsureSslEnabled(&session->config);
     if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    // Ensure PIN array has data if non-empty
+    if (pin.len > 0 && pin.data == NULL) {
+        return KINETIC_STATUS_MISSING_PIN;
+    }
 
     KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildErase(operation, false);
+    KineticOperation_BuildErase(operation, true, &pin);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session,
+    ByteArray pin)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+
+    KineticStatus status;
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    // Ensure PIN array has data if non-empty
+    if (pin.len > 0 && pin.data == NULL) {
+        return KINETIC_STATUS_MISSING_PIN;
+    }
+
+    KineticOperation* operation = KineticOperation_Create(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildErase(operation, false, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
 
 KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session,
+    ByteArray old_pin, ByteArray new_pin)
+{
+    KineticStatus status;
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    // Ensure PIN arrays have data if non-empty
+    if ((old_pin.len > 0 && old_pin.data == NULL) ||
+        (new_pin.len > 0 && new_pin.data == NULL)) {
+        return KINETIC_STATUS_MISSING_PIN;
+    }
+
+    KineticOperation* operation = KineticOperation_Create(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticOperation_BuildSetPin(operation, old_pin, new_pin, true);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session,
     ByteArray pin)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
-    (void)session;
-    (void)pin;
-    return KINETIC_STATUS_INVALID;
-}
-
-KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
 
     KineticStatus status;
-    status = KineticAuth_EnsurePinSupplied(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
     status = KineticAuth_EnsureSslEnabled(&session->config);
     if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    // Ensure PIN array has data if non-empty
+    if (pin.len > 0 && pin.data == NULL) {
+        return KINETIC_STATUS_MISSING_PIN;
+    }
 
     KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildLockUnlock(operation, true);
+    KineticOperation_BuildLockUnlock(operation, true, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const session)
+KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const session,
+    ByteArray pin)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
 
     KineticStatus status;
-    status = KineticAuth_EnsurePinSupplied(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
     status = KineticAuth_EnsureSslEnabled(&session->config);
     if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    // Ensure PIN array has data if non-empty
+    if (pin.len > 0 && pin.data == NULL) {
+        return KINETIC_STATUS_MISSING_PIN;
+    }
 
     KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildLockUnlock(operation, false);
+    KineticOperation_BuildLockUnlock(operation, false, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 

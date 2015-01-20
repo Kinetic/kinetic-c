@@ -64,7 +64,7 @@ void setUp(void)
             .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         };
 
-        KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry, NULL);
+        KineticStatus status = KineticClient_Put(Fixture.session, &putEntry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, putEntry.key);
         TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, putEntry.tag);
@@ -92,7 +92,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
 
-    KineticStatus status = KineticClient_Get(&Fixture.session, &getEntry, NULL);
+    KineticStatus status = KineticClient_Get(Fixture.session, &getEntry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);
@@ -115,7 +115,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
         .value = ValueBuffer,
     };
 
-    KineticStatus status = KineticClient_Get(&Fixture.session, &getEntry, NULL);
+    KineticStatus status = KineticClient_Get(Fixture.session, &getEntry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);
@@ -138,7 +138,7 @@ void test_Get_should_be_able_to_retrieve_just_metadata_from_device(void)
         .metadataOnly = true,
     };
 
-    KineticStatus status = KineticClient_Get(&Fixture.session, &getEntry, NULL);
+    KineticStatus status = KineticClient_Get(Fixture.session, &getEntry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);

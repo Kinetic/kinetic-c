@@ -22,7 +22,7 @@
 
 void setUp(void)
 {
-    SystemTestSetup(1);
+    SystemTestSetup(3);
 }
 
 void tearDown(void)
@@ -32,12 +32,12 @@ void tearDown(void)
 
 void test_NoOp_should_succeed(void)
 {
-    KineticStatus status = KineticClient_NoOp(&Fixture.session);
+    KineticStatus status = KineticClient_NoOp(Fixture.session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 void test_NoOp_should_succeed_again(void)
 {
-    KineticStatus status = KineticClient_NoOp(&Fixture.session);
+    KineticStatus status = KineticClient_NoOp(Fixture.session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

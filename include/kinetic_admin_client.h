@@ -31,7 +31,7 @@
  * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
  *
  * @return          Returns a pointer to a `KineticClient`. You need to pass 
- *                  this pointer to KineticClient_CreateConnection() to create 
+ *                  this pointer to KineticClient_CreateSession() to create 
  *                  new connections. 
  *                  Once you are finished will the `KineticClient`, and there
  *                  are no active connections. The pointer should be release
@@ -45,95 +45,112 @@ KineticClient * KineticAdminClient_Init(const char* log_file, int log_level);
 void KineticAdminClient_Shutdown(KineticClient * const client);
 
 /**
- * @brief Initializes the Kinetic API, configures logging destination, establishes a
- * connection to the specified Kinetic Device, and establishes a session.
+ * @brief Creates a session with the Kinetic Device per specified configuration.
  *
- * @param session   Configured KineticSession to connect
- *  .config           `KineticSessionConfig` structure which must be configured
- *                    by the client prior to creating the device connection.
- *    .host             Host name or IP address to connect to
- *    .port             Port to establish socket connection on
- *    .clusterVersion   Cluster version to use for the session
- *    .identity         Identity to use for the session
- *    .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
- *  .connection       Pointer to dynamically allocated connection which will be
- *                    populated upon establishment of a connection.
+ * @param config   `KineticSessionConfig` structure which must be configured
+ *                 by the client prior to creating the device connection.
+ *   .host             Host name or IP address to connect to
+ *   .port             Port to establish socket connection on
+ *   .clusterVersion   Cluster version to use for the session
+ *   .identity         Identity to use for the session
+ *   .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
+ *   .pin              PIN to use for PIN-based operations
+ * @param client    The `KineticClient` pointer returned from KineticClient_Init()
+ * @param session   Pointer to a KineticSession pointer that will be populated
+ *                  with the allocated/created session upon success.
  *
- * @return          Returns the resulting `KineticStatus`, and `session->connection`
- *                  will be populated with a session instance pointer upon success.
- *                  The client should call KineticAdminClient_DestroyConnection() in
- *                  order to shutdown a connection and cleanup resources when
- *                  done using a KineticSession.
+ * @return          Returns the resulting `KineticStatus`, and `session`
+ *                  will be populated with a pointer to the session instance
+ *                  upon success. The client should call
+ *                  KineticClient_DestroySession() in order to shutdown a
+ *                  connection and cleanup resources when done using a
+ *                  `KineticSession`.
  */
-KineticStatus KineticAdminClient_CreateConnection(KineticSession * const session,
-    KineticClient * const client);
+KineticStatus KineticAdminClient_CreateSession(KineticSessionConfig * const config,
+    KineticClient * const client, KineticSession** session);
 
 /**
  * @brief Closes the connection to a host.
  *
- * @param session   The connected `KineticSession` to close. The connection
+ * @param session   The connected `KineticSession` to close. The session
  *                  instance will be freed by this call after closing the
- *                  connection.
+ *                  connection, so the pointer should not longer be used.
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_DestroyConnection(KineticSession * const session);
+KineticStatus KineticAdminClient_DestroySession(KineticSession * const session);
 
 /**
  * @brief Sets the erase PIN of the Kinetic Device.
  *
- * @param pin       New erase PIN to set.
+ * @param session   The connected `KineticSession` to close. The session
+ *                  instance will be freed by this call after closing the
+ *                  connection, so the pointer should not longer be used.
+ * @param old_pin   Old erase PIN to change.
+ * @param new_pin   New erase PIN to change to.
  *
  * @return          Returns the resulting KineticStatus.
  */
 KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const session,
-    ByteArray pin);
+    ByteArray old_pin, ByteArray new_pin);
 
 /**
  * @brief Executes a SecureErase command to erase all data from the Kinetic device.
  *
  * @param session   The connected KineticSession to use for the operation.
+ * @param pin       PIN to send with operation, which must match the configured erase PIN.
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session);
+KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session,
+    ByteArray pin);
 
 /**
  * @brief Executes an InstantErase command to erase all data from the Kinetic device.
  *
  * @param session   The connected KineticSession to use for the operation.
+ * @param pin       PIN to send with operation, which must match the configured erase PIN.
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session);
+KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session,
+    ByteArray pin);
 
 /**
  * @brief Sets the lock PIN of the Kinetic Device.
  *
- * @param pin       New lock PIN to set.
+ * @param session   The connected `KineticSession` to close. The session
+ *                  instance will be freed by this call after closing the
+ *                  connection, so the pointer should not longer be used.
+ * @param old_pin   Old erase PIN to change.
+ * @param new_pin   New erase PIN to change to.
  *
  * @return          Returns the resulting KineticStatus.
  */
 KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session,
-    ByteArray pin);
+    ByteArray old_pin, ByteArray new_pin);
 
 /**
  * @brief Executes a LOCK command to lock the Kinetic device.
  *
  * @param session   The connected KineticSession to use for the operation.
+ * @param pin       PIN to send with operation, which must match the configured lock PIN.
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session);
+KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session,
+    ByteArray pin);
 
 /**
  * @brief Executes an UNLOCK command to unlock the Kinetic device.
  *
  * @param session   The connected KineticSession to use for the operation.
+ * @param pin       PIN to send with operation, which must match the configured lock PIN.
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const session);
+KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const session,
+    ByteArray pin);
 
 /**
  * @brief Executes a GETLOG command to retrieve specific configuration and/or

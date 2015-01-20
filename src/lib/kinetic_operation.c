@@ -112,15 +112,21 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         .len = request->message.message.commandBytes.len,
     });
 
-    // Populate the HMAC for the protobuf, if appropriate
-    KineticStatus status = KineticAuth_Populate(&operation->connection->session->config, operation->request);
+    // Populate the HMAC/PIN for protobuf authentication
+    KineticStatus status;
+    if (operation->pin != NULL) {
+        status = KineticAuth_PopulatePin(&operation->connection->session->config, operation->request, *operation->pin);
+    }
+    else {
+        status = KineticAuth_PopulateHmac(&operation->connection->session->config, operation->request);
+    }
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG0("Failed populating authentication info for new request!");
         return status;
     }
-    KineticPDUHeader header;
 
     // Configure PDU header length fields
+    KineticPDUHeader header;
     header.versionPrefix = 'F';
     header.protobufLength = KineticProto_Message__get_packed_size(proto);
     KineticLogger_LogProtobuf(3, proto);
@@ -148,11 +154,10 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         operation->request, operation, &operation->connection->session,
         operation->connection->messageBus, header.protobufLength, header.valueLength);
 
-    KineticLogger_LogHeader(2, &header);
+    KineticLogger_LogHeader(3, &header);
 
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
     uint32_t nboValueLength = KineticNBO_FromHostU32(header.valueLength);
-
 
     size_t offset = 0;
     uint8_t * msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
@@ -712,6 +717,48 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
  * Admin Client Operations
 *******************************************************************************/
 
+KineticStatus KineticOperation_SetPinCallback(KineticOperation* const operation, KineticStatus const status)
+{
+    assert(operation != NULL);
+    assert(operation->connection != NULL);
+    LOGF3("SetPin callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        operation, operation->connection);
+    return status;
+}
+
+void KineticOperation_BuildSetPin(KineticOperation* const operation, ByteArray old_pin, ByteArray new_pin, bool lock)
+{
+    KineticOperation_ValidateOperation(operation);
+    KineticSession_IncrementSequence(operation->connection->session);
+
+    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY;
+    operation->request->message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->message.body;
+    operation->request->command->body->security = &operation->request->message.security;
+
+    if (lock) {
+        operation->request->message.security.oldLockPIN = (ProtobufCBinaryData) {
+            .data = old_pin.data, .len = old_pin.len };
+        operation->request->message.security.has_oldLockPIN = true;
+        operation->request->message.security.newLockPIN = (ProtobufCBinaryData) {
+            .data = new_pin.data, .len = new_pin.len };
+        operation->request->message.security.has_newLockPIN = true;
+    }
+    else {
+        operation->request->message.security.oldErasePIN = (ProtobufCBinaryData) {
+            .data = old_pin.data, .len = old_pin.len };
+        operation->request->message.security.has_oldErasePIN = true;
+        operation->request->message.security.newErasePIN = (ProtobufCBinaryData) {
+            .data = new_pin.data, .len = new_pin.len };
+        operation->request->message.security.has_newErasePIN = true;
+    }
+    
+    operation->valueEnabled = false;
+    operation->sendValue = false;
+    operation->callback = &KineticOperation_SetPinCallback;
+    operation->request->pinAuth = false;
+}
+
 KineticStatus KineticOperation_EraseCallback(KineticOperation* const operation, KineticStatus const status)
 {
     assert(operation != NULL);
@@ -721,11 +768,12 @@ KineticStatus KineticOperation_EraseCallback(KineticOperation* const operation, 
     return status;
 }
 
-void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_erase)
+void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_erase, ByteArray* pin)
 {
     KineticOperation_ValidateOperation(operation);
     KineticSession_IncrementSequence(operation->connection->session);
 
+    operation->pin = pin;
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP;
     operation->request->message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->message.body;
@@ -739,7 +787,7 @@ void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_EraseCallback;
-    operation->request->pinOp = true;
+    operation->request->pinAuth = true;
     operation->timeoutSeconds = 180;
 }
 
@@ -752,11 +800,12 @@ KineticStatus KineticOperation_LockUnlockCallback(KineticOperation* const operat
     return status;
 }
 
-void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lock)
+void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lock, ByteArray* pin)
 {
     KineticOperation_ValidateOperation(operation);
     KineticSession_IncrementSequence(operation->connection->session);
 
+    operation->pin = pin;
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP;
     operation->request->message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->message.body;
@@ -770,7 +819,7 @@ void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lo
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_LockUnlockCallback;
-    operation->request->pinOp = true;
+    operation->request->pinAuth = true;
 }
 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status)
@@ -800,5 +849,5 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetClusterVersionCallback;
-    operation->request->pinOp = false;
+    operation->request->pinAuth = false;
 }

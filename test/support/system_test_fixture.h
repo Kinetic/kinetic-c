@@ -49,8 +49,8 @@
 #endif
 
 typedef struct _SystemTestFixture {
-    KineticSession session;
-    KineticSession adminSession;
+    KineticSession* session;
+    KineticSession* adminSession;
     bool connected;
     int64_t expectedSequence;
     KineticClient * client;

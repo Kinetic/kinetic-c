@@ -386,9 +386,6 @@ void KineticSessionConfig_Copy(KineticSessionConfig* dest, KineticSessionConfig*
     if (src->hmacKey.data != NULL) {
         memcpy(dest->keyData, src->hmacKey.data, src->hmacKey.len);
     }
-    if (src->pin.data != NULL) {
-        memcpy(dest->pinData, src->pin.data, src->pin.len);
-    }
 }
 
 void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con)
@@ -432,6 +429,7 @@ void KineticMessage_Init(KineticMessage* const message)
     KineticProto_command_range__init(&message->keyRange);
     KineticProto_command_setup__init(&message->setup);
     KineticProto_command_get_log__init(&message->getLog);
+    KineticProto_command_security__init(&message->security);
     KineticProto_command_pin_operation__init(&message->pinOp);
 }
 

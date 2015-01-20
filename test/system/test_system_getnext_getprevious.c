@@ -49,7 +49,7 @@ static bool add_keys(int count)
             .force = true,
         };
 
-        KineticStatus status = KineticClient_Put(&Fixture.session, &entry, NULL);
+        KineticStatus status = KineticClient_Put(Fixture.session, &entry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     }
     return true;
@@ -106,10 +106,10 @@ static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
 
         switch (cmd) {
         case CMD_NEXT:
-            status = KineticClient_GetNext(&Fixture.session, &entry, NULL);
+            status = KineticClient_GetNext(Fixture.session, &entry, NULL);
             break;
         case CMD_PREVIOUS:
-            status = KineticClient_GetPrevious(&Fixture.session, &entry, NULL);
+            status = KineticClient_GetPrevious(Fixture.session, &entry, NULL);
             break;
         default:
             TEST_ASSERT(false);

@@ -90,7 +90,7 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
     KineticOperation_BuildNoop(&Operation);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, Request.message.command.header->messageType);
     TEST_ASSERT_NULL(Operation.response);
@@ -118,7 +118,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     // Build the operation
     KineticOperation_BuildPut(&Operation, &entry);
 
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_TRUE(Operation.valueEnabled);
     TEST_ASSERT_TRUE(Operation.sendValue);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
@@ -126,7 +126,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry->value.array);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
 }
@@ -155,7 +155,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
@@ -184,7 +184,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
@@ -214,7 +214,7 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
@@ -245,7 +245,7 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_me
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
@@ -275,7 +275,7 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
@@ -306,7 +306,7 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
@@ -323,7 +323,7 @@ void test_KineticOperation_BuildFlush_should_build_a_FLUSHALLDATA_operation(void
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA,
         Request.message.command.header->messageType);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
 
     TEST_ASSERT_NULL(Operation.response);
@@ -349,7 +349,7 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
 }
@@ -393,7 +393,7 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     TEST_ASSERT_FALSE(Operation.sendValue);
     TEST_ASSERT_NULL(Operation.entry);
     TEST_ASSERT_EQUAL_PTR(&Request, Operation.request);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL_PTR(&Request.message.command, Request.command);
@@ -450,7 +450,7 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
 
     KineticOperation_BuildP2POperation(&Operation, &p2pOp);
 
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH,
         Request.message.command.header->messageType);
@@ -545,6 +545,67 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
  * Admin Client Operations
 *******************************************************************************/
 
+void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_new_LOCK_PIN(void)
+{
+    KineticSession_IncrementSequence_Expect(&Session);
+
+    char oldPinData[] = "1234";
+    char newPinData[] = "5678";
+    ByteArray oldPin = ByteArray_Create(oldPinData, sizeof(oldPinData));
+    ByteArray newPin = ByteArray_Create(newPinData, sizeof(newPinData));
+    KineticOperation_BuildSetPin(&Operation, oldPin, newPin, true);
+
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.security, Request.command->body->security);
+    TEST_ASSERT_TRUE(Request.command->body->security->has_oldLockPIN);
+    TEST_ASSERT_EQUAL_PTR(oldPinData, Request.command->body->security->oldLockPIN.data);
+    TEST_ASSERT_EQUAL(oldPin.len, Request.command->body->security->oldLockPIN.len);
+    TEST_ASSERT_TRUE(Request.command->body->security->has_newLockPIN);
+    TEST_ASSERT_EQUAL_PTR(newPinData, Request.command->body->security->newLockPIN.data);
+    TEST_ASSERT_EQUAL(newPin.len, Request.command->body->security->newLockPIN.len);
+    TEST_ASSERT_NULL(Request.command->body->pinOp);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetPinCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+}
+void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_new_ERASE_PIN(void)
+{
+    KineticSession_IncrementSequence_Expect(&Session);
+
+    char oldPinData[] = "1234";
+    char newPinData[] = "5678";
+    ByteArray oldPin = ByteArray_Create(oldPinData, sizeof(oldPinData));
+    ByteArray newPin = ByteArray_Create(newPinData, sizeof(newPinData));
+    KineticOperation_BuildSetPin(&Operation, oldPin, newPin, false);
+
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.security, Request.command->body->security);
+    TEST_ASSERT_TRUE(Request.command->body->security->has_oldErasePIN);
+    TEST_ASSERT_EQUAL_PTR(oldPinData, Request.command->body->security->oldErasePIN.data);
+    TEST_ASSERT_EQUAL(oldPin.len, Request.command->body->security->oldErasePIN.len);
+    TEST_ASSERT_TRUE(Request.command->body->security->has_newErasePIN);
+    TEST_ASSERT_EQUAL_PTR(newPinData, Request.command->body->security->newErasePIN.data);
+    TEST_ASSERT_EQUAL(newPin.len, Request.command->body->security->newErasePIN.len);
+    TEST_ASSERT_NULL(Request.command->body->pinOp);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetPinCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+}
+
+
+
 void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 {
     KineticDeviceInfo* pInfo;
@@ -563,7 +624,7 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
         Request.command->body->getLog->types[0]);
     TEST_ASSERT_EQUAL_PTR(&pInfo, Operation.deviceInfo);
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
 }
@@ -589,13 +650,18 @@ void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_
 
 
 
-void test_KineticOperation_BuildErase_should_build_a_SECURE_ERASE_operation_with_PIN(void)
+void test_KineticOperation_BuildErase_should_build_a_SECURE_ERASE_operation_with_PIN_auth(void)
 {
+    char pinData[] = "abc123";
+    ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
+
     KineticSession_IncrementSequence_Expect(&Session);
 
-    KineticOperation_BuildErase(&Operation, true);
+    KineticOperation_BuildErase(&Operation, true, &pin);
 
-    TEST_ASSERT_TRUE(Request.pinOp);
+    TEST_ASSERT_NOT_NULL(Operation.pin);
+    TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
+    TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
         Request.message.command.header->messageType);
@@ -611,13 +677,18 @@ void test_KineticOperation_BuildErase_should_build_a_SECURE_ERASE_operation_with
     TEST_ASSERT_EQUAL(180, Operation.timeoutSeconds);
 }
 
-void test_KineticOperation_BuildErase_should_build_an_INSTANT_ERASE_operation_with_PIN(void)
+void test_KineticOperation_BuildErase_should_build_an_INSTANT_ERASE_operation_with_PIN_auth(void)
 {
+    char pinData[] = "abc123";
+    ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
+
     KineticSession_IncrementSequence_Expect(&Session);
 
-    KineticOperation_BuildErase(&Operation, false);
+    KineticOperation_BuildErase(&Operation, false, &pin);
 
-    TEST_ASSERT_TRUE(Request.pinOp);
+    TEST_ASSERT_NOT_NULL(Operation.pin);
+    TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
+    TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
         Request.message.command.header->messageType);
@@ -635,13 +706,18 @@ void test_KineticOperation_BuildErase_should_build_an_INSTANT_ERASE_operation_wi
 
 
 
-void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PIN(void)
+void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PIN_auth(void)
 {
+    char pinData[] = "abc123";
+    ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
+
     KineticSession_IncrementSequence_Expect(&Session);
 
-    KineticOperation_BuildLockUnlock(&Operation, true);
+    KineticOperation_BuildLockUnlock(&Operation, true, &pin);
 
-    TEST_ASSERT_TRUE(Request.pinOp);
+    TEST_ASSERT_NOT_NULL(Operation.pin);
+    TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
+    TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
         Request.message.command.header->messageType);
@@ -657,13 +733,18 @@ void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PI
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
 }
 
-void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with_PIN(void)
+void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with_PIN_auth(void)
 {
+    char pinData[] = "abc123";
+    ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
+
     KineticSession_IncrementSequence_Expect(&Session);
 
-    KineticOperation_BuildLockUnlock(&Operation, false);
+    KineticOperation_BuildLockUnlock(&Operation, false, &pin);
 
-    TEST_ASSERT_TRUE(Request.pinOp);
+    TEST_ASSERT_NOT_NULL(Operation.pin);
+    TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
+    TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
         Request.message.command.header->messageType);
@@ -681,13 +762,13 @@ void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with
 
 
 
-void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VERSION_operation_with_PIN(void)
+void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VERSION_operation_with_PIN_auth(void)
 {
     KineticSession_IncrementSequence_Expect(&Session);
 
     KineticOperation_BuildSetClusterVersion(&Operation, 1776);
 
-    TEST_ASSERT_FALSE(Request.pinOp);
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
     TEST_ASSERT_NULL(Operation.response);
