@@ -145,9 +145,18 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
     return KINETIC_STATUS_SUCCESS;
 }
 
+#define CAS(PTR, OLD, NEW) (__sync_bool_compare_and_swap(PTR, OLD, NEW))
+
 void KineticSession_IncrementSequence(KineticSession const * const session)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
-    session->connection->sequence++;
+
+    for (;;) {
+        int64_t cur_seq_id = session->connection->sequence;
+        if (CAS(&session->connection->sequence,
+                cur_seq_id, cur_seq_id + 1)) {
+            break;
+        }
+    }
 }
