@@ -88,7 +88,6 @@ typedef enum _KineticSynchronization {
 } KineticSynchronization;
 
 
-struct _KineticClient;
 /**
  * @brief Handle to the kinetic client, which is shared by all connections
  */
@@ -96,9 +95,10 @@ typedef struct _KineticClient KineticClient;
 
 
 /**
- * @brief Kinetic Connection Instance
+ * @brief Kinetic connection instance
  */
 struct _KineticConnection;
+
 
 /**
  * @brief Structure used to specify the configuration for a session.
@@ -129,19 +129,11 @@ typedef struct _KineticSessionConfig {
     bool useSsl;
 } KineticSessionConfig;
 
+
 /**
  * @brief An instance of a session with a Kinetic device.
  */
-// FIXME: Internalize session w/ copy of config
-typedef struct _KineticSession {
-    // Session configuration structure which must be configured 
-    KineticSessionConfig config;
-
-    // Connection instance which is dynamically allocated upon call to KineticClient_CreateSession.
-    // Client must call KineticAdminClient_DestroySession when finished with a session to shutdown
-    // a session cleanly and free the `connection`.
-    struct _KineticConnection* connection;
-} KineticSession;
+typedef struct _KineticSession KineticSession;
 
 #define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey) { \
     (*_session).config = (KineticSessionConfig) { \

@@ -58,6 +58,20 @@ struct _KineticClient {
     struct bus *bus;
 };
 
+/**
+ * @brief An instance of a session with a Kinetic device.
+ */
+struct _KineticSession {
+    // Session configuration structure which must be configured 
+    KineticSessionConfig config;
+
+    // Connection instance which is dynamically allocated upon call to KineticClient_CreateSession.
+    // Client must call KineticAdminClient_DestroySession when finished with a session to shutdown
+    // a session cleanly and free the `connection`.
+    struct _KineticConnection* connection;
+};
+
+
 // #TODO remove packed attribute and replace uses of sizeof(KineticPDUHeader)
 //  with a constant
 typedef struct __attribute__((__packed__)) _KineticPDUHeader {

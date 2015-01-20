@@ -1,0 +1,16 @@
+#!/bin/sh
+##################################################
+# Construct a flame graph for a specific command.
+# Linux-specific, and requires the "perf" package.
+##################################################
+
+CMD="$*"
+
+if [ -z ${CMD} ]; then
+    echo Usage: mk_flamegraph COMMAND
+else
+    # -g: call graph
+    sudo perf record --freq=993 --all-cpus -g --output=perf.out -- ${CMD}
+    sudo perf script --input=perf.out | vendor/FlameGraph/stackcollapse-perf.pl > out.perf-folded
+    vendor/FlameGraph/flamegraph.pl out.perf-folded > perf_out.svg
+fi

@@ -55,6 +55,7 @@ KineticOperation* KineticController_CreateOperation(KineticSession const * const
 typedef struct {
     pthread_mutex_t receiveCompleteMutex;
     pthread_cond_t receiveComplete;
+    bool completed;
     KineticStatus status;
 } DefaultCallbackData;
 
@@ -63,6 +64,7 @@ static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_da
     DefaultCallbackData * data = client_data;
     pthread_mutex_lock(&data->receiveCompleteMutex);
     data->status = kinetic_data->status;
+    data->completed = true;
     pthread_cond_signal(&data->receiveComplete);
     pthread_mutex_unlock(&data->receiveCompleteMutex);
 }
@@ -93,6 +95,7 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
         pthread_mutex_init(&data.receiveCompleteMutex, NULL);
         pthread_cond_init(&data.receiveComplete, NULL);
         data.status = KINETIC_STATUS_INVALID;
+        data.completed = false;
 
         operation->closure = DefaultClosure(&data);
 
@@ -101,9 +104,10 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
 
         if (status == KINETIC_STATUS_SUCCESS) {
             pthread_mutex_lock(&data.receiveCompleteMutex);
-            pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex);
-            pthread_mutex_unlock(&data.receiveCompleteMutex);
+            while(data.completed == false)
+            { pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex); }
             status = data.status;
+            pthread_mutex_unlock(&data.receiveCompleteMutex);
         }
 
         pthread_cond_destroy(&data.receiveComplete);

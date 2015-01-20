@@ -229,15 +229,17 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
 {
     assert(operation != NULL);
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
-    if (operation->closure.callback == NULL) { return; }
     KineticCompletionData completionData = {.status = status};
 
     KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
 
-    operation->closure.callback(&completionData, operation->closure.clientData);
+    if(operation->closure.callback != NULL) {
+        operation->closure.callback(&completionData, operation->closure.clientData);
+    }
 
     KineticAllocator_FreeOperation(operation);
 }
+
 
 
 /*******************************************************************************
@@ -849,5 +851,4 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetClusterVersionCallback;
-    operation->request->pinAuth = false;
 }
