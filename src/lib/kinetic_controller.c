@@ -118,28 +118,45 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
 
 KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
 {
+    KineticStatus res = KINETIC_STATUS_INVALID;
+
     switch(status)
     {
-        // TODO fix all these mappings
+        // TODO scrutinize all these mappings
         case BUS_SEND_SUCCESS:
-            return KINETIC_STATUS_SUCCESS;
+            res = KINETIC_STATUS_SUCCESS;
+            break;
         case BUS_SEND_TX_TIMEOUT:
-            return KINETIC_STATUS_SOCKET_TIMEOUT;
+            res = KINETIC_STATUS_SOCKET_TIMEOUT;
+            break;
         case BUS_SEND_TX_FAILURE:
-            return KINETIC_STATUS_SOCKET_ERROR;
+            res = KINETIC_STATUS_SOCKET_ERROR;
+            break;
         case BUS_SEND_RX_TIMEOUT:
-            return KINETIC_STATUS_OPERATION_TIMEDOUT;
+            res = KINETIC_STATUS_OPERATION_TIMEDOUT;
+            break;
         case BUS_SEND_RX_FAILURE:
-            return KINETIC_STATUS_SOCKET_ERROR;
+            res = KINETIC_STATUS_SOCKET_ERROR;
+            break;
         case BUS_SEND_BAD_RESPONSE:
-            return KINETIC_STATUS_SOCKET_ERROR;
+            res = KINETIC_STATUS_SOCKET_ERROR;
+            break;
         case BUS_SEND_UNREGISTERED_SOCKET:
-            return KINETIC_STATUS_SOCKET_ERROR;
+            res = KINETIC_STATUS_SOCKET_ERROR;
+            break;
         case BUS_SEND_UNDEFINED:
         default:
+        {
+            LOGF0("bus_to_kinetic_status: UNMATCHED %d\n", status);
             assert(false);
             return KINETIC_STATUS_INVALID;
+        }
     }
+    
+    LOGF3("bus_to_kinetic_status: mapping status %d => %d\n",
+        status, res);
+    }
+    return res;
 }
 
 static const char *bus_error_string(bus_send_status_t t) {
