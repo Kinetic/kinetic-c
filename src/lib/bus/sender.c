@@ -666,8 +666,12 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
     bus_send_status_t status = BUS_SEND_UNDEFINED;
     switch (error) {
     default:
+    {
+        BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 64,
+            "setting BUS_SEND_TX_FAILURE on socket %d, reason %d", fd, error);
         status = BUS_SEND_TX_FAILURE;
         break;
+    }
     case TX_ERROR_UNREGISTERED_SOCKET:
         status = BUS_SEND_UNREGISTERED_SOCKET;
         break;
