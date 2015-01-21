@@ -145,9 +145,7 @@ typedef enum {
 
 // Kinetic PDU
 struct _KineticPDU {
-    // Message associated with this PDU instance
     KineticMessage message;
-
     KineticProto_Command* command;
 };
 

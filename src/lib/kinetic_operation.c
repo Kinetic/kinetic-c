@@ -57,9 +57,10 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     return status;
 }
 
+// TODO: Asses refactoring this methog by disecting out Operation and relocate to kinetic_pdu
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation)
 {
-    LOGF2("\nSending PDU via fd=%d", operation->connection->messageBus);
+    LOGF3("\nSending PDU via fd=%d", operation->connection->messageBus);
 
     KineticPDU* request = operation->request;
     KineticProto_Message* proto = &operation->request->message.message;
@@ -78,7 +79,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     assert(packedLen == expectedLen);
     request->message.message.commandBytes.len = packedLen;
     request->message.message.has_commandBytes = true;
-    KineticLogger_LogByteArray(2, "commandBytes", (ByteArray){
+    KineticLogger_LogByteArray(3, "commandBytes", (ByteArray){
         .data = request->message.message.commandBytes.data,
         .len = request->message.message.commandBytes.len,
     });
@@ -125,11 +126,11 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         return KINETIC_STATUS_BUFFER_OVERRUN;
     }
 
-    LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, protoLen: %u, valueLen: %u",
-        operation->request, operation, &operation->connection->session,
-        operation->connection->messageBus, header.protobufLength, header.valueLength);
+    LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, seq: %5lld, protoLen: %4u, valueLen: %u",
+        operation->request, operation, &operation->connection->session, operation->connection->messageBus,
+        request->message.header.sequence, header.protobufLength, header.valueLength);
 
-    KineticLogger_LogHeader(2, &header);
+    KineticLogger_LogHeader(3, &header);
 
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
     uint32_t nboValueLength = KineticNBO_FromHostU32(header.valueLength);
