@@ -155,7 +155,6 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
     
     LOGF3("bus_to_kinetic_status: mapping status %d => %d\n",
         status, res);
-    }
     return res;
 }
 
