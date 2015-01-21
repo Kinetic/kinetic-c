@@ -31,7 +31,6 @@ KineticConnection* KineticAllocator_NewConnection(void)
         LOG0("Failed allocating new Connection!");
         return NULL;
     }
-    connection->socket = -1;  // start without a file descriptor
     return connection;
 }
 

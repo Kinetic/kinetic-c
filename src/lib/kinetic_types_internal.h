@@ -96,6 +96,7 @@ struct _KineticConnection {
     KineticSession  session;        // session configuration
     struct bus *    messageBus;
     socket_info *   si;
+    pthread_mutex_t sendMutex;      // mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool
     KineticCountingSemaphore * outstandingOperations;
 };
 

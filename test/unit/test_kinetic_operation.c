@@ -68,8 +68,7 @@ void tearDown(void)
 
 void test_KineticOperation_Init_should_configure_the_operation(void)
 {
-    LOG_LOCATION;
-    KineticOperation op = {
+   KineticOperation op = {
         .connection = NULL,
         .request = NULL,
         .response = NULL,
@@ -83,12 +82,14 @@ void test_KineticOperation_Init_should_configure_the_operation(void)
 }
 
 
+void test_KineticOperation_SendRequest_should_acquire_and_increment_sequence_count_and_send_PDU_to_bus(void)
+{
+    TEST_IGNORE_MESSAGE("Need to test KineticOperation_SendRequest");
+}
+
+
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
-    LOG_LOCATION;
-
-    KineticSession_IncrementSequence_Expect(&Session);
-
     KineticOperation_BuildNoop(&Operation);
 
     // NOOP
@@ -117,13 +118,10 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
 
 void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_create_a_new_object(void)
 {
-    LOG_LOCATION;
-    ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
+   ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
     ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
     ByteArray tag = ByteArray_CreateWithCString("some_tag");
-
-    KineticSession_IncrementSequence_Expect(&Session);
 
     // PUT
     // The PUT operation sets the value and metadata for a given key. If a value
@@ -227,16 +225,13 @@ uint8_t ValueData[KINETIC_OBJ_SIZE];
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 {
-    LOG_LOCATION;
-    const ByteArray key = ByteArray_CreateWithCString("foobar");
+   const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGet(&Operation, &entry);
@@ -279,8 +274,7 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
 {
-    LOG_LOCATION;
-    const ByteArray key = ByteArray_CreateWithCString("foobar");
+   const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -288,8 +282,6 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGet(&Operation, &entry);
@@ -332,16 +324,13 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
 
 void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
 {
-    LOG_LOCATION;
-    const ByteArray key = ByteArray_CreateWithCString("foobar");
+   const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetNext(&Operation, &entry);
@@ -361,8 +350,7 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
 
 void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_metadata_only(void)
 {
-    LOG_LOCATION;
-    const ByteArray key = ByteArray_CreateWithCString("foobar");
+   const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -370,8 +358,6 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_me
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetNext(&Operation, &entry);
@@ -391,16 +377,13 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_me
 
 void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation(void)
 {
-    LOG_LOCATION;
-    const ByteArray key = ByteArray_CreateWithCString("foobar");
+   const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetPrevious(&Operation, &entry);
@@ -420,8 +403,7 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
 
 void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation_with_metadata_only(void)
 {
-    LOG_LOCATION;
-    const ByteArray key = ByteArray_CreateWithCString("foobar");
+   const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -429,8 +411,6 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetPrevious(&Operation, &entry);
@@ -450,8 +430,6 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
 
 void test_KineticOperation_BuildFlush_should_build_a_FLUSHALLDATA_operation(void)
 {
-    KineticSession_IncrementSequence_Expect(&Session);
-
     KineticOperation_BuildFlush(&Operation);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
@@ -463,12 +441,9 @@ void test_KineticOperation_BuildFlush_should_build_a_FLUSHALLDATA_operation(void
 
 void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 {
-    LOG_LOCATION;
-    const ByteArray key = ByteArray_CreateWithCString("foobar");
+   const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {.key = ByteBuffer_CreateWithArray(key), .value = ByteBuffer_CreateWithArray(value)};
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildDelete(&Operation, &entry);
@@ -511,8 +486,6 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 
 void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(void)
 {
-    LOG_LOCATION;
-
     const int maxKeyLen = 32; // arbitrary key length for test
     uint8_t startKeyData[maxKeyLen];
     uint8_t endKeyData[maxKeyLen];
@@ -537,8 +510,6 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
         keyBuffers[i] = ByteBuffer_Create(keysData[i], maxKeyLen, 0);
     }
     ByteBufferArray keys = {.buffers = keyBuffers, .count = numKeysInRange};
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyRange_Expect(&Request.message, &range);
 
     KineticOperation_BuildGetKeyRange(&Operation, &range, &keys);
@@ -612,11 +583,7 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
 
 void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 {
-    LOG_LOCATION;
-
     KineticDeviceInfo* pInfo;
-
-    KineticSession_IncrementSequence_Expect(&Session);
 
     KineticOperation_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
 
@@ -693,8 +660,6 @@ void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_
 
 void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request(void)
 {
-    LOG_LOCATION;
-
     ByteBuffer oldKey1 = ByteBuffer_Create((void*)0x1234, 10, 10);
     ByteBuffer newKey1 = ByteBuffer_Create((void*)0x4321, 33, 33);
     ByteBuffer version1 = ByteBuffer_Create((void*)0xABC, 6, 6);
@@ -737,8 +702,6 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
         .operations = ops
     };
     
-
-    KineticSession_IncrementSequence_Expect(&Session);
 
     KineticOperation_BuildP2POperation(&Operation, &p2pOp);
 
