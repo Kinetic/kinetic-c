@@ -44,6 +44,7 @@ typedef enum {
     TX_ERROR_NOTIFY_LISTENER_FAILURE = -6,
     TX_ERROR_WRITE_TIMEOUT = -7,
     TX_ERROR_NOTIFY_TIMEOUT = -8,
+    TX_ERROR_BAD_SEQUENCE_ID = -9,
 } tx_error_t;
 
 typedef enum {
@@ -141,6 +142,8 @@ typedef struct sender {
      * commands have been committed. */
     int commit_pipe;
     int incoming_command_pipe;
+
+    int64_t largest_seq_id_seen;
 
     /* Set of file descriptors to poll.
      * fds[0] is the incoming command pipe, and is polled for

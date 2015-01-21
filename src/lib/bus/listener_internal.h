@@ -111,6 +111,7 @@ typedef struct listener {
     listener_msg msgs[MAX_QUEUE_MESSAGES];
     listener_msg *msg_freelist;
     int16_t msgs_in_use;
+    int64_t largest_seq_id_seen;
 
     size_t upstream_backpressure;
 
