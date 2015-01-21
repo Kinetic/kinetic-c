@@ -608,11 +608,12 @@ static void process_unpacked_message(listener *l,
         int64_t seq_id = result.u.success.seq_id;
         void *opaque_msg = result.u.success.msg;
 
-        if (seq_id < l->largest_seq_id_seen && l->largest_seq_id_seen != 0) {
+        if (seq_id < ci->largest_seq_id_seen && ci->largest_seq_id_seen != 0) {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                 "suspicious sequence ID: largest seen is %lld, got %lld\n",
-                (long long)l->largest_seq_id_seen, (long long)seq_id);
+                (long long)ci->largest_seq_id_seen, (long long)seq_id);
         }
+        ci->largest_seq_id_seen = seq_id;
 
         rx_info_t *info = find_info_by_sequence_id(l, ci->fd, seq_id);
         if (info) {
@@ -641,10 +642,11 @@ static void process_unpacked_message(listener *l,
             }
         } else {
             /* We received a response that we weren't expecting. */
-            BUS_LOG_SNPRINTF(b, 2 - 2, LOG_LISTENER, b->udata, 128,
-                "Couldn't find info for fd %d, seq_id %lld, msg %p",
-                ci->fd, (long long)seq_id, opaque_msg);
-   
+            if (seq_id != 0) {
+                BUS_LOG_SNPRINTF(b, 2 - 2, LOG_LISTENER, b->udata, 128,
+                    "Couldn't find info for fd %d, seq_id %lld, msg %p",
+                    ci->fd, (long long)seq_id, opaque_msg);
+            }   
             if (b->unexpected_msg_cb) {
                 b->unexpected_msg_cb(opaque_msg, seq_id, b->udata, ci->udata);
             }
@@ -1211,7 +1213,7 @@ static void attempt_delivery(listener *l, struct rx_info_t *info) {
         /* success */
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
             "successfully delivered box %p (seq_id %lld), marking info %d as DONE",
-            (void*)box, (long long)box->out_seq_id, info->id);
+            (void*)box, (long long)seq_id, info->id);
         info->u.expect.error = RX_ERROR_DONE;
         BUS_LOG_SNPRINTF(b, 4, LOG_LISTENER, b->udata, 128,
             "initial clean-up attempt for completed RX event at info +%d", info->id);
