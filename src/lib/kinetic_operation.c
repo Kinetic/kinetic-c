@@ -100,6 +100,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     }
 
     KineticPDUHeader header;
+    memset(&header, 0, sizeof(header));
 
     // Configure PDU header length fields
     header.versionPrefix = 'F';
