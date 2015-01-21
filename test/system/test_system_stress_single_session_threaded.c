@@ -32,15 +32,15 @@ typedef struct {
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
-void run_throghput_tests(KineticSession* session, size_t num_ops, size_t value_size)
+void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_size)
 {
     printf("\n"
         "========================================\n"
-        "Throughput Tests\n"
+        "Stress Tests\n"
         "========================================\n"
         "Entry Size: %zu bytes\n"
         "Count:      %zu entries\n\n",
-        value_size, num_ops );
+        value_size, num_ops);
 
     ByteBuffer test_data = ByteBuffer_Malloc(value_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
@@ -105,12 +105,11 @@ void run_throghput_tests(KineticSession* session, size_t num_ops, size_t value_s
         }
 
         LOG0("Waiting for PUTs to finish...");
-        for (size_t i = 0; i < num_ops; i++)
-        {
+        for (size_t i = 0; i < num_ops; i++) {
             KineticSemaphore_WaitForSignalAndDestroy(put_statuses[i].sem);
             if (put_statuses[i].status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "PUT failed w/status: %s\n", Kinetic_GetStatusDescription(put_statuses[i].status));
+                sprintf(msg, "PUT failed w/status: %s", Kinetic_GetStatusDescription(put_statuses[i].status));
                 TEST_FAIL_MESSAGE(msg);
             }
         }
@@ -215,6 +214,7 @@ void run_throghput_tests(KineticSession* session, size_t num_ops, size_t value_s
         }
     }
 
+    #if 1
     // Measure DELETE performance
     {
         OpStatus delete_statuses[num_ops];
@@ -256,7 +256,7 @@ void run_throghput_tests(KineticSession* session, size_t num_ops, size_t value_s
 
             if (status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "DELETE failed w/status: %s\n", Kinetic_GetStatusDescription(status));
+                sprintf(msg, "DELETE failed w/status: %s", Kinetic_GetStatusDescription(status));
                 TEST_FAIL_MESSAGE(msg);
             }
         }
@@ -289,6 +289,7 @@ void run_throghput_tests(KineticSession* session, size_t num_ops, size_t value_s
             elapsed_ms / 1000.0f,
             throughput);
     }
+    #endif
 
     ByteBuffer_Free(test_data);
 }
@@ -306,7 +307,7 @@ static void* test_thread(void* test_params)
 {
     TestParams * params = test_params;
     for (uint32_t i = 0; i < params->thread_iters; i++) {
-        run_throghput_tests(params->session, params->num_ops, params->obj_size);
+        run_throughput_tests(params->session, params->num_ops, params->obj_size);
     }
     return NULL;
 }
@@ -329,7 +330,7 @@ void run_tests(KineticClient * client)
     KineticStatus status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         char msg[128];
-        sprintf(msg, "Failed connecting to the Kinetic device w/status: %s\n", Kinetic_GetStatusDescription(status));
+        sprintf(msg, "Failed connecting to the Kinetic device w/status: %s", Kinetic_GetStatusDescription(status));
         TEST_FAIL_MESSAGE(msg);
     }
 
@@ -337,9 +338,9 @@ void run_tests(KineticClient * client)
     TestParams params[] = { 
         { .client = client, .session = &session, .thread_iters = 1, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
         { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 120,             },
-        { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 500,             },
-        { .client = client, .session = &session, .thread_iters = 1, .num_ops = 500,  .obj_size = 70000,           },
-        { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 120,             },
+        // { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 500,             },
+        // { .client = client, .session = &session, .thread_iters = 1, .num_ops = 500,  .obj_size = 70000,           },
+        // { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 120,             },
         // { .client = client, .session = &session, .thread_iters = 3, .num_ops = 1000, .obj_size = 120,             },
         // { .client = client, .session = &session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
         // { .client = client, .session = &session, .thread_iters = 5, .num_ops = 1000, .obj_size = 120,             },

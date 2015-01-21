@@ -28,6 +28,7 @@
 #include "kinetic_device_info.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
+#include <pthread.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/time.h>
@@ -127,6 +128,20 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         return KINETIC_STATUS_BUFFER_OVERRUN;
     }
 
+    size_t offset = 0;
+    uint8_t * msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
+    if (msg == NULL)
+    {
+        LOG0("Failed to allocate outgoing message!");
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+
+    // Acquire lock
+    pthread_mutex_lock(&operation->connection->sendMutex);
+
+    // Populate sequence count and increment it for next operation
+    request->message.header.sequence = operation->connection->sequence++;
+
     LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, seq: %5lld, protoLen: %4u, valueLen: %u",
         operation->request, operation, &operation->connection->session, operation->connection->messageBus,
         request->message.header.sequence, header.protobufLength, header.valueLength);
@@ -135,14 +150,6 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
     uint32_t nboValueLength = KineticNBO_FromHostU32(header.valueLength);
-
-    size_t offset = 0;
-    uint8_t * msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
-    if (msg == NULL)
-    {
-        LOG0("Failed to allocate outgoing message!");
-        return KINETIC_STATUS_MEMORY_ERROR;
-    }
     
     msg[offset] = header.versionPrefix;
     offset += sizeof(header.versionPrefix);
@@ -169,13 +176,14 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     bus_send_request(operation->connection->messageBus, &(bus_user_msg){
         .fd       = operation->connection->socket,
         .type     = BUS_SOCKET_PLAIN,
-        // #TODO it would probably be good to clean up how we setup this sequence number
         .seq_id   = request->message.header.sequence,
         .msg      = msg,
         .msg_size = offset,
         .cb       = KineticController_HandleExpectedResponse,
         .udata    = operation,
     });
+
+    pthread_mutex_unlock(&operation->connection->sendMutex);
 
     free(msg);
 
@@ -203,7 +211,6 @@ KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, K
 void KineticOperation_BuildNoop(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
     operation->request->message.command.header->has_messageType = true;
     operation->valueEnabled = false;
@@ -248,7 +255,6 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT;
     operation->request->message.command.header->has_messageType = true;
@@ -299,7 +305,6 @@ static void build_get_command(KineticOperation* const operation,
                               KineticProto_Command_MessageType command_id)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->message.command.header->messageType = command_id;
     operation->request->message.command.header->has_messageType = true;
@@ -365,7 +370,6 @@ KineticStatus KineticOperation_FlushCallback(KineticOperation* const operation, 
 void KineticOperation_BuildFlush(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->message.command.header->messageType =
       KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA;
     operation->request->message.command.header->has_messageType = true;
@@ -388,7 +392,6 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE;
     operation->request->message.command.header->has_messageType = true;
@@ -434,7 +437,6 @@ void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
     KineticOperation_ValidateOperation(operation);
     assert(range != NULL);
     assert(buffers != NULL);
-    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE;
     operation->request->command->header->has_messageType = true;
@@ -475,7 +477,6 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     KineticDeviceInfo** info)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     KineticProto_Command_GetLog_Type protoType =
         KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(type);
         
@@ -644,7 +645,6 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
                                                  KineticP2P_Operation* const p2pOp)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
         
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH;
     operation->request->command->header->has_messageType = true;
@@ -673,7 +673,6 @@ KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* cons
 void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->message.body;
@@ -724,7 +723,6 @@ KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* opera
 void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->message.command.header->has_messageType = true;
     

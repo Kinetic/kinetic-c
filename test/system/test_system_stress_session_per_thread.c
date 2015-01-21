@@ -32,15 +32,15 @@ typedef struct {
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
-void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_size)
+void run_throughput_tests(KineticClient * client, size_t num_ops, size_t value_size)
 {
     printf("\n"
         "========================================\n"
-        "Throughput Tests\n"
+        "Stress Tests\n"
         "========================================\n"
         "Entry Size: %zu bytes\n"
-        "Count:      %zu entries",
-        value_size, num_ops );
+        "Count:      %zu entries\n\n",
+        value_size, num_ops);
 
     // Initialize kinetic-c and configure sessions
     const char HmacKeyString[] = "asdfasdf";
@@ -58,7 +58,7 @@ void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_si
     KineticStatus status = KineticClient_CreateConnection(&session, client);
     if (status != KINETIC_STATUS_SUCCESS) {
         char msg[128];
-        sprintf(msg, "Failed connecting to the Kinetic device w/status: %s\n", Kinetic_GetStatusDescription(status));
+        sprintf(msg, "Failed connecting to the Kinetic device w/status: %s", Kinetic_GetStatusDescription(status));
         TEST_FAIL_MESSAGE(msg);
     }
 
@@ -125,7 +125,7 @@ void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_si
             KineticSemaphore_WaitForSignalAndDestroy(put_statuses[i].sem);
             if (put_statuses[i].status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "PUT failed w/status: %s\n", Kinetic_GetStatusDescription(put_statuses[i].status));
+                sprintf(msg, "PUT failed w/status: %s", Kinetic_GetStatusDescription(put_statuses[i].status));
                 TEST_FAIL_MESSAGE(msg);
             }
         }
@@ -269,7 +269,7 @@ void run_throghput_tests(KineticClient * client, size_t num_ops, size_t value_si
 
             if (status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "DELETE failed w/status: %s\n", Kinetic_GetStatusDescription(status));
+                sprintf(msg, "DELETE failed w/status: %s", Kinetic_GetStatusDescription(status));
                 TEST_FAIL_MESSAGE(msg);
             }
         }
@@ -321,7 +321,7 @@ static void* test_thread(void* test_params)
 {
     TestParams * params = test_params;
     for (uint32_t i = 0; i < params->thread_iters; i++) {
-        run_throghput_tests(params->client, params->num_ops, params->obj_size);
+        run_throughput_tests(params->client, params->num_ops, params->obj_size);
     }
     return NULL;
 }

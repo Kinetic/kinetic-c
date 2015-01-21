@@ -1,7 +1,6 @@
 #include "kinetic_semaphore.h"
 #include <pthread.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 struct _KineticSemaphore
 {
@@ -28,6 +27,24 @@ void KineticSemaphore_Signal(KineticSemaphore * sem)
     sem->signaled = true;
     pthread_cond_signal(&sem->complete);
     pthread_mutex_unlock(&sem->mutex); 
+}
+
+bool KineticSemaphore_CheckSignaled(KineticSemaphore * sem)
+{
+    return sem->signaled;
+}
+
+bool KineticSemaphore_DestroyIfSignaled(KineticSemaphore * sem)
+{
+    if (sem->signaled) {
+        pthread_mutex_destroy(&sem->mutex);
+        pthread_cond_destroy(&sem->complete);
+        free(sem);
+        return true;
+    }
+    else {
+        return false; // Semaphore has not yet been signaled
+    }
 }
 
 void KineticSemaphore_WaitForSignalAndDestroy(KineticSemaphore * sem)
