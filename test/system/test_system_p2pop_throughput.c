@@ -227,8 +227,11 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
 
 void test_p2p_throughput(void)
 {
-    KineticClient * client = KineticClient_Init("stdout", 0);
+    KineticClientConfig config = {
+        .logFile = "stdout",
+        .logLevel = 0,
+    };
+    KineticClient * client = KineticClient_Init(&config);
     run_p2p_throughput_test(client, 50, KINETIC_OBJ_SIZE);
     KineticClient_Shutdown(client);   
 }
-

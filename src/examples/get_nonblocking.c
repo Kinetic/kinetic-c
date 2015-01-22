@@ -18,23 +18,27 @@ int main(int argc, char** argv)
     (void)argc;
     (void)argv;
 
-    // Initialize kinetic-c and establish session
+    // Initialize kinetic-c and configure sessions
     KineticSession* session;
-    KineticClient * client = KineticClient_Init("stdout", 0);
+    KineticClientConfig clientConfig = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    KineticClient * client = KineticClient_Init(&clientConfig);
     if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
-    KineticSessionConfig config = {
-        .host = SYSTEM_TEST_HOST,
+    KineticSessionConfig sessionConfig = {
+        .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    KineticStatus connect_status = KineticClient_CreateSession(&config, client, &session);
-    if (connect_status != KINETIC_STATUS_SUCCESS) {
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
+    if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
-            Kinetic_GetStatusDescription(connect_status));
-        return 1;
+            Kinetic_GetStatusDescription(status));
+        exit(1);
     }
 
     // some dummy data to PUT
@@ -88,7 +92,7 @@ int main(int argc, char** argv)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Get(
+    status = KineticClient_Get(
         session,
         &get_entry,
         &(KineticCompletionClosure) {

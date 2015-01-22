@@ -20,11 +20,12 @@
 
 #include "unity.h"
 #include "unity_helper.h"
+#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
 #include "kinetic_admin_client.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
-#include "kinetic_types.h"
-#include "kinetic_types_internal.h"
+#include "kinetic_device_info.h"
 #include "byte_array.h"
 #include "mock_kinetic_client.h"
 #include "mock_kinetic_auth.h"
@@ -52,9 +53,17 @@ void tearDown(void)
 
 void test_KineticAdminClient_Init_should_delegate_to_base_client(void)
 {
-    KineticClient client;
-    KineticClient_Init_ExpectAndReturn("console", 2, &client);
-    KineticAdminClient_Init("console", 2);
+    KineticClient testClient;
+    KineticClient* returnedClient;
+
+    KineticClientConfig config = {
+        .logFile = "./some_file.log",
+        .logLevel = 3,
+    };
+    KineticClient_Init_ExpectAndReturn(&config, &testClient);
+    returnedClient = KineticAdminClient_Init(&config);
+
+    TEST_ASSERT_EQUAL_PTR(&testClient, returnedClient);
 }
 
 void test_KineticAdminClient_Shutdown_should_delegate_to_base_client(void)

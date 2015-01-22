@@ -564,13 +564,18 @@ static void handle_command(sender *s, int id) {
 static void enqueue_write(struct sender *s, tx_info_t *info) {
     assert(info->state == TIS_REQUEST_ENQUEUE);
 
+    struct bus *b = s->bus;
     int fd = info->u.enqueue.fd;
     fd_info *fdi = NULL;
-    if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
+    int64_t out_seq_id = info->u.enqueue.box->out_seq_id;
+    if (s->largest_seq_id_seen >= out_seq_id && s->largest_seq_id_seen > 0) {
+        BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
+            "suspicious outgoing sequence ID: got %lld, already sent up to %lld",
+            (long long)out_seq_id, (long long)s->largest_seq_id_seen);
+        set_error_for_socket(s, fd, TX_ERROR_BAD_SEQUENCE_ID);
+    } else if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
         assert(fdi);
-
-        int64_t out_seq_id = info->u.enqueue.box->out_seq_id;
-
+        s->largest_seq_id_seen = out_seq_id;
         /* Notify the listener that we're about to start writing to a drive,
          * because (in rare cases) the response may arrive between finishing
          * the write and the listener processing the notification. In that
@@ -661,8 +666,12 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
     bus_send_status_t status = BUS_SEND_UNDEFINED;
     switch (error) {
     default:
+    {
+        BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 64,
+            "setting BUS_SEND_TX_FAILURE on socket %d, reason %d", fd, error);
         status = BUS_SEND_TX_FAILURE;
         break;
+    }
     case TX_ERROR_UNREGISTERED_SOCKET:
         status = BUS_SEND_UNREGISTERED_SOCKET;
         break;

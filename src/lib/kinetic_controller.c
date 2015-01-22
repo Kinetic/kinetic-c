@@ -119,28 +119,44 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
 
 KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
 {
+    KineticStatus res = KINETIC_STATUS_INVALID;
+
     switch(status)
     {
-        // TODO fix all these mappings
+        // TODO scrutinize all these mappings
         case BUS_SEND_SUCCESS:
-            return KINETIC_STATUS_SUCCESS;
+            res = KINETIC_STATUS_SUCCESS;
+            break;
         case BUS_SEND_TX_TIMEOUT:
-            return KINETIC_STATUS_SOCKET_TIMEOUT;
+            res = KINETIC_STATUS_SOCKET_TIMEOUT;
+            break;
         case BUS_SEND_TX_FAILURE:
-            return KINETIC_STATUS_SOCKET_ERROR;
+            res = KINETIC_STATUS_SOCKET_ERROR;
+            break;
         case BUS_SEND_RX_TIMEOUT:
-            return KINETIC_STATUS_OPERATION_TIMEDOUT;
+            res = KINETIC_STATUS_OPERATION_TIMEDOUT;
+            break;
         case BUS_SEND_RX_FAILURE:
-            return KINETIC_STATUS_SOCKET_ERROR;
+            res = KINETIC_STATUS_SOCKET_ERROR;
+            break;
         case BUS_SEND_BAD_RESPONSE:
-            return KINETIC_STATUS_SOCKET_ERROR;
+            res = KINETIC_STATUS_SOCKET_ERROR;
+            break;
         case BUS_SEND_UNREGISTERED_SOCKET:
-            return KINETIC_STATUS_SOCKET_ERROR;
+            res = KINETIC_STATUS_SOCKET_ERROR;
+            break;
         case BUS_SEND_UNDEFINED:
         default:
+        {
+            LOGF0("bus_to_kinetic_status: UNMATCHED %d\n", status);
             assert(false);
             return KINETIC_STATUS_INVALID;
+        }
     }
+    
+    LOGF3("bus_to_kinetic_status: mapping status %d => %d\n",
+        status, res);
+    return res;
 }
 
 static const char *bus_error_string(bus_send_status_t t) {
@@ -187,13 +203,18 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
             response->command->header != NULL &&
             response->command->header->has_connectionID)
         {
+            LOGF1("[PDU RX UNSOLICITED] pdu: 0x%0llX, session: 0x%llX, bus: 0x%llX, "
+                "protoLen: %u, valueLen: %u",
+                response, &connection->session, connection->messageBus,
+                response->header.protobufLength, response->header.valueLength);
+
             // Extract connectionID from unsolicited status message
             connection->connectionID = response->command->header->connectionID;
             LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
                 connection->connectionID);
         }
         else {
-            LOG0("WARNING: Unsolicited PDU in invalid. Does not specify connection ID!");
+            LOG0("WARNING: Unsolicited PDU is invalid. Does not specify connection ID!");
         }
         KineticAllocator_FreeKineticResponse(response);
     }
@@ -231,6 +252,12 @@ void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata
         {
             status = KINETIC_STATUS_INVALID;
         }
+
+        LOGF1("[PDU RX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, "
+            "seq: %5lld, protoLen: %4u, valueLen: %u, status: %s",
+            response, op, &op->connection->session, op->connection->messageBus,
+            response->command->header->ackSequence, response->header.protobufLength, response->header.valueLength,
+            Kinetic_GetStatusDescription(status));
     }
     else
     {

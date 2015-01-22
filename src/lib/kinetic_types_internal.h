@@ -110,6 +110,7 @@ struct _KineticConnection {
     KineticSession  const *session; // session configuration
     struct bus *    messageBus;
     socket_info *   si;
+    pthread_mutex_t sendMutex;      // mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool
     KineticCountingSemaphore * outstandingOperations;
 };
 
@@ -163,7 +164,6 @@ typedef enum {
 
 // Kinetic PDU
 struct _KineticPDU {
-    // Message associated with this PDU instance
     KineticMessage message;
     KineticProto_Command* command;
     bool pinAuth;

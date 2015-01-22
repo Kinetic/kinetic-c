@@ -83,6 +83,29 @@ int main(int argc, char** argv)
     (void)argc;
     (void)argv;
 
+    // Initialize kinetic-c and configure sessions
+    KineticSession* session;
+    KineticClientConfig clientConfig = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    KineticClient * client = KineticClient_Init(&clientConfig);
+    if (client == NULL) { return 1; }
+    const char HmacKeyString[] = "asdfasdf";
+    KineticSessionConfig sessionConfig = {
+        .host = "localhost",
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+    };
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
+            Kinetic_GetStatusDescription(status));
+        exit(1);
+    }
+
     // Read in file contents to store
     const char* dataFile = "test/support/data/test.data";
     struct stat st;
@@ -96,24 +119,7 @@ int main(int argc, char** argv)
         exit(-1);
     }
 
-    // Establish connection
-    KineticSession* session;
-    KineticClient * client = KineticClient_Init("stdout", 0);
-    if (client == NULL) { return 1; }
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSessionConfig config = {
-        .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_PORT,
-        .clusterVersion = 0,
-        .identity = 1,
-        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-    };
-    KineticStatus connect_status = KineticClient_CreateSession(&config, client, &session);
-    if (connect_status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
-            Kinetic_GetStatusDescription(connect_status));
-        return 1;
-    }
+
     write_args* writeArgs = calloc(1, sizeof(write_args));
     writeArgs->session = session;
     
@@ -136,7 +142,7 @@ int main(int argc, char** argv)
         .value = ByteBuffer_Create(writeArgs->value, sizeof(writeArgs->value), 0),
         .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
     };
-    strcpy(writeArgs->ip, config.host);
+    strcpy(writeArgs->ip, sessionConfig.host);
 
     // Store the data
     printf("\nWriting data file to the Kinetic device...\n");

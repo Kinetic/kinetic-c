@@ -27,9 +27,14 @@ SystemTestFixture Fixture = {.connected = false};
 
 void SystemTestSetup(int log_level)
 {
+    KineticClientConfig clientConfig = {
+        .logFile = "stdout",
+        .logLevel = log_level,
+    };
+
     Fixture = (SystemTestFixture) {
         .connected = false,
-        .client = KineticClient_Init("stdout", log_level),
+        .client = KineticClient_Init(&clientConfig),
     };
 
     KineticSessionConfig config = {

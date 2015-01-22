@@ -19,6 +19,7 @@
 */
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
+#include "kinetic_device_info.h"
 #include <stdlib.h>
 
 static KineticStatus Status;
@@ -34,7 +35,7 @@ void tearDown(void)
 {
     SystemTestShutDown();
     if (Info != NULL) {
-        free(Info);
+        KineticDeviceInfo_Free(Info);
         Info = NULL;
     };
 }

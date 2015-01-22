@@ -23,10 +23,11 @@
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
 #include "kinetic_auth.h"
+#include "kinetic_device_info.h"
 
-KineticClient * KineticAdminClient_Init(const char* log_file, int log_level)
+KineticClient * KineticAdminClient_Init(KineticClientConfig *config)
 {
-    return KineticClient_Init(log_file, log_level);
+    return KineticClient_Init(config);
 }
 
 void KineticAdminClient_Shutdown(KineticClient * const client)
@@ -192,6 +193,17 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
+}
+
+void KineticClient_FreeDeviceInfo(KineticSession const * const session,
+                                  KineticDeviceInfo* info)
+{
+    assert(session != NULL);
+    if (info) { KineticDeviceInfo_Free(info); }
+
+    /* The session is not currently used, but part of the API to allow
+     * a different memory management strategy. */
+    (void)session;
 }
 
 KineticStatus KineticAdminClient_SetAcl(KineticSession const * const session,

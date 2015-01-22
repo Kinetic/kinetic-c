@@ -52,14 +52,24 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         return KINETIC_STATUS_MEMORY_ERROR;
     }
 
-    session->connection->outstandingOperations =
-        KineticCountingSemaphore_Create(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION);
-    if (session->connection->outstandingOperations == NULL) {
+    session->connection->session = session; // TODO: Refactor out this reference?
+    session->connection->messageBus = client->bus;
+    session->connection->socket = -1;  // start without a file descriptor
+    
+    // init connection send mutex
+    if (pthread_mutex_init(&session->connection->sendMutex, NULL) != 0) {
+        LOG0("Failed initializing connection send mutex!");
         KineticAllocator_FreeConnection(session->connection);
         return KINETIC_STATUS_MEMORY_ERROR;
     }
-    session->connection->session = session; // TODO: KILL ME!!!
-    session->connection->messageBus = client->bus;
+
+    session->connection->outstandingOperations =
+        KineticCountingSemaphore_Create(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION);
+    if (session->connection->outstandingOperations == NULL) {
+        LOG0("Failed initializing session counting semaphore!");
+        KineticAllocator_FreeConnection(session->connection);
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -143,16 +153,9 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
     // Close the connection
     bus_release_socket(connection->messageBus, connection->socket);
     free(connection->si);
-
     connection->socket = KINETIC_HANDLE_INVALID;
     connection->connected = false;
+    pthread_mutex_destroy(&connection->sendMutex);
 
     return KINETIC_STATUS_SUCCESS;
-}
-
-void KineticSession_IncrementSequence(KineticSession const * const session)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    session->connection->sequence++;
 }

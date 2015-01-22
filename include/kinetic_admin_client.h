@@ -27,17 +27,16 @@
 /**
  * Initializes the Kinetic Admin API and configures logging.
  *
- * @param log_file (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
- * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
+ * @param config A configuration struct.
  *
  * @return          Returns a pointer to a `KineticClient`. You need to pass 
  *                  this pointer to KineticClient_CreateSession() to create 
  *                  new connections. 
  *                  Once you are finished will the `KineticClient`, and there
- *                  are no active connections. The pointer should be release
+ *                  are no active connections. The pointer should be released
  *                  with KineticClient_Shutdown()
  */
-KineticClient * KineticAdminClient_Init(const char* log_file, int log_level);
+KineticClient * KineticAdminClient_Init(KineticClientConfig *config);
 
 /**
  * @brief Performs shutdown/cleanup of the kinetic-c client library
@@ -174,6 +173,15 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
                                    KineticDeviceInfo_Type type,
                                    KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure);
+
+/**
+ * @brief Free the KineticDeviceInfo result from KineticClient_GetLog.
+ *
+ * @param session       The connected KineticSession to use for the operation
+ * @param info          The KineticDeviceInfo result to free.
+ */
+void KineticClient_FreeDeviceInfo(KineticSession const * const session,
+                                  KineticDeviceInfo* info);
 
 /**
  * @brief Executes a SECURITY command to define/set the access control list

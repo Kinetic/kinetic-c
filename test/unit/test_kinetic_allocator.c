@@ -64,7 +64,6 @@ void test_KineticAllocator_NewConnection_should_return_a_connection_with_a_minus
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
     KineticConnection* connection =  KineticAllocator_NewConnection();
     TEST_ASSERT_NOT_NULL(connection);
-    TEST_ASSERT_EQUAL(-1, connection->socket);
 }
 
 void test_KineticAllocator_NewKineticResponse_should_return_null_if_calloc_return_null(void)

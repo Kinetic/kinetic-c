@@ -27,36 +27,23 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/file.h>
-#include <getopt.h>
+#include <ctype.h>
 
-static char *kinetic_host = "localhost";
-static long idle_seconds = 0;
+#include <openssl/sha.h>
 
-static void usage(void) {
-    fprintf(stderr, "usage: setup_teardown [-h KINETIC_HOST] [-i IDLE_SECONDS]\n");
-    exit(1);
-}
+static void do_flush(KineticSession *session) {
+    /* Send a Flush command.
+     * Blocking, because the completion closure is NULL. */
+    KineticStatus status = KineticClient_Flush(session, NULL);
+    printf("Flush status: %s\n", Kinetic_GetStatusDescription(status));
 
-static void handle_args(int argc, char **argv) {
-    int fl = 0;
-    while ((fl = getopt(argc, argv, "i:h:")) != -1) {
-        switch (fl) {
-        case 'h':               /* host */
-            kinetic_host = optarg;
-            break;
-        case 'i':               /* idle seconds */
-            idle_seconds = strtol(optarg, NULL, 10);
-            break;
-        case '?':
-        default:
-            usage();
-        }
-    }
+    /* No cleanup necessary */
 }
 
 int main(int argc, char** argv)
 {
-    handle_args(argc, argv);
+    (void)argc;
+    (void)argv;
 
     // Initialize kinetic-c and configure sessions
     KineticSession* session;
@@ -81,11 +68,8 @@ int main(int argc, char** argv)
         exit(1);
     }
 
-    if (idle_seconds > 0) {
-        printf(" -- Sleeping %ld seconds\n", idle_seconds);
-        sleep(idle_seconds);
-    }
-
+    do_flush(session);
+    
     // Shutdown client connection and cleanup
     KineticClient_DestroySession(session);
     KineticClient_Shutdown(client);

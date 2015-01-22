@@ -82,8 +82,30 @@ int main(int argc, char** argv)
     (void)argc;
     (void)argv;
 
+    // Initialize kinetic-c and configure sessions
+    KineticSession* session;
+    KineticClientConfig clientConfig = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    KineticClient * client = KineticClient_Init(&clientConfig);
+    if (client == NULL) { return 1; }
+    const char HmacKeyString[] = "asdfasdf";
+    KineticSessionConfig sessionConfig = {
+        .host = "localhost",
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+    };
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
+            Kinetic_GetStatusDescription(status));
+        return -1;
+    }
+
     // Read in file contents to store
-    KineticStatus status;
     const char* dataFile = "test/support/data/test.data";
     struct stat st;
     stat(dataFile, &st);
@@ -96,24 +118,6 @@ int main(int argc, char** argv)
         exit(-1);
     }
 
-    // Initialize kinetic-c and configure sessions
-    KineticSession* session;
-    KineticClient* client = KineticClient_Init("stdout", 0);
-    if (client == NULL) { return 1; }
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSessionConfig config = {
-        .host = "localhost",
-        .port = KINETIC_PORT,
-        .clusterVersion = 0,
-        .identity = 1,
-        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-    };
-    status = KineticClient_CreateSession(&config, client, &session);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
-            Kinetic_GetStatusDescription(status));
-        return -1;
-    }
     write_args* writeArgs = calloc(NUM_FILES, sizeof(write_args));
     if (writeArgs == NULL) {
         fprintf(stderr, "Failed allocating overlapped thread arguments!\n");
@@ -123,13 +127,13 @@ int main(int argc, char** argv)
     for (int i = 0; i < NUM_FILES; i++) {
 
         // Establish connection
-        status = KineticClient_CreateSession(&config, client, &writeArgs[i].session);
+        status = KineticClient_CreateSession(&sessionConfig, client, &writeArgs[i].session);
         if (status != KINETIC_STATUS_SUCCESS) {
             fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
                 Kinetic_GetStatusDescription(status));
             return -1;
         }
-        strcpy(writeArgs[i].ip, config.host);
+        strcpy(writeArgs[i].ip, sessionConfig.host);
 
         // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
         writeArgs[i].data = ByteBuffer_Create(buf, dataLen, 0);

@@ -38,9 +38,13 @@ STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udat
     const char *event_str = bus_log_event_str(event);
     struct timeval tv;
     gettimeofday(&tv, NULL);
+#if 0
+    KineticLogger_Log(log_level, msg);
+#else
     LOGF1("%ld.%06ld: %s[%d] -- %s\n",
         (long)tv.tv_sec, (long)tv.tv_usec,
         event_str, log_level, msg);
+#endif
 }
 
 static bus_sink_cb_res_t reset_transfer(socket_info *si) {
@@ -220,8 +224,10 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     }
 }
 
-bool KineticPDU_InitBus(int log_level, KineticClient * client)
+bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
 {
+    int log_level = config->logLevel;
+
     bus_config cfg = {
         .log_cb = log_cb,
         .log_level = log_level,
@@ -229,10 +235,14 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = KineticController_HandleUnexecpectedResponse,
         .bus_udata = NULL,
-        .sender_count = 4,
-        .listener_count = 4,
+        .sender_count = config->writerThreads,
+        .listener_count = config->readerThreads,
+        .threadpool_cfg = {
+            .max_threads = config->maxThreadpoolThreads,
+        },
     };
-    bus_result res = {0};
+    bus_result res;
+    memset(&res, 0, sizeof(res));
     if (!bus_init(&cfg, &res)) {
         LOGF0("failed to init bus: %d\n", res.status);
         return false;
@@ -243,8 +253,11 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
 
 void KineticPDU_DeinitBus(KineticClient * const client)
 {
-    bus_shutdown(client->bus);
-    bus_free(client->bus);
+    if (client) {
+        bus_shutdown(client->bus);
+        bus_free(client->bus);
+        client->bus = NULL;
+    }
 }
 
 KineticStatus KineticPDU_GetStatus(KineticResponse* response)

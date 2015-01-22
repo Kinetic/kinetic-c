@@ -20,6 +20,7 @@
 
 #include "kinetic_client.h"
 #include "kinetic_types.h"
+#include "kinetic_device_info.h"
 #include "kinetic_types_internal.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_session.h"

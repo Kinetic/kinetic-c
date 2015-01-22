@@ -34,25 +34,28 @@ int main(int argc, char** argv)
 {
     (void)argc;
     (void)argv;
-
-    // Establish connection
+    
+    // Initialize kinetic-c and configure sessions
     KineticSession* session;
-    KineticStatus status;
+    KineticClientConfig clientConfig = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    KineticClient * client = KineticClient_Init(&clientConfig);
+    if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
-    KineticSessionConfig config = {
+    KineticSessionConfig sessionConfig = {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
-        .hmacKey = ByteArray_CreateWithCString(HmacKeyString)
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    KineticClient * client = KineticClient_Init("stdout", 0);
-    if (client == NULL) { return 1; }
-    status = KineticClient_CreateSession(&config, client, &session);
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
-            config.host, Kinetic_GetStatusDescription(status));
-        return 1;
+        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
+            Kinetic_GetStatusDescription(status));
+        exit(1);
     }
 
     // Create some entries so that we can query the keys

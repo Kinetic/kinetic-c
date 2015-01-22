@@ -81,21 +81,26 @@ ByteArray Pin;
 void setUp(void)
 { LOG_LOCATION;
     // SystemTestSetup(&Fixture, 1);
-    client = KineticClient_Init("stdout", 1);
+
+    KineticClientConfig clientConfig = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    client = KineticClient_Init(&clientConfig);
 
     Pin = ByteArray_CreateWithCString("123");
 
-    KineticSessionConfig config = {
+    KineticSessionConfig sessionConfig = {
         .host = KINETIC_TEST_HOST1,
         .port = KINETIC_TEST_PORT1,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    KineticStatus status = KineticClient_CreateSession(&config, client, &session);
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    KineticSessionConfig adminConfig = {
+    KineticSessionConfig adminSessionConfig = {
         .host = KINETIC_TEST_HOST1,
         .port = KINETIC_TEST_ADMIN_PORT1,
         .clusterVersion = 0,
@@ -103,7 +108,7 @@ void setUp(void)
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         .useSsl = true,
     };
-    status = KineticAdminClient_CreateSession(&adminConfig, client, &adminSession);
+    status = KineticAdminClient_CreateSession(&adminSessionConfig, client, &adminSession);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     Key1Buffer    = ByteBuffer_Create(key1Data, sizeof(key1Data), sizeof(key1Data));

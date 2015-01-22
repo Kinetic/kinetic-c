@@ -367,7 +367,6 @@ static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
         }
         default:
         {
-            struct bus *b = l->bus;
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                 "match fail %d on line %d", info->state, __LINE__);
             assert(false);
@@ -608,6 +607,12 @@ static void process_unpacked_message(listener *l,
     if (result.ok) {
         int64_t seq_id = result.u.success.seq_id;
         void *opaque_msg = result.u.success.msg;
+
+        if (seq_id < l->largest_seq_id_seen && l->largest_seq_id_seen != 0) {
+            BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
+                "suspicious sequence ID: largest seen is %lld, got %lld\n",
+                (long long)l->largest_seq_id_seen, (long long)seq_id);
+        }
 
         rx_info_t *info = find_info_by_sequence_id(l, ci->fd, seq_id);
         if (info) {
@@ -1256,7 +1261,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             info->timeout_sec = box->timeout_sec;
         }
     } else {                    /* use free info */
-        rx_info_t *info = get_free_rx_info(l);
+        info = get_free_rx_info(l);
         assert(info);
         assert(info->state == RIS_INACTIVE);
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,

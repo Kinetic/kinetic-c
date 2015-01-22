@@ -22,9 +22,9 @@
 #define _KINETIC_DEVICE_INFO_H
 
 #include "kinetic_device_info.h"
-#include "kinetic_serial_allocator.h"
 #include "kinetic_types_internal.h"
 
 KineticDeviceInfo* KineticDeviceInfo_Create(const KineticProto_Command_GetLog* getLog);
+void KineticDeviceInfo_Free(KineticDeviceInfo* kdi);
 
 #endif // _KINETIC_DEVICE_INFO_H

@@ -60,8 +60,9 @@ void setUp(void)
     KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
     
     KineticStatus status = KineticSession_Create(&Session, &Client);
+
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    TEST_ASSERT_NOT_NULL(Session.connection);
+    TEST_ASSERT_EQUAL_PTR(&Connection, Session.connection);
     TEST_ASSERT_FALSE(Session.connection->connected);
     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
     TEST_ASSERT_EQUAL(17, Session.config.port);
@@ -217,20 +218,4 @@ void test_KineticSession_Connect_should_connect_to_specified_host(void)
     TEST_ASSERT_EQUAL_INT64(expected.config.clusterVersion, session.config.clusterVersion);
     TEST_ASSERT_EQUAL_INT64(expected.config.identity, session.config.identity);
     TEST_ASSERT_EQUAL_ByteArray(expected.config.hmacKey, session.config.hmacKey);
-}
-
-void test_KineticSession_IncrementSequence_should_increment_the_sequence_count(void)
-{
-    LOG_LOCATION;
-
-    KineticConnection connection;
-    Session = (KineticSession) {.connection = &connection};
-
-    Session.connection->sequence = 57;
-    KineticSession_IncrementSequence(&Session);
-    TEST_ASSERT_EQUAL_INT64(58, Session.connection->sequence);
-
-    Session.connection->sequence = 0;
-    KineticSession_IncrementSequence(&Session);
-    TEST_ASSERT_EQUAL_INT64(1, Session.connection->sequence);
 }

@@ -36,14 +36,15 @@ typedef uint32_t tx_flag_t;
 #define SENDER_FD_NOT_IN_USE (-1)
 typedef enum {
     TX_ERROR_NONE = 0,
-    TX_ERROR_POLLHUP = -1,
-    TX_ERROR_POLLERR = -2,
-    TX_ERROR_WRITE_FAILURE = -3,
-    TX_ERROR_UNREGISTERED_SOCKET = -4,
-    TX_ERROR_CLOSED = -5,
-    TX_ERROR_NOTIFY_LISTENER_FAILURE = -6,
-    TX_ERROR_WRITE_TIMEOUT = -7,
-    TX_ERROR_NOTIFY_TIMEOUT = -8,
+    TX_ERROR_POLLHUP = -11,
+    TX_ERROR_POLLERR = -12,
+    TX_ERROR_WRITE_FAILURE = -13,
+    TX_ERROR_UNREGISTERED_SOCKET = -14,
+    TX_ERROR_CLOSED = -15,
+    TX_ERROR_NOTIFY_LISTENER_FAILURE = -16,
+    TX_ERROR_WRITE_TIMEOUT = -17,
+    TX_ERROR_NOTIFY_TIMEOUT = -18,
+    TX_ERROR_BAD_SEQUENCE_ID = -19,
 } tx_error_t;
 
 typedef enum {
@@ -141,6 +142,8 @@ typedef struct sender {
      * commands have been committed. */
     int commit_pipe;
     int incoming_command_pipe;
+
+    int64_t largest_seq_id_seen;
 
     /* Set of file descriptors to poll.
      * fds[0] is the incoming command pipe, and is polled for

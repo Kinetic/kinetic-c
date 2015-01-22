@@ -23,21 +23,32 @@
 #include "kinetic_session.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
+#include "kinetic_device_info.h"
 #include "kinetic_logger.h"
 #include "kinetic_pdu.h"
 #include "kinetic_memory.h"
 #include <stdlib.h>
 #include <sys/time.h>
 
-KineticClient * KineticClient_Init(const char* log_file, int log_level)
+KineticClient * KineticClient_Init(KineticClientConfig *config)
 {
-    KineticLogger_Init(log_file, log_level);
+    KineticLogger_Init(config->logFile, config->logLevel);
     KineticClient * client = KineticCalloc(1, sizeof(*client));
     if (client == NULL) { return NULL; }
-    int bus_log_level = (log_level > 0) ? (log_level-1) : 0;
-    bool success = KineticPDU_InitBus(bus_log_level, client);
-    if (!success)
-    {
+
+    /* Use defaults if set to 0. */
+    if (config->writerThreads == 0) {
+        config->writerThreads = KINETIC_CLIENT_DEFAULT_WRITER_THREADS;
+    }
+    if (config->readerThreads == 0) {
+        config->readerThreads = KINETIC_CLIENT_DEFAULT_READER_THREADS;
+    }
+    if (config->maxThreadpoolThreads == 0) {
+        config->maxThreadpoolThreads = KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS;
+    }
+
+    bool success = KineticPDU_InitBus(client, config);
+    if (!success) {
         KineticFree(client);
         return NULL;
     }

@@ -57,19 +57,30 @@ void tearDown(void)
 void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_client(void)
 {
     KineticClient client;
+    KineticClientConfig config = {
+        .logFile = "./some_file.log",
+        .logLevel = 3,
+    };
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
-    KineticPDU_InitBus_ExpectAndReturn(0, &client, true);
+    KineticPDU_InitBus_ExpectAndReturn(&client, &config, true);
 
-    KineticClient * result = KineticClient_Init("./some_file.log", 1);
+    KineticClient * result = KineticClient_Init(&config);
+
     TEST_ASSERT_EQUAL(&client, result);
 }
 
 void test_KineticClient_Init_should_return_null_if_calloc_returns_null(void)
 {
+    KineticClientConfig config = {
+        .logFile = "./some_file.log",
+        .logLevel = 3,
+    };
+
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), NULL);
 
-    KineticClient * result = KineticClient_Init("./some_file.log", 3);
+    KineticClient * result = KineticClient_Init(&config);
+
     TEST_ASSERT_NULL(result);
 }
 
@@ -77,11 +88,15 @@ void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
 {
     KineticClient client;
 
+    KineticClientConfig config = {
+        .logFile = "./some_file.log",
+        .logLevel = 3,
+    };
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
-    KineticPDU_InitBus_ExpectAndReturn(2, &client, false);
+    KineticPDU_InitBus_ExpectAndReturn(&client, &config, false);
     KineticFree_Expect(&client);
 
-    KineticClient * result = KineticClient_Init("./some_file.log", 3);
+    KineticClient * result = KineticClient_Init(&config);
     TEST_ASSERT_NULL(result);
 }
 

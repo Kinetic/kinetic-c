@@ -27,36 +27,62 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/file.h>
-#include <getopt.h>
+#include <ctype.h>
 
-static char *kinetic_host = "localhost";
-static long idle_seconds = 0;
+#include <openssl/sha.h>
 
-static void usage(void) {
-    fprintf(stderr, "usage: setup_teardown [-h KINETIC_HOST] [-i IDLE_SECONDS]\n");
-    exit(1);
-}
+static void do_put_and_delete(KineticSession *session) {
+    const char key[] = "key";
+    ByteBuffer put_key_buf = ByteBuffer_MallocAndAppend(key, strlen(key));
 
-static void handle_args(int argc, char **argv) {
-    int fl = 0;
-    while ((fl = getopt(argc, argv, "i:h:")) != -1) {
-        switch (fl) {
-        case 'h':               /* host */
-            kinetic_host = optarg;
-            break;
-        case 'i':               /* idle seconds */
-            idle_seconds = strtol(optarg, NULL, 10);
-            break;
-        case '?':
-        default:
-            usage();
-        }
-    }
+    const uint8_t value[] = "value\x01\x02\x03\x04";
+    ByteBuffer put_value_buf = ByteBuffer_MallocAndAppend(value, sizeof(value));
+    
+    /* Populate tag with SHA1 of value */
+    ByteBuffer put_tag_buf = ByteBuffer_Malloc(20);
+    uint8_t sha1[20];
+    SHA1(put_value_buf.array.data, put_value_buf.bytesUsed, &sha1[0]);
+    ByteBuffer_Append(&put_tag_buf, sha1, sizeof(sha1));
+
+    KineticEntry put_entry = {
+        .key = put_key_buf,
+        .value = put_value_buf,
+        .tag = put_tag_buf,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        /* Set sync to WRITETHROUGH, which will wait to complete
+         * until the drive has persistend the write. (WRITEBACK
+         * returns as soon as the drive has buffered the write.) */
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
+    };
+
+    /* Put "key" => "value\x01\x02\x03\x04".
+     * This will block, because the callback field (arg 3) is NULL. */
+    KineticStatus status = KineticClient_Put(session, &put_entry, NULL);
+    printf("Put status: %s\n", Kinetic_GetStatusDescription(status));
+
+    /* Allocate a tag large enough for the SHA1. */
+    ByteBuffer delete_tag_buf = ByteBuffer_Malloc(put_tag_buf.bytesUsed);
+
+    KineticEntry delete_entry = {
+        .key = put_key_buf,
+        .tag = delete_tag_buf,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+    };
+
+    status = KineticClient_Delete(session, &delete_entry, NULL);
+    printf("Delete status: %s\n", Kinetic_GetStatusDescription(status));
+
+    /* Cleanup */
+    ByteBuffer_Free(put_key_buf);
+    ByteBuffer_Free(put_value_buf);
+    ByteBuffer_Free(put_tag_buf);
+    ByteBuffer_Free(delete_tag_buf);
 }
 
 int main(int argc, char** argv)
 {
-    handle_args(argc, argv);
+    (void)argc;
+    (void)argv;
 
     // Initialize kinetic-c and configure sessions
     KineticSession* session;
@@ -81,11 +107,8 @@ int main(int argc, char** argv)
         exit(1);
     }
 
-    if (idle_seconds > 0) {
-        printf(" -- Sleeping %ld seconds\n", idle_seconds);
-        sleep(idle_seconds);
-    }
-
+    do_put_and_delete(session);
+    
     // Shutdown client connection and cleanup
     KineticClient_DestroySession(session);
     KineticClient_Shutdown(client);

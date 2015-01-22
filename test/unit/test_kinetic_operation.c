@@ -83,10 +83,13 @@ void test_KineticOperation_Init_should_configure_the_operation(void)
  * Client Operations
 *******************************************************************************/
 
+void test_KineticOperation_SendRequest_should_acquire_and_increment_sequence_count_and_send_PDU_to_bus(void)
+{
+    TEST_IGNORE_MESSAGE("Need to test KineticOperation_SendRequest");
+}
+
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
-    KineticSession_IncrementSequence_Expect(&Session);
-
     KineticOperation_BuildNoop(&Operation);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
@@ -102,8 +105,6 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
     ByteArray tag = ByteArray_CreateWithCString("some_tag");
-
-    KineticSession_IncrementSequence_Expect(&Session);
 
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -142,8 +143,6 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGet(&Operation, &entry);
@@ -171,8 +170,6 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGet(&Operation, &entry);
@@ -199,8 +196,6 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetNext(&Operation, &entry);
@@ -230,8 +225,6 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_me
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetNext(&Operation, &entry);
@@ -260,8 +253,6 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetPrevious(&Operation, &entry);
@@ -291,8 +282,6 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
         .value = ByteBuffer_CreateWithArray(value),
     };
     entry.value.bytesUsed = 123; // Set to non-empty state, since it should be reset to 0 for a metadata-only request
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildGetPrevious(&Operation, &entry);
@@ -316,8 +305,6 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
 
 void test_KineticOperation_BuildFlush_should_build_a_FLUSHALLDATA_operation(void)
 {
-    KineticSession_IncrementSequence_Expect(&Session);
-
     KineticOperation_BuildFlush(&Operation);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
@@ -336,8 +323,6 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
     const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {.key = ByteBuffer_CreateWithArray(key), .value = ByteBuffer_CreateWithArray(value)};
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildDelete(&Operation, &entry);
@@ -381,8 +366,6 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
         keyBuffers[i] = ByteBuffer_Create(keysData[i], maxKeyLen, 0);
     }
     ByteBufferArray keys = {.buffers = keyBuffers, .count = numKeysInRange};
-
-    KineticSession_IncrementSequence_Expect(&Session);
     KineticMessage_ConfigureKeyRange_Expect(&Request.message, &range);
 
     KineticOperation_BuildGetKeyRange(&Operation, &range, &keys);
@@ -398,7 +381,6 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL_PTR(&Request.message.command, Request.command);
 }
-
 
 
 void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request(void)
@@ -445,8 +427,6 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
         .operations = ops
     };
     
-
-    KineticSession_IncrementSequence_Expect(&Session);
 
     KineticOperation_BuildP2POperation(&Operation, &p2pOp);
 
@@ -547,8 +527,6 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
 
 void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_new_LOCK_PIN(void)
 {
-    KineticSession_IncrementSequence_Expect(&Session);
-
     char oldPinData[] = "1234";
     char newPinData[] = "5678";
     ByteArray oldPin = ByteArray_Create(oldPinData, sizeof(oldPinData));
@@ -576,8 +554,6 @@ void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_
 }
 void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_new_ERASE_PIN(void)
 {
-    KineticSession_IncrementSequence_Expect(&Session);
-
     char oldPinData[] = "1234";
     char newPinData[] = "5678";
     ByteArray oldPin = ByteArray_Create(oldPinData, sizeof(oldPinData));
@@ -610,8 +586,6 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 {
     KineticDeviceInfo* pInfo;
 
-    KineticSession_IncrementSequence_Expect(&Session);
-
     KineticOperation_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
@@ -630,23 +604,23 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 }
 
 
-void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
-{
-    // KineticConnection con;
-    // KineticPDU response;
-    // KineticDeviceInfo* info;
-    // KineticOperation op = {
-    //     .connection = &con,
-    //     .response = &response,
-    //     .deviceInfo = &info,
-    // };
+// void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
+// {
+//     // KineticConnection con;
+//     // KineticPDU response;
+//     // KineticDeviceInfo* info;
+//     // KineticOperation op = {
+//     //     .connection = &con,
+//     //     .response = &response,
+//     //     .deviceInfo = &info,
+//     // };
 
-    TEST_IGNORE_MESSAGE("TODO: Need to implement!")
+//     TEST_IGNORE_MESSAGE("TODO: Need to implement!")
 
-    // KineticSerialAllocator_Create()
+//     // KineticSerialAllocator_Create()
 
-    // KineticStatus status = KineticOperation_GetLogCallback(&op);
-}
+//     // KineticStatus status = KineticOperation_GetLogCallback(&op);
+// }
 
 
 
@@ -654,8 +628,6 @@ void test_KineticOperation_BuildErase_should_build_a_SECURE_ERASE_operation_with
 {
     char pinData[] = "abc123";
     ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
-
-    KineticSession_IncrementSequence_Expect(&Session);
 
     KineticOperation_BuildErase(&Operation, true, &pin);
 
@@ -681,8 +653,6 @@ void test_KineticOperation_BuildErase_should_build_an_INSTANT_ERASE_operation_wi
 {
     char pinData[] = "abc123";
     ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
-
-    KineticSession_IncrementSequence_Expect(&Session);
 
     KineticOperation_BuildErase(&Operation, false, &pin);
 
@@ -711,8 +681,6 @@ void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PI
     char pinData[] = "abc123";
     ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
 
-    KineticSession_IncrementSequence_Expect(&Session);
-
     KineticOperation_BuildLockUnlock(&Operation, true, &pin);
 
     TEST_ASSERT_NOT_NULL(Operation.pin);
@@ -738,8 +706,6 @@ void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with
     char pinData[] = "abc123";
     ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
 
-    KineticSession_IncrementSequence_Expect(&Session);
-
     KineticOperation_BuildLockUnlock(&Operation, false, &pin);
 
     TEST_ASSERT_NOT_NULL(Operation.pin);
@@ -764,8 +730,6 @@ void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with
 
 void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VERSION_operation_with_PIN_auth(void)
 {
-    KineticSession_IncrementSequence_Expect(&Session);
-
     KineticOperation_BuildSetClusterVersion(&Operation, 1776);
 
     TEST_ASSERT_FALSE(Request.pinAuth);

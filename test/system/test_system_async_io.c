@@ -45,17 +45,23 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
 
     // Establish session with device
-    KineticClient * client = KineticClient_Init("stdout", 0);
+    KineticClientConfig clientConfig = {
+        .logFile = "stdout",
+        .logLevel = 0,
+    };
+    KineticClient * client = KineticClient_Init(&clientConfig);
+
+    // Establish connection
+    KineticSession* session;
     const char HmacKeyString[] = "asdfasdf";
-    KineticSessionConfig config = {
+    KineticSessionConfig sessionConfig = {
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    KineticSession* session;
-    KineticStatus status = KineticClient_CreateSession(&config, client, &session);
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -67,7 +73,7 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
 
     PutStatus put_statuses[NUM_PUTS];
     for (size_t i = 0; i < NUM_PUTS; i++) {
-        put_statuses[i] = (PutStatus){
+        put_statuses[i] = (PutStatus) {
             .sem = KineticSemaphore_Create(),
             .status = KINETIC_STATUS_INVALID,
         };
