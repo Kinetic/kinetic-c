@@ -659,6 +659,10 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
         return KINETIC_STATUS_OPERATION_INVALID;
     }
 
+    if (p2pOp->numOperations >= 100000) {
+        return KINETIC_STATUS_BUFFER_OVERRUN;
+    }
+
     operation->p2pOp = p2pOp;
     operation->callback = &KineticOperation_P2POperationCallback;
     return KINETIC_STATUS_SUCCESS;
