@@ -73,8 +73,6 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
     uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
     ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
 
-
-
     uint32_t keys[num_ops];
     KineticEntry entries[num_ops];
 
