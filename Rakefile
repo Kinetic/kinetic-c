@@ -92,7 +92,7 @@ end
 
 namespace :doxygen do
 
-  DOCS_PATH = "./docs/"
+  DOCS_PATH = "./docs/api/"
   directory DOCS_PATH
   CLOBBER.include DOCS_PATH
   VERSION = File.read('./config/VERSION').strip
