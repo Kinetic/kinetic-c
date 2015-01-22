@@ -133,6 +133,9 @@ $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Werror -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
+${OUT_DIR}/bus.o: ${LIB_DIR}/bus/bus_types.h
+${OUT_DIR}/sender.o: ${LIB_DIR}/bus/sender_internal.h
+${OUT_DIR}/listener.o: ${LIB_DIR}/bus/listener_internal.h
 
 $(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpool/threadpool.h
 	$(CC) -o $@ -c $< $(CFLAGS)

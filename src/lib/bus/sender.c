@@ -439,6 +439,7 @@ static bool register_socket_info(sender *s, int fd, SSL *ssl) {
     info->fd = fd;
     info->ssl = ssl;
     info->refcount = 0;
+    info->largest_seq_id_seen = 0;
 
     void *old = NULL;
     if (!yacht_set(s->fd_hash_table, fd, info, &old)) {
@@ -554,7 +555,7 @@ static void handle_command(sender *s, int id) {
     default:
     {
         struct bus *b = s->bus;
-        BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
+        BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 64,
             "match_fail: %d", info->state);
         assert(false);
     }
@@ -568,14 +569,18 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
     int fd = info->u.enqueue.fd;
     fd_info *fdi = NULL;
     int64_t out_seq_id = info->u.enqueue.box->out_seq_id;
-    if (s->largest_seq_id_seen >= out_seq_id && s->largest_seq_id_seen > 0) {
-        BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
-            "suspicious outgoing sequence ID: got %lld, already sent up to %lld",
-            (long long)out_seq_id, (long long)s->largest_seq_id_seen);
-        set_error_for_socket(s, fd, TX_ERROR_BAD_SEQUENCE_ID);
-    } else if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
+    if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
         assert(fdi);
-        s->largest_seq_id_seen = out_seq_id;
+
+        if (fdi->largest_seq_id_seen > out_seq_id && fdi->largest_seq_id_seen > 0) {
+            BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
+                "suspicious outgoing sequence ID: got %lld, already sent up to %lld",
+                (long long)out_seq_id, (long long)fdi->largest_seq_id_seen);
+            set_error_for_socket(s, fd, TX_ERROR_BAD_SEQUENCE_ID);
+            return;
+        }
+        fdi->largest_seq_id_seen = out_seq_id;
+
         /* Notify the listener that we're about to start writing to a drive,
          * because (in rare cases) the response may arrive between finishing
          * the write and the listener processing the notification. In that
@@ -1032,7 +1037,7 @@ static void attempt_to_enqueue_sending_request_message_to_listener(sender *s,
     int fd, int64_t seq_id, int16_t timeout_sec) {
     struct bus *b = s->bus;
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
-      "telling listener to expect response, with fd %d, seq_id %lld",
+      "telling listener to expect response, with <fd%d, seq_id:%lld>",
         fd, (long long)seq_id);
 
     struct listener *l = bus_get_listener_for_socket(s->bus, fd);

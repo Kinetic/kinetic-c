@@ -103,6 +103,7 @@ typedef struct {
     int fd;
     rx_error_t error;
     size_t to_read_size;
+    int64_t largest_seq_id_seen;
 
     SSL *ssl;                   /* SSL handle. Must be valid or BUS_NO_SSL. */
 

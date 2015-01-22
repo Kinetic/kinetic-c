@@ -462,6 +462,7 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
     ci->fd = fd;
     ci->to_read_size = 0;
     ci->udata = udata;
+    ci->largest_seq_id_seen = 0;
 
     if (type == BUS_SOCKET_SSL) {
         if (!bus_ssl_connect(b, ci)) { goto cleanup; }

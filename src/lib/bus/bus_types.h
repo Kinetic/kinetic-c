@@ -66,6 +66,9 @@ struct boxed_msg;
                     "snprintf failure -- "                             \
                     __FILE__,                                          \
                     udata);                                            \
+                char line_buf[32];                                     \
+                snprintf(line_buf, 32, "line %d\n", __LINE__);         \
+                _b->log_cb(event_key, level, line_buf, udata);         \
             } else {                                                   \
                 _b->log_cb(event_key, level, log_buf, udata);          \
             }                                                          \
