@@ -1035,7 +1035,7 @@ static void attempt_to_enqueue_sending_request_message_to_listener(sender *s,
     int fd, int64_t seq_id, int16_t timeout_sec) {
     struct bus *b = s->bus;
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
-      "telling listener to expect response, with fd %d, seq_id %lld",
+      "telling listener to expect response, with <fd%d, seq_id:%lld>",
         fd, (long long)seq_id);
 
     struct listener *l = bus_get_listener_for_socket(s->bus, fd);

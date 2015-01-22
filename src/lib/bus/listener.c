@@ -160,7 +160,7 @@ bool listener_hold_response(struct listener *l, int fd,
     }
 
     BUS_LOG_SNPRINTF(b, 5, LOG_MEMORY, b->udata, 128,
-        "listener_hold_response with fd %d, seq_id %lld",
+        "listener_hold_response with <fd:%d, seq_id:%lld>",
         fd, (long long)seq_id);
 
     msg->type = MSG_HOLD_RESPONSE;
@@ -171,7 +171,7 @@ bool listener_hold_response(struct listener *l, int fd,
     bool pm_res = push_message(l, msg);
     if (!pm_res) {
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
-            "listener_hold_response with fd %d, seq_id %lld FAILED",
+            "listener_hold_response with <fd:%d, seq_id:%lld> FAILED",
             fd, (long long)seq_id);
     }
     return pm_res;
@@ -188,7 +188,8 @@ bool listener_expect_response(struct listener *l, boxed_msg *box,
     }
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-        "listener_expect_response with box of %p", (void*)box);
+        "listener_expect_response with box of %p, seq_id:%lld",
+        (void*)box, (long long)box->out_seq_id);
 
     msg->type = MSG_EXPECT_RESPONSE;
     msg->u.expect.box = box;
@@ -531,7 +532,7 @@ static bool sink_socket_read(struct bus *b,
         BUS_LOG(b, 3, LOG_LISTENER, "calling unpack CB", b->udata);
         bus_unpack_cb_res_t ures = b->unpack_cb(sres.full_msg_buffer, ci->udata);
         BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-            "process_unpacked_message: ok? %d, seq_id %lld",
+            "process_unpacked_message: ok? %d, seq_id:%lld",
             ures.ok, (long long)ures.u.success.seq_id);
         process_unpacked_message(l, ci, ures);
     }
@@ -564,7 +565,7 @@ static rx_info_t *find_info_by_sequence_id(listener *l,
             break;            /* skip */
         case RIS_HOLD:
             BUS_LOG_SNPRINTF(b, 4, LOG_MEMORY, b->udata, 128,
-                "find_info_by_sequence_id: info (%p) at +%d: fd %d, seq_id %lld",
+                "find_info_by_sequence_id: info (%p) at +%d: <fd:%d, seq_id:%lld>",
                 (void*)info, info->id, fd, (long long)seq_id);
             if (info->u.hold.fd == fd && info->u.hold.seq_id == seq_id) {
                 return info;
@@ -590,7 +591,7 @@ static rx_info_t *find_info_by_sequence_id(listener *l,
 
     if (b->log_level > 5 || 0) {
         BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
-            "==== Could not find <fd: %d, seq_id: %lld>, dumping table ====\n", 
+            "==== Could not find <fd:%d, seq_id:%lld>, dumping table ====\n", 
             fd, (long long)seq_id);
         dump_rx_info_table(l);
     }
@@ -627,7 +628,7 @@ static void process_unpacked_message(listener *l,
             case RIS_EXPECT:
             {
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
-                    "marking info %d, seq_id %lld ready for delivery",
+                    "marking info %d, seq_id:%lld ready for delivery",
                     info->id, (long long)result.u.success.seq_id);
                 info->u.expect.error = RX_ERROR_READY_FOR_DELIVERY;
                 assert(!info->u.hold.has_result);
@@ -644,9 +645,9 @@ static void process_unpacked_message(listener *l,
             /* We received a response that we weren't expecting. */
             if (seq_id != 0) {
                 BUS_LOG_SNPRINTF(b, 2 - 2, LOG_LISTENER, b->udata, 128,
-                    "Couldn't find info for fd %d, seq_id %lld, msg %p",
+                    "Couldn't find info for fd:%d, seq_id:%lld, msg %p",
                     ci->fd, (long long)seq_id, opaque_msg);
-            }   
+            }
             if (b->unexpected_msg_cb) {
                 b->unexpected_msg_cb(opaque_msg, seq_id, b->udata, ci->udata);
             }
@@ -1212,7 +1213,7 @@ static void attempt_delivery(listener *l, struct rx_info_t *info) {
     if (bus_process_boxed_message(b, box, &backpressure)) {
         /* success */
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
-            "successfully delivered box %p (seq_id %lld), marking info %d as DONE",
+            "successfully delivered box %p (seq_id:%lld), marking info %d as DONE",
             (void*)box, (long long)seq_id, info->id);
         info->u.expect.error = RX_ERROR_DONE;
         BUS_LOG_SNPRINTF(b, 4, LOG_LISTENER, b->udata, 128,
@@ -1242,8 +1243,9 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             bus_unpack_cb_res_t result = info->u.hold.result;
 
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 256,
-                "converting HOLD to EXPECT for info %d with result, attempting delivery <box:%p, fd:%d, seq_id:%lld>",
-                info->id, (void *)box, info->u.hold.fd, (long long)info->u.hold.seq_id);
+                "converting HOLD to EXPECT for info %d (%p) with result, attempting delivery <box:%p, fd:%d, seq_id:%lld>",
+                info->id, (void *)info,
+                (void *)box, info->u.hold.fd, (long long)info->u.hold.seq_id);
 
             info->state = RIS_EXPECT;
             info->u.expect.error = RX_ERROR_READY_FOR_DELIVERY;
@@ -1253,8 +1255,9 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             attempt_delivery(l, info);
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 256,
-                "converting HOLD to EXPECT info %d, attempting delivery <box:%p, fd:%d, seq_id:%lld>",
-                info->id, (void *)box, info->u.hold.fd, (long long)info->u.hold.seq_id);
+                "converting HOLD to EXPECT info %d (%p), attempting delivery <box:%p, fd:%d, seq_id:%lld>",
+                info->id, (void *)info,
+                (void *)box, info->u.hold.fd, (long long)info->u.hold.seq_id);
             info->state = RIS_EXPECT;
             info->u.expect.box = box;
             info->u.expect.error = RX_ERROR_NONE;
