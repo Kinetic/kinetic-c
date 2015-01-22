@@ -198,8 +198,8 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
             response->command->header->has_connectionID)
         {
             LOGF1("[PDU RX UNSOLICITED] pdu: 0x%0llX, session: 0x%llX, bus: 0x%llX, "
-                "protoLen: %u, valueLen: %u",
-                response, &connection->session, connection->messageBus,
+                "fd: %6d, protoLen: %u, valueLen: %u",
+                response, &connection->session, connection->messageBus, connection->socket,
                 response->header.protobufLength, response->header.valueLength);
 
             // Extract connectionID from unsolicited status message
@@ -240,9 +240,9 @@ void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata
             status = KINETIC_STATUS_INVALID;
         }
 
-        LOGF1("[PDU RX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, "
+        LOGF1("[PDU RX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, fd: %6d, "
             "seq: %5lld, protoLen: %4u, valueLen: %u, status: %s",
-            response, op, &op->connection->session, op->connection->messageBus,
+            response, op, &op->connection->session, op->connection->messageBus, op->connection->socket, 
             response->command->header->ackSequence, response->header.protobufLength, response->header.valueLength,
             Kinetic_GetStatusDescription(status));
     }

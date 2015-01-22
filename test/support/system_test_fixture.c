@@ -63,10 +63,6 @@ void SystemTestSetup(SystemTestFixture* fixture, int log_level)
         fixture->testIgnored = false;
     }
 
-    // Erase the drive
-    status = KineticClient_InstantSecureErase(&fixture->session);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
     // TEST_ASSERT_EQUAL_MESSAGE(
     //     fixture->expectedSequence,
     //     fixture->connection.sequence,
