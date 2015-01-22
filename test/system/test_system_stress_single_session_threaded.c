@@ -214,7 +214,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
         }
     }
 
-    #if 1
     // Measure DELETE performance
     {
         OpStatus delete_statuses[num_ops];
@@ -289,7 +288,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             elapsed_ms / 1000.0f,
             throughput);
     }
-    #endif
 
     ByteBuffer_Free(test_data);
 }
@@ -338,7 +336,7 @@ void run_tests(KineticClient * client)
     TestParams params[] = { 
         { .client = client, .session = &session, .thread_iters = 1, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
         { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 120,             },
-        // { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 500,             },
+        { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 500,             },
         // { .client = client, .session = &session, .thread_iters = 1, .num_ops = 500,  .obj_size = 70000,           },
         // { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 120,             },
         // { .client = client, .session = &session, .thread_iters = 3, .num_ops = 1000, .obj_size = 120,             },

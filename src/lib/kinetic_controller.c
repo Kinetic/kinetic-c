@@ -243,7 +243,7 @@ void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata
         LOGF1("[PDU RX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, "
             "seq: %5lld, protoLen: %4u, valueLen: %u, status: %s",
             response, op, &op->connection->session, op->connection->messageBus,
-            response->command->header->sequence, response->header.protobufLength, response->header.valueLength,
+            response->command->header->ackSequence, response->header.protobufLength, response->header.valueLength,
             Kinetic_GetStatusDescription(status));
     }
     else
