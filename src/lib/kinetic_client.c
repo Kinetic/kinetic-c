@@ -144,6 +144,7 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(entry != NULL);
     assert(entry->value.array.data != NULL);
+    assert(&session->connection->session == session);
 
     KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
