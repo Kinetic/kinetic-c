@@ -574,8 +574,8 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
 
         if (fdi->largest_seq_id_seen > out_seq_id && fdi->largest_seq_id_seen > 0) {
             BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
-                "suspicious outgoing sequence ID: got %lld, already sent up to %lld",
-                (long long)out_seq_id, (long long)fdi->largest_seq_id_seen);
+                "suspicious outgoing sequence ID on %d: got %lld, already sent up to %lld",
+                fd, (long long)out_seq_id, (long long)fdi->largest_seq_id_seen);
             set_error_for_socket(s, fd, TX_ERROR_BAD_SEQUENCE_ID);
             return;
         }
