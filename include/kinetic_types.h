@@ -144,10 +144,6 @@ typedef struct _KineticSession {
     /// Session configuration structure which must be configured 
     KineticSessionConfig config;
 
-    /* An overly coarse lock, applied as part of debugging a race condition.
-     * TODO: Remove this when the root cause is determined. */
-    pthread_mutex_t coarse_lock;
-
     /// Connection instance which is dynamically allocated upon call to `KineticClient_CreateConnection`.
     /// Client must call `KineticClient_DestroyConnection` when finished with a session to shutdown
     /// a session cleanly and free the `connection`.
