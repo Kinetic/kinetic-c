@@ -323,7 +323,7 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg)
     int s_id = sender_id_of_socket(b, msg->fd);
     struct sender *s = b->senders[s_id];
 
-    BUS_LOG_SNPRINTF(b, 3-3, LOG_SENDING_REQUEST, b->udata, 64,
+    BUS_LOG_SNPRINTF(b, 3-0, LOG_SENDING_REQUEST, b->udata, 64,
         "Sending request <fd:%d, seq_id:%lld>", msg->fd, (long long)msg->seq_id);
     bool res = sender_send_request(s, box);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
