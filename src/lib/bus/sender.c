@@ -111,11 +111,11 @@ bool sender_register_socket(struct sender *s, int fd, SSL *ssl) {
     info->u.add_socket.ssl = ssl;
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "registering socket %d with SSL %p", fd, (void*)ssl);
-    bool res = commit_event_and_block(s, info);
+    tx_error_t res = commit_event_and_block(s, info);
     release_tx_info(s, info);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "registering socket %d: res %d", fd, res);
-    return res;
+    return res == TX_ERROR_NONE;
 }
 
 bool sender_remove_socket(struct sender *s, int fd) {
@@ -124,9 +124,9 @@ bool sender_remove_socket(struct sender *s, int fd) {
     
     info->state = TIS_RM_SOCKET;
     info->u.rm_socket.fd = fd;
-    bool res = commit_event_and_block(s, info);
+    tx_error_t res = commit_event_and_block(s, info);
     release_tx_info(s, info);
-    return res;
+    return res == TX_ERROR_NONE;
 }
 
 bool sender_send_request(struct sender *s, boxed_msg *box) {
@@ -141,11 +141,11 @@ bool sender_send_request(struct sender *s, boxed_msg *box) {
     
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending request on %d: box %p", box->fd, (void*)box);
-    bool res = commit_event_and_block(s, info);
+    tx_error_t res = commit_event_and_block(s, info);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending request: releasing tx_info, res %d", res);
     release_tx_info(s, info);
-    return res;
+    return res == TX_ERROR_NONE;
 }
 
 bool sender_shutdown(struct sender *s) {
@@ -157,11 +157,11 @@ bool sender_shutdown(struct sender *s) {
     info->state = TIS_SHUTDOWN;
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending shutdown request on %d", info->id);
-    bool res = commit_event_and_block(s, info);
+    tx_error_t res = commit_event_and_block(s, info);
     release_tx_info(s, info);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "shutdown request: %d", res);
-    return res;
+    return res == TX_ERROR_NONE;
 }
 
 void sender_free(struct sender *s) {
@@ -245,8 +245,10 @@ static bool write_commit(struct sender *s, tx_info_t *info) {
     }
 }
 
-static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
-    if (!write_commit(s, info)) { return false; }
+static tx_error_t commit_event_and_block(struct sender *s, tx_info_t *info) {
+    if (!write_commit(s, info)) {
+        return TX_ERROR_WRITE_FAILURE;
+    }
     
     struct bus *b = s->bus;
     struct pollfd fds[1];
@@ -265,7 +267,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
             if (ev & (POLLHUP | POLLERR | POLLNVAL)) {
                 /* We've been hung up on due to a shutdown event. */
                 close(info->done_pipe);
-                return true;
+                return TX_ERROR_CLOSED;
             } else if (ev & POLLIN) {
                 uint16_t backpressure = 0;
                 uint8_t buf[sizeof(bool) + sizeof(backpressure)];
@@ -288,7 +290,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
                     
                     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
                         "reading done_pipe: success %d", 1);
-                    return success;
+                    return success ? TX_ERROR_NONE : TX_ERROR_WRITE_FAILURE;
                 } else if (rd == -1) {
                     if (errno == EINTR) {
                         errno = 0;
@@ -297,7 +299,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
                         BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
                             "blocking read on done_pipe: errno %d", errno);
                         errno = 0;
-                        return false;
+                        return TX_ERROR_CLOSED;
                     }
                 }
             } else {
@@ -310,7 +312,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
             BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
                 "blocking poll for done_pipe: errno %d", errno);
             errno = 0;
-            return false;
+            return TX_ERROR_CLOSED;
         } else {
             /* Shouldn't happen -- blocking. */
             assert(false);
@@ -432,7 +434,7 @@ static void cleanup(sender *s) {
 
 static bool register_socket_info(sender *s, int fd, SSL *ssl) {
     if (s->shutdown) { return false; }
-    fd_info *info = malloc(sizeof(*info));
+    fd_info *info = calloc(1, sizeof(*info));
     if (info == NULL) { 
         return false;
     }
@@ -501,9 +503,10 @@ static bool release_socket_info(sender *s, int fd) {
     fd_info *info = (fd_info *)old;
     if (info) {
         assert(fd == info->fd);
+        info->errored = true;
         /* Expire any pending events on this socket. */
         if (info->refcount > 0) {
-            set_error_for_socket(s, fd, TX_ERROR_CLOSED);
+            set_error_for_socket(s, fd, TX_ERROR_CLOSED);            
         }
         free(info);
         return true;
@@ -572,10 +575,15 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
     if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
         assert(fdi);
 
+        if (fdi->errored) {
+            set_error_for_socket(s, fd, TX_ERROR_CLOSED);
+            return;
+        }
+
         if (fdi->largest_seq_id_seen > out_seq_id && fdi->largest_seq_id_seen > 0) {
             BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
-                "suspicious outgoing sequence ID: got %lld, already sent up to %lld",
-                (long long)out_seq_id, (long long)fdi->largest_seq_id_seen);
+                "suspicious outgoing sequence ID on %d: got %lld, already sent up to %lld",
+                fd, (long long)out_seq_id, (long long)fdi->largest_seq_id_seen);
             set_error_for_socket(s, fd, TX_ERROR_BAD_SEQUENCE_ID);
             return;
         }
@@ -680,6 +688,11 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
     case TX_ERROR_UNREGISTERED_SOCKET:
         status = BUS_SEND_UNREGISTERED_SOCKET;
         break;
+    }
+
+    fd_info *fdi = NULL;
+    if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
+        fdi->errored = true;
     }
 
     for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
@@ -789,6 +802,7 @@ static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
     BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
         "write %p to %d, %zd bytes (info %d)",
         (void*)&msg[sent_size], fd, rem, info->id);
+
     ssize_t wrsz = write(fd, &msg[sent_size], rem);
     if (wrsz == -1) {
         if (util_is_resumable_io_error(errno)) {
@@ -803,6 +817,7 @@ static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
             return 0;
         }
     } else if (wrsz > 0) {
+
         update_sent(b, s, info, wrsz);
         BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
             "sent: %zd\n", wrsz);

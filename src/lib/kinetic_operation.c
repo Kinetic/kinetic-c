@@ -87,7 +87,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 // TODO: Asses refactoring this methog by disecting out Operation and relocate to kinetic_pdu
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation)
 {
-    LOGF3("\nSending PDU via fd=%d", operation->connection->messageBus);
+    LOGF3("\nSending PDU via fd=%d", operation->connection->socket);
 
     KineticStatus status = KINETIC_STATUS_INVALID;
     uint8_t * msg = NULL;
@@ -120,10 +120,10 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     // Populate the HMAC/PIN for protobuf authentication
     if (operation->pin != NULL) {
-        status = KineticAuth_PopulatePin(&operation->connection->session->config, operation->request, *operation->pin);
+        status = KineticAuth_PopulatePin(&operation->connection->pSession->config, operation->request, *operation->pin);
     }
     else {
-        status = KineticAuth_PopulateHmac(&operation->connection->session->config, operation->request);
+        status = KineticAuth_PopulateHmac(&operation->connection->pSession->config, operation->request);
     }
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG0("Failed populating authentication info for new request!");
@@ -154,9 +154,9 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     // Populate sequence count and increment it for next operation
     request->message.header.sequence = operation->connection->sequence++;
 
-    LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, seq: %5lld, protoLen: %4u, valueLen: %u",
-        operation->request, operation, &operation->connection->session, operation->connection->messageBus,
-        request->message.header.sequence, header.protobufLength, header.valueLength);
+    LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, fd: %6d, seq: %5lld, protoLen: %4u, valueLen: %u",
+        operation->request, operation, operation->connection->pSession, operation->connection->messageBus,
+        operation->connection->socket, request->message.header.sequence, header.protobufLength, header.valueLength);
 
     KineticLogger_LogHeader(3, &header);
 
@@ -193,7 +193,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     }
     assert((PDU_HEADER_LEN + header.protobufLength + header.valueLength) == offset);
 
-    bus_send_request(operation->connection->messageBus, &(bus_user_msg){
+    if (!bus_send_request(operation->connection->messageBus, &(bus_user_msg){
         .fd       = operation->connection->socket,
         .type     = BUS_SOCKET_PLAIN,
         .seq_id   = request->message.header.sequence,
@@ -202,9 +202,15 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         .cb       = KineticController_HandleExpectedResponse,
         .udata    = operation,
         .timeout_sec = operation->timeoutSeconds,
-    });
-
-    status = KINETIC_STATUS_SUCCESS;
+    }))
+    {
+        LOGF0("Failed queuing request %p for transmit on fd=%d w/seq=%lld",
+            (void*)request, operation->connection->socket, (long long)request->message.header.sequence);
+        status = KINETIC_STATUS_SOCKET_ERROR;
+    }
+    else {
+        status = KINETIC_STATUS_SUCCESS;
+    }
 
 cleanup:
 

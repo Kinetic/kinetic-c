@@ -350,10 +350,10 @@ systest_names = $(patsubst $(SYSTEST_OUT)/run_%,%,$(systest_executables))
 list_system_tests:
 	echo $(systest_names)
 
-$(SYSTEST_OUT)/%_runner.c: $(SYSTEST_SRC)/%.c
+$(SYSTEST_OUT)/%_runner.c: $(SYSTEST_SRC)/%.c $(KINETIC_LIB)
 	./test/support/generate_test_runner.sh $< > $@
 
-$(SYSTEST_OUT)/run_%: $(SYSTEST_SRC)/%.c $(SYSTEST_OUT)/%_runner.c $(KINETIC_LIB)
+$(SYSTEST_OUT)/run_%: $(SYSTEST_SRC)/%.c $(SYSTEST_OUT)/%_runner.c
 	@echo
 	@echo ================================================================================
 	@echo System test: '$<'

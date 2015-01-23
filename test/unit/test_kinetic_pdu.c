@@ -122,7 +122,7 @@ void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embed
             .identity = 37,
         }
     };
-    Connection.session = &Session;
+    Connection.pSession = &Session;
     Session.connection = &Connection;
     KineticPDU_InitWithCommand(&PDU, &Session);
 
@@ -160,7 +160,7 @@ void test_KineticPDU_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(v
 
 void test_KineticPDU_GetKeyRange_should_return_the_KineticProto_Command_Range_from_the_message_if_avaliable(void)
 { LOG_LOCATION;
-    Connection.session = &Session;
+    Connection.pSession = &Session;
     Session.connection = &Connection;
 
     KineticPDU_InitWithCommand(&PDU, &Session);

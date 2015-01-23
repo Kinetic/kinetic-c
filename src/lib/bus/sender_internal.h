@@ -69,6 +69,7 @@ typedef struct {
     SSL *ssl;                   /* SSL handle. Can be NULL. */
     int refcount;
     int64_t largest_seq_id_seen;
+    bool errored;
 } fd_info;
 
 /* Metadata for a message in-flight. */
@@ -164,7 +165,7 @@ static tx_info_t *get_free_tx_info(struct sender *s);
 static void release_tx_info(struct sender *s, tx_info_t *info);
 static int get_notify_pipe(struct sender *s, int id);
 static bool write_commit(struct sender *s, tx_info_t *info);
-static bool commit_event_and_block(struct sender *s, tx_info_t *info);
+static tx_error_t commit_event_and_block(struct sender *s, tx_info_t *info);
 
 static bool register_socket_info(sender *s, int fd, SSL *ssl);
 static void increment_fd_refcount(sender *s, fd_info *fdi);

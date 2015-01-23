@@ -1,0 +1,35 @@
+title Kinetic C message handling (w/ send error/hangup)
+
+parallel {
+    Client -> Sender: client enqueues request
+    note left of Client: client is blocked
+}
+
+Sender -> Listener: hold responses for <FD, SEQ_ID>
+activate Sender
+activate Listener
+
+Sender -> Drive: send request
+activate Drive
+
+Drive -> Sender: HANG UP (error)
+deactivate Drive
+
+Sender -> Client: notify client
+
+Sender -> Threadpool: Transfer callback with send error
+deactivate Sender
+activate Threadpool
+
+Client -> Client: backpressure
+
+parallel {
+    note left of Client: client is unblocked
+    Threadpool -->> Client: callback(receive timeout)
+    deactivate Threadpool
+}
+
+Listener -->> Listener: (wait)
+
+note right of Listener: TIME OUT
+deactivate Listener

@@ -198,6 +198,7 @@ KineticStatus KineticAdminClient_SetAcl(KineticSession const * const session,
 /**
  * @brief Updates the cluster version of the Kinetic Device.
  *
+ * @param session   The connected KineticSession to use for the operation.
  * @param version   New cluster version.
  *
  * @return          Returns the resulting KineticStatus.

@@ -402,7 +402,7 @@ void KineticSession_Init(KineticSession* const session, KineticSessionConfig* co
         .config = destConfig,
         .connection = con,
     };
-    con->session = session;
+    con->pSession = session;
 }
 
 void KineticConnection_Init(KineticConnection* const con)

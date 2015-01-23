@@ -47,6 +47,7 @@ static KineticPDU Request, Response;
 static int OperationCompleteCallbackCount;
 static KineticStatus LastStatus;
 static struct _KineticClient Client;
+static struct bus MessageBus;
 
 void setUp(void)
 {
@@ -55,8 +56,9 @@ void setUp(void)
         .port = 17,
         .clusterVersion = 6,
     };
+    Client.bus = &MessageBus;
     KineticConnection_Init(&Connection);
-    KineticAllocator_NewConnection_ExpectAndReturn(&Connection);
+    KineticAllocator_NewConnection_ExpectAndReturn(&MessageBus, &Session, &Connection);
     KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
     
     KineticStatus status = KineticSession_Create(&Session, &Client);
@@ -96,16 +98,20 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
     memset(&session, 0, sizeof(session));
     KineticConnection connection;
     memset(&connection, 0, sizeof(connection));
-    KineticAllocator_NewConnection_ExpectAndReturn(&connection);
+    KineticAllocator_NewConnection_ExpectAndReturn(&MessageBus, &session, &connection);
     KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
+
     KineticStatus status = KineticSession_Create(&session, &Client);
+    
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, session.connection);
     TEST_ASSERT_FALSE(session.connection->connected);
 
     KineticCountingSemaphore_Destroy_Expect(&Semaphore);
     KineticAllocator_FreeConnection_Expect(&connection);
+
     status = KineticSession_Destroy(&session);
+    
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_NULL(session.connection);
 }

@@ -611,8 +611,8 @@ static void process_unpacked_message(listener *l,
 
         if (seq_id < ci->largest_seq_id_seen && ci->largest_seq_id_seen != 0) {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
-                "suspicious sequence ID: largest seen is %lld, got %lld\n",
-                (long long)ci->largest_seq_id_seen, (long long)seq_id);
+                "suspicious sequence ID on %d: largest seen is %lld, got %lld\n",
+                ci->fd, (long long)ci->largest_seq_id_seen, (long long)seq_id);
         }
         ci->largest_seq_id_seen = seq_id;
 

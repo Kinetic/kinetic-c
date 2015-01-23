@@ -107,7 +107,7 @@ struct _KineticConnection {
     int             socket;         // socket file descriptor
     int64_t         connectionID;   // initialized to seconds since epoch
     int64_t         sequence;       // increments for each request in a session
-    KineticSession  const *session; // session configuration
+    KineticSession* pSession;       // session configuration
     struct bus *    messageBus;
     socket_info *   si;
     pthread_mutex_t sendMutex;      // mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool

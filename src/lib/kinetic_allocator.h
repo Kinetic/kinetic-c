@@ -23,7 +23,8 @@
 
 #include "kinetic_types_internal.h"
 
-KineticConnection* KineticAllocator_NewConnection(void);
+KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession* const session);
+
 void KineticAllocator_FreeConnection(KineticConnection* connection);
 
 KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection);
