@@ -144,16 +144,36 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(entry != NULL);
     assert(entry->value.array.data != NULL);
-    assert(&session->connection->session == session);
+    
+    assert(session->connection->pSession == session);
+    assert(session->connection == session->connection->pSession->connection);
+
+#define PUT_LOCK 1
+
+#if PUT_LOCK
+    KineticSession_Lock(session);
+#endif
 
     KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+#if PUT_LOCK
+    if (0) {  // Debugging: change to 1 to force race condition
+        KineticSession_Unlock(session);
+        KineticSession_Lock(session);
+    }
+#endif
 
     // Initialize request
     KineticOperation_BuildPut(operation, entry);
 
     // Execute the operation
-    return KineticController_ExecuteOperation(operation, closure);
+    assert(operation->connection == session->connection);
+    KineticStatus res = KineticController_ExecuteOperation(operation, closure);
+#if PUT_LOCK
+    KineticSession_Unlock(session);
+#endif
+    return res;
 }
 
 KineticStatus KineticClient_Flush(KineticSession const * const session,

@@ -43,11 +43,14 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
+    assert(session->connection == NULL);
     session->connection = KineticAllocator_NewConnection(client->bus, session);
     if (session->connection == NULL) {
         return KINETIC_STATUS_MEMORY_ERROR;
     }
     
+    pthread_mutex_init(&session->coarse_lock, NULL);
+
     // init connection send mutex
     if (pthread_mutex_init(&session->connection->sendMutex, NULL) != 0) {
         LOG0("Failed initializing connection send mutex!");
@@ -149,4 +152,14 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
     pthread_mutex_destroy(&connection->sendMutex);
 
     return KINETIC_STATUS_SUCCESS;
+}
+
+void KineticSession_Lock(KineticSession const *const ses) {
+    KineticSession *s = (KineticSession *)ses;
+    pthread_mutex_lock(&s->coarse_lock);
+}
+
+void KineticSession_Unlock(KineticSession const * const ses) {
+    KineticSession *s = (KineticSession *)ses;
+    pthread_mutex_unlock(&s->coarse_lock);
 }

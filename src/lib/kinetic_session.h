@@ -29,4 +29,7 @@ KineticStatus KineticSession_Connect(KineticSession const * const session);
 KineticStatus KineticSession_Disconnect(KineticSession const * const session);
 void KineticSession_IncrementSequence(KineticSession const * const session);
 
+void KineticSession_Lock(KineticSession const * const ses);
+void KineticSession_Unlock(KineticSession const * const ses);
+
 #endif // _KINETIC_SESSION_H
