@@ -69,6 +69,7 @@ typedef struct {
     SSL *ssl;                   /* SSL handle. Can be NULL. */
     int refcount;
     int64_t largest_seq_id_seen;
+    bool errored;
 } fd_info;
 
 /* Metadata for a message in-flight. */
