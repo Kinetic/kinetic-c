@@ -898,7 +898,7 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
              * but the listener never got the handler callback. */
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                 "LEAKING RESULT %p", (void *)&info->u.hold.result);
-            assert(false);
+            //assert(false);
         }
         break;
     case RIS_EXPECT:
