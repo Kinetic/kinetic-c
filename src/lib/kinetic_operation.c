@@ -45,10 +45,12 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
 
+#if COUNTING_SEMAPHORE_ENABLED
     KineticCountingSemaphore * const sem = operation->connection->outstandingOperations;
     (void)sem;
-
     KineticCountingSemaphore_Take(sem);
+#endif
+    
     KineticStatus status = KineticOperation_SendRequestInner(operation);
     if (status != KINETIC_STATUS_SUCCESS)
     {
@@ -59,7 +61,9 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
             request->message.message.commandBytes.data = NULL;
         }
     }
+#if COUNTING_SEMAPHORE_ENABLED
     KineticCountingSemaphore_Give(sem);
+#endif
     return status;
 }
 
