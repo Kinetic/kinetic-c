@@ -16,3 +16,6 @@
 [submodule "vendor/FlameGraph"]
 	path = vendor/FlameGraph
 	url = https://github.com/brendangregg/FlameGraph.git
+[submodule "vendor/json-c"]
+	path = vendor/json-c
+	url = https://github.com/json-c/json-c
