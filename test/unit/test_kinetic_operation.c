@@ -51,6 +51,7 @@ void setUp(void)
     KineticLogger_Init("stdout", 1);
     Connection.connectionID = ConnectionID;
     Session.connection = &Connection;
+    Connection.pSession = &Session;
     KineticPDU_InitWithCommand(&Request, &Connection);
     KineticPDU_InitWithCommand(&Response, &Connection);
     KineticOperation_Init(&Operation, &Connection);
@@ -58,7 +59,6 @@ void setUp(void)
     Operation.connection = &Connection;
     SessionConfig = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
     Session = (KineticSession) {.config = SessionConfig, .connection = &Connection};
-    Connection.session = Session;
 }
 
 void tearDown(void)
@@ -118,7 +118,7 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
 
 void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_create_a_new_object(void)
 {
-   ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
+    ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
     ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
     ByteArray tag = ByteArray_CreateWithCString("some_tag");

@@ -47,15 +47,20 @@ static KineticPDU Request, Response;
 static int OperationCompleteCallbackCount;
 static KineticStatus LastStatus;
 static struct _KineticClient Client;
+static struct bus MessageBus;
 
 void setUp(void)
 {
+    memset(&Session, 0, sizeof(Session));
     Session.config = (KineticSessionConfig) {
         .host = "somehost.com",
         .port = 17,
     };
     memset(&Connection, 0, sizeof(Connection));
-    KineticAllocator_NewConnection_ExpectAndReturn(&Connection);
+    Connection.pSession = &Session;
+    Client.bus = &MessageBus;
+
+    KineticAllocator_NewConnection_ExpectAndReturn(&MessageBus, &Session, &Connection);
     KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
     
     KineticStatus status = KineticSession_Create(&Session, &Client);
@@ -65,7 +70,6 @@ void setUp(void)
     TEST_ASSERT_FALSE(Session.connection->connected);
     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
     TEST_ASSERT_EQUAL(17, Session.config.port);
-    TEST_ASSERT_EQUAL(-1, Session.connection->socket);
 
     KineticPDU_InitWithCommand(&Request, Session.connection);
     KineticPDU_InitWithCommand(&Response, Session.connection);
@@ -87,15 +91,22 @@ void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_
 void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_client(void)
 {
     LOG_LOCATION;
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, KineticSession_Create(&Session, NULL));
+    KineticSession session;
+    memset(&session, 0, sizeof(session));
+    session.connection = &Connection;
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, KineticSession_Create(&session, NULL));
 }
 
 void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(void)
 {
     LOG_LOCATION;
     KineticSession session;
+    memset(&session, 0, sizeof(session));
     KineticConnection connection;
-    KineticAllocator_NewConnection_ExpectAndReturn(&connection);
+    connection.pSession = &session;
+    // session.connection = &connection;
+
+    KineticAllocator_NewConnection_ExpectAndReturn(&MessageBus, &session, &connection);
     KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
     KineticStatus status = KineticSession_Create(&session, &Client);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -117,6 +128,7 @@ void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_s
 
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, status);
 }
+
 
 void test_KineticSession_Connect_should_return_KINETIC_STATUS_CONNECTION_ERROR_upon_NULL_connection(void)
 {

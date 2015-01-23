@@ -70,7 +70,7 @@ void setUp(void)
     memset(&Connection, 0, sizeof(Connection));
     Connection.connected = true;
     Connection.socket = 456;
-    Connection.session = Session;
+    Connection.pSession = &Session;
 
     KineticPDU_Init(&PDU, &Connection);
     ByteArray_FillWithDummyData(Value);
