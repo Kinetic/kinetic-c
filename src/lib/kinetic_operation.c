@@ -102,7 +102,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
             // Populate the HMAC for the protobuf
             KineticHMAC_Init(&hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-            KineticHMAC_Populate(&hmac, proto, operation->connection->session.config.hmacKey);
+            KineticHMAC_Populate(&hmac, proto, operation->connection->pSession->config.hmacKey);
         } break;
     default:
         break;
@@ -134,7 +134,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     request->message.header.sequence = operation->connection->sequence++;
 
     LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, fd: %6d, seq: %5lld, protoLen: %4u, valueLen: %u",
-        operation->request, operation, &operation->connection->session, operation->connection->messageBus,
+        operation->request, operation, operation->connection->pSession, operation->connection->messageBus,
         operation->connection->socket, request->message.header.sequence, header.protobufLength, header.valueLength);
 
     KineticLogger_LogHeader(3, &header);
@@ -189,7 +189,6 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     else {
         status = KINETIC_STATUS_SUCCESS;
     }
-
 
 cleanup:
 

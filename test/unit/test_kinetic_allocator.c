@@ -32,6 +32,7 @@
 
 KineticConnection Connection;
 KineticSession Session;
+struct bus MessageBus;
 
 void setUp(void)
 {
@@ -46,23 +47,40 @@ void tearDown(void)
 void test_KineticAllocator_NewConnection_should_return_null_if_calloc_returns_null(void)
 {
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), NULL);
-    KineticConnection* connection =  KineticAllocator_NewConnection();
+    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
     TEST_ASSERT_NULL(connection);
 }
 
 void test_KineticAllocator_NewConnection_should_return_a_connection_with_connected_flag_set_to_false(void)
 {
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
-    KineticConnection* connection =  KineticAllocator_NewConnection();
-    TEST_ASSERT_NOT_NULL(connection);
+    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
+    TEST_ASSERT_EQUAL_PTR(&Connection, connection);
     TEST_ASSERT_FALSE(connection->connected);
 }
 
 void test_KineticAllocator_NewConnection_should_return_a_connection_with_a_minus1_fd(void)
 {
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
-    KineticConnection* connection =  KineticAllocator_NewConnection();
+    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
     TEST_ASSERT_NOT_NULL(connection);
+    TEST_ASSERT_EQUAL(-1, connection->socket);
+}
+
+void test_KineticAllocator_NewConnection_should_return_a_connection_pointing_to_passed_bus(void)
+{
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
+    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
+    TEST_ASSERT_NOT_NULL(connection);
+    TEST_ASSERT_EQUAL_PTR(&MessageBus, connection->messageBus);
+}
+
+void test_KineticAllocator_NewConnection_should_return_a_connection_pointing_to_passed_session(void)
+{
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
+    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
+    TEST_ASSERT_NOT_NULL(connection);
+    TEST_ASSERT_EQUAL_PTR(&Session, connection->pSession);
 }
 
 void test_KineticAllocator_NewKineticResponse_should_return_null_if_calloc_return_null(void)

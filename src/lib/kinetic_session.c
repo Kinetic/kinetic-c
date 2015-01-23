@@ -43,14 +43,10 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
-    session->connection = KineticAllocator_NewConnection();
+    session->connection = KineticAllocator_NewConnection(client->bus, session);
     if (session->connection == NULL) {
         return KINETIC_STATUS_MEMORY_ERROR;
     }
-
-    session->connection->session = *session; // TODO: KILL ME!!!
-    session->connection->messageBus = client->bus;
-    session->connection->socket = -1;  // start without a file descriptor
     
     // init connection send mutex
     if (pthread_mutex_init(&session->connection->sendMutex, NULL) != 0) {
@@ -117,7 +113,6 @@ KineticStatus KineticSession_Connect(KineticSession const * const session)
         return KINETIC_STATUS_SESSION_INVALID;
     }
 
-    connection->session = *session;
     // #TODO what to do if we time out here? I think the bus should timeout by itself or something
 
     // Wait for initial unsolicited status to be received in order to obtain connectionID
