@@ -101,6 +101,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     case KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH:
         {
             KineticHMAC hmac;
+            memset(&hmac, 0, sizeof(hmac));
 
             // Populate the HMAC for the protobuf
             KineticHMAC_Init(&hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
