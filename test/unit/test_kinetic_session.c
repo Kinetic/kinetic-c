@@ -103,6 +103,7 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
     KineticSession session;
     memset(&session, 0, sizeof(session));
     KineticConnection connection;
+    memset(&connection, 0, sizeof(connection));
     connection.pSession = &session;
     // session.connection = &connection;
 
