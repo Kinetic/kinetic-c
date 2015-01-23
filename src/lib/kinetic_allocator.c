@@ -24,13 +24,16 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-KineticConnection* KineticAllocator_NewConnection(void)
+KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession* const session)
 {
     KineticConnection* connection = KineticCalloc(1, sizeof(KineticConnection));
     if (connection == NULL) {
         LOG0("Failed allocating new Connection!");
         return NULL;
     }
+    connection->pSession = session;
+    connection->messageBus = b;
+    connection->socket = -1;  // start with an invalid file descriptor
     return connection;
 }
 

@@ -435,7 +435,7 @@ void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr,
     *hdr = (KineticProto_Command_Header) {
         .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor),
         .has_clusterVersion = true,
-        .clusterVersion = con->session.config.clusterVersion,
+        .clusterVersion = con->pSession->config.clusterVersion,
         .has_connectionID = true,
         .connectionID = con->connectionID,
         .has_sequence = true,
@@ -462,7 +462,7 @@ void KineticPDU_Init(KineticPDU* pdu, KineticConnection* con)
     memset(pdu, 0, sizeof(KineticPDU));
     KineticMessage_Init(&(pdu->message));
     Kinetic_auth_init_hmac(
-            &(pdu->message), con->session.config.identity, con->session.config.hmacKey);
+            &(pdu->message), con->pSession->config.identity, con->pSession->config.hmacKey);
     KineticMessage_HeaderInit(&(pdu->message.header), con);
 }
 

@@ -80,7 +80,7 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
-    assert(&operation->connection->session != NULL);
+    assert(operation->connection->pSession != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     if (closure != NULL)
@@ -177,6 +177,7 @@ static const char *bus_error_string(bus_send_status_t t) {
         return "bad_response";
     }
 }
+
 void KineticController_HandleUnexecpectedResponse(void *msg,
                                                   int64_t seq_id,
                                                   void *bus_udata,
@@ -188,8 +189,10 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
     (void)seq_id;
     (void)bus_udata;
 
-    KineticLogger_LogProtobuf(2, response->proto);
-
+    LOGF1("[PDU RX UNSOLICITED] pdu: 0x%0llX, session: 0x%llX, bus: 0x%llX, "
+                "fd: %6d, protoLen: %u, valueLen: %u",
+                response, connection->pSession, connection->messageBus, connection->socket,
+                response->header.protobufLength, response->header.valueLength);
 
     // Handle unsolicited status PDUs
     if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
@@ -197,25 +200,23 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
             response->command->header != NULL &&
             response->command->header->has_connectionID)
         {
-            LOGF1("[PDU RX UNSOLICITED] pdu: 0x%0llX, session: 0x%llX, bus: 0x%llX, "
-                "fd: %6d, protoLen: %u, valueLen: %u",
-                response, &connection->session, connection->messageBus, connection->socket,
-                response->header.protobufLength, response->header.valueLength);
-
             // Extract connectionID from unsolicited status message
             connection->connectionID = response->command->header->connectionID;
             LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
                 connection->connectionID);
         }
         else {
-            LOG0("WARNING: Unsolicited PDU is invalid. Does not specify connection ID!");
+            LOG0("WARNING: Unsolicited PDU received after session initialized!");
         }
-        KineticAllocator_FreeKineticResponse(response);
     }
     else
     {
         LOG0("WARNING: Received unexpected response that was not an unsolicited status.");
     }
+
+    KineticLogger_LogProtobuf(2, response->proto);
+
+    KineticAllocator_FreeKineticResponse(response);
 }
 
 void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata)
@@ -242,7 +243,7 @@ void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata
 
         LOGF1("[PDU RX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, fd: %6d, "
             "seq: %5lld, protoLen: %4u, valueLen: %u, status: %s",
-            response, op, &op->connection->session, op->connection->messageBus, op->connection->socket, 
+            response, op, op->connection->pSession, op->connection->messageBus, op->connection->socket, 
             response->command->header->ackSequence, response->header.protobufLength, response->header.valueLength,
             Kinetic_GetStatusDescription(status));
     }
