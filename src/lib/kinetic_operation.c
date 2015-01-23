@@ -46,6 +46,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     assert(operation->request != NULL);
 
     KineticCountingSemaphore * const sem = operation->connection->outstandingOperations;
+    (void)sem;
 
     KineticCountingSemaphore_Take(sem);
     KineticStatus status = KineticOperation_SendRequestInner(operation);
@@ -57,8 +58,8 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
             free(request->message.message.commandBytes.data);
             request->message.message.commandBytes.data = NULL;
         }
-        KineticCountingSemaphore_Give(sem);
     }
+    KineticCountingSemaphore_Give(sem);
     return status;
 }
 
@@ -774,8 +775,6 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
     assert(operation != NULL);
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
     KineticCompletionData completionData = {.status = status};
-
-    KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
 
     if(operation->closure.callback != NULL) {
         operation->closure.callback(&completionData, operation->closure.clientData);
