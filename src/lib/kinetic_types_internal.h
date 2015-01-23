@@ -80,6 +80,8 @@ enum unpack_error {
     UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
 };
 
+#define KINETIC_SEQUENCE_NOT_YET_BOUND ((int64_t)-2)
+
 typedef struct {
     enum socket_state state;
     KineticPDUHeader header;

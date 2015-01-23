@@ -34,6 +34,8 @@
 #include <sys/time.h>
 #include "bus.h"
 
+#define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
+
 static void KineticOperation_ValidateOperation(KineticOperation* operation);
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation);
 
@@ -131,7 +133,9 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     }
 
     // Populate sequence count and increment it for next operation
-    request->message.header.sequence = operation->connection->sequence++;
+    assert(request->message.header.sequence == KINETIC_SEQUENCE_NOT_YET_BOUND);
+    int seq_id = ATOMIC_FETCH_AND_INCREMENT(&operation->connection->sequence);
+    request->message.header.sequence = seq_id;
 
     LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, fd: %6d, seq: %5lld, protoLen: %4u, valueLen: %u",
         operation->request, operation, operation->connection->pSession, operation->connection->messageBus,
@@ -172,10 +176,12 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     }
     assert((PDU_HEADER_LEN + header.protobufLength + header.valueLength) == offset);
 
+    int fd = operation->connection->socket;
+
     if (!bus_send_request(operation->connection->messageBus, &(bus_user_msg){
-        .fd       = operation->connection->socket,
+        .fd       = fd,
         .type     = BUS_SOCKET_PLAIN,
-        .seq_id   = request->message.header.sequence,
+        .seq_id   = seq_id,
         .msg      = msg,
         .msg_size = offset,
         .cb       = KineticController_HandleExpectedResponse,
@@ -183,7 +189,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         }))
     {
         LOGF0("Failed queuing request %p for transmit on fd=%d w/seq=%lld",
-            (void*)request, operation->connection->socket, (long long)request->message.header.sequence);
+            (void*)request, fd, (long long)seq_id);
         status = KINETIC_STATUS_SOCKET_ERROR;
     }
     else {

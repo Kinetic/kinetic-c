@@ -439,7 +439,7 @@ void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr,
         .has_connectionID = true,
         .connectionID = con->connectionID,
         .has_sequence = true,
-        .sequence = con->sequence,
+        .sequence = KINETIC_SEQUENCE_NOT_YET_BOUND,
     };
 }
 
