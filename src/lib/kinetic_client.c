@@ -158,6 +158,9 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(entry != NULL);
     assert(entry->value.array.data != NULL);
+    
+    assert(session->connection->pSession == session);
+    assert(session->connection == session->connection->pSession->connection);
 
     KineticOperation* operation = KineticOperation_Create(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -166,7 +169,9 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     KineticOperation_BuildPut(operation, entry);
 
     // Execute the operation
-    return KineticController_ExecuteOperation(operation, closure);
+    assert(operation->connection == session->connection);
+    KineticStatus res = KineticController_ExecuteOperation(operation, closure);
+    return res;
 }
 
 KineticStatus KineticClient_Flush(KineticSession const * const session,

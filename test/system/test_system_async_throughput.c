@@ -25,14 +25,36 @@
 #include <sys/time.h>
 #include <errno.h>
 
+void setUp(void)
+{
+    SystemTestSetup(2);
+}
+
+void tearDown(void)
+{
+    SystemTestShutDown();
+}
+
 typedef struct {
     KineticSemaphore * sem;
     KineticStatus status;
 } OpStatus;
 
+static void run_throghput_tests(size_t num_ops, size_t value_size);
+
+void test_kinetic_client_throughput_for_maximum_sized_objects(void)
+{
+    run_throghput_tests(500, KINETIC_OBJ_SIZE);
+}
+
+void test_kinetic_client_throughput_for_small_sized_objects(void)
+{
+    run_throghput_tests(2000, 120);
+}
+
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
-void run_throghput_tests(size_t num_ops, size_t value_size)
+static void run_throghput_tests(size_t num_ops, size_t value_size)
 {
     printf("\n"
         "========================================\n"
@@ -44,30 +66,6 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
 
     ByteBuffer test_data = ByteBuffer_Malloc(value_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
-
-    // Initialize kinetic-c and configure sessions
-    KineticClientConfig clientConfig = {
-        .logFile = "stdout",
-        .logLevel = 0,
-    };
-    KineticClient * client = KineticClient_Init(&clientConfig);
-
-    // Establish session with device
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSessionConfig sessionConfig = {
-        .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_PORT,
-        .clusterVersion = 0,
-        .identity = 1,
-        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-    };
-    KineticSession* session;
-    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
-            Kinetic_GetStatusDescription(status));
-        TEST_FAIL();
-    }
 
     uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
     ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
@@ -105,7 +103,7 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             };
 
             KineticStatus status = KineticClient_Put(
-                session,
+                Fixture.session,
                 &entries[put],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -183,7 +181,7 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             };
 
             KineticStatus status = KineticClient_Get(
-                session,
+                Fixture.session,
                 &entries[get],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -269,7 +267,7 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             };
 
             KineticStatus status = KineticClient_Delete(
-                session,
+                Fixture.session,
                 &entries[del],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -294,14 +292,14 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
                 TEST_FAIL();
             }
         }
+
+
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
-
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
         float throughput = (num_ops * 1000.0f) / elapsed_ms;
-        fflush(stdout);
         printf("\n"
             "Delete Performance:\n"
             "----------------------------------------\n"
@@ -314,20 +312,6 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
     }
 
     ByteBuffer_Free(test_data);
-
-    // Shutdown client connection and cleanup
-    KineticClient_DestroySession(session);
-    KineticClient_Shutdown(client);
-}
-
-void test_kinetic_client_throughput_for_maximum_sized_objects(void)
-{
-    run_throghput_tests(500, KINETIC_OBJ_SIZE);
-}
-
-void test_kinetic_client_throughput_for_small_sized_objects(void)
-{
-    run_throghput_tests(2000, 120);
 }
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData)

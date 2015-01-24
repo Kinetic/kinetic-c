@@ -52,10 +52,14 @@ void setUp(void)
     KineticLogger_Init("stdout", 1);
     KineticSession_Init(&Session, &SessionConfig, &Connection);
     Connection.connectionID = ConnectionID;
+    Connection.pSession = &Session;
     KineticPDU_InitWithCommand(&Request, &Session);
     KineticPDU_InitWithCommand(&Response, &Session);
     KineticOperation_Init(&Operation, &Session);
     Operation.request = &Request;
+    Operation.connection = &Connection;
+    SessionConfig = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
+    Session = (KineticSession) {.config = SessionConfig, .connection = &Connection};
 }
 
 void tearDown(void)

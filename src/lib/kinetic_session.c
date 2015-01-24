@@ -46,6 +46,7 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
+    assert(session->connection == NULL);
     session->connection = KineticAllocator_NewConnection(client->bus, session);
     if (session->connection == NULL) {
         LOG0("Failed allocating a new connection instance");
@@ -59,6 +60,7 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         return KINETIC_STATUS_MEMORY_ERROR;
     }
 
+#if COUNTING_SEMAPHORE_ENABLED
     session->connection->outstandingOperations =
         KineticCountingSemaphore_Create(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION);
     if (session->connection->outstandingOperations == NULL) {
@@ -66,6 +68,7 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         KineticAllocator_FreeConnection(session->connection);
         return KINETIC_STATUS_MEMORY_ERROR;
     }
+#endif
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -78,7 +81,9 @@ KineticStatus KineticSession_Destroy(KineticSession * const session)
     if (session->connection == NULL) {
         return KINETIC_STATUS_SESSION_INVALID;
     }
+#if COUNTING_SEMAPHORE_ENABLED
     KineticCountingSemaphore_Destroy(session->connection->outstandingOperations);
+#endif
     KineticAllocator_FreeConnection(session->connection);
     session->connection = NULL;
     return KINETIC_STATUS_SUCCESS;

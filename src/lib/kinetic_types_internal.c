@@ -445,7 +445,7 @@ static void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr, KineticS
         .has_connectionID = true,
         .connectionID = session->connection->connectionID,
         .has_sequence = true,
-        .sequence = session->connection->sequence,
+        .sequence = KINETIC_SEQUENCE_NOT_YET_BOUND,
     };
 }
 

@@ -24,6 +24,7 @@
 #include <sys/file.h>
 #include <sys/time.h>
 #include <errno.h>
+
 // Smaller number of large payloads
 #define NUM_PUTS (500)
 #define PAYLOAD_SIZE (KINETIC_OBJ_SIZE)
@@ -31,6 +32,16 @@
 // Large number of very small payloads
 //#define NUM_PUTS (10000)
 //#define PAYLOAD_SIZE (20)
+
+void setUp(void)
+{
+    SystemTestSetup(2);
+}
+
+void tearDown(void)
+{
+    SystemTestShutDown();
+}
 
 typedef struct {
     KineticSemaphore * sem;
@@ -43,30 +54,6 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
 {
     ByteBuffer test_data = ByteBuffer_Malloc(PAYLOAD_SIZE);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
-
-    // Establish session with device
-    KineticClientConfig clientConfig = {
-        .logFile = "stdout",
-        .logLevel = 0,
-    };
-    KineticClient * client = KineticClient_Init(&clientConfig);
-
-    // Establish connection
-    KineticSession* session;
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSessionConfig sessionConfig = {
-        .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_PORT,
-        .clusterVersion = 0,
-        .identity = 1,
-        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-    };
-    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
-            Kinetic_GetStatusDescription(status));
-        TEST_FAIL();
-    }
 
     uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
     ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
@@ -101,7 +88,7 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
             .synchronization = sync,
         };
 
-        KineticStatus status = KineticClient_Put(session,
+        KineticStatus status = KineticClient_Put(Fixture.session,
             &entries[put],
             &(KineticCompletionClosure) {
                 .callback = put_finished,
@@ -148,10 +135,6 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
     printf("Transfer completed successfully!\n");
 
     ByteBuffer_Free(test_data);
-
-    // Shutdown client connection and cleanup
-    KineticClient_DestroySession(session);
-    KineticClient_Shutdown(client);
 }
 
 static void put_finished(KineticCompletionData* kinetic_data, void* clientData)

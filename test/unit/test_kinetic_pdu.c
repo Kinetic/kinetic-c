@@ -66,6 +66,7 @@ void setUp(void)
     KineticSession_Init(&Session, &config, &Connection);
     Connection.connected = true;
     Connection.socket = 456;
+    Connection.pSession = &Session;
     KineticPDU_InitWithCommand(&PDU, &Session);
     ByteArray_FillWithDummyData(Value);
 
@@ -131,7 +132,7 @@ void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embed
     TEST_ASSERT_TRUE(PDU.message.header.has_connectionID);
     TEST_ASSERT_EQUAL_INT64(8765432, PDU.message.header.connectionID);
     TEST_ASSERT_TRUE(PDU.message.header.has_sequence);
-    TEST_ASSERT_EQUAL_INT64(24, PDU.message.header.sequence);
+    TEST_ASSERT_EQUAL_INT64(KINETIC_SEQUENCE_NOT_YET_BOUND, PDU.message.header.sequence);
 }
 
 

@@ -61,15 +61,19 @@ KineticOperation* KineticOperation_Create(KineticSession const * const session)
     return operation;
 }
 
+#define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation);
-
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 {
     assert(operation != NULL);
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
 
-    KineticCountingSemaphore_Take(operation->connection->outstandingOperations);
+#if COUNTING_SEMAPHORE_ENABLED
+    KineticCountingSemaphore * const sem = operation->connection->outstandingOperations;
+    KineticCountingSemaphore_Take(sem);
+#endif
+    
     KineticStatus status = KineticOperation_SendRequestInner(operation);
     if (status != KINETIC_STATUS_SUCCESS)
     {
@@ -79,12 +83,14 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
             free(request->message.message.commandBytes.data);
             request->message.message.commandBytes.data = NULL;
         }
-        KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
     }
+#if COUNTING_SEMAPHORE_ENABLED
+    KineticCountingSemaphore_Give(sem);
+#endif
     return status;
 }
 
-// TODO: Asses refactoring this methog by disecting out Operation and relocate to kinetic_pdu
+// TODO: Assess refactoring this method by dissecting out Operation and relocate to kinetic_pdu
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation)
 {
     LOGF3("\nSending PDU via fd=%d", operation->connection->socket);
@@ -97,6 +103,12 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     // Acquire lock
     pthread_mutex_lock(sendMutex);
+    KineticSession *session = operation->connection->pSession;
+
+    // Populate sequence count and increment it for next operation
+    assert(request->message.header.sequence == KINETIC_SEQUENCE_NOT_YET_BOUND);
+    int seq_id = ATOMIC_FETCH_AND_INCREMENT(&operation->connection->sequence);
+    request->message.header.sequence = seq_id;
 
     // Pack the command, if available
     size_t expectedLen = KineticProto_command__get_packed_size(&request->message.command);
@@ -120,10 +132,10 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     // Populate the HMAC/PIN for protobuf authentication
     if (operation->pin != NULL) {
-        status = KineticAuth_PopulatePin(&operation->connection->pSession->config, operation->request, *operation->pin);
+        status = KineticAuth_PopulatePin(&session->config, operation->request, *operation->pin);
     }
     else {
-        status = KineticAuth_PopulateHmac(&operation->connection->pSession->config, operation->request);
+        status = KineticAuth_PopulateHmac(&session->config, operation->request);
     }
     if (status != KINETIC_STATUS_SUCCESS) {
         LOG0("Failed populating authentication info for new request!");
@@ -150,9 +162,6 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         status = KINETIC_STATUS_BUFFER_OVERRUN;
         goto cleanup;
     }
-
-    // Populate sequence count and increment it for next operation
-    request->message.header.sequence = operation->connection->sequence++;
 
     LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, fd: %6d, seq: %5lld, protoLen: %4u, valueLen: %u",
         operation->request, operation, operation->connection->pSession, operation->connection->messageBus,
@@ -193,10 +202,12 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     }
     assert((PDU_HEADER_LEN + header.protobufLength + header.valueLength) == offset);
 
+    int fd = operation->connection->socket;
+
     if (!bus_send_request(operation->connection->messageBus, &(bus_user_msg){
-        .fd       = operation->connection->socket,
+        .fd       = fd,
         .type     = BUS_SOCKET_PLAIN,
-        .seq_id   = request->message.header.sequence,
+        .seq_id   = seq_id,
         .msg      = msg,
         .msg_size = offset,
         .cb       = KineticController_HandleExpectedResponse,
@@ -205,7 +216,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     }))
     {
         LOGF0("Failed queuing request %p for transmit on fd=%d w/seq=%lld",
-            (void*)request, operation->connection->socket, (long long)request->message.header.sequence);
+            (void*)request, fd, (long long)seq_id);
         status = KINETIC_STATUS_SOCKET_ERROR;
     }
     else {
@@ -246,7 +257,9 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
     KineticCompletionData completionData = {.status = status};
 
+#if COUNTING_SEMAPHORE_ENABLED
     KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
+#endif
 
     if(operation->closure.callback != NULL) {
         operation->closure.callback(&completionData, operation->closure.clientData);
