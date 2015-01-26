@@ -20,6 +20,7 @@
 
 #include "kinetic_types_internal.h"
 #include "kinetic_client.h"
+#include "kinetic_allocator.h"
 #include "kinetic_session.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
@@ -86,30 +87,26 @@ KineticStatus KineticClient_CreateSession(KineticSessionConfig* const config,
         return KINETIC_STATUS_HMAC_REQUIRED;
     }
 
-    // Allocate a new session
-    KineticSession* s = KineticCalloc(1, sizeof(KineticSession));
+    // Create a new session
+    KineticSession* s = KineticAllocator_NewSession(client->bus, config);
     if (s == NULL) {
-        LOG0("Failed allocating a new session!");
+        LOG0("Failed to create session instance!");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
-
-    // Copy the supplied config into the session config
-    s->config = *config;
-    strncpy(s->config.host, config->host, sizeof(s->config.host));
-
-    // Initialize the session instance
     KineticSession_Create(s, client);
     if (s->connection == NULL) {
         LOG0("Failed to create connection instance!");
+        KineticAllocator_FreeSession(s);
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
-    // Create the connection
+    // Establish the connection
     KineticStatus status = KineticSession_Connect(s);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOGF0("Failed creating connection to %s:%d", config->host, config->port);
-        KineticSession_Destroy(s);
         s->connection = NULL;
+        KineticSession_Destroy(s);
+        KineticAllocator_FreeSession(s);
         return status;
     }
 

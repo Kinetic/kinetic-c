@@ -86,6 +86,9 @@ KineticStatus KineticSession_Destroy(KineticSession * const session)
 #endif
     KineticAllocator_FreeConnection(session->connection);
     session->connection = NULL;
+
+    KineticAllocator_FreeSession(session);
+
     return KINETIC_STATUS_SUCCESS;
 }
 

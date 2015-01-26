@@ -24,6 +24,32 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+
+KineticSession* KineticAllocator_NewSession(struct bus * b, KineticSessionConfig* config)
+{
+    (void)b; // TODO: combine session w/connection, which will use this variable
+    
+    // Allocate a new session
+    KineticSession* session = KineticCalloc(1, sizeof(KineticSession));
+    if (session == NULL) {
+        LOG0("Failed allocating a new session!");
+        return NULL;
+    }
+
+    // Copy the supplied config into the session config
+    session->config = *config;
+    strncpy(session->config.host, config->host, sizeof(session->config.host));
+
+    return session;
+}
+
+void KineticAllocator_FreeSession(KineticSession* session)
+{
+    if (session != NULL) {
+        KineticFree(session);
+    }
+}
+
 KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession* const session)
 {
     KineticConnection* connection = KineticCalloc(1, sizeof(KineticConnection));
