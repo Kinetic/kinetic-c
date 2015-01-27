@@ -247,7 +247,7 @@ static void unexpected_msg_cb(void *msg,
 void test_that_we_can_register_sockets(void)
 { LOG_LOCATION;
 
-    KineticLogger_Init("stdout", 3);
+    KineticLogger_Init("stdout", 2);
     bus_config cfg = {
         .log_cb = log_cb,
         .log_level = /*2,*/ 5,
