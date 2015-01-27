@@ -18,23 +18,24 @@ Prerequisites
     * Installation (if you don't already have OpenSSL installed)
         * Linux (using apt-get)
             * `> sudo apt-get install openssl`
+        * Linux (using yum)
+            * `> sudo yum install openssl`
         * OSX (using [Homebrew](http://brew.sh/))
             * `> brew install openssl`
 * [json-c](https://github.com/json-c/json-c) for JSON-formatted ACL definition files
-    * NOTE: Supplied as a Get submodule
-    * Installation (via autotools)
-        * `> cd vendor/json-c`
-        * `> sh autogen.sh`
-        * `> ./configure`
-        * `> make`
-        * `> sudo make install`
-    * Installation is further detailed in the json-c README
+    * Installation
+        * Linux (using apt-get)
+            * `> sudo apt-get install json-c`
+        * Linux (using yum)
+            * `> sudo yum install json-c`
+        * OSX (using [Homebrew](http://brew.sh/))
+            * `> brew install openssl`
             
 A release of OpenSSL that provides TLS 1.1 or newer is required.
 
 If the OpenSSL installation is not found, the `OPENSSL_PATH` environment
 variable may need to be set to its base path, e.g.
-`/usr/local/openssl/1.0.1k/`.
+`export OPENSSL_PATH=/usr/local/openssl/1.0.1k/`.
 
 Getting Started
 ---------------
