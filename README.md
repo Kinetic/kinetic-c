@@ -20,6 +20,15 @@ Prerequisites
             * `> sudo apt-get install openssl`
         * OSX (using [Homebrew](http://brew.sh/))
             * `> brew install openssl`
+* [json-c](https://github.com/json-c/json-c) for JSON-formatted ACL definition files
+    * NOTE: Supplied as a Get submodule
+    * Installation (via autotools)
+        * `> cd vendor/json-c`
+        * `> sh autogen.sh`
+        * `> ./configure`
+        * `> make`
+        * `> sudo make install`
+    * Installation is further detailed in the json-c README
             
 A release of OpenSSL that provides TLS 1.1 or newer is required.
 

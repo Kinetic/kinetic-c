@@ -7,6 +7,7 @@ v0.11.0 (kinetic-protocol 3.0.5)
 * Added options for the number of writer, reader, and max threadpool threads, with defaults.
 * Added KineticClient_FreeDeviceInfo to free the `KineticDeviceInfo` structure allocated by `KineticClient_GetLog`.
 * Added several new examples under src/examples/.
+* Added json-c library dependency which will be used for JSON-formatted ACL files for upcoming Admin API and multi-cast drive discovery tool.
 
 v0.10.1 (kinetic-protocol 3.0.5)
 --------------------------------

@@ -157,8 +157,22 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     size_t len = KineticProto_Message__pack(&request->message.message, &msg[offset]);
     assert(len == header.protobufLength);
     offset += header.protobufLength;
+
+    assert(operation);
+    assert(operation->request);
+    assert(operation->connection);
+    assert(request);
+    LOGF2("[PDU TX] pdu: %p, op: %p, session: %p, bus: %p, fd: %6d, seq: %5lld, protoLen: %4u, valueLen: %u",
+        (void*)operation->request, (void*)operation,
+        (void*)operation->connection->pSession, (void*)operation->connection->messageBus,
+        operation->connection->socket, request->message.header.sequence,
+        header.protobufLength, header.valueLength);
+    KineticLogger_LogHeader(3, &header);
+    KineticLogger_LogProtobuf(3, proto);
+
     free(request->message.message.commandBytes.data);
     request->message.message.commandBytes.data = NULL;
+
     // Send the value/payload, if specified
     if (header.valueLength > 0) {
         memcpy(&msg[offset], operation->entry->value.array.data, operation->entry->value.bytesUsed);
@@ -188,13 +202,6 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         status = KINETIC_STATUS_SOCKET_ERROR;
     }
     else {
-        LOGF2("[PDU TX] pdu: %p, op: %p, session: %p, bus: %p, fd: %6d, seq: %5lld, protoLen: %4u, valueLen: %u",
-            (void*)operation->request, (void*)operation,
-            (void*)operation->connection->pSession, (void*)operation->connection->messageBus,
-            operation->connection->socket, request->message.header.sequence,
-            header.protobufLength, header.valueLength);
-        KineticLogger_LogHeader(3, &header);
-        KineticLogger_LogProtobuf(3, proto);
         status = KINETIC_STATUS_SUCCESS;
     }
 

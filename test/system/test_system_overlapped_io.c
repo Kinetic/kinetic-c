@@ -99,6 +99,7 @@ void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_obj
         // Establish all of the connection first, so their session can all get initialized first
         for (int i = 0; i < NUM_COPIES; i++) {
             // Establish connection
+            memset(&kt_arg[i].session, 0, sizeof(KineticSession));
             kt_arg[i].session.config = sessionConfig;
             TEST_ASSERT_EQUAL_KineticStatus(
                 KINETIC_STATUS_SUCCESS,
