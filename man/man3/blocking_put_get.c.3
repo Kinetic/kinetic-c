@@ -1,0 +1,49 @@
+.TH "blocking_put_get.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+blocking_put_get.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_client\&.h'\fP
+.br
+\fC#include 'kinetic_types\&.h'\fP
+.br
+\fC#include 'byte_array\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <getopt\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <sys/param\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <sys/file\&.h>\fP
+.br
+\fC#include <ctype\&.h>\fP
+.br
+\fC#include <openssl/sha\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 96 of file blocking_put_get\&.c\&.
+.PP
+References ByteArray_CreateWithCString(), KineticSession::config, KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), and KineticClientConfig::logFile\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

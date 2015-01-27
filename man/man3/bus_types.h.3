@@ -1,0 +1,294 @@
+.TH "bus_types.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_types.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include 'threadpool\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBbus_sink_cb_res_t\fP"
+.br
+.ti -1c
+.RI "struct \fBbus_unpack_cb_res_t\fP"
+.br
+.ti -1c
+.RI "struct \fBbus_config\fP"
+.br
+.ti -1c
+.RI "struct \fBbus_result\fP"
+.br
+.ti -1c
+.RI "struct \fBbus_msg_result_t\fP"
+.br
+.ti -1c
+.RI "struct \fBbus_user_msg\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBUS_MAX_CONCURRENT_SENDS\fP   10"
+.br
+.ti -1c
+.RI "#define \fBBUS_DEFAULT_TIMEOUT_SEC\fP   10"
+.br
+.ti -1c
+.RI "#define \fBBUS_LOG\fP(B, LEVEL, EVENT_KEY, MSG, UDATA)"
+.br
+.ti -1c
+.RI "#define \fBBUS_LOG_STRINGIFY\fP(X)   #X"
+.br
+.ti -1c
+.RI "#define \fBBUS_LOG_SNPRINTF\fP(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT,\&.\&.\&.)"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef void( \fBbus_log_cb\fP )(\fBlog_event_t\fP event, int log_level, const char *msg, void *udata)"
+.br
+.ti -1c
+.RI "typedef \fBbus_sink_cb_res_t\fP( \fBbus_sink_cb\fP )(uint8_t *read_buf, size_t read_size, void *socket_udata)"
+.br
+.ti -1c
+.RI "typedef \fBbus_unpack_cb_res_t\fP( \fBbus_unpack_cb\fP )(void *msg, void *socket_udata)"
+.br
+.ti -1c
+.RI "typedef void( \fBbus_error_cb\fP )(\fBbus_unpack_cb_res_t\fP result, void *socket_udata)"
+.br
+.ti -1c
+.RI "typedef void( \fBbus_unexpected_msg_cb\fP )(void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)"
+.br
+.ti -1c
+.RI "typedef void( \fBbus_msg_cb\fP )(\fBbus_msg_result_t\fP *res, void *udata)"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBlog_event_t\fP "
+.br
+.ti -1c
+.RI "enum \fBbus_init_res_t\fP "
+.br
+.ti -1c
+.RI "enum \fBbus_send_status_t\fP "
+.br
+.ti -1c
+.RI "enum \fBbus_socket_t\fP "
+.br
+.ti -1c
+.RI "enum \fBbus_status_res_t\fP "
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define BUS_MAX_CONCURRENT_SENDS   10"
+
+.PP
+Definition at line 33 of file bus_types\&.h\&.
+.SS "#define BUS_DEFAULT_TIMEOUT_SEC   10"
+
+.PP
+Definition at line 36 of file bus_types\&.h\&.
+.SS "#define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                               \
+        struct bus *_b = (B);                                          \
+        int level = LEVEL;                                             \\
+        log_event_t event_key = EVENT_KEY;                             \
+        char *msg = MSG;                                               \
+        void *udata = UDATA;                                           \
+        if (_b->log_level >= level && _b->log_cb != NULL) {            \\
+            bus_lock_log(_b);                                          \
+            _b->log_cb(event_key, level, msg, udata);                  \\
+            bus_unlock_log(_b);                                        \
+        }                                                              \
+    } while (0)                                                        \
+.fi
+.PP
+Definition at line 38 of file bus_types\&.h\&.
+.SS "#define BUS_LOG_STRINGIFY(X)   #X"
+
+.PP
+Definition at line 52 of file bus_types\&.h\&.
+.SS "#define BUS_LOG_SNPRINTF(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT, \&.\&.\&.)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                               \
+        struct bus *_b = (B);                                          \
+        int level = LEVEL;                                             \\
+        log_event_t event_key = EVENT_KEY;                             \
+        void *udata = UDATA;                                           \
+        if (_b->log_level >= level && _b->log_cb != NULL) {            \\
+            bus_lock_log(_b);                                          \
+            char log_buf[MAX_SZ];                                      \
+            if (MAX_SZ < snprintf(log_buf, MAX_SZ,                     \
+                    FMT, __VA_ARGS__)) {                               \
+                _b->log_cb(event_key, level,                           \
+                    "snprintf failure -- "                             \
+                    __FILE__,                                          \
+                    udata);                                            \
+                char line_buf[32];                                     \
+                snprintf(line_buf, 32, "line %d\n", __LINE__);         \
+                _b->log_cb(event_key, level, line_buf, udata);         \
+            } else {                                                   \
+                _b->log_cb(event_key, level, log_buf, udata);          \
+            }                                                          \\
+            bus_unlock_log(_b);                                        \
+        }                                                              \
+    } while (0)                                                        \
+.fi
+.PP
+Definition at line 54 of file bus_types\&.h\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef void( bus_log_cb)(\fBlog_event_t\fP event, int log_level, const char *msg, void *udata)"
+
+.PP
+Definition at line 94 of file bus_types\&.h\&.
+.SS "typedef \fBbus_sink_cb_res_t\fP( bus_sink_cb)(uint8_t *read_buf, size_t read_size, void *socket_udata)"
+
+.PP
+Definition at line 114 of file bus_types\&.h\&.
+.SS "typedef \fBbus_unpack_cb_res_t\fP( bus_unpack_cb)(void *msg, void *socket_udata)"
+
+.PP
+Definition at line 135 of file bus_types\&.h\&.
+.SS "typedef void( bus_error_cb)(\fBbus_unpack_cb_res_t\fP result, void *socket_udata)"
+
+.PP
+Definition at line 138 of file bus_types\&.h\&.
+.SS "typedef void( bus_unexpected_msg_cb)(void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)"
+
+.PP
+Definition at line 143 of file bus_types\&.h\&.
+.SS "typedef void( bus_msg_cb)(\fBbus_msg_result_t\fP *res, void *udata)"
+
+.PP
+Definition at line 210 of file bus_types\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBlog_event_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fILOG_INITIALIZATION \fP\fP
+.TP
+\fB\fILOG_NEW_CLIENT \fP\fP
+.TP
+\fB\fILOG_SOCKET_REGISTERED \fP\fP
+.TP
+\fB\fILOG_SENDING_REQUEST \fP\fP
+.TP
+\fB\fILOG_SHUTDOWN \fP\fP
+.TP
+\fB\fILOG_SENDER \fP\fP
+.TP
+\fB\fILOG_LISTENER \fP\fP
+.TP
+\fB\fILOG_MEMORY \fP\fP
+.TP
+\fB\fILOG_EVENT_TYPE_COUNT \fP\fP
+.PP
+Definition at line 80 of file bus_types\&.h\&.
+.SS "enum \fBbus_init_res_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIBUS_INIT_SUCCESS \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_NULL \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_MISSING_SINK_CB \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_MISSING_UNPACK_CB \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_ALLOC_FAIL \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_SENDER_INIT_FAIL \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_LISTENER_INIT_FAIL \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_THREADPOOL_INIT_FAIL \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_PTHREAD_INIT_FAIL \fP\fP
+.TP
+\fB\fIBUS_INIT_ERROR_MUTEX_INIT_FAIL \fP\fP
+.PP
+Definition at line 165 of file bus_types\&.h\&.
+.SS "enum \fBbus_send_status_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIBUS_SEND_UNDEFINED \fP\fP
+.TP
+\fB\fIBUS_SEND_SUCCESS \fP\fP
+.TP
+\fB\fIBUS_SEND_TX_TIMEOUT \fP\fP
+.TP
+\fB\fIBUS_SEND_TX_FAILURE \fP\fP
+.TP
+\fB\fIBUS_SEND_RX_TIMEOUT \fP\fP
+.TP
+\fB\fIBUS_SEND_RX_FAILURE \fP\fP
+.TP
+\fB\fIBUS_SEND_BAD_RESPONSE \fP\fP
+.TP
+\fB\fIBUS_SEND_UNREGISTERED_SOCKET \fP\fP
+.PP
+Definition at line 178 of file bus_types\&.h\&.
+.SS "enum \fBbus_socket_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIBUS_SOCKET_PLAIN \fP\fP
+.TP
+\fB\fIBUS_SOCKET_SSL \fP\fP
+.PP
+Definition at line 212 of file bus_types\&.h\&.
+.SS "enum \fBbus_status_res_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIBUS_REQUEST_SUCCESS \fP\fP
+.TP
+\fB\fIBUS_REQUEST_SEND_FAILURE_TIMEOUT \fP\fP
+.TP
+\fB\fIBUS_REQUEST_SEND_FAILURE_HUP \fP\fP
+.TP
+\fB\fIBUS_RESPONSE_FAILURE_TIMEOUT \fP\fP
+.TP
+\fB\fIBUS_RESPONSE_FAILURE_HUP \fP\fP
+.PP
+Definition at line 231 of file bus_types\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

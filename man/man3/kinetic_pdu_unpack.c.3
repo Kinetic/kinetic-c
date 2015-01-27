@@ -1,0 +1,38 @@
+.TH "kinetic_pdu_unpack.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_pdu_unpack.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_pdu_unpack\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "KineticProto_Command * \fBKineticPDU_unpack_command\fP (ProtobufCAllocator *allocator, size_t len, const uint8_t *data)"
+.br
+.ti -1c
+.RI "KineticProto_Message * \fBKineticPDU_unpack_message\fP (ProtobufCAllocator *allocator, size_t len, const uint8_t *data)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "KineticProto_Command* KineticPDU_unpack_command (ProtobufCAllocator *allocator, size_tlen, const uint8_t *data)"
+
+.PP
+Definition at line 23 of file kinetic_pdu_unpack\&.c\&.
+.PP
+References KineticProto_command__unpack()\&.
+.SS "KineticProto_Message* KineticPDU_unpack_message (ProtobufCAllocator *allocator, size_tlen, const uint8_t *data)"
+
+.PP
+Definition at line 28 of file kinetic_pdu_unpack\&.c\&.
+.PP
+References KineticProto_Message__unpack()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

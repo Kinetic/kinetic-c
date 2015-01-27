@@ -1,4 +1,4 @@
-.TH "KineticPDU" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticPDU" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,96 +12,25 @@ KineticPDU \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticPDUHeader\fP \fBheader\fP"
-.br
-.ti -1c
-.RI "\fBKineticPDUHeader\fP \fBheaderNBO\fP"
-.br
-.ti -1c
-.RI "union {"
-.br
-.ti -1c
-.RI "   KineticProto_Message \fBbase\fP"
-.br
-.ti -1c
-.RI "   \fBKineticMessage\fP \fBmessage\fP"
-.br
-.ti -1c
-.RI "} \fBprotoData\fP"
-.br
-.ti -1c
-.RI "KineticProto_Message * \fBproto\fP"
-.br
-.ti -1c
-.RI "bool \fBprotobufDynamicallyExtracted\fP"
+.RI "\fBKineticMessage\fP \fBmessage\fP"
 .br
 .ti -1c
 .RI "KineticProto_Command * \fBcommand\fP"
 .br
-.ti -1c
-.RI "\fBKineticHMAC\fP \fBhmac\fP"
-.br
-.ti -1c
-.RI "KineticConnection * \fBconnection\fP"
-.br
-.ti -1c
-.RI "\fBKineticPDUType\fP \fBtype\fP"
-.br
-.ti -1c
-.RI "KineticOperation * \fBoperation\fP"
-.br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 216 of file kinetic_types_internal\&.h\&.
+Definition at line 153 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
-.SS "\fBKineticPDUHeader\fP KineticPDU::header"
-
-.PP
-Definition at line 218 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticPDUHeader\fP KineticPDU::headerNBO"
-
-.PP
-Definition at line 219 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Message KineticPDU::base"
-
-.PP
-Definition at line 223 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticMessage\fP KineticPDU::message"
 
 .PP
-Definition at line 224 of file kinetic_types_internal\&.h\&.
-.SS "union { \&.\&.\&. }   KineticPDU::protoData"
-
-.SS "KineticProto_Message* KineticPDU::proto"
-
-.PP
-Definition at line 226 of file kinetic_types_internal\&.h\&.
-.SS "bool KineticPDU::protobufDynamicallyExtracted"
-
-.PP
-Definition at line 227 of file kinetic_types_internal\&.h\&.
+Definition at line 154 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command* KineticPDU::command"
 
 .PP
-Definition at line 228 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticHMAC\fP KineticPDU::hmac"
-
-.PP
-Definition at line 231 of file kinetic_types_internal\&.h\&.
-.SS "KineticConnection* KineticPDU::connection"
-
-.PP
-Definition at line 234 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticPDUType\fP KineticPDU::type"
-
-.PP
-Definition at line 237 of file kinetic_types_internal\&.h\&.
-.SS "KineticOperation* KineticPDU::operation"
-
-.PP
-Definition at line 240 of file kinetic_types_internal\&.h\&.
+Definition at line 155 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

@@ -1,0 +1,61 @@
+.TH "kinetic_session.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_session.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_types_internal\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticSession_Create\fP (\fBKineticSession\fP *const session, KineticClient *const client)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticSession_Destroy\fP (\fBKineticSession\fP *const session)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticSession_Connect\fP (\fBKineticSession\fP const *const session)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticSession_Disconnect\fP (\fBKineticSession\fP const *const session)"
+.br
+.ti -1c
+.RI "void \fBKineticSession_IncrementSequence\fP (\fBKineticSession\fP const *const session)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticStatus\fP KineticSession_Create (\fBKineticSession\fP *constsession, KineticClient *constclient)"
+
+.PP
+Definition at line 37 of file kinetic_session\&.c\&.
+.PP
+References KineticSession::connection, KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeConnection(), KineticAllocator_NewConnection(), KineticCountingSemaphore_Create(), LOG0, KineticConnection::outstandingOperations, and KineticConnection::sendMutex\&.
+.SS "\fBKineticStatus\fP KineticSession_Destroy (\fBKineticSession\fP *constsession)"
+
+.PP
+Definition at line 71 of file kinetic_session\&.c\&.
+.PP
+References KineticSession::connection, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeConnection(), KineticCountingSemaphore_Destroy(), and KineticConnection::outstandingOperations\&.
+.SS "\fBKineticStatus\fP KineticSession_Connect (\fBKineticSession\fP const *constsession)"
+
+.PP
+Definition at line 85 of file kinetic_session\&.c\&.
+.PP
+References bus_register_socket(), BUS_SOCKET_PLAIN, KineticSession::config, KineticSession::connection, KineticSessionConfig::host, KINETIC_CONNECTION_TIMEOUT_SECS, KINETIC_SOCKET_DESCRIPTOR_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticResourceWaiter_WaitTilAvailable(), KineticSocket_Close(), KineticSocket_Connect(), LOG0, LOG_LOCATION, LOGF1, PDU_PROTO_MAX_LEN, and KineticSessionConfig::port\&.
+.SS "\fBKineticStatus\fP KineticSession_Disconnect (\fBKineticSession\fP const *constsession)"
+
+.PP
+Definition at line 147 of file kinetic_session\&.c\&.
+.PP
+References bus_release_socket(), KineticConnection::connected, KineticSession::connection, KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_EMPTY, and KINETIC_STATUS_SUCCESS\&.
+.SS "void KineticSession_IncrementSequence (\fBKineticSession\fP const *constsession)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

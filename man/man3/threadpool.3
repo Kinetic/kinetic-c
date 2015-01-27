@@ -1,0 +1,114 @@
+.TH "threadpool" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+threadpool \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <threadpool_internals\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBtask_reserve_head\fP"
+.br
+.ti -1c
+.RI "size_t \fBtask_commit_head\fP"
+.br
+.ti -1c
+.RI "size_t \fBtask_request_head\fP"
+.br
+.ti -1c
+.RI "size_t \fBtask_release_head\fP"
+.br
+.ti -1c
+.RI "struct \fBmarked_task\fP * \fBtasks\fP"
+.br
+.ti -1c
+.RI "size_t \fBtask_ringbuf_size\fP"
+.br
+.ti -1c
+.RI "size_t \fBtask_ringbuf_mask\fP"
+.br
+.ti -1c
+.RI "size_t \fBmax_delay\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBtask_ringbuf_size2\fP"
+.br
+.ti -1c
+.RI "bool \fBshutting_down\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBlive_threads\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBmax_threads\fP"
+.br
+.ti -1c
+.RI "struct \fBthread_info\fP * \fBthreads\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 45 of file threadpool_internals\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "size_t threadpool::task_reserve_head"
+
+.PP
+Definition at line 47 of file threadpool_internals\&.h\&.
+.SS "size_t threadpool::task_commit_head"
+
+.PP
+Definition at line 48 of file threadpool_internals\&.h\&.
+.SS "size_t threadpool::task_request_head"
+
+.PP
+Definition at line 49 of file threadpool_internals\&.h\&.
+.SS "size_t threadpool::task_release_head"
+
+.PP
+Definition at line 50 of file threadpool_internals\&.h\&.
+.SS "struct \fBmarked_task\fP* threadpool::tasks"
+
+.PP
+Definition at line 52 of file threadpool_internals\&.h\&.
+.SS "size_t threadpool::task_ringbuf_size"
+
+.PP
+Definition at line 54 of file threadpool_internals\&.h\&.
+.SS "size_t threadpool::task_ringbuf_mask"
+
+.PP
+Definition at line 55 of file threadpool_internals\&.h\&.
+.SS "size_t threadpool::max_delay"
+
+.PP
+Definition at line 57 of file threadpool_internals\&.h\&.
+.SS "uint8_t threadpool::task_ringbuf_size2"
+
+.PP
+Definition at line 58 of file threadpool_internals\&.h\&.
+.SS "bool threadpool::shutting_down"
+
+.PP
+Definition at line 60 of file threadpool_internals\&.h\&.
+.SS "uint8_t threadpool::live_threads"
+
+.PP
+Definition at line 61 of file threadpool_internals\&.h\&.
+.SS "uint8_t threadpool::max_threads"
+
+.PP
+Definition at line 62 of file threadpool_internals\&.h\&.
+.SS "struct \fBthread_info\fP* threadpool::threads"
+
+.PP
+Definition at line 63 of file threadpool_internals\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "kinetic_operation.h" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_operation.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -79,13 +79,16 @@ kinetic_operation.h \-
 .RI "\fBKineticStatus\fP \fBKineticOperation_P2POperationCallback\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
 .br
 .ti -1c
-.RI "void \fBKineticOperation_BuildP2POperation\fP (KineticOperation *const operation, \fBKineticP2P_Operation\fP *const p2pOp)"
+.RI "\fBKineticStatus\fP \fBKineticOperation_BuildP2POperation\fP (KineticOperation *const operation, KineticP2P_Operation *const p2pOp)"
 .br
 .ti -1c
 .RI "\fBKineticStatus\fP \fBKineticOperation_InstantSecureEraseCallback\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
 .br
 .ti -1c
 .RI "void \fBKineticOperation_BuildInstantSecureErase\fP (KineticOperation *operation)"
+.br
+.ti -1c
+.RI "void \fBKineticOperation_BuildSetClusterVersion\fP (KineticOperation *operation, int64_t newClusterVersion)"
 .br
 .ti -1c
 .RI "void \fBKineticOperation_Complete\fP (KineticOperation *operation, \fBKineticStatus\fP status)"
@@ -99,159 +102,151 @@ kinetic_operation.h \-
 .SS "\fBKineticStatus\fP KineticOperation_SendRequest (KineticOperation *constoperation)"
 
 .PP
-Definition at line 80 of file kinetic_operation\&.c\&.
+Definition at line 42 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_OPERATION_TIMEOUT_SECS, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), KineticHMAC_Populate(), KineticLogger_LogByteArray(), KineticLogger_LogHeader(), KineticNBO_FromHostU32(), KineticOperation_SetTimeoutTime(), KineticProto_command__get_packed_size(), KineticProto_command__pack(), KineticProto_Message__get_packed_size(), and LOGF1\&.
+References KINETIC_STATUS_SUCCESS\&.
 .SS "KineticOperation* KineticOperation_AssociateResponseWithOperation (KineticPDU *response)"
 
-.PP
-Definition at line 167 of file kinetic_operation\&.c\&.
-.PP
-References KINETIC_PDU_TYPE_REQUEST, KINETIC_PDU_TYPE_RESPONSE, KineticAllocator_GetFirstOperation(), KineticAllocator_GetNextOperation(), LOG0, LOG2, and LOGF3\&.
 .SS "struct timeval KineticOperation_GetTimeoutTime (KineticOperation *constoperation)"
 
-.PP
-Definition at line 143 of file kinetic_operation\&.c\&.
 .SS "void KineticOperation_SetTimeoutTime (KineticOperation *constoperation, uint32_t consttimeout_in_sec)"
 
-.PP
-Definition at line 151 of file kinetic_operation\&.c\&.
-.PP
-References Kinetic_TimevalAdd()\&.
 .SS "\fBKineticStatus\fP KineticOperation_GetStatus (const KineticOperation *constoperation)"
 
 .PP
-Definition at line 134 of file kinetic_operation\&.c\&.
+Definition at line 217 of file kinetic_operation\&.c\&.
 .PP
 References KINETIC_STATUS_INVALID, and KineticPDU_GetStatus()\&.
 .SS "\fBKineticStatus\fP KineticOperation_NoopCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .PP
-Definition at line 205 of file kinetic_operation\&.c\&.
+Definition at line 226 of file kinetic_operation\&.c\&.
 .PP
 References LOGF3\&.
 .SS "void KineticOperation_BuildNoop (KineticOperation *operation)"
 
 .PP
-Definition at line 214 of file kinetic_operation\&.c\&.
+Definition at line 235 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, KineticOperation_NoopCallback(), and KineticSession_IncrementSequence()\&.
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, and KineticOperation_NoopCallback()\&.
 .SS "\fBKineticStatus\fP KineticOperation_PutCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .PP
-Definition at line 225 of file kinetic_operation\&.c\&.
+Definition at line 246 of file kinetic_operation\&.c\&.
 .PP
 References ByteBuffer::array, BYTE_BUFFER_NONE, ByteBuffer_Append(), ByteBuffer_Reset(), ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::dbVersion, KINETIC_STATUS_SUCCESS, ByteArray::len, LOGF3, and KineticEntry::newVersion\&.
 .SS "void KineticOperation_BuildPut (KineticOperation *constoperation, \fBKineticEntry\fP *constentry)"
 
 .PP
-Definition at line 257 of file kinetic_operation\&.c\&.
+Definition at line 278 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT, KineticMessage_ConfigureKeyValue(), KineticOperation_PutCallback(), and KineticSession_IncrementSequence()\&.
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT, KineticMessage_ConfigureKeyValue(), and KineticOperation_PutCallback()\&.
 .SS "\fBKineticStatus\fP KineticOperation_GetCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .SS "void KineticOperation_BuildGet (KineticOperation *constoperation, \fBKineticEntry\fP *constentry)"
 
 .PP
-Definition at line 325 of file kinetic_operation\&.c\&.
+Definition at line 353 of file kinetic_operation\&.c\&.
 .PP
 References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET\&.
 .SS "void KineticOperation_BuildGetNext (KineticOperation *constoperation, \fBKineticEntry\fP *constentry)"
 
 .PP
-Definition at line 349 of file kinetic_operation\&.c\&.
+Definition at line 377 of file kinetic_operation\&.c\&.
 .PP
 References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT\&.
 .SS "void KineticOperation_BuildGetPrevious (KineticOperation *constoperation, \fBKineticEntry\fP *constentry)"
 
 .PP
-Definition at line 337 of file kinetic_operation\&.c\&.
+Definition at line 365 of file kinetic_operation\&.c\&.
 .PP
 References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS\&.
 .SS "\fBKineticStatus\fP KineticOperation_FlushCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .PP
-Definition at line 356 of file kinetic_operation\&.c\&.
+Definition at line 384 of file kinetic_operation\&.c\&.
 .PP
 References LOGF3\&.
 .SS "void KineticOperation_BuildFlush (KineticOperation *constoperation)"
 
 .PP
-Definition at line 366 of file kinetic_operation\&.c\&.
+Definition at line 394 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA, KineticOperation_FlushCallback(), and KineticSession_IncrementSequence()\&.
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA, and KineticOperation_FlushCallback()\&.
 .SS "\fBKineticStatus\fP KineticOperation_DeleteCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .PP
-Definition at line 378 of file kinetic_operation\&.c\&.
+Definition at line 405 of file kinetic_operation\&.c\&.
 .PP
 References LOGF3\&.
 .SS "void KineticOperation_BuildDelete (KineticOperation *constoperation, \fBKineticEntry\fP *constentry)"
 
 .PP
-Definition at line 389 of file kinetic_operation\&.c\&.
+Definition at line 415 of file kinetic_operation\&.c\&.
 .PP
-References ByteBuffer_Reset(), KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE, KineticMessage_ConfigureKeyValue(), KineticOperation_DeleteCallback(), and KineticSession_IncrementSequence()\&.
+References ByteBuffer_Reset(), KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE, KineticMessage_ConfigureKeyValue(), and KineticOperation_DeleteCallback()\&.
 .SS "\fBKineticStatus\fP KineticOperation_GetKeyRangeCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .PP
-Definition at line 410 of file kinetic_operation\&.c\&.
+Definition at line 435 of file kinetic_operation\&.c\&.
 .PP
 References Copy_KineticProto_Command_Range_to_ByteBufferArray(), KINETIC_STATUS_BUFFER_OVERRUN, KINETIC_STATUS_SUCCESS, KineticPDU_GetKeyRange(), and LOGF3\&.
 .SS "void KineticOperation_BuildGetKeyRange (KineticOperation *constoperation, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *buffers)"
 
 .PP
-Definition at line 433 of file kinetic_operation\&.c\&.
+Definition at line 458 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE, KineticMessage_ConfigureKeyRange(), KineticOperation_GetKeyRangeCallback(), and KineticSession_IncrementSequence()\&.
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE, KineticMessage_ConfigureKeyRange(), and KineticOperation_GetKeyRangeCallback()\&.
 .SS "\fBKineticStatus\fP KineticOperation_GetLogCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .PP
-Definition at line 452 of file kinetic_operation\&.c\&.
+Definition at line 476 of file kinetic_operation\&.c\&.
 .PP
 References KINETIC_STATUS_OPERATION_FAILED, KINETIC_STATUS_SUCCESS, KineticDeviceInfo_Create(), and LOGF3\&.
 .SS "void KineticOperation_BuildGetLog (KineticOperation *constoperation, \fBKineticDeviceInfo_Type\fPtype, \fBKineticDeviceInfo\fP **info)"
 
 .PP
-Definition at line 476 of file kinetic_operation\&.c\&.
+Definition at line 499 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG, KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(), KineticOperation_GetLogCallback(), and KineticSession_IncrementSequence()\&.
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG, KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(), and KineticOperation_GetLogCallback()\&.
 .SS "\fBKineticStatus\fP KineticOperation_P2POperationCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .PP
-Definition at line 496 of file kinetic_operation\&.c\&.
+Definition at line 649 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticProtoStatusCode_to_KineticStatus(), KineticP2P_Operation::numOperations, KineticP2P_Operation::operations, and KineticP2P_OperationData::resultStatus\&.
-.SS "void KineticOperation_BuildP2POperation (KineticOperation *constoperation, \fBKineticP2P_Operation\fP *constp2pOp)"
+References destroy_p2pOp(), and KINETIC_STATUS_SUCCESS\&.
+.SS "\fBKineticStatus\fP KineticOperation_BuildP2POperation (KineticOperation *constoperation, KineticP2P_Operation *constp2pOp)"
 
 .PP
-Definition at line 534 of file kinetic_operation\&.c\&.
+Definition at line 668 of file kinetic_operation\&.c\&.
 .PP
-References ByteBuffer::array, ByteBuffer_IsNull(), ByteBuffer::bytesUsed, ByteArray::data, KineticP2P_Peer::hostname, KineticP2P_OperationData::key, KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH, KineticOperation_P2POperationCallback(), KineticProto_command_p2_poperation_operation__init(), KineticSession_IncrementSequence(), KineticP2P_OperationData::newKey, KineticP2P_Operation::numOperations, KineticP2P_Operation::operations, KineticP2P_Operation::peer, KineticP2P_Peer::port, KineticP2P_Peer::tls, and KineticP2P_OperationData::version\&.
+References build_p2pOp(), KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH, KINETIC_STATUS_BUFFER_OVERRUN, KINETIC_STATUS_OPERATION_INVALID, KINETIC_STATUS_SUCCESS, and KineticOperation_P2POperationCallback()\&.
 .SS "\fBKineticStatus\fP KineticOperation_InstantSecureEraseCallback (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
 
 .PP
-Definition at line 592 of file kinetic_operation\&.c\&.
+Definition at line 692 of file kinetic_operation\&.c\&.
 .PP
 References LOGF3\&.
 .SS "void KineticOperation_BuildInstantSecureErase (KineticOperation *operation)"
 
 .PP
-Definition at line 601 of file kinetic_operation\&.c\&.
+Definition at line 701 of file kinetic_operation\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP, KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP, KineticOperation_InstantSecureEraseCallback(), and KineticSession_IncrementSequence()\&.
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP, KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP, and KineticOperation_InstantSecureEraseCallback()\&.
+.SS "void KineticOperation_BuildSetClusterVersion (KineticOperation *operation, int64_tnewClusterVersion)"
+
+.PP
+Definition at line 728 of file kinetic_operation\&.c\&.
+.PP
+References KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP, and KineticOperation_SetClusterVersionCallback()\&.
 .SS "void KineticOperation_Complete (KineticOperation *operation, \fBKineticStatus\fPstatus)"
 
 .PP
-Definition at line 630 of file kinetic_operation\&.c\&.
+Definition at line 754 of file kinetic_operation\&.c\&.
 .PP
-References KineticAllocator_FreeOperation(), and KineticCompletionData::status\&.
+References KineticAllocator_FreeOperation(), KineticCountingSemaphore_Give(), and KineticCompletionData::status\&.
 .SS "void KineticOperation_TimeoutOperations (KineticConnection *constconnection)"
 
-.PP
-Definition at line 641 of file kinetic_operation\&.c\&.
-.PP
-References KINETIC_STATUS_OPERATION_TIMEDOUT, Kinetic_TimevalCmp(), Kinetic_TimevalIsZero(), KineticAllocator_GetFirstOperation(), KineticAllocator_GetNextOperation(), KineticOperation_Complete(), and KineticOperation_GetTimeoutTime()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

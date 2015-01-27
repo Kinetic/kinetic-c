@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -63,32 +63,22 @@
 Functions</h2></td></tr>
 <tr class="memitem:ade87a99a948224add0a96d09b0f62cd9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#ade87a99a948224add0a96d09b0f62cd9">KineticAllocator_InitLists</a> (KineticConnection *connection)</td></tr>
 <tr class="separator:ade87a99a948224add0a96d09b0f62cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03e3395fdbd9a30fd9f9621b8909a365"><td class="memItemLeft" align="right" valign="top">KineticConnection *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a03e3395fdbd9a30fd9f9621b8909a365">KineticAllocator_NewConnection</a> (void)</td></tr>
-<tr class="separator:a03e3395fdbd9a30fd9f9621b8909a365"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa32172871b8d282fb4c9d7b667e9ddba"><td class="memItemLeft" align="right" valign="top">KineticConnection *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#aa32172871b8d282fb4c9d7b667e9ddba">KineticAllocator_NewConnection</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="struct_kinetic_session.html">KineticSession</a> *const session)</td></tr>
+<tr class="separator:aa32172871b8d282fb4c9d7b667e9ddba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a870468e22b2d0dac6f7dc86f9ad5e92f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a870468e22b2d0dac6f7dc86f9ad5e92f">KineticAllocator_FreeConnection</a> (KineticConnection *connection)</td></tr>
 <tr class="separator:a870468e22b2d0dac6f7dc86f9ad5e92f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74633bbfb28f39b6388449643206573d"><td class="memItemLeft" align="right" valign="top">KineticPDU *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a74633bbfb28f39b6388449643206573d">KineticAllocator_NewPDU</a> (KineticConnection *connection)</td></tr>
 <tr class="separator:a74633bbfb28f39b6388449643206573d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2d80d508232d116745144d8d94e9ffa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#ac2d80d508232d116745144d8d94e9ffa">KineticAllocator_FreePDU</a> (KineticConnection *connection, KineticPDU *pdu)</td></tr>
-<tr class="separator:ac2d80d508232d116745144d8d94e9ffa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33b0e25e30a11f07d68e358924d4b3d3"><td class="memItemLeft" align="right" valign="top">KineticPDU *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a33b0e25e30a11f07d68e358924d4b3d3">KineticAllocator_GetFirstPDU</a> (KineticConnection *connection)</td></tr>
-<tr class="separator:a33b0e25e30a11f07d68e358924d4b3d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31aae9131844cb95472fe1d3fadc8820"><td class="memItemLeft" align="right" valign="top">KineticPDU *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a31aae9131844cb95472fe1d3fadc8820">KineticAllocator_GetNextPDU</a> (KineticConnection *connection, KineticPDU *pdu)</td></tr>
-<tr class="separator:a31aae9131844cb95472fe1d3fadc8820"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c1861c44afab0b427c22f31560bf1a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a1c1861c44afab0b427c22f31560bf1a6">KineticAllocator_FreeAllPDUs</a> (KineticConnection *connection)</td></tr>
-<tr class="separator:a1c1861c44afab0b427c22f31560bf1a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a167e4709ff5e3432eb9e1c991d7de869"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a167e4709ff5e3432eb9e1c991d7de869">KineticAllocator_FreePDU</a> (KineticPDU *pdu)</td></tr>
+<tr class="separator:a167e4709ff5e3432eb9e1c991d7de869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a316769b24a5c83955f95bb97a0347a50"><td class="memItemLeft" align="right" valign="top">KineticOperation *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a316769b24a5c83955f95bb97a0347a50">KineticAllocator_NewOperation</a> (KineticConnection *connection)</td></tr>
 <tr class="separator:a316769b24a5c83955f95bb97a0347a50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c18ebc155dd5604d7e79c01d85727b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a4c18ebc155dd5604d7e79c01d85727b0">KineticAllocator_FreeOperation</a> (KineticConnection *connection, KineticOperation *operation)</td></tr>
-<tr class="separator:a4c18ebc155dd5604d7e79c01d85727b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43dc850d34534b4b9b871f9c4f2ba3b4"><td class="memItemLeft" align="right" valign="top">KineticOperation *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a43dc850d34534b4b9b871f9c4f2ba3b4">KineticAllocator_GetFirstOperation</a> (KineticConnection *connection)</td></tr>
-<tr class="separator:a43dc850d34534b4b9b871f9c4f2ba3b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdc00a85d9c0652b980edea9ec88fb4c"><td class="memItemLeft" align="right" valign="top">KineticOperation *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#abdc00a85d9c0652b980edea9ec88fb4c">KineticAllocator_GetNextOperation</a> (KineticConnection *connection, KineticOperation *operation)</td></tr>
-<tr class="separator:abdc00a85d9c0652b980edea9ec88fb4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae36036bfa23121b446c2ad61d4aa9a58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#ae36036bfa23121b446c2ad61d4aa9a58">KineticAllocator_FreeAllOperations</a> (KineticConnection *connection)</td></tr>
-<tr class="separator:ae36036bfa23121b446c2ad61d4aa9a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a975785d80b110e973623b26644eff77a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a975785d80b110e973623b26644eff77a">KineticAllocator_ValidateAllMemoryFreed</a> (KineticConnection *connection)</td></tr>
-<tr class="separator:a975785d80b110e973623b26644eff77a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4edf7f13ac63599495458bb59536a6cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a4edf7f13ac63599495458bb59536a6cb">KineticAllocator_FreeOperation</a> (KineticOperation *operation)</td></tr>
+<tr class="separator:a4edf7f13ac63599495458bb59536a6cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a3c242e31eaeea2efcedea00bfbece6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_response.html">KineticResponse</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#a1a3c242e31eaeea2efcedea00bfbece6">KineticAllocator_NewKineticResponse</a> (size_t const valueLength)</td></tr>
+<tr class="separator:a1a3c242e31eaeea2efcedea00bfbece6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8859e2a71ff081265087335265a7e1c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__allocator_8h.html#af8859e2a71ff081265087335265a7e1c">KineticAllocator_FreeKineticResponse</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
+<tr class="separator:af8859e2a71ff081265087335265a7e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ade87a99a948224add0a96d09b0f62cd9"></a>
@@ -105,29 +95,35 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00044">44</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00071">KINETIC_LIST_INITIALIZER</a>.</p>
-
 </div>
 </div>
-<a class="anchor" id="a03e3395fdbd9a30fd9f9621b8909a365"></a>
+<a class="anchor" id="aa32172871b8d282fb4c9d7b667e9ddba"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">KineticConnection* KineticAllocator_NewConnection </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> *const&#160;</td>
+          <td class="paramname"><em>session</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00051">51</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00029">29</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00096">KINETIC_CONNECTION_INIT</a>.</p>
+<p>References <a class="el" href="kinetic__memory_8c_source.html#l00005">KineticCalloc()</a>, <a class="el" href="kinetic__resourcewaiter_8c_source.html#l00008">KineticResourceWaiter_Init()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>.</p>
 
 </div>
 </div>
@@ -145,7 +141,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00058">58</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00043">43</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__memory_8c_source.html#l00010">KineticFree()</a>, and <a class="el" href="kinetic__resourcewaiter_8c_source.html#l00053">KineticResourceWaiter_Destroy()</a>.</p>
 
 </div>
 </div>
@@ -163,105 +161,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00200">200</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00243">KINETIC_PDU_INIT</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
-
 </div>
 </div>
-<a class="anchor" id="ac2d80d508232d116745144d8d94e9ffa"></a>
+<a class="anchor" id="a167e4709ff5e3432eb9e1c991d7de869"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void KineticAllocator_FreePDU </td>
           <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">KineticPDU *&#160;</td>
-          <td class="paramname"><em>pdu</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00216">216</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__allocator_8c_source.html#l00031">KINETIC_LIST_LOCK</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00037">KINETIC_LIST_UNLOCK</a>, <a class="el" href="kinetic__proto_8c_source.html#l00104">KineticProto_Message__free_unpacked()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00055">LOG3</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a33b0e25e30a11f07d68e358924d4b3d3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">KineticPDU* KineticAllocator_GetFirstPDU </td>
-          <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em></td><td>)</td>
+          <td class="paramname"><em>pdu</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00236">236</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a31aae9131844cb95472fe1d3fadc8820"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">KineticPDU* KineticAllocator_GetNextPDU </td>
-          <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">KineticPDU *&#160;</td>
-          <td class="paramname"><em>pdu</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00242">242</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1c1861c44afab0b427c22f31560bf1a6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void KineticAllocator_FreeAllPDUs </td>
-          <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00248">248</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__allocator_8c_source.html#l00031">KINETIC_LIST_LOCK</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00037">KINETIC_LIST_UNLOCK</a>, <a class="el" href="kinetic__proto_8c_source.html#l00104">KineticProto_Message__free_unpacked()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00053">LOG1</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00055">LOG3</a>.</p>
 
 </div>
 </div>
@@ -279,125 +193,69 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00276">276</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00073">73</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00283">KINETIC_OPERATION_INIT</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00256">KINETIC_PDU_INIT_WITH_COMMAND</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00200">KineticAllocator_NewPDU()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
+<p>References <a class="el" href="kinetic__memory_8c_source.html#l00005">KineticCalloc()</a>, <a class="el" href="kinetic__memory_8c_source.html#l00010">KineticFree()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00446">KineticOperation_Init()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00469">KineticPDU_InitWithCommand()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4c18ebc155dd5604d7e79c01d85727b0"></a>
+<a class="anchor" id="a4edf7f13ac63599495458bb59536a6cb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void KineticAllocator_FreeOperation </td>
           <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">KineticOperation *&#160;</td>
-          <td class="paramname"><em>operation</em>&#160;</td>
-        </tr>
-        <tr>
+          <td class="paramname"><em>operation</em></td><td>)</td>
           <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00293">293</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00096">96</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__allocator_8c_source.html#l00216">KineticAllocator_FreePDU()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
+<p>References <a class="el" href="kinetic__allocator_8c_source.html#l00060">KineticAllocator_FreeKineticResponse()</a>, <a class="el" href="kinetic__memory_8c_source.html#l00010">KineticFree()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a43dc850d34534b4b9b871f9c4f2ba3b4"></a>
+<a class="anchor" id="a1a3c242e31eaeea2efcedea00bfbece6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">KineticOperation* KineticAllocator_GetFirstOperation </td>
+          <td class="memname"><a class="el" href="struct_kinetic_response.html">KineticResponse</a>* KineticAllocator_NewKineticResponse </td>
           <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em></td><td>)</td>
+          <td class="paramtype">size_t const&#160;</td>
+          <td class="paramname"><em>valueLength</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00315">315</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00050">50</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__memory_8c_source.html#l00005">KineticCalloc()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="abdc00a85d9c0652b980edea9ec88fb4c"></a>
+<a class="anchor" id="af8859e2a71ff081265087335265a7e1c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">KineticOperation* KineticAllocator_GetNextOperation </td>
+          <td class="memname">void KineticAllocator_FreeKineticResponse </td>
           <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">KineticOperation *&#160;</td>
-          <td class="paramname"><em>operation</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00321">321</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae36036bfa23121b446c2ad61d4aa9a58"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void KineticAllocator_FreeAllOperations </td>
-          <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_response.html">KineticResponse</a> *&#160;</td>
+          <td class="paramname"><em>response</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00327">327</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00060">60</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__allocator_8c_source.html#l00293">KineticAllocator_FreeOperation()</a>, and <a class="el" href="kinetic__allocator_8c_source.html#l00315">KineticAllocator_GetFirstOperation()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a975785d80b110e973623b26644eff77a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool KineticAllocator_ValidateAllMemoryFreed </td>
-          <td>(</td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>connection</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__allocator_8c_source.html#l00336">336</a> of file <a class="el" href="kinetic__allocator_8c_source.html">kinetic_allocator.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00064">BOOL_TO_STRING</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00162">KineticResponse::command</a>, <a class="el" href="kinetic__memory_8c_source.html#l00010">KineticFree()</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00161">KineticResponse::proto</a>.</p>
 
 </div>
 </div>

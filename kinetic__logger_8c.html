@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -69,7 +69,7 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:afd9117f49e6fe26a09f07a8b4094668b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#afd9117f49e6fe26a09f07a8b4094668b">KINETIC_LOGGER_BUFFER_STR_MAX_LEN</a>&#160;&#160;&#160;256</td></tr>
+<tr class="memitem:afd9117f49e6fe26a09f07a8b4094668b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#afd9117f49e6fe26a09f07a8b4094668b">KINETIC_LOGGER_BUFFER_STR_MAX_LEN</a>&#160;&#160;&#160;512</td></tr>
 <tr class="separator:afd9117f49e6fe26a09f07a8b4094668b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46c0b1536713e7bd16d5d879b148fcbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__logger_8c.html#a46c0b1536713e7bd16d5d879b148fcbd">KINETIC_LOGGER_BUFFER_SIZE</a>&#160;&#160;&#160;(0x1 &lt;&lt; 12)</td></tr>
 <tr class="separator:a46c0b1536713e7bd16d5d879b148fcbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,7 +123,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define KINETIC_LOGGER_BUFFER_STR_MAX_LEN&#160;&#160;&#160;256</td>
+          <td class="memname">#define KINETIC_LOGGER_BUFFER_STR_MAX_LEN&#160;&#160;&#160;512</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -219,7 +219,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><a class="code" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a>(2, <span class="stringliteral">&quot;%s%s {&quot;</span>, (_indent), (__name)); \</div>
-<div class="line">    strcat(_indent, <span class="stringliteral">&quot;  &quot;</span>);</div>
+<div class="line">    (strlen(_indent) &lt; (<span class="keyword">sizeof</span>(_indent) - 3 )) ? strcat(_indent, <span class="stringliteral">&quot;  &quot;</span>) : 0;</div>
 <div class="ttc" id="kinetic__logger_8c_html_ad8a9ff07bbef2692cdd898a5c62553b4"><div class="ttname"><a href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a></div><div class="ttdeci">void KineticLogger_LogPrintf(int log_level, const char *format,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00133">kinetic_logger.c:133</a></div></div>
 </div><!-- fragment -->
 <p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00181">181</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
@@ -239,7 +239,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><a class="code" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a>(2, <span class="stringliteral">&quot;{&quot;</span>); \</div>
-<div class="line">    strcat(_indent, <span class="stringliteral">&quot;  &quot;</span>);</div>
+<div class="line">    (strlen(_indent) &lt; (<span class="keyword">sizeof</span>(_indent) - 3)) ? strcat(_indent, <span class="stringliteral">&quot;  &quot;</span>) : 0;</div>
 <div class="ttc" id="kinetic__logger_8c_html_ad8a9ff07bbef2692cdd898a5c62553b4"><div class="ttname"><a href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a></div><div class="ttdeci">void KineticLogger_LogPrintf(int log_level, const char *format,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00133">kinetic_logger.c:133</a></div></div>
 </div><!-- fragment -->
 <p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00184">184</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
@@ -290,7 +290,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><a class="code" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a>(2, <span class="stringliteral">&quot;%s%s: (%u elements) [&quot;</span>, (_indent), (__name), (__quantity)); \</div>
-<div class="line">    strcat(_indent, <span class="stringliteral">&quot;  &quot;</span>);</div>
+<div class="line">    (strlen(_indent) &lt; (<span class="keyword">sizeof</span>(_indent) - 3)) ? strcat(_indent, <span class="stringliteral">&quot;  &quot;</span>) : 0;</div>
 <div class="ttc" id="kinetic__logger_8c_html_ad8a9ff07bbef2692cdd898a5c62553b4"><div class="ttname"><a href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4">KineticLogger_LogPrintf</a></div><div class="ttdeci">void KineticLogger_LogPrintf(int log_level, const char *format,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8c_source.html#l00133">kinetic_logger.c:133</a></div></div>
 </div><!-- fragment -->
 <p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00191">191</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
@@ -362,7 +362,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__logger_8c_source.html#l00101">101</a> of file <a class="el" href="kinetic__logger_8c_source.html">kinetic_logger.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00311">Kinetic_GetErrnoDescription()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00288">Kinetic_GetErrnoDescription()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>.</p>
 
 </div>
 </div>

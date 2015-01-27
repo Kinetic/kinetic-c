@@ -1,0 +1,58 @@
+.TH "KineticCountingSemaphore" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+KineticCountingSemaphore \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <kinetic_countingsemaphore_types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "pthread_mutex_t \fBmutex\fP"
+.br
+.ti -1c
+.RI "pthread_cond_t \fBavailable\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBcount\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBmax\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBnum_waiting\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 7 of file kinetic_countingsemaphore_types\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "pthread_mutex_t KineticCountingSemaphore::mutex"
+
+.PP
+Definition at line 8 of file kinetic_countingsemaphore_types\&.h\&.
+.SS "pthread_cond_t KineticCountingSemaphore::available"
+
+.PP
+Definition at line 9 of file kinetic_countingsemaphore_types\&.h\&.
+.SS "uint32_t KineticCountingSemaphore::count"
+
+.PP
+Definition at line 10 of file kinetic_countingsemaphore_types\&.h\&.
+.SS "uint32_t KineticCountingSemaphore::max"
+
+.PP
+Definition at line 11 of file kinetic_countingsemaphore_types\&.h\&.
+.SS "uint32_t KineticCountingSemaphore::num_waiting"
+
+.PP
+Definition at line 12 of file kinetic_countingsemaphore_types\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

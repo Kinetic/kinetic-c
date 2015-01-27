@@ -1,4 +1,4 @@
-.TH "byte_array.c" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "byte_array.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,6 +15,8 @@ byte_array.c \-
 \fC#include <stdio\&.h>\fP
 .br
 \fC#include <stdarg\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
 .br
 \fC#include <sys/param\&.h>\fP
 .br
@@ -53,6 +55,9 @@ byte_array.c \-
 .RI "\fBByteBuffer\fP \fBByteBuffer_CreateAndAppendCString\fP (void *data, size_t max_len, const char *value)"
 .br
 .ti -1c
+.RI "\fBByteBuffer\fP \fBByteBuffer_CreateAndAppendDummyData\fP (void *data, size_t max_len, size_t len)"
+.br
+.ti -1c
 .RI "long \fBByteBuffer_BytesRemaining\fP (const \fBByteBuffer\fP buffer)"
 .br
 .ti -1c
@@ -82,125 +87,158 @@ byte_array.c \-
 .ti -1c
 .RI "bool \fBByteBuffer_IsNull\fP (\fBByteBuffer\fP const buffer)"
 .br
+.ti -1c
+.RI "\fBByteBuffer\fP \fBByteBuffer_Malloc\fP (size_t size)"
+.br
+.ti -1c
+.RI "\fBByteBuffer\fP \fBByteBuffer_MallocAndAppend\fP (const void *data, size_t len)"
+.br
+.ti -1c
+.RI "void \fBByteBuffer_Free\fP (\fBByteBuffer\fP buffer)"
+.br
 .in -1c
 .SH "Function Documentation"
 .PP 
 .SS "\fBByteArray\fP ByteArray_Create (void *data, size_tlen)"
 
 .PP
-Definition at line 11 of file byte_array\&.c\&.
+Definition at line 12 of file byte_array\&.c\&.
 .PP
 References ByteArray::data\&.
 .SS "\fBByteArray\fP ByteArray_CreateWithCString (const char *str)"
 
 .PP
-Definition at line 18 of file byte_array\&.c\&.
+Definition at line 19 of file byte_array\&.c\&.
 .PP
 References ByteArray::data\&.
 .SS "void ByteArray_FillWithDummyData (\fBByteArray\fParray)"
 
 .PP
-Definition at line 25 of file byte_array\&.c\&.
+Definition at line 26 of file byte_array\&.c\&.
 .PP
 References ByteArray::data, and ByteArray::len\&.
 .SS "\fBByteArray\fP ByteArray_GetSlice (\fBByteArray\fParray, size_tstart, size_tlen)"
 
 .PP
-Definition at line 32 of file byte_array\&.c\&.
+Definition at line 33 of file byte_array\&.c\&.
 .PP
 References ByteArray::data, and ByteArray::len\&.
 .SS "void ByteBuffer_Reset (\fBByteBuffer\fP *buffer)"
 
 .PP
-Definition at line 42 of file byte_array\&.c\&.
+Definition at line 43 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::bytesUsed\&.
 .SS "\fBByteBuffer\fP ByteBuffer_Create (void *data, size_tmax_len, size_tused)"
 
 .PP
-Definition at line 48 of file byte_array\&.c\&.
+Definition at line 49 of file byte_array\&.c\&.
 .SS "\fBByteBuffer\fP ByteBuffer_CreateWithArray (\fBByteArray\fParray)"
 
 .PP
-Definition at line 58 of file byte_array\&.c\&.
+Definition at line 59 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array\&.
 .SS "\fBByteBuffer\fP ByteBuffer_CreateAndAppend (void *data, size_tmax_len, const void *value, size_tvalue_len)"
 
 .PP
-Definition at line 63 of file byte_array\&.c\&.
+Definition at line 64 of file byte_array\&.c\&.
 .PP
 References ByteBuffer_Append(), and ByteBuffer_Create()\&.
 .SS "\fBByteBuffer\fP ByteBuffer_CreateAndAppendArray (void *data, size_tmax_len, const \fBByteArray\fPvalue)"
 
 .PP
-Definition at line 70 of file byte_array\&.c\&.
+Definition at line 71 of file byte_array\&.c\&.
 .PP
 References ByteBuffer_AppendArray(), and ByteBuffer_Create()\&.
 .SS "\fBByteBuffer\fP ByteBuffer_CreateAndAppendCString (void *data, size_tmax_len, const char *value)"
 
 .PP
-Definition at line 77 of file byte_array\&.c\&.
+Definition at line 78 of file byte_array\&.c\&.
 .PP
 References ByteBuffer_AppendCString(), and ByteBuffer_Create()\&.
+.SS "\fBByteBuffer\fP ByteBuffer_CreateAndAppendDummyData (void *data, size_tmax_len, size_tlen)"
+
+.PP
+Definition at line 85 of file byte_array\&.c\&.
+.PP
+References ByteBuffer_AppendDummyData(), and ByteBuffer_Create()\&.
 .SS "long ByteBuffer_BytesRemaining (const \fBByteBuffer\fPbuffer)"
 
 .PP
-Definition at line 84 of file byte_array\&.c\&.
+Definition at line 92 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
 .SS "\fBByteArray\fP ByteBuffer_Consume (\fBByteBuffer\fP *buffer, size_tmax_len)"
 
 .PP
-Definition at line 90 of file byte_array\&.c\&.
+Definition at line 98 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, BYTE_ARRAY_NONE, ByteBuffer_BytesRemaining(), ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
 .SS "\fBByteBuffer\fP* ByteBuffer_Append (\fBByteBuffer\fP *buffer, const void *data, size_tlen)"
 
 .PP
-Definition at line 108 of file byte_array\&.c\&.
+Definition at line 116 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
 .SS "\fBByteBuffer\fP* ByteBuffer_AppendArray (\fBByteBuffer\fP *buffer, const \fBByteArray\fParray)"
 
 .PP
-Definition at line 122 of file byte_array\&.c\&.
+Definition at line 130 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
 .SS "\fBByteBuffer\fP* ByteBuffer_AppendBuffer (\fBByteBuffer\fP *buffer, const \fBByteBuffer\fPbufferToAppend)"
 
 .PP
-Definition at line 135 of file byte_array\&.c\&.
+Definition at line 143 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
 .SS "\fBByteBuffer\fP* ByteBuffer_AppendCString (\fBByteBuffer\fP *buffer, const char *str)"
 
 .PP
-Definition at line 149 of file byte_array\&.c\&.
+Definition at line 157 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
 .SS "\fBByteBuffer\fP* ByteBuffer_AppendFormattedCString (\fBByteBuffer\fP *buffer, const char *format, \&.\&.\&.)"
 
 .PP
-Definition at line 178 of file byte_array\&.c\&.
+Definition at line 186 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, and ByteArray::data\&.
 .SS "\fBByteBuffer\fP ByteBuffer_CreateAndAppendFormattedCString (void *data, size_tmax_len, const char *format, \&.\&.\&.)"
 
 .PP
-Definition at line 194 of file byte_array\&.c\&.
+Definition at line 202 of file byte_array\&.c\&.
 .PP
 References ByteBuffer_Create()\&.
 .SS "\fBByteBuffer\fP* ByteBuffer_AppendDummyData (\fBByteBuffer\fP *buffer, size_tlen)"
 
 .PP
-Definition at line 208 of file byte_array\&.c\&.
+Definition at line 216 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
 .SS "bool ByteBuffer_IsNull (\fBByteBuffer\fP constbuffer)"
 
 .PP
-Definition at line 222 of file byte_array\&.c\&.
+Definition at line 230 of file byte_array\&.c\&.
+.PP
+References ByteBuffer::array, and ByteArray::data\&.
+.SS "\fBByteBuffer\fP ByteBuffer_Malloc (size_tsize)"
+
+.PP
+Definition at line 235 of file byte_array\&.c\&.
+.PP
+References ByteBuffer_Create()\&.
+.SS "\fBByteBuffer\fP ByteBuffer_MallocAndAppend (const void *data, size_tlen)"
+
+.PP
+Definition at line 243 of file byte_array\&.c\&.
+.PP
+References ByteBuffer_Append(), ByteBuffer_IsNull(), and ByteBuffer_Malloc()\&.
+.SS "void ByteBuffer_Free (\fBByteBuffer\fPbuffer)"
+
+.PP
+Definition at line 253 of file byte_array\&.c\&.
 .PP
 References ByteBuffer::array, and ByteArray::data\&.
 .SH "Author"

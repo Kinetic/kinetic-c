@@ -1,8 +1,11 @@
-.TH "KineticKeyRange" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticKeyRange" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 KineticKeyRange \- 
+.PP
+Kinetic Key Range request structure\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,51 +17,71 @@ KineticKeyRange \-
 .ti -1c
 .RI "\fBByteBuffer\fP \fBstartKey\fP"
 .br
+.RI "\fIRequired bytes, the beginning of the requested range\&. \fP"
 .ti -1c
 .RI "\fBByteBuffer\fP \fBendKey\fP"
 .br
+.RI "\fIRequired bytes, the end of the requested range\&. \fP"
 .ti -1c
 .RI "bool \fBstartKeyInclusive\fP"
 .br
+.RI "\fIOptional bool, defaults to false If set, indicates that the start key should be included in the returned range\&. \fP"
 .ti -1c
 .RI "bool \fBendKeyInclusive\fP"
 .br
+.RI "\fIOptional bool, defaults to false If set, indicates that the end key should be included in the returned range\&. \fP"
 .ti -1c
 .RI "int32_t \fBmaxReturned\fP"
 .br
+.RI "\fIRequired int32, must be greater than 0 The maximum number of keys returned, in sorted order\&. \fP"
 .ti -1c
 .RI "bool \fBreverse\fP"
 .br
+.RI "\fIOptional bool, defaults to false If true, the key range will be returned in reverse order, starting at endKey and moving back to startKey\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 208 of file kinetic_types\&.h\&.
+Kinetic Key Range request structure\&. 
+.PP
+Definition at line 255 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBByteBuffer\fP KineticKeyRange::startKey"
 
 .PP
-Definition at line 209 of file kinetic_types\&.h\&.
+Required bytes, the beginning of the requested range\&. 
+.PP
+Definition at line 258 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticKeyRange::endKey"
 
 .PP
-Definition at line 210 of file kinetic_types\&.h\&.
+Required bytes, the end of the requested range\&. 
+.PP
+Definition at line 261 of file kinetic_types\&.h\&.
 .SS "bool KineticKeyRange::startKeyInclusive"
 
 .PP
-Definition at line 211 of file kinetic_types\&.h\&.
+Optional bool, defaults to false If set, indicates that the start key should be included in the returned range\&. 
+.PP
+Definition at line 265 of file kinetic_types\&.h\&.
 .SS "bool KineticKeyRange::endKeyInclusive"
 
 .PP
-Definition at line 212 of file kinetic_types\&.h\&.
+Optional bool, defaults to false If set, indicates that the end key should be included in the returned range\&. 
+.PP
+Definition at line 269 of file kinetic_types\&.h\&.
 .SS "int32_t KineticKeyRange::maxReturned"
 
 .PP
-Definition at line 213 of file kinetic_types\&.h\&.
+Required int32, must be greater than 0 The maximum number of keys returned, in sorted order\&. 
+.PP
+Definition at line 273 of file kinetic_types\&.h\&.
 .SS "bool KineticKeyRange::reverse"
 
 .PP
-Definition at line 214 of file kinetic_types\&.h\&.
+Optional bool, defaults to false If true, the key range will be returned in reverse order, starting at endKey and moving back to startKey\&. For instance if the search is startKey='j', endKey='k', maxReturned=2, reverse=true and the keys 'k0', 'k1', 'k2' exist the system will return 'k2' and 'k1' in that order\&. 
+.PP
+Definition at line 281 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

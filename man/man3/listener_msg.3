@@ -1,0 +1,144 @@
+.TH "listener_msg" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+listener_msg \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <listener_internal\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "const uint8_t \fBid\fP"
+.br
+.ti -1c
+.RI "\fBMSG_TYPE\fP \fBtype\fP"
+.br
+.ti -1c
+.RI "struct \fBlistener_msg\fP * \fBnext\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      \fBconnection_info\fP * \fBinfo\fP"
+.br
+.ti -1c
+.RI "      int \fBnotify_fd\fP"
+.br
+.ti -1c
+.RI "   } \fBadd_socket\fP"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      int \fBfd\fP"
+.br
+.ti -1c
+.RI "   } \fBclose_socket\fP"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      int \fBfd\fP"
+.br
+.ti -1c
+.RI "      int64_t \fBseq_id\fP"
+.br
+.ti -1c
+.RI "      int16_t \fBtimeout_sec\fP"
+.br
+.ti -1c
+.RI "   } \fBhold\fP"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      \fBboxed_msg\fP * \fBbox\fP"
+.br
+.ti -1c
+.RI "   } \fBexpect\fP"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      int \fBunused\fP"
+.br
+.ti -1c
+.RI "   } \fBshutdown\fP"
+.br
+.ti -1c
+.RI "} \fBu\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 33 of file listener_internal\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "const uint8_t listener_msg::id"
+
+.PP
+Definition at line 34 of file listener_internal\&.h\&.
+.SS "\fBMSG_TYPE\fP listener_msg::type"
+
+.PP
+Definition at line 35 of file listener_internal\&.h\&.
+.SS "struct \fBlistener_msg\fP* listener_msg::next"
+
+.PP
+Definition at line 36 of file listener_internal\&.h\&.
+.SS "\fBconnection_info\fP* listener_msg::info"
+
+.PP
+Definition at line 39 of file listener_internal\&.h\&.
+.SS "int listener_msg::notify_fd"
+
+.PP
+Definition at line 40 of file listener_internal\&.h\&.
+.SS "struct { \&.\&.\&. }   listener_msg::add_socket"
+
+.SS "int listener_msg::fd"
+
+.PP
+Definition at line 43 of file listener_internal\&.h\&.
+.SS "struct { \&.\&.\&. }   listener_msg::close_socket"
+
+.SS "int64_t listener_msg::seq_id"
+
+.PP
+Definition at line 47 of file listener_internal\&.h\&.
+.SS "int16_t listener_msg::timeout_sec"
+
+.PP
+Definition at line 48 of file listener_internal\&.h\&.
+.SS "struct { \&.\&.\&. }   listener_msg::hold"
+
+.SS "\fBboxed_msg\fP* listener_msg::box"
+
+.PP
+Definition at line 51 of file listener_internal\&.h\&.
+.SS "struct { \&.\&.\&. }   listener_msg::expect"
+
+.SS "int listener_msg::unused"
+
+.PP
+Definition at line 54 of file listener_internal\&.h\&.
+.SS "struct { \&.\&.\&. }   listener_msg::shutdown"
+
+.SS "union { \&.\&.\&. }   listener_msg::u"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

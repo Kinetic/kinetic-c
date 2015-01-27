@@ -1,0 +1,138 @@
+.TH "bus_example.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_example.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <err\&.h>\fP
+.br
+\fC#include <signal\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+\fC#include 'bus\&.h'\fP
+.br
+\fC#include 'atomic\&.h'\fP
+.br
+\fC#include 'socket99\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBMAGIC_NUMBER\fP   3"
+.br
+.ti -1c
+.RI "#define \fBMAX_SOCKETS\fP   1000"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_BUF_SIZE\fP   (1024 * 1024 + sizeof(prot_header_t))"
+.br
+.ti -1c
+.RI "#define \fBPRINT_RESPONSES\fP   0"
+.br
+.ti -1c
+.RI "#define \fBLOG\fP(VERBOSITY,\&.\&.\&.)   do { if (state\&.verbosity >= VERBOSITY) { printf(__VA_ARGS__); } } while(0)"
+.br
+.ti -1c
+.RI "#define \fBINCREMENT_COMPLETION_COUNTER\fP   1"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBsocket_state\fP "
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "example_state \fBstate\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define MAGIC_NUMBER   3"
+
+.PP
+Definition at line 44 of file bus_example\&.c\&.
+.SS "#define MAX_SOCKETS   1000"
+
+.PP
+Definition at line 46 of file bus_example\&.c\&.
+.SS "#define DEFAULT_BUF_SIZE   (1024 * 1024 + sizeof(prot_header_t))"
+
+.PP
+Definition at line 47 of file bus_example\&.c\&.
+.SS "#define PRINT_RESPONSES   0"
+
+.PP
+Definition at line 48 of file bus_example\&.c\&.
+.SS "#define LOG(VERBOSITY, \&.\&.\&.)   do { if (state\&.verbosity >= VERBOSITY) { printf(__VA_ARGS__); } } while(0)"
+
+.PP
+Definition at line 94 of file bus_example\&.c\&.
+.SS "#define INCREMENT_COMPLETION_COUNTER   1"
+
+.PP
+Definition at line 394 of file bus_example\&.c\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBsocket_state\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fISTATE_UNINIT \fP\fP
+.TP
+\fB\fISTATE_AWAITING_HEADER \fP\fP
+.TP
+\fB\fISTATE_AWAITING_BODY \fP\fP
+.TP
+\fB\fISTATE_UNINIT \fP\fP
+.TP
+\fB\fISTATE_AWAITING_HEADER \fP\fP
+.TP
+\fB\fISTATE_AWAITING_BODY \fP\fP
+.PP
+Definition at line 50 of file bus_example\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 239 of file bus_example\&.c\&.
+.PP
+References bus_result::bus, bus_free(), bus_init(), bus_shutdown(), LOG, bus_config::log_cb, state, and bus_result::status\&.
+.SH "Variable Documentation"
+.PP 
+.SS "example_state state"
+
+.PP
+Definition at line 81 of file bus_example\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

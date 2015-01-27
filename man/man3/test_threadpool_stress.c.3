@@ -1,0 +1,74 @@
+.TH "test_threadpool_stress.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+test_threadpool_stress.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <err\&.h>\fP
+.br
+\fC#include <poll\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+\fC#include 'threadpool\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBATOMIC_BOOL_COMPARE_AND_SWAP\fP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
+.br
+.ti -1c
+.RI "#define \fBSPIN_ADJ\fP(F, ADJ)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
+
+.PP
+Definition at line 44 of file test_threadpool_stress\&.c\&.
+.SS "#define SPIN_ADJ(F, ADJ)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \
+        for (;;) {                                                      \
+            size_t v = F;                                               \
+            if (ATOMIC_BOOL_COMPARE_AND_SWAP(&F, v, v + ADJ)) {         \
+                break;                                                  \
+            }                                                           \
+        }                                                               \
+    } while (0)
+.fi
+.PP
+Definition at line 48 of file test_threadpool_stress\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 70 of file test_threadpool_stress\&.c\&.
+.PP
+References threadpool_config::max_threads, threadpool_task::task, threadpool_config::task_ringbuf_size2, threadpool_init(), threadpool_schedule(), and threadpool_stats()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

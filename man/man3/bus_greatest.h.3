@@ -1,0 +1,740 @@
+.TH "greatest.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+greatest.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <time\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBgreatest_suite_info\fP"
+.br
+.ti -1c
+.RI "struct \fBgreatest_type_info\fP"
+.br
+.ti -1c
+.RI "struct \fBgreatest_run_info\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBGREATEST_VERSION_MAJOR\fP   0"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_VERSION_MINOR\fP   10"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_VERSION_PATCH\fP   1"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_DEFAULT_WIDTH\fP   72"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_STDOUT\fP   stdout"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_USE_ABBREVS\fP   1"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_SUITE\fP(NAME)   void NAME(void)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_TEST\fP   static int"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_RUN_SUITE\fP(S_NAME)   greatest_run_suite(S_NAME, #S_NAME)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_RUN_TEST\fP(\fBTEST\fP)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_RUN_TEST1\fP(\fBTEST\fP, ENV)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_IS_VERBOSE\fP()   (greatest_info\&.flags & \fBGREATEST_FLAG_VERBOSE\fP)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_LIST_ONLY\fP()   (greatest_info\&.flags & \fBGREATEST_FLAG_LIST_ONLY\fP)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_FIRST_FAIL\fP()   (greatest_info\&.flags & \fBGREATEST_FLAG_FIRST_FAIL\fP)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_FAILURE_ABORT\fP()   (greatest_info\&.suite\&.failed > 0 && \fBGREATEST_FIRST_FAIL\fP())"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_PASS\fP()   \fBGREATEST_PASSm\fP(NULL)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_FAIL\fP()   \fBGREATEST_FAILm\fP(NULL)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_SKIP\fP()   \fBGREATEST_SKIPm\fP(NULL)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT\fP(COND)   \fBGREATEST_ASSERTm\fP(#COND, COND)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT_FALSE\fP(COND)   \fBGREATEST_ASSERT_FALSEm\fP(#COND, COND)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT_EQ\fP(EXP, GOT)   \fBGREATEST_ASSERT_EQm\fP(#EXP ' != ' #GOT, EXP, GOT)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT_EQUAL_T\fP(EXP, GOT, TYPE_INFO, UDATA)   \fBGREATEST_ASSERT_EQUAL_Tm\fP(#EXP ' != ' #GOT, EXP, GOT, TYPE_INFO, UDATA)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT_STR_EQ\fP(EXP, GOT)   \fBGREATEST_ASSERT_STR_EQm\fP(#EXP ' != ' #GOT, EXP, GOT)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERTm\fP(MSG, COND)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT_FALSEm\fP(MSG, COND)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT_EQm\fP(MSG, EXP, GOT)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT_STR_EQm\fP(MSG, EXP, GOT)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_ASSERT_EQUAL_Tm\fP(MSG, EXP, GOT, TYPE_INFO, UDATA)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_PASSm\fP(MSG)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_FAILm\fP(MSG)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_SKIPm\fP(MSG)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_SET_TIME\fP(NAME)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_CLOCK_DIFF\fP(C1, C2)"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_MAIN_DEFS\fP()"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_MAIN_BEGIN\fP()"
+.br
+.ti -1c
+.RI "#define \fBGREATEST_MAIN_END\fP()"
+.br
+.ti -1c
+.RI "#define \fBTEST\fP   \fBGREATEST_TEST\fP"
+.br
+.ti -1c
+.RI "#define \fBSUITE\fP   \fBGREATEST_SUITE\fP"
+.br
+.ti -1c
+.RI "#define \fBRUN_TEST\fP   \fBGREATEST_RUN_TEST\fP"
+.br
+.ti -1c
+.RI "#define \fBRUN_TEST1\fP   \fBGREATEST_RUN_TEST1\fP"
+.br
+.ti -1c
+.RI "#define \fBRUN_SUITE\fP   \fBGREATEST_RUN_SUITE\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT\fP   \fBGREATEST_ASSERT\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERTm\fP   \fBGREATEST_ASSERTm\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT_FALSE\fP   \fBGREATEST_ASSERT_FALSE\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT_EQ\fP   \fBGREATEST_ASSERT_EQ\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT_EQUAL_T\fP   \fBGREATEST_ASSERT_EQUAL_T\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT_STR_EQ\fP   \fBGREATEST_ASSERT_STR_EQ\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT_FALSEm\fP   \fBGREATEST_ASSERT_FALSEm\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT_EQm\fP   \fBGREATEST_ASSERT_EQm\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT_EQUAL_Tm\fP   \fBGREATEST_ASSERT_EQUAL_Tm\fP"
+.br
+.ti -1c
+.RI "#define \fBASSERT_STR_EQm\fP   \fBGREATEST_ASSERT_STR_EQm\fP"
+.br
+.ti -1c
+.RI "#define \fBPASS\fP   \fBGREATEST_PASS\fP"
+.br
+.ti -1c
+.RI "#define \fBFAIL\fP   \fBGREATEST_FAIL\fP"
+.br
+.ti -1c
+.RI "#define \fBSKIP\fP   \fBGREATEST_SKIP\fP"
+.br
+.ti -1c
+.RI "#define \fBPASSm\fP   \fBGREATEST_PASSm\fP"
+.br
+.ti -1c
+.RI "#define \fBFAILm\fP   \fBGREATEST_FAILm\fP"
+.br
+.ti -1c
+.RI "#define \fBSKIPm\fP   \fBGREATEST_SKIPm\fP"
+.br
+.ti -1c
+.RI "#define \fBSET_SETUP\fP   \fBGREATEST_SET_SETUP_CB\fP"
+.br
+.ti -1c
+.RI "#define \fBSET_TEARDOWN\fP   \fBGREATEST_SET_TEARDOWN_CB\fP"
+.br
+.ti -1c
+.RI "#define \fBRUN_TESTp\fP   GREATEST_RUN_TESTp"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef void( \fBgreatest_suite_cb\fP )(void)"
+.br
+.ti -1c
+.RI "typedef void( \fBgreatest_setup_cb\fP )(void *udata)"
+.br
+.ti -1c
+.RI "typedef void( \fBgreatest_teardown_cb\fP )(void *udata)"
+.br
+.ti -1c
+.RI "typedef int \fBgreatest_equal_cb\fP (const void *exp, const void *got, void *udata)"
+.br
+.ti -1c
+.RI "typedef int \fBgreatest_printf_cb\fP (const void *t, void *udata)"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBGREATEST_FLAG\fP "
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBgreatest_do_pass\fP (const char *name)"
+.br
+.ti -1c
+.RI "void \fBgreatest_do_fail\fP (const char *name)"
+.br
+.ti -1c
+.RI "void \fBgreatest_do_skip\fP (const char *name)"
+.br
+.ti -1c
+.RI "int \fBgreatest_pre_test\fP (const char *name)"
+.br
+.ti -1c
+.RI "void \fBgreatest_post_test\fP (const char *name, int res)"
+.br
+.ti -1c
+.RI "void \fBgreatest_usage\fP (const char *name)"
+.br
+.ti -1c
+.RI "int \fBgreatest_do_assert_equal_t\fP (const void *exp, const void *got, \fBgreatest_type_info\fP *type_info, void *udata)"
+.br
+.ti -1c
+.RI "void \fBGREATEST_SET_SETUP_CB\fP (\fBgreatest_setup_cb\fP *cb, void *udata)"
+.br
+.ti -1c
+.RI "void \fBGREATEST_SET_TEARDOWN_CB\fP (\fBgreatest_teardown_cb\fP *cb, void *udata)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBgreatest_type_info\fP \fBgreatest_type_info_string\fP"
+.br
+.ti -1c
+.RI "\fBgreatest_run_info\fP \fBgreatest_info\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define GREATEST_VERSION_MAJOR   0"
+
+.PP
+Definition at line 20 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_VERSION_MINOR   10"
+
+.PP
+Definition at line 21 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_VERSION_PATCH   1"
+
+.PP
+Definition at line 22 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_DEFAULT_WIDTH   72"
+
+.PP
+Definition at line 83 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_STDOUT   stdout"
+
+.PP
+Definition at line 88 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_USE_ABBREVS   1"
+
+.PP
+Definition at line 93 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_SUITE(NAME)   void NAME(void)"
+
+.PP
+Definition at line 216 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_TEST   static int"
+
+.PP
+Definition at line 220 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_RUN_SUITE(S_NAME)   greatest_run_suite(S_NAME, #S_NAME)"
+
+.PP
+Definition at line 223 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_RUN_TEST(\fBTEST\fP)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \
+        if (greatest_pre_test(#TEST) == 1) {                            \
+            int res = TEST();                                           \\
+            greatest_post_test(#TEST, res);                             \
+        } else if (GREATEST_LIST_ONLY()) {                              \
+            fprintf(GREATEST_STDOUT, "  %s\n", #TEST);                  \
+        }                                                               \
+    } while (0)
+.fi
+.PP
+Definition at line 226 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_RUN_TEST1(\fBTEST\fP, ENV)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \
+        if (greatest_pre_test(#TEST) == 1) {                            \
+            int res = TEST(ENV);                                        \\
+            greatest_post_test(#TEST, res);                             \
+        } else if (GREATEST_LIST_ONLY()) {                              \
+            fprintf(GREATEST_STDOUT, "  %s\n", #TEST);                  \
+        }                                                               \
+    } while (0)
+.fi
+.PP
+Definition at line 238 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_IS_VERBOSE()   (greatest_info\&.flags & \fBGREATEST_FLAG_VERBOSE\fP)"
+
+.PP
+Definition at line 264 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_LIST_ONLY()   (greatest_info\&.flags & \fBGREATEST_FLAG_LIST_ONLY\fP)"
+
+.PP
+Definition at line 265 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_FIRST_FAIL()   (greatest_info\&.flags & \fBGREATEST_FLAG_FIRST_FAIL\fP)"
+
+.PP
+Definition at line 266 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_FAILURE_ABORT()   (greatest_info\&.suite\&.failed > 0 && \fBGREATEST_FIRST_FAIL\fP())"
+
+.PP
+Definition at line 267 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_PASS()   \fBGREATEST_PASSm\fP(NULL)"
+
+.PP
+Definition at line 270 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_FAIL()   \fBGREATEST_FAILm\fP(NULL)"
+
+.PP
+Definition at line 271 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_SKIP()   \fBGREATEST_SKIPm\fP(NULL)"
+
+.PP
+Definition at line 272 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT(COND)   \fBGREATEST_ASSERTm\fP(#COND, COND)"
+
+.PP
+Definition at line 273 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT_FALSE(COND)   \fBGREATEST_ASSERT_FALSEm\fP(#COND, COND)"
+
+.PP
+Definition at line 274 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT_EQ(EXP, GOT)   \fBGREATEST_ASSERT_EQm\fP(#EXP ' != ' #GOT, EXP, GOT)"
+
+.PP
+Definition at line 275 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT_EQUAL_T(EXP, GOT, TYPE_INFO, UDATA)   \fBGREATEST_ASSERT_EQUAL_Tm\fP(#EXP ' != ' #GOT, EXP, GOT, TYPE_INFO, UDATA)"
+
+.PP
+Definition at line 276 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT_STR_EQ(EXP, GOT)   \fBGREATEST_ASSERT_STR_EQm\fP(#EXP ' != ' #GOT, EXP, GOT)"
+
+.PP
+Definition at line 278 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERTm(MSG, COND)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \\
+        greatest_info\&.assertions++;                                     \
+        if (!(COND)) { FAILm(MSG); }                                    \
+    } while (0)
+.fi
+.PP
+Definition at line 284 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT_FALSEm(MSG, COND)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \\
+        greatest_info\&.assertions++;                                     \
+        if ((COND)) { FAILm(MSG); }                                     \
+    } while (0)
+.fi
+.PP
+Definition at line 291 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT_EQm(MSG, EXP, GOT)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \\
+        greatest_info\&.assertions++;                                     \
+        if ((EXP) != (GOT)) { FAILm(MSG); }                             \
+    } while (0)
+.fi
+.PP
+Definition at line 298 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT_STR_EQm(MSG, EXP, GOT)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \\
+        GREATEST_ASSERT_EQUAL_Tm(MSG, EXP, GOT,                         \
+            &greatest_type_info_string, NULL);                          \
+    } while (0)                                                         \
+.fi
+.PP
+Definition at line 305 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_ASSERT_EQUAL_Tm(MSG, EXP, GOT, TYPE_INFO, UDATA)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \
+        greatest_type_info *type_info = (TYPE_INFO);                    \\
+        greatest_info\&.assertions++;                                     \
+        if (!greatest_do_assert_equal_t(EXP, GOT,                       \
+                type_info, UDATA)) {                                    \
+            if (type_info == NULL || type_info->equal == NULL) {        \\
+                FAILm("type_info->equal callback missing!");            \
+            } else {                                                    \\
+                FAILm(MSG);                                             \
+            }                                                           \
+        }                                                               \
+    } while (0)                                                         \
+.fi
+.PP
+Definition at line 314 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_PASSm(MSG)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \\
+        greatest_info\&.msg = MSG;                                        \
+        return 0;                                                       \
+    } while (0)
+.fi
+.PP
+Definition at line 329 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_FAILm(MSG)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \\
+        greatest_info\&.fail_file = __FILE__;                             \\
+        greatest_info\&.fail_line = __LINE__;                             \\
+        greatest_info\&.msg = MSG;                                        \
+        return -1;                                                      \
+    } while (0)
+.fi
+.PP
+Definition at line 336 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_SKIPm(MSG)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \\
+        greatest_info\&.msg = MSG;                                        \
+        return 1;                                                       \
+    } while (0)
+.fi
+.PP
+Definition at line 345 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_SET_TIME(NAME)"
+\fBValue:\fP
+.PP
+.nf
+NAME = clock();                                                     \
+    if (NAME == (clock_t) -1) {                                         \
+        fprintf(GREATEST_STDOUT,                                        \
+            "clock error: %s\n", #NAME);                                \
+        exit(EXIT_FAILURE);                                             \
+    }
+.fi
+.PP
+Definition at line 351 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_CLOCK_DIFF(C1, C2)"
+\fBValue:\fP
+.PP
+.nf
+fprintf(GREATEST_STDOUT, " (%lu ticks, %\&.3f sec)",                  \
+        (long unsigned int) (C2) - (long unsigned int)(C1),             \
+        (double)((C2) - (C1)) / (1\&.0 * (double)CLOCKS_PER_SEC))         \
+.fi
+.PP
+Definition at line 359 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_MAIN_DEFS()"
+
+.PP
+Definition at line 365 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_MAIN_BEGIN()"
+
+.PP
+Definition at line 569 of file bus/greatest\&.h\&.
+.SS "#define GREATEST_MAIN_END()"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \
+        if (!GREATEST_LIST_ONLY()) {                                    \\
+            GREATEST_SET_TIME(greatest_info\&.end);                       \
+            fprintf(GREATEST_STDOUT,                                    \
+                "\nTotal: %u tests", greatest_info\&.tests_run);          \\
+            GREATEST_CLOCK_DIFF(greatest_info\&.begin,                    \
+                greatest_info\&.end);                                     \
+            fprintf(GREATEST_STDOUT, ", %u assertions\n",               \
+                greatest_info\&.assertions);                              \
+            fprintf(GREATEST_STDOUT,                                    \
+                "Pass: %u, fail: %u, skip: %u\&.\n",                      \
+                greatest_info\&.passed,                                   \
+                greatest_info\&.failed, greatest_info\&.skipped);           \
+        }                                                               \
+        return (greatest_info\&.failed > 0                                \
+            ? EXIT_FAILURE : EXIT_SUCCESS);                             \
+    } while (0)
+.fi
+.PP
+Definition at line 610 of file bus/greatest\&.h\&.
+.SS "#define TEST   \fBGREATEST_TEST\fP"
+
+.PP
+Definition at line 632 of file bus/greatest\&.h\&.
+.SS "#define SUITE   \fBGREATEST_SUITE\fP"
+
+.PP
+Definition at line 633 of file bus/greatest\&.h\&.
+.SS "#define RUN_TEST   \fBGREATEST_RUN_TEST\fP"
+
+.PP
+Definition at line 634 of file bus/greatest\&.h\&.
+.SS "#define RUN_TEST1   \fBGREATEST_RUN_TEST1\fP"
+
+.PP
+Definition at line 635 of file bus/greatest\&.h\&.
+.SS "#define RUN_SUITE   \fBGREATEST_RUN_SUITE\fP"
+
+.PP
+Definition at line 636 of file bus/greatest\&.h\&.
+.SS "#define ASSERT   \fBGREATEST_ASSERT\fP"
+
+.PP
+Definition at line 637 of file bus/greatest\&.h\&.
+.SS "#define ASSERTm   \fBGREATEST_ASSERTm\fP"
+
+.PP
+Definition at line 638 of file bus/greatest\&.h\&.
+.SS "#define ASSERT_FALSE   \fBGREATEST_ASSERT_FALSE\fP"
+
+.PP
+Definition at line 639 of file bus/greatest\&.h\&.
+.SS "#define ASSERT_EQ   \fBGREATEST_ASSERT_EQ\fP"
+
+.PP
+Definition at line 640 of file bus/greatest\&.h\&.
+.SS "#define ASSERT_EQUAL_T   \fBGREATEST_ASSERT_EQUAL_T\fP"
+
+.PP
+Definition at line 641 of file bus/greatest\&.h\&.
+.SS "#define ASSERT_STR_EQ   \fBGREATEST_ASSERT_STR_EQ\fP"
+
+.PP
+Definition at line 642 of file bus/greatest\&.h\&.
+.SS "#define ASSERT_FALSEm   \fBGREATEST_ASSERT_FALSEm\fP"
+
+.PP
+Definition at line 643 of file bus/greatest\&.h\&.
+.SS "#define ASSERT_EQm   \fBGREATEST_ASSERT_EQm\fP"
+
+.PP
+Definition at line 644 of file bus/greatest\&.h\&.
+.SS "#define ASSERT_EQUAL_Tm   \fBGREATEST_ASSERT_EQUAL_Tm\fP"
+
+.PP
+Definition at line 645 of file bus/greatest\&.h\&.
+.SS "#define ASSERT_STR_EQm   \fBGREATEST_ASSERT_STR_EQm\fP"
+
+.PP
+Definition at line 646 of file bus/greatest\&.h\&.
+.SS "#define PASS   \fBGREATEST_PASS\fP"
+
+.PP
+Definition at line 647 of file bus/greatest\&.h\&.
+.SS "#define FAIL   \fBGREATEST_FAIL\fP"
+
+.PP
+Definition at line 648 of file bus/greatest\&.h\&.
+.SS "#define SKIP   \fBGREATEST_SKIP\fP"
+
+.PP
+Definition at line 649 of file bus/greatest\&.h\&.
+.SS "#define PASSm   \fBGREATEST_PASSm\fP"
+
+.PP
+Definition at line 650 of file bus/greatest\&.h\&.
+.SS "#define FAILm   \fBGREATEST_FAILm\fP"
+
+.PP
+Definition at line 651 of file bus/greatest\&.h\&.
+.SS "#define SKIPm   \fBGREATEST_SKIPm\fP"
+
+.PP
+Definition at line 652 of file bus/greatest\&.h\&.
+.SS "#define SET_SETUP   \fBGREATEST_SET_SETUP_CB\fP"
+
+.PP
+Definition at line 653 of file bus/greatest\&.h\&.
+.SS "#define SET_TEARDOWN   \fBGREATEST_SET_TEARDOWN_CB\fP"
+
+.PP
+Definition at line 654 of file bus/greatest\&.h\&.
+.SS "#define RUN_TESTp   GREATEST_RUN_TESTp"
+
+.PP
+Definition at line 658 of file bus/greatest\&.h\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef void( greatest_suite_cb)(void)"
+
+.PP
+Definition at line 116 of file bus/greatest\&.h\&.
+.SS "typedef void( greatest_setup_cb)(void *udata)"
+
+.PP
+Definition at line 120 of file bus/greatest\&.h\&.
+.SS "typedef void( greatest_teardown_cb)(void *udata)"
+
+.PP
+Definition at line 121 of file bus/greatest\&.h\&.
+.SS "typedef int greatest_equal_cb(const void *exp, const void *got, void *udata)"
+
+.PP
+Definition at line 126 of file bus/greatest\&.h\&.
+.SS "typedef int greatest_printf_cb(const void *t, void *udata)"
+
+.PP
+Definition at line 131 of file bus/greatest\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBGREATEST_FLAG\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIGREATEST_FLAG_VERBOSE \fP\fP
+.TP
+\fB\fIGREATEST_FLAG_FIRST_FAIL \fP\fP
+.TP
+\fB\fIGREATEST_FLAG_LIST_ONLY \fP\fP
+.TP
+\fB\fIGREATEST_FLAG_VERBOSE \fP\fP
+.TP
+\fB\fIGREATEST_FLAG_FIRST_FAIL \fP\fP
+.TP
+\fB\fIGREATEST_FLAG_LIST_ONLY \fP\fP
+.PP
+Definition at line 143 of file bus/greatest\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "void greatest_do_pass (const char *name)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "void greatest_do_fail (const char *name)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "void greatest_do_skip (const char *name)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "int greatest_pre_test (const char *name)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "void greatest_post_test (const char *name, intres)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "void greatest_usage (const char *name)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "int greatest_do_assert_equal_t (const void *exp, const void *got, \fBgreatest_type_info\fP *type_info, void *udata)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "void GREATEST_SET_SETUP_CB (\fBgreatest_setup_cb\fP *cb, void *udata)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "void GREATEST_SET_TEARDOWN_CB (\fBgreatest_teardown_cb\fP *cb, void *udata)"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SH "Variable Documentation"
+.PP 
+.SS "\fBgreatest_type_info\fP greatest_type_info_string"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SS "\fBgreatest_run_info\fP greatest_info"
+
+.PP
+Definition at line 127 of file test_casq\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

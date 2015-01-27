@@ -1,0 +1,101 @@
+.TH "echosrv.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+echosrv.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <err\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+\fC#include <sys/socket\&.h>\fP
+.br
+\fC#include <netinet/tcp\&.h>\fP
+.br
+\fC#include 'socket99\&.h'\fP
+.br
+\fC#include 'util\&.h'\fP
+.br
+\fC#include <poll\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBUF_SZ\fP   (2 * 1024L * 1024)"
+.br
+.ti -1c
+.RI "#define \fBMAX_CLIENTS\fP   10"
+.br
+.ti -1c
+.RI "#define \fBNO_CLIENT\fP   ((int)-1)"
+.br
+.ti -1c
+.RI "#define \fBLOG\fP(VERBOSITY,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "#define \fBMAX_TIMEOUT\fP   1000"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define BUF_SZ   (2 * 1024L * 1024)"
+
+.PP
+Definition at line 39 of file echosrv\&.c\&.
+.SS "#define MAX_CLIENTS   10"
+
+.PP
+Definition at line 40 of file echosrv\&.c\&.
+.SS "#define NO_CLIENT   ((int)-1)"
+
+.PP
+Definition at line 42 of file echosrv\&.c\&.
+.SS "#define LOG(VERBOSITY, \&.\&.\&.)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                               \
+        if (VERBOSITY <= cfg->verbosity) {                             \
+            printf(__VA_ARGS__);                                       \
+        }                                                              \
+    }                                                                  \
+    while(0)
+.fi
+.PP
+Definition at line 46 of file echosrv\&.c\&.
+.SS "#define MAX_TIMEOUT   1000"
+
+.PP
+Definition at line 187 of file echosrv\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 125 of file echosrv\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

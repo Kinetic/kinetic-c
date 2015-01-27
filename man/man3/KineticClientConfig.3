@@ -1,0 +1,80 @@
+.TH "KineticClientConfig" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+KineticClientConfig \- 
+.PP
+Configuration values for the KineticClient connection\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <kinetic_types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "const char * \fBlogFile\fP"
+.br
+.RI "\fIPath to log file\&. Specify 'stdout' to log to STDOUT or NULL to disable logging\&. \fP"
+.ti -1c
+.RI "int \fBlogLevel\fP"
+.br
+.RI "\fILogging level (-1:none, 0:error, 1:info, 2:verbose, 3:full) \fP"
+.ti -1c
+.RI "uint8_t \fBwriterThreads\fP"
+.br
+.RI "\fINumber of threads used for handling outgoing requests\&. \fP"
+.ti -1c
+.RI "uint8_t \fBreaderThreads\fP"
+.br
+.RI "\fINumber of threads used for handling incoming responses and status messages\&. \fP"
+.ti -1c
+.RI "uint8_t \fBmaxThreadpoolThreads\fP"
+.br
+.RI "\fIMax number of threads to use for the threadpool that handles response callbacks\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Configuration values for the KineticClient connection\&. 
+
+Configuration for the KineticClient connection\&. If fields are zeroed out, default values will be used\&. 
+.PP
+Definition at line 442 of file kinetic_types\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "const char* KineticClientConfig::logFile"
+
+.PP
+Path to log file\&. Specify 'stdout' to log to STDOUT or NULL to disable logging\&. 
+.PP
+Definition at line 443 of file kinetic_types\&.h\&.
+.SS "int KineticClientConfig::logLevel"
+
+.PP
+Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full) 
+.PP
+Definition at line 444 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticClientConfig::writerThreads"
+
+.PP
+Number of threads used for handling outgoing requests\&. 
+.PP
+Definition at line 445 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticClientConfig::readerThreads"
+
+.PP
+Number of threads used for handling incoming responses and status messages\&. 
+.PP
+Definition at line 446 of file kinetic_types\&.h\&.
+.SS "uint8_t KineticClientConfig::maxThreadpoolThreads"
+
+.PP
+Max number of threads to use for the threadpool that handles response callbacks\&. 
+.PP
+Definition at line 447 of file kinetic_types\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

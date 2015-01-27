@@ -1,0 +1,54 @@
+.TH "test_threadpool.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+test_threadpool.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <err\&.h>\fP
+.br
+\fC#include <poll\&.h>\fP
+.br
+\fC#include 'threadpool\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBATOMIC_BOOL_COMPARE_AND_SWAP\fP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
+
+.PP
+Definition at line 42 of file test_threadpool\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 75 of file test_threadpool\&.c\&.
+.PP
+References threadpool_config::max_threads, threadpool_task::task, threadpool_config::task_ringbuf_size2, THREAD_SHUTDOWN_SECONDS, threadpool_free(), threadpool_init(), threadpool_schedule(), threadpool_shutdown(), and threadpool_stats()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

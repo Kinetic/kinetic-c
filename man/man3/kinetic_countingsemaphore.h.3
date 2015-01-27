@@ -1,0 +1,52 @@
+.TH "kinetic_countingsemaphore.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_countingsemaphore.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "KineticCountingSemaphore * \fBKineticCountingSemaphore_Create\fP (uint32_t max)"
+.br
+.ti -1c
+.RI "void \fBKineticCountingSemaphore_Take\fP (KineticCountingSemaphore *const sem)"
+.br
+.ti -1c
+.RI "void \fBKineticCountingSemaphore_Give\fP (KineticCountingSemaphore *const sem)"
+.br
+.ti -1c
+.RI "void \fBKineticCountingSemaphore_Destroy\fP (KineticCountingSemaphore *const sem)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "KineticCountingSemaphore* KineticCountingSemaphore_Create (uint32_tmax)"
+
+.PP
+Definition at line 7 of file kinetic_countingsemaphore\&.c\&.
+.SS "void KineticCountingSemaphore_Take (KineticCountingSemaphore *constsem)"
+
+.PP
+Definition at line 18 of file kinetic_countingsemaphore\&.c\&.
+.PP
+References LOGF2\&.
+.SS "void KineticCountingSemaphore_Give (KineticCountingSemaphore *constsem)"
+
+.PP
+Definition at line 40 of file kinetic_countingsemaphore\&.c\&.
+.PP
+References LOGF2\&.
+.SS "void KineticCountingSemaphore_Destroy (KineticCountingSemaphore *constsem)"
+
+.PP
+Definition at line 58 of file kinetic_countingsemaphore\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

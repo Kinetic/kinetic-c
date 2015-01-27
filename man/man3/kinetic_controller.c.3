@@ -1,4 +1,4 @@
-.TH "kinetic_controller.c" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_controller.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,7 +8,7 @@ kinetic_controller.c \-
 .PP
 \fC#include 'kinetic_controller\&.h'\fP
 .br
-\fC#include 'kinetic_connection\&.h'\fP
+\fC#include 'kinetic_session\&.h'\fP
 .br
 \fC#include 'kinetic_operation\&.h'\fP
 .br
@@ -18,17 +18,18 @@ kinetic_controller.c \-
 .br
 \fC#include 'kinetic_allocator\&.h'\fP
 .br
+\fC#include 'kinetic_resourcewaiter\&.h'\fP
+.br
 \fC#include 'kinetic_logger\&.h'\fP
 .br
 \fC#include <pthread\&.h>\fP
+.br
+\fC#include 'bus\&.h'\fP
 .br
 
 .SS "Functions"
 
 .in +1c
-.ti -1c
-.RI "\fBKineticStatus\fP \fBKineticController_Init\fP (\fBKineticSession\fP const *const session)"
-.br
 .ti -1c
 .RI "KineticOperation * \fBKineticController_CreateOperation\fP (\fBKineticSession\fP const *const session)"
 .br
@@ -36,53 +37,47 @@ kinetic_controller.c \-
 .RI "\fBKineticStatus\fP \fBKineticController_ExecuteOperation\fP (KineticOperation *operation, \fBKineticCompletionClosure\fP *const closure)"
 .br
 .ti -1c
-.RI "void \fBKineticController_Pause\fP (\fBKineticSession\fP const *const session, bool pause)"
+.RI "\fBKineticStatus\fP \fBbus_to_kinetic_status\fP (\fBbus_send_status_t\fP const status)"
 .br
 .ti -1c
-.RI "void \fBKineticController_HandleIncomingPDU\fP (KineticConnection *const connection)"
+.RI "void \fBKineticController_HandleUnexecpectedResponse\fP (void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)"
 .br
 .ti -1c
-.RI "void * \fBKineticController_ReceiveThread\fP (void *thread_arg)"
+.RI "void \fBKineticController_HandleExpectedResponse\fP (\fBbus_msg_result_t\fP *res, void *udata)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticStatus\fP KineticController_Init (\fBKineticSession\fP const *constsession)"
-
-.PP
-Definition at line 30 of file kinetic_controller\&.c\&.
-.PP
-References KineticSession::connection, Kinetic_GetErrnoDescription(), KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SUCCESS, KineticController_ReceiveThread(), LOGF0, KineticConnection::thread, and KineticConnection::threadID\&.
 .SS "KineticOperation* KineticController_CreateOperation (\fBKineticSession\fP const *constsession)"
 
 .PP
-Definition at line 50 of file kinetic_controller\&.c\&.
+Definition at line 32 of file kinetic_controller\&.c\&.
 .PP
-References KineticSession::connection, KineticAllocator_NewOperation(), LOG0, and LOGF1\&.
+References KineticSession::connection, KineticAllocator_NewOperation(), LOG0, and LOGF3\&.
 .SS "\fBKineticStatus\fP KineticController_ExecuteOperation (KineticOperation *operation, \fBKineticCompletionClosure\fP *constclosure)"
 
 .PP
-Definition at line 95 of file kinetic_controller\&.c\&.
+Definition at line 80 of file kinetic_controller\&.c\&.
 .PP
-References KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticOperation_SendRequest(), and LOGF1\&.
-.SS "void KineticController_Pause (\fBKineticSession\fP const *constsession, boolpause)"
+References KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, and KineticOperation_SendRequest()\&.
+.SS "\fBKineticStatus\fP bus_to_kinetic_status (\fBbus_send_status_t\fP conststatus)"
 
 .PP
-Definition at line 143 of file kinetic_controller\&.c\&.
+Definition at line 120 of file kinetic_controller\&.c\&.
 .PP
-References KineticSession::connection, KineticThread::paused, and KineticConnection::thread\&.
-.SS "void KineticController_HandleIncomingPDU (KineticConnection *constconnection)"
+References BUS_SEND_BAD_RESPONSE, BUS_SEND_RX_FAILURE, BUS_SEND_RX_TIMEOUT, BUS_SEND_SUCCESS, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT, BUS_SEND_UNDEFINED, BUS_SEND_UNREGISTERED_SOCKET, KINETIC_STATUS_INVALID, KINETIC_STATUS_OPERATION_TIMEDOUT, KINETIC_STATUS_SOCKET_ERROR, KINETIC_STATUS_SOCKET_TIMEOUT, KINETIC_STATUS_SUCCESS, LOGF0, and LOGF3\&.
+.SS "void KineticController_HandleUnexecpectedResponse (void *msg, int64_tseq_id, void *bus_udata, void *socket_udata)"
 
 .PP
-Definition at line 150 of file kinetic_controller\&.c\&.
+Definition at line 182 of file kinetic_controller\&.c\&.
 .PP
-References Kinetic_GetStatusDescription(), KINETIC_PDU_TYPE_RESPONSE, KINETIC_PDU_TYPE_UNSOLICITED, KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS, KINETIC_STATUS_SUCCESS, KineticAllocator_FreePDU(), KineticAllocator_NewPDU(), KineticOperation_AssociateResponseWithOperation(), KineticOperation_Complete(), KineticPDU_GetStatus(), KineticPDU_GetValueLength(), KineticPDU_ReceiveMain(), KineticPDU_ReceiveValue(), LOG0, LOG2, LOGF0, and LOGF2\&.
-.SS "void* KineticController_ReceiveThread (void *thread_arg)"
+References KineticResponse::command, KineticResponse::header, KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS, KineticAllocator_FreeKineticResponse(), KineticLogger_LogProtobuf(), KineticResourceWaiter_SetAvailable(), LOG0, LOGF2, and KineticResponse::proto\&.
+.SS "void KineticController_HandleExpectedResponse (\fBbus_msg_result_t\fP *res, void *udata)"
 
 .PP
-Definition at line 251 of file kinetic_controller\&.c\&.
+Definition at line 229 of file kinetic_controller\&.c\&.
 .PP
-References KineticThread::abortRequested, KineticThread::connection, KineticThread::fatalError, KINETIC_STATUS_SUCCESS, LOG3, and KineticThread::paused\&.
+References bus_to_kinetic_status(), KineticResponse::command, KineticResponse::header, Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticLogger_LogProtobuf(), KineticOperation_Complete(), KineticProtoStatusCode_to_KineticStatus(), LOGF1, LOGF2, KineticResponse::proto, bus_msg_result_t::response, bus_msg_result_t::status, and bus_msg_result_t::u\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

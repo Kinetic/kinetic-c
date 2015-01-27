@@ -1,0 +1,108 @@
+.TH "listener_internal.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+listener_internal.h \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBlistener_msg\fP"
+.br
+.ti -1c
+.RI "struct \fBrx_info_t\fP"
+.br
+.ti -1c
+.RI "struct \fBlistener\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBMAX_FDS\fP   1000"
+.br
+.ti -1c
+.RI "#define \fBMAX_PENDING_MESSAGES\fP   (1024)"
+.br
+.ti -1c
+.RI "#define \fBMAX_QUEUE_MESSAGES\fP   32"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef uint32_t \fBmsg_flag_t\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBMSG_TYPE\fP "
+.br
+.ti -1c
+.RI "enum \fBrx_info_state\fP "
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define MAX_FDS   1000"
+
+.PP
+Definition at line 90 of file listener_internal\&.h\&.
+.SS "#define MAX_PENDING_MESSAGES   (1024)"
+
+.PP
+Definition at line 94 of file listener_internal\&.h\&.
+.SS "#define MAX_QUEUE_MESSAGES   32"
+
+.PP
+Definition at line 97 of file listener_internal\&.h\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef uint32_t \fBmsg_flag_t\fP"
+
+.PP
+Definition at line 98 of file listener_internal\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBMSG_TYPE\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIMSG_NONE \fP\fP
+.TP
+\fB\fIMSG_ADD_SOCKET \fP\fP
+.TP
+\fB\fIMSG_CLOSE_SOCKET \fP\fP
+.TP
+\fB\fIMSG_HOLD_RESPONSE \fP\fP
+.TP
+\fB\fIMSG_EXPECT_RESPONSE \fP\fP
+.TP
+\fB\fIMSG_SHUTDOWN \fP\fP
+.PP
+Definition at line 23 of file listener_internal\&.h\&.
+.SS "enum \fBrx_info_state\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIRIS_HOLD \fP\fP
+.TP
+\fB\fIRIS_EXPECT \fP\fP
+.TP
+\fB\fIRIS_INACTIVE \fP\fP
+.PP
+Definition at line 59 of file listener_internal\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

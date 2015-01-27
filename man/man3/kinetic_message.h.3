@@ -1,4 +1,4 @@
-.TH "kinetic_message.h" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_message.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,9 +15,6 @@ kinetic_message.h \-
 
 .in +1c
 .ti -1c
-.RI "void \fBKineticMessage_Init\fP (\fBKineticMessage\fP *const message)"
-.br
-.ti -1c
 .RI "void \fBKineticMessage_ConfigureKeyValue\fP (\fBKineticMessage\fP *const message, const \fBKineticEntry\fP *entry)"
 .br
 .ti -1c
@@ -26,22 +23,16 @@ kinetic_message.h \-
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "void KineticMessage_Init (\fBKineticMessage\fP *constmessage)"
-
-.PP
-Definition at line 24 of file kinetic_message\&.c\&.
-.PP
-References KINETIC_MESSAGE_INIT\&.
 .SS "void KineticMessage_ConfigureKeyValue (\fBKineticMessage\fP *constmessage, const \fBKineticEntry\fP *entry)"
 
 .PP
-Definition at line 46 of file kinetic_message\&.c\&.
+Definition at line 40 of file kinetic_message\&.c\&.
 .PP
 References KineticEntry::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_BUFFER, KineticEntry::force, KineticMessage::keyValue, KineticProto_Command_Algorithm_from_KineticAlgorithm(), KineticProto_Command_Synchronization_from_KineticSynchronization(), KineticEntry::metadataOnly, and KineticEntry::synchronization\&.
 .SS "void KineticMessage_ConfigureKeyRange (\fBKineticMessage\fP *constmessage, const \fBKineticKeyRange\fP *range)"
 
 .PP
-Definition at line 87 of file kinetic_message\&.c\&.
+Definition at line 81 of file kinetic_message\&.c\&.
 .PP
 References ByteBuffer::array, KineticMessage::body, ByteBuffer::bytesUsed, KineticMessage::command, ByteArray::data, KineticKeyRange::endKey, KineticKeyRange::endKeyInclusive, KineticMessage::keyRange, ByteArray::len, KineticKeyRange::maxReturned, KineticKeyRange::reverse, KineticKeyRange::startKey, and KineticKeyRange::startKeyInclusive\&.
 .SH "Author"

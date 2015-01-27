@@ -1,0 +1,142 @@
+.TH "listener" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+listener \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <listener_internal\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "struct \fBbus\fP * \fBbus\fP"
+.br
+.ti -1c
+.RI "struct casq * \fBq\fP"
+.br
+.ti -1c
+.RI "bool \fBshutdown\fP"
+.br
+.ti -1c
+.RI "\fBrx_info_t\fP \fBrx_info\fP [(1024)]"
+.br
+.ti -1c
+.RI "\fBrx_info_t\fP * \fBrx_info_freelist\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBrx_info_in_use\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBrx_info_max_used\fP"
+.br
+.ti -1c
+.RI "\fBlistener_msg\fP \fBmsgs\fP [32]"
+.br
+.ti -1c
+.RI "\fBlistener_msg\fP * \fBmsg_freelist\fP"
+.br
+.ti -1c
+.RI "int16_t \fBmsgs_in_use\fP"
+.br
+.ti -1c
+.RI "int64_t \fBlargest_seq_id_seen\fP"
+.br
+.ti -1c
+.RI "size_t \fBupstream_backpressure\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBtracked_fds\fP"
+.br
+.ti -1c
+.RI "struct pollfd \fBfds\fP [1000]"
+.br
+.ti -1c
+.RI "\fBconnection_info\fP * \fBfd_info\fP [1000]"
+.br
+.ti -1c
+.RI "size_t \fBread_buf_size\fP"
+.br
+.ti -1c
+.RI "uint8_t * \fBread_buf\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 101 of file listener_internal\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "struct \fBbus\fP* listener::bus"
+
+.PP
+Definition at line 102 of file listener_internal\&.h\&.
+.SS "struct casq* listener::q"
+
+.PP
+Definition at line 103 of file listener_internal\&.h\&.
+.SS "bool listener::shutdown"
+
+.PP
+Definition at line 104 of file listener_internal\&.h\&.
+.SS "\fBrx_info_t\fP listener::rx_info[(1024)]"
+
+.PP
+Definition at line 106 of file listener_internal\&.h\&.
+.SS "\fBrx_info_t\fP* listener::rx_info_freelist"
+
+.PP
+Definition at line 107 of file listener_internal\&.h\&.
+.SS "uint16_t listener::rx_info_in_use"
+
+.PP
+Definition at line 108 of file listener_internal\&.h\&.
+.SS "uint16_t listener::rx_info_max_used"
+
+.PP
+Definition at line 109 of file listener_internal\&.h\&.
+.SS "\fBlistener_msg\fP listener::msgs[32]"
+
+.PP
+Definition at line 111 of file listener_internal\&.h\&.
+.SS "\fBlistener_msg\fP* listener::msg_freelist"
+
+.PP
+Definition at line 112 of file listener_internal\&.h\&.
+.SS "int16_t listener::msgs_in_use"
+
+.PP
+Definition at line 113 of file listener_internal\&.h\&.
+.SS "int64_t listener::largest_seq_id_seen"
+
+.PP
+Definition at line 114 of file listener_internal\&.h\&.
+.SS "size_t listener::upstream_backpressure"
+
+.PP
+Definition at line 116 of file listener_internal\&.h\&.
+.SS "uint16_t listener::tracked_fds"
+
+.PP
+Definition at line 118 of file listener_internal\&.h\&.
+.SS "struct pollfd listener::fds[1000]"
+
+.PP
+Definition at line 119 of file listener_internal\&.h\&.
+.SS "\fBconnection_info\fP* listener::fd_info[1000]"
+
+.PP
+Definition at line 120 of file listener_internal\&.h\&.
+.SS "size_t listener::read_buf_size"
+
+.PP
+Definition at line 123 of file listener_internal\&.h\&.
+.SS "uint8_t* listener::read_buf"
+
+.PP
+Definition at line 124 of file listener_internal\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

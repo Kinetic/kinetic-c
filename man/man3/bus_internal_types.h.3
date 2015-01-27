@@ -1,0 +1,89 @@
+.TH "bus_internal_types.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_internal_types.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include <openssl/ssl\&.h>\fP
+.br
+\fC#include <openssl/err\&.h>\fP
+.br
+\fC#include 'bus\&.h'\fP
+.br
+\fC#include 'yacht\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBboxed_msg\fP"
+.br
+.ti -1c
+.RI "struct \fBbus\fP"
+.br
+.ti -1c
+.RI "struct \fBconnection_info\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBUS_NO_SSL\fP   ((SSL *)-2)"
+.br
+.ti -1c
+.RI "#define \fBTIMEOUT_NOT_YET_SET\fP   ((time_t)(-1))"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBrx_error_t\fP "
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define BUS_NO_SSL   ((SSL *)-2)"
+
+.PP
+Definition at line 57 of file bus_internal_types\&.h\&.
+.SS "#define TIMEOUT_NOT_YET_SET   ((time_t)(-1))"
+
+.PP
+Definition at line 89 of file bus_internal_types\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBrx_error_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIRX_ERROR_NONE \fP\fP
+.TP
+\fB\fIRX_ERROR_READY_FOR_DELIVERY \fP\fP
+.TP
+\fB\fIRX_ERROR_DONE \fP\fP
+.TP
+\fB\fIRX_ERROR_POLLHUP \fP\fP
+.TP
+\fB\fIRX_ERROR_POLLERR \fP\fP
+.TP
+\fB\fIRX_ERROR_READ_FAILURE \fP\fP
+.TP
+\fB\fIRX_ERROR_TIMEOUT \fP\fP
+.PP
+Definition at line 91 of file bus_internal_types\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,0 +1,123 @@
+.TH "rx_info_t" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+rx_info_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <listener_internal\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "const uint16_t \fBid\fP"
+.br
+.ti -1c
+.RI "struct \fBrx_info_t\fP * \fBnext\fP"
+.br
+.ti -1c
+.RI "\fBrx_info_state\fP \fBstate\fP"
+.br
+.ti -1c
+.RI "time_t \fBtimeout_sec\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      int \fBfd\fP"
+.br
+.ti -1c
+.RI "      int64_t \fBseq_id\fP"
+.br
+.ti -1c
+.RI "      bool \fBhas_result\fP"
+.br
+.ti -1c
+.RI "      \fBbus_unpack_cb_res_t\fP \fBresult\fP"
+.br
+.ti -1c
+.RI "   } \fBhold\fP"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      \fBboxed_msg\fP * \fBbox\fP"
+.br
+.ti -1c
+.RI "      \fBrx_error_t\fP \fBerror\fP"
+.br
+.ti -1c
+.RI "      bool \fBhas_result\fP"
+.br
+.ti -1c
+.RI "      \fBbus_unpack_cb_res_t\fP \fBresult\fP"
+.br
+.ti -1c
+.RI "   } \fBexpect\fP"
+.br
+.ti -1c
+.RI "} \fBu\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 66 of file listener_internal\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "const uint16_t rx_info_t::id"
+
+.PP
+Definition at line 67 of file listener_internal\&.h\&.
+.SS "struct \fBrx_info_t\fP* rx_info_t::next"
+
+.PP
+Definition at line 68 of file listener_internal\&.h\&.
+.SS "\fBrx_info_state\fP rx_info_t::state"
+
+.PP
+Definition at line 70 of file listener_internal\&.h\&.
+.SS "time_t rx_info_t::timeout_sec"
+
+.PP
+Definition at line 71 of file listener_internal\&.h\&.
+.SS "int rx_info_t::fd"
+
+.PP
+Definition at line 75 of file listener_internal\&.h\&.
+.SS "int64_t rx_info_t::seq_id"
+
+.PP
+Definition at line 76 of file listener_internal\&.h\&.
+.SS "bool rx_info_t::has_result"
+
+.PP
+Definition at line 77 of file listener_internal\&.h\&.
+.SS "\fBbus_unpack_cb_res_t\fP rx_info_t::result"
+
+.PP
+Definition at line 78 of file listener_internal\&.h\&.
+.SS "struct { \&.\&.\&. }   rx_info_t::hold"
+
+.SS "\fBboxed_msg\fP* rx_info_t::box"
+
+.PP
+Definition at line 81 of file listener_internal\&.h\&.
+.SS "\fBrx_error_t\fP rx_info_t::error"
+
+.PP
+Definition at line 82 of file listener_internal\&.h\&.
+.SS "struct { \&.\&.\&. }   rx_info_t::expect"
+
+.SS "union { \&.\&.\&. }   rx_info_t::u"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

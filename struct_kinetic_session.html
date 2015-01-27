@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,14 +60,16 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a45587886059c9f68db0fb36a6b692b7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session.html#a45587886059c9f68db0fb36a6b692b7d">config</a></td></tr>
+<tr class="memdesc:a45587886059c9f68db0fb36a6b692b7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Session configuration structure which must be configured.  <a href="#a45587886059c9f68db0fb36a6b692b7d">More...</a><br /></td></tr>
 <tr class="separator:a45587886059c9f68db0fb36a6b692b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57d1d01861409e3f9a3651cad67138d2"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="struct___kinetic_connection.html">_KineticConnection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session.html#a57d1d01861409e3f9a3651cad67138d2">connection</a></td></tr>
+<tr class="memdesc:a57d1d01861409e3f9a3651cad67138d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connection instance which is dynamically allocated upon call to <code>KineticClient_CreateConnection</code>.  <a href="#a57d1d01861409e3f9a3651cad67138d2">More...</a><br /></td></tr>
 <tr class="separator:a57d1d01861409e3f9a3651cad67138d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An instance of a session with a Kinetic device. </p>
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00124">124</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00143">143</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a45587886059c9f68db0fb36a6b692b7d"></a>
 <div class="memitem">
@@ -79,7 +81,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00126">126</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Session configuration structure which must be configured. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00145">145</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -93,7 +97,10 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00131">131</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Connection instance which is dynamically allocated upon call to <code>KineticClient_CreateConnection</code>. </p>
+<p>Client must call <code>KineticClient_DestroyConnection</code> when finished with a session to shutdown a session cleanly and free the <code>connection</code>. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00150">150</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>

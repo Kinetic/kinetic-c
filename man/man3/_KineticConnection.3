@@ -1,4 +1,4 @@
-.TH "KineticConnection" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticConnection" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,75 +18,75 @@ KineticConnection \-
 .RI "int \fBsocket\fP"
 .br
 .ti -1c
-.RI "pthread_mutex_t \fBwriteMutex\fP"
-.br
-.ti -1c
 .RI "int64_t \fBconnectionID\fP"
 .br
 .ti -1c
 .RI "int64_t \fBsequence\fP"
 .br
 .ti -1c
-.RI "\fBKineticList\fP \fBpdus\fP"
+.RI "\fBKineticSession\fP * \fBpSession\fP"
 .br
 .ti -1c
-.RI "\fBKineticList\fP \fBoperations\fP"
+.RI "struct \fBbus\fP * \fBmessageBus\fP"
 .br
 .ti -1c
-.RI "\fBKineticSession\fP \fBsession\fP"
+.RI "socket_info * \fBsi\fP"
 .br
 .ti -1c
-.RI "\fBKineticThread\fP \fBthread\fP"
+.RI "pthread_mutex_t \fBsendMutex\fP"
 .br
 .ti -1c
-.RI "pthread_t \fBthreadID\fP"
+.RI "KineticResourceWaiter \fBconnectionReady\fP"
+.br
+.ti -1c
+.RI "KineticCountingSemaphore * \fBoutstandingOperations\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 84 of file kinetic_types_internal\&.h\&.
+Definition at line 95 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "bool KineticConnection::connected"
 
 .PP
-Definition at line 85 of file kinetic_types_internal\&.h\&.
+Definition at line 96 of file kinetic_types_internal\&.h\&.
 .SS "int KineticConnection::socket"
 
 .PP
-Definition at line 86 of file kinetic_types_internal\&.h\&.
-.SS "pthread_mutex_t KineticConnection::writeMutex"
-
-.PP
-Definition at line 87 of file kinetic_types_internal\&.h\&.
+Definition at line 97 of file kinetic_types_internal\&.h\&.
 .SS "int64_t KineticConnection::connectionID"
 
 .PP
-Definition at line 88 of file kinetic_types_internal\&.h\&.
+Definition at line 98 of file kinetic_types_internal\&.h\&.
 .SS "int64_t KineticConnection::sequence"
 
 .PP
-Definition at line 89 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticList\fP KineticConnection::pdus"
+Definition at line 99 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticSession\fP* KineticConnection::pSession"
 
 .PP
-Definition at line 90 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticList\fP KineticConnection::operations"
+Definition at line 100 of file kinetic_types_internal\&.h\&.
+.SS "struct \fBbus\fP* KineticConnection::messageBus"
 
 .PP
-Definition at line 91 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticSession\fP KineticConnection::session"
+Definition at line 101 of file kinetic_types_internal\&.h\&.
+.SS "socket_info* KineticConnection::si"
 
 .PP
-Definition at line 92 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticThread\fP KineticConnection::thread"
+Definition at line 102 of file kinetic_types_internal\&.h\&.
+.SS "pthread_mutex_t KineticConnection::sendMutex"
 
 .PP
-Definition at line 93 of file kinetic_types_internal\&.h\&.
-.SS "pthread_t KineticConnection::threadID"
+Definition at line 103 of file kinetic_types_internal\&.h\&.
+.SS "KineticResourceWaiter KineticConnection::connectionReady"
 
 .PP
-Definition at line 94 of file kinetic_types_internal\&.h\&.
+Definition at line 104 of file kinetic_types_internal\&.h\&.
+.SS "KineticCountingSemaphore* KineticConnection::outstandingOperations"
+
+.PP
+Definition at line 105 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

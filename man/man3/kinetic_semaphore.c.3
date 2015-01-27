@@ -1,0 +1,119 @@
+.TH "kinetic_semaphore.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_semaphore.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_semaphore\&.h'\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "KineticSemaphore * \fBKineticSemaphore_Create\fP (void)"
+.br
+.RI "\fICreates a KineticSemaphore\&. \fP"
+.ti -1c
+.RI "void \fBKineticSemaphore_Signal\fP (KineticSemaphore *sem)"
+.br
+.RI "\fISignals KineticSemaphore\&. \fP"
+.ti -1c
+.RI "bool \fBKineticSemaphore_CheckSignaled\fP (KineticSemaphore *sem)"
+.br
+.RI "\fIReports whether the KineticSemaphore has been signaled\&. \fP"
+.ti -1c
+.RI "bool \fBKineticSemaphore_DestroyIfSignaled\fP (KineticSemaphore *sem)"
+.br
+.RI "\fIDestorys the KineticSemaphore if it has been signaled\&. \fP"
+.ti -1c
+.RI "void \fBKineticSemaphore_WaitForSignalAndDestroy\fP (KineticSemaphore *sem)"
+.br
+.RI "\fIBlocks until the given semaphore is signaled\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "KineticSemaphore* KineticSemaphore_Create (void)"
+
+.PP
+Creates a KineticSemaphore\&. The KineticSemaphore is a simple wrapper around a pthread condition variable and provides a a thread-safe way to block a thread and wait for notification from another thread\&.
+.PP
+\fBReturns:\fP
+.RS 4
+Returns a pointer to a KineticSemaphore\&. 
+.RE
+.PP
+
+.PP
+Definition at line 12 of file kinetic_semaphore\&.c\&.
+.SS "void KineticSemaphore_Signal (KineticSemaphore *sem)"
+
+.PP
+Signals KineticSemaphore\&. This will unblock another thread that's blocked on the given semaphore using \fBKineticSemaphore_WaitForSignalAndDestroy()\fP You should never signal the same KineticSemaphore more than once\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsem\fP A pointer to the semaphore to signal\&. 
+.RE
+.PP
+
+.PP
+Definition at line 24 of file kinetic_semaphore\&.c\&.
+.SS "bool KineticSemaphore_CheckSignaled (KineticSemaphore *sem)"
+
+.PP
+Reports whether the KineticSemaphore has been signaled\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsem\fP A pointer to the semaphore to report signaled status from\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns true if signaled\&. 
+.RE
+.PP
+
+.PP
+Definition at line 32 of file kinetic_semaphore\&.c\&.
+.SS "bool KineticSemaphore_DestroyIfSignaled (KineticSemaphore *sem)"
+
+.PP
+Destorys the KineticSemaphore if it has been signaled\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsem\fP A pointer to the semaphore to destroy\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns true signaled and detroyed\&. Returns false if not yet signaled\&. 
+.RE
+.PP
+
+.PP
+Definition at line 37 of file kinetic_semaphore\&.c\&.
+.SS "void KineticSemaphore_WaitForSignalAndDestroy (KineticSemaphore *sem)"
+
+.PP
+Blocks until the given semaphore is signaled\&. This will not block if the Semaphore has already been signaled\&. Once unblocked, this will also destroy (free) the provide KineticSemaphore\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsem\fP A pointer to the semaphore to wait for a signal\&. 
+.RE
+.PP
+
+.PP
+Definition at line 50 of file kinetic_semaphore\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

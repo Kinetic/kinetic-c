@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,12 +60,14 @@
       <li><a href="functions_g.html#index_g"><span>g</span></a></li>
       <li class="current"><a href="functions_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_m.html#index_m"><span>m</span></a></li>
       <li><a href="functions_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_t.html#index_t"><span>t</span></a></li>
@@ -99,9 +101,6 @@
 </li>
 <li>has_code
 : <a class="el" href="struct___kinetic_proto___command___status.html#a6d377f86df590153dfa6322ddac971ce">KineticProto_Command_Status</a>
-</li>
-<li>has_command
-: <a class="el" href="struct_kinetic_message.html#ae327869d3ba5f7191b549d35d704ab52">KineticMessage</a>
 </li>
 <li>has_commandBytes
 : <a class="el" href="struct___kinetic_proto___message.html#ab818a3573f37dd679c746a1df13e8b13">KineticProto_Message</a>
@@ -262,6 +261,9 @@
 <li>has_priority
 : <a class="el" href="struct___kinetic_proto___command___header.html#a34cc8224b2139feb05bebce9bcd39f7f">KineticProto_Command_Header</a>
 </li>
+<li>has_result
+: <a class="el" href="structrx__info__t.html#a228e094655268b71e7f3a03e93daa517">rx_info_t</a>
+</li>
 <li>has_reverse
 : <a class="el" href="struct___kinetic_proto___command___range.html#a69a26372422ab3548f375e34de0dcee0">KineticProto_Command_Range</a>
 </li>
@@ -312,16 +314,12 @@
 : <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#a192e8a0d5dcd1e7c438de7265b739bf7">KineticProto_Command_GetLog_Configuration</a>
 </li>
 <li>header
-: <a class="el" href="struct___kinetic_p_d_u.html#a626673d332c72f6b188e9629b09cb2c8">KineticPDU</a>
-, <a class="el" href="struct___kinetic_proto___command.html#a8f698a767804ebcf35583cce944b6065">KineticProto_Command</a>
+: <a class="el" href="struct___kinetic_proto___command.html#a8f698a767804ebcf35583cce944b6065">KineticProto_Command</a>
 , <a class="el" href="struct_kinetic_message.html#a058b813fadb4ad61f52250c82c62f26f">KineticMessage</a>
-</li>
-<li>headerNBO
-: <a class="el" href="struct___kinetic_p_d_u.html#aef50cc92053fc481336a68363584ef4d">KineticPDU</a>
+, <a class="el" href="struct_kinetic_response.html#af39104124519d310cfa0750c81f70473">KineticResponse</a>
 </li>
 <li>hmac
-: <a class="el" href="struct___kinetic_p_d_u.html#a24cd6071d964ac66ddca742c6023ab85">KineticPDU</a>
-, <a class="el" href="struct___kinetic_proto___message___h_m_a_cauth.html#a25038e376d0369aa80b32262c9ffbca5">KineticProto_Message_HMACauth</a>
+: <a class="el" href="struct___kinetic_proto___message___h_m_a_cauth.html#a25038e376d0369aa80b32262c9ffbca5">KineticProto_Message_HMACauth</a>
 </li>
 <li>hmacAlgorithm
 : <a class="el" href="struct___kinetic_proto___command___security___a_c_l.html#a0d01156f29478de9d33ec605cecf4177">KineticProto_Command_Security_ACL</a>
@@ -335,6 +333,10 @@
 </li>
 <li>hmacKey
 : <a class="el" href="struct_kinetic_session_config.html#acb9f1d3dceb9739eb3c88db1f8150198">KineticSessionConfig</a>
+</li>
+<li>hold
+: <a class="el" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4">listener_msg</a>
+, <a class="el" href="structrx__info__t.html#a1d15eb350e608c4c3987b58bd78bde52">rx_info_t</a>
 </li>
 <li>host
 : <a class="el" href="struct_kinetic_session_config.html#a6006141d44982fdf8748c65fe45946f3">KineticSessionConfig</a>

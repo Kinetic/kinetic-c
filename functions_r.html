@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,12 +60,14 @@
       <li><a href="functions_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_m.html#index_m"><span>m</span></a></li>
       <li><a href="functions_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_q.html#index_q"><span>q</span></a></li>
       <li class="current"><a href="functions_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_t.html#index_t"><span>t</span></a></li>
@@ -82,6 +84,27 @@
 <li>range
 : <a class="el" href="struct___kinetic_proto___command___body.html#a0a96a36635d5f7f27b89cfbb7a8ed5aa">KineticProto_Command_Body</a>
 </li>
+<li>read_buf
+: <a class="el" href="structlistener.html#ada742987f7ce7758fc4422a290948d97">listener</a>
+</li>
+<li>read_buf_size
+: <a class="el" href="structlistener.html#a78f69f0cfcea46e590a71e1fccf81b92">listener</a>
+</li>
+<li>readerThreads
+: <a class="el" href="struct_kinetic_client_config.html#a7554ee4d63821eb7ce0d5c59d632018a">KineticClientConfig</a>
+</li>
+<li>ready
+: <a class="el" href="struct___kinetic_resource_waiter.html#acf3a918593e1380fbc0033b97c2bdf8d">KineticResourceWaiter</a>
+</li>
+<li>ready_cond
+: <a class="el" href="struct___kinetic_resource_waiter.html#af79c12debd1476a6ddc3ba87a91d26f6">KineticResourceWaiter</a>
+</li>
+<li>refcount
+: <a class="el" href="structfd__info.html#a6f4437e27ab87d3f6a9d962a422e288f">fd_info</a>
+</li>
+<li>release
+: <a class="el" href="structtx__info__t.html#a2445fd10412433bffce13104c1258a09">tx_info_t</a>
+</li>
 <li>request
 : <a class="el" href="struct___kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc">KineticOperation</a>
 </li>
@@ -89,14 +112,37 @@
 : <a class="el" href="struct_kinetic_completion_data.html#a7a8d032245ba95097b732824292cdc61">KineticCompletionData</a>
 </li>
 <li>response
-: <a class="el" href="struct___kinetic_operation.html#a9474f1811fbed7a7ac32e0f11f154d3c">KineticOperation</a>
+: <a class="el" href="struct___kinetic_operation.html#a0191c99ea2be1e3608c367080d994d71">KineticOperation</a>
+, <a class="el" href="structbus__msg__result__t.html#ac4e4674f7a4c28cb5807f78d7552fe24">bus_msg_result_t</a>
+</li>
+<li>result
+: <a class="el" href="structboxed__msg.html#a3ba93e50d6ae6093e131696a1f10c924">boxed_msg</a>
+, <a class="el" href="structrx__info__t.html#ab71b0f36041491e8e1f50736f6a83683">rx_info_t</a>
 </li>
 <li>resultStatus
 : <a class="el" href="struct_kinetic_p2_p___operation_data.html#af6b00c80dc8649a7ac42f29977c27178">KineticP2P_OperationData</a>
 </li>
+<li>retries
+: <a class="el" href="structtx__info__t.html#a9a2f2b534cf01de85c6127589f00620a">tx_info_t</a>
+</li>
 <li>reverse
 : <a class="el" href="struct___kinetic_proto___command___range.html#adc8f7f1c8806d4e3d2252d871d6c7188">KineticProto_Command_Range</a>
 , <a class="el" href="struct_kinetic_key_range.html#a25e5103ae87da236464775a23afe9619">KineticKeyRange</a>
+</li>
+<li>rm_socket
+: <a class="el" href="structtx__info__t.html#aa4d8bd6c3afe21286e04e81d145cf981">tx_info_t</a>
+</li>
+<li>rx_info
+: <a class="el" href="structlistener.html#ab0d1685b2ada442ec0983c9319125d0c">listener</a>
+</li>
+<li>rx_info_freelist
+: <a class="el" href="structlistener.html#aba8752eae5f7b0b4bd13980ac118dbf8">listener</a>
+</li>
+<li>rx_info_in_use
+: <a class="el" href="structlistener.html#ac89de9e149ba59813be0e77f010eb591">listener</a>
+</li>
+<li>rx_info_max_used
+: <a class="el" href="structlistener.html#a944a9d2c8ddf511f930e2fff830e98a8">listener</a>
 </li>
 </ul>
 </div><!-- contents -->

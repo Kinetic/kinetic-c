@@ -1,4 +1,4 @@
-.TH "KineticMessage" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticMessage" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,9 +22,6 @@ KineticMessage \-
 .br
 .ti -1c
 .RI "uint8_t \fBhmacData\fP [\fBKINETIC_HMAC_MAX_LEN\fP]"
-.br
-.ti -1c
-.RI "bool \fBhas_command\fP"
 .br
 .ti -1c
 .RI "KineticProto_Command \fBcommand\fP"
@@ -59,97 +56,72 @@ KineticMessage \-
 .ti -1c
 .RI "KineticProto_Command_PinOperation \fBpinOp\fP"
 .br
-.ti -1c
-.RI "KineticProto_Command_P2POperation \fBp2pOp\fP"
-.br
-.ti -1c
-.RI "KineticProto_Command_P2POperation_Operation \fBp2pOpOp\fP"
-.br
-.ti -1c
-.RI "KineticProto_Command_P2POperation_Peer \fBp2pPeer\fP"
-.br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 115 of file kinetic_types_internal\&.h\&.
+Definition at line 117 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "KineticProto_Message KineticMessage::message"
 
 .PP
-Definition at line 117 of file kinetic_types_internal\&.h\&.
+Definition at line 119 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Message_HMACauth KineticMessage::hmacAuth"
 
 .PP
-Definition at line 118 of file kinetic_types_internal\&.h\&.
+Definition at line 120 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Message_PINauth KineticMessage::pinAuth"
 
 .PP
-Definition at line 119 of file kinetic_types_internal\&.h\&.
+Definition at line 121 of file kinetic_types_internal\&.h\&.
 .SS "uint8_t KineticMessage::hmacData[\fBKINETIC_HMAC_MAX_LEN\fP]"
-
-.PP
-Definition at line 120 of file kinetic_types_internal\&.h\&.
-.SS "bool KineticMessage::has_command"
 
 .PP
 Definition at line 122 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command KineticMessage::command"
 
 .PP
-Definition at line 123 of file kinetic_types_internal\&.h\&.
+Definition at line 124 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Header KineticMessage::header"
 
 .PP
-Definition at line 124 of file kinetic_types_internal\&.h\&.
+Definition at line 125 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Body KineticMessage::body"
 
 .PP
-Definition at line 125 of file kinetic_types_internal\&.h\&.
+Definition at line 126 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Status KineticMessage::status"
 
 .PP
-Definition at line 126 of file kinetic_types_internal\&.h\&.
+Definition at line 127 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Security KineticMessage::security"
 
 .PP
-Definition at line 127 of file kinetic_types_internal\&.h\&.
+Definition at line 128 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Security_ACL KineticMessage::acl"
 
 .PP
-Definition at line 128 of file kinetic_types_internal\&.h\&.
+Definition at line 129 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_KeyValue KineticMessage::keyValue"
 
 .PP
-Definition at line 129 of file kinetic_types_internal\&.h\&.
+Definition at line 130 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Range KineticMessage::keyRange"
 
 .PP
-Definition at line 130 of file kinetic_types_internal\&.h\&.
+Definition at line 131 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_GetLog KineticMessage::getLog"
 
 .PP
-Definition at line 131 of file kinetic_types_internal\&.h\&.
+Definition at line 132 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticProto_Command_GetLog_Type\fP KineticMessage::getLogType"
 
 .PP
-Definition at line 132 of file kinetic_types_internal\&.h\&.
+Definition at line 133 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_PinOperation KineticMessage::pinOp"
 
 .PP
-Definition at line 133 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_P2POperation KineticMessage::p2pOp"
-
-.PP
 Definition at line 134 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_P2POperation_Operation KineticMessage::p2pOpOp"
-
-.PP
-Definition at line 135 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_P2POperation_Peer KineticMessage::p2pPeer"
-
-.PP
-Definition at line 136 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

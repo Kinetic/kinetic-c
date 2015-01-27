@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -50,162 +50,25 @@
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">kinetic_device_info.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__device__info_8h_source.html">kinetic_device_info.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__serial__allocator_8h_source.html">kinetic_serial_allocator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
 </div>
 <p><a href="kinetic__device__info_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:acde0f6af9a9b2e350c9b3a51b46e8eda"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#acde0f6af9a9b2e350c9b3a51b46e8eda">COPY_VALUE_OPTIONAL</a>(_attr, _dest, _src)</td></tr>
-<tr class="separator:acde0f6af9a9b2e350c9b3a51b46e8eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad39c068eecc58c6cbee8184819e87f2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#ad39c068eecc58c6cbee8184819e87f2e">COPY_CSTRING</a>(_attr, _dest, _src, _allocator)</td></tr>
-<tr class="separator:ad39c068eecc58c6cbee8184819e87f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29635d2652beba37e5f990feac50efd6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a29635d2652beba37e5f990feac50efd6">COPY_BYTES_OPTIONAL</a>(_attr, _dest, _src, _allocator)</td></tr>
-<tr class="separator:a29635d2652beba37e5f990feac50efd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a5f061838bd7c675301f9a7e9bbee8758"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a5f061838bd7c675301f9a7e9bbee8758">KineticDeviceInfo_Create</a> (const KineticProto_Command_GetLog *getLog)</td></tr>
 <tr class="separator:a5f061838bd7c675301f9a7e9bbee8758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c9a2961fbab286f1d4004a6fb5fbf5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a6c9a2961fbab286f1d4004a6fb5fbf5b">KineticDeviceInfo_Free</a> (<a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> *kdi)</td></tr>
+<tr class="separator:a6c9a2961fbab286f1d4004a6fb5fbf5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="acde0f6af9a9b2e350c9b3a51b46e8eda"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define COPY_VALUE_OPTIONAL</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_attr, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_dest, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_src&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">{ \</div>
-<div class="line">    if (_src-&gt;has_##_attr) { _dest-&gt;_attr = _src-&gt;_attr; } }</div>
-</div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00026">26</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad39c068eecc58c6cbee8184819e87f2e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define COPY_CSTRING</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_attr, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_dest, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_src, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_allocator&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span> (_src-&gt;_attr != NULL) { \</div>
-<div class="line">        size_t len = strlen(_src-&gt;_attr)+1; \</div>
-<div class="line">        _dest-&gt;_attr = <a class="code" href="kinetic__serial__allocator_8c.html#a5461e7660ca76f2e4df9895d2dc0ed0f">KineticSerialAllocator_AllocateChunk</a>(_allocator, len); \</div>
-<div class="line">        memcpy(_dest-&gt;_attr, _src-&gt;_attr, len); \</div>
-<div class="line">    }</div>
-<div class="ttc" id="kinetic__serial__allocator_8c_html_a5461e7660ca76f2e4df9895d2dc0ed0f"><div class="ttname"><a href="kinetic__serial__allocator_8c.html#a5461e7660ca76f2e4df9895d2dc0ed0f">KineticSerialAllocator_AllocateChunk</a></div><div class="ttdeci">void * KineticSerialAllocator_AllocateChunk(KineticSerialAllocator *allocator, size_t len)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__serial__allocator_8c_source.html#l00040">kinetic_serial_allocator.c:40</a></div></div>
-</div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00028">28</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a29635d2652beba37e5f990feac50efd6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define COPY_BYTES_OPTIONAL</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_attr, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_dest, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_src, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">_allocator&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span> (_src-&gt;has_##_attr) { \</div>
-<div class="line">        _dest-&gt;_attr.data = <a class="code" href="kinetic__serial__allocator_8c.html#a5461e7660ca76f2e4df9895d2dc0ed0f">KineticSerialAllocator_AllocateChunk</a>(_allocator, _src-&gt;_attr.len); \</div>
-<div class="line">        memcpy(_dest-&gt;_attr.data, _src-&gt;_attr.data, _src-&gt;_attr.len); \</div>
-<div class="line">        _dest-&gt;_attr.len = _src-&gt;_attr.len; \</div>
-<div class="line">    }</div>
-<div class="ttc" id="kinetic__serial__allocator_8c_html_a5461e7660ca76f2e4df9895d2dc0ed0f"><div class="ttname"><a href="kinetic__serial__allocator_8c.html#a5461e7660ca76f2e4df9895d2dc0ed0f">KineticSerialAllocator_AllocateChunk</a></div><div class="ttdeci">void * KineticSerialAllocator_AllocateChunk(KineticSerialAllocator *allocator, size_t len)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__serial__allocator_8c_source.html#l00040">kinetic_serial_allocator.c:40</a></div></div>
-</div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00034">34</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a5f061838bd7c675301f9a7e9bbee8758"></a>
 <div class="memitem">
@@ -221,9 +84,29 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00185">185</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00257">257</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00357">KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN</a>, <a class="el" href="kinetic__serial__allocator_8c_source.html#l00040">KineticSerialAllocator_AllocateChunk()</a>, <a class="el" href="kinetic__serial__allocator_8c_source.html#l00026">KineticSerialAllocator_Create()</a>, <a class="el" href="kinetic__serial__allocator_8c_source.html#l00034">KineticSerialAllocator_GetBuffer()</a>, <a class="el" href="kinetic__serial__allocator_8c_source.html#l00066">KineticSerialAllocator_TrimBuffer()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF2</a>, <a class="el" href="kinetic__types_8h_source.html#l00322">KineticDeviceInfo::totalLength</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00295">KineticSerialAllocator::used</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00393">KineticDeviceInfo::capacity</a>, <a class="el" href="kinetic__types_8h_source.html#l00394">KineticDeviceInfo::configuration</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00399">KineticDeviceInfo::device</a>, <a class="el" href="kinetic__types_8h_source.html#l00398">KineticDeviceInfo::limits</a>, <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF2</a>, <a class="el" href="kinetic__types_8h_source.html#l00397">KineticDeviceInfo::messages</a>, <a class="el" href="kinetic__types_8h_source.html#l00396">KineticDeviceInfo::numStatistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00392">KineticDeviceInfo::numTemperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00390">KineticDeviceInfo::numUtilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00395">KineticDeviceInfo::statistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00391">KineticDeviceInfo::temperatures</a>, and <a class="el" href="kinetic__types_8h_source.html#l00389">KineticDeviceInfo::utilizations</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6c9a2961fbab286f1d4004a6fb5fbf5b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticDeviceInfo_Free </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> *&#160;</td>
+          <td class="paramname"><em>kdi</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00323">323</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00393">KineticDeviceInfo::capacity</a>, <a class="el" href="kinetic__types_8h_source.html#l00322">KineticDeviceInfo_Configuration::compilationDate</a>, <a class="el" href="kinetic__types_8h_source.html#l00394">KineticDeviceInfo::configuration</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00399">KineticDeviceInfo::device</a>, <a class="el" href="kinetic__types_8h_source.html#l00327">KineticDeviceInfo_Configuration::interfaces</a>, <a class="el" href="kinetic__types_8h_source.html#l00313">KineticDeviceInfo_Interface::ipv4Address</a>, <a class="el" href="kinetic__types_8h_source.html#l00314">KineticDeviceInfo_Interface::ipv6Address</a>, <a class="el" href="kinetic__types_8h_source.html#l00398">KineticDeviceInfo::limits</a>, <a class="el" href="kinetic__types_8h_source.html#l00312">KineticDeviceInfo_Interface::MAC</a>, <a class="el" href="kinetic__types_8h_source.html#l00397">KineticDeviceInfo::messages</a>, <a class="el" href="kinetic__types_8h_source.html#l00318">KineticDeviceInfo_Configuration::model</a>, <a class="el" href="kinetic__types_8h_source.html#l00296">KineticDeviceInfo_Utilization::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00300">KineticDeviceInfo_Temperature::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00311">KineticDeviceInfo_Interface::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00386">KineticDeviceInfo_Device::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00328">KineticDeviceInfo_Configuration::numInterfaces</a>, <a class="el" href="kinetic__types_8h_source.html#l00392">KineticDeviceInfo::numTemperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00390">KineticDeviceInfo::numUtilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00325">KineticDeviceInfo_Configuration::protocolCompilationDate</a>, <a class="el" href="kinetic__types_8h_source.html#l00326">KineticDeviceInfo_Configuration::protocolSourceHash</a>, <a class="el" href="kinetic__types_8h_source.html#l00324">KineticDeviceInfo_Configuration::protocolVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00319">KineticDeviceInfo_Configuration::serialNumber</a>, <a class="el" href="kinetic__types_8h_source.html#l00323">KineticDeviceInfo_Configuration::sourceHash</a>, <a class="el" href="kinetic__types_8h_source.html#l00395">KineticDeviceInfo::statistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00391">KineticDeviceInfo::temperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00389">KineticDeviceInfo::utilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00317">KineticDeviceInfo_Configuration::vendor</a>, <a class="el" href="kinetic__types_8h_source.html#l00321">KineticDeviceInfo_Configuration::version</a>, and <a class="el" href="kinetic__types_8h_source.html#l00320">KineticDeviceInfo_Configuration::worldWideName</a>.</p>
 
 </div>
 </div>

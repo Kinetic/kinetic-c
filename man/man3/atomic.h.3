@@ -1,0 +1,42 @@
+.TH "atomic.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+atomic.h \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBATOMIC_BOOL_COMPARE_AND_SWAP\fP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
+.br
+.ti -1c
+.RI "#define \fBSPIN_ADJ\fP(F, ADJ)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
+
+.PP
+Definition at line 23 of file atomic\&.h\&.
+.SS "#define SPIN_ADJ(F, ADJ)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \
+        for (;;) {                                                      \
+            size_t v = F;                                               \
+            if (ATOMIC_BOOL_COMPARE_AND_SWAP(&F, v, v + ADJ)) {         \
+                break;                                                  \
+            }                                                           \
+        }                                                               \
+    } while (0)
+.fi
+.PP
+Definition at line 27 of file atomic\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

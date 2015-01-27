@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -52,26 +52,36 @@
 </div><!--header-->
 <div class="contents">
 
+<p>Kinetic Key Range request structure.  
+ <a href="struct_kinetic_key_range.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a368aca257ec76a040d2c9b11aafc7a11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_key_range.html#a368aca257ec76a040d2c9b11aafc7a11">startKey</a></td></tr>
+<tr class="memdesc:a368aca257ec76a040d2c9b11aafc7a11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required bytes, the beginning of the requested range.  <a href="#a368aca257ec76a040d2c9b11aafc7a11">More...</a><br /></td></tr>
 <tr class="separator:a368aca257ec76a040d2c9b11aafc7a11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a060df4cb8b192e69001776315bdcea41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_key_range.html#a060df4cb8b192e69001776315bdcea41">endKey</a></td></tr>
+<tr class="memdesc:a060df4cb8b192e69001776315bdcea41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required bytes, the end of the requested range.  <a href="#a060df4cb8b192e69001776315bdcea41">More...</a><br /></td></tr>
 <tr class="separator:a060df4cb8b192e69001776315bdcea41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acddb7d7cc3a47f798631aaf127bea6ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_key_range.html#acddb7d7cc3a47f798631aaf127bea6ef">startKeyInclusive</a></td></tr>
+<tr class="memdesc:acddb7d7cc3a47f798631aaf127bea6ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional bool, defaults to false If set, indicates that the start key should be included in the returned range.  <a href="#acddb7d7cc3a47f798631aaf127bea6ef">More...</a><br /></td></tr>
 <tr class="separator:acddb7d7cc3a47f798631aaf127bea6ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ca6ce6c73ea02a66b5d58cff2e401c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_key_range.html#a9ca6ce6c73ea02a66b5d58cff2e401c5">endKeyInclusive</a></td></tr>
+<tr class="memdesc:a9ca6ce6c73ea02a66b5d58cff2e401c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional bool, defaults to false If set, indicates that the end key should be included in the returned range.  <a href="#a9ca6ce6c73ea02a66b5d58cff2e401c5">More...</a><br /></td></tr>
 <tr class="separator:a9ca6ce6c73ea02a66b5d58cff2e401c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a160371c5c224acd9d706b46c2ff8c195"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_key_range.html#a160371c5c224acd9d706b46c2ff8c195">maxReturned</a></td></tr>
+<tr class="memdesc:a160371c5c224acd9d706b46c2ff8c195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required int32, must be greater than 0 The maximum number of keys returned, in sorted order.  <a href="#a160371c5c224acd9d706b46c2ff8c195">More...</a><br /></td></tr>
 <tr class="separator:a160371c5c224acd9d706b46c2ff8c195"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25e5103ae87da236464775a23afe9619"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_key_range.html#a25e5103ae87da236464775a23afe9619">reverse</a></td></tr>
+<tr class="memdesc:a25e5103ae87da236464775a23afe9619"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional bool, defaults to false If true, the key range will be returned in reverse order, starting at endKey and moving back to startKey.  <a href="#a25e5103ae87da236464775a23afe9619">More...</a><br /></td></tr>
 <tr class="separator:a25e5103ae87da236464775a23afe9619"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00208">208</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<div class="textblock"><p>Kinetic Key Range request structure. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00255">255</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a368aca257ec76a040d2c9b11aafc7a11"></a>
 <div class="memitem">
@@ -83,7 +93,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00209">209</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Required bytes, the beginning of the requested range. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00258">258</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -97,7 +109,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00210">210</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Required bytes, the end of the requested range. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00261">261</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -111,7 +125,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00211">211</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Optional bool, defaults to false If set, indicates that the start key should be included in the returned range. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00265">265</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -125,7 +141,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00212">212</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Optional bool, defaults to false If set, indicates that the end key should be included in the returned range. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00269">269</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -139,7 +157,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00213">213</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Required int32, must be greater than 0 The maximum number of keys returned, in sorted order. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00273">273</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -153,7 +173,10 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00214">214</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Optional bool, defaults to false If true, the key range will be returned in reverse order, starting at endKey and moving back to startKey. </p>
+<p>For instance if the search is startKey="j", endKey="k", maxReturned=2, reverse=true and the keys "k0", "k1", "k2" exist the system will return "k2" and "k1" in that order. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00281">281</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>

@@ -1,0 +1,101 @@
+.TH "threadpool_internals.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+threadpool_internals.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'threadpool\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBthread_info\fP"
+.br
+.ti -1c
+.RI "struct \fBthread_context\fP"
+.br
+.ti -1c
+.RI "struct \fBmarked_task\fP"
+.br
+.ti -1c
+.RI "struct \fBthreadpool\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBATOMIC_BOOL_COMPARE_AND_SWAP\fP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
+.br
+.ti -1c
+.RI "#define \fBNOTIFY_MSG\fP   '!'"
+.br
+.ti -1c
+.RI "#define \fBNOTIFY_MSG_LEN\fP   1"
+.br
+.ti -1c
+.RI "#define \fBSPIN_ADJ\fP(F, ADJ)"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBthread_status_t\fP "
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
+
+.PP
+Definition at line 66 of file threadpool_internals\&.h\&.
+.SS "#define NOTIFY_MSG   '!'"
+
+.PP
+Definition at line 69 of file threadpool_internals\&.h\&.
+.SS "#define NOTIFY_MSG_LEN   1"
+
+.PP
+Definition at line 70 of file threadpool_internals\&.h\&.
+.SS "#define SPIN_ADJ(F, ADJ)"
+\fBValue:\fP
+.PP
+.nf
+do {                                                                \
+        for (;;) {                                                      \
+            size_t v = F;                                               \
+            if (ATOMIC_BOOL_COMPARE_AND_SWAP(&F, v, v + ADJ)) {         \
+                break;                                                  \
+            }                                                           \
+        }                                                               \
+    } while (0)
+.fi
+.PP
+Definition at line 73 of file threadpool_internals\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBthread_status_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fISTATUS_NONE \fP\fP
+.TP
+\fB\fISTATUS_ASLEEP \fP\fP
+.TP
+\fB\fISTATUS_AWAKE \fP\fP
+.TP
+\fB\fISTATUS_SHUTDOWN \fP\fP
+.TP
+\fB\fISTATUS_JOINED \fP\fP
+.PP
+Definition at line 6 of file threadpool_internals\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

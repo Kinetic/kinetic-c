@@ -1,0 +1,152 @@
+.TH "sender_internal.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+sender_internal.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'sender\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBfd_info\fP"
+.br
+.ti -1c
+.RI "struct \fBtx_info_t\fP"
+.br
+.ti -1c
+.RI "struct \fBsender\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBMAX_TIMEOUT\fP   100"
+.br
+.ti -1c
+.RI "#define \fBTX_TIMEOUT\fP   9"
+.br
+.ti -1c
+.RI "#define \fBSENDER_MAX_DELIVERY_RETRIES\fP   5"
+.br
+.ti -1c
+.RI "#define \fBMAX_CONCURRENT_SENDS\fP   32"
+.br
+.ti -1c
+.RI "#define \fBHASH_TABLE_SIZE2\fP   6 /* should be > log2(\fBMAX_CONCURRENT_SENDS\fP) */"
+.br
+.ti -1c
+.RI "#define \fBSENDER_FD_NOT_IN_USE\fP   (-1)"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef uint32_t \fBtx_flag_t\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBtx_error_t\fP "
+.br
+.ti -1c
+.RI "enum \fBtx_info_state\fP "
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define MAX_TIMEOUT   100"
+
+.PP
+Definition at line 25 of file sender_internal\&.h\&.
+.SS "#define TX_TIMEOUT   9"
+
+.PP
+Definition at line 26 of file sender_internal\&.h\&.
+.SS "#define SENDER_MAX_DELIVERY_RETRIES   5"
+
+.PP
+Definition at line 28 of file sender_internal\&.h\&.
+.SS "#define MAX_CONCURRENT_SENDS   32"
+
+.PP
+Definition at line 31 of file sender_internal\&.h\&.
+.SS "#define HASH_TABLE_SIZE2   6 /* should be > log2(\fBMAX_CONCURRENT_SENDS\fP) */"
+
+.PP
+Definition at line 34 of file sender_internal\&.h\&.
+.SS "#define SENDER_FD_NOT_IN_USE   (-1)"
+
+.PP
+Definition at line 36 of file sender_internal\&.h\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef uint32_t \fBtx_flag_t\fP"
+
+.PP
+Definition at line 32 of file sender_internal\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBtx_error_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fITX_ERROR_NONE \fP\fP
+.TP
+\fB\fITX_ERROR_POLLHUP \fP\fP
+.TP
+\fB\fITX_ERROR_POLLERR \fP\fP
+.TP
+\fB\fITX_ERROR_WRITE_FAILURE \fP\fP
+.TP
+\fB\fITX_ERROR_UNREGISTERED_SOCKET \fP\fP
+.TP
+\fB\fITX_ERROR_CLOSED \fP\fP
+.TP
+\fB\fITX_ERROR_NOTIFY_LISTENER_FAILURE \fP\fP
+.TP
+\fB\fITX_ERROR_WRITE_TIMEOUT \fP\fP
+.TP
+\fB\fITX_ERROR_NOTIFY_TIMEOUT \fP\fP
+.TP
+\fB\fITX_ERROR_BAD_SEQUENCE_ID \fP\fP
+.PP
+Definition at line 37 of file sender_internal\&.h\&.
+.SS "enum \fBtx_info_state\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fITIS_UNDEF \fP\fP
+.TP
+\fB\fITIS_ADD_SOCKET \fP\fP
+.TP
+\fB\fITIS_RM_SOCKET \fP\fP
+.TP
+\fB\fITIS_SHUTDOWN \fP\fP
+.TP
+\fB\fITIS_REQUEST_ENQUEUE \fP\fP
+.TP
+\fB\fITIS_REQUEST_WRITE \fP\fP
+.TP
+\fB\fITIS_RESPONSE_NOTIFY \fP\fP
+.TP
+\fB\fITIS_REQUEST_RELEASE \fP\fP
+.TP
+\fB\fITIS_ERROR \fP\fP
+.PP
+Definition at line 50 of file sender_internal\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

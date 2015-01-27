@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -52,32 +52,46 @@
 </div><!--header-->
 <div class="contents">
 
+<p>Kinetic object instance.  
+ <a href="struct_kinetic_entry.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:ab34b2be83d0c4bf878d51fa557f229ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#ab34b2be83d0c4bf878d51fa557f229ac">key</a></td></tr>
+<tr class="memdesc:ab34b2be83d0c4bf878d51fa557f229ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Key associated with the object stored on disk.  <a href="#ab34b2be83d0c4bf878d51fa557f229ac">More...</a><br /></td></tr>
 <tr class="separator:ab34b2be83d0c4bf878d51fa557f229ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59e00f6de104c463050dd6108e3564e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#a59e00f6de104c463050dd6108e3564e3">value</a></td></tr>
+<tr class="memdesc:a59e00f6de104c463050dd6108e3564e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Value data associated with the key.  <a href="#a59e00f6de104c463050dd6108e3564e3">More...</a><br /></td></tr>
 <tr class="separator:a59e00f6de104c463050dd6108e3564e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd8189bdf6ee52f4102f04286a754e1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#afd8189bdf6ee52f4102f04286a754e1d">dbVersion</a></td></tr>
+<tr class="memdesc:afd8189bdf6ee52f4102f04286a754e1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current version of the entry (optional)  <a href="#afd8189bdf6ee52f4102f04286a754e1d">More...</a><br /></td></tr>
 <tr class="separator:afd8189bdf6ee52f4102f04286a754e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab95a27c6512b0745ab63fab0e47b661"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#aab95a27c6512b0745ab63fab0e47b661">tag</a></td></tr>
+<tr class="memdesc:aab95a27c6512b0745ab63fab0e47b661"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generated authentication hash per the specified <code>algorithm</code>  <a href="#aab95a27c6512b0745ab63fab0e47b661">More...</a><br /></td></tr>
 <tr class="separator:aab95a27c6512b0745ab63fab0e47b661"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a920f534c8e71109a6e4e62eed921db92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09">KineticAlgorithm</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#a920f534c8e71109a6e4e62eed921db92">algorithm</a></td></tr>
+<tr class="memdesc:a920f534c8e71109a6e4e62eed921db92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Algorithm used to generate the specified <code>tag</code>  <a href="#a920f534c8e71109a6e4e62eed921db92">More...</a><br /></td></tr>
 <tr class="separator:a920f534c8e71109a6e4e62eed921db92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ab421a9388a1a203ca35c022e78c8e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#a3ab421a9388a1a203ca35c022e78c8e7">newVersion</a></td></tr>
+<tr class="memdesc:a3ab421a9388a1a203ca35c022e78c8e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">New version for the object to assume once written to disk (optional)  <a href="#a3ab421a9388a1a203ca35c022e78c8e7">More...</a><br /></td></tr>
 <tr class="separator:a3ab421a9388a1a203ca35c022e78c8e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a453aef7088b4e728ff250d8c8cd7414c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#a453aef7088b4e728ff250d8c8cd7414c">metadataOnly</a></td></tr>
+<tr class="memdesc:a453aef7088b4e728ff250d8c8cd7414c"><td class="mdescLeft">&#160;</td><td class="mdescRight">If set for a GET request, will return only the metadata for the specified object (<code>value</code> will not be retrieved)  <a href="#a453aef7088b4e728ff250d8c8cd7414c">More...</a><br /></td></tr>
 <tr class="separator:a453aef7088b4e728ff250d8c8cd7414c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96b9deeff3a41d9830590bd9ea9175c7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#a96b9deeff3a41d9830590bd9ea9175c7">force</a></td></tr>
+<tr class="memdesc:a96b9deeff3a41d9830590bd9ea9175c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">If set for a GET/DELETE request, will override <code>version</code> checking.  <a href="#a96b9deeff3a41d9830590bd9ea9175c7">More...</a><br /></td></tr>
 <tr class="separator:a96b9deeff3a41d9830590bd9ea9175c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7d04e1dcbfc7794823542c61698b777"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3">KineticSynchronization</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html#ac7d04e1dcbfc7794823542c61698b777">synchronization</a></td></tr>
+<tr class="memdesc:ac7d04e1dcbfc7794823542c61698b777"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronization method to use for PUT/DELETE requests.  <a href="#ac7d04e1dcbfc7794823542c61698b777">More...</a><br /></td></tr>
 <tr class="separator:ac7d04e1dcbfc7794823542c61698b777"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00191">191</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<div class="textblock"><p>Kinetic object instance. </p>
+<p>The <a class="el" href="struct_byte_buffer.html" title="Structure for an embedded ByteArray as a buffer. ">ByteBuffer</a> attributes must be allocated and freed by the client, if used. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00236">236</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="ab34b2be83d0c4bf878d51fa557f229ac"></a>
 <div class="memitem">
@@ -89,7 +103,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00192">192</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Key associated with the object stored on disk. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00237">237</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -103,7 +119,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00193">193</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Value data associated with the key. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00238">238</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -117,7 +135,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00196">196</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Current version of the entry (optional) </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00241">241</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -131,7 +151,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00197">197</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Generated authentication hash per the specified <code>algorithm</code> </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00242">242</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -145,7 +167,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00198">198</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Algorithm used to generate the specified <code>tag</code> </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00243">243</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -159,7 +183,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00201">201</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>New version for the object to assume once written to disk (optional) </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00246">246</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -173,7 +199,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00202">202</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>If set for a GET request, will return only the metadata for the specified object (<code>value</code> will not be retrieved) </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00247">247</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -187,7 +215,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00203">203</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>If set for a GET/DELETE request, will override <code>version</code> checking. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00248">248</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -201,7 +231,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00204">204</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Synchronization method to use for PUT/DELETE requests. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00249">249</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>

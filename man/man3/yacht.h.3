@@ -1,0 +1,111 @@
+.TH "yacht.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+yacht.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stdbool\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBYACHT_NO_KEY\fP   ((int)-1)"
+.br
+.ti -1c
+.RI "#define \fBYACHT_DELETED\fP   ((int)-2)"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef void( \fByacht_free_cb\fP )(void *value, void *udata)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct yacht * \fByacht_init\fP (uint8_t sz2)"
+.br
+.ti -1c
+.RI "bool \fByacht_set\fP (struct yacht *y, int key, void *value, void **old_value)"
+.br
+.ti -1c
+.RI "bool \fByacht_get\fP (struct yacht *y, int key, void **value)"
+.br
+.ti -1c
+.RI "bool \fByacht_member\fP (struct yacht *y, int key)"
+.br
+.ti -1c
+.RI "bool \fByacht_remove\fP (struct yacht *y, int key, void **old_value)"
+.br
+.ti -1c
+.RI "void \fByacht_free\fP (struct yacht *y, \fByacht_free_cb\fP *cb, void *udata)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define YACHT_NO_KEY   ((int)-1)"
+
+.PP
+Definition at line 27 of file yacht\&.h\&.
+.SS "#define YACHT_DELETED   ((int)-2)"
+
+.PP
+Definition at line 28 of file yacht\&.h\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef void( yacht_free_cb)(void *value, void *udata)"
+
+.PP
+Definition at line 52 of file yacht\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "struct yacht* yacht_init (uint8_tsz2)"
+
+.PP
+Definition at line 51 of file yacht\&.c\&.
+.PP
+References DEF_SZ2, LOG, and YACHT_NO_KEY\&.
+.SS "bool yacht_set (struct yacht *y, intkey, void *value, void **old_value)"
+
+.PP
+Definition at line 105 of file yacht\&.c\&.
+.PP
+References LOG, and MAX_PROBES\&.
+.SS "bool yacht_get (struct yacht *y, intkey, void **value)"
+
+.PP
+Definition at line 81 of file yacht\&.c\&.
+.PP
+References LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
+.SS "bool yacht_member (struct yacht *y, intkey)"
+
+.PP
+Definition at line 99 of file yacht\&.c\&.
+.PP
+References LOG, and yacht_get()\&.
+.SS "bool yacht_remove (struct yacht *y, intkey, void **old_value)"
+
+.PP
+Definition at line 203 of file yacht\&.c\&.
+.PP
+References LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
+.SS "void yacht_free (struct yacht *y, \fByacht_free_cb\fP *cb, void *udata)"
+
+.PP
+Definition at line 231 of file yacht\&.c\&.
+.PP
+References YACHT_DELETED, and YACHT_NO_KEY\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

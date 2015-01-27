@@ -1,8 +1,11 @@
-.TH "KineticP2P_Peer" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticP2P_Peer" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 KineticP2P_Peer \- 
+.PP
+Configuration of remote peer for a PEER2PEERPUSH operation\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,30 +17,41 @@ KineticP2P_Peer \-
 .ti -1c
 .RI "char * \fBhostname\fP"
 .br
+.RI "\fIHost name of peer/destination\&. Pointer must remain valid until operation completes\&. \fP"
 .ti -1c
 .RI "int32_t \fBport\fP"
 .br
+.RI "\fIPort to etablish peer connection to destination host\&. \fP"
 .ti -1c
 .RI "bool \fBtls\fP"
 .br
+.RI "\fIIf set, will use TLS for peer connection\&. Optional, defaults to false\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 336 of file kinetic_types\&.h\&.
+Configuration of remote peer for a PEER2PEERPUSH operation\&. 
+.PP
+Definition at line 405 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "char* KineticP2P_Peer::hostname"
 
 .PP
-Definition at line 337 of file kinetic_types\&.h\&.
+Host name of peer/destination\&. Pointer must remain valid until operation completes\&. 
+.PP
+Definition at line 406 of file kinetic_types\&.h\&.
 .SS "int32_t KineticP2P_Peer::port"
 
 .PP
-Definition at line 338 of file kinetic_types\&.h\&.
+Port to etablish peer connection to destination host\&. 
+.PP
+Definition at line 407 of file kinetic_types\&.h\&.
 .SS "bool KineticP2P_Peer::tls"
 
 .PP
-Definition at line 339 of file kinetic_types\&.h\&.
+If set, will use TLS for peer connection\&. Optional, defaults to false\&. 
+.PP
+Definition at line 408 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

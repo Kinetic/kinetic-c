@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,12 +60,14 @@
       <li><a href="functions_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_m.html#index_m"><span>m</span></a></li>
       <li class="current"><a href="functions_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_t.html#index_t"><span>t</span></a></li>
@@ -137,17 +139,31 @@
 , <a class="el" href="struct_kinetic_entry.html#a3ab421a9388a1a203ca35c022e78c8e7">KineticEntry</a>
 </li>
 <li>next
-: <a class="el" href="struct___kinetic_list_item.html#a3cfb3f92689dc401df42bbc6c5c69e74">KineticListItem</a>
+: <a class="el" href="structlistener__msg.html#a856d225df0b476a85b12946457ad6513">listener_msg</a>
+, <a class="el" href="structrx__info__t.html#ae24b1c26a711715b183a03392a7d9cae">rx_info_t</a>
+</li>
+<li>next_read
+: <a class="el" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">bus_sink_cb_res_t</a>
 </li>
 <li>nominalCapacityInBytes
 : <a class="el" href="struct___kinetic_proto___command___get_log___capacity.html#abbc14b487add37c1e444d61ecdde84f9">KineticProto_Command_GetLog_Capacity</a>
 , <a class="el" href="struct_kinetic_device_info___capacity.html#acceee8e59aab5e140b8b03b49bdc3374">KineticDeviceInfo_Capacity</a>
 </li>
+<li>notify
+: <a class="el" href="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d">tx_info_t</a>
+</li>
+<li>notify_fd
+: <a class="el" href="structlistener__msg.html#a6b0ba1341c3e8c74196c0453bf110e36">listener_msg</a>
+</li>
+<li>num_waiting
+: <a class="el" href="struct___kinetic_counting_semaphore.html#a2ec8ffa7243032a20e94c9c8aa0f37ec">KineticCountingSemaphore</a>
+, <a class="el" href="struct___kinetic_resource_waiter.html#af31d6b98dd2b0cb6adf067d38ce050d7">KineticResourceWaiter</a>
+</li>
 <li>numInterfaces
 : <a class="el" href="struct_kinetic_device_info___configuration.html#a63e01aec4f3c912fd5cb1705f3fa3a67">KineticDeviceInfo_Configuration</a>
 </li>
 <li>numOperations
-: <a class="el" href="struct_kinetic_p2_p___operation.html#a46218f8ac795492bc5f7ac039cf9f747">KineticP2P_Operation</a>
+: <a class="el" href="struct___kinetic_p2_p___operation.html#a46218f8ac795492bc5f7ac039cf9f747">KineticP2P_Operation</a>
 </li>
 <li>numStatistics
 : <a class="el" href="struct_kinetic_device_info.html#a4e7e363d38b675cda44660d04307c01f">KineticDeviceInfo</a>

@@ -1,0 +1,124 @@
+.TH "sender.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+sender.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <poll\&.h>\fP
+.br
+\fC#include 'bus\&.h'\fP
+.br
+\fC#include 'bus_types\&.h'\fP
+.br
+\fC#include 'bus_internal_types\&.h'\fP
+.br
+\fC#include 'listener\&.h'\fP
+.br
+\fC#include 'casq\&.h'\fP
+.br
+\fC#include 'util\&.h'\fP
+.br
+\fC#include 'atomic\&.h'\fP
+.br
+\fC#include 'yacht\&.h'\fP
+.br
+\fC#include 'sender_internal\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBCMD_FD\fP   (1)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fBsender\fP * \fBsender_init\fP (struct \fBbus\fP *b, struct \fBbus_config\fP *cfg)"
+.br
+.ti -1c
+.RI "bool \fBsender_register_socket\fP (struct \fBsender\fP *s, int fd, SSL *ssl)"
+.br
+.ti -1c
+.RI "bool \fBsender_remove_socket\fP (struct \fBsender\fP *s, int fd)"
+.br
+.ti -1c
+.RI "bool \fBsender_send_request\fP (struct \fBsender\fP *s, \fBboxed_msg\fP *box)"
+.br
+.ti -1c
+.RI "bool \fBsender_shutdown\fP (struct \fBsender\fP *s)"
+.br
+.ti -1c
+.RI "void \fBsender_free\fP (struct \fBsender\fP *s)"
+.br
+.ti -1c
+.RI "void * \fBsender_mainloop\fP (void *arg)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define CMD_FD   (1)"
+
+.PP
+Definition at line 40 of file sender\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "struct \fBsender\fP* sender_init (struct \fBbus\fP *b, struct \fBbus_config\fP *cfg)"
+
+.PP
+Definition at line 42 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG, BUS_LOG_SNPRINTF, sender::commit_pipe, sender::fd_hash_table, sender::fds, HASH_TABLE_SIZE2, tx_info_t::id, sender::incoming_command_pipe, LOG_SENDER, MAX_CONCURRENT_SENDS, sender::pipes, SENDER_FD_NOT_IN_USE, tx_info_t::state, TIS_UNDEF, sender::tx_info, bus::udata, and yacht_init()\&.
+.SS "bool sender_register_socket (struct \fBsender\fP *s, intfd, SSL *ssl)"
+
+.PP
+Definition at line 104 of file sender\&.c\&.
+.PP
+References tx_info_t::add_socket, sender::bus, BUS_LOG_SNPRINTF, LOG_SENDER, tx_info_t::state, TIS_ADD_SOCKET, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
+.SS "bool sender_remove_socket (struct \fBsender\fP *s, intfd)"
+
+.PP
+Definition at line 121 of file sender\&.c\&.
+.PP
+References tx_info_t::rm_socket, tx_info_t::state, TIS_RM_SOCKET, TX_ERROR_NONE, and tx_info_t::u\&.
+.SS "bool sender_send_request (struct \fBsender\fP *s, \fBboxed_msg\fP *box)"
+
+.PP
+Definition at line 132 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, tx_info_t::enqueue, boxed_msg::fd, LOG_SENDER, tx_info_t::state, boxed_msg::timeout_sec, TIS_REQUEST_ENQUEUE, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
+.SS "bool sender_shutdown (struct \fBsender\fP *s)"
+
+.PP
+Definition at line 151 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, sender::fd_hash_table, tx_info_t::id, LOG_SENDER, tx_info_t::state, TIS_SHUTDOWN, TX_ERROR_NONE, and bus::udata\&.
+.SS "void sender_free (struct \fBsender\fP *s)"
+
+.PP
+Definition at line 167 of file sender\&.c\&.
+.SS "void* sender_mainloop (void *arg)"
+
+.PP
+Definition at line 323 of file sender\&.c\&.
+.PP
+References BUS_LOG, BUS_LOG_SNPRINTF, CMD_FD, LOG_SENDER, MAX_TIMEOUT, bus::udata, and util_is_resumable_io_error()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

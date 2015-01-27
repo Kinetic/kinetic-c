@@ -1,0 +1,87 @@
+.TH "listener.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+listener.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'bus_types\&.h'\fP
+.br
+\fC#include 'bus_internal_types\&.h'\fP
+.br
+\fC#include 'casq\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fBlistener\fP * \fBlistener_init\fP (struct \fBbus\fP *b, struct \fBbus_config\fP *cfg)"
+.br
+.ti -1c
+.RI "bool \fBlistener_add_socket\fP (struct \fBlistener\fP *l, \fBconnection_info\fP *ci, int notify_fd)"
+.br
+.ti -1c
+.RI "bool \fBlistener_remove_socket\fP (struct \fBlistener\fP *l, int fd)"
+.br
+.ti -1c
+.RI "bool \fBlistener_hold_response\fP (struct \fBlistener\fP *l, int fd, int64_t seq_id, int16_t timeout_sec)"
+.br
+.ti -1c
+.RI "bool \fBlistener_expect_response\fP (struct \fBlistener\fP *l, \fBboxed_msg\fP *box, uint16_t *backpressure)"
+.br
+.ti -1c
+.RI "bool \fBlistener_shutdown\fP (struct \fBlistener\fP *l)"
+.br
+.ti -1c
+.RI "void \fBlistener_free\fP (struct \fBlistener\fP *l)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "struct \fBlistener\fP* listener_init (struct \fBbus\fP *b, struct \fBbus_config\fP *cfg)"
+
+.PP
+Definition at line 41 of file listener\&.c\&.
+.PP
+References listener::bus, BUS_LOG, casq_new(), listener_msg::id, rx_info_t::id, LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, listener::msg_freelist, listener::msgs, listener_msg::next, rx_info_t::next, listener::q, RIS_INACTIVE, listener::rx_info, listener::rx_info_freelist, listener::rx_info_max_used, rx_info_t::state, and bus::udata\&.
+.SS "bool listener_add_socket (struct \fBlistener\fP *l, \fBconnection_info\fP *ci, intnotify_fd)"
+
+.PP
+Definition at line 82 of file listener\&.c\&.
+.PP
+References listener_msg::add_socket, MSG_ADD_SOCKET, listener_msg::type, and listener_msg::u\&.
+.SS "bool listener_remove_socket (struct \fBlistener\fP *l, intfd)"
+
+.PP
+Definition at line 94 of file listener\&.c\&.
+.PP
+References listener_msg::close_socket, MSG_CLOSE_SOCKET, listener_msg::type, and listener_msg::u\&.
+.SS "bool listener_hold_response (struct \fBlistener\fP *l, intfd, int64_tseq_id, int16_ttimeout_sec)"
+
+.PP
+Definition at line 153 of file listener\&.c\&.
+.PP
+References listener::bus, BUS_LOG, BUS_LOG_SNPRINTF, listener_msg::hold, LOG_LISTENER, LOG_MEMORY, MSG_HOLD_RESPONSE, listener_msg::type, listener_msg::u, and bus::udata\&.
+.SS "bool listener_expect_response (struct \fBlistener\fP *l, \fBboxed_msg\fP *box, uint16_t *backpressure)"
+
+.PP
+Definition at line 180 of file listener\&.c\&.
+.PP
+References listener::bus, BUS_LOG_SNPRINTF, listener_msg::expect, LOG_MEMORY, MSG_EXPECT_RESPONSE, boxed_msg::out_seq_id, listener_msg::type, listener_msg::u, and bus::udata\&.
+.SS "bool listener_shutdown (struct \fBlistener\fP *l)"
+
+.PP
+Definition at line 206 of file listener\&.c\&.
+.PP
+References MSG_SHUTDOWN, and listener_msg::type\&.
+.SS "void listener_free (struct \fBlistener\fP *l)"
+
+.PP
+Definition at line 229 of file listener\&.c\&.
+.PP
+References listener::bus, BUS_LOG_SNPRINTF, casq_free(), rx_info_t::expect, listener::fds, LOG_LISTENER, MAX_PENDING_MESSAGES, listener::q, listener::read_buf, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, rx_info_t::state, listener::tracked_fds, rx_info_t::u, and bus::udata\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

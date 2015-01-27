@@ -1,8 +1,11 @@
-.TH "KineticEntry" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticEntry" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 KineticEntry \- 
+.PP
+Kinetic object instance\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,72 +17,103 @@ KineticEntry \-
 .ti -1c
 .RI "\fBByteBuffer\fP \fBkey\fP"
 .br
+.RI "\fIKey associated with the object stored on disk\&. \fP"
 .ti -1c
 .RI "\fBByteBuffer\fP \fBvalue\fP"
 .br
+.RI "\fIValue data associated with the key\&. \fP"
 .ti -1c
 .RI "\fBByteBuffer\fP \fBdbVersion\fP"
 .br
+.RI "\fICurrent version of the entry (optional) \fP"
 .ti -1c
 .RI "\fBByteBuffer\fP \fBtag\fP"
 .br
+.RI "\fIGenerated authentication hash per the specified \fCalgorithm\fP \fP"
 .ti -1c
 .RI "\fBKineticAlgorithm\fP \fBalgorithm\fP"
 .br
+.RI "\fIAlgorithm used to generate the specified \fCtag\fP \fP"
 .ti -1c
 .RI "\fBByteBuffer\fP \fBnewVersion\fP"
 .br
+.RI "\fINew version for the object to assume once written to disk (optional) \fP"
 .ti -1c
 .RI "bool \fBmetadataOnly\fP"
 .br
+.RI "\fIIf set for a GET request, will return only the metadata for the specified object (\fCvalue\fP will not be retrieved) \fP"
 .ti -1c
 .RI "bool \fBforce\fP"
 .br
+.RI "\fIIf set for a GET/DELETE request, will override \fCversion\fP checking\&. \fP"
 .ti -1c
 .RI "\fBKineticSynchronization\fP \fBsynchronization\fP"
 .br
+.RI "\fISynchronization method to use for PUT/DELETE requests\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 191 of file kinetic_types\&.h\&.
+Kinetic object instance\&. 
+
+The \fBByteBuffer\fP attributes must be allocated and freed by the client, if used\&. 
+.PP
+Definition at line 236 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBByteBuffer\fP KineticEntry::key"
 
 .PP
-Definition at line 192 of file kinetic_types\&.h\&.
+Key associated with the object stored on disk\&. 
+.PP
+Definition at line 237 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticEntry::value"
 
 .PP
-Definition at line 193 of file kinetic_types\&.h\&.
+Value data associated with the key\&. 
+.PP
+Definition at line 238 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticEntry::dbVersion"
 
 .PP
-Definition at line 196 of file kinetic_types\&.h\&.
+Current version of the entry (optional) 
+.PP
+Definition at line 241 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticEntry::tag"
 
 .PP
-Definition at line 197 of file kinetic_types\&.h\&.
+Generated authentication hash per the specified \fCalgorithm\fP 
+.PP
+Definition at line 242 of file kinetic_types\&.h\&.
 .SS "\fBKineticAlgorithm\fP KineticEntry::algorithm"
 
 .PP
-Definition at line 198 of file kinetic_types\&.h\&.
+Algorithm used to generate the specified \fCtag\fP 
+.PP
+Definition at line 243 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticEntry::newVersion"
 
 .PP
-Definition at line 201 of file kinetic_types\&.h\&.
+New version for the object to assume once written to disk (optional) 
+.PP
+Definition at line 246 of file kinetic_types\&.h\&.
 .SS "bool KineticEntry::metadataOnly"
 
 .PP
-Definition at line 202 of file kinetic_types\&.h\&.
+If set for a GET request, will return only the metadata for the specified object (\fCvalue\fP will not be retrieved) 
+.PP
+Definition at line 247 of file kinetic_types\&.h\&.
 .SS "bool KineticEntry::force"
 
 .PP
-Definition at line 203 of file kinetic_types\&.h\&.
+If set for a GET/DELETE request, will override \fCversion\fP checking\&. 
+.PP
+Definition at line 248 of file kinetic_types\&.h\&.
 .SS "\fBKineticSynchronization\fP KineticEntry::synchronization"
 
 .PP
-Definition at line 204 of file kinetic_types\&.h\&.
+Synchronization method to use for PUT/DELETE requests\&. 
+.PP
+Definition at line 249 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

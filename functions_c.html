@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,12 +60,14 @@
       <li><a href="functions_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_m.html#index_m"><span>m</span></a></li>
       <li><a href="functions_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_t.html#index_t"><span>t</span></a></li>
@@ -87,8 +89,25 @@
 : <a class="el" href="struct___kinetic_proto___command___get_log.html#ab2b0cf374e269adb6706553d1240031b">KineticProto_Command_GetLog</a>
 , <a class="el" href="struct_kinetic_device_info.html#a90ca11225302d5aa989e28d3f01fba91">KineticDeviceInfo</a>
 </li>
+<li>cb
+: <a class="el" href="structboxed__msg.html#a26aeab33d3d6055c2abb84d6bad2b567">boxed_msg</a>
+, <a class="el" href="structbus__user__msg.html#a64825131994cb41782d51eeae6983b6a">bus_user_msg</a>
+</li>
+<li>chainedOperation
+: <a class="el" href="struct_kinetic_p2_p___operation_data.html#ad234caec7c1a8ffbe738da4b5caad85f">KineticP2P_OperationData</a>
+</li>
+<li>child_fd
+: <a class="el" href="structthread__info.html#a68e6a7bd14530784060eab0b9f17bbce">thread_info</a>
+</li>
+<li>cleanup
+: <a class="el" href="structmarked__task.html#aafdaf6d53cd6813e4980102ad827bced">marked_task</a>
+, <a class="el" href="structthreadpool__task.html#a0859c59120434648d22ea1686e68e1ce">threadpool_task</a>
+</li>
 <li>clientData
 : <a class="el" href="struct_kinetic_completion_closure.html#a88ae597d19a8e9c16060a2bbe0bddaf4">KineticCompletionClosure</a>
+</li>
+<li>close_socket
+: <a class="el" href="structlistener__msg.html#a034f7c4ae5e2dcb215e9e088020dedff">listener_msg</a>
 </li>
 <li>closure
 : <a class="el" href="struct___kinetic_operation.html#abf2c244091c0989d5028a13d2176a59a">KineticOperation</a>
@@ -100,12 +119,19 @@
 <li>code
 : <a class="el" href="struct___kinetic_proto___command___status.html#a44c8db01525523ed4b48e5be007c29dd">KineticProto_Command_Status</a>
 </li>
+<li>col
+: <a class="el" href="structgreatest__run__info.html#ac8c3cae671aa474815f36a74ec596fc3">greatest_run_info</a>
+</li>
 <li>command
 : <a class="el" href="struct___kinetic_p_d_u.html#a11ee6df846abc8e3b686aa5eb8ca6e26">KineticPDU</a>
 , <a class="el" href="struct_kinetic_message.html#a760d787dc11866d5e8b3bcc8c7117b36">KineticMessage</a>
+, <a class="el" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">KineticResponse</a>
 </li>
 <li>commandBytes
 : <a class="el" href="struct___kinetic_proto___message.html#abae23de7583a4f43019e1ed489e67dca">KineticProto_Message</a>
+</li>
+<li>commit_pipe
+: <a class="el" href="structsender.html#a5d9bfeef7350314f6c03cda33569e00c">sender</a>
 </li>
 <li>compilationDate
 : <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#a363302703c2d9cb48a20140caa03cb8d">KineticProto_Command_GetLog_Configuration</a>
@@ -123,17 +149,19 @@
 </li>
 <li>connection
 : <a class="el" href="struct___kinetic_operation.html#a9501bcc7cf72e4886300e5eeedb79a0c">KineticOperation</a>
-, <a class="el" href="struct___kinetic_p_d_u.html#a56c111da6a2d877ef9ca0f669c5944d8">KineticPDU</a>
 , <a class="el" href="struct_kinetic_session.html#a57d1d01861409e3f9a3651cad67138d2">KineticSession</a>
-, <a class="el" href="struct_kinetic_thread.html#ad60a523751f56c21f22b31d0202e70e0">KineticThread</a>
 </li>
 <li>connectionID
 : <a class="el" href="struct___kinetic_connection.html#a559c2a2ceffdd95af1462d7a7e0ebc3c">KineticConnection</a>
 , <a class="el" href="struct___kinetic_proto___command___header.html#a7735351f01e561092cb5cd645b940b46">KineticProto_Command_Header</a>
 , <a class="el" href="struct_kinetic_completion_data.html#a69e0224ec877d8217bb81bc296282920">KineticCompletionData</a>
 </li>
+<li>connectionReady
+: <a class="el" href="struct___kinetic_connection.html#a7c4a4ae14b6f29b1b6d6743939ae2756">KineticConnection</a>
+</li>
 <li>count
-: <a class="el" href="struct___kinetic_proto___command___get_log___statistics.html#afcf335f602cccb62f2761408d478be44">KineticProto_Command_GetLog_Statistics</a>
+: <a class="el" href="struct___kinetic_counting_semaphore.html#ab18d0ae86cf2fd4bcf678c24f22c522d">KineticCountingSemaphore</a>
+, <a class="el" href="struct___kinetic_proto___command___get_log___statistics.html#afcf335f602cccb62f2761408d478be44">KineticProto_Command_GetLog_Statistics</a>
 , <a class="el" href="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c">ByteBufferArray</a>
 , <a class="el" href="struct_kinetic_device_info___statistics.html#a7a6447733f3e66999d25c1df1b73a3aa">KineticDeviceInfo_Statistics</a>
 </li>

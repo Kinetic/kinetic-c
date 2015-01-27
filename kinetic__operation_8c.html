@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -50,13 +50,15 @@
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">kinetic_operation.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__operation_8h_source.html">kinetic_operation.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__connection_8h_source.html">kinetic_connection.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__controller_8h_source.html">kinetic_controller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__session_8h_source.html">kinetic_session.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__message_8h_source.html">kinetic_message.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__nbo_8h_source.html">kinetic_nbo.h</a>&quot;</code><br />
@@ -64,24 +66,25 @@
 <code>#include &quot;<a class="el" href="kinetic__device__info_8h_source.html">kinetic_device_info.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__allocator_8h_source.html">kinetic_allocator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
+<code>#include &lt;pthread.h&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;errno.h&gt;</code><br />
 <code>#include &lt;sys/time.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="bus_8h_source.html">bus.h</a>&quot;</code><br />
 </div>
 <p><a href="kinetic__operation_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a8e6ca0967c3f2508bd8dab901a6a6ba7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a8e6ca0967c3f2508bd8dab901a6a6ba7">ATOMIC_FETCH_AND_INCREMENT</a>(P)&#160;&#160;&#160;__sync_fetch_and_add(P, 1)</td></tr>
+<tr class="separator:a8e6ca0967c3f2508bd8dab901a6a6ba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a267d9481a259bcc26147d166a3fc515a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a267d9481a259bcc26147d166a3fc515a">KineticOperation_SendRequest</a> (KineticOperation *const operation)</td></tr>
 <tr class="separator:a267d9481a259bcc26147d166a3fc515a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbf3eeef54dcdb65dfaf75f2e0312cd0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0">KineticOperation_GetStatus</a> (const KineticOperation *const operation)</td></tr>
 <tr class="separator:adbf3eeef54dcdb65dfaf75f2e0312cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a790389f0f654a43da93c8af714e2f281"><td class="memItemLeft" align="right" valign="top">struct timeval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a790389f0f654a43da93c8af714e2f281">KineticOperation_GetTimeoutTime</a> (KineticOperation *const operation)</td></tr>
-<tr class="separator:a790389f0f654a43da93c8af714e2f281"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cd218545f9b11b8ffe04efea3b9ab27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a2cd218545f9b11b8ffe04efea3b9ab27">KineticOperation_SetTimeoutTime</a> (KineticOperation *const operation, uint32_t const timeout_in_sec)</td></tr>
-<tr class="separator:a2cd218545f9b11b8ffe04efea3b9ab27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89e0c50021d088a66e7dd43b5bffdfb6"><td class="memItemLeft" align="right" valign="top">KineticOperation *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a89e0c50021d088a66e7dd43b5bffdfb6">KineticOperation_AssociateResponseWithOperation</a> (KineticPDU *response)</td></tr>
-<tr class="separator:a89e0c50021d088a66e7dd43b5bffdfb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46daff6d8cff869d0036a59a7a09d603"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a46daff6d8cff869d0036a59a7a09d603">KineticOperation_NoopCallback</a> (KineticOperation *const operation, <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> const status)</td></tr>
 <tr class="separator:a46daff6d8cff869d0036a59a7a09d603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19c5d28a27474e8d0830a8b9d23f2231"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a19c5d28a27474e8d0830a8b9d23f2231">KineticOperation_BuildNoop</a> (KineticOperation *const operation)</td></tr>
@@ -112,19 +115,44 @@ Functions</h2></td></tr>
 <tr class="separator:a92287f17ac6de8b67a70936f33401c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ef4faa6a804f6f69cb9d4cbe040a810"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a8ef4faa6a804f6f69cb9d4cbe040a810">KineticOperation_BuildGetLog</a> (KineticOperation *const operation, <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a> type, <a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> **info)</td></tr>
 <tr class="separator:a8ef4faa6a804f6f69cb9d4cbe040a810"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade10b18ca3d5744ee90fca3e1b06a85a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#ade10b18ca3d5744ee90fca3e1b06a85a">destroy_p2pOp</a> (KineticProto_Command_P2POperation *proto_p2pOp)</td></tr>
+<tr class="separator:ade10b18ca3d5744ee90fca3e1b06a85a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b74ef47a9b375899c10ba5853dff346"><td class="memItemLeft" align="right" valign="top">KineticProto_Command_P2POperation *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a2b74ef47a9b375899c10ba5853dff346">build_p2pOp</a> (uint32_t nestingLevel, KineticP2P_Operation const *const p2pOp)</td></tr>
+<tr class="separator:a2b74ef47a9b375899c10ba5853dff346"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9e64484dd1c76a00846528d5bde3818"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#ae9e64484dd1c76a00846528d5bde3818">KineticOperation_P2POperationCallback</a> (KineticOperation *const operation, <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> const status)</td></tr>
 <tr class="separator:ae9e64484dd1c76a00846528d5bde3818"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fadbc047ad4b44617e2176fe02f9cd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a4fadbc047ad4b44617e2176fe02f9cd8">KineticOperation_BuildP2POperation</a> (KineticOperation *const operation, <a class="el" href="struct_kinetic_p2_p___operation.html">KineticP2P_Operation</a> *const p2pOp)</td></tr>
-<tr class="separator:a4fadbc047ad4b44617e2176fe02f9cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e19baf1359764fbe2d439dcc932dd71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a4e19baf1359764fbe2d439dcc932dd71">KineticOperation_BuildP2POperation</a> (KineticOperation *const operation, KineticP2P_Operation *const p2pOp)</td></tr>
+<tr class="separator:a4e19baf1359764fbe2d439dcc932dd71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ef26e667f80b1720096c352abdf0bef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a4ef26e667f80b1720096c352abdf0bef">KineticOperation_InstantSecureEraseCallback</a> (KineticOperation *const operation, <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> const status)</td></tr>
 <tr class="separator:a4ef26e667f80b1720096c352abdf0bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa70394e99f79cf3f08dd7b1b5dde6795"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#aa70394e99f79cf3f08dd7b1b5dde6795">KineticOperation_BuildInstantSecureErase</a> (KineticOperation *operation)</td></tr>
 <tr class="separator:aa70394e99f79cf3f08dd7b1b5dde6795"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3170f984f585e6a8374a9cfd4f302f51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a3170f984f585e6a8374a9cfd4f302f51">KineticOperation_SetClusterVersionCallback</a> (KineticOperation *operation, <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> const status)</td></tr>
+<tr class="separator:a3170f984f585e6a8374a9cfd4f302f51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a671425fcd78ed5135c679e40bcc33374"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a671425fcd78ed5135c679e40bcc33374">KineticOperation_BuildSetClusterVersion</a> (KineticOperation *operation, int64_t newClusterVersion)</td></tr>
+<tr class="separator:a671425fcd78ed5135c679e40bcc33374"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ed174b20d25b186335a498efc3d763e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a8ed174b20d25b186335a498efc3d763e">KineticOperation_Complete</a> (KineticOperation *operation, <a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> status)</td></tr>
 <tr class="separator:a8ed174b20d25b186335a498efc3d763e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b6d1724eb75b7c589664fb51865cfb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__operation_8c.html#a7b6d1724eb75b7c589664fb51865cfb4">KineticOperation_TimeoutOperations</a> (KineticConnection *const connection)</td></tr>
-<tr class="separator:a7b6d1724eb75b7c589664fb51865cfb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a8e6ca0967c3f2508bd8dab901a6a6ba7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ATOMIC_FETCH_AND_INCREMENT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">P</td><td>)</td>
+          <td>&#160;&#160;&#160;__sync_fetch_and_add(P, 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00037">37</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a267d9481a259bcc26147d166a3fc515a"></a>
 <div class="memitem">
@@ -140,9 +168,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00080">80</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00042">42</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00036">KINETIC_OPERATION_TIMEOUT_SECS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00115">KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00031">KineticHMAC_Init()</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00047">KineticHMAC_Populate()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00479">KineticLogger_LogByteArray()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00167">KineticLogger_LogHeader()</a>, <a class="el" href="kinetic__nbo_8c_source.html#l00032">KineticNBO_FromHostU32()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00151">KineticOperation_SetTimeoutTime()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00225">KineticProto_command__get_packed_size()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00230">KineticProto_command__pack()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00080">KineticProto_Message__get_packed_size()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00057">LOGF1</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>.</p>
 
 </div>
 </div>
@@ -160,77 +188,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00134">134</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00217">217</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_INVALID</a>, and <a class="el" href="kinetic__pdu_8c_source.html#l00143">KineticPDU_GetStatus()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a790389f0f654a43da93c8af714e2f281"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct timeval KineticOperation_GetTimeoutTime </td>
-          <td>(</td>
-          <td class="paramtype">KineticOperation *const&#160;</td>
-          <td class="paramname"><em>operation</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00143">143</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a2cd218545f9b11b8ffe04efea3b9ab27"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void KineticOperation_SetTimeoutTime </td>
-          <td>(</td>
-          <td class="paramtype">KineticOperation *const&#160;</td>
-          <td class="paramname"><em>operation</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t const&#160;</td>
-          <td class="paramname"><em>timeout_in_sec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00151">151</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00339">Kinetic_TimevalAdd()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a89e0c50021d088a66e7dd43b5bffdfb6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">KineticOperation* KineticOperation_AssociateResponseWithOperation </td>
-          <td>(</td>
-          <td class="paramtype">KineticPDU *&#160;</td>
-          <td class="paramname"><em>response</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00167">167</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00209">KINETIC_PDU_TYPE_REQUEST</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00210">KINETIC_PDU_TYPE_RESPONSE</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00315">KineticAllocator_GetFirstOperation()</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00321">KineticAllocator_GetNextOperation()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00054">LOG2</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00168">KINETIC_STATUS_INVALID</a>, and <a class="el" href="kinetic__pdu_8c_source.html#l00263">KineticPDU_GetStatus()</a>.</p>
 
 </div>
 </div>
@@ -258,7 +218,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00205">205</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00226">226</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
@@ -278,9 +238,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00214">214</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00235">235</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00186">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP</a>, <a class="el" href="kinetic__operation_8c_source.html#l00205">KineticOperation_NoopCallback()</a>, and <a class="el" href="kinetic__connection_8c_source.html#l00142">KineticSession_IncrementSequence()</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00186">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00226">KineticOperation_NoopCallback()</a>.</p>
 
 </div>
 </div>
@@ -308,9 +268,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00225">225</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00246">246</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00046">BYTE_BUFFER_NONE</a>, <a class="el" href="byte__array_8c_source.html#l00108">ByteBuffer_Append()</a>, <a class="el" href="byte__array_8c_source.html#l00042">ByteBuffer_Reset()</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00196">KineticEntry::dbVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>, and <a class="el" href="kinetic__types_8h_source.html#l00201">KineticEntry::newVersion</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00046">BYTE_BUFFER_NONE</a>, <a class="el" href="byte__array_8c_source.html#l00116">ByteBuffer_Append()</a>, <a class="el" href="byte__array_8c_source.html#l00043">ByteBuffer_Reset()</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00241">KineticEntry::dbVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="byte__array_8h_source.html#l00016">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>, and <a class="el" href="kinetic__types_8h_source.html#l00246">KineticEntry::newVersion</a>.</p>
 
 </div>
 </div>
@@ -338,9 +298,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00257">257</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00278">278</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00166">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__message_8c_source.html#l00046">KineticMessage_ConfigureKeyValue()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00225">KineticOperation_PutCallback()</a>, and <a class="el" href="kinetic__connection_8c_source.html#l00142">KineticSession_IncrementSequence()</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00166">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__message_8c_source.html#l00040">KineticMessage_ConfigureKeyValue()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00246">KineticOperation_PutCallback()</a>.</p>
 
 </div>
 </div>
@@ -368,7 +328,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00325">325</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00353">353</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__proto_8h_source.html#l00164">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET</a>.</p>
 
@@ -398,7 +358,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00337">337</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00365">365</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__proto_8h_source.html#l00172">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS</a>.</p>
 
@@ -428,7 +388,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00349">349</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00377">377</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__proto_8h_source.html#l00170">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT</a>.</p>
 
@@ -458,7 +418,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00356">356</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00384">384</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
@@ -478,9 +438,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00366">366</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00394">394</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00188">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA</a>, <a class="el" href="kinetic__operation_8c_source.html#l00356">KineticOperation_FlushCallback()</a>, and <a class="el" href="kinetic__connection_8c_source.html#l00142">KineticSession_IncrementSequence()</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00188">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00384">KineticOperation_FlushCallback()</a>.</p>
 
 </div>
 </div>
@@ -508,7 +468,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00378">378</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00405">405</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
@@ -538,9 +498,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00389">389</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00415">415</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8c_source.html#l00042">ByteBuffer_Reset()</a>, <a class="el" href="kinetic__proto_8h_source.html#l00168">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE</a>, <a class="el" href="kinetic__message_8c_source.html#l00046">KineticMessage_ConfigureKeyValue()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00378">KineticOperation_DeleteCallback()</a>, and <a class="el" href="kinetic__connection_8c_source.html#l00142">KineticSession_IncrementSequence()</a>.</p>
+<p>References <a class="el" href="byte__array_8c_source.html#l00043">ByteBuffer_Reset()</a>, <a class="el" href="kinetic__proto_8h_source.html#l00168">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE</a>, <a class="el" href="kinetic__message_8c_source.html#l00040">KineticMessage_ConfigureKeyValue()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00405">KineticOperation_DeleteCallback()</a>.</p>
 
 </div>
 </div>
@@ -568,9 +528,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00410">410</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00435">435</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00294">Copy_KineticProto_Command_Range_to_ByteBufferArray()</a>, <a class="el" href="kinetic__types_8h_source.html#l00165">KINETIC_STATUS_BUFFER_OVERRUN</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00172">KineticPDU_GetKeyRange()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00271">Copy_KineticProto_Command_Range_to_ByteBufferArray()</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_BUFFER_OVERRUN</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00292">KineticPDU_GetKeyRange()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
 </div>
 </div>
@@ -604,9 +564,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00433">433</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00458">458</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00174">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE</a>, <a class="el" href="kinetic__message_8c_source.html#l00087">KineticMessage_ConfigureKeyRange()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00410">KineticOperation_GetKeyRangeCallback()</a>, and <a class="el" href="kinetic__connection_8c_source.html#l00142">KineticSession_IncrementSequence()</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00174">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE</a>, <a class="el" href="kinetic__message_8c_source.html#l00081">KineticMessage_ConfigureKeyRange()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00435">KineticOperation_GetKeyRangeCallback()</a>.</p>
 
 </div>
 </div>
@@ -634,9 +594,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00452">452</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00476">476</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00159">KINETIC_STATUS_OPERATION_FAILED</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00185">KineticDeviceInfo_Create()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00180">KINETIC_STATUS_OPERATION_FAILED</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00257">KineticDeviceInfo_Create()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
 </div>
 </div>
@@ -670,9 +630,57 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00476">476</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00499">499</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00180">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00371">KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00452">KineticOperation_GetLogCallback()</a>, and <a class="el" href="kinetic__connection_8c_source.html#l00142">KineticSession_IncrementSequence()</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00180">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00348">KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00476">KineticOperation_GetLogCallback()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ade10b18ca3d5744ee90fca3e1b06a85a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void destroy_p2pOp </td>
+          <td>(</td>
+          <td class="paramtype">KineticProto_Command_P2POperation *&#160;</td>
+          <td class="paramname"><em>proto_p2pOp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00519">519</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2b74ef47a9b375899c10ba5853dff346"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">KineticProto_Command_P2POperation* build_p2pOp </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>nestingLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">KineticP2P_Operation const *const&#160;</td>
+          <td class="paramname"><em>p2pOp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00549">549</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8c_source.html#l00230">ByteBuffer_IsNull()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00519">destroy_p2pOp()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00150">KineticProto_command_p2_poperation__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00140">KineticProto_command_p2_poperation_operation__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00145">KineticProto_command_p2_poperation_peer__init()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>.</p>
 
 </div>
 </div>
@@ -700,18 +708,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00496">496</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00649">649</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00028">KineticProtoStatusCode_to_KineticStatus()</a>, <a class="el" href="kinetic__types_8h_source.html#l00351">KineticP2P_Operation::numOperations</a>, <a class="el" href="kinetic__types_8h_source.html#l00352">KineticP2P_Operation::operations</a>, and <a class="el" href="kinetic__types_8h_source.html#l00346">KineticP2P_OperationData::resultStatus</a>.</p>
+<p>References <a class="el" href="kinetic__operation_8c_source.html#l00519">destroy_p2pOp()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4fadbc047ad4b44617e2176fe02f9cd8"></a>
+<a class="anchor" id="a4e19baf1359764fbe2d439dcc932dd71"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void KineticOperation_BuildP2POperation </td>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticOperation_BuildP2POperation </td>
           <td>(</td>
           <td class="paramtype">KineticOperation *const&#160;</td>
           <td class="paramname"><em>operation</em>, </td>
@@ -719,7 +727,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_p2_p___operation.html">KineticP2P_Operation</a> *const&#160;</td>
+          <td class="paramtype">KineticP2P_Operation *const&#160;</td>
           <td class="paramname"><em>p2pOp</em>&#160;</td>
         </tr>
         <tr>
@@ -730,9 +738,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00534">534</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00668">668</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00035">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00222">ByteBuffer_IsNull()</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00017">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00337">KineticP2P_Peer::hostname</a>, <a class="el" href="kinetic__types_8h_source.html#l00343">KineticP2P_OperationData::key</a>, <a class="el" href="kinetic__proto_8h_source.html#l00184">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH</a>, <a class="el" href="kinetic__operation_8c_source.html#l00496">KineticOperation_P2POperationCallback()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00140">KineticProto_command_p2_poperation_operation__init()</a>, <a class="el" href="kinetic__connection_8c_source.html#l00142">KineticSession_IncrementSequence()</a>, <a class="el" href="kinetic__types_8h_source.html#l00345">KineticP2P_OperationData::newKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00351">KineticP2P_Operation::numOperations</a>, <a class="el" href="kinetic__types_8h_source.html#l00352">KineticP2P_Operation::operations</a>, <a class="el" href="kinetic__types_8h_source.html#l00350">KineticP2P_Operation::peer</a>, <a class="el" href="kinetic__types_8h_source.html#l00338">KineticP2P_Peer::port</a>, <a class="el" href="kinetic__types_8h_source.html#l00339">KineticP2P_Peer::tls</a>, and <a class="el" href="kinetic__types_8h_source.html#l00344">KineticP2P_OperationData::version</a>.</p>
+<p>References <a class="el" href="kinetic__operation_8c_source.html#l00549">build_p2pOp()</a>, <a class="el" href="kinetic__proto_8h_source.html#l00184">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_BUFFER_OVERRUN</a>, <a class="el" href="kinetic__types_8h_source.html#l00179">KINETIC_STATUS_OPERATION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00649">KineticOperation_P2POperationCallback()</a>.</p>
 
 </div>
 </div>
@@ -760,7 +768,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00592">592</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00692">692</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
 <p>References <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
@@ -780,9 +788,69 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00601">601</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00701">701</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00178">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP</a>, <a class="el" href="kinetic__proto_8h_source.html#l00135">KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP</a>, <a class="el" href="kinetic__operation_8c_source.html#l00592">KineticOperation_InstantSecureEraseCallback()</a>, and <a class="el" href="kinetic__connection_8c_source.html#l00142">KineticSession_IncrementSequence()</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00178">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP</a>, <a class="el" href="kinetic__proto_8h_source.html#l00135">KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00692">KineticOperation_InstantSecureEraseCallback()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3170f984f585e6a8374a9cfd4f302f51"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticOperation_SetClusterVersionCallback </td>
+          <td>(</td>
+          <td class="paramtype">KineticOperation *&#160;</td>
+          <td class="paramname"><em>operation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> const&#160;</td>
+          <td class="paramname"><em>status</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00717">717</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a671425fcd78ed5135c679e40bcc33374"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticOperation_BuildSetClusterVersion </td>
+          <td>(</td>
+          <td class="paramtype">KineticOperation *&#160;</td>
+          <td class="paramname"><em>operation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>newClusterVersion</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00728">728</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00178">KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00717">KineticOperation_SetClusterVersionCallback()</a>.</p>
 
 </div>
 </div>
@@ -810,29 +878,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00630">630</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00754">754</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__allocator_8c_source.html#l00293">KineticAllocator_FreeOperation()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00180">KineticCompletionData::status</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a7b6d1724eb75b7c589664fb51865cfb4"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void KineticOperation_TimeoutOperations </td>
-          <td>(</td>
-          <td class="paramtype">KineticConnection *const&#160;</td>
-          <td class="paramname"><em>connection</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__operation_8c_source.html#l00641">641</a> of file <a class="el" href="kinetic__operation_8c_source.html">kinetic_operation.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00160">KINETIC_STATUS_OPERATION_TIMEDOUT</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00366">Kinetic_TimevalCmp()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00334">Kinetic_TimevalIsZero()</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00315">KineticAllocator_GetFirstOperation()</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00321">KineticAllocator_GetNextOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00630">KineticOperation_Complete()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00143">KineticOperation_GetTimeoutTime()</a>.</p>
+<p>References <a class="el" href="kinetic__allocator_8c_source.html#l00096">KineticAllocator_FreeOperation()</a>, <a class="el" href="kinetic__countingsemaphore_8c_source.html#l00040">KineticCountingSemaphore_Give()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00211">KineticCompletionData::status</a>.</p>
 
 </div>
 </div>

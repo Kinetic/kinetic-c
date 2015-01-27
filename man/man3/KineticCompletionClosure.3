@@ -1,8 +1,11 @@
-.TH "KineticCompletionClosure" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticCompletionClosure" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 KineticCompletionClosure \- 
+.PP
+Closure which can be specified for operations which support asynchronous mode\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,23 +17,31 @@ KineticCompletionClosure \-
 .ti -1c
 .RI "\fBKineticCompletionCallback\fP \fBcallback\fP"
 .br
+.RI "\fIFunction to be called upon completion\&. \fP"
 .ti -1c
 .RI "void * \fBclientData\fP"
 .br
+.RI "\fIOptional client-supplied data which will be supplied to callback\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 185 of file kinetic_types\&.h\&.
+Closure which can be specified for operations which support asynchronous mode\&. 
+.PP
+Definition at line 226 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticCompletionCallback\fP KineticCompletionClosure::callback"
 
 .PP
-Definition at line 186 of file kinetic_types\&.h\&.
+Function to be called upon completion\&. 
+.PP
+Definition at line 227 of file kinetic_types\&.h\&.
 .SS "void* KineticCompletionClosure::clientData"
 
 .PP
-Definition at line 187 of file kinetic_types\&.h\&.
+Optional client-supplied data which will be supplied to callback\&. 
+.PP
+Definition at line 228 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

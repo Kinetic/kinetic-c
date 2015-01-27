@@ -1,0 +1,72 @@
+.TH "connection_info" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+connection_info \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <bus_internal_types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBfd\fP"
+.br
+.ti -1c
+.RI "\fBrx_error_t\fP \fBerror\fP"
+.br
+.ti -1c
+.RI "size_t \fBto_read_size\fP"
+.br
+.ti -1c
+.RI "int64_t \fBlargest_seq_id_seen\fP"
+.br
+.ti -1c
+.RI "SSL * \fBssl\fP"
+.br
+.ti -1c
+.RI "\fBbus_socket_t\fP \fBtype\fP"
+.br
+.ti -1c
+.RI "void * \fBudata\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 102 of file bus_internal_types\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "int connection_info::fd"
+
+.PP
+Definition at line 103 of file bus_internal_types\&.h\&.
+.SS "\fBrx_error_t\fP connection_info::error"
+
+.PP
+Definition at line 104 of file bus_internal_types\&.h\&.
+.SS "size_t connection_info::to_read_size"
+
+.PP
+Definition at line 105 of file bus_internal_types\&.h\&.
+.SS "int64_t connection_info::largest_seq_id_seen"
+
+.PP
+Definition at line 106 of file bus_internal_types\&.h\&.
+.SS "SSL* connection_info::ssl"
+
+.PP
+Definition at line 108 of file bus_internal_types\&.h\&.
+.SS "\fBbus_socket_t\fP connection_info::type"
+
+.PP
+Definition at line 110 of file bus_internal_types\&.h\&.
+.SS "void* connection_info::udata"
+
+.PP
+Definition at line 111 of file bus_internal_types\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

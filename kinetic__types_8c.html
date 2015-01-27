@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -64,8 +64,10 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a82c4aac2c0a454092185b10d8809f1bc"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8c.html#a82c4aac2c0a454092185b10d8809f1bc">Kinetic_GetStatusDescription</a> (<a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> status)</td></tr>
+<tr class="memdesc:a82c4aac2c0a454092185b10d8809f1bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a string representation for a KineticStatus code.  <a href="#a82c4aac2c0a454092185b10d8809f1bc">More...</a><br /></td></tr>
 <tr class="separator:a82c4aac2c0a454092185b10d8809f1bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38e38f8880dedd6a7ba66c374f34b264"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8c.html#a38e38f8880dedd6a7ba66c374f34b264">KineticMessageType_GetName</a> (<a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">KineticMessageType</a> type)</td></tr>
+<tr class="memdesc:a38e38f8880dedd6a7ba66c374f34b264"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a string representation for a Kinetic message type.  <a href="#a38e38f8880dedd6a7ba66c374f34b264">More...</a><br /></td></tr>
 <tr class="separator:a38e38f8880dedd6a7ba66c374f34b264"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -88,9 +90,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Provides a string representation for a KineticStatus code. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">status</td><td>The status enumeration value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the appropriate string representation for the specified status. </dd></dl>
+
 <p>Definition at line <a class="el" href="kinetic__types_8c_source.html#l00056">56</a> of file <a class="el" href="kinetic__types_8c_source.html">kinetic_types.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00171">KINETIC_STATUS_COUNT</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00192">KINETIC_STATUS_COUNT</a>.</p>
 
 </div>
 </div>
@@ -108,9 +119,18 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Provides a string representation for a Kinetic message type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The message type value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the appropriate string representation for the specified type. </dd></dl>
+
 <p>Definition at line <a class="el" href="kinetic__types_8c_source.html#l00101">101</a> of file <a class="el" href="kinetic__types_8c_source.html">kinetic_types.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00272">KINETIC_MESSAGE_TYPE_DELETE</a>, <a class="el" href="kinetic__types_8h_source.html#l00271">KINETIC_MESSAGE_TYPE_DELETE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00292">KINETIC_MESSAGE_TYPE_FLUSHALLDATA</a>, <a class="el" href="kinetic__types_8h_source.html#l00291">KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00268">KINETIC_MESSAGE_TYPE_GET</a>, <a class="el" href="kinetic__types_8h_source.html#l00267">KINETIC_MESSAGE_TYPE_GET_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00278">KINETIC_MESSAGE_TYPE_GETKEYRANGE</a>, <a class="el" href="kinetic__types_8h_source.html#l00277">KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00284">KINETIC_MESSAGE_TYPE_GETLOG</a>, <a class="el" href="kinetic__types_8h_source.html#l00283">KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00274">KINETIC_MESSAGE_TYPE_GETNEXT</a>, <a class="el" href="kinetic__types_8h_source.html#l00273">KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00276">KINETIC_MESSAGE_TYPE_GETPREVIOUS</a>, <a class="el" href="kinetic__types_8h_source.html#l00275">KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00280">KINETIC_MESSAGE_TYPE_GETVERSION</a>, <a class="el" href="kinetic__types_8h_source.html#l00279">KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00266">KINETIC_MESSAGE_TYPE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00298">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE</a>, <a class="el" href="kinetic__types_8h_source.html#l00297">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00296">KINETIC_MESSAGE_TYPE_MEDIASCAN</a>, <a class="el" href="kinetic__types_8h_source.html#l00295">KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00290">KINETIC_MESSAGE_TYPE_NOOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00289">KINETIC_MESSAGE_TYPE_NOOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00288">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00287">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00294">KINETIC_MESSAGE_TYPE_PINOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00293">KINETIC_MESSAGE_TYPE_PINOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00270">KINETIC_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00269">KINETIC_MESSAGE_TYPE_PUT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00286">KINETIC_MESSAGE_TYPE_SECURITY</a>, <a class="el" href="kinetic__types_8h_source.html#l00285">KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00282">KINETIC_MESSAGE_TYPE_SETUP</a>, and <a class="el" href="kinetic__types_8h_source.html#l00281">KINETIC_MESSAGE_TYPE_SETUP_RESPONSE</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00339">KINETIC_MESSAGE_TYPE_DELETE</a>, <a class="el" href="kinetic__types_8h_source.html#l00338">KINETIC_MESSAGE_TYPE_DELETE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00359">KINETIC_MESSAGE_TYPE_FLUSHALLDATA</a>, <a class="el" href="kinetic__types_8h_source.html#l00358">KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00335">KINETIC_MESSAGE_TYPE_GET</a>, <a class="el" href="kinetic__types_8h_source.html#l00334">KINETIC_MESSAGE_TYPE_GET_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00345">KINETIC_MESSAGE_TYPE_GETKEYRANGE</a>, <a class="el" href="kinetic__types_8h_source.html#l00344">KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00351">KINETIC_MESSAGE_TYPE_GETLOG</a>, <a class="el" href="kinetic__types_8h_source.html#l00350">KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00341">KINETIC_MESSAGE_TYPE_GETNEXT</a>, <a class="el" href="kinetic__types_8h_source.html#l00340">KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00343">KINETIC_MESSAGE_TYPE_GETPREVIOUS</a>, <a class="el" href="kinetic__types_8h_source.html#l00342">KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00347">KINETIC_MESSAGE_TYPE_GETVERSION</a>, <a class="el" href="kinetic__types_8h_source.html#l00346">KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00333">KINETIC_MESSAGE_TYPE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00365">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE</a>, <a class="el" href="kinetic__types_8h_source.html#l00364">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00363">KINETIC_MESSAGE_TYPE_MEDIASCAN</a>, <a class="el" href="kinetic__types_8h_source.html#l00362">KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00357">KINETIC_MESSAGE_TYPE_NOOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00356">KINETIC_MESSAGE_TYPE_NOOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00355">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00354">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00361">KINETIC_MESSAGE_TYPE_PINOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00360">KINETIC_MESSAGE_TYPE_PINOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00337">KINETIC_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00336">KINETIC_MESSAGE_TYPE_PUT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00353">KINETIC_MESSAGE_TYPE_SECURITY</a>, <a class="el" href="kinetic__types_8h_source.html#l00352">KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00349">KINETIC_MESSAGE_TYPE_SETUP</a>, and <a class="el" href="kinetic__types_8h_source.html#l00348">KINETIC_MESSAGE_TYPE_SETUP_RESPONSE</a>.</p>
 
 </div>
 </div>

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,12 +60,14 @@
       <li><a href="functions_vars_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_vars_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_vars_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_vars_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_vars_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_vars_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_vars_m.html#index_m"><span>m</span></a></li>
       <li><a href="functions_vars_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_vars_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_vars_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_vars_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_vars_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_vars_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_vars_t.html#index_t"><span>t</span></a></li>
@@ -79,16 +81,57 @@
 &#160;
 
 <h3><a class="anchor" id="index_f"></a>- f -</h3><ul>
-<li>fatalError
-: <a class="el" href="struct_kinetic_thread.html#a4493df34b25bfa91e8c98f8ae2fcdea8">KineticThread</a>
+<li>fail_file
+: <a class="el" href="structgreatest__run__info.html#ac4bd91b5bd23ecd1e54d3f035caa00c2">greatest_run_info</a>
+</li>
+<li>fail_line
+: <a class="el" href="structgreatest__run__info.html#aedbe50e3357308ee15144f7f96e75d34">greatest_run_info</a>
+</li>
+<li>failed
+: <a class="el" href="structgreatest__run__info.html#a7722c5b8788ef63357df71aa9cdb19da">greatest_run_info</a>
+, <a class="el" href="structgreatest__suite__info.html#a7538c04a6885105333d9fedfda57d070">greatest_suite_info</a>
+</li>
+<li>fd
+: <a class="el" href="structboxed__msg.html#af9725c9490a7e20cba9d649dea8c5d48">boxed_msg</a>
+, <a class="el" href="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953">bus_user_msg</a>
+, <a class="el" href="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8">connection_info</a>
+, <a class="el" href="structfd__info.html#ae854a5754cd0716eba8aabed12a6cd1e">fd_info</a>
+, <a class="el" href="structlistener__msg.html#a8d0dc639ff95796b83fb2788b89f6f4f">listener_msg</a>
+, <a class="el" href="structrx__info__t.html#ad785820c779b544430751de5f28e2c1c">rx_info_t</a>
+, <a class="el" href="structtx__info__t.html#a2292418fbcac8b8ba7c293bac184ced4">tx_info_t</a>
+</li>
+<li>fd_hash_table
+: <a class="el" href="structsender.html#aff098306a5cefab0f1dc624bd3d1da04">sender</a>
+</li>
+<li>fd_info
+: <a class="el" href="structlistener.html#a66e7d5a3179530bd3658e758f11be642">listener</a>
+</li>
+<li>fd_set
+: <a class="el" href="structbus.html#a02b724a103e70fd7eea516e8c4b2556c">bus</a>
+</li>
+<li>fd_set_lock
+: <a class="el" href="structbus.html#a01464a80aa897f2caa81b063402d1f28">bus</a>
+</li>
+<li>fdi
+: <a class="el" href="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309">tx_info_t</a>
+</li>
+<li>fds
+: <a class="el" href="structlistener.html#a00f399cab62860fad164340a21d5efd1">listener</a>
+, <a class="el" href="structsender.html#aff32b617c8187617c30fde60a778dc44">sender</a>
 </li>
 <li>firmwareDownload
 : <a class="el" href="struct___kinetic_proto___command___setup.html#a3557a3a4b926c1ea14684b29fec47288">KineticProto_Command_Setup</a>
+</li>
+<li>flags
+: <a class="el" href="structgreatest__run__info.html#ae8471c5288b7b2d6d6da2ed661671b8e">greatest_run_info</a>
 </li>
 <li>force
 : <a class="el" href="struct___kinetic_proto___command___key_value.html#a980bd466f0e7b774b2319d517da095f6">KineticProto_Command_KeyValue</a>
 , <a class="el" href="struct___kinetic_proto___command___p2_p_operation___operation.html#a57239c116edd11755853225ae4beb249">KineticProto_Command_P2POperation_Operation</a>
 , <a class="el" href="struct_kinetic_entry.html#a96b9deeff3a41d9830590bd9ea9175c7">KineticEntry</a>
+</li>
+<li>full_msg_buffer
+: <a class="el" href="structbus__sink__cb__res__t.html#a20c276520e040728b4085e6c0973b0d8">bus_sink_cb_res_t</a>
 </li>
 </ul>
 </div><!-- contents -->

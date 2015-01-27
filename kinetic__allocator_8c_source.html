@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -75,365 +75,125 @@
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__allocator_8h.html">kinetic_allocator.h</a>&quot;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__logger_8h.html">kinetic_logger.h</a>&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;pthread.h&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">//==============================================================================</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">// Generic List Support (INTERNAL)</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">//==============================================================================</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f">   31</a></span>&#160;<span class="preprocessor">#define KINETIC_LIST_LOCK(_list) { \</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">    </span><span class="comment">/*LOG_LOCATION; LOGF3(&quot;Locking list! (list_addr=0x%llX)&quot;, (_list));*/</span><span class="preprocessor"> \</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">    pthread_mutex_lock(&amp;((_list)-&gt;mutex)); \</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">    ((_list)-&gt;locked) = true; \</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">}</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">   37</a></span>&#160;<span class="preprocessor">#define KINETIC_LIST_UNLOCK(_list) { \</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">    </span><span class="comment">/*LOG_LOCATION; LOGF3(&quot;Unlocking list! (list_addr=0x%llX)&quot;, (_list));*/</span><span class="preprocessor"> \</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">    assert(((_list)-&gt;locked)); \</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">    pthread_mutex_unlock(&amp;((_list)-&gt;mutex)); \</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">    ((_list)-&gt;locked) = false; \</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">}</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#ade87a99a948224add0a96d09b0f62cd9">   44</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#ade87a99a948224add0a96d09b0f62cd9">KineticAllocator_InitLists</a>(KineticConnection* connection)</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    connection-&gt;pdus = <a class="code" href="kinetic__types__internal_8h.html#a86c480dc8bf5bd1698df83979222d9ad">KINETIC_LIST_INITIALIZER</a>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    connection-&gt;operations = <a class="code" href="kinetic__types__internal_8h.html#a86c480dc8bf5bd1698df83979222d9ad">KINETIC_LIST_INITIALIZER</a>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a03e3395fdbd9a30fd9f9621b8909a365">   51</a></span>&#160;KineticConnection* <a class="code" href="kinetic__allocator_8c.html#a03e3395fdbd9a30fd9f9621b8909a365">KineticAllocator_NewConnection</a>(<span class="keywordtype">void</span>)</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    KineticConnection* connection = calloc(1, <span class="keyword">sizeof</span>(KineticConnection));</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="kinetic__types__internal_8h.html#a529fe75e17c8366353a843ca5cce2a04">KINETIC_CONNECTION_INIT</a>(connection);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> connection;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a870468e22b2d0dac6f7dc86f9ad5e92f">   58</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#a870468e22b2d0dac6f7dc86f9ad5e92f">KineticAllocator_FreeConnection</a>(KineticConnection* connection)</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;{</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    free(connection);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__memory_8h.html">kinetic_memory.h</a>&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__resourcewaiter_8h.html">kinetic_resourcewaiter.h</a>&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__resourcewaiter__types_8h.html">kinetic_resourcewaiter_types.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;pthread.h&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#aa32172871b8d282fb4c9d7b667e9ddba">   29</a></span>&#160;KineticConnection* <a class="code" href="kinetic__allocator_8c.html#aa32172871b8d282fb4c9d7b667e9ddba">KineticAllocator_NewConnection</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> * b, <a class="code" href="struct_kinetic_session.html">KineticSession</a>* <span class="keyword">const</span> session)</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    KineticConnection* connection = <a class="code" href="kinetic__memory_8c.html#adfb5f2a2a7375670f5f360b07b83776a">KineticCalloc</a>(1, <span class="keyword">sizeof</span>(KineticConnection));</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordflow">if</span> (connection == NULL) {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <a class="code" href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a>(<span class="stringliteral">&quot;Failed allocating new Connection!&quot;</span>);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="kinetic__resourcewaiter_8c.html#ab8d207b74ec58acf48157292629bcc19">KineticResourceWaiter_Init</a>(&amp;connection-&gt;connectionReady);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    connection-&gt;pSession = session;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    connection-&gt;messageBus = b;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    connection-&gt;socket = -1;  <span class="comment">// start with an invalid file descriptor</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">return</span> connection;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a870468e22b2d0dac6f7dc86f9ad5e92f">   43</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#a870468e22b2d0dac6f7dc86f9ad5e92f">KineticAllocator_FreeConnection</a>(KineticConnection* connection)</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    assert(connection != NULL);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="kinetic__resourcewaiter_8c.html#ab5cb73c17c907f7eeb425cba0aed8dec">KineticResourceWaiter_Destroy</a>(&amp;connection-&gt;connectionReady);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="kinetic__memory_8c.html#a6c17ee9d38a5f75ad6401f31626cf2e5">KineticFree</a>(connection);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a1a3c242e31eaeea2efcedea00bfbece6">   50</a></span>&#160;<a class="code" href="struct_kinetic_response.html">KineticResponse</a> * <a class="code" href="kinetic__allocator_8c.html#a1a3c242e31eaeea2efcedea00bfbece6">KineticAllocator_NewKineticResponse</a>(<span class="keywordtype">size_t</span> <span class="keyword">const</span> valueLength)</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;{</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="struct_kinetic_response.html">KineticResponse</a> * response = <a class="code" href="kinetic__memory_8c.html#adfb5f2a2a7375670f5f360b07b83776a">KineticCalloc</a>(1, <span class="keyword">sizeof</span>(*response) + valueLength);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">if</span> (response == NULL) {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a>(<span class="stringliteral">&quot;Failed allocating new response!&quot;</span>);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">return</span> response;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#af8859e2a71ff081265087335265a7e1c">   60</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#af8859e2a71ff081265087335265a7e1c">KineticAllocator_FreeKineticResponse</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a> * response)</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;{</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    assert(response != NULL);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span>* KineticAllocator_GetFirstListItem(<a class="code" href="struct_kinetic_list.html">KineticList</a>* list)</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;{</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    assert(list != NULL);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">if</span> (list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a> == NULL) {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">if</span> (response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a> != NULL) {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        protobuf_c_message_free_unpacked(&amp;response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a>-&gt;base, NULL);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">if</span> (response-&gt;<a class="code" href="struct_kinetic_response.html#a2d400c211de3d6da0eea3db4f8eb8dd3">proto</a> != NULL) {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        protobuf_c_message_free_unpacked(&amp;response-&gt;<a class="code" href="struct_kinetic_response.html#a2d400c211de3d6da0eea3db4f8eb8dd3">proto</a>-&gt;base, NULL);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">return</span> list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a>-&gt;data;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="kinetic__memory_8c.html#a6c17ee9d38a5f75ad6401f31626cf2e5">KineticFree</a>(response);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span>* KineticAllocator_GetNextListItem(<a class="code" href="struct_kinetic_list.html">KineticList</a>* list, <span class="keywordtype">void</span>* item_data)</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a316769b24a5c83955f95bb97a0347a50">   73</a></span>&#160;KineticOperation* <a class="code" href="kinetic__allocator_8c.html#a22c724004191cd597cfafa5c5b6af8b2">KineticAllocator_NewOperation</a>(KineticConnection* <span class="keyword">const</span> connection)</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;{</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    assert(list != NULL);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span>* nextData = NULL;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f">KINETIC_LIST_LOCK</a>(list);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    KineticListItem* current = list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">while</span> (current != NULL) {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">void</span>* currData = current-&gt;data;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">if</span> (currData == item_data) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">if</span> (current-&gt;next != NULL) {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                nextData = current-&gt;next-&gt;data;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            }</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        current = current-&gt;next;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">KINETIC_LIST_UNLOCK</a>(list);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">return</span> nextData;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span>* KineticAllocator_NewItem(<a class="code" href="struct_kinetic_list.html">KineticList</a>* <span class="keyword">const</span> list, <span class="keywordtype">size_t</span> size)</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;{</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    KineticListItem* newItem = (KineticListItem*)malloc(<span class="keyword">sizeof</span>(KineticListItem));</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">if</span> (newItem == NULL) {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <a class="code" href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a>(<span class="stringliteral">&quot;  Failed allocating new list item!&quot;</span>);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    }</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    memset(newItem, 0, <span class="keyword">sizeof</span>(KineticListItem));</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    newItem-&gt;data = malloc(size);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">if</span> (newItem-&gt;data == NULL) {</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <a class="code" href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a>(<span class="stringliteral">&quot;  Failed allocating data for list item!&quot;</span>);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    memset(newItem-&gt;data, 0, size);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">// Add the new item to the list</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f">KINETIC_LIST_LOCK</a>(list);</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    newItem-&gt;next = list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a>;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a> = newItem;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">KINETIC_LIST_UNLOCK</a>(list);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;  Allocated new list item (0x%0llX) w/data (0x%0llX)&quot;</span>,</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;         (<span class="keywordtype">long</span> <span class="keywordtype">long</span>)newItem, (<span class="keywordtype">long</span> <span class="keywordtype">long</span>)newItem-&gt;data);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">return</span> newItem-&gt;data;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;}</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> KineticAllocator_FreeItem(<a class="code" href="struct_kinetic_list.html">KineticList</a>* <span class="keyword">const</span> list, <span class="keywordtype">void</span>* item, <span class="keywordtype">bool</span> lock)</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;{</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="comment">/* Make locking optional, since the lock may already be owned by the caller. */</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordflow">if</span> (lock) {</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f">KINETIC_LIST_LOCK</a>(list);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    KineticListItem* cur = list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a>;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    KineticListItem* prev = NULL;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordflow">while</span> (cur-&gt;data != item) {</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordflow">if</span> (cur-&gt;next == NULL) {</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <a class="code" href="kinetic__logger_8h.html#a29568acb2f080ad18e87c2fbd9439142">LOG1</a>(<span class="stringliteral">&quot;  Reached end of list before finding item to free!&quot;</span>);</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            <span class="keywordflow">if</span> (lock) {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                <a class="code" href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">KINETIC_LIST_UNLOCK</a>(list);</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            }</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        }</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            prev = cur;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;            cur = cur-&gt;next;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        }</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    }</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <a class="code" href="kinetic__logger_8h.html#af5f51c21e155b9c0a80dd1bd3831b934">LOG3</a>(<span class="stringliteral">&quot;  Done searching for item list item&quot;</span>);</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordflow">if</span> ((cur != NULL) &amp;&amp; (cur-&gt;data == item)) {</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <a class="code" href="kinetic__logger_8h.html#af5f51c21e155b9c0a80dd1bd3831b934">LOG3</a>(<span class="stringliteral">&quot;  item found! freeing it.&quot;</span>);</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordflow">if</span> (prev == NULL) {</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <a class="code" href="kinetic__logger_8h.html#af5f51c21e155b9c0a80dd1bd3831b934">LOG3</a>(<span class="stringliteral">&quot;  At start of list.&quot;</span>);</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a> = cur-&gt;next;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            <a class="code" href="kinetic__logger_8h.html#af5f51c21e155b9c0a80dd1bd3831b934">LOG3</a>(<span class="stringliteral">&quot;  Not at list start, so relinking list to free item.&quot;</span>);</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            prev-&gt;next = cur-&gt;next;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        }</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;  Freeing item (0x%0llX) w/data (0x%0llX)&quot;</span>, cur, &amp;cur-&gt;data);</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        free(cur-&gt;data);</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        cur-&gt;data = NULL;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        free(cur);</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        cur = NULL;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    }</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordflow">if</span> (lock) {</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">KINETIC_LIST_UNLOCK</a>(list);</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    }</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;}</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> KineticAllocator_FreeList(<a class="code" href="struct_kinetic_list.html">KineticList</a>* <span class="keyword">const</span> list)</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;{</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <span class="keywordflow">if</span> (list != NULL) {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;  Freeing list (0x%0llX) of all items...&quot;</span>, list);</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f">KINETIC_LIST_LOCK</a>(list);</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        KineticListItem* next = NULL;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordflow">for</span> (KineticListItem* item = list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a>; item; item = next) {</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            next = item-&gt;next;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;  Freeing list item (0x%0llX) w/ data (0x%llX)&quot;</span>,</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                    (<span class="keywordtype">long</span> <span class="keywordtype">long</span>)item, (<span class="keywordtype">long</span> <span class="keywordtype">long</span>)&amp;item-&gt;data);</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                <span class="keywordflow">if</span> (item-&gt;data != NULL) {</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                    free(item-&gt;data);</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                    item-&gt;data = NULL;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                }</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                free(item);</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        }</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="comment">// Make list empty, but leave mutex alone so the state is retained!</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        list-&gt;<a class="code" href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">start</a> = NULL;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="comment">/* list-&gt;last = NULL; */</span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">KINETIC_LIST_UNLOCK</a>(list);</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    }</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;  Nothing to free from list (0x%0llX)&quot;</span>, list);</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    }</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;}</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="comment">//==============================================================================</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment">// PDU List Support</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment">//==============================================================================</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
-<div class="line"><a name="l00200"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a74633bbfb28f39b6388449643206573d">  200</a></span>&#160;KineticPDU* <a class="code" href="kinetic__allocator_8c.html#a74633bbfb28f39b6388449643206573d">KineticAllocator_NewPDU</a>(KineticConnection* connection)</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;{</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Allocating new PDU on connection (0x%0llX)&quot;</span>, connection);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    KineticPDU* newPDU = (KineticPDU*)KineticAllocator_NewItem(</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                             &amp;connection-&gt;pdus, <span class="keyword">sizeof</span>(KineticPDU));</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keywordflow">if</span> (newPDU == NULL) {</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <a class="code" href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a>(<span class="stringliteral">&quot;Failed allocating new PDU!&quot;</span>);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    }</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    assert(newPDU-&gt;proto == NULL);</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <a class="code" href="kinetic__types__internal_8h.html#a6dcbf11d2ca311f7edff940de2bab28b">KINETIC_PDU_INIT</a>(newPDU, connection);</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Allocated new PDU (0x%0llX) on connection&quot;</span>, newPDU, connection);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    <span class="keywordflow">return</span> newPDU;</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;}</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
-<div class="line"><a name="l00216"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#ac2d80d508232d116745144d8d94e9ffa">  216</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#ac2d80d508232d116745144d8d94e9ffa">KineticAllocator_FreePDU</a>(KineticConnection* connection, KineticPDU* pdu)</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;{</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freeing PDU (0x%0llX) on connection (0x%0llX)&quot;</span>, pdu, connection);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <a class="code" href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f">KINETIC_LIST_LOCK</a>(&amp;connection-&gt;pdus);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keywordflow">if</span> (pdu &amp;&amp; (pdu-&gt;proto != NULL) &amp;&amp; pdu-&gt;protobufDynamicallyExtracted) {</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <a class="code" href="kinetic__logger_8h.html#af5f51c21e155b9c0a80dd1bd3831b934">LOG3</a>(<span class="stringliteral">&quot;Freeing dynamically allocated protobuf&quot;</span>);</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <a class="code" href="kinetic__proto_8c.html#a236adb6fa7dbee22cdab033a4095e2d4">KineticProto_Message__free_unpacked</a>(pdu-&gt;proto, NULL);</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        pdu-&gt;proto = NULL;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    };</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    </div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="comment">/* TODO: We can&#39;t unlock until the function below completes, but it</span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment">     *     normally also tries to lock, so pass in a flag indicating</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="comment">     *     we already have it locked. The way that the mutexes are</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="comment">     *     currently initialized makes adding an attribute of</span></div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">     *     PTHREAD_MUTEX_RECURSIVE significantly more trouble. */</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    KineticAllocator_FreeItem(&amp;connection-&gt;pdus, (<span class="keywordtype">void</span>*)pdu, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <a class="code" href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">KINETIC_LIST_UNLOCK</a>(&amp;connection-&gt;pdus);</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freed PDU (0x%0llX) on connection (0x%0llX)&quot;</span>, pdu, connection);</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;}</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;</div>
-<div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a33b0e25e30a11f07d68e358924d4b3d3">  236</a></span>&#160;KineticPDU* <a class="code" href="kinetic__allocator_8c.html#a33b0e25e30a11f07d68e358924d4b3d3">KineticAllocator_GetFirstPDU</a>(KineticConnection* connection)</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;{</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keywordflow">return</span> (KineticPDU*)KineticAllocator_GetFirstListItem(&amp;connection-&gt;pdus);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;}</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;</div>
-<div class="line"><a name="l00242"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a31aae9131844cb95472fe1d3fadc8820">  242</a></span>&#160;KineticPDU* <a class="code" href="kinetic__allocator_8c.html#a31aae9131844cb95472fe1d3fadc8820">KineticAllocator_GetNextPDU</a>(KineticConnection* connection, KineticPDU* pdu)</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;{</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="keywordflow">return</span> (KineticPDU*)KineticAllocator_GetNextListItem(&amp;connection-&gt;pdus, pdu);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;}</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;</div>
-<div class="line"><a name="l00248"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a1c1861c44afab0b427c22f31560bf1a6">  248</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#a1c1861c44afab0b427c22f31560bf1a6">KineticAllocator_FreeAllPDUs</a>(KineticConnection* connection)</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;{</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keywordflow">if</span> (connection-&gt;pdus.start != NULL) {</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <a class="code" href="kinetic__logger_8h.html#af5f51c21e155b9c0a80dd1bd3831b934">LOG3</a>(<span class="stringliteral">&quot;Freeing all PDUs...&quot;</span>);</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f">KINETIC_LIST_LOCK</a>(&amp;connection-&gt;pdus);</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        KineticListItem* current = connection-&gt;pdus.start;</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="keywordflow">while</span> (current != NULL) {</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            KineticPDU* pdu = (KineticPDU*)current-&gt;data;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            if (pdu != NULL &amp;&amp; pdu-&gt;proto != NULL</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                &amp;&amp; pdu-&gt;protobufDynamicallyExtracted) {</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                <a class="code" href="kinetic__proto_8c.html#a236adb6fa7dbee22cdab033a4095e2d4">KineticProto_Message__free_unpacked</a>(pdu-&gt;proto, NULL);</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            }</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            current = current-&gt;next;</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        }</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">KINETIC_LIST_UNLOCK</a>(&amp;connection-&gt;pdus);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        KineticAllocator_FreeList(&amp;connection-&gt;pdus);</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    }</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a29568acb2f080ad18e87c2fbd9439142">LOG1</a>(<span class="stringliteral">&quot;  Nothing to free!&quot;</span>);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    }</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;}</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment">//==============================================================================</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="comment">// Operation List Support</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="comment">//==============================================================================</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;</div>
-<div class="line"><a name="l00276"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a316769b24a5c83955f95bb97a0347a50">  276</a></span>&#160;KineticOperation* <a class="code" href="kinetic__allocator_8c.html#a22c724004191cd597cfafa5c5b6af8b2">KineticAllocator_NewOperation</a>(KineticConnection* <span class="keyword">const</span> connection)</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;{</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Allocating new operation on connection (0x%0llX)&quot;</span>, connection);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    KineticOperation* newOperation =</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        (KineticOperation*)KineticAllocator_NewItem(&amp;connection-&gt;operations, <span class="keyword">sizeof</span>(KineticOperation));</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordflow">if</span> (newOperation == NULL) {</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a7a718ac84225eea733516b978b7aafd4">LOGF0</a>(<span class="stringliteral">&quot;Failed allocating new operation on connection (0x%0llX)!&quot;</span>, connection);</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    }</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <a class="code" href="kinetic__types__internal_8h.html#a7c5a07c3343ea1a9cb5a63947c064a16">KINETIC_OPERATION_INIT</a>(newOperation, connection);</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    newOperation-&gt;request = <a class="code" href="kinetic__allocator_8c.html#a74633bbfb28f39b6388449643206573d">KineticAllocator_NewPDU</a>(connection);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <a class="code" href="kinetic__types__internal_8h.html#a8b2d382301935a7b9290d83683e47624">KINETIC_PDU_INIT_WITH_COMMAND</a>(newOperation-&gt;request, connection);</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Allocated new operation (0x%0llX) on connection (0x%0llX)&quot;</span>, newOperation, connection);</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordflow">return</span> newOperation;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;}</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
-<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a4c18ebc155dd5604d7e79c01d85727b0">  293</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#a7e8f9447a88173f5be23094c5c88b194">KineticAllocator_FreeOperation</a>(KineticConnection* <span class="keyword">const</span> connection, KineticOperation* operation)</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;{</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    assert(operation != NULL);</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freeing operation (0x%0llX) on connection (0x%0llX)&quot;</span>, operation, connection);</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="keywordflow">if</span> (operation-&gt;request != NULL) {</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freeing request PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)&quot;</span>,</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            operation-&gt;request, operation, connection);</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#ac2d80d508232d116745144d8d94e9ffa">KineticAllocator_FreePDU</a>(connection, operation-&gt;request);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        operation-&gt;request = NULL;</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    }</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keywordflow">if</span> (operation-&gt;response != NULL) {</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freeing response PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)&quot;</span>,</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            operation-&gt;response, operation, connection);</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#ac2d80d508232d116745144d8d94e9ffa">KineticAllocator_FreePDU</a>(connection, operation-&gt;response);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        operation-&gt;response = NULL;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    }</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    pthread_mutex_destroy(&amp;operation-&gt;timeoutTimeMutex);</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    KineticAllocator_FreeItem(&amp;connection-&gt;operations, (<span class="keywordtype">void</span>*)operation, <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freed operation (0x%0llX) on connection (0x%0llX)&quot;</span>, operation, connection);</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;}</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;</div>
-<div class="line"><a name="l00315"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a43dc850d34534b4b9b871f9c4f2ba3b4">  315</a></span>&#160;KineticOperation* <a class="code" href="kinetic__allocator_8c.html#aa662aad225df5547a5a9c2ebceb9e383">KineticAllocator_GetFirstOperation</a>(KineticConnection* <span class="keyword">const</span> connection)</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;{</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keywordflow">return</span> (KineticOperation*)KineticAllocator_GetFirstListItem(&amp;connection-&gt;operations);</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;}</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;</div>
-<div class="line"><a name="l00321"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#abdc00a85d9c0652b980edea9ec88fb4c">  321</a></span>&#160;KineticOperation* <a class="code" href="kinetic__allocator_8c.html#a65c98ea8bbe920d5d8df87e5531e558d">KineticAllocator_GetNextOperation</a>(KineticConnection* <span class="keyword">const</span> connection, KineticOperation* operation)</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;{</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keywordflow">return</span> (KineticOperation*)KineticAllocator_GetNextListItem(&amp;connection-&gt;operations, operation);</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;}</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;</div>
-<div class="line"><a name="l00327"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#ae36036bfa23121b446c2ad61d4aa9a58">  327</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#ac1b825014d72ef06ad43227c3654b1f3">KineticAllocator_FreeAllOperations</a>(KineticConnection* <span class="keyword">const</span> connection)</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;{</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    KineticOperation* op = <a class="code" href="kinetic__allocator_8c.html#aa662aad225df5547a5a9c2ebceb9e383">KineticAllocator_GetFirstOperation</a>(connection);</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keywordflow">while</span> (op) {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#a7e8f9447a88173f5be23094c5c88b194">KineticAllocator_FreeOperation</a>(connection, op);</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        op = <a class="code" href="kinetic__allocator_8c.html#aa662aad225df5547a5a9c2ebceb9e383">KineticAllocator_GetFirstOperation</a>(connection);</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    }</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;}</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;</div>
-<div class="line"><a name="l00336"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a975785d80b110e973623b26644eff77a">  336</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__allocator_8c.html#ac349eb1dfe45610593fb1260ccb20d48">KineticAllocator_ValidateAllMemoryFreed</a>(KineticConnection* <span class="keyword">const</span> connection)</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;{</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    assert(connection != NULL);</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Checking to see if all memory has been freed from connection (0x%0llX)...&quot;</span>,</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        connection);</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keywordtype">bool</span> empty = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;  Operations: 0x%0llX, empty=%s&quot;</span>,connection-&gt;operations.start,</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <a class="code" href="kinetic__types_8h.html#a77c3b6f6dc303295398cc6a1308a5e79">BOOL_TO_STRING</a>(connection-&gt;operations.start == NULL));</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keywordflow">if</span> (connection-&gt;operations.start != NULL) {empty = <span class="keyword">false</span>;}</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;  PDUs: 0x%0llX, empty=%s&quot;</span>, connection-&gt;pdus.start,</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        <a class="code" href="kinetic__types_8h.html#a77c3b6f6dc303295398cc6a1308a5e79">BOOL_TO_STRING</a>(connection-&gt;pdus.start == NULL));</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="keywordflow">if</span> (connection-&gt;pdus.start != NULL) {empty = <span class="keyword">false</span>;}</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keywordflow">return</span> empty;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;}</div>
-<div class="ttc" id="kinetic__allocator_8c_html_aa662aad225df5547a5a9c2ebceb9e383"><div class="ttname"><a href="kinetic__allocator_8c.html#aa662aad225df5547a5a9c2ebceb9e383">KineticAllocator_GetFirstOperation</a></div><div class="ttdeci">KineticOperation * KineticAllocator_GetFirstOperation(KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00315">kinetic_allocator.c:315</a></div></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    assert(connection != NULL);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Allocating new operation on connection (0x%0llX)&quot;</span>, connection);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    KineticOperation* newOperation =</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        (KineticOperation*)<a class="code" href="kinetic__memory_8c.html#adfb5f2a2a7375670f5f360b07b83776a">KineticCalloc</a>(1, <span class="keyword">sizeof</span>(KineticOperation));</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">if</span> (newOperation == NULL) {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a7a718ac84225eea733516b978b7aafd4">LOGF0</a>(<span class="stringliteral">&quot;Failed allocating new operation on connection (0x%0llX)!&quot;</span>, connection);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="kinetic__types__internal_8c.html#a08237b688a01e364ec6fb93e066c6c97">KineticOperation_Init</a>(newOperation, connection);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Allocating new PDU on connection (0x%0llX)&quot;</span>, connection);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    newOperation-&gt;request = (KineticPDU*)<a class="code" href="kinetic__memory_8c.html#adfb5f2a2a7375670f5f360b07b83776a">KineticCalloc</a>(1, <span class="keyword">sizeof</span>(KineticPDU));</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">if</span> (newOperation-&gt;request == NULL) {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <a class="code" href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a>(<span class="stringliteral">&quot;Failed allocating new PDU!&quot;</span>);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <a class="code" href="kinetic__memory_8c.html#a6c17ee9d38a5f75ad6401f31626cf2e5">KineticFree</a>(newOperation);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">return</span> NULL;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <a class="code" href="kinetic__types__internal_8c.html#adb398056b18d7e4d4445aa4a9dcffabf">KineticPDU_InitWithCommand</a>(newOperation-&gt;request, connection);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Allocated new operation (0x%0llX) on connection (0x%0llX)&quot;</span>, newOperation, connection);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">return</span> newOperation;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="kinetic__allocator_8h.html#a4edf7f13ac63599495458bb59536a6cb">   96</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__allocator_8c.html#a4edf7f13ac63599495458bb59536a6cb">KineticAllocator_FreeOperation</a>(KineticOperation* operation)</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;{</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    assert(operation != NULL);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    KineticConnection* <span class="keyword">const</span> connection = operation-&gt;connection;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freeing operation (0x%0llX) on connection (0x%0llX)&quot;</span>, operation, connection);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">if</span> (operation-&gt;request != NULL) {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freeing request PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)&quot;</span>,</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            operation-&gt;request, operation, connection);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <a class="code" href="kinetic__memory_8c.html#a6c17ee9d38a5f75ad6401f31626cf2e5">KineticFree</a>(operation-&gt;request);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freed PDU (0x%0llX)&quot;</span>, operation-&gt;request);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        operation-&gt;request = NULL;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">if</span> (operation-&gt;response != NULL) {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freeing response (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)&quot;</span>,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            operation-&gt;response, operation, connection);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <a class="code" href="kinetic__allocator_8c.html#af8859e2a71ff081265087335265a7e1c">KineticAllocator_FreeKineticResponse</a>(operation-&gt;response);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        operation-&gt;response = NULL;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <a class="code" href="kinetic__memory_8c.html#a6c17ee9d38a5f75ad6401f31626cf2e5">KineticFree</a>(operation);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Freed operation (0x%0llX) on connection (0x%0llX)&quot;</span>, operation, connection);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;}</div>
+<div class="ttc" id="kinetic__memory_8c_html_adfb5f2a2a7375670f5f360b07b83776a"><div class="ttname"><a href="kinetic__memory_8c.html#adfb5f2a2a7375670f5f360b07b83776a">KineticCalloc</a></div><div class="ttdeci">void * KineticCalloc(size_t count, size_t size)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__memory_8c_source.html#l00005">kinetic_memory.c:5</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html"><div class="ttname"><a href="kinetic__logger_8h.html">kinetic_logger.h</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_ade87a99a948224add0a96d09b0f62cd9"><div class="ttname"><a href="kinetic__allocator_8c.html#ade87a99a948224add0a96d09b0f62cd9">KineticAllocator_InitLists</a></div><div class="ttdeci">void KineticAllocator_InitLists(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00044">kinetic_allocator.c:44</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a03e3395fdbd9a30fd9f9621b8909a365"><div class="ttname"><a href="kinetic__allocator_8c.html#a03e3395fdbd9a30fd9f9621b8909a365">KineticAllocator_NewConnection</a></div><div class="ttdeci">KineticConnection * KineticAllocator_NewConnection(void)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00051">kinetic_allocator.c:51</a></div></div>
-<div class="ttc" id="struct_kinetic_list_html_a8114beead571dc50a51f3d519eadeaa5"><div class="ttname"><a href="struct_kinetic_list.html#a8114beead571dc50a51f3d519eadeaa5">KineticList::start</a></div><div class="ttdeci">KineticListItem * start</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00067">kinetic_types_internal.h:67</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_a77c3b6f6dc303295398cc6a1308a5e79"><div class="ttname"><a href="kinetic__types_8h.html#a77c3b6f6dc303295398cc6a1308a5e79">BOOL_TO_STRING</a></div><div class="ttdeci">#define BOOL_TO_STRING(_bool)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00064">kinetic_types.h:64</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a65c98ea8bbe920d5d8df87e5531e558d"><div class="ttname"><a href="kinetic__allocator_8c.html#a65c98ea8bbe920d5d8df87e5531e558d">KineticAllocator_GetNextOperation</a></div><div class="ttdeci">KineticOperation * KineticAllocator_GetNextOperation(KineticConnection *const connection, KineticOperation *operation)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00321">kinetic_allocator.c:321</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a1c1861c44afab0b427c22f31560bf1a6"><div class="ttname"><a href="kinetic__allocator_8c.html#a1c1861c44afab0b427c22f31560bf1a6">KineticAllocator_FreeAllPDUs</a></div><div class="ttdeci">void KineticAllocator_FreeAllPDUs(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00248">kinetic_allocator.c:248</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a22c724004191cd597cfafa5c5b6af8b2"><div class="ttname"><a href="kinetic__allocator_8c.html#a22c724004191cd597cfafa5c5b6af8b2">KineticAllocator_NewOperation</a></div><div class="ttdeci">KineticOperation * KineticAllocator_NewOperation(KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00276">kinetic_allocator.c:276</a></div></div>
-<div class="ttc" id="kinetic__types__internal_8h_html_a86c480dc8bf5bd1698df83979222d9ad"><div class="ttname"><a href="kinetic__types__internal_8h.html#a86c480dc8bf5bd1698df83979222d9ad">KINETIC_LIST_INITIALIZER</a></div><div class="ttdeci">#define KINETIC_LIST_INITIALIZER</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00071">kinetic_types_internal.h:71</a></div></div>
+<div class="ttc" id="kinetic__allocator_8c_html_a4edf7f13ac63599495458bb59536a6cb"><div class="ttname"><a href="kinetic__allocator_8c.html#a4edf7f13ac63599495458bb59536a6cb">KineticAllocator_FreeOperation</a></div><div class="ttdeci">void KineticAllocator_FreeOperation(KineticOperation *operation)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00096">kinetic_allocator.c:96</a></div></div>
+<div class="ttc" id="kinetic__allocator_8c_html_a22c724004191cd597cfafa5c5b6af8b2"><div class="ttname"><a href="kinetic__allocator_8c.html#a22c724004191cd597cfafa5c5b6af8b2">KineticAllocator_NewOperation</a></div><div class="ttdeci">KineticOperation * KineticAllocator_NewOperation(KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00073">kinetic_allocator.c:73</a></div></div>
+<div class="ttc" id="kinetic__resourcewaiter_8h_html"><div class="ttname"><a href="kinetic__resourcewaiter_8h.html">kinetic_resourcewaiter.h</a></div></div>
+<div class="ttc" id="kinetic__allocator_8c_html_a1a3c242e31eaeea2efcedea00bfbece6"><div class="ttname"><a href="kinetic__allocator_8c.html#a1a3c242e31eaeea2efcedea00bfbece6">KineticAllocator_NewKineticResponse</a></div><div class="ttdeci">KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00050">kinetic_allocator.c:50</a></div></div>
+<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00060">bus_internal_types.h:60</a></div></div>
 <div class="ttc" id="kinetic__allocator_8h_html"><div class="ttname"><a href="kinetic__allocator_8h.html">kinetic_allocator.h</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a74633bbfb28f39b6388449643206573d"><div class="ttname"><a href="kinetic__allocator_8c.html#a74633bbfb28f39b6388449643206573d">KineticAllocator_NewPDU</a></div><div class="ttdeci">KineticPDU * KineticAllocator_NewPDU(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00200">kinetic_allocator.c:200</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_ac1b825014d72ef06ad43227c3654b1f3"><div class="ttname"><a href="kinetic__allocator_8c.html#ac1b825014d72ef06ad43227c3654b1f3">KineticAllocator_FreeAllOperations</a></div><div class="ttdeci">void KineticAllocator_FreeAllOperations(KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00327">kinetic_allocator.c:327</a></div></div>
-<div class="ttc" id="kinetic__types__internal_8h_html_a6dcbf11d2ca311f7edff940de2bab28b"><div class="ttname"><a href="kinetic__types__internal_8h.html#a6dcbf11d2ca311f7edff940de2bab28b">KINETIC_PDU_INIT</a></div><div class="ttdeci">#define KINETIC_PDU_INIT(_pdu, _con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00243">kinetic_types_internal.h:243</a></div></div>
-<div class="ttc" id="kinetic__types__internal_8h_html_a7c5a07c3343ea1a9cb5a63947c064a16"><div class="ttname"><a href="kinetic__types__internal_8h.html#a7c5a07c3343ea1a9cb5a63947c064a16">KINETIC_OPERATION_INIT</a></div><div class="ttdeci">#define KINETIC_OPERATION_INIT(_op, _con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00283">kinetic_types_internal.h:283</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a31aae9131844cb95472fe1d3fadc8820"><div class="ttname"><a href="kinetic__allocator_8c.html#a31aae9131844cb95472fe1d3fadc8820">KineticAllocator_GetNextPDU</a></div><div class="ttdeci">KineticPDU * KineticAllocator_GetNextPDU(KineticConnection *connection, KineticPDU *pdu)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00242">kinetic_allocator.c:242</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_ac349eb1dfe45610593fb1260ccb20d48"><div class="ttname"><a href="kinetic__allocator_8c.html#ac349eb1dfe45610593fb1260ccb20d48">KineticAllocator_ValidateAllMemoryFreed</a></div><div class="ttdeci">bool KineticAllocator_ValidateAllMemoryFreed(KineticConnection *const connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00336">kinetic_allocator.c:336</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a870468e22b2d0dac6f7dc86f9ad5e92f"><div class="ttname"><a href="kinetic__allocator_8c.html#a870468e22b2d0dac6f7dc86f9ad5e92f">KineticAllocator_FreeConnection</a></div><div class="ttdeci">void KineticAllocator_FreeConnection(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00058">kinetic_allocator.c:58</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a33b0e25e30a11f07d68e358924d4b3d3"><div class="ttname"><a href="kinetic__allocator_8c.html#a33b0e25e30a11f07d68e358924d4b3d3">KineticAllocator_GetFirstPDU</a></div><div class="ttdeci">KineticPDU * KineticAllocator_GetFirstPDU(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00236">kinetic_allocator.c:236</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_ac2d80d508232d116745144d8d94e9ffa"><div class="ttname"><a href="kinetic__allocator_8c.html#ac2d80d508232d116745144d8d94e9ffa">KineticAllocator_FreePDU</a></div><div class="ttdeci">void KineticAllocator_FreePDU(KineticConnection *connection, KineticPDU *pdu)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00216">kinetic_allocator.c:216</a></div></div>
+<div class="ttc" id="struct_kinetic_response_html"><div class="ttname"><a href="struct_kinetic_response.html">KineticResponse</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00158">kinetic_types_internal.h:158</a></div></div>
+<div class="ttc" id="kinetic__types__internal_8c_html_a08237b688a01e364ec6fb93e066c6c97"><div class="ttname"><a href="kinetic__types__internal_8c.html#a08237b688a01e364ec6fb93e066c6c97">KineticOperation_Init</a></div><div class="ttdeci">void KineticOperation_Init(KineticOperation *op, KineticConnection *con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8c_source.html#l00446">kinetic_types_internal.c:446</a></div></div>
+<div class="ttc" id="kinetic__memory_8c_html_a6c17ee9d38a5f75ad6401f31626cf2e5"><div class="ttname"><a href="kinetic__memory_8c.html#a6c17ee9d38a5f75ad6401f31626cf2e5">KineticFree</a></div><div class="ttdeci">void KineticFree(void *pointer)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__memory_8c_source.html#l00010">kinetic_memory.c:10</a></div></div>
+<div class="ttc" id="kinetic__allocator_8c_html_a870468e22b2d0dac6f7dc86f9ad5e92f"><div class="ttname"><a href="kinetic__allocator_8c.html#a870468e22b2d0dac6f7dc86f9ad5e92f">KineticAllocator_FreeConnection</a></div><div class="ttdeci">void KineticAllocator_FreeConnection(KineticConnection *connection)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00043">kinetic_allocator.c:43</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html_aa65b0516ca90f3ef1cda5feab07e239c"><div class="ttname"><a href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a></div><div class="ttdeci">#define LOG0(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00052">kinetic_logger.h:52</a></div></div>
+<div class="ttc" id="kinetic__allocator_8c_html_aa32172871b8d282fb4c9d7b667e9ddba"><div class="ttname"><a href="kinetic__allocator_8c.html#aa32172871b8d282fb4c9d7b667e9ddba">KineticAllocator_NewConnection</a></div><div class="ttdeci">KineticConnection * KineticAllocator_NewConnection(struct bus *b, KineticSession *const session)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00029">kinetic_allocator.c:29</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html_a698df39f1ec75e686b2b7aff6c347100"><div class="ttname"><a href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a></div><div class="ttdeci">#define LOGF3(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00059">kinetic_logger.h:59</a></div></div>
+<div class="ttc" id="struct_kinetic_session_html"><div class="ttname"><a href="struct_kinetic_session.html">KineticSession</a></div><div class="ttdoc">An instance of a session with a Kinetic device. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00143">kinetic_types.h:143</a></div></div>
+<div class="ttc" id="kinetic__resourcewaiter_8c_html_ab8d207b74ec58acf48157292629bcc19"><div class="ttname"><a href="kinetic__resourcewaiter_8c.html#ab8d207b74ec58acf48157292629bcc19">KineticResourceWaiter_Init</a></div><div class="ttdeci">void KineticResourceWaiter_Init(KineticResourceWaiter *const waiter)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__resourcewaiter_8c_source.html#l00008">kinetic_resourcewaiter.c:8</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html_a7a718ac84225eea733516b978b7aafd4"><div class="ttname"><a href="kinetic__logger_8h.html#a7a718ac84225eea733516b978b7aafd4">LOGF0</a></div><div class="ttdeci">#define LOGF0(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00056">kinetic_logger.h:56</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_af5f51c21e155b9c0a80dd1bd3831b934"><div class="ttname"><a href="kinetic__logger_8h.html#af5f51c21e155b9c0a80dd1bd3831b934">LOG3</a></div><div class="ttdeci">#define LOG3(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00055">kinetic_logger.h:55</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_a29568acb2f080ad18e87c2fbd9439142"><div class="ttname"><a href="kinetic__logger_8h.html#a29568acb2f080ad18e87c2fbd9439142">LOG1</a></div><div class="ttdeci">#define LOG1(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00053">kinetic_logger.h:53</a></div></div>
-<div class="ttc" id="struct_kinetic_list_html"><div class="ttname"><a href="struct_kinetic_list.html">KineticList</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00066">kinetic_types_internal.h:66</a></div></div>
-<div class="ttc" id="kinetic__proto_8c_html_a236adb6fa7dbee22cdab033a4095e2d4"><div class="ttname"><a href="kinetic__proto_8c.html#a236adb6fa7dbee22cdab033a4095e2d4">KineticProto_Message__free_unpacked</a></div><div class="ttdeci">void KineticProto_Message__free_unpacked(KineticProto_Message *message, ProtobufCAllocator *allocator)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00104">kinetic_proto.c:104</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_a7e8f9447a88173f5be23094c5c88b194"><div class="ttname"><a href="kinetic__allocator_8c.html#a7e8f9447a88173f5be23094c5c88b194">KineticAllocator_FreeOperation</a></div><div class="ttdeci">void KineticAllocator_FreeOperation(KineticConnection *const connection, KineticOperation *operation)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00293">kinetic_allocator.c:293</a></div></div>
-<div class="ttc" id="kinetic__types__internal_8h_html_a8b2d382301935a7b9290d83683e47624"><div class="ttname"><a href="kinetic__types__internal_8h.html#a8b2d382301935a7b9290d83683e47624">KINETIC_PDU_INIT_WITH_COMMAND</a></div><div class="ttdeci">#define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00256">kinetic_types_internal.h:256</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_adffd668bafe67fdfebcbe0fd2f623567"><div class="ttname"><a href="kinetic__allocator_8c.html#adffd668bafe67fdfebcbe0fd2f623567">KINETIC_LIST_UNLOCK</a></div><div class="ttdeci">#define KINETIC_LIST_UNLOCK(_list)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00037">kinetic_allocator.c:37</a></div></div>
-<div class="ttc" id="kinetic__types__internal_8h_html_a529fe75e17c8366353a843ca5cce2a04"><div class="ttname"><a href="kinetic__types__internal_8h.html#a529fe75e17c8366353a843ca5cce2a04">KINETIC_CONNECTION_INIT</a></div><div class="ttdeci">#define KINETIC_CONNECTION_INIT(_con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00096">kinetic_types_internal.h:96</a></div></div>
-<div class="ttc" id="kinetic__allocator_8c_html_aae50d1352a052544fa52b7f4b970be5f"><div class="ttname"><a href="kinetic__allocator_8c.html#aae50d1352a052544fa52b7f4b970be5f">KINETIC_LIST_LOCK</a></div><div class="ttdeci">#define KINETIC_LIST_LOCK(_list)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00031">kinetic_allocator.c:31</a></div></div>
+<div class="ttc" id="struct_kinetic_response_html_a2d400c211de3d6da0eea3db4f8eb8dd3"><div class="ttname"><a href="struct_kinetic_response.html#a2d400c211de3d6da0eea3db4f8eb8dd3">KineticResponse::proto</a></div><div class="ttdeci">KineticProto_Message * proto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00161">kinetic_types_internal.h:161</a></div></div>
+<div class="ttc" id="kinetic__allocator_8c_html_af8859e2a71ff081265087335265a7e1c"><div class="ttname"><a href="kinetic__allocator_8c.html#af8859e2a71ff081265087335265a7e1c">KineticAllocator_FreeKineticResponse</a></div><div class="ttdeci">void KineticAllocator_FreeKineticResponse(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__allocator_8c_source.html#l00060">kinetic_allocator.c:60</a></div></div>
+<div class="ttc" id="struct_kinetic_response_html_a25436f0924b231ce3f8e60fb68c0821f"><div class="ttname"><a href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">KineticResponse::command</a></div><div class="ttdeci">KineticProto_Command * command</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00162">kinetic_types_internal.h:162</a></div></div>
+<div class="ttc" id="kinetic__resourcewaiter_8c_html_ab5cb73c17c907f7eeb425cba0aed8dec"><div class="ttname"><a href="kinetic__resourcewaiter_8c.html#ab5cb73c17c907f7eeb425cba0aed8dec">KineticResourceWaiter_Destroy</a></div><div class="ttdeci">void KineticResourceWaiter_Destroy(KineticResourceWaiter *const waiter)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__resourcewaiter_8c_source.html#l00053">kinetic_resourcewaiter.c:53</a></div></div>
+<div class="ttc" id="kinetic__resourcewaiter__types_8h_html"><div class="ttname"><a href="kinetic__resourcewaiter__types_8h.html">kinetic_resourcewaiter_types.h</a></div></div>
+<div class="ttc" id="kinetic__types__internal_8c_html_adb398056b18d7e4d4445aa4a9dcffabf"><div class="ttname"><a href="kinetic__types__internal_8c.html#adb398056b18d7e4d4445aa4a9dcffabf">KineticPDU_InitWithCommand</a></div><div class="ttdeci">void KineticPDU_InitWithCommand(KineticPDU *pdu, KineticConnection *con)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8c_source.html#l00469">kinetic_types_internal.c:469</a></div></div>
+<div class="ttc" id="kinetic__memory_8h_html"><div class="ttname"><a href="kinetic__memory_8h.html">kinetic_memory.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -1,4 +1,4 @@
-.TH "KineticSession" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticSession" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,25 +17,31 @@ An instance of a session with a Kinetic device\&.
 .ti -1c
 .RI "\fBKineticSessionConfig\fP \fBconfig\fP"
 .br
+.RI "\fISession configuration structure which must be configured\&. \fP"
 .ti -1c
 .RI "struct \fB_KineticConnection\fP * \fBconnection\fP"
 .br
+.RI "\fIConnection instance which is dynamically allocated upon call to \fCKineticClient_CreateConnection\fP\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 An instance of a session with a Kinetic device\&. 
 .PP
-Definition at line 124 of file kinetic_types\&.h\&.
+Definition at line 143 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticSessionConfig\fP KineticSession::config"
 
 .PP
-Definition at line 126 of file kinetic_types\&.h\&.
+Session configuration structure which must be configured\&. 
+.PP
+Definition at line 145 of file kinetic_types\&.h\&.
 .SS "struct \fB_KineticConnection\fP* KineticSession::connection"
 
 .PP
-Definition at line 131 of file kinetic_types\&.h\&.
+Connection instance which is dynamically allocated upon call to \fCKineticClient_CreateConnection\fP\&. Client must call \fCKineticClient_DestroyConnection\fP when finished with a session to shutdown a session cleanly and free the \fCconnection\fP\&. 
+.PP
+Definition at line 150 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

@@ -1,0 +1,58 @@
+.TH "kinetic_resourcewaiter.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_resourcewaiter.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_resourcewaiter\&.h'\fP
+.br
+\fC#include 'kinetic_resourcewaiter_types\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <time\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBKineticResourceWaiter_Init\fP (KineticResourceWaiter *const waiter)"
+.br
+.ti -1c
+.RI "void \fBKineticResourceWaiter_SetAvailable\fP (KineticResourceWaiter *const waiter)"
+.br
+.ti -1c
+.RI "bool \fBKineticResourceWaiter_WaitTilAvailable\fP (KineticResourceWaiter *const waiter, uint32_t max_wait_sec)"
+.br
+.ti -1c
+.RI "void \fBKineticResourceWaiter_Destroy\fP (KineticResourceWaiter *const waiter)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void KineticResourceWaiter_Init (KineticResourceWaiter *constwaiter)"
+
+.PP
+Definition at line 8 of file kinetic_resourcewaiter\&.c\&.
+.SS "void KineticResourceWaiter_SetAvailable (KineticResourceWaiter *constwaiter)"
+
+.PP
+Definition at line 15 of file kinetic_resourcewaiter\&.c\&.
+.SS "bool KineticResourceWaiter_WaitTilAvailable (KineticResourceWaiter *constwaiter, uint32_tmax_wait_sec)"
+
+.PP
+Definition at line 28 of file kinetic_resourcewaiter\&.c\&.
+.SS "void KineticResourceWaiter_Destroy (KineticResourceWaiter *constwaiter)"
+
+.PP
+Definition at line 53 of file kinetic_resourcewaiter\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -52,20 +52,27 @@
 </div><!--header-->
 <div class="contents">
 
+<p>Configuration of remote peer for a PEER2PEERPUSH operation.  
+ <a href="struct_kinetic_p2_p___peer.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:ad05f29013880464048d139696f4ad598"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p2_p___peer.html#ad05f29013880464048d139696f4ad598">hostname</a></td></tr>
+<tr class="memdesc:ad05f29013880464048d139696f4ad598"><td class="mdescLeft">&#160;</td><td class="mdescRight">Host name of peer/destination. Pointer must remain valid until operation completes.  <a href="#ad05f29013880464048d139696f4ad598">More...</a><br /></td></tr>
 <tr class="separator:ad05f29013880464048d139696f4ad598"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7aca8a7cb0c77dd219553896c836cec5"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p2_p___peer.html#a7aca8a7cb0c77dd219553896c836cec5">port</a></td></tr>
+<tr class="memdesc:a7aca8a7cb0c77dd219553896c836cec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port to etablish peer connection to destination host.  <a href="#a7aca8a7cb0c77dd219553896c836cec5">More...</a><br /></td></tr>
 <tr class="separator:a7aca8a7cb0c77dd219553896c836cec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac83f1d2226108f58c6cd63aa3d9b5d83"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p2_p___peer.html#ac83f1d2226108f58c6cd63aa3d9b5d83">tls</a></td></tr>
+<tr class="memdesc:ac83f1d2226108f58c6cd63aa3d9b5d83"><td class="mdescLeft">&#160;</td><td class="mdescRight">If set, will use TLS for peer connection. Optional, defaults to false.  <a href="#ac83f1d2226108f58c6cd63aa3d9b5d83">More...</a><br /></td></tr>
 <tr class="separator:ac83f1d2226108f58c6cd63aa3d9b5d83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00336">336</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<div class="textblock"><p>Configuration of remote peer for a PEER2PEERPUSH operation. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00405">405</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="ad05f29013880464048d139696f4ad598"></a>
 <div class="memitem">
@@ -77,7 +84,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00337">337</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Host name of peer/destination. Pointer must remain valid until operation completes. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00406">406</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -91,7 +100,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00338">338</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Port to etablish peer connection to destination host. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00407">407</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -105,7 +116,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00339">339</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>If set, will use TLS for peer connection. Optional, defaults to false. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00408">408</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>

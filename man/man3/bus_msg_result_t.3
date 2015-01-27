@@ -1,0 +1,75 @@
+.TH "bus_msg_result_t" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_msg_result_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <bus_types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBbus_send_status_t\fP \fBstatus\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      const char * \fBerr_str\fP"
+.br
+.ti -1c
+.RI "   } \fBerror_minutiae\fP"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      int64_t \fBseq_id\fP"
+.br
+.ti -1c
+.RI "      void * \fBopaque_msg\fP"
+.br
+.ti -1c
+.RI "   } \fBresponse\fP"
+.br
+.ti -1c
+.RI "} \fBu\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 196 of file bus_types\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "\fBbus_send_status_t\fP bus_msg_result_t::status"
+
+.PP
+Definition at line 197 of file bus_types\&.h\&.
+.SS "const char* bus_msg_result_t::err_str"
+
+.PP
+Definition at line 200 of file bus_types\&.h\&.
+.SS "struct { \&.\&.\&. }   bus_msg_result_t::error_minutiae"
+
+.SS "int64_t bus_msg_result_t::seq_id"
+
+.PP
+Definition at line 204 of file bus_types\&.h\&.
+.SS "void* bus_msg_result_t::opaque_msg"
+
+.PP
+Definition at line 205 of file bus_types\&.h\&.
+.SS "struct { \&.\&.\&. }   bus_msg_result_t::response"
+
+.SS "union { \&.\&.\&. }   bus_msg_result_t::u"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

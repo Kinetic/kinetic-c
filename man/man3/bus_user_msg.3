@@ -1,0 +1,79 @@
+.TH "bus_user_msg" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_user_msg \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <bus_types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBfd\fP"
+.br
+.ti -1c
+.RI "\fBbus_socket_t\fP \fBtype\fP"
+.br
+.ti -1c
+.RI "uint64_t \fBseq_id\fP"
+.br
+.ti -1c
+.RI "uint8_t * \fBmsg\fP"
+.br
+.ti -1c
+.RI "size_t \fBmsg_size\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBtimeout_sec\fP"
+.br
+.ti -1c
+.RI "\fBbus_msg_cb\fP * \fBcb\fP"
+.br
+.ti -1c
+.RI "void * \fBudata\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 217 of file bus_types\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "int bus_user_msg::fd"
+
+.PP
+Definition at line 218 of file bus_types\&.h\&.
+.SS "\fBbus_socket_t\fP bus_user_msg::type"
+
+.PP
+Definition at line 219 of file bus_types\&.h\&.
+.SS "uint64_t bus_user_msg::seq_id"
+
+.PP
+Definition at line 220 of file bus_types\&.h\&.
+.SS "uint8_t* bus_user_msg::msg"
+
+.PP
+Definition at line 221 of file bus_types\&.h\&.
+.SS "size_t bus_user_msg::msg_size"
+
+.PP
+Definition at line 222 of file bus_types\&.h\&.
+.SS "uint16_t bus_user_msg::timeout_sec"
+
+.PP
+Definition at line 223 of file bus_types\&.h\&.
+.SS "\fBbus_msg_cb\fP* bus_user_msg::cb"
+
+.PP
+Definition at line 225 of file bus_types\&.h\&.
+.SS "void* bus_user_msg::udata"
+
+.PP
+Definition at line 226 of file bus_types\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

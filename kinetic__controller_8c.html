@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -56,52 +56,32 @@
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__controller_8h_source.html">kinetic_controller.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__connection_8h_source.html">kinetic_connection.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__session_8h_source.html">kinetic_session.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__operation_8h_source.html">kinetic_operation.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__pdu_8h_source.html">kinetic_pdu.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__socket_8h_source.html">kinetic_socket.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__allocator_8h_source.html">kinetic_allocator.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic__resourcewaiter_8h_source.html">kinetic_resourcewaiter.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
 <code>#include &lt;pthread.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="bus_8h_source.html">bus.h</a>&quot;</code><br />
 </div>
 <p><a href="kinetic__controller_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2696cec04d495fb25499052ef0d35a42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#a2696cec04d495fb25499052ef0d35a42">KineticController_Init</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session)</td></tr>
-<tr class="separator:a2696cec04d495fb25499052ef0d35a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4fe27fac91b48a17326954619478f44"><td class="memItemLeft" align="right" valign="top">KineticOperation *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#ad4fe27fac91b48a17326954619478f44">KineticController_CreateOperation</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session)</td></tr>
 <tr class="separator:ad4fe27fac91b48a17326954619478f44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9a4252a775e193885639be40bd3d2a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#ac9a4252a775e193885639be40bd3d2a0">KineticController_ExecuteOperation</a> (KineticOperation *operation, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *const closure)</td></tr>
 <tr class="separator:ac9a4252a775e193885639be40bd3d2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dd33ab2356015636ca1476ab8d2981f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#a2dd33ab2356015636ca1476ab8d2981f">KineticController_Pause</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, bool pause)</td></tr>
-<tr class="separator:a2dd33ab2356015636ca1476ab8d2981f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cf14cbf7279bb5d8259f784c2e05a2c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#a8cf14cbf7279bb5d8259f784c2e05a2c">KineticController_HandleIncomingPDU</a> (KineticConnection *const connection)</td></tr>
-<tr class="separator:a8cf14cbf7279bb5d8259f784c2e05a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40cdec3b98767b923793edff1bc1f1c5"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#a40cdec3b98767b923793edff1bc1f1c5">KineticController_ReceiveThread</a> (void *thread_arg)</td></tr>
-<tr class="separator:a40cdec3b98767b923793edff1bc1f1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79b2f6dcc349338aa767e037c481d58f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#a79b2f6dcc349338aa767e037c481d58f">bus_to_kinetic_status</a> (<a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a> const status)</td></tr>
+<tr class="separator:a79b2f6dcc349338aa767e037c481d58f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7404236e212f8b84f1ec139b410d242"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#af7404236e212f8b84f1ec139b410d242">KineticController_HandleUnexecpectedResponse</a> (void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)</td></tr>
+<tr class="separator:af7404236e212f8b84f1ec139b410d242"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bf440ef345b654b1fcdd1c40219efeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__controller_8c.html#a2bf440ef345b654b1fcdd1c40219efeb">KineticController_HandleExpectedResponse</a> (<a class="el" href="structbus__msg__result__t.html">bus_msg_result_t</a> *res, void *udata)</td></tr>
+<tr class="separator:a2bf440ef345b654b1fcdd1c40219efeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a2696cec04d495fb25499052ef0d35a42"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticController_Init </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
-          <td class="paramname"><em>session</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00030">30</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00131">KineticSession::connection</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00311">Kinetic_GetErrnoDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00156">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__controller_8c_source.html#l00251">KineticController_ReceiveThread()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00093">KineticConnection::thread</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00094">KineticConnection::threadID</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="ad4fe27fac91b48a17326954619478f44"></a>
 <div class="memitem">
 <div class="memproto">
@@ -116,9 +96,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00050">50</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00032">32</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00131">KineticSession::connection</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00276">KineticAllocator_NewOperation()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00057">LOGF1</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00073">KineticAllocator_NewOperation()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
 
 </div>
 </div>
@@ -146,27 +126,59 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00095">95</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00080">80</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00147">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__operation_8c_source.html#l00080">KineticOperation_SendRequest()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00057">LOGF1</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00168">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00042">KineticOperation_SendRequest()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2dd33ab2356015636ca1476ab8d2981f"></a>
+<a class="anchor" id="a79b2f6dcc349338aa767e037c481d58f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void KineticController_Pause </td>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> bus_to_kinetic_status </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
-          <td class="paramname"><em>session</em>, </td>
+          <td class="paramtype"><a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a> const&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00120">120</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
+
+<p>References <a class="el" href="bus__types_8h_source.html#l00185">BUS_SEND_BAD_RESPONSE</a>, <a class="el" href="bus__types_8h_source.html#l00184">BUS_SEND_RX_FAILURE</a>, <a class="el" href="bus__types_8h_source.html#l00183">BUS_SEND_RX_TIMEOUT</a>, <a class="el" href="bus__types_8h_source.html#l00180">BUS_SEND_SUCCESS</a>, <a class="el" href="bus__types_8h_source.html#l00182">BUS_SEND_TX_FAILURE</a>, <a class="el" href="bus__types_8h_source.html#l00181">BUS_SEND_TX_TIMEOUT</a>, <a class="el" href="bus__types_8h_source.html#l00179">BUS_SEND_UNDEFINED</a>, <a class="el" href="bus__types_8h_source.html#l00186">BUS_SEND_UNREGISTERED_SOCKET</a>, <a class="el" href="kinetic__types_8h_source.html#l00168">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00181">KINETIC_STATUS_OPERATION_TIMEDOUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00189">KINETIC_STATUS_SOCKET_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00188">KINETIC_STATUS_SOCKET_TIMEOUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF3</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af7404236e212f8b84f1ec139b410d242"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticController_HandleUnexecpectedResponse </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>msg</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>pause</em>&#160;</td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>seq_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>bus_udata</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>socket_udata</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -176,49 +188,39 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00143">143</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00182">182</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00131">KineticSession::connection</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00078">KineticThread::paused</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00093">KineticConnection::thread</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00162">KineticResponse::command</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00160">KineticResponse::header</a>, <a class="el" href="kinetic__proto_8h_source.html#l00073">KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00060">KineticAllocator_FreeKineticResponse()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00410">KineticLogger_LogProtobuf()</a>, <a class="el" href="kinetic__resourcewaiter_8c_source.html#l00015">KineticResourceWaiter_SetAvailable()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF2</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00161">KineticResponse::proto</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a8cf14cbf7279bb5d8259f784c2e05a2c"></a>
+<a class="anchor" id="a2bf440ef345b654b1fcdd1c40219efeb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void KineticController_HandleIncomingPDU </td>
+          <td class="memname">void KineticController_HandleExpectedResponse </td>
           <td>(</td>
-          <td class="paramtype">KineticConnection *const&#160;</td>
-          <td class="paramname"><em>connection</em></td><td>)</td>
-          <td></td>
+          <td class="paramtype"><a class="el" href="structbus__msg__result__t.html">bus_msg_result_t</a> *&#160;</td>
+          <td class="paramname"><em>res</em>, </td>
         </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00150">150</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types_8c_source.html#l00056">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00210">KINETIC_PDU_TYPE_RESPONSE</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00211">KINETIC_PDU_TYPE_UNSOLICITED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00073">KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00216">KineticAllocator_FreePDU()</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00200">KineticAllocator_NewPDU()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00167">KineticOperation_AssociateResponseWithOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00630">KineticOperation_Complete()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00143">KineticPDU_GetStatus()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00137">KineticPDU_GetValueLength()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00036">KineticPDU_ReceiveMain()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00118">KineticPDU_ReceiveValue()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00054">LOG2</a>, <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF2</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a40cdec3b98767b923793edff1bc1f1c5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
         <tr>
-          <td class="memname">void* KineticController_ReceiveThread </td>
-          <td>(</td>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>thread_arg</em></td><td>)</td>
+          <td class="paramname"><em>udata</em>&#160;</td>
+        </tr>
+        <tr>
           <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00251">251</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__controller_8c_source.html#l00229">229</a> of file <a class="el" href="kinetic__controller_8c_source.html">kinetic_controller.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00076">KineticThread::abortRequested</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00079">KineticThread::connection</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00077">KineticThread::fatalError</a>, <a class="el" href="kinetic__types_8h_source.html#l00149">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__logger_8h_source.html#l00055">LOG3</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00078">KineticThread::paused</a>.</p>
+<p>References <a class="el" href="kinetic__controller_8c_source.html#l00120">bus_to_kinetic_status()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00162">KineticResponse::command</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00160">KineticResponse::header</a>, <a class="el" href="kinetic__types_8c_source.html#l00056">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00168">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__logger_8c_source.html#l00410">KineticLogger_LogProtobuf()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00754">KineticOperation_Complete()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00028">KineticProtoStatusCode_to_KineticStatus()</a>, <a class="el" href="kinetic__logger_8h_source.html#l00057">LOGF1</a>, <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF2</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00161">KineticResponse::proto</a>, <a class="el" href="structbus__msg__result__t.html#ac4e4674f7a4c28cb5807f78d7552fe24">bus_msg_result_t::response</a>, <a class="el" href="bus__types_8h_source.html#l00197">bus_msg_result_t::status</a>, and <a class="el" href="structbus__msg__result__t.html#a241466c461e3be2accbb0b0f351a71dc">bus_msg_result_t::u</a>.</p>
 
 </div>
 </div>

@@ -1,0 +1,123 @@
+.TH "test_yacht.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+test_yacht.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'greatest\&.h'\fP
+.br
+\fC#include 'yacht\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBsuite\fP (void)"
+.br
+.ti -1c
+.RI "int \fBgreatest_pre_test\fP (const char *name)"
+.br
+.ti -1c
+.RI "void \fBgreatest_post_test\fP (const char *name, int res)"
+.br
+.ti -1c
+.RI "void \fBgreatest_do_pass\fP (const char *name)"
+.br
+.ti -1c
+.RI "void \fBgreatest_do_fail\fP (const char *name)"
+.br
+.ti -1c
+.RI "void \fBgreatest_do_skip\fP (const char *name)"
+.br
+.ti -1c
+.RI "int \fBgreatest_do_assert_equal_t\fP (const void *exp, const void *got, \fBgreatest_type_info\fP *type_info, void *udata)"
+.br
+.ti -1c
+.RI "void \fBgreatest_usage\fP (const char *name)"
+.br
+.ti -1c
+.RI "void \fBGREATEST_SET_SETUP_CB\fP (\fBgreatest_setup_cb\fP *cb, void *udata)"
+.br
+.ti -1c
+.RI "void \fBGREATEST_SET_TEARDOWN_CB\fP (\fBgreatest_teardown_cb\fP *cb, void *udata)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBgreatest_type_info\fP \fBgreatest_type_info_string\fP = { greatest_string_equal_cb, greatest_string_printf_cb, }"
+.br
+.ti -1c
+.RI "\fBgreatest_run_info\fP \fBgreatest_info\fP"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void suite (void)"
+
+.PP
+Definition at line 160 of file test_yacht\&.c\&.
+.PP
+References RUN_TEST, and RUN_TESTp\&.
+.SS "int greatest_pre_test (const char *name)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "void greatest_post_test (const char *name, intres)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "void greatest_do_pass (const char *name)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "void greatest_do_fail (const char *name)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "void greatest_do_skip (const char *name)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "int greatest_do_assert_equal_t (const void *exp, const void *got, \fBgreatest_type_info\fP *type_info, void *udata)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "void greatest_usage (const char *name)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "void GREATEST_SET_SETUP_CB (\fBgreatest_setup_cb\fP *cb, void *udata)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "void GREATEST_SET_TEARDOWN_CB (\fBgreatest_teardown_cb\fP *cb, void *udata)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 181 of file test_yacht\&.c\&.
+.PP
+References GREATEST_MAIN_BEGIN, GREATEST_MAIN_END, RUN_SUITE, and suite()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "\fBgreatest_type_info\fP greatest_type_info_string = { greatest_string_equal_cb, greatest_string_printf_cb, }"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "\fBgreatest_run_info\fP greatest_info"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

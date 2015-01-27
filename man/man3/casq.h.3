@@ -1,0 +1,74 @@
+.TH "casq.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+casq.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdbool\&.h>\fP
+.br
+
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef void( \fBcasq_free_cb\fP )(void *data, void *udata)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct casq * \fBcasq_new\fP (void)"
+.br
+.ti -1c
+.RI "bool \fBcasq_push\fP (struct casq *q, void *data)"
+.br
+.ti -1c
+.RI "void * \fBcasq_pop\fP (struct casq *q)"
+.br
+.ti -1c
+.RI "bool \fBcasq_empty\fP (struct casq *q)"
+.br
+.ti -1c
+.RI "void \fBcasq_free\fP (struct casq *q, \fBcasq_free_cb\fP *cb, void *udata)"
+.br
+.in -1c
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef void( casq_free_cb)(void *data, void *udata)"
+
+.PP
+Definition at line 34 of file casq\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "struct casq* casq_new (void)"
+
+.PP
+Definition at line 37 of file casq\&.c\&.
+.SS "bool casq_push (struct casq *q, void *data)"
+
+.PP
+Definition at line 58 of file casq\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP\&.
+.SS "void* casq_pop (struct casq *q)"
+
+.PP
+Definition at line 102 of file casq\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP\&.
+.SS "bool casq_empty (struct casq *q)"
+
+.PP
+Definition at line 97 of file casq\&.c\&.
+.SS "void casq_free (struct casq *q, \fBcasq_free_cb\fP *cb, void *udata)"
+
+.PP
+Definition at line 145 of file casq\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

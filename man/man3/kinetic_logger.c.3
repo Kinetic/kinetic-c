@@ -1,4 +1,4 @@
-.TH "kinetic_logger.c" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_logger.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,7 +27,7 @@ kinetic_logger.c \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBKINETIC_LOGGER_BUFFER_STR_MAX_LEN\fP   256"
+.RI "#define \fBKINETIC_LOGGER_BUFFER_STR_MAX_LEN\fP   512"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_LOGGER_BUFFER_SIZE\fP   (0x1 << 12)"
@@ -99,7 +99,7 @@ kinetic_logger.c \-
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define KINETIC_LOGGER_BUFFER_STR_MAX_LEN   256"
+.SS "#define KINETIC_LOGGER_BUFFER_STR_MAX_LEN   512"
 
 .PP
 Definition at line 31 of file kinetic_logger\&.c\&.
@@ -128,7 +128,7 @@ Definition at line 179 of file kinetic_logger\&.c\&.
 .PP
 .nf
 KineticLogger_LogPrintf(2, "%s%s {", (_indent), (__name)); \
-    strcat(_indent, "  ");
+    (strlen(_indent) < (sizeof(_indent) - 3 )) ? strcat(_indent, "  ") : 0;
 .fi
 .PP
 Definition at line 181 of file kinetic_logger\&.c\&.
@@ -137,7 +137,7 @@ Definition at line 181 of file kinetic_logger\&.c\&.
 .PP
 .nf
 KineticLogger_LogPrintf(2, "{"); \
-    strcat(_indent, "  ");
+    (strlen(_indent) < (sizeof(_indent) - 3)) ? strcat(_indent, "  ") : 0;
 .fi
 .PP
 Definition at line 184 of file kinetic_logger\&.c\&.
@@ -155,7 +155,7 @@ Definition at line 187 of file kinetic_logger\&.c\&.
 .PP
 .nf
 KineticLogger_LogPrintf(2, "%s%s: (%u elements) [", (_indent), (__name), (__quantity)); \
-    strcat(_indent, "  ");
+    (strlen(_indent) < (sizeof(_indent) - 3)) ? strcat(_indent, "  ") : 0;
 .fi
 .PP
 Definition at line 191 of file kinetic_logger\&.c\&.

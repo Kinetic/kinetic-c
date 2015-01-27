@@ -1,0 +1,75 @@
+.TH "bus_unpack_cb_res_t" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_unpack_cb_res_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <bus_types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "bool \fBok\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      void * \fBmsg\fP"
+.br
+.ti -1c
+.RI "      int64_t \fBseq_id\fP"
+.br
+.ti -1c
+.RI "   } \fBsuccess\fP"
+.br
+.ti -1c
+.RI "   struct {"
+.br
+.ti -1c
+.RI "      uintptr_t \fBopaque_error_id\fP"
+.br
+.ti -1c
+.RI "   } \fBerror\fP"
+.br
+.ti -1c
+.RI "} \fBu\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 119 of file bus_types\&.h\&.
+.SH "Field Documentation"
+.PP 
+.SS "bool bus_unpack_cb_res_t::ok"
+
+.PP
+Definition at line 120 of file bus_types\&.h\&.
+.SS "void* bus_unpack_cb_res_t::msg"
+
+.PP
+Definition at line 123 of file bus_types\&.h\&.
+.SS "int64_t bus_unpack_cb_res_t::seq_id"
+
+.PP
+Definition at line 124 of file bus_types\&.h\&.
+.SS "struct { \&.\&.\&. }   bus_unpack_cb_res_t::success"
+
+.SS "uintptr_t bus_unpack_cb_res_t::opaque_error_id"
+
+.PP
+Definition at line 127 of file bus_types\&.h\&.
+.SS "struct { \&.\&.\&. }   bus_unpack_cb_res_t::error"
+
+.SS "union { \&.\&.\&. }   bus_unpack_cb_res_t::u"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

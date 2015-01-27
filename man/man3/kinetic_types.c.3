@@ -1,4 +1,4 @@
-.TH "kinetic_types.c" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,9 +17,11 @@ kinetic_types.c \-
 .ti -1c
 .RI "const char * \fBKinetic_GetStatusDescription\fP (\fBKineticStatus\fP status)"
 .br
+.RI "\fIProvides a string representation for a KineticStatus code\&. \fP"
 .ti -1c
 .RI "const char * \fBKineticMessageType_GetName\fP (\fBKineticMessageType\fP type)"
 .br
+.RI "\fIProvides a string representation for a Kinetic message type\&. \fP"
 .in -1c
 .SS "Variables"
 
@@ -33,10 +35,38 @@ kinetic_types.c \-
 .SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
 
 .PP
+Provides a string representation for a KineticStatus code\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstatus\fP The status enumeration value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Pointer to the appropriate string representation for the specified status\&. 
+.RE
+.PP
+
+.PP
 Definition at line 56 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_STATUS_COUNT\&.
 .SS "const char* KineticMessageType_GetName (\fBKineticMessageType\fPtype)"
+
+.PP
+Provides a string representation for a Kinetic message type\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItype\fP The message type value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Pointer to the appropriate string representation for the specified type\&. 
+.RE
+.PP
 
 .PP
 Definition at line 101 of file kinetic_types\&.c\&.

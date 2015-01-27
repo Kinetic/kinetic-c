@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,12 +60,14 @@
       <li><a href="functions_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_k.html#index_k"><span>k</span></a></li>
       <li><a href="functions_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_m.html#index_m"><span>m</span></a></li>
       <li><a href="functions_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_t.html#index_t"><span>t</span></a></li>
@@ -79,9 +81,14 @@
 <div class="textblock">Here is a list of all struct and union fields with links to the structures/unions they belong to:</div>
 
 <h3><a class="anchor" id="index_b"></a>- b -</h3><ul>
+<li>backlog_size
+: <a class="el" href="structthreadpool__info.html#ab146e3c2396a31d66017435900961eee">threadpool_info</a>
+</li>
+<li>backpressure
+: <a class="el" href="structtx__info__t.html#ad5806f7db0c0dcf5c87f96f29975de23">tx_info_t</a>
+</li>
 <li>base
-: <a class="el" href="struct___kinetic_p_d_u.html#adc934c90b3e4fb356d2e1c3730a52c85">KineticPDU</a>
-, <a class="el" href="struct___kinetic_proto___command.html#a53d74c5a9f728836ea96ec462a8573cf">KineticProto_Command</a>
+: <a class="el" href="struct___kinetic_proto___command.html#a53d74c5a9f728836ea96ec462a8573cf">KineticProto_Command</a>
 , <a class="el" href="struct___kinetic_proto___command___body.html#aed7a080efa1996fc2f4bd6c2b49777c7">KineticProto_Command_Body</a>
 , <a class="el" href="struct___kinetic_proto___command___get_log.html#ad43fcc145a21e39b5fa01428eb46d983">KineticProto_Command_GetLog</a>
 , <a class="el" href="struct___kinetic_proto___command___get_log___capacity.html#a4a60adaffbbc78c7a242f4894d124540">KineticProto_Command_GetLog_Capacity</a>
@@ -109,9 +116,17 @@
 , <a class="el" href="struct___kinetic_proto___message___h_m_a_cauth.html#adf4503b8e0c527bf9073eca902fad261">KineticProto_Message_HMACauth</a>
 , <a class="el" href="struct___kinetic_proto___message___p_i_nauth.html#ae99e21aea90f0979d343c42dedae4c14">KineticProto_Message_PINauth</a>
 </li>
+<li>begin
+: <a class="el" href="structgreatest__run__info.html#a9e3c58e87cff9afd5b8aedb12b9fce2d">greatest_run_info</a>
+</li>
 <li>body
 : <a class="el" href="struct___kinetic_proto___command.html#a658b97fd9713b08fa0820948d1ee7d83">KineticProto_Command</a>
 , <a class="el" href="struct_kinetic_message.html#a52360b1faabe72644d3ce900df9c869e">KineticMessage</a>
+</li>
+<li>box
+: <a class="el" href="structlistener__msg.html#a39f0b0ecbdab57c7e35fef63d74f290d">listener_msg</a>
+, <a class="el" href="structrx__info__t.html#aca5bb544069594d79c37a47b40e75eb5">rx_info_t</a>
+, <a class="el" href="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a">tx_info_t</a>
 </li>
 <li>buffer
 : <a class="el" href="struct_kinetic_serial_allocator.html#a9db8f55118e26ad2bc2aff148bc6b9db">KineticSerialAllocator</a>
@@ -119,6 +134,15 @@
 <li>buffers
 : <a class="el" href="struct___kinetic_operation.html#a0524c2ab9e5490d2d0a47369b69ae2f6">KineticOperation</a>
 , <a class="el" href="struct_byte_buffer_array.html#a922d96cfe901de9e63e8263bd0604c2e">ByteBufferArray</a>
+</li>
+<li>bus
+: <a class="el" href="struct___kinetic_client.html#a51d100a10b40c6fa5d6c769485103c56">KineticClient</a>
+, <a class="el" href="structbus__result.html#aabd61449d17f5f5d086b22f88b8cee6d">bus_result</a>
+, <a class="el" href="structlistener.html#a3b774e2e0ad1e58c3a0bdf7207cabbb6">listener</a>
+, <a class="el" href="structsender.html#a757588eec51f26a7d24b7dd72662aad2">sender</a>
+</li>
+<li>bus_udata
+: <a class="el" href="structbus__config.html#aeb1c96486e571d7c27bfcee89b9b8aa6">bus_config</a>
 </li>
 <li>bytes
 : <a class="el" href="struct___kinetic_proto___command___get_log___statistics.html#a0c7f32e2caa64f6023c90913d89aef9f">KineticProto_Command_GetLog_Statistics</a>

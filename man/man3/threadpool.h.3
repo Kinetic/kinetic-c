@@ -1,0 +1,115 @@
+.TH "threadpool.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+threadpool.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stdbool\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBthreadpool_config\fP"
+.br
+.ti -1c
+.RI "struct \fBthreadpool_task\fP"
+.br
+.ti -1c
+.RI "struct \fBthreadpool_info\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBTHREADPOOL_MAX_RINGBUF_SIZE2\fP   30"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef void( \fBthreadpool_task_cb\fP )(void *udata)"
+.br
+.ti -1c
+.RI "typedef void( \fBthreadpool_task_cleanup_cb\fP )(void *udata)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fBthreadpool\fP * \fBthreadpool_init\fP (struct \fBthreadpool_config\fP *cfg)"
+.br
+.ti -1c
+.RI "bool \fBthreadpool_schedule\fP (struct \fBthreadpool\fP *t, struct \fBthreadpool_task\fP *task, size_t *pushback)"
+.br
+.ti -1c
+.RI "void \fBthreadpool_stats\fP (struct \fBthreadpool\fP *t, struct \fBthreadpool_info\fP *ti)"
+.br
+.ti -1c
+.RI "bool \fBthreadpool_shutdown\fP (struct \fBthreadpool\fP *t, bool kill_all)"
+.br
+.ti -1c
+.RI "void \fBthreadpool_free\fP (struct \fBthreadpool\fP *t)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define THREADPOOL_MAX_RINGBUF_SIZE2   30"
+
+.PP
+Definition at line 28 of file threadpool\&.h\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef void( threadpool_task_cb)(void *udata)"
+
+.PP
+Definition at line 41 of file threadpool\&.h\&.
+.SS "typedef void( threadpool_task_cleanup_cb)(void *udata)"
+
+.PP
+Definition at line 45 of file threadpool\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "struct \fBthreadpool\fP* threadpool_init (struct \fBthreadpool_config\fP *cfg)"
+
+.PP
+Definition at line 44 of file threadpool\&.c\&.
+.PP
+References threadpool_config::max_delay, threadpool::max_delay, threadpool_config::max_threads, threadpool::max_threads, thread_info::t, threadpool::task_ringbuf_mask, threadpool::task_ringbuf_size, threadpool_config::task_ringbuf_size2, threadpool::task_ringbuf_size2, threadpool::tasks, THREADPOOL_MAX_RINGBUF_SIZE2, and threadpool::threads\&.
+.SS "bool threadpool_schedule (struct \fBthreadpool\fP *t, struct \fBthreadpool_task\fP *task, size_t *pushback)"
+
+.PP
+Definition at line 92 of file threadpool\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::cleanup, threadpool_task::cleanup, threadpool::shutting_down, marked_task::task, threadpool_task::task, threadpool::task_release_head, threadpool::task_reserve_head, threadpool::task_ringbuf_size, threadpool::tasks, marked_task::udata, and threadpool_task::udata\&.
+.SS "void threadpool_stats (struct \fBthreadpool\fP *t, struct \fBthreadpool_info\fP *ti)"
+
+.PP
+Definition at line 145 of file threadpool\&.c\&.
+.PP
+References threadpool_info::active_threads, threadpool_info::backlog_size, threadpool_info::dormant_threads, threadpool::live_threads, thread_info::status, STATUS_AWAKE, threadpool::task_commit_head, threadpool::task_request_head, and threadpool::threads\&.
+.SS "bool threadpool_shutdown (struct \fBthreadpool\fP *t, boolkill_all)"
+
+.PP
+Definition at line 159 of file threadpool\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::cleanup, threadpool::live_threads, threadpool::shutting_down, SPIN_ADJ, thread_info::status, STATUS_SHUTDOWN, thread_info::t, threadpool::task_commit_head, threadpool::task_release_head, threadpool::task_request_head, threadpool::task_ringbuf_mask, threadpool::tasks, threadpool::threads, and marked_task::udata\&.
+.SS "void threadpool_free (struct \fBthreadpool\fP *t)"
+
+.PP
+Definition at line 196 of file threadpool\&.c\&.
+.PP
+References threadpool::tasks, and threadpool::threads\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

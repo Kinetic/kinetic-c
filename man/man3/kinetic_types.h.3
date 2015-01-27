@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -45,15 +45,19 @@ kinetic_types.h \-
 .ti -1c
 .RI "struct \fBKineticCompletionData\fP"
 .br
+.RI "\fICompletion data which will be provided to \fBKineticCompletionClosure\fP for asynchronous operations\&. \fP"
 .ti -1c
 .RI "struct \fBKineticCompletionClosure\fP"
 .br
+.RI "\fIClosure which can be specified for operations which support asynchronous mode\&. \fP"
 .ti -1c
 .RI "struct \fBKineticEntry\fP"
 .br
+.RI "\fIKinetic object instance\&. \fP"
 .ti -1c
 .RI "struct \fBKineticKeyRange\fP"
 .br
+.RI "\fIKinetic Key Range request structure\&. \fP"
 .ti -1c
 .RI "struct \fBKineticDeviceInfo_Utilization\fP"
 .br
@@ -84,12 +88,17 @@ kinetic_types.h \-
 .ti -1c
 .RI "struct \fBKineticP2P_Peer\fP"
 .br
+.RI "\fIConfiguration of remote peer for a PEER2PEERPUSH operation\&. \fP"
 .ti -1c
 .RI "struct \fBKineticP2P_OperationData\fP"
 .br
 .ti -1c
 .RI "struct \fBKineticP2P_Operation\fP"
 .br
+.ti -1c
+.RI "struct \fBKineticClientConfig\fP"
+.br
+.RI "\fIConfiguration values for the KineticClient connection\&. \fP"
 .in -1c
 .SS "Macros"
 
@@ -137,6 +146,19 @@ kinetic_types.h \-
 .RI "#define \fBKINETIC_SESSION_INIT\fP(_session, _host, _clusterVersion, _identity, _hmacKey)"
 .br
 .ti -1c
+.RI "#define \fBKINETIC_CLIENT_DEFAULT_LOG_LEVEL\fP   0"
+.br
+.RI "\fIDefault values for the \fBKineticClientConfig\fP struct, which will be used if the corresponding field in the struct is 0\&. \fP"
+.ti -1c
+.RI "#define \fBKINETIC_CLIENT_DEFAULT_WRITER_THREADS\fP   4"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_CLIENT_DEFAULT_READER_THREADS\fP   4"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS\fP   8"
+.br
+.ti -1c
 .RI "#define \fBKINETIC_DEVICE_INFO_SCRATCH_BUF_LEN\fP   (1024 * 1024 * 4)"
 .br
 .in -1c
@@ -146,6 +168,7 @@ kinetic_types.h \-
 .ti -1c
 .RI "typedef void(* \fBKineticCompletionCallback\fP )(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
 .br
+.RI "\fIOperation completion callback function prototype\&. \fP"
 .in -1c
 .SS "Enumerations"
 
@@ -157,10 +180,11 @@ kinetic_types.h \-
 .ti -1c
 .RI "enum \fBKineticSynchronization\fP "
 .br
-.RI "\fIEnumeration of synchronization types for an operation\&. \fP"
+.RI "\fIEnumeration of synchronization types for an operation on a \fC\fBKineticEntry\fP\fP\&. \fP"
 .ti -1c
 .RI "enum \fBKineticStatus\fP "
 .br
+.RI "\fIKinetic status codes\&. \fP"
 .ti -1c
 .RI "enum \fBKineticDeviceInfo_Type\fP "
 .br
@@ -174,9 +198,11 @@ kinetic_types.h \-
 .ti -1c
 .RI "const char * \fBKinetic_GetStatusDescription\fP (\fBKineticStatus\fP status)"
 .br
+.RI "\fIProvides a string representation for a KineticStatus code\&. \fP"
 .ti -1c
 .RI "const char * \fBKineticMessageType_GetName\fP (\fBKineticMessageType\fP type)"
 .br
+.RI "\fIProvides a string representation for a Kinetic message type\&. \fP"
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
@@ -248,17 +274,46 @@ Definition at line 64 of file kinetic_types\&.h\&.
 }
 .fi
 .PP
-Definition at line 134 of file kinetic_types\&.h\&.
+Definition at line 153 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_CLIENT_DEFAULT_LOG_LEVEL   0"
+
+.PP
+Default values for the \fBKineticClientConfig\fP struct, which will be used if the corresponding field in the struct is 0\&. 
+.PP
+Definition at line 431 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_CLIENT_DEFAULT_WRITER_THREADS   4"
+
+.PP
+Definition at line 432 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_CLIENT_DEFAULT_READER_THREADS   4"
+
+.PP
+Definition at line 433 of file kinetic_types\&.h\&.
+.SS "#define KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS   8"
+
+.PP
+Definition at line 434 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN   (1024 * 1024 * 4)"
 
 .PP
-Definition at line 357 of file kinetic_types\&.h\&.
+Definition at line 459 of file kinetic_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef void(* KineticCompletionCallback)(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
 
 .PP
-Definition at line 183 of file kinetic_types\&.h\&.
+Operation completion callback function prototype\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIkinetic_data\fP \fBKineticCompletionData\fP provided by kinetic-c\&. 
+.br
+\fIclient_data\fP Optional pointer to arbitrary client-supplied data\&. 
+.RE
+.PP
+
+.PP
+Definition at line 220 of file kinetic_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBKineticAlgorithm\fP"
@@ -272,20 +327,25 @@ Enumeration of encryption/checksum key algorithms\&.
 \fB\fIKINETIC_ALGORITHM_INVALID \fP\fP
 .TP
 \fB\fIKINETIC_ALGORITHM_SHA1 \fP\fP
+SHA1\&. 
 .TP
 \fB\fIKINETIC_ALGORITHM_SHA2 \fP\fP
+SHA2\&. 
 .TP
 \fB\fIKINETIC_ALGORITHM_SHA3 \fP\fP
+SHA3\&. 
 .TP
 \fB\fIKINETIC_ALGORITHM_CRC32 \fP\fP
+CRC32\&. 
 .TP
 \fB\fIKINETIC_ALGORITHM_CRC64 \fP\fP
+CRC64\&. 
 .PP
 Definition at line 69 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticSynchronization\fP"
 
 .PP
-Enumeration of synchronization types for an operation\&. 
+Enumeration of synchronization types for an operation on a \fC\fBKineticEntry\fP\fP\&. 
 .PP
 \fBEnumerator\fP
 .in +1c
@@ -293,69 +353,99 @@ Enumeration of synchronization types for an operation\&.
 \fB\fIKINETIC_SYNCHRONIZATION_INVALID \fP\fP
 .TP
 \fB\fIKINETIC_SYNCHRONIZATION_WRITETHROUGH \fP\fP
+This request is made persistent before returning\&. This does not effect any other pending operations\&. 
 .TP
 \fB\fIKINETIC_SYNCHRONIZATION_WRITEBACK \fP\fP
+They can be made persistent when the drive chooses, or when a subsequent FLUSH is sent to the drive\&. 
 .TP
 \fB\fIKINETIC_SYNCHRONIZATION_FLUSH \fP\fP
+All pending information that has not been written is pushed to the disk and the command that specifies FLUSH is written last and then returned\&. All WRITEBACK writes that have received ending status will be guaranteed to be written before the FLUSH operation is returned completed\&. 
 .PP
 Definition at line 82 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticStatus\fP"
 
 .PP
+Kinetic status codes\&. 
+.PP
 \fBEnumerator\fP
 .in +1c
 .TP
 \fB\fIKINETIC_STATUS_INVALID \fP\fP
+Status not available (no reponse/status available) 
 .TP
 \fB\fIKINETIC_STATUS_NOT_ATTEMPTED \fP\fP
+No operation has been attempted\&. 
 .TP
 \fB\fIKINETIC_STATUS_SUCCESS \fP\fP
+Operation successful\&. 
 .TP
 \fB\fIKINETIC_STATUS_SESSION_EMPTY \fP\fP
+Session was NULL in request\&. 
 .TP
 \fB\fIKINETIC_STATUS_SESSION_INVALID \fP\fP
+Session configuration was invalid or NULL\&. 
 .TP
 \fB\fIKINETIC_STATUS_HOST_EMPTY \fP\fP
+Host was empty in request\&. 
 .TP
 \fB\fIKINETIC_STATUS_HMAC_EMPTY \fP\fP
+HMAC key is empty or NULL\&. 
 .TP
 \fB\fIKINETIC_STATUS_NO_PDUS_AVAVILABLE \fP\fP
+All PDUs for the session have been allocated\&. 
 .TP
 \fB\fIKINETIC_STATUS_DEVICE_BUSY \fP\fP
+Device busy (retry later) 
 .TP
 \fB\fIKINETIC_STATUS_CONNECTION_ERROR \fP\fP
+No connection/disconnected\&. 
 .TP
 \fB\fIKINETIC_STATUS_INVALID_REQUEST \fP\fP
+Something about the request is invalid\&. 
 .TP
 \fB\fIKINETIC_STATUS_OPERATION_INVALID \fP\fP
+Operation was invalid\&. 
 .TP
 \fB\fIKINETIC_STATUS_OPERATION_FAILED \fP\fP
+Device reported an operation error\&. 
 .TP
 \fB\fIKINETIC_STATUS_OPERATION_TIMEDOUT \fP\fP
+Device did not respond to the operation in time\&. 
 .TP
 \fB\fIKINETIC_STATUS_CLUSTER_MISMATCH \fP\fP
+Specified cluster version does not match device\&. 
 .TP
 \fB\fIKINETIC_STATUS_VERSION_MISMATCH \fP\fP
+The specified object version info for a PUT/GET do not match stored object\&. 
 .TP
 \fB\fIKINETIC_STATUS_DATA_ERROR \fP\fP
+Device reported data error, no space or HMAC failure\&. 
 .TP
 \fB\fIKINETIC_STATUS_NOT_FOUND \fP\fP
+The requested object does not exist\&. 
 .TP
 \fB\fIKINETIC_STATUS_BUFFER_OVERRUN \fP\fP
+One or more of byte buffers did not fit all data\&. 
 .TP
 \fB\fIKINETIC_STATUS_MEMORY_ERROR \fP\fP
+Failed allocating/deallocating memory\&. 
 .TP
 \fB\fIKINETIC_STATUS_SOCKET_TIMEOUT \fP\fP
+A timeout occurred while waiting for a socket operation\&. 
 .TP
 \fB\fIKINETIC_STATUS_SOCKET_ERROR \fP\fP
+An I/O error occurred during a socket operation\&. 
 .TP
 \fB\fIKINETIC_STATUS_MISSING_KEY \fP\fP
+An operation is missing a required key\&. 
 .TP
 \fB\fIKINETIC_STATUS_MISSING_VALUE_BUFFER \fP\fP
+An operation is missing a required value buffer\&. 
 .TP
 \fB\fIKINETIC_STATUS_COUNT \fP\fP
+Number of status codes in KineticStatusDescriptor\&. 
 .PP
-Definition at line 146 of file kinetic_types\&.h\&.
+Definition at line 167 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticDeviceInfo_Type\fP"
 
 .PP
@@ -378,7 +468,7 @@ Definition at line 146 of file kinetic_types\&.h\&.
 .TP
 \fB\fIKINETIC_DEVICE_INFO_TYPE_DEVICE \fP\fP
 .PP
-Definition at line 218 of file kinetic_types\&.h\&.
+Definition at line 285 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticMessageType\fP"
 
 .PP
@@ -388,79 +478,139 @@ Definition at line 218 of file kinetic_types\&.h\&.
 \fB\fIKINETIC_MESSAGE_TYPE_INVALID \fP\fP
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GET_RESPONSE \fP\fP
+GET_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GET \fP\fP
+GET\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_PUT_RESPONSE \fP\fP
+PUT_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_PUT \fP\fP
+PUT\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_DELETE_RESPONSE \fP\fP
+DELETE_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_DELETE \fP\fP
+DELETE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE \fP\fP
+GETNEXT_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETNEXT \fP\fP
+GETNEXT\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE \fP\fP
+GETPREVIOUS_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETPREVIOUS \fP\fP
+GETPREVIOUS\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE \fP\fP
+GETKEYRANGE_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETKEYRANGE \fP\fP
+GETKEYRANGE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE \fP\fP
+GETVERSION_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETVERSION \fP\fP
+GETVERSION\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_SETUP_RESPONSE \fP\fP
+SETUP_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_SETUP \fP\fP
+SETUP\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETLOG_RESPONSE \fP\fP
+GETLOG_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_GETLOG \fP\fP
+GETLOG\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_SECURITY_RESPONSE \fP\fP
+SECURITY_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_SECURITY \fP\fP
+SECURITY\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE \fP\fP
+PEER2PEERPUSH_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_PEER2PEERPUSH \fP\fP
+PEER2PEERPUSH\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_NOOP_RESPONSE \fP\fP
+NOOP_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_NOOP \fP\fP
+NOOP\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE \fP\fP
+FLUSHALLDATA_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_FLUSHALLDATA \fP\fP
+FLUSHALLDATA\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_PINOP_RESPONSE \fP\fP
+PINOP_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_PINOP \fP\fP
+PINOP\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE \fP\fP
+MEDIASCAN_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_MEDIASCAN \fP\fP
+MEDIASCAN\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE \fP\fP
+MEDIAOPTIMIZE_RESPONSE\&. 
 .TP
 \fB\fIKINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE \fP\fP
+MEDIAOPTIMIZE\&. 
 .PP
-Definition at line 265 of file kinetic_types\&.h\&.
+Definition at line 332 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
+
+.PP
+Provides a string representation for a KineticStatus code\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstatus\fP The status enumeration value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Pointer to the appropriate string representation for the specified status\&. 
+.RE
+.PP
 
 .PP
 Definition at line 56 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_STATUS_COUNT\&.
 .SS "const char* KineticMessageType_GetName (\fBKineticMessageType\fPtype)"
+
+.PP
+Provides a string representation for a Kinetic message type\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItype\fP The message type value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Pointer to the appropriate string representation for the specified type\&. 
+.RE
+.PP
 
 .PP
 Definition at line 101 of file kinetic_types\&.c\&.

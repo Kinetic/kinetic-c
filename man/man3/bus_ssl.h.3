@@ -1,0 +1,69 @@
+.TH "bus_ssl.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_ssl.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'bus\&.h'\fP
+.br
+\fC#include 'bus_internal_types\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBKINETIC_USE_TLS_1_2\fP   0"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBbus_ssl_init\fP (struct \fBbus\fP *b)"
+.br
+.ti -1c
+.RI "bool \fBbus_ssl_connect\fP (struct \fBbus\fP *b, \fBconnection_info\fP *ci)"
+.br
+.ti -1c
+.RI "bool \fBbus_ssl_disconnect\fP (struct \fBbus\fP *b, SSL *ssl)"
+.br
+.ti -1c
+.RI "void \fBbus_ssl_free\fP (struct \fBbus\fP *b)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define KINETIC_USE_TLS_1_2   0"
+
+.PP
+Definition at line 9 of file bus_ssl\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "bool bus_ssl_init (struct \fBbus\fP *b)"
+
+.PP
+Definition at line 16 of file bus_ssl\&.c\&.
+.PP
+References bus::ssl_ctx\&.
+.SS "bool bus_ssl_connect (struct \fBbus\fP *b, \fBconnection_info\fP *ci)"
+
+.PP
+Definition at line 31 of file bus_ssl\&.c\&.
+.PP
+References connection_info::fd, connection_info::ssl, and bus::ssl_ctx\&.
+.SS "bool bus_ssl_disconnect (struct \fBbus\fP *b, SSL *ssl)"
+
+.PP
+Definition at line 55 of file bus_ssl\&.c\&.
+.SS "void bus_ssl_free (struct \fBbus\fP *b)"
+
+.PP
+Definition at line 62 of file bus_ssl\&.c\&.
+.PP
+References bus::ssl_ctx\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

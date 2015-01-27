@@ -1,0 +1,41 @@
+.TH "get_nonblocking.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+get_nonblocking.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_client\&.h'\fP
+.br
+\fC#include 'kinetic_types\&.h'\fP
+.br
+\fC#include 'kinetic_semaphore\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <sys/param\&.h>\fP
+.br
+\fC#include <openssl/sha\&.h>\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int main (intargc, char **argv)"
+
+.PP
+Definition at line 16 of file get_nonblocking\&.c\&.
+.PP
+References ByteBuffer::array, ByteArray_CreateWithCString(), ByteBuffer_Append(), ByteBuffer_Free(), ByteBuffer_Malloc(), ByteBuffer_MallocAndAppend(), ByteBuffer::bytesUsed, KineticSession::config, ByteArray::data, KineticSessionConfig::host, KineticEntry::key, KINETIC_ALGORITHM_SHA1, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KINETIC_SYNCHRONIZATION_WRITETHROUGH, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Get(), KineticClient_Init(), KineticClient_Put(), KineticClient_Shutdown(), KineticSemaphore_Create(), KineticSemaphore_WaitForSignalAndDestroy(), and KineticClientConfig::logFile\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

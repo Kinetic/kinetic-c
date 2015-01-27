@@ -1,4 +1,4 @@
-.TH "kinetic_types_internal.h" 3 "Thu Dec 11 2014" "Version v0.9.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types_internal.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,12 @@ kinetic_types_internal.h \-
 \fC#include 'kinetic_types\&.h'\fP
 .br
 \fC#include 'kinetic_proto\&.h'\fP
+.br
+\fC#include 'kinetic_countingsemaphore\&.h'\fP
+.br
+\fC#include 'kinetic_resourcewaiter_types\&.h'\fP
+.br
+\fC#include 'kinetic_resourcewaiter\&.h'\fP
 .br
 \fC#include <netinet/in\&.h>\fP
 .br
@@ -25,14 +31,9 @@ kinetic_types_internal.h \-
 
 .in +1c
 .ti -1c
-.RI "struct \fBKineticListItem\fP"
+.RI "struct \fBKineticClient\fP"
 .br
-.ti -1c
-.RI "struct \fBKineticList\fP"
-.br
-.ti -1c
-.RI "struct \fBKineticThread\fP"
-.br
+.RI "\fIHandle to the kinetic client, which is shared by all connections\&. \fP"
 .ti -1c
 .RI "struct \fBKineticConnection\fP"
 .br
@@ -46,6 +47,9 @@ kinetic_types_internal.h \-
 .RI "struct \fBKineticPDU\fP"
 .br
 .ti -1c
+.RI "struct \fBKineticResponse\fP"
+.br
+.ti -1c
 .RI "struct \fBKineticOperation\fP"
 .br
 .ti -1c
@@ -56,16 +60,13 @@ kinetic_types_internal.h \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBKINETIC_PDUS_PER_SESSION_DEFAULT\fP   (2)"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_PDUS_PER_SESSION_MAX\fP   (10)"
+.RI "#define \fBKINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION\fP   (10)"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_SOCKET_DESCRIPTOR_INVALID\fP   (-1)"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS\fP   (3)"
+.RI "#define \fBKINETIC_CONNECTION_TIMEOUT_SECS\fP   (30) /* Java simulator may take longer than 10 seconds to respond */"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_OPERATION_TIMEOUT_SECS\fP   (20)"
@@ -80,19 +81,7 @@ kinetic_types_internal.h \-
 .RI "#define \fBNUM_ELEMENTS\fP(ARRAY)   (sizeof(ARRAY)/sizeof((ARRAY)[0]))"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_LIST_INITIALIZER\fP"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_CONNECTION_INIT\fP(_con)"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_MESSAGE_AUTH_HMAC_INIT\fP(_msg, _identity, _hmac)"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_MESSAGE_HEADER_INIT\fP(_hdr, _con)"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_MESSAGE_INIT\fP(msg)"
+.RI "#define \fBKINETIC_SEQUENCE_NOT_YET_BOUND\fP   ((int64_t)-2)"
 .br
 .ti -1c
 .RI "#define \fBPDU_HEADER_LEN\fP   (1 + (2 * sizeof(int32_t)))"
@@ -106,18 +95,6 @@ kinetic_types_internal.h \-
 .ti -1c
 .RI "#define \fBPDU_MAX_LEN\fP"
 .br
-.ti -1c
-.RI "#define \fBKINETIC_PDU_HEADER_INIT\fP   (\fBKineticPDUHeader\fP) {\&.versionPrefix = 'F'}"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_PDU_INIT\fP(_pdu, _con)"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_PDU_INIT_WITH_COMMAND\fP(_pdu, _con)"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_OPERATION_INIT\fP(_op, _con)"
-.br
 .in -1c
 .SS "Typedefs"
 
@@ -129,6 +106,12 @@ kinetic_types_internal.h \-
 .SS "Enumerations"
 
 .in +1c
+.ti -1c
+.RI "enum \fBsocket_state\fP "
+.br
+.ti -1c
+.RI "enum \fBunpack_error\fP "
+.br
 .ti -1c
 .RI "enum \fBKineticPDUType\fP "
 .br
@@ -187,6 +170,27 @@ kinetic_types_internal.h \-
 .ti -1c
 .RI "\fBKineticMessageType\fP \fBKineticProto_Command_MessageType_to_KineticMessageType\fP (\fBKineticProto_Command_MessageType\fP type)"
 .br
+.ti -1c
+.RI "void \fBKineticMessage_Init\fP (\fBKineticMessage\fP *const message)"
+.br
+.ti -1c
+.RI "void \fBKineticMessage_HeaderInit\fP (KineticProto_Command_Header *hdr, KineticConnection *con)"
+.br
+.ti -1c
+.RI "void \fBKineticOperation_Init\fP (KineticOperation *op, KineticConnection *con)"
+.br
+.ti -1c
+.RI "void \fBKineticPDU_Init\fP (KineticPDU *pdu, KineticConnection *con)"
+.br
+.ti -1c
+.RI "void \fBKineticPDU_InitWithCommand\fP (KineticPDU *pdu, KineticConnection *con)"
+.br
+.ti -1c
+.RI "void \fBKinetic_auth_init_hmac\fP (\fBKineticMessage\fP *const msg, int identity, \fBByteArray\fP hmac)"
+.br
+.ti -1c
+.RI "void \fBKinetic_auth_init_pinop\fP (\fBKineticMessage\fP *const msg)"
+.br
 .in -1c
 .SS "Variables"
 
@@ -197,146 +201,50 @@ kinetic_types_internal.h \-
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define KINETIC_PDUS_PER_SESSION_DEFAULT   (2)"
-
-.PP
-Definition at line 32 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_PDUS_PER_SESSION_MAX   (10)"
-
-.PP
-Definition at line 33 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_SOCKET_DESCRIPTOR_INVALID   (-1)"
-
-.PP
-Definition at line 34 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS   (3)"
+.SS "#define KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION   (10)"
 
 .PP
 Definition at line 35 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_OPERATION_TIMEOUT_SECS   (20)"
+.SS "#define KINETIC_SOCKET_DESCRIPTOR_INVALID   (-1)"
 
 .PP
 Definition at line 36 of file kinetic_types_internal\&.h\&.
+.SS "#define KINETIC_CONNECTION_TIMEOUT_SECS   (30) /* Java simulator may take longer than 10 seconds to respond */"
+
+.PP
+Definition at line 37 of file kinetic_types_internal\&.h\&.
+.SS "#define KINETIC_OPERATION_TIMEOUT_SECS   (20)"
+
+.PP
+Definition at line 38 of file kinetic_types_internal\&.h\&.
 .SS "#define __func__   __FUNCTION__"
 
 .PP
-Definition at line 40 of file kinetic_types_internal\&.h\&.
+Definition at line 42 of file kinetic_types_internal\&.h\&.
 .SS "#define STATIC   static"
 
 .PP
-Definition at line 47 of file kinetic_types_internal\&.h\&.
+Definition at line 49 of file kinetic_types_internal\&.h\&.
 .SS "#define NUM_ELEMENTS(ARRAY)   (sizeof(ARRAY)/sizeof((ARRAY)[0]))"
 
 .PP
-Definition at line 51 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_LIST_INITIALIZER"
-\fBValue:\fP
+Definition at line 53 of file kinetic_types_internal\&.h\&.
+.SS "#define KINETIC_SEQUENCE_NOT_YET_BOUND   ((int64_t)-2)"
+
 .PP
-.nf
-(KineticList) { \
-    \&.mutex = PTHREAD_MUTEX_INITIALIZER, \&.locked = false, \&.start = NULL, }
-.fi
-.PP
-Definition at line 71 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_CONNECTION_INIT(_con)"
-\fBValue:\fP
-.PP
-.nf
-{ (*_con) = (KineticConnection) { \
-        \&.connected = false, \
-        \&.socket = -1, \
-        \&.writeMutex = PTHREAD_MUTEX_INITIALIZER, \
-        \&.operations = KINETIC_LIST_INITIALIZER, \
-        \&.pdus = KINETIC_LIST_INITIALIZER, \
-    }; \
-}
-.fi
-.PP
-Definition at line 96 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_MESSAGE_AUTH_HMAC_INIT(_msg, _identity, _hmac)"
-\fBValue:\fP
-.PP
-.nf
-{ \
-    assert((_msg) != NULL); \
-    (_msg)->message\&.has_authType = true; \
-    (_msg)->message\&.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH; \\
-    KineticProto_Message_hmacauth__init(&(_msg)->hmacAuth); \
-    (_msg)->message\&.hmacAuth = &(_msg)->hmacAuth; \\
-    KineticProto_Message_pinauth__init(&(_msg)->pinAuth); \
-    (_msg)->message\&.pinAuth = NULL; \
-    (_msg)->command\&.header = &(_msg)->header; \
-    memset((_msg)->hmacData, 0, KINETIC_HMAC_MAX_LEN); \
-    if ((_hmac)\&.len <= KINETIC_HMAC_MAX_LEN \
-        && (_hmac)\&.data != NULL && (_hmac)\&.len > 0 \
-        && (_msg)->hmacData != NULL) { \
-        memcpy((_msg)->hmacData, (_hmac)\&.data, (_hmac)\&.len);} \
-    (_msg)->message\&.hmacAuth->has_identity = true; \
-    (_msg)->message\&.hmacAuth->identity = (_identity); \
-    (_msg)->message\&.hmacAuth->has_hmac = true; \
-    (_msg)->message\&.hmacAuth->hmac = (ProtobufCBinaryData) { \
-        \&.data = (_msg)->hmacData, \&.len = SHA_DIGEST_LENGTH}; \
-}
-.fi
-.PP
-Definition at line 139 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_MESSAGE_HEADER_INIT(_hdr, _con)"
-\fBValue:\fP
-.PP
-.nf
-{ \
-    assert((_hdr) != NULL); \
-    assert((_con) != NULL); \
-    *(_hdr) = (KineticProto_Command_Header) { \
-        \&.base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor), \
-        \&.has_clusterVersion = true, \
-        \&.clusterVersion = (_con)->session\&.config\&.clusterVersion, \
-        \&.has_connectionID = true, \
-        \&.connectionID = (_con)->connectionID, \
-        \&.has_sequence = true, \
-        \&.sequence = (_con)->sequence, \
-    }; \
-}
-.fi
-.PP
-Definition at line 160 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_MESSAGE_INIT(msg)"
-\fBValue:\fP
-.PP
-.nf
-{ \\
-    KineticProto_Message__init(&(msg)->message); \\
-    KineticProto_command__init(&(msg)->command); \\
-    KineticProto_Message_hmacauth__init(&(msg)->hmacAuth); \\
-    KineticProto_Message_pinauth__init(&(msg)->pinAuth); \\
-    KineticProto_command_header__init(&(msg)->header); \\
-    KineticProto_command_status__init(&(msg)->status); \\
-    KineticProto_command_body__init(&(msg)->body); \\
-    KineticProto_command_key_value__init(&(msg)->keyValue); \\
-    KineticProto_command_range__init(&(msg)->keyRange); \\
-    KineticProto_command_get_log__init(&(msg)->getLog); \\
-    KineticProto_command_pin_operation__init(&(msg)->pinOp); \\
-    KineticProto_command_p2_poperation__init(&(msg)->p2pOp); \\
-    KineticProto_command_p2_poperation_operation__init(&(msg)->p2pOpOp); \\
-    KineticProto_command_p2_poperation_peer__init(&(msg)->p2pPeer); \\
-    KINETIC_MESSAGE_AUTH_HMAC_INIT(msg, 0, BYTE_ARRAY_NONE); \
-    (msg)->has_command = false; \
-}
-.fi
-.PP
-Definition at line 174 of file kinetic_types_internal\&.h\&.
+Definition at line 85 of file kinetic_types_internal\&.h\&.
 .SS "#define PDU_HEADER_LEN   (1 + (2 * sizeof(int32_t)))"
 
 .PP
-Definition at line 194 of file kinetic_types_internal\&.h\&.
+Definition at line 138 of file kinetic_types_internal\&.h\&.
 .SS "#define PDU_PROTO_MAX_LEN   (1024 * 1024)"
 
 .PP
-Definition at line 195 of file kinetic_types_internal\&.h\&.
+Definition at line 139 of file kinetic_types_internal\&.h\&.
 .SS "#define PDU_PROTO_MAX_UNPACKED_LEN   (\fBPDU_PROTO_MAX_LEN\fP * 2)"
 
 .PP
-Definition at line 196 of file kinetic_types_internal\&.h\&.
+Definition at line 140 of file kinetic_types_internal\&.h\&.
 .SS "#define PDU_MAX_LEN"
 \fBValue:\fP
 .PP
@@ -345,66 +253,49 @@ Definition at line 196 of file kinetic_types_internal\&.h\&.
                                     PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE)
 .fi
 .PP
-Definition at line 197 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_PDU_HEADER_INIT   (\fBKineticPDUHeader\fP) {\&.versionPrefix = 'F'}"
-
-.PP
-Definition at line 204 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_PDU_INIT(_pdu, _con)"
-\fBValue:\fP
-.PP
-.nf
-{ \
-    assert((_pdu) != NULL); \
-    assert((_con) != NULL); \
-    memset((_pdu), 0, sizeof(KineticPDU)); \
-    (_pdu)->connection = (_con); \
-    (_pdu)->header = KINETIC_PDU_HEADER_INIT; \
-    (_pdu)->headerNBO = KINETIC_PDU_HEADER_INIT; \\
-    KINETIC_MESSAGE_INIT(&((_pdu)->protoData\&.message)); \\
-    KINETIC_MESSAGE_AUTH_HMAC_INIT( \
-            &((_pdu)->protoData\&.message), (_con)->session\&.config\&.identity, (_con)->session\&.config\&.hmacKey); \\
-    KINETIC_MESSAGE_HEADER_INIT(&((_pdu)->protoData\&.message\&.header), (_con)); \
-}
-.fi
-.PP
-Definition at line 243 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_PDU_INIT_WITH_COMMAND(_pdu, _con)"
-\fBValue:\fP
-.PP
-.nf
-{ \\
-    KINETIC_PDU_INIT((_pdu), (_con)) \
-    (_pdu)->proto = &(_pdu)->protoData\&.message\&.message; \
-    (_pdu)->protoData\&.message\&.has_command = true; \
-    (_pdu)->command = &(_pdu)->protoData\&.message\&.command; \
-    (_pdu)->command->header = &(_pdu)->protoData\&.message\&.header; \
-    (_pdu)->type = KINETIC_PDU_TYPE_REQUEST; \
-}
-.fi
-.PP
-Definition at line 256 of file kinetic_types_internal\&.h\&.
-.SS "#define KINETIC_OPERATION_INIT(_op, _con)"
-\fBValue:\fP
-.PP
-.nf
-assert((_op) != NULL); \
-    assert((_con) != NULL); \
-    *(_op) = (KineticOperation) { \
-        \&.connection = (_con), \
-        \&.timeoutTimeMutex = PTHREAD_MUTEX_INITIALIZER, \
-    }
-.fi
-.PP
-Definition at line 283 of file kinetic_types_internal\&.h\&.
+Definition at line 141 of file kinetic_types_internal\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef \fBKineticStatus\fP(* KineticOperationCallback)(KineticOperation *const operation, \fBKineticStatus\fP const status)"
 
 .PP
-Definition at line 265 of file kinetic_types_internal\&.h\&.
+Definition at line 167 of file kinetic_types_internal\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
+.SS "enum \fBsocket_state\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fISTATE_UNINIT \fP\fP
+.TP
+\fB\fISTATE_AWAITING_HEADER \fP\fP
+.TP
+\fB\fISTATE_AWAITING_BODY \fP\fP
+.TP
+\fB\fISTATE_UNINIT \fP\fP
+.TP
+\fB\fISTATE_AWAITING_HEADER \fP\fP
+.TP
+\fB\fISTATE_AWAITING_BODY \fP\fP
+.PP
+Definition at line 72 of file kinetic_types_internal\&.h\&.
+.SS "enum \fBunpack_error\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIUNPACK_ERROR_UNDEFINED \fP\fP
+.TP
+\fB\fIUNPACK_ERROR_SUCCESS \fP\fP
+.TP
+\fB\fIUNPACK_ERROR_INVALID_HEADER \fP\fP
+.TP
+\fB\fIUNPACK_ERROR_PAYLOAD_MALLOC_FAIL \fP\fP
+.PP
+Definition at line 78 of file kinetic_types_internal\&.h\&.
 .SS "enum \fBKineticPDUType\fP"
 
 .PP
@@ -419,13 +310,13 @@ Definition at line 265 of file kinetic_types_internal\&.h\&.
 .TP
 \fB\fIKINETIC_PDU_TYPE_UNSOLICITED \fP\fP
 .PP
-Definition at line 207 of file kinetic_types_internal\&.h\&.
+Definition at line 144 of file kinetic_types_internal\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "struct __attribute__ ((__packed__))"
 
 .PP
-Definition at line 199 of file kinetic_types_internal\&.h\&.
+Definition at line 66 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticProto_Command_Algorithm\fP KineticProto_Command_Algorithm_from_KineticAlgorithm (\fBKineticAlgorithm\fPkinteicAlgorithm)"
 
 .PP
@@ -473,49 +364,87 @@ References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteAr
 .PP
 Definition at line 220 of file kinetic_types_internal\&.c\&.
 .PP
-References KineticEntry::algorithm, ByteBuffer::array, ByteBuffer_Append(), ByteBuffer_Reset(), ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::dbVersion, KineticEntry::force, KineticEntry::key, KineticAlgorithm_from_KineticProto_Command_Algorithm(), KineticSynchronization_from_KineticProto_Command_Synchronization(), ByteArray::len, LOG1, KineticEntry::metadataOnly, KineticEntry::newVersion, KineticEntry::synchronization, and KineticEntry::tag\&.
+References KineticEntry::algorithm, ByteBuffer::array, ByteBuffer_Append(), ByteBuffer_Reset(), ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::dbVersion, KineticEntry::key, KineticAlgorithm_from_KineticProto_Command_Algorithm(), ByteArray::len, LOG1, and KineticEntry::tag\&.
 .SS "bool Copy_KineticProto_Command_Range_to_ByteBufferArray (KineticProto_Command_Range *keyRange, \fBByteBufferArray\fP *keys)"
 
 .PP
-Definition at line 294 of file kinetic_types_internal\&.c\&.
+Definition at line 271 of file kinetic_types_internal\&.c\&.
 .PP
 References ByteBufferArray::buffers, ByteBuffer_Append(), ByteBuffer_Reset(), ByteBufferArray::count, LOGF2, and ByteBufferArray::used\&.
 .SS "int Kinetic_GetErrnoDescription (interr_num, char *buf, size_tlen)"
 
 .PP
-Definition at line 311 of file kinetic_types_internal\&.c\&.
+Definition at line 288 of file kinetic_types_internal\&.c\&.
 .SS "struct timeval Kinetic_TimevalZero (void)"
 
 .PP
-Definition at line 326 of file kinetic_types_internal\&.c\&.
+Definition at line 303 of file kinetic_types_internal\&.c\&.
 .SS "bool Kinetic_TimevalIsZero (struct timeval consttv)"
 
 .PP
-Definition at line 334 of file kinetic_types_internal\&.c\&.
+Definition at line 311 of file kinetic_types_internal\&.c\&.
 .SS "struct timeval Kinetic_TimevalAdd (struct timeval consta, struct timeval constb)"
 
 .PP
-Definition at line 339 of file kinetic_types_internal\&.c\&.
+Definition at line 316 of file kinetic_types_internal\&.c\&.
 .SS "int Kinetic_TimevalCmp (struct timeval consta, struct timeval constb)"
 
 .PP
-Definition at line 366 of file kinetic_types_internal\&.c\&.
+Definition at line 343 of file kinetic_types_internal\&.c\&.
 .SS "\fBKineticProto_Command_GetLog_Type\fP KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type (\fBKineticDeviceInfo_Type\fPtype)"
 
 .PP
-Definition at line 371 of file kinetic_types_internal\&.c\&.
+Definition at line 348 of file kinetic_types_internal\&.c\&.
 .PP
 References KINETIC_DEVICE_INFO_TYPE_CAPACITIES, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, KINETIC_DEVICE_INFO_TYPE_DEVICE, KINETIC_DEVICE_INFO_TYPE_LIMITS, KINETIC_DEVICE_INFO_TYPE_MESSAGES, KINETIC_DEVICE_INFO_TYPE_STATISTICS, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES, and KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS\&.
 .SS "\fBKineticMessageType\fP KineticProto_Command_MessageType_to_KineticMessageType (\fBKineticProto_Command_MessageType\fPtype)"
 
 .PP
-Definition at line 399 of file kinetic_types_internal\&.c\&.
+Definition at line 376 of file kinetic_types_internal\&.c\&.
+.SS "void KineticMessage_Init (\fBKineticMessage\fP *constmessage)"
+
+.PP
+Definition at line 381 of file kinetic_types_internal\&.c\&.
+.PP
+References KineticMessage::body, BYTE_ARRAY_NONE, KineticMessage::command, KineticMessage::getLog, KineticMessage::header, KineticMessage::hmacAuth, KineticMessage::keyRange, KineticMessage::keyValue, Kinetic_auth_init_hmac(), Kinetic_auth_init_pinop(), KineticProto_command__init(), KineticProto_command_body__init(), KineticProto_command_get_log__init(), KineticProto_command_header__init(), KineticProto_command_key_value__init(), KineticProto_command_pin_operation__init(), KineticProto_command_range__init(), KineticProto_command_status__init(), KineticProto_Message__init(), KineticProto_Message_hmacauth__init(), KineticProto_Message_pinauth__init(), KineticMessage::message, KineticMessage::pinAuth, KineticMessage::pinOp, and KineticMessage::status\&.
+.SS "void KineticMessage_HeaderInit (KineticProto_Command_Header *hdr, KineticConnection *con)"
+
+.PP
+Definition at line 430 of file kinetic_types_internal\&.c\&.
+.PP
+References KINETIC_SEQUENCE_NOT_YET_BOUND, and KineticProto_command_header__descriptor\&.
+.SS "void KineticOperation_Init (KineticOperation *op, KineticConnection *con)"
+
+.PP
+Definition at line 446 of file kinetic_types_internal\&.c\&.
+.SS "void KineticPDU_Init (KineticPDU *pdu, KineticConnection *con)"
+
+.PP
+Definition at line 458 of file kinetic_types_internal\&.c\&.
+.PP
+References Kinetic_auth_init_hmac(), KineticMessage_HeaderInit(), and KineticMessage_Init()\&.
+.SS "void KineticPDU_InitWithCommand (KineticPDU *pdu, KineticConnection *con)"
+
+.PP
+Definition at line 469 of file kinetic_types_internal\&.c\&.
+.PP
+References KineticPDU_Init()\&.
+.SS "void Kinetic_auth_init_hmac (\fBKineticMessage\fP *constmsg, intidentity, \fBByteArray\fPhmac)"
+
+.PP
+Definition at line 401 of file kinetic_types_internal\&.c\&.
+.PP
+References KineticMessage::command, ByteArray::data, KineticMessage::header, KineticMessage::hmacAuth, KineticMessage::hmacData, KINETIC_HMAC_MAX_LEN, KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, KineticProto_Message_hmacauth__init(), KineticProto_Message_pinauth__init(), ByteArray::len, KineticMessage::message, and KineticMessage::pinAuth\&.
+.SS "void Kinetic_auth_init_pinop (\fBKineticMessage\fP *constmsg)"
+
+.PP
+Definition at line 424 of file kinetic_types_internal\&.c\&.
 .SH "Variable Documentation"
 .PP 
 .SS "KineticPDUHeader"
 
 .PP
-Definition at line 203 of file kinetic_types_internal\&.h\&.
+Definition at line 70 of file kinetic_types_internal\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.9.1</span>
+   &#160;<span id="projectnumber">v0.11.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -83,12 +83,16 @@ Data Structures</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An instance of a session with a Kinetic device.  <a href="struct_kinetic_session.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_completion_data.html">KineticCompletionData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Completion data which will be provided to <a class="el" href="struct_kinetic_completion_closure.html" title="Closure which can be specified for operations which support asynchronous mode. ">KineticCompletionClosure</a> for asynchronous operations.  <a href="struct_kinetic_completion_data.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closure which can be specified for operations which support asynchronous mode.  <a href="struct_kinetic_completion_closure.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_entry.html">KineticEntry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kinetic object instance.  <a href="struct_kinetic_entry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_key_range.html">KineticKeyRange</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kinetic Key Range request structure.  <a href="struct_kinetic_key_range.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info___utilization.html">KineticDeviceInfo_Utilization</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,10 +113,14 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p2_p___peer.html">KineticP2P_Peer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration of remote peer for a PEER2PEERPUSH operation.  <a href="struct_kinetic_p2_p___peer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p2_p___operation_data.html">KineticP2P_OperationData</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_p2_p___operation.html">KineticP2P_Operation</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_p2_p___operation.html">KineticP2P_Operation</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_client_config.html">KineticClientConfig</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration values for the KineticClient connection.  <a href="struct_kinetic_client_config.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -145,12 +153,22 @@ Macros</h2></td></tr>
 <tr class="separator:a77c3b6f6dc303295398cc6a1308a5e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f0f476362d01ca4c7899cf1325c72e6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a2f0f476362d01ca4c7899cf1325c72e6">KINETIC_SESSION_INIT</a>(_session, _host, _clusterVersion, _identity, _hmacKey)</td></tr>
 <tr class="separator:a2f0f476362d01ca4c7899cf1325c72e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3b3ca91939b728ff6079e235a2e7076"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#af3b3ca91939b728ff6079e235a2e7076">KINETIC_CLIENT_DEFAULT_LOG_LEVEL</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:af3b3ca91939b728ff6079e235a2e7076"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default values for the <a class="el" href="struct_kinetic_client_config.html" title="Configuration values for the KineticClient connection. ">KineticClientConfig</a> struct, which will be used if the corresponding field in the struct is 0.  <a href="#af3b3ca91939b728ff6079e235a2e7076">More...</a><br /></td></tr>
+<tr class="separator:af3b3ca91939b728ff6079e235a2e7076"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86714c3c1cfa6964686a72207c3506c3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a86714c3c1cfa6964686a72207c3506c3">KINETIC_CLIENT_DEFAULT_WRITER_THREADS</a>&#160;&#160;&#160;4</td></tr>
+<tr class="separator:a86714c3c1cfa6964686a72207c3506c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1139caf48a78b5227f8de332ab693314"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a1139caf48a78b5227f8de332ab693314">KINETIC_CLIENT_DEFAULT_READER_THREADS</a>&#160;&#160;&#160;4</td></tr>
+<tr class="separator:a1139caf48a78b5227f8de332ab693314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaccd20ff47192379bc8c497407bfc03"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#acaccd20ff47192379bc8c497407bfc03">KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS</a>&#160;&#160;&#160;8</td></tr>
+<tr class="separator:acaccd20ff47192379bc8c497407bfc03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19eed82e573d877a85b41792b553b1df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a19eed82e573d877a85b41792b553b1df">KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN</a>&#160;&#160;&#160;(1024 * 1024 * 4)</td></tr>
 <tr class="separator:a19eed82e573d877a85b41792b553b1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:ad95e188aec422aa51e43c076c40b9f00"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#ad95e188aec422aa51e43c076c40b9f00">KineticCompletionCallback</a> )(<a class="el" href="struct_kinetic_completion_data.html">KineticCompletionData</a> *kinetic_data, void *client_data)</td></tr>
+<tr class="memdesc:ad95e188aec422aa51e43c076c40b9f00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operation completion callback function prototype.  <a href="#ad95e188aec422aa51e43c076c40b9f00">More...</a><br /></td></tr>
 <tr class="separator:ad95e188aec422aa51e43c076c40b9f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -159,9 +177,10 @@ Enumerations</h2></td></tr>
 <tr class="memdesc:a64085c22df4e88fff43aad8779dd6b09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of encryption/checksum key algorithms.  <a href="kinetic__types_8h.html#a64085c22df4e88fff43aad8779dd6b09">More...</a><br /></td></tr>
 <tr class="separator:a64085c22df4e88fff43aad8779dd6b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9265fe1f35c1db2f10f24203622466c3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3">KineticSynchronization</a> </td></tr>
-<tr class="memdesc:a9265fe1f35c1db2f10f24203622466c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of synchronization types for an operation.  <a href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3">More...</a><br /></td></tr>
+<tr class="memdesc:a9265fe1f35c1db2f10f24203622466c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of synchronization types for an operation on a <code><a class="el" href="struct_kinetic_entry.html" title="Kinetic object instance. ">KineticEntry</a></code>.  <a href="kinetic__types_8h.html#a9265fe1f35c1db2f10f24203622466c3">More...</a><br /></td></tr>
 <tr class="separator:a9265fe1f35c1db2f10f24203622466c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a455d29140e6816c61eba35e8f52b0d57"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> </td></tr>
+<tr class="memdesc:a455d29140e6816c61eba35e8f52b0d57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kinetic status codes.  <a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">More...</a><br /></td></tr>
 <tr class="separator:a455d29140e6816c61eba35e8f52b0d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0659f218c5ddd6a07d0e17e99f6e507d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a> </td></tr>
 <tr class="separator:a0659f218c5ddd6a07d0e17e99f6e507d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,8 +190,10 @@ Enumerations</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a82c4aac2c0a454092185b10d8809f1bc"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a82c4aac2c0a454092185b10d8809f1bc">Kinetic_GetStatusDescription</a> (<a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> status)</td></tr>
+<tr class="memdesc:a82c4aac2c0a454092185b10d8809f1bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a string representation for a KineticStatus code.  <a href="#a82c4aac2c0a454092185b10d8809f1bc">More...</a><br /></td></tr>
 <tr class="separator:a82c4aac2c0a454092185b10d8809f1bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38e38f8880dedd6a7ba66c374f34b264"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types_8h.html#a38e38f8880dedd6a7ba66c374f34b264">KineticMessageType_GetName</a> (<a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">KineticMessageType</a> type)</td></tr>
+<tr class="memdesc:a38e38f8880dedd6a7ba66c374f34b264"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a string representation for a Kinetic message type.  <a href="#a38e38f8880dedd6a7ba66c374f34b264">More...</a><br /></td></tr>
 <tr class="separator:a38e38f8880dedd6a7ba66c374f34b264"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -413,10 +434,68 @@ Functions</h2></td></tr>
 <div class="line">    strcpy((_session)-&gt;config.host, (_host)); \</div>
 <div class="line">    memcpy((_session)-&gt;config.hmacKey.data, (_hmacKey).data, (_hmacKey).len); \</div>
 <div class="line">}</div>
-<div class="ttc" id="struct_kinetic_session_config_html"><div class="ttname"><a href="struct_kinetic_session_config.html">KineticSessionConfig</a></div><div class="ttdoc">Structure used to specify the configuration for a session. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00098">kinetic_types.h:98</a></div></div>
+<div class="ttc" id="struct_kinetic_session_config_html"><div class="ttname"><a href="struct_kinetic_session_config.html">KineticSessionConfig</a></div><div class="ttdoc">Structure used to specify the configuration for a session. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00117">kinetic_types.h:117</a></div></div>
 <div class="ttc" id="kinetic__types_8h_html_add9d47513f5472c08a593999978f8018"><div class="ttname"><a href="kinetic__types_8h.html#add9d47513f5472c08a593999978f8018">KINETIC_PORT</a></div><div class="ttdeci">#define KINETIC_PORT</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00040">kinetic_types.h:40</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00134">134</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00153">153</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af3b3ca91939b728ff6079e235a2e7076"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_CLIENT_DEFAULT_LOG_LEVEL&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default values for the <a class="el" href="struct_kinetic_client_config.html" title="Configuration values for the KineticClient connection. ">KineticClientConfig</a> struct, which will be used if the corresponding field in the struct is 0. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00431">431</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a86714c3c1cfa6964686a72207c3506c3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_CLIENT_DEFAULT_WRITER_THREADS&#160;&#160;&#160;4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00432">432</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1139caf48a78b5227f8de332ab693314"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_CLIENT_DEFAULT_READER_THREADS&#160;&#160;&#160;4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00433">433</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acaccd20ff47192379bc8c497407bfc03"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS&#160;&#160;&#160;8</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00434">434</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -430,7 +509,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00357">357</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00459">459</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -445,7 +524,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00183">183</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Operation completion callback function prototype. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kinetic_data</td><td><a class="el" href="struct_kinetic_completion_data.html" title="Completion data which will be provided to KineticCompletionClosure for asynchronous operations...">KineticCompletionData</a> provided by kinetic-c. </td></tr>
+    <tr><td class="paramname">client_data</td><td>Optional pointer to arbitrary client-supplied data. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00220">220</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -465,14 +553,19 @@ Functions</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a64085c22df4e88fff43aad8779dd6b09a4b72e1e6f22ff34f7bb91e170c2787d9"></a>KINETIC_ALGORITHM_INVALID&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a64085c22df4e88fff43aad8779dd6b09a543a4f72b499ea5ef6e3591ed69c112c"></a>KINETIC_ALGORITHM_SHA1&#160;</td><td class="fielddoc">
+<p>SHA1. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a64085c22df4e88fff43aad8779dd6b09a495cafcdee4af2cbd7afb64647aea1b0"></a>KINETIC_ALGORITHM_SHA2&#160;</td><td class="fielddoc">
+<p>SHA2. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a64085c22df4e88fff43aad8779dd6b09a9f0b099f79aa0ee56d7e6e1099ffd477"></a>KINETIC_ALGORITHM_SHA3&#160;</td><td class="fielddoc">
+<p>SHA3. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a64085c22df4e88fff43aad8779dd6b09aaab84de045ce61f42337e854e5b70484"></a>KINETIC_ALGORITHM_CRC32&#160;</td><td class="fielddoc">
+<p>CRC32. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a64085c22df4e88fff43aad8779dd6b09a557e88bdb0a2d0728cc04a1a008a38b8"></a>KINETIC_ALGORITHM_CRC64&#160;</td><td class="fielddoc">
+<p>CRC64. </p>
 </td></tr>
 </table>
 
@@ -490,15 +583,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Enumeration of synchronization types for an operation. </p>
+<p>Enumeration of synchronization types for an operation on a <code><a class="el" href="struct_kinetic_entry.html" title="Kinetic object instance. ">KineticEntry</a></code>. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a9265fe1f35c1db2f10f24203622466c3aa80606d4e63469cb05a15a9e05dbf75d"></a>KINETIC_SYNCHRONIZATION_INVALID&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a9265fe1f35c1db2f10f24203622466c3a7bc2d5aa096a740bd3c8641fc5d40b48"></a>KINETIC_SYNCHRONIZATION_WRITETHROUGH&#160;</td><td class="fielddoc">
+<p>This request is made persistent before returning. </p>
+<p>This does not effect any other pending operations. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a9265fe1f35c1db2f10f24203622466c3aba9b67f24a947cf25d47fce9ca1c68d8"></a>KINETIC_SYNCHRONIZATION_WRITEBACK&#160;</td><td class="fielddoc">
+<p>They can be made persistent when the drive chooses, or when a subsequent FLUSH is sent to the drive. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a9265fe1f35c1db2f10f24203622466c3a21e19f0d27726421bc690bb1b115ab88"></a>KINETIC_SYNCHRONIZATION_FLUSH&#160;</td><td class="fielddoc">
+<p>All pending information that has not been written is pushed to the disk and the command that specifies FLUSH is written last and then returned. </p>
+<p>All WRITEBACK writes that have received ending status will be guaranteed to be written before the FLUSH operation is returned completed. </p>
 </td></tr>
 </table>
 
@@ -515,60 +613,87 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Kinetic status codes. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f"></a>KINETIC_STATUS_INVALID&#160;</td><td class="fielddoc">
+<p>Status not available (no reponse/status available) </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a33b64dd81cae94469f50cee52123718f"></a>KINETIC_STATUS_NOT_ATTEMPTED&#160;</td><td class="fielddoc">
+<p>No operation has been attempted. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57af8c32311b3523fb2db307610689a9c0e"></a>KINETIC_STATUS_SUCCESS&#160;</td><td class="fielddoc">
+<p>Operation successful. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ae004f902f39faff5c3117b7e4524f04b"></a>KINETIC_STATUS_SESSION_EMPTY&#160;</td><td class="fielddoc">
+<p>Session was NULL in request. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a145893949409e77de5f393f4ba4e70f4"></a>KINETIC_STATUS_SESSION_INVALID&#160;</td><td class="fielddoc">
+<p>Session configuration was invalid or NULL. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a7a20715bee191c5ee51d2461ffedacb0"></a>KINETIC_STATUS_HOST_EMPTY&#160;</td><td class="fielddoc">
+<p>Host was empty in request. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a72368b71976086bddf0308d32456c817"></a>KINETIC_STATUS_HMAC_EMPTY&#160;</td><td class="fielddoc">
+<p>HMAC key is empty or NULL. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a5b1cb4b9d3ce032c90510853fc53745f"></a>KINETIC_STATUS_NO_PDUS_AVAVILABLE&#160;</td><td class="fielddoc">
+<p>All PDUs for the session have been allocated. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a6c1bab895a12cbc908fc4ac3c912f2af"></a>KINETIC_STATUS_DEVICE_BUSY&#160;</td><td class="fielddoc">
+<p>Device busy (retry later) </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018"></a>KINETIC_STATUS_CONNECTION_ERROR&#160;</td><td class="fielddoc">
+<p>No connection/disconnected. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a0910418168ab52290184d28436cd1499"></a>KINETIC_STATUS_INVALID_REQUEST&#160;</td><td class="fielddoc">
+<p>Something about the request is invalid. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57aaae0e2fcdb6f20713083d21b817abcf2"></a>KINETIC_STATUS_OPERATION_INVALID&#160;</td><td class="fielddoc">
+<p>Operation was invalid. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57aa813a980b746ba107c191675603a3285"></a>KINETIC_STATUS_OPERATION_FAILED&#160;</td><td class="fielddoc">
+<p>Device reported an operation error. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57aec174c53ca475d4bada51ef8b6aae27f"></a>KINETIC_STATUS_OPERATION_TIMEDOUT&#160;</td><td class="fielddoc">
+<p>Device did not respond to the operation in time. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ac6363230f4f02e8f3881736bda428407"></a>KINETIC_STATUS_CLUSTER_MISMATCH&#160;</td><td class="fielddoc">
+<p>Specified cluster version does not match device. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ad184ad42294d8549d18305473cd07cd7"></a>KINETIC_STATUS_VERSION_MISMATCH&#160;</td><td class="fielddoc">
+<p>The specified object version info for a PUT/GET do not match stored object. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a880da6938443e4f357d12a22e4d51aef"></a>KINETIC_STATUS_DATA_ERROR&#160;</td><td class="fielddoc">
+<p>Device reported data error, no space or HMAC failure. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a80b5621d0bb12abaf42de6431e05c039"></a>KINETIC_STATUS_NOT_FOUND&#160;</td><td class="fielddoc">
+<p>The requested object does not exist. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a6a2ee44da05d8dc7b42b2cde2c784c6d"></a>KINETIC_STATUS_BUFFER_OVERRUN&#160;</td><td class="fielddoc">
+<p>One or more of byte buffers did not fit all data. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ac0f79301a35ae3a53e979f69012bf5a3"></a>KINETIC_STATUS_MEMORY_ERROR&#160;</td><td class="fielddoc">
+<p>Failed allocating/deallocating memory. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ad30c7ef07c00fe000119aac6973ec139"></a>KINETIC_STATUS_SOCKET_TIMEOUT&#160;</td><td class="fielddoc">
+<p>A timeout occurred while waiting for a socket operation. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57a062cab06528a8ff0e145fd33fe7e6789"></a>KINETIC_STATUS_SOCKET_ERROR&#160;</td><td class="fielddoc">
+<p>An I/O error occurred during a socket operation. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57ae082ebc2e1ee44ec1c6690bd370e4962"></a>KINETIC_STATUS_MISSING_KEY&#160;</td><td class="fielddoc">
+<p>An operation is missing a required key. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57af35c62d5b12c10b6362d6bb1d5dff2de"></a>KINETIC_STATUS_MISSING_VALUE_BUFFER&#160;</td><td class="fielddoc">
+<p>An operation is missing a required value buffer. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a455d29140e6816c61eba35e8f52b0d57aa6a2bd5838c04467a4b7385b1a1e8cb4"></a>KINETIC_STATUS_COUNT&#160;</td><td class="fielddoc">
+<p>Number of status codes in KineticStatusDescriptor. </p>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00146">146</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00167">167</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -600,7 +725,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00218">218</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00285">285</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -617,72 +742,104 @@ Functions</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa14be56f724bcbb8c1da013cdf05a6c9a"></a>KINETIC_MESSAGE_TYPE_INVALID&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa50acc5233931b41da0638214091381f9"></a>KINETIC_MESSAGE_TYPE_GET_RESPONSE&#160;</td><td class="fielddoc">
+<p>GET_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa6294ace63aa5283d0106786a50f795dc"></a>KINETIC_MESSAGE_TYPE_GET&#160;</td><td class="fielddoc">
+<p>GET. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa0b049c0398ab8674938d8d812f5c52ed"></a>KINETIC_MESSAGE_TYPE_PUT_RESPONSE&#160;</td><td class="fielddoc">
+<p>PUT_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa2994028db64c6d4d1b26925b80ab7c45"></a>KINETIC_MESSAGE_TYPE_PUT&#160;</td><td class="fielddoc">
+<p>PUT. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa1c6c35335c9a053f0f1e73b0fe278db7"></a>KINETIC_MESSAGE_TYPE_DELETE_RESPONSE&#160;</td><td class="fielddoc">
+<p>DELETE_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faf8bd9d9c0abfcbf11533068db3752f50"></a>KINETIC_MESSAGE_TYPE_DELETE&#160;</td><td class="fielddoc">
+<p>DELETE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faebf98e2922841cd913249ab74b51f39a"></a>KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE&#160;</td><td class="fielddoc">
+<p>GETNEXT_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fac5dd99658135ca1691f2b6b88ef6f34f"></a>KINETIC_MESSAGE_TYPE_GETNEXT&#160;</td><td class="fielddoc">
+<p>GETNEXT. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faac5a2dc338c76fb76818eb72b174f57c"></a>KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE&#160;</td><td class="fielddoc">
+<p>GETPREVIOUS_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faf748bc303a14c4921f476fe220201397"></a>KINETIC_MESSAGE_TYPE_GETPREVIOUS&#160;</td><td class="fielddoc">
+<p>GETPREVIOUS. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa6dfe4a05341f9ae65a1277c0ad6634b3"></a>KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE&#160;</td><td class="fielddoc">
+<p>GETKEYRANGE_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15facff5cf72de8f529c27159925351dcde3"></a>KINETIC_MESSAGE_TYPE_GETKEYRANGE&#160;</td><td class="fielddoc">
+<p>GETKEYRANGE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faaf86f91ce5cce325a4b250e25fd73ac3"></a>KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE&#160;</td><td class="fielddoc">
+<p>GETVERSION_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa80b280e489c591d2a05381290377f200"></a>KINETIC_MESSAGE_TYPE_GETVERSION&#160;</td><td class="fielddoc">
+<p>GETVERSION. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faa77b3f4fe14b2886b473a406a0a0f565"></a>KINETIC_MESSAGE_TYPE_SETUP_RESPONSE&#160;</td><td class="fielddoc">
+<p>SETUP_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa99f8ab06d2be1ee727e5b94acd95b26d"></a>KINETIC_MESSAGE_TYPE_SETUP&#160;</td><td class="fielddoc">
+<p>SETUP. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa1913687de3f5d33ef4fa818cf619d528"></a>KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE&#160;</td><td class="fielddoc">
+<p>GETLOG_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faa5875e7f9af1e1904705660908527b69"></a>KINETIC_MESSAGE_TYPE_GETLOG&#160;</td><td class="fielddoc">
+<p>GETLOG. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa66e8e6eea2f28a99f03d7e9d134241fd"></a>KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE&#160;</td><td class="fielddoc">
+<p>SECURITY_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa7ae7baa4956d805bfc00ee7fd218c5b4"></a>KINETIC_MESSAGE_TYPE_SECURITY&#160;</td><td class="fielddoc">
+<p>SECURITY. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa3bff70fc93ff9c39cca4740160714488"></a>KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE&#160;</td><td class="fielddoc">
+<p>PEER2PEERPUSH_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa5859aa715220e6d6de10c701b0f2cd6c"></a>KINETIC_MESSAGE_TYPE_PEER2PEERPUSH&#160;</td><td class="fielddoc">
+<p>PEER2PEERPUSH. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa7e23ef4f856c61ff301a0c934e8c8769"></a>KINETIC_MESSAGE_TYPE_NOOP_RESPONSE&#160;</td><td class="fielddoc">
+<p>NOOP_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa2a1eacb916e62766345871ffea0bc73f"></a>KINETIC_MESSAGE_TYPE_NOOP&#160;</td><td class="fielddoc">
+<p>NOOP. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faaf3ccd2e79d512aee93b5f061677448a"></a>KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE&#160;</td><td class="fielddoc">
+<p>FLUSHALLDATA_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa90298fea7c22abdc6bbe27586a9b6ff1"></a>KINETIC_MESSAGE_TYPE_FLUSHALLDATA&#160;</td><td class="fielddoc">
+<p>FLUSHALLDATA. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15faf731f234afe403d28575876ce8d4becb"></a>KINETIC_MESSAGE_TYPE_PINOP_RESPONSE&#160;</td><td class="fielddoc">
+<p>PINOP_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fadcb95d5d972d6dc281f05b367df11b5f"></a>KINETIC_MESSAGE_TYPE_PINOP&#160;</td><td class="fielddoc">
+<p>PINOP. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa2573ecbb6043251e698c506f354a790e"></a>KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE&#160;</td><td class="fielddoc">
+<p>MEDIASCAN_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa8ce12b8a5362de4a2fbac471f5dc2dc9"></a>KINETIC_MESSAGE_TYPE_MEDIASCAN&#160;</td><td class="fielddoc">
+<p>MEDIASCAN. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa46bb582b24917f3414dd7277e48749cc"></a>KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE&#160;</td><td class="fielddoc">
+<p>MEDIAOPTIMIZE_RESPONSE. </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a00f738045cd3e7be4d876e341453c15fa96e96fd7c3d65364e3e055616465298a"></a>KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE&#160;</td><td class="fielddoc">
+<p>MEDIAOPTIMIZE. </p>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00265">265</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00332">332</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -701,9 +858,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Provides a string representation for a KineticStatus code. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">status</td><td>The status enumeration value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the appropriate string representation for the specified status. </dd></dl>
+
 <p>Definition at line <a class="el" href="kinetic__types_8c_source.html#l00056">56</a> of file <a class="el" href="kinetic__types_8c_source.html">kinetic_types.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00171">KINETIC_STATUS_COUNT</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00192">KINETIC_STATUS_COUNT</a>.</p>
 
 </div>
 </div>
@@ -721,9 +887,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Provides a string representation for a Kinetic message type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The message type value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the appropriate string representation for the specified type. </dd></dl>
+
 <p>Definition at line <a class="el" href="kinetic__types_8c_source.html#l00101">101</a> of file <a class="el" href="kinetic__types_8c_source.html">kinetic_types.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00272">KINETIC_MESSAGE_TYPE_DELETE</a>, <a class="el" href="kinetic__types_8h_source.html#l00271">KINETIC_MESSAGE_TYPE_DELETE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00292">KINETIC_MESSAGE_TYPE_FLUSHALLDATA</a>, <a class="el" href="kinetic__types_8h_source.html#l00291">KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00268">KINETIC_MESSAGE_TYPE_GET</a>, <a class="el" href="kinetic__types_8h_source.html#l00267">KINETIC_MESSAGE_TYPE_GET_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00278">KINETIC_MESSAGE_TYPE_GETKEYRANGE</a>, <a class="el" href="kinetic__types_8h_source.html#l00277">KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00284">KINETIC_MESSAGE_TYPE_GETLOG</a>, <a class="el" href="kinetic__types_8h_source.html#l00283">KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00274">KINETIC_MESSAGE_TYPE_GETNEXT</a>, <a class="el" href="kinetic__types_8h_source.html#l00273">KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00276">KINETIC_MESSAGE_TYPE_GETPREVIOUS</a>, <a class="el" href="kinetic__types_8h_source.html#l00275">KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00280">KINETIC_MESSAGE_TYPE_GETVERSION</a>, <a class="el" href="kinetic__types_8h_source.html#l00279">KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00266">KINETIC_MESSAGE_TYPE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00298">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE</a>, <a class="el" href="kinetic__types_8h_source.html#l00297">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00296">KINETIC_MESSAGE_TYPE_MEDIASCAN</a>, <a class="el" href="kinetic__types_8h_source.html#l00295">KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00290">KINETIC_MESSAGE_TYPE_NOOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00289">KINETIC_MESSAGE_TYPE_NOOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00288">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00287">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00294">KINETIC_MESSAGE_TYPE_PINOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00293">KINETIC_MESSAGE_TYPE_PINOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00270">KINETIC_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00269">KINETIC_MESSAGE_TYPE_PUT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00286">KINETIC_MESSAGE_TYPE_SECURITY</a>, <a class="el" href="kinetic__types_8h_source.html#l00285">KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00282">KINETIC_MESSAGE_TYPE_SETUP</a>, and <a class="el" href="kinetic__types_8h_source.html#l00281">KINETIC_MESSAGE_TYPE_SETUP_RESPONSE</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00339">KINETIC_MESSAGE_TYPE_DELETE</a>, <a class="el" href="kinetic__types_8h_source.html#l00338">KINETIC_MESSAGE_TYPE_DELETE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00359">KINETIC_MESSAGE_TYPE_FLUSHALLDATA</a>, <a class="el" href="kinetic__types_8h_source.html#l00358">KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00335">KINETIC_MESSAGE_TYPE_GET</a>, <a class="el" href="kinetic__types_8h_source.html#l00334">KINETIC_MESSAGE_TYPE_GET_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00345">KINETIC_MESSAGE_TYPE_GETKEYRANGE</a>, <a class="el" href="kinetic__types_8h_source.html#l00344">KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00351">KINETIC_MESSAGE_TYPE_GETLOG</a>, <a class="el" href="kinetic__types_8h_source.html#l00350">KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00341">KINETIC_MESSAGE_TYPE_GETNEXT</a>, <a class="el" href="kinetic__types_8h_source.html#l00340">KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00343">KINETIC_MESSAGE_TYPE_GETPREVIOUS</a>, <a class="el" href="kinetic__types_8h_source.html#l00342">KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00347">KINETIC_MESSAGE_TYPE_GETVERSION</a>, <a class="el" href="kinetic__types_8h_source.html#l00346">KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00333">KINETIC_MESSAGE_TYPE_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00365">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE</a>, <a class="el" href="kinetic__types_8h_source.html#l00364">KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00363">KINETIC_MESSAGE_TYPE_MEDIASCAN</a>, <a class="el" href="kinetic__types_8h_source.html#l00362">KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00357">KINETIC_MESSAGE_TYPE_NOOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00356">KINETIC_MESSAGE_TYPE_NOOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00355">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00354">KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00361">KINETIC_MESSAGE_TYPE_PINOP</a>, <a class="el" href="kinetic__types_8h_source.html#l00360">KINETIC_MESSAGE_TYPE_PINOP_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00337">KINETIC_MESSAGE_TYPE_PUT</a>, <a class="el" href="kinetic__types_8h_source.html#l00336">KINETIC_MESSAGE_TYPE_PUT_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00353">KINETIC_MESSAGE_TYPE_SECURITY</a>, <a class="el" href="kinetic__types_8h_source.html#l00352">KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE</a>, <a class="el" href="kinetic__types_8h_source.html#l00349">KINETIC_MESSAGE_TYPE_SETUP</a>, and <a class="el" href="kinetic__types_8h_source.html#l00348">KINETIC_MESSAGE_TYPE_SETUP_RESPONSE</a>.</p>
 
 </div>
 </div>
