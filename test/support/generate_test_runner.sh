@@ -1,5 +1,5 @@
 #!/bin/sh
-grep -n -o -e "void test_[a-zA-Z0-9_]\+(void)" $1 |
+grep -n -o -e "^void test_[a-zA-Z0-9_]\+(void)" $1 |
 env testfile=$1 awk '
 {
     ln=$1

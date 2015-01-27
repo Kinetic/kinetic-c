@@ -24,18 +24,17 @@
 #include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "kinetic_countingsemaphore.h"
+#include "kinetic_resourcewaiter_types.h"
+#include "kinetic_resourcewaiter.h"
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <openssl/sha.h>
 #include <time.h>
 #include <pthread.h>
 
-#define COUNTING_SEMAPHORE_ENABLED 0
-#if COUNTING_SEMAPHORE_ENABLED
 #define KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION (10)
-#endif
 #define KINETIC_SOCKET_DESCRIPTOR_INVALID (-1)
-#define KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS (3)
+#define KINETIC_CONNECTION_TIMEOUT_SECS (30) /* Java simulator may take longer than 10 seconds to respond */
 #define KINETIC_OPERATION_TIMEOUT_SECS (20)
 
 // Ensure __func__ is defined (for debugging)
@@ -102,6 +101,7 @@ struct _KineticConnection {
     struct bus *    messageBus;
     socket_info *   si;
     pthread_mutex_t sendMutex;      // mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool
+    KineticResourceWaiter connectionReady;
     KineticCountingSemaphore * outstandingOperations;
 };
 

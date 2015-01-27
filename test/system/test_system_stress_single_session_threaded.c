@@ -34,13 +34,7 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
 void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_size)
 {
-    printf("\n"
-        "========================================\n"
-        "Stress Tests\n"
-        "========================================\n"
-        "Entry Size: %zu bytes\n"
-        "Count:      %zu entries\n\n",
-        value_size, num_ops);
+    LOGF0("\nSTRESS THREAD: object_size: %zu bytes, count: %zu entries\n", value_size, num_ops);
 
     ByteBuffer test_data = ByteBuffer_Malloc(value_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
@@ -123,15 +117,9 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
         float elapsed_ms = elapsed_us / 1000.0f;
         float bandwidth = (bytes_written * 1000.0f) / (elapsed_ms * 1024 * 1024);
         fflush(stdout);
-        printf("\n"
-            "Write/Put Performance:\n"
-            "----------------------------------------\n"
-            "wrote:      %.1f kB\n"
-            "duration:   %.3f seconds\n"
-            "throughput: %.2f MB/sec\n\n",
-            bytes_written / 1024.0f,
-            elapsed_ms / 1000.0f,
-            bandwidth);
+        LOGF0("\n--------------------------------------------------------------------------------\n"
+            "PUT Performance: wrote: %.1f kB, duration: %.3f seconds, throughput: %.2f MB/sec",
+            bytes_written / 1024.0f, elapsed_ms / 1000.0f, bandwidth);
     }
 
     // Measure GET performance
@@ -200,15 +188,9 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
         float elapsed_ms = elapsed_us / 1000.0f;
         float bandwidth = (bytes_read * 1000.0f) / (elapsed_ms * 1024 * 1024);
         fflush(stdout);
-        printf("\n"
-            "Read/Get Performance:\n"
-            "----------------------------------------\n"
-            "read:      %.1f kB\n"
-            "duration:   %.3f seconds\n"
-            "throughput: %.2f MB/sec\n\n",
-            bytes_read / 1024.0f,
-            elapsed_ms / 1000.0f,
-            bandwidth);
+        LOGF0("\n--------------------------------------------------------------------------------\n"
+            "GET Performance: read: %.1f kB, duration: %.3f seconds, throughput: %.2f MB/sec",
+            bytes_read / 1024.0f, elapsed_ms / 1000.0f, bandwidth);
         for (size_t i = 0; i < num_ops; i++) {
             ByteBuffer_Free(test_get_datas[i]);
         }
@@ -278,15 +260,9 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
         float elapsed_ms = elapsed_us / 1000.0f;
         float throughput = (num_ops * 1000.0f) / elapsed_ms;
         fflush(stdout);
-        printf("\n"
-            "Delete Performance:\n"
-            "----------------------------------------\n"
-            "count:      %zu entries\n"
-            "duration:   %.3f seconds\n"
-            "throughput: %.2f entries/sec\n\n",
-            num_ops,
-            elapsed_ms / 1000.0f,
-            throughput);
+        LOGF0("\n--------------------------------------------------------------------------------\n"
+            "DELETE Performance: count: %zu entries, duration: %.3f seconds, throughput: %.2f entries/sec\n",
+            num_ops, elapsed_ms / 1000.0f, throughput);
     }
 
     ByteBuffer_Free(test_data);
@@ -334,11 +310,11 @@ void run_tests(KineticClient * client)
 
     // Prepare per-thread test data
     TestParams params[] = { 
-        { .client = client, .session = &session, .thread_iters = 1, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
-        { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 120,             },
-        { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 500,             },
-        // { .client = client, .session = &session, .thread_iters = 1, .num_ops = 500,  .obj_size = 70000,           },
-        // { .client = client, .session = &session, .thread_iters = 1, .num_ops = 1000, .obj_size = 120,             },
+        { .client = client, .session = &session, .thread_iters = 2, .num_ops = 500,  .obj_size = KINETIC_OBJ_SIZE },
+        { .client = client, .session = &session, .thread_iters = 2, .num_ops = 1000, .obj_size = 120,             },
+        { .client = client, .session = &session, .thread_iters = 2, .num_ops = 1500, .obj_size = 500,             },
+        { .client = client, .session = &session, .thread_iters = 2, .num_ops = 500,  .obj_size = 70000,           },
+        // { .client = client, .session = &session, .thread_iters = 2, .num_ops = 1000, .obj_size = 120,             },
         // { .client = client, .session = &session, .thread_iters = 3, .num_ops = 1000, .obj_size = 120,             },
         // { .client = client, .session = &session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
         // { .client = client, .session = &session, .thread_iters = 5, .num_ops = 1000, .obj_size = 120,             },
@@ -365,15 +341,24 @@ void run_tests(KineticClient * client)
 void test_kinetic_client_throughput_for_small_sized_objects(void)
 {
     srand(time(NULL));
-    for (uint32_t i = 0; i < 2; i++) {
-        KineticClientConfig config = {
-            .logFile = "stdout",
-            .logLevel = 0,
-        };
-        KineticClient * client = KineticClient_Init(&config);
+    KineticClientConfig config = {
+        .logFile = "stdout",
+        .logLevel = 0,
+        // .writerThreads = 1,
+        // .readerThreads = 1,
+        // .maxThreadpoolThreads = 1,
+    };
+    KineticClient * client = KineticClient_Init(&config);
+
+    const uint32_t max_runs = 2;
+    for (uint32_t i = 0; i < max_runs; i++) {
+        LOG0( "============================================================================================");
+        LOGF0("==  Test run %u of %u", i+1, max_runs);
+        LOG0("============================================================================================");
         run_tests(client);
-        KineticClient_Shutdown(client);
     }
+    
+    KineticClient_Shutdown(client);
 }
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData)

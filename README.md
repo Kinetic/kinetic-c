@@ -65,6 +65,8 @@ API Documentation
     * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c
         * e.g. object keys, object value data, etc.
 
+**NOTE: Configuration structures `KineticClientConfig` and `KineticSessionConfig` should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure backwards compatibility!**
+
 Client Test Utility
 ===========================
 

@@ -162,7 +162,6 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
 
 static void put_finished(KineticCompletionData* kinetic_data, void* clientData)
 {
-    // LOGF1("DONE w/ status: %s", kinetic_data->status);
     PutStatus * put_status = clientData;
     // Save PUT result status
     put_status->status = kinetic_data->status;

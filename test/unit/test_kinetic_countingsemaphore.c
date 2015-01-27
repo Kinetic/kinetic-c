@@ -18,30 +18,36 @@
 *
 */
 
+#include "kinetic_countingsemaphore.h"
+#include "kinetic_countingsemaphore_types.h"
+#include "unity.h"
 #include "unity_helper.h"
-#include "byte_array.h"
-#include "kinetic_types.h"
-#include "kinetic_types_internal.h"
-#include "kinetic_controller.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include "protobuf-c.h"
-#include "kinetic_device_info.h"
-#include "mock_kinetic_session.h"
-#include "mock_kinetic_socket.h"
-#include "mock_kinetic_operation.h"
-#include "mock_kinetic_pdu.h"
-#include "mock_kinetic_allocator.h"
-#include "mock_kinetic_resourcewaiter.h"
+#include <stdlib.h>
 #include <pthread.h>
 
-void setUp(void)
+typedef struct {
+    pthread_t threadID;
+    KineticCountingSemaphore* sem;
+} worker_args;
+
+void* worker_thread(void* args)
 {
-    KineticLogger_Init("stdout", 3);
+    (void)args;
+    return (void*)NULL;
 }
 
-void tearDown(void)
-{
-    KineticLogger_Close();
-}
+#define MAX_COUNT 3
+#define NUM_WORKERS 4
+worker_args workers[NUM_WORKERS];
 
+void test_kinetic_countingsemaphore_should_be_thread_safe(void)
+{
+    KineticCountingSemaphore* sem = KineticCountingSemaphore_Create(3);
+
+    // Do stuff.....
+
+    KineticCountingSemaphore_Destroy(sem);
+}
