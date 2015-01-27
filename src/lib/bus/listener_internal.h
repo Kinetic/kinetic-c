@@ -24,6 +24,7 @@ typedef enum {
     MSG_NONE,
     MSG_ADD_SOCKET,
     MSG_CLOSE_SOCKET,
+    MSG_HOLD_RESPONSE,
     MSG_EXPECT_RESPONSE,
     MSG_SHUTDOWN,
 } MSG_TYPE;
@@ -42,6 +43,11 @@ typedef struct listener_msg {
             int fd;
         } close_socket;
         struct {
+            int fd;
+            int64_t seq_id;
+            int16_t timeout_sec;
+        } hold;
+        struct {
             boxed_msg *box;
         } expect;
         struct {
@@ -50,21 +56,41 @@ typedef struct listener_msg {
     } u;
 } listener_msg;
 
+typedef enum {
+    RIS_HOLD = 1,
+    RIS_EXPECT = 2,
+    RIS_INACTIVE = 3,
+} rx_info_state;
+
 /* Record in table for partially processed messages. */
 typedef struct rx_info_t {
     const uint16_t id;
     struct rx_info_t *next;
-    bool active;
+
+    rx_info_state state;
     time_t timeout_sec;
-    rx_error_t error;
-    boxed_msg *box;
+
+    union {
+        struct {
+            int fd;
+            int64_t seq_id;
+            bool has_result;
+            bus_unpack_cb_res_t result;
+        } hold;
+        struct {
+            boxed_msg *box;
+            rx_error_t error;
+            bool has_result;
+            bus_unpack_cb_res_t result;
+        } expect;
+    } u;
 } rx_info_t;
 
 /* Max number of sockets to monitor. */
 #define MAX_FDS 1000
 
 /* Max number of partially processed messages.
- * TODO: We may want this significantly higher. */
+ * TODO: Capacity planning. */
 #define MAX_PENDING_MESSAGES (1024)
 
 /* Max number of unprocessed queue messages */
@@ -78,13 +104,14 @@ typedef struct listener {
     bool shutdown;
 
     rx_info_t rx_info[MAX_PENDING_MESSAGES];
-    int info_available;
     rx_info_t *rx_info_freelist;
     uint16_t rx_info_in_use;
+    uint16_t rx_info_max_used;
 
     listener_msg msgs[MAX_QUEUE_MESSAGES];
     listener_msg *msg_freelist;
     int16_t msgs_in_use;
+    int64_t largest_seq_id_seen;
 
     size_t upstream_backpressure;
 
@@ -109,13 +136,18 @@ static void process_unpacked_message(listener *l,
     connection_info *ci, bus_unpack_cb_res_t result);
 static void notify_message_failure(listener *l,
     rx_info_t *info, bus_send_status_t status);
+static void attempt_delivery(listener *l, struct rx_info_t *info);
 static void clean_up_completed_info(listener *l, rx_info_t *info);
 static void observe_backpressure(listener *l, size_t backpressure);
 static bool grow_read_buf(listener *l, size_t nsize);
 
+static rx_info_t *get_hold_rx_info(listener *l, int fd, int64_t seq_id);
+static void dump_rx_info_table(listener *l);
+
 static void msg_handler(listener *l, listener_msg *msg);
 static void add_socket(listener *l, connection_info *ci, int notify_fd);
 static void forget_socket(listener *l, int fd);
+static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_sec);
 static void expect_response(listener *l, boxed_msg *box);
 static void shutdown(listener *l);
 static void free_ci(connection_info *ci);

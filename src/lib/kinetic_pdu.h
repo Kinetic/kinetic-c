@@ -23,7 +23,7 @@
 
 #include "kinetic_types_internal.h"
 
-bool KineticPDU_InitBus(int log_level, KineticClient * client);
+bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config);
 void KineticPDU_DeinitBus(KineticClient * const client);
 KineticStatus KineticPDU_GetStatus(KineticResponse* pdu);
 KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticResponse* pdu);

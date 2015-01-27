@@ -36,14 +36,15 @@ typedef uint32_t tx_flag_t;
 #define SENDER_FD_NOT_IN_USE (-1)
 typedef enum {
     TX_ERROR_NONE = 0,
-    TX_ERROR_POLLHUP = -1,
-    TX_ERROR_POLLERR = -2,
-    TX_ERROR_WRITE_FAILURE = -3,
-    TX_ERROR_UNREGISTERED_SOCKET = -4,
-    TX_ERROR_CLOSED = -5,
-    TX_ERROR_NOTIFY_LISTENER_FAILURE = -6,
-    TX_ERROR_WRITE_TIMEOUT = -7,
-    TX_ERROR_NOTIFY_TIMEOUT = -8,
+    TX_ERROR_POLLHUP = -11,
+    TX_ERROR_POLLERR = -12,
+    TX_ERROR_WRITE_FAILURE = -13,
+    TX_ERROR_UNREGISTERED_SOCKET = -14,
+    TX_ERROR_CLOSED = -15,
+    TX_ERROR_NOTIFY_LISTENER_FAILURE = -16,
+    TX_ERROR_WRITE_TIMEOUT = -17,
+    TX_ERROR_NOTIFY_TIMEOUT = -18,
+    TX_ERROR_BAD_SEQUENCE_ID = -19,
 } tx_error_t;
 
 typedef enum {
@@ -67,6 +68,8 @@ typedef struct {
     int fd;
     SSL *ssl;                   /* SSL handle. Can be NULL. */
     int refcount;
+    int64_t largest_seq_id_seen;
+    bool errored;
 } fd_info;
 
 /* Metadata for a message in-flight. */
@@ -142,6 +145,8 @@ typedef struct sender {
     int commit_pipe;
     int incoming_command_pipe;
 
+    int64_t largest_seq_id_seen;
+
     /* Set of file descriptors to poll.
      * fds[0] is the incoming command pipe, and is polled for
      * read; the rest (fds[1] through fds[1 + active_fds] are
@@ -160,7 +165,7 @@ static tx_info_t *get_free_tx_info(struct sender *s);
 static void release_tx_info(struct sender *s, tx_info_t *info);
 static int get_notify_pipe(struct sender *s, int id);
 static bool write_commit(struct sender *s, tx_info_t *info);
-static bool commit_event_and_block(struct sender *s, tx_info_t *info);
+static tx_error_t commit_event_and_block(struct sender *s, tx_info_t *info);
 
 static bool register_socket_info(sender *s, int fd, SSL *ssl);
 static void increment_fd_refcount(sender *s, fd_info *fdi);
@@ -179,8 +184,10 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
 static void attempt_write(sender *s, int available);
 
 static void tick_handler(sender *s);
-static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info);
 static void notify_message_failure(sender *s, tx_info_t *info, bus_send_status_t status);
+static void attempt_to_enqueue_sending_request_message_to_listener(sender *s,
+    int fd, int64_t seq_id, int16_t timeout_sec);
+static void attempt_to_enqueue_request_sent_message_to_listener(sender *s, tx_info_t *info);
 
 static void notify_caller(sender *s, tx_info_t *info, bool success);
 static void tick_timeout(sender *s, tx_info_t *info);

@@ -18,7 +18,11 @@ int main(int argc, char** argv)
     (void)argv;
 
     // Initialize kinetic-c and establish session
-    KineticClient * client = KineticClient_Init("stdout", 0);
+    KineticClientConfig client_config = {
+        .logFile = "stdout",
+        .logLevel = 0,
+    };
+    KineticClient * client = KineticClient_Init(&client_config);
     if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
     KineticSession session = {.config = {

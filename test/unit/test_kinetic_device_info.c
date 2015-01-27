@@ -88,7 +88,6 @@ void test_KineticDeviceInfo_Create_should_allocate_and_populate_device_info_with
     TEST_ASSERT_NOT_NULL(Info);
     TEST_ASSERT_NOT_NULL(Info->utilizations);
     TEST_ASSERT_EQUAL(numUtilizations, Info->numUtilizations);
-    TEST_ASSERT_EQUAL(expectedSize, Info->totalLength);
 
     TEST_ASSERT_EQUAL_STRING("fo", Info->utilizations[0].name);
     TEST_ASSERT_EQUAL_FLOAT(1.7f, Info->utilizations[0].value);

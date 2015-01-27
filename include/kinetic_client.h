@@ -26,8 +26,7 @@
 /**
  * Initializes the Kinetic API and configures logging destination.
  *
- * @param log_file (path to log file, 'stdout' to log to STDOUT, NULL to disable logging)
- * @param log_level Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
+ * @param config A configuration struct.
  *
  * @return          Returns a pointer to a `KineticClient`. You need to pass 
  *                  this pointer to KineticClient_CreateConnection() to create 
@@ -36,7 +35,7 @@
  *                  are no active connections. The pointer should be release
  *                  with KineticClient_Shutdown()
  */
-KineticClient * KineticClient_Init(const char* log_file, int log_level);
+KineticClient * KineticClient_Init(KineticClientConfig *config);
 
 /**
  * @brief Performs shutdown/cleanup of the kinetic-c client lib
@@ -244,6 +243,15 @@ KineticStatus KineticClient_GetLog(KineticSession const * const session,
                                    KineticDeviceInfo_Type type,
                                    KineticDeviceInfo** info,
                                    KineticCompletionClosure* closure);
+
+/**
+ * @brief Free the KineticDeviceInfo result from KineticClient_GetLog.
+ *
+ * @param session       The connected KineticSession to use for the operation
+ * @param info          The KineticDeviceInfo result to free.
+ */
+void KineticClient_FreeDeviceInfo(KineticSession const * const session,
+                                  KineticDeviceInfo* info);
 
 /**
  * @brief Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic

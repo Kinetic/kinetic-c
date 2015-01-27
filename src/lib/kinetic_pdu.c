@@ -38,9 +38,13 @@ STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udat
     const char *event_str = bus_log_event_str(event);
     struct timeval tv;
     gettimeofday(&tv, NULL);
+#if 0
+    KineticLogger_Log(log_level, msg);
+#else
     LOGF1("%ld.%06ld: %s[%d] -- %s\n",
         (long)tv.tv_sec, (long)tv.tv_usec,
         event_str, log_level, msg);
+#endif
 }
 
 static bus_sink_cb_res_t reset_transfer(socket_info *si) {
@@ -97,22 +101,36 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
     }
     case STATE_AWAITING_HEADER:
     {
-        if (unpack_header(read_buf, read_size, &si->header))
+        memcpy(&si->buf[si->accumulated], read_buf, read_size);
+        si->accumulated += read_size;
+
+        uint32_t remaining = PDU_HEADER_LEN - si->accumulated;
+
+        if (remaining == 0) {
+            if (unpack_header(&si->buf[0], PDU_HEADER_LEN, &si->header))
+            {
+                si->accumulated = 0;
+                si->unpack_status = UNPACK_ERROR_SUCCESS;
+                si->state = STATE_AWAITING_BODY;
+                bus_sink_cb_res_t res = {
+                    .next_read = si->header.protobufLength + si->header.valueLength,
+                };
+                return res;
+            } else {
+                si->accumulated = 0;
+                si->unpack_status = UNPACK_ERROR_INVALID_HEADER;
+                si->state = STATE_AWAITING_HEADER;
+                bus_sink_cb_res_t res = {
+                    .next_read = sizeof(KineticPDUHeader),
+                    .full_msg_buffer = si,
+                };
+                return res;
+            }
+        }
+        else
         {
-            si->accumulated = 0;
-            si->unpack_status = UNPACK_ERROR_SUCCESS;
-            si->state = STATE_AWAITING_BODY;
             bus_sink_cb_res_t res = {
-                .next_read = si->header.protobufLength + si->header.valueLength,
-            };
-            return res;
-        } else {
-            si->accumulated = 0;
-            si->unpack_status = UNPACK_ERROR_INVALID_HEADER;
-            si->state = STATE_AWAITING_HEADER;
-            bus_sink_cb_res_t res = {
-                .next_read = sizeof(KineticPDUHeader),
-                .full_msg_buffer = si,
+                .next_read = remaining,
             };
             return res;
         }
@@ -127,6 +145,7 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
 
         if (remaining == 0) {
             si->state = STATE_AWAITING_HEADER;
+            si->accumulated = 0;
             bus_sink_cb_res_t res = {
                 .next_read = sizeof(KineticPDUHeader),
                 // returning the whole si, because we need access to the pdu header as well 
@@ -205,19 +224,25 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     }
 }
 
-bool KineticPDU_InitBus(int log_level, KineticClient * client)
+bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
 {
+    int log_level = config->logLevel;
+
     bus_config cfg = {
         .log_cb = log_cb,
-        .log_level = (log_level > 1) ? 1 : 0,
+        .log_level = log_level,
         .sink_cb = sink_cb,
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = KineticController_HandleUnexecpectedResponse,
         .bus_udata = NULL,
-        .sender_count = 4,
-        .listener_count = 4,
+        .sender_count = config->writerThreads,
+        .listener_count = config->readerThreads,
+        .threadpool_cfg = {
+            .max_threads = config->maxThreadpoolThreads,
+        },
     };
-    bus_result res = {0};
+    bus_result res;
+    memset(&res, 0, sizeof(res));
     if (!bus_init(&cfg, &res)) {
         LOGF0("failed to init bus: %d\n", res.status);
         return false;
@@ -228,8 +253,11 @@ bool KineticPDU_InitBus(int log_level, KineticClient * client)
 
 void KineticPDU_DeinitBus(KineticClient * const client)
 {
-    bus_shutdown(client->bus);
-    bus_free(client->bus);
+    if (client) {
+        bus_shutdown(client->bus);
+        bus_free(client->bus);
+        client->bus = NULL;
+    }
 }
 
 KineticStatus KineticPDU_GetStatus(KineticResponse* response)

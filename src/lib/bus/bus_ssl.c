@@ -73,11 +73,11 @@ static bool init_client_SSL_CTX(SSL_CTX **ctx_out) {
     /* Create TLS context */
     const SSL_METHOD *method = NULL;
 
-    if (KINETIC_USE_TLS_1_2) {
+    #if KINETIC_USE_TLS_1_2
         method = TLSv1_2_client_method();
-    } else {
+    #else
         method = TLSv1_1_client_method();
-    }
+    #endif
 
     assert(method);
     ctx = SSL_CTX_new(method);

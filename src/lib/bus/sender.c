@@ -111,11 +111,11 @@ bool sender_register_socket(struct sender *s, int fd, SSL *ssl) {
     info->u.add_socket.ssl = ssl;
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "registering socket %d with SSL %p", fd, (void*)ssl);
-    bool res = commit_event_and_block(s, info);
+    tx_error_t res = commit_event_and_block(s, info);
     release_tx_info(s, info);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "registering socket %d: res %d", fd, res);
-    return res;
+    return res == TX_ERROR_NONE;
 }
 
 bool sender_remove_socket(struct sender *s, int fd) {
@@ -124,9 +124,9 @@ bool sender_remove_socket(struct sender *s, int fd) {
     
     info->state = TIS_RM_SOCKET;
     info->u.rm_socket.fd = fd;
-    bool res = commit_event_and_block(s, info);
+    tx_error_t res = commit_event_and_block(s, info);
     release_tx_info(s, info);
-    return res;
+    return res == TX_ERROR_NONE;
 }
 
 bool sender_send_request(struct sender *s, boxed_msg *box) {
@@ -141,11 +141,11 @@ bool sender_send_request(struct sender *s, boxed_msg *box) {
     
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending request on %d: box %p", box->fd, (void*)box);
-    bool res = commit_event_and_block(s, info);
+    tx_error_t res = commit_event_and_block(s, info);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending request: releasing tx_info, res %d", res);
     release_tx_info(s, info);
-    return res;
+    return res == TX_ERROR_NONE;
 }
 
 bool sender_shutdown(struct sender *s) {
@@ -157,11 +157,11 @@ bool sender_shutdown(struct sender *s) {
     info->state = TIS_SHUTDOWN;
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "sending shutdown request on %d", info->id);
-    bool res = commit_event_and_block(s, info);
+    tx_error_t res = commit_event_and_block(s, info);
     release_tx_info(s, info);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
         "shutdown request: %d", res);
-    return res;
+    return res == TX_ERROR_NONE;
 }
 
 void sender_free(struct sender *s) {
@@ -245,8 +245,10 @@ static bool write_commit(struct sender *s, tx_info_t *info) {
     }
 }
 
-static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
-    if (!write_commit(s, info)) { return false; }
+static tx_error_t commit_event_and_block(struct sender *s, tx_info_t *info) {
+    if (!write_commit(s, info)) {
+        return TX_ERROR_WRITE_FAILURE;
+    }
     
     struct bus *b = s->bus;
     struct pollfd fds[1];
@@ -265,7 +267,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
             if (ev & (POLLHUP | POLLERR | POLLNVAL)) {
                 /* We've been hung up on due to a shutdown event. */
                 close(info->done_pipe);
-                return true;
+                return TX_ERROR_CLOSED;
             } else if (ev & POLLIN) {
                 uint16_t backpressure = 0;
                 uint8_t buf[sizeof(bool) + sizeof(backpressure)];
@@ -288,7 +290,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
                     
                     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
                         "reading done_pipe: success %d", 1);
-                    return success;
+                    return success ? TX_ERROR_NONE : TX_ERROR_WRITE_FAILURE;
                 } else if (rd == -1) {
                     if (errno == EINTR) {
                         errno = 0;
@@ -297,7 +299,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
                         BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
                             "blocking read on done_pipe: errno %d", errno);
                         errno = 0;
-                        return false;
+                        return TX_ERROR_CLOSED;
                     }
                 }
             } else {
@@ -310,7 +312,7 @@ static bool commit_event_and_block(struct sender *s, tx_info_t *info) {
             BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
                 "blocking poll for done_pipe: errno %d", errno);
             errno = 0;
-            return false;
+            return TX_ERROR_CLOSED;
         } else {
             /* Shouldn't happen -- blocking. */
             assert(false);
@@ -333,7 +335,7 @@ void *sender_mainloop(void *arg) {
     while (!self->shutdown) {
         bool work = false;
         
-        gettimeofday(&tv, NULL);
+        gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
             BUS_LOG(b, 5, LOG_SENDER, "entering tick handler", b->udata);
@@ -432,13 +434,14 @@ static void cleanup(sender *s) {
 
 static bool register_socket_info(sender *s, int fd, SSL *ssl) {
     if (s->shutdown) { return false; }
-    fd_info *info = malloc(sizeof(*info));
+    fd_info *info = calloc(1, sizeof(*info));
     if (info == NULL) { 
         return false;
     }
     info->fd = fd;
     info->ssl = ssl;
     info->refcount = 0;
+    info->largest_seq_id_seen = 0;
 
     void *old = NULL;
     if (!yacht_set(s->fd_hash_table, fd, info, &old)) {
@@ -500,9 +503,10 @@ static bool release_socket_info(sender *s, int fd) {
     fd_info *info = (fd_info *)old;
     if (info) {
         assert(fd == info->fd);
+        info->errored = true;
         /* Expire any pending events on this socket. */
         if (info->refcount > 0) {
-            set_error_for_socket(s, fd, TX_ERROR_CLOSED);
+            set_error_for_socket(s, fd, TX_ERROR_CLOSED);            
         }
         free(info);
         return true;
@@ -552,17 +556,47 @@ static void handle_command(sender *s, int id) {
 
    /* Should not get anything else as an incoming command.  */
     default:
+    {
+        struct bus *b = s->bus;
+        BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 64,
+            "match_fail: %d", info->state);
         assert(false);
+    }
     }
 }
 
 static void enqueue_write(struct sender *s, tx_info_t *info) {
     assert(info->state == TIS_REQUEST_ENQUEUE);
 
+    struct bus *b = s->bus;
     int fd = info->u.enqueue.fd;
     fd_info *fdi = NULL;
+    int64_t out_seq_id = info->u.enqueue.box->out_seq_id;
     if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
         assert(fdi);
+
+        if (fdi->errored) {
+            set_error_for_socket(s, fd, TX_ERROR_CLOSED);
+            return;
+        }
+
+        if (fdi->largest_seq_id_seen > out_seq_id && fdi->largest_seq_id_seen > 0) {
+            BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
+                "suspicious outgoing sequence ID on %d: got %lld, already sent up to %lld",
+                fd, (long long)out_seq_id, (long long)fdi->largest_seq_id_seen);
+            set_error_for_socket(s, fd, TX_ERROR_BAD_SEQUENCE_ID);
+            return;
+        }
+        fdi->largest_seq_id_seen = out_seq_id;
+
+        /* Notify the listener that we're about to start writing to a drive,
+         * because (in rare cases) the response may arrive between finishing
+         * the write and the listener processing the notification. In that
+         * case, it should hold onto the unrecognized response until the
+         * sender notifies it (and passes it the callback). */
+        attempt_to_enqueue_sending_request_message_to_listener(s,
+            fd, out_seq_id, info->u.enqueue.timeout_sec + 1);
+        
         /* Increment the refcount. This will cause poll to watch for the
          * socket being writable, if it isn't already being watched. */
         increment_fd_refcount(s, fdi);
@@ -645,11 +679,20 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
     bus_send_status_t status = BUS_SEND_UNDEFINED;
     switch (error) {
     default:
+    {
+        BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 64,
+            "setting BUS_SEND_TX_FAILURE on socket %d, reason %d", fd, error);
         status = BUS_SEND_TX_FAILURE;
         break;
+    }
     case TX_ERROR_UNREGISTERED_SOCKET:
         status = BUS_SEND_UNREGISTERED_SOCKET;
         break;
+    }
+
+    fd_info *fdi = NULL;
+    if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
+        fdi->errored = true;
     }
 
     for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
@@ -692,7 +735,7 @@ static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
 
             if (notify) {
                 BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                    "setting error on socket %d", fd);
+                    "setting error on socket %d, reason %d", fd, error);
                 info->state = TIS_ERROR;
                 info->u.error = ue;
                 notify_message_failure(s, info, status);
@@ -759,6 +802,7 @@ static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
     BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
         "write %p to %d, %zd bytes (info %d)",
         (void*)&msg[sent_size], fd, rem, info->id);
+
     ssize_t wrsz = write(fd, &msg[sent_size], rem);
     if (wrsz == -1) {
         if (util_is_resumable_io_error(errno)) {
@@ -773,6 +817,7 @@ static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
             return 0;
         }
     } else if (wrsz > 0) {
+
         update_sent(b, s, info, wrsz);
         BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
             "sent: %zd\n", wrsz);
@@ -866,7 +911,7 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
 
         BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
             "wrote all of %p, clearing", (void*)box->out_msg);
-        attempt_to_enqueue_message_to_listener(s, info);
+        attempt_to_enqueue_request_sent_message_to_listener(s, info);
     }
 }
 
@@ -933,7 +978,7 @@ static void tick_handler(sender *s) {
     }
     
     BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 64,
-        "tick... %p -- %d of %d tx_info in use, %d active FDs\n",
+        "tick... %p -- %d of %d tx_info in use, %d active FDs",
         (void*)s, tx_info_in_use, MAX_CONCURRENT_SENDS, s->active_fds);
     
     /* Walk table and expire timeouts & items which have been sent.
@@ -952,7 +997,7 @@ static void tick_handler(sender *s) {
 
                 /* if not timed out, attempt to re-send */
                 if (info->state == TIS_RESPONSE_NOTIFY) {
-                    attempt_to_enqueue_message_to_listener(s, info);
+                    attempt_to_enqueue_request_sent_message_to_listener(s, info);
                 }
                 break;
 
@@ -998,13 +1043,41 @@ static void tick_timeout(sender *s, tx_info_t *info) {
     }
 }
 
-static void attempt_to_enqueue_message_to_listener(sender *s, tx_info_t *info) {
+/* Notify the listener that the sender is about to send a message, and to hold
+ * on to the response if it arrives before the sender transfers the destination
+ * callback and other info to it.*/
+static void attempt_to_enqueue_sending_request_message_to_listener(sender *s,
+    int fd, int64_t seq_id, int16_t timeout_sec) {
+    struct bus *b = s->bus;
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
+      "telling listener to expect response, with <fd%d, seq_id:%lld>",
+        fd, (long long)seq_id);
+
+    struct listener *l = bus_get_listener_for_socket(s->bus, fd);
+
+    int delay = 1;
+    for (;;) {
+        if (listener_hold_response(l, fd, seq_id, timeout_sec)) {
+            return;
+        } else {
+            /* Don't apply much backpressure since this will be running on the sender. */
+            poll(NULL, 0, delay);
+            if (delay < 5) { delay++; }
+        }
+    }
+    assert(false);
+}
+
+/* Notify the listener that the sender has finished sending a message, and
+ * transfer all details for handling the response to it. */
+static void attempt_to_enqueue_request_sent_message_to_listener(sender *s, tx_info_t *info) {
     assert(info->state == TIS_RESPONSE_NOTIFY);
     struct bus *b = s->bus;
     /* Notify listener that it should expect a response to a
      * successfully sent message. */
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-      "telling listener to expect response, with box %p", (void *)info->u.notify.box);
+      "telling listener to expect sent response, with box %p, seq_id %lld",
+        (void *)info->u.notify.box, (long long)info->u.notify.box->out_seq_id);
     
     struct listener *l = bus_get_listener_for_socket(s->bus, info->u.notify.fd);
     

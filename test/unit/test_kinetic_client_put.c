@@ -21,6 +21,7 @@
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
+#include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
@@ -50,9 +51,11 @@ void tearDown(void)
 void test_KineticClient_Put_should_execute_PUT_operation(void)
 {
     Session.connection = &Connection;
+    Connection.pSession = &Session;
     ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
     KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
     KineticOperation operation;
+    operation.connection = &Connection;
     
     KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
     KineticOperation_BuildPut_Expect(&operation, &entry);

@@ -68,21 +68,33 @@
  */
 typedef enum _KineticAlgorithm {
     KINETIC_ALGORITHM_INVALID = -1,
-    KINETIC_ALGORITHM_SHA1 = 2,
-    KINETIC_ALGORITHM_SHA2,
-    KINETIC_ALGORITHM_SHA3,
-    KINETIC_ALGORITHM_CRC32,
-    KINETIC_ALGORITHM_CRC64
+    KINETIC_ALGORITHM_SHA1 = 2,     ///< SHA1
+    KINETIC_ALGORITHM_SHA2 = 3,     ///< SHA2
+    KINETIC_ALGORITHM_SHA3 = 4,     ///< SHA3
+    KINETIC_ALGORITHM_CRC32 = 5,    ///< CRC32
+    KINETIC_ALGORITHM_CRC64 = 6     ///< CRC64
 } KineticAlgorithm;
 
 
 /**
- * @brief Enumeration of synchronization types for an operation.
+ * @brief Enumeration of synchronization types for an operation on a `KineticEntry`.
  */
 typedef enum _KineticSynchronization {
     KINETIC_SYNCHRONIZATION_INVALID = -1,
+
+    /// This request is made persistent before returning.
+    /// This does not effect any other pending operations.
     KINETIC_SYNCHRONIZATION_WRITETHROUGH = 1,
+
+    /// They can be made persistent when the drive chooses,
+    /// or when a subsequent FLUSH is sent to the drive.
     KINETIC_SYNCHRONIZATION_WRITEBACK = 2,
+
+    /// All pending information that has not been written is 
+    /// pushed to the disk and the command that specifies 
+    /// FLUSH is written last and then returned. All WRITEBACK writes
+    /// that have received ending status will be guaranteed to be
+    /// written before the FLUSH operation is returned completed.
     KINETIC_SYNCHRONIZATION_FLUSH = 3
 } KineticSynchronization;
 
@@ -95,7 +107,7 @@ typedef struct _KineticClient KineticClient;
 
 
 /**
- * @brief Kinetic Connection Instance
+ * @brief Kinetic connection instance
  */
 struct _KineticConnection;
 
@@ -129,12 +141,12 @@ typedef struct _KineticSessionConfig {
  * @brief An instance of a session with a Kinetic device.
  */
 typedef struct _KineticSession {
-    // Session configuration structure which must be configured 
+    /// Session configuration structure which must be configured 
     KineticSessionConfig config;
 
-    // Connection instance which is dynamically allocated upon call to KineticClient_CreateConnection.
-    // Client must call KineticClient_DestroyConnection when finished with a session to shutdown
-    // a session cleanly and free the `connection`.
+    /// Connection instance which is dynamically allocated upon call to `KineticClient_CreateConnection`.
+    /// Client must call `KineticClient_DestroyConnection` when finished with a session to shutdown
+    /// a session cleanly and free the `connection`.
     struct _KineticConnection* connection;
 } KineticSession;
 
@@ -149,75 +161,123 @@ typedef struct _KineticSession {
     memcpy((_session)->config.hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
 }
 
-// Kinetic Status Codes
+/**
+* @brief Kinetic status codes.
+*/
 typedef enum {
-    KINETIC_STATUS_INVALID = -1,        // Status not available (no reponse/status available)
-    KINETIC_STATUS_NOT_ATTEMPTED = 0,   // No operation has been attempted
-    KINETIC_STATUS_SUCCESS = 1,         // Operation successful
-    KINETIC_STATUS_SESSION_EMPTY,       // Session was NULL in request
-    KINETIC_STATUS_SESSION_INVALID,     // Session configuration was invalid or NULL
-    KINETIC_STATUS_HOST_EMPTY,          // Host was empty in request
-    KINETIC_STATUS_HMAC_EMPTY,          // HMAC key is empty or NULL
-    KINETIC_STATUS_NO_PDUS_AVAVILABLE,  // All PDUs for the session have been allocated
-    KINETIC_STATUS_DEVICE_BUSY,         // Device busy (retry later)
-    KINETIC_STATUS_CONNECTION_ERROR,    // No connection/disconnected
-    KINETIC_STATUS_INVALID_REQUEST,     // Something about the request is invalid
-    KINETIC_STATUS_OPERATION_INVALID,   // Operation was invalid
-    KINETIC_STATUS_OPERATION_FAILED,    // Device reported an operation error
-    KINETIC_STATUS_OPERATION_TIMEDOUT,  // Device did not respond to the operation in time
-    KINETIC_STATUS_CLUSTER_MISMATCH,    // Specified cluster version does not match device
-    KINETIC_STATUS_VERSION_MISMATCH,    // The specified object version info for a PUT/GET do not match stored object
-    KINETIC_STATUS_DATA_ERROR,          // Device reported data error, no space or HMAC failure
-    KINETIC_STATUS_NOT_FOUND,           // The requested object does not exist
-    KINETIC_STATUS_BUFFER_OVERRUN,      // One or more of byte buffers did not fit all data
-    KINETIC_STATUS_MEMORY_ERROR,        // Failed allocating/deallocating memory
-    KINETIC_STATUS_SOCKET_TIMEOUT,      // A timeout occurred while waiting for a socket operation
-    KINETIC_STATUS_SOCKET_ERROR,        // An I/O error occurred during a socket operation
-    KINETIC_STATUS_MISSING_KEY,         // An operation is missing a required key
-    KINETIC_STATUS_MISSING_VALUE_BUFFER,// An operation is missing a required value buffer
-    KINETIC_STATUS_COUNT                // Number of status codes in KineticStatusDescriptor
+    KINETIC_STATUS_INVALID = -1,            ///< Status not available (no reponse/status available)
+    KINETIC_STATUS_NOT_ATTEMPTED = 0,       ///< No operation has been attempted
+    KINETIC_STATUS_SUCCESS = 1,             ///< Operation successful
+    KINETIC_STATUS_SESSION_EMPTY,           ///< Session was NULL in request
+    KINETIC_STATUS_SESSION_INVALID,         ///< Session configuration was invalid or NULL
+    KINETIC_STATUS_HOST_EMPTY,              ///< Host was empty in request
+    KINETIC_STATUS_HMAC_EMPTY,              ///< HMAC key is empty or NULL
+    KINETIC_STATUS_NO_PDUS_AVAVILABLE,      ///< All PDUs for the session have been allocated
+    KINETIC_STATUS_DEVICE_BUSY,             ///< Device busy (retry later)
+    KINETIC_STATUS_CONNECTION_ERROR,        ///< No connection/disconnected
+    KINETIC_STATUS_INVALID_REQUEST,         ///< Something about the request is invalid
+    KINETIC_STATUS_OPERATION_INVALID,       ///< Operation was invalid
+    KINETIC_STATUS_OPERATION_FAILED,        ///< Device reported an operation error
+    KINETIC_STATUS_OPERATION_TIMEDOUT,      ///< Device did not respond to the operation in time
+    KINETIC_STATUS_CLUSTER_MISMATCH,        ///< Specified cluster version does not match device
+    KINETIC_STATUS_VERSION_MISMATCH,        ///< The specified object version info for a PUT/GET do not match stored object
+    KINETIC_STATUS_DATA_ERROR,              ///< Device reported data error, no space or HMAC failure
+    KINETIC_STATUS_NOT_FOUND,               ///< The requested object does not exist
+    KINETIC_STATUS_BUFFER_OVERRUN,          ///< One or more of byte buffers did not fit all data
+    KINETIC_STATUS_MEMORY_ERROR,            ///< Failed allocating/deallocating memory
+    KINETIC_STATUS_SOCKET_TIMEOUT,          ///< A timeout occurred while waiting for a socket operation
+    KINETIC_STATUS_SOCKET_ERROR,            ///< An I/O error occurred during a socket operation
+    KINETIC_STATUS_MISSING_KEY,             ///< An operation is missing a required key
+    KINETIC_STATUS_MISSING_VALUE_BUFFER,    ///< An operation is missing a required value buffer
+    KINETIC_STATUS_COUNT                    ///< Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 
+/**
+ * @brief Provides a string representation for a KineticStatus code.
+ * 
+ * @param status    The status enumeration value.
+ * 
+ * @return          Pointer to the appropriate string representation for the specified status.
+ */
 const char* Kinetic_GetStatusDescription(KineticStatus status);
 
+/**
+ * @brief Completion data which will be provided to KineticCompletionClosure for asynchronous operations.
+ */
 typedef struct _KineticCompletionData {
-    int64_t connectionID;
-    int64_t sequence;
-    struct timeval requestTime;
-    KineticStatus status;
+    int64_t connectionID;       ///< Connection ID for the session
+    int64_t sequence;           ///< Sequence count for the operation
+    struct timeval requestTime; ///< Time at which the operation request was queued up
+    KineticStatus status;       ///< Resultant status of the operation
 } KineticCompletionData;
 
+/**
+ * @brief Operation completion callback function prototype.
+ * 
+ * @param kinetic_data  KineticCompletionData provided by kinetic-c.
+ * @param client_data   Optional pointer to arbitrary client-supplied data.
+ */
 typedef void (*KineticCompletionCallback)(KineticCompletionData* kinetic_data, void* client_data);
 
+
+/**
+ * @brief Closure which can be specified for operations which support asynchronous mode
+ */
 typedef struct _KineticCompletionClosure {
-    KineticCompletionCallback callback;
-    void* clientData;
+    KineticCompletionCallback callback; ///< Function to be called upon completion
+    void* clientData;                   ///< Optional client-supplied data which will be supplied to callback
 } KineticCompletionClosure;
 
-// KineticEntry - byte arrays need to be preallocated by the client
+/**
+ * @brief Kinetic object instance
+ *
+ * The ByteBuffer attributes must be allocated and freed by the client, if used.
+ */
 typedef struct _KineticEntry {
-    ByteBuffer key;
-    ByteBuffer value;
+    ByteBuffer key;             ///< Key associated with the object stored on disk 
+    ByteBuffer value;           ///< Value data associated with the key
 
     // Metadata
-    ByteBuffer dbVersion;
-    ByteBuffer tag;
-    KineticAlgorithm algorithm;
+    ByteBuffer dbVersion;       ///< Current version of the entry (optional)
+    ByteBuffer tag;             ///< Generated authentication hash per the specified `algorithm`
+    KineticAlgorithm algorithm; ///< Algorithm used to generate the specified `tag`
 
     // Operation-specific attributes (TODO: remove from struct, and specify a attributes to PUT/GET operations)
-    ByteBuffer newVersion;
-    bool metadataOnly;
-    bool force;
-    KineticSynchronization synchronization;
+    ByteBuffer newVersion;      ///< New version for the object to assume once written to disk (optional)
+    bool metadataOnly;          ///< If set for a GET request, will return only the metadata for the specified object (`value` will not be retrieved)
+    bool force;                 ///< If set for a GET/DELETE request, will override `version` checking
+    KineticSynchronization synchronization; ///< Synchronization method to use for PUT/DELETE requests.
 } KineticEntry;
 
-// Kinetic Key Range request structure
+/**
+ * @brief Kinetic Key Range request structure
+ */ 
 typedef struct _KineticKeyRange {
+
+    /// Required bytes, the beginning of the requested range
     ByteBuffer startKey;
+
+    /// Required bytes, the end of the requested range
     ByteBuffer endKey;
+
+    /// Optional bool, defaults to false
+    /// If set, indicates that the start key should be included in the returned range
     bool startKeyInclusive;
+
+    /// Optional bool, defaults to false
+    /// If set, indicates that the end key should be included in the returned range
     bool endKeyInclusive;
+
+    /// Required int32, must be greater than 0
+    /// The maximum number of keys returned, in sorted order
     int32_t maxReturned;
+
+    /// Optional bool, defaults to false
+    /// If true, the key range will be returned in reverse order, starting at
+    /// endKey and moving back to startKey.  For instance
+    /// if the search is startKey="j", endKey="k", maxReturned=2,
+    /// reverse=true and the keys "k0", "k1", "k2" exist
+    /// the system will return "k2" and "k1" in that order.
     bool reverse;
 } KineticKeyRange;
 
@@ -271,38 +331,38 @@ typedef struct {
 } KineticDeviceInfo_Configuration;
 typedef enum {
     KINETIC_MESSAGE_TYPE_INVALID = 0,
-    KINETIC_MESSAGE_TYPE_GET_RESPONSE,
-    KINETIC_MESSAGE_TYPE_GET,
-    KINETIC_MESSAGE_TYPE_PUT_RESPONSE,
-    KINETIC_MESSAGE_TYPE_PUT,
-    KINETIC_MESSAGE_TYPE_DELETE_RESPONSE,
-    KINETIC_MESSAGE_TYPE_DELETE,
-    KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE,
-    KINETIC_MESSAGE_TYPE_GETNEXT,
-    KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE,
-    KINETIC_MESSAGE_TYPE_GETPREVIOUS,
-    KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE,
-    KINETIC_MESSAGE_TYPE_GETKEYRANGE,
-    KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE,
-    KINETIC_MESSAGE_TYPE_GETVERSION,
-    KINETIC_MESSAGE_TYPE_SETUP_RESPONSE,
-    KINETIC_MESSAGE_TYPE_SETUP,
-    KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE,
-    KINETIC_MESSAGE_TYPE_GETLOG,
-    KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE,
-    KINETIC_MESSAGE_TYPE_SECURITY,
-    KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE,
-    KINETIC_MESSAGE_TYPE_PEER2PEERPUSH,
-    KINETIC_MESSAGE_TYPE_NOOP_RESPONSE,
-    KINETIC_MESSAGE_TYPE_NOOP,
-    KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE,
-    KINETIC_MESSAGE_TYPE_FLUSHALLDATA,
-    KINETIC_MESSAGE_TYPE_PINOP_RESPONSE,
-    KINETIC_MESSAGE_TYPE_PINOP,
-    KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE,
-    KINETIC_MESSAGE_TYPE_MEDIASCAN,
-    KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE,
-    KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE,
+    KINETIC_MESSAGE_TYPE_GET_RESPONSE,              ///< GET_RESPONSE
+    KINETIC_MESSAGE_TYPE_GET,                       ///< GET
+    KINETIC_MESSAGE_TYPE_PUT_RESPONSE,              ///< PUT_RESPONSE
+    KINETIC_MESSAGE_TYPE_PUT,                       ///< PUT
+    KINETIC_MESSAGE_TYPE_DELETE_RESPONSE,           ///< DELETE_RESPONSE
+    KINETIC_MESSAGE_TYPE_DELETE,                    ///< DELETE
+    KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE,          ///< GETNEXT_RESPONSE
+    KINETIC_MESSAGE_TYPE_GETNEXT,                   ///< GETNEXT
+    KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE,      ///< GETPREVIOUS_RESPONSE
+    KINETIC_MESSAGE_TYPE_GETPREVIOUS,               ///< GETPREVIOUS
+    KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE,      ///< GETKEYRANGE_RESPONSE
+    KINETIC_MESSAGE_TYPE_GETKEYRANGE,               ///< GETKEYRANGE
+    KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE,       ///< GETVERSION_RESPONSE
+    KINETIC_MESSAGE_TYPE_GETVERSION,                ///< GETVERSION
+    KINETIC_MESSAGE_TYPE_SETUP_RESPONSE,            ///< SETUP_RESPONSE
+    KINETIC_MESSAGE_TYPE_SETUP,                     ///< SETUP
+    KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE,           ///< GETLOG_RESPONSE
+    KINETIC_MESSAGE_TYPE_GETLOG,                    ///< GETLOG
+    KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE,         ///< SECURITY_RESPONSE
+    KINETIC_MESSAGE_TYPE_SECURITY,                  ///< SECURITY
+    KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE,    ///< PEER2PEERPUSH_RESPONSE
+    KINETIC_MESSAGE_TYPE_PEER2PEERPUSH,             ///< PEER2PEERPUSH
+    KINETIC_MESSAGE_TYPE_NOOP_RESPONSE,             ///< NOOP_RESPONSE
+    KINETIC_MESSAGE_TYPE_NOOP,                      ///< NOOP
+    KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE,     ///< FLUSHALLDATA_RESPONSE
+    KINETIC_MESSAGE_TYPE_FLUSHALLDATA,              ///< FLUSHALLDATA
+    KINETIC_MESSAGE_TYPE_PINOP_RESPONSE,            ///< PINOP_RESPONSE
+    KINETIC_MESSAGE_TYPE_PINOP,                     ///< PINOP
+    KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE,        ///< MEDIASCAN_RESPONSE
+    KINETIC_MESSAGE_TYPE_MEDIASCAN,                 ///< MEDIASCAN
+    KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE,    ///< MEDIAOPTIMIZE_RESPONSE
+    KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE,             ///< MEDIAOPTIMIZE
 } KineticMessageType;
 typedef struct {
     KineticMessageType messageType;
@@ -326,7 +386,6 @@ typedef struct {
     ByteArray name;
 } KineticDeviceInfo_Device;
 typedef struct {
-    size_t totalLength;
     KineticDeviceInfo_Utilization* utilizations;
     size_t numUtilizations;
     KineticDeviceInfo_Temperature* temperatures;
@@ -340,10 +399,13 @@ typedef struct {
     KineticDeviceInfo_Device* device;
 } KineticDeviceInfo;
 
+/**
+ * Configuration of remote peer for a PEER2PEERPUSH operation
+ */
 typedef struct {
-    char*   hostname; // pointer must remain valid until operation completes
-    int32_t port; 
-    bool    tls; // optional, defaults to false
+    char*   hostname;   ///< Host name of peer/destination. Pointer must remain valid until operation completes
+    int32_t port;       ///< Port to etablish peer connection to destination host.
+    bool    tls;        ///< If set, will use TLS for peer connection. Optional, defaults to false
 } KineticP2P_Peer;
 
 typedef struct _KineticP2P_Operation KineticP2P_Operation;
@@ -362,6 +424,36 @@ struct _KineticP2P_Operation {
     KineticP2P_OperationData* operations; // pointer must remain valid until operations complete
 };
 
+/**
+ * @brief Default values for the KineticClientConfig struct, which will be used
+ * if the corresponding field in the struct is 0.
+ */
+#define KINETIC_CLIENT_DEFAULT_LOG_LEVEL 0
+#define KINETIC_CLIENT_DEFAULT_WRITER_THREADS 4
+#define KINETIC_CLIENT_DEFAULT_READER_THREADS 4
+#define KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS 8
+
+/**
+ * @brief Configuration values for the KineticClient connection.
+ *
+ * Configuration for the KineticClient connection. If fields are zeroed out, default
+ * values will be used.
+ */
+typedef struct {
+    const char *logFile;            ///< Path to log file. Specify 'stdout' to log to STDOUT or NULL to disable logging.
+    int logLevel;                   ///< Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
+    uint8_t writerThreads;          ///< Number of threads used for handling outgoing requests
+    uint8_t readerThreads;          ///< Number of threads used for handling incoming responses and status messages
+    uint8_t maxThreadpoolThreads;   ///< Max number of threads to use for the threadpool that handles response callbacks.
+} KineticClientConfig;
+
+/**
+ * @brief Provides a string representation for a Kinetic message type.
+ * 
+ * @param type  The message type value.
+ * 
+ * @return      Pointer to the appropriate string representation for the specified type.
+ */
 const char* KineticMessageType_GetName(KineticMessageType type);
 
 #define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN (1024 * 1024 * 4) // Will get reallocated to actual/used size post-copy

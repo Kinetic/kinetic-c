@@ -142,17 +142,17 @@ static void commit_current_task(struct threadpool *t, struct marked_task *task, 
     }
 }
 
-void threadpool_stats(struct threadpool *t, struct threadpool_info *ti) {
-    if (ti) {
+void threadpool_stats(struct threadpool *t, struct threadpool_info *info) {
+    if (info) {
         uint8_t at = 0;
         for (int i = 0; i < t->live_threads; i++) {
             struct thread_info *ti = &t->threads[i];
             if (ti->status == STATUS_AWAKE) { at++; }
         }
-        ti->active_threads = at;
+        info->active_threads = at;
 
-        ti->dormant_threads = t->live_threads - at;
-        ti->backlog_size = t->task_commit_head - t->task_request_head;
+        info->dormant_threads = t->live_threads - at;
+        info->backlog_size = t->task_commit_head - t->task_request_head;
     }
 }
 

@@ -71,5 +71,6 @@ size_t KineticSerialAllocator_TrimBuffer(KineticSerialAllocator* allocator)
     assert(final != NULL);
     allocator->buffer = final;
     allocator->total = allocator->used;
+    printf("allocator->buffer, post-trim: %p\n", (void *)allocator->buffer);
     return allocator->total;
 }

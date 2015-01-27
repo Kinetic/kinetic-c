@@ -24,6 +24,8 @@
 #include "kinetic_types.h"
 #include "kinetic_proto.h"
 #include "kinetic_countingsemaphore.h"
+#include "kinetic_resourcewaiter_types.h"
+#include "kinetic_resourcewaiter.h"
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <openssl/sha.h>
@@ -32,7 +34,7 @@
 
 #define KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION (10)
 #define KINETIC_SOCKET_DESCRIPTOR_INVALID (-1)
-#define KINETIC_CONNECTION_INITIAL_STATUS_TIMEOUT_SECS (3)
+#define KINETIC_CONNECTION_TIMEOUT_SECS (30) /* Java simulator may take longer than 10 seconds to respond */
 #define KINETIC_OPERATION_TIMEOUT_SECS (20)
 
 // Ensure __func__ is defined (for debugging)
@@ -80,6 +82,8 @@ enum unpack_error {
     UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
 };
 
+#define KINETIC_SEQUENCE_NOT_YET_BOUND ((int64_t)-2)
+
 typedef struct {
     enum socket_state state;
     KineticPDUHeader header;
@@ -93,9 +97,11 @@ struct _KineticConnection {
     int             socket;         // socket file descriptor
     int64_t         connectionID;   // initialized to seconds since epoch
     int64_t         sequence;       // increments for each request in a session
-    KineticSession  session;        // session configuration
+    KineticSession* pSession;       // session configuration
     struct bus *    messageBus;
     socket_info *   si;
+    pthread_mutex_t sendMutex;      // mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool
+    KineticResourceWaiter connectionReady;
     KineticCountingSemaphore * outstandingOperations;
 };
 
@@ -145,9 +151,7 @@ typedef enum {
 
 // Kinetic PDU
 struct _KineticPDU {
-    // Message associated with this PDU instance
     KineticMessage message;
-
     KineticProto_Command* command;
 };
 

@@ -597,7 +597,7 @@ static void* KineticLogger_FlushThread(void* arg)
 
     while(!KineticLogggerAbortRequested) {
         sleep(KINETIC_LOGGER_SLEEP_TIME_SEC);
-        gettimeofday(&tv, NULL);
+        gettimeofday(&tv, NULL);  // TODO: clock_gettime
         curtime = tv.tv_sec;
         if ((curtime - lasttime) >= KINETIC_LOGGER_FLUSH_INTERVAL_SEC) {
             KineticLogger_FlushBuffer();

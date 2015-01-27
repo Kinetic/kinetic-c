@@ -23,18 +23,31 @@
 #include "kinetic_session.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
+#include "kinetic_device_info.h"
 #include "kinetic_logger.h"
 #include "kinetic_pdu.h"
 #include "kinetic_memory.h"
 #include <stdlib.h>
 #include <sys/time.h>
 
-KineticClient * KineticClient_Init(const char* log_file, int log_level)
+KineticClient * KineticClient_Init(KineticClientConfig *config)
 {
-    KineticLogger_Init(log_file, log_level);
+    KineticLogger_Init(config->logFile, config->logLevel);
     KineticClient * client = KineticCalloc(1, sizeof(*client));
     if (client == NULL) { return NULL; }
-    bool success = KineticPDU_InitBus(1, client);
+
+    /* Use defaults if set to 0. */
+    if (config->writerThreads == 0) {
+        config->writerThreads = KINETIC_CLIENT_DEFAULT_WRITER_THREADS;
+    }
+    if (config->readerThreads == 0) {
+        config->readerThreads = KINETIC_CLIENT_DEFAULT_READER_THREADS;
+    }
+    if (config->maxThreadpoolThreads == 0) {
+        config->maxThreadpoolThreads = KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS;
+    }
+
+    bool success = KineticPDU_InitBus(client, config);
     if (!success)
     {
         KineticFree(client);
@@ -67,7 +80,13 @@ KineticStatus KineticClient_CreateConnection(KineticSession* const session, Kine
         return KINETIC_STATUS_HMAC_EMPTY;
     }
 
-    KineticSession_Create(session, client);
+    KineticStatus res = KineticSession_Create(session, client);
+    if (res != KINETIC_STATUS_SUCCESS) {
+        LOGF0("Failed to create connection instance: %s",
+            Kinetic_GetStatusDescription(res));
+        return res;
+    }
+
     if (session->connection == NULL) {
         LOG0("Failed to create connection instance!");
         return KINETIC_STATUS_CONNECTION_ERROR;
@@ -125,6 +144,9 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(entry != NULL);
     assert(entry->value.array.data != NULL);
+    
+    assert(session->connection->pSession == session);
+    assert(session->connection == session->connection->pSession->connection);
 
     KineticOperation* operation = KineticController_CreateOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -133,7 +155,9 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     KineticOperation_BuildPut(operation, entry);
 
     // Execute the operation
-    return KineticController_ExecuteOperation(operation, closure);
+    assert(operation->connection == session->connection);
+    KineticStatus res = KineticController_ExecuteOperation(operation, closure);
+    return res;
 }
 
 KineticStatus KineticClient_Flush(KineticSession const * const session,
@@ -286,6 +310,18 @@ KineticStatus KineticClient_GetLog(KineticSession const * const session,
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
 }
+
+void KineticClient_FreeDeviceInfo(KineticSession const * const session,
+                                  KineticDeviceInfo* info)
+{
+    assert(session != NULL);
+    if (info) { KineticDeviceInfo_Free(info); }
+
+    /* The session is not currently used, but part of the API to allow
+     * a different memory management strategy. */
+    (void)session;
+}
+
 
 KineticStatus KineticClient_P2POperation(KineticSession const * const session,
                                          KineticP2P_Operation* const p2pOp,

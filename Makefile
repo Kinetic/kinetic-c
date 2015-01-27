@@ -23,7 +23,7 @@ SYSTEM_TEST_HOST ?= \"localhost\"
 WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
-LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread
+LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread -ljson-c
 
 #===============================================================================
 # Kinetic-C Library Build Support
@@ -38,6 +38,7 @@ LIB_DIR = ./src/lib
 VENDOR = ./vendor
 PROTOBUFC = $(VENDOR)/protobuf-c
 SOCKET99 = $(VENDOR)/socket99
+JSONC = $(VENDOR)/json-c
 VERSION_FILE = ./config/VERSION
 VERSION = ${shell head -n1 $(VERSION_FILE)}
 THREADPOOL_PATH = ${LIB_DIR}/threadpool
@@ -46,7 +47,7 @@ BUS_PATH = ${LIB_DIR}/bus
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
 LIB_INCS = -I$(LIB_DIR) -I$(PUB_INC) -I$(PROTOBUFC) -I$(SOCKET99) -I$(VENDOR) \
-	-I$(THREADPOOL_PATH) -I$(BUS_PATH) -I${OPENSSL_PATH}/include
+	-I$(JSONC) -I$(THREADPOOL_PATH) -I$(BUS_PATH) -I${OPENSSL_PATH}/include
 
 C_SRC=${LIB_DIR}/*.[ch] $(SOCKET99)/socket99.[ch] $(PROTOBUFC)/protobuf-c/protobuf-c.[ch]
 
@@ -72,6 +73,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_memory.o \
 	$(OUT_DIR)/kinetic_semaphore.o \
 	$(OUT_DIR)/kinetic_countingsemaphore.o \
+	$(OUT_DIR)/kinetic_resourcewaiter.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/threadpool.o \
@@ -95,7 +97,7 @@ makedirs:
 all: default test system_tests test_internals run examples
 
 clean: makedirs update_git_submodules
-	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util
+	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util $(DISCOVERY_UTIL_EXEC)
 	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber
@@ -103,6 +105,7 @@ clean: makedirs update_git_submodules
 	cd ${SOCKET99} && make clean
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
+	# cd ${JSONC} && make clean --- make clean task does NOT exist
 
 update_git_submodules:
 	git submodule update --init
@@ -129,6 +132,9 @@ $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Werror -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
+${OUT_DIR}/bus.o: ${LIB_DIR}/bus/bus_types.h
+${OUT_DIR}/sender.o: ${LIB_DIR}/bus/sender_internal.h
+${OUT_DIR}/listener.o: ${LIB_DIR}/bus/listener_internal.h
 
 $(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpool/threadpool.h
 	$(CC) -o $@ -c $< $(CFLAGS)
@@ -147,6 +153,24 @@ ci: uninstall all stop_simulator test_internals install
 	@echo $(PROJECT) v$(VERSION) is in working order
 	@echo
 
+
+#-------------------------------------------------------------------------------
+# json-c
+#-------------------------------------------------------------------------------
+
+json: ${OUT_DIR}/libjson-c.a
+
+${JSONC}/Makefile:
+	cd ${JSONC} && \
+	sh autogen.sh && \
+	./configure
+
+${JSONC}/.libs/libjson-c.a: ${JSONC}/Makefile
+	cd ${JSONC} && \
+	make libjson-c.la
+
+${OUT_DIR}/libjson-c.a: ${JSONC}/.libs/libjson-c.a
+	cp ${JSONC}/.libs/libjson-c.a ${OUT_DIR}/libjson-c.a
 
 #-------------------------------------------------------------------------------
 # Test Support
@@ -292,10 +316,10 @@ systest_names = $(patsubst $(SYSTEST_OUT)/run_%,%,$(systest_executables))
 list_system_tests:
 	echo $(systest_names)
 
-$(SYSTEST_OUT)/%_runner.c: $(SYSTEST_SRC)/%.c
+$(SYSTEST_OUT)/%_runner.c: $(SYSTEST_SRC)/%.c $(KINETIC_LIB)
 	./test/support/generate_test_runner.sh $< > $@
 
-$(SYSTEST_OUT)/run_%: $(SYSTEST_SRC)/%.c $(SYSTEST_OUT)/%_runner.c $(KINETIC_LIB)
+$(SYSTEST_OUT)/run_%: $(SYSTEST_SRC)/%.c $(SYSTEST_OUT)/%_runner.c
 	@echo
 	@echo ================================================================================
 	@echo System test: '$<'
@@ -333,6 +357,33 @@ $(UTIL_EXEC): $(UTIL_OBJ) $(KINETIC_LIB)
 utility: $(UTIL_EXEC)
 
 build: $(KINETIC_LIB) $(KINETIC_SO_DEV) utility
+
+
+#===============================================================================
+# Service Discovery Utility Build Support
+#===============================================================================
+
+DISCOVERY_UTILITY = kinetic-c-discovery
+DISCOVERY_UTIL_DIR = $(UTIL_DIR)
+DISCOVERY_UTIL_EXEC = $(BIN_DIR)/$(DISCOVERY_UTILITY)
+DISCOVERY_UTIL_OBJ = $(OUT_DIR)/discovery.o $(OUT_DIR)/socket99.o
+DISCOVERY_UTIL_LDFLAGS +=  -lm -lssl $(KINETIC_LIB) -L${OUT_DIR} -lcrypto -lpthread -ljson-c
+
+$(OUT_DIR)/discovery.o: $(DISCOVERY_UTIL_DIR)/discovery.c
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(DISCOVERY_UTIL_DIR) $(LIB_INCS)
+
+$(DISCOVERY_UTIL_EXEC): $(DISCOVERY_UTIL_OBJ) $(KINETIC_LIB) json
+	@echo
+	@echo --------------------------------------------------------------------------------
+	@echo Building service discovery utility: $(DISCOVERY_UTIL_EXEC)
+	@echo --------------------------------------------------------------------------------
+	$(CC) -o $@ $(DISCOVERY_UTIL_OBJ) $(CFLAGS) $(DISCOVERY_UTIL_LDFLAGS) $(KINETIC_LIB)
+
+discovery_utility: $(DISCOVERY_UTIL_EXEC)
+
+build: discovery_utility
+
+
 
 
 #-------------------------------------------------------------------------------

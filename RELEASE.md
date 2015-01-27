@@ -1,3 +1,14 @@
+v0.11.0 (kinetic-protocol 3.0.5)
+--------------------------------
+* Changed API to use a `KineticClientConfig` struct, to keep future configuration changes from breaking the source API.
+    * NOTE: KineticClientConfig and KineticSessionConfig rely on C99 struct init.
+        * Unconfigured fields will be reverted to defaults if set to 0.
+        * These structures must be configured via C99 struct init or memset to 0 prior to population for backwards compatibility.
+* Added options for the number of writer, reader, and max threadpool threads, with defaults.
+* Added KineticClient_FreeDeviceInfo to free the `KineticDeviceInfo` structure allocated by `KineticClient_GetLog`.
+* Added several new examples under src/examples/.
+* Added json-c library dependency which will be used for JSON-formatted ACL files for upcoming Admin API and multi-cast drive discovery tool.
+
 v0.10.1 (kinetic-protocol 3.0.5)
 --------------------------------
 * Fixed regression in 0.10.0 where a GET with metadataOnly=true would result in a crash if a value field was not provided

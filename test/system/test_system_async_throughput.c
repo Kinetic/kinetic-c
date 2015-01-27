@@ -56,7 +56,11 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
             .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         },
     };
-    KineticClient * client = KineticClient_Init("stdout", 0);
+    KineticClientConfig config = {
+        .logFile = "stdout",
+        .logLevel = 0,
+    };
+    KineticClient * client = KineticClient_Init(&config);
 
     // Establish connection
     KineticStatus status = KineticClient_CreateConnection(&session, client);
@@ -68,8 +72,6 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
 
     uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
     ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
-
-
 
     uint32_t keys[num_ops];
     KineticEntry entries[num_ops];
@@ -212,6 +214,11 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
         }
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
+
+        for (size_t i = 0; i < num_ops; i++)
+        {
+            ByteBuffer_Free(test_get_datas[i]);
+        }
 
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
             + (stop_time.tv_usec - start_time.tv_usec);

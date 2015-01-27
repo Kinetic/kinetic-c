@@ -1,0 +1,39 @@
+title Kinetic C message handling (w/ no errors)
+
+parallel {
+    Client -> Sender: client enqueues request
+    note left of Client: client is blocked
+}
+
+Sender -> Listener: hold responses for <FD, SEQ_ID>
+activate Sender
+activate Listener
+
+Sender -> Drive: send request
+activate Drive
+
+Sender -> Client: notify Client
+
+parallel {
+    Client -> Client: backpressure
+
+    Sender -> Listener: expect response for <FD, SEQ_ID>
+    deactivate Sender
+}
+
+parallel {
+    note left of Client: client is unblocked
+
+    Drive -> Listener: response
+    deactivate Drive
+}
+
+Listener -> Listener: unpack response
+
+deactivate Listener
+
+Listener -> Threadpool: Transfer callback with result code
+activate Threadpool
+
+Threadpool -->> Client: callback(status)
+deactivate Threadpool

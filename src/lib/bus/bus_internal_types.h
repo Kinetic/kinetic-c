@@ -92,10 +92,10 @@ typedef enum {
     RX_ERROR_NONE = 0,
     RX_ERROR_READY_FOR_DELIVERY = 1,
     RX_ERROR_DONE = 2,
-    RX_ERROR_POLLHUP = -1,
-    RX_ERROR_POLLERR = -2,
-    RX_ERROR_READ_FAILURE = -3,
-    RX_ERROR_TIMEOUT = -4,
+    RX_ERROR_POLLHUP = -31,
+    RX_ERROR_POLLERR = -32,
+    RX_ERROR_READ_FAILURE = -33,
+    RX_ERROR_TIMEOUT = -34,
 } rx_error_t;
 
 /* Per-socket connection context. (Owned by the listener.) */
@@ -103,6 +103,7 @@ typedef struct {
     int fd;
     rx_error_t error;
     size_t to_read_size;
+    int64_t largest_seq_id_seen;
 
     SSL *ssl;                   /* SSL handle. Must be valid or BUS_NO_SSL. */
 

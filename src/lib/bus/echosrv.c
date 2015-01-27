@@ -119,6 +119,7 @@ static void parse_args(int argc, char **argv, config *cfg) {
     if (cfg->port_low == 0) { cfg->port_low = cfg->port_high; }
     if (cfg->port_high == 0) { cfg->port_high = cfg->port_low; }
     if (cfg->port_high < cfg->port_low || cfg->port_low == 0) { usage(); }
+    if (cfg->verbosity > 0) { printf("verbosity: %d\n", cfg->verbosity); }
 }
 
 int main(int argc, char **argv) {
@@ -178,6 +179,7 @@ static void open_ports(config *cfg) {
         } else {
             cfg->accept_fds[i].fd = res.fd;
             cfg->accept_fds[i].events = (POLLIN);
+            LOG(2, " -- Accepting on %s:%d\n", scfg.host, scfg.port);
         }
     }
 }
@@ -204,7 +206,7 @@ static void listen_loop_poll(config *cfg) {
     int delay = 1;
 
     for (;;) {
-        gettimeofday(&tv, 0);
+        gettimeofday(&tv, 0);  // TODO: clock_gettime
         if (tv.tv_sec != cfg->last_second) {
             tick_handler(cfg);
             cfg->last_second = tv.tv_sec;
@@ -336,6 +338,7 @@ static void handle_client_io(config *cfg, int available) {
         LOG(4, "fd[%d]->events 0x%08x ==> revents: 0x%08x\n", i, fd->events, fd->revents);
         
         if ((fd->revents & POLLERR) || (fd->revents & POLLHUP)) {
+            LOG(3, "Disconnecting client %d\n", fd->fd);
             disconnect_client(cfg, fd->fd);
         } else if (fd->revents & POLLOUT) {
             checked++;
@@ -380,7 +383,7 @@ static void handle_client_io(config *cfg, int available) {
                     cfg->last_second, rres);
                 enqueue_write(cfg, buf->fd, read_buf, rres);
             } else {
-
+                LOG(2, "else, rres %zd\n", rres);
             }
         }
     }

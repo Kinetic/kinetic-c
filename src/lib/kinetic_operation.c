@@ -28,10 +28,13 @@
 #include "kinetic_device_info.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
+#include <pthread.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/time.h>
 #include "bus.h"
+
+#define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
 
 static void KineticOperation_ValidateOperation(KineticOperation* operation);
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation);
@@ -41,8 +44,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     assert(operation != NULL);
     assert(operation->connection != NULL);
     assert(operation->request != NULL);
-
-    KineticCountingSemaphore_Take(operation->connection->outstandingOperations);
+    
     KineticStatus status = KineticOperation_SendRequestInner(operation);
     if (status != KINETIC_STATUS_SUCCESS)
     {
@@ -52,17 +54,32 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
             free(request->message.message.commandBytes.data);
             request->message.message.commandBytes.data = NULL;
         }
-        KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
     }
     return status;
 }
 
+// TODO: Assess refactoring this method by dissecting out Operation and relocate to kinetic_pdu
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation)
 {
-    LOGF2("\nSending PDU via fd=%d", operation->connection->messageBus);
+    LOGF3("\nSending PDU via fd=%d", operation->connection->socket);
 
+    KineticStatus status = KINETIC_STATUS_INVALID;
+    uint8_t * msg = NULL;
     KineticPDU* request = operation->request;
     KineticProto_Message* proto = &operation->request->message.message;
+    pthread_mutex_t* sendMutex = &operation->connection->sendMutex;
+
+    // Acquire lock
+    pthread_mutex_lock(sendMutex);
+    KineticSession *session = operation->connection->pSession;
+
+    // Populate sequence count and increment it for next operation
+    assert(request->message.header.sequence == KINETIC_SEQUENCE_NOT_YET_BOUND);
+
+    // int seq_id = ATOMIC_FETCH_AND_INCREMENT(&operation->connection->sequence);
+    // request->message.header.sequence = seq_id;
+    int64_t seq_id = operation->connection->sequence++;
+    request->message.header.sequence = seq_id;
 
     // Pack the command, if available
     size_t expectedLen = KineticProto_command__get_packed_size(&request->message.command);
@@ -70,7 +87,8 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     if(request->message.message.commandBytes.data == NULL)
     {
         LOG0("Failed to allocate command bytes!");
-        return KINETIC_STATUS_MEMORY_ERROR;
+        status = KINETIC_STATUS_MEMORY_ERROR;
+        goto cleanup;
     }
     size_t packedLen = KineticProto_command__pack(
         &request->message.command,
@@ -78,7 +96,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     assert(packedLen == expectedLen);
     request->message.message.commandBytes.len = packedLen;
     request->message.message.has_commandBytes = true;
-    KineticLogger_LogByteArray(2, "commandBytes", (ByteArray){
+    KineticLogger_LogByteArray(3, "commandBytes", (ByteArray){
         .data = request->message.message.commandBytes.data,
         .len = request->message.message.commandBytes.len,
     });
@@ -90,69 +108,67 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     case KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH:
         {
             KineticHMAC hmac;
+            memset(&hmac, 0, sizeof(hmac));
 
             // Populate the HMAC for the protobuf
             KineticHMAC_Init(&hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-            KineticHMAC_Populate(&hmac, proto, operation->connection->session.config.hmacKey);
+            KineticHMAC_Populate(&hmac, proto, session->config.hmacKey);
         } break;
     default:
         break;
     }
 
     KineticPDUHeader header;
+    memset(&header, 0, sizeof(header));
 
     // Configure PDU header length fields
     header.versionPrefix = 'F';
     header.protobufLength = KineticProto_Message__get_packed_size(proto);
-    KineticLogger_LogProtobuf(3, proto);
-
-    if (header.protobufLength > PDU_PROTO_MAX_LEN) {
-        // Packed message exceeds max size.
-        LOGF2("\nPacked protobuf exceeds maximum size. Packed size is: %d, Max size is: %d", header.protobufLength, PDU_PROTO_MAX_LEN);
-        return KINETIC_STATUS_BUFFER_OVERRUN;
-    }
-
     if (operation->entry != NULL && operation->sendValue) {
         header.valueLength = operation->entry->value.bytesUsed;
     }
     else {
         header.valueLength = 0;
     }
-
     if (header.valueLength > PDU_PROTO_MAX_LEN) {
         // Packed value exceeds max size.
         LOGF2("\nPacked value exceeds maximum size. Packed size is: %d, Max size is: %d", header.valueLength, PDU_PROTO_MAX_LEN);
-        return KINETIC_STATUS_BUFFER_OVERRUN;
+        status = KINETIC_STATUS_BUFFER_OVERRUN;
+        goto cleanup;
     }
-
-    LOGF1("[PDU TX] pdu: 0x%0llX, op: 0x%llX, session: 0x%llX, bus: 0x%llX, protoLen: %u, valueLen: %u",
-        operation->request, operation, &operation->connection->session,
-        operation->connection->messageBus, header.protobufLength, header.valueLength);
-
-    KineticLogger_LogHeader(2, &header);
-
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
     uint32_t nboValueLength = KineticNBO_FromHostU32(header.valueLength);
 
+    // Allocate and pack message
     size_t offset = 0;
-    uint8_t * msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
-    if (msg == NULL)
-    {
+    msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
+    if (msg == NULL) {
         LOG0("Failed to allocate outgoing message!");
-        return KINETIC_STATUS_MEMORY_ERROR;
+        status = KINETIC_STATUS_MEMORY_ERROR;
+        goto cleanup;
     }
     
     msg[offset] = header.versionPrefix;
     offset += sizeof(header.versionPrefix);
-
     memcpy(&msg[offset], &nboProtoLength, sizeof(nboProtoLength));
     offset += sizeof(nboProtoLength);
     memcpy(&msg[offset], &nboValueLength, sizeof(nboValueLength));
     offset += sizeof(nboValueLength);
-
     size_t len = KineticProto_Message__pack(&request->message.message, &msg[offset]);
     assert(len == header.protobufLength);
     offset += header.protobufLength;
+
+    assert(operation);
+    assert(operation->request);
+    assert(operation->connection);
+    assert(request);
+    LOGF2("[PDU TX] pdu: %p, op: %p, session: %p, bus: %p, fd: %6d, seq: %5lld, protoLen: %4u, valueLen: %u",
+        (void*)operation->request, (void*)operation,
+        (void*)operation->connection->pSession, (void*)operation->connection->messageBus,
+        operation->connection->socket, request->message.header.sequence,
+        header.protobufLength, header.valueLength);
+    KineticLogger_LogHeader(3, &header);
+    KineticLogger_LogProtobuf(3, proto);
 
     free(request->message.message.commandBytes.data);
     request->message.message.commandBytes.data = NULL;
@@ -164,20 +180,38 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     }
     assert((PDU_HEADER_LEN + header.protobufLength + header.valueLength) == offset);
 
-    bus_send_request(operation->connection->messageBus, &(bus_user_msg){
-        .fd       = operation->connection->socket,
+    // Claim a send PDU for proper throttling of concurrent requests to avoid flooding the drive
+    KineticCountingSemaphore * const sem = operation->connection->outstandingOperations;
+    KineticCountingSemaphore_Take(sem);
+    int fd = operation->connection->socket;
+    if (!bus_send_request(operation->connection->messageBus, &(bus_user_msg){
+        .fd       = fd,
         .type     = BUS_SOCKET_PLAIN,
-        // #TODO it would probably be good to clean up how we setup this sequence number
-        .seq_id   = request->message.header.sequence,
+        .seq_id   = seq_id,
         .msg      = msg,
         .msg_size = offset,
         .cb       = KineticController_HandleExpectedResponse,
         .udata    = operation,
-    });
+        }))
+    {
+        LOGF0("Failed queuing request %p for transmit on fd=%d w/seq=%lld",
+            (void*)request, fd, (long long)seq_id);
+        // Since the request PDU failed getting queued into the bus,
+        // release this request from the throttle to clean up properly
+        KineticCountingSemaphore_Give(sem);
+        status = KINETIC_STATUS_SOCKET_ERROR;
+    }
+    else {
+        status = KINETIC_STATUS_SUCCESS;
+    }
 
-    free(msg);
+cleanup:
 
-    return KINETIC_STATUS_SUCCESS;
+    pthread_mutex_unlock(sendMutex);
+
+    if (msg != NULL) { free(msg); }
+
+    return status;
 }
 
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation)
@@ -201,7 +235,6 @@ KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, K
 void KineticOperation_BuildNoop(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
     operation->request->message.command.header->has_messageType = true;
     operation->valueEnabled = false;
@@ -246,7 +279,6 @@ void KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT;
     operation->request->message.command.header->has_messageType = true;
@@ -297,7 +329,6 @@ static void build_get_command(KineticOperation* const operation,
                               KineticProto_Command_MessageType command_id)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->message.command.header->messageType = command_id;
     operation->request->message.command.header->has_messageType = true;
@@ -363,7 +394,6 @@ KineticStatus KineticOperation_FlushCallback(KineticOperation* const operation, 
 void KineticOperation_BuildFlush(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->message.command.header->messageType =
       KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA;
     operation->request->message.command.header->has_messageType = true;
@@ -386,7 +416,6 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
                                   KineticEntry* const entry)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE;
     operation->request->message.command.header->has_messageType = true;
@@ -432,7 +461,6 @@ void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
     KineticOperation_ValidateOperation(operation);
     assert(range != NULL);
     assert(buffers != NULL);
-    KineticSession_IncrementSequence(&operation->connection->session);
 
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE;
     operation->request->command->header->has_messageType = true;
@@ -473,7 +501,6 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     KineticDeviceInfo** info)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     KineticProto_Command_GetLog_Type protoType =
         KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(type);
         
@@ -642,7 +669,6 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
                                                  KineticP2P_Operation* const p2pOp)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
         
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH;
     operation->request->command->header->has_messageType = true;
@@ -652,6 +678,10 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
     
     if (operation->request->command->body->p2pOperation == NULL) {
         return KINETIC_STATUS_OPERATION_INVALID;
+    }
+
+    if (p2pOp->numOperations >= 100000) {
+        return KINETIC_STATUS_BUFFER_OVERRUN;
     }
 
     operation->p2pOp = p2pOp;
@@ -671,36 +701,12 @@ KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* cons
 void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->message.body;
     operation->request->command->body->pinOp = &operation->request->message.pinOp;
- 
-#if 0
-    /* Replace HMAC auth with pin auth */
-    KineticProto_Message* pdu = operation->request->proto;
-    pdu->has_authType = true;
-    pdu->authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH;
-    //ProtobufCBinaryData pin_bd = { .data="pin", .len=3 };
-    ProtobufCBinaryData pin_bd = { .data="", .len=0 };
-
-    pdu->hmacAuth = NULL;
-#if 0
-    pdu->hmacAuth->has_hmac = false;
-    pdu->hmacAuth->has_identity = false;
-    pdu->hmacAuth->hmac = (ProtobufCBinaryData) {
-        .data = NULL, .len = 0,
-    };
-#endif
-
-    pdu->pinAuth = &operation->request->message.pinAuth;
-    pdu->pinAuth->pin = pin_bd;
-    pdu->pinAuth->has_pin = true;
-#endif
     
     operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP;
-    //operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP;
     operation->request->command->body->pinOp->has_pinOpType = true;
     
     operation->valueEnabled = false;
@@ -722,7 +728,6 @@ KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* opera
 void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion)
 {
     KineticOperation_ValidateOperation(operation);
-    KineticSession_IncrementSequence(&operation->connection->session);
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->message.command.header->has_messageType = true;
     
@@ -750,12 +755,14 @@ void KineticOperation_Complete(KineticOperation* operation, KineticStatus status
 {
     assert(operation != NULL);
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
-    if (operation->closure.callback == NULL) { return; }
     KineticCompletionData completionData = {.status = status};
 
+    // Release this request so that others can be unblocked if at max (request PDUs throttled)
     KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
 
-    operation->closure.callback(&completionData, operation->closure.clientData);
+    if(operation->closure.callback != NULL) {
+        operation->closure.callback(&completionData, operation->closure.clientData);
+    }
 
     KineticAllocator_FreeOperation(operation);
 }
