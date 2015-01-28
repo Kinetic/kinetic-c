@@ -55,7 +55,7 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation_in_asynchronous_mode(
     Session.connection = &Connection;
     KineticOperation operation;
 
-    KineticOperation_Create_ExpectAndReturn(&Session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildNoop_Expect(&operation);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

@@ -59,7 +59,7 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     KineticOperation operation;
     operation.connection = &Connection;
     
-    KineticOperation_Create_ExpectAndReturn(&Session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildPut_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
 

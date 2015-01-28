@@ -61,7 +61,7 @@ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_de
     KineticDeviceInfo* info;
     KineticOperation operation;
 
-    KineticOperation_Create_ExpectAndReturn(&Session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

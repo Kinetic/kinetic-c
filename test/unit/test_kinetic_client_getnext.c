@@ -75,7 +75,7 @@ void test_KineticClient_GetNext_should_execute_GETNEXT(void)
     };
     KineticOperation operation;
 
-    KineticOperation_Create_ExpectAndReturn(&Session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildGetNext_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -96,7 +96,7 @@ void test_KineticClient_GetNext_should_expose_memory_errors(void)
         .value = ValueBuffer,
     };
 
-    KineticOperation_Create_ExpectAndReturn(&Session, NULL);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, NULL);
     KineticStatus status = KineticClient_GetNext(&Session, &entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MEMORY_ERROR, status);
 }
