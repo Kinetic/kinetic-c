@@ -35,7 +35,7 @@
 
 void setUp(void)
 {
-    SystemTestSetup(2);
+    SystemTestSetup(1);
 }
 
 void tearDown(void)
@@ -48,6 +48,10 @@ typedef struct {
     KineticStatus status;
 } PutStatus;
 
+uint32_t keys[NUM_PUTS];
+KineticEntry entries[NUM_PUTS];
+PutStatus put_statuses[NUM_PUTS];
+
 static void put_finished(KineticCompletionData* kinetic_data, void* clientData);
 
 void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
@@ -57,17 +61,12 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
 
     uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
     ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
-
-    PutStatus put_statuses[NUM_PUTS];
     for (size_t i = 0; i < NUM_PUTS; i++) {
         put_statuses[i] = (PutStatus) {
             .sem = KineticSemaphore_Create(),
             .status = KINETIC_STATUS_INVALID,
         };
     };
-
-    uint32_t keys[NUM_PUTS];
-    KineticEntry entries[NUM_PUTS];
 
     struct timeval start_time;
     gettimeofday(&start_time, NULL);

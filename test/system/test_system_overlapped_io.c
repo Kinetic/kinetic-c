@@ -36,7 +36,7 @@
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
 STATIC const char HmacKeyString[] = "asdfasdf";
-STATIC const int TestDataSize = 50 * (1024*1024);
+STATIC const int TestDataSize = 500 * KINETIC_OBJ_SIZE;
 
 struct kinetic_thread_arg {
     char ip[16];

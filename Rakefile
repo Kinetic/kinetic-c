@@ -49,11 +49,16 @@ BUILD_ARTIFACTS = File.join(HERE, 'build', 'artifacts', 'release')
 TEST_ARTIFACTS = File.join(HERE, 'build', 'artifacts', 'test')
 PROTO_OUT = TEST_ARTIFACTS
 TEST_TEMP = File.join(HERE, 'build', 'test', 'temp')
+DOCS_PATH = File.join(HERE, 'docs/api')
 
+directory DOCS_PATH
+CLOBBER.include DOCS_PATH
 directory PROTO_OUT
 CLOBBER.include PROTO_OUT
 directory TEST_TEMP
 CLOBBER.include TEST_TEMP
+
+task :clobber
 
 task :test => ['test:delta']
 
@@ -92,9 +97,6 @@ end
 
 namespace :doxygen do
 
-  DOCS_PATH = "./docs/api/"
-  directory DOCS_PATH
-  CLOBBER.include DOCS_PATH
   VERSION = File.read('./config/VERSION').strip
 
   task :checkout_github_pages => ['clobber', DOCS_PATH] do

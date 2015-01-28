@@ -328,7 +328,7 @@ void run_tests(KineticClient * client)
     TestParams params[] = { 
         { .client = client, .num_ops = 100, .obj_size = KINETIC_OBJ_SIZE, .thread_iters = 2 },
         { .client = client, .num_ops = 1000, .obj_size = 120, .thread_iters = 2 },
-        { .client = client, .num_ops = 500, .obj_size = 70000, .thread_iters = 2 },
+        // { .client = client, .num_ops = 500, .obj_size = 70000, .thread_iters = 2 },
         // { .client = client, .num_ops = 1000, .obj_size = 120, .thread_iters = 5 },
         // { .client = client, .num_ops = 1000, .obj_size = 120, .thread_iters = 5 },
         // { .client = client, .num_ops = 1000, .obj_size = 120, .thread_iters = 2 },

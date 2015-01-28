@@ -22,13 +22,11 @@
 
 void setUp(void)
 {
-    LOG_LOCATION;
-    SystemTestSetup(3);
+    SystemTestSetup(1);
 }
 
 void tearDown(void)
 {
-    LOG_LOCATION;
     SystemTestShutDown();
 }
 
@@ -59,7 +57,6 @@ typedef enum { CMD_NEXT, CMD_PREVIOUS } GET_CMD;
 
 static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
 {
-    LOG_LOCATION;
     static const ssize_t sz = 10;
     char key_buf[sz];
     char tag_buf[sz];
@@ -114,7 +111,7 @@ static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
         default:
             TEST_ASSERT(false);
         }
-
+        
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
         ByteBuffer expectedKeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_exp_buf, sz, "key_%d", i);

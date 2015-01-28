@@ -52,10 +52,13 @@ void setUp(void)
     KineticLogger_Init("stdout", 1);
     KineticSession_Init(&Session, &SessionConfig, &Connection);
     Connection.connectionID = ConnectionID;
+
+    Session.connection = &Connection;
     Connection.pSession = &Session;
     KineticPDU_InitWithCommand(&Request, &Session);
     KineticPDU_InitWithCommand(&Response, &Session);
     KineticOperation_Init(&Operation, &Session);
+
     Operation.request = &Request;
     Operation.connection = &Connection;
     SessionConfig = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
@@ -116,6 +119,40 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
         .tag = ByteBuffer_CreateWithArray(tag),
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ByteBuffer_CreateWithArray(value),
+    };
+
+    KineticMessage_ConfigureKeyValue_Expect(&Operation.request->message, &entry);
+
+    // Build the operation
+    KineticOperation_BuildPut(&Operation, &entry);
+
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_TRUE(Operation.valueEnabled);
+    TEST_ASSERT_TRUE(Operation.sendValue);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry->value.array);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_NULL(Operation.response);
+}
+
+void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_create_a_new_object_with_calculated_tag(void)
+{
+    ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
+    ByteArray key = ByteArray_CreateWithCString("foobar");
+    ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
+    ByteArray tag = ByteArray_CreateWithCString("some_tag");
+
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .newVersion = ByteBuffer_CreateWithArray(newVersion),
+        .tag = ByteBuffer_CreateWithArray(tag),
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ByteBuffer_CreateWithArray(value),
+        .computeTag = true;
     };
 
     KineticMessage_ConfigureKeyValue_Expect(&Operation.request->message, &entry);

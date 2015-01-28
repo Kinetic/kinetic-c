@@ -18,14 +18,36 @@
 *
 */
 
-#ifndef _KINETIC_AUTH_H
-#define _KINETIC_AUTH_H
+#include "kinetic_countingsemaphore.h"
+#include "kinetic_countingsemaphore_types.h"
+#include "unity.h"
+#include "unity_helper.h"
+#include "kinetic_logger.h"
+#include "kinetic_proto.h"
+#include "protobuf-c.h"
+#include <stdlib.h>
+#include <pthread.h>
 
-#include "kinetic_types_internal.h"
+typedef struct {
+    pthread_t threadID;
+    KineticCountingSemaphore* sem;
+} worker_args;
 
-KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const config);
-KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticPDU * const pdu);
-KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticPDU * const pdu, ByteArray pin);
-KineticStatus KineticAuth_PopulateTag(ByteBuffer * const tag, KineticAlgorithm algorithm, ByteArray const * const key);
+void* worker_thread(void* args)
+{
+    (void)args;
+    return (void*)NULL;
+}
 
-#endif // _KINETIC_AUTH_H
+#define MAX_COUNT 3
+#define NUM_WORKERS 4
+worker_args workers[NUM_WORKERS];
+
+void test_kinetic_countingsemaphore_should_be_thread_safe(void)
+{
+    KineticCountingSemaphore* sem = KineticCountingSemaphore_Create(3);
+
+    // Do stuff.....
+
+    KineticCountingSemaphore_Destroy(sem);
+}

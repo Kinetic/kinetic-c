@@ -18,14 +18,38 @@
 *
 */
 
-#ifndef _KINETIC_AUTH_H
-#define _KINETIC_AUTH_H
+#include "kinetic_resourcewaiter.h"
+#include "kinetic_resourcewaiter_types.h"
+#include "unity.h"
+#include "unity_helper.h"
+#include <stdlib.h>
+#include <pthread.h>
 
-#include "kinetic_types_internal.h"
+KineticResourceWaiter ConnectionReady;
 
-KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const config);
-KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticPDU * const pdu);
-KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticPDU * const pdu, ByteArray pin);
-KineticStatus KineticAuth_PopulateTag(ByteBuffer * const tag, KineticAlgorithm algorithm, ByteArray const * const key);
+typedef struct {
+    pthread_t threadID;
+    KineticResourceWaiter* waiter;
+    bool signaled;
+} worker_args;
 
-#endif // _KINETIC_AUTH_H
+void* worker_thread(void* args)
+{
+    (void)args;
+    return (void*)NULL;
+}
+
+#define MAX_COUNT 3
+#define NUM_WORKERS 4
+worker_args workers[NUM_WORKERS];
+
+void test_kinetic_resourcewaiter_should_block_waiting_threads_until_available(void)
+{
+    KineticResourceWaiter_Init(&ConnectionReady);
+
+    // Do stuff.....
+
+    KineticResourceWaiter_SetAvailable(&ConnectionReady);
+
+    KineticResourceWaiter_Destroy(&ConnectionReady);
+}

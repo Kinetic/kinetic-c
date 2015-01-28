@@ -23,7 +23,6 @@
 
 #include "kinetic_types_internal.h"
 
-KineticOperation* KineticOperation_Create(KineticSession const * const session);
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation);
 KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
 void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);

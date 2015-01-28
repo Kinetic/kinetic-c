@@ -18,6 +18,16 @@ Prerequisites
     * Installation (if you don't already have OpenSSL installed)
         * Linux (using apt-get)
             * `> sudo apt-get install openssl`
+        * Linux (using yum)
+            * `> sudo yum install openssl`
+        * OSX (using [Homebrew](http://brew.sh/))
+            * `> brew install openssl`
+* [json-c](https://github.com/json-c/json-c) for JSON-formatted ACL definition files
+    * Installation
+        * Linux (using apt-get)
+            * `> sudo apt-get install json-c`
+        * Linux (using yum)
+            * `> sudo yum install json-c`
         * OSX (using [Homebrew](http://brew.sh/))
             * `> brew install openssl`
             
@@ -25,7 +35,7 @@ A release of OpenSSL that provides TLS 1.1 or newer is required.
 
 If the OpenSSL installation is not found, the `OPENSSL_PATH` environment
 variable may need to be set to its base path, e.g.
-`/usr/local/openssl/1.0.1k/`.
+`export OPENSSL_PATH=/usr/local/openssl/1.0.1k/`.
 
 Getting Started
 ---------------
@@ -64,6 +74,8 @@ API Documentation
 * [ByteArray API](http://seagate.github.io/kinetic-c/byte__array_8h.html)
     * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c
         * e.g. object keys, object value data, etc.
+
+**NOTE: Configuration structures `KineticClientConfig` and `KineticSessionConfig` should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure backwards compatibility!**
 
 Client Test Utility
 ===========================

@@ -74,6 +74,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_memory.o \
 	$(OUT_DIR)/kinetic_semaphore.o \
 	$(OUT_DIR)/kinetic_countingsemaphore.o \
+	$(OUT_DIR)/kinetic_resourcewaiter.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/kinetic_admin_client.o \
@@ -107,7 +108,7 @@ clean: makedirs update_git_submodules
 	cd ${SOCKET99} && make clean
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
-	# cd ${JSONC} && make clean -- would be nice, but doesn't have clean task :(
+	# cd ${JSONC} && make clean --- make clean task does NOT exist until autoconf is run
 
 update_git_submodules:
 	git submodule update --init

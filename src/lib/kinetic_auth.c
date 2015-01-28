@@ -104,3 +104,11 @@ KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config,
 
     return KINETIC_STATUS_SUCCESS;
 }
+
+KineticStatus KineticAuth_PopulateTag(ByteBuffer * const tag, KineticAlgorithm algorithm, ByteArray const * const key)
+{
+    (void)tag;
+    (void)algorithm;
+    (void)key;
+    return KINETIC_STATUS_INVALID;
+}

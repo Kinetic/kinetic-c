@@ -24,7 +24,6 @@
 #include "kinetic_session.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
-#include "kinetic_device_info.h"
 #include "kinetic_logger.h"
 #include "kinetic_pdu.h"
 #include "kinetic_memory.h"
@@ -137,10 +136,11 @@ KineticStatus KineticClient_DestroySession(KineticSession* const session)
 
 KineticStatus KineticClient_NoOp(KineticSession const * const session)
 {
+    LOG_LOCATION;
     assert(session != NULL);
     assert(session->connection != NULL);
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildNoop(operation);
@@ -159,7 +159,7 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     assert(session->connection->pSession == session);
     assert(session->connection == session->connection->pSession->connection);
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -177,7 +177,7 @@ KineticStatus KineticClient_Flush(KineticSession const * const session,
     assert(session != NULL);
     assert(session->connection != NULL);
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
 
     // Initialize request
@@ -217,7 +217,7 @@ static KineticStatus handle_get_command(GET_COMMAND cmd,
         return KINETIC_STATUS_MISSING_VALUE_BUFFER;
     }
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {
         return KINETIC_STATUS_MEMORY_ERROR;
     }
@@ -271,7 +271,7 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(entry != NULL);
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -293,7 +293,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
     assert(keys->buffers != NULL);
     assert(keys->count > 0);
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -311,7 +311,7 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(p2pOp != NULL);
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request

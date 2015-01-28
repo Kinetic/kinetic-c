@@ -244,6 +244,7 @@ typedef struct _KineticEntry {
     ByteBuffer newVersion;      ///< New version for the object to assume once written to disk (optional)
     bool metadataOnly;          ///< If set for a GET request, will return only the metadata for the specified object (`value` will not be retrieved)
     bool force;                 ///< If set for a GET/DELETE request, will override `version` checking
+    bool computeTag;            ///< If set and an algorithm is specified, the tag will be populated with the calculated hash for integrity checking
     KineticSynchronization synchronization; ///< Synchronization method to use for PUT/DELETE requests.
 } KineticEntry;
 

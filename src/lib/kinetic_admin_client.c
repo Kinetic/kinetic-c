@@ -22,6 +22,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
+#include "kinetic_allocator.h"
 #include "kinetic_auth.h"
 #include "kinetic_device_info.h"
 
@@ -60,7 +61,7 @@ KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const sessio
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildSetPin(operation, old_pin, new_pin, false);
@@ -82,7 +83,7 @@ KineticStatus KineticAdminClient_SecureErase(KineticSession const * const sessio
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildErase(operation, true, &pin);
@@ -104,7 +105,7 @@ KineticStatus KineticAdminClient_InstantErase(KineticSession const * const sessi
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildErase(operation, false, &pin);
@@ -125,7 +126,7 @@ KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildSetPin(operation, old_pin, new_pin, true);
@@ -147,7 +148,7 @@ KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildLockUnlock(operation, true, &pin);
@@ -169,7 +170,7 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildLockUnlock(operation, false, &pin);
@@ -185,7 +186,7 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(info != NULL);
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -226,7 +227,7 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const 
     status = KineticAuth_EnsureSslEnabled(&session->config);
     if (status != KINETIC_STATUS_SUCCESS) {return status;}
 
-    KineticOperation* operation = KineticOperation_Create(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildSetClusterVersion(operation, version);

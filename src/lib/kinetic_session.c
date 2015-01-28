@@ -26,6 +26,7 @@
 #include "kinetic_operation.h"
 #include "kinetic_controller.h"
 #include "kinetic_allocator.h"
+#include "kinetic_resourcewaiter.h"
 #include "kinetic_logger.h"
 #include <stdlib.h>
 #include <string.h>
@@ -35,7 +36,6 @@
 
 KineticStatus KineticSession_Create(KineticSession * const session, KineticClient * const client)
 {
-    LOG_LOCATION;
     if (session == NULL) {
         LOG0("Session is NULL");
         return KINETIC_STATUS_SESSION_EMPTY;
@@ -60,7 +60,6 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         return KINETIC_STATUS_MEMORY_ERROR;
     }
 
-#if COUNTING_SEMAPHORE_ENABLED
     session->connection->outstandingOperations =
         KineticCountingSemaphore_Create(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION);
     if (session->connection->outstandingOperations == NULL) {
@@ -68,7 +67,6 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         KineticAllocator_FreeConnection(session->connection);
         return KINETIC_STATUS_MEMORY_ERROR;
     }
-#endif
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -81,9 +79,7 @@ KineticStatus KineticSession_Destroy(KineticSession * const session)
     if (session->connection == NULL) {
         return KINETIC_STATUS_SESSION_INVALID;
     }
-#if COUNTING_SEMAPHORE_ENABLED
     KineticCountingSemaphore_Destroy(session->connection->outstandingOperations);
-#endif
     KineticAllocator_FreeConnection(session->connection);
     session->connection = NULL;
 
@@ -106,41 +102,52 @@ KineticStatus KineticSession_Connect(KineticSession * const session)
     assert(session != NULL);
     assert(session->connection != NULL);
     assert(strlen(session->config.host) > 0);
-    connection->connected = false;
     connection->socket = KineticSocket_Connect(
         session->config.host, session->config.port);
-    connection->connected = (connection->socket >= 0);
-    if (!connection->connected) {
+    if (connection->socket == KINETIC_SOCKET_DESCRIPTOR_INVALID) {
         LOG0("Session connection failed!");
         connection->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
+        connection->connected = false;
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
+    connection->connected = true;
 
     bus_socket_t socket_type = session->config.useSsl ? BUS_SOCKET_SSL : BUS_SOCKET_PLAIN;
     connection->si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     if (connection->si == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
     bool success = bus_register_socket(connection->messageBus, socket_type, connection->socket, connection);
     if (!success) {
-        free(connection->si);
-        return KINETIC_STATUS_SESSION_INVALID;
+        LOG0("Failed registering connection with client!");
+        goto connection_error_cleanup;
     }
 
-    // #TODO what to do if we time out here? I think the bus should timeout by itself or something
-
-    // Wait for initial unsolicited status to be received in order to obtain connectionID
-    const long maxWaitMicrosecs = 10000000;
-    long microsecsWaiting = 0;
-    struct timespec sleepDuration = {.tv_nsec = 500000};
-    while(connection->connectionID == 0) {
-        if (microsecsWaiting > maxWaitMicrosecs) {
-            LOG0("Timed out waiting for connection ID from device!");
-            return KINETIC_STATUS_SOCKET_TIMEOUT;
-        }
-        nanosleep(&sleepDuration, NULL);
-        microsecsWaiting += (sleepDuration.tv_nsec / 1000);
+    // Wait for initial unsolicited status to be received in order to obtain connection ID
+    success = KineticResourceWaiter_WaitTilAvailable(&connection->connectionReady, KINETIC_CONNECTION_TIMEOUT_SECS);
+    if (!success) {
+        LOG0("Timed out waiting for connection ID from device!");
+        goto connection_error_cleanup;
     }
+    // nanosleep(&sleepDuration, NULL);
+    LOGF1("Received connection ID %lld for session %p",
+        (long long)connection->connectionID, (void*)session);
+    // nanosleep(&sleepDuration, NULL);
 
     return KINETIC_STATUS_SUCCESS;
+
+connection_error_cleanup:
+
+    LOG_LOCATION;
+
+    if (connection->si != NULL) {
+        free(connection->si);
+        connection->si = NULL;
+    }
+    if (connection->socket != KINETIC_SOCKET_DESCRIPTOR_INVALID) {
+        KineticSocket_Close(connection->socket);
+        connection->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
+    }
+    connection->connected = false;
+    return KINETIC_STATUS_CONNECTION_ERROR;
 }
 
 KineticStatus KineticSession_Disconnect(KineticSession const * const session)
@@ -156,6 +163,7 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
     // Close the connection
     bus_release_socket(connection->messageBus, connection->socket);
     free(connection->si);
+    connection->si = NULL;
     connection->socket = KINETIC_HANDLE_INVALID;
     connection->connected = false;
     pthread_mutex_destroy(&connection->sendMutex);

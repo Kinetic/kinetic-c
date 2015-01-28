@@ -75,12 +75,6 @@ void test_Put_should_create_new_object_on_device(void)
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
 
-void test_system_put_neeeds_to_have_tests_refactored(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Finish refactoring tests!")
-}
-
-
 void test_Put_should_create_another_new_object_on_device(void)
 {
     LOG_LOCATION;

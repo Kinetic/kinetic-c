@@ -23,7 +23,6 @@
 static char OldPinData[4];
 static char NewPinData[4];
 static ByteArray OldPin, NewPin;
-static bool ErasePinSet;
 
 static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
@@ -80,26 +79,17 @@ void setUp(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Set the erase PIN to something non-empty
-    ErasePinSet = false;
     strcpy(NewPinData, "123");
     OldPin = ByteArray_Create(OldPinData, 0);
     NewPin = ByteArray_Create(NewPinData, strlen(NewPinData));
     status = KineticAdminClient_SetErasePin(Fixture.adminSession,
         OldPin, NewPin);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    ErasePinSet = (status == KINETIC_STATUS_SUCCESS);
 }
 
 void tearDown(void)
 {
     KineticStatus status;
-    
-    // Restore erase PIN
-    if (ErasePinSet) {
-        status = KineticAdminClient_SetErasePin(Fixture.adminSession,
-            NewPin, OldPin);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    }
     
     // Validate the object no longer exists
     KineticEntry regetEntryMetadata = {

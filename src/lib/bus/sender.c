@@ -980,7 +980,7 @@ static void tick_handler(sender *s) {
     }
     
     BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 64,
-        "tick... %p -- %d of %d tx_info in use, %d active FDs\n",
+        "tick... %p -- %d of %d tx_info in use, %d active FDs",
         (void*)s, tx_info_in_use, MAX_CONCURRENT_SENDS, s->active_fds);
     
     /* Walk table and expire timeouts & items which have been sent.

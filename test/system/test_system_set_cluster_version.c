@@ -20,24 +20,32 @@
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
 
+const int64_t ClusterVersion = 1981;
+bool ClusterVersionSet;
+
 void setUp(void)
 {
     SystemTestSetup(3);
+    ClusterVersionSet = false;
 }
 
 void tearDown(void)
 {
+    if (ClusterVersionSet) {
+        KineticStatus status = KineticAdminClient_SetClusterVersion(Fixture.adminSession, 0);
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status); 
+    }
     SystemTestShutDown();
 }
 
 void test_SetClusterVersion_should_succeed(void)
 {
-    TEST_IGNORE_MESSAGE("FIXME: Not getting a valid response from the drive, and threadpool should be marking as a failure, but we are getting KINETIC_STATUS_SUCCESS");
-
-    KineticStatus status = KineticAdminClient_SetClusterVersion(Fixture.adminSession, 1981);
+    KineticStatus status = KineticAdminClient_SetClusterVersion(Fixture.adminSession, 0);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    ClusterVersionSet = true;
+}
 
-    sleep(1);
-
-    TEST_FAIL_MESSAGE("FIXME: Not getting a valid response from the drive, and threadpool should be marking as a failure, but we are getting KINETIC_STATUS_SUCCESS");
+void test_SetClusterVersion_should_update_session_cluster_version_upon_success(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: update session cluster version!");
 }
