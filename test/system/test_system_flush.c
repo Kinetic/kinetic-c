@@ -22,7 +22,7 @@
 
 void setUp(void)
 {
-    SystemTestSetup(2);
+    SystemTestSetup(1);
 }
 
 void tearDown(void)

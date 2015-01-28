@@ -76,8 +76,6 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     // Populate sequence count and increment it for next operation
     assert(request->message.header.sequence == KINETIC_SEQUENCE_NOT_YET_BOUND);
-    // int seq_id = ATOMIC_FETCH_AND_INCREMENT(&operation->connection->sequence);
-    // request->message.header.sequence = seq_id;
     int64_t seq_id = operation->connection->sequence++;
     request->message.header.sequence = seq_id;
 

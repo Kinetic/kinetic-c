@@ -152,7 +152,7 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
         .tag = ByteBuffer_CreateWithArray(tag),
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ByteBuffer_CreateWithArray(value),
-        .computeTag = true;
+        .computeTag = true,
     };
 
     KineticMessage_ConfigureKeyValue_Expect(&Operation.request->message, &entry);

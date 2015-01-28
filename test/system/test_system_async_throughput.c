@@ -27,7 +27,7 @@
 
 void setUp(void)
 {
-    SystemTestSetup(3);
+    SystemTestSetup(1);
 }
 
 void tearDown(void)
@@ -44,15 +44,13 @@ static void run_throghput_tests(size_t num_ops, size_t value_size);
 
 void test_kinetic_client_throughput_for_maximum_sized_objects(void)
 {
-    for (int iteration = 0; iteration < 1; iteration++) {
-        run_throghput_tests(500, KINETIC_OBJ_SIZE);
-    }
+    run_throghput_tests(500, KINETIC_OBJ_SIZE);
 }
 
-// void test_kinetic_client_throughput_for_small_sized_objects(void)
-// {
-//     run_throghput_tests(200, 120);
-// }
+void test_kinetic_client_throughput_for_small_sized_objects(void)
+{
+    run_throghput_tests(200, 120);
+}
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
@@ -80,10 +78,7 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
     KineticEntry* entries = calloc(num_ops, sizeof(KineticEntry));
     OpStatus* op_statuses = calloc(num_ops, sizeof(OpStatus));
     KineticCompletionClosure* closures = calloc(num_ops, sizeof(KineticCompletionClosure));
-    uint8_t* valueDatas[num_ops];
-    for (size_t i = 0; i < num_ops; i++) {
-        valueDatas[i] = calloc(1, value_size);
-    }
+    ByteBuffer* test_get_datas = calloc(num_ops, sizeof(ByteBuffer));
 
     // Measure PUT performance
     {
@@ -164,25 +159,17 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
     }
 
     // Measure GET performance
-    #if 1
     {
         for (size_t i = 0; i < num_ops; i++) {
             op_statuses[i] = (OpStatus){
                 .sem = KineticSemaphore_Create(),
                 .status = KINETIC_STATUS_INVALID,
             };
-        };
 
-        ByteBuffer test_get_datas[num_ops];
-        for (size_t i = 0; i < num_ops; i++) {
-            test_get_datas[i] = ByteBuffer_Create(valueDatas[i], value_size, 0);
-        }
+            test_get_datas[i] = ByteBuffer_Malloc(value_size);
 
-        struct timeval start_time;
-        gettimeofday(&start_time, NULL);
-
-        for (size_t i = 0; i < num_ops; i++) {
-            ByteBuffer key = ByteBuffer_CreateAndAppendFormattedCString(&keys[i], sizeof(struct key_struct), "%08zu", i);
+            ByteBuffer key = ByteBuffer_CreateAndAppendFormattedCString(&keys[i],
+                sizeof(struct key_struct), "%08zu", i);
 
             entries[i] = (KineticEntry) {
                 .key = key,
@@ -194,7 +181,12 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
                 .callback = op_finished,
                 .clientData = &op_statuses[i],
             };
+        };
 
+        struct timeval start_time;
+        gettimeofday(&start_time, NULL);
+
+        for (size_t i = 0; i < num_ops; i++) {
             KineticStatus status = KineticClient_Get(Fixture.session, &entries[i], &closures[i]);
 
             if (status != KINETIC_STATUS_SUCCESS) {
@@ -220,9 +212,9 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
 
-        // for (size_t i = 0; i < num_ops; i++) {
-        //     ByteBuffer_Free(test_get_datas[i]);
-        // }
+        for (size_t i = 0; i < num_ops; i++) {
+            ByteBuffer_Free(test_get_datas[i]);
+        }
 
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
             + (stop_time.tv_usec - start_time.tv_usec);
@@ -243,7 +235,6 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
             bandwidth,
             entries_per_sec);
     }
-    #endif
 
     // Measure DELETE performance
     {
@@ -318,10 +309,7 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
     free(entries);
     free(op_statuses);
     free(closures);
-    for (size_t i = 0; i < num_ops; i++) {
-        free(valueDatas[i]);
-    }
-    // free(valueDatas);
+    free(test_get_datas);
 }
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData)

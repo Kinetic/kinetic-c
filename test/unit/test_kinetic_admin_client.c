@@ -114,7 +114,7 @@ void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_t
     KineticDeviceInfo* info;
     KineticOperation operation;
 
-    KineticOperation_Create_ExpectAndReturn(&session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
     KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -135,7 +135,7 @@ void test_KineticAdminClient_SecureErase_should_build_and_execute_a_SECURE_ERASE
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticOperation_Create_ExpectAndReturn(&session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
     KineticOperation_BuildErase_Expect(&operation, true, &pin);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -174,7 +174,7 @@ void test_KineticAdminClient_InstantErase_should_build_and_execute_an_INSTANT_SE
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticOperation_Create_ExpectAndReturn(&session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
     KineticOperation_BuildErase_Expect(&operation, false, &pin);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -212,7 +212,7 @@ void test_KineticAdminClient_LockDevice_should_build_and_execute_an_LOCK_with_PI
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticOperation_Create_ExpectAndReturn(&session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
     KineticOperation_BuildLockUnlock_Expect(&operation, true, &pin);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -250,7 +250,7 @@ void test_KineticAdminClient_UnlockDevice_should_build_and_execute_an_LOCK_with_
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticOperation_Create_ExpectAndReturn(&session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
     KineticOperation_BuildLockUnlock_Expect(&operation, false, &pin);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -287,7 +287,7 @@ void test_KineticAdminClient_KineticAdminClient_SetClusterVersion_should_work(vo
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticOperation_Create_ExpectAndReturn(&session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
     KineticOperation_BuildSetClusterVersion_Expect(&operation, 1402);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
