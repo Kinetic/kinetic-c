@@ -209,6 +209,19 @@ void run_throughput_tests(KineticClient * client, size_t num_ops, size_t value_s
             }
         }
 
+        // Check data for integrity
+        size_t numFailures = 0;
+        for (size_t i = 0; i < num_ops; i++) {
+            int res = memcmp(test_data.array.data, test_get_datas[i].array.data, test_data.array.len);
+            if (res != 0) {
+                LOGF0("Failed validating data in object %zu of %zu!", i+1, num_ops);
+                numFailures++;
+            }
+        }
+        TEST_ASSERT_EQUAL_MESSAGE(0, numFailures, "DATA INTEGRITY CHECK FAILED UPON READBACK!");
+        LOG0("Data integrity check passed!");
+
+        // Calculate and report performance
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
@@ -356,13 +369,22 @@ void run_tests(KineticClient * client)
 void test_kinetic_client_throughput_for_small_sized_objects(void)
 {
     srand(time(NULL));
-    for (uint32_t i = 0; i < 2; i++) {
+    const uint32_t max_runs = 2;
+
+    for (uint32_t i = 0; i < max_runs; i++) {
+        LOG0( "============================================================================================");
+        LOGF0("==  Test run %u of %u", i+1, max_runs);
+        LOG0( "============================================================================================");
+
         KineticClientConfig config = {
             .logFile = "stdout",
             .logLevel = 0,
         };
+
         KineticClient * client = KineticClient_Init(&config);
+
         run_tests(client);
+
         KineticClient_Shutdown(client);
     }
 }
