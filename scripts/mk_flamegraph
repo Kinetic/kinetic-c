@@ -9,6 +9,7 @@ CMD="$*"
 if [ -z ${CMD} ]; then
     echo Usage: mk_flamegraph COMMAND
 else
+    pwd
     # -g: call graph
     sudo perf record --freq=993 --all-cpus -g --output=perf.out -- ${CMD}
     sudo perf script --input=perf.out | vendor/FlameGraph/stackcollapse-perf.pl > out.perf-folded
