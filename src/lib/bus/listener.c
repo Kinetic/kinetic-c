@@ -253,7 +253,7 @@ void listener_free(struct listener *l) {
             }
         }
 
-        for (int i = 0; i < l->tracked_fds; i++) {
+        while (l->tracked_fds > 0) {
             /* Remove off the front to stress remove_socket. */
             remove_socket(l, l->fds[0].fd);
         }
