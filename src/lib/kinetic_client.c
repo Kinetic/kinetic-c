@@ -129,7 +129,6 @@ KineticStatus KineticClient_DestroySession(KineticSession* const session)
     KineticStatus status = KineticSession_Disconnect(session);
     if (status != KINETIC_STATUS_SUCCESS) {LOG0("Disconnection failed!");}
     KineticSession_Destroy(session);
-    session->connection = NULL;
 
     return status;
 }
