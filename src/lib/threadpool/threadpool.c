@@ -118,11 +118,9 @@ bool threadpool_schedule(struct threadpool *t, struct threadpool_task *task,
             tbuf->cleanup = task->cleanup;
             tbuf->udata = task->udata;
 
+            commit_current_task(t, tbuf, wh);
             notify_new_task(t);
             if (pushback) { *pushback = wh - rh; }
-
-            commit_current_task(t, tbuf, wh);
-            //printf("delta %zd\n", wh);
             return true;
         }
     }
@@ -184,7 +182,7 @@ bool threadpool_shutdown(struct threadpool *t, bool kill_all) {
         if (ATOMIC_BOOL_COMPARE_AND_SWAP(&t->task_request_head, rh, rh + 1)) {
             if (tbuf->cleanup) {
                 tbuf->cleanup(tbuf->udata);
-                memset(tbuf, 0, sizeof(*tbuf));
+                tbuf->udata = NULL;
             }
             SPIN_ADJ(t->task_release_head, 1);
         }
