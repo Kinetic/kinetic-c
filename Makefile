@@ -302,14 +302,6 @@ stop_simulator:
 UNITY_INC = ./vendor/unity/src
 UNITY_SRC = ./vendor/unity/src/unity.c
 
-test: Rakefile $(LIB_OBJS)
-	@echo
-	@echo --------------------------------------------------------------------------------
-	@echo Testing $(PROJECT)
-	@echo --------------------------------------------------------------------------------
-	bundle install
-	bundle exec rake test_all
-
 
 #===============================================================================
 # CMock Tests
