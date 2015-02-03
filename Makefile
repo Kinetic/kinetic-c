@@ -97,7 +97,7 @@ default: makedirs $(KINETIC_LIB)
 makedirs:
 	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/unit &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
 
-all: default test system_tests test_internals run examples
+all: default json test system_tests test_internals run examples
 
 clean: makedirs update_git_submodules
 	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util $(DISCOVERY_UTIL_EXEC)
@@ -108,7 +108,7 @@ clean: makedirs update_git_submodules
 	cd ${SOCKET99} && make clean
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
-	# cd ${JSONC} && make clean --- make clean task does NOT exist until autoconf is run
+	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make clean; fi;
 
 update_git_submodules:
 	git submodule update --init
@@ -162,6 +162,9 @@ ci: uninstall stop_simulator start_simulator all stop_simulator install uninstal
 #-------------------------------------------------------------------------------
 
 json: ${OUT_DIR}/libjson-c.a
+json_install:
+	cd ${JSONC} && \
+	make install
 
 ${JSONC}/Makefile:
 	cd ${JSONC} && \
@@ -240,11 +243,10 @@ $(KINETIC_SO_DEV): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
 # Installation Support
 #-------------------------------------------------------------------------------
 
-API_NAME = kinetic_client
 INSTALL ?= install
 RM ?= rm
 
-install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
+install: json json_install $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
