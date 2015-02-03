@@ -95,8 +95,8 @@ bool listener_remove_socket(struct listener *l, int fd) {
     listener_msg *msg = get_free_msg(l);
     if (msg == NULL) { return false; }
 
-    msg->type = MSG_CLOSE_SOCKET;
-    msg->u.close_socket.fd = fd;
+    msg->type = MSG_REMOVE_SOCKET;
+    msg->u.remove_socket.fd = fd;
 
     return push_message(l, msg);
 }
@@ -254,8 +254,8 @@ void listener_free(struct listener *l) {
         }
 
         for (int i = 0; i < l->tracked_fds; i++) {
-            /* Forget off the front to stress forget_socket. */
-            forget_socket(l, l->fds[0].fd);
+            /* Remove off the front to stress remove_socket. */
+            remove_socket(l, l->fds[0].fd);
         }
 
         if (l->read_buf) {
@@ -393,7 +393,7 @@ static bool sink_socket_read(struct bus *b,
     listener *l, connection_info *ci, ssize_t size);
 
 static void attempt_recv(listener *l, int available) {
-    /*   --> failure --> close socket, don't die */
+    /*   --> failure --> set 'closed' error on socket, don't die */
     struct bus *b = l->bus;
     int read_from = 0;
     BUS_LOG(b, 3, LOG_LISTENER, "attempting receive", b->udata);
@@ -406,11 +406,13 @@ static void attempt_recv(listener *l, int available) {
         
         if (fd->revents & (POLLERR | POLLNVAL)) {
             read_from++;
-            BUS_LOG(b, 2, LOG_LISTENER, "pollfd: socket error (POLLERR | POLLNVAL)", b->udata);
+            BUS_LOG(b, 2, LOG_LISTENER,
+                "pollfd: socket error (POLLERR | POLLNVAL)", b->udata);
             set_error_for_socket(l, i, ci->fd, RX_ERROR_POLLERR);
         } else if (fd->revents & POLLHUP) {
             read_from++;
-            BUS_LOG(b, 3, LOG_LISTENER, "pollfd: socket error POLLHUP", b->udata);
+            BUS_LOG(b, 3, LOG_LISTENER, "pollfd: socket error POLLHUP",
+                b->udata);
             set_error_for_socket(l, i, ci->fd, RX_ERROR_POLLHUP);
         } else if (fd->revents & POLLIN) {
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
@@ -1021,8 +1023,8 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
     case MSG_ADD_SOCKET:
         add_socket(l, msg.u.add_socket.info, msg.u.add_socket.notify_fd);
         break;
-    case MSG_CLOSE_SOCKET:
-        forget_socket(l, msg.u.close_socket.fd);
+    case MSG_REMOVE_SOCKET:
+        remove_socket(l, msg.u.remove_socket.fd);
         break;
     case MSG_HOLD_RESPONSE:
         hold_response(l, msg.u.hold.fd, msg.u.hold.seq_id,
@@ -1123,10 +1125,10 @@ static void free_ci(connection_info *ci) {
     }
 }
 
-static void forget_socket(listener *l, int fd) {
+static void remove_socket(listener *l, int fd) {
     struct bus *b = l->bus;
     BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
-        "forgetting socket %d", fd);
+        "removing socket %d", fd);
 
     /* don't really close it, just drop info about it in the listener */
     for (int i = 0; i < l->tracked_fds; i++) {

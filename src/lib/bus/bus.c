@@ -682,7 +682,7 @@ void bus_free(bus *b) {
 
     pthread_mutex_destroy(&b->log_lock);
 
-    bus_ssl_free(b);
+    bus_ssl_ctx_free(b);
 
     free(b);
 }

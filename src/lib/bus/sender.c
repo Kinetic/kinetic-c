@@ -395,7 +395,10 @@ void *sender_mainloop(void *arg) {
 
 static void free_fd_info_cb(void *value, void *udata) {
     fd_info *info = (fd_info *)value;
-    /* Note: info->ssl will be freed by the listener. */
+
+    /* Note: info->ssl will be freed by the main bus code. */
+    info->ssl = NULL;
+
     (void)udata;
     free(info);
 }
