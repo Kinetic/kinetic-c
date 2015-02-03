@@ -341,16 +341,13 @@ void *listener_mainloop(void *arg) {
     return NULL;
 }
 
-#define RX_INFO_MAX_USED i <= l->rx_info_max_used
-//#define RX_INFO_MAX_USED i < MAX_PENDING_MESSAGES
-
 static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
     /* Mark all pending messages on this socket as being failed due to error. */
     struct bus *b = l->bus;
     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
         "set_error_for_socket %d, err %d", fd, err);
 
-    for (int i = 0; RX_INFO_MAX_USED; i++) {
+    for (int i = 0; i <= l->rx_info_max_used; i++) {
         rx_info_t *info = &l->rx_info[i];
         switch (info->state) {
         case RIS_INACTIVE:
@@ -559,7 +556,7 @@ static bool sink_socket_read(struct bus *b,
 static rx_info_t *find_info_by_sequence_id(listener *l,
         int fd, int64_t seq_id) {
     struct bus *b = l->bus;    
-    for (int i = 0; RX_INFO_MAX_USED; i++) {
+    for (int i = 0; i <= l->rx_info_max_used; i++) {
         rx_info_t *info = &l->rx_info[i];
 
         switch (info->state) {
@@ -683,7 +680,7 @@ static void tick_handler(listener *l) {
     
     if (b->log_level > 5 || 0) { dump_rx_info_table(l); }
 
-    for (int i = 0; RX_INFO_MAX_USED; i++) {
+    for (int i = 0; i <= l->rx_info_max_used; i++) {
         rx_info_t *info = &l->rx_info[i];
 
         switch (info->state) {
@@ -738,7 +735,7 @@ static void tick_handler(listener *l) {
 }
 
 static void dump_rx_info_table(listener *l) {
-    for (int i = 0; RX_INFO_MAX_USED; i++) {
+    for (int i = 0; i <= l->rx_info_max_used; i++) {
         rx_info_t *info = &l->rx_info[i];
         
         printf(" -- state: %d, info[%d]: timeout %ld",
@@ -1169,7 +1166,7 @@ static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_s
 }
 
 static rx_info_t *get_hold_rx_info(listener *l, int fd, int64_t seq_id) {
-    for (int i = 0; RX_INFO_MAX_USED; i++) {
+    for (int i = 0; i <= l->rx_info_max_used; i++) {
         rx_info_t *info = &l->rx_info[i];
         if (info->state == RIS_HOLD &&
             info->u.hold.fd == fd &&
