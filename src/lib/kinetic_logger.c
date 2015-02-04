@@ -355,7 +355,7 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
         {
             case PROTOBUF_C_LABEL_REQUIRED:
             {
-                printf("%s%s: ", _indent, fieldDesc->name);
+                KineticLogger_LogPrintf(log_level, "%s%s: ", _indent, fieldDesc->name);
 
                 LogUnboxed(log_level, &pMsg[fieldDesc->offset], fieldDesc, 0, _indent);
             } break;
@@ -366,7 +366,7 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
                     // and a special case: if this is a message, don't show it if the message is NULL
                     (PROTOBUF_C_TYPE_MESSAGE != fieldDesc->type || ((ProtobufCMessage**)(void*)&pMsg[fieldDesc->offset])[0] != NULL)) 
                 {
-                    printf("%s%s: ", _indent, fieldDesc->name);
+                    KineticLogger_LogPrintf(log_level, "%s%s: ", _indent, fieldDesc->name);
 
                     /* special case for nested command packed into commandBytes field */
                     if ((protobuf_c_message_descriptor_get_field_by_name(desc, "commandBytes") == fieldDesc ) && 
@@ -397,7 +397,7 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
                     for (uint32_t i = 0; i < *quantifier; i++)
                     {
                         void const ** box = (void const **)(void*)&pMsg[fieldDesc->offset];
-                        printf("%s", _indent);
+                        KineticLogger_LogPrintf(log_level, "%s", _indent);
                         LogUnboxed(log_level, *box, fieldDesc, i, _indent);
                     }
                     LOG_PROTO_LEVEL_END_ARRAY();
