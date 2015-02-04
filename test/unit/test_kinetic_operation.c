@@ -785,6 +785,7 @@ void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VER
 
     TEST_ASSERT_EQUAL_PTR(&Request.message.setup, Request.command->body->setup);
     TEST_ASSERT_EQUAL_INT64(1776, Request.message.setup.newClusterVersion);
+    TEST_ASSERT_EQUAL_INT64(1776, Operation.pendingClusterVersion);
     TEST_ASSERT_TRUE(Request.message.setup.has_newClusterVersion);
     TEST_ASSERT_FALSE(Request.message.setup.has_firmwareDownload);
     TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetClusterVersionCallback, Operation.callback);

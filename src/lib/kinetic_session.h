@@ -27,6 +27,8 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
 KineticStatus KineticSession_Destroy(KineticSession * const session);
 KineticStatus KineticSession_Connect(KineticSession * const session);
 KineticStatus KineticSession_Disconnect(KineticSession const * const session);
-void KineticSession_IncrementSequence(KineticSession const * const session);
+int64_t KineticSession_GetNextSequenceCount(KineticSession const * const session);
+int64_t KineticSession_GetClusterVersion(KineticSession const * const session);
+void KineticSession_SetClusterVersion(KineticSession * const session, int64_t cluster_version);
 
 #endif // _KINETIC_SESSION_H

@@ -92,7 +92,7 @@ LIB_OBJS = \
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
 
-default: makedirs $(KINETIC_LIB)
+default: makedirs json $(KINETIC_LIB)
 
 makedirs:
 	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/unit &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
@@ -162,9 +162,13 @@ ci: uninstall stop_simulator start_simulator all stop_simulator install uninstal
 #-------------------------------------------------------------------------------
 
 json: ${OUT_DIR}/libjson-c.a
-json_install:
+
+json_install: json
 	cd ${JSONC} && \
 	make install
+
+json_uninstall:
+	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make uninstall; fi;
 
 ${JSONC}/Makefile:
 	cd ${JSONC} && \
@@ -277,9 +281,9 @@ uninstall:
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
+	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make uninstall; fi;
 
-.PHONY: install uninstall
-
+.PHONY: install uninstall json_install json_uninstall
 
 #===============================================================================
 # Java Simulator Support
@@ -345,7 +349,6 @@ unit_tests: start_simulator $(unit_passfiles)
 #===============================================================================
 # System Tests
 #===============================================================================
-
 
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
@@ -432,8 +435,6 @@ discovery_utility: $(DISCOVERY_UTIL_EXEC)
 build: discovery_utility
 
 
-
-
 #-------------------------------------------------------------------------------
 # Support for Simulator and Exection of Test Utility
 #-------------------------------------------------------------------------------
@@ -509,7 +510,7 @@ examples: setup_examples \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
-	run_example_get_key_range \
+	run_example_get_key_range
 
 valgrind_examples: setup_examples \
 	valgrind_put_nonblocking \
@@ -517,4 +518,4 @@ valgrind_examples: setup_examples \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \
-	valgrind_example_get_key_range \
+	valgrind_example_get_key_range

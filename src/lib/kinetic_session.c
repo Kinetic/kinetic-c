@@ -170,3 +170,24 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
 
     return KINETIC_STATUS_SUCCESS;
 }
+
+#define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
+
+int64_t KineticSession_GetNextSequenceCount(KineticSession const * const session)
+{
+    assert(session);
+    int64_t seq_cnt = ATOMIC_FETCH_AND_INCREMENT(&session->connection->sequence);
+    return seq_cnt;
+}
+
+int64_t KineticSession_GetClusterVersion(KineticSession const * const session)
+{
+    assert(session);
+    return session->config.clusterVersion;
+}
+
+void KineticSession_SetClusterVersion(KineticSession * const session, int64_t cluster_version)
+{
+    assert(session);
+    session->config.clusterVersion = cluster_version;
+}
