@@ -34,7 +34,7 @@
 #define KINETIC_LOGGER_SLEEP_TIME_SEC 10
 #define KINETIC_LOGGER_BUFFER_FLUSH_SIZE (0.8 * KINETIC_LOGGER_BUFFER_SIZE)
 
-static int KineticLogLevel = -1;
+STATIC int KineticLogLevel = -1;
 static FILE* KineticLoggerHandle = NULL;
 static pthread_mutex_t KineticLoggerBufferMutex = PTHREAD_MUTEX_INITIALIZER;
 static char KineticLoggerBuffer[KINETIC_LOGGER_BUFFER_SIZE][KINETIC_LOGGER_BUFFER_STR_MAX_LEN];
