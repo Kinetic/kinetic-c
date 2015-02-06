@@ -180,6 +180,18 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             }
         }
 
+        // Check data for integrity
+        size_t numFailures = 0;
+        for (size_t i = 0; i < num_ops; i++) {
+            int res = memcmp(test_data.array.data, test_get_datas[i].array.data, test_data.array.len);
+            if (res != 0) {
+                LOGF0("Failed validating data in object %zu of %zu!", i+1, num_ops);
+                numFailures++;
+            }
+        }
+        TEST_ASSERT_EQUAL_MESSAGE(0, numFailures, "DATA INTEGRITY CHECK FAILED UPON READBACK!");
+        LOG0("Data integrity check passed!");
+
         // Calculate and report performance
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
@@ -306,11 +318,11 @@ void run_tests(KineticClient * client)
     }
 
     // Prepare per-thread test data
-    TestParams params[] = { 
-        { .client = client, .session = session, .thread_iters = 2, .num_ops = 250,  .obj_size = KINETIC_OBJ_SIZE },
-        { .client = client, .session = session, .thread_iters = 2, .num_ops = 500,  .obj_size = 120,             },
-        { .client = client, .session = session, .thread_iters = 2, .num_ops = 750,  .obj_size = 500,             },
-        { .client = client, .session = session, .thread_iters = 2, .num_ops = 250,  .obj_size = 70000,           },
+    TestParams params[] = {
+        { .client = client, .session = session, .thread_iters = 1, .num_ops = 250,  .obj_size = KINETIC_OBJ_SIZE },
+        { .client = client, .session = session, .thread_iters = 1, .num_ops = 500,  .obj_size = 120,             },
+        { .client = client, .session = session, .thread_iters = 1, .num_ops = 750,  .obj_size = 500,             },
+        { .client = client, .session = session, .thread_iters = 1, .num_ops = 250,  .obj_size = 70000,           },
         // { .client = client, .session = session, .thread_iters = 2, .num_ops = 1000, .obj_size = 120,             },
         // { .client = client, .session = session, .thread_iters = 3, .num_ops = 1000, .obj_size = 120,             },
         // { .client = client, .session = session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
@@ -341,9 +353,9 @@ void test_kinetic_client_throughput_for_small_sized_objects(void)
     KineticClientConfig config = {
         .logFile = "stdout",
         .logLevel = 0,
-        // .writerThreads = 1,
-        // .readerThreads = 1,
-        // .maxThreadpoolThreads = 1,
+        .writerThreads = 1,
+        .readerThreads = 1,
+        .maxThreadpoolThreads = 1,
     };
     KineticClient * client = KineticClient_Init(&config);
 

@@ -192,6 +192,7 @@ struct _KineticOperation {
     bool valueEnabled;
     bool sendValue;
     uint16_t timeoutSeconds;
+    int64_t pendingClusterVersion;
     ByteArray* pin;
     KineticEntry* entry;
     ByteBufferArray* buffers;

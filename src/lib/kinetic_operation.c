@@ -76,7 +76,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     // Populate sequence count and increment it for next operation
     assert(request->message.header.sequence == KINETIC_SEQUENCE_NOT_YET_BOUND);
-    int64_t seq_id = operation->connection->sequence++;
+    int64_t seq_id = KineticSession_GetNextSequenceCount(session);
     request->message.header.sequence = seq_id;
 
     // Pack the command, if available
@@ -826,11 +826,14 @@ KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const
     assert(operation->connection != NULL);
     LOGF3("SetClusterVersion callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    (void)status;
-    return KINETIC_STATUS_SUCCESS;
+    if (status == KINETIC_STATUS_SUCCESS) {
+        KineticSession_SetClusterVersion(operation->connection->pSession, operation->pendingClusterVersion);
+        operation->pendingClusterVersion = -1; // Invalidate
+    }
+    return status;
 }
 
-void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion)
+void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t new_cluster_version)
 {
     KineticOperation_ValidateOperation(operation);
     
@@ -839,7 +842,7 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->request->command->body = &operation->request->message.body;
     
     operation->request->command->body->setup = &operation->request->message.setup;
-    operation->request->command->body->setup->newClusterVersion = newClusterVersion;
+    operation->request->command->body->setup->newClusterVersion = new_cluster_version;
     operation->request->command->body->setup->has_newClusterVersion = true;
 
     operation->request->command->body = &operation->request->message.body;
@@ -847,4 +850,5 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetClusterVersionCallback;
+    operation->pendingClusterVersion = new_cluster_version;
 }

@@ -88,6 +88,6 @@ void KineticOperation_BuildSetAcl(KineticOperation* const operation,
                                KineticDeviceInfo** info);
 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildSetClusterVersion(KineticOperation* const operation, int64_t newClusterVersion);
+void KineticOperation_BuildSetClusterVersion(KineticOperation* const operation, int64_t new_cluster_version);
 
 #endif // _KINETIC_OPERATION_H

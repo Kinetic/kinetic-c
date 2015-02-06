@@ -40,12 +40,7 @@ void tearDown(void)
 
 void test_SetClusterVersion_should_succeed(void)
 {
-    KineticStatus status = KineticAdminClient_SetClusterVersion(Fixture.adminSession, 0);
+    KineticStatus status = KineticAdminClient_SetClusterVersion(Fixture.adminSession, 12);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     ClusterVersionSet = true;
-}
-
-void test_SetClusterVersion_should_update_session_cluster_version_upon_success(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: update session cluster version!");
 }
