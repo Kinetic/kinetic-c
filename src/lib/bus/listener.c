@@ -75,6 +75,8 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     l->msg_freelist = &l->msgs[0];
     l->rx_info_max_used = 0;
 
+    BUS_LOG_SNPRINTF(b, 4, LOG_LISTENER, b->udata, 64,
+        "listener rx_info table at %p", (void *)l->rx_info);
     (void)cfg;
     return l;
 }

@@ -96,6 +96,8 @@ struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
     }
     
     BUS_LOG(b, 2, LOG_SENDER, "init success", b->udata);
+    BUS_LOG_SNPRINTF(b, 4, LOG_SENDER, b->udata, 64,
+        "sender tx_info table at %p", (void *)s->tx_info);
     
     (void)cfg;
     return s;
@@ -1014,6 +1016,7 @@ static void tick_handler(sender *s) {
 }
 
 static void tick_timeout(sender *s, tx_info_t *info) {
+    struct bus *b = s->bus;
     switch (info->state) {
     case TIS_REQUEST_WRITE:
         if (info->u.write.timeout_sec == 1) { /* timed out */
@@ -1025,6 +1028,9 @@ static void tick_timeout(sender *s, tx_info_t *info) {
             };
             info->u.error = ue;
             notify_message_failure(s, info, BUS_SEND_TX_TIMEOUT);
+            BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 128,
+                "write timed out: <fd%d, seq_id:%lld>",
+                info->u.write.fd, (long long)info->u.write.box->out_seq_id);
         } else {
             info->u.write.timeout_sec--;
         }
