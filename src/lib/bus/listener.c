@@ -881,6 +881,15 @@ static rx_info_t *get_free_rx_info(struct listener *l) {
     }
 }
 
+static connection_info *get_connection_info(struct listener *l, int fd) {
+    for (int i = 0; i < l->tracked_fds; i++) {
+        connection_info *ci = l->fd_info[i];
+        assert(ci);
+        if (ci->fd == fd) { return ci; }
+    }
+    return NULL;
+}
+
 static void release_rx_info(struct listener *l, rx_info_t *info) {
     assert(info);
     struct bus *b = l->bus;
@@ -896,9 +905,22 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
              * free it, but don't know how. We should never get here,
              * because it means the sender finished sending the message,
              * but the listener never got the handler callback. */
-            BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
-                "LEAKING RESULT %p", (void *)&info->u.hold.result);
-            //assert(false);
+
+            if (info->u.hold.result.ok) {
+                void *msg = info->u.hold.result.u.success.msg;
+                int64_t seq_id = info->u.hold.result.u.success.seq_id;
+
+                connection_info *ci = get_connection_info(l, info->u.hold.fd);
+                if (ci && b->unexpected_msg_cb) {
+                    BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
+                        "CALLING UNEXPECTED_MSG_CB ON RESULT %p", (void *)&info->u.hold.result);
+                    b->unexpected_msg_cb(msg, seq_id, b->udata, ci->udata);
+                } else {
+                    BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
+                        "LEAKING RESULT %p", (void *)&info->u.hold.result);
+                }
+                
+            }
         }
         break;
     case RIS_EXPECT:
@@ -1266,12 +1288,23 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             info->timeout_sec = box->timeout_sec;
         }
     } else {                    /* use free info */
+        /* If we get here, the listener thinks the HOLD message timed out,
+         * but the sender doesn't think things timed out badly enough to
+         * itself expose an error. We also don't know if we're going to
+         * get a response or not. */
+
+        BUS_LOG_SNPRINTF(b, 3-3, LOG_MEMORY, b->udata, 128,
+            "get_hold_rx_info FAILED: fd %d, seq_id %lld",
+            box->fd, (long long)box->out_seq_id);
+
+        /* This should be treated like a send timeout. */
         info = get_free_rx_info(l);
         assert(info);
         assert(info->state == RIS_INACTIVE);
-        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-            "Setting info %p (+%d)'s box to %p",
-            (void*)info, info->id, (void*)box);
+
+        BUS_LOG_SNPRINTF(b, 3-3, LOG_MEMORY, b->udata, 256,
+            "Setting info %p (+%d)'s box to %p, which will be expired immediately (timeout %lld)",
+            (void*)info, info->id, (void*)box, (long long)box->timeout_sec);
         
         info->state = RIS_EXPECT;
         assert(info->u.expect.box == NULL);
@@ -1280,6 +1313,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
         info->u.expect.has_result = false;
         /* Switch over to sender's transferred timeout */
         info->timeout_sec = box->timeout_sec;
+        notify_message_failure(l, info, BUS_SEND_RX_TIMEOUT_EXPECT);
     }
 }
 

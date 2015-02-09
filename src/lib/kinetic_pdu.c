@@ -41,7 +41,7 @@ STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udat
 #if 0
     KineticLogger_Log(log_level, msg);
 #else
-    LOGF1("%ld.%06ld: %s[%d] -- %s\n",
+    LOGF0("%ld.%06ld: %s[%d] -- %s\n",
         (long)tv.tv_sec, (long)tv.tv_usec,
         event_str, log_level, msg);
 #endif
@@ -233,7 +233,7 @@ bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
         .log_level = log_level,
         .sink_cb = sink_cb,
         .unpack_cb = unpack_cb,
-        .unexpected_msg_cb = KineticController_HandleUnexecpectedResponse,
+        .unexpected_msg_cb = KineticController_HandleUnexpectedResponse,
         .bus_udata = NULL,
         .sender_count = config->writerThreads,
         .listener_count = config->readerThreads,

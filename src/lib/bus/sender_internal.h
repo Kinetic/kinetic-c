@@ -25,7 +25,9 @@
 #define MAX_TIMEOUT 100
 #define TX_TIMEOUT 9
 
+#if 0
 #define SENDER_MAX_DELIVERY_RETRIES 5
+#endif
 
 /* Max number of in-flight messagse. */
 #define MAX_CONCURRENT_SENDS 32
@@ -103,7 +105,6 @@ typedef struct {
             time_t timeout_sec;
             boxed_msg *box;
             size_t sent_size;
-            uint8_t retries;
             fd_info *fdi;
         } write;
 
@@ -111,7 +112,6 @@ typedef struct {
             int fd;
             time_t timeout_sec;
             boxed_msg *box;
-            uint8_t retries;
         } notify;
 
         struct {
