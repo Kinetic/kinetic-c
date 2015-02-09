@@ -95,7 +95,6 @@ KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config,
     // Configure PIN support
     assert(pin.len <= KINETIC_PIN_MAX_LEN);
     if (pin.len > 0) { assert(pin.data != NULL); }
-    LOGF0("pin data=%p, len=%zu", pin.data, pin.len);
     msg->message.pinAuth->pin = (ProtobufCBinaryData) {
         .data = pin.data,
         .len = pin.len,

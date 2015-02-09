@@ -48,6 +48,7 @@ STATIC const char* KineticStatusDescriptor[] = {
     "MISSING_VALUE_BUFFER",
     "MISSING_PIN",
     "SSL_REQUIRED",
+    "DEVICE_LOCKED",
 };
 
 #ifdef TEST

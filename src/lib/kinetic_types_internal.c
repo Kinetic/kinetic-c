@@ -76,6 +76,10 @@ KineticStatus KineticProtoStatusCode_to_KineticStatus(
         status = KINETIC_STATUS_OPERATION_FAILED;
         break;
 
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED:
+        status = KINETIC_STATUS_DEVICE_LOCKED;
+        break;
+
     default:
     case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE:
     case _KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_IS_INT_SIZE:
