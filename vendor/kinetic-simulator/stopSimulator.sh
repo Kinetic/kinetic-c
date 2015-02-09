@@ -10,5 +10,13 @@ if [[ ! -z $_SIMS ]]; then
       kill $sim
     fi
   done
+
+  _SIMS=`ps -ef | grep "kinetic-simulator/kinetic-simulator-" | grep -v 'grep' | sed -e 's/^ *//' -e 's/ *$//' | tr -s ' ' | cut -d ' ' -f 2`
+  while [[ ! -z $_SIMS ]]; do
+     echo Waiting for simulators to shutdown...
+     sleep 1
+     _SIMS=`ps -ef | grep "kinetic-simulator/kinetic-simulator-" | grep -v 'grep' | sed -e 's/^ *//' -e 's/ *$//' | tr -s ' ' | cut -d ' ' -f 2`
+  done
+
   echo All simulators have been terminated!
 fi

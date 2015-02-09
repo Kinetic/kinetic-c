@@ -20,6 +20,8 @@ OPENSSL_PATH ?=	.
 CC ?= gcc
 OPTIMIZE = -O3
 SYSTEM_TEST_HOST ?= \"localhost\"
+SESSION_HMAC_KEY ?= \"asdfasdf\"
+SESSION_PIN ?= \"1234\"
 WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
@@ -101,11 +103,11 @@ clean: makedirs update_git_submodules
 	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber
-	-./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
+	# -./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 	cd ${SOCKET99} && make clean
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
-	# cd ${JSONC} && make clean --- make clean task does NOT exist
+	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make clean; fi;
 
 update_git_submodules:
 	git submodule update --init
@@ -145,7 +147,7 @@ $(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 
-ci: uninstall all stop_simulator test_internals install
+ci: uninstall stop_simulator start_simulator all stop_simulator install uninstall
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!
@@ -159,6 +161,15 @@ ci: uninstall all stop_simulator test_internals install
 #-------------------------------------------------------------------------------
 
 json: ${OUT_DIR}/libjson-c.a
+
+json_install: json
+	cd ${JSONC} && \
+	make install
+
+json_uninstall:
+	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make uninstall; fi;
+
+.PHONY: json_install json_uninstall
 
 ${JSONC}/Makefile:
 	cd ${JSONC} && \
@@ -237,7 +248,6 @@ $(KINETIC_SO_DEV): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
 # Installation Support
 #-------------------------------------------------------------------------------
 
-API_NAME = kinetic_client
 INSTALL ?= install
 RM ?= rm
 
@@ -250,7 +260,7 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -d $(PREFIX)${LIBDIR}
 	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)${LIBDIR}/
 	$(INSTALL) -d $(PREFIX)/include/
-	$(INSTALL) -c $(PUB_INC)/$(API_NAME).h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/$kinetic_client.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_semaphore.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
@@ -263,7 +273,7 @@ uninstall:
 	@echo
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.a
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
-	$(RM) -f $(PREFIX)/include/${API_NAME}.h
+	$(RM) -f $(PREFIX)/include/kinetic_client.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
 	$(RM) -f $(PREFIX)/include/kinetic_semaphore.h
 	$(RM) -f $(PREFIX)/include/byte_array.h
@@ -384,8 +394,6 @@ discovery_utility: $(DISCOVERY_UTIL_EXEC)
 build: discovery_utility
 
 
-
-
 #-------------------------------------------------------------------------------
 # Support for Simulator and Exection of Test Utility
 #-------------------------------------------------------------------------------
@@ -460,7 +468,7 @@ examples: setup_examples \
 	run_example_write_file_blocking \
 	run_example_write_file_blocking_threads \
 	run_example_write_file_nonblocking \
-	run_example_get_key_range \
+	run_example_get_key_range
 
 valgrind_examples: setup_examples \
 	valgrind_put_nonblocking \
@@ -468,4 +476,4 @@ valgrind_examples: setup_examples \
 	valgrind_example_write_file_blocking \
 	valgrind_example_write_file_blocking_threads \
 	valgrind_example_write_file_nonblocking \
-	valgrind_example_get_key_range \
+	valgrind_example_get_key_range

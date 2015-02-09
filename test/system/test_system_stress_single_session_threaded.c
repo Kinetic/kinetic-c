@@ -384,4 +384,3 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData)
     // Signal that we're done
     KineticSemaphore_Signal(op_status->sem);
 }
-
