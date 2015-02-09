@@ -183,7 +183,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         .seq_id   = seq_id,
         .msg      = msg,
         .msg_size = offset,
-        .cb       = KineticController_HandleExpectedResponse,
+        .cb       = KineticController_HandleResult,
         .udata    = operation,
         .timeout_sec = operation->timeoutSeconds,
     }))
