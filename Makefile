@@ -343,7 +343,7 @@ $(UNIT_OUT)/%.testpass : $(UNIT_OUT)/run_%
 
 $(unit_names) : % : $(UNIT_OUT)/%.testpass
 
-unit_tests: start_simulator $(unit_passfiles)
+unit_tests: $(unit_passfiles)
 
 
 #===============================================================================
