@@ -26,6 +26,7 @@ WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-mis
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread -ljson-c
+NUM_SIMS ?= 2
 
 #===============================================================================
 # Kinetic-C Library Build Support
@@ -293,11 +294,15 @@ update_simulator:
 	cd vendor/kinetic-java; mvn clean package; cd -
 	cp vendor/kinetic-java/kinetic-simulator/target/*.jar vendor/kinetic-java-simulator/
 
-start_simulator:
-	./vendor/kinetic-simulator/start2Simulators.sh
+start_sims:
+	./vendor/kinetic-simulator/startSimulators.sh
 
-stop_simulator:
-	./vendor/kinetic-simulator/stopSimulator.sh
+start_simulator: start_sims
+
+stop_sims:
+	./vendor/kinetic-simulator/stopSimulators.sh
+
+stop_simulator: stop_sims
 
 .PHONY: update_simulator erase_simulator stop_simulator
 

@@ -155,7 +155,8 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     assert(operation->request);
     assert(operation->connection);
     assert(request);
-    LOGF2("[PDU TX] pdu: %p, op: %p, session: %p, bus: %p, fd: %6d, seq: %5lld, protoLen: %4u, valueLen: %u",
+    LOGF2("[PDU TX] pdu: %p, op: %p, session: %p, bus: %p, fd: %6d, "
+        "seq: %5lld, protoLen: %4u, valueLen: %u",
         (void*)operation->request, (void*)operation,
         (void*)operation->connection->pSession, (void*)operation->connection->messageBus,
         operation->connection->socket, request->message.header.sequence,
