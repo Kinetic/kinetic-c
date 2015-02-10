@@ -598,9 +598,15 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
          * because (in rare cases) the response may arrive between finishing
          * the write and the listener processing the notification. In that
          * case, it should hold onto the unrecognized response until the
-         * sender notifies it (and passes it the callback). */
+         * sender notifies it (and passes it the callback).
+         *
+         * This timeout is several extra seconds so that we don't have
+         * a window where the HOLD message has timed out, but the
+         * EXPECT hasn't, leading to ambiguity about what to do with
+         * the response (which may or may not have arrived).
+         * */
         attempt_to_enqueue_sending_request_message_to_listener(s,
-            fd, out_seq_id, info->u.enqueue.timeout_sec + 1);
+            fd, out_seq_id, info->u.enqueue.timeout_sec + 5);
         
         /* Increment the refcount. This will cause poll to watch for the
          * socket being writable, if it isn't already being watched. */
@@ -905,7 +911,6 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
             .fd = info->u.write.fd,
             .timeout_sec = info->u.write.timeout_sec,
             .box = info->u.write.box,
-            .retries = info->u.write.retries,
         };
 
         /* Message has been sent, so release - caller may free it. */
@@ -1106,26 +1111,12 @@ static void attempt_to_enqueue_request_sent_message_to_listener(sender *s, tx_in
         info->state = TIS_REQUEST_RELEASE;
         info->u.release.backpressure = backpressure;
 
-        notify_caller(s, info, true);
+        notify_caller(s, info, true);   // unblock sender
     } else {
         BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);
 
         /* Put it back, since we need to keep managing it */
         info->u.notify.box = box;
-
-        info->u.notify.retries++;
-        if (info->u.notify.retries == SENDER_MAX_DELIVERY_RETRIES) {
-
-            info->state = TIS_ERROR;
-            struct u_error ue = {
-                .error = TX_ERROR_NOTIFY_LISTENER_FAILURE,
-                .box = box,
-            };
-            info->u.error = ue;
-
-            notify_message_failure(s, info, BUS_SEND_RX_FAILURE);
-            BUS_LOG(b, 2, LOG_SENDER, "failed delivery, several retries", b->udata);
-        }
     }
 }
 

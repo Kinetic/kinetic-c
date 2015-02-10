@@ -27,11 +27,11 @@
 KineticStatus KineticController_Init(KineticSession const * const session);
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure);
 
-void KineticController_HandleUnexecpectedResponse(void *msg,
-                                                  int64_t seq_id,
-                                                  void *bus_udata,
-                                                  void *socket_udata);
+void KineticController_HandleUnexpectedResponse(void *msg,
+                                                int64_t seq_id,
+                                                void *bus_udata,
+                                                void *socket_udata);
 
-void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata);
+void KineticController_HandleResult(bus_msg_result_t *res, void *udata);
 
 #endif // _KINETIC_CONTROLLER_H

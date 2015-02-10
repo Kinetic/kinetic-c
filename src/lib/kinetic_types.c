@@ -35,7 +35,7 @@ STATIC const char* KineticStatusDescriptor[] = {
     "INVALID_REQUEST",
     "OPERATION_INVALID",
     "OPERATION_FAILED",
-    "OPERATION_TIMEDOUT",
+    "OPERATION_TIMEOUT",
     "CLUSTER_MISMATCH",
     "VERSION_MISMATCH",
     "DATA_ERROR",

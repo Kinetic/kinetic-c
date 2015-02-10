@@ -146,6 +146,9 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
         case BUS_SEND_UNREGISTERED_SOCKET:
             res = KINETIC_STATUS_SOCKET_ERROR;
             break;
+        case BUS_SEND_RX_TIMEOUT_EXPECT:
+            res = KINETIC_STATUS_OPERATION_TIMEDOUT;
+            break;
         case BUS_SEND_UNDEFINED:
         default:
         {
@@ -177,26 +180,30 @@ static const char *bus_error_string(bus_send_status_t t) {
         return "rx_failure";
     case BUS_SEND_BAD_RESPONSE:
         return "bad_response";
+    case BUS_SEND_UNREGISTERED_SOCKET:
+        return "unregistered socket";
+    case BUS_SEND_RX_TIMEOUT_EXPECT:
+        return "internal timeout";
     }
 }
 
-void KineticController_HandleUnexecpectedResponse(void *msg,
-                                                  int64_t seq_id,
-                                                  void *bus_udata,
-                                                  void *socket_udata)
+void KineticController_HandleUnexpectedResponse(void *msg,
+                                                int64_t seq_id,
+                                                void *bus_udata,
+                                                void *socket_udata)
 {
     KineticResponse * response = msg;
     KineticConnection* connection = socket_udata;
     bool connetionInfoReceived = false;
 
-    (void)seq_id;
     (void)bus_udata;
 
     LOGF2("[PDU RX UNSOLICITED] pdu: %p, session: %p, bus: %p, "
-                "fd: %6d, protoLen: %u, valueLen: %u",
+                "fd: %6d, protoLen: %u, valueLen: %u, seq_id: %08llx",
                 (void*)response, (void*)connection->pSession,
                 (void*)connection->messageBus, connection->socket,
-                response->header.protobufLength, response->header.valueLength);
+                response->header.protobufLength, response->header.valueLength,
+                (long long)seq_id);
 
     // Handle unsolicited status PDUs
     if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
@@ -214,8 +221,7 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
             LOG0("WARNING: Unsolicited PDU received after session initialized!");
         }
     }
-    else
-    {
+    else {
         LOG0("WARNING: Received unexpected response that was not an unsolicited status.");
     }
 
@@ -228,7 +234,7 @@ void KineticController_HandleUnexecpectedResponse(void *msg,
     }
 }
 
-void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata)
+void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
 {
     KineticOperation* op = udata;
 
@@ -261,7 +267,7 @@ void KineticController_HandleExpectedResponse(bus_msg_result_t *res, void *udata
     else
     {
         // pull out bus error?
-        LOGF1("Error receiving response, got message bus error: %s", bus_error_string(res->status));
+        LOGF0("Error receiving response, got message bus error: %s", bus_error_string(res->status));
     }
 
     // Call operation-specific callback, if configured
