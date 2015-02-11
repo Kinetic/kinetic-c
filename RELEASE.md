@@ -1,3 +1,8 @@
+v0.11.1 (kinetic-protocol 3.0.5)
+--------------------------------
+* Fixed race condition causing timeouts to not ne handled resulting in a deadlock.
+* Fixed extremely high CPU usage during loaded and idle times.
+
 v0.11.0 (kinetic-protocol 3.0.5)
 --------------------------------
 * Changed API to use a `KineticClientConfig` struct, to keep future configuration changes from breaking the source API.

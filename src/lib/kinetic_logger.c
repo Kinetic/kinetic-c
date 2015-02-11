@@ -186,23 +186,25 @@ static int indent_overflow = 0;
     indent_overflow = 0;
 
 #define LOG_PROTO_LEVEL_START(__name) \
-    KineticLogger_LogPrintf(2, "%s%s {", indent, __name); \
+    KineticLogger_LogPrintf(0, "%s%s {", indent, __name); \
     if (strlen(indent) < max_indent) { strcat(indent, LOG_INDENT); } \
     else { indent_overflow++; }
+
 #define LOG_PROTO_LEVEL_END() \
     if (indent_overflow == 0) { indent[strlen(indent) - 2] = '\0'; } \
     else { indent_overflow--; } \
-    KineticLogger_LogPrintf(2, "%s}", indent);
+    KineticLogger_LogPrintf(0, "%s}", indent);
 
 #define LOG_PROTO_LEVEL_START_ARRAY(__name, __quantity) \
-    KineticLogger_LogPrintf(2, "%s%s: (%u elements)", (indent), (__name), (__quantity)); \
-    KineticLogger_LogPrintf(2, "%s[", (indent)); \
+    KineticLogger_LogPrintf(0, "%s%s: (%u elements)", (indent), (__name), (__quantity)); \
+    KineticLogger_LogPrintf(0, "%s[", (indent)); \
     if (strlen(indent) < max_indent) { strcat(indent, LOG_INDENT); } \
     else { indent_overflow++; }
+
 #define LOG_PROTO_LEVEL_END_ARRAY() \
     if (indent_overflow == 0) { indent[strlen(indent) - 2] = '\0'; } \
     else { indent_overflow--; } \
-    KineticLogger_LogPrintf(2, "%s]", (indent));
+    KineticLogger_LogPrintf(0, "%s]", (indent));
 
 static int KineticLogger_u8toa(char* p_buf, uint8_t val)
 {

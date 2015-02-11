@@ -5,7 +5,7 @@
 #include "util.h"
 
 #define TIMEOUT_MSEC 100
-#define MAX_TIMEOUT 1000
+#define MAX_TIMEOUT 10000
 
 static bool init_client_SSL_CTX(SSL_CTX **ctx_out);
 static void disable_SSL_compression(void);

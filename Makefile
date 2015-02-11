@@ -26,6 +26,7 @@ WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-mis
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread -ljson-c
+NUM_SIMS ?= 2
 
 #===============================================================================
 # Kinetic-C Library Build Support
@@ -103,7 +104,6 @@ clean: makedirs update_git_submodules
 	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	bundle exec rake clobber
-	# -./vendor/kinetic-simulator/stopSimulator.sh &> /dev/null;
 	cd ${SOCKET99} && make clean
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
@@ -146,8 +146,11 @@ $(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
 
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
-
-ci: uninstall stop_simulator start_simulator all stop_simulator install uninstall
+ci: stop_sims start_sims all stop_sims
+	@echo 
+	@echo Testing installation/uninstallation of kinetic-c
+	sudo make install
+	sudo make uninstall
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!
@@ -182,6 +185,7 @@ ${JSONC}/.libs/libjson-c.a: ${JSONC}/Makefile
 
 ${OUT_DIR}/libjson-c.a: ${JSONC}/.libs/libjson-c.a
 	cp ${JSONC}/.libs/libjson-c.a ${OUT_DIR}/libjson-c.a
+
 
 #-------------------------------------------------------------------------------
 # Test Support
@@ -260,7 +264,7 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -d $(PREFIX)${LIBDIR}
 	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)${LIBDIR}/
 	$(INSTALL) -d $(PREFIX)/include/
-	$(INSTALL) -c $(PUB_INC)/$kinetic_client.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/kinetic_client.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_semaphore.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
@@ -292,20 +296,23 @@ update_simulator:
 	cd vendor/kinetic-java; mvn clean package; cd -
 	cp vendor/kinetic-java/kinetic-simulator/target/*.jar vendor/kinetic-java-simulator/
 
-start_simulator:
-	./vendor/kinetic-simulator/start2Simulators.sh
+start_sims:
+	./vendor/kinetic-simulator/startSimulators.sh
+ 		 
+start_simulator: start_sims
 
-stop_simulator:
-	./vendor/kinetic-simulator/stopSimulator.sh
+stop_sims:
+	./vendor/kinetic-simulator/stopSimulators.sh
 
-.PHONY: update_simulator erase_simulator stop_simulator
+stop_simulator: stop_sims
 
+
+.PHONY: update_simulator start_sims start_simulator stop_sims stop_simulator
 
 
 #===============================================================================
 # System Tests
 #===============================================================================
-
 
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
@@ -415,6 +422,7 @@ run: $(UTIL_EXEC)
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
 	@echo
+
 
 #===============================================================================
 # Standalone Example Executables

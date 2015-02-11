@@ -1,5 +1,9 @@
 #! /usr/bin/env bash
 
+function get_running_sims() {
+  echo 
+}
+
 # Kill any simulators running
 _SIMS=`ps -ef | grep "kinetic-simulator/kinetic-simulator-" | grep -v 'grep' | sed -e 's/^ *//' -e 's/ *$//' | tr -s ' ' | cut -d ' ' -f 2`
 if [[ ! -z $_SIMS ]]; then
@@ -12,7 +16,7 @@ if [[ ! -z $_SIMS ]]; then
   done
 
   _SIMS=`ps -ef | grep "kinetic-simulator/kinetic-simulator-" | grep -v 'grep' | sed -e 's/^ *//' -e 's/ *$//' | tr -s ' ' | cut -d ' ' -f 2`
-  while [[ ! -z $_SIMS ]]; do
+  while [[ ! -z $_sims ]]; do
      echo Waiting for simulators to shutdown...
      sleep 1
      _SIMS=`ps -ef | grep "kinetic-simulator/kinetic-simulator-" | grep -v 'grep' | sed -e 's/^ *//' -e 's/ *$//' | tr -s ' ' | cut -d ' ' -f 2`

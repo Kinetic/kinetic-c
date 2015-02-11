@@ -58,7 +58,7 @@ void run_throghput_tests(size_t num_ops, size_t value_size)
     };
     KineticClientConfig config = {
         .logFile = "stdout",
-        .logLevel = 0,
+        .logLevel = 1,
     };
     KineticClient * client = KineticClient_Init(&config);
 
