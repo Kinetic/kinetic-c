@@ -24,7 +24,7 @@ static SystemTestFixture Fixture;
 
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 1);
+    SystemTestSetup(&Fixture, 3);
 }
 
 void tearDown(void)
