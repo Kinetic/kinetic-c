@@ -346,8 +346,7 @@ void run_tests(KineticClient * client)
     KineticClient_DestroySession(session);
 }
 
-
-void test_kinetic_client_throughput_for_small_sized_objects(void)
+void test_kinetic_client_throughput_test_kinetic_client_throughput_(void)
 {
     srand(time(NULL));
     KineticClientConfig config = {
@@ -359,15 +358,16 @@ void test_kinetic_client_throughput_for_small_sized_objects(void)
     };
     KineticClient * client = KineticClient_Init(&config);
 
-    const uint32_t max_runs = 1;
+    const uint32_t max_runs = 2;
     for (uint32_t i = 0; i < max_runs; i++) {
         LOG0( "============================================================================================");
         LOGF0("==  Test run %u of %u", i+1, max_runs);
         LOG0( "============================================================================================");
         run_tests(client);
     }
-    
+
     KineticClient_Shutdown(client);
+    
 }
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData)
@@ -378,4 +378,3 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData)
     // Signal that we're done
     KineticSemaphore_Signal(op_status->sem);
 }
-

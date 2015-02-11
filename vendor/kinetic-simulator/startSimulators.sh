@@ -40,6 +40,7 @@ while [ $index -lt $LIMIT ]; do
    if ! netstat -an | grep LISTEN | grep "[\.:]$PORT"; then
       echo Starting simulator instance $NUM of $LIMIT
       new_ports=("${new_ports[@]}" "$PORT" "$TLS_PORT")
+      mkdir -p ~/kinetic$NUM
       exec "$JAVA" -classpath "$CLASSPATH" $SIM "$@" -port $PORT -tlsport $TLS_PORT -home ~/kinetic$NUM &> ~/kinetic$NUM/kinetic-sim.log &
    fi
    let index=index+1

@@ -289,8 +289,8 @@ static void *thread_task(void *arg) {
     size_t mask = t->task_ringbuf_mask;
     struct pollfd pfd[1] = { { .fd=ti->child_fd, .events=POLLIN }, };
     uint8_t read_buf[NOTIFY_MSG_LEN];
-
-    size_t delay = 1;
+    size_t min_delay = 100;
+    size_t delay = min_delay;
 
     while (ti->status < STATUS_SHUTDOWN) {
         if (t->task_request_head == t->task_commit_head) {
@@ -298,7 +298,7 @@ static void *thread_task(void *arg) {
                 if (delay > 1) { ti->status = STATUS_ASLEEP; }
             } else {
                 if (delay == 0) {
-                    delay = 1;
+                    delay = min_delay;
                 } else {
                     delay <<= 1;
                 }
@@ -316,7 +316,7 @@ static void *thread_task(void *arg) {
                     break;
                 } else if (pfd[0].revents & POLLIN) {
                     if (ti->status == STATUS_ASLEEP) { ti->status = STATUS_AWAKE; }
-                    delay = 0;
+                    delay = min_delay;
                     //SPIN_ADJ(t->active_threads, 1);
                     ssize_t rres = read(ti->child_fd, read_buf, NOTIFY_MSG_LEN);
                     if (rres < 0) {

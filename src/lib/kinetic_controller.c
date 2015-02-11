@@ -195,15 +195,12 @@ void KineticController_HandleUnexpectedResponse(void *msg,
     KineticResponse * response = msg;
     KineticConnection* connection = socket_udata;
     bool connetionInfoReceived = false;
+    char const * statusTag = "[PDU RX STATUS]";
+    char const * unexpectedTag = "[PDU RX UNEXPECTED]";
+    char const * logTag = unexpectedTag;
+    int logAtLevel, protoLogAtLevel;
 
     (void)bus_udata;
-
-    LOGF2("[PDU RX UNSOLICITED] pdu: %p, session: %p, bus: %p, "
-                "fd: %6d, protoLen: %u, valueLen: %u, seq_id: %08llx",
-                (void*)response, (void*)connection->pSession,
-                (void*)connection->messageBus, connection->socket,
-                response->header.protobufLength, response->header.valueLength,
-                (long long)seq_id);
 
     // Handle unsolicited status PDUs
     if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
@@ -216,16 +213,33 @@ void KineticController_HandleUnexpectedResponse(void *msg,
             LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
                 connection->connectionID);
             connetionInfoReceived = true;
+            logTag = statusTag;
+            logAtLevel = 2;
+            protoLogAtLevel = 2;
         }
         else {
-            LOG0("WARNING: Unsolicited PDU received after session initialized!");
+            LOG0("WARNING: Unsolicited status received. Connection being terminated by remote!");
+            logTag = statusTag;
+            logAtLevel = 0; 
+            protoLogAtLevel = 0;
         }
     }
-    else {
-        LOG0("WARNING: Received unexpected response that was not an unsolicited status.");
+    else
+    {
+        LOG0("WARNING: Received unexpected response!");
+        logTag = unexpectedTag;
+        logAtLevel = 0;
+        protoLogAtLevel = 0;
     }
 
-    KineticLogger_LogProtobuf(2, response->proto);
+    KineticLogger_LogPrintf(logAtLevel, "%s pdu: %p, session: %p, bus: %p, "
+        "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u",
+        logTag,
+        (void*)response, (void*)connection->pSession,
+        (void*)connection->messageBus,
+        connection->socket, (long long)seq_id,
+        response->header.protobufLength, response->header.valueLength);
+    KineticLogger_LogProtobuf(protoLogAtLevel, response->proto);
 
     KineticAllocator_FreeKineticResponse(response);
 
@@ -254,12 +268,13 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
             status = KINETIC_STATUS_INVALID;
         }
 
-        LOGF2("[PDU RX] pdu: %p, op: %p, session: %p, bus: %p, fd: %6d, "
-            "seq: %5lld, protoLen: %4u, valueLen: %u, status: %s",
-            (void*)response, (void*)op,
+        LOGF2("[PDU RX] pdu: %p, session: %p, bus: %p, "
+            "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, status: %s",
+            (void*)response,
             (void*)op->connection->pSession, (void*)op->connection->messageBus,
             op->connection->socket, response->command->header->ackSequence,
             response->header.protobufLength, response->header.valueLength,
+            (void*)op,
             Kinetic_GetStatusDescription(status));
         KineticLogger_LogHeader(3, &response->header);
         KineticLogger_LogProtobuf(3, response->proto);

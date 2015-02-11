@@ -148,13 +148,18 @@ $(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
 
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
-
-ci: uninstall stop_simulator start_simulator all stop_simulator install uninstall
+ci: stop_sims start_sims all stop_sims
+	@echo 
+	@echo --------------------------------------------------------------------------------
+	@echo Testing install/uninstall of kinetic-c
+	@echo --------------------------------------------------------------------------------
+	sudo make install
+	sudo make uninstall
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!
 	@echo --------------------------------------------------------------------------------
-	@echo $(PROJECT) v$(VERSION) is in working order
+	@echo $(PROJECT) v$(VERSION) is in working order!
 	@echo
 
 
@@ -171,6 +176,8 @@ json_install: json
 json_uninstall:
 	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make uninstall; fi;
 
+.PHONY: json_install json_uninstall
+
 ${JSONC}/Makefile:
 	cd ${JSONC} && \
 	sh autogen.sh && \
@@ -182,6 +189,7 @@ ${JSONC}/.libs/libjson-c.a: ${JSONC}/Makefile
 
 ${OUT_DIR}/libjson-c.a: ${JSONC}/.libs/libjson-c.a
 	cp ${JSONC}/.libs/libjson-c.a ${OUT_DIR}/libjson-c.a
+
 
 #-------------------------------------------------------------------------------
 # Test Support
@@ -304,7 +312,7 @@ stop_sims:
 
 stop_simulator: stop_sims
 
-.PHONY: update_simulator erase_simulator stop_simulator
+.PHONY: update_simulator start_sims start_simulator stop_sims stop_simulator
 
 
 #===============================================================================
@@ -312,43 +320,6 @@ stop_simulator: stop_sims
 #===============================================================================
 UNITY_INC = ./vendor/unity/src
 UNITY_SRC = ./vendor/unity/src/unity.c
-
-
-#===============================================================================
-# CMock Tests
-#===============================================================================
-
-UNIT_SRC = ./test/unit
-UNIT_OUT = $(BIN_DIR)/unit
-UNIT_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
-UNIT_WARN = -Wall -Wextra -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
-UNIT_CFLAGS += -std=c99 -fPIC -g $(UNIT_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
-
-unit_sources = $(wildcard $(UNIT_SRC)/*.c)
-unit_executables = $(patsubst $(UNIT_SRC)/%.c,$(UNIT_OUT)/run_%,$(unit_sources))
-unit_results = $(patsubst $(UNIT_OUT)/run_%,$(UNIT_OUT)/%.log,$(unit_executables))
-unit_passfiles = $(patsubst $(UNIT_OUT)/run_%,$(UNIT_OUT)/%.testpass,$(unit_executables))
-unit_names = $(patsubst $(UNIT_OUT)/run_%,%,$(unit_executables))
-
-list_unit_tests:
-	echo $(unit_names)
-
-$(UNIT_OUT)/%_runner.c: $(UNIT_SRC)/%.c
-	./test/support/generate_unit_runner.sh $< > $@
-
-$(UNIT_OUT)/run_%: $(UNIT_SRC)/%.c $(UNIT_OUT)/%_runner.c $(KINETIC_LIB)
-	@echo
-	@echo ================================================================================
-	@echo System test: '$<'
-	@echo --------------------------------------------------------------------------------
-	$(CC) -o $@ $< $(word 2,$^) ./test/support/unit_unit_fixture.c $(UNITY_SRC) $(UNIT_CFLAGS) $(LIB_INCS) -I$(UNITY_INC) -I./test/support $(UNIT_LDFLAGS) $(KINETIC_LIB)
-
-$(UNIT_OUT)/%.testpass : $(UNIT_OUT)/run_%
-	./scripts/runSystemTest.sh $*
-
-$(unit_names) : % : $(UNIT_OUT)/%.testpass
-
-unit_tests: $(unit_passfiles)
 
 
 #===============================================================================

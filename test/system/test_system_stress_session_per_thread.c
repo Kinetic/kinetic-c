@@ -366,13 +366,21 @@ void run_tests(KineticClient * client)
 void test_kinetic_client_throughput_for_small_sized_objects(void)
 {
     srand(time(NULL));
-    for (uint32_t i = 0; i < 1; i++) {
+    const uint32_t num_iterations = 2;
+    for (uint32_t i = 0; i < num_iterations; i++) {
+        LOG0( "============================================================================================");
+        LOGF0("==  Test run %u of %u", i+1, num_iterations);
+        LOG0( "============================================================================================");
+
         KineticClientConfig config = {
             .logFile = "stdout",
             .logLevel = 0,
         };
+
         KineticClient * client = KineticClient_Init(&config);
+
         run_tests(client);
+
         KineticClient_Shutdown(client);
     }
 }
