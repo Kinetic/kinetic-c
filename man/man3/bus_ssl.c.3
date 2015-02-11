@@ -1,4 +1,4 @@
-.TH "bus_ssl.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "bus_ssl.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,7 +22,7 @@ bus_ssl.c \-
 .RI "#define \fBTIMEOUT_MSEC\fP   100"
 .br
 .ti -1c
-.RI "#define \fBMAX_TIMEOUT\fP   1000"
+.RI "#define \fBMAX_TIMEOUT\fP   10000"
 .br
 .in -1c
 .SS "Functions"
@@ -46,33 +46,33 @@ bus_ssl.c \-
 .SS "#define TIMEOUT_MSEC   100"
 
 .PP
-Definition at line 7 of file bus_ssl\&.c\&.
-.SS "#define MAX_TIMEOUT   1000"
+Definition at line 26 of file bus_ssl\&.c\&.
+.SS "#define MAX_TIMEOUT   10000"
 
 .PP
-Definition at line 8 of file bus_ssl\&.c\&.
+Definition at line 27 of file bus_ssl\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "bool bus_ssl_init (struct \fBbus\fP *b)"
 
 .PP
-Definition at line 16 of file bus_ssl\&.c\&.
+Definition at line 35 of file bus_ssl\&.c\&.
 .PP
 References bus::ssl_ctx\&.
 .SS "bool bus_ssl_connect (struct \fBbus\fP *b, \fBconnection_info\fP *ci)"
 
 .PP
-Definition at line 31 of file bus_ssl\&.c\&.
+Definition at line 50 of file bus_ssl\&.c\&.
 .PP
 References connection_info::fd, connection_info::ssl, and bus::ssl_ctx\&.
 .SS "bool bus_ssl_disconnect (struct \fBbus\fP *b, SSL *ssl)"
 
 .PP
-Definition at line 55 of file bus_ssl\&.c\&.
+Definition at line 74 of file bus_ssl\&.c\&.
 .SS "void bus_ssl_free (struct \fBbus\fP *b)"
 
 .PP
-Definition at line 62 of file bus_ssl\&.c\&.
+Definition at line 81 of file bus_ssl\&.c\&.
 .PP
 References bus::ssl_ctx\&.
 .SH "Author"

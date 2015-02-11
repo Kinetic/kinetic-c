@@ -3570,11 +3570,6 @@
               <Anchor>a61afed662d74f641186fb125661639f5</Anchor>
              </Node>
              <Node>
-              <Name>retries</Name>
-              <Path>structtx__info__t.html</Path>
-              <Anchor>a9a2f2b534cf01de85c6127589f00620a</Anchor>
-             </Node>
-             <Node>
               <Name>fdi</Name>
               <Path>structtx__info__t.html</Path>
               <Anchor>a3805e192b19f4b131b44a133c37b0309</Anchor>
@@ -4898,6 +4893,11 @@
                 <Name>BUS_SEND_UNREGISTERED_SOCKET</Name>
                 <Path>bus__types_8h.html</Path>
                 <Anchor>a3f10842947032a2f6fc237770d4cf76aad373d2f8bb961b04fa9e2c2a21ee7dc1</Anchor>
+               </Node>
+               <Node>
+                <Name>BUS_SEND_RX_TIMEOUT_EXPECT</Name>
+                <Path>bus__types_8h.html</Path>
+                <Anchor>a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84</Anchor>
                </Node>
               </Subnodes>
              </Node>
@@ -6886,14 +6886,14 @@
               <Anchor>a79b2f6dcc349338aa767e037c481d58f</Anchor>
              </Node>
              <Node>
-              <Name>KineticController_HandleUnexecpectedResponse</Name>
+              <Name>KineticController_HandleUnexpectedResponse</Name>
               <Path>kinetic__controller_8c.html</Path>
-              <Anchor>af7404236e212f8b84f1ec139b410d242</Anchor>
+              <Anchor>add3086b393c52587fbb6f608ec5646c5</Anchor>
              </Node>
              <Node>
-              <Name>KineticController_HandleExpectedResponse</Name>
+              <Name>KineticController_HandleResult</Name>
               <Path>kinetic__controller_8c.html</Path>
-              <Anchor>a2bf440ef345b654b1fcdd1c40219efeb</Anchor>
+              <Anchor>a807fc16fb4348e2792eca614323e953f</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -6917,14 +6917,14 @@
               <Anchor>a317e37adb34e380e2266c764b0becf36</Anchor>
              </Node>
              <Node>
-              <Name>KineticController_HandleUnexecpectedResponse</Name>
+              <Name>KineticController_HandleUnexpectedResponse</Name>
               <Path>kinetic__controller_8h.html</Path>
-              <Anchor>af7404236e212f8b84f1ec139b410d242</Anchor>
+              <Anchor>add3086b393c52587fbb6f608ec5646c5</Anchor>
              </Node>
              <Node>
-              <Name>KineticController_HandleExpectedResponse</Name>
+              <Name>KineticController_HandleResult</Name>
               <Path>kinetic__controller_8h.html</Path>
-              <Anchor>a2bf440ef345b654b1fcdd1c40219efeb</Anchor>
+              <Anchor>a807fc16fb4348e2792eca614323e953f</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -7203,6 +7203,11 @@
               <Anchor>a929eb7f04063b2b0e8e4a6ef59b8f58e</Anchor>
              </Node>
              <Node>
+              <Name>LOG_INDENT</Name>
+              <Path>kinetic__logger_8c.html</Path>
+              <Anchor>a3af97540f61003b8cfc44f9a23d9ed5e</Anchor>
+             </Node>
+             <Node>
               <Name>LOG_PROTO_INIT</Name>
               <Path>kinetic__logger_8c.html</Path>
               <Anchor>aa759dab3714df698270c4644b8559ed5</Anchor>
@@ -7211,11 +7216,6 @@
               <Name>LOG_PROTO_LEVEL_START</Name>
               <Path>kinetic__logger_8c.html</Path>
               <Anchor>ad3a2abfb5107485323e52906371f1bbc</Anchor>
-             </Node>
-             <Node>
-              <Name>LOG_PROTO_LEVEL_START_NO_INDENT</Name>
-              <Path>kinetic__logger_8c.html</Path>
-              <Anchor>a14b8efce9c53f61f1f878c2571937c5b</Anchor>
              </Node>
              <Node>
               <Name>LOG_PROTO_LEVEL_END</Name>
@@ -13926,11 +13926,6 @@
                 <Anchor>a61afed662d74f641186fb125661639f5</Anchor>
                </Node>
                <Node>
-                <Name>retries</Name>
-                <Path>structtx__info__t.html</Path>
-                <Anchor>a9a2f2b534cf01de85c6127589f00620a</Anchor>
-               </Node>
-               <Node>
                 <Name>fdi</Name>
                 <Path>structtx__info__t.html</Path>
                 <Anchor>a3805e192b19f4b131b44a133c37b0309</Anchor>
@@ -14042,11 +14037,6 @@
               <Name>TX_TIMEOUT</Name>
               <Path>sender__internal_8h.html</Path>
               <Anchor>ad380e380939eae9a5d6c8f228f0fe7c8</Anchor>
-             </Node>
-             <Node>
-              <Name>SENDER_MAX_DELIVERY_RETRIES</Name>
-              <Path>sender__internal_8h.html</Path>
-              <Anchor>afa49a2853c9cf530a44e4e4a3614bedf</Anchor>
              </Node>
              <Node>
               <Name>MAX_CONCURRENT_SENDS</Name>

@@ -1,4 +1,4 @@
-.TH "threadpool.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "threadpool.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -84,23 +84,23 @@ References threadpool_config::max_delay, threadpool::max_delay, threadpool_confi
 .PP
 Definition at line 92 of file threadpool\&.c\&.
 .PP
-References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::cleanup, threadpool_task::cleanup, threadpool::shutting_down, marked_task::task, threadpool_task::task, threadpool::task_release_head, threadpool::task_reserve_head, threadpool::task_ringbuf_size, threadpool::tasks, marked_task::udata, and threadpool_task::udata\&.
+References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::cleanup, threadpool_task::cleanup, threadpool::shutting_down, threadpool_task::task, marked_task::task, threadpool::task_release_head, threadpool::task_reserve_head, threadpool::task_ringbuf_size, threadpool::tasks, marked_task::udata, and threadpool_task::udata\&.
 .SS "void threadpool_stats (struct \fBthreadpool\fP *t, struct \fBthreadpool_info\fP *info)"
 
 .PP
-Definition at line 145 of file threadpool\&.c\&.
+Definition at line 143 of file threadpool\&.c\&.
 .PP
 References threadpool_info::active_threads, threadpool_info::backlog_size, threadpool_info::dormant_threads, threadpool::live_threads, thread_info::status, STATUS_AWAKE, threadpool::task_commit_head, threadpool::task_request_head, and threadpool::threads\&.
 .SS "bool threadpool_shutdown (struct \fBthreadpool\fP *t, boolkill_all)"
 
 .PP
-Definition at line 159 of file threadpool\&.c\&.
+Definition at line 157 of file threadpool\&.c\&.
 .PP
 References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::cleanup, threadpool::live_threads, threadpool::shutting_down, SPIN_ADJ, thread_info::status, STATUS_SHUTDOWN, thread_info::t, threadpool::task_commit_head, threadpool::task_release_head, threadpool::task_request_head, threadpool::task_ringbuf_mask, threadpool::tasks, threadpool::threads, and marked_task::udata\&.
 .SS "void threadpool_free (struct \fBthreadpool\fP *t)"
 
 .PP
-Definition at line 196 of file threadpool\&.c\&.
+Definition at line 194 of file threadpool\&.c\&.
 .PP
 References threadpool::tasks, and threadpool::threads\&.
 .SH "Author"

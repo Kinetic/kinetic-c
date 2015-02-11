@@ -5,7 +5,7 @@
   <filterSection>
     <filterAttribute>doxygen</filterAttribute>
     <toc>
-      <section title="kinetic-c v0.11.0" ref="index.html">
+      <section title="kinetic-c v0.11.1" ref="index.html">
         <section title="Kinetic-C Library Developer Reference" ref="md__d_e_v_e_l_o_p.html" />
         <section title="Data Structures">
           <section title="Data Structures" ref="annotated.html">
@@ -786,7 +786,6 @@
               <section title="box" ref="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a" />
               <section title="enqueue" ref="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180" />
               <section title="sent_size" ref="structtx__info__t.html#a61afed662d74f641186fb125661639f5" />
-              <section title="retries" ref="structtx__info__t.html#a9a2f2b534cf01de85c6127589f00620a" />
               <section title="fdi" ref="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309" />
               <section title="write" ref="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92" />
               <section title="notify" ref="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d" />
@@ -1086,6 +1085,7 @@
                 <section title="BUS_SEND_RX_FAILURE" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143" />
                 <section title="BUS_SEND_BAD_RESPONSE" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aadd9779e34cdfcee87a3548baaf020ba3" />
                 <section title="BUS_SEND_UNREGISTERED_SOCKET" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aad373d2f8bb961b04fa9e2c2a21ee7dc1" />
+                <section title="BUS_SEND_RX_TIMEOUT_EXPECT" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84" />
               </section>
               <section title="bus_socket_t" ref="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2">
                 <section title="BUS_SOCKET_PLAIN" ref="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb" />
@@ -1506,15 +1506,15 @@
               <section title="KineticController_CreateOperation" ref="kinetic__controller_8c.html#ad4fe27fac91b48a17326954619478f44" />
               <section title="KineticController_ExecuteOperation" ref="kinetic__controller_8c.html#ac9a4252a775e193885639be40bd3d2a0" />
               <section title="bus_to_kinetic_status" ref="kinetic__controller_8c.html#a79b2f6dcc349338aa767e037c481d58f" />
-              <section title="KineticController_HandleUnexecpectedResponse" ref="kinetic__controller_8c.html#af7404236e212f8b84f1ec139b410d242" />
-              <section title="KineticController_HandleExpectedResponse" ref="kinetic__controller_8c.html#a2bf440ef345b654b1fcdd1c40219efeb" />
+              <section title="KineticController_HandleUnexpectedResponse" ref="kinetic__controller_8c.html#add3086b393c52587fbb6f608ec5646c5" />
+              <section title="KineticController_HandleResult" ref="kinetic__controller_8c.html#a807fc16fb4348e2792eca614323e953f" />
             </section>
             <section title="kinetic_controller.h" ref="kinetic__controller_8h.html">
               <section title="KineticController_Init" ref="kinetic__controller_8h.html#a2696cec04d495fb25499052ef0d35a42" />
               <section title="KineticController_CreateOperation" ref="kinetic__controller_8h.html#ad4fe27fac91b48a17326954619478f44" />
               <section title="KineticController_ExecuteOperation" ref="kinetic__controller_8h.html#a317e37adb34e380e2266c764b0becf36" />
-              <section title="KineticController_HandleUnexecpectedResponse" ref="kinetic__controller_8h.html#af7404236e212f8b84f1ec139b410d242" />
-              <section title="KineticController_HandleExpectedResponse" ref="kinetic__controller_8h.html#a2bf440ef345b654b1fcdd1c40219efeb" />
+              <section title="KineticController_HandleUnexpectedResponse" ref="kinetic__controller_8h.html#add3086b393c52587fbb6f608ec5646c5" />
+              <section title="KineticController_HandleResult" ref="kinetic__controller_8h.html#a807fc16fb4348e2792eca614323e953f" />
             </section>
             <section title="kinetic_countingsemaphore.c" ref="kinetic__countingsemaphore_8c.html">
               <section title="KineticCountingSemaphore_Create" ref="kinetic__countingsemaphore_8c.html#af48447276de19051d4f0629156f2aaed" />
@@ -1579,9 +1579,9 @@
               <section title="KINETIC_LOGGER_FLUSH_INTERVAL_SEC" ref="kinetic__logger_8c.html#a3825b625f64850a03373ec53f7882557" />
               <section title="KINETIC_LOGGER_SLEEP_TIME_SEC" ref="kinetic__logger_8c.html#accf24c9dab82c503a41930746d2c0ea4" />
               <section title="KINETIC_LOGGER_BUFFER_FLUSH_SIZE" ref="kinetic__logger_8c.html#a929eb7f04063b2b0e8e4a6ef59b8f58e" />
+              <section title="LOG_INDENT" ref="kinetic__logger_8c.html#a3af97540f61003b8cfc44f9a23d9ed5e" />
               <section title="LOG_PROTO_INIT" ref="kinetic__logger_8c.html#aa759dab3714df698270c4644b8559ed5" />
               <section title="LOG_PROTO_LEVEL_START" ref="kinetic__logger_8c.html#ad3a2abfb5107485323e52906371f1bbc" />
-              <section title="LOG_PROTO_LEVEL_START_NO_INDENT" ref="kinetic__logger_8c.html#a14b8efce9c53f61f1f878c2571937c5b" />
               <section title="LOG_PROTO_LEVEL_END" ref="kinetic__logger_8c.html#ac3d221b143080cbf9b6abe41272c07b0" />
               <section title="LOG_PROTO_LEVEL_START_ARRAY" ref="kinetic__logger_8c.html#aa604fb43091d3870e2d74ab8248c3f2c" />
               <section title="LOG_PROTO_LEVEL_END_ARRAY" ref="kinetic__logger_8c.html#a0451e133e0d5b557b7af956003efdb11" />
@@ -3014,7 +3014,6 @@
                 <section title="box" ref="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a" />
                 <section title="enqueue" ref="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180" />
                 <section title="sent_size" ref="structtx__info__t.html#a61afed662d74f641186fb125661639f5" />
-                <section title="retries" ref="structtx__info__t.html#a9a2f2b534cf01de85c6127589f00620a" />
                 <section title="fdi" ref="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309" />
                 <section title="write" ref="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92" />
                 <section title="notify" ref="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d" />
@@ -3039,7 +3038,6 @@
               </section>
               <section title="MAX_TIMEOUT" ref="sender__internal_8h.html#a85fda3522e69a1bf85f7dcd97b6023a1" />
               <section title="TX_TIMEOUT" ref="sender__internal_8h.html#ad380e380939eae9a5d6c8f228f0fe7c8" />
-              <section title="SENDER_MAX_DELIVERY_RETRIES" ref="sender__internal_8h.html#afa49a2853c9cf530a44e4e4a3614bedf" />
               <section title="MAX_CONCURRENT_SENDS" ref="sender__internal_8h.html#acf81eb49715fa84e816bfdfb0ce18748" />
               <section title="HASH_TABLE_SIZE2" ref="sender__internal_8h.html#a2071bea833e4fa740cb66ccd81930b65" />
               <section title="SENDER_FD_NOT_IN_USE" ref="sender__internal_8h.html#a11970f2c99571e46862c6df7c94ad3c9" />
@@ -3432,6 +3430,7 @@
       <keyword name="BUS_SEND_RX_FAILURE" id="bus_types.h::BUS_SEND_RX_FAILURE" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143" />
       <keyword name="BUS_SEND_BAD_RESPONSE" id="bus_types.h::BUS_SEND_BAD_RESPONSE" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aadd9779e34cdfcee87a3548baaf020ba3" />
       <keyword name="BUS_SEND_UNREGISTERED_SOCKET" id="bus_types.h::BUS_SEND_UNREGISTERED_SOCKET" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aad373d2f8bb961b04fa9e2c2a21ee7dc1" />
+      <keyword name="BUS_SEND_RX_TIMEOUT_EXPECT" id="bus_types.h::BUS_SEND_RX_TIMEOUT_EXPECT" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84" />
       <keyword name="BUS_SOCKET_PLAIN" id="bus_types.h::BUS_SOCKET_PLAIN" ref="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb" />
       <keyword name="BUS_SOCKET_SSL" id="bus_types.h::BUS_SOCKET_SSL" ref="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2ae50613e7167203c0f237328f0391aa51" />
       <keyword name="BUS_REQUEST_SUCCESS" id="bus_types.h::BUS_REQUEST_SUCCESS" ref="bus__types_8h.html#a57ad19e042110dc3559f626fde746945ad6a0b87444666fb3e0aee54b85bf804d" />
@@ -3726,13 +3725,13 @@
       <keyword name="KineticController_CreateOperation" id="kinetic_controller.c::KineticController_CreateOperation" ref="kinetic__controller_8c.html#ad4fe27fac91b48a17326954619478f44" />
       <keyword name="KineticController_ExecuteOperation" id="kinetic_controller.c::KineticController_ExecuteOperation" ref="kinetic__controller_8c.html#ac9a4252a775e193885639be40bd3d2a0" />
       <keyword name="bus_to_kinetic_status" id="kinetic_controller.c::bus_to_kinetic_status" ref="kinetic__controller_8c.html#a79b2f6dcc349338aa767e037c481d58f" />
-      <keyword name="KineticController_HandleUnexecpectedResponse" id="kinetic_controller.c::KineticController_HandleUnexecpectedResponse" ref="kinetic__controller_8c.html#af7404236e212f8b84f1ec139b410d242" />
-      <keyword name="KineticController_HandleExpectedResponse" id="kinetic_controller.c::KineticController_HandleExpectedResponse" ref="kinetic__controller_8c.html#a2bf440ef345b654b1fcdd1c40219efeb" />
+      <keyword name="KineticController_HandleUnexpectedResponse" id="kinetic_controller.c::KineticController_HandleUnexpectedResponse" ref="kinetic__controller_8c.html#add3086b393c52587fbb6f608ec5646c5" />
+      <keyword name="KineticController_HandleResult" id="kinetic_controller.c::KineticController_HandleResult" ref="kinetic__controller_8c.html#a807fc16fb4348e2792eca614323e953f" />
       <keyword name="KineticController_Init" id="kinetic_controller.h::KineticController_Init" ref="kinetic__controller_8h.html#a2696cec04d495fb25499052ef0d35a42" />
       <keyword name="KineticController_CreateOperation" id="kinetic_controller.h::KineticController_CreateOperation" ref="kinetic__controller_8h.html#ad4fe27fac91b48a17326954619478f44" />
       <keyword name="KineticController_ExecuteOperation" id="kinetic_controller.h::KineticController_ExecuteOperation" ref="kinetic__controller_8h.html#a317e37adb34e380e2266c764b0becf36" />
-      <keyword name="KineticController_HandleUnexecpectedResponse" id="kinetic_controller.h::KineticController_HandleUnexecpectedResponse" ref="kinetic__controller_8h.html#af7404236e212f8b84f1ec139b410d242" />
-      <keyword name="KineticController_HandleExpectedResponse" id="kinetic_controller.h::KineticController_HandleExpectedResponse" ref="kinetic__controller_8h.html#a2bf440ef345b654b1fcdd1c40219efeb" />
+      <keyword name="KineticController_HandleUnexpectedResponse" id="kinetic_controller.h::KineticController_HandleUnexpectedResponse" ref="kinetic__controller_8h.html#add3086b393c52587fbb6f608ec5646c5" />
+      <keyword name="KineticController_HandleResult" id="kinetic_controller.h::KineticController_HandleResult" ref="kinetic__controller_8h.html#a807fc16fb4348e2792eca614323e953f" />
       <keyword name="KineticCountingSemaphore_Create" id="kinetic_countingsemaphore.c::KineticCountingSemaphore_Create" ref="kinetic__countingsemaphore_8c.html#af48447276de19051d4f0629156f2aaed" />
       <keyword name="KineticCountingSemaphore_Take" id="kinetic_countingsemaphore.c::KineticCountingSemaphore_Take" ref="kinetic__countingsemaphore_8c.html#ad266d96cf1de81b93578a5ac8d97c45a" />
       <keyword name="KineticCountingSemaphore_Give" id="kinetic_countingsemaphore.c::KineticCountingSemaphore_Give" ref="kinetic__countingsemaphore_8c.html#a1ec34085ec1aa056c673faa2e6e5d369" />
@@ -3770,9 +3769,9 @@
       <keyword name="KINETIC_LOGGER_FLUSH_INTERVAL_SEC" id="kinetic_logger.c::KINETIC_LOGGER_FLUSH_INTERVAL_SEC" ref="kinetic__logger_8c.html#a3825b625f64850a03373ec53f7882557" />
       <keyword name="KINETIC_LOGGER_SLEEP_TIME_SEC" id="kinetic_logger.c::KINETIC_LOGGER_SLEEP_TIME_SEC" ref="kinetic__logger_8c.html#accf24c9dab82c503a41930746d2c0ea4" />
       <keyword name="KINETIC_LOGGER_BUFFER_FLUSH_SIZE" id="kinetic_logger.c::KINETIC_LOGGER_BUFFER_FLUSH_SIZE" ref="kinetic__logger_8c.html#a929eb7f04063b2b0e8e4a6ef59b8f58e" />
+      <keyword name="LOG_INDENT" id="kinetic_logger.c::LOG_INDENT" ref="kinetic__logger_8c.html#a3af97540f61003b8cfc44f9a23d9ed5e" />
       <keyword name="LOG_PROTO_INIT" id="kinetic_logger.c::LOG_PROTO_INIT" ref="kinetic__logger_8c.html#aa759dab3714df698270c4644b8559ed5" />
       <keyword name="LOG_PROTO_LEVEL_START" id="kinetic_logger.c::LOG_PROTO_LEVEL_START" ref="kinetic__logger_8c.html#ad3a2abfb5107485323e52906371f1bbc" />
-      <keyword name="LOG_PROTO_LEVEL_START_NO_INDENT" id="kinetic_logger.c::LOG_PROTO_LEVEL_START_NO_INDENT" ref="kinetic__logger_8c.html#a14b8efce9c53f61f1f878c2571937c5b" />
       <keyword name="LOG_PROTO_LEVEL_END" id="kinetic_logger.c::LOG_PROTO_LEVEL_END" ref="kinetic__logger_8c.html#ac3d221b143080cbf9b6abe41272c07b0" />
       <keyword name="LOG_PROTO_LEVEL_START_ARRAY" id="kinetic_logger.c::LOG_PROTO_LEVEL_START_ARRAY" ref="kinetic__logger_8c.html#aa604fb43091d3870e2d74ab8248c3f2c" />
       <keyword name="LOG_PROTO_LEVEL_END_ARRAY" id="kinetic_logger.c::LOG_PROTO_LEVEL_END_ARRAY" ref="kinetic__logger_8c.html#a0451e133e0d5b557b7af956003efdb11" />
@@ -4515,7 +4514,6 @@
       <keyword name="sender_free" id="sender.h::sender_free" ref="sender_8h.html#acdaed429f2456b13e846d4e7f846bd65" />
       <keyword name="MAX_TIMEOUT" id="sender_internal.h::MAX_TIMEOUT" ref="sender__internal_8h.html#a85fda3522e69a1bf85f7dcd97b6023a1" />
       <keyword name="TX_TIMEOUT" id="sender_internal.h::TX_TIMEOUT" ref="sender__internal_8h.html#ad380e380939eae9a5d6c8f228f0fe7c8" />
-      <keyword name="SENDER_MAX_DELIVERY_RETRIES" id="sender_internal.h::SENDER_MAX_DELIVERY_RETRIES" ref="sender__internal_8h.html#afa49a2853c9cf530a44e4e4a3614bedf" />
       <keyword name="MAX_CONCURRENT_SENDS" id="sender_internal.h::MAX_CONCURRENT_SENDS" ref="sender__internal_8h.html#acf81eb49715fa84e816bfdfb0ce18748" />
       <keyword name="HASH_TABLE_SIZE2" id="sender_internal.h::HASH_TABLE_SIZE2" ref="sender__internal_8h.html#a2071bea833e4fa740cb66ccd81930b65" />
       <keyword name="SENDER_FD_NOT_IN_USE" id="sender_internal.h::SENDER_FD_NOT_IN_USE" ref="sender__internal_8h.html#a11970f2c99571e46862c6df7c94ad3c9" />
@@ -5335,13 +5333,11 @@
       <keyword name="timeout_sec" id="tx_info_t::@15::u_write::timeout_sec" ref="structtx__info__t_1_1@15_1_1u__write.html#a10c8deedf53f947a5752a23270044a77" />
       <keyword name="box" id="tx_info_t::@15::u_write::box" ref="structtx__info__t_1_1@15_1_1u__write.html#a3c91439a433e3d5cdc1c533393f5d161" />
       <keyword name="sent_size" id="tx_info_t::@15::u_write::sent_size" ref="structtx__info__t_1_1@15_1_1u__write.html#ab8e4007794e5c4bdb303f5c9b60787ea" />
-      <keyword name="retries" id="tx_info_t::@15::u_write::retries" ref="structtx__info__t_1_1@15_1_1u__write.html#a4adeb5f4e6043ef8c12508296d3205e8" />
       <keyword name="fdi" id="tx_info_t::@15::u_write::fdi" ref="structtx__info__t_1_1@15_1_1u__write.html#ae27433160e8a9bfdd95d0657164ef3a3" />
       <keyword name="write" id="tx_info_t::@15::write" ref="uniontx__info__t_1_1@15.html#a9eadf3e2e3ed3fd0b69cdeb1667a3b9d" />
       <keyword name="fd" id="tx_info_t::@15::u_notify::fd" ref="structtx__info__t_1_1@15_1_1u__notify.html#a8a8138f1cb697a4f2bf1fe6c9729c349" />
       <keyword name="timeout_sec" id="tx_info_t::@15::u_notify::timeout_sec" ref="structtx__info__t_1_1@15_1_1u__notify.html#a73a37acbe329369caba0d7a5a3961c3a" />
       <keyword name="box" id="tx_info_t::@15::u_notify::box" ref="structtx__info__t_1_1@15_1_1u__notify.html#a6533732fb5050b81b2019b079c8ebb19" />
-      <keyword name="retries" id="tx_info_t::@15::u_notify::retries" ref="structtx__info__t_1_1@15_1_1u__notify.html#ab0b2405c0145b73d85a9828ce9a9c389" />
       <keyword name="notify" id="tx_info_t::@15::notify" ref="uniontx__info__t_1_1@15.html#a0b4c9606cdb7efd57bf179f1e01324c6" />
       <keyword name="backpressure" id="tx_info_t::@15::@18::backpressure" ref="structtx__info__t_1_1@15_1_1@18.html#a1c6d378bb64a3cdd45d900c15d2355b9" />
       <keyword name="release" id="tx_info_t::@15::release" ref="uniontx__info__t_1_1@15.html#ae046645f9e52812500715590ed20c818" />

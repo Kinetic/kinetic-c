@@ -1102,6 +1102,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>BUS_SEND_RX_TIMEOUT_EXPECT</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>bus__types_8h.html</Path>
+    <Anchor>a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84</Anchor>
+    <DeclaredIn>bus_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>BUS_SOCKET_PLAIN</Name>
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
@@ -4076,22 +4086,22 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticController_HandleUnexecpectedResponse</Name>
+      <Name>KineticController_HandleUnexpectedResponse</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8c.html</Path>
-    <Anchor>af7404236e212f8b84f1ec139b410d242</Anchor>
+    <Anchor>add3086b393c52587fbb6f608ec5646c5</Anchor>
     <DeclaredIn>kinetic_controller.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticController_HandleExpectedResponse</Name>
+      <Name>KineticController_HandleResult</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8c.html</Path>
-    <Anchor>a2bf440ef345b654b1fcdd1c40219efeb</Anchor>
+    <Anchor>a807fc16fb4348e2792eca614323e953f</Anchor>
     <DeclaredIn>kinetic_controller.c</DeclaredIn>
   </Token>
   <Token>
@@ -4126,22 +4136,22 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticController_HandleUnexecpectedResponse</Name>
+      <Name>KineticController_HandleUnexpectedResponse</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8h.html</Path>
-    <Anchor>af7404236e212f8b84f1ec139b410d242</Anchor>
+    <Anchor>add3086b393c52587fbb6f608ec5646c5</Anchor>
     <DeclaredIn>kinetic_controller.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticController_HandleExpectedResponse</Name>
+      <Name>KineticController_HandleResult</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__controller_8h.html</Path>
-    <Anchor>a2bf440ef345b654b1fcdd1c40219efeb</Anchor>
+    <Anchor>a807fc16fb4348e2792eca614323e953f</Anchor>
     <DeclaredIn>kinetic_controller.h</DeclaredIn>
   </Token>
   <Token>
@@ -4516,6 +4526,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>LOG_INDENT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__logger_8c.html</Path>
+    <Anchor>a3af97540f61003b8cfc44f9a23d9ed5e</Anchor>
+    <DeclaredIn>kinetic_logger.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>LOG_PROTO_INIT</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
@@ -4532,16 +4552,6 @@
     </TokenIdentifier>
     <Path>kinetic__logger_8c.html</Path>
     <Anchor>ad3a2abfb5107485323e52906371f1bbc</Anchor>
-    <DeclaredIn>kinetic_logger.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>LOG_PROTO_LEVEL_START_NO_INDENT</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__logger_8c.html</Path>
-    <Anchor>a14b8efce9c53f61f1f878c2571937c5b</Anchor>
     <DeclaredIn>kinetic_logger.c</DeclaredIn>
   </Token>
   <Token>
@@ -12043,16 +12053,6 @@
     </TokenIdentifier>
     <Path>sender__internal_8h.html</Path>
     <Anchor>ad380e380939eae9a5d6c8f228f0fe7c8</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>SENDER_MAX_DELIVERY_RETRIES</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>afa49a2853c9cf530a44e4e4a3614bedf</Anchor>
     <DeclaredIn>sender_internal.h</DeclaredIn>
   </Token>
   <Token>

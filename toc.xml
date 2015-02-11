@@ -779,7 +779,6 @@
         <topic label="box" href="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a"/>
         <topic label="enqueue" href="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180"/>
         <topic label="sent_size" href="structtx__info__t.html#a61afed662d74f641186fb125661639f5"/>
-        <topic label="retries" href="structtx__info__t.html#a9a2f2b534cf01de85c6127589f00620a"/>
         <topic label="fdi" href="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309"/>
         <topic label="write" href="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92"/>
         <topic label="notify" href="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d"/>
@@ -1079,6 +1078,7 @@
           <topic label="BUS_SEND_RX_FAILURE" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143"/>
           <topic label="BUS_SEND_BAD_RESPONSE" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aadd9779e34cdfcee87a3548baaf020ba3"/>
           <topic label="BUS_SEND_UNREGISTERED_SOCKET" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aad373d2f8bb961b04fa9e2c2a21ee7dc1"/>
+          <topic label="BUS_SEND_RX_TIMEOUT_EXPECT" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84"/>
         </topic>
         <topic label="bus_socket_t" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2">
           <topic label="BUS_SOCKET_PLAIN" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb"/>
@@ -1499,15 +1499,15 @@
         <topic label="KineticController_CreateOperation" href="kinetic__controller_8c.html#ad4fe27fac91b48a17326954619478f44"/>
         <topic label="KineticController_ExecuteOperation" href="kinetic__controller_8c.html#ac9a4252a775e193885639be40bd3d2a0"/>
         <topic label="bus_to_kinetic_status" href="kinetic__controller_8c.html#a79b2f6dcc349338aa767e037c481d58f"/>
-        <topic label="KineticController_HandleUnexecpectedResponse" href="kinetic__controller_8c.html#af7404236e212f8b84f1ec139b410d242"/>
-        <topic label="KineticController_HandleExpectedResponse" href="kinetic__controller_8c.html#a2bf440ef345b654b1fcdd1c40219efeb"/>
+        <topic label="KineticController_HandleUnexpectedResponse" href="kinetic__controller_8c.html#add3086b393c52587fbb6f608ec5646c5"/>
+        <topic label="KineticController_HandleResult" href="kinetic__controller_8c.html#a807fc16fb4348e2792eca614323e953f"/>
       </topic>
       <topic label="kinetic_controller.h" href="kinetic__controller_8h.html">
         <topic label="KineticController_Init" href="kinetic__controller_8h.html#a2696cec04d495fb25499052ef0d35a42"/>
         <topic label="KineticController_CreateOperation" href="kinetic__controller_8h.html#ad4fe27fac91b48a17326954619478f44"/>
         <topic label="KineticController_ExecuteOperation" href="kinetic__controller_8h.html#a317e37adb34e380e2266c764b0becf36"/>
-        <topic label="KineticController_HandleUnexecpectedResponse" href="kinetic__controller_8h.html#af7404236e212f8b84f1ec139b410d242"/>
-        <topic label="KineticController_HandleExpectedResponse" href="kinetic__controller_8h.html#a2bf440ef345b654b1fcdd1c40219efeb"/>
+        <topic label="KineticController_HandleUnexpectedResponse" href="kinetic__controller_8h.html#add3086b393c52587fbb6f608ec5646c5"/>
+        <topic label="KineticController_HandleResult" href="kinetic__controller_8h.html#a807fc16fb4348e2792eca614323e953f"/>
       </topic>
       <topic label="kinetic_countingsemaphore.c" href="kinetic__countingsemaphore_8c.html">
         <topic label="KineticCountingSemaphore_Create" href="kinetic__countingsemaphore_8c.html#af48447276de19051d4f0629156f2aaed"/>
@@ -1572,9 +1572,9 @@
         <topic label="KINETIC_LOGGER_FLUSH_INTERVAL_SEC" href="kinetic__logger_8c.html#a3825b625f64850a03373ec53f7882557"/>
         <topic label="KINETIC_LOGGER_SLEEP_TIME_SEC" href="kinetic__logger_8c.html#accf24c9dab82c503a41930746d2c0ea4"/>
         <topic label="KINETIC_LOGGER_BUFFER_FLUSH_SIZE" href="kinetic__logger_8c.html#a929eb7f04063b2b0e8e4a6ef59b8f58e"/>
+        <topic label="LOG_INDENT" href="kinetic__logger_8c.html#a3af97540f61003b8cfc44f9a23d9ed5e"/>
         <topic label="LOG_PROTO_INIT" href="kinetic__logger_8c.html#aa759dab3714df698270c4644b8559ed5"/>
         <topic label="LOG_PROTO_LEVEL_START" href="kinetic__logger_8c.html#ad3a2abfb5107485323e52906371f1bbc"/>
-        <topic label="LOG_PROTO_LEVEL_START_NO_INDENT" href="kinetic__logger_8c.html#a14b8efce9c53f61f1f878c2571937c5b"/>
         <topic label="LOG_PROTO_LEVEL_END" href="kinetic__logger_8c.html#ac3d221b143080cbf9b6abe41272c07b0"/>
         <topic label="LOG_PROTO_LEVEL_START_ARRAY" href="kinetic__logger_8c.html#aa604fb43091d3870e2d74ab8248c3f2c"/>
         <topic label="LOG_PROTO_LEVEL_END_ARRAY" href="kinetic__logger_8c.html#a0451e133e0d5b557b7af956003efdb11"/>
@@ -3007,7 +3007,6 @@
           <topic label="box" href="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a"/>
           <topic label="enqueue" href="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180"/>
           <topic label="sent_size" href="structtx__info__t.html#a61afed662d74f641186fb125661639f5"/>
-          <topic label="retries" href="structtx__info__t.html#a9a2f2b534cf01de85c6127589f00620a"/>
           <topic label="fdi" href="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309"/>
           <topic label="write" href="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92"/>
           <topic label="notify" href="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d"/>
@@ -3032,7 +3031,6 @@
         </topic>
         <topic label="MAX_TIMEOUT" href="sender__internal_8h.html#a85fda3522e69a1bf85f7dcd97b6023a1"/>
         <topic label="TX_TIMEOUT" href="sender__internal_8h.html#ad380e380939eae9a5d6c8f228f0fe7c8"/>
-        <topic label="SENDER_MAX_DELIVERY_RETRIES" href="sender__internal_8h.html#afa49a2853c9cf530a44e4e4a3614bedf"/>
         <topic label="MAX_CONCURRENT_SENDS" href="sender__internal_8h.html#acf81eb49715fa84e816bfdfb0ce18748"/>
         <topic label="HASH_TABLE_SIZE2" href="sender__internal_8h.html#a2071bea833e4fa740cb66ccd81930b65"/>
         <topic label="SENDER_FD_NOT_IN_USE" href="sender__internal_8h.html#a11970f2c99571e46862c6df7c94ad3c9"/>

@@ -1,4 +1,4 @@
-.TH "write_file_nonblocking.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "write_file_nonblocking.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -54,21 +54,21 @@ write_file_nonblocking.c \-
 .SS "#define REPORT_ERRNO(en, msg)   if(en != 0){errno = en; perror(msg);}"
 
 .PP
-Definition at line 13 of file write_file_nonblocking\&.c\&.
+Definition at line 32 of file write_file_nonblocking\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "FileTransferProgress * start_file_transfer (\fBKineticSession\fP *session, char const *constfilename, uint64_tkeyPrefix, uint32_tmaxOverlappedChunks)"
 
 .PP
-Definition at line 175 of file write_file_nonblocking\&.c\&.
+Definition at line 194 of file write_file_nonblocking\&.c\&.
 .SS "\fBKineticStatus\fP wait_for_put_finish (FileTransferProgress *consttransfer)"
 
 .PP
-Definition at line 196 of file write_file_nonblocking\&.c\&.
+Definition at line 215 of file write_file_nonblocking\&.c\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
-Definition at line 50 of file write_file_nonblocking\&.c\&.
+Definition at line 69 of file write_file_nonblocking\&.c\&.
 .PP
 References ByteArray_CreateWithCString(), KineticSession::config, KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), KineticClientConfig::logFile, start_file_transfer(), and wait_for_put_finish()\&.
 .SH "Author"

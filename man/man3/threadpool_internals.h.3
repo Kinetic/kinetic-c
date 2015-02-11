@@ -1,4 +1,4 @@
-.TH "threadpool_internals.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "threadpool_internals.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -53,15 +53,15 @@ threadpool_internals.h \-
 .SS "#define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)   (__sync_bool_compare_and_swap(PTR, OLD, NEW))"
 
 .PP
-Definition at line 66 of file threadpool_internals\&.h\&.
+Definition at line 85 of file threadpool_internals\&.h\&.
 .SS "#define NOTIFY_MSG   '!'"
 
 .PP
-Definition at line 69 of file threadpool_internals\&.h\&.
+Definition at line 88 of file threadpool_internals\&.h\&.
 .SS "#define NOTIFY_MSG_LEN   1"
 
 .PP
-Definition at line 70 of file threadpool_internals\&.h\&.
+Definition at line 89 of file threadpool_internals\&.h\&.
 .SS "#define SPIN_ADJ(F, ADJ)"
 \fBValue:\fP
 .PP
@@ -76,7 +76,7 @@ do {                                                                \
     } while (0)
 .fi
 .PP
-Definition at line 73 of file threadpool_internals\&.h\&.
+Definition at line 92 of file threadpool_internals\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBthread_status_t\fP"
@@ -95,7 +95,7 @@ Definition at line 73 of file threadpool_internals\&.h\&.
 .TP
 \fB\fISTATUS_JOINED \fP\fP
 .PP
-Definition at line 6 of file threadpool_internals\&.h\&.
+Definition at line 25 of file threadpool_internals\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

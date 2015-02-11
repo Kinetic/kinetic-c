@@ -1,4 +1,4 @@
-.TH "tx_info_t" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "tx_info_t" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -75,9 +75,6 @@ tx_info_t \-
 .RI "      size_t \fBsent_size\fP"
 .br
 .ti -1c
-.RI "      uint8_t \fBretries\fP"
-.br
-.ti -1c
 .RI "      \fBfd_info\fP * \fBfdi\fP"
 .br
 .ti -1c
@@ -94,9 +91,6 @@ tx_info_t \-
 .br
 .ti -1c
 .RI "      \fBboxed_msg\fP * \fBbox\fP"
-.br
-.ti -1c
-.RI "      uint8_t \fBretries\fP"
 .br
 .ti -1c
 .RI "   } \fBnotify\fP"
@@ -131,29 +125,29 @@ tx_info_t \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 76 of file sender_internal\&.h\&.
+Definition at line 78 of file sender_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "const int tx_info_t::id"
 
 .PP
-Definition at line 78 of file sender_internal\&.h\&.
+Definition at line 80 of file sender_internal\&.h\&.
 .SS "int tx_info_t::done_pipe"
 
 .PP
-Definition at line 81 of file sender_internal\&.h\&.
+Definition at line 83 of file sender_internal\&.h\&.
 .SS "\fBtx_info_state\fP tx_info_t::state"
 
 .PP
-Definition at line 84 of file sender_internal\&.h\&.
+Definition at line 86 of file sender_internal\&.h\&.
 .SS "int tx_info_t::fd"
 
 .PP
-Definition at line 87 of file sender_internal\&.h\&.
+Definition at line 89 of file sender_internal\&.h\&.
 .SS "SSL* tx_info_t::ssl"
 
 .PP
-Definition at line 88 of file sender_internal\&.h\&.
+Definition at line 90 of file sender_internal\&.h\&.
 .SS "struct { \&.\&.\&. }   tx_info_t::add_socket"
 
 .SS "struct { \&.\&.\&. }   tx_info_t::rm_socket"
@@ -161,25 +155,21 @@ Definition at line 88 of file sender_internal\&.h\&.
 .SS "time_t tx_info_t::timeout_sec"
 
 .PP
-Definition at line 97 of file sender_internal\&.h\&.
+Definition at line 99 of file sender_internal\&.h\&.
 .SS "\fBboxed_msg\fP* tx_info_t::box"
 
 .PP
-Definition at line 98 of file sender_internal\&.h\&.
+Definition at line 100 of file sender_internal\&.h\&.
 .SS "struct { \&.\&.\&. } ::u_enqueue  tx_info_t::enqueue"
 
 .SS "size_t tx_info_t::sent_size"
 
 .PP
-Definition at line 105 of file sender_internal\&.h\&.
-.SS "uint8_t tx_info_t::retries"
-
-.PP
-Definition at line 106 of file sender_internal\&.h\&.
+Definition at line 107 of file sender_internal\&.h\&.
 .SS "\fBfd_info\fP* tx_info_t::fdi"
 
 .PP
-Definition at line 107 of file sender_internal\&.h\&.
+Definition at line 108 of file sender_internal\&.h\&.
 .SS "struct { \&.\&.\&. } ::u_write  tx_info_t::write"
 
 .SS "struct { \&.\&.\&. } ::u_notify  tx_info_t::notify"

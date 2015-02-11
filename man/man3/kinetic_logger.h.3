@@ -1,4 +1,4 @@
-.TH "kinetic_logger.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_logger.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -193,31 +193,31 @@ References KineticLogger_Log(), and KineticLogger_LogPrintf()\&.
 .SS "void KineticLogger_LogProtobuf (intlog_level, const KineticProto_Message *msg)"
 
 .PP
-Definition at line 410 of file kinetic_logger\&.c\&.
+Definition at line 411 of file kinetic_logger\&.c\&.
 .PP
 References KineticLogger_Log(), and LOG_PROTO_INIT\&.
 .SS "void KineticLogger_LogStatus (intlog_level, KineticProto_Command_Status *status)"
 
 .PP
-Definition at line 422 of file kinetic_logger\&.c\&.
+Definition at line 423 of file kinetic_logger\&.c\&.
 .PP
 References KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS, and KineticLogger_LogPrintf()\&.
 .SS "void KineticLogger_LogByteArray (intlog_level, const char *title, \fBByteArray\fPbytes)"
 
 .PP
-Definition at line 479 of file kinetic_logger\&.c\&.
+Definition at line 480 of file kinetic_logger\&.c\&.
 .PP
 References ByteArray::data, KineticLogger_LogPrintf(), and ByteArray::len\&.
 .SS "void KineticLogger_LogByteBuffer (intlog_level, const char *title, \fBByteBuffer\fPbuffer)"
 
 .PP
-Definition at line 523 of file kinetic_logger\&.c\&.
+Definition at line 524 of file kinetic_logger\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and KineticLogger_LogByteArray()\&.
 .SS "int KineticLogger_ByteArraySliceToCString (char *p_buf, const \fBByteArray\fPbytes, const intstart, const intcount)"
 
 .PP
-Definition at line 218 of file kinetic_logger\&.c\&.
+Definition at line 229 of file kinetic_logger\&.c\&.
 .PP
 References ByteArray::data\&.
 .SH "Author"

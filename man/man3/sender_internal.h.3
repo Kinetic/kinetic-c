@@ -1,4 +1,4 @@
-.TH "sender_internal.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "sender_internal.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,9 +30,6 @@ sender_internal.h \-
 .br
 .ti -1c
 .RI "#define \fBTX_TIMEOUT\fP   9"
-.br
-.ti -1c
-.RI "#define \fBSENDER_MAX_DELIVERY_RETRIES\fP   5"
 .br
 .ti -1c
 .RI "#define \fBMAX_CONCURRENT_SENDS\fP   32"
@@ -71,28 +68,24 @@ Definition at line 25 of file sender_internal\&.h\&.
 
 .PP
 Definition at line 26 of file sender_internal\&.h\&.
-.SS "#define SENDER_MAX_DELIVERY_RETRIES   5"
-
-.PP
-Definition at line 28 of file sender_internal\&.h\&.
 .SS "#define MAX_CONCURRENT_SENDS   32"
 
 .PP
-Definition at line 31 of file sender_internal\&.h\&.
+Definition at line 33 of file sender_internal\&.h\&.
 .SS "#define HASH_TABLE_SIZE2   6 /* should be > log2(\fBMAX_CONCURRENT_SENDS\fP) */"
 
 .PP
-Definition at line 34 of file sender_internal\&.h\&.
+Definition at line 36 of file sender_internal\&.h\&.
 .SS "#define SENDER_FD_NOT_IN_USE   (-1)"
 
 .PP
-Definition at line 36 of file sender_internal\&.h\&.
+Definition at line 38 of file sender_internal\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef uint32_t \fBtx_flag_t\fP"
 
 .PP
-Definition at line 32 of file sender_internal\&.h\&.
+Definition at line 34 of file sender_internal\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBtx_error_t\fP"
@@ -121,7 +114,7 @@ Definition at line 32 of file sender_internal\&.h\&.
 .TP
 \fB\fITX_ERROR_BAD_SEQUENCE_ID \fP\fP
 .PP
-Definition at line 37 of file sender_internal\&.h\&.
+Definition at line 39 of file sender_internal\&.h\&.
 .SS "enum \fBtx_info_state\fP"
 
 .PP
@@ -146,7 +139,7 @@ Definition at line 37 of file sender_internal\&.h\&.
 .TP
 \fB\fITIS_ERROR \fP\fP
 .PP
-Definition at line 50 of file sender_internal\&.h\&.
+Definition at line 52 of file sender_internal\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

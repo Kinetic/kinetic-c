@@ -1,4 +1,4 @@
-.TH "kinetic_semaphore.c" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_semaphore.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -51,7 +51,7 @@ Returns a pointer to a KineticSemaphore\&.
 .PP
 
 .PP
-Definition at line 12 of file kinetic_semaphore\&.c\&.
+Definition at line 31 of file kinetic_semaphore\&.c\&.
 .SS "void KineticSemaphore_Signal (KineticSemaphore *sem)"
 
 .PP
@@ -64,7 +64,7 @@ Signals KineticSemaphore\&. This will unblock another thread that's blocked on t
 .PP
 
 .PP
-Definition at line 24 of file kinetic_semaphore\&.c\&.
+Definition at line 43 of file kinetic_semaphore\&.c\&.
 .SS "bool KineticSemaphore_CheckSignaled (KineticSemaphore *sem)"
 
 .PP
@@ -82,7 +82,7 @@ Returns true if signaled\&.
 .PP
 
 .PP
-Definition at line 32 of file kinetic_semaphore\&.c\&.
+Definition at line 51 of file kinetic_semaphore\&.c\&.
 .SS "bool KineticSemaphore_DestroyIfSignaled (KineticSemaphore *sem)"
 
 .PP
@@ -100,7 +100,7 @@ Returns true signaled and detroyed\&. Returns false if not yet signaled\&.
 .PP
 
 .PP
-Definition at line 37 of file kinetic_semaphore\&.c\&.
+Definition at line 56 of file kinetic_semaphore\&.c\&.
 .SS "void KineticSemaphore_WaitForSignalAndDestroy (KineticSemaphore *sem)"
 
 .PP
@@ -113,7 +113,7 @@ Blocks until the given semaphore is signaled\&. This will not block if the Semap
 .PP
 
 .PP
-Definition at line 50 of file kinetic_semaphore\&.c\&.
+Definition at line 69 of file kinetic_semaphore\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

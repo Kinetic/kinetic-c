@@ -1,4 +1,4 @@
-.TH "greatest.h" 3 "Tue Jan 27 2015" "Version v0.11.0" "kinetic-c" \" -*- nroff -*-
+.TH "greatest.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -284,39 +284,39 @@ greatest.h \-
 .SS "#define GREATEST_VERSION_MAJOR   0"
 
 .PP
-Definition at line 20 of file threadpool/greatest\&.h\&.
+Definition at line 39 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_VERSION_MINOR   10"
 
 .PP
-Definition at line 21 of file threadpool/greatest\&.h\&.
+Definition at line 40 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_VERSION_PATCH   1"
 
 .PP
-Definition at line 22 of file threadpool/greatest\&.h\&.
+Definition at line 41 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_DEFAULT_WIDTH   72"
 
 .PP
-Definition at line 83 of file threadpool/greatest\&.h\&.
+Definition at line 102 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_STDOUT   stdout"
 
 .PP
-Definition at line 88 of file threadpool/greatest\&.h\&.
+Definition at line 107 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_USE_ABBREVS   1"
 
 .PP
-Definition at line 93 of file threadpool/greatest\&.h\&.
+Definition at line 112 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_SUITE(NAME)   void NAME(void)"
 
 .PP
-Definition at line 216 of file threadpool/greatest\&.h\&.
+Definition at line 235 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_TEST   static int"
 
 .PP
-Definition at line 220 of file threadpool/greatest\&.h\&.
+Definition at line 239 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_RUN_SUITE(S_NAME)   greatest_run_suite(S_NAME, #S_NAME)"
 
 .PP
-Definition at line 223 of file threadpool/greatest\&.h\&.
+Definition at line 242 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_RUN_TEST(\fBTEST\fP)"
 \fBValue:\fP
 .PP
@@ -331,7 +331,7 @@ do {                                                                \
     } while (0)
 .fi
 .PP
-Definition at line 226 of file threadpool/greatest\&.h\&.
+Definition at line 245 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_RUN_TEST1(\fBTEST\fP, ENV)"
 \fBValue:\fP
 .PP
@@ -346,55 +346,55 @@ do {                                                                \
     } while (0)
 .fi
 .PP
-Definition at line 238 of file threadpool/greatest\&.h\&.
+Definition at line 257 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_IS_VERBOSE()   (greatest_info\&.flags & \fBGREATEST_FLAG_VERBOSE\fP)"
 
 .PP
-Definition at line 264 of file threadpool/greatest\&.h\&.
+Definition at line 283 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_LIST_ONLY()   (greatest_info\&.flags & \fBGREATEST_FLAG_LIST_ONLY\fP)"
 
 .PP
-Definition at line 265 of file threadpool/greatest\&.h\&.
+Definition at line 284 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_FIRST_FAIL()   (greatest_info\&.flags & \fBGREATEST_FLAG_FIRST_FAIL\fP)"
 
 .PP
-Definition at line 266 of file threadpool/greatest\&.h\&.
+Definition at line 285 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_FAILURE_ABORT()   (greatest_info\&.suite\&.failed > 0 && \fBGREATEST_FIRST_FAIL\fP())"
 
 .PP
-Definition at line 267 of file threadpool/greatest\&.h\&.
+Definition at line 286 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_PASS()   \fBGREATEST_PASSm\fP(NULL)"
 
 .PP
-Definition at line 270 of file threadpool/greatest\&.h\&.
+Definition at line 289 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_FAIL()   \fBGREATEST_FAILm\fP(NULL)"
 
 .PP
-Definition at line 271 of file threadpool/greatest\&.h\&.
+Definition at line 290 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_SKIP()   \fBGREATEST_SKIPm\fP(NULL)"
 
 .PP
-Definition at line 272 of file threadpool/greatest\&.h\&.
+Definition at line 291 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT(COND)   \fBGREATEST_ASSERTm\fP(#COND, COND)"
 
 .PP
-Definition at line 273 of file threadpool/greatest\&.h\&.
+Definition at line 292 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT_FALSE(COND)   \fBGREATEST_ASSERT_FALSEm\fP(#COND, COND)"
 
 .PP
-Definition at line 274 of file threadpool/greatest\&.h\&.
+Definition at line 293 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT_EQ(EXP, GOT)   \fBGREATEST_ASSERT_EQm\fP(#EXP ' != ' #GOT, EXP, GOT)"
 
 .PP
-Definition at line 275 of file threadpool/greatest\&.h\&.
+Definition at line 294 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT_EQUAL_T(EXP, GOT, TYPE_INFO, UDATA)   \fBGREATEST_ASSERT_EQUAL_Tm\fP(#EXP ' != ' #GOT, EXP, GOT, TYPE_INFO, UDATA)"
 
 .PP
-Definition at line 276 of file threadpool/greatest\&.h\&.
+Definition at line 295 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT_STR_EQ(EXP, GOT)   \fBGREATEST_ASSERT_STR_EQm\fP(#EXP ' != ' #GOT, EXP, GOT)"
 
 .PP
-Definition at line 278 of file threadpool/greatest\&.h\&.
+Definition at line 297 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERTm(MSG, COND)"
 \fBValue:\fP
 .PP
@@ -405,7 +405,7 @@ do {                                                                \\
     } while (0)
 .fi
 .PP
-Definition at line 284 of file threadpool/greatest\&.h\&.
+Definition at line 303 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT_FALSEm(MSG, COND)"
 \fBValue:\fP
 .PP
@@ -416,7 +416,7 @@ do {                                                                \\
     } while (0)
 .fi
 .PP
-Definition at line 291 of file threadpool/greatest\&.h\&.
+Definition at line 310 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT_EQm(MSG, EXP, GOT)"
 \fBValue:\fP
 .PP
@@ -427,7 +427,7 @@ do {                                                                \\
     } while (0)
 .fi
 .PP
-Definition at line 298 of file threadpool/greatest\&.h\&.
+Definition at line 317 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT_STR_EQm(MSG, EXP, GOT)"
 \fBValue:\fP
 .PP
@@ -438,7 +438,7 @@ do {                                                                \\
     } while (0)                                                         \
 .fi
 .PP
-Definition at line 305 of file threadpool/greatest\&.h\&.
+Definition at line 324 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_ASSERT_EQUAL_Tm(MSG, EXP, GOT, TYPE_INFO, UDATA)"
 \fBValue:\fP
 .PP
@@ -457,7 +457,7 @@ do {                                                                \
     } while (0)                                                         \
 .fi
 .PP
-Definition at line 314 of file threadpool/greatest\&.h\&.
+Definition at line 333 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_PASSm(MSG)"
 \fBValue:\fP
 .PP
@@ -468,7 +468,7 @@ do {                                                                \\
     } while (0)
 .fi
 .PP
-Definition at line 329 of file threadpool/greatest\&.h\&.
+Definition at line 348 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_FAILm(MSG)"
 \fBValue:\fP
 .PP
@@ -481,7 +481,7 @@ do {                                                                \\
     } while (0)
 .fi
 .PP
-Definition at line 336 of file threadpool/greatest\&.h\&.
+Definition at line 355 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_SKIPm(MSG)"
 \fBValue:\fP
 .PP
@@ -492,7 +492,7 @@ do {                                                                \\
     } while (0)
 .fi
 .PP
-Definition at line 345 of file threadpool/greatest\&.h\&.
+Definition at line 364 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_SET_TIME(NAME)"
 \fBValue:\fP
 .PP
@@ -505,7 +505,7 @@ NAME = clock();                                                     \
     }
 .fi
 .PP
-Definition at line 351 of file threadpool/greatest\&.h\&.
+Definition at line 370 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_CLOCK_DIFF(C1, C2)"
 \fBValue:\fP
 .PP
@@ -515,15 +515,15 @@ fprintf(GREATEST_STDOUT, " (%lu ticks, %\&.3f sec)",                  \
         (double)((C2) - (C1)) / (1\&.0 * (double)CLOCKS_PER_SEC))         \
 .fi
 .PP
-Definition at line 359 of file threadpool/greatest\&.h\&.
+Definition at line 378 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_MAIN_DEFS()"
 
 .PP
-Definition at line 365 of file threadpool/greatest\&.h\&.
+Definition at line 384 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_MAIN_BEGIN()"
 
 .PP
-Definition at line 569 of file threadpool/greatest\&.h\&.
+Definition at line 588 of file threadpool/greatest\&.h\&.
 .SS "#define GREATEST_MAIN_END()"
 \fBValue:\fP
 .PP
@@ -547,125 +547,125 @@ do {                                                                \
     } while (0)
 .fi
 .PP
-Definition at line 610 of file threadpool/greatest\&.h\&.
+Definition at line 629 of file threadpool/greatest\&.h\&.
 .SS "#define TEST   \fBGREATEST_TEST\fP"
 
 .PP
-Definition at line 632 of file threadpool/greatest\&.h\&.
+Definition at line 651 of file threadpool/greatest\&.h\&.
 .SS "#define SUITE   \fBGREATEST_SUITE\fP"
 
 .PP
-Definition at line 633 of file threadpool/greatest\&.h\&.
+Definition at line 652 of file threadpool/greatest\&.h\&.
 .SS "#define RUN_TEST   \fBGREATEST_RUN_TEST\fP"
 
 .PP
-Definition at line 634 of file threadpool/greatest\&.h\&.
+Definition at line 653 of file threadpool/greatest\&.h\&.
 .SS "#define RUN_TEST1   \fBGREATEST_RUN_TEST1\fP"
 
 .PP
-Definition at line 635 of file threadpool/greatest\&.h\&.
+Definition at line 654 of file threadpool/greatest\&.h\&.
 .SS "#define RUN_SUITE   \fBGREATEST_RUN_SUITE\fP"
 
 .PP
-Definition at line 636 of file threadpool/greatest\&.h\&.
+Definition at line 655 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT   \fBGREATEST_ASSERT\fP"
 
 .PP
-Definition at line 637 of file threadpool/greatest\&.h\&.
+Definition at line 656 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERTm   \fBGREATEST_ASSERTm\fP"
 
 .PP
-Definition at line 638 of file threadpool/greatest\&.h\&.
+Definition at line 657 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT_FALSE   \fBGREATEST_ASSERT_FALSE\fP"
 
 .PP
-Definition at line 639 of file threadpool/greatest\&.h\&.
+Definition at line 658 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT_EQ   \fBGREATEST_ASSERT_EQ\fP"
 
 .PP
-Definition at line 640 of file threadpool/greatest\&.h\&.
+Definition at line 659 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT_EQUAL_T   \fBGREATEST_ASSERT_EQUAL_T\fP"
 
 .PP
-Definition at line 641 of file threadpool/greatest\&.h\&.
+Definition at line 660 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT_STR_EQ   \fBGREATEST_ASSERT_STR_EQ\fP"
 
 .PP
-Definition at line 642 of file threadpool/greatest\&.h\&.
+Definition at line 661 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT_FALSEm   \fBGREATEST_ASSERT_FALSEm\fP"
 
 .PP
-Definition at line 643 of file threadpool/greatest\&.h\&.
+Definition at line 662 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT_EQm   \fBGREATEST_ASSERT_EQm\fP"
 
 .PP
-Definition at line 644 of file threadpool/greatest\&.h\&.
+Definition at line 663 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT_EQUAL_Tm   \fBGREATEST_ASSERT_EQUAL_Tm\fP"
 
 .PP
-Definition at line 645 of file threadpool/greatest\&.h\&.
+Definition at line 664 of file threadpool/greatest\&.h\&.
 .SS "#define ASSERT_STR_EQm   \fBGREATEST_ASSERT_STR_EQm\fP"
 
 .PP
-Definition at line 646 of file threadpool/greatest\&.h\&.
+Definition at line 665 of file threadpool/greatest\&.h\&.
 .SS "#define PASS   \fBGREATEST_PASS\fP"
 
 .PP
-Definition at line 647 of file threadpool/greatest\&.h\&.
+Definition at line 666 of file threadpool/greatest\&.h\&.
 .SS "#define FAIL   \fBGREATEST_FAIL\fP"
 
 .PP
-Definition at line 648 of file threadpool/greatest\&.h\&.
+Definition at line 667 of file threadpool/greatest\&.h\&.
 .SS "#define SKIP   \fBGREATEST_SKIP\fP"
 
 .PP
-Definition at line 649 of file threadpool/greatest\&.h\&.
+Definition at line 668 of file threadpool/greatest\&.h\&.
 .SS "#define PASSm   \fBGREATEST_PASSm\fP"
 
 .PP
-Definition at line 650 of file threadpool/greatest\&.h\&.
+Definition at line 669 of file threadpool/greatest\&.h\&.
 .SS "#define FAILm   \fBGREATEST_FAILm\fP"
 
 .PP
-Definition at line 651 of file threadpool/greatest\&.h\&.
+Definition at line 670 of file threadpool/greatest\&.h\&.
 .SS "#define SKIPm   \fBGREATEST_SKIPm\fP"
 
 .PP
-Definition at line 652 of file threadpool/greatest\&.h\&.
+Definition at line 671 of file threadpool/greatest\&.h\&.
 .SS "#define SET_SETUP   \fBGREATEST_SET_SETUP_CB\fP"
 
 .PP
-Definition at line 653 of file threadpool/greatest\&.h\&.
+Definition at line 672 of file threadpool/greatest\&.h\&.
 .SS "#define SET_TEARDOWN   \fBGREATEST_SET_TEARDOWN_CB\fP"
 
 .PP
-Definition at line 654 of file threadpool/greatest\&.h\&.
+Definition at line 673 of file threadpool/greatest\&.h\&.
 .SS "#define RUN_TESTp   GREATEST_RUN_TESTp"
 
 .PP
-Definition at line 658 of file threadpool/greatest\&.h\&.
+Definition at line 677 of file threadpool/greatest\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef void( greatest_suite_cb)(void)"
 
 .PP
-Definition at line 116 of file threadpool/greatest\&.h\&.
+Definition at line 135 of file threadpool/greatest\&.h\&.
 .SS "typedef void( greatest_setup_cb)(void *udata)"
 
 .PP
-Definition at line 120 of file threadpool/greatest\&.h\&.
+Definition at line 139 of file threadpool/greatest\&.h\&.
 .SS "typedef void( greatest_teardown_cb)(void *udata)"
 
 .PP
-Definition at line 121 of file threadpool/greatest\&.h\&.
+Definition at line 140 of file threadpool/greatest\&.h\&.
 .SS "typedef int greatest_equal_cb(const void *exp, const void *got, void *udata)"
 
 .PP
-Definition at line 126 of file threadpool/greatest\&.h\&.
+Definition at line 145 of file threadpool/greatest\&.h\&.
 .SS "typedef int greatest_printf_cb(const void *t, void *udata)"
 
 .PP
-Definition at line 131 of file threadpool/greatest\&.h\&.
+Definition at line 150 of file threadpool/greatest\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBGREATEST_FLAG\fP"
@@ -686,7 +686,7 @@ Definition at line 131 of file threadpool/greatest\&.h\&.
 .TP
 \fB\fIGREATEST_FLAG_LIST_ONLY \fP\fP
 .PP
-Definition at line 143 of file threadpool/greatest\&.h\&.
+Definition at line 162 of file threadpool/greatest\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "void greatest_do_pass (const char *name)"
