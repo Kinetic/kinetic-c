@@ -111,7 +111,7 @@ void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_t
         .config = (KineticSessionConfig) {.port = 4321},
         .connection = &connection
     };
-    KineticDeviceInfo* info;
+    KineticLogInfo* info;
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);

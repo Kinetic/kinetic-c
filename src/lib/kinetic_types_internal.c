@@ -348,7 +348,7 @@ int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b)
     return (a.tv_sec == b.tv_sec) ? cmp_suseconds_t(a.tv_usec, b.tv_usec) : ((a.tv_sec > b.tv_sec) ? 1 : -1);
 }
 
-KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type)
+KineticProto_Command_GetLog_Type KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KineticLogInfo_Type type)
 {
     KineticProto_Command_GetLog_Type protoType;
 

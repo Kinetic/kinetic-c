@@ -18,13 +18,13 @@
 *
 */
 
-#ifndef _KINETIC_DEVICE_INFO_H
-#define _KINETIC_DEVICE_INFO_H
+#ifndef _KINETIC_LOG_INFO_H
+#define _KINETIC_LOG_INFO_H
 
 #include "kinetic_device_info.h"
 #include "kinetic_types_internal.h"
 
-KineticDeviceInfo* KineticDeviceInfo_Create(const KineticProto_Command_GetLog* getLog);
-void KineticDeviceInfo_Free(KineticDeviceInfo* kdi);
+KineticLogInfo* KineticLogInfo_Create(const KineticProto_Command_GetLog* getLog);
+void KineticLogInfo_Free(KineticLogInfo* kdi);
 
-#endif // _KINETIC_DEVICE_INFO_H
+#endif // _KINETIC_LOG_INFO_H

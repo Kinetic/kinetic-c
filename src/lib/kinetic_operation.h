@@ -79,13 +79,13 @@ void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lo
 
 KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildGetLog(KineticOperation* const operation,
-                               KineticDeviceInfo_Type type,
-                               KineticDeviceInfo** info);
+                               KineticLogInfo_Type type,
+                               KineticLogInfo** info);
 
 KineticStatus KineticOperation_SetAclCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildSetAcl(KineticOperation* const operation,
-                               KineticDeviceInfo_Type type,
-                               KineticDeviceInfo** info);
+                               KineticLogInfo_Type type,
+                               KineticLogInfo** info);
 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildSetClusterVersion(KineticOperation* const operation, int64_t new_cluster_version);

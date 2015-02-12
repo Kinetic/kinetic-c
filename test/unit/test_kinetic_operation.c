@@ -625,7 +625,7 @@ void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_
 
 void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 {
-    KineticDeviceInfo* pInfo;
+    KineticLogInfo* pInfo;
 
     KineticOperation_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
 
@@ -649,7 +649,7 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 // {
 //     // KineticConnection con;
 //     // KineticPDU response;
-//     // KineticDeviceInfo* info;
+//     // KineticLogInfo* info;
 //     // KineticOperation op = {
 //     //     .connection = &con,
 //     //     .response = &response,

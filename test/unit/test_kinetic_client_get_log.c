@@ -58,7 +58,7 @@ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_de
 {
     LOG_LOCATION;
 
-    KineticDeviceInfo* info;
+    KineticLogInfo* info;
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);

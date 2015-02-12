@@ -519,7 +519,7 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation,
             return KINETIC_STATUS_OPERATION_FAILED;
         }
         else {
-            *operation->deviceInfo = KineticDeviceInfo_Create(operation->response->command->body->getLog);
+            *operation->deviceInfo = KineticLogInfo_Create(operation->response->command->body->getLog);
             return KINETIC_STATUS_SUCCESS;
         }
     }
@@ -527,12 +527,12 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation,
 }
 
 void KineticOperation_BuildGetLog(KineticOperation* const operation,
-    KineticDeviceInfo_Type type,
-    KineticDeviceInfo** info)
+    KineticLogInfo_Type type,
+    KineticLogInfo** info)
 {
     KineticOperation_ValidateOperation(operation);
     KineticProto_Command_GetLog_Type protoType =
-        KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(type);
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(type);
         
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG;
     operation->request->command->header->has_messageType = true;

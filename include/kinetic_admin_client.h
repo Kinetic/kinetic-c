@@ -157,7 +157,7 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
  *
  * @param session   The connected KineticSession to use for the operation
  * @param type      KineticLogDataType specifying data type to retrieve.
- * @param info      KineticDeviceInfo pointer, which will be assigned to
+ * @param info      KineticLogInfo pointer, which will be assigned to
  *                  a dynamically allocated structure populated with
  *                  the requested data, if successful. The client should
  *                  call free() on this pointer in order to free the root
@@ -170,18 +170,18 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
  *                  upon failure
  */
 KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
-                                   KineticDeviceInfo_Type type,
-                                   KineticDeviceInfo** info,
+                                   KineticLogInfo_Type type,
+                                   KineticLogInfo** info,
                                    KineticCompletionClosure* closure);
 
 /**
- * @brief Free the KineticDeviceInfo result from KineticClient_GetLog.
+ * @brief Free the KineticLogInfo result from KineticClient_GetLog.
  *
  * @param session       The connected KineticSession to use for the operation
- * @param info          The KineticDeviceInfo result to free.
+ * @param info          The KineticLogInfo result to free.
  */
-void KineticClient_FreeDeviceInfo(KineticSession const * const session,
-                                  KineticDeviceInfo* info);
+void KineticAdminClient_FreeLogInfo(KineticSession const * const session,
+                                  KineticLogInfo* info);
 
 /**
  * @brief Executes a SECURITY command to define/set the access control list

@@ -1,3 +1,15 @@
+v0.12.0 (kinetic-protocol 3.0.5)
+--------------------------------
+* Added new KineticAdminClient API (see include/kinetic_admin_client.h)
+    * Reloacted existing admin methods to admin API
+        * KineticClient_InstantSecureErase => KineticAdminClient_InstantErase/KineticAdminClient_SecureErase
+        * KineticClient_GetLog => KineticAdminClient_GetLog
+        * KineticClient_FreeDeviceInfo -> KineticAdminClient_LogInfo
+* KineticSession is now supplied as an opaque instance pointer from KineticClient_CreateSession
+    * Passed KineticClientConfig copied and can be discarded after session creation
+* *KNOWN ISSUES*
+    * KineticAdminClient_UpdateFirmware and KineticAdminClient_SetAcl are incomplete
+
 v0.11.1 (kinetic-protocol 3.0.5)
 --------------------------------
 * Fixed race condition causing timeouts to not be handled resulting in a deadlock.

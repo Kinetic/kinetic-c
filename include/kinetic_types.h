@@ -291,28 +291,28 @@ typedef enum {
     KINETIC_DEVICE_INFO_TYPE_MESSAGES,
     KINETIC_DEVICE_INFO_TYPE_LIMITS,
     KINETIC_DEVICE_INFO_TYPE_DEVICE,
-} KineticDeviceInfo_Type;
+} KineticLogInfo_Type;
 typedef struct {
     char* name;
     float value;
-} KineticDeviceInfo_Utilization;
+} KineticLogInfo_Utilization;
 typedef struct {
     char* name;
     float current;
     float minimum;
     float maximum;
     float target;
-} KineticDeviceInfo_Temperature;
+} KineticLogInfo_Temperature;
 typedef struct {
     uint64_t nominalCapacityInBytes;
     float portionFull;
-} KineticDeviceInfo_Capacity;
+} KineticLogInfo_Capacity;
 typedef struct {
     char* name;
     ByteArray MAC;
     ByteArray ipv4Address;
     ByteArray ipv6Address;
-} KineticDeviceInfo_Interface;
+} KineticLogInfo_Interface;
 typedef struct {
     char* vendor;
     char* model;
@@ -324,11 +324,11 @@ typedef struct {
     char* protocolVersion;
     char* protocolCompilationDate;
     char* protocolSourceHash;
-    KineticDeviceInfo_Interface* interfaces;
+    KineticLogInfo_Interface* interfaces;
     size_t numInterfaces;
     int32_t port;
     int32_t tlsPort;
-} KineticDeviceInfo_Configuration;
+} KineticLogInfo_Configuration;
 typedef enum {
     KINETIC_MESSAGE_TYPE_INVALID = 0,
     KINETIC_MESSAGE_TYPE_GET_RESPONSE,              ///< GET_RESPONSE
@@ -368,7 +368,7 @@ typedef struct {
     KineticMessageType messageType;
     uint64_t count;
     uint64_t bytes;
-} KineticDeviceInfo_Statistics;
+} KineticLogInfo_Statistics;
 typedef struct {
     uint32_t maxKeySize;
     uint32_t maxValueSize;
@@ -381,23 +381,23 @@ typedef struct {
     uint32_t maxKeyRangeCount;
     uint32_t maxIdentityCount;
     uint32_t maxPinSize;
-} KineticDeviceInfo_Limits;
+} KineticLogInfo_Limits;
 typedef struct {
     ByteArray name;
-} KineticDeviceInfo_Device;
+} KineticLogInfo_Device;
 typedef struct {
-    KineticDeviceInfo_Utilization* utilizations;
+    KineticLogInfo_Utilization* utilizations;
     size_t numUtilizations;
-    KineticDeviceInfo_Temperature* temperatures;
+    KineticLogInfo_Temperature* temperatures;
     size_t numTemperatures;
-    KineticDeviceInfo_Capacity* capacity;
-    KineticDeviceInfo_Configuration* configuration;
-    KineticDeviceInfo_Statistics* statistics;
+    KineticLogInfo_Capacity* capacity;
+    KineticLogInfo_Configuration* configuration;
+    KineticLogInfo_Statistics* statistics;
     size_t numStatistics;
     ByteArray messages;
-    KineticDeviceInfo_Limits* limits;
-    KineticDeviceInfo_Device* device;
-} KineticDeviceInfo;
+    KineticLogInfo_Limits* limits;
+    KineticLogInfo_Device* device;
+} KineticLogInfo;
 
 /**
  * Configuration of remote peer for a PEER2PEERPUSH operation

@@ -196,7 +196,7 @@ struct _KineticOperation {
     ByteArray* pin;
     KineticEntry* entry;
     ByteBufferArray* buffers;
-    KineticDeviceInfo** deviceInfo;
+    KineticLogInfo** deviceInfo;
     KineticP2P_Operation* p2pOp;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
@@ -237,7 +237,7 @@ bool Kinetic_TimevalIsZero(struct timeval const tv);
 struct timeval Kinetic_TimevalAdd(struct timeval const a, struct timeval const b);
 int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b);
 
-KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type);
+KineticProto_Command_GetLog_Type KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KineticLogInfo_Type type);
 
 KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type);
 

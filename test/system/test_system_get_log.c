@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 static KineticStatus Status;
-static KineticDeviceInfo* Info;
+static KineticLogInfo* Info;
 
 void setUp(void)
 {
@@ -35,7 +35,7 @@ void tearDown(void)
 {
     SystemTestShutDown();
     if (Info != NULL) {
-        KineticDeviceInfo_Free(Info);
+        KineticLogInfo_Free(Info);
         Info = NULL;
     };
 }
@@ -50,7 +50,7 @@ void test_GetLog_should_retrieve_utilizations_from_device(void)
     TEST_ASSERT_TRUE(Info->numUtilizations >= 4);
     for (size_t i = 0; i < Info->numUtilizations; i++) {
         TEST_ASSERT_NOT_NULL(Info->utilizations[i].name);
-        KineticDeviceInfo_Utilization* utilization = &Info->utilizations[i];
+        KineticLogInfo_Utilization* utilization = &Info->utilizations[i];
         LOGF0("info->utilizations[%zu]: %s = %.3f", i, utilization->name, utilization->value);
     }
 }
@@ -104,7 +104,7 @@ void test_GetLog_should_retrieve_configuration_from_device(void)
     LOGF0("  protocolCompilationDate: %s", Info->configuration->protocolCompilationDate);
     LOGF0("  protocolSourceHash: %s", Info->configuration->protocolSourceHash);
     for (size_t i = 0; i < Info->configuration->numInterfaces; i++) {
-        KineticDeviceInfo_Interface* iface = &Info->configuration->interfaces[i];
+        KineticLogInfo_Interface* iface = &Info->configuration->interfaces[i];
         TEST_ASSERT_NOT_NULL(iface->name);
         LOGF0("  interface: %s", iface->name);
         BYTES_TO_CSTRING(buf, iface->MAC, 0, iface->MAC.len);
@@ -127,7 +127,7 @@ void test_GetLog_should_retrieve_statistics_from_device(void)
 
     LOGF0("Device Statistics (count=%zu)", Info->numStatistics);
     for (size_t i = 0; i < Info->numStatistics; i++) {
-        KineticDeviceInfo_Statistics* stats = &Info->statistics[i];
+        KineticLogInfo_Statistics* stats = &Info->statistics[i];
         LOGF0("  %s: count=%llu, bytes=%llu",
             KineticMessageType_GetName(stats->messageType),
             stats->count, stats->bytes);

@@ -178,8 +178,8 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
 }
 
 KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
-                                   KineticDeviceInfo_Type type,
-                                   KineticDeviceInfo** info,
+                                   KineticLogInfo_Type type,
+                                   KineticLogInfo** info,
                                    KineticCompletionClosure* closure)
 {
     assert(session != NULL);
@@ -196,11 +196,11 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-void KineticClient_FreeDeviceInfo(KineticSession const * const session,
-                                  KineticDeviceInfo* info)
+void KineticClient_FreeLogInfo(KineticSession const * const session,
+                                  KineticLogInfo* info)
 {
     assert(session != NULL);
-    if (info) { KineticDeviceInfo_Free(info); }
+    if (info) { KineticLogInfo_Free(info); }
 
     /* The session is not currently used, but part of the API to allow
      * a different memory management strategy. */
