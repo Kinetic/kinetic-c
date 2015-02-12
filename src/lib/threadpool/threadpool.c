@@ -28,9 +28,13 @@
 
 #include "threadpool_internals.h"
 
-#define DEFAULT_MAX_DELAY 1000   /* msec */
+#define MIN_DELAY 2
+#define DEFAULT_MAX_DELAY 10000   /* msec */
+#define INFINITE_DELAY -1
 #define DEFAULT_TASK_RINGBUF_SIZE2 8
 #define DEFAULT_MAX_THREADS 8
+
+#define DORMANT_WHEN_IDLE false
 
 static void set_defaults(struct threadpool_config *cfg) {
     if (cfg->task_ringbuf_size2 == 0) {
@@ -289,23 +293,30 @@ static void *thread_task(void *arg) {
     size_t mask = t->task_ringbuf_mask;
     struct pollfd pfd[1] = { { .fd=ti->child_fd, .events=POLLIN }, };
     uint8_t read_buf[NOTIFY_MSG_LEN];
-    size_t min_delay = 100;
-    size_t delay = min_delay;
+#if DORMANT_WHEN_IDLE
+    const size_t delay = 1000;
+#else
+    int delay = MIN_DELAY;
+#endif
 
     while (ti->status < STATUS_SHUTDOWN) {
         if (t->task_request_head == t->task_commit_head) {
+
+#if !DORMANT_WHEN_IDLE
             if (ti->status == STATUS_AWAKE) {
-                if (delay > 1) { ti->status = STATUS_ASLEEP; }
+                if (delay == INFINITE_DELAY || delay > 1) { ti->status = STATUS_ASLEEP; }
             } else {
                 if (delay == 0) {
-                    delay = min_delay;
+                    delay = MIN_DELAY;
                 } else {
                     delay <<= 1;
                 }
-                if (delay > t->max_delay) {
-                    delay = t->max_delay;
+                if ((size_t)delay > t->max_delay) {
+                    // delay = t->max_delay;
+                    delay = INFINITE_DELAY;
                 }
             }
+#endif
 
             int res = poll(pfd, 1, delay);
             if (res == 1) {
@@ -316,7 +327,9 @@ static void *thread_task(void *arg) {
                     break;
                 } else if (pfd[0].revents & POLLIN) {
                     if (ti->status == STATUS_ASLEEP) { ti->status = STATUS_AWAKE; }
-                    delay = min_delay;
+#if !DORMANT_WHEN_IDLE
+                    delay = MIN_DELAY;
+#endif
                     //SPIN_ADJ(t->active_threads, 1);
                     ssize_t rres = read(ti->child_fd, read_buf, NOTIFY_MSG_LEN);
                     if (rres < 0) {
