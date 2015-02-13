@@ -36,6 +36,9 @@
 #include "yacht.h"
 #include "sender_internal.h"
 
+#define MIN_DELAY 100 /* msec */
+#define INFINITE_DELAY -1  /* poll will only return upon an event */
+
 /* Offset for s->fds[0], which is the command pipe. */
 #define CMD_FD (1)
 
@@ -324,8 +327,7 @@ void *sender_mainloop(void *arg) {
     sender *self = (sender *)arg;
     assert(self);
     struct bus *b = self->bus;
-    
-    int delay = 1;
+    int delay = MIN_DELAY;
     
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -379,10 +381,10 @@ void *sender_mainloop(void *arg) {
         }
         
         if (work) {
-            delay = 1;
-        } else {
+            delay = MIN_DELAY;
+        } else if (delay != INFINITE_DELAY) {
             delay <<= 1;
-            if (delay > MAX_TIMEOUT) { delay = MAX_TIMEOUT; }
+            if (delay > MAX_TIMEOUT) { delay = INFINITE_DELAY; }
         }
     }
     
