@@ -291,7 +291,7 @@ static void *thread_task(void *arg) {
     size_t mask = t->task_ringbuf_mask;
     struct pollfd pfd[1] = { { .fd=ti->child_fd, .events=POLLIN }, };
     uint8_t read_buf[NOTIFY_MSG_LEN];
-    const size_t delay = MIN_DELAY;
+    size_t delay = MIN_DELAY;
 
     while (ti->status < STATUS_SHUTDOWN) {
         if (t->task_request_head == t->task_commit_head) {
