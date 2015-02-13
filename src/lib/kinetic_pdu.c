@@ -180,6 +180,8 @@ static void log_response_seq_id(int fd, int64_t seq_id) {
 
 STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     KineticConnection * connection = (KineticConnection *)socket_udata;
+    assert(connection);
+    
     /* just got .full_msg_buffer from sink_cb -- pass it along as-is */
     socket_info *si = (socket_info *)msg;
 
@@ -201,7 +203,7 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         return res;
     } else {
         response->header = si->header;
-
+        
         response->proto = KineticPDU_unpack_message(NULL, si->header.protobufLength, si->buf);
         if (response->proto->has_commandBytes &&
             response->proto->commandBytes.data != NULL &&
@@ -220,7 +222,8 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
 
         int64_t seq_id = 0;
         if (response->command != NULL &&
-            response->command->header != NULL) {
+            response->command->header != NULL)
+        {
             seq_id = response->command->header->ackSequence;
             log_response_seq_id(connection->socket, seq_id);
         }
