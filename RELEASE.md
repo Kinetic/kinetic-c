@@ -1,3 +1,7 @@
+v0.11.2 (kinetic-protocol 3.0.5)
+--------------------------------
+* Changed all threads to be block indefinitely and be fully event-driven.
+
 v0.11.1 (kinetic-protocol 3.0.5)
 --------------------------------
 * Fixed race condition causing timeouts to not ne handled resulting in a deadlock.

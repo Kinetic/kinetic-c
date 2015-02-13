@@ -58,6 +58,20 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     return status;
 }
 
+static void log_request_seq_id(int fd, int64_t seq_id, KineticMessageType mt)
+{
+    #if KINETIC_LOGGER_LOG_SEQUENCE_ID
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    LOGF2("SEQ_ID request fd %d seq_id %lld %08lld.%08d cmd %02x",
+        fd, (long long)seq_id,
+        (long)tv.tv_sec, (long)tv.tv_usec, (uint8_t)mt);
+    #else
+    (void)seq_id;
+    (void)mt;
+    #endif
+}    
+
 // TODO: Assess refactoring this method by dissecting out Operation and relocate to kinetic_pdu
 static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation)
 {
@@ -100,6 +114,8 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         .data = request->message.message.commandBytes.data,
         .len = request->message.message.commandBytes.len,
     });
+
+    log_request_seq_id(operation->connection->socket, seq_id, request->message.header.messageType);
 
     switch (proto->authType) {
     case KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH:
@@ -164,12 +180,12 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     assert(request);
 
     LOGF2("[PDU TX] pdu: %p, session: %p, bus: %p, "
-        "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p",
+        "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, msgType: %02x",
         (void*)operation->request,
         (void*)operation->connection->pSession, (void*)operation->connection->messageBus,
         operation->connection->socket, request->message.header.sequence,
         header.protobufLength, header.valueLength,
-        (void*)operation);
+        (void*)operation, request->message.header.messageType);
     KineticLogger_LogHeader(3, &header);
     KineticLogger_LogProtobuf(3, proto);
 

@@ -166,8 +166,20 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
     }
 }
 
+static void log_response_seq_id(int fd, int64_t seq_id) {
+    #if KINETIC_LOGGER_LOG_SEQUENCE_ID
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    LOGF2("SEQ_ID response fd %d seq_id %lld %08lld.%08d",
+        fd, (long long)seq_id,
+        (long)tv.tv_sec, (long)tv.tv_usec);
+    #else
+    (void)seq_id;
+    #endif
+}
+
 STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
-    (void)socket_udata;
+    KineticConnection * connection = (KineticConnection *)socket_udata;
     /* just got .full_msg_buffer from sink_cb -- pass it along as-is */
     socket_info *si = (socket_info *)msg;
 
@@ -209,8 +221,8 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         int64_t seq_id = 0;
         if (response->command != NULL &&
             response->command->header != NULL) {
-
             seq_id = response->command->header->ackSequence;
+            log_response_seq_id(connection->socket, seq_id);
         }
 
         bus_unpack_cb_res_t res = {
