@@ -36,8 +36,8 @@
 #include "yacht.h"
 #include "sender_internal.h"
 
-#define MIN_DELAY 100
-#define INFINITE_DELAY -1
+#define MIN_DELAY 100 /* msec */
+#define INFINITE_DELAY -1  /* poll will only return upon an event */
 
 /* Offset for s->fds[0], which is the command pipe. */
 #define CMD_FD (1)
