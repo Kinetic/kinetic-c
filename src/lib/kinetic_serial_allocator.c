@@ -33,7 +33,7 @@ KineticSerialAllocator KineticSerialAllocator_Create(size_t max_len) {
 
 void* KineticSerialAllocator_GetBuffer(KineticSerialAllocator* allocator)
 {
-    assert(allocator != NULL);
+    KINETIC_ASSERT(allocator != NULL);
     return allocator->buffer;
 }
 
@@ -65,10 +65,10 @@ void* KineticSerialAllocator_AllocateChunk(KineticSerialAllocator* allocator, si
 
 size_t KineticSerialAllocator_TrimBuffer(KineticSerialAllocator* allocator)
 {
-    assert(allocator != NULL);
-    assert(allocator->buffer != NULL);
+    KINETIC_ASSERT(allocator != NULL);
+    KINETIC_ASSERT(allocator->buffer != NULL);
     void* final = realloc(allocator->buffer, allocator->used);
-    assert(final != NULL);
+    KINETIC_ASSERT(final != NULL);
     allocator->buffer = final;
     allocator->total = allocator->used;
     printf("allocator->buffer, post-trim: %p\n", (void *)allocator->buffer);

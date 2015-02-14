@@ -380,7 +380,7 @@ KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(Kineti
 
 void KineticMessage_Init(KineticMessage* const message)
 {
-    assert(message != NULL);
+    KINETIC_ASSERT(message != NULL);
 
     KineticProto_Message__init(&message->message);
     KineticProto_command__init(&message->command);
@@ -401,7 +401,7 @@ void KineticMessage_Init(KineticMessage* const message)
 void Kinetic_auth_init_hmac(KineticMessage* const msg,
     int identity, ByteArray hmac)
 {
-    assert(msg != NULL);
+    KINETIC_ASSERT(msg != NULL);
     msg->message.has_authType = true;
     msg->message.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
     KineticProto_Message_hmacauth__init(&msg->hmacAuth);
@@ -430,8 +430,8 @@ void Kinetic_auth_init_pinop(KineticMessage* const msg)
 void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr,
     KineticConnection* con)
 {
-    assert(hdr != NULL);
-    assert(con != NULL);
+    KINETIC_ASSERT(hdr != NULL);
+    KINETIC_ASSERT(con != NULL);
     *hdr = (KineticProto_Command_Header) {
         .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor),
         .has_clusterVersion = true,
@@ -445,8 +445,8 @@ void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr,
 
 void KineticOperation_Init(KineticOperation* op, KineticConnection* con)
 {
-    assert(op != NULL);
-    assert(con != NULL);
+    KINETIC_ASSERT(op != NULL);
+    KINETIC_ASSERT(con != NULL);
     *op = (KineticOperation) {
         .connection = con,
     };
@@ -457,8 +457,8 @@ void KineticOperation_Init(KineticOperation* op, KineticConnection* con)
 
 void KineticPDU_Init(KineticPDU* pdu, KineticConnection* con)
 {
-    assert(pdu != NULL);
-    assert(con != NULL);
+    KINETIC_ASSERT(pdu != NULL);
+    KINETIC_ASSERT(con != NULL);
     memset(pdu, 0, sizeof(KineticPDU));
     KineticMessage_Init(&(pdu->message));
     Kinetic_auth_init_hmac(

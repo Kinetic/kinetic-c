@@ -89,14 +89,14 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         size_t read_size, void *socket_udata) {
 
     KineticConnection * connection = (KineticConnection *)socket_udata;
-    assert(connection);
+    KINETIC_ASSERT(connection);
     socket_info *si = connection->si;
-    assert(si);
+    KINETIC_ASSERT(si);
 
     switch (si->state) {
     case STATE_UNINIT:
     {
-        assert(read_size == 0);
+        KINETIC_ASSERT(read_size == 0);
         return reset_transfer(si);
     }
     case STATE_AWAITING_HEADER:
@@ -162,7 +162,7 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         break;
     }
     default:
-        assert(false);
+        KINETIC_ASSERT(false);
     }
 }
 
@@ -180,7 +180,7 @@ static void log_response_seq_id(int fd, int64_t seq_id) {
 
 STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     KineticConnection * connection = (KineticConnection *)socket_udata;
-    assert(connection);
+    KINETIC_ASSERT(connection);
     
     /* just got .full_msg_buffer from sink_cb -- pass it along as-is */
     socket_info *si = (socket_info *)msg;

@@ -256,7 +256,7 @@ static KineticDeviceInfo_Device * KineticDeviceInfo_GetDevice(
 
 KineticDeviceInfo* KineticDeviceInfo_Create(const KineticProto_Command_GetLog* getLog)
 {
-    assert(getLog != NULL);
+    KINETIC_ASSERT(getLog != NULL);
 
     // Copy data into the nested allocated structure tree
     KineticDeviceInfo* info = calloc(1, sizeof(*info));

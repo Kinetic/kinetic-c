@@ -48,10 +48,10 @@ void KineticHMAC_Populate(KineticHMAC* hmac,
                           KineticProto_Message* msg,
                           const ByteArray key)
 {
-    assert(hmac != NULL);
-    assert(msg != NULL);
-    assert(key.data != NULL);
-    assert(key.len > 0);
+    KINETIC_ASSERT(hmac != NULL);
+    KINETIC_ASSERT(msg != NULL);
+    KINETIC_ASSERT(key.data != NULL);
+    KINETIC_ASSERT(key.len > 0);
 
     KineticHMAC_Init(hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
     KineticHMAC_Compute(hmac, msg, key);
@@ -65,9 +65,9 @@ void KineticHMAC_Populate(KineticHMAC* hmac,
 bool KineticHMAC_Validate(const KineticProto_Message* msg,
                           const ByteArray key)
 {
-    assert(msg != NULL);
-    assert(key.data != NULL);
-    assert(key.len > 0);
+    KINETIC_ASSERT(msg != NULL);
+    KINETIC_ASSERT(key.data != NULL);
+    KINETIC_ASSERT(key.len > 0);
 
     bool success = false;
     size_t i;
@@ -109,13 +109,13 @@ static void KineticHMAC_Compute(KineticHMAC* hmac,
                                 const KineticProto_Message* msg,
                                 const ByteArray key)
 {
-    assert(hmac != NULL);
-    assert(hmac->data != NULL);
-    assert(hmac->len > 0);
-    assert(msg != NULL);
-    assert(msg->has_commandBytes);
-    assert(msg->commandBytes.data != NULL);
-    assert(msg->commandBytes.len > 0);
+    KINETIC_ASSERT(hmac != NULL);
+    KINETIC_ASSERT(hmac->data != NULL);
+    KINETIC_ASSERT(hmac->len > 0);
+    KINETIC_ASSERT(msg != NULL);
+    KINETIC_ASSERT(msg->has_commandBytes);
+    KINETIC_ASSERT(msg->commandBytes.data != NULL);
+    KINETIC_ASSERT(msg->commandBytes.len > 0);
 
     uint32_t lenNBO = KineticNBO_FromHostU32(msg->commandBytes.len);
 

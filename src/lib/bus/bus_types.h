@@ -76,6 +76,17 @@ struct boxed_msg;
         }                                                              \
     } while (0)                                                        \
 
+#define BUS_ASSERT(B, UDATA, COND) \
+    do { \
+        if(!(COND)) \
+        { \
+            BUS_LOG_SNPRINTF(B, 0, LOG_ASSERT, UDATA, 128, \
+                "BUS FAILURE at %s:%d in %s: assert(" #COND ")", \
+                __FILE__, (int)__LINE__, __FUNCTION__); \
+            assert(COND); \
+        } \
+    } while(0)
+
 /* Event tag for a log message. */
 typedef enum {
     LOG_INITIALIZATION,
@@ -86,6 +97,7 @@ typedef enum {
     LOG_SENDER,
     LOG_LISTENER,
     LOG_MEMORY,
+    LOG_ASSERT,
     /* ... */
     LOG_EVENT_TYPE_COUNT,
 } log_event_t;

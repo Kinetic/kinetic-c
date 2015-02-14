@@ -42,7 +42,7 @@ KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession
 
 void KineticAllocator_FreeConnection(KineticConnection* connection)
 {
-    assert(connection != NULL);
+    KINETIC_ASSERT(connection != NULL);
     KineticResourceWaiter_Destroy(&connection->connectionReady);
     KineticFree(connection);
 }
@@ -59,7 +59,7 @@ KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength)
 
 void KineticAllocator_FreeKineticResponse(KineticResponse * response)
 {
-    assert(response != NULL);
+    KINETIC_ASSERT(response != NULL);
 
     if (response->command != NULL) {
         protobuf_c_message_free_unpacked(&response->command->base, NULL);
@@ -72,7 +72,7 @@ void KineticAllocator_FreeKineticResponse(KineticResponse * response)
 
 KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connection)
 {
-    assert(connection != NULL);
+    KINETIC_ASSERT(connection != NULL);
     LOGF3("Allocating new operation on connection (0x%0llX)", connection);
     KineticOperation* newOperation =
         (KineticOperation*)KineticCalloc(1, sizeof(KineticOperation));
@@ -95,7 +95,7 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
 
 void KineticAllocator_FreeOperation(KineticOperation* operation)
 {
-    assert(operation != NULL);
+    KINETIC_ASSERT(operation != NULL);
     KineticConnection* const connection = operation->connection;
     LOGF3("Freeing operation (0x%0llX) on connection (0x%0llX)", operation, connection);
     if (operation->request != NULL) {

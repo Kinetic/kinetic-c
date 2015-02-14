@@ -44,7 +44,7 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
-    assert(session->connection == NULL);
+    KINETIC_ASSERT(session->connection == NULL);
     session->connection = KineticAllocator_NewConnection(client->bus, session);
     if (session->connection == NULL) {
         return KINETIC_STATUS_MEMORY_ERROR;
@@ -93,9 +93,9 @@ KineticStatus KineticSession_Connect(KineticSession const * const session)
     }
 
     // Establish the connection
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    assert(strlen(session->config.host) > 0);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
+    KINETIC_ASSERT(strlen(session->config.host) > 0);
     connection->socket = KineticSocket_Connect(
         session->config.host, session->config.port);
     if (connection->socket == KINETIC_SOCKET_DESCRIPTOR_INVALID) {

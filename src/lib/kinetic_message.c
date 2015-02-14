@@ -40,8 +40,8 @@
 void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
                                       const KineticEntry* entry)
 {
-    assert(message != NULL);
-    assert(entry != NULL);
+    KINETIC_ASSERT(message != NULL);
+    KINETIC_ASSERT(entry != NULL);
 
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
@@ -81,13 +81,13 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
 void KineticMessage_ConfigureKeyRange(KineticMessage* const message,
                                       const KineticKeyRange* range)
 {
-    assert(message != NULL);
-    assert(range != NULL);
-    assert(range->startKey.array.data != NULL);
-    assert(range->startKey.array.len > 0);
-    assert(range->startKey.bytesUsed > 0);
-    assert(range->startKey.bytesUsed <= range->startKey.array.len);
-    assert(range->maxReturned > 0);
+    KINETIC_ASSERT(message != NULL);
+    KINETIC_ASSERT(range != NULL);
+    KINETIC_ASSERT(range->startKey.array.data != NULL);
+    KINETIC_ASSERT(range->startKey.array.len > 0);
+    KINETIC_ASSERT(range->startKey.bytesUsed > 0);
+    KINETIC_ASSERT(range->startKey.bytesUsed <= range->startKey.array.len);
+    KINETIC_ASSERT(range->maxReturned > 0);
 
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
