@@ -39,7 +39,7 @@ static ByteBuffer ValueBuffer;
 static const char strKey[] = "GET system test blob";
 
 void setUp(void)
-{ LOG_LOCATION;
+{
     SystemTestSetup(&Fixture, 2);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
@@ -75,12 +75,12 @@ void setUp(void)
 }
 
 void tearDown(void)
-{ LOG_LOCATION;
+{
     SystemTestTearDown(&Fixture);
 }
 
 void test_InstantSecureErase_should_erase_device_contents(void)
-{ LOG_LOCATION;
+{
     if (SystemTestIsUnderSimulator()) {
         KineticStatus status = KineticClient_InstantSecureErase(&Fixture.session);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status); 

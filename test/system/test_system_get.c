@@ -39,7 +39,7 @@ static ByteBuffer ValueBuffer;
 static const char strKey[] = "GET system test blob";
 
 void setUp(void)
-{ LOG_LOCATION;
+{
     SystemTestSetup(&Fixture, 1);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
@@ -74,12 +74,12 @@ void setUp(void)
 }
 
 void tearDown(void)
-{ LOG_LOCATION;
+{
     SystemTestTearDown(&Fixture);
 }
 
 void test_Get_should_retrieve_object_and_metadata_from_device(void)
-{ LOG_LOCATION;
+{
 
     KineticEntry getEntry = {
         .key = KeyBuffer,
@@ -103,7 +103,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
 }
 
 void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
-{ LOG_LOCATION;
+{
 
     KineticEntry getEntry = {
         .key = KeyBuffer,
@@ -126,7 +126,7 @@ void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
 }
 
 void test_Get_should_be_able_to_retrieve_just_metadata_from_device(void)
-{ LOG_LOCATION;
+{
 
     KineticEntry getEntry = {
         .key = KeyBuffer,

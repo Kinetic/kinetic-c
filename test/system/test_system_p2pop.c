@@ -74,7 +74,7 @@ const char HmacKeyString[] = "asdfasdf";
 
 
 void setUp(void)
-{ LOG_LOCATION;
+{
     // SystemTestSetup(&Fixture, 1);
 
     KineticClientConfig config = {
@@ -139,7 +139,7 @@ void setUp(void)
 }
 
 void tearDown(void)
-{ LOG_LOCATION;
+{
     // SystemTestTearDown(&Fixture);
     KineticStatus status = KineticClient_DestroyConnection(&session1);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -148,7 +148,7 @@ void tearDown(void)
 }
 
 void test_P2P_should_copy_keys_from_one_device_to_another(void)
-{ LOG_LOCATION;
+{
 
 
     ByteBuffer_Reset(&ReadValueBuffer);
@@ -276,7 +276,7 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
 // This test is disabled at the moment because the simulator does not currently support nested operations.
 //   It works on real hardware
 void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
-{ LOG_LOCATION;
+{
     ByteBuffer_Reset(&ReadValueBuffer);
     ByteBuffer_Reset(&ReadTagBuffer);
 
@@ -443,7 +443,7 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
 }
 
 void test_P2P_should_fail_with_a_buffer_overrun_error_if_to_many_operations_specified(void)
-{ LOG_LOCATION;
+{
 
     size_t to_many_operations = 100000;
     KineticP2P_OperationData * ops = calloc(to_many_operations, sizeof(KineticP2P_OperationData));
@@ -472,7 +472,7 @@ void test_P2P_should_fail_with_a_buffer_overrun_error_if_to_many_operations_spec
 
 
 void test_P2P_should_fail_with_a_operation_invalid_if_to_many_chained_p2p_operations(void)
-{ LOG_LOCATION;
+{
 
     size_t to_many_operations = 1001;
     KineticP2P_OperationData * ops = calloc(to_many_operations, sizeof(KineticP2P_OperationData));

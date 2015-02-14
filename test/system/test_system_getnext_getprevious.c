@@ -24,13 +24,11 @@ static SystemTestFixture Fixture;
 
 void setUp(void)
 {
-    LOG_LOCATION;
     SystemTestSetup(&Fixture, 1);
 }
 
 void tearDown(void)
 {
-    LOG_LOCATION;
     SystemTestTearDown(&Fixture);
 }
 
@@ -61,7 +59,6 @@ typedef enum { CMD_NEXT, CMD_PREVIOUS } GET_CMD;
 
 static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
 {
-    LOG_LOCATION;
     static const ssize_t sz = 10;
     char key_buf[sz];
     char tag_buf[sz];

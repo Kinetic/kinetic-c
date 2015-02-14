@@ -45,11 +45,11 @@
 #include "bus.h"
 
 void setUp(void)
-{ LOG_LOCATION;
+{
 }
 
 void tearDown(void)
-{ LOG_LOCATION;
+{
 
 }
 
@@ -245,7 +245,7 @@ static void unexpected_msg_cb(void *msg,
 
 
 void test_that_we_can_register_sockets(void)
-{ LOG_LOCATION;
+{
 
     KineticLogger_Init("stdout", 3);
     bus_config cfg = {
@@ -283,7 +283,7 @@ void test_that_we_can_register_sockets(void)
 }
 
 void test_that_we_can_register_SSL_sockets(void)
-{ LOG_LOCATION;
+{
 
     KineticLogger_Init("stdout", 3);
     bus_config cfg = {

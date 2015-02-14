@@ -56,7 +56,6 @@ void tearDown(void)
 
 void test_Put_should_create_new_object_on_device(void)
 {
-    LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = KeyBuffer,
         .newVersion = VersionBuffer,
@@ -79,7 +78,6 @@ void test_Put_should_create_new_object_on_device(void)
 
 void test_Put_should_create_another_new_object_on_device(void)
 {
-    LOG_LOCATION;
     Entry = (KineticEntry) {
         .key = OtherKeyBuffer,
         .newVersion = VersionBuffer,
