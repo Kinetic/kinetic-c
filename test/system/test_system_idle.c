@@ -19,6 +19,7 @@
 */
 #include <unistd.h>
 #include <err.h>
+#include <sys/wait.h>
 
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
