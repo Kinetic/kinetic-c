@@ -99,6 +99,61 @@ void test_Put_should_create_another_new_object_on_device(void)
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
 
+void test_Put_should_handle_0_length_keys(void)
+{
+    uint8_t KeyData0[128];
+    ByteBuffer KeyBuffer0 = ByteBuffer_CreateAndAppendCString(KeyData0,
+        sizeof(KeyData0), "");
+
+    Entry = (KineticEntry) {
+        .key = KeyBuffer0,
+        .newVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
+        .force = true,
+    };
+
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
+    TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, Entry.key.bytesUsed,
+        "ByteBuffer used lengths do not match!");
+
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
+}
+
+void test_Put_should_handle_0_length_values(void)
+{
+    uint8_t ValueData0[128];
+    ByteBuffer ValueBuffer0 = ByteBuffer_CreateAndAppendCString(ValueData0,
+        sizeof(ValueData0), "");
+
+    Entry = (KineticEntry) {
+        .key = KeyBuffer,
+        .newVersion = VersionBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer0,
+        .force = true,
+    };
+
+    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
+    TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, Entry.value.bytesUsed,
+        "ByteBuffer used lengths do not match!");
+
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
+}
+
+
 /*******************************************************************************
 * ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
 *******************************************************************************/
