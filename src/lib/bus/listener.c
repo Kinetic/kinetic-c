@@ -291,8 +291,6 @@ void *listener_mainloop(void *arg) {
     listener *self = (listener *)arg;
     assert(self);
     struct bus *b = self->bus;
-    int timeout = MIN_DELAY;
-
     struct timeval tv;
     
     gettimeofday(&tv, NULL);
@@ -304,7 +302,6 @@ void *listener_mainloop(void *arg) {
      * internal locking. */
 
     while (!self->shutdown) {
-        bool work_done = false;
         gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
@@ -312,7 +309,7 @@ void *listener_mainloop(void *arg) {
             last_sec = cur_sec;
         }
 
-        int res = poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, timeout);
+        int res = poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, -1);
         BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
             "poll res %d", res);
 
@@ -322,8 +319,6 @@ void *listener_mainloop(void *arg) {
             msg_handler(self, msg);
             listener_msg *nmsg = casq_pop(self->q);
             msg = nmsg;
-            timeout = 0;
-            work_done = true;
         }
 
         if (res < 0) {
@@ -337,20 +332,8 @@ void *listener_mainloop(void *arg) {
         } else if (res > 0) {
             check_and_flush_incoming_msg_pipe(self, &res);
             attempt_recv(self, res);
-            work_done = true;
         } else {
             /* nothing to do */
-        }
-
-        if (work_done) {
-            timeout = 0;
-        } else if (timeout == 0) {
-            timeout = MIN_DELAY;
-        } else {
-            timeout <<= 1;
-            if (timeout > MAX_DELAY) {
-                timeout = INFINITE_DELAY;
-            }
         }
     }
 

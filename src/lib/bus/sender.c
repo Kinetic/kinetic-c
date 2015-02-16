@@ -36,9 +36,6 @@
 #include "yacht.h"
 #include "sender_internal.h"
 
-#define MIN_DELAY 100 /* msec */
-#define INFINITE_DELAY -1  /* poll will only return upon an event */
-
 /* Offset for s->fds[0], which is the command pipe. */
 #define CMD_FD (1)
 
@@ -333,7 +330,6 @@ void *sender_mainloop(void *arg) {
     sender *self = (sender *)arg;
     assert(self);
     struct bus *b = self->bus;
-    int delay = MIN_DELAY;
     
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -341,7 +337,6 @@ void *sender_mainloop(void *arg) {
     
     BUS_LOG(b, 5, LOG_SENDER, "entering main loop", b->udata);
     while (!self->shutdown) {
-        bool work = false;
         
         gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
@@ -358,7 +353,7 @@ void *sender_mainloop(void *arg) {
          *     sense to use poll here -- self->active_fds will be small. */
         BUS_LOG(b, 7, LOG_SENDER, "polling", b->udata);
         
-        int res = poll(self->fds, self->active_fds + CMD_FD, delay);
+        int res = poll(self->fds, self->active_fds + CMD_FD, -1);
 
         BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_SENDER, b->udata, 64,
             "poll res %d, active fds %d", res, self->active_fds);
@@ -373,7 +368,7 @@ void *sender_mainloop(void *arg) {
             }
         } else if (res > 0) {
             if (self->fds[0].revents & POLLIN) {
-                work = check_incoming_commands(self);
+                (void)check_incoming_commands(self);
                 res--;
             }
 
@@ -383,14 +378,7 @@ void *sender_mainloop(void *arg) {
             if (res > 0) {
                 attempt_write(self, res);
             }
-            work = true;
-        }
-        
-        if (work) {
-            delay = MIN_DELAY;
-        } else if (delay != INFINITE_DELAY) {
-            delay <<= 1;
-            if (delay > MAX_TIMEOUT) { delay = INFINITE_DELAY; }
+            // work = true;
         }
     }
     

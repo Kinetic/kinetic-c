@@ -204,7 +204,7 @@ void threadpool_free(struct threadpool *t) {
 static void notify_new_task(struct threadpool *t) {
     for (int i = 0; i < t->live_threads; i++) {
         struct thread_info *ti = &t->threads[i];
-        if (ti->status == STATUS_ASLEEP) {
+        if (ti->status == STATUS_ASLEEP || true) {
             ssize_t res = write(ti->parent_fd,
                 NOTIFY_MSG, NOTIFY_MSG_LEN);
             if (2 == res) {
@@ -290,26 +290,11 @@ static void *thread_task(void *arg) {
 
     size_t mask = t->task_ringbuf_mask;
     struct pollfd pfd[1] = { { .fd=ti->child_fd, .events=POLLIN }, };
-    uint8_t read_buf[NOTIFY_MSG_LEN];
-    size_t delay = MIN_DELAY;
+    uint8_t read_buf[NOTIFY_MSG_LEN*32];
 
     while (ti->status < STATUS_SHUTDOWN) {
         if (t->task_request_head == t->task_commit_head) {
-
-            if (ti->status == STATUS_AWAKE) {
-                if (delay > MIN_DELAY) { ti->status = STATUS_ASLEEP; }
-            } else {
-                if (delay == 0) {
-                    delay = MIN_DELAY;
-                } else {
-                    delay <<= 1;
-                }
-                if ((size_t)delay > t->max_delay) {
-                    delay = INFINITE_DELAY;
-                }
-            }
-
-            int res = poll(pfd, 1, delay);
+            int res = poll(pfd, 1, -1);
             if (res == 1) {
                 if (pfd[0].revents & (POLLHUP | POLLERR | POLLNVAL)) {
                     /* TODO: HUP should be distinct from ERR -- hup is
@@ -318,9 +303,8 @@ static void *thread_task(void *arg) {
                     break;
                 } else if (pfd[0].revents & POLLIN) {
                     if (ti->status == STATUS_ASLEEP) { ti->status = STATUS_AWAKE; }
-                    delay = MIN_DELAY;
                     //SPIN_ADJ(t->active_threads, 1);
-                    ssize_t rres = read(ti->child_fd, read_buf, NOTIFY_MSG_LEN);
+                    ssize_t rres = read(ti->child_fd, read_buf, sizeof(read_buf));
                     if (rres < 0) {
                         assert(0);
                     }
