@@ -50,9 +50,13 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     {
         //cleanup
         KineticPDU* request = operation->request;
-        if (request->message.message.commandBytes.data != NULL) {
-            free(request->message.message.commandBytes.data);
-            request->message.message.commandBytes.data = NULL;
+        if (request != NULL) {
+            if (request->message.message.commandBytes.data != NULL) {
+                free(request->message.message.commandBytes.data);
+                request->message.message.commandBytes.data = NULL;
+            }
+            free(request);
+            request = NULL;
         }
     }
     return status;
