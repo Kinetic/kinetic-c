@@ -784,7 +784,7 @@ static void tick_handler(listener *l) {
                 BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 256,
                     "notifying of rx failure -- timeout (info %p) -- "
                     "<fd:%d, seq_id:%lld>, from time (%ld.%ld) to (%ld.%ld) to (%ld.%ld)",
-                    (void*)info, box->fd, box->out_seq_id,
+                    (void*)info, box->fd, (long long)box->out_seq_id,
                     (long)box->tv_send_start.tv_sec, (long)box->tv_send_start.tv_usec, 
                     (long)box->tv_send_done.tv_sec, (long)box->tv_send_done.tv_usec, 
                     (long)tv.tv_sec, (long)tv.tv_usec);

@@ -1068,7 +1068,7 @@ static void tick_timeout(sender *s, tx_info_t *info) {
             BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 256,
                 "timeout waiting to notify of pending response on <fd:%d, seq_id:%lld>:"
                 "(%ld.%ld - %ld.%ld - %ld.%ld)",
-                info->u.notify.fd, info->u.notify.box->out_seq_id,
+                info->u.notify.fd, (long long)info->u.notify.box->out_seq_id,
                 (long)ue.box->tv_send_start.tv_sec, (long)ue.box->tv_send_start.tv_usec,
                 (long)ue.box->tv_send_done.tv_sec, (long)ue.box->tv_send_done.tv_usec,
                 (long)tv.tv_sec, (long)tv.tv_usec);
