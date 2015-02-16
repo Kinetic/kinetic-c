@@ -737,10 +737,20 @@ static void tick_handler(listener *l) {
         case RIS_HOLD:
             /* Check timeout */
             if (info->timeout_sec == 1) {
+                struct timeval tv;
+                if (-1 == gettimeofday(&tv, NULL)) {
+                    BUS_LOG(b, 0, LOG_LISTENER,
+                        "gettimeofday failure in tick_handler!", b->udata);
+                    continue;
+                }
+
                 /* never got a response, but we don't have the callback
                  * either -- the sender will notify about the timeout. */
-                BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                    "timing out hold info %p", (void*)info);
+                BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
+                    "timing out hold info %p -- <fd:%d, seq_id:%lld> at (%ld.%ld)",
+                    (void*)info, info->u.hold.fd, (long long)info->u.hold.seq_id,
+                    (long)tv.tv_sec, (long)tv.tv_usec);
+
                 release_rx_info(l, info);
             } else {
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
@@ -764,8 +774,21 @@ static void tick_handler(listener *l) {
                     info->u.expect.error, (void*)info);
                 notify_message_failure(l, info, BUS_SEND_RX_FAILURE);
             } else if (info->timeout_sec == 1) {
-                BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 64,
-                    "notifying of rx failure -- timeout (info %p)", (void*)info);
+                struct timeval tv;
+                if (-1 == gettimeofday(&tv, NULL)) {
+                    BUS_LOG(b, 0, LOG_LISTENER,
+                        "gettimeofday failure in tick_handler!", b->udata);
+                    continue;
+                }
+                struct boxed_msg *box = info->u.expect.box;
+                BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 256,
+                    "notifying of rx failure -- timeout (info %p) -- "
+                    "<fd:%d, seq_id:%lld>, from time (%ld.%ld) to (%ld.%ld) to (%ld.%ld)",
+                    (void*)info, box->fd, box->out_seq_id,
+                    (long)box->tv_send_start.tv_sec, (long)box->tv_send_start.tv_usec, 
+                    (long)box->tv_send_done.tv_sec, (long)box->tv_send_done.tv_usec, 
+                    (long)tv.tv_sec, (long)tv.tv_usec);
+
                 notify_message_failure(l, info, BUS_SEND_RX_TIMEOUT);
             } else {
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
