@@ -25,6 +25,7 @@
 #include <err.h>
 #include <signal.h>
 #include <sys/time.h>
+#include <poll.h>
 
 #ifdef __Linux__
 // some Linux distros put this in a nonstandard place.
@@ -454,7 +455,6 @@ static void run_bus(example_state *s, struct bus *b) {
         bus_register_socket(b, BUS_SOCKET_PLAIN, s->sockets[i], s->info[i]);
     }
 
-    bool should_send = true;
     int cur_socket_i = 0;
     int64_t seq_id = 1;
 
@@ -464,19 +464,26 @@ static void run_bus(example_state *s, struct bus *b) {
 
     s->last_second = get_cur_second();
 
+    int sleep_counter = 0;
+
     while (loop_flag) {
         time_t cur_second = get_cur_second();
         if (cur_second != s->last_second) {
             tick_handler(s);
             s->last_second = cur_second;
             payload_size = 8;
-            should_send = true;
-        } else {
-            should_send = true;
+            if (sleep_counter > 0) {
+                sleep_counter--;
+                if (sleep_counter == 0) {
+                    printf(" -- resuming\n");
+                }
+            } else if ((cur_second & 0x3f) == 0x00) {
+                printf(" -- sleeping for 10 seconds\n");
+                sleep_counter = 10;
+            }
         }
 
-        if (should_send) {
-            should_send = false;
+        if (sleep_counter == 0) {
             size_t msg_size = construct_msg(msg_buf, buf_size,
                 100 * /*payload_size * */ 1024L, seq_id);
             LOG(3, " @@ sending message with %zd bytes\n", msg_size);
@@ -503,6 +510,8 @@ static void run_bus(example_state *s, struct bus *b) {
             if (seq_id == s->max_seq_id) {
                 loop_flag = false;
             }
+        } else {
+            poll(NULL, 0, 1000);
         }
     }
 }
