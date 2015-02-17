@@ -207,7 +207,7 @@ static void notify_new_task(struct threadpool *t) {
         if (ti->status == STATUS_ASLEEP || true) {
             ssize_t res = write(ti->parent_fd,
                 NOTIFY_MSG, NOTIFY_MSG_LEN);
-            if (2 == res) {
+            if (NOTIFY_MSG_LEN == res) {
                 return;
             } else if (res == -1) {
                 err(1, "write");
@@ -252,7 +252,9 @@ static bool notify_shutdown(struct threadpool *t) {
 }
 
 static bool spawn(struct threadpool *t) {
-    struct thread_info *ti = &t->threads[t->live_threads];
+    int id = t->live_threads;
+    if (id >= t->max_threads) { return false; }
+    struct thread_info *ti = &t->threads[id];
 
     struct thread_context *tc = malloc(sizeof(*tc));
     if (tc == NULL) { return false; }
