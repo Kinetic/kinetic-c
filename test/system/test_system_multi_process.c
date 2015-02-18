@@ -17,36 +17,68 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
+#include <unistd.h>
+#include <err.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <errno.h>
+
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 #include "kinetic_semaphore.h"
-#include <stdlib.h>
-#include <sys/file.h>
-#include <sys/time.h>
-#include <errno.h>
 
 typedef struct {
     KineticSemaphore * sem;
     KineticStatus status;
 } OpStatus;
 
+static const int MaxDaemons = 2;
+static int NumDaemons = 0;
+static int CurrentPort;
+
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
-void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_size)
-{
-    LOGF0("STRESS THREAD: object_size: %zu bytes, count: %zu entries", value_size, num_ops);
+static void child_task(void) {
 
-    ByteBuffer test_data = ByteBuffer_Malloc(value_size);
+    srand(time(NULL) + getpid()); // re-randomize this process
+
+    const size_t num_ops = 100;
+    const size_t obj_size = KINETIC_OBJ_SIZE;
+
+    KineticClientConfig config = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    KineticClient * client = KineticClient_Init(&config);
+
+    KineticStatus status;
+    ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
+    KineticSessionConfig sessionConfig = {
+        .host = SYSTEM_TEST_HOST,
+        .port = CurrentPort,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = hmacArray,
+    };
+    KineticSession* session;
+    status = KineticClient_CreateSession(&sessionConfig, client, &session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+
+    sleep(2); // Delay to allow other processes to become connected to maximize overlapping
+
+    pid_t pid = getpid();
+    LOGF0("Starting I/O in process %lu", (unsigned long)pid);
+
+    // Generate test entry data
+    ByteBuffer test_data = ByteBuffer_Malloc(obj_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
-
     uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
     ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
-
-    uint64_t r = rand();
-
     uint64_t keys[num_ops];
     KineticEntry entries[num_ops];
-
+    uint64_t r = rand();
     for (uint32_t put = 0; put < num_ops; put++) {
         keys[put] = put | (r << 16);
     }
@@ -61,24 +93,28 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             };
         };
 
-        // Record start time
         struct timeval start_time;
         gettimeofday(&start_time, NULL);
 
-        // Kick off a batch of async PUTs
+        size_t bytes_written = 0;
+
         for (uint32_t put = 0; put < num_ops; put++) {
             ByteBuffer key = ByteBuffer_Create(&keys[put], sizeof(keys[put]), sizeof(keys[put]));
 
-            // Only set FLUSH on last object to allow delayed persistence w/ batch FLUSH once complete
-            KineticSynchronization sync = (put == num_ops - 1)
-                ? KINETIC_SYNCHRONIZATION_FLUSH
-                : KINETIC_SYNCHRONIZATION_WRITEBACK;
+            KineticSynchronization sync = KINETIC_SYNCHRONIZATION_WRITEBACK;
+            if ((put == num_ops - 1) || (num_ops % 7 == 0)) {
+                sync = KINETIC_SYNCHRONIZATION_FLUSH;
+            }
+
+            ByteBuffer my_data = test_data;
+            // my_data.array.len = rand() % KINETIC_OBJ_SIZE;
+            // my_data.bytesUsed = my_data.array.len;
 
             entries[put] = (KineticEntry) {
                 .key = key,
                 .tag = tag,
                 .algorithm = KINETIC_ALGORITHM_SHA1,
-                .value = test_data,
+                .value = my_data,
                 .synchronization = sync,
             };
 
@@ -93,50 +129,56 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
 
             if (status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "PUT failed w/status: %s", Kinetic_GetStatusDescription(status));
+                sprintf(msg, "PUT(pid=%lu) failed w/status: %s",
+                    (unsigned long)pid, Kinetic_GetStatusDescription(status));
                 TEST_FAIL_MESSAGE(msg);
             }
+
+            bytes_written += my_data.bytesUsed;
         }
 
-        for (size_t i = 0; i < num_ops; i++) {
+        for (size_t i = 0; i < num_ops; i++)
+        {
             KineticSemaphore_WaitForSignalAndDestroy(put_statuses[i].sem);
             if (put_statuses[i].status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "PUT failed w/status: %s", Kinetic_GetStatusDescription(put_statuses[i].status));
+                sprintf(msg, "PUT(pid=%lu) failed w/status: %s",
+                    (unsigned long)pid, Kinetic_GetStatusDescription(put_statuses[i].status));
                 TEST_FAIL_MESSAGE(msg);
             }
         }
 
-        // Calculate and report performance
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
-        size_t bytes_written = num_ops * test_data.array.len;
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
         float bandwidth = (bytes_written * 1000.0f) / (elapsed_ms * 1024 * 1024);
-        fflush(stdout);
-        LOGF0("PUT Performance: wrote: %.1f kB, duration: %.3f sec, throughput: %.2f MB/sec",
-            bytes_written / 1024.0f, elapsed_ms / 1000.0f, bandwidth);
+        LOGF0("PUT(pid=%lu) Performance: wrote %.1f kB, duration: %.2f sec, throughput: %.2f MB/sec",
+            (unsigned long)pid,
+            bytes_written / 1024.0f,
+            elapsed_ms / 1000.0f,
+            bandwidth);
     }
 
     // Measure GET performance
     {
         OpStatus get_statuses[num_ops];
-        ByteBuffer test_get_datas[num_ops];
         for (size_t i = 0; i < num_ops; i++) {
             get_statuses[i] = (OpStatus){
                 .sem = KineticSemaphore_Create(),
                 .status = KINETIC_STATUS_INVALID,
             };
-            test_get_datas[i] = ByteBuffer_Malloc(value_size);
         };
 
-        // Record start time
+        ByteBuffer test_get_datas[num_ops];
+        for (size_t i = 0; i < num_ops; i++) {
+            test_get_datas[i] = ByteBuffer_Malloc(obj_size);
+        }
+
         struct timeval start_time;
         gettimeofday(&start_time, NULL);
 
-        // Kick off a batch of async GETss
         for (uint32_t get = 0; get < num_ops; get++) {
             ByteBuffer key = ByteBuffer_Create(&keys[get], sizeof(keys[get]), sizeof(keys[get]));
 
@@ -157,7 +199,8 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
 
             if (status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "GET failed w/status: %s", Kinetic_GetStatusDescription(status));
+                sprintf(msg, "GET(pid=%lu) failed w/status: %s",
+                    (unsigned long)pid, Kinetic_GetStatusDescription(status));
                 TEST_FAIL_MESSAGE(msg);
             }
         }
@@ -168,11 +211,11 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             KineticSemaphore_WaitForSignalAndDestroy(get_statuses[i].sem);
             if (get_statuses[i].status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "GET failed w/status: %s", Kinetic_GetStatusDescription(get_statuses[i].status));
+                sprintf(msg, "GET(pid=%lu) failed w/status: %s",
+                    (unsigned long)pid, Kinetic_GetStatusDescription(get_statuses[i].status));
                 TEST_FAIL_MESSAGE(msg);
             }
-            else
-            {
+            else {
                 bytes_read += entries[i].value.bytesUsed;
             }
         }
@@ -180,9 +223,9 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
         // Check data for integrity
         size_t numFailures = 0;
         for (size_t i = 0; i < num_ops; i++) {
-            int res = memcmp(test_data.array.data, test_get_datas[i].array.data, test_data.array.len);
+            int res = memcmp(test_data.array.data, test_get_datas[i].array.data, test_get_datas[i].bytesUsed);
             if (res != 0) {
-                LOGF0("Failed validating data in object %zu of %zu!", i+1, num_ops);
+                LOGF0("Failed validating data in object %zu of %zu (pid=%lu)!", i+1, num_ops);
                 numFailures++;
             }
         }
@@ -195,9 +238,12 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
         float bandwidth = (bytes_read * 1000.0f) / (elapsed_ms * 1024 * 1024);
-        fflush(stdout);
-        LOGF0("GET Performance: read: %.1f kB, duration: %.3f sec, throughput: %.2f MB/sec",
-            bytes_read / 1024.0f, elapsed_ms / 1000.0f, bandwidth);
+        LOGF0("GET(pid=%lu) Performance: wrote %.1f kB, duration: %.2f sec, throughput: %.2f MB/sec",
+            (unsigned long)pid,
+            bytes_read / 1024.0f,
+            elapsed_ms / 1000.0f,
+            bandwidth);
+
         for (size_t i = 0; i < num_ops; i++) {
             ByteBuffer_Free(test_get_datas[i]);
         }
@@ -213,15 +259,12 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             };
         };
 
-        // Record start time
         struct timeval start_time;
         gettimeofday(&start_time, NULL);
 
-        // Kick off a batch of async DELETEs
         for (uint32_t del = 0; del < num_ops; del++) {
             ByteBuffer key = ByteBuffer_Create(&keys[del], sizeof(keys[del]), sizeof(keys[del]));
 
-            // Only set FLUSH on last object to allow delayed persistence w/ batch FLUSH once complete
             KineticSynchronization sync = (del == num_ops - 1)
                 ? KINETIC_SYNCHRONIZATION_FLUSH
                 : KINETIC_SYNCHRONIZATION_WRITEBACK;
@@ -244,7 +287,8 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
 
             if (status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "DELETE failed w/status: %s", Kinetic_GetStatusDescription(status));
+                sprintf(msg, "DELETE(pid=%lu) failed w/status: %s",
+                    (unsigned long)pid, Kinetic_GetStatusDescription(status));
                 TEST_FAIL_MESSAGE(msg);
             }
         }
@@ -253,116 +297,31 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             KineticSemaphore_WaitForSignalAndDestroy(delete_statuses[i].sem);
             if (delete_statuses[i].status != KINETIC_STATUS_SUCCESS) {
                 char msg[128];
-                sprintf(msg, "DELETE failed w/status: %s", Kinetic_GetStatusDescription(delete_statuses[i].status));
+                sprintf(msg, "DELETE(pid=%lu) failed w/status: %s",
+                    (unsigned long)pid, Kinetic_GetStatusDescription(delete_statuses[i].status));
                 TEST_FAIL_MESSAGE(msg);
             }
         }
 
-        // Calculate and report performance
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
         float throughput = (num_ops * 1000.0f) / elapsed_ms;
-        fflush(stdout);
-        LOGF0("DELETE Performance: count: %zu entries, duration: %.3f sec, throughput: %.2f entries/sec",
-            num_ops, elapsed_ms / 1000.0f, throughput);
+        LOGF0("DELETE(pid=%lu) Performance: count %zu entries, duration %.3f sec, throughput: %.2f entries/sec",
+            (unsigned long)pid,
+            num_ops,
+            elapsed_ms / 1000.0f,
+            throughput);
     }
 
+    // Shutdown client connection and cleanup
     ByteBuffer_Free(test_data);
-}
-
-
-typedef struct {
-    KineticClient * client;
-    KineticSession * session;
-    uint32_t num_ops;
-    uint32_t obj_size;
-    uint32_t thread_iters;
-} TestParams;
-
-static void* test_thread(void* test_params)
-{
-    TestParams * params = test_params;
-    for (uint32_t i = 0; i < params->thread_iters; i++) {
-        run_throughput_tests(params->session, params->num_ops, params->obj_size);
-    }
-    return NULL;
-}
-
-void run_tests(KineticClient * client)
-{
-    // Configure and establish a session with the specified device
-    KineticSession* session;
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSessionConfig config = {
-        .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_PORT,
-        .clusterVersion = 0,
-        .identity = 1,
-        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-    };
-    KineticStatus status = KineticClient_CreateSession(&config, client, &session);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        char msg[128];
-        sprintf(msg, "Failed connecting to the Kinetic device w/status: %s", Kinetic_GetStatusDescription(status));
-        TEST_FAIL_MESSAGE(msg);
-    }
-
-    // Prepare per-thread test data
-    TestParams params[] = {
-        { .client = client, .session = session, .thread_iters = 1, .num_ops = 250,  .obj_size = KINETIC_OBJ_SIZE },
-        { .client = client, .session = session, .thread_iters = 1, .num_ops = 500,  .obj_size = 120,             },
-        { .client = client, .session = session, .thread_iters = 1, .num_ops = 750,  .obj_size = 500,             },
-        { .client = client, .session = session, .thread_iters = 1, .num_ops = 250,  .obj_size = 70000,           },
-        // { .client = client, .session = session, .thread_iters = 2, .num_ops = 1000, .obj_size = 120,             },
-        // { .client = client, .session = session, .thread_iters = 3, .num_ops = 1000, .obj_size = 120,             },
-        // { .client = client, .session = session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
-        // { .client = client, .session = session, .thread_iters = 5, .num_ops = 1000, .obj_size = 120,             },
-        // { .client = client, .session = session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
-    };
-
-    pthread_t thread_id[NUM_ELEMENTS(params)];
-
-    for (uint32_t i = 0; i < NUM_ELEMENTS(params); i++) {
-        int pthreadStatus = pthread_create(&thread_id[i], NULL, test_thread, &params[i]);
-        TEST_ASSERT_EQUAL_MESSAGE(0, pthreadStatus, "pthread create failed");
-    }
-
-    for (uint32_t i = 0; i < NUM_ELEMENTS(params); i++) {
-        int join_status = pthread_join(thread_id[i], NULL);
-        TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
-    }
-
-    // Shutdown client session and cleanup
-    KineticClient_DestroySession(session);
-}
-
-void test_kinetic_client_throughput_test_kinetic_client_throughput_(void)
-{
-    srand(time(NULL));
-    KineticClientConfig config = {
-        .logFile = "stdout",
-        .logLevel = 0,
-        .writerThreads = 1,
-        .readerThreads = 1,
-        .maxThreadpoolThreads = 1,
-    };
-    KineticClient * client = KineticClient_Init(&config);
-
-    const uint32_t max_runs = 2;
-    for (uint32_t i = 0; i < max_runs; i++) {
-        LOGF0(
-            "============================================================================================\n"
-            "==  Test run %u of %u\n"
-            "============================================================================================\n",
-            i+1, max_runs);
-        run_tests(client);
-    }
-
+    status = KineticClient_DestroySession(session);
+    TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
     KineticClient_Shutdown(client);
-    
+    exit(0);
 }
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData)
@@ -372,4 +331,26 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData)
     op_status->status = kinetic_data->status;
     // Signal that we're done
     KineticSemaphore_Signal(op_status->sem);
+}
+
+void test_kinetic_client_stress_multiple_processes(void)
+{
+    srand(time(NULL));
+    CurrentPort = KINETIC_PORT;
+    for (NumDaemons = 0; NumDaemons < MaxDaemons; NumDaemons++) {
+        pid_t pid = fork();
+        if (pid == 0) {
+            LOGF0("\nStarting kinetic daemon on port %d", CurrentPort);
+            child_task();
+        } else if (pid == -1) {
+            err(1, "fork");
+        } else {
+            CurrentPort++;
+        }
+    }
+
+    for (int i = 0; i < MaxDaemons; i++) {
+        int stat_loc = 0;
+        wait(&stat_loc);
+    }
 }

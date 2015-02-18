@@ -73,7 +73,7 @@ void* store_data(void* args)
             return (void*)NULL;
         }
     }
-    printf("File stored to successfully to Kinetic Device across %d entries!\n", objIndex);
+    printf("File stored successfully to Kinetic device across %d entries!\n", objIndex);
     return (void*)NULL;
 }
 

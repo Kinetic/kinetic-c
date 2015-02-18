@@ -19,6 +19,7 @@
 */
 #include "kinetic_resourcewaiter.h"
 #include "kinetic_resourcewaiter_types.h"
+#include "kinetic_logger.h"
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
@@ -26,14 +27,14 @@
 
 void KineticResourceWaiter_Init(KineticResourceWaiter * const waiter)
 {
-    assert(waiter != NULL);
+    KINETIC_ASSERT(waiter != NULL);
     pthread_mutex_init(&waiter->mutex, NULL);
     pthread_cond_init(&waiter->ready_cond, NULL);
 }
 
 void KineticResourceWaiter_SetAvailable(KineticResourceWaiter * const waiter)
 {
-    assert(waiter != NULL);
+    KINETIC_ASSERT(waiter != NULL);
     pthread_mutex_lock(&waiter->mutex);
 
     waiter->ready = true;
@@ -46,7 +47,7 @@ void KineticResourceWaiter_SetAvailable(KineticResourceWaiter * const waiter)
 
 bool KineticResourceWaiter_WaitTilAvailable(KineticResourceWaiter * const waiter, uint32_t max_wait_sec)
 {
-    assert(waiter != NULL);
+    KINETIC_ASSERT(waiter != NULL);
     pthread_mutex_lock(&waiter->mutex);
 
     waiter->num_waiting++;
@@ -71,7 +72,7 @@ bool KineticResourceWaiter_WaitTilAvailable(KineticResourceWaiter * const waiter
 
 void KineticResourceWaiter_Destroy(KineticResourceWaiter * const waiter)
 {
-    assert(waiter != NULL);
+    KINETIC_ASSERT(waiter != NULL);
     pthread_mutex_destroy(&waiter->mutex);
     pthread_cond_destroy(&waiter->ready_cond);
 }

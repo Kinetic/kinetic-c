@@ -22,6 +22,9 @@
 #include "kinetic_resourcewaiter_types.h"
 #include "unity.h"
 #include "unity_helper.h"
+#include "kinetic_logger.h"
+#include "kinetic_proto.h"
+#include "protobuf-c.h"
 #include <stdlib.h>
 #include <pthread.h>
 

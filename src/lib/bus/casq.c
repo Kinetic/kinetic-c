@@ -113,7 +113,7 @@ void *casq_pop(struct casq *q) {
             l->data = NULL;
             for (;;) {              /* spin, push */
                 l->next = q->free_links;
-                if (ATOMIC_BOOL_COMPARE_AND_SWAP(&q->free_links, q->free_links, l)) {
+                if (ATOMIC_BOOL_COMPARE_AND_SWAP(&q->free_links, l->next, l)) {
                     break;
                 }
             }

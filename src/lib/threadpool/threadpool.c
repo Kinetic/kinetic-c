@@ -28,7 +28,9 @@
 
 #include "threadpool_internals.h"
 
-#define DEFAULT_MAX_DELAY 1000   /* msec */
+#define MIN_DELAY 10 /* msec */
+#define DEFAULT_MAX_DELAY 10000 /* msec */
+#define INFINITE_DELAY -1 /* poll will only return upon an event */
 #define DEFAULT_TASK_RINGBUF_SIZE2 8
 #define DEFAULT_MAX_THREADS 8
 
@@ -202,10 +204,10 @@ void threadpool_free(struct threadpool *t) {
 static void notify_new_task(struct threadpool *t) {
     for (int i = 0; i < t->live_threads; i++) {
         struct thread_info *ti = &t->threads[i];
-        if (ti->status == STATUS_ASLEEP) {
+        if (ti->status == STATUS_ASLEEP || true) {
             ssize_t res = write(ti->parent_fd,
                 NOTIFY_MSG, NOTIFY_MSG_LEN);
-            if (2 == res) {
+            if (NOTIFY_MSG_LEN == res) {
                 return;
             } else if (res == -1) {
                 err(1, "write");
@@ -250,7 +252,9 @@ static bool notify_shutdown(struct threadpool *t) {
 }
 
 static bool spawn(struct threadpool *t) {
-    struct thread_info *ti = &t->threads[t->live_threads];
+    int id = t->live_threads;
+    if (id >= t->max_threads) { return false; }
+    struct thread_info *ti = &t->threads[id];
 
     struct thread_context *tc = malloc(sizeof(*tc));
     if (tc == NULL) { return false; }
@@ -288,26 +292,11 @@ static void *thread_task(void *arg) {
 
     size_t mask = t->task_ringbuf_mask;
     struct pollfd pfd[1] = { { .fd=ti->child_fd, .events=POLLIN }, };
-    uint8_t read_buf[NOTIFY_MSG_LEN];
-    size_t min_delay = 100;
-    size_t delay = min_delay;
+    uint8_t read_buf[NOTIFY_MSG_LEN*32];
 
     while (ti->status < STATUS_SHUTDOWN) {
         if (t->task_request_head == t->task_commit_head) {
-            if (ti->status == STATUS_AWAKE) {
-                if (delay > 1) { ti->status = STATUS_ASLEEP; }
-            } else {
-                if (delay == 0) {
-                    delay = min_delay;
-                } else {
-                    delay <<= 1;
-                }
-                if (delay > t->max_delay) {
-                    delay = t->max_delay;
-                }
-            }
-
-            int res = poll(pfd, 1, delay);
+            int res = poll(pfd, 1, -1);
             if (res == 1) {
                 if (pfd[0].revents & (POLLHUP | POLLERR | POLLNVAL)) {
                     /* TODO: HUP should be distinct from ERR -- hup is
@@ -316,9 +305,8 @@ static void *thread_task(void *arg) {
                     break;
                 } else if (pfd[0].revents & POLLIN) {
                     if (ti->status == STATUS_ASLEEP) { ti->status = STATUS_AWAKE; }
-                    delay = min_delay;
                     //SPIN_ADJ(t->active_threads, 1);
-                    ssize_t rres = read(ti->child_fd, read_buf, NOTIFY_MSG_LEN);
+                    ssize_t rres = read(ti->child_fd, read_buf, sizeof(read_buf));
                     if (rres < 0) {
                         assert(0);
                     }

@@ -55,7 +55,6 @@ void setUp(void)
 
 void tearDown(void)
 {
-    LOG_LOCATION;
     SystemTestShutDown();
 }
 

@@ -46,6 +46,10 @@ typedef struct boxed_msg {
     bus_msg_cb *cb;
     void *udata;
 
+    /* Event timestamps to track timeouts. */
+    struct timeval tv_send_start;
+    struct timeval tv_send_done;
+
     /* Destination filename and message body. */
     int fd;
     SSL *ssl;                   /* valid pointer or BUS_BOXED_MSG_NO_SSL */

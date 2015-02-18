@@ -135,9 +135,8 @@ KineticStatus KineticClient_DestroySession(KineticSession* const session)
 
 KineticStatus KineticClient_NoOp(KineticSession const * const session)
 {
-    LOG_LOCATION;
-    assert(session != NULL);
-    assert(session->connection != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -150,13 +149,13 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure)
 {
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    assert(entry != NULL);
-    assert(entry->value.array.data != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
+    KINETIC_ASSERT(entry != NULL);
+    KINETIC_ASSERT(entry->value.array.data != NULL);
     
-    assert(session->connection->pSession == session);
-    assert(session->connection == session->connection->pSession->connection);
+    KINETIC_ASSERT(session->connection->pSession == session);
+    KINETIC_ASSERT(session->connection == session->connection->pSession->connection);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -165,7 +164,7 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     KineticOperation_BuildPut(operation, entry);
 
     // Execute the operation
-    assert(operation->connection == session->connection);
+    KINETIC_ASSERT(operation->connection == session->connection);
     KineticStatus res = KineticController_ExecuteOperation(operation, closure);
     return res;
 }
@@ -173,8 +172,8 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
 KineticStatus KineticClient_Flush(KineticSession const * const session,
                                   KineticCompletionClosure* closure)
 {
-    assert(session != NULL);
-    assert(session->connection != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
@@ -207,9 +206,9 @@ static KineticStatus handle_get_command(GET_COMMAND cmd,
                                         KineticEntry* const entry,
                                         KineticCompletionClosure* closure)
 {
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    assert(entry != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
+    KINETIC_ASSERT(entry != NULL);
 
     if (!has_key(entry)) {return KINETIC_STATUS_MISSING_KEY;}
     if (!has_value_buffer(entry) && !entry->metadataOnly) {
@@ -234,7 +233,7 @@ static KineticStatus handle_get_command(GET_COMMAND cmd,
         KineticOperation_BuildGetPrevious(operation, entry);
         break;
     default:
-        assert(false);
+        KINETIC_ASSERT(false);
     }
 
     // Execute the operation
@@ -266,9 +265,9 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
                                    KineticEntry* const entry,
                                    KineticCompletionClosure* closure)
 {
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    assert(entry != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
+    KINETIC_ASSERT(entry != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -285,12 +284,12 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
                                         ByteBufferArray* keys,
                                         KineticCompletionClosure* closure)
 {
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    assert(range != NULL);
-    assert(keys != NULL);
-    assert(keys->buffers != NULL);
-    assert(keys->count > 0);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
+    KINETIC_ASSERT(range != NULL);
+    KINETIC_ASSERT(keys != NULL);
+    KINETIC_ASSERT(keys->buffers != NULL);
+    KINETIC_ASSERT(keys->count > 0);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -306,9 +305,9 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure)
 {
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    assert(p2pOp != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
+    KINETIC_ASSERT(p2pOp != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}

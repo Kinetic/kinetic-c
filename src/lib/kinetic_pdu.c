@@ -89,14 +89,14 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         size_t read_size, void *socket_udata) {
 
     KineticConnection * connection = (KineticConnection *)socket_udata;
-    assert(connection);
+    KINETIC_ASSERT(connection);
     socket_info *si = connection->si;
-    assert(si);
+    KINETIC_ASSERT(si);
 
     switch (si->state) {
     case STATE_UNINIT:
     {
-        assert(read_size == 0);
+        KINETIC_ASSERT(read_size == 0);
         return reset_transfer(si);
     }
     case STATE_AWAITING_HEADER:
@@ -162,12 +162,26 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         break;
     }
     default:
-        assert(false);
+        KINETIC_ASSERT(false);
     }
 }
 
+static void log_response_seq_id(int fd, int64_t seq_id) {
+    #if KINETIC_LOGGER_LOG_SEQUENCE_ID
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    LOGF2("SEQ_ID response fd %d seq_id %lld %08lld.%08d",
+        fd, (long long)seq_id,
+        (long)tv.tv_sec, (long)tv.tv_usec);
+    #else
+    (void)seq_id;
+    #endif
+}
+
 STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
-    (void)socket_udata;
+    KineticConnection * connection = (KineticConnection *)socket_udata;
+    KINETIC_ASSERT(connection);
+    
     /* just got .full_msg_buffer from sink_cb -- pass it along as-is */
     socket_info *si = (socket_info *)msg;
 
@@ -189,7 +203,7 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         return res;
     } else {
         response->header = si->header;
-
+        
         response->proto = KineticPDU_unpack_message(NULL, si->header.protobufLength, si->buf);
         if (response->proto->has_commandBytes &&
             response->proto->commandBytes.data != NULL &&
@@ -208,9 +222,10 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
 
         int64_t seq_id = 0;
         if (response->command != NULL &&
-            response->command->header != NULL) {
-
+            response->command->header != NULL)
+        {
             seq_id = response->command->header->ackSequence;
+            log_response_seq_id(connection->socket, seq_id);
         }
 
         bus_unpack_cb_res_t res = {

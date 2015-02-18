@@ -81,26 +81,22 @@ void tearDown(void)
 
 void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
 {
-    LOG_LOCATION;
     TEST_ASSERT_EQUAL(1 + 4 + 4, PDU_HEADER_LEN);
     TEST_ASSERT_EQUAL(PDU_HEADER_LEN, sizeof(KineticPDUHeader));
 }
 
 void test_KineteicPDU_PDU_PROTO_MAX_LEN_should_be_1MB(void)
 {
-    LOG_LOCATION;
     TEST_ASSERT_EQUAL(1024 * 1024, PDU_PROTO_MAX_LEN);
 }
 
 void test_KineteicPDU_KINETIC_OBJ_SIZE_should_be_1MB(void)
 {
-    LOG_LOCATION;
     TEST_ASSERT_EQUAL(1024 * 1024, KINETIC_OBJ_SIZE);
 }
 
 void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_value_max_lengths(void)
 {
-    LOG_LOCATION;
     TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE, PDU_MAX_LEN);
 }
 
@@ -139,7 +135,6 @@ void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embed
 
 void test_KineticPDU_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(void)
 {
-    LOG_LOCATION;
 
     KineticProto_Command Command;
     memset(&Command, 0, sizeof(Command));
@@ -160,10 +155,9 @@ void test_KineticPDU_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(v
 
 
 void test_KineticPDU_GetKeyRange_should_return_the_KineticProto_Command_Range_from_the_message_if_avaliable(void)
-{ LOG_LOCATION;
+{
     Connection.pSession = &Session;
     Session.connection = &Connection;
-
     KineticPDU_InitWithCommand(&PDU, &Session);
     KineticProto_Command_Range* range = NULL;
 
@@ -367,6 +361,7 @@ bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata);
 
 void test_unpack_cb_should_expose_error_codes(void)
 {
+    KineticConnection con = {.socket = 123};
     socket_info *si = (socket_info *)si_buf;
     *si = (socket_info){
         .state = STATE_AWAITING_HEADER,
@@ -382,7 +377,7 @@ void test_unpack_cb_should_expose_error_codes(void)
 
     for (size_t i = 0; i < sizeof(error_states) / sizeof(error_states[0]); i++) {
         si->unpack_status = error_states[i];
-        bus_unpack_cb_res_t res = unpack_cb((void *)si, NULL);
+        bus_unpack_cb_res_t res = unpack_cb((void *)si, &con);
         TEST_ASSERT_FALSE(res.ok);
         TEST_ASSERT_EQUAL(error_states[i], res.u.error.opaque_error_id);
     }
@@ -390,6 +385,7 @@ void test_unpack_cb_should_expose_error_codes(void)
 
 void test_unpack_cb_should_expose_alloc_failure(void)
 {
+    KineticConnection con = {.socket = 123};
     socket_info si = {
         .state = STATE_AWAITING_HEADER,
         .accumulated = 0,
@@ -400,16 +396,15 @@ void test_unpack_cb_should_expose_alloc_failure(void)
     };
     
     KineticAllocator_NewKineticResponse_ExpectAndReturn(8, NULL);
-    bus_unpack_cb_res_t res = unpack_cb((void*)&si, NULL);
+    bus_unpack_cb_res_t res = unpack_cb((void*)&si, &con);
     TEST_ASSERT_FALSE(res.ok);
     TEST_ASSERT_EQUAL(UNPACK_ERROR_PAYLOAD_MALLOC_FAIL, res.u.error.opaque_error_id);
 }
 
 void test_unpack_cb_should_skip_empty_commands(void)
 {
-    LOG_LOCATION;
     /* Include trailing memory for si's .buf[]. */
-
+    KineticConnection con = {.socket = 123};
     socket_info *si = (socket_info *)si_buf;
     si->state = STATE_AWAITING_HEADER;
     si->unpack_status = UNPACK_ERROR_SUCCESS,
@@ -432,7 +427,7 @@ void test_unpack_cb_should_skip_empty_commands(void)
     KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
         si->buf, &Proto);
 
-    bus_unpack_cb_res_t res = unpack_cb(si, NULL);
+    bus_unpack_cb_res_t res = unpack_cb(si, &con);
 
     TEST_ASSERT_EQUAL(0xee, response->value[0]);
 
@@ -442,7 +437,7 @@ void test_unpack_cb_should_skip_empty_commands(void)
 
 void test_unpack_cb_should_unpack_command_bytes(void)
 {
-    LOG_LOCATION;
+    KineticConnection con = {.socket = 123};
     socket_info *si = (socket_info *)si_buf;
     si->state = STATE_AWAITING_HEADER;
     si->unpack_status = UNPACK_ERROR_SUCCESS,
@@ -479,7 +474,7 @@ void test_unpack_cb_should_unpack_command_bytes(void)
     KineticPDU_unpack_command_ExpectAndReturn(NULL, Proto.commandBytes.len,
         Proto.commandBytes.data, &Command);
 
-    bus_unpack_cb_res_t res = unpack_cb(si, NULL);
+    bus_unpack_cb_res_t res = unpack_cb(si, &con);
 
     TEST_ASSERT_EQUAL(0xee, response->value[0]);
 

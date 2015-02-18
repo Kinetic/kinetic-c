@@ -87,7 +87,7 @@ void KineticLogger_Init(const char* log_file, int log_level)
         else {
             printf("\nLogging kinetic-c output to %s w/ log_level=%d\n", log_file, KineticLogLevel);
             KineticLoggerHandle = fopen(log_file, "a+");
-            assert(KineticLoggerHandle != NULL);
+            KINETIC_ASSERT(KineticLoggerHandle != NULL);
         }
 
         // Create thread to periodically flush the log
@@ -342,7 +342,7 @@ static void LogUnboxed(int log_level,
 
     default:
         KineticLogger_LogPrintf(log_level, "Invalid message field type!: %d", fieldDesc->type);
-        assert(false); // should never get here!
+        KINETIC_ASSERT(false); // should never get here!
         break;
     };
 }

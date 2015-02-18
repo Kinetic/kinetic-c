@@ -97,11 +97,20 @@ typedef struct rx_info_t {
 #define MAX_QUEUE_MESSAGES 32
 typedef uint32_t msg_flag_t;
 
+/* Minimum and maximum poll() delays for listener, before going dormant. */
+#define MIN_DELAY 10
+#define MAX_DELAY 100
+#define INFINITE_DELAY (-1)
+
 /* Receiver of responses */
 typedef struct listener {
     struct bus *bus;
     struct casq *q;
     bool shutdown;
+
+    /* Pipes used to wake the sleeping listener on queue input. */
+    int commit_pipe;
+    int incoming_msg_pipe;
 
     rx_info_t rx_info[MAX_PENDING_MESSAGES];
     rx_info_t *rx_info_freelist;
@@ -116,7 +125,8 @@ typedef struct listener {
     size_t upstream_backpressure;
 
     uint16_t tracked_fds;
-    struct pollfd fds[MAX_FDS];
+    /* tracked_fds + incoming_msg_pipe */
+    struct pollfd fds[MAX_FDS + 1];
     connection_info *fd_info[MAX_FDS];
 
     /* Read buffer and it's size. Will be grown on demand. */
@@ -140,6 +150,7 @@ static void attempt_delivery(listener *l, struct rx_info_t *info);
 static void clean_up_completed_info(listener *l, rx_info_t *info);
 static void observe_backpressure(listener *l, size_t backpressure);
 static bool grow_read_buf(listener *l, size_t nsize);
+static void check_and_flush_incoming_msg_pipe(listener *l, int *res);
 
 static rx_info_t *get_hold_rx_info(listener *l, int fd, int64_t seq_id);
 static void dump_rx_info_table(listener *l);

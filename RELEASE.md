@@ -10,6 +10,10 @@ v0.12.0 (kinetic-protocol 3.0.5)
 * *KNOWN ISSUES*
     * KineticAdminClient_UpdateFirmware and KineticAdminClient_SetAcl are incomplete
 
+v0.11.2 (kinetic-protocol 3.0.5)
+--------------------------------
+* Changed all threads to be block indefinitely and be fully event-driven.
+
 v0.11.1 (kinetic-protocol 3.0.5)
 --------------------------------
 * Fixed race condition causing timeouts to not be handled resulting in a deadlock.

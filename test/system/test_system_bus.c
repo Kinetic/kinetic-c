@@ -88,8 +88,9 @@ static bool unpack_header(uint8_t const * const read_buf, size_t const read_size
         return false;
     }
 }
-static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
-        size_t read_size, void *socket_udata) {
+
+static bus_sink_cb_res_t sink_cb(uint8_t *read_buf, size_t read_size, void *socket_udata)
+{
 
     socket_info *si = (socket_info *)socket_udata;
     assert(si);
@@ -236,7 +237,7 @@ static void unexpected_msg_cb(void *msg,
 
 
 void test_that_we_can_register_sockets(void)
-{ LOG_LOCATION;
+{
 
     KineticLogger_Init("stdout", 2);
     bus_config cfg = {
@@ -274,7 +275,7 @@ void test_that_we_can_register_sockets(void)
 }
 
 void test_that_we_can_register_SSL_sockets(void)
-{ LOG_LOCATION;
+{
 
     KineticLogger_Init("stdout", 3);
     bus_config cfg = {

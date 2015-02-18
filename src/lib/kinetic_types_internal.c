@@ -383,8 +383,8 @@ KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(Kineti
 
 void KineticSessionConfig_Copy(KineticSessionConfig* dest, KineticSessionConfig* src)
 {
-    assert(dest != NULL);
-    assert(src != NULL);
+    KINETIC_ASSERT(dest != NULL);
+    KINETIC_ASSERT(src != NULL);
     if (dest == src) {return;}
     *dest = *src;
     if (src->hmacKey.data != NULL) {
@@ -394,7 +394,7 @@ void KineticSessionConfig_Copy(KineticSessionConfig* dest, KineticSessionConfig*
 
 void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con)
 {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
     KineticSessionConfig destConfig = {.host = "google.com"};
     if (config != NULL) {
         KineticSessionConfig_Copy(&destConfig, config);
@@ -411,7 +411,7 @@ void KineticSession_Init(KineticSession* const session, KineticSessionConfig* co
 
 void KineticConnection_Init(KineticConnection* const con)
 {
-    assert(con != NULL);
+    KINETIC_ASSERT(con != NULL);
     *con = (KineticConnection) {
         .connected = false, // Just to clarify
         .socket = -1,
@@ -420,7 +420,7 @@ void KineticConnection_Init(KineticConnection* const con)
 
 void KineticMessage_Init(KineticMessage* const message)
 {
-    assert(message != NULL);
+    KINETIC_ASSERT(message != NULL);
 
     KineticProto_Message__init(&message->message);
     KineticProto_command__init(&message->command);
@@ -439,9 +439,9 @@ void KineticMessage_Init(KineticMessage* const message)
 
 static void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr, KineticSession const * const session)
 {
-    assert(hdr != NULL);
-    assert(session != NULL);
-    assert(session->connection != NULL);
+    KINETIC_ASSERT(hdr != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
     *hdr = (KineticProto_Command_Header) {
         .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor),
         .has_clusterVersion = true,
@@ -455,9 +455,9 @@ static void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr, KineticS
 
 void KineticOperation_Init(KineticOperation* op, KineticSession const * const session)
 {
-    assert(op != NULL);
-    assert(session != NULL);
-    assert(session->connection != NULL);
+    KINETIC_ASSERT(op != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
     *op = (KineticOperation) {
         .connection = session->connection,
     };
@@ -465,9 +465,9 @@ void KineticOperation_Init(KineticOperation* op, KineticSession const * const se
 
 void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session)
 {
-    assert(pdu != NULL);
-    assert(session != NULL);
-    assert(session->connection != NULL);
+    KINETIC_ASSERT(pdu != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(session->connection != NULL);
     memset(pdu, 0, sizeof(KineticPDU));
     KineticMessage_Init(&(pdu->message));
     KineticMessage_HeaderInit(&(pdu->message.header), session);

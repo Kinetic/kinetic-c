@@ -80,9 +80,9 @@ static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
 
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* const closure)
 {
-    assert(operation != NULL);
-    assert(operation->connection != NULL);
-    assert(operation->connection->pSession != NULL);
+    KINETIC_ASSERT(operation != NULL);
+    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->connection->pSession != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     if (closure != NULL)
@@ -153,7 +153,7 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
         default:
         {
             LOGF0("bus_to_kinetic_status: UNMATCHED %d\n", status);
-            assert(false);
+            KINETIC_ASSERT(false);
             return KINETIC_STATUS_INVALID;
         }
     }

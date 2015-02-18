@@ -34,7 +34,7 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
 void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_size)
 {
-    LOGF0("\nSTRESS THREAD: object_size: %zu bytes, count: %zu entries\n", value_size, num_ops);
+    LOGF0("STRESS THREAD: object_size: %zu bytes, count: %zu entries", value_size, num_ops);
 
     ByteBuffer test_data = ByteBuffer_Malloc(value_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
@@ -95,9 +95,7 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
         float bandwidth = (bytes_written * 1000.0f) / (elapsed_ms * 1024 * 1024);
-        fflush(stdout);
-        LOGF0("\n--------------------------------------------------------------------------------\n"
-            "PUT Performance: wrote: %.1f kB, duration: %.3f seconds, throughput: %.2f MB/sec",
+        LOGF0("PUT Performance: wrote: %.1f kB, duration: %.3f sec, throughput: %.2f MB/sec",
             bytes_written / 1024.0f, elapsed_ms / 1000.0f, bandwidth);
     }
 
@@ -143,7 +141,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             }
         }
 
-        LOG0("Waiting for GETs to finish...");
         size_t bytes_read = 0;
         for (size_t i = 0; i < num_ops; i++)
         {
@@ -169,7 +166,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             }
         }
         TEST_ASSERT_EQUAL_MESSAGE(0, numFailures, "DATA INTEGRITY CHECK FAILED UPON READBACK!");
-        LOG0("Data integrity check passed!");
 
         // Calculate and report performance
         struct timeval stop_time;
@@ -178,9 +174,7 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
         float bandwidth = (bytes_read * 1000.0f) / (elapsed_ms * 1024 * 1024);
-        fflush(stdout);
-        LOGF0("\n--------------------------------------------------------------------------------\n"
-            "GET Performance: read: %.1f kB, duration: %.3f seconds, throughput: %.2f MB/sec",
+        LOGF0("GET Performance: read: %.1f kB, duration: %.3f sec, throughput: %.2f MB/sec",
             bytes_read / 1024.0f, elapsed_ms / 1000.0f, bandwidth);
         for (size_t i = 0; i < num_ops; i++) {
             ByteBuffer_Free(test_get_datas[i]);
@@ -233,7 +227,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             }
         }
 
-        LOG0("Waiting for DELETEs to finish...");
         for (size_t i = 0; i < num_ops; i++) {
             KineticSemaphore_WaitForSignalAndDestroy(delete_statuses[i].sem);
             if (delete_statuses[i].status != KINETIC_STATUS_SUCCESS) {
@@ -250,9 +243,7 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
         float throughput = (num_ops * 1000.0f) / elapsed_ms;
-        fflush(stdout);
-        LOGF0("\n--------------------------------------------------------------------------------\n"
-            "DELETE Performance: count: %zu entries, duration: %.3f seconds, throughput: %.2f entries/sec\n",
+        LOGF0("DELETE Performance: count: %zu entries, duration: %.3f sec, throughput: %.2f entries/sec",
             num_ops, elapsed_ms / 1000.0f, throughput);
     }
 
@@ -367,9 +358,11 @@ void test_kinetic_client_throughput_for_small_sized_objects(void)
 
     const uint32_t max_runs = 1;
     for (uint32_t i = 0; i < max_runs; i++) {
-        LOG0( "============================================================================================");
-        LOGF0("==  Test run %u of %u", i+1, max_runs);
-        LOG0( "============================================================================================");
+        LOGF0(
+            "============================================================================================\n"
+            "==  Test run %u of %u\n"
+            "============================================================================================\n",
+            i+1, max_runs);
         run_tests(client);
     }
     

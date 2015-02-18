@@ -35,6 +35,8 @@
 #include "atomic.h"
 
 #define DEFAULT_READ_BUF_SIZE (1024L * 1024L)
+#define INCOMING_MSG_PIPE 1
+#define INCOMING_MSG_PIPE_ID 0
 
 static void retry_delivery(listener *l, rx_info_t *info);
 
@@ -45,12 +47,25 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     l->bus = b;
     BUS_LOG(b, 2, LOG_LISTENER, "init", b->udata);
 
-    struct casq *q = casq_new();
-    if (q == NULL) {
+    int pipes[2];
+    if (0 != pipe(pipes)) {
         free(l);
         return NULL;
     }
+
+    struct casq *q = casq_new();
+    if (q == NULL) {
+        free(l);
+        close(pipes[0]);
+        close(pipes[1]);
+        return NULL;
+    }
     l->q = q;
+
+    l->commit_pipe = pipes[1];
+    l->incoming_msg_pipe = pipes[0];
+    l->fds[INCOMING_MSG_PIPE_ID].fd = l->incoming_msg_pipe;
+    l->fds[INCOMING_MSG_PIPE_ID].events = POLLIN;
 
     for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
         rx_info_t *info = &l->rx_info[i];
@@ -75,8 +90,6 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     l->msg_freelist = &l->msgs[0];
     l->rx_info_max_used = 0;
 
-    BUS_LOG_SNPRINTF(b, 4, LOG_LISTENER, b->udata, 64,
-        "listener rx_info table at %p", (void *)l->rx_info);
     (void)cfg;
     return l;
 }
@@ -251,18 +264,21 @@ void listener_free(struct listener *l) {
             default:
                 BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                     "match fail %d on line %d", info->state, __LINE__);
-                assert(false);
+                BUS_ASSERT(b, b->udata, false);
             }
         }
 
         while (l->tracked_fds > 0) {
             /* Remove off the front to stress remove_socket. */
-            remove_socket(l, l->fds[0].fd);
+            remove_socket(l, l->fds[0 + INCOMING_MSG_PIPE].fd);
         }
 
         if (l->read_buf) {
             free(l->read_buf);
         }                
+
+        close(l->commit_pipe);
+        close(l->incoming_msg_pipe);
 
         free(l);
     }
@@ -271,14 +287,10 @@ void listener_free(struct listener *l) {
 
 // ==================================================
 
-#define MAX_TIMEOUT 100
-
 void *listener_mainloop(void *arg) {
     listener *self = (listener *)arg;
     assert(self);
     struct bus *b = self->bus;
-    int timeout = 1;
-
     struct timeval tv;
     
     gettimeofday(&tv, NULL);
@@ -290,7 +302,6 @@ void *listener_mainloop(void *arg) {
      * internal locking. */
 
     while (!self->shutdown) {
-        bool work_done = false;
         gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
@@ -298,7 +309,7 @@ void *listener_mainloop(void *arg) {
             last_sec = cur_sec;
         }
 
-        int res = poll(self->fds, self->tracked_fds, timeout);
+        int res = poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, -1);
         BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
             "poll res %d", res);
 
@@ -308,8 +319,6 @@ void *listener_mainloop(void *arg) {
             msg_handler(self, msg);
             listener_msg *nmsg = casq_pop(self->q);
             msg = nmsg;
-            timeout = 0;
-            work_done = true;
         }
 
         if (res < 0) {
@@ -318,29 +327,48 @@ void *listener_mainloop(void *arg) {
             } else {
                 /* unrecoverable poll error -- FD count is bad
                  * or FDS is a bad pointer. */
-                assert(false);
+                BUS_ASSERT(b, b->udata, false);
             }
         } else if (res > 0) {
+            check_and_flush_incoming_msg_pipe(self, &res);
             attempt_recv(self, res);
-            work_done = true;
         } else {
             /* nothing to do */
-        }
-
-        if (work_done) {
-            timeout = 0;
-        } else if (timeout == 0) {
-            timeout = 1;
-        } else {
-            timeout <<= 1;
-            if (timeout > MAX_TIMEOUT) {
-                timeout = MAX_TIMEOUT;
-            }
         }
     }
 
     BUS_LOG(b, 3, LOG_LISTENER, "shutting down", b->udata);
     return NULL;
+}
+
+static void check_and_flush_incoming_msg_pipe(listener *l, int *res) {
+    struct bus *b = l->bus;
+    short ev = l->fds[INCOMING_MSG_PIPE_ID].revents;
+    if (ev & (POLLERR | POLLHUP | POLLNVAL)) {  /* hangup/error */
+        return;
+    }
+
+    if (ev & POLLIN) {
+        char buf[64];
+        for (;;) {
+            ssize_t rd = read(l->fds[INCOMING_MSG_PIPE_ID].fd, buf, sizeof(buf));
+            if (rd == -1) {
+                if (errno == EINTR) {
+                    errno = 0;
+                    continue;
+                } else {
+                    BUS_LOG_SNPRINTF(b, 6, LOG_LISTENER, b->udata, 128,
+                        "check_and_flush_incoming_msg_pipe: %s", strerror(errno));
+                    errno = 0;
+                    break;
+                }
+            } else {
+                /* no-op, msg is unused */
+                (*res)--;
+                break;
+            }
+        }
+    }
 }
 
 static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
@@ -369,11 +397,11 @@ static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
         {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                 "match fail %d on line %d", info->state, __LINE__);
-            assert(false);
+            BUS_ASSERT(b, b->udata, false);
         }
         }
     }    
-    l->fds[id].events &= ~POLLIN;
+    l->fds[id + INCOMING_MSG_PIPE].events &= ~POLLIN;
 }
 
 static void print_SSL_error(struct bus *b, connection_info *ci, int lvl, const char *prefix) {
@@ -399,9 +427,9 @@ static void attempt_recv(listener *l, int available) {
     
     for (int i = 0; i < l->tracked_fds; i++) {
         if (read_from == available) { break; }
-        struct pollfd *fd = &l->fds[i];
+        struct pollfd *fd = &l->fds[i + INCOMING_MSG_PIPE];
         connection_info *ci = l->fd_info[i];
-        assert(ci->fd == fd->fd);
+        BUS_ASSERT(b, b->udata, ci->fd == fd->fd);
         
         if (fd->revents & (POLLERR | POLLNVAL)) {
             read_from++;
@@ -417,7 +445,7 @@ static void attempt_recv(listener *l, int available) {
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                 "reading %zd bytes from socket (buf is %zd)",
                 ci->to_read_size, l->read_buf_size);
-            assert(l->read_buf_size >= ci->to_read_size);
+            BUS_ASSERT(b, b->udata, l->read_buf_size >= ci->to_read_size);
             read_from++;
 
             switch (ci->type) {
@@ -428,7 +456,7 @@ static void attempt_recv(listener *l, int available) {
                 socket_read_ssl(b, l, i, ci);
                 break;
             default:
-                assert(false);
+                BUS_ASSERT(b, b->udata, false);
             }
         }
     }
@@ -458,7 +486,7 @@ static bool socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_
 }
 
 static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
-    assert(ci->ssl);
+    BUS_ASSERT(b, b->udata, ci->ssl);
     for (;;) {
         // ssize_t pending = SSL_pending(ci->ssl);
         ssize_t size = (ssize_t)SSL_read(ci->ssl, l->read_buf, ci->to_read_size);
@@ -473,13 +501,13 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
                 return true;
                 
             case SSL_ERROR_WANT_WRITE:
-                assert(false);
+                BUS_ASSERT(b, b->udata, false);
                 
             case SSL_ERROR_SYSCALL:
             {
                 if (errno == 0) {
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL errno 0");
-                    assert(false);
+                    BUS_ASSERT(b, b->udata, false);
                 } else if (util_is_resumable_io_error(errno)) {
                 errno = 0;
                 } else {
@@ -501,7 +529,7 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
             default:
                 print_SSL_error(b, ci, 1, "SSL_ERROR UNKNOWN");
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
-                assert(false);
+                BUS_ASSERT(b, b->udata, false);
             }
         } else if (size > 0) {
             sink_socket_read(b, l, ci, size);
@@ -549,7 +577,7 @@ static bool sink_socket_read(struct bus *b,
             BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
                 "Read buffer realloc failure for %p (%zd to %zd)",
                 l->read_buf, l->read_buf_size, ci->to_read_size);
-            assert(false);
+            BUS_ASSERT(b, b->udata, false);
         }
     }
     return true;
@@ -586,7 +614,7 @@ static rx_info_t *find_info_by_sequence_id(listener *l,
         default:
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                 "match fail %d on line %d", info->state, __LINE__);
-            assert(false);
+            BUS_ASSERT(b, b->udata, false);
         }
     }
 
@@ -622,7 +650,7 @@ static void process_unpacked_message(listener *l,
             switch (info->state) {
             case RIS_HOLD:
                 /* Just save result, to match up later. */
-                assert(!info->u.hold.has_result);
+                BUS_ASSERT(b, b->udata, !info->u.hold.has_result);
                 info->u.hold.has_result = true;
                 info->u.hold.result = result;
                 break;
@@ -632,7 +660,7 @@ static void process_unpacked_message(listener *l,
                     "marking info %d, seq_id:%lld ready for delivery",
                     info->id, (long long)result.u.success.seq_id);
                 info->u.expect.error = RX_ERROR_READY_FOR_DELIVERY;
-                assert(!info->u.hold.has_result);
+                BUS_ASSERT(b, b->udata, !info->u.hold.has_result);
                 info->u.expect.has_result = true;
                 info->u.expect.result = result;
                 attempt_delivery(l, info);
@@ -640,7 +668,7 @@ static void process_unpacked_message(listener *l,
             }
             case RIS_INACTIVE:
             default:
-                assert(false);
+                BUS_ASSERT(b, b->udata, false);
             }
         } else {
             /* We received a response that we weren't expecting. */
@@ -691,10 +719,20 @@ static void tick_handler(listener *l) {
         case RIS_HOLD:
             /* Check timeout */
             if (info->timeout_sec == 1) {
+                struct timeval tv;
+                if (-1 == gettimeofday(&tv, NULL)) {
+                    BUS_LOG(b, 0, LOG_LISTENER,
+                        "gettimeofday failure in tick_handler!", b->udata);
+                    continue;
+                }
+
                 /* never got a response, but we don't have the callback
                  * either -- the sender will notify about the timeout. */
-                BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                    "timing out hold info %p", (void*)info);
+                BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
+                    "timing out hold info %p -- <fd:%d, seq_id:%lld> at (%ld.%ld)",
+                    (void*)info, info->u.hold.fd, (long long)info->u.hold.seq_id,
+                    (long)tv.tv_sec, (long)tv.tv_usec);
+
                 release_rx_info(l, info);
             } else {
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
@@ -718,8 +756,21 @@ static void tick_handler(listener *l) {
                     info->u.expect.error, (void*)info);
                 notify_message_failure(l, info, BUS_SEND_RX_FAILURE);
             } else if (info->timeout_sec == 1) {
-                BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 64,
-                    "notifying of rx failure -- timeout (info %p)", (void*)info);
+                struct timeval tv;
+                if (-1 == gettimeofday(&tv, NULL)) {
+                    BUS_LOG(b, 0, LOG_LISTENER,
+                        "gettimeofday failure in tick_handler!", b->udata);
+                    continue;
+                }
+                struct boxed_msg *box = info->u.expect.box;
+                BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 256,
+                    "notifying of rx failure -- timeout (info %p) -- "
+                    "<fd:%d, seq_id:%lld>, from time (%ld.%ld) to (%ld.%ld) to (%ld.%ld)",
+                    (void*)info, box->fd, (long long)box->out_seq_id,
+                    (long)box->tv_send_start.tv_sec, (long)box->tv_send_start.tv_usec, 
+                    (long)box->tv_send_done.tv_sec, (long)box->tv_send_done.tv_usec, 
+                    (long)tv.tv_sec, (long)tv.tv_usec);
+
                 notify_message_failure(l, info, BUS_SEND_RX_TIMEOUT);
             } else {
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
@@ -731,7 +782,7 @@ static void tick_handler(listener *l) {
         default:
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                 "match fail %d on line %d", info->state, __LINE__);
-            assert(false);
+            BUS_ASSERT(b, b->udata, false);
         }
     }
 }
@@ -763,16 +814,16 @@ static void dump_rx_info_table(listener *l) {
 }
 
 static void retry_delivery(listener *l, rx_info_t *info) {
-    assert(info->state == RIS_EXPECT);
-    assert(info->u.expect.error == RX_ERROR_READY_FOR_DELIVERY);
-    assert(info->u.expect.box);
     struct bus *b = l->bus;
+    BUS_ASSERT(b, b->udata, info->state == RIS_EXPECT);
+    BUS_ASSERT(b, b->udata, info->u.expect.error == RX_ERROR_READY_FOR_DELIVERY);
+    BUS_ASSERT(b, b->udata, info->u.expect.box);
 
     struct boxed_msg *box = info->u.expect.box;
     info->u.expect.box = NULL;       /* release */
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
         "releasing box %p at line %d", (void*)box, __LINE__);
-    assert(box->result.status == BUS_SEND_SUCCESS);
+    BUS_ASSERT(b, b->udata, box->result.status == BUS_SEND_SUCCESS);
 
     size_t backpressure = 0;
     if (bus_process_boxed_message(l->bus, box, &backpressure)) {
@@ -791,9 +842,9 @@ static void retry_delivery(listener *l, rx_info_t *info) {
 }
 
 static void clean_up_completed_info(listener *l, rx_info_t *info) {
-    assert(info->state == RIS_EXPECT);
-    assert(info->u.expect.error == RX_ERROR_DONE);
     struct bus *b = l->bus;
+    BUS_ASSERT(b, b->udata, info->state == RIS_EXPECT);
+    BUS_ASSERT(b, b->udata, info->u.expect.error == RX_ERROR_DONE);
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
         "info %p, box is %p at line %d", (void*)info,
         (void*)info->u.expect.box, __LINE__);
@@ -811,7 +862,7 @@ static void clean_up_completed_info(listener *l, rx_info_t *info) {
             printf("    info->box->out_msg %p\n", (void*)box->out_msg);
 
         }
-        assert(box->result.status == BUS_SEND_SUCCESS);
+        BUS_ASSERT(b, b->udata, box->result.status == BUS_SEND_SUCCESS);
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
             "releasing box %p at line %d", (void*)box, __LINE__);
         info->u.expect.box = NULL;       /* release */
@@ -831,11 +882,12 @@ static void clean_up_completed_info(listener *l, rx_info_t *info) {
 
 static void notify_message_failure(listener *l,
         rx_info_t *info, bus_send_status_t status) {
-    assert(info->state == RIS_EXPECT);
-    assert(info->u.expect.box);
-    info->u.expect.box->result.status = status;
     size_t backpressure = 0;
     struct bus *b = l->bus;
+    BUS_ASSERT(b, b->udata, info->state == RIS_EXPECT);
+    BUS_ASSERT(b, b->udata, info->u.expect.box);
+    
+    info->u.expect.box->result.status = status;
     
     boxed_msg *box = info->u.expect.box;
     info->u.expect.box = NULL;
@@ -867,37 +919,38 @@ static rx_info_t *get_free_rx_info(struct listener *l) {
         head->next = NULL;
         l->rx_info_in_use++;
         BUS_LOG(l->bus, 4, LOG_LISTENER, "reserving RX info", l->bus->udata);
-        assert(head->state == RIS_INACTIVE);
+        BUS_ASSERT(b, b->udata, head->state == RIS_INACTIVE);
         if (l->rx_info_max_used < head->id) {
             BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
                 "rx_info_max_used <- %d", head->id);
             l->rx_info_max_used = head->id;
-            assert(l->rx_info_max_used < MAX_PENDING_MESSAGES); 
+            BUS_ASSERT(b, b->udata, l->rx_info_max_used < MAX_PENDING_MESSAGES); 
         }
 
         BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
             "got free rx_info_t %d (%p)", head->id, (void *)head);
-        assert(head == &l->rx_info[head->id]);
+        BUS_ASSERT(b, b->udata, head == &l->rx_info[head->id]);
         return head;
     }
 }
 
 static connection_info *get_connection_info(struct listener *l, int fd) {
+    struct bus *b = l->bus;
     for (int i = 0; i < l->tracked_fds; i++) {
         connection_info *ci = l->fd_info[i];
-        assert(ci);
+        BUS_ASSERT(b, b->udata, ci);
         if (ci->fd == fd) { return ci; }
     }
     return NULL;
 }
 
 static void release_rx_info(struct listener *l, rx_info_t *info) {
-    assert(info);
     struct bus *b = l->bus;
+    BUS_ASSERT(b, b->udata, info);
     BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
         "releasing RX info %d (%p)", info->id, (void *)info);
-    assert(info->id < MAX_PENDING_MESSAGES);
-    assert(info == &l->rx_info[info->id]);
+    BUS_ASSERT(b, b->udata, info->id < MAX_PENDING_MESSAGES);
+    BUS_ASSERT(b, b->udata, info == &l->rx_info[info->id]);
 
     switch (info->state) {
     case RIS_HOLD:
@@ -925,12 +978,12 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
         }
         break;
     case RIS_EXPECT:
-        assert(info->u.expect.error == RX_ERROR_DONE);
-        assert(info->u.expect.box == NULL);
+        BUS_ASSERT(b, b->udata, info->u.expect.error == RX_ERROR_DONE);
+        BUS_ASSERT(b, b->udata, info->u.expect.box == NULL);
         break;
     default:
     case RIS_INACTIVE:
-        assert(false);
+        BUS_ASSERT(b, b->udata, false);
     }
 
     /* Set to no longer active and push on the freelist. */
@@ -938,7 +991,7 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
         "releasing rx_info_t %d (%p), was %d",
         info->id, (void *)info, info->state);
 
-    assert(info->state != RIS_INACTIVE);
+    BUS_ASSERT(b, b->udata, info->state != RIS_INACTIVE);
     info->state = RIS_INACTIVE;
     memset(&info->u, 0, sizeof(info->u));
     info->next = l->rx_info_freelist;
@@ -952,7 +1005,7 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
             l->rx_info_max_used--;
             if (l->rx_info_max_used == 0) { break; }
         }
-        assert(l->rx_info_max_used < MAX_PENDING_MESSAGES); 
+        BUS_ASSERT(b, b->udata, l->rx_info_max_used < MAX_PENDING_MESSAGES); 
     }
 
     l->rx_info_in_use--;
@@ -986,7 +1039,7 @@ static listener_msg *get_free_msg(listener *l) {
                         };
                         nanosleep(&ts, NULL);
                     }
-                    assert(head->type == MSG_NONE);
+                    BUS_ASSERT(b, b->udata, head->type == MSG_NONE);
                     return head;
                 }
             }
@@ -996,7 +1049,7 @@ static listener_msg *get_free_msg(listener *l) {
 
 static void release_msg(struct listener *l, listener_msg *msg) {
     struct bus *b = l->bus;
-    assert(msg->id < MAX_QUEUE_MESSAGES);
+    BUS_ASSERT(b, b->udata, msg->id < MAX_QUEUE_MESSAGES);
     msg->type = MSG_NONE;
 
     for (;;) {
@@ -1006,7 +1059,7 @@ static void release_msg(struct listener *l, listener_msg *msg) {
             for (;;) {
                 int16_t miu = l->msgs_in_use;
                 if (ATOMIC_BOOL_COMPARE_AND_SWAP(&l->msgs_in_use, miu, miu - 1)) {
-                    assert(miu >= 0);
+                    BUS_ASSERT(b, b->udata, miu >= 0);
                     BUS_LOG(b, 3, LOG_LISTENER, "Releasing msg", b->udata);
                     return;
                 }
@@ -1016,18 +1069,32 @@ static void release_msg(struct listener *l, listener_msg *msg) {
 }
 
 static bool push_message(struct listener *l, listener_msg *msg) {
-    assert(msg);
     struct bus *b = l->bus;
+    BUS_ASSERT(b, b->udata, msg);
   
     if (casq_push(l->q, msg)) {
+retry:
         BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
             "Pushed message -- %p -- of type %d", (void*)msg, msg->type);
-        /* TODO: write a wake message to a pipe? */
-        return true;
+        ssize_t wr = write(l->commit_pipe, "!", 1);
+        if (wr == 1) {
+            return true;
+        } else {
+            BUS_ASSERT(b, b->udata, wr == -1);
+            if (errno == EINTR) {
+                errno = 0;
+                goto retry;
+            } else {
+                BUS_LOG_SNPRINTF(b, 10, LOG_LISTENER, b->udata, 64,
+                    "write_commit errno %d", errno);
+                errno = 0;
+                return false;
+            }
+        }
     } else {
         BUS_LOG_SNPRINTF(b, 3 - 3, LOG_LISTENER, b->udata, 128,
             "Failed to pushed message -- %p", (void*)msg);
-        assert(false);
+        BUS_ASSERT(b, b->udata, false);
         release_msg(l, msg);
         return false;
     }
@@ -1060,7 +1127,7 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
 
     case MSG_NONE:
     default:
-        assert(false);
+        BUS_ASSERT(b, b->udata, false);
         break;
     }
     release_msg(l, pmsg);
@@ -1110,7 +1177,7 @@ static void add_socket(listener *l, connection_info *ci, int notify_fd) {
         BUS_LOG(b, 3, LOG_LISTENER, "FULL", b->udata);
     }
     for (int i = 0; i < l->tracked_fds; i++) {
-        if (l->fds[i].fd == ci->fd) {
+        if (l->fds[i + INCOMING_MSG_PIPE].fd == ci->fd) {
             free(ci);
             notify_caller(notify_fd);
             return;             /* already present */
@@ -1119,13 +1186,13 @@ static void add_socket(listener *l, connection_info *ci, int notify_fd) {
 
     int id = l->tracked_fds;
     l->fd_info[id] = ci;
-    l->fds[id].fd = ci->fd;
-    l->fds[id].events = POLLIN;
+    l->fds[id + INCOMING_MSG_PIPE].fd = ci->fd;
+    l->fds[id + INCOMING_MSG_PIPE].events = POLLIN;
     l->tracked_fds++;
 
     /* Prime the pump by sinking 0 bytes and getting a size to expect. */
     bus_sink_cb_res_t sink_res = b->sink_cb(l->read_buf, 0, ci->udata);
-    assert(sink_res.full_msg_buffer == NULL);  // should have nothing to handle yet
+    BUS_ASSERT(b, b->udata, sink_res.full_msg_buffer == NULL);  // should have nothing to handle yet
     ci->to_read_size = sink_res.next_read;
 
     if (!grow_read_buf(l, ci->to_read_size)) {
@@ -1153,12 +1220,12 @@ static void remove_socket(listener *l, int fd) {
 
     /* don't really close it, just drop info about it in the listener */
     for (int i = 0; i < l->tracked_fds; i++) {
-        if (l->fds[i].fd == fd) {
+        if (l->fds[i + INCOMING_MSG_PIPE].fd == fd) {
             if (l->tracked_fds > 1) {
                 /* Swap pollfd CI and last ones. */
-                struct pollfd pfd = l->fds[i];
-                l->fds[i] = l->fds[l->tracked_fds - 1];
-                l->fds[l->tracked_fds - 1] = pfd;
+                struct pollfd pfd = l->fds[i + INCOMING_MSG_PIPE];
+                l->fds[i + INCOMING_MSG_PIPE] = l->fds[l->tracked_fds - 1 + INCOMING_MSG_PIPE];
+                l->fds[l->tracked_fds - 1 + INCOMING_MSG_PIPE] = pfd;
                 connection_info *ci = l->fd_info[i];
                 l->fd_info[i] = l->fd_info[l->tracked_fds - 1];
                 l->fd_info[l->tracked_fds - 1] = ci;
@@ -1175,8 +1242,8 @@ static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_s
     struct bus *b = l->bus;
     
     rx_info_t *info = get_free_rx_info(l);
-    assert(info);
-    assert(info->state == RIS_INACTIVE);
+    BUS_ASSERT(b, b->udata, info);
+    BUS_ASSERT(b, b->udata, info->state == RIS_INACTIVE);
     BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
         "setting info %p(+%d) to hold response <fd:%d, seq_id:%lld>",
         (void *)info, info->id, fd, (long long)seq_id);
@@ -1217,16 +1284,16 @@ static void attempt_delivery(listener *l, struct rx_info_t *info) {
     bus_unpack_cb_res_t unpacked_result;
     switch (info->state) {
     case RIS_EXPECT:
-        assert(info->u.expect.has_result);
+        BUS_ASSERT(b, b->udata, info->u.expect.has_result);
         unpacked_result = info->u.expect.result;
         break;
     default:
     case RIS_HOLD:
     case RIS_INACTIVE:
-        assert(false);
+        BUS_ASSERT(b, b->udata, false);
     }
 
-    assert(unpacked_result.ok);
+    BUS_ASSERT(b, b->udata, unpacked_result.ok);
     int64_t seq_id = unpacked_result.u.success.seq_id;
     void *opaque_msg = unpacked_result.u.success.msg;
     result->u.response.seq_id = seq_id;
@@ -1252,8 +1319,8 @@ static void attempt_delivery(listener *l, struct rx_info_t *info) {
 }
 
 static void expect_response(listener *l, struct boxed_msg *box) {
-    assert(box);
     struct bus *b = l->bus;
+    BUS_ASSERT(b, b->udata, box);
     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
         "notifying to expect response <box:%p, fd:%d, seq_id:%lld>",
         (void *)box, box->fd, (long long)box->out_seq_id);
@@ -1261,7 +1328,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
     /* If there's a pending HOLD message, convert it. */
     rx_info_t *info = get_hold_rx_info(l, box->fd, box->out_seq_id);
     if (info) {
-        assert(info->state == RIS_HOLD);
+        BUS_ASSERT(b, b->udata, info->state == RIS_HOLD);
         if (info->u.hold.has_result) {
             bus_unpack_cb_res_t result = info->u.hold.result;
 
@@ -1300,15 +1367,15 @@ static void expect_response(listener *l, struct boxed_msg *box) {
 
         /* This should be treated like a send timeout. */
         info = get_free_rx_info(l);
-        assert(info);
-        assert(info->state == RIS_INACTIVE);
+        BUS_ASSERT(b, b->udata, info);
+        BUS_ASSERT(b, b->udata, info->state == RIS_INACTIVE);
 
         BUS_LOG_SNPRINTF(b, 3-3, LOG_MEMORY, b->udata, 256,
             "Setting info %p (+%d)'s box to %p, which will be expired immediately (timeout %lld)",
             (void*)info, info->id, (void*)box, (long long)box->timeout_sec);
         
         info->state = RIS_EXPECT;
-        assert(info->u.expect.box == NULL);
+        BUS_ASSERT(b, b->udata, info->u.expect.box == NULL);
         info->u.expect.box = box;
         info->u.expect.error = RX_ERROR_NONE;
         info->u.expect.has_result = false;

@@ -27,6 +27,7 @@
 
 #define KINETIC_LOGGER_DISABLED false
 #define KINETIC_LOGGER_FLUSH_THREAD_ENABLED false
+#define KINETIC_LOGGER_LOG_SEQUENCE_ID true
 #define KINETIC_LOG_FILE "kinetic.log"
 
 void KineticLogger_Init(const char* logFile, int log_level);
@@ -58,6 +59,14 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf, const ByteArray bytes, co
 #define LOGF2(message, ...) KineticLogger_LogPrintf(2, message, __VA_ARGS__)
 #define LOGF3(message, ...) KineticLogger_LogPrintf(3, message, __VA_ARGS__)
 #define LOG_LOCATION  KineticLogger_LogLocation(__FILE__, __LINE__, __func__);
+#define KINETIC_ASSERT(cond) { \
+        if(!(cond)) \
+        { \
+            LOGF0("ASSERT FAILURE at %s:%d in %s: assert(" #cond ")", \
+            __FILE__, (int)__LINE__, __FUNCTION__); \
+            assert(cond); \
+        } \
+    }
 
 #else
 
@@ -70,6 +79,7 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf, const ByteArray bytes, co
 #define LOGF2(message, ...)
 #define LOGF3(message, ...)
 #define LOG_LOCATION
+#define KINETIC_ASSERT(cond)
 
 #endif
 

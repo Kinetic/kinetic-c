@@ -77,7 +77,7 @@ bool bus_ssl_disconnect(struct bus *b, SSL *ssl) {
     return true;
 }
 
-/* Free all internal data for using SSL. */
+/* Free all internal data for using SSL (the SSL_CTX). */
 void bus_ssl_ctx_free(struct bus *b) {
     if (b && b->ssl_ctx) {
         SSL_CTX_free(b->ssl_ctx);
