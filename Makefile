@@ -82,7 +82,6 @@ LIB_OBJS = \
 	$(OUT_DIR)/threadpool.o \
 	$(OUT_DIR)/bus.o \
 	$(OUT_DIR)/bus_ssl.o \
-	$(OUT_DIR)/casq.o \
 	$(OUT_DIR)/listener.o \
 	$(OUT_DIR)/sender.o \
 	$(OUT_DIR)/util.o \

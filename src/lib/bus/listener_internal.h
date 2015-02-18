@@ -105,7 +105,6 @@ typedef uint32_t msg_flag_t;
 /* Receiver of responses */
 typedef struct listener {
     struct bus *bus;
-    struct casq *q;
     bool shutdown;
 
     /* Pipes used to wake the sleeping listener on queue input. */

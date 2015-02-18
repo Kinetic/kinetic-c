@@ -53,15 +53,6 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
         return NULL;
     }
 
-    struct casq *q = casq_new();
-    if (q == NULL) {
-        free(l);
-        close(pipes[0]);
-        close(pipes[1]);
-        return NULL;
-    }
-    l->q = q;
-
     l->commit_pipe = pipes[1];
     l->incoming_msg_pipe = pipes[0];
     l->fds[INCOMING_MSG_PIPE_ID].fd = l->incoming_msg_pipe;
@@ -226,27 +217,10 @@ bool listener_shutdown(struct listener *l) {
     return push_message(l, msg);
 }
 
-static void free_queue_cb(void *data, void *udata) {
-    listener_msg *msg = (listener_msg *)data;
-    switch (msg->type) {
-    case MSG_ADD_SOCKET:
-        if (msg->u.add_socket.info) { free_ci(msg->u.add_socket.info); }
-        break;
-    case MSG_EXPECT_RESPONSE:
-        if (msg->u.expect.box) { free(msg->u.expect.box); }
-        break;
-    default:
-        break;
-    }
-    (void)udata;
-}
-
 void listener_free(struct listener *l) {
     struct bus *b = l->bus;
     /* assert: pthread must be join'd. */
     if (l) {
-        casq_free(l->q, free_queue_cb, l);
-
         for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
             rx_info_t *info = &l->rx_info[i];
 
@@ -265,6 +239,20 @@ void listener_free(struct listener *l) {
                 BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                     "match fail %d on line %d", info->state, __LINE__);
                 BUS_ASSERT(b, b->udata, false);
+            }
+        }
+
+        for (int i = 0; i < MAX_QUEUE_MESSAGES; i++) {
+            listener_msg *msg = &l->msgs[i];
+            switch (msg->type) {
+            case MSG_ADD_SOCKET:
+                if (msg->u.add_socket.info) { free_ci(msg->u.add_socket.info); }
+                break;
+            case MSG_EXPECT_RESPONSE:
+                if (msg->u.expect.box) { free(msg->u.expect.box); }
+                break;
+            default:
+                break;
             }
         }
 
@@ -297,9 +285,11 @@ void *listener_mainloop(void *arg) {
     time_t last_sec = tv.tv_sec;
 
     /* The listener thread has full control over its execution -- the
-     * only thing other threads can do is put messages into its
-     * thread-safe queue to be processed, so it doesn't need any
-     * internal locking. */
+     * only thing other threads can do is reserve messages from l->msgs,
+     * write commands into them, and then commit them by writing their
+     * msg->id into the incoming command ID pipe. All cross-thread
+     * communication is managed at the command interface, so it doesn't
+     * need any internal locking. */
 
     while (!self->shutdown) {
         gettimeofday(&tv, NULL);  // TODO: clock_gettime
@@ -312,14 +302,6 @@ void *listener_mainloop(void *arg) {
         int res = poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, -1);
         BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
             "poll res %d", res);
-
-        /* Pop queue for incoming events, if able to handle them. */
-        listener_msg *msg = casq_pop(self->q);
-        while (msg && self->rx_info_in_use < MAX_PENDING_MESSAGES) {
-            msg_handler(self, msg);
-            listener_msg *nmsg = casq_pop(self->q);
-            msg = nmsg;
-        }
 
         if (res < 0) {
             if (util_is_resumable_io_error(errno)) {
@@ -363,7 +345,11 @@ static void check_and_flush_incoming_msg_pipe(listener *l, int *res) {
                     break;
                 }
             } else {
-                /* no-op, msg is unused */
+                for (ssize_t i = 0; i < rd; i++) {
+                    uint8_t msg_id = buf[i];
+                    listener_msg *msg = &l->msgs[msg_id];
+                    msg_handler(l, msg);
+                }
                 (*res)--;
                 break;
             }
@@ -1072,31 +1058,24 @@ static bool push_message(struct listener *l, listener_msg *msg) {
     struct bus *b = l->bus;
     BUS_ASSERT(b, b->udata, msg);
   
-    if (casq_push(l->q, msg)) {
-retry:
-        BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
-            "Pushed message -- %p -- of type %d", (void*)msg, msg->type);
-        ssize_t wr = write(l->commit_pipe, "!", 1);
-        if (wr == 1) {
-            return true;
+    uint8_t msg_buf[sizeof(msg->id)];
+    msg_buf[0] = msg->id;
+
+    for (;;) {
+        ssize_t wr = write(l->commit_pipe, msg_buf, sizeof(msg_buf));
+        if (wr == sizeof(msg_buf)) {
+            return true;  // committed
         } else {
-            BUS_ASSERT(b, b->udata, wr == -1);
-            if (errno == EINTR) {
+            if (errno == EINTR) { /* signal interrupted; retry */
                 errno = 0;
-                goto retry;
             } else {
                 BUS_LOG_SNPRINTF(b, 10, LOG_LISTENER, b->udata, 64,
-                    "write_commit errno %d", errno);
+                    "write_commit error, errno %d", errno);
                 errno = 0;
+                release_msg(l, msg);
                 return false;
             }
         }
-    } else {
-        BUS_LOG_SNPRINTF(b, 3 - 3, LOG_LISTENER, b->udata, 128,
-            "Failed to pushed message -- %p", (void*)msg);
-        BUS_ASSERT(b, b->udata, false);
-        release_msg(l, msg);
-        return false;
     }
 }
 

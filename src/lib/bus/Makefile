@@ -10,7 +10,6 @@ LDFLAGS +=	-L. -L${LIB_PATH} -L${THREADPOOL_PATH} -L${OPENSSL_PATH}/lib -L${SOCK
 BUS_OBJS = \
 	bus.o \
 	bus_ssl.o \
-	casq.o \
 	listener.o \
 	sender.o \
 	util.o \
@@ -20,10 +19,9 @@ ECHOSRV_OBJS = \
 	echosrv.o \
 	util.o \
 
-all: bus.png test_casq test_yacht echosrv bus_example
+all: bus.png test_yacht echosrv bus_example
 
 test: test_casq test_yacht
-	./test_casq
 	./test_yacht
 
 %.png: %.dot
@@ -31,9 +29,6 @@ test: test_casq test_yacht
 
 libbus.a: ${BUS_OBJS}
 	ar -rcs $@ $^
-
-test_casq: test_casq.o casq.o
-	${CC} -o $@ $^ ${LDFLAGS}
 
 test_yacht: test_yacht.o yacht.o
 	${CC} -o $@ $^ ${LDFLAGS}
@@ -45,7 +40,7 @@ bus_example: bus_example.o libbus.a
 	${CC} -o $@ $^ ${LDFLAGS} -lbus -lthreadpool
 
 clean:
-	rm -f *.a *.o test_casq echosrv bus_example
+	rm -f *.a *.o echosrv bus_example
 
 tags: TAGS
 
