@@ -268,14 +268,14 @@ static tx_error_t commit_event_and_block(struct sender *s, tx_info_t *info) {
         BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
             "polling done_pipe: %d", res);
         if (res == 1) {
-            short ev = fds[0].revents;
+            short events = fds[0].revents;
             BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 64,
-                "poll: ev %d, errno %d", ev, errno);
-            if (ev & (POLLHUP | POLLERR | POLLNVAL)) {
+                "poll: events %d, errno %d", events, errno);
+            if (events & (POLLHUP | POLLERR | POLLNVAL)) {
                 /* We've been hung up on due to a shutdown event. */
                 close(info->done_pipe);
                 return TX_ERROR_CLOSED;
-            } else if (ev & POLLIN) {
+            } else if (events & POLLIN) {
                 uint16_t backpressure = 0;
                 uint8_t buf[sizeof(bool) + sizeof(backpressure)];
                 ssize_t rd = read(info->done_pipe, buf, sizeof(buf));
@@ -312,7 +312,7 @@ static tx_error_t commit_event_and_block(struct sender *s, tx_info_t *info) {
             } else {
                 /* Shouldn't happen -- blocking. */
                 BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                    "shouldn't happen: ev %d, errno %d", ev, errno);
+                    "shouldn't happen: events %d, errno %d", events, errno);
                 assert(false);
             }
         } else if (res == -1) {
@@ -327,6 +327,8 @@ static tx_error_t commit_event_and_block(struct sender *s, tx_info_t *info) {
     }
 }
 
+#define TIMEOUT_DELAY 100
+
 void *sender_mainloop(void *arg) {
     sender *self = (sender *)arg;
     assert(self);
@@ -338,7 +340,6 @@ void *sender_mainloop(void *arg) {
     
     BUS_LOG(b, 5, LOG_SENDER, "entering main loop", b->udata);
     while (!self->shutdown) {
-        
         gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
@@ -354,7 +355,8 @@ void *sender_mainloop(void *arg) {
          *     sense to use poll here -- self->active_fds will be small. */
         BUS_LOG(b, 7, LOG_SENDER, "polling", b->udata);
         
-        int res = poll(self->fds, self->active_fds + CMD_FD, -1);
+        int delay = self->is_idle ? -1 : TIMEOUT_DELAY;
+        int res = poll(self->fds, self->active_fds + CMD_FD, delay);
 
         BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_SENDER, b->udata, 64,
             "poll res %d, active fds %d", res, self->active_fds);
@@ -518,6 +520,8 @@ static bool release_socket_info(sender *s, int fd) {
 static void handle_command(sender *s, int id) {
     assert(id < MAX_CONCURRENT_SENDS);
     tx_info_t *info = &s->tx_info[id];
+
+    s->is_idle = false;
     
     switch (info->state) {
     case TIS_ADD_SOCKET:
@@ -981,6 +985,8 @@ static void notify_caller(sender *s, tx_info_t *info, bool success) {
 static void tick_handler(sender *s) {
     struct bus *b = s->bus;
     int tx_info_in_use = 0;
+    bool any_work = false;
+
     for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
         tx_flag_t bit = (1 << i);
         if (s->tx_flags & bit) {
@@ -999,6 +1005,7 @@ static void tick_handler(sender *s) {
     for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
         tx_flag_t bit = (1 << i);
         if (s->tx_flags & bit) {  /* if info is in use */
+            any_work = true;
             tx_info_t *info = &s->tx_info[i];
             switch (info->state) {
             case TIS_REQUEST_WRITE:
@@ -1018,6 +1025,7 @@ static void tick_handler(sender *s) {
             }
         }
     }
+    if (!any_work) { s->is_idle = true; }
 }
 
 static void tick_timeout(sender *s, tx_info_t *info) {
