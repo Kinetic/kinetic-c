@@ -67,9 +67,9 @@ static void log_request_seq_id(int fd, int64_t seq_id, KineticMessageType mt)
     #if KINETIC_LOGGER_LOG_SEQUENCE_ID
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    LOGF2("SEQ_ID request fd %d seq_id %lld %08lld.%08d cmd %02x",
+    LOGF2("SEQ_ID request fd %d seq_id %lld %08lld.%08lld cmd %02x",
         fd, (long long)seq_id,
-        (long)tv.tv_sec, (long)tv.tv_usec, (uint8_t)mt);
+        (long long)tv.tv_sec, (long long)tv.tv_usec, (uint8_t)mt);
     #else
     (void)seq_id;
     (void)mt;
@@ -187,7 +187,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, msgType: %02x",
         (void*)operation->request,
         (void*)operation->connection->pSession, (void*)operation->connection->messageBus,
-        operation->connection->socket, request->message.header.sequence,
+        operation->connection->socket, (long long)request->message.header.sequence,
         header.protobufLength, header.valueLength,
         (void*)operation, request->message.header.messageType);
     KineticLogger_LogHeader(3, &header);
