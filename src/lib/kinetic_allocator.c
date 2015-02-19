@@ -40,6 +40,8 @@ KineticSession* KineticAllocator_NewSession(struct bus * b, KineticSessionConfig
 
     // Copy the supplied config into the session config
     session->config = *config;
+    // Update pointer to copy of key data
+    session->config.hmacKey.data = session->config.keyData;
     strncpy(session->config.host, config->host, sizeof(session->config.host));
 
     return session;
