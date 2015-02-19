@@ -35,6 +35,9 @@ struct boxed_msg;
 /* Default number of seconds before a message response times out. */
 #define BUS_DEFAULT_TIMEOUT_SEC 10
 
+/* Special sequence ID value indicating none was available. */
+#define BUS_NO_SEQ_ID (-1)
+
 #define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA)                       \
     do {                                                               \
         struct bus *_b = (B);                                          \

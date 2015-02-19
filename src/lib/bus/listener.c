@@ -673,7 +673,7 @@ static void process_unpacked_message(listener *l,
             }
         } else {
             /* We received a response that we weren't expecting. */
-            if (seq_id != 0) {
+            if (seq_id != BUS_NO_SEQ_ID) {
                 BUS_LOG_SNPRINTF(b, 2 - 2, LOG_LISTENER, b->udata, 128,
                     "Couldn't find info for fd:%d, seq_id:%lld, msg %p",
                     ci->fd, (long long)seq_id, opaque_msg);

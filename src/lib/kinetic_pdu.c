@@ -220,7 +220,7 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
             memcpy(response->value, &si->buf[si->header.protobufLength], si->header.valueLength);
         }
 
-        int64_t seq_id = 0;
+        int64_t seq_id = BUS_NO_SEQ_ID;
         if (response->command != NULL &&
             response->command->header != NULL)
         {
