@@ -250,12 +250,17 @@ void KineticController_HandleUnexpectedResponse(void *msg,
 void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
 {
     KineticOperation* op = udata;
+    KINETIC_ASSERT(op);
+    KINETIC_ASSERT(op->connection);
 
     KineticStatus status = bus_to_kinetic_status(res->status);
 
     if (status == KINETIC_STATUS_SUCCESS) {
-
         KineticResponse * response = res->u.response.opaque_msg;
+        KINETIC_ASSERT(response);
+        KINETIC_ASSERT(response->command);
+        KINETIC_ASSERT(response->command->header);
+
         if (response->command != NULL &&
             response->command->status != NULL &&
             response->command->status->has_code)
