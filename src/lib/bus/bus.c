@@ -82,11 +82,11 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     res->status = BUS_INIT_ERROR_ALLOC_FAIL;
 
     bool log_lock_init = false;
-    struct sender **ss = NULL;
-    struct listener **ls = NULL;
+    struct sender **ss = NULL;       /* senders */
+    struct listener **ls = NULL;     /* listeners */
     struct threadpool *tp = NULL;
-    bool *j = NULL;
-    pthread_t *pts = NULL;
+    bool *joined = NULL;
+    pthread_t *threads = NULL;
     struct yacht *fd_set = NULL;
 
     bus *b = calloc(1, sizeof(*b));
@@ -156,9 +156,9 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     }
 
     int thread_count = config->sender_count + config->listener_count;
-    j = calloc(thread_count, sizeof(bool));
-    pts = calloc(thread_count, sizeof(pthread_t));
-    if (j == NULL || pts == NULL) {
+    joined = calloc(thread_count, sizeof(bool));
+    threads = calloc(thread_count, sizeof(pthread_t));
+    if (joined == NULL || threads == NULL) {
         goto cleanup;
     }
 
@@ -172,8 +172,8 @@ bool bus_init(bus_config *config, struct bus_result *res) {
     b->listener_count = config->listener_count;
     b->listeners = ls;
     b->threadpool = tp;
-    b->joined = j;
-    b->threads = pts;
+    b->joined = joined;
+    b->threads = threads;
 
     for (int i = 0; i < b->sender_count; i++) {
         int pcres = pthread_create(&b->threads[i], NULL,
@@ -212,7 +212,7 @@ cleanup:
         free(ls);
     }
     if (tp) { threadpool_free(tp); }
-    if (j) { free(j); }
+    if (joined) { free(joined); }
     if (b) {
         if (log_lock_init) {
             pthread_mutex_destroy(&b->fd_set_lock);
@@ -221,7 +221,7 @@ cleanup:
         free(b);
     }
 
-    if (pts) { free(pts); }
+    if (threads) { free(threads); }
     if (fd_set) { yacht_free(fd_set, NULL, NULL); }
 
     return false;
