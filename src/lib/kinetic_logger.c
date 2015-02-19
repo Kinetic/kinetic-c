@@ -28,41 +28,24 @@
 #include <pthread.h>
 #include <time.h>
 
-#define KINETIC_LOGGER_BUFFER_STR_MAX_LEN 512
-#define KINETIC_LOGGER_BUFFER_SIZE (0x1 << 12)
-#define KINETIC_LOGGER_FLUSH_INTERVAL_SEC 180
-#define KINETIC_LOGGER_SLEEP_TIME_SEC 10
-#define KINETIC_LOGGER_BUFFER_FLUSH_SIZE (0.8 * KINETIC_LOGGER_BUFFER_SIZE)
+#define BUFFER_SIZE 1024
+#define BUFFER_MAX_STRLEN (BUFFER_SIZE-2)
 
 STATIC int KineticLogLevel = -1;
 static FILE* KineticLoggerHandle = NULL;
-static pthread_mutex_t KineticLoggerBufferMutex = PTHREAD_MUTEX_INITIALIZER;
-static char KineticLoggerBuffer[KINETIC_LOGGER_BUFFER_SIZE][KINETIC_LOGGER_BUFFER_STR_MAX_LEN];
-static int KineticLoggerBufferSize = 0;
-
-#if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
-static pthread_t KineticLoggerFlushThread;
-static bool KineticLoggerForceFlush = false;
-static bool KineticLogggerAbortRequested = false;
-#else
-static bool KineticLoggerForceFlush = true;
-#endif
-
+static pthread_mutex_t BufferMutex = PTHREAD_MUTEX_INITIALIZER;
+static char Buffer[BUFFER_SIZE];
 
 //------------------------------------------------------------------------------
 // Private Method Declarations
 
-static inline bool KineticLogger_IsLevelEnabled(int log_level);
-static inline void KineticLogger_BufferLock(void);
-static inline void KineticLogger_BufferUnlock(void);
-static void KineticLogger_FlushBuffer(void);
-static inline char* KineticLogger_GetBuffer(void);
-static inline void KineticLogger_FinishBuffer(void);
-#if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
-static void* KineticLogger_FlushThread(void* arg);
-static void KineticLogger_InitFlushThread(void);
-#endif
-static void KineticLogger_LogProtobufMessage(int log_level, const ProtobufCMessage *msg, char* indent);
+static inline bool is_level_enabled(int log_level);
+static inline void lock_buffer(void);
+static inline void unlock_buffer(void);
+static void flush_buffer(void);
+static inline char* get_buffer(void);
+static inline void finish_buffer(void);
+static void log_protobuf_message(int log_level, const ProtobufCMessage *msg, char* indent);
 
 
 //------------------------------------------------------------------------------
@@ -71,6 +54,7 @@ static void KineticLogger_LogProtobufMessage(int log_level, const ProtobufCMessa
 void KineticLogger_Init(const char* log_file, int log_level)
 {
     KineticLogLevel = -1;
+    pthread_mutex_init(&BufferMutex, NULL);
 
     KineticLoggerHandle = NULL;
     if (log_file == NULL) {
@@ -89,28 +73,12 @@ void KineticLogger_Init(const char* log_file, int log_level)
             KineticLoggerHandle = fopen(log_file, "a+");
             KINETIC_ASSERT(KineticLoggerHandle != NULL);
         }
-
-        // Create thread to periodically flush the log
-        #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
-        KineticLoggerForceFlush = false;
-        KineticLogger_InitFlushThread();
-        #endif
     }
 }
 
 void KineticLogger_Close(void)
 {
     if (KineticLogLevel >= 0 && KineticLoggerHandle != NULL) {
-        #if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
-        KineticLogggerAbortRequested = true;
-        int pthreadStatus = pthread_join(KineticLoggerFlushThread, NULL);
-        if (pthreadStatus != 0) {
-            char errMsg[256];
-            Kinetic_GetErrnoDescription(pthreadStatus, errMsg, sizeof(errMsg));
-            LOGF0("Failed terminating logger flush thread w/error: %s", errMsg);
-        }
-        #endif
-        KineticLogger_FlushBuffer();
         if (KineticLoggerHandle != stdout) {
             fclose(KineticLoggerHandle);
         }
@@ -120,32 +88,29 @@ void KineticLogger_Close(void)
 
 void KineticLogger_Log(int log_level, const char* message)
 {
-    if (message == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
-        return;
-    }
-
-    char* buffer = NULL;
-    buffer = KineticLogger_GetBuffer();
-    snprintf(buffer, KINETIC_LOGGER_BUFFER_STR_MAX_LEN, "%s\n", message);
-    KineticLogger_FinishBuffer();
+    KineticLogger_LogPrintf(log_level, "%s", message);
 }
 
 void KineticLogger_LogPrintf(int log_level, const char* format, ...)
 {
-    if (format == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
+    if (format == NULL || !is_level_enabled(log_level)) {
         return;
     }
 
     char* buffer = NULL;
-    buffer = KineticLogger_GetBuffer();
+    buffer = get_buffer();
 
     va_list arg_ptr;
     va_start(arg_ptr, format);
-    vsnprintf(buffer, KINETIC_LOGGER_BUFFER_STR_MAX_LEN, format, arg_ptr);
+    int len = vsnprintf(buffer, BUFFER_MAX_STRLEN, format, arg_ptr);
     va_end(arg_ptr);
 
-    strcat(buffer, "\n");
-    KineticLogger_FinishBuffer();
+    if (len > BUFFER_MAX_STRLEN) {
+        Buffer[BUFFER_MAX_STRLEN] = '\0';
+    }
+    strcat(Buffer, "\n");
+    
+    finish_buffer();
 }
 
 void KineticLogger_LogLocation(const char* filename, int line, const char* message)
@@ -155,10 +120,9 @@ void KineticLogger_LogLocation(const char* filename, int line, const char* messa
     }
 
     if (KineticLogLevel >= 0) {
-        KineticLogger_LogPrintf(1, "\n[@%s:%d] %s", filename, line, message);
+        KineticLogger_LogPrintf(1, "[@%s:%d] %s", filename, line, message);
     }
-    else
-    {
+    else {
         printf("\n[@%s:%d] %s\n", filename, line, message);
         fflush(stdout);
     }
@@ -166,7 +130,7 @@ void KineticLogger_LogLocation(const char* filename, int line, const char* messa
 
 void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header)
 {
-    if (header == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
+    if (header == NULL || !is_level_enabled(log_level)) {
         return;
     }
 
@@ -181,32 +145,54 @@ void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header)
 static char indent[64] = LOG_INDENT;
 static const size_t max_indent = sizeof(indent)-3;
 static int indent_overflow = 0;
+    
 
-#define LOG_PROTO_INIT() \
-    indent_overflow = 0;
+static void log_proto_level_start(const char* name)
+{
+    KineticLogger_LogPrintf(0, "%s%s {", indent, name); \
+    if (strlen(indent) < max_indent) {
+        strcat(indent, LOG_INDENT);
+    }
+    else {
+        indent_overflow++;
+    }
+}
 
-#define LOG_PROTO_LEVEL_START(__name) \
-    KineticLogger_LogPrintf(0, "%s%s {", indent, __name); \
-    if (strlen(indent) < max_indent) { strcat(indent, LOG_INDENT); } \
-    else { indent_overflow++; }
-
-#define LOG_PROTO_LEVEL_END() \
-    if (indent_overflow == 0) { indent[strlen(indent) - 2] = '\0'; } \
-    else { indent_overflow--; } \
+static void log_proto_level_end(void)
+{
+    if (indent_overflow == 0) {
+        indent[strlen(indent) - 2] = '\0';
+    }
+    else {
+        indent_overflow--;
+    }
     KineticLogger_LogPrintf(0, "%s}", indent);
+}
 
-#define LOG_PROTO_LEVEL_START_ARRAY(__name, __quantity) \
-    KineticLogger_LogPrintf(0, "%s%s: (%u elements)", (indent), (__name), (__quantity)); \
-    KineticLogger_LogPrintf(0, "%s[", (indent)); \
-    if (strlen(indent) < max_indent) { strcat(indent, LOG_INDENT); } \
-    else { indent_overflow++; }
+static void log_proto_level_start_array(const char* name, unsigned quantity)
+{
+    KineticLogger_LogPrintf(0, "%s%s: (%u elements)", indent, name, quantity);
+    KineticLogger_LogPrintf(0, "%s[", (indent));
+    if (strlen(indent) < max_indent) {
+        strcat(indent, LOG_INDENT);
+    }
+    else {
+        indent_overflow++;
+    }
+}
 
-#define LOG_PROTO_LEVEL_END_ARRAY() \
-    if (indent_overflow == 0) { indent[strlen(indent) - 2] = '\0'; } \
-    else { indent_overflow--; } \
-    KineticLogger_LogPrintf(0, "%s]", (indent));
+static void log_proto_level_end_array(void)
+{
+    if (indent_overflow == 0) {
+        indent[strlen(indent) - 2] = '\0';
+    }
+    else {
+        indent_overflow--;
+    }
+    KineticLogger_LogPrintf(0, "%s]", indent);
+}
 
-static int KineticLogger_u8toa(char* p_buf, uint8_t val)
+static int bytetoa(char* p_buf, uint8_t val)
 {
     // KineticLogger_LogPrintf(log_level, "Converting byte=%02u", val);
     const uint8_t base = 16;
@@ -232,7 +218,7 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
     int len = 0;
     for (int i = 0; i < count; i++) {
         p_buf[len++] = '\\';
-        len += KineticLogger_u8toa(&p_buf[len], bytes.data[start + i]);
+        len += bytetoa(&p_buf[len], bytes.data[start + i]);
     }
     p_buf[len] = '\0';
     return len;
@@ -310,11 +296,11 @@ static void LogUnboxed(int log_level,
     case PROTOBUF_C_TYPE_BYTES:
         {
             ProtobufCBinaryData* value = (ProtobufCBinaryData*)fieldData;
-            LOG_PROTO_LEVEL_START(fieldDesc->name);
+            log_proto_level_start(fieldDesc->name);
             KineticLogger_LogByteArray(log_level, indent,
                                        (ByteArray){.data = value[i].data,
                                                    .len = value[i].len});
-            LOG_PROTO_LEVEL_END();
+            log_proto_level_end();
         }
         break;
 
@@ -332,9 +318,9 @@ static void LogUnboxed(int log_level,
             ProtobufCMessage** msg = (ProtobufCMessage**)fieldData;
             if (msg[i] != NULL)
             {
-                LOG_PROTO_LEVEL_START(fieldDesc->name);
-                KineticLogger_LogProtobufMessage(log_level, msg[i], indent);
-                LOG_PROTO_LEVEL_END();
+                log_proto_level_start(fieldDesc->name);
+                log_protobuf_message(log_level, msg[i], indent);
+                log_proto_level_end();
             }
         } break;
 
@@ -345,9 +331,9 @@ static void LogUnboxed(int log_level,
     };
 }
 
-static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage const * msg, char* indent)
+static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, char* indent)
 {
-    if (msg == NULL || msg->descriptor == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
+    if (msg == NULL || msg->descriptor == NULL || !is_level_enabled(log_level)) {
         return;
     }
 
@@ -380,10 +366,10 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
                     {
                         ProtobufCBinaryData* value = (ProtobufCBinaryData*)(void*)&pMsg[fieldDesc->offset];
                         if ((value->data != NULL) && (value->len > 0)) {
-                            LOG_PROTO_LEVEL_START(fieldDesc->name);
+                            log_proto_level_start(fieldDesc->name);
                             KineticProto_Command * cmd = KineticProto_command__unpack(NULL, value->len, value->data);
-                            KineticLogger_LogProtobufMessage(log_level, &cmd->base, indent);
-                            LOG_PROTO_LEVEL_END();
+                            log_protobuf_message(log_level, &cmd->base, indent);
+                            log_proto_level_end();
                             free(cmd);
                         }
                     }
@@ -396,12 +382,12 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
             {
                 unsigned const * quantifier = (unsigned const *)(void*)&pMsg[fieldDesc->quantifier_offset];
                 if (*quantifier > 0) {
-                    LOG_PROTO_LEVEL_START_ARRAY(fieldDesc->name, *quantifier);
+                    log_proto_level_start_array(fieldDesc->name, *quantifier);
                     for (uint32_t i = 0; i < *quantifier; i++) {
                         void const ** box = (void const **)(void*)&pMsg[fieldDesc->offset];
                         LogUnboxed(log_level, *box, fieldDesc, i, indent);
                     }
-                    LOG_PROTO_LEVEL_END_ARRAY();
+                    log_proto_level_end_array();
                 }
             } break;
         }
@@ -410,19 +396,19 @@ static void KineticLogger_LogProtobufMessage(int log_level, ProtobufCMessage con
 
 void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
 {
-    if (msg == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
+    if (msg == NULL || !is_level_enabled(log_level)) {
         return;
     }
-    LOG_PROTO_INIT();
+    indent_overflow = 0;
 
     KineticLogger_Log(log_level, "Kinetic Protobuf:");
 
-    KineticLogger_LogProtobufMessage(log_level, &msg->base, indent);
+    log_protobuf_message(log_level, &msg->base, indent);
 }
 
 void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
 {
-    if (status == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
+    if (status == NULL || !is_level_enabled(log_level)) {
         return;
     }
 
@@ -479,7 +465,7 @@ void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
 
 void KineticLogger_LogByteArray(int log_level, const char* title, ByteArray bytes)
 {
-    if (title == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
+    if (title == NULL || !is_level_enabled(log_level)) {
         return;
     }
 
@@ -523,7 +509,7 @@ void KineticLogger_LogByteArray(int log_level, const char* title, ByteArray byte
 
 void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer buffer)
 {
-    if (title == NULL || !KineticLogger_IsLevelEnabled(log_level)) {
+    if (title == NULL || !is_level_enabled(log_level)) {
         return;
     }
     ByteArray array = {.data = buffer.array.data, .len = buffer.bytesUsed};
@@ -534,94 +520,38 @@ void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer bu
 //------------------------------------------------------------------------------
 // Private Method Definitions
 
-static inline bool KineticLogger_IsLevelEnabled(int log_level)
+static inline bool is_level_enabled(int log_level)
 {
     return (log_level <= KineticLogLevel && KineticLogLevel >= 0);
 }
 
-static inline void KineticLogger_BufferLock(void)
+static inline void lock_buffer(void)
 {
-    pthread_mutex_lock(&KineticLoggerBufferMutex);
+    pthread_mutex_lock(&BufferMutex);
 }
 
-static inline void KineticLogger_BufferUnlock()
+static inline void unlock_buffer()
 {
-    pthread_mutex_unlock(&KineticLoggerBufferMutex);
+    pthread_mutex_unlock(&BufferMutex);
 }
 
-static void KineticLogger_FlushBuffer(void)
+static void flush_buffer(void)
 {
     if (KineticLoggerHandle == NULL) {
         return;
     }
-    for (int i = 0; i < KineticLoggerBufferSize; i++) {
-        fprintf(KineticLoggerHandle, "%s", KineticLoggerBuffer[i]);
-    }
+    fprintf(KineticLoggerHandle, "%s", Buffer);
     fflush(KineticLoggerHandle);
-    KineticLoggerBufferSize = 0;
 }
 
-static inline char* KineticLogger_GetBuffer()
+static inline char* get_buffer()
 {
-    KineticLogger_BufferLock();
-    if (KineticLoggerBufferSize >= KINETIC_LOGGER_BUFFER_SIZE) {
-        KineticLogger_FlushBuffer();
-    }
-
-    // allocate buffer
-    KineticLoggerBufferSize++;
-    return KineticLoggerBuffer[KineticLoggerBufferSize-1];
+    lock_buffer();
+    return Buffer;
 }
 
-static inline void KineticLogger_FinishBuffer(void)
+static inline void finish_buffer(void)
 {
-    if (KineticLoggerForceFlush) {
-        KineticLogger_FlushBuffer();
-    }
-    KineticLogger_BufferUnlock();
+    flush_buffer();
+    unlock_buffer();
 }
-
-#if KINETIC_LOGGER_FLUSH_THREAD_ENABLED
-
-static bool LoggerFlushThreadStarted;
-
-static void* KineticLogger_FlushThread(void* arg)
-{
-    (void)arg;
-    struct timeval tv;
-    time_t lasttime, curtime;
-
-    gettimeofday(&tv, NULL);
-
-    lasttime = tv.tv_sec;
-    LoggerFlushThreadStarted = true;
-
-    while(!KineticLogggerAbortRequested) {
-        sleep(KINETIC_LOGGER_SLEEP_TIME_SEC);
-        gettimeofday(&tv, NULL);  // TODO: clock_gettime
-        curtime = tv.tv_sec;
-        if ((curtime - lasttime) >= KINETIC_LOGGER_FLUSH_INTERVAL_SEC) {
-            KineticLogger_FlushBuffer();
-            lasttime = curtime;
-        }
-        else {
-            KineticLogger_BufferLock();
-            if (KineticLoggerBufferSize >= KINETIC_LOGGER_BUFFER_FLUSH_SIZE) {
-                KineticLogger_FlushBuffer();
-            }
-            KineticLogger_BufferUnlock();
-        }
-    }
-
-    return NULL;
-}
-
-static void KineticLogger_InitFlushThread(void)
-{
-    LoggerFlushThreadStarted = false;
-    pthread_create(&KineticLoggerFlushThread, NULL, KineticLogger_FlushThread, NULL);
-    KineticLogger_Log(3, "Logger flush thread started!");
-    KineticLogger_FlushBuffer();
-}
-
-#endif
