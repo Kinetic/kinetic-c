@@ -154,6 +154,7 @@ typedef struct sender {
      * for write. */
     uint8_t active_fds;
     struct pollfd fds[MAX_CONCURRENT_SENDS + 1];
+    bool is_idle;
 
     /* Hash table for file descriptors in use -> fd_info.
      * This tracks which file descriptors are registered

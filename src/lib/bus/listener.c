@@ -287,6 +287,8 @@ void listener_free(struct listener *l) {
 
 // ==================================================
 
+#define TIMEOUT_DELAY 100
+
 void *listener_mainloop(void *arg) {
     listener *self = (listener *)arg;
     assert(self);
@@ -309,7 +311,8 @@ void *listener_mainloop(void *arg) {
             last_sec = cur_sec;
         }
 
-        int res = poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, -1);
+        int delay = (self->is_idle ? -1 : TIMEOUT_DELAY);
+        int res = poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, delay);
         BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
             "poll res %d", res);
 
@@ -343,12 +346,12 @@ void *listener_mainloop(void *arg) {
 
 static void check_and_flush_incoming_msg_pipe(listener *l, int *res) {
     struct bus *b = l->bus;
-    short ev = l->fds[INCOMING_MSG_PIPE_ID].revents;
-    if (ev & (POLLERR | POLLHUP | POLLNVAL)) {  /* hangup/error */
+    short events = l->fds[INCOMING_MSG_PIPE_ID].revents;
+    if (events & (POLLERR | POLLHUP | POLLNVAL)) {  /* hangup/error */
         return;
     }
 
-    if (ev & POLLIN) {
+    if (events & POLLIN) {
         char buf[64];
         for (;;) {
             ssize_t rd = read(l->fds[INCOMING_MSG_PIPE_ID].fd, buf, sizeof(buf));
@@ -697,6 +700,7 @@ static void process_unpacked_message(listener *l,
 
 static void tick_handler(listener *l) {
     struct bus *b = l->bus;
+    bool any_work = false;
 
     BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
         "tick... %p: %d of %d msgs in use, %d of %d rx_info in use, %d tracked_fds",
@@ -718,6 +722,7 @@ static void tick_handler(listener *l) {
         case RIS_INACTIVE:
             break;
         case RIS_HOLD:
+            any_work = true;
             /* Check timeout */
             if (info->timeout_sec == 1) {
                 struct timeval tv;
@@ -743,6 +748,7 @@ static void tick_handler(listener *l) {
             }
             break;
         case RIS_EXPECT:
+            any_work = true;
             if (info->u.expect.error == RX_ERROR_READY_FOR_DELIVERY) {
                 BUS_LOG(b, 4, LOG_LISTENER,
                     "retrying RX event delivery", b->udata);
@@ -786,6 +792,7 @@ static void tick_handler(listener *l) {
             BUS_ASSERT(b, b->udata, false);
         }
     }
+    if (!any_work) { l->is_idle = true; }
 }
 
 static void dump_rx_info_table(listener *l) {
@@ -1105,6 +1112,8 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
     struct bus *b = l->bus;
     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
         "Handling message -- %p", (void*)pmsg);
+
+    l->is_idle = false;
 
     listener_msg msg = *pmsg;
     switch (msg.type) {
