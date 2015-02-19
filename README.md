@@ -63,6 +63,7 @@ Getting Started
 
 **Build example utility and run tests against Kinetic Device simulator**
 
+    > make start_sims # starts bundled kinetic-java simulators for testing
     > make all # this is what Travis-CI build does does for regression testing
 
 API Documentation

@@ -1,6 +1,11 @@
 v0.11.2 (kinetic-protocol 3.0.5)
 --------------------------------
-* Changed all threads to be block indefinitely and be fully event-driven.
+* Changed all threads to block indefinitely and be fully event-driven.
+* Added logging of all assertions to provide debugging info in the absence of debug symbols.
+* Fixed race condition in message bus listener which could lead to data corruption.
+* Fixed race condition that could cause more than the max number of thread pool threads to be created.
+* Fixed potential buffer overrun in logger.
+* Fixed bug with mishandling of unsolicited status responses from the drive prior to drive terminating connection.
 
 v0.11.1 (kinetic-protocol 3.0.5)
 --------------------------------
