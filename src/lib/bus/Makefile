@@ -21,7 +21,7 @@ ECHOSRV_OBJS = \
 
 all: bus.png test_yacht echosrv bus_example
 
-test: test_casq test_yacht
+test: test_yacht
 	./test_yacht
 
 %.png: %.dot
