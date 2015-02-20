@@ -32,6 +32,7 @@
     - include/**
     - vendor/socket99/**
     - vendor/protobuf-c/**
+    - vendor/json-c/**
 
 :defines:
   :commmon: &common_defines
@@ -133,6 +134,8 @@
       - -l crypto
       - "-o \"${2}\""
       - -l pthread
+      - -L obj/
+      - -l json-c
 
 :plugins:
   :load_paths:

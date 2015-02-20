@@ -1,0 +1,31 @@
+{
+    "identity": 3,
+    "key": "a3b38c37298f7f01a377518dae81dd99655b2be8129c3b2c6357b7e779064159",
+    "HMACAlgorithm": "HmacSHA1",
+    "scope": [
+        {
+            "permission": "READ"
+        },
+        {
+            "permission": "WRITE"
+        },
+        {
+            "permission": "DELETE"
+        },
+        {
+            "permission": "RANGE"
+        },
+        {
+            "permission": "SETUP"
+        },
+        {
+            "permission": "P2POP"
+        },
+        {
+            "permission": "GETLOG"
+        },
+        {
+            "permission": "SECURITY"
+        },
+    ]
+}
