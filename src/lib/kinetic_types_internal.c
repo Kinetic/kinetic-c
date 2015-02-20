@@ -449,6 +449,7 @@ void KineticOperation_Init(KineticOperation* op, KineticConnection* con)
     KINETIC_ASSERT(con != NULL);
     *op = (KineticOperation) {
         .connection = con,
+        .timeoutSeconds = con->pSession->config.timeoutSeconds,
     };
 }
 
