@@ -71,6 +71,9 @@ struct _KineticSession {
     // Client must call KineticAdminClient_DestroySession when finished with a session to shutdown
     // a session cleanly and free the `connection`.
     struct _KineticConnection* connection;
+
+    // Default timeout.
+    uint16_t timeoutSeconds;
 };
 
 

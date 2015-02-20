@@ -460,6 +460,7 @@ void KineticOperation_Init(KineticOperation* op, KineticSession const * const se
     KINETIC_ASSERT(session->connection != NULL);
     *op = (KineticOperation) {
         .connection = session->connection,
+        .timeoutSeconds = session->timeoutSeconds,
     };
 }
 
