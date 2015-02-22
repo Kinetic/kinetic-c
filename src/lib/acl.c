@@ -19,7 +19,10 @@
 */
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <errno.h>
 
+#include "kinetic_logger.h"
 #include "acl.h"
 #include "json.h"
 
@@ -42,6 +45,10 @@ static permission_pair permission_table[] = {
 
 #define PERM_TABLE_ROWS sizeof(permission_table)/sizeof(permission_table)[0]
 
+static acl_of_file_res read_ACLs(const char *buf, size_t buf_size, struct ACL **instance);
+static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
+    size_t offset, size_t *new_offset, struct json_tokener *tokener,
+    struct ACL **instance);
 static acl_of_file_res unpack_scopes(struct ACL *acl,
     int scope_count, json_object *scopes);
 
@@ -67,8 +74,124 @@ acl_of_file(const char *path, struct ACL **instance) {
         return ACL_ERROR_NULL;
     }
     
-    struct json_object *obj = json_object_from_file(path);
-    if (obj == NULL) { return ACL_ERROR_BAD_JSON; }
+    int fd = open(path, O_RDONLY);
+    if (fd == -1) {
+#ifndef TEST
+        LOGF0("Failed ot open file '%s': %s", path, strerror(errno));
+#endif
+        errno = 0;
+        return ACL_ERROR_BAD_JSON;
+    }
+    acl_of_file_res res = ACL_ERROR_NULL;
+
+    const int BUF_START_SIZE = 256;
+    char *buf = malloc(BUF_START_SIZE);
+    if (buf == NULL) {
+        res = ACL_ERROR_MEMORY;
+        goto cleanup;
+    }
+    size_t buf_sz = BUF_START_SIZE;
+    size_t buf_used = 0;
+
+    ssize_t read_sz = 0;
+    for (;;) {
+        read_sz = read(fd, &buf[buf_used], buf_sz - buf_used);
+        if (read_sz == -1) {
+            res = ACL_ERROR_JSON_FILE;
+            goto cleanup;
+        } else if (read_sz == 0) {
+            break;
+        } else {
+            buf_used += read_sz;
+            if (buf_sz == buf_used) {
+                size_t nsz = 2 * buf_sz;
+                char *nbuf = realloc(buf, nsz);
+                if (nbuf) {
+                    buf_sz = nsz;
+                    buf = nbuf;
+                }
+            }
+        }
+    }
+
+#ifndef TEST
+    LOGF2(" -- read %zd bytes, parsing...\n", buf_used);
+#endif
+    res = read_ACLs(buf, buf_used, instance);
+cleanup:
+    if (buf) { free(buf); }
+    close(fd);
+    return res;
+}
+
+static acl_of_file_res read_ACLs(const char *buf, size_t buf_size, struct ACL **instance) {
+    struct ACL *cur = NULL;
+    struct ACL *first = NULL;
+
+    struct json_tokener* tokener = json_tokener_new();
+    if (tokener == NULL) { return ACL_ERROR_MEMORY; }
+
+    size_t offset = 0;
+
+    acl_of_file_res res = ACL_ERROR_NULL;
+    while (buf_size - offset > 0) {
+        size_t offset_out = 0;
+        struct ACL *new_acl = NULL;
+#ifndef TEST
+        LOGF2(" -- reading next ACL at offset %zd, rem %zd\n", offset, buf_size - offset);
+#endif
+        res = read_next_ACL(buf, buf_size, offset,
+            &offset_out, tokener, &new_acl);
+        offset += offset_out;
+#ifndef TEST
+        LOGF2(" -- result %d, offset_out %zd\n", res, offset);
+#endif
+        if (res == ACL_OK) {
+            if (first == NULL) {
+                first = new_acl;
+                *instance = first;
+                cur = first;
+            } else {
+                assert(cur);
+                cur->next = new_acl;
+                cur = new_acl;
+            }
+        } else {
+            break;
+        }
+    }
+
+    /* cleanup */
+    json_tokener_free(tokener);
+    
+    if (res == ACL_END_OF_STREAM || res == ACL_OK) {
+        if (first == NULL) {
+            LOG2("Failed to read any JSON objects\n");
+            return ACL_ERROR_BAD_JSON;
+        } else {            /* read at least one ACL */
+            return ACL_OK;
+        }
+    } else {
+        acl_free(first);
+        return res;
+    }
+}
+
+static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
+        size_t offset, size_t *new_offset,
+        struct json_tokener *tokener, struct ACL **instance) {
+    struct json_object *obj = json_tokener_parse_ex(tokener,
+        &buf[offset], buf_size - offset);
+    if (obj == NULL) {
+        if (json_tokener_get_error(tokener) == json_tokener_error_parse_eof) {
+            return ACL_END_OF_STREAM;
+        } else {
+            LOGF2("JSON error %d\n", json_tokener_get_error(tokener));
+            return ACL_ERROR_BAD_JSON;
+        }
+    }
+    
+    *new_offset = tokener->char_offset;
     
     acl_of_file_res res = ACL_ERROR_NULL;
     
@@ -88,7 +211,7 @@ acl_of_file(const char *path, struct ACL **instance) {
         res = ACL_ERROR_MEMORY;
         goto cleanup;
     }
-
+    
     memset(acl, 0, alloc_sz);
     
     /* Copy fields */
@@ -134,7 +257,6 @@ acl_of_file(const char *path, struct ACL **instance) {
     json_object_put(obj);
     *instance = acl;
     return ACL_OK;
-    
 cleanup:
     if (obj) { json_object_put(obj); }
     return res;
@@ -239,11 +361,13 @@ void acl_fprintf(FILE *f, struct ACL *acl) {
 }
 
 void acl_free(struct ACL *acl) {
-    if (acl) {
+    while (acl) {
         if (acl->hmacKey) { free(acl->hmacKey); }
         for (size_t i = 0; i < acl->scopeCount; i++) {
             if (acl->scopes[i].value) { free(acl->scopes[i].value); }
         }
+        struct ACL *next = acl->next;
         free(acl);
+        acl = next;
     }
 }

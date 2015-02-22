@@ -48,16 +48,19 @@ struct ACL {
     int64_t identity;
     struct hmac_key *hmacKey;
     size_t scopeCount;
+    struct ACL *next;
     struct acl_scope scopes[];
 };
 
 typedef enum {
     ACL_OK = 0,
+    ACL_END_OF_STREAM = 1,
     ACL_ERROR_NULL = -1,
     ACL_ERROR_MEMORY = -2,
-    ACL_ERROR_BAD_JSON = -3,
-    ACL_ERROR_MISSING_FIELD = -4,
-    ACL_ERROR_INVALID_FIELD = -5,
+    ACL_ERROR_JSON_FILE = -3,
+    ACL_ERROR_BAD_JSON = -4,
+    ACL_ERROR_MISSING_FIELD = -5,
+    ACL_ERROR_INVALID_FIELD = -6,
 } acl_of_file_res;
 
 #endif

@@ -22,6 +22,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "mock_kinetic_logger.h"
+
 #define TEST_DIR(F) ("test/unit/acl/" F)
 
 void test_acl_of_empty_JSON_object_should_fail(void)
@@ -34,7 +36,8 @@ void test_acl_of_empty_JSON_object_should_fail(void)
 void test_acl_of_nonexistent_file_should_fail(void)
 {
     struct ACL *acl = NULL;
-    acl_of_file_res res = acl_of_file(TEST_DIR("nonexistent.json"), &acl);
+    const char *path = TEST_DIR("nonexistent.json");
+    acl_of_file_res res = acl_of_file(path, &acl);
     TEST_ASSERT_EQUAL(ACL_ERROR_BAD_JSON, res);
 }
 
@@ -133,6 +136,48 @@ void test_acl_of_file_should_handle_multiple_permissions(void)
     TEST_ASSERT_EQUAL(PERM_READ, acl->scopes[0].permissions[0]);
     TEST_ASSERT_EQUAL(PERM_WRITE, acl->scopes[0].permissions[1]);
     TEST_ASSERT_EQUAL(PERM_SETUP, acl->scopes[0].permissions[2]);
+
+    acl_free(acl);
+}
+
+void test_acl_should_handle_multiple_JSON_objects(void)
+{
+    struct ACL *acl = NULL;
+    acl_of_file_res res = acl_of_file(TEST_DIR("ex_multi.json"), &acl);
+    TEST_ASSERT_EQUAL(ACL_OK, res);
+
+    TEST_ASSERT_EQUAL(1, acl->identity);
+
+    TEST_ASSERT_EQUAL(HMAC_SHA1, acl->hmacKey->type);
+    TEST_ASSERT_EQUAL(64, acl->hmacKey->length);
+    TEST_ASSERT_EQUAL(0, strcmp((const char *)acl->hmacKey->key,
+            "a3b38c37298f7f01a377518dae81dd99655b2be8129c3b2c6357b7e779064159"));
+
+    TEST_ASSERT_EQUAL(2, acl->scopeCount);
+
+    TEST_ASSERT_EQUAL(1, acl->scopes[0].permission_count);
+    TEST_ASSERT_EQUAL(PERM_READ, acl->scopes[0].permissions[0]);
+
+    TEST_ASSERT_EQUAL(0, acl->scopes[1].offset);
+    TEST_ASSERT_EQUAL(1, acl->scopes[1].permission_count);
+    TEST_ASSERT_EQUAL(PERM_WRITE, acl->scopes[1].permissions[0]);
+    TEST_ASSERT_EQUAL(3, acl->scopes[1].valueSize);
+    TEST_ASSERT_EQUAL(0, strcmp((char *)acl->scopes[1].value, "foo"));
+
+    struct ACL *acl2 = acl->next;
+    TEST_ASSERT_NOT_NULL(acl2);
+
+    TEST_ASSERT_EQUAL(2, acl2->identity);
+
+    TEST_ASSERT_EQUAL(HMAC_SHA1, acl2->hmacKey->type);
+    TEST_ASSERT_EQUAL(64, acl2->hmacKey->length);
+    TEST_ASSERT_EQUAL(0, strcmp((const char *)acl2->hmacKey->key,
+            "13010b8d8acdbe6abc005840aad1dc5dedb4345e681ed4e3c4645d891241d6b2"));
+
+    TEST_ASSERT_EQUAL(1, acl2->scopeCount);
+    TEST_ASSERT_EQUAL(1, acl2->scopes[0].permission_count);
+    TEST_ASSERT_EQUAL(PERM_SECURITY, acl2->scopes[0].permissions[0]);
+    TEST_ASSERT_EQUAL(true, acl2->scopes[0].tlsRequired);
 
     acl_free(acl);
 }
