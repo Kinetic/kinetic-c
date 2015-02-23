@@ -107,15 +107,7 @@ KineticStatus ExecuteOperation(
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
 
-    if (strcmp("instanterase", operation) == 0) {
-        status = KineticClient_InstantSecureErase(session);
-        if (status == 0) {
-            printf("\nInstantSecureErase executed successfully."
-                   " The device has been erased!\n\n");
-        }
-    }
-
-    else if (strcmp("noop", operation) == 0) {
+    if (strcmp("noop", operation) == 0) {
         status = KineticClient_NoOp(session);
         if (status == KINETIC_STATUS_SUCCESS) {
             printf("\nNoOp operation completed successfully."
@@ -139,14 +131,6 @@ KineticStatus ExecuteOperation(
         }
     }
 
-    else if (strcmp("delete", operation) == 0) {
-        status = KineticClient_Delete(session, entry, NULL);
-        if (status == 0) {
-            printf("\nDelete executed successfully."
-                   " The entry has been destroyed!\n\n");
-        }
-    }
-
     else if (strcmp("getnext", operation) == 0) {
         status = KineticClient_GetNext(session, entry, NULL);
         if (status == 0) {
@@ -160,6 +144,14 @@ KineticStatus ExecuteOperation(
         if (status == 0) {
             printf("\nGetPrevious executed successfully."
                    "The entry has been retrieved!\n\n");
+        }
+    }
+
+    else if (strcmp("delete", operation) == 0) {
+        status = KineticClient_Delete(session, entry, NULL);
+        if (status == 0) {
+            printf("\nDelete executed successfully."
+                   " The entry has been destroyed!\n\n");
         }
     }
 
@@ -239,7 +231,6 @@ int ParseOptions(
     struct {
         char host[HOST_NAME_MAX];
         int port;
-        int nonBlocking;
         int useTls;
         int64_t clusterVersion;
         int64_t identity;
@@ -263,8 +254,6 @@ int ParseOptions(
 
     // Create configuration for long format options
     struct option long_options[] = {
-        {"non-blocking", no_argument,       &cfg.nonBlocking, true},
-        {"blocking",     no_argument,       &cfg.nonBlocking, false},
         {"tls",          no_argument,       &cfg.port,        KINETIC_TLS_PORT},
         {"host",         required_argument, 0,                'h'},
         {0,              0,                 0,                0},

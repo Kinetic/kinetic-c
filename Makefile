@@ -98,15 +98,17 @@ makedirs:
 
 all: default test system_tests test_internals run examples
 
-clean: makedirs update_git_submodules
+clean: makedirs
 	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util $(DISCOVERY_UTIL_EXEC)
 	rm -rf ./bin/**/*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
-	bundle exec rake clobber
+	if rake --version > /dev/null 2>&1; then if bundle --version > /dev/null 2>&1; then bundle exec rake clobber; fi; fi
 	cd ${SOCKET99} && make clean
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
 	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make clean; fi;
+
+config: makedirs update_git_submodules
 
 update_git_submodules:
 	git submodule update --init
@@ -415,7 +417,6 @@ run: $(UTIL_EXEC)
 	@echo Running test utility: $(UTIL_EXEC)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	$(UTIL_EXEC) instanterase
 	$(UTIL_EXEC) noop
 	exec $(UTIL_EXEC) put get delete
 	@echo
