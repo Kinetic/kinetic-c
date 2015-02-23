@@ -6,6 +6,8 @@ v0.11.2 (kinetic-protocol 3.0.5)
 * Fixed race condition that could cause more than the max number of thread pool threads to be created.
 * Fixed potential buffer overrun in logger.
 * Fixed bug with mishandling of unsolicited status responses from the drive prior to drive terminating connection.
+* Removed ruby/rake as non-development build prerequisites.
+* Added make json, json_install and json_uninstall tasks for json-c.
 
 v0.11.1 (kinetic-protocol 3.0.5)
 --------------------------------
