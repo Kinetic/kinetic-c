@@ -60,7 +60,6 @@ struct _KineticClient {
     struct bus *bus;
 };
 
-
 // #TODO remove packed attribute and replace uses of sizeof(KineticPDUHeader)
 //  with a constant
 typedef struct __attribute__((__packed__)) _KineticPDUHeader {
@@ -179,6 +178,7 @@ struct _KineticOperation {
     KineticP2P_Operation* p2pOp;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
+    uint16_t timeoutSeconds;
 };
 
 

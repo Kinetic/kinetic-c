@@ -135,6 +135,12 @@ typedef struct _KineticSessionConfig {
     // client and the device, used to sign requests.
     uint8_t keyData[KINETIC_MAX_KEY_LEN];
     ByteArray hmacKey;
+
+    /// Set to `true' to enable SSL for for this session
+    bool useSsl;
+
+    /// Operation timeout. If 0, use the default (10 seconds).
+    uint16_t timeoutSeconds;
 } KineticSessionConfig;
 
 /**
