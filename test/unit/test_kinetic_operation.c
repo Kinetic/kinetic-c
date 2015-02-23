@@ -29,7 +29,6 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_device_info.h"
 #include "mock_kinetic_allocator.h"
-#include "mock_kinetic_serial_allocator.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"

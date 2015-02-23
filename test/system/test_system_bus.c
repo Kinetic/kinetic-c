@@ -31,7 +31,6 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_device_info.h"
-#include "kinetic_serial_allocator.h"
 #include "kinetic_proto.h"
 #include "kinetic_allocator.h"
 #include "kinetic_message.h"

@@ -69,7 +69,6 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_hmac.o \
 	$(OUT_DIR)/kinetic_controller.o \
 	$(OUT_DIR)/kinetic_device_info.o \
-	$(OUT_DIR)/kinetic_serial_allocator.o \
 	$(OUT_DIR)/kinetic_session.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \

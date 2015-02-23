@@ -181,14 +181,6 @@ struct _KineticOperation {
     KineticCompletionClosure closure;
 };
 
-// Kintic Serial Allocator
-// Used for allocating a contiguous hunk of memory to hold arbitrary variable-length response data
-typedef struct _KineticSerialAllocator {
-    uint8_t* buffer;
-    size_t used;
-    size_t total;
-} KineticSerialAllocator;
-
 
 KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
     KineticAlgorithm kinteicAlgorithm);
