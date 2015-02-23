@@ -24,12 +24,16 @@ Prerequisites
             * `> brew install openssl`
 * [json-c](https://github.com/json-c/json-c) for JSON-formatted ACL definition files
     * Installation
-        * Linux (using apt-get)
-            * `> sudo apt-get install json-c`
-        * Linux (using yum)
-            * `> sudo yum install json-c`
-        * OSX (using [Homebrew](http://brew.sh/))
-            * `> brew install openssl`
+        * via package manager
+            * Linux (using apt-get)
+                * `> sudo apt-get install json-c`
+            * Linux (using yum)
+                * `> sudo yum install json-c`
+            * OSX (using [Homebrew](http://brew.sh/))
+                * `> brew install openssl`
+        * via Git submodule (from bundled source)
+            * `> make json`
+            * `> sudo make install_json`
             
 A release of OpenSSL that provides TLS 1.1 or newer is required.
 
