@@ -143,7 +143,11 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(session->connection != NULL);
     KINETIC_ASSERT(entry != NULL);
-    KINETIC_ASSERT(entry->value.array.data != NULL);
+
+    // Assert non-NULL value upon non-zero length
+    if (entry->value.array.len > 0) {
+        KINETIC_ASSERT(entry->value.array.data != NULL);
+    }
     
     KINETIC_ASSERT(session->connection->pSession == session);
     KINETIC_ASSERT(session->connection == session->connection->pSession->connection);

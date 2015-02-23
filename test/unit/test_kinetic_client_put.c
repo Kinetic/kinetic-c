@@ -65,3 +65,24 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
 }
+
+void test_KineticClient_Put_should_allow_NULL_pointer_to_value_data_if_length_is_zero(void)
+{
+    Session.connection = &Connection;
+    Connection.pSession = &Session;
+    ByteArray value = {
+        .data = NULL,
+        .len = 0,
+    };
+    KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
+    KineticOperation operation;
+    operation.connection = &Connection;
+    
+    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
+    KineticOperation_BuildPut_Expect(&operation, &entry);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
+
+    KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
+}
