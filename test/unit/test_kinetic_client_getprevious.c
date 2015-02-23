@@ -27,6 +27,8 @@
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_memory.h"
+#include "mock_kinetic_allocator.h"
+#include "mock_kinetic_resourcewaiter.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -73,7 +75,7 @@ void test_KineticClient_GetPrevious_should_execute_GETNEXT(void)
     };
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildGetPrevious_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -94,7 +96,7 @@ void test_KineticClient_GetPrevious_should_expose_memory_errors(void)
         .value = ValueBuffer,
     };
 
-    KineticController_CreateOperation_ExpectAndReturn(&Session, NULL);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, NULL);
     KineticStatus status = KineticClient_GetPrevious(&Session, &entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MEMORY_ERROR, status);
 }

@@ -55,16 +55,15 @@ static void child_task(void) {
 
     KineticStatus status;
     ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
-    KineticSession session = (KineticSession) {
-        .config = (KineticSessionConfig) {
-            .host = SYSTEM_TEST_HOST,
-            .port = CurrentPort,
-            .clusterVersion = 0,
-            .identity = 1,
-            .hmacKey = hmacArray,
-        },
+    KineticSessionConfig sessionConfig = {
+        .host = SYSTEM_TEST_HOST,
+        .port = CurrentPort,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = hmacArray,
     };
-    status = KineticClient_CreateConnection(&session, client);
+    KineticSession* session;
+    status = KineticClient_CreateSession(&sessionConfig, client, &session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     sleep(2); // Delay to allow other processes to become connected to maximize overlapping
@@ -120,7 +119,7 @@ static void child_task(void) {
             };
 
             KineticStatus status = KineticClient_Put(
-                &session,
+                session,
                 &entries[put],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -190,7 +189,7 @@ static void child_task(void) {
             };
 
             KineticStatus status = KineticClient_Get(
-                &session,
+                session,
                 &entries[get],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -278,7 +277,7 @@ static void child_task(void) {
             };
 
             KineticStatus status = KineticClient_Delete(
-                &session,
+                session,
                 &entries[del],
                 &(KineticCompletionClosure) {
                     .callback = op_finished,
@@ -319,7 +318,7 @@ static void child_task(void) {
 
     // Shutdown client connection and cleanup
     ByteBuffer_Free(test_data);
-    status = KineticClient_DestroyConnection(&session);
+    status = KineticClient_DestroySession(session);
     TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
     KineticClient_Shutdown(client);
     exit(0);

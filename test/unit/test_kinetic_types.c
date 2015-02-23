@@ -72,8 +72,8 @@ void test_Kinetic_GetStatusDescription_should_return_appropriate_descriptions(vo
                              Kinetic_GetStatusDescription(KINETIC_STATUS_SESSION_INVALID));
     TEST_ASSERT_EQUAL_STRING("HOST_EMPTY",
                              Kinetic_GetStatusDescription(KINETIC_STATUS_HOST_EMPTY));
-    TEST_ASSERT_EQUAL_STRING("HMAC_EMPTY",
-                             Kinetic_GetStatusDescription(KINETIC_STATUS_HMAC_EMPTY));
+    TEST_ASSERT_EQUAL_STRING("HMAC_REQUIRED",
+                             Kinetic_GetStatusDescription(KINETIC_STATUS_HMAC_REQUIRED));
     TEST_ASSERT_EQUAL_STRING("NO_PDUS_AVAVILABLE",
                              Kinetic_GetStatusDescription(KINETIC_STATUS_NO_PDUS_AVAVILABLE));
     TEST_ASSERT_EQUAL_STRING("DEVICE_BUSY",

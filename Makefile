@@ -33,10 +33,8 @@ NUM_SIMS ?= 2
 #===============================================================================
 
 PROJECT = kinetic-c-client
-
 PREFIX ?= /usr/local
 LIBDIR ?= /lib
-
 LIB_DIR = ./src/lib
 VENDOR = ./vendor
 PROTOBUFC = $(VENDOR)/protobuf-c
@@ -61,6 +59,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
 	$(OUT_DIR)/kinetic_pdu.o \
+	$(OUT_DIR)/kinetic_auth.o \
 	$(OUT_DIR)/kinetic_pdu_unpack.o \
 	$(OUT_DIR)/kinetic_proto.o \
 	$(OUT_DIR)/kinetic_socket.o \
@@ -78,10 +77,10 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_resourcewaiter.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
+	$(OUT_DIR)/kinetic_admin_client.o \
 	$(OUT_DIR)/threadpool.o \
 	$(OUT_DIR)/bus.o \
 	$(OUT_DIR)/bus_ssl.o \
-	$(OUT_DIR)/casq.o \
 	$(OUT_DIR)/listener.o \
 	$(OUT_DIR)/sender.o \
 	$(OUT_DIR)/util.o \
@@ -91,16 +90,18 @@ LIB_OBJS = \
 
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
-default: makedirs $(KINETIC_LIB)
+
+default: makedirs json $(KINETIC_LIB)
 
 makedirs:
-	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
+	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/unit &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
 
-all: default test system_tests test_internals run examples
+all: default json test system_tests test_internals run examples
 
 clean: makedirs
 	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util $(DISCOVERY_UTIL_EXEC)
 	rm -rf ./bin/**/*
+	rm -f ./bin/*.*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
 	if rake --version > /dev/null 2>&1; then if bundle --version > /dev/null 2>&1; then bundle exec rake clobber; fi; fi
 	cd ${SOCKET99} && make clean
@@ -149,14 +150,16 @@ ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 ci: stop_sims start_sims all stop_sims
 	@echo 
-	@echo Testing installation/uninstallation of kinetic-c
+	@echo --------------------------------------------------------------------------------
+	@echo Testing install/uninstall of kinetic-c
+	@echo --------------------------------------------------------------------------------
 	sudo make install
 	sudo make uninstall
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo $(PROJECT) build completed successfully!
 	@echo --------------------------------------------------------------------------------
-	@echo $(PROJECT) v$(VERSION) is in working order
+	@echo $(PROJECT) v$(VERSION) is in working order!
 	@echo
 
 
@@ -256,7 +259,7 @@ $(KINETIC_SO_DEV): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
 INSTALL ?= install
 RM ?= rm
 
-install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
+install: json json_install $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
@@ -266,6 +269,7 @@ install: $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	$(INSTALL) -c $(KINETIC_LIB) $(PREFIX)${LIBDIR}/
 	$(INSTALL) -d $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_client.h $(PREFIX)/include/
+	$(INSTALL) -c $(PUB_INC)/kinetic_admin_client.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_types.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/kinetic_semaphore.h $(PREFIX)/include/
 	$(INSTALL) -c $(PUB_INC)/byte_array.h $(PREFIX)/include/
@@ -279,15 +283,16 @@ uninstall:
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.a
 	$(RM) -f $(PREFIX)${LIBDIR}/lib$(PROJECT)*.so
 	$(RM) -f $(PREFIX)/include/kinetic_client.h
+	$(RM) -f $(PREFIX)/include/kinetic_admin_client.h
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
 	$(RM) -f $(PREFIX)/include/kinetic_semaphore.h
 	$(RM) -f $(PREFIX)/include/byte_array.h
 	$(RM) -f $(PREFIX)/include/kinetic_proto.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
+	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make uninstall; fi;
 
-.PHONY: install uninstall
-
+.PHONY: install uninstall json_install json_uninstall
 
 #===============================================================================
 # Java Simulator Support
@@ -299,7 +304,7 @@ update_simulator:
 
 start_sims:
 	./vendor/kinetic-simulator/startSimulators.sh
- 		 
+
 start_simulator: start_sims
 
 stop_sims:
@@ -307,8 +312,14 @@ stop_sims:
 
 stop_simulator: stop_sims
 
-
 .PHONY: update_simulator start_sims start_simulator stop_sims stop_simulator
+
+
+#===============================================================================
+# Unity Test Framework Support
+#===============================================================================
+UNITY_INC = ./vendor/unity/src
+UNITY_SRC = ./vendor/unity/src/unity.c
 
 
 #===============================================================================
@@ -320,8 +331,6 @@ SYSTEST_OUT = $(BIN_DIR)/systest
 SYSTEST_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
 SYSTEST_WARN = -Wall -Wextra -Werror -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
-UNITY_INC = ./vendor/unity/src
-UNITY_SRC = ./vendor/unity/src/unity.c
 
 systest_sources = $(wildcard $(SYSTEST_SRC)/*.c)
 systest_executables = $(patsubst $(SYSTEST_SRC)/%.c,$(SYSTEST_OUT)/run_%,$(systest_sources))
@@ -349,7 +358,7 @@ $(SYSTEST_OUT)/%.testpass : $(SYSTEST_OUT)/run_%
 
 $(systest_names) : % : $(SYSTEST_OUT)/%.testpass
 
-system_tests: $(systest_passfiles)
+system_tests: $(systest_passfiles) $(KINETIC_LIB)
 
 
 #===============================================================================
@@ -406,6 +415,8 @@ build: discovery_utility
 # Support for Simulator and Exection of Test Utility
 #-------------------------------------------------------------------------------
 # JAVA=$(JAVA_HOME)/bin/java
+JAVA_HOME ?= /usr
+JAVA_BIN = $(JAVA_HOME)/bin/java
 SIM_JARS_PREFIX = vendor/kinetic-java/kinetic-simulator-0.7.0.2-kinetic-proto-2.0.6-SNAPSHOT
 CLASSPATH = $(JAVA_HOME)/lib/tools.jar:$(SIM_JARS_PREFIX)-jar-with-dependencies.jar:$(SIM_JARS_PREFIX)-sources.jar:$(SIM_JARS_PREFIX).jar
 SIM_RUNNER = com.seagate.kinetic.simulator.internal.SimulatorRunner
@@ -417,6 +428,7 @@ run: $(UTIL_EXEC)
 	@echo Running test utility: $(UTIL_EXEC)
 	@echo --------------------------------------------------------------------------------
 	@echo
+	# $(UTIL_EXEC) instanterase
 	$(UTIL_EXEC) noop
 	exec $(UTIL_EXEC) put get delete
 	@echo
@@ -432,8 +444,6 @@ EXAMPLE_SRC = ./src/examples
 EXAMPLE_LDFLAGS += -lm -l ssl $(KINETIC_LIB) -l crypto -l pthread
 EXAMPLE_CFLAGS += -Wno-deprecated-declarations
 EXAMPLES = write_file_blocking
-VALGRIND = valgrind
-VALGRIND_ARGS = --track-origins=yes #--leak-check=full
 
 example_sources = $(wildcard $(EXAMPLE_SRC)/*.c)
 example_executables = $(patsubst $(EXAMPLE_SRC)/%.c,$(BIN_DIR)/examples/%,$(example_sources))

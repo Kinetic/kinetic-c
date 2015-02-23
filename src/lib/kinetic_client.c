@@ -20,10 +20,10 @@
 
 #include "kinetic_types_internal.h"
 #include "kinetic_client.h"
+#include "kinetic_allocator.h"
 #include "kinetic_session.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
-#include "kinetic_device_info.h"
 #include "kinetic_logger.h"
 #include "kinetic_pdu.h"
 #include "kinetic_memory.h"
@@ -48,8 +48,7 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
     }
 
     bool success = KineticPDU_InitBus(client, config);
-    if (!success)
-    {
+    if (!success) {
         KineticFree(client);
         return NULL;
     }
@@ -63,48 +62,59 @@ void KineticClient_Shutdown(KineticClient * const client)
     KineticLogger_Close();
 }
 
-KineticStatus KineticClient_CreateConnection(KineticSession* const session, KineticClient * const client)
+KineticStatus KineticClient_CreateSession(KineticSessionConfig* const config,
+    KineticClient * const client, KineticSession** session)
 {
+    if (config == NULL) {
+        LOG0("KineticSessionConfig is NULL!");
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
+
     if (session == NULL) {
-        LOG0("KineticSession is NULL!");
+        LOG0("Pointer to KineticSession pointer is NULL!");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
-    if (strlen(session->config.host) == 0) {
+    if (strlen(config->host) == 0) {
         LOG0("Host is empty!");
         return KINETIC_STATUS_HOST_EMPTY;
     }
 
-    if (session->config.hmacKey.len < 1 || session->config.hmacKey.data == NULL) {
+    if (config->hmacKey.len < 1 || config->hmacKey.data == NULL)
+    {
         LOG0("HMAC key is NULL or empty!");
-        return KINETIC_STATUS_HMAC_EMPTY;
+        return KINETIC_STATUS_HMAC_REQUIRED;
     }
 
-    KineticStatus res = KineticSession_Create(session, client);
-    if (res != KINETIC_STATUS_SUCCESS) {
-        LOGF0("Failed to create connection instance: %s",
-            Kinetic_GetStatusDescription(res));
-        return res;
+    // Create a new session
+    KineticSession* s = KineticAllocator_NewSession(client->bus, config);
+    if (s == NULL) {
+        LOG0("Failed to create session instance!");
+        return KINETIC_STATUS_MEMORY_ERROR;
     }
-
-    if (session->connection == NULL) {
+    KineticSession_Create(s, client);
+    if (s->connection == NULL) {
         LOG0("Failed to create connection instance!");
+        KineticAllocator_FreeSession(s);
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
 
-    // Create the connection
-    KineticStatus status = KineticSession_Connect(session);
+    // Establish the connection
+    KineticStatus status = KineticSession_Connect(s);
     if (status != KINETIC_STATUS_SUCCESS) {
-        LOGF0("Failed creating connection to %s:%d", session->config.host, session->config.port);
-        KineticSession_Destroy(session);
-        session->connection = NULL;
+        LOGF0("Failed creating connection to %s:%d", config->host, config->port);
+        s->connection = NULL;
+        KineticSession_Destroy(s);
+        KineticAllocator_FreeSession(s);
         return status;
     }
+
+    *session = s;
 
     return status;
 }
 
-KineticStatus KineticClient_DestroyConnection(KineticSession* const session)
+KineticStatus KineticClient_DestroySession(KineticSession* const session)
 {
     if (session == NULL) {
         LOG0("KineticSession is NULL!");
@@ -119,7 +129,6 @@ KineticStatus KineticClient_DestroyConnection(KineticSession* const session)
     KineticStatus status = KineticSession_Disconnect(session);
     if (status != KINETIC_STATUS_SUCCESS) {LOG0("Disconnection failed!");}
     KineticSession_Destroy(session);
-    session->connection = NULL;
 
     return status;
 }
@@ -129,7 +138,7 @@ KineticStatus KineticClient_NoOp(KineticSession const * const session)
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(session->connection != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildNoop(operation);
@@ -152,7 +161,7 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     KINETIC_ASSERT(session->connection->pSession == session);
     KINETIC_ASSERT(session->connection == session->connection->pSession->connection);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -170,7 +179,7 @@ KineticStatus KineticClient_Flush(KineticSession const * const session,
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(session->connection != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
 
     // Initialize request
@@ -210,7 +219,7 @@ static KineticStatus handle_get_command(GET_COMMAND cmd,
         return KINETIC_STATUS_MISSING_VALUE_BUFFER;
     }
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {
         return KINETIC_STATUS_MEMORY_ERROR;
     }
@@ -264,7 +273,7 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
     KINETIC_ASSERT(session->connection != NULL);
     KINETIC_ASSERT(entry != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -286,7 +295,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
     KINETIC_ASSERT(keys->buffers != NULL);
     KINETIC_ASSERT(keys->count > 0);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -296,37 +305,6 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_GetLog(KineticSession const * const session,
-                                   KineticDeviceInfo_Type type,
-                                   KineticDeviceInfo** info,
-                                   KineticCompletionClosure* closure)
-{
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
-    KINETIC_ASSERT(info != NULL);
-
-    KineticOperation* operation = KineticController_CreateOperation(session);
-    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
-
-    // Initialize request
-    KineticOperation_BuildGetLog(operation, type, info);
-
-    // Execute the operation
-    return KineticController_ExecuteOperation(operation, closure);
-}
-
-void KineticClient_FreeDeviceInfo(KineticSession const * const session,
-                                  KineticDeviceInfo* info)
-{
-    KINETIC_ASSERT(session != NULL);
-    if (info) { KineticDeviceInfo_Free(info); }
-
-    /* The session is not currently used, but part of the API to allow
-     * a different memory management strategy. */
-    (void)session;
-}
-
-
 KineticStatus KineticClient_P2POperation(KineticSession const * const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure)
@@ -335,7 +313,7 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
     KINETIC_ASSERT(session->connection != NULL);
     KINETIC_ASSERT(p2pOp != NULL);
 
-    KineticOperation* operation = KineticController_CreateOperation(session);
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -352,16 +330,3 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
 }
-
-KineticStatus KineticClient_InstantSecureErase(KineticSession const * const session)
-{
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
-
-    KineticOperation* operation = KineticController_CreateOperation(session);
-    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
-
-    KineticOperation_BuildInstantSecureErase(operation);
-    return KineticController_ExecuteOperation(operation, NULL);
-}
-

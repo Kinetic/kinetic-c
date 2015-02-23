@@ -22,11 +22,13 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_device_info.h"
+#include "mock_kinetic_allocator.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_memory.h"
+#include "mock_kinetic_resourcewaiter.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -54,7 +56,7 @@ void test_KineticClient_Delete_should_execute_DELETE_operation(void)
     KineticEntry entry;
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildDelete_Expect(&operation, &entry);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

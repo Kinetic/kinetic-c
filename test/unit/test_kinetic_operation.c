@@ -33,6 +33,7 @@
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_socket.h"
+#include "mock_kinetic_auth.h"
 #include "mock_kinetic_hmac.h"
 #include "mock_bus.h"
 #include "mock_kinetic_controller.h"
@@ -48,12 +49,15 @@ static KineticOperation Operation;
 void setUp(void)
 {
     KineticLogger_Init("stdout", 1);
+    KineticSession_Init(&Session, &SessionConfig, &Connection);
     Connection.connectionID = ConnectionID;
+
     Session.connection = &Connection;
     Connection.pSession = &Session;
-    KineticPDU_InitWithCommand(&Request, &Connection);
-    KineticPDU_InitWithCommand(&Response, &Connection);
-    KineticOperation_Init(&Operation, &Connection);
+    KineticPDU_InitWithCommand(&Request, &Session);
+    KineticPDU_InitWithCommand(&Response, &Session);
+    KineticOperation_Init(&Operation, &Session);
+
     Operation.request = &Request;
     Operation.connection = &Connection;
     SessionConfig = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
@@ -67,13 +71,13 @@ void tearDown(void)
 
 void test_KineticOperation_Init_should_configure_the_operation(void)
 {
-   KineticOperation op = {
+    KineticOperation op = {
         .connection = NULL,
         .request = NULL,
         .response = NULL,
     };
 
-    KineticOperation_Init(&op, &Connection);
+    KineticOperation_Init(&op, &Session);
 
     TEST_ASSERT_EQUAL_PTR(&Connection, op.connection);
     TEST_ASSERT_NULL(op.request);
@@ -81,36 +85,22 @@ void test_KineticOperation_Init_should_configure_the_operation(void)
 }
 
 
+/*******************************************************************************
+ * Client Operations
+*******************************************************************************/
+
 void test_KineticOperation_SendRequest_should_acquire_and_increment_sequence_count_and_send_PDU_to_bus(void)
 {
     TEST_IGNORE_MESSAGE("Need to test KineticOperation_SendRequest");
 }
 
-
 void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(void)
 {
     KineticOperation_BuildNoop(&Operation);
 
-    // NOOP
-    // The NOOP operation can be used as a quick test of whether the Kinetic
-    // Device is running and available. If the Kinetic Device is running,
-    // this operation will always succeed.
-    //
-    // Request Message:
-    //
-    // command {
-    //   header {
-    //     clusterVersion: ...
-    //     identity: ...
-    //     connectionID: ...
-    //     sequence: ...
-    //     messageType: NOOP
-    //   }
-    // }
-    // hmac: "..."
-    //
-
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, Request.message.command.header->messageType);
     TEST_ASSERT_NULL(Operation.response);
 }
@@ -122,94 +112,20 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
     ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
     ByteArray tag = ByteArray_CreateWithCString("some_tag");
 
-    // PUT
-    // The PUT operation sets the value and metadata for a given key. If a value
-    // already exists in the store for the given key, the client must pass a
-    // value for dbVersion which matches the stored version for this key to
-    // overwrite the value metadata. This behavior can be overridden (so that
-    // the version is ignored and the value and metadata are always written) by
-    // setting forced to true in the KeyValue option.
-    //
-    // Request Message:
-    //
-    // command {
-    //   // See top level cross cutting concerns for header details
-    //   header {
-    //     clusterVersion: ...
-    //     identity: ...
-    //     connectionID: ...
-    //     sequence: ...
-    //     messageType: PUT
-    //   }
-    //   body: {
-    //     keyValue {
-    //       // Required bytes
-    //       // The key for the value being set
-    //       key: "..."
-    //
-    //       // Required bytes
-    //       // Versions are set on objects to support optimistic locking.
-    //       // For operations that modify data, if the dbVersion sent in the
-    //       // request message does not match the version stored in the db, the
-    //       // request will fail.
-    //       dbVersion: "..."
-    //
-    //       // Required bytes
-    //       // Specifies what the next version of the data will be if this
-    //       // operation is successful.
-    //       newVersion: "..."
-    //
-    //       // Optional bool, default false
-    //       // Setting force to true ignores potential version mismatches
-    //       // and carries out the operation.
-    //       force: true
-    //
-    //       // Optional bytes
-    //       // The integrity value for the data. This value should be computed
-    //       // by the client application by applying the hash algorithm
-    //       // specified below to the value (and only to the value).
-    //       // The algorithm used should be specified in the algorithm field.
-    //       // The Kinetic Device will not do any processing on this value.
-    //       tag: "..."
-    //
-    //       // Optional enum
-    //       // The algorithm used by the client to compute the tag.
-    //       // The allowed values are: SHA1, SHA2, SHA3, CRC32, CRC64
-    //       algorithm: ...
-    //
-    //       // Optional Synchronization enum value, defaults to WRITETHROUGH
-    //       // Allows client to specify if the data must be written to disk
-    //       // immediately, or can be written in the future.
-    //       //
-    //       // WRITETHROUGH:  This request is made persistent before returning.
-    //       //                This does not effect any other pending operations.
-    //       // WRITEBACK:     They can be made persistent when the drive chooses,
-    //       //            or when a subsequent FLUSH is give to the drive.
-    //       // FLUSH:     All pending information that has not been written is
-    //       //        pushed to the disk and the command that specifies
-    //       //        FLUSH is written last and then returned. All WRITEBACK writes
-    //       //        that have received ending status will be guaranteed to be
-    //       //        written before the FLUSH operation is returned completed.
-    //       synchronization: ...
-    //     }
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
         .newVersion = ByteBuffer_CreateWithArray(newVersion),
-        // .dbVersion = ByteBuffer_CreateWithArray(BYTE_ARRAY_NONE),
         .tag = ByteBuffer_CreateWithArray(tag),
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ByteBuffer_CreateWithArray(value),
     };
+
     KineticMessage_ConfigureKeyValue_Expect(&Operation.request->message, &entry);
-    //   }
-    // }
-    // hmac: "..."
-    //
 
     // Build the operation
     KineticOperation_BuildPut(&Operation, &entry);
 
-    // Ensure proper message type
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_TRUE(Operation.valueEnabled);
     TEST_ASSERT_TRUE(Operation.sendValue);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
@@ -217,6 +133,42 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry->value.array);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_NULL(Operation.response);
+}
+
+void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_create_a_new_object_with_calculated_tag(void)
+{
+    ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
+    ByteArray key = ByteArray_CreateWithCString("foobar");
+    ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
+    ByteArray tag = ByteArray_CreateWithCString("some_tag");
+
+    KineticEntry entry = {
+        .key = ByteBuffer_CreateWithArray(key),
+        .newVersion = ByteBuffer_CreateWithArray(newVersion),
+        .tag = ByteBuffer_CreateWithArray(tag),
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ByteBuffer_CreateWithArray(value),
+        .computeTag = true,
+    };
+
+    KineticMessage_ConfigureKeyValue_Expect(&Operation.request->message, &entry);
+
+    // Build the operation
+    KineticOperation_BuildPut(&Operation, &entry);
+
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_TRUE(Operation.valueEnabled);
+    TEST_ASSERT_TRUE(Operation.sendValue);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry->value.array);
+    TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
 }
 
@@ -224,7 +176,7 @@ uint8_t ValueData[KINETIC_OBJ_SIZE];
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 {
-   const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -235,45 +187,22 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
 
     KineticOperation_BuildGet(&Operation, &entry);
 
-    // GET
-    // The GET operation is used to retrieve the value and metadata for a given key.
-    //
-    // Request Message:
-    // command {
-    //   header {
-    //     // See above for descriptions of these fields
-    //     clusterVersion: ...
-    //     identity: ...
-    //     connectionID: ...
-    //     sequence: ...
-    //
-    //     // The mesageType should be GET
-    //     messageType: GET
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
-    //   }
-    //   body {
-    //     keyValue {
-    //       // See above
-    //       key: "..."
-    //     }
-    //   }
-    // }
-    // // See above
-    // hmac: "..."
-
     TEST_ASSERT_TRUE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
 }
 
 void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_metadata_only(void)
 {
-   const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -285,45 +214,22 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
 
     KineticOperation_BuildGet(&Operation, &entry);
 
-    // GET
-    // The GET operation is used to retrieve the value and metadata for a given key.
-    //
-    // Request Message:
-    // command {
-    //   header {
-    //     // See above for descriptions of these fields
-    //     clusterVersion: ...
-    //     identity: ...
-    //     connectionID: ...
-    //     sequence: ...
-    //
-    //     // The mesageType should be GET
-    //     messageType: GET
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
-    //   }
-    //   body {
-    //     keyValue {
-    //       // See above
-    //       key: "..."
-    //     }
-    //   }
-    // }
-    // // See above
-    // hmac: "..."
-
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
 }
 
 void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
 {
-   const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -343,13 +249,15 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
 }
 
 void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_metadata_only(void)
 {
-   const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -370,13 +278,15 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_me
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
 }
 
 void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation(void)
 {
-   const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = {.data = ValueData, .len = sizeof(ValueData)};
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -396,13 +306,15 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_FALSE(Operation.entry->metadataOnly);
 }
 
 void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation_with_metadata_only(void)
 {
-   const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {
         .key = ByteBuffer_CreateWithArray(key),
@@ -423,9 +335,13 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_TRUE(Operation.entry->metadataOnly);
 }
+
+
 
 void test_KineticOperation_BuildFlush_should_build_a_FLUSHALLDATA_operation(void)
 {
@@ -434,51 +350,32 @@ void test_KineticOperation_BuildFlush_should_build_a_FLUSHALLDATA_operation(void
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA,
         Request.message.command.header->messageType);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
 
     TEST_ASSERT_NULL(Operation.response);
 }
 
+
+
 void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
 {
-   const ByteArray key = ByteArray_CreateWithCString("foobar");
+    const ByteArray key = ByteArray_CreateWithCString("foobar");
     ByteArray value = ByteArray_Create(ValueData, sizeof(ValueData));
     KineticEntry entry = {.key = ByteBuffer_CreateWithArray(key), .value = ByteBuffer_CreateWithArray(value)};
     KineticMessage_ConfigureKeyValue_Expect(&Request.message, &entry);
 
     KineticOperation_BuildDelete(&Operation, &entry);
 
-    // The `DELETE` operation removes the entry for a given key. It respects the
-    // same locking behavior around `dbVersion` and `force` as described in the previous sections.
-    // The following request will remove a key value pair to the store.
-    //
-    // ```
-    // command {
-    //   // See top level cross cutting concerns for header details
-    //   header {
-    //     clusterVersion: ...
-    //     identity: ...
-    //     connectionID: ...
-    //     sequence: ...
-    //     // messageType should be DELETE
-    //     messageType: DELETE
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE, Request.message.command.header->messageType);
-    //   }
-    //   body {
-    //     keyValue {
-    //       key: "..."
-    //       // See write operation cross cutting concerns
-    //       synchronization: ...
-    //     }
-    //   }
-    // }
-    // hmac: "..."
-
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
 }
 
@@ -513,149 +410,18 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
 
     KineticOperation_BuildGetKeyRange(&Operation, &range, &keys);
 
-    // Get Key Range
-    // 
-    // The GETKEYRANGE operation takes a start and end key and returns all keys between those in the sorted set of keys.
-    // This operation can be configured so that the range is either inclusive or exclusive of the start and end keys,
-    // the range can be reversed, and the requester can cap the number of keys returned.
-    // 
-    // Note that this operation does not fetch associated values, or other metadata. It only returns the keys themselves,
-    // which can be used for other operations.
-    // 
-    // Request Message
-    //
-    // command {
-    //   header {
-    //     // See above for descriptions of these fields
-    //     clusterVersion: ...
-    //     identity: ...
-    //     connectionID: ...
-    //     sequence: ...
-    //
-    //     // messageType should be GETKEYRANGE
-    //     messageType: GETKEYRANGE
-    //   }
     TEST_ASSERT_TRUE(Request.command->header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE, Request.command->header->messageType);
-    //   body {
-    //     // The range message must be populated
-    //     range {
-    //       // Required bytes, the beginning of the requested range
-    //       startKey: "..."
-    //
-    //       // Optional bool, defaults to false
-    //       // True indicates that the start key should be included in the returned 
-    //       // range
-    //       startKeyInclusive: ...
-    //
-    //       // Required bytes, the end of the requested range
-    //       endKey: "..."
-    //
-    //       // Optional bool, defaults to false
-    //       // True indicates that the end key should be included in the returned 
-    //       // range
-    //       endKeyInclusive: ...
-    //
-    //       // Required int32, must be greater than 0
-    //       // The maximum number of keys returned, in sorted order
-    //       maxReturned: ...
-    //
-    //       // Optional bool, defaults to false
-    //       // If true, the key range will be returned in reverse order, starting at
-    //       // endKey and moving back to startKey.  For instance
-    //       // if the search is startKey="j", endKey="k", maxReturned=2,
-    //       // reverse=true and the keys "k0", "k1", "k2" exist
-    //       // the system will return "k2" and "k1" in that order.
-    //       reverse: ....
-    //     }
-    //   }
-    // }
-
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
     TEST_ASSERT_NULL(Operation.entry);
     TEST_ASSERT_EQUAL_PTR(&Request, Operation.request);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL_PTR(&Request.message.command, Request.command);
 }
 
-
-void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
-{
-    KineticDeviceInfo* pInfo;
-
-    KineticOperation_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
-
-    // Get Log
-    //
-    // The GETLOG operation gives the client access to log information.
-    // The request message must include at least one type and can have many types. The supported types are:
-    //     UTILIZATIONS
-    //     TEMPERATURES
-    //     CAPACITIES
-    //     CONFIGURATION
-    //     STATISTICS
-    //     MESSAGES
-    //     LIMITS
-    // Below we will show the message structure used to request all types in a single GETLOG request.
-    // 
-    // Request Message
-    // ---------------
-    // command {
-    //   header {
-    //     clusterVersion: ...
-    //     identity: ...
-    //     connectionID: ...
-    //     sequence: ...
-    //     // The messageType should be GETLOG
-    //     messageType: GETLOG
-    //   }
-    //   body {
-    //     // The body should contain a getLog message, which must have
-    //     // at least one value for type. Multiple are allowed. 
-    //     // Here all types are requested.
-    //     getLog {
-    //       type: CAPACITIES
-    //       type: CONFIGURATION
-    //       type: MESSAGES
-    //       type: STATISTICS
-    //       type: TEMPERATURES
-    //       type: UTILIZATIONS
-    //     }
-    //   }
-    // }
-    // hmac: "..."
-    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG,
-        Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
-    TEST_ASSERT_EQUAL_PTR(&Request.message.getLog, Request.command->body->getLog);
-    TEST_ASSERT_NOT_NULL(Request.command->body->getLog->types);
-    TEST_ASSERT_EQUAL(1, Request.command->body->getLog->n_types);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
-        Request.command->body->getLog->types[0]);
-    TEST_ASSERT_EQUAL_PTR(&pInfo, Operation.deviceInfo);
-    TEST_ASSERT_NULL(Operation.response);
-}
-
-
-void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
-{
-    // KineticConnection con;
-    // KineticPDU response;
-    // KineticDeviceInfo* info;
-    // KineticOperation op = {
-    //     .connection = &con,
-    //     .response = &response,
-    //     .deviceInfo = &info,
-    // };
-
-    TEST_IGNORE_MESSAGE("TODO: Need to implement!")
-
-    // KineticSerialAllocator_Create()
-
-    // KineticStatus status = KineticOperation_GetLogCallback(&op);
-}
 
 void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request(void)
 {
@@ -704,6 +470,7 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
 
     KineticOperation_BuildP2POperation(&Operation, &p2pOp);
 
+    TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH,
         Request.message.command.header->messageType);
@@ -743,6 +510,7 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
         Request.command->body->p2pOperation->operation[0]->version.len);
     TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->has_force);
     TEST_ASSERT_FALSE(Request.command->body->p2pOperation->operation[0]->force);
+
     TEST_ASSERT_NOT_NULL(Request.command->body->p2pOperation->operation[0]->p2pop);
     TEST_ASSERT_TRUE(Request.command->body->p2pOperation->operation[0]->p2pop->peer->has_port);
     TEST_ASSERT_EQUAL(4321,
@@ -783,15 +551,241 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
     TEST_ASSERT_NULL(Request.command->body->p2pOperation->operation[1]->status);
 
     TEST_ASSERT_EQUAL_PTR(&p2pOp, Operation.p2pOp);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+
     TEST_ASSERT_NULL(Operation.response);
 
     // This just free's the malloc'd memory and sets statuses to "invalid" (since no operation was actually performed)
     KineticOperation_P2POperationCallback(&Operation, KINETIC_STATUS_SUCCESS);
+}
 
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_NOT_ATTEMPTED,
-        p2pOp.operations[0].resultStatus);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_NOT_ATTEMPTED,
-        p2pOp.operations[1].resultStatus);
-    TEST_ASSERT_EQUAL(KINETIC_STATUS_NOT_ATTEMPTED,
-        p2pOp.operations[0].chainedOperation->operations[0].resultStatus);
+
+
+/*******************************************************************************
+ * Admin Client Operations
+*******************************************************************************/
+
+void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_new_LOCK_PIN(void)
+{
+    char oldPinData[] = "1234";
+    char newPinData[] = "5678";
+    ByteArray oldPin = ByteArray_Create(oldPinData, sizeof(oldPinData));
+    ByteArray newPin = ByteArray_Create(newPinData, sizeof(newPinData));
+    KineticOperation_BuildSetPin(&Operation, oldPin, newPin, true);
+
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.security, Request.command->body->security);
+    TEST_ASSERT_TRUE(Request.command->body->security->has_oldLockPIN);
+    TEST_ASSERT_EQUAL_PTR(oldPinData, Request.command->body->security->oldLockPIN.data);
+    TEST_ASSERT_EQUAL(oldPin.len, Request.command->body->security->oldLockPIN.len);
+    TEST_ASSERT_TRUE(Request.command->body->security->has_newLockPIN);
+    TEST_ASSERT_EQUAL_PTR(newPinData, Request.command->body->security->newLockPIN.data);
+    TEST_ASSERT_EQUAL(newPin.len, Request.command->body->security->newLockPIN.len);
+    TEST_ASSERT_NULL(Request.command->body->pinOp);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetPinCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+}
+void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_new_ERASE_PIN(void)
+{
+    char oldPinData[] = "1234";
+    char newPinData[] = "5678";
+    ByteArray oldPin = ByteArray_Create(oldPinData, sizeof(oldPinData));
+    ByteArray newPin = ByteArray_Create(newPinData, sizeof(newPinData));
+    KineticOperation_BuildSetPin(&Operation, oldPin, newPin, false);
+
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.security, Request.command->body->security);
+    TEST_ASSERT_TRUE(Request.command->body->security->has_oldErasePIN);
+    TEST_ASSERT_EQUAL_PTR(oldPinData, Request.command->body->security->oldErasePIN.data);
+    TEST_ASSERT_EQUAL(oldPin.len, Request.command->body->security->oldErasePIN.len);
+    TEST_ASSERT_TRUE(Request.command->body->security->has_newErasePIN);
+    TEST_ASSERT_EQUAL_PTR(newPinData, Request.command->body->security->newErasePIN.data);
+    TEST_ASSERT_EQUAL(newPin.len, Request.command->body->security->newErasePIN.len);
+    TEST_ASSERT_NULL(Request.command->body->pinOp);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetPinCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+}
+
+
+
+void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
+{
+    KineticLogInfo* pInfo;
+
+    KineticOperation_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
+
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.getLog, Request.command->body->getLog);
+    TEST_ASSERT_NOT_NULL(Request.command->body->getLog->types);
+    TEST_ASSERT_EQUAL(1, Request.command->body->getLog->n_types);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
+        Request.command->body->getLog->types[0]);
+    TEST_ASSERT_EQUAL_PTR(&pInfo, Operation.deviceInfo);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_NULL(Operation.response);
+}
+
+
+// void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
+// {
+//     // KineticConnection con;
+//     // KineticPDU response;
+//     // KineticLogInfo* info;
+//     // KineticOperation op = {
+//     //     .connection = &con,
+//     //     .response = &response,
+//     //     .deviceInfo = &info,
+//     // };
+
+//     TEST_IGNORE_MESSAGE("TODO: Need to implement!")
+
+//     // KineticSerialAllocator_Create()
+
+//     // KineticStatus status = KineticOperation_GetLogCallback(&op);
+// }
+
+
+
+void test_KineticOperation_BuildErase_should_build_a_SECURE_ERASE_operation_with_PIN_auth(void)
+{
+    char pinData[] = "abc123";
+    ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
+
+    KineticOperation_BuildErase(&Operation, true, &pin);
+
+    TEST_ASSERT_NOT_NULL(Operation.pin);
+    TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
+    TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
+    TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP,
+        Request.command->body->pinOp->pinOpType);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_EraseCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_EQUAL(180, Operation.timeoutSeconds);
+}
+
+void test_KineticOperation_BuildErase_should_build_an_INSTANT_ERASE_operation_with_PIN_auth(void)
+{
+    char pinData[] = "abc123";
+    ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
+
+    KineticOperation_BuildErase(&Operation, false, &pin);
+
+    TEST_ASSERT_NOT_NULL(Operation.pin);
+    TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
+    TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
+    TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP,
+        Request.command->body->pinOp->pinOpType);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_EraseCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_EQUAL(180, Operation.timeoutSeconds);
+}
+
+
+
+void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PIN_auth(void)
+{
+    char pinData[] = "abc123";
+    ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
+
+    KineticOperation_BuildLockUnlock(&Operation, true, &pin);
+
+    TEST_ASSERT_NOT_NULL(Operation.pin);
+    TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
+    TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
+    TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_LOCK_PINOP,
+        Request.command->body->pinOp->pinOpType);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_LockUnlockCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+}
+
+void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with_PIN_auth(void)
+{
+    char pinData[] = "abc123";
+    ByteArray pin = ByteArray_Create(pinData, strlen(pinData));
+
+    KineticOperation_BuildLockUnlock(&Operation, false, &pin);
+
+    TEST_ASSERT_NOT_NULL(Operation.pin);
+    TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
+    TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
+    TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP,
+        Request.command->body->pinOp->pinOpType);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_LockUnlockCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+}
+
+
+
+void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VERSION_operation_with_PIN_auth(void)
+{
+    KineticOperation_BuildSetClusterVersion(&Operation, 1776);
+
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+
+    TEST_ASSERT_EQUAL_PTR(&Request.message.setup, Request.command->body->setup);
+    TEST_ASSERT_EQUAL_INT64(1776, Request.message.setup.newClusterVersion);
+    TEST_ASSERT_EQUAL_INT64(1776, Operation.pendingClusterVersion);
+    TEST_ASSERT_TRUE(Request.message.setup.has_newClusterVersion);
+    TEST_ASSERT_FALSE(Request.message.setup.has_firmwareDownload);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetClusterVersionCallback, Operation.callback);
 }

@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+KineticSessionConfig Config;
 KineticConnection Connection;
 KineticSession Session;
 struct bus MessageBus;
@@ -98,6 +99,7 @@ void test_KineticAllocator_FreeConnection_should_destroy_waiter_and_free_connect
 
 void test_KineticAllocator_NewKineticResponse_should_return_null_if_calloc_return_null(void)
 {
+    Connection.pSession = &Session;
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticResponse) + 1234, NULL);
     KineticResponse * response = KineticAllocator_NewKineticResponse(1234);
     TEST_ASSERT_NULL(response);
@@ -155,9 +157,12 @@ void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_nul
 
 void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if_calloc_returns_null_for_pdu(void)
 {
+    Session.connection = &Connection;
+    Connection.pSession = &Session;
     KineticOperation op;
+
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
-    KineticOperation_Init_Expect(&op, &Connection);
+    KineticOperation_Init_Expect(&op, &Session);
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticPDU), NULL);
     KineticFree_Expect(&op);
 
@@ -168,13 +173,16 @@ void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if
 
 void test_KineticAllocator_NewOperation_should_initialize_operation_and_pdu(void)
 {
+    Session.connection = &Connection;
+    Connection.pSession = &Session;
     KineticOperation op;
     KineticPDU pdu;
+
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
-    KineticOperation_Init_Expect(&op, &Connection);
+    KineticOperation_Init_Expect(&op, &Session);
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticPDU), &pdu);
 
-    KineticPDU_InitWithCommand_Expect(&pdu, &Connection);
+    KineticPDU_InitWithCommand_Expect(&pdu, &Session);
     KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
 
     TEST_ASSERT_NOT_NULL(operation);
@@ -205,4 +213,3 @@ void test_KineticAllocator_FreeOperation_should_free_response_if_its_not_null(vo
 
     KineticAllocator_FreeOperation(&op);
 }
-

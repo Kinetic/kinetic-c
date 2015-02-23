@@ -28,6 +28,8 @@
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_memory.h"
+#include "mock_kinetic_allocator.h"
+#include "mock_kinetic_resourcewaiter.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -69,50 +71,6 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-// command {
-//   header {
-//     // See above for descriptions of these fields
-//     clusterVersion: ...
-//     identity: ...
-//     connectionID: ...
-//     sequence: ...
-//
-//     // messageType should be GETKEYRANGE
-//     messageType: GETKEYRANGE
-//   }
-//   body {
-//     // The range message must be populated
-//     range {
-//       // Required bytes, the beginning of the requested range
-//       startKey: "..."
-//
-//       // Optional bool, defaults to false
-//       // True indicates that the start key should be included in the returned
-//       // range
-//       startKeyInclusive: ...
-//
-//       // Required bytes, the end of the requested range
-//       endKey: "..."
-//
-//       // Optional bool, defaults to false
-//       // True indicates that the end key should be included in the returned
-//       // range
-//       endKeyInclusive: ...
-//
-//       // Required int32, must be greater than 0
-//       // The maximum number of keys returned, in sorted order
-//       maxReturned: ...
-//
-//       // Optional bool, defaults to false
-//       // If true, the key range will be returned in reverse order, starting at
-//       // endKey and moving back to startKey.  For instance
-//       // if the search is startKey="j", endKey="k", maxReturned=2,
-//       // reverse=true and the keys "k0", "k1", "k2" exist
-//       // the system will return "k2" and "k1" in that order.
-//       reverse: ....
-//     }
-//   }
-// }
 void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_specified_range(void)
 {
     LOG_LOCATION;
@@ -134,7 +92,7 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
     };
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildGetKeyRange_Expect(&operation, &keyRange, &keyArray);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_BUFFER_OVERRUN);
 

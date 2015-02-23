@@ -20,14 +20,18 @@
 */
 
 #include "kinetic_client.h"
+#include "kinetic_admin_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
+#include "mock_kinetic_auth.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_memory.h"
+#include "mock_kinetic_allocator.h"
+#include "mock_kinetic_resourcewaiter.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -54,14 +58,14 @@ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_de
 {
     LOG_LOCATION;
 
-    KineticDeviceInfo* info;
+    KineticLogInfo* info;
     KineticOperation operation;
 
-    KineticController_CreateOperation_ExpectAndReturn(&Session, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
     KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_GetLog(&Session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
+    KineticStatus status = KineticAdminClient_GetLog(&Session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

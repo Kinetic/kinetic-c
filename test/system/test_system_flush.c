@@ -20,29 +20,27 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
-
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 1);
+    SystemTestSetup(1);
 }
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_Flush_should_succeed(void)
 {
-    KineticStatus status = KineticClient_Flush(&Fixture.session, NULL);
+    KineticStatus status = KineticClient_Flush(Fixture.session, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 void test_Flush_should_be_idempotent(void)
 {
-    KineticStatus status = KineticClient_Flush(&Fixture.session, NULL);
+    KineticStatus status = KineticClient_Flush(Fixture.session, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    status = KineticClient_Flush(&Fixture.session, NULL);
+    status = KineticClient_Flush(Fixture.session, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
@@ -74,7 +72,7 @@ void test_Flush_should_call_callback_after_completion(void)
         .clientData = (void *)&env
     };
 
-    KineticStatus status = KineticClient_Flush(&Fixture.session, &closure);
+    KineticStatus status = KineticClient_Flush(Fixture.session, &closure);
 
     /* Wait up to 10 seconds for the callback to fire. */
     struct timeval tv;
@@ -94,21 +92,17 @@ static void no_op_callback(KineticCompletionData* kinetic_data, void* client_dat
     (void)client_data;
 }
 
-void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
+void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
 {
-    if (SystemTestIsUnderSimulator()) {
-        TEST_IGNORE_MESSAGE("FLUSHALLDATA is a no-op in the simulator.");
-    }
+    LOG_LOCATION;
 
     // Arguments shared between entries
     uint8_t TagData[1024];
     ByteBuffer tagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "tag_val");
-
     uint8_t key1[10];
     ByteBuffer keyBuffer1 = ByteBuffer_CreateAndAppendCString(key1, sizeof(key1), "key1");
     uint8_t value1[10];
     ByteBuffer valueBuffer1 = ByteBuffer_CreateAndAppendCString(value1, sizeof(value1), "value1");
-
     uint8_t key2[10];
     ByteBuffer keyBuffer2 = ByteBuffer_CreateAndAppendCString(key2, sizeof(key2), "key2");
     uint8_t value2[10];
@@ -123,10 +117,9 @@ void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
         .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
         .force = true,
     };
-    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // Do an async PUT ("key2" => "value2") so we can flush to complete it
     Entry = (KineticEntry) {
         .key = keyBuffer2,
         .tag = tagBuffer,
@@ -136,7 +129,7 @@ void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
         .force = true,
     };
 
-    status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Do an async DELETE so we can flush to complete it
@@ -146,16 +139,12 @@ void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
     KineticCompletionClosure no_op_closure = {
         .callback = &no_op_callback,
     };
-    status = KineticClient_Delete(&Fixture.session, &deleteEntry, &no_op_closure);
+    status = KineticClient_Delete(Fixture.session, &deleteEntry, &no_op_closure);
 
     /* Now do a blocking flush and confirm that (key1,value1) has been
      * DELETEd and (key2,value2) have been PUT. */
-    status = KineticClient_Flush(&Fixture.session, NULL);
+    status = KineticClient_Flush(Fixture.session, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    // Reset buffers for GET requests
-    ByteBuffer_Reset(&valueBuffer1);
-    ByteBuffer_Reset(&valueBuffer2);
 
     // GET key1 --> expect NOT FOUND
     KineticEntry getEntry1 = {
@@ -163,7 +152,7 @@ void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
         .tag = tagBuffer,
         .value = valueBuffer1,
     };
-    status = KineticClient_Get(&Fixture.session, &getEntry1, NULL);
+    status = KineticClient_Get(Fixture.session, &getEntry1, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
 
     // GET key2 --> present
@@ -172,13 +161,6 @@ void test_Flush_should_flush_pending_async_PUTs_and_DELETEs(void)
         .tag = tagBuffer,
         .value = valueBuffer2,
     };
-    status = KineticClient_Get(&Fixture.session, &getEntry2, NULL);
+    status = KineticClient_Get(Fixture.session, &getEntry2, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
-
-
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

@@ -142,6 +142,7 @@ void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header)
 }
 
 
+// Helper macros and stuff for logging protobufs
 #define LOG_INDENT "  "
 static char indent[64] = LOG_INDENT;
 static const size_t max_indent = sizeof(indent)-3;

@@ -60,6 +60,19 @@ struct _KineticClient {
     struct bus *bus;
 };
 
+/**
+ * @brief An instance of a session with a Kinetic device.
+ */
+struct _KineticSession {
+    // Session configuration structure which must be configured 
+    KineticSessionConfig config;
+
+    // Connection instance which is dynamically allocated upon call to KineticClient_CreateSession.
+    // Client must call KineticAdminClient_DestroySession when finished with a session to shutdown
+    // a session cleanly and free the `connection`.
+    struct _KineticConnection* connection;
+};
+
 // #TODO remove packed attribute and replace uses of sizeof(KineticPDUHeader)
 //  with a constant
 typedef struct __attribute__((__packed__)) _KineticPDUHeader {
@@ -90,6 +103,7 @@ typedef struct {
     size_t accumulated;
     uint8_t buf[];
 } socket_info;
+
 // Kinetic Device Client Connection
 struct _KineticConnection {
     bool            connected;      // state of connection
@@ -115,22 +129,26 @@ typedef struct _KineticHMAC {
 // Kinetic Device Message Request
 typedef struct _KineticMessage {
     // Kinetic Protocol Buffer Elements
+
+    // Base Message
     KineticProto_Message                message;
     KineticProto_Message_HMACauth       hmacAuth;
     KineticProto_Message_PINauth        pinAuth;
     uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
 
-    KineticProto_Command                         command;
-    KineticProto_Command_Header                  header;
-    KineticProto_Command_Body                    body;
-    KineticProto_Command_Status                  status;
-    KineticProto_Command_Security                security;
-    KineticProto_Command_Security_ACL            acl;
-    KineticProto_Command_KeyValue                keyValue;
-    KineticProto_Command_Range                   keyRange;
-    KineticProto_Command_GetLog                  getLog;
-    KineticProto_Command_GetLog_Type             getLogType;
-    KineticProto_Command_PinOperation            pinOp;
+    // Internal Command
+    KineticProto_Command                command;
+    KineticProto_Command_Header         header;
+    KineticProto_Command_Body           body;
+    KineticProto_Command_Status         status;
+    KineticProto_Command_Security       security;
+    KineticProto_Command_Security_ACL   acl;
+    KineticProto_Command_KeyValue       keyValue;
+    KineticProto_Command_Range          keyRange;
+    KineticProto_Command_Setup          setup;
+    KineticProto_Command_GetLog         getLog;
+    KineticProto_Command_GetLog_Type    getLogType;
+    KineticProto_Command_PinOperation   pinOp;
 } KineticMessage;
 
 // Kinetic PDU Header
@@ -152,6 +170,7 @@ typedef enum {
 struct _KineticPDU {
     KineticMessage message;
     KineticProto_Command* command;
+    bool pinAuth;
 };
 
 typedef struct _KineticResponse
@@ -162,7 +181,6 @@ typedef struct _KineticResponse
     uint8_t value[];
 } KineticResponse;
 
-
 typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operation, KineticStatus const status);
 
 // Kinetic Operation
@@ -172,13 +190,15 @@ struct _KineticOperation {
     KineticResponse* response;
     bool valueEnabled;
     bool sendValue;
+    uint16_t timeoutSeconds;
+    int64_t pendingClusterVersion;
+    ByteArray* pin;
     KineticEntry* entry;
     ByteBufferArray* buffers;
-    KineticDeviceInfo** deviceInfo;
+    KineticLogInfo** deviceInfo;
     KineticP2P_Operation* p2pOp;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
-    uint16_t timeoutSeconds;
 };
 
 
@@ -208,18 +228,14 @@ bool Kinetic_TimevalIsZero(struct timeval const tv);
 struct timeval Kinetic_TimevalAdd(struct timeval const a, struct timeval const b);
 int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b);
 
-KineticProto_Command_GetLog_Type KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(KineticDeviceInfo_Type type);
+KineticProto_Command_GetLog_Type KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KineticLogInfo_Type type);
 
 KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type);
 
+void KineticConnection_Init(KineticConnection* const con);
+void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con);
 void KineticMessage_Init(KineticMessage* const message);
-void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr, KineticConnection* con);
-void KineticOperation_Init(KineticOperation* op, KineticConnection* con);
-void KineticPDU_Init(KineticPDU* pdu, KineticConnection* con);
-void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticConnection* con);
-
-void Kinetic_auth_init_hmac(KineticMessage* const msg,
-    int identity, ByteArray hmac);
-void Kinetic_auth_init_pinop(KineticMessage* const msg);
+void KineticOperation_Init(KineticOperation* op, KineticSession const * const session);
+void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

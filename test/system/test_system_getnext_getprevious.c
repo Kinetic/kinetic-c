@@ -20,16 +20,14 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
-
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 1);
+    SystemTestSetup(1);
 }
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 static bool add_keys(int count)
@@ -49,7 +47,7 @@ static bool add_keys(int count)
             .force = true,
         };
 
-        KineticStatus status = KineticClient_Put(&Fixture.session, &entry, NULL);
+        KineticStatus status = KineticClient_Put(Fixture.session, &entry, NULL);
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     }
     return true;
@@ -105,15 +103,15 @@ static void compare_against_offset_key(GET_CMD cmd, bool metadataOnly)
 
         switch (cmd) {
         case CMD_NEXT:
-            status = KineticClient_GetNext(&Fixture.session, &entry, NULL);
+            status = KineticClient_GetNext(Fixture.session, &entry, NULL);
             break;
         case CMD_PREVIOUS:
-            status = KineticClient_GetPrevious(&Fixture.session, &entry, NULL);
+            status = KineticClient_GetPrevious(Fixture.session, &entry, NULL);
             break;
         default:
             TEST_ASSERT(false);
         }
-
+        
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
         ByteBuffer expectedKeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_exp_buf, sz, "key_%d", i);
@@ -145,8 +143,3 @@ void test_GetPrevious_should_retrieve_only_metadata_with_metadataOnly(void)
 {
     compare_against_offset_key(CMD_PREVIOUS, true);
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

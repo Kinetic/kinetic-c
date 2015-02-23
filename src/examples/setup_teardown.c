@@ -58,31 +58,26 @@ int main(int argc, char** argv)
 {
     handle_args(argc, argv);
 
-    // Establish connection
-    KineticStatus status;
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .port = KINETIC_PORT,
-            .clusterVersion = 0,
-            .identity = 1,
-            .hmacKey = ByteArray_CreateWithCString(HmacKeyString)
-        }
-    };
-
-    strncpy(session.config.host, kinetic_host, HOST_NAME_MAX - 1);
-    session.config.host[HOST_NAME_MAX - 1] = '\0';
-
-    KineticClientConfig client_config = {
+    // Initialize kinetic-c and configure sessions
+    KineticSession* session;
+    KineticClientConfig clientConfig = {
         .logFile = "stdout",
         .logLevel = 1,
     };
-    KineticClient * client = KineticClient_Init(&client_config);
+    KineticClient * client = KineticClient_Init(&clientConfig);
     if (client == NULL) { return 1; }
-    status = KineticClient_CreateConnection(&session, client);
+    const char HmacKeyString[] = "asdfasdf";
+    KineticSessionConfig sessionConfig = {
+        .host = "localhost",
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+    };
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
-            session.config.host, Kinetic_GetStatusDescription(status));
+        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
+            Kinetic_GetStatusDescription(status));
         exit(1);
     }
 
@@ -92,7 +87,7 @@ int main(int argc, char** argv)
     }
 
     // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(&session);
+    KineticClient_DestroySession(session);
     KineticClient_Shutdown(client);
     return 0;
 }

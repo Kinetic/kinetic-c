@@ -53,7 +53,7 @@ void KineticCountingSemaphore_Take(KineticCountingSemaphore * const sem) // WAIT
     
     pthread_mutex_unlock(&sem->mutex);
     
-    LOGF2("Concurrent ops throttle -- TAKE: %u => %u (waiting=%u)", before, after, waiting);
+    LOGF3("Concurrent ops throttle -- TAKE: %u => %u (waiting=%u)", before, after, waiting);
 }
 
 void KineticCountingSemaphore_Give(KineticCountingSemaphore * const sem) // SIGNAL
@@ -71,7 +71,7 @@ void KineticCountingSemaphore_Give(KineticCountingSemaphore * const sem) // SIGN
     
     pthread_mutex_unlock(&sem->mutex);
     
-    LOGF2("Concurrent ops throttle -- GIVE: %u => %u (waiting=%u)", before, after, waiting);
+    LOGF3("Concurrent ops throttle -- GIVE: %u => %u (waiting=%u)", before, after, waiting);
 }
 
 void KineticCountingSemaphore_Destroy(KineticCountingSemaphore * const sem)

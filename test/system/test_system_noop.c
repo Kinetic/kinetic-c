@@ -20,25 +20,24 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
-
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 3);
+    SystemTestSetup(3);
 }
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_NoOp_should_succeed(void)
 {
-    KineticStatus status = KineticClient_NoOp(&Fixture.session);
+    KineticStatus status = KineticClient_NoOp(Fixture.session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)
+void test_NoOp_should_succeed_again(void)
+{
+    KineticStatus status = KineticClient_NoOp(Fixture.session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}

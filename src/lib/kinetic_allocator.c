@@ -26,6 +26,35 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+
+KineticSession* KineticAllocator_NewSession(struct bus * b, KineticSessionConfig* config)
+{
+    (void)b; // TODO: combine session w/connection, which will use this variable
+    
+    // Allocate a new session
+    KineticSession* session = KineticCalloc(1, sizeof(KineticSession));
+    if (session == NULL) {
+        LOG0("Failed allocating a new session!");
+        return NULL;
+    }
+
+    // Copy the supplied config into the session config
+    session->config = *config;
+    memcpy(session->config.keyData, config->hmacKey.data, config->hmacKey.len);
+    // Update pointer to copy of key data
+    session->config.hmacKey.data = session->config.keyData;
+    strncpy(session->config.host, config->host, sizeof(session->config.host));
+
+    return session;
+}
+
+void KineticAllocator_FreeSession(KineticSession* session)
+{
+    if (session != NULL) {
+        KineticFree(session);
+    }
+}
+
 KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession* const session)
 {
     KineticConnection* connection = KineticCalloc(1, sizeof(KineticConnection));
@@ -73,6 +102,7 @@ void KineticAllocator_FreeKineticResponse(KineticResponse * response)
 KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connection)
 {
     KINETIC_ASSERT(connection != NULL);
+    KINETIC_ASSERT(connection->pSession != NULL);
     LOGF3("Allocating new operation on connection (0x%0llX)", connection);
     KineticOperation* newOperation =
         (KineticOperation*)KineticCalloc(1, sizeof(KineticOperation));
@@ -80,7 +110,7 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
         LOGF0("Failed allocating new operation on connection (0x%0llX)!", connection);
         return NULL;
     }
-    KineticOperation_Init(newOperation, connection);
+    KineticOperation_Init(newOperation, connection->pSession);
     LOGF3("Allocating new PDU on connection (0x%0llX)", connection);
     newOperation->request = (KineticPDU*)KineticCalloc(1, sizeof(KineticPDU));
     if (newOperation->request == NULL) {
@@ -88,7 +118,7 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
         KineticFree(newOperation);
         return NULL;
     }
-    KineticPDU_InitWithCommand(newOperation->request, connection);
+    KineticPDU_InitWithCommand(newOperation->request, connection->pSession);
     LOGF3("Allocated new operation (0x%0llX) on connection (0x%0llX)", newOperation, connection);
     return newOperation;
 }

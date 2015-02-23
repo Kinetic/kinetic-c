@@ -56,24 +56,24 @@ void setUp(void)
     Session.config = (KineticSessionConfig) {
         .host = "somehost.com",
         .port = 17,
+        .clusterVersion = 6,
     };
-    memset(&Connection, 0, sizeof(Connection));
+    Client.bus = &MessageBus;
+    KineticConnection_Init(&Connection);
     Connection.pSession = &Session;
     Client.bus = &MessageBus;
-
     KineticAllocator_NewConnection_ExpectAndReturn(&MessageBus, &Session, &Connection);
     KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
     
     KineticStatus status = KineticSession_Create(&Session, &Client);
-
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&Connection, Session.connection);
     TEST_ASSERT_FALSE(Session.connection->connected);
     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
     TEST_ASSERT_EQUAL(17, Session.config.port);
 
-    KineticPDU_InitWithCommand(&Request, Session.connection);
-    KineticPDU_InitWithCommand(&Response, Session.connection);
+    KineticPDU_InitWithCommand(&Request, &Session);
+    KineticPDU_InitWithCommand(&Response, &Session);
     OperationCompleteCallbackCount = 0;
     LastStatus = KINETIC_STATUS_INVALID;
 }
@@ -109,16 +109,29 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
 
     KineticAllocator_NewConnection_ExpectAndReturn(&MessageBus, &session, &connection);
     KineticCountingSemaphore_Create_ExpectAndReturn(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, &Semaphore);
-    KineticStatus status = KineticSession_Create(&session, &Client);
+    KineticStatus status = KineticSession_Create(&session, &Client);    
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_PTR(&connection, session.connection);
     TEST_ASSERT_FALSE(session.connection->connected);
 
     KineticCountingSemaphore_Destroy_Expect(&Semaphore);
     KineticAllocator_FreeConnection_Expect(&connection);
+    KineticAllocator_FreeSession_Expect(&session);
     status = KineticSession_Destroy(&session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_NULL(session.connection);
+}
+
+void test_KineticConnection_Init_should_create_a_default_connection_object(void)
+{
+    LOG_LOCATION;
+    KineticConnection connection;
+    KineticConnection_Init(&connection);
+
+    TEST_ASSERT_FALSE(connection.connected);
+    TEST_ASSERT_EQUAL(-1, connection.socket);
+    TEST_ASSERT_EQUAL_INT64(0, connection.sequence);
+    TEST_ASSERT_EQUAL_INT64(0, connection.connectionID);
 }
 
 void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_session(void)

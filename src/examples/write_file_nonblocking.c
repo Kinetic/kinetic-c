@@ -72,6 +72,7 @@ int main(int argc, char** argv)
     (void)argv;
 
     // Initialize kinetic-c and establish session
+    KineticSession* session;
     KineticClientConfig client_config = {
         .logFile = "stdout",
         .logLevel = 0,
@@ -79,15 +80,14 @@ int main(int argc, char** argv)
     KineticClient * client = KineticClient_Init(&client_config);
     if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
-    const KineticSessionConfig config = {
+    KineticSessionConfig config = {
         .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    KineticSession session = {.config = config};
-    KineticStatus status = KineticClient_CreateConnection(&session, client);
+    KineticStatus status = KineticClient_CreateSession(&config, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
             Kinetic_GetStatusDescription(status));
@@ -102,7 +102,7 @@ int main(int argc, char** argv)
     // Kick off the chained write/PUT operations and wait for completion
     const uint32_t maxOverlappedChunks = 4;
     const char* dataFile = "test/support/data/test.data";
-    FileTransferProgress* transfer = start_file_transfer(&session, dataFile, prefix, maxOverlappedChunks);
+    FileTransferProgress* transfer = start_file_transfer(session, dataFile, prefix, maxOverlappedChunks);
     printf("Waiting for transfer to complete...\n");
     status = wait_for_put_finish(transfer);
     if (status != KINETIC_STATUS_SUCCESS) {
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
     printf("Transfer completed successfully!\n");
 
     // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(&session);
+    KineticClient_DestroySession(session);
     KineticClient_Shutdown(client);
 
     return 0;

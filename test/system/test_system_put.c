@@ -20,7 +20,6 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
 static KineticEntry Entry;
 static uint8_t KeyData[64];
 static ByteBuffer KeyBuffer;
@@ -30,10 +29,9 @@ static uint8_t VersionData[64];
 static ByteBuffer VersionBuffer;
 static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
-
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 3);
+    SystemTestSetup(2);
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "PUT test key");
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
     VersionBuffer = ByteBuffer_CreateAndAppendCString(VersionData, sizeof(VersionData), "v1.0");
@@ -42,7 +40,7 @@ void setUp(void)
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_Put_should_create_new_object_on_device(void)
@@ -56,7 +54,7 @@ void test_Put_should_create_new_object_on_device(void)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
@@ -79,7 +77,7 @@ void test_Put_should_handle_non_null_buffer_with_length_of_0(void)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
@@ -106,7 +104,7 @@ void test_Put_should_handle_NULL_buffer_if_length_specified_as_0(void)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Put(&Fixture.session, &Entry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
@@ -114,9 +112,3 @@ void test_Put_should_handle_NULL_buffer_if_length_specified_as_0(void)
         "ByteBuffer used lengths do not match!");
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
-
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

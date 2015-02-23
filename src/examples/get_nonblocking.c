@@ -37,27 +37,27 @@ int main(int argc, char** argv)
     (void)argc;
     (void)argv;
 
-    // Initialize kinetic-c and establish session
-    KineticClientConfig client_config = {
+    // Initialize kinetic-c and configure sessions
+    KineticSession* session;
+    KineticClientConfig clientConfig = {
         .logFile = "stdout",
-        .logLevel = 0,
+        .logLevel = 1,
     };
-    KineticClient * client = KineticClient_Init(&client_config);
+    KineticClient * client = KineticClient_Init(&clientConfig);
     if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
-    KineticSession session = {.config = {
-        .host = SYSTEM_TEST_HOST,
+    KineticSessionConfig sessionConfig = {
+        .host = "localhost",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-    }};
-
-    KineticStatus connect_status = KineticClient_CreateConnection(&session, client);
-    if (connect_status != KINETIC_STATUS_SUCCESS) {
+    };
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
+    if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
-            Kinetic_GetStatusDescription(connect_status));
-        return 1;
+            Kinetic_GetStatusDescription(status));
+        exit(1);
     }
 
     // some dummy data to PUT
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
     };
 
     // Do a blocking put to make sure there is something there to read back
-    KineticStatus put_status = KineticClient_Put(&session, &entry, NULL);
+    KineticStatus put_status = KineticClient_Put(session, &entry, NULL);
 
     if (put_status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Put failed w/status: %s\n", Kinetic_GetStatusDescription(put_status));
@@ -111,8 +111,8 @@ int main(int argc, char** argv)
         .force = true,
     };
 
-    KineticStatus status = KineticClient_Get(
-        &session,
+    status = KineticClient_Get(
+        session,
         &get_entry,
         &(KineticCompletionClosure) {
             .callback = get_finished,
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
     
 
     // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(&session);
+    KineticClient_DestroySession(session);
     KineticClient_Shutdown(client);
 
     return 0;

@@ -34,7 +34,7 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
 void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_size)
 {
-    LOGF0("\nSTRESS THREAD: object_size: %zu bytes, count: %zu entries\n", value_size, num_ops);
+    LOGF0("STRESS THREAD: object_size: %zu bytes, count: %zu entries", value_size, num_ops);
 
     ByteBuffer test_data = ByteBuffer_Malloc(value_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
@@ -98,7 +98,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             }
         }
 
-        LOG0("Waiting for PUTs to finish...");
         for (size_t i = 0; i < num_ops; i++) {
             KineticSemaphore_WaitForSignalAndDestroy(put_statuses[i].sem);
             if (put_statuses[i].status != KINETIC_STATUS_SUCCESS) {
@@ -117,8 +116,7 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
         float elapsed_ms = elapsed_us / 1000.0f;
         float bandwidth = (bytes_written * 1000.0f) / (elapsed_ms * 1024 * 1024);
         fflush(stdout);
-        LOGF0("\n--------------------------------------------------------------------------------\n"
-            "PUT Performance: wrote: %.1f kB, duration: %.3f seconds, throughput: %.2f MB/sec",
+        LOGF0("PUT Performance: wrote: %.1f kB, duration: %.3f sec, throughput: %.2f MB/sec",
             bytes_written / 1024.0f, elapsed_ms / 1000.0f, bandwidth);
     }
 
@@ -164,7 +162,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             }
         }
 
-        LOG0("Waiting for GETs to finish...");
         size_t bytes_read = 0;
         for (size_t i = 0; i < num_ops; i++)
         {
@@ -190,7 +187,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             }
         }
         TEST_ASSERT_EQUAL_MESSAGE(0, numFailures, "DATA INTEGRITY CHECK FAILED UPON READBACK!");
-        LOG0("Data integrity check passed!");
 
         // Calculate and report performance
         struct timeval stop_time;
@@ -200,8 +196,7 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
         float elapsed_ms = elapsed_us / 1000.0f;
         float bandwidth = (bytes_read * 1000.0f) / (elapsed_ms * 1024 * 1024);
         fflush(stdout);
-        LOGF0("\n--------------------------------------------------------------------------------\n"
-            "GET Performance: read: %.1f kB, duration: %.3f seconds, throughput: %.2f MB/sec",
+        LOGF0("GET Performance: read: %.1f kB, duration: %.3f sec, throughput: %.2f MB/sec",
             bytes_read / 1024.0f, elapsed_ms / 1000.0f, bandwidth);
         for (size_t i = 0; i < num_ops; i++) {
             ByteBuffer_Free(test_get_datas[i]);
@@ -254,7 +249,6 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
             }
         }
 
-        LOG0("Waiting for DELETEs to finish...");
         for (size_t i = 0; i < num_ops; i++) {
             KineticSemaphore_WaitForSignalAndDestroy(delete_statuses[i].sem);
             if (delete_statuses[i].status != KINETIC_STATUS_SUCCESS) {
@@ -272,8 +266,7 @@ void run_throughput_tests(KineticSession* session, size_t num_ops, size_t value_
         float elapsed_ms = elapsed_us / 1000.0f;
         float throughput = (num_ops * 1000.0f) / elapsed_ms;
         fflush(stdout);
-        LOGF0("\n--------------------------------------------------------------------------------\n"
-            "DELETE Performance: count: %zu entries, duration: %.3f seconds, throughput: %.2f entries/sec\n",
+        LOGF0("DELETE Performance: count: %zu entries, duration: %.3f sec, throughput: %.2f entries/sec",
             num_ops, elapsed_ms / 1000.0f, throughput);
     }
 
@@ -300,20 +293,17 @@ static void* test_thread(void* test_params)
 
 void run_tests(KineticClient * client)
 {
-    // Initialize kinetic-c and configure sessions
+    // Configure and establish a session with the specified device
+    KineticSession* session;
     const char HmacKeyString[] = "asdfasdf";
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .host = SYSTEM_TEST_HOST,
-            .port = KINETIC_PORT,
-            .clusterVersion = 0,
-            .identity = 1,
-            .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
-        },
+    KineticSessionConfig config = {
+        .host = SYSTEM_TEST_HOST,
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-
-    // Establish connection
-    KineticStatus status = KineticClient_CreateConnection(&session, client);
+    KineticStatus status = KineticClient_CreateSession(&config, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
         char msg[128];
         sprintf(msg, "Failed connecting to the Kinetic device w/status: %s", Kinetic_GetStatusDescription(status));
@@ -321,16 +311,16 @@ void run_tests(KineticClient * client)
     }
 
     // Prepare per-thread test data
-    TestParams params[] = { 
-        { .client = client, .session = &session, .thread_iters = 2, .num_ops = 500,  .obj_size = KINETIC_OBJ_SIZE },
-        { .client = client, .session = &session, .thread_iters = 2, .num_ops = 1000, .obj_size = 120,             },
-        { .client = client, .session = &session, .thread_iters = 2, .num_ops = 1500, .obj_size = 500,             },
-        { .client = client, .session = &session, .thread_iters = 2, .num_ops = 500,  .obj_size = 70000,           },
-        // { .client = client, .session = &session, .thread_iters = 2, .num_ops = 1000, .obj_size = 120,             },
-        // { .client = client, .session = &session, .thread_iters = 3, .num_ops = 1000, .obj_size = 120,             },
-        // { .client = client, .session = &session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
-        // { .client = client, .session = &session, .thread_iters = 5, .num_ops = 1000, .obj_size = 120,             },
-        // { .client = client, .session = &session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
+    TestParams params[] = {
+        { .client = client, .session = session, .thread_iters = 1, .num_ops = 250,  .obj_size = KINETIC_OBJ_SIZE },
+        { .client = client, .session = session, .thread_iters = 1, .num_ops = 500,  .obj_size = 120,             },
+        { .client = client, .session = session, .thread_iters = 1, .num_ops = 750,  .obj_size = 500,             },
+        { .client = client, .session = session, .thread_iters = 1, .num_ops = 250,  .obj_size = 70000,           },
+        // { .client = client, .session = session, .thread_iters = 2, .num_ops = 1000, .obj_size = 120,             },
+        // { .client = client, .session = session, .thread_iters = 3, .num_ops = 1000, .obj_size = 120,             },
+        // { .client = client, .session = session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
+        // { .client = client, .session = session, .thread_iters = 5, .num_ops = 1000, .obj_size = 120,             },
+        // { .client = client, .session = session, .thread_iters = 2, .num_ops = 100,  .obj_size = KINETIC_OBJ_SIZE },
     };
 
     pthread_t thread_id[NUM_ELEMENTS(params)];
@@ -345,34 +335,33 @@ void run_tests(KineticClient * client)
         TEST_ASSERT_EQUAL_MESSAGE(0, join_status, "pthread join failed");
     }
 
-    // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(&session);
+    // Shutdown client session and cleanup
+    KineticClient_DestroySession(session);
 }
 
 void test_kinetic_client_throughput_test_kinetic_client_throughput_(void)
 {
     srand(time(NULL));
+    KineticClientConfig config = {
+        .logFile = "stdout",
+        .logLevel = 0,
+        .writerThreads = 1,
+        .readerThreads = 1,
+        .maxThreadpoolThreads = 1,
+    };
+    KineticClient * client = KineticClient_Init(&config);
+
     const uint32_t max_runs = 2;
-
     for (uint32_t i = 0; i < max_runs; i++) {
-        LOG0( "============================================================================================");
-        LOGF0("==  Test run %u of %u", i+1, max_runs);
-        LOG0( "============================================================================================");
-
-        KineticClientConfig config = {
-            .logFile = "stdout",
-            .logLevel = 0,
-            .writerThreads = 1,
-            .readerThreads = 1,
-            .maxThreadpoolThreads = 1,
-        };
-
-        KineticClient * client = KineticClient_Init(&config);
-
+        LOGF0(
+            "============================================================================================\n"
+            "==  Test run %u of %u\n"
+            "============================================================================================\n",
+            i+1, max_runs);
         run_tests(client);
-
-        KineticClient_Shutdown(client);
     }
+
+    KineticClient_Shutdown(client);
     
 }
 

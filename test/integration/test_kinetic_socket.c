@@ -47,7 +47,7 @@
 #include "socket99.h"
 
 static int FileDesc;
-static int KineticTestPort = KINETIC_PORT;
+// static int KineticTestPort = KINETIC_PORT;
 
 void setUp(void)
 {
@@ -80,6 +80,3 @@ void test_KineticSocket_Connect_should_create_a_socket_connection(void)
     // FileDesc = KineticSocket_Connect(SYSTEM_TEST_HOST, KineticTestPort);
     // TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }
-
-
-

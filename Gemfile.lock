@@ -12,4 +12,4 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (>= 1.3.5)
-  ceedling (>= 0.15)
+  ceedling (>= 0.16)

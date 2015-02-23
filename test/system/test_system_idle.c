@@ -24,24 +24,15 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
 
 #define IDLE_SECONDS 10
 
-void setUp(void)
-{
-}
-
-void tearDown(void)
-{
-}
-
 static void child_task(void) {
-    SystemTestSetup(&Fixture, 0);
+    SystemTestSetup(0);
 
     sleep(IDLE_SECONDS);
 
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
     exit(0);
 }
 

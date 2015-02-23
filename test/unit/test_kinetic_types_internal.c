@@ -47,7 +47,7 @@ void test_kinetic_internal_types_should_be_defined(void)
     TEST_ASSERT_EQUAL(-1, KINETIC_SOCKET_DESCRIPTOR_INVALID);
 }
 
-void test_KineticProtoStatusCode_to_KineticStatus_should__map_from_internal_to_public_type(void)
+void test_KineticProtoStatusCode_to_KineticStatus_should_map_from_internal_to_public_type(void)
 {
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS));
@@ -96,6 +96,9 @@ void test_KineticProtoStatusCode_to_KineticStatus_should__map_from_internal_to_p
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS));
 
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_LOCKED,
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED));
+
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
@@ -103,6 +106,11 @@ void test_KineticProtoStatusCode_to_KineticStatus_should__map_from_internal_to_p
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
                                     KineticProtoStatusCode_to_KineticStatus((KineticProto_Command_Status_StatusCode)
                                             (KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 100)));
+}
+
+void test_KineticProtoStatusCode_to_KineticStatus_should_ensure_all_device_status_codes_are_mapped(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Add support to status mapping test to ensure all statuses defined by the protocol are mapped to a public status."); 
 }
 
 void test_KineticProto_Command_Synchronization_from_KineticSynchronization_should_map_from_internal_to_public_type(void)

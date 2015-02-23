@@ -29,6 +29,7 @@
 #include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_socket.h"
+#include "mock_kinetic_auth.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_allocator.h"
@@ -44,4 +45,3 @@ void tearDown(void)
 {
     KineticLogger_Close();
 }
-

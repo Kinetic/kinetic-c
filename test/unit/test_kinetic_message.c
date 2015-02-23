@@ -71,15 +71,6 @@ void test_KineticMessage_Init_should_initialize_the_message_and_required_protobu
     KineticMessage protoMsg;
 
     KineticMessage_Init(&protoMsg);
-
-    TEST_ASSERT_EQUAL_PTR(&protoMsg.header, protoMsg.command.header);
-    TEST_ASSERT_TRUE(protoMsg.message.has_authType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, protoMsg.message.authType);
-    TEST_ASSERT_EQUAL_PTR(&protoMsg.hmacAuth, protoMsg.message.hmacAuth);
-    TEST_ASSERT_EQUAL_PTR(protoMsg.hmacData, protoMsg.message.hmacAuth->hmac.data);
-    TEST_ASSERT_EQUAL(KINETIC_HMAC_MAX_LEN, protoMsg.message.hmacAuth->hmac.len);
-    TEST_ASSERT_NULL(protoMsg.command.body);
-    TEST_ASSERT_NULL(protoMsg.command.status);
 }
 
 void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_add_to_message(void)
@@ -196,9 +187,6 @@ void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticPro
     TEST_ASSERT_TRUE(message.command.body->range->reverse);
     TEST_ASSERT_EQUAL(0, message.command.body->range->n_keys);
     TEST_ASSERT_NULL(message.command.body->range->keys);
-
-
-
 
     range = (KineticKeyRange) {
         .startKey = startKey,

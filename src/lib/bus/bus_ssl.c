@@ -58,7 +58,7 @@ bool bus_ssl_connect(struct bus *b, connection_info *ci) {
     ci->ssl = ssl;
 
     if (!SSL_set_fd(ci->ssl, ci->fd)) {
-        return false;;
+        return false;
     }
 
     if (do_blocking_connection(b, ci)) {
@@ -77,8 +77,8 @@ bool bus_ssl_disconnect(struct bus *b, SSL *ssl) {
     return true;
 }
 
-/* Free all internal data for using SSL. */
-void bus_ssl_free(struct bus *b) {
+/* Free all internal data for using SSL (the SSL_CTX). */
+void bus_ssl_ctx_free(struct bus *b) {
     if (b && b->ssl_ctx) {
         SSL_CTX_free(b->ssl_ctx);
         b->ssl_ctx = NULL;

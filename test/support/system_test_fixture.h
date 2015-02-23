@@ -22,6 +22,8 @@
 #define _SYSTEM_TEST_FIXTURE
 
 #include "kinetic_types.h"
+#include "unity.h"
+#include "unity_helper.h"
 #include "kinetic_logger.h"
 #include "unity.h"
 #include "unity_helper.h"
@@ -30,25 +32,36 @@
 #define SYSTEM_TEST_HOST "localhost"
 #endif
 
+#ifndef SESSION_CLUSTER_VERSION
+#define SESSION_CLUSTER_VERSION 0
+#endif
+
+#ifndef SESSION_HMAC_KEY
+#define SESSION_HMAC_KEY "asdfasdf"
+#endif
+
+#ifndef SESSION_PIN
+#define SESSION_PIN "123"
+#endif
+
+#ifndef SESSION_IDENTITY
+#define SESSION_IDENTITY 1
+#endif
+
 typedef struct _SystemTestFixture {
-    KineticSession session;
-    bool testIgnored;
+    KineticSession* session;
+    KineticSession* adminSession;
     bool connected;
     int64_t expectedSequence;
     KineticClient * client;
 } SystemTestFixture;
 
-void SystemTestSetup(SystemTestFixture* fixture, int log_level);
-void SystemTestTearDown(SystemTestFixture* fixture);
-void SystemTestSuiteTearDown(SystemTestFixture* fixture);
+extern SystemTestFixture Fixture;
+
+void SystemTestSetup(int log_level);
+void SystemTestShutDown(void);
 bool SystemTestIsUnderSimulator(void);
 
-#define SYSTEM_TEST_SUITE_TEARDOWN(_fixture) \
-void test_Suite_TearDown(void) \
-{ \
-    if ((_fixture)->session.connection != NULL && (_fixture)->connected) { \
-        KineticClient_DestroyConnection(&(_fixture)->session); } \
-    (_fixture)->connected = false; \
-}
+#define SYSTEM_TEST_SUITE_TEARDOWN void test_Suite_TearDown(void) {SystemTestShutDown();}
 
 #endif // _SYSTEM_TEST_FIXTURE

@@ -23,7 +23,7 @@
 typedef enum {
     MSG_NONE,
     MSG_ADD_SOCKET,
-    MSG_CLOSE_SOCKET,
+    MSG_REMOVE_SOCKET,
     MSG_HOLD_RESPONSE,
     MSG_EXPECT_RESPONSE,
     MSG_SHUTDOWN,
@@ -41,7 +41,7 @@ typedef struct listener_msg {
         } add_socket;
         struct {
             int fd;
-        } close_socket;
+        } remove_socket;
         struct {
             int fd;
             int64_t seq_id;
@@ -105,7 +105,6 @@ typedef uint32_t msg_flag_t;
 /* Receiver of responses */
 typedef struct listener {
     struct bus *bus;
-    struct casq *q;
     bool shutdown;
 
     /* Pipes used to wake the sleeping listener on queue input. */
@@ -158,7 +157,7 @@ static void dump_rx_info_table(listener *l);
 
 static void msg_handler(listener *l, listener_msg *msg);
 static void add_socket(listener *l, connection_info *ci, int notify_fd);
-static void forget_socket(listener *l, int fd);
+static void remove_socket(listener *l, int fd);
 static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_sec);
 static void expect_response(listener *l, boxed_msg *box);
 static void shutdown(listener *l);

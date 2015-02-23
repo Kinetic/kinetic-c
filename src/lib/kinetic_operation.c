@@ -17,13 +17,13 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-
 #include "kinetic_operation.h"
 #include "kinetic_controller.h"
 #include "kinetic_session.h"
 #include "kinetic_message.h"
 #include "kinetic_pdu.h"
 #include "kinetic_nbo.h"
+#include "kinetic_auth.h"
 #include "kinetic_socket.h"
 #include "kinetic_device_info.h"
 #include "kinetic_allocator.h"
@@ -59,6 +59,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
             request = NULL;
         }
     }
+
     return status;
 }
 
@@ -93,10 +94,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     // Populate sequence count and increment it for next operation
     KINETIC_ASSERT(request->message.header.sequence == KINETIC_SEQUENCE_NOT_YET_BOUND);
-
-    // int seq_id = ATOMIC_FETCH_AND_INCREMENT(&operation->connection->sequence);
-    // request->message.header.sequence = seq_id;
-    int64_t seq_id = operation->connection->sequence++;
+    int64_t seq_id = KineticSession_GetNextSequenceCount(session);
     request->message.header.sequence = seq_id;
 
     // Pack the command, if available
@@ -121,29 +119,23 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     log_request_seq_id(operation->connection->socket, seq_id, request->message.header.messageType);
 
-    switch (proto->authType) {
-    case KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH:
-        /* TODO: If operation uses PIN AUTH, then init that */
-        break;
-    case KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH:
-        {
-            KineticHMAC hmac;
-            memset(&hmac, 0, sizeof(hmac));
-
-            // Populate the HMAC for the protobuf
-            KineticHMAC_Init(&hmac, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
-            KineticHMAC_Populate(&hmac, proto, session->config.hmacKey);
-        } break;
-    default:
-        break;
+    // Populate the HMAC/PIN for protobuf authentication
+    if (operation->pin != NULL) {
+        status = KineticAuth_PopulatePin(&session->config, operation->request, *operation->pin);
+    }
+    else {
+        status = KineticAuth_PopulateHmac(&session->config, operation->request);
+    }
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOG0("Failed populating authentication info for new request!");
+        return status;
     }
 
-    KineticPDUHeader header;
-    memset(&header, 0, sizeof(header));
-
     // Configure PDU header length fields
-    header.versionPrefix = 'F';
-    header.protobufLength = KineticProto_Message__get_packed_size(proto);
+    KineticPDUHeader header = {
+        .versionPrefix = 'F',
+        .protobufLength = KineticProto_Message__get_packed_size(proto)
+    };
     if (operation->entry != NULL && operation->sendValue) {
         header.valueLength = operation->entry->value.bytesUsed;
     }
@@ -156,6 +148,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         status = KINETIC_STATUS_BUFFER_OVERRUN;
         goto cleanup;
     }
+
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
     uint32_t nboValueLength = KineticNBO_FromHostU32(header.valueLength);
 
@@ -246,6 +239,38 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
     }
     return status;
 }
+
+static void KineticOperation_ValidateOperation(KineticOperation* operation)
+{
+    KINETIC_ASSERT(operation != NULL);
+    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->request != NULL);
+    KINETIC_ASSERT(operation->request->command != NULL);
+    KINETIC_ASSERT(operation->request->command->header != NULL);
+    KINETIC_ASSERT(operation->request->command->header->has_sequence);
+}
+
+void KineticOperation_Complete(KineticOperation* operation, KineticStatus status)
+{
+    KINETIC_ASSERT(operation != NULL);
+    // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
+    KineticCompletionData completionData = {.status = status};
+
+    // Release this request so that others can be unblocked if at max (request PDUs throttled)
+    KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
+
+    if(operation->closure.callback != NULL) {
+        operation->closure.callback(&completionData, operation->closure.clientData);
+    }
+
+    KineticAllocator_FreeOperation(operation);
+}
+
+
+
+/*******************************************************************************
+ * Client Operations
+*******************************************************************************/
 
 KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, KineticStatus const status)
 {
@@ -418,8 +443,9 @@ KineticStatus KineticOperation_FlushCallback(KineticOperation* const operation, 
 void KineticOperation_BuildFlush(KineticOperation* const operation)
 {
     KineticOperation_ValidateOperation(operation);
+
     operation->request->message.command.header->messageType =
-      KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA;
+        KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA;
     operation->request->message.command.header->has_messageType = true;
     operation->valueEnabled = false;
     operation->sendValue = false;
@@ -513,7 +539,7 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation,
             return KINETIC_STATUS_OPERATION_FAILED;
         }
         else {
-            *operation->deviceInfo = KineticDeviceInfo_Create(operation->response->command->body->getLog);
+            *operation->deviceInfo = KineticLogInfo_Create(operation->response->command->body->getLog);
             return KINETIC_STATUS_SUCCESS;
         }
     }
@@ -521,12 +547,12 @@ KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation,
 }
 
 void KineticOperation_BuildGetLog(KineticOperation* const operation,
-    KineticDeviceInfo_Type type,
-    KineticDeviceInfo** info)
+    KineticLogInfo_Type type,
+    KineticLogInfo** info)
 {
     KineticOperation_ValidateOperation(operation);
     KineticProto_Command_GetLog_Type protoType =
-        KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type(type);
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(type);
         
     operation->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG;
     operation->request->command->header->has_messageType = true;
@@ -538,7 +564,6 @@ void KineticOperation_BuildGetLog(KineticOperation* const operation,
     operation->deviceInfo = info;
     operation->callback = &KineticOperation_GetLogCallback;
 }
-
 
 void destroy_p2pOp(KineticProto_Command_P2POperation* proto_p2pOp)
 {
@@ -568,7 +593,6 @@ void destroy_p2pOp(KineticProto_Command_P2POperation* proto_p2pOp)
         free(proto_p2pOp);
     }
 }
-
 
 KineticProto_Command_P2POperation* build_p2pOp(uint32_t nestingLevel, KineticP2P_Operation const * const p2pOp)
 {
@@ -669,7 +693,6 @@ static void populateP2PStatusCodes(KineticP2P_Operation* const p2pOp, KineticPro
     }
 }
 
-
 KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status)
 {
     KineticP2P_Operation* const p2pOp = operation->p2pOp;
@@ -713,49 +736,136 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticOperation_InstantSecureEraseCallback(KineticOperation* const operation, KineticStatus const status)
+
+
+/*******************************************************************************
+ * Admin Client Operations
+*******************************************************************************/
+
+KineticStatus KineticOperation_SetPinCallback(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
     KINETIC_ASSERT(operation->connection != NULL);
-    LOGF3("IntantSecureErase callback w/ operation (0x%0llX) on connection (0x%0llX)",
+    LOGF3("SetPin callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
     return status;
 }
 
-void KineticOperation_BuildInstantSecureErase(KineticOperation* operation)
+void KineticOperation_BuildSetPin(KineticOperation* const operation, ByteArray old_pin, ByteArray new_pin, bool lock)
 {
     KineticOperation_ValidateOperation(operation);
-    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
+
+    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY;
+    operation->request->message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->message.body;
+    operation->request->command->body->security = &operation->request->message.security;
+
+    if (lock) {
+        operation->request->message.security.oldLockPIN = (ProtobufCBinaryData) {
+            .data = old_pin.data, .len = old_pin.len };
+        operation->request->message.security.has_oldLockPIN = true;
+        operation->request->message.security.newLockPIN = (ProtobufCBinaryData) {
+            .data = new_pin.data, .len = new_pin.len };
+        operation->request->message.security.has_newLockPIN = true;
+    }
+    else {
+        operation->request->message.security.oldErasePIN = (ProtobufCBinaryData) {
+            .data = old_pin.data, .len = old_pin.len };
+        operation->request->message.security.has_oldErasePIN = true;
+        operation->request->message.security.newErasePIN = (ProtobufCBinaryData) {
+            .data = new_pin.data, .len = new_pin.len };
+        operation->request->message.security.has_newErasePIN = true;
+    }
+    
+    operation->valueEnabled = false;
+    operation->sendValue = false;
+    operation->callback = &KineticOperation_SetPinCallback;
+    operation->request->pinAuth = false;
+}
+
+KineticStatus KineticOperation_EraseCallback(KineticOperation* const operation, KineticStatus const status)
+{
+    KINETIC_ASSERT(operation != NULL);
+    KINETIC_ASSERT(operation->connection != NULL);
+    LOGF3("Erase callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        operation, operation->connection);
+    return status;
+}
+
+void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_erase, ByteArray* pin)
+{
+    KineticOperation_ValidateOperation(operation);
+
+    operation->pin = pin;
+    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP;
     operation->request->message.command.header->has_messageType = true;
     operation->request->command->body = &operation->request->message.body;
     operation->request->command->body->pinOp = &operation->request->message.pinOp;
-    
-    operation->request->command->body->pinOp->pinOpType = KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP;
+    operation->request->command->body->pinOp->pinOpType = secure_erase ?
+        KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP :
+        KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP;
     operation->request->command->body->pinOp->has_pinOpType = true;
     
     operation->valueEnabled = false;
     operation->sendValue = false;
-    operation->callback = &KineticOperation_InstantSecureEraseCallback;
+    operation->callback = &KineticOperation_EraseCallback;
+    operation->request->pinAuth = true;
+    operation->timeoutSeconds = 180;
 }
 
-KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* operation,
-    KineticStatus const status)
+KineticStatus KineticOperation_LockUnlockCallback(KineticOperation* const operation, KineticStatus const status)
+{
+    KINETIC_ASSERT(operation != NULL);
+    KINETIC_ASSERT(operation->connection != NULL);
+    LOGF3("LockUnlockCallback callback w/ operation (0x%0llX) on connection (0x%0llX)",
+        operation, operation->connection);
+    return status;
+}
+
+void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lock, ByteArray* pin)
+{
+    KineticOperation_ValidateOperation(operation);
+
+    operation->pin = pin;
+    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP;
+    operation->request->message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->message.body;
+    operation->request->command->body->pinOp = &operation->request->message.pinOp;
+    
+    operation->request->command->body->pinOp->pinOpType = lock ?
+        KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_LOCK_PINOP :
+        KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP;
+    operation->request->command->body->pinOp->has_pinOpType = true;
+    
+    operation->valueEnabled = false;
+    operation->sendValue = false;
+    operation->callback = &KineticOperation_LockUnlockCallback;
+    operation->request->pinAuth = true;
+}
+
+KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
     KINETIC_ASSERT(operation->connection != NULL);
     LOGF3("SetClusterVersion callback w/ operation (0x%0llX) on connection (0x%0llX)",
         operation, operation->connection);
-    (void)status;
-    return KINETIC_STATUS_SUCCESS;
+    if (status == KINETIC_STATUS_SUCCESS) {
+        KineticSession_SetClusterVersion(operation->connection->pSession, operation->pendingClusterVersion);
+        operation->pendingClusterVersion = -1; // Invalidate
+    }
+    return status;
 }
 
-void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t newClusterVersion)
+void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_t new_cluster_version)
 {
     KineticOperation_ValidateOperation(operation);
+    
     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
     operation->request->message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->message.body;
     
-    operation->request->command->body->setup->newClusterVersion = newClusterVersion;
+    operation->request->command->body->setup = &operation->request->message.setup;
+    operation->request->command->body->setup->newClusterVersion = new_cluster_version;
     operation->request->command->body->setup->has_newClusterVersion = true;
 
     operation->request->command->body = &operation->request->message.body;
@@ -763,30 +873,5 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetClusterVersionCallback;
-}
-
-static void KineticOperation_ValidateOperation(KineticOperation* operation)
-{
-    KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
-    KINETIC_ASSERT(operation->request != NULL);
-    KINETIC_ASSERT(operation->request->command != NULL);
-    KINETIC_ASSERT(operation->request->command->header != NULL);
-    KINETIC_ASSERT(operation->request->command->header->has_sequence);
-}
-
-void KineticOperation_Complete(KineticOperation* operation, KineticStatus status)
-{
-    KINETIC_ASSERT(operation != NULL);
-    // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
-    KineticCompletionData completionData = {.status = status};
-
-    // Release this request so that others can be unblocked if at max (request PDUs throttled)
-    KineticCountingSemaphore_Give(operation->connection->outstandingOperations);
-
-    if(operation->closure.callback != NULL) {
-        operation->closure.callback(&completionData, operation->closure.clientData);
-    }
-
-    KineticAllocator_FreeOperation(operation);
+    operation->pendingClusterVersion = new_cluster_version;
 }

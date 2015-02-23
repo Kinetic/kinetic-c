@@ -30,7 +30,6 @@
 #include "bus_types.h"
 #include "bus_internal_types.h"
 #include "listener.h"
-#include "casq.h"
 #include "util.h"
 #include "atomic.h"
 #include "yacht.h"
@@ -96,6 +95,8 @@ struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
     }
     
     BUS_LOG(b, 2, LOG_SENDER, "init success", b->udata);
+    BUS_LOG_SNPRINTF(b, 4, LOG_SENDER, b->udata, 64,
+        "sender tx_info table at %p", (void *)s->tx_info);
     
     (void)cfg;
     return s;
@@ -393,7 +394,10 @@ void *sender_mainloop(void *arg) {
 
 static void free_fd_info_cb(void *value, void *udata) {
     fd_info *info = (fd_info *)value;
-    /* Note: info->ssl will be freed by the listener. */
+
+    /* Note: info->ssl will be freed by the main bus code. */
+    info->ssl = NULL;
+
     (void)udata;
     free(info);
 }
@@ -842,11 +846,13 @@ static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl) {
     size_t rem = msg_size - info->u.write.sent_size;
     int fd = info->u.write.fd;
     ssize_t written = 0;
-    for (;;) {
+
+    while (rem > 0) {
         ssize_t wrsz = SSL_write(ssl, &msg[info->u.write.sent_size], rem);
         if (wrsz > 0) {
             update_sent(b, s, info, wrsz);
             written += wrsz;
+            rem -= wrsz;
         } else if (wrsz < 0) {
             int reason = SSL_get_error(ssl, wrsz);
             switch (reason) {
@@ -1041,6 +1047,9 @@ static void tick_timeout(sender *s, tx_info_t *info) {
                 (long)ue.box->tv_send_done.tv_sec, (long)ue.box->tv_send_done.tv_usec);
             
             notify_message_failure(s, info, BUS_SEND_TX_TIMEOUT);
+            BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 128,
+                "write timed out: <fd%d, seq_id:%lld>",
+                info->u.write.fd, (long long)info->u.write.box->out_seq_id);
         } else {
             info->u.write.timeout_sec--;
         }

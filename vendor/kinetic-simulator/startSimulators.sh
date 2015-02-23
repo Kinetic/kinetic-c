@@ -54,4 +54,3 @@ done
 
 echo
 echo Successfully started $LIMIT kinetic simulators
-

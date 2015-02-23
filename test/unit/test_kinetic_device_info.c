@@ -28,7 +28,7 @@
 #include "unity_helper.h"
 #include <stdlib.h>
 
-static KineticDeviceInfo* Info;
+static KineticLogInfo* Info;
 
 void setUp(void)
 {
@@ -55,9 +55,9 @@ static size_t GetPaddedLength(size_t len)
 }
 
 
-void test_KineticDeviceInfo_Create_should_allocate_and_populate_device_info_with_utilizations(void)
+void test_KineticLogInfo_Create_should_allocate_and_populate_device_info_with_utilizations(void)
 {
-    size_t expectedSize = sizeof(KineticDeviceInfo);
+    size_t expectedSize = sizeof(KineticLogInfo);
     const int numUtilizations = 2;
     KineticProto_Command_GetLog_Utilization utilizations[] = {
         KINETIC_PROTO_COMMAND_GET_LOG_UTILIZATION__INIT,
@@ -70,19 +70,19 @@ void test_KineticDeviceInfo_Create_should_allocate_and_populate_device_info_with
     utilizations[0].name = names[0];
     utilizations[0].has_value = true;
     utilizations[0].value = 1.7f;
-    expectedSize += sizeof(KineticDeviceInfo_Utilization) + GetPaddedLength(strlen(utilizations[0].name)+1);
+    expectedSize += sizeof(KineticLogInfo_Utilization) + GetPaddedLength(strlen(utilizations[0].name)+1);
 
     utilizations[1].name = names[1];
     utilizations[1].has_value = true;
     utilizations[1].value = 2.3f;
-    expectedSize += sizeof(KineticDeviceInfo_Utilization) + GetPaddedLength(strlen(utilizations[1].name)+1);
+    expectedSize += sizeof(KineticLogInfo_Utilization) + GetPaddedLength(strlen(utilizations[1].name)+1);
 
     KineticProto_Command_GetLog_Utilization* pUtilizations[] = {
         &utilizations[0], &utilizations[1]
     };
     getLog.utilizations = pUtilizations;
 
-    Info = KineticDeviceInfo_Create(&getLog);
+    Info = KineticLogInfo_Create(&getLog);
 
     TEST_ASSERT_NOT_NULL(Info);
     TEST_ASSERT_NOT_NULL(Info->utilizations);

@@ -18,9 +18,12 @@
 *
 */
 #include "system_test_fixture.h"
-#include "kinetic_client.h"
+#include "kinetic_admin_client.h"
 
-static SystemTestFixture Fixture;
+static char OldPinData[4];
+static char NewPinData[4];
+static ByteArray OldPin, NewPin;
+
 static uint8_t KeyData[1024];
 static ByteBuffer KeyBuffer;
 static uint8_t ExpectedKeyData[1024];
@@ -29,10 +32,6 @@ static uint8_t TagData[1024];
 static ByteBuffer TagBuffer;
 static uint8_t ExpectedTagData[1024];
 static ByteBuffer ExpectedTagBuffer;
-static uint8_t VersionData[1024];
-static ByteBuffer VersionBuffer;
-static uint8_t ExpectedVersionData[1024];
-static ByteBuffer ExpectedVersionBuffer;
 static ByteArray TestValue;
 static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
@@ -40,14 +39,12 @@ static const char strKey[] = "GET system test blob";
 
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 2);
+    SystemTestSetup(2);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
     ExpectedTagBuffer = ByteBuffer_CreateAndAppendCString(ExpectedTagData, sizeof(ExpectedTagData), "SomeTagValue");
-    VersionBuffer = ByteBuffer_CreateAndAppendCString(VersionData, sizeof(VersionData), "v1.0");
-    ExpectedVersionBuffer = ByteBuffer_CreateAndAppendCString(ExpectedVersionData, sizeof(ExpectedVersionData), "v1.0");
     TestValue = ByteArray_CreateWithCString("lorem ipsum... blah blah blah... etc.");
     ValueBuffer = ByteBuffer_CreateAndAppendArray(ValueData, sizeof(ValueData), TestValue);
 
@@ -55,42 +52,66 @@ void setUp(void)
     KineticEntry putEntry = {
         .key = KeyBuffer,
         .tag = TagBuffer,
-        .newVersion = VersionBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer,
         .force = true,
         .synchronization = KINETIC_SYNCHRONIZATION_FLUSH,
     };
 
-    KineticStatus status = KineticClient_Put(&Fixture.session, &putEntry, NULL);
+    KineticStatus status = KineticClient_Put(Fixture.session, &putEntry, NULL);
+
+    // Validate the object exists initially
+    KineticEntry getEntry = {
+        .key = KeyBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer,
+        .force = true,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
+    };
+    status = KineticClient_Get(Fixture.session, &getEntry, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_ByteArray(putEntry.key.array, getEntry.key.array);
+    TEST_ASSERT_EQUAL_ByteArray(putEntry.tag.array, getEntry.tag.array);
+    TEST_ASSERT_EQUAL(putEntry.algorithm, getEntry.algorithm);
+    TEST_ASSERT_EQUAL_ByteBuffer(putEntry.value, getEntry.value);
+
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, putEntry.key);
-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, putEntry.tag);
-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, putEntry.dbVersion);
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
-    TEST_ASSERT_ByteBuffer_NULL(putEntry.newVersion);
-
-    Fixture.expectedSequence++;
+    // Set the erase PIN to something non-empty
+    strcpy(NewPinData, "123");
+    OldPin = ByteArray_Create(OldPinData, 0);
+    NewPin = ByteArray_Create(NewPinData, strlen(NewPinData));
+    status = KineticAdminClient_SetErasePin(Fixture.adminSession,
+        OldPin, NewPin);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    KineticStatus status;
+    
+    // Validate the object no longer exists
+    KineticEntry regetEntryMetadata = {
+        .key = KeyBuffer,
+        .tag = TagBuffer,
+        .metadataOnly = true,
+    };
+    status = KineticClient_Get(Fixture.session, &regetEntryMetadata, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND, status);
+    TEST_ASSERT_ByteArray_EMPTY(regetEntryMetadata.value.array);
+
+    SystemTestShutDown();
 }
 
-void test_InstantSecureErase_should_erase_device_contents(void)
+void test_SecureErase_should_erase_device_contents(void)
 {
-    if (SystemTestIsUnderSimulator()) {
-        KineticStatus status = KineticClient_InstantSecureErase(&Fixture.session);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status); 
-    }
-    else {
-        TEST_IGNORE_MESSAGE("Test disabled against HW until PIN auth completed!");
-    }
+    KineticStatus status = KineticAdminClient_SecureErase(Fixture.adminSession, NewPin);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)
+void test_InstantErase_should_erase_device_contents(void)
+{
+    KineticStatus status = KineticAdminClient_InstantErase(Fixture.adminSession, NewPin);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}

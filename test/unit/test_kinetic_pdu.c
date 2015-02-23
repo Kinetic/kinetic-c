@@ -41,11 +41,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+static uint32_t ClusterVersion = 7;
 static KineticPDU PDU;
 static KineticConnection Connection;
 static KineticResponse Response;
 static KineticSession Session;
-static ByteArray Key;
 static uint8_t ValueBuffer[KINETIC_OBJ_SIZE];
 static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
 
@@ -57,22 +57,17 @@ void setUp(void)
     KineticLogger_Init("stdout", 3);
 
     // Create and configure a new Kinetic protocol instance
-    Key = ByteArray_CreateWithCString("some valid HMAC key...");
-    Session = (KineticSession) {
-        .config = (KineticSessionConfig) {
-            .port = 1234,
-            .host = "valid-host.com",
-            .hmacKey = (ByteArray) {.data = &Session.config.keyData[0], .len = Key.len},
-        }
+    KineticSessionConfig config = {
+        .port = 1234,
+        .host = "valid-host.com",
+        .hmacKey = ByteArray_CreateWithCString("some valid HMAC key..."),
+        .clusterVersion = ClusterVersion,
     };
-    memcpy(Session.config.hmacKey.data, Key.data, Key.len);
-
-    memset(&Connection, 0, sizeof(Connection));
+    KineticSession_Init(&Session, &config, &Connection);
     Connection.connected = true;
     Connection.socket = 456;
     Connection.pSession = &Session;
-
-    KineticPDU_Init(&PDU, &Connection);
+    KineticPDU_InitWithCommand(&PDU, &Session);
     ByteArray_FillWithDummyData(Value);
 
     memset(si_buf, 0, SI_BUF_SIZE);
@@ -105,6 +100,39 @@ void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_v
     TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE, PDU_MAX_LEN);
 }
 
+
+void test_KineticPDU_Init_should_initialize_PDU(void)
+{
+    LOG_LOCATION;
+    KineticPDU_InitWithCommand(&PDU, &Session);
+}
+
+void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
+{
+    LOG_LOCATION;
+    KineticConnection_Init(&Connection);
+    Connection.sequence = 24;
+    Connection.connectionID = 8765432;
+    Session = (KineticSession) {
+        .config = (KineticSessionConfig) {
+            .clusterVersion = 1122334455667788,
+            .identity = 37,
+        }
+    };
+    Connection.pSession = &Session;
+    Session.connection = &Connection;
+    KineticPDU_InitWithCommand(&PDU, &Session);
+
+    TEST_ASSERT_TRUE(PDU.message.header.has_clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(1122334455667788, PDU.message.header.clusterVersion);
+    TEST_ASSERT_TRUE(PDU.message.header.has_connectionID);
+    TEST_ASSERT_EQUAL_INT64(8765432, PDU.message.header.connectionID);
+    TEST_ASSERT_TRUE(PDU.message.header.has_sequence);
+    TEST_ASSERT_EQUAL_INT64(KINETIC_SEQUENCE_NOT_YET_BOUND, PDU.message.header.sequence);
+}
+
+
+
 void test_KineticPDU_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(void)
 {
 
@@ -128,7 +156,9 @@ void test_KineticPDU_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(v
 
 void test_KineticPDU_GetKeyRange_should_return_the_KineticProto_Command_Range_from_the_message_if_avaliable(void)
 {
-    KineticPDU_InitWithCommand(&PDU, &Connection);
+    Connection.pSession = &Session;
+    Session.connection = &Connection;
+    KineticPDU_InitWithCommand(&PDU, &Session);
     KineticProto_Command_Range* range = NULL;
 
     range = KineticPDU_GetKeyRange(NULL);

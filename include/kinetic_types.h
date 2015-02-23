@@ -41,6 +41,7 @@
 #define KINETIC_TLS_PORT        (8443)
 #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
+#define KINETIC_PIN_MAX_LEN     (1024)
 #define KINETIC_DEFAULT_KEY_LEN (1024)
 #define KINETIC_MAX_KEY_LEN     (4096)
 #define KINETIC_MAX_VERSION_LEN (256)
@@ -115,24 +116,24 @@ struct _KineticConnection;
  * @brief Structure used to specify the configuration for a session.
  */
 typedef struct _KineticSessionConfig {
-    // Host name/IP address of Kinetic Device
+    /// Host name/IP address of Kinetic Device
     char    host[HOST_NAME_MAX];
 
-    // Port for Kinetic Device session
+    /// Port for Kinetic Device session
     int     port;
 
-    // The version number of this cluster definition. If this is not equal to
-    // the value on the Kinetic Device, the request is rejected and will return
-    // `KINETIC_STATUS_VERSION_FAILURE`
+    /// The version number of this cluster definition. If this is not equal to
+    /// the value on the Kinetic Device, the request is rejected and will return
+    /// `KINETIC_STATUS_VERSION_FAILURE`
     int64_t clusterVersion;
 
-    // The identity associated with this request. See the ACL discussion above.
-    // The Kinetic Device will use this identity value to lookup the
-    // HMAC key (shared secret) to verify the HMAC.
+    /// The identity associated with this request. See the ACL discussion above.
+    /// The Kinetic Device will use this identity value to lookup the
+    /// HMAC key (shared secret) to verify the HMAC.
     int64_t identity;
 
-    // This is the identity's HMAC Key. This is a shared secret between the
-    // client and the device, used to sign requests.
+    /// This is the identity's HMAC Key. This is a shared secret between the
+    /// client and the device, used to sign requests.
     uint8_t keyData[KINETIC_MAX_KEY_LEN];
     ByteArray hmacKey;
 
@@ -146,15 +147,7 @@ typedef struct _KineticSessionConfig {
 /**
  * @brief An instance of a session with a Kinetic device.
  */
-typedef struct _KineticSession {
-    /// Session configuration structure which must be configured 
-    KineticSessionConfig config;
-
-    /// Connection instance which is dynamically allocated upon call to `KineticClient_CreateConnection`.
-    /// Client must call `KineticClient_DestroyConnection` when finished with a session to shutdown
-    /// a session cleanly and free the `connection`.
-    struct _KineticConnection* connection;
-} KineticSession;
+typedef struct _KineticSession KineticSession;
 
 #define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey) { \
     (*_session).config = (KineticSessionConfig) { \
@@ -177,7 +170,7 @@ typedef enum {
     KINETIC_STATUS_SESSION_EMPTY,           ///< Session was NULL in request
     KINETIC_STATUS_SESSION_INVALID,         ///< Session configuration was invalid or NULL
     KINETIC_STATUS_HOST_EMPTY,              ///< Host was empty in request
-    KINETIC_STATUS_HMAC_EMPTY,              ///< HMAC key is empty or NULL
+    KINETIC_STATUS_HMAC_REQUIRED,           ///< HMAC key is empty or NULL
     KINETIC_STATUS_NO_PDUS_AVAVILABLE,      ///< All PDUs for the session have been allocated
     KINETIC_STATUS_DEVICE_BUSY,             ///< Device busy (retry later)
     KINETIC_STATUS_CONNECTION_ERROR,        ///< No connection/disconnected
@@ -195,6 +188,9 @@ typedef enum {
     KINETIC_STATUS_SOCKET_ERROR,            ///< An I/O error occurred during a socket operation
     KINETIC_STATUS_MISSING_KEY,             ///< An operation is missing a required key
     KINETIC_STATUS_MISSING_VALUE_BUFFER,    ///< An operation is missing a required value buffer
+    KINETIC_STATUS_MISSING_PIN,             ///< An operation is missing a PIN
+    KINETIC_STATUS_SSL_REQUIRED,            ///< The operation requires an SSL connection and the specified connection is non-SSL
+    KINETIC_STATUS_DEVICE_LOCKED,           ///< The operation failed because the device is sercurely locked. An UNLOCK must be issued to unlock for use.
     KINETIC_STATUS_COUNT                    ///< Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 
@@ -252,6 +248,7 @@ typedef struct _KineticEntry {
     ByteBuffer newVersion;      ///< New version for the object to assume once written to disk (optional)
     bool metadataOnly;          ///< If set for a GET request, will return only the metadata for the specified object (`value` will not be retrieved)
     bool force;                 ///< If set for a GET/DELETE request, will override `version` checking
+    bool computeTag;            ///< If set and an algorithm is specified, the tag will be populated with the calculated hash for integrity checking
     KineticSynchronization synchronization; ///< Synchronization method to use for PUT/DELETE requests.
 } KineticEntry;
 
@@ -297,28 +294,28 @@ typedef enum {
     KINETIC_DEVICE_INFO_TYPE_MESSAGES,
     KINETIC_DEVICE_INFO_TYPE_LIMITS,
     KINETIC_DEVICE_INFO_TYPE_DEVICE,
-} KineticDeviceInfo_Type;
+} KineticLogInfo_Type;
 typedef struct {
     char* name;
     float value;
-} KineticDeviceInfo_Utilization;
+} KineticLogInfo_Utilization;
 typedef struct {
     char* name;
     float current;
     float minimum;
     float maximum;
     float target;
-} KineticDeviceInfo_Temperature;
+} KineticLogInfo_Temperature;
 typedef struct {
     uint64_t nominalCapacityInBytes;
     float portionFull;
-} KineticDeviceInfo_Capacity;
+} KineticLogInfo_Capacity;
 typedef struct {
     char* name;
     ByteArray MAC;
     ByteArray ipv4Address;
     ByteArray ipv6Address;
-} KineticDeviceInfo_Interface;
+} KineticLogInfo_Interface;
 typedef struct {
     char* vendor;
     char* model;
@@ -330,11 +327,11 @@ typedef struct {
     char* protocolVersion;
     char* protocolCompilationDate;
     char* protocolSourceHash;
-    KineticDeviceInfo_Interface* interfaces;
+    KineticLogInfo_Interface* interfaces;
     size_t numInterfaces;
     int32_t port;
     int32_t tlsPort;
-} KineticDeviceInfo_Configuration;
+} KineticLogInfo_Configuration;
 typedef enum {
     KINETIC_MESSAGE_TYPE_INVALID = 0,
     KINETIC_MESSAGE_TYPE_GET_RESPONSE,              ///< GET_RESPONSE
@@ -374,7 +371,7 @@ typedef struct {
     KineticMessageType messageType;
     uint64_t count;
     uint64_t bytes;
-} KineticDeviceInfo_Statistics;
+} KineticLogInfo_Statistics;
 typedef struct {
     uint32_t maxKeySize;
     uint32_t maxValueSize;
@@ -387,23 +384,23 @@ typedef struct {
     uint32_t maxKeyRangeCount;
     uint32_t maxIdentityCount;
     uint32_t maxPinSize;
-} KineticDeviceInfo_Limits;
+} KineticLogInfo_Limits;
 typedef struct {
     ByteArray name;
-} KineticDeviceInfo_Device;
+} KineticLogInfo_Device;
 typedef struct {
-    KineticDeviceInfo_Utilization* utilizations;
+    KineticLogInfo_Utilization* utilizations;
     size_t numUtilizations;
-    KineticDeviceInfo_Temperature* temperatures;
+    KineticLogInfo_Temperature* temperatures;
     size_t numTemperatures;
-    KineticDeviceInfo_Capacity* capacity;
-    KineticDeviceInfo_Configuration* configuration;
-    KineticDeviceInfo_Statistics* statistics;
+    KineticLogInfo_Capacity* capacity;
+    KineticLogInfo_Configuration* configuration;
+    KineticLogInfo_Statistics* statistics;
     size_t numStatistics;
     ByteArray messages;
-    KineticDeviceInfo_Limits* limits;
-    KineticDeviceInfo_Device* device;
-} KineticDeviceInfo;
+    KineticLogInfo_Limits* limits;
+    KineticLogInfo_Device* device;
+} KineticLogInfo;
 
 /**
  * Configuration of remote peer for a PEER2PEERPUSH operation

@@ -1,5 +1,5 @@
 /*
-* kinetic-c-client
+* kinetic-c
 * Copyright (C) 2014 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
@@ -17,22 +17,15 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef CASQ_H
-#define CASQ_H
 
-#include <stdbool.h>
+#ifndef _KINETIC_AUTH_H
+#define _KINETIC_AUTH_H
 
-/* Atomic queue. */
-struct casq;
+#include "kinetic_types_internal.h"
 
-struct casq *casq_new(void);
+KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const config);
+KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticPDU * const pdu);
+KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticPDU * const pdu, ByteArray pin);
+KineticStatus KineticAuth_PopulateTag(ByteBuffer * const tag, KineticAlgorithm algorithm, ByteArray const * const key);
 
-bool casq_push(struct casq *q, void *data);
-void *casq_pop(struct casq *q);
-bool casq_empty(struct casq *q);
-
-typedef void (casq_free_cb)(void *data, void *udata);
-
-void casq_free(struct casq *q, casq_free_cb *cb, void *udata);
-
-#endif
+#endif // _KINETIC_AUTH_H

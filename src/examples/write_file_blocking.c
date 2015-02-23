@@ -83,6 +83,29 @@ int main(int argc, char** argv)
     (void)argc;
     (void)argv;
 
+    // Initialize kinetic-c and configure sessions
+    KineticSession* session;
+    KineticClientConfig clientConfig = {
+        .logFile = "stdout",
+        .logLevel = 1,
+    };
+    KineticClient * client = KineticClient_Init(&clientConfig);
+    if (client == NULL) { return 1; }
+    const char HmacKeyString[] = "asdfasdf";
+    KineticSessionConfig sessionConfig = {
+        .host = "localhost",
+        .port = KINETIC_PORT,
+        .clusterVersion = 0,
+        .identity = 1,
+        .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
+    };
+    KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
+            Kinetic_GetStatusDescription(status));
+        exit(1);
+    }
+
     // Read in file contents to store
     const char* dataFile = "test/support/data/test.data";
     struct stat st;
@@ -96,32 +119,9 @@ int main(int argc, char** argv)
         exit(-1);
     }
 
-    // Establish connection
-    KineticStatus status;
-    const char HmacKeyString[] = "asdfasdf";
-    KineticSession session = {
-        .config = (KineticSessionConfig) {
-            .host = "localhost",
-            .port = KINETIC_PORT,
-            .clusterVersion = 0,
-            .identity = 1,
-            .hmacKey = ByteArray_CreateWithCString(HmacKeyString)
-        }
-    };
-    write_args* writeArgs = calloc(1, sizeof(write_args));
 
-    KineticClientConfig client_config = {
-        .logFile = "stdout",
-        .logLevel = 0,
-    };
-    KineticClient * client = KineticClient_Init(&client_config);
-    if (client == NULL) { return 1; }
-    status = KineticClient_CreateConnection(&session, client);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Connection to host '%s' failed w/ status: %s\n",
-            session.config.host, Kinetic_GetStatusDescription(status));
-    }
-    writeArgs->session = &session;
+    write_args* writeArgs = calloc(1, sizeof(write_args));
+    writeArgs->session = session;
     
     // Create a ByteBuffer for consuming chunks of data out of for overlapped PUTs
     writeArgs->data = ByteBuffer_Create(buf, dataLen, 0);
@@ -142,14 +142,14 @@ int main(int argc, char** argv)
         .value = ByteBuffer_Create(writeArgs->value, sizeof(writeArgs->value), 0),
         .synchronization = KINETIC_SYNCHRONIZATION_WRITEBACK,
     };
-    strcpy(writeArgs->ip, session.config.host);
+    strcpy(writeArgs->ip, sessionConfig.host);
 
     // Store the data
     printf("\nWriting data file to the Kinetic device...\n");
     store_data(writeArgs);
 
     // Shutdown client connection and cleanup
-    KineticClient_DestroyConnection(writeArgs->session);
+    KineticClient_DestroySession(writeArgs->session);
     KineticClient_Shutdown(client);
     free(writeArgs);
     free(buf);

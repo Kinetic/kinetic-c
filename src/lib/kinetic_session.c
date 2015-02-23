@@ -37,16 +37,19 @@
 KineticStatus KineticSession_Create(KineticSession * const session, KineticClient * const client)
 {
     if (session == NULL) {
+        LOG0("Session is NULL");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
     if (client == NULL) {
+        LOG0("Client is NULL");
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
     KINETIC_ASSERT(session->connection == NULL);
     session->connection = KineticAllocator_NewConnection(client->bus, session);
     if (session->connection == NULL) {
+        LOG0("Failed allocating a new connection instance");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
     
@@ -79,10 +82,13 @@ KineticStatus KineticSession_Destroy(KineticSession * const session)
     KineticCountingSemaphore_Destroy(session->connection->outstandingOperations);
     KineticAllocator_FreeConnection(session->connection);
     session->connection = NULL;
+
+    KineticAllocator_FreeSession(session);
+
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticSession_Connect(KineticSession const * const session)
+KineticStatus KineticSession_Connect(KineticSession * const session)
 {
     if (session == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
@@ -106,10 +112,10 @@ KineticStatus KineticSession_Connect(KineticSession const * const session)
     }
     connection->connected = true;
 
-    // Kick off the worker thread
+    bus_socket_t socket_type = session->config.useSsl ? BUS_SOCKET_SSL : BUS_SOCKET_PLAIN;
     connection->si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     if (connection->si == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
-    bool success = bus_register_socket(connection->messageBus, BUS_SOCKET_PLAIN, connection->socket, connection);
+    bool success = bus_register_socket(connection->messageBus, socket_type, connection->socket, connection);
     if (!success) {
         LOG0("Failed registering connection with client!");
         goto connection_error_cleanup;
@@ -163,4 +169,25 @@ KineticStatus KineticSession_Disconnect(KineticSession const * const session)
     pthread_mutex_destroy(&connection->sendMutex);
 
     return KINETIC_STATUS_SUCCESS;
+}
+
+#define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
+
+int64_t KineticSession_GetNextSequenceCount(KineticSession const * const session)
+{
+    assert(session);
+    int64_t seq_cnt = ATOMIC_FETCH_AND_INCREMENT(&session->connection->sequence);
+    return seq_cnt;
+}
+
+int64_t KineticSession_GetClusterVersion(KineticSession const * const session)
+{
+    assert(session);
+    return session->config.clusterVersion;
+}
+
+void KineticSession_SetClusterVersion(KineticSession * const session, int64_t cluster_version)
+{
+    assert(session);
+    session->config.clusterVersion = cluster_version;
 }

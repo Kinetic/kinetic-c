@@ -22,6 +22,7 @@
 #include "kinetic_session.h"
 #include "kinetic_operation.h"
 #include "kinetic_pdu.h"
+#include "kinetic_auth.h"
 #include "kinetic_socket.h"
 #include "kinetic_allocator.h"
 #include "kinetic_resourcewaiter.h"
@@ -227,7 +228,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
     {
         LOG0("WARNING: Received unexpected response!");
         logTag = unexpectedTag;
-	logAtLevel = 0;
+        logAtLevel = 0;
         protoLogAtLevel = 0;
     }
 
@@ -266,11 +267,9 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
             response->command->status->has_code)
         {
             status = KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
-            KineticLogger_LogProtobuf(3, response->proto);
             op->response = response;
         }
-        else
-        {
+        else {
             status = KINETIC_STATUS_INVALID;
         }
 
@@ -282,6 +281,8 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
             response->header.protobufLength, response->header.valueLength,
             (void*)op,
             Kinetic_GetStatusDescription(status));
+        KineticLogger_LogHeader(3, &response->header);
+        KineticLogger_LogProtobuf(3, response->proto);
     }
     else
     {

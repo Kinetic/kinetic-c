@@ -20,32 +20,25 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static SystemTestFixture Fixture;
-
 void setUp(void)
 {
-    SystemTestSetup(&Fixture, 1);
+    SystemTestSetup(1);
 }
 
 void tearDown(void)
 {
-    SystemTestTearDown(&Fixture);
+    SystemTestShutDown();
 }
 
 void test_KineticClient_should_process_initial_unsolicited_status_response(void)
 {
     int secondsWaiting = 0, maxWaiting = 2;
-    while(Fixture.session.connection->connectionID == 0) {
+    while(Fixture.session->connection->connectionID == 0) {
         LOG0("Waiting for connection ID...");
         sleep(1);
         secondsWaiting++;
         TEST_ASSERT_TRUE_MESSAGE(secondsWaiting < maxWaiting,
             "Timed out waiting for initial unsolicited status!");
     }
-    TEST_ASSERT_TRUE_MESSAGE(Fixture.session.connection->connectionID > 0, "Invalid connection ID!");
+    TEST_ASSERT_TRUE_MESSAGE(Fixture.session->connection->connectionID > 0, "Invalid connection ID!");
 }
-
-/*******************************************************************************
-* ENSURE THIS IS AFTER ALL TESTS IN THE TEST SUITE
-*******************************************************************************/
-SYSTEM_TEST_SUITE_TEARDOWN(&Fixture)

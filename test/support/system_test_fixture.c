@@ -21,74 +21,61 @@
 #include "system_test_fixture.h"
 #include "unity_helper.h"
 #include "kinetic_client.h"
-#include "kinetic_logger.h"
+#include "kinetic_admin_client.h"
 
-uint8_t data[KINETIC_OBJ_SIZE];
+SystemTestFixture Fixture = {.connected = false};
 
-void SystemTestSetup(SystemTestFixture* fixture, int log_level)
+void SystemTestSetup(int log_level)
 {
-    KineticClientConfig config = {
+    KineticClientConfig clientConfig = {
         .logFile = "stdout",
         .logLevel = log_level,
     };
-    KineticClient * client = KineticClient_Init(&config);
 
-    TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
+    Fixture = (SystemTestFixture) {
+        .connected = false,
+        .client = KineticClient_Init(&clientConfig),
+    };
 
-    memset(fixture, 0, sizeof(SystemTestFixture));
+    KineticSessionConfig config = {
+        .host = SYSTEM_TEST_HOST,
+        .port = KINETIC_PORT,
+        .clusterVersion = SESSION_CLUSTER_VERSION,
+        .identity = SESSION_IDENTITY,
+        .hmacKey = ByteArray_Create(config.keyData, strlen(SESSION_HMAC_KEY)),
+    };
+    strcpy((char*)config.keyData, SESSION_HMAC_KEY);
+    KineticStatus status = KineticClient_CreateSession(&config, Fixture.client, &Fixture.session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    KineticStatus status;
-    ByteArray hmacArray = ByteArray_CreateWithCString("asdfasdf");
-    if (!fixture->connected) {
-        *fixture = (SystemTestFixture) {
-            .session = (KineticSession) {
-                .config = (KineticSessionConfig) {
-                    .host = SYSTEM_TEST_HOST,
-                    .port = KINETIC_PORT,
-                    .clusterVersion = 0,
-                    .identity = 1,
-                    .hmacKey = hmacArray,
-                },
-            },
-            .connected = fixture->connected,
-            .testIgnored = false,
-            .client = client,
-        };
-        status = KineticClient_CreateConnection(&fixture->session, fixture->client);
-        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-        fixture->expectedSequence = 0;
-        fixture->connected = true;
-    }
-    else {
-        fixture->testIgnored = false;
-    }
+    KineticSessionConfig adminConfig = {
+        .host = SYSTEM_TEST_HOST,
+        .port = KINETIC_TLS_PORT,
+        .clusterVersion = SESSION_CLUSTER_VERSION,
+        .identity = SESSION_IDENTITY,
+        .hmacKey = ByteArray_Create(config.keyData, strlen(SESSION_HMAC_KEY)),
+        .useSsl = true,
+    };
+    strcpy((char*)config.keyData, SESSION_HMAC_KEY);
+    status = KineticAdminClient_CreateSession(&adminConfig, Fixture.client, &Fixture.adminSession);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    // TEST_ASSERT_EQUAL_MESSAGE(
-    //     fixture->expectedSequence,
-    //     fixture->connection.sequence,
-    //     "Failed validating starting sequence count for the"
-    //     " operation w/session!");
+    Fixture.connected = true;
 }
 
-void SystemTestTearDown(SystemTestFixture* fixture)
+void SystemTestShutDown(void)
 {
-    TEST_ASSERT_NOT_NULL_MESSAGE(fixture, "System test fixture is NULL!");
-
-    if (!fixture->testIgnored) {
-        fixture->expectedSequence++;
-        // TEST_ASSERT_EQUAL_MESSAGE(
-        //     fixture->expectedSequence,
-        //     fixture->connection.sequence,
-        //     "Sequence should post-increment for every operation on the session!");
+    if (Fixture.connected) {
+        KineticStatus status = KineticClient_DestroySession(Fixture.session);
+        TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying client!");
+        status = KineticAdminClient_DestroySession(Fixture.adminSession);
+        TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying admin client!");
+        KineticClient_Shutdown(Fixture.client);
+        memset(&Fixture, 0, sizeof(Fixture));
     }
-
-    KineticStatus status = KineticClient_DestroyConnection(&fixture->session);
-    TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
-
-    KineticClient_Shutdown(fixture->client);
 }
 
 bool SystemTestIsUnderSimulator(void)
 {
-    return 0 == strncmp(SYSTEM_TEST_HOST, "localhost", strlen("localhost"));
+    return (0 == strncmp(SYSTEM_TEST_HOST, "localhost", strlen("localhost")));
 }

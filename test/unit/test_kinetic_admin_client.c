@@ -1,0 +1,297 @@
+/*
+* kinetic-c
+* Copyright (C) 2014 Seagate Technology.
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 2
+* of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*
+*/
+
+#include "unity.h"
+#include "unity_helper.h"
+#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
+#include "kinetic_admin_client.h"
+#include "kinetic_proto.h"
+#include "kinetic_logger.h"
+#include "kinetic_device_info.h"
+#include "byte_array.h"
+#include "mock_kinetic_client.h"
+#include "mock_kinetic_auth.h"
+#include "mock_kinetic_allocator.h"
+#include "mock_kinetic_session.h"
+#include "mock_kinetic_controller.h"
+#include "mock_kinetic_message.h"
+#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_operation.h"
+#include "protobuf-c/protobuf-c.h"
+#include <stdio.h>
+
+KineticSession Session;
+
+void setUp(void)
+{
+    KineticLogger_Init("stdout", 3);
+}
+
+void tearDown(void)
+{
+    KineticLogger_Close();
+}
+
+
+void test_KineticAdminClient_Init_should_delegate_to_base_client(void)
+{
+    KineticClient testClient;
+    KineticClient* returnedClient;
+
+    KineticClientConfig config = {
+        .logFile = "./some_file.log",
+        .logLevel = 3,
+    };
+    KineticClient_Init_ExpectAndReturn(&config, &testClient);
+    returnedClient = KineticAdminClient_Init(&config);
+
+    TEST_ASSERT_EQUAL_PTR(&testClient, returnedClient);
+}
+
+void test_KineticAdminClient_Shutdown_should_delegate_to_base_client(void)
+{
+    KineticClient client;
+    KineticClient_Shutdown_Expect(&client);
+    KineticAdminClient_Shutdown(&client);
+}
+
+void test_KineticAdminClient_CreateSession_should_delegate_to_base_client(void)
+{
+    KineticClient client;
+    KineticSessionConfig config = { .port = 8765 };
+    KineticSession* session = &Session;
+
+    KineticClient_CreateSession_ExpectAndReturn(&config, &client, &session, KINETIC_STATUS_CLUSTER_MISMATCH);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH,
+        KineticAdminClient_CreateSession(&config, &client, &session));
+}
+
+void test_KineticAdminClient_DestroySession_should_delegate_to_base_client(void)
+{
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection,
+    };
+
+    KineticClient_DestroySession_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticAdminClient_DestroySession(&session);
+
+    TEST_ASSERT_EQUAL_KineticStatus(
+        KINETIC_STATUS_SUCCESS,
+        status);
+}
+
+
+
+void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_the_device(void)
+{
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+    KineticLogInfo* info;
+    KineticOperation operation;
+
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticAdminClient_GetLog(&session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+
+void test_KineticAdminClient_SecureErase_should_build_and_execute_a_SECURE_ERASE_operation(void)
+{
+    ByteArray pin = ByteArray_CreateWithCString("abc123");
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+    KineticOperation operation;
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticOperation_BuildErase_Expect(&operation, true, &pin);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticAdminClient_SecureErase(&session, pin);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticAdminClient_SecureErase_should_forward_erroneous_status_if_SSL_enabled_validation_failed(void)
+{
+    ByteArray pin = ByteArray_CreateWithCString("abc123");
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
+
+    KineticStatus status = KineticAdminClient_SecureErase(&session, pin);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SSL_REQUIRED, status);
+}
+
+
+
+
+void test_KineticAdminClient_InstantErase_should_build_and_execute_an_INSTANT_SECURE_ERASE_operation(void)
+{
+    ByteArray pin = ByteArray_CreateWithCString("abc123");
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+    KineticOperation operation;
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticOperation_BuildErase_Expect(&operation, false, &pin);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticAdminClient_InstantErase(&session, pin);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticAdminClient_InstantErase_should_forward_erroneous_status_if_SSL_enabled_validation_failed(void)
+{
+    ByteArray pin = ByteArray_CreateWithCString("abc123");
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
+
+    KineticStatus status = KineticAdminClient_InstantErase(&session, pin);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SSL_REQUIRED, status);
+}
+
+
+
+void test_KineticAdminClient_LockDevice_should_build_and_execute_an_LOCK_with_PIN_operation(void)
+{
+    ByteArray pin = ByteArray_CreateWithCString("abc123");
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+    KineticOperation operation;
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticOperation_BuildLockUnlock_Expect(&operation, true, &pin);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticAdminClient_LockDevice(&session, pin);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticAdminClient_LockDevice_should_forward_erroneous_status_if_SSL_enabled_validation_failed(void)
+{
+    ByteArray pin = ByteArray_CreateWithCString("abc123");
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
+
+    KineticStatus status = KineticAdminClient_LockDevice(&session, pin);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SSL_REQUIRED, status);
+}
+
+
+
+void test_KineticAdminClient_UnlockDevice_should_build_and_execute_an_LOCK_with_PIN_operation(void)
+{
+    ByteArray pin = ByteArray_CreateWithCString("abc123");
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+    KineticOperation operation;
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticOperation_BuildLockUnlock_Expect(&operation, false, &pin);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticAdminClient_UnlockDevice(&session, pin);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticAdminClient_UnlockDevice_should_forward_erroneous_status_if_SSL_enabled_validation_failed(void)
+{
+    ByteArray pin = ByteArray_CreateWithCString("abc123");
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
+
+    KineticStatus status = KineticAdminClient_UnlockDevice(&session, pin);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SSL_REQUIRED, status);
+}
+
+
+
+void test_KineticAdminClient_KineticAdminClient_SetClusterVersion_should_work(void)
+{
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+    KineticOperation operation;
+
+    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticOperation_BuildSetClusterVersion_Expect(&operation, 1402);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticAdminClient_SetClusterVersion(&session, 1402);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}

@@ -24,7 +24,6 @@
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
 #include "kinetic_types.h"
-#include "kinetic_device_info.h"
 #include "kinetic_types_internal.h"
 #include "byte_array.h"
 #include "mock_kinetic_allocator.h"
@@ -43,11 +42,13 @@ static KineticConnection Connection;
 static const int64_t ClusterVersion = 1234;
 static const int64_t Identity = 47;
 static ByteArray HmacKey;
+static struct bus MessageBus;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
     memset(&Session, 0, sizeof(KineticSession));
+    memset(&MessageBus, 0, sizeof(MessageBus));
 }
 
 void tearDown(void)
@@ -58,14 +59,14 @@ void tearDown(void)
 void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_client(void)
 {
     KineticClient client;
-    
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
-
     KineticClientConfig config = {
         .logFile = "./some_file.log",
         .logLevel = 3,
     };
+
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
     KineticPDU_InitBus_ExpectAndReturn(&client, &config, true);
+
     KineticClient * result = KineticClient_Init(&config);
 
     TEST_ASSERT_EQUAL(&client, result);
@@ -73,16 +74,17 @@ void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_
 
 void test_KineticClient_Init_should_return_null_if_calloc_returns_null(void)
 {
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), NULL);
-    
     KineticClientConfig config = {
         .logFile = "./some_file.log",
         .logLevel = 3,
     };
+
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), NULL);
+
     KineticClient * result = KineticClient_Init(&config);
+
     TEST_ASSERT_NULL(result);
 }
-
 
 void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
 {
@@ -103,119 +105,154 @@ void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
 static void ConnectSession(void)
 {
     KineticClient client;
+    client.bus = &MessageBus;
     Connection.connected = false; // Ensure gets set appropriately by internal connect call
     HmacKey = ByteArray_CreateWithCString("some hmac key");
-    KINETIC_SESSION_INIT(&Session, "somehost.com", ClusterVersion, Identity, HmacKey);
+    KineticSessionConfig config = {
+        .host = "localhost",
+        .port = KINETIC_PORT,
+        .clusterVersion = ClusterVersion,
+        .identity = Identity,
+        .hmacKey = HmacKey,
+    };
+    Session.config = config;
     Session.connection = &Connection;
+    KineticSession* session;
 
+    KineticAllocator_NewSession_ExpectAndReturn(&MessageBus, &config, &Session);
     KineticSession_Create_ExpectAndReturn(&Session, &client, KINETIC_STATUS_SUCCESS);
     KineticSession_Connect_ExpectAndReturn(&Session, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticClient_CreateConnection(&Session, &client);
+    KineticStatus status = KineticClient_CreateSession(&config, &client, &session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
 
-void test_KineticClient_CreateConnection_should_configure_a_session_and_connect_to_specified_host(void)
+void test_KineticClient_CreateSession_should_configure_a_session_and_connect_to_specified_host(void)
 {
     ConnectSession();
 }
 
-void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_session_config(void)
+void test_KineticClient_CreateSession_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_session_config(void)
 {
-    KineticStatus status = KineticClient_CreateConnection(NULL, NULL);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_EMPTY, status);
+    KineticStatus status = KineticClient_CreateSession(NULL, NULL, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_INVALID, status);
 }
 
-void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_HOST_EMPTY_upon_NULL_host(void)
+void test_KineticClient_CreateSession_should_return_KINETIC_STATUS_HOST_EMPTY_upon_NULL_host(void)
 {
     KineticClient client;
     ByteArray key = ByteArray_CreateWithCString("some_key");
-    KineticSession session = {
-        .config = {
-            .host = "",
-            .hmacKey = key,
-        },
+    KineticSessionConfig config = {
+        .host = "",
+        .hmacKey = key,
     };
+    KineticSession* session = NULL;
 
-    KineticStatus status = KineticClient_CreateConnection(&session, &client);
+    KineticStatus status = KineticClient_CreateSession(&config, &client, &session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HOST_EMPTY, status);
 }
 
-void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_HMAC_EMPTY_upon_NULL_HMAC_key(void)
+void test_KineticClient_CreateSession_should_return_KINETIC_STATUS_HMAC_REQUIRED_upon_NULL_HMAC_key(void)
 {
     KineticClient client;
     ByteArray key = {.len = 4, .data = NULL};
-    KineticSession session = {
-        .config.host = "somehost.com",
-        .config.hmacKey = key,
+    KineticSessionConfig config = {
+        .host = "somehost.com",
+        .hmacKey = key,
     };
+    KineticSession* session;
 
-    KineticStatus status = KineticClient_CreateConnection(&session, &client);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
+    KineticStatus status = KineticClient_CreateSession(&config, &client, &session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
-void test_KineticClient_CreateConnection_should_return_false_upon_empty_HMAC_key(void)
+void test_KineticClient_CreateSession_should_return_false_upon_empty_HMAC_key(void)
 {
     KineticClient client;
     uint8_t keyData[] = {0, 1, 2, 3};
     ByteArray key = {.len = 0, .data = keyData};
-    KineticSession session = {
-        .config.host = "somehost.com",
-        .config.hmacKey = key,
+    KineticSessionConfig config = {
+        .host = "somehost.com",
+        .hmacKey = key,
     };
+    KineticSession* session;
 
-    KineticStatus status = KineticClient_CreateConnection(&session, &client);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
+    KineticStatus status = KineticClient_CreateSession(&config, &client, &session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
-void test_KineticClient_CreateConnection_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_connection(void)
+void test_KineticClient_CreateSession_should_return_MEMORY_ERROR_if_unable_to_allocate_a_session(void)
 {
     KineticClient client;
-    KineticSession session = {
-        .config.host = "somehost.com",
-        .config.hmacKey = ByteArray_CreateWithCString("some_key"),
-        .connection = NULL,
+    client.bus = &MessageBus;
+    KineticSessionConfig config = {
+        .host = "somehost.com",
+        .hmacKey = ByteArray_CreateWithCString("some_key"),
     };
+    KineticSession* session = NULL;
 
-    KineticSession_Create_ExpectAndReturn(&session, &client, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewSession_ExpectAndReturn(&MessageBus, &config, NULL);
 
-    KineticStatus status = KineticClient_CreateConnection(&session, &client);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR, status);
+    KineticStatus status = KineticClient_CreateSession(&config, &client, &session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MEMORY_ERROR, status);
 }
 
-void test_KineticClient_CreateConnection_should_return_status_from_a_failed_connection(void)
+void test_KineticClient_CreateSession_should_return_KINETIC_STATUS_MEMORY_ERROR_upon_NULL_connection(void)
+{
+    KineticClient client = {
+        .bus = &MessageBus,
+    };
+    KineticSessionConfig config = {
+        .host = "somehost.com",
+        .hmacKey = ByteArray_CreateWithCString("some_key"),
+    };
+    Session.connection = NULL;
+    KineticSession* pSession = &Session;
+
+    KineticAllocator_NewSession_ExpectAndReturn(&MessageBus, &config, NULL);
+
+    KineticStatus status = KineticClient_CreateSession(&config, &client, &pSession);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_MEMORY_ERROR, status);
+}
+
+void test_KineticClient_CreateSession_should_return_status_from_a_failed_connection(void)
 {
     KineticClient client;
-    KineticSession session = {
-        .config.host = "somehost.com",
-        .config.hmacKey = ByteArray_CreateWithCString("some_key"),
-        .connection = &Connection,
+    client.bus = &MessageBus;
+    KineticSessionConfig config = {
+        .host = "somehost.com",
+        .hmacKey = ByteArray_CreateWithCString("some_key"),
     };
+    KineticSession* session;
+    KineticConnection connection;
+    Session.connection = &connection;
 
-    KineticSession_Create_ExpectAndReturn(&session, &client, KINETIC_STATUS_SUCCESS);
-    KineticSession_Connect_ExpectAndReturn(&session, KINETIC_STATUS_HMAC_EMPTY);
-    KineticSession_Destroy_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewSession_ExpectAndReturn(&MessageBus, &config, &Session);
+    KineticSession_Create_ExpectAndReturn(&Session, &client, KINETIC_STATUS_SUCCESS);
+    KineticSession_Connect_ExpectAndReturn(&Session, KINETIC_STATUS_HMAC_REQUIRED);
+    KineticSession_Destroy_ExpectAndReturn(&Session, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_FreeSession_Expect(&Session);
 
-    KineticStatus status = KineticClient_CreateConnection(&session, &client);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_EMPTY, status);
+    KineticStatus status = KineticClient_CreateSession(&config, &client, &session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
 
-void test_KineticClient_DestroyConnection_should_disconnect_and_free_the_connection_associated_with_handle(void)
+void test_KineticClient_DestroySession_should_disconnect_and_free_the_connection_associated_with_handle(void)
 {
     Session.connection = &Connection;
     KineticSession_Disconnect_ExpectAndReturn(&Session, KINETIC_STATUS_SUCCESS);
     KineticSession_Destroy_ExpectAndReturn(&Session, KINETIC_STATUS_SUCCESS);
-    KineticStatus status = KineticClient_DestroyConnection(&Session);
+    KineticStatus status = KineticClient_DestroySession(&Session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
 
-void test_KineticClient_DestroyConnection_should_return_status_from_KineticSession_upon_faileure(void)
+void test_KineticClient_DestroySession_should_return_status_from_KineticSession_upon_faileure(void)
 {
     Session.connection = &Connection;
     KineticSession_Disconnect_ExpectAndReturn(&Session, KINETIC_STATUS_SESSION_INVALID);
     KineticSession_Destroy_ExpectAndReturn(&Session, KINETIC_STATUS_SUCCESS);
-    KineticStatus status = KineticClient_DestroyConnection(&Session);
+    KineticStatus status = KineticClient_DestroySession(&Session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_INVALID, status);
 }

@@ -22,7 +22,6 @@
 
 #include "bus_types.h"
 #include "bus_internal_types.h"
-#include "casq.h"
 
 /* Manager of incoming messages from drives, both responses and
  * unsolicited status updates. */
