@@ -32,7 +32,9 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/time.h>
+
 #include "bus.h"
+#include "acl.h"
 
 #define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
 
@@ -874,4 +876,32 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetClusterVersionCallback;
     operation->pendingClusterVersion = new_cluster_version;
+}
+
+KineticStatus KineticOperation_SetACLCallback(KineticOperation* const operation, KineticStatus const status)
+{
+    KINETIC_ASSERT(operation != NULL);
+    KINETIC_ASSERT(operation->connection != NULL);
+    LOGF3("SecurityCallback, with operation (0x%0llX) on connection (0x%0llX), status %d",
+        operation, operation->connection, status);
+    
+    return status;
+}
+
+void KineticOperation_BuildSetACL(KineticOperation* const operation,
+    struct ACL *ACLs)
+{
+    KineticOperation_ValidateOperation(operation);
+
+    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY;
+    operation->request->message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->message.body;
+    operation->request->command->body->security = &operation->request->message.security;
+
+    operation->request->command->body->security->n_acl = ACLs->ACL_count;
+    operation->request->command->body->security->acl = ACLs->ACLs;
+
+    operation->valueEnabled = false;
+    operation->sendValue = false;
+    operation->callback = &KineticOperation_SetACLCallback;
 }

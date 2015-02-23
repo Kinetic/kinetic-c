@@ -184,18 +184,6 @@ void KineticAdminClient_FreeLogInfo(KineticSession const * const session,
                                   KineticLogInfo* info);
 
 /**
- * @brief Executes a SECURITY command to define/set the access control list
- * (ACL) for the Kinetic device.
- *
- * @param session   The connected KineticSession to use for the operation.
- * @param acl_path  Path to ACL definitions per identity in JSON format.
- *
- * @return          Returns the resulting KineticStatus.
- */
-KineticStatus KineticAdminClient_SetAcl(KineticSession const * const session,
-    char const * const acl_path);
-
-/**
  * @brief Updates the cluster version of the Kinetic Device.
  *
  * @param session   The connected KineticSession to use for the operation.
@@ -216,5 +204,18 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const 
  */
 KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
     char const * const fw_path);
+
+
+/**
+ * @brief Executes a SECURITY operation, setting one or more ACLs.
+ *
+ * @param session       The connected KineticSession to use for the operation
+ * @param ACLPath       Path to a JSON file containing one or more ACLs.
+ *
+ * @return              Returns 0 upon success, -1 or the Kinetic status code
+ *                      upon failure.
+ */
+KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
+                                        const char *ACLPath);
 
 #endif // _KINETIC_ADMIN_CLIENT_H

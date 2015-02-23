@@ -26,6 +26,7 @@
 #include "kinetic_countingsemaphore.h"
 #include "kinetic_resourcewaiter_types.h"
 #include "kinetic_resourcewaiter.h"
+#include "acl.h"
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <openssl/sha.h>

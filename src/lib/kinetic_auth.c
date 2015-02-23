@@ -51,7 +51,7 @@ KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config
 
     // Configure HMAC support
     ByteArray const * const hmacKey = &config->hmacKey;
-    assert(hmacKey->len <= KINETIC_HMAC_MAX_LEN);
+    assert(hmacKey->len <= KINETIC_HMAC_MAX_LEN);  // NOCOMMIT
     assert(hmacKey->data != NULL);
 
     msg->hmacAuth = &pdu->message.hmacAuth;

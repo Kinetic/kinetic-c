@@ -1,6 +1,6 @@
 /*
- * kinetic-c-client
-* Copyright (C) 2015 Seagate Technology.
+* kinetic-c
+* Copyright (C) 2014 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -17,24 +17,26 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef ACL_H
-#define ACL_H
+#include "system_test_fixture.h"
+#include "kinetic_admin_client.h"
 
-#include "acl_types.h"
-#include "kinetic_proto.h"
+#define TEST_DIR(F) ("test/unit/acl/" F)
 
-/* Attempt to instantiate an ACL structure based on the JSON data
- * contained in PATH. */
-acl_of_file_res
-acl_of_file(const char *path, struct ACL **instance);
+void setUp(void)
+{
+    SystemTestSetup(3);
+}
 
-acl_of_file_res
-acl_of_string(const char *buf, size_t buf_size, struct ACL **instance);
+void tearDown(void)
+{
+    SystemTestShutDown();
+}
 
-/* fprintf an ACL struct. */
-void acl_fprintf(FILE *f, struct ACL *acl);
+void test_Secure_should_set_ACL(void)
+{
+    const char *ACL_path = TEST_DIR("system_test.json");
+    KineticStatus res = KineticAdminClient_SetACL(Fixture.adminSession,
+        ACL_path);
 
-/* Free an ACL struct */
-void acl_free(struct ACL *acl);
-
-#endif
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, res);
+}

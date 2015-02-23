@@ -27,32 +27,31 @@
 #include "json.h"
 
 typedef struct {
-    permission_t permission;
+    KineticProto_Command_Security_ACL_Permission permission;
     const char *string;
 } permission_pair;
 
 static permission_pair permission_table[] = {
-    { PERM_INVALID, "INVALID" },
-    { PERM_READ, "READ" },
-    { PERM_WRITE, "WRITE" },
-    { PERM_DELETE, "DELETE" },
-    { PERM_RANGE, "RANGE" },
-    { PERM_SETUP, "SETUP" },
-    { PERM_P2POP, "P2POP" },
-    { PERM_GETLOG, "GETLOG" },
-    { PERM_SECURITY, "SECURITY" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION, "INVALID" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_READ, "READ" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_WRITE, "WRITE" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_DELETE, "DELETE" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_RANGE, "RANGE" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SETUP, "SETUP" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_P2POP, "P2POP" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_GETLOG, "GETLOG" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SECURITY, "SECURITY" },
 };
 
 #define PERM_TABLE_ROWS sizeof(permission_table)/sizeof(permission_table)[0]
 
-static acl_of_file_res read_ACLs(const char *buf, size_t buf_size, struct ACL **instance);
 static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
     size_t offset, size_t *new_offset, struct json_tokener *tokener,
-    struct ACL **instance);
-static acl_of_file_res unpack_scopes(struct ACL *acl,
+    KineticProto_Command_Security_ACL **instance);
+static acl_of_file_res unpack_scopes(KineticProto_Command_Security_ACL *acl,
     int scope_count, json_object *scopes);
 
-static const char *str_of_permission(permission_t perm) {
+static const char *str_of_permission(KineticProto_Command_Security_ACL_Permission perm) {
     for (size_t i = 0; i < PERM_TABLE_ROWS; i++) {
         permission_pair *pp = &permission_table[i];
         if (pp->permission == perm) { return pp->string; }
@@ -60,12 +59,12 @@ static const char *str_of_permission(permission_t perm) {
     return "INVALID";
 }
 
-static permission_t permission_of_str(const char *str) {
+static KineticProto_Command_Security_ACL_Permission permission_of_str(const char *str) {
     for (size_t i = 0; i < PERM_TABLE_ROWS; i++) {
         permission_pair *pp = &permission_table[i];
         if (0 == strcmp(str, pp->string)) { return pp->permission; }
     }
-    return PERM_INVALID;
+    return KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION;
 }
 
 acl_of_file_res
@@ -85,7 +84,7 @@ acl_of_file(const char *path, struct ACL **instance) {
     acl_of_file_res res = ACL_ERROR_NULL;
 
     const int BUF_START_SIZE = 256;
-    char *buf = malloc(BUF_START_SIZE);
+    char *buf = calloc(1, BUF_START_SIZE);
     if (buf == NULL) {
         res = ACL_ERROR_MEMORY;
         goto cleanup;
@@ -117,26 +116,35 @@ acl_of_file(const char *path, struct ACL **instance) {
 #ifndef TEST
     LOGF2(" -- read %zd bytes, parsing...\n", buf_used);
 #endif
-    res = read_ACLs(buf, buf_used, instance);
+    res = acl_of_string(buf, buf_used, instance);
 cleanup:
     if (buf) { free(buf); }
     close(fd);
     return res;
 }
 
-static acl_of_file_res read_ACLs(const char *buf, size_t buf_size, struct ACL **instance) {
-    struct ACL *cur = NULL;
-    struct ACL *first = NULL;
+acl_of_file_res
+acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
+    acl_of_file_res res = ACL_ERROR_MEMORY;
+    struct ACL *acl_group = NULL;
+    KineticProto_Command_Security_ACL **acl_array = NULL;
+
+    acl_group = calloc(1, sizeof(*acl_group));
+    if (acl_group == NULL) { goto cleanup; }
+
+    acl_group->ACLs = calloc(1, sizeof(KineticProto_Command_Security_ACL *));
+    if (acl_group->ACLs == NULL) { goto cleanup; }
+    acl_group->ACL_ceil = 1;
+    acl_group->ACL_count = 0;
 
     struct json_tokener* tokener = json_tokener_new();
-    if (tokener == NULL) { return ACL_ERROR_MEMORY; }
+    if (tokener == NULL) { goto cleanup; }
 
     size_t offset = 0;
 
-    acl_of_file_res res = ACL_ERROR_NULL;
     while (buf_size - offset > 0) {
         size_t offset_out = 0;
-        struct ACL *new_acl = NULL;
+        KineticProto_Command_Security_ACL *new_acl = NULL;
 #ifndef TEST
         LOGF2(" -- reading next ACL at offset %zd, rem %zd\n", offset, buf_size - offset);
 #endif
@@ -147,39 +155,44 @@ static acl_of_file_res read_ACLs(const char *buf, size_t buf_size, struct ACL **
         LOGF2(" -- result %d, offset_out %zd\n", res, offset);
 #endif
         if (res == ACL_OK) {
-            if (first == NULL) {
-                first = new_acl;
-                *instance = first;
-                cur = first;
-            } else {
-                assert(cur);
-                cur->next = new_acl;
-                cur = new_acl;
+            if (acl_group->ACL_count == acl_group->ACL_ceil) {  /* grow */
+                size_t nsz = 2 * acl_group->ACL_ceil * sizeof(acl_group->ACLs[0]);
+                KineticProto_Command_Security_ACL **nACLs = realloc(acl_group->ACLs, nsz);
+                if (nACLs == NULL) {
+                    goto cleanup;
+                } else {
+                    acl_group->ACL_ceil *= 2;
+                    acl_group->ACLs = nACLs;
+                }
             }
+            acl_group->ACLs[acl_group->ACL_count] = new_acl;
+            acl_group->ACL_count++;
         } else {
             break;
         }
     }
 
-    /* cleanup */
+cleanup:
     json_tokener_free(tokener);
     
     if (res == ACL_END_OF_STREAM || res == ACL_OK) {
-        if (first == NULL) {
+        if (acl_group && acl_group->ACL_count == 0) {
             LOG2("Failed to read any JSON objects\n");
             return ACL_ERROR_BAD_JSON;
         } else {            /* read at least one ACL */
+            *instance = acl_group;
             return ACL_OK;
         }
     } else {
-        acl_free(first);
+        if (acl_group) { free(acl_group); }
+        if (acl_array) { free(acl_array); }
         return res;
     }
 }
 
 static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
         size_t offset, size_t *new_offset,
-        struct json_tokener *tokener, struct ACL **instance) {
+        struct json_tokener *tokener, KineticProto_Command_Security_ACL **instance) {
     struct json_object *obj = json_tokener_parse_ex(tokener,
         &buf[offset], buf_size - offset);
     if (obj == NULL) {
@@ -193,8 +206,10 @@ static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
     
     *new_offset = tokener->char_offset;
     
-    acl_of_file_res res = ACL_ERROR_NULL;
-    
+    acl_of_file_res res = ACL_ERROR_MEMORY;
+    KineticProto_Command_Security_ACL *acl = NULL;
+    uint8_t *data = NULL;
+
     int scope_count = 0;
     struct json_object *val = NULL;
     if (json_object_object_get_ex(obj, "scope", &val)) {
@@ -204,37 +219,35 @@ static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
         goto cleanup;
     }
     
-    struct ACL *acl = NULL;
-    size_t alloc_sz = sizeof(*acl) + scope_count * sizeof(struct acl_scope);
-    acl = malloc(alloc_sz);
-    if (acl == NULL) {
-        res = ACL_ERROR_MEMORY;
-        goto cleanup;
-    }
-    
-    memset(acl, 0, alloc_sz);
-    
+    size_t alloc_sz = sizeof(*acl);
+    acl = calloc(1, alloc_sz);
+    if (acl == NULL) { goto cleanup; }
+
+    KineticProto_command_security_acl__init(acl);    
+
     /* Copy fields */
     if (json_object_object_get_ex(obj, "identity", &val)) {
+        acl->has_identity = true;
         acl->identity = json_object_get_int64(val);
     } else {
-        acl->identity = ACL_NO_IDENTITY;
+        acl->has_identity = false;
     }
     
     if (json_object_object_get_ex(obj, "key", &val)) {
         const char *key = json_object_get_string(val);
         size_t len = strlen(key);
-        struct hmac_key *hmacKey = malloc(sizeof(*hmacKey) + len + 1);
-        if (hmacKey) {
-            hmacKey->type = HMAC_SHA1;
-            hmacKey->length = len;
-            memcpy(hmacKey->key, key, len);
-            hmacKey->key[len] = '\0';
-            acl->hmacKey = hmacKey;
-        } else {
-            res = ACL_ERROR_MEMORY;
-            goto cleanup;
-        }
+
+        acl->has_hmacAlgorithm = true;
+        acl->hmacAlgorithm = KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1;
+
+        acl->key.len = len;
+        data = calloc(1, len + 1);
+        if (data == NULL) { goto cleanup; }
+        memcpy(data, key, len);
+        data[len] = '\0';
+        acl->key.data = data;
+        data = NULL;
+        acl->has_key = true;
     }
     
     if (json_object_object_get_ex(obj, "HMACAlgorithm", &val)) {
@@ -259,57 +272,85 @@ static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
     return ACL_OK;
 cleanup:
     if (obj) { json_object_put(obj); }
+    if (acl) { free(acl); }
+    if (data) { free(data); }
     return res;
 }
 
-static acl_of_file_res unpack_scopes(struct ACL *acl, int scope_count, json_object *scopes) {
+static acl_of_file_res unpack_scopes(KineticProto_Command_Security_ACL *acl,
+        int scope_count, json_object *scopes) {
+    acl_of_file_res res = ACL_ERROR_MEMORY;
+    KineticProto_Command_Security_ACL_Scope **scope_array = NULL;
+    KineticProto_Command_Security_ACL_Permission *perm_array = NULL;
+    KineticProto_Command_Security_ACL_Scope *scope = NULL;
+    uint8_t *data = NULL;
+
+    scope_array = calloc(scope_count, sizeof(*scope_array));
+    if (scope_array == NULL) { goto cleanup; }
+
+    acl->scope = scope_array;
+
     for (int si = 0; si < scope_count; si++) {
         struct json_object *cur_scope = json_object_array_get_idx(scopes, si);
         if (cur_scope) {
-            struct acl_scope *scope = &acl->scopes[si];
-            for (int i = 0; i < ACL_MAX_PERMISSIONS; i++) {
-                scope->permissions[i] = PERM_INVALID;
-            }
+            scope = calloc(1, sizeof(*scope));
+            if (scope == NULL) { goto cleanup; }
+            KineticProto_command_security_acl_scope__init(scope);
+    
             struct json_object *val = NULL;
             if (json_object_object_get_ex(cur_scope, "offset", &val)) {
                 scope->offset = json_object_get_int64(val);
+                scope->has_offset = true;
             } else {
-                scope->offset = ACL_NO_OFFSET;
+                scope->has_offset = false;
             }
+
             if (json_object_object_get_ex(cur_scope, "value", &val)) {
                 const char *str = json_object_get_string(val);
                 if (str) {
                     size_t len = strlen(str);
-                    scope->value = malloc(len + 1);
-                    if (scope->value == NULL) {
+                    data = malloc(len + 1);
+                    if (data == NULL) {
                         return ACL_ERROR_MEMORY;
                     } else {
-                        memcpy(scope->value, str, len);
-                        scope->value[len] = '\0';
+                        memcpy(data, str, len);
+                        data[len] = '\0';
+                        scope->value.data = data;
+                        scope->value.len = len;
+                        data = NULL;
+                        scope->has_value = true;
                     }
-                    scope->valueSize = len;
                 }
+            } else {
+                scope->has_value = false;
             }
-            scope->permission_count = 0;
+
+            scope->n_permission = 0;
             if (json_object_object_get_ex(cur_scope, "permission", &val)) {
+                perm_array = calloc(ACL_MAX_PERMISSIONS, sizeof(*perm_array));
+                if (perm_array == NULL) { goto cleanup; }
+                scope->permission = perm_array;
+                perm_array = NULL;
+
                 enum json_type perm_type = json_object_get_type(val);
                 if (perm_type == json_type_string) {
-                    scope->permissions[0] = permission_of_str(json_object_get_string(val));
-                    if (scope->permissions[0] == PERM_INVALID) {
+                    scope->permission[0] = permission_of_str(json_object_get_string(val));
+                    if (scope->permission[0] == PERM_INVALID) {
                         return ACL_ERROR_INVALID_FIELD;
                     } else {
-                        scope->permission_count++;
+                        scope->n_permission++;
                     }
                 } else if (perm_type == json_type_array) {
                     int count = json_object_array_length(val);
                     for (int i = 0; i < count; i++) {
                         struct json_object *jperm = json_object_array_get_idx(val, i);
-                        permission_t p = permission_of_str(json_object_get_string(jperm));
+                        KineticProto_Command_Security_ACL_Permission p;
+                        p = permission_of_str(json_object_get_string(jperm));
                         if (p == PERM_INVALID) {
                             return ACL_ERROR_INVALID_FIELD;
                         } else {
-                            scope->permissions[scope->permission_count] = p;
-                            scope->permission_count++;
+                            scope->permission[scope->n_permission] = p;
+                            scope->n_permission++;
                         }
                     }
                 } else {
@@ -317,57 +358,98 @@ static acl_of_file_res unpack_scopes(struct ACL *acl, int scope_count, json_obje
                 }
             }
             if (json_object_object_get_ex(cur_scope, "TlsRequired", &val)) {
-                scope->tlsRequired = json_object_get_boolean(val);
+                scope->TlsRequired = json_object_get_boolean(val);
+                scope->has_TlsRequired = true;
             }
+
+            acl->scope[acl->n_scope] = scope;
+            acl->n_scope++;
+            scope = NULL;
         }
     }
-    acl->scopeCount = scope_count;
+    acl->n_scope = scope_count;
     return ACL_OK;
+
+cleanup:
+    if (scope_array) { free(scope_array); }
+    if (scope) { free(scope); }
+    if (perm_array) { free(perm_array); }
+    if (data) { free(data); }
+    return res;
 }
 
-void acl_fprintf(FILE *f, struct ACL *acl) {
-    if (acl == NULL) {
+void acl_fprintf(FILE *f, struct ACL *ACLs) {
+    if (ACLs == NULL) {
         fprintf(f, "NULL\n");
-    } else {
-        fprintf(f, "ACL:\n");
-        if (acl->identity != ACL_NO_IDENTITY) {
+        return;
+    }
+
+    fprintf(f, "ACLs [%zd]:\n", ACLs->ACL_count);
+    
+    for (size_t ai = 0; ai < ACLs->ACL_count; ai++) {
+        KineticProto_Command_Security_ACL *acl = ACLs->ACLs[ai];
+        if (acl == NULL) { continue; }
+        if (ai > 0) { fprintf(f, "\n"); }
+
+        if (acl->has_identity) {
             fprintf(f, "  identity: %lld\n", acl->identity);
         }
-        if (acl->hmacKey) {
+
+        if (acl->has_key) {
             fprintf(f, "  key[%s,%zd]: \"%s\"\n",
-                "HmacSHA1", acl->hmacKey->length, acl->hmacKey->key);
+                "HmacSHA1", acl->key.len, acl->key.data);
         }
-        fprintf(f, "  scopes: (%zd)\n", acl->scopeCount);
+
+        fprintf(f, "  scopes: (%zd)\n", acl->n_scope);
         
-        for (size_t i = 0; i < acl->scopeCount; i++) {
-            struct acl_scope *scope = &acl->scopes[i];
-            fprintf(f, "    scope %zd:\n", i);
-            if (scope->offset != ACL_NO_OFFSET) {
+        for (size_t si = 0; si < acl->n_scope; si++) {
+            KineticProto_Command_Security_ACL_Scope *scope = acl->scope[si];
+            if (si > 0) { fprintf(f, "\n"); }
+            fprintf(f, "    scope %zd:\n", si);
+            if (scope->has_offset) {
                 fprintf(f, "      offset: %lld\n", scope->offset);
             }
-            if (scope->value) {
+            if (scope->has_value) {
                 fprintf(f, "      value[%zd]: \"%s\"\n",
-                    scope->valueSize, scope->value);
+                    scope->value.len, scope->value.data);
             }
-            for (size_t pi = 0; pi < scope->permission_count; pi++) {
-                if (scope->permissions[pi] != PERM_INVALID) {
-                    fprintf(f, "      permission: %s\n",
-                        str_of_permission(scope->permissions[pi]));
-                }
+            for (size_t pi = 0; pi < scope->n_permission; pi++) {
+                fprintf(f, "      permission: %s\n",
+                    str_of_permission(scope->permission[pi]));
             }
-            fprintf(f, "      tlsRequired: %d\n", scope->tlsRequired);
+
+            if (scope->has_TlsRequired) {
+                fprintf(f, "      TlsRequired: %d\n", scope->TlsRequired);
+            }
         }
     }
 }
 
-void acl_free(struct ACL *acl) {
-    while (acl) {
-        if (acl->hmacKey) { free(acl->hmacKey); }
-        for (size_t i = 0; i < acl->scopeCount; i++) {
-            if (acl->scopes[i].value) { free(acl->scopes[i].value); }
+void acl_free(struct ACL *ACLs) {
+    if (ACLs) {
+        for (size_t ai = 0; ai < ACLs->ACL_count; ai++) {
+            KineticProto_Command_Security_ACL *acl = ACLs->ACLs[ai];
+            if (acl) {
+                for (size_t si = 0; si < acl->n_scope; si++) {
+                    KineticProto_Command_Security_ACL_Scope *scope = acl->scope[si];
+                    if (scope->has_value && scope->value.data) {
+                        free(scope->value.data);
+                    }
+
+                    if (scope->n_permission > 0) {
+                        free(scope->permission);
+                    }                    
+                    free(scope);
+                }
+                free(acl->scope);
+
+                if (acl->has_key && acl->key.data) {
+                    free(acl->key.data);
+                }
+                free(acl);
+            }
         }
-        struct ACL *next = acl->next;
-        free(acl);
-        acl = next;
+        free(ACLs->ACLs);
+        free(ACLs);
     }
 }

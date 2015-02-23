@@ -25,6 +25,11 @@
 #include "kinetic_allocator.h"
 #include "kinetic_auth.h"
 #include "kinetic_device_info.h"
+#include "acl.h"
+
+#ifdef TEST
+struct ACL *ACLs = NULL;
+#endif
 
 KineticClient * KineticAdminClient_Init(KineticClientConfig *config)
 {
@@ -76,7 +81,7 @@ KineticStatus KineticAdminClient_SecureErase(KineticSession const * const sessio
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+    if (status != KINETIC_STATUS_SUCCESS) { return status; }
 
     // Ensure PIN array has data if non-empty
     if (pin.len > 0 && pin.data == NULL) {
@@ -207,16 +212,6 @@ void KineticClient_FreeLogInfo(KineticSession const * const session,
     (void)session;
 }
 
-KineticStatus KineticAdminClient_SetAcl(KineticSession const * const session,
-    char const * const acl_path)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    (void)session;
-    (void)acl_path;
-    return KINETIC_STATUS_INVALID;
-}
-
 KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
     int64_t version)
 {
@@ -242,4 +237,35 @@ KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const ses
     (void)session;
     (void)fw_path;
     return KINETIC_STATUS_INVALID;
+}
+
+KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
+        const char *ACLPath) {
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    if (ACLPath == NULL) {
+        return KINETIC_STATUS_INVALID_REQUEST;
+    }
+
+    #ifndef TEST
+    struct ACL *ACLs = NULL;
+    #endif
+    acl_of_file_res acl_res = acl_of_file(ACLPath, &ACLs);
+    if (acl_res != ACL_OK) {
+        return KINETIC_STATUS_ACL_ERROR;
+    }
+
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    if (operation == NULL) {
+        printf("!operation\n");
+        return KINETIC_STATUS_MEMORY_ERROR;
+    }
+
+    // Initialize request
+    KineticOperation_BuildSetACL(operation, ACLs);
+    KineticStatus status = KineticController_ExecuteOperation(operation, NULL);
+
+    // FIXME: confirm ACLs are freed
+
+    return status;
 }

@@ -1,0 +1,10 @@
+{
+    "identity": 1,
+    "key": "key",
+    "HMACAlgorithm": "HmacSHA1",
+    "scope": [
+        {
+            "permission": ["READ", "WRITE", "SETUP", "SECURITY"]
+        }
+    ]
+}

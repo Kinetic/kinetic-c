@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "kinetic_proto.h"
 
 typedef enum {
     HMAC_UNKNOWN = 0,
@@ -32,24 +33,10 @@ typedef enum {
 
 #define ACL_MAX_PERMISSIONS 8
 
-struct acl_scope {
-    int64_t offset;
-    size_t valueSize;
-    uint8_t *value;
-    uint8_t permission_count;
-    permission_t permissions[ACL_MAX_PERMISSIONS];
-    bool tlsRequired;
-};
-
-#define ACL_NO_IDENTITY (-1)
-#define ACL_NO_OFFSET (-1)
-
 struct ACL {
-    int64_t identity;
-    struct hmac_key *hmacKey;
-    size_t scopeCount;
-    struct ACL *next;
-    struct acl_scope scopes[];
+    size_t ACL_ceil;
+    size_t ACL_count;
+    KineticProto_Command_Security_ACL **ACLs;
 };
 
 typedef enum {
@@ -62,5 +49,33 @@ typedef enum {
     ACL_ERROR_MISSING_FIELD = -5,
     ACL_ERROR_INVALID_FIELD = -6,
 } acl_of_file_res;
+
+#if 0
+struct  _KineticProto_Command_Security_ACL {
+    ProtobufCMessage base;
+    protobuf_c_boolean has_identity;
+    int64_t identity;
+    protobuf_c_boolean has_key;
+    ProtobufCBinaryData key;
+    protobuf_c_boolean has_hmacAlgorithm;
+    KineticProto_Command_Security_ACL_HMACAlgorithm hmacAlgorithm;
+    size_t n_scope;
+    KineticProto_Command_Security_ACL_Scope** scope;
+    protobuf_c_boolean has_maxPriority;
+    KineticProto_Command_Priority maxPriority;
+};
+
+struct  _KineticProto_Command_Security_ACL_Scope {
+    ProtobufCMessage base;
+    protobuf_c_boolean has_offset;
+    int64_t offset;
+    protobuf_c_boolean has_value;
+    ProtobufCBinaryData value;
+    size_t n_permission;
+    KineticProto_Command_Security_ACL_Permission* permission;
+    protobuf_c_boolean has_TlsRequired;
+    protobuf_c_boolean TlsRequired;
+};
+#endif
 
 #endif
