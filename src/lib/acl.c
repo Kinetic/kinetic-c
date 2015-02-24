@@ -128,6 +128,7 @@ acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
     acl_of_file_res res = ACL_ERROR_MEMORY;
     struct ACL *acl_group = NULL;
     KineticProto_Command_Security_ACL **acl_array = NULL;
+    struct json_tokener* tokener = NULL;
 
     acl_group = calloc(1, sizeof(*acl_group));
     if (acl_group == NULL) { goto cleanup; }
@@ -137,7 +138,7 @@ acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
     acl_group->ACL_ceil = 1;
     acl_group->ACL_count = 0;
 
-    struct json_tokener* tokener = json_tokener_new();
+    tokener = json_tokener_new();
     if (tokener == NULL) { goto cleanup; }
 
     size_t offset = 0;
@@ -173,7 +174,7 @@ acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
     }
 
 cleanup:
-    json_tokener_free(tokener);
+    if (tokener) { json_tokener_free(tokener); }
     
     if (res == ACL_END_OF_STREAM || res == ACL_OK) {
         if (acl_group && acl_group->ACL_count == 0) {
@@ -392,7 +393,7 @@ void acl_fprintf(FILE *f, struct ACL *ACLs) {
         if (ai > 0) { fprintf(f, "\n"); }
 
         if (acl->has_identity) {
-            fprintf(f, "  identity: %lld\n", acl->identity);
+            fprintf(f, "  identity: %lld\n", (long long)acl->identity);
         }
 
         if (acl->has_key) {
@@ -407,7 +408,7 @@ void acl_fprintf(FILE *f, struct ACL *ACLs) {
             if (si > 0) { fprintf(f, "\n"); }
             fprintf(f, "    scope %zd:\n", si);
             if (scope->has_offset) {
-                fprintf(f, "      offset: %lld\n", scope->offset);
+                fprintf(f, "      offset: %lld\n", (long long)scope->offset);
             }
             if (scope->has_value) {
                 fprintf(f, "      value[%zd]: \"%s\"\n",
