@@ -1,10 +1,22 @@
 {
     "identity": 1,
-    "key": "key",
+    "key": "asdfasdf",
     "HMACAlgorithm": "HmacSHA1",
     "scope": [
         {
-            "permission": ["READ", "WRITE", "SETUP", "SECURITY"]
+            "permission": ["READ", "WRITE", "DELETE", "RANGE",
+                           "SETUP", "P2POP", "GETLOG", "SECURITY"]
+        }
+    ]
+}
+
+{
+    "identity": 2,
+    "key": "test_key",
+    "HMACAlgorithm": "HmacSHA1",
+    "scope": [
+        {
+            "permission": ["READ", "WRITE"]
         }
     ]
 }

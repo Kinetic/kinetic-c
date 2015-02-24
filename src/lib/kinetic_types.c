@@ -50,6 +50,7 @@ STATIC const char* KineticStatusDescriptor[] = {
     "SSL_REQUIRED",
     "DEVICE_LOCKED",
     "ACL_ERROR",
+    "NOT_AUTHORIZED",
 };
 
 #ifdef TEST
