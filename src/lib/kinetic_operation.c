@@ -58,7 +58,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
                 request->message.message.commandBytes.data = NULL;
             }
             free(request);
-            request = NULL;
+            operation->request = NULL;
         }
     }
 
