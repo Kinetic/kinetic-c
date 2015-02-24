@@ -226,7 +226,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
     }
     else
     {
-        LOG0("WARNING: Received unexpected response!");
+        KineticLogger_LogTimestamp(0, "WARNING: Received unexpected response!");
         logTag = unexpectedTag;
         logAtLevel = 0;
         protoLogAtLevel = 0;
@@ -288,6 +288,9 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
     {
         // pull out bus error?
         LOGF0("Error receiving response, got message bus error: %s", bus_error_string(res->status));
+        if (res->status == BUS_SEND_RX_TIMEOUT) {
+            KineticLogger_LogTimestamp(0, "RX_TIMEOUT");
+        }
     }
 
     // Call operation-specific callback, if configured
