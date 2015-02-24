@@ -88,4 +88,7 @@ void KineticOperation_BuildSetACL(KineticOperation* const operation, struct ACL 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildSetClusterVersion(KineticOperation* const operation, int64_t new_cluster_version);
 
+KineticStatus KineticOperation_UpdateFirmwareCallback(KineticOperation* const operation, KineticStatus const status);
+KineticStatus KineticOperation_BuildUpdateFirmware(KineticOperation* const operation, const char* fw_path);
+
 #endif // _KINETIC_OPERATION_H

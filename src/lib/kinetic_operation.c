@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/time.h>
+#include <stdio.h>
 
 #include "bus.h"
 #include "acl.h"
@@ -140,15 +141,17 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
     };
     if (operation->entry != NULL && operation->sendValue) {
         header.valueLength = operation->entry->value.bytesUsed;
+        if (header.valueLength > PDU_PROTO_MAX_LEN) {
+            LOGF2("Value exceeds maximum size. Packed size is: %d, Max size is: %d", header.valueLength, PDU_PROTO_MAX_LEN);
+            status = KINETIC_STATUS_BUFFER_OVERRUN;
+            goto cleanup;
+        }
+    }
+    else if (operation->value.len > 0) {
+        header.valueLength = operation->value.len;
     }
     else {
         header.valueLength = 0;
-    }
-    if (header.valueLength > PDU_PROTO_MAX_LEN) {
-        // Packed value exceeds max size.
-        LOGF2("\nPacked value exceeds maximum size. Packed size is: %d, Max size is: %d", header.valueLength, PDU_PROTO_MAX_LEN);
-        status = KINETIC_STATUS_BUFFER_OVERRUN;
-        goto cleanup;
     }
 
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
@@ -193,7 +196,12 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
 
     // Send the value/payload, if specified
     if (header.valueLength > 0) {
-        memcpy(&msg[offset], operation->entry->value.array.data, operation->entry->value.bytesUsed);
+        if (operation->value.len == 0) {
+            memcpy(&msg[offset], operation->entry->value.array.data, operation->entry->value.bytesUsed);
+        }
+        else {
+            memcpy(&msg[offset], operation->value.data, operation->value.len);
+        }
         offset += operation->entry->value.bytesUsed;
     }
     KINETIC_ASSERT((PDU_HEADER_LEN + header.protobufLength + header.valueLength) == offset);
@@ -870,8 +878,6 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
     operation->request->command->body->setup->newClusterVersion = new_cluster_version;
     operation->request->command->body->setup->has_newClusterVersion = true;
 
-    operation->request->command->body = &operation->request->message.body;
-
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetClusterVersionCallback;
@@ -904,4 +910,95 @@ void KineticOperation_BuildSetACL(KineticOperation* const operation,
     operation->valueEnabled = false;
     operation->sendValue = false;
     operation->callback = &KineticOperation_SetACLCallback;
+}
+
+KineticStatus KineticOperation_UpdateFirmwareCallback(KineticOperation* const operation, KineticStatus const status)
+{
+    KINETIC_ASSERT(operation != NULL);
+    KINETIC_ASSERT(operation->connection != NULL);
+    LOGF3("UpdateFirmwareCallback, with operation (0x%0llX) on connection (0x%0llX), status %d",
+        operation, operation->connection, status);
+
+    if (operation->value.data != NULL) {
+        free(operation->value.data);
+        memset(&operation->value, 0, sizeof(ByteArray));
+    }
+    
+    return status;
+}
+
+KineticStatus KineticOperation_BuildUpdateFirmware(KineticOperation* const operation, const char* fw_path)
+{
+    KineticOperation_ValidateOperation(operation);
+
+    KineticStatus status = KINETIC_STATUS_INVALID;
+    FILE* fw_file = NULL;
+
+    if (fw_path == NULL) {
+        LOG0("ERROR: FW update file was NULL");
+        status = KINETIC_STATUS_INVALID_FILE;
+        goto cleanup;
+    }
+
+    fw_file = fopen(fw_path, "r");
+    if (fw_file == NULL) {
+        LOG0("ERROR: Specified FW update file could not be opened");
+        return KINETIC_STATUS_INVALID_FILE;
+        goto cleanup;
+    }
+
+    if (fseek(fw_file, 0L, SEEK_END) != 0) {
+        LOG0("ERROR: Specified FW update file could not be seek");
+        status = KINETIC_STATUS_INVALID_FILE;
+        goto cleanup;
+    }
+
+    long len = ftell(fw_file);
+    if (len < 1) {
+        LOG0("ERROR: Specified FW update file could not be queried for length");
+        status = KINETIC_STATUS_INVALID_FILE;
+        goto cleanup;
+    }
+    if (fseek(fw_file, 0L, SEEK_SET) != 0) {
+        LOG0("ERROR: Specified FW update file could not be seek back to start");
+        status = KINETIC_STATUS_INVALID_FILE;
+        goto cleanup;
+    }
+
+    operation->value.data = calloc(len, 1);
+    if (operation->value.data == NULL) {
+        LOG0("ERROR: Failed allocating memory to store FW update image");
+        status = KINETIC_STATUS_MEMORY_ERROR;
+        goto cleanup;
+    }
+
+    size_t readLen = fread(operation->value.data, 1, len, fw_file);
+    if ((long)readLen != len) {
+        LOGF0("ERROR: Expected to read %ld bytes from FW file, but read %zu", len, readLen);
+        status = KINETIC_STATUS_INVALID_FILE;
+        goto cleanup;
+    }
+    fclose(fw_file);
+
+    operation->value.len = readLen;
+    
+    operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
+    operation->request->message.command.header->has_messageType = true;
+    operation->request->command->body = &operation->request->message.body;
+    
+    operation->request->command->body->setup = &operation->request->message.setup;
+    operation->request->command->body->setup->firmwareDownload = true;
+    operation->request->command->body->setup->has_firmwareDownload = true;
+
+    operation->valueEnabled = true;
+    operation->sendValue = true;
+    operation->callback = &KineticOperation_UpdateFirmwareCallback;
+
+    return KINETIC_STATUS_SUCCESS;
+
+cleanup:
+    if (fw_file != NULL) {
+        fclose(fw_file);
+    }
+    return status;
 }

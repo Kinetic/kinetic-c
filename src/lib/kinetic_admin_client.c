@@ -218,25 +218,11 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const 
     assert(session != NULL);
     assert(session->connection != NULL);
 
-    KineticStatus status;
-    status = KineticAuth_EnsureSslEnabled(&session->config);
-    if (status != KINETIC_STATUS_SUCCESS) {return status;}
-
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticOperation_BuildSetClusterVersion(operation, version);
     return KineticController_ExecuteOperation(operation, NULL);
-}
-
-KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
-    char const * const fw_path)
-{
-    assert(session != NULL);
-    assert(session->connection != NULL);
-    (void)session;
-    (void)fw_path;
-    return KINETIC_STATUS_INVALID;
 }
 
 KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
@@ -268,4 +254,21 @@ KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
     // FIXME: confirm ACLs are freed
 
     return status;
+}
+
+KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
+    char const * const fw_path)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+    
+    KineticStatus status = KineticOperation_BuildUpdateFirmware(operation, fw_path);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        return status;
+    }
+    
+    return KineticController_ExecuteOperation(operation, NULL);
 }

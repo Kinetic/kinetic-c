@@ -817,3 +817,42 @@ void test_KineticOperation_BuildSetACL_should_build_a_SECURITY_operation(void)
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
 }
+
+void test_KineticOperation_BuildFirmwareUpdate_should_build_a_FIRMWARE_DOWNLOAD_operation(void)
+{
+    const char* path = "test/support/data/dummy_fw.slod";
+    const char* fwBytes = "firmware\nupdate\ncontents\n";
+    int fwLen = strlen(fwBytes);
+
+    KineticStatus status = KineticOperation_BuildUpdateFirmware(&Operation, path);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_TRUE(Operation.valueEnabled);
+    TEST_ASSERT_TRUE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+
+    TEST_ASSERT_EQUAL_PTR(&Request.message.setup, Request.command->body->setup);
+    TEST_ASSERT_TRUE(Request.message.setup.firmwareDownload);
+    TEST_ASSERT_TRUE(Request.message.setup.has_firmwareDownload);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_UpdateFirmwareCallback, Operation.callback);
+
+    TEST_ASSERT_NOT_NULL(Operation.value.data);
+    TEST_ASSERT_EQUAL(fwLen, Operation.value.len);
+    TEST_ASSERT_EQUAL_STRING(fwBytes, (char*)Operation.value.data);
+}
+
+void test_KineticOperation_BuildFirmwareUpdate_should_return_INVALID_FILE_if_does_not_exist(void)
+{
+    const char* path = "test/support/data/none.slod";
+
+    KineticStatus status = KineticOperation_BuildUpdateFirmware(&Operation, path);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_FILE, status);
+}

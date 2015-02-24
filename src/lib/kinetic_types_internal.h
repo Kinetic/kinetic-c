@@ -204,6 +204,7 @@ struct _KineticOperation {
     KineticP2P_Operation* p2pOp;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
+    ByteArray value;
 };
 
 // Kintic Serial Allocator
