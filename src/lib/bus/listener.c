@@ -627,7 +627,8 @@ static void process_unpacked_message(listener *l,
         int64_t seq_id = result.u.success.seq_id;
         void *opaque_msg = result.u.success.msg;
 
-        if (seq_id < ci->largest_seq_id_seen && ci->largest_seq_id_seen != 0) {
+        if (seq_id < ci->largest_seq_id_seen && ci->largest_seq_id_seen != 0
+                && seq_id != BUS_NO_SEQ_ID) {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                 "suspicious sequence ID on %d: largest seen is %lld, got %lld\n",
                 ci->fd, (long long)ci->largest_seq_id_seen, (long long)seq_id);
