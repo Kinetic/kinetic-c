@@ -107,6 +107,8 @@ bool KineticHMAC_Validate(const KineticProto_Message* msg,
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
+#define LOG_HMAC 0
+
 static void KineticHMAC_Compute(KineticHMAC* hmac,
                                 const KineticProto_Message* msg,
                                 const ByteArray key)
@@ -123,6 +125,20 @@ static void KineticHMAC_Compute(KineticHMAC* hmac,
 
     HMAC_CTX ctx;
     HMAC_CTX_init(&ctx);
+#if LOG_HMAC
+    fprintf(stderr, "\n\nUsing hmac key [%zd]: '%s' and length '", key.len, key.data);
+    for (size_t i = 0; i < sizeof(uint32_t); i++) {
+        fprintf(stderr, "%02x", ((uint8_t *)&lenNBO)[i]);
+    }
+    
+    fprintf(stderr, "' on data: \n");
+    for (size_t i = 0; i < msg->commandBytes.len; i++) {
+        fprintf(stderr, "%02x", msg->commandBytes.data[i]);
+        if (i > 0 && (i & 15) == 15) { fprintf(stderr, "\n"); }
+    }
+    fprintf(stderr, "\n\n");
+#endif
+
     HMAC_Init_ex(&ctx, key.data, key.len, EVP_sha1(), NULL);
     HMAC_Update(&ctx, (uint8_t*)&lenNBO, sizeof(uint32_t));
     HMAC_Update(&ctx, msg->commandBytes.data, msg->commandBytes.len);
