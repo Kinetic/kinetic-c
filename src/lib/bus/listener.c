@@ -719,7 +719,7 @@ static void tick_handler(listener *l) {
 
                 /* never got a response, but we don't have the callback
                  * either -- the sender will notify about the timeout. */
-                BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                     "timing out hold info %p -- <fd:%d, seq_id:%lld> at (%ld.%ld)",
                     (void*)info, info->u.hold.fd, (long long)info->u.hold.seq_id,
                     (long)tv.tv_sec, (long)tv.tv_usec);
@@ -755,7 +755,7 @@ static void tick_handler(listener *l) {
                     continue;
                 }
                 struct boxed_msg *box = info->u.expect.box;
-                BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 256,
+                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 256,
                     "notifying of rx failure -- timeout (info %p) -- "
                     "<fd:%d, seq_id:%lld>, from time (%ld.%ld) to (%ld.%ld) to (%ld.%ld)",
                     (void*)info, box->fd, (long long)box->out_seq_id,
