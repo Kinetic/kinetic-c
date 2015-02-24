@@ -24,6 +24,8 @@ struct ACL {
     KineticProto_Command_Security_ACL **ACLs;
 };
 
+#define ACL_MAX_PERMISSIONS 8
+
 typedef enum {
     ACL_OK = 0,
     ACL_END_OF_STREAM = 1,

@@ -347,7 +347,7 @@ static acl_of_file_res unpack_scopes(KineticProto_Command_Security_ACL *acl,
                         struct json_object *jperm = json_object_array_get_idx(val, i);
                         KineticProto_Command_Security_ACL_Permission p;
                         p = permission_of_str(json_object_get_string(jperm));
-                        if (p == PERM_INVALID) {
+                        if (p == KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION) {
                             return ACL_ERROR_INVALID_FIELD;
                         } else {
                             scope->permission[scope->n_permission] = p;
