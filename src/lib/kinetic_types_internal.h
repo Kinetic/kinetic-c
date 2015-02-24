@@ -26,6 +26,7 @@
 #include "kinetic_countingsemaphore.h"
 #include "kinetic_resourcewaiter_types.h"
 #include "kinetic_resourcewaiter.h"
+#include "acl.h"
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <openssl/sha.h>
@@ -71,6 +72,9 @@ struct _KineticSession {
     // Client must call KineticAdminClient_DestroySession when finished with a session to shutdown
     // a session cleanly and free the `connection`.
     struct _KineticConnection* connection;
+
+    // Default timeout.
+    uint16_t timeoutSeconds;
 };
 
 // #TODO remove packed attribute and replace uses of sizeof(KineticPDUHeader)

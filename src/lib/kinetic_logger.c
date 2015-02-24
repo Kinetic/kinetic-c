@@ -518,6 +518,18 @@ void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer bu
     KineticLogger_LogByteArray(log_level, title, array);
 }
 
+void KineticLogger_LogTimestamp(int log_level, const char* title) {
+    struct timeval tv;
+    if (title == NULL) {
+        title = "";
+    }
+    if (0 == gettimeofday(&tv, NULL)) {
+        KineticLogger_LogPrintf(log_level, "%s: %lld.%lld\n",
+            title, (long long)tv.tv_sec, (long long)tv.tv_usec);
+    } else {
+        KineticLogger_LogPrintf(0, "%s: (gettimeofday failure)", title);
+    }
+}
 
 //------------------------------------------------------------------------------
 // Private Method Definitions

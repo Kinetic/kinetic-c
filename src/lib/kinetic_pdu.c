@@ -224,7 +224,15 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         if (response->command != NULL &&
             response->command->header != NULL)
         {
-            seq_id = response->command->header->ackSequence;
+            if (response->proto->has_authType &&
+                response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS
+                && connection->connectionID == 0)
+            {
+                /* Ignore the unsolicited status message on connect. */
+                seq_id = BUS_NO_SEQ_ID;
+            } else {
+                seq_id = response->command->header->ackSequence;
+            }
             log_response_seq_id(connection->socket, seq_id);
         }
 

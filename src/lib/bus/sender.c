@@ -584,7 +584,8 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
             return;
         }
 
-        if (fdi->largest_seq_id_seen > out_seq_id && fdi->largest_seq_id_seen > 0) {
+        if (fdi->largest_seq_id_seen > out_seq_id && fdi->largest_seq_id_seen != 0
+                && out_seq_id != BUS_NO_SEQ_ID) {
             BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
                 "suspicious outgoing sequence ID on %d: got %lld, already sent up to %lld",
                 fd, (long long)out_seq_id, (long long)fdi->largest_seq_id_seen);
@@ -614,6 +615,7 @@ static void enqueue_write(struct sender *s, tx_info_t *info) {
         struct u_write uw = {
             .fd = info->u.enqueue.fd,
             .timeout_sec = info->u.enqueue.timeout_sec,
+            .orig_timeout_sec = info->u.enqueue.timeout_sec,
             .box = info->u.enqueue.box,
             .fdi = fdi,
         };
@@ -908,7 +910,7 @@ static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent)
 
         struct u_notify un = {
             .fd = info->u.write.fd,
-            .timeout_sec = info->u.write.timeout_sec,
+            .timeout_sec = info->u.write.orig_timeout_sec,
             .box = info->u.write.box,
         };
 

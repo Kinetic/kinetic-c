@@ -1,4 +1,3 @@
-
 /*
 * kinetic-c
 * Copyright (C) 2014 Seagate Technology.
@@ -15,7 +14,7 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
 
@@ -23,15 +22,16 @@
 #include "kinetic_admin_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
+#include "kinetic_logger.h"
 #include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
-#include "mock_kinetic_auth.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_resourcewaiter.h"
+#include "mock_kinetic_auth.h"
 #include "mock_acl.h"
 
 #include "kinetic_logger.h"
@@ -44,9 +44,13 @@
 static KineticSession Session;
 static KineticConnection Connection;
 
+extern struct ACL *ACLs;
+
+#define TEST_DIR(F) ("test/unit/acl/" F)
+
 void setUp(void)
 {
-    KineticLogger_Init("stdout", 3);
+    KineticLogger_Init("stdout", 2);
     Session.connection = &Connection;
 }
 
@@ -55,18 +59,38 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_device(void)
+void test_KineticAdminClient_SetACL_should_reject_an_invalid_ACL_path(void)
 {
-    LOG_LOCATION;
+    Session.connection = &Connection;
 
-    KineticLogInfo* info;
+    KineticStatus status = KineticAdminClient_SetACL(&Session, NULL);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
+}
+
+void test_KineticAdminClient_SetACL_should_set_an_ACL(void)
+{
+    Session.connection = &Connection;
     KineticOperation operation;
 
+    const char *ACL_path = TEST_DIR("ex1.json");
+
+    acl_of_file_ExpectAndReturn(ACL_path, &ACLs, ACL_OK);
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
+    KineticOperation_BuildSetACL_Expect(&operation, ACLs);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticAdminClient_GetLog(&Session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
+    KineticStatus status = KineticAdminClient_SetACL(&Session, ACL_path);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
+}
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+void test_KineticAdminClient_SetACL_should_fail_with_KINETIC_STATUS_ACL_ERROR_if_ACL_load_fails(void)
+{
+    Session.connection = &Connection;
+
+    const char *ACL_path = TEST_DIR("ex1.json");
+
+    acl_of_file_ExpectAndReturn(ACL_path, &ACLs, ACL_ERROR_JSON_FILE);
+
+    KineticStatus status = KineticAdminClient_SetACL(&Session, ACL_path);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_ACL_ERROR, status);
 }

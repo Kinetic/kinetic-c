@@ -69,11 +69,14 @@ KineticStatus KineticProtoStatusCode_to_KineticStatus(
         break;
 
     case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED:
     case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED:
     case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE:
     case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS:
         status = KINETIC_STATUS_OPERATION_FAILED;
+        break;
+
+    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED:
+        status = KINETIC_STATUS_NOT_AUTHORIZED;
         break;
 
     case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED:
@@ -460,7 +463,7 @@ void KineticOperation_Init(KineticOperation* op, KineticSession const * const se
     KINETIC_ASSERT(session->connection != NULL);
     *op = (KineticOperation) {
         .connection = session->connection,
-        .timeoutSeconds = session->config.timeoutSeconds,
+        .timeoutSeconds = session->timeoutSeconds,
     };
 }
 

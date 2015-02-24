@@ -191,6 +191,8 @@ typedef enum {
     KINETIC_STATUS_MISSING_PIN,             ///< An operation is missing a PIN
     KINETIC_STATUS_SSL_REQUIRED,            ///< The operation requires an SSL connection and the specified connection is non-SSL
     KINETIC_STATUS_DEVICE_LOCKED,           ///< The operation failed because the device is sercurely locked. An UNLOCK must be issued to unlock for use.
+    KINETIC_STATUS_ACL_ERROR,               ///< A security operation failed due to bad ACL(s)
+    KINETIC_STATUS_NOT_AUTHORIZED,          ///< Authorization failure
     KINETIC_STATUS_COUNT                    ///< Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 

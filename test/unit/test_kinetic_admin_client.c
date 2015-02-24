@@ -35,6 +35,7 @@
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
+#include "mock_acl.h"
 #include "protobuf-c/protobuf-c.h"
 #include <stdio.h>
 

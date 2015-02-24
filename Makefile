@@ -75,6 +75,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_semaphore.o \
 	$(OUT_DIR)/kinetic_countingsemaphore.o \
 	$(OUT_DIR)/kinetic_resourcewaiter.o \
+	$(OUT_DIR)/acl.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/kinetic_admin_client.o \
@@ -85,8 +86,6 @@ LIB_OBJS = \
 	$(OUT_DIR)/sender.o \
 	$(OUT_DIR)/util.o \
 	$(OUT_DIR)/yacht.o \
-
-
 
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
@@ -169,6 +168,8 @@ ci: stop_sims start_sims all stop_sims
 
 json: ${OUT_DIR}/libjson-c.a
 
+$(OUT_DIR)/acl.o: json
+
 json_install: json
 	cd ${JSONC} && \
 	make install
@@ -236,7 +237,7 @@ ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
 KINETIC_SO_DEV = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).so
 KINETIC_SO_RELEASE = $(PREFIX)/lib$(KINETIC_LIB_NAME).so
 
-$(KINETIC_LIB): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
+$(KINETIC_LIB): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS) json
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Building static library: $(KINETIC_LIB)
@@ -328,7 +329,7 @@ UNITY_SRC = ./vendor/unity/src/unity.c
 
 SYSTEST_SRC = ./test/system
 SYSTEST_OUT = $(BIN_DIR)/systest
-SYSTEST_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
+SYSTEST_LDFLAGS += -lm $(KINETIC_LIB) -L${OUT_DIR} -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread -ljson-c
 SYSTEST_WARN = -Wall -Wextra -Werror -Wstrict-prototypes -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
 SYSTEST_CFLAGS += -std=c99 -fPIC -g $(SYSTEST_WARN) $(CDEFS) $(OPTIMIZE) -DTEST
 
@@ -369,7 +370,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread
+UTIL_LDFLAGS += -lm $(KINETIC_LIB) -L${OUT_DIR} -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread -ljson-c
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)

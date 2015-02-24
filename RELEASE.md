@@ -5,10 +5,12 @@ v0.12.0 (kinetic-protocol 3.0.5)
         * KineticClient_InstantSecureErase => KineticAdminClient_InstantErase/KineticAdminClient_SecureErase
         * KineticClient_GetLog => KineticAdminClient_GetLog
         * KineticClient_FreeDeviceInfo -> KineticAdminClient_LogInfo
+* Added `KINETIC_STATUS_NOT_AUTHORIZED` to KineticStatus enum.
+* Added KineticAdminClient_SetACL command.
 * KineticSession is now supplied as an opaque instance pointer from KineticClient_CreateSession
     * Passed KineticClientConfig copied and can be discarded after session creation
 * *KNOWN ISSUES*
-    * KineticAdminClient_UpdateFirmware and KineticAdminClient_SetAcl are incomplete
+    * KineticAdminClient_UpdateFirmware is incomplete
 
 v0.11.2 (kinetic-protocol 3.0.5)
 --------------------------------

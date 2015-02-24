@@ -627,7 +627,8 @@ static void process_unpacked_message(listener *l,
         int64_t seq_id = result.u.success.seq_id;
         void *opaque_msg = result.u.success.msg;
 
-        if (seq_id < ci->largest_seq_id_seen && ci->largest_seq_id_seen != 0) {
+        if (seq_id < ci->largest_seq_id_seen && ci->largest_seq_id_seen != 0
+                && seq_id != BUS_NO_SEQ_ID) {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                 "suspicious sequence ID on %d: largest seen is %lld, got %lld\n",
                 ci->fd, (long long)ci->largest_seq_id_seen, (long long)seq_id);
@@ -719,7 +720,7 @@ static void tick_handler(listener *l) {
 
                 /* never got a response, but we don't have the callback
                  * either -- the sender will notify about the timeout. */
-                BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                     "timing out hold info %p -- <fd:%d, seq_id:%lld> at (%ld.%ld)",
                     (void*)info, info->u.hold.fd, (long long)info->u.hold.seq_id,
                     (long)tv.tv_sec, (long)tv.tv_usec);
@@ -755,9 +756,9 @@ static void tick_handler(listener *l) {
                     continue;
                 }
                 struct boxed_msg *box = info->u.expect.box;
-                BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 256,
+                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 256 + 64,
                     "notifying of rx failure -- timeout (info %p) -- "
-                    "<fd:%d, seq_id:%lld>, from time (%ld.%ld) to (%ld.%ld) to (%ld.%ld)",
+                    "<fd:%d, seq_id:%lld>, from time (queued:%ld.%ld) to (sent:%ld.%ld) to (now:%ld.%ld)",
                     (void*)info, box->fd, (long long)box->out_seq_id,
                     (long)box->tv_send_start.tv_sec, (long)box->tv_send_start.tv_usec, 
                     (long)box->tv_send_done.tv_sec, (long)box->tv_send_done.tv_usec, 

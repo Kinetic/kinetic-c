@@ -121,8 +121,6 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
             }
         }
 
-        printf("Waiting for PUTs to finish\n");
-
         size_t num_failures = 0;
         for (size_t i = 0; i < num_ops; i++) {
             KineticSemaphore_WaitForSignalAndDestroy(op_statuses[i].sem);
@@ -194,8 +192,6 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
                 TEST_FAIL();
             }
         }
-
-        printf("Waiting for GETs to finish\n");
 
         size_t bytes_read = 0;
         for (size_t i = 0; i < num_ops; i++)
@@ -274,8 +270,6 @@ static void run_throghput_tests(size_t num_ops, size_t value_size)
                 TEST_FAIL();
             }
         }
-
-        printf("Waiting for DELETEs to finish\n");
 
         for (size_t i = 0; i < num_ops; i++)
         {

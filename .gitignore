@@ -30,6 +30,7 @@ bin/
 obj/
 build/
 docs/api/
+tmp/
 
 # Eclipse temp files
 .metadata/

@@ -27,6 +27,13 @@ SystemTestFixture Fixture = {.connected = false};
 
 void SystemTestSetup(int log_level)
 {
+    const uint8_t *key = (const uint8_t *)SESSION_HMAC_KEY;
+    SystemTestSetupWithIdentity(log_level, SESSION_IDENTITY, key, strlen((const char*)key));
+}
+
+void SystemTestSetupWithIdentity(int log_level, int64_t identity,
+    const uint8_t *key, size_t key_size)
+{
     KineticClientConfig clientConfig = {
         .logFile = "stdout",
         .logLevel = log_level,
@@ -41,8 +48,8 @@ void SystemTestSetup(int log_level)
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_PORT,
         .clusterVersion = SESSION_CLUSTER_VERSION,
-        .identity = SESSION_IDENTITY,
-        .hmacKey = ByteArray_Create(config.keyData, strlen(SESSION_HMAC_KEY)),
+        .identity = identity,
+        .hmacKey = ByteArray_Create((void *)key, key_size),
     };
     strcpy((char*)config.keyData, SESSION_HMAC_KEY);
     KineticStatus status = KineticClient_CreateSession(&config, Fixture.client, &Fixture.session);
@@ -52,8 +59,8 @@ void SystemTestSetup(int log_level)
         .host = SYSTEM_TEST_HOST,
         .port = KINETIC_TLS_PORT,
         .clusterVersion = SESSION_CLUSTER_VERSION,
-        .identity = SESSION_IDENTITY,
-        .hmacKey = ByteArray_Create(config.keyData, strlen(SESSION_HMAC_KEY)),
+        .identity = identity,
+        .hmacKey = ByteArray_Create((void *)key, key_size),
         .useSsl = true,
     };
     strcpy((char*)config.keyData, SESSION_HMAC_KEY);

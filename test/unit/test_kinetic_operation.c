@@ -36,6 +36,7 @@
 #include "mock_kinetic_auth.h"
 #include "mock_kinetic_hmac.h"
 #include "mock_bus.h"
+#include "mock_acl.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_countingsemaphore.h"
 
@@ -440,8 +441,10 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
     };
 
     KineticP2P_Operation chained_p2pOp = {
-        .peer.hostname = "hostname1",
-        .peer.port = 4321,
+        .peer = {
+            .hostname = "hostname1",
+            .port = 4321,
+        },
         .numOperations = 1,
         .operations = ops2
     };
@@ -460,9 +463,11 @@ void test_KineticOperation_BuildP2POperation_should_build_a_P2POperation_request
     };
 
     KineticP2P_Operation p2pOp = {
-        .peer.hostname = "hostname",
-        .peer.port = 1234,
-        .peer.tls = true,
+        .peer = {
+            .hostname = "hostname",
+            .port = 1234,
+            .tls = true,
+        },
         .numOperations = 2,
         .operations = ops
     };
@@ -620,8 +625,6 @@ void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_
     TEST_ASSERT_NULL(Operation.response);
 }
 
-
-
 void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
 {
     KineticLogInfo* pInfo;
@@ -714,8 +717,6 @@ void test_KineticOperation_BuildErase_should_build_an_INSTANT_ERASE_operation_wi
     TEST_ASSERT_EQUAL(180, Operation.timeoutSeconds);
 }
 
-
-
 void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PIN_auth(void)
 {
     char pinData[] = "abc123";
@@ -766,8 +767,6 @@ void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
 }
 
-
-
 void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VERSION_operation_with_PIN_auth(void)
 {
     KineticOperation_BuildSetClusterVersion(&Operation, 1776);
@@ -788,4 +787,32 @@ void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VER
     TEST_ASSERT_TRUE(Request.message.setup.has_newClusterVersion);
     TEST_ASSERT_FALSE(Request.message.setup.has_firmwareDownload);
     TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetClusterVersionCallback, Operation.callback);
+}
+
+void test_KineticOperation_BuildSetACL_should_build_a_SECURITY_operation(void)
+{
+    struct ACL ACLs = {
+        .ACL_count = 1,
+        .ACL_ceil = 1,
+        .ACLs = NULL,
+    };
+    KineticOperation_BuildSetACL(&Operation, &ACLs);
+
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    
+    TEST_ASSERT_FALSE(Request.command->body->security->has_oldLockPIN);
+    TEST_ASSERT_FALSE(Request.command->body->security->has_newLockPIN);
+    TEST_ASSERT_FALSE(Request.command->body->security->has_oldErasePIN);
+    TEST_ASSERT_FALSE(Request.command->body->security->has_newErasePIN);
+
+    TEST_ASSERT_EQUAL_PTR(Request.command->body->security->acl, ACLs.ACLs);
+
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetACLCallback, Operation.callback);
+    TEST_ASSERT_FALSE(Operation.valueEnabled);
+    TEST_ASSERT_FALSE(Operation.sendValue);
+    TEST_ASSERT_NULL(Operation.response);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
 }

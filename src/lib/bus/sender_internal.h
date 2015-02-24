@@ -103,6 +103,7 @@ typedef struct {
         struct u_write {
             int fd;
             time_t timeout_sec;
+            time_t orig_timeout_sec;
             boxed_msg *box;
             size_t sent_size;
             fd_info *fdi;

@@ -36,10 +36,11 @@ static ByteArray TestValue;
 static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
 static const char strKey[] = "GET system test blob";
+static bool failing = false;
 
 void setUp(void)
 {
-    SystemTestSetup(2);
+    SystemTestSetup(0);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);
@@ -59,6 +60,10 @@ void setUp(void)
     };
 
     KineticStatus status = KineticClient_Put(Fixture.session, &putEntry, NULL);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        failing = true;
+        TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
 
     // Validate the object exists initially
     KineticEntry getEntry = {
@@ -89,8 +94,10 @@ void setUp(void)
 
 void tearDown(void)
 {
-    KineticStatus status;
+    KineticStatus status = KINETIC_STATUS_INVALID;
     
+    if (failing) { return; }
+
     // Validate the object no longer exists
     KineticEntry regetEntryMetadata = {
         .key = KeyBuffer,

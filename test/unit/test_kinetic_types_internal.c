@@ -87,7 +87,7 @@ void test_KineticProtoStatusCode_to_KineticStatus_should_map_from_internal_to_pu
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR));
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_AUTHORIZED,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED));
