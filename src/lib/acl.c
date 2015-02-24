@@ -336,7 +336,7 @@ static acl_of_file_res unpack_scopes(KineticProto_Command_Security_ACL *acl,
                 enum json_type perm_type = json_object_get_type(val);
                 if (perm_type == json_type_string) {
                     scope->permission[0] = permission_of_str(json_object_get_string(val));
-                    if (scope->permission[0] == PERM_INVALID) {
+                    if (scope->permission[0] == KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION) {
                         return ACL_ERROR_INVALID_FIELD;
                     } else {
                         scope->n_permission++;
