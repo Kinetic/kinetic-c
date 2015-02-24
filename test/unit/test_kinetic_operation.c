@@ -790,14 +790,14 @@ void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VER
     TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetClusterVersionCallback, Operation.callback);
 }
 
-void test_KineticOperation_BuildSecurity_should_build_a_SECURITY_operation(void)
+void test_KineticOperation_BuildSetACL_should_build_a_SECURITY_operation(void)
 {
     struct ACL ACLs = {
         .ACL_count = 1,
         .ACL_ceil = 1,
         .ACLs = NULL,
     };
-    KineticOperation_BuildSecurity(&Operation, &ACLs);
+    KineticOperation_BuildSetACL(&Operation, &ACLs);
 
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
         Request.message.command.header->messageType);
@@ -811,7 +811,7 @@ void test_KineticOperation_BuildSecurity_should_build_a_SECURITY_operation(void)
 
     TEST_ASSERT_EQUAL_PTR(Request.command->body->security->acl, ACLs.ACLs);
 
-    TEST_ASSERT_EQUAL_PTR(&KineticOperation_SecurityCallback, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetACLCallback, Operation.callback);
     TEST_ASSERT_FALSE(Operation.valueEnabled);
     TEST_ASSERT_FALSE(Operation.sendValue);
     TEST_ASSERT_NULL(Operation.response);

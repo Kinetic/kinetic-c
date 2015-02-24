@@ -59,15 +59,15 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KineticAdminClient_Security_should_reject_an_invalid_ACL_path(void)
+void test_KineticAdminClient_SetACL_should_reject_an_invalid_ACL_path(void)
 {
     Session.connection = &Connection;
 
-    KineticStatus status = KineticAdminClient_Security(&Session, NULL);
+    KineticStatus status = KineticAdminClient_SetACL(&Session, NULL);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
 }
 
-void test_KineticAdminClient_Security_should_set_an_ACL(void)
+void test_KineticAdminClient_SetACL_should_set_an_ACL(void)
 {
     Session.connection = &Connection;
     KineticOperation operation;
@@ -76,10 +76,10 @@ void test_KineticAdminClient_Security_should_set_an_ACL(void)
 
     acl_of_file_ExpectAndReturn(ACL_path, &ACLs, ACL_OK);
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildSecurity_Expect(&operation, ACLs);
+    KineticOperation_BuildSetACL_Expect(&operation, ACLs);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticAdminClient_Security(&Session, ACL_path);
+    KineticStatus status = KineticAdminClient_SetACL(&Session, ACL_path);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
 }
 

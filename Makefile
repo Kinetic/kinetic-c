@@ -369,7 +369,7 @@ UTILITY = kinetic-c-util
 UTIL_DIR = ./src/utility
 UTIL_EXEC = $(BIN_DIR)/$(UTILITY)
 UTIL_OBJ = $(OUT_DIR)/main.o
-UTIL_LDFLAGS += -lm $(KINETIC_LIB) -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread -ljson-c
+UTIL_LDFLAGS += -lm $(KINETIC_LIB) -L${OUT_DIR} -L${OPENSSL_PATH}/lib -lssl -lcrypto -lpthread -ljson-c
 
 $(UTIL_OBJ): $(UTIL_DIR)/main.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(UTIL_DIR)

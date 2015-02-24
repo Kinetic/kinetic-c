@@ -91,11 +91,11 @@ void test_Secure_should_set_ACL_and_only_be_able_to_executed_permitted_operation
 
     /* Erase on identity 2 --> Permission Denied! */
 
-    // Set the erase PIN to something non-empty
+    // Leave the erase PIN empty so other erase tests won't fail.
     static char OldPinData[4];
     static char NewPinData[4];
     static ByteArray OldPin, NewPin;
-    strcpy(NewPinData, "123");
+    strcpy(NewPinData, "");
     OldPin = ByteArray_Create(OldPinData, 0);
     NewPin = ByteArray_Create(NewPinData, strlen(NewPinData));
     status = KineticAdminClient_SetErasePin(Fixture.adminSession,

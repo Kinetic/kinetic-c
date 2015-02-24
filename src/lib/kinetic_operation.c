@@ -882,7 +882,7 @@ KineticStatus KineticOperation_SetACLCallback(KineticOperation* const operation,
 {
     KINETIC_ASSERT(operation != NULL);
     KINETIC_ASSERT(operation->connection != NULL);
-    LOGF3("SecurityCallback, with operation (0x%0llX) on connection (0x%0llX), status %d",
+    LOGF3("SetACLCallback, with operation (0x%0llX) on connection (0x%0llX), status %d",
         operation, operation->connection, status);
     
     return status;
