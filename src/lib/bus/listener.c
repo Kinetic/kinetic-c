@@ -755,9 +755,9 @@ static void tick_handler(listener *l) {
                     continue;
                 }
                 struct boxed_msg *box = info->u.expect.box;
-                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 256,
+                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 256 + 64,
                     "notifying of rx failure -- timeout (info %p) -- "
-                    "<fd:%d, seq_id:%lld>, from time (%ld.%ld) to (%ld.%ld) to (%ld.%ld)",
+                    "<fd:%d, seq_id:%lld>, from time (queued:%ld.%ld) to (sent:%ld.%ld) to (now:%ld.%ld)",
                     (void*)info, box->fd, (long long)box->out_seq_id,
                     (long)box->tv_send_start.tv_sec, (long)box->tv_send_start.tv_usec, 
                     (long)box->tv_send_done.tv_sec, (long)box->tv_send_done.tv_usec, 
