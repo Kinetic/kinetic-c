@@ -430,6 +430,16 @@ struct _KineticP2P_Operation {
 };
 
 /**
+ * @brief Limit for P2P operations.
+ */
+#define KINETIC_P2P_OPERATION_LIMIT 100000
+
+/**
+ * @brief Limit for P2P operation nesting.
+ */
+#define KINETIC_P2P_MAX_NESTING 1000
+
+/**
  * @brief Default values for the KineticClientConfig struct, which will be used
  * if the corresponding field in the struct is 0.
  */
