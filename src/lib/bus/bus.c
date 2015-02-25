@@ -476,14 +476,17 @@ bool bus_release_socket(struct bus *b, int fd) {
     connection_info *ci = (connection_info *)old_value;
     assert(ci != NULL);
 
+    bool res = false;
+
     if (ci->ssl == BUS_NO_SSL) {
-        return true;            /* nothing else to do */
+        res = true;            /* nothing else to do */
     } else {
-        return bus_ssl_disconnect(b, ci->ssl);
+        res = bus_ssl_disconnect(b, ci->ssl);
     }
 
     /* TODO: return ci->udata? */
     free(ci);
+    return res;
 }
 
 bool bus_schedule_threadpool_task(struct bus *b, struct threadpool_task *task,
@@ -507,6 +510,8 @@ static void free_connection_cb(void *value, void *udata) {
     if (!completed) {
         return;
     }
+
+    free(ci);
 }
 
 bool bus_shutdown(bus *b) {
