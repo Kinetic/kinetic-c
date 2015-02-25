@@ -18,7 +18,7 @@
 *
 */
 
-#include "kinetic_pdu.h"
+#include "kinetic_bus.h"
 #include "kinetic_nbo.h"
 #include "kinetic_session.h"
 #include "kinetic_socket.h"
@@ -247,7 +247,7 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     }
 }
 
-bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
+bool KineticBus_Init(KineticClient * client, KineticClientConfig * config)
 {
     int log_level = config->logLevel;
 
@@ -274,53 +274,11 @@ bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
     return true;
 }
 
-void KineticPDU_DeinitBus(KineticClient * const client)
+void KineticBus_Shutdown(KineticClient * const client)
 {
     if (client) {
         bus_shutdown(client->bus);
         bus_free(client->bus);
         client->bus = NULL;
     }
-}
-
-KineticStatus KineticPDU_GetStatus(KineticResponse* response)
-{
-    KineticStatus status = KINETIC_STATUS_INVALID;
-
-    if (response != NULL &&
-        response->command != NULL &&
-        response->command->status != NULL &&
-        response->command->status->has_code != false)
-    {
-        status = KineticProtoStatusCode_to_KineticStatus(
-            response->command->status->code);
-    }
-
-    return status;
-}
-
-KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticResponse* response)
-{
-    KineticProto_Command_KeyValue* keyValue = NULL;
-
-    if (response != NULL &&
-        response->command != NULL &&
-        response->command->body != NULL)
-    {
-        keyValue = response->command->body->keyValue;
-    }
-    return keyValue;
-}
-
-KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticResponse* response)
-{
-    KineticProto_Command_Range* range = NULL;
-    if (response != NULL &&
-        response->proto != NULL &&
-        response->command != NULL &&
-        response->command->body != NULL)
-    {
-        range = response->command->body->range;
-    }
-    return range;
 }

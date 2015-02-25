@@ -24,8 +24,8 @@
 #include "kinetic_types_internal.h"
 
 KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const config);
-KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticPDU * const pdu);
-KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticPDU * const pdu, ByteArray pin);
+KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticRequest * const request);
+KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticRequest * const request, ByteArray pin);
 KineticStatus KineticAuth_PopulateTag(ByteBuffer * const tag, KineticAlgorithm algorithm, ByteArray const * const key);
 
 #endif // _KINETIC_AUTH_H

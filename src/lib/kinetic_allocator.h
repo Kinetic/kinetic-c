@@ -29,8 +29,8 @@ void KineticAllocator_FreeSession(KineticSession* session);
 KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession* const session);
 void KineticAllocator_FreeConnection(KineticConnection* connection);
 
-KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection);
-void KineticAllocator_FreePDU(KineticPDU* pdu);
+KineticRequest* KineticAllocator_NewPDU(KineticConnection* connection);
+void KineticAllocator_FreePDU(KineticRequest* pdu);
 
 KineticOperation* KineticAllocator_NewOperation(KineticConnection* connection);
 void KineticAllocator_FreeOperation(KineticOperation* operation);

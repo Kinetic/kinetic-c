@@ -44,7 +44,7 @@ void setUp(void)
     NewPinSet = false;
     Locked = false;
 
-    SystemTestSetup(2);
+    SystemTestSetup(1);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);

@@ -18,14 +18,12 @@
 *
 */
 
-#ifndef _KINETIC_SERIAL_ALLOCATOR_H
-#define _KINETIC_SERIAL_ALLOCATOR_H
+#ifndef _KINETIC_BUS_H
+#define _KINETIC_BUS_H
 
 #include "kinetic_types_internal.h"
 
-KineticSerialAllocator KineticSerialAllocator_Create(size_t max_len);
-void* KineticSerialAllocator_GetBuffer(KineticSerialAllocator* allocator);
-void* KineticSerialAllocator_AllocateChunk(KineticSerialAllocator* allocator, size_t len);
-size_t KineticSerialAllocator_TrimBuffer(KineticSerialAllocator* allocator);
+bool KineticBus_Init(KineticClient * client, KineticClientConfig * config);
+void KineticBus_Shutdown(KineticClient * const client);
 
-#endif // _KINETIC_SERIAL_ALLOCATOR_H
+#endif // _KINETIC_BUS_H

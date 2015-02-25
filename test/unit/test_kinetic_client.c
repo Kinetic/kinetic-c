@@ -30,7 +30,7 @@
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_message.h"
-#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_bus.h"
 #include "mock_kinetic_operation.h"
 #include "protobuf-c/protobuf-c.h"
 #include "mock_bus.h"
@@ -65,7 +65,7 @@ void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_
     };
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
-    KineticPDU_InitBus_ExpectAndReturn(&client, &config, true);
+    KineticBus_Init_ExpectAndReturn(&client, &config, true);
 
     KineticClient * result = KineticClient_Init(&config);
 
@@ -95,7 +95,7 @@ void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
         .logLevel = 3,
     };
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
-    KineticPDU_InitBus_ExpectAndReturn(&client, &config, false);
+    KineticBus_Init_ExpectAndReturn(&client, &config, false);
     KineticFree_Expect(&client);
 
     KineticClient * result = KineticClient_Init(&config);

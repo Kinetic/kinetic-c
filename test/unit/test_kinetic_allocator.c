@@ -155,7 +155,7 @@ void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_nul
 }
 
 
-void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if_calloc_returns_null_for_pdu(void)
+void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if_calloc_returns_null_for_request(void)
 {
     Session.connection = &Connection;
     Connection.pSession = &Session;
@@ -163,7 +163,7 @@ void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
     KineticOperation_Init_Expect(&op, &Session);
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticPDU), NULL);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), NULL);
     KineticFree_Expect(&op);
 
     KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
@@ -171,31 +171,31 @@ void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if
     TEST_ASSERT_NULL(operation);
 }
 
-void test_KineticAllocator_NewOperation_should_initialize_operation_and_pdu(void)
+void test_KineticAllocator_NewOperation_should_initialize_operation_and_request(void)
 {
     Session.connection = &Connection;
     Connection.pSession = &Session;
     KineticOperation op;
-    KineticPDU pdu;
+    KineticRequest request;
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
     KineticOperation_Init_Expect(&op, &Session);
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticPDU), &pdu);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), &request);
 
-    KineticPDU_InitWithCommand_Expect(&pdu, &Session);
+    KineticRequest_Init_Expect(&request, &Session);
     KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
 
     TEST_ASSERT_NOT_NULL(operation);
 }
 
-void test_KineticAllocator_FreeOperation_should_free_request_if_its_not_null(void)
+void test_KineticAllocator_FreeOperation_should_free_request_if_it_is_not_NULL(void)
 {
-    KineticPDU pdu;
-    memset(&pdu, 0x00, sizeof(pdu));
+    KineticRequest request;
+    memset(&request, 0x00, sizeof(request));
 
-    KineticOperation op = { .request = &pdu };
+    KineticOperation op = { .request = &request };
 
-    KineticFree_Expect(&pdu);
+    KineticFree_Expect(&request);
     KineticFree_Expect(&op);
 
     KineticAllocator_FreeOperation(&op);

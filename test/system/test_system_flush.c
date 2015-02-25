@@ -94,8 +94,6 @@ static void no_op_callback(KineticCompletionData* kinetic_data, void* client_dat
 
 void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
 {
-    LOG_LOCATION;
-
     // Arguments shared between entries
     uint8_t TagData[1024];
     ByteBuffer tagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "tag_val");

@@ -36,7 +36,7 @@ KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, K
 void KineticOperation_BuildNoop(KineticOperation* operation);
 
 KineticStatus KineticOperation_PutCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildPut(KineticOperation* const operation,
+KineticStatus KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry);
 
 KineticStatus KineticOperation_GetCallback(KineticOperation* const operation, KineticStatus const status);

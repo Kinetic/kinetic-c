@@ -54,7 +54,7 @@ PutStatus put_statuses[NUM_PUTS];
 
 static void put_finished(KineticCompletionData* kinetic_data, void* clientData);
 
-void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
+void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_overlapped_asynchronous_IO_operations(void)
 {
     ByteBuffer test_data = ByteBuffer_Malloc(PAYLOAD_SIZE);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);

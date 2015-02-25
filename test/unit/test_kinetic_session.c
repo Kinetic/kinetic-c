@@ -28,7 +28,6 @@
 #include "kinetic_types_internal.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_socket.h"
-#include "mock_kinetic_pdu.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_client.h"
@@ -44,7 +43,7 @@
 static KineticConnection Connection;
 static KineticCountingSemaphore Semaphore;
 static KineticSession Session;
-static KineticPDU Request, Response;
+static KineticRequest Request;
 static int OperationCompleteCallbackCount;
 static KineticStatus LastStatus;
 static struct _KineticClient Client;
@@ -72,26 +71,23 @@ void setUp(void)
     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
     TEST_ASSERT_EQUAL(17, Session.config.port);
 
-    KineticPDU_InitWithCommand(&Request, &Session);
-    KineticPDU_InitWithCommand(&Response, &Session);
+    KineticRequest_Init(&Request, &Session);
     OperationCompleteCallbackCount = 0;
     LastStatus = KINETIC_STATUS_INVALID;
 }
 
 void tearDown(void)
-{ LOG_LOCATION;
+{
     KineticLogger_Close();
 }
 
 void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_session(void)
 {
-    LOG_LOCATION;
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, KineticSession_Create(NULL, NULL));
 }
 
 void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_client(void)
 {
-    LOG_LOCATION;
     KineticSession session;
     memset(&session, 0, sizeof(session));
     session.connection = &Connection;
@@ -100,7 +96,6 @@ void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_
 
 void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(void)
 {
-    LOG_LOCATION;
     KineticSession session;
     memset(&session, 0, sizeof(session));
     KineticConnection connection;
@@ -124,7 +119,6 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
 
 void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 {
-    LOG_LOCATION;
     KineticConnection connection;
     KineticConnection_Init(&connection);
 
@@ -136,8 +130,6 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
 
 void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_session(void)
 {
-    LOG_LOCATION;
-
     KineticStatus status = KineticSession_Connect(NULL);
 
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, status);
@@ -146,7 +138,6 @@ void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_s
 
 void test_KineticSession_Connect_should_return_KINETIC_STATUS_CONNECTION_ERROR_upon_NULL_connection(void)
 {
-    LOG_LOCATION;
     KineticSession session = {.connection = NULL};
 
     KineticStatus status = KineticSession_Connect(&session);
@@ -156,8 +147,6 @@ void test_KineticSession_Connect_should_return_KINETIC_STATUS_CONNECTION_ERROR_u
 
 void test_KineticSession_Connect_should_report_a_failed_connection(void)
 {
-    LOG_LOCATION;
-
     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
     TEST_ASSERT_EQUAL(17, Session.config.port);
 
@@ -172,8 +161,6 @@ void test_KineticSession_Connect_should_report_a_failed_connection(void)
 
 void test_KineticSession_Connect_should_report_a_failure_to_receive_register_with_client(void)
 {
-    LOG_LOCATION;
-
     const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
 
     KineticConnection expectedConnection = {
@@ -232,8 +219,6 @@ void test_KineticSession_Connect_should_report_a_failure_to_receive_register_wit
 
 void test_KineticSession_Connect_should_report_a_failure_to_receive_initialization_info_from_device(void)
 {
-    LOG_LOCATION;
-
     const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
 
     KineticConnection expectedConnection = {
@@ -294,8 +279,6 @@ void test_KineticSession_Connect_should_report_a_failure_to_receive_initializati
 
 void test_KineticSession_Connect_should_connect_to_specified_host(void)
 {
-    LOG_LOCATION;
-
     const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
 
     KineticConnection expectedConnection = {

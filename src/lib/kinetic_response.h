@@ -18,15 +18,13 @@
 *
 */
 
-#ifndef _KINETIC_PDU_H
-#define _KINETIC_PDU_H
+#ifndef _KINETIC_RESPONSE_H
+#define _KINETIC_RESPONSE_H
 
 #include "kinetic_types_internal.h"
 
-bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config);
-void KineticPDU_DeinitBus(KineticClient * const client);
-KineticStatus KineticPDU_GetStatus(KineticResponse* pdu);
-KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticResponse* pdu);
-KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticResponse* pdu);
+KineticStatus KineticResponse_GetStatus(KineticResponse* pdu);
+KineticProto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse* pdu);
+KineticProto_Command_Range* KineticResponse_GetKeyRange(KineticResponse* pdu);
 
-#endif // _KINETIC_PDU_H
+#endif // _KINETIC_RESPONSE_H

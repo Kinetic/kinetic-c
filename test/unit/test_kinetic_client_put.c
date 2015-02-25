@@ -21,15 +21,12 @@
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
-#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
-#include "mock_kinetic_resourcewaiter.h"
-
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include "protobuf-c/protobuf-c.h"
@@ -60,10 +57,28 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     operation.connection = &Connection;
     
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildPut_Expect(&operation, &entry);
+    KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
 
     KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
+}
+
+void test_KineticClient_Put_should_return_BUFFER_OVERRUN_if_object_value_too_long(void)
+{
+    Session.connection = &Connection;
+    Connection.pSession = &Session;
+    ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
+    KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
+    KineticOperation operation;
+    operation.connection = &Connection;
+    
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_BUFFER_OVERRUN);
+    KineticAllocator_FreeOperation_Expect(&operation);
+
+    KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_BUFFER_OVERRUN, status);
 }
