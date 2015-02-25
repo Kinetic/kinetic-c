@@ -29,7 +29,7 @@
 static bool init_client_SSL_CTX(SSL_CTX **ctx_out);
 static void disable_SSL_compression(void);
 static void disable_known_bad_ciphers(SSL_CTX *ctx);
-static bool do_blocking_connection(struct bus *b, connection_info *ci);
+static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd);
 
 /* Initialize the SSL library internals for use by the messaging bus. */
 bool bus_ssl_init(struct bus *b) {
@@ -47,26 +47,24 @@ bool bus_ssl_init(struct bus *b) {
 
 /* Do an SSL / TLS shake for a connection. Blocking.
  * Returns whether the connection succeeded. */
-bool bus_ssl_connect(struct bus *b, connection_info *ci) {
+SSL *bus_ssl_connect(struct bus *b, int fd) {
     SSL *ssl = NULL;
 
     ssl = SSL_new(b->ssl_ctx);
     if (ssl == NULL) {
         ERR_print_errors_fp(stderr);
-        return false;
-    }
-    ci->ssl = ssl;
-
-    if (!SSL_set_fd(ci->ssl, ci->fd)) {
-        return false;
+        return NULL;
     }
 
-    if (do_blocking_connection(b, ci)) {
-        return true;
+    if (!SSL_set_fd(ssl, fd)) {
+        return NULL;
+    }
+
+    if (do_blocking_connection(b, ssl, fd)) {
+        return ssl;
     } else {
-        SSL_free(ci->ssl);
-        ci->ssl = NULL;
-        return false;
+        SSL_free(ssl);
+        return NULL;
     }
 }
 
@@ -128,12 +126,12 @@ static void disable_known_bad_ciphers(SSL_CTX *ctx) {
     assert(res == 1);
 }
 
-static bool do_blocking_connection(struct bus *b, connection_info *ci) {
+static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd) {
     BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 128,
-        "SSL_Connect handshake for socket %d", ci->fd);
+        "SSL_Connect handshake for socket %d", fd);
 
     struct pollfd fds[1];
-    fds[0].fd = ci->fd;
+    fds[0].fd = fd;
     fds[0].events = POLLOUT;
     
     bool connected = false;
@@ -142,7 +140,7 @@ static bool do_blocking_connection(struct bus *b, connection_info *ci) {
     while (!connected) {
         int pres = poll(fds, 1, TIMEOUT_MSEC);
         BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
-            "SSL_Connect handshake for socket %d, poll res %d", ci->fd, pres);
+            "SSL_Connect handshake for socket %d, poll res %d", fd, pres);
 
         if (pres < 0) {
             if (util_is_resumable_io_error(errno)) {
@@ -153,16 +151,16 @@ static bool do_blocking_connection(struct bus *b, connection_info *ci) {
             }
         } else if (pres > 0) {
             if (fds[0].revents & (POLLOUT | POLLIN)) {
-                int connect_res = SSL_connect(ci->ssl);
+                int connect_res = SSL_connect(ssl);
                 BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
-                    "socket %d: connect_res %d", ci->fd, connect_res);
+                    "socket %d: connect_res %d", fd, connect_res);
 
                 if (connect_res == 1) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
-                        "socket %d: successfully connected", ci->fd);
+                        "socket %d: successfully connected", fd);
                     connected = true;
                 } else if (connect_res < 0) {
-                    int reason = SSL_get_error(ci->ssl, connect_res);
+                    int reason = SSL_get_error(ssl, connect_res);
 
                     switch (reason) {
                     case SSL_ERROR_WANT_WRITE:
@@ -184,7 +182,7 @@ static bool do_blocking_connection(struct bus *b, connection_info *ci) {
                             unsigned long errval = ERR_get_error();
                             char ebuf[256];
                             BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
-                                "socket %d: ERROR -- %s", ci->fd, ERR_error_string(errval, ebuf));
+                                "socket %d: ERROR -- %s", fd, ERR_error_string(errval, ebuf));
                         }
                     }
                     break;
@@ -193,7 +191,7 @@ static bool do_blocking_connection(struct bus *b, connection_info *ci) {
                         unsigned long errval = ERR_get_error();
                         char ebuf[256];
                         BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
-                            "socket %d: ERROR %d -- %s", ci->fd, reason, ERR_error_string(errval, ebuf));
+                            "socket %d: ERROR %d -- %s", fd, reason, ERR_error_string(errval, ebuf));
                         assert(false);
                     }
                     }
@@ -201,16 +199,16 @@ static bool do_blocking_connection(struct bus *b, connection_info *ci) {
                 } else {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
                         "socket %d: unknown state, setting event bask to (POLLIN | POLLOUT)",
-                        ci->fd);
+                        fd);
                     fds[0].events = (POLLIN | POLLOUT);
                 }
             } else if (fds[0].revents & POLLHUP) {
                 BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 128,
-                    "SSL_Connect: HUP on %d", ci->fd);
+                    "SSL_Connect: HUP on %d", fd);
                 return false;
             } else if (fds[0].revents & POLLERR) {
                 BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 128,
-                    "SSL_Connect: ERR on %d", ci->fd);
+                    "SSL_Connect: ERR on %d", fd);
                 return false;
             }
         } else {

@@ -56,6 +56,7 @@ typedef struct boxed_msg {
     int64_t out_seq_id;
     uint8_t *out_msg;
     size_t out_msg_size;
+    size_t out_sent_size;
 } boxed_msg;
 
 #define BUS_NO_SSL ((SSL *)-2)
@@ -72,9 +73,6 @@ typedef struct bus {
     bus_log_cb *log_cb;
     pthread_mutex_t log_lock;
 
-    uint8_t sender_count;
-    struct sender **senders;
-
     uint8_t listener_count;
     struct listener **listeners;
 
@@ -84,9 +82,9 @@ typedef struct bus {
     struct threadpool *threadpool;
     SSL_CTX *ssl_ctx;
 
-    /* Locked hash table for fd -> (SSL * | BUS_NO_SSL) */
+    /* Locked hash table for fd -> connection_info */
     struct yacht *fd_set;
-    pthread_mutex_t fd_set_lock;
+    pthread_rwlock_t fd_set_lock;
 } bus;
 
 /* Special timeout value indicating UNBOUND. */
@@ -104,15 +102,24 @@ typedef enum {
 
 /* Per-socket connection context. (Owned by the listener.) */
 typedef struct {
-    int fd;
-    rx_error_t error;
-    size_t to_read_size;
-    int64_t largest_seq_id_seen;
+    /* Shared */
+    const int fd;
+    const bus_socket_t type;
+    void *udata;                /* user connection data */
 
+    /* Shared, cleaned up by sender */
     SSL *ssl;                   /* SSL handle. Must be valid or BUS_NO_SSL. */
 
-    bus_socket_t type;
-    void *udata;                /* user connection data */
+    /* Set by client thread */
+    int64_t largest_wr_seq_id_seen;
+
+    /* Set by listener thread */
+    rx_error_t error;
+    size_t to_read_size;
+    int64_t largest_rd_seq_id_seen;
 } connection_info;
+
+/* Arbitrary byte used to tag writes from the listener. */
+#define LISTENER_MSG_TAG 0x15
 
 #endif

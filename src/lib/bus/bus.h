@@ -77,4 +77,6 @@ void bus_free(struct bus *b);
 bool bus_process_boxed_message(struct bus *b,
     struct boxed_msg *box, size_t *backpressure);
 
+void bus_backpressure_delay(struct bus *b, size_t backpressure, uint8_t shift);
+
 #endif

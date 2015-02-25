@@ -35,826 +35,221 @@
 #include "yacht.h"
 #include "sender_internal.h"
 
-/* Offset for s->fds[0], which is the command pipe. */
-#define CMD_FD (1)
+bool sender_do_blocking_send(bus *b, boxed_msg *box) {
+    // assumes that all locking and seq_id allocation has been handled upstream
+    assert(b);
 
-struct sender *sender_init(struct bus *b, struct bus_config *cfg) {
-    struct sender *s = calloc(1, sizeof(*s));
-    if (s == NULL) {
-        return NULL;
-    }
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 256,
+        "doing blocking send of box %p, with <fd:%d, seq_id %lld>, msg[%zd]: %p",
+        (void *)box, box->fd, (long long)box->out_seq_id,
+        box->out_msg_size, (void *)box->out_msg);
+    
+    int timeout_msec = box->timeout_sec * 1000;
 
-    /* TODO: use `goto cleanup` idiom to ensure that all resources are
-     *     freed if any intermediate resource acquisition fails. */
-    
-    s->bus = b;
-    
-    if ((8 * sizeof(tx_flag_t)) < MAX_CONCURRENT_SENDS) {
-        /* tx_flag_t MUST have >= MAX_CONCURRENT_SENDS bits, since it
-         * is used as bitflags to indicate message availability. */
-        assert(false);
-    }
-    
-    int pipes[2];
-    int res = pipe(pipes);
-    if (res == -1) {
-        free(s);
-        return NULL;
-    }
-    
-    s->incoming_command_pipe = pipes[0];
-    s->commit_pipe = pipes[1];
-    
-    s->fd_hash_table = yacht_init(HASH_TABLE_SIZE2);
-    if (s->fd_hash_table == NULL) {
-        close(pipes[0]);
-        close(pipes[1]);
-        free(s);
-        return NULL;
-    }
-    
-    s->fds[0].fd = s->incoming_command_pipe;
-    s->fds[0].events = POLLIN;
-    
-    for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
-        if (0 != pipe(s->pipes[i])) {
-            fprintf(stderr, "Error: pipe(2): %s\n", strerror(errno));
-            free(s);
-            return NULL;
-        }
-        
-        BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
-            "PIPE fds %d and %d\n", s->pipes[i][0], s->pipes[i][1]);
-
-        s->fds[i + 1].fd = SENDER_FD_NOT_IN_USE;
-        s->fds[i + 1].events = POLLOUT;
-        
-        int *p_id = (int *)(&s->tx_info[i].id);
-        *p_id = i;
-        s->tx_info[i].state = TIS_UNDEF;
-    }
-    
-    BUS_LOG(b, 2, LOG_SENDER, "init success", b->udata);
-    BUS_LOG_SNPRINTF(b, 4, LOG_SENDER, b->udata, 64,
-        "sender tx_info table at %p", (void *)s->tx_info);
-    
-    (void)cfg;
-    return s;
-}
-
-bool sender_register_socket(struct sender *s, int fd, SSL *ssl) {
-    struct bus *b = s->bus;
-    tx_info_t *info = get_free_tx_info(s);
-    if (info == NULL) { return false; }
-    
-    info->state = TIS_ADD_SOCKET;
-    info->u.add_socket.fd = fd;
-    info->u.add_socket.ssl = ssl;
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "registering socket %d with SSL %p", fd, (void*)ssl);
-    tx_error_t res = commit_event_and_block(s, info);
-    release_tx_info(s, info);
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "registering socket %d: res %d", fd, res);
-    return res == TX_ERROR_NONE;
-}
-
-bool sender_remove_socket(struct sender *s, int fd) {
-    tx_info_t *info = get_free_tx_info(s);
-    if (info == NULL) { return false; }
-    
-    info->state = TIS_RM_SOCKET;
-    info->u.rm_socket.fd = fd;
-    tx_error_t res = commit_event_and_block(s, info);
-    release_tx_info(s, info);
-    return res == TX_ERROR_NONE;
-}
-
-bool sender_send_request(struct sender *s, boxed_msg *box) {
-    struct bus *b = s->bus;
-    tx_info_t *info = get_free_tx_info(s);
-    if (info == NULL) { return false; }
-    
-    info->state = TIS_REQUEST_ENQUEUE;
-    info->u.enqueue.fd = box->fd;
-    info->u.enqueue.box = box;
-    info->u.enqueue.timeout_sec = box->timeout_sec;
-    
-    if (-1 == gettimeofday(&box->tv_send_start, NULL)) {
-        BUS_LOG(b, 0, LOG_SENDER,
-            "gettimeofday failure in sender_send_request!", b->udata);
-        return false;
-    }
-
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "sending request on %d: box %p", box->fd, (void*)box);
-    tx_error_t res = commit_event_and_block(s, info);
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "sending request: releasing tx_info, res %d", res);
-    release_tx_info(s, info);
-    return res == TX_ERROR_NONE;
-}
-
-bool sender_shutdown(struct sender *s) {
-    if (s->fd_hash_table == NULL) { return true; }
-    struct bus *b = s->bus;
-    tx_info_t *info = get_free_tx_info(s);
-    if (info == NULL) { return false; }
-    
-    info->state = TIS_SHUTDOWN;
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "sending shutdown request on %d", info->id);
-    tx_error_t res = commit_event_and_block(s, info);
-    release_tx_info(s, info);
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "shutdown request: %d", res);
-    return res == TX_ERROR_NONE;
-}
-
-void sender_free(struct sender *s) {
-    if (s) {
-        cleanup(s);
-        free(s);
-    }
-}
-
-static tx_info_t *get_free_tx_info(struct sender *s) {
-    struct bus *b = s->bus;
-    /* Use atomic compare-and-swap to attempt to reserve a tx_info_t. */
-    for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
-        tx_flag_t cur = s->tx_flags;
-        tx_flag_t bit = (1 << i);
-        if ((cur & bit) == 0) {
-            tx_flag_t marked = cur | bit;
-            if (ATOMIC_BOOL_COMPARE_AND_SWAP(&s->tx_flags, cur, marked)) {
-                /* *info is now reserved. */
-                tx_info_t *info = &s->tx_info[i];
-                BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
-                    "reserving free TX info %d", info->id);
-                
-                assert(info->id == i);
-                assert(info->state == TIS_UNDEF);
-                info->done_pipe = get_notify_pipe(s, info->id);
-                return info;
-            }
-        }
-    }
-    
-    BUS_LOG(b, 1, LOG_SENDER, "No tx_info cells left", b->udata);
-    return NULL;
-}
-
-static void release_tx_info(struct sender *s, tx_info_t *info) {
-    assert(info->state != TIS_UNDEF);
-    info->state = TIS_UNDEF;
-    struct bus *b = s->bus;
-    assert(info->id < MAX_CONCURRENT_SENDS);
-    assert(s->tx_flags & (1 << info->id));
-    
-    for (;;) {
-        tx_flag_t cur = s->tx_flags;
-        tx_flag_t cleared = cur & ~(1 << info->id);
-        BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
-            "CAS 0x%04x => 0x%04x", cur, cleared);
-        if (ATOMIC_BOOL_COMPARE_AND_SWAP(&s->tx_flags, cur, cleared)) {
-            BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
-                "releasing TX info %d", info->id);
-            break;
-        }
-    }
-}
-
-static int get_notify_pipe(struct sender *s, int id) {
-    return s->pipes[id][0];
-}
-
-static bool write_commit(struct sender *s, tx_info_t *info) {
-    uint8_t buf[1];
-    buf[0] = info->id;
-    struct bus *b = s->bus;
-    
-    for (;;) {
-        /* Notify the sender thread that a command is available. */
-        ssize_t wr = write(s->commit_pipe, buf, sizeof(buf));
-        if (wr == 1) {
-            return true;
-        } else {
-            assert(wr == -1);
-            if (errno == EINTR) {
-                errno = 0;
-            } else {
-                BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
-                    "write_commit errno %d", errno);
-                errno = 0;
-                return false;
-            }
-        }
-    }
-}
-
-static tx_error_t commit_event_and_block(struct sender *s, tx_info_t *info) {
-    if (!write_commit(s, info)) {
-        return TX_ERROR_WRITE_FAILURE;
-    }
-    
-    struct bus *b = s->bus;
     struct pollfd fds[1];
-    assert(info->done_pipe != SENDER_FD_NOT_IN_USE);
-    fds[0].fd = info->done_pipe;
-    fds[0].events = POLLIN;
-    
+    fds[0].fd = box->fd;
+    fds[0].events = POLLOUT;
+
+    /* Notify the listener that we're about to start writing to a drive,
+     * because (in rare cases) the response may arrive between finishing
+     * the write and the listener processing the notification. In that
+     * case, it should hold onto the unrecognized response until the
+     * sender notifies it (and passes it the callback).
+     *
+     * This timeout is several extra seconds so that we don't have
+     * a window where the HOLD message has timed out, but the
+     * EXPECT hasn't, leading to ambiguity about what to do with
+     * the response (which may or may not have arrived).
+     * */
+    attempt_to_enqueue_sending_request_message_to_listener(b,
+        box->fd, box->out_seq_id, box->timeout_sec + 5);
+    assert(box->out_sent_size == 0);
+
+    int rem_msec = timeout_msec;
+
     for (;;) {
-        int res = poll(fds, 1, -1);
-        BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-            "polling done_pipe: %d", res);
-        if (res == 1) {
-            short events = fds[0].revents;
-            BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 64,
-                "poll: events %d, errno %d", events, errno);
-            if (events & (POLLHUP | POLLERR | POLLNVAL)) {
-                /* We've been hung up on due to a shutdown event. */
-                close(info->done_pipe);
-                return TX_ERROR_CLOSED;
-            } else if (events & POLLIN) {
-                uint16_t backpressure = 0;
-                uint8_t buf[sizeof(bool) + sizeof(backpressure)];
-                ssize_t rd = read(info->done_pipe, buf, sizeof(buf));
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                    "reading done_pipe: %zd", rd);
-                if (rd == sizeof(buf)) {
-                    bool success = buf[0] == 0 ? false : true;
-                    backpressure = (buf[1] << 0);
-                    backpressure += (buf[2] << 8);
-                    
-                    /* Push back if message bus is too busy. */
-                    backpressure >>= 7;  // TODO: further tuning
-                    
-                    if (backpressure > 0) {
-                        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-                            "reading done_pipe: backpressure %d", backpressure);
-                        poll(NULL, 0, backpressure);
-                    }
-                    
-                    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                        "reading done_pipe: success %d", 1);
-                    return success ? TX_ERROR_NONE : TX_ERROR_WRITE_FAILURE;
-                } else if (rd == -1) {
-                    if (errno == EINTR) {
-                        errno = 0;
-                        continue;
-                    } else {
-                        BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
-                            "blocking read on done_pipe: errno %d", errno);
-                        errno = 0;
-                        return TX_ERROR_CLOSED;
-                    }
-                }
-            } else {
-                /* Shouldn't happen -- blocking. */
-                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                    "shouldn't happen: events %d, errno %d", events, errno);
-                assert(false);
-            }
-        } else if (res == -1) {
-            BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
-                "blocking poll for done_pipe: errno %d", errno);
-            errno = 0;
-            return TX_ERROR_CLOSED;
-        } else {
-            /* Shouldn't happen -- blocking. */
-            assert(false);
-        }
-    }
-}
-
-#define TIMEOUT_DELAY 100
-
-void *sender_mainloop(void *arg) {
-    sender *self = (sender *)arg;
-    assert(self);
-    struct bus *b = self->bus;
-    
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    time_t last_sec = tv.tv_sec;
-    
-    BUS_LOG(b, 5, LOG_SENDER, "entering main loop", b->udata);
-    while (!self->shutdown) {
-        gettimeofday(&tv, NULL);  // TODO: clock_gettime
-        time_t cur_sec = tv.tv_sec;
-        if (cur_sec != last_sec) {
-            BUS_LOG(b, 5, LOG_SENDER, "entering tick handler", b->udata);
-            tick_handler(self);  /* handle timeouts and retries */
-            last_sec = cur_sec;
-        }
-        
-        /* Poll on incoming command pipe and any sockets for which we have
-         * an outgoing message queued up.
-         *
-         * Note: Even if epoll(2) or kqueue(2) are available, it still makes
-         *     sense to use poll here -- self->active_fds will be small. */
-        BUS_LOG(b, 7, LOG_SENDER, "polling", b->udata);
-        
-        int delay = self->is_idle ? -1 : TIMEOUT_DELAY;
-        int res = poll(self->fds, self->active_fds + CMD_FD, delay);
-
-        BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_SENDER, b->udata, 64,
-            "poll res %d, active fds %d", res, self->active_fds);
-        
+        int res = poll(fds, 1, rem_msec);
+        BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
+            "handle_write: poll res %d", res);
         if (res == -1) {
-            if (util_is_resumable_io_error(errno)) {
-                errno = 0;
-            } else {
-                /* unrecoverable poll error -- FD count is bad
-                 * or FDS is a bad pointer. */
-                assert(false);
-            }
-        } else if (res > 0) {
-            if (self->fds[0].revents & POLLIN) {
-                (void)check_incoming_commands(self);
-                res--;
-            }
-
-            if (self->shutdown) { break; }
-
-            /* If the incoming command pipe isn't the only active FD: */
-            if (res > 0) {
-                attempt_write(self, res);
-            }
-            // work = true;
-        }
-    }
-    
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "shutting down, shutdown == %d", self->shutdown);
-    cleanup(self);
-
-    return NULL;
-}
-
-static void free_fd_info_cb(void *value, void *udata) {
-    fd_info *info = (fd_info *)value;
-
-    /* Note: info->ssl will be freed by the main bus code. */
-    info->ssl = NULL;
-
-    (void)udata;
-    free(info);
-}
-
-static void cleanup(sender *s) {
-    struct bus *b = s->bus;
-    BUS_LOG(b, 2, LOG_SHUTDOWN, "sender_cleanup", b->udata);
-    if (s->fd_hash_table) {     /* make idempotent */
-        struct yacht *y = s->fd_hash_table;
-        s->fd_hash_table = NULL;
-        int shutdown_id = -1;
-        
-        for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
-            if (s->tx_info[i].state == TIS_SHUTDOWN) {
-                shutdown_id = i;
-            } else {
-                close(s->pipes[i][0]);
-                close(s->pipes[i][1]);
-            }            
-        }
-
-        BUS_LOG_SNPRINTF(b, 6 , LOG_SENDER, b->udata, 64,
-            "shutdown_id: %d", shutdown_id);
-        if (shutdown_id != -1) {
-            /* Notify the sender about the shutdown via POLLHUP / POLLNVAL. */
-            BUS_LOG(b, 3, LOG_SENDER, "closing to notify shutdown", b->udata);
-            /* Client thread will close the other end. */
-            close(s->pipes[shutdown_id][1]);
-        }
-        
-        yacht_free(y, free_fd_info_cb, NULL);
-        close(s->incoming_command_pipe);
-        close(s->commit_pipe);
-    }
-}
-
-static bool register_socket_info(sender *s, int fd, SSL *ssl) {
-    if (s->shutdown) { return false; }
-    fd_info *info = calloc(1, sizeof(*info));
-    if (info == NULL) { 
-        return false;
-    }
-    info->fd = fd;
-    info->ssl = ssl;
-    info->refcount = 0;
-    info->largest_seq_id_seen = 0;
-
-    void *old = NULL;
-    if (!yacht_set(s->fd_hash_table, fd, info, &old)) {
-        free(info);
-        return false;
-    }
-    assert(old == NULL);
-    return true;
-}
-
-static void increment_fd_refcount(sender *s, fd_info *fdi) {
-    assert(fdi);
-    if (fdi->refcount == 0) {
-        /* Add to poll watch set */
-        int idx = s->active_fds;
-        assert(s->fds[idx + 1].fd == SENDER_FD_NOT_IN_USE);
-        s->fds[idx + 1].fd = fdi->fd;
-        assert(s->fds[idx + 1].events == POLLOUT);
-
-        s->active_fds++;
-    }
-
-    fdi->refcount++;
-}
-
-static void decrement_fd_refcount(sender *s, fd_info *fdi) {
-    assert(fdi);
-    assert(fdi->refcount > 0);
-
-    if (fdi->refcount == 1) {
-        bool found = false;
-        /* Remove from poll watch set */
-        for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
-            struct pollfd *pfd = &s->fds[CMD_FD + i];
-            if (pfd->fd == fdi->fd) {
-                if (s->active_fds > 1) {
-                    /* Replace this one with last */
-                    s->fds[CMD_FD + i].fd = s->fds[CMD_FD + s->active_fds - 1].fd;
-                }
-                s->fds[CMD_FD + s->active_fds - 1].fd = SENDER_FD_NOT_IN_USE;
-                s->active_fds--;
-                found = true;
-                break;
-            }
-        }
-        assert(found);
-    }
-
-    fdi->refcount--;
-}
-
-static bool release_socket_info(sender *s, int fd) {
-    if (s->shutdown) { return false; }
-
-    void *old = NULL;
-    if (!yacht_remove(s->fd_hash_table, fd, &old)) {
-        return false;
-    }
-    fd_info *info = (fd_info *)old;
-    if (info) {
-        assert(fd == info->fd);
-        info->errored = true;
-        /* Expire any pending events on this socket. */
-        if (info->refcount > 0) {
-            set_error_for_socket(s, fd, TX_ERROR_CLOSED);            
-        }
-        free(info);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-static void handle_command(sender *s, int id) {
-    assert(id < MAX_CONCURRENT_SENDS);
-    tx_info_t *info = &s->tx_info[id];
-
-    s->is_idle = false;
-    
-    switch (info->state) {
-    case TIS_ADD_SOCKET:
-    {
-        int fd = info->u.add_socket.fd;
-        SSL *ssl = info->u.add_socket.ssl;
-        if (register_socket_info(s, fd, ssl)) {
-            notify_caller(s, info, true);
-        } else {
-            notify_caller(s, info, false);
-        }
-        break;
-    }
-    case TIS_RM_SOCKET:
-    {
-        int fd = info->u.rm_socket.fd;
-        if (release_socket_info(s, fd)) {
-            notify_caller(s, info, true);
-        } else {
-            notify_caller(s, info, false);
-        }
-        break;
-    }
-    case TIS_SHUTDOWN:
-    {
-        s->shutdown = true;
-        /* Caller should be notified from cleanup(), by closing the
-         * notification pipe. Block until shutdown is complete. */
-        break;
-    }
-    case TIS_REQUEST_ENQUEUE:
-    {
-        enqueue_write(s, info);
-        break;
-    }
-
-   /* Should not get anything else as an incoming command.  */
-    default:
-    {
-        struct bus *b = s->bus;
-        BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 64,
-            "match_fail: %d", info->state);
-        assert(false);
-    }
-    }
-}
-
-static void enqueue_write(struct sender *s, tx_info_t *info) {
-    assert(info->state == TIS_REQUEST_ENQUEUE);
-
-    struct bus *b = s->bus;
-    int fd = info->u.enqueue.fd;
-    fd_info *fdi = NULL;
-    int64_t out_seq_id = info->u.enqueue.box->out_seq_id;
-    if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
-        assert(fdi);
-
-        if (fdi->errored) {
-            set_error_for_socket(s, fd, TX_ERROR_CLOSED);
-            return;
-        }
-
-        if (fdi->largest_seq_id_seen > out_seq_id && fdi->largest_seq_id_seen != 0
-                && out_seq_id != BUS_NO_SEQ_ID) {
-            BUS_LOG_SNPRINTF(b, 0 , LOG_SENDER, b->udata, 64,
-                "suspicious outgoing sequence ID on %d: got %lld, already sent up to %lld",
-                fd, (long long)out_seq_id, (long long)fdi->largest_seq_id_seen);
-            set_error_for_socket(s, fd, TX_ERROR_BAD_SEQUENCE_ID);
-            return;
-        }
-        fdi->largest_seq_id_seen = out_seq_id;
-
-        /* Notify the listener that we're about to start writing to a drive,
-         * because (in rare cases) the response may arrive between finishing
-         * the write and the listener processing the notification. In that
-         * case, it should hold onto the unrecognized response until the
-         * sender notifies it (and passes it the callback).
-         *
-         * This timeout is several extra seconds so that we don't have
-         * a window where the HOLD message has timed out, but the
-         * EXPECT hasn't, leading to ambiguity about what to do with
-         * the response (which may or may not have arrived).
-         * */
-        attempt_to_enqueue_sending_request_message_to_listener(s,
-            fd, out_seq_id, info->u.enqueue.timeout_sec + 5);
-        
-        /* Increment the refcount. This will cause poll to watch for the
-         * socket being writable, if it isn't already being watched. */
-        increment_fd_refcount(s, fdi);
-        
-        struct u_write uw = {
-            .fd = info->u.enqueue.fd,
-            .timeout_sec = info->u.enqueue.timeout_sec,
-            .orig_timeout_sec = info->u.enqueue.timeout_sec,
-            .box = info->u.enqueue.box,
-            .fdi = fdi,
-        };
-        
-        info->state = TIS_REQUEST_WRITE;
-        info->u.write = uw;
-        
-    } else {
-        set_error_for_socket(s, fd, TX_ERROR_UNREGISTERED_SOCKET);
-    }
-}
-
-static bool check_incoming_commands(struct sender *s) {
-    struct bus *b = s->bus;
-    uint8_t buf[8];
-    for (;;) {
-        ssize_t rd = read(s->incoming_command_pipe, buf, sizeof(buf));
-        
-        if (rd == -1) {
-            if (errno == EINTR) {
+            if (errno == EINTR || errno == EAGAIN) { /* interrupted/try again */
                 errno = 0;
                 continue;
             } else {
-                BUS_LOG_SNPRINTF(b, 6 , LOG_SENDER, b->udata, 64,
-                    "incoming_command poll: %s", strerror(errno));
-                errno = 0;
+                handle_failure(b, box, BUS_SEND_TX_FAILURE);
                 return false;
             }
-        } else {
-            for (int i = 0; i < rd; i++) {
-                handle_command(s, buf[i]);
-            }
-            return true;
-        }
-    }
-}
+        } else if (res == 1) {
+            short revents = fds[0].revents;
+            if (revents & POLLNVAL) {
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
+                    "do_blocking_send on %d: POLLNVAL => UNREGISTERED_SOCKET", box->fd);
+                handle_failure(b, box, BUS_SEND_UNREGISTERED_SOCKET);
+                return false;
+            } else if (revents & (POLLERR | POLLHUP)) {
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
+                    "do_blocking_send on %d: POLLERR/POLLHUP => TX_FAILURE (%d)",
+                    box->fd, revents);
+                handle_failure(b, box, BUS_SEND_TX_FAILURE);
+                return false;
+            } else if (revents & POLLOUT) {
+                /* TODO: use gettimeofday to figure out actual elapsed time?
+                 * We're more concerned with timing out on the response than
+                 * on the send, though. */
+                handle_write_res hw_res = handle_write(b, box);
 
-/* Get a tx_info write event associated with a socket. If there is one
- * that is already partially written, prefer that, to avoid interleaving
- * outgoing messages. */
-static tx_info_t *get_info_to_write_for_socket(sender *s, int fd) {
-    tx_info_t *res = NULL;
-    for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
-        tx_flag_t cur = 1 << i;
-        if (s->tx_flags & cur) {
-            tx_info_t *info = &s->tx_info[i];
-            if (info->state != TIS_REQUEST_WRITE) { continue; }
-            if (info->u.write.fd == fd) {
-                if (res == NULL) {
-                    res = info;
-                } else {
-                    int64_t cur_seq_id = res->u.write.box->out_seq_id;
-                    int64_t new_seq_id = info->u.write.box->out_seq_id;
-                    if (new_seq_id < cur_seq_id) {
-                        res = info;
-                    }
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
+                    "handle_write res %d", hw_res);
+
+                switch (hw_res) {
+                case HW_OK:
+                    continue;
+                case HW_DONE:
+                    return true;
+                case HW_ERROR:
+                    return false;
                 }
-                /* If we've already sent part of a message, send the rest
-                 * before starting another, otherwise arbitrarily choose
-                 * the one with the highest tx_info->id. */
-                if (info->u.write.sent_size > 0) { return res; }
-            }
-        }
-    }
-    return res;
-}
-
-/* For every pending tx_info event associated with a given socket,
- * cancel it and notify its caller. */
-static void set_error_for_socket(sender *s, int fd, tx_error_t error) {
-    struct bus *b = s->bus;
-
-    bus_send_status_t status = BUS_SEND_UNDEFINED;
-    switch (error) {
-    default:
-    {
-        BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 64,
-            "setting BUS_SEND_TX_FAILURE on socket %d, reason %d", fd, error);
-        status = BUS_SEND_TX_FAILURE;
-        break;
-    }
-    case TX_ERROR_UNREGISTERED_SOCKET:
-        status = BUS_SEND_UNREGISTERED_SOCKET;
-        break;
-    }
-
-    fd_info *fdi = NULL;
-    if (yacht_get(s->fd_hash_table, fd, (void **)&fdi)) {
-        fdi->errored = true;
-    }
-
-    for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
-        tx_flag_t cur = 1 << i;
-        if (s->tx_flags & cur) {
-            tx_info_t *info = &s->tx_info[i];
-
-            bool notify = false;
-            struct u_error ue = {
-                .error = error,
-            };
-
-            switch (info->state) {
-
-            /* TODO: There is a possible race here:
-             *     Client thread writes TIS_REQUEST_ENQUEUE into a
-             *     tx_info_t just as we're erroring it out. */
-            case TIS_REQUEST_ENQUEUE:
-                if (fd == info->u.enqueue.fd) {
-                    ue.box = info->u.enqueue.box;
-                    notify = true;
-                }
-                break;
-            case TIS_REQUEST_WRITE:
-                if (fd == info->u.write.fd) {
-                    ue.box = info->u.write.box;
-                    decrement_fd_refcount(s, info->u.write.fdi);
-                    notify = true;
-                }
-                break;
-            case TIS_RESPONSE_NOTIFY:
-                if (fd == info->u.notify.fd) {
-                    ue.box = info->u.notify.box;
-                    notify = true;
-                }
-                break;
-            default:
-                break;
-            }
-
-            if (notify) {
-                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                    "setting error on socket %d, reason %d", fd, error);
-                info->state = TIS_ERROR;
-                info->u.error = ue;
-                notify_message_failure(s, info, status);
-            }
-        }
-    }
-}
-
-static void attempt_write(sender *s, int available) {
-    int written = 0;
-    struct bus *b = s->bus;
-    for (int i = 0; i < s->active_fds; i++) {
-        if (written == available) { break; }  /* all done */
-        
-        struct pollfd *pfd = &s->fds[CMD_FD + i];
-        assert(pfd->fd != SENDER_FD_NOT_IN_USE);
-        BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
-            "attempting write on %d (revents 0x%08x)", pfd->fd, pfd->revents);
-        
-        if (pfd->revents & (POLLERR | POLLNVAL)) {
-            written++;
-            set_error_for_socket(s, pfd->fd, TX_ERROR_POLLERR);
-        } else if (pfd->revents & POLLHUP) {
-            written++;
-            set_error_for_socket(s, pfd->fd, TX_ERROR_POLLHUP);
-        } else if (pfd->revents & POLLOUT) {
-            written++;
-            tx_info_t *info = get_info_to_write_for_socket(s, pfd->fd);
-            if (info == NULL) {
-                /* Polling is telling us a socket is writeable that we
-                 * shouldn't care about. Should not get here. */
-                printf(" *** NULL INFO ***\n");
-                //assert(false);
-                continue;
-            }
-            assert(info->state == TIS_REQUEST_WRITE);
-
-            SSL *ssl = info->u.write.fdi->ssl;
-
-            ssize_t wrsz = 0;
-            if (ssl == BUS_NO_SSL) {
-                wrsz = socket_write_plain(s, info);
             } else {
-                assert(ssl);
-                wrsz = socket_write_ssl(s, info, ssl);
+                BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 256,
+                    "match fail %d", revents);
+                assert(false);  /* match fail */
             }
-            BUS_LOG_SNPRINTF(b, 6, LOG_SENDER, b->udata, 64,
-                "wrote %zd", wrsz);
+        } else if (res == 0) {  /* timeout */
+            BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
+                "do_blocking_send on %d: TX_TIMEOUT", box->fd);
+            handle_failure(b, box, BUS_SEND_TX_TIMEOUT);
+            return false;
         }
     }
 }
 
-static ssize_t socket_write_plain(sender *s, tx_info_t *info) {
-    struct bus *b = s->bus;
-    assert(info->state == TIS_REQUEST_WRITE);
-    boxed_msg *box = info->u.write.box;
+static void attempt_to_enqueue_sending_request_message_to_listener(struct bus *b,
+    int fd, int64_t seq_id, int16_t timeout_sec) {
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
+      "telling listener to expect response, with <fd%d, seq_id:%lld>",
+        fd, (long long)seq_id);
+
+    struct listener *l = bus_get_listener_for_socket(b, fd);
+
+    int delay = 1;
+    for (;;) {
+        if (listener_hold_response(l, fd, seq_id, timeout_sec)) {
+            return;
+        } else {
+            /* Don't apply much backpressure since this will be running on the sender. */
+            poll(NULL, 0, delay);
+            if (delay < 5) { delay++; }
+        }
+    }
+    assert(false);
+}
+
+static void handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status) {
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+        "handle_failure: box %p, status %d",
+        (void*)box, status);
+    
+    box->result = (bus_msg_result_t){
+        .status = status,
+    };
+}
+
+static ssize_t write_plain(bus *b, boxed_msg *box);
+static ssize_t write_ssl(bus *b, boxed_msg *box, SSL *ssl);
+static bool enqueue_request_sent_message_to_listener(bus *b, boxed_msg *box);
+
+static handle_write_res handle_write(bus *b, boxed_msg *box) {
+    SSL *ssl = box->ssl;
+    ssize_t wrsz = 0;
+    if (ssl == BUS_NO_SSL) {
+        wrsz = write_plain(b, box);
+    } else {
+        assert(ssl);
+        wrsz = write_ssl(b, box, ssl);
+    }
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+        "wrote %zd", wrsz);
+
+    if (wrsz == -1) {
+        handle_failure(b, box, BUS_SEND_TX_FAILURE);
+        return HW_ERROR;
+    } else if (wrsz == 0) {
+        /* If the OS set POLLOUT but we can't actually write, then
+         * just go back to the poll() loop with no progress.
+         * If we busywait on this, something is deeply wrong. */
+    } else {
+        box->out_sent_size += wrsz;
+    }
+
+    size_t msg_size = box->out_msg_size;
+    size_t sent_size = box->out_sent_size;
+    size_t rem = msg_size - sent_size;
+
+    BUS_LOG_SNPRINTF(b, 5-2, LOG_SENDER, b->udata, 64,
+        "wrote %zd, rem is %zd", wrsz, rem);
+
+    if (rem == 0) {
+        if (enqueue_request_sent_message_to_listener(b, box)) {
+            return HW_DONE;
+        } else {
+            handle_failure(b, box, BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER);
+            return HW_ERROR;
+        }
+    } else {
+        return HW_OK;
+    }
+}
+
+static ssize_t write_plain(struct bus *b, boxed_msg *box) {
+    int fd = box->fd;
     uint8_t *msg = box->out_msg;
     size_t msg_size = box->out_msg_size;
-    size_t sent_size = info->u.write.sent_size;
+    size_t sent_size = box->out_sent_size;
     size_t rem = msg_size - sent_size;
     
-    int fd = info->u.write.fd;
+    BUS_LOG_SNPRINTF(b, 10-5, LOG_SENDER, b->udata, 64,
+        "write %p to %d, %zd bytes",
+        (void*)&msg[sent_size], fd, rem);
 
-    BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
-        "write %p to %d, %zd bytes (info %d)",
-        (void*)&msg[sent_size], fd, rem, info->id);
-
-    ssize_t wrsz = write(fd, &msg[sent_size], rem);
-    if (wrsz == -1) {
-        if (util_is_resumable_io_error(errno)) {
-            errno = 0;
-            return 0;
+    for (;;) {
+        ssize_t wrsz = write(fd, &msg[sent_size], rem);
+        if (wrsz == -1) {
+            if (util_is_resumable_io_error(errno)) {
+                errno = 0;
+                continue;
+            } else {
+                /* close socket */
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                    "write: socket error writing, %d", errno);
+                errno = 0;
+                return -1;
+            }
+        } else if (wrsz > 0) {
+            BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+                "sent: %zd\n", wrsz);
+            return wrsz;
         } else {
-            /* close socket */
-            BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                "write: socket error writing, %d", errno);
-            set_error_for_socket(s, info->u.write.fd, TX_ERROR_WRITE_FAILURE);
-            errno = 0;
             return 0;
         }
-    } else if (wrsz > 0) {
-
-        update_sent(b, s, info, wrsz);
-        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-            "sent: %zd\n", wrsz);
-        return wrsz;
-    } else {
-        return 0;
     }
 }
 
-static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl) {
-    struct bus *b = s->bus;
-    assert(info->state == TIS_REQUEST_WRITE);
-    boxed_msg *box = info->u.write.box;
+static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
     uint8_t *msg = box->out_msg;
     size_t msg_size = box->out_msg_size;
-    size_t rem = msg_size - info->u.write.sent_size;
-    int fd = info->u.write.fd;
+    ssize_t rem = msg_size - box->out_sent_size;
+    int fd = box->fd;
     ssize_t written = 0;
+    assert(rem >= 0);
 
     while (rem > 0) {
-        ssize_t wrsz = SSL_write(ssl, &msg[info->u.write.sent_size], rem);
+        ssize_t wrsz = SSL_write(ssl, &msg[box->out_sent_size], rem);
+        BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+            "SSL_write: socket %d, write %zd => wrsz %zd",
+            fd, rem, wrsz);
         if (wrsz > 0) {
-            update_sent(b, s, info, wrsz);
             written += wrsz;
-            rem -= wrsz;
+            return written;
         } else if (wrsz < 0) {
             int reason = SSL_get_error(ssl, wrsz);
             switch (reason) {
@@ -876,14 +271,31 @@ static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl) {
                     /* don't break; we want to retry on EINTR etc. until
                      * we get WANT_WRITE, otherwise poll(2) may not retry
                      * the socket for too long */
+                    continue;
                 } else {
-                    set_error_for_socket(s, fd, TX_ERROR_WRITE_FAILURE);
+                    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                        "SSL_write on fd %d: SSL_ERROR_SYSCALL %d", fd, errno);
+                    errno = 0;                    
+                    return -1;
                 }
             }
+            case SSL_ERROR_SSL:
+                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                    "SSL_write: socket %d: error SSL (wrsz %zd)",
+                    box->fd, wrsz);
+
+                for (;;) {
+                    unsigned long e = ERR_get_error();
+                    if (e == 0) { break; }  // no more errors
+                    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
+                        "SSL_write error: %s",
+                        ERR_error_string(e, NULL));
+                }
+                return -1;                
             default:
             {
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                    "SSL_write: socket %d: error %d", info->u.write.fd, reason);
+                    "SSL_write: socket %d: error %d", box->fd, reason);
                 break;
             }
             }
@@ -892,284 +304,35 @@ static ssize_t socket_write_ssl(sender *s, tx_info_t *info, SSL *ssl) {
              * to write further. */
         }
     }
+    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+        "SSL_write: leaving loop, %zd bytes written", written);
     return written;
 }
 
-static void update_sent(struct bus *b, sender *s, tx_info_t *info, ssize_t sent) {
-    assert(info->state == TIS_REQUEST_WRITE);
-    boxed_msg *box = info->u.write.box;
-    size_t msg_size = box->out_msg_size;
-    info->u.write.sent_size += sent;
-    size_t rem = msg_size - info->u.write.sent_size;
-    
-    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-        "wrote %zd, msg_size %zd (%p)",
-        sent, msg_size, (void*)box->out_msg);
-    if (rem == 0) { /* completed! */
-        fd_info *fdi = info->u.write.fdi;
-
-        struct u_notify un = {
-            .fd = info->u.write.fd,
-            .timeout_sec = info->u.write.orig_timeout_sec,
-            .box = info->u.write.box,
-        };
-
-        /* Message has been sent, so release - caller may free it. */
-        un.box->out_msg = NULL;
-        if (-1 == gettimeofday(&un.box->tv_send_done, NULL)) {
-            BUS_LOG(b, 0, LOG_SENDER,
-                "gettimeofday failure in update_sent!", b->udata);
-            return;
-        }
-
-        info->state = TIS_RESPONSE_NOTIFY;
-        info->u.notify = un;
-
-        decrement_fd_refcount(s, fdi);
-
-        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-            "wrote all of %p, clearing", (void*)box->out_msg);
-        attempt_to_enqueue_request_sent_message_to_listener(s, info);
-    }
-}
-
-static void notify_caller(sender *s, tx_info_t *info, bool success) {
-    struct bus *b = s->bus;
-    uint16_t bp = 0;
-
-    switch (info->state) {
-    case TIS_REQUEST_RELEASE:
-        bp = info->u.release.backpressure;
-        break;
-    case TIS_ERROR:
-        bp = info->u.error.backpressure;
-        break;
-    default:
-        bp = 0;
-        break;
-    }
-
-    uint8_t buf[sizeof(bool) + sizeof(bp)];
-    buf[0] = success ? 0x01 : 0x00;
-    buf[1] = (uint8_t)((bp & 0x00FF) >> 0);
-    buf[2] = (uint8_t)((bp & 0xFF00) >> 8);
-    
-    int pipe_fd = s->pipes[info->id][1];
-    
-    ssize_t res = 0;
-
-    for (;;) {                  /* for loop because of EINTR */
-        res = write(pipe_fd, buf, sizeof(buf));
-        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-            "notify_caller: write %zd", res);
-
-        if (res == -1) {
-            if (errno == EINTR) {
-                errno = 0;
-                continue;
-            } else {
-                /* Note -- if this fails, a timeout upstream will take
-                 *     care of it. But, under what circumstances can it
-                 *     even fail? */
-                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 256,
-                    "error on notify_caller write: %s", strerror(errno));
-                errno = 0;
-                break;
-            }
-        } else if (res == sizeof(buf)) {
-            break;              /* success */
-        } else {
-            assert(false);
-        }
-    }
-}
-
-static void tick_handler(sender *s) {
-    struct bus *b = s->bus;
-    int tx_info_in_use = 0;
-    bool any_work = false;
-
-    for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
-        tx_flag_t bit = (1 << i);
-        if (s->tx_flags & bit) {
-            tx_info_t *info = &s->tx_info[i];
-            if (info->state != TIS_UNDEF) { tx_info_in_use++; }
-        }
-    }
-    
-    BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 64,
-        "tick... %p -- %d of %d tx_info in use, %d active FDs",
-        (void*)s, tx_info_in_use, MAX_CONCURRENT_SENDS, s->active_fds);
-    
-    /* Walk table and expire timeouts & items which have been sent.
-     *
-     * All expiration of TX_INFO fields happens in here. */
-    for (int i = 0; i < MAX_CONCURRENT_SENDS; i++) {
-        tx_flag_t bit = (1 << i);
-        if (s->tx_flags & bit) {  /* if info is in use */
-            any_work = true;
-            tx_info_t *info = &s->tx_info[i];
-            switch (info->state) {
-            case TIS_REQUEST_WRITE:
-                tick_timeout(s, info);
-                break;
-            case TIS_RESPONSE_NOTIFY:
-                tick_timeout(s, info);
-
-                /* if not timed out, attempt to re-send */
-                if (info->state == TIS_RESPONSE_NOTIFY) {
-                    attempt_to_enqueue_request_sent_message_to_listener(s, info);
-                }
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-    if (!any_work) { s->is_idle = true; }
-}
-
-static void tick_timeout(sender *s, tx_info_t *info) {
-    struct bus *b = s->bus;
-    switch (info->state) {
-    case TIS_REQUEST_WRITE:
-        if (info->u.write.timeout_sec == 1) { /* timed out */
-            info->state = TIS_ERROR;
-            struct u_error ue = {
-                .error = TX_ERROR_WRITE_TIMEOUT,
-                .box = info->u.write.box,
-                .backpressure = 0,
-            };
-            info->u.error = ue;
-
-            BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 128,
-                "timeout during network send (%ld.%ld - %ld.%ld)",
-                (long)ue.box->tv_send_start.tv_sec, (long)ue.box->tv_send_start.tv_usec,
-                (long)ue.box->tv_send_done.tv_sec, (long)ue.box->tv_send_done.tv_usec);
-            
-            notify_message_failure(s, info, BUS_SEND_TX_TIMEOUT);
-            BUS_LOG_SNPRINTF(b, 2, LOG_SENDER, b->udata, 128,
-                "write timed out: <fd%d, seq_id:%lld>",
-                info->u.write.fd, (long long)info->u.write.box->out_seq_id);
-        } else {
-            info->u.write.timeout_sec--;
-        }
-        break;
-    case TIS_RESPONSE_NOTIFY:
-        if (info->u.notify.timeout_sec == 1) { /* timed out */
-            info->state = TIS_ERROR;
-            struct u_error ue = {
-                .error = TX_ERROR_NOTIFY_TIMEOUT,
-                .box = info->u.write.box,
-                .backpressure = 0,
-            };
-            info->u.error = ue;
-
-            struct timeval tv;
-            if (-1 == gettimeofday(&tv, NULL)) {
-                BUS_LOG(b, 0, LOG_SENDER,
-                    "gettimeofday failure in tick_timeout!", b->udata);
-            }
-
-            BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 256,
-                "timeout waiting to notify of pending response on <fd:%d, seq_id:%lld>:"
-                "(%ld.%ld - %ld.%ld - %ld.%ld)",
-                info->u.notify.fd, (long long)info->u.notify.box->out_seq_id,
-                (long)ue.box->tv_send_start.tv_sec, (long)ue.box->tv_send_start.tv_usec,
-                (long)ue.box->tv_send_done.tv_sec, (long)ue.box->tv_send_done.tv_usec,
-                (long)tv.tv_sec, (long)tv.tv_usec);
-            
-            notify_message_failure(s, info, BUS_SEND_TX_TIMEOUT);
-        } else {
-            info->u.notify.timeout_sec--;
-        }
-        break;
-    default:
-        assert(false);
-    }
-}
-
-/* Notify the listener that the sender is about to send a message, and to hold
- * on to the response if it arrives before the sender transfers the destination
- * callback and other info to it.*/
-static void attempt_to_enqueue_sending_request_message_to_listener(sender *s,
-    int fd, int64_t seq_id, int16_t timeout_sec) {
-    struct bus *b = s->bus;
-    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
-      "telling listener to expect response, with <fd%d, seq_id:%lld>",
-        fd, (long long)seq_id);
-
-    struct listener *l = bus_get_listener_for_socket(s->bus, fd);
-
-    int delay = 1;
-    for (;;) {
-        if (listener_hold_response(l, fd, seq_id, timeout_sec)) {
-            return;
-        } else {
-            /* Don't apply much backpressure since this will be running on the sender. */
-            poll(NULL, 0, delay);
-            if (delay < 5) { delay++; }
-        }
-    }
-    assert(false);
-}
-
 /* Notify the listener that the sender has finished sending a message, and
- * transfer all details for handling the response to it. */
-static void attempt_to_enqueue_request_sent_message_to_listener(sender *s, tx_info_t *info) {
-    assert(info->state == TIS_RESPONSE_NOTIFY);
-    struct bus *b = s->bus;
+ * transfer all details for handling the response to it. Blocking. */
+static bool enqueue_request_sent_message_to_listener(bus *b, boxed_msg *box) {
     /* Notify listener that it should expect a response to a
      * successfully sent message. */
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-      "telling listener to expect sent response, with box %p, seq_id %lld",
-        (void *)info->u.notify.box, (long long)info->u.notify.box->out_seq_id);
+        "telling listener to expect sent response, with box %p, seq_id %lld",
+        (void *)box, (long long)box->out_seq_id);
     
-    struct listener *l = bus_get_listener_for_socket(s->bus, info->u.notify.fd);
-    
-    /* Release reference to the boxed message; if transferring ownership
-     * to the listener succeeds, this will go out of scope. */
-    struct boxed_msg *box = info->u.notify.box;
-    info->u.notify.box = NULL;  /* passing on to listener */
-    
-    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-        "deleting box %p for info->id %d (pass to listener)", (void *)box, info->id);
+    struct listener *l = bus_get_listener_for_socket(b, box->fd);
 
-    uint16_t backpressure = 0;
-    /* If this succeeds, then this thread cannot touch the box anymore. */
-    if (listener_expect_response(l, box, &backpressure)) {
-        info->state = TIS_REQUEST_RELEASE;
-        info->u.release.backpressure = backpressure;
-
-        notify_caller(s, info, true);   // unblock sender
-    } else {
-        BUS_LOG(b, 2, LOG_SENDER, "failed delivery", b->udata);
-
-        /* Put it back, since we need to keep managing it */
-        info->u.notify.box = box;
-    }
-}
-
-static void notify_message_failure(sender *s, tx_info_t *info, bus_send_status_t status) {
-    struct bus *b = s->bus;
-    assert(info->state == TIS_ERROR);
-
-    struct boxed_msg *box = info->u.error.box;
-    box->result.status = status;
-    
-    size_t backpressure = 0;
-    for (;;) {
-        if (bus_process_boxed_message(s->bus, box, &backpressure)) {
-            BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-                "deleting box %p for info->id %d (msg failure)",
-                (void*)info->u.error.box, info->id);
-            info->u.error.box = NULL;
-            info->u.error.backpressure = backpressure;
-            notify_caller(s, info, false);
-            break;
+    for (int retries = 0; retries < 10; retries++) {
+        uint16_t backpressure = 0;
+        /* If this succeeds, then this thread cannot touch the box anymore. */
+        if (listener_expect_response(l, box, &backpressure)) {
+            bus_backpressure_delay(b, backpressure, 7);
+            return true;
         } else {
-            poll(NULL, 0, 1);   /* sleep 1 msec and retry */
+            BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
+                "enqueue_request_sent: failed delivery %d", retries);
+            poll(NULL, 0, 10);  // delay
         }
     }
+
+    /* Timeout, will be treated as a TX error */
+    return false;
 }

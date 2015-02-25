@@ -34,6 +34,8 @@ typedef struct listener_msg {
     const uint8_t id;
     MSG_TYPE type;
     struct listener_msg *next;
+    int pipes[2];
+    
     union {
         struct {
             connection_info *info;
@@ -41,6 +43,7 @@ typedef struct listener_msg {
         } add_socket;
         struct {
             int fd;
+            int notify_fd;
         } remove_socket;
         struct {
             int fd;
@@ -51,7 +54,7 @@ typedef struct listener_msg {
             boxed_msg *box;
         } expect;
         struct {
-            int unused;
+            int notify_fd;
         } shutdown;
     } u;
 } listener_msg;
@@ -102,10 +105,12 @@ typedef uint32_t msg_flag_t;
 #define MAX_DELAY 100
 #define INFINITE_DELAY (-1)
 
+#define SHUTDOWN_NO_FD (-1)
+
 /* Receiver of responses */
 typedef struct listener {
     struct bus *bus;
-    bool shutdown;
+    int shutdown_notify_fd;
 
     /* Pipes used to wake the sleeping listener on queue input. */
     int commit_pipe;
@@ -139,7 +144,7 @@ static void tick_handler(listener *l);
 static rx_info_t *get_free_rx_info(listener *l);
 static void release_rx_info(struct listener *l, rx_info_t *info);
 static listener_msg *get_free_msg(listener *l);
-static bool push_message(struct listener *l, listener_msg *msg);
+static bool push_message(struct listener *l, listener_msg *msg, int *reply_fd);
 static void release_msg(struct listener *l, listener_msg *msg);
 static void attempt_recv(listener *l, int avaliable);
 static void process_unpacked_message(listener *l,
@@ -157,10 +162,12 @@ static void dump_rx_info_table(listener *l);
 
 static void msg_handler(listener *l, listener_msg *msg);
 static void add_socket(listener *l, connection_info *ci, int notify_fd);
-static void remove_socket(listener *l, int fd);
+static void remove_socket(listener *l, int fd, int notify_fd);
 static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_sec);
 static void expect_response(listener *l, boxed_msg *box);
-static void shutdown(listener *l);
-static void free_ci(connection_info *ci);
+static void shutdown(listener *l, int notify_fd);
+
+static void retry_delivery(listener *l, rx_info_t *info);
+static void notify_caller(int fd);
 
 #endif

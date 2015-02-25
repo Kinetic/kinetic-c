@@ -29,9 +29,9 @@ struct listener;
 
 struct listener *listener_init(struct bus *b, struct bus_config *cfg);
 
-/* Add/remove sockets' metadata from internal info. */
-bool listener_add_socket(struct listener *l, connection_info *ci, int notify_fd);
-bool listener_remove_socket(struct listener *l, int fd);
+/* Add/remove sockets' metadata from internal info. Blocking. */
+bool listener_add_socket(struct listener *l, connection_info *ci, int *notify_fd);
+bool listener_remove_socket(struct listener *l, int fd, int *notify_fd);
 
 /* The sender is about to start a write, the sender should hold on to
  * the response (with timeout) if it arrives before receiving further
@@ -43,7 +43,8 @@ bool listener_hold_response(struct listener *l, int fd,
 bool listener_expect_response(struct listener *l, boxed_msg *box,
     uint16_t *backpressure);
 
-bool listener_shutdown(struct listener *l);
+/* Shut down the listener. Blocking. */
+bool listener_shutdown(struct listener *l, int *notify_fd);
 
 void listener_free(struct listener *l);
 

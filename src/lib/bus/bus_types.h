@@ -194,12 +194,13 @@ typedef enum {
     BUS_SEND_UNDEFINED = 0,
     BUS_SEND_SUCCESS = 1,
     BUS_SEND_TX_TIMEOUT = -51,
-    BUS_SEND_TX_FAILURE = -52,
+    BUS_SEND_TX_FAILURE = -52,  // -> socket error
     BUS_SEND_RX_TIMEOUT = -53,
     BUS_SEND_RX_FAILURE = -54,
     BUS_SEND_BAD_RESPONSE = -55,
     BUS_SEND_UNREGISTERED_SOCKET = -56,
     BUS_SEND_RX_TIMEOUT_EXPECT = -57,
+    BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER = -58,
 } bus_send_status_t;
 
 /* Result from attempting to configure a message bus. */

@@ -31,9 +31,8 @@
 /* Initialize the SSL library internals for use by the messaging bus. */
 bool bus_ssl_init(struct bus *b);
 
-/* Do an SSL / TLS shake for a connection. Blocking.
- * Returns whether the connection succeeded. */
-bool bus_ssl_connect(struct bus *b, connection_info *ci);
+/* Do an SSL / TLS shake for a connection. Blocking. */
+SSL *bus_ssl_connect(struct bus *b, int fd);
 
 /* Disconnect and free an individual SSL handle. */
 bool bus_ssl_disconnect(struct bus *b, SSL *ssl);

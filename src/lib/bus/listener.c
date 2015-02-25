@@ -38,8 +38,6 @@
 #define INCOMING_MSG_PIPE 1
 #define INCOMING_MSG_PIPE_ID 0
 
-static void retry_delivery(listener *l, rx_info_t *info);
-
 struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     struct listener *l = calloc(1, sizeof(*l));
     if (l == NULL) { return NULL; }
@@ -47,6 +45,7 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     l->bus = b;
     BUS_LOG(b, 2, LOG_LISTENER, "init", b->udata);
 
+    int pipe_count = 0;
     int pipes[2];
     if (0 != pipe(pipes)) {
         free(l);
@@ -57,6 +56,7 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     l->incoming_msg_pipe = pipes[0];
     l->fds[INCOMING_MSG_PIPE_ID].fd = l->incoming_msg_pipe;
     l->fds[INCOMING_MSG_PIPE_ID].events = POLLIN;
+    l->shutdown_notify_fd = SHUTDOWN_NO_FD;
 
     for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
         rx_info_t *info = &l->rx_info[i];
@@ -70,12 +70,25 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     }
     l->rx_info_freelist = &l->rx_info[0];
 
-    for (int i = 0; i < MAX_QUEUE_MESSAGES; i++) {
-        listener_msg *msg = &l->msgs[i];
+    for (pipe_count = 0; pipe_count < MAX_QUEUE_MESSAGES; pipe_count++) {
+        listener_msg *msg = &l->msgs[pipe_count];
         uint8_t *p_id = (uint8_t *)&msg->id;
-        *p_id = i;
-        if (i < MAX_QUEUE_MESSAGES - 1) { /* forward link */
-            msg->next = &l->msgs[i + 1];
+        *p_id = pipe_count;  /* Set (const) ID. */
+
+        if (0 != pipe(msg->pipes)) {
+            for (int i = 0; i < pipe_count; i++) {
+                listener_msg *msg = &l->msgs[i];
+                close(msg->pipes[0]);
+                close(msg->pipes[1]);
+            }
+            close(pipes[0]);
+            close(pipes[1]);
+            free(l);
+            return NULL;
+        }
+
+        if (pipe_count < MAX_QUEUE_MESSAGES - 1) { /* forward link */
+            msg->next = &l->msgs[pipe_count + 1];
         }
     }
     l->msg_freelist = &l->msgs[0];
@@ -86,25 +99,24 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
 }
 
 bool listener_add_socket(struct listener *l,
-        connection_info *ci, int notify_fd) {
+        connection_info *ci, int *notify_fd) {
     listener_msg *msg = get_free_msg(l);
     if (msg == NULL) { return false; }
 
     msg->type = MSG_ADD_SOCKET;
     msg->u.add_socket.info = ci;
-    msg->u.add_socket.notify_fd = notify_fd;
-
-    return push_message(l, msg);
+    msg->u.add_socket.notify_fd = msg->pipes[1];
+    return push_message(l, msg, notify_fd);
 }
 
-bool listener_remove_socket(struct listener *l, int fd) {
+bool listener_remove_socket(struct listener *l, int fd, int *notify_fd) {
     listener_msg *msg = get_free_msg(l);
     if (msg == NULL) { return false; }
 
     msg->type = MSG_REMOVE_SOCKET;
     msg->u.remove_socket.fd = fd;
-
-    return push_message(l, msg);
+    msg->u.remove_socket.notify_fd = msg->pipes[1];
+    return push_message(l, msg, notify_fd);
 }
 
 /* Coefficients for backpressure based on certain conditions. */
@@ -174,7 +186,7 @@ bool listener_hold_response(struct listener *l, int fd,
     msg->u.hold.seq_id = seq_id;
     msg->u.hold.timeout_sec = timeout_sec;
 
-    bool pm_res = push_message(l, msg);
+    bool pm_res = push_message(l, msg, NULL);
     if (!pm_res) {
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
             "listener_hold_response with <fd:%d, seq_id:%lld> FAILED",
@@ -201,7 +213,7 @@ bool listener_expect_response(struct listener *l, boxed_msg *box,
     msg->u.expect.box = box;
     *backpressure = get_backpressure(l);
 
-    bool pm = push_message(l, msg);
+    bool pm = push_message(l, msg, NULL);
     if (!pm) {
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
             "! push_message fail %p", (void*)box);
@@ -209,12 +221,13 @@ bool listener_expect_response(struct listener *l, boxed_msg *box,
     return pm;
 }
 
-bool listener_shutdown(struct listener *l) {
+bool listener_shutdown(struct listener *l, int *notify_fd) {
     listener_msg *msg = get_free_msg(l);
     if (msg == NULL) { return false; }
 
     msg->type = MSG_SHUTDOWN;
-    return push_message(l, msg);
+    msg->u.shutdown.notify_fd = msg->pipes[1];
+    return push_message(l, msg, notify_fd);
 }
 
 void listener_free(struct listener *l) {
@@ -246,7 +259,10 @@ void listener_free(struct listener *l) {
             listener_msg *msg = &l->msgs[i];
             switch (msg->type) {
             case MSG_ADD_SOCKET:
-                if (msg->u.add_socket.info) { free_ci(msg->u.add_socket.info); }
+                notify_caller(msg->u.add_socket.notify_fd);
+                break;
+            case MSG_REMOVE_SOCKET:
+                notify_caller(msg->u.remove_socket.notify_fd);
                 break;
             case MSG_EXPECT_RESPONSE:
                 if (msg->u.expect.box) { free(msg->u.expect.box); }
@@ -254,11 +270,6 @@ void listener_free(struct listener *l) {
             default:
                 break;
             }
-        }
-
-        while (l->tracked_fds > 0) {
-            /* Remove off the front to stress remove_socket. */
-            remove_socket(l, l->fds[0 + INCOMING_MSG_PIPE].fd);
         }
 
         if (l->read_buf) {
@@ -293,7 +304,7 @@ void *listener_mainloop(void *arg) {
      * communication is managed at the command interface, so it doesn't
      * need any internal locking. */
 
-    while (!self->shutdown) {
+    while (self->shutdown_notify_fd == SHUTDOWN_NO_FD) {
         gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
@@ -323,6 +334,13 @@ void *listener_mainloop(void *arg) {
     }
 
     BUS_LOG(b, 3, LOG_LISTENER, "shutting down", b->udata);
+
+    if (self->tracked_fds > 0) {
+        BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
+            "%d connections still open!", self->tracked_fds);
+    }
+
+    notify_caller(self->shutdown_notify_fd);
     return NULL;
 }
 
@@ -627,13 +645,13 @@ static void process_unpacked_message(listener *l,
         int64_t seq_id = result.u.success.seq_id;
         void *opaque_msg = result.u.success.msg;
 
-        if (seq_id < ci->largest_seq_id_seen && ci->largest_seq_id_seen != 0
+        if (seq_id < ci->largest_rd_seq_id_seen && ci->largest_rd_seq_id_seen != 0
                 && seq_id != BUS_NO_SEQ_ID) {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                 "suspicious sequence ID on %d: largest seen is %lld, got %lld\n",
-                ci->fd, (long long)ci->largest_seq_id_seen, (long long)seq_id);
+                ci->fd, (long long)ci->largest_rd_seq_id_seen, (long long)seq_id);
         }
-        ci->largest_seq_id_seen = seq_id;
+        ci->largest_rd_seq_id_seen = seq_id;
 
         rx_info_t *info = find_info_by_sequence_id(l, ci->fd, seq_id);
         if (info) {
@@ -720,7 +738,7 @@ static void tick_handler(listener *l) {
 
                 /* never got a response, but we don't have the callback
                  * either -- the sender will notify about the timeout. */
-                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                     "timing out hold info %p -- <fd:%d, seq_id:%lld> at (%ld.%ld)",
                     (void*)info, info->u.hold.fd, (long long)info->u.hold.seq_id,
                     (long)tv.tv_sec, (long)tv.tv_usec);
@@ -1062,12 +1080,14 @@ static void release_msg(struct listener *l, listener_msg *msg) {
     }
 }
 
-static bool push_message(struct listener *l, listener_msg *msg) {
+static bool push_message(struct listener *l, listener_msg *msg, int *reply_fd) {
     struct bus *b = l->bus;
     BUS_ASSERT(b, b->udata, msg);
   
     uint8_t msg_buf[sizeof(msg->id)];
     msg_buf[0] = msg->id;
+
+    if (reply_fd) { *reply_fd = msg->pipes[0]; }
 
     for (;;) {
         ssize_t wr = write(l->commit_pipe, msg_buf, sizeof(msg_buf));
@@ -1101,7 +1121,7 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
         add_socket(l, msg.u.add_socket.info, msg.u.add_socket.notify_fd);
         break;
     case MSG_REMOVE_SOCKET:
-        remove_socket(l, msg.u.remove_socket.fd);
+        remove_socket(l, msg.u.remove_socket.fd, msg.u.remove_socket.notify_fd);
         break;
     case MSG_HOLD_RESPONSE:
         hold_response(l, msg.u.hold.fd, msg.u.hold.seq_id,
@@ -1111,7 +1131,7 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
         expect_response(l, msg.u.expect.box);
         break;
     case MSG_SHUTDOWN:
-        shutdown(l);
+        shutdown(l, msg.u.shutdown.notify_fd);
         break;
 
     case MSG_NONE:
@@ -1123,7 +1143,9 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
 }
 
 static void notify_caller(int fd) {
-    uint8_t reply_buf[sizeof(uint16_t)] = {0x00};
+    uint8_t reply_buf[sizeof(uint8_t) + sizeof(uint16_t)] = {LISTENER_MSG_TAG};
+
+    /* TODO: reply_buf[1:2] can be little-endian backpressure */
 
     for (;;) {
         ssize_t wres = write(fd, reply_buf, sizeof(reply_buf));
@@ -1194,20 +1216,13 @@ static void add_socket(listener *l, connection_info *ci, int notify_fd) {
     notify_caller(notify_fd);
 }
 
-static void free_ci(connection_info *ci) {
-    if (ci) {
-        /* If using SSL, the handle will be freed in the client thread. */
-        ci->ssl = NULL;
-        free(ci);
-    }
-}
-
-static void remove_socket(listener *l, int fd) {
+static void remove_socket(listener *l, int fd, int notify_fd) {
     struct bus *b = l->bus;
     BUS_LOG_SNPRINTF(b, 2, LOG_LISTENER, b->udata, 128,
         "removing socket %d", fd);
 
-    /* don't really close it, just drop info about it in the listener */
+    /* Don't really close it, just drop info about it in the listener.
+     * The client thread will actually free the structure, close SSL, etc. */
     for (int i = 0; i < l->tracked_fds; i++) {
         if (l->fds[i + INCOMING_MSG_PIPE].fd == fd) {
             if (l->tracked_fds > 1) {
@@ -1218,13 +1233,12 @@ static void remove_socket(listener *l, int fd) {
                 connection_info *ci = l->fd_info[i];
                 l->fd_info[i] = l->fd_info[l->tracked_fds - 1];
                 l->fd_info[l->tracked_fds - 1] = ci;
-                free_ci(ci);
-            } else {
-                free_ci(l->fd_info[i]);
             }
             l->tracked_fds--;
         }
     }
+    /* CI will be freed by the client thread. */
+    notify_caller(notify_fd);
 }
 
 static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_sec) {
@@ -1374,6 +1388,6 @@ static void expect_response(listener *l, struct boxed_msg *box) {
     }
 }
 
-static void shutdown(listener *l) {
-    l->shutdown = true;
+static void shutdown(listener *l, int notify_fd) {
+    l->shutdown_notify_fd = notify_fd;
 }
