@@ -324,7 +324,6 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
         if (closure != NULL) {
             operation->closure = *closure;
         }
-        KineticOperation_Complete(operation, status);
         return status;
     }
 

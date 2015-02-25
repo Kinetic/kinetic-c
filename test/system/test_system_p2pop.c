@@ -422,12 +422,11 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
     TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when disconnecting client!");
 }
 
-void test_P2P_should_fail_with_a_buffer_overrun_error_if_to_many_operations_specified(void)
+void test_P2P_should_fail_with_a_buffer_overrun_error_if_too_many_operations_specified(void)
 {
-
-    size_t to_many_operations = 100000;
-    KineticP2P_OperationData * ops = calloc(to_many_operations, sizeof(KineticP2P_OperationData));
-    for (size_t i = 0; i < to_many_operations; i++) {
+    size_t too_many_operations = KINETIC_P2P_OPERATION_LIMIT;
+    KineticP2P_OperationData * ops = calloc(too_many_operations, sizeof(KineticP2P_OperationData));
+    for (size_t i = 0; i < too_many_operations; i++) {
         ops[i] = (KineticP2P_OperationData){
             .key = Key1Buffer,
             .newKey = Key3Buffer,
@@ -439,7 +438,7 @@ void test_P2P_should_fail_with_a_buffer_overrun_error_if_to_many_operations_spec
                   .port = KINETIC_TEST_PORT1,
                   .tls = false,
                 },
-        .numOperations = to_many_operations,
+        .numOperations = too_many_operations,
         .operations = ops
     };
 
@@ -450,18 +449,17 @@ void test_P2P_should_fail_with_a_buffer_overrun_error_if_to_many_operations_spec
 }
 
 
-void test_P2P_should_fail_with_a_operation_invalid_if_to_many_chained_p2p_operations(void)
+void test_P2P_should_fail_with_a_operation_invalid_if_too_many_chained_p2p_operations(void)
 {
+    size_t too_many_operations = KINETIC_P2P_OPERATION_LIMIT + 1;
+    KineticP2P_OperationData * ops = calloc(too_many_operations, sizeof(KineticP2P_OperationData));
+    KineticP2P_Operation * chained_ops = calloc(too_many_operations, sizeof(KineticP2P_Operation));
 
-    size_t to_many_operations = 1001;
-    KineticP2P_OperationData * ops = calloc(to_many_operations, sizeof(KineticP2P_OperationData));
-    KineticP2P_Operation * chained_ops = calloc(to_many_operations, sizeof(KineticP2P_Operation));
-
-    for (size_t i = 0; i < to_many_operations; i++) {
+    for (size_t i = 0; i < too_many_operations; i++) {
         ops[i] = (KineticP2P_OperationData){
             .key = Key1Buffer,
             .newKey = Key3Buffer,
-            .chainedOperation = (i == (to_many_operations - 1)) ? NULL : &chained_ops[i + 1],
+            .chainedOperation = (i == (too_many_operations - 1)) ? NULL : &chained_ops[i + 1],
         };
         chained_ops[i] = (KineticP2P_Operation){
             .peer = { .hostname = KINETIC_TEST_HOST1,

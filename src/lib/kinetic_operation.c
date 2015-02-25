@@ -588,9 +588,9 @@ void destroy_p2pOp(KineticProto_Command_P2POperation* proto_p2pOp)
 
 KineticProto_Command_P2POperation* build_p2pOp(uint32_t nestingLevel, KineticP2P_Operation const * const p2pOp)
 {
-    // limit nesting level to 10000
-    if (nestingLevel == 1000) {
-        LOG0("P2P operation nesting level is too deep. Max is 1000.");
+    // limit nesting level to KINETIC_P2P_MAX_NESTING
+    if (nestingLevel >= KINETIC_P2P_MAX_NESTING) {
+        LOGF0("P2P operation nesting level is too deep. Max is %d.", KINETIC_P2P_MAX_NESTING);
         return NULL;
     }
 
@@ -719,7 +719,7 @@ KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operati
         return KINETIC_STATUS_OPERATION_INVALID;
     }
 
-    if (p2pOp->numOperations >= 100000) {
+    if (p2pOp->numOperations >= KINETIC_P2P_OPERATION_LIMIT) {
         return KINETIC_STATUS_BUFFER_OVERRUN;
     }
 
