@@ -372,7 +372,7 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
                             KineticProto_Command * cmd = KineticProto_command__unpack(NULL, value->len, value->data);
                             log_protobuf_message(log_level, &cmd->base, indent);
                             log_proto_level_end();
-                            free(cmd);
+                            KineticProto_command__free_unpacked(cmd, NULL);
                         }
                     }
                     else {
