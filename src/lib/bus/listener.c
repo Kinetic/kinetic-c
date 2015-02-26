@@ -1245,6 +1245,12 @@ static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_s
     struct bus *b = l->bus;
     
     rx_info_t *info = get_free_rx_info(l);
+    if (info == NULL) {
+        BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
+            "failed to get free rx_info for <fd:%d, seq_id:%lld>, dropping it",
+            fd, (long long)seq_id);
+        return;
+    }
     BUS_ASSERT(b, b->udata, info);
     BUS_ASSERT(b, b->udata, info->state == RIS_INACTIVE);
     BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
