@@ -51,7 +51,7 @@ const char *bus_log_event_str(log_event_t event);
 bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *socket_udata);
 
 /* Free metadata about a socket that has been disconnected. */
-bool bus_release_socket(struct bus *b, int fd);
+bool bus_release_socket(struct bus *b, int fd, void **socket_udata_out);
 
 /* Begin shutting the system down. Returns true once everything pending
  * has resolved. */

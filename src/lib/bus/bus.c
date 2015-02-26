@@ -448,7 +448,7 @@ cleanup:
 }
 
 /* Free metadata about a socket that has been disconnected. */
-bool bus_release_socket(struct bus *b, int fd) {
+bool bus_release_socket(struct bus *b, int fd, void **socket_udata_out) {
     int l_id = listener_id_of_socket(b, fd);
 
     BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 64,
@@ -462,7 +462,7 @@ bool bus_release_socket(struct bus *b, int fd) {
     }
 
     bool completed = poll_on_completion(b, completion_fd);
-    if (!completed) {
+    if (!completed) {           /* listener hung up while waiting */
         return false;
     }
 
@@ -476,6 +476,8 @@ bool bus_release_socket(struct bus *b, int fd) {
     connection_info *ci = (connection_info *)old_value;
     assert(ci != NULL);
 
+    if (socket_udata_out) { *socket_udata_out = ci->udata; }
+
     bool res = false;
 
     if (ci->ssl == BUS_NO_SSL) {
@@ -484,7 +486,6 @@ bool bus_release_socket(struct bus *b, int fd) {
         res = bus_ssl_disconnect(b, ci->ssl);
     }
 
-    /* TODO: return ci->udata? */
     free(ci);
     return res;
 }
