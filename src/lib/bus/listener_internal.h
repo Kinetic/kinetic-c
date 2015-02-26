@@ -105,11 +105,19 @@ typedef uint32_t msg_flag_t;
 #define MAX_DELAY 100
 #define INFINITE_DELAY (-1)
 
-#define SHUTDOWN_NO_FD (-1)
+/* Sentinel values used for listener.shutdown_notify_fd. */
+#define LISTENER_NO_FD (-1)
+#define LISTENER_SHUTDOWN_COMPLETE_FD (-2)
 
 /* Receiver of responses */
 typedef struct listener {
     struct bus *bus;
+
+    /* File descriptor which should receive a notification when the
+     * listener is shutting down. It will be set to LISTENER_NO_FD
+     * until shutdown is requested, then the FD to notify will be
+     * saved, then the FD will be notifed and it will be set to
+     * LISTENER_SHUTDOWN_COMPLETE_FD. */
     int shutdown_notify_fd;
 
     /* Pipes used to wake the sleeping listener on queue input. */

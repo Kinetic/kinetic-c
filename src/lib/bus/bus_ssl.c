@@ -45,7 +45,7 @@ bool bus_ssl_init(struct bus *b) {
     return true;
 }
 
-/* Do an SSL / TLS shake for a connection. Blocking.
+/* Do an SSL / TLS handshake for a connection. Blocking.
  * Returns whether the connection succeeded. */
 SSL *bus_ssl_connect(struct bus *b, int fd) {
     SSL *ssl = NULL;
@@ -181,7 +181,7 @@ static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd) {
                         } else {
                             unsigned long errval = ERR_get_error();
                             char ebuf[256];
-                            BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
+                            BUS_LOG_SNPRINTF(b, 1, LOG_SOCKET_REGISTERED, b->udata, 128,
                                 "socket %d: ERROR -- %s", fd, ERR_error_string(errval, ebuf));
                         }
                     }
@@ -190,7 +190,7 @@ static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd) {
                     {
                         unsigned long errval = ERR_get_error();
                         char ebuf[256];
-                        BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
+                        BUS_LOG_SNPRINTF(b, 1, LOG_SOCKET_REGISTERED, b->udata, 128,
                             "socket %d: ERROR %d -- %s", fd, reason, ERR_error_string(errval, ebuf));
                         assert(false);
                     }
@@ -203,11 +203,11 @@ static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd) {
                     fds[0].events = (POLLIN | POLLOUT);
                 }
             } else if (fds[0].revents & POLLHUP) {
-                BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 128,
+                BUS_LOG_SNPRINTF(b, 1, LOG_SOCKET_REGISTERED, b->udata, 128,
                     "SSL_Connect: HUP on %d", fd);
                 return false;
             } else if (fds[0].revents & POLLERR) {
-                BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 128,
+                BUS_LOG_SNPRINTF(b,12, LOG_SOCKET_REGISTERED, b->udata, 128,
                     "SSL_Connect: ERR on %d", fd);
                 return false;
             }

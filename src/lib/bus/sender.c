@@ -36,10 +36,13 @@
 #include "sender_internal.h"
 
 bool sender_do_blocking_send(bus *b, boxed_msg *box) {
-    // assumes that all locking and seq_id allocation has been handled upstream
+    /* Note: assumes that all locking and thread-safe seq_id allocation
+     * has been handled upstream. If multiple client requests are queued
+     * up to go out at the same time, they must go out in monotonic order,
+     * with only a single thread writing to the socket at once. */
     assert(b);
 
-    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 256,
+    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
         "doing blocking send of box %p, with <fd:%d, seq_id %lld>, msg[%zd]: %p",
         (void *)box, box->fd, (long long)box->out_seq_id,
         box->out_msg_size, (void *)box->out_msg);
@@ -101,7 +104,7 @@ bool sender_do_blocking_send(bus *b, boxed_msg *box) {
                  * on the send, though. */
                 handle_write_res hw_res = handle_write(b, box);
 
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
+                BUS_LOG_SNPRINTF(b, 4, LOG_SENDER, b->udata, 256,
                     "handle_write res %d", hw_res);
 
                 switch (hw_res) {
@@ -139,7 +142,8 @@ static void attempt_to_enqueue_sending_request_message_to_listener(struct bus *b
         if (listener_hold_response(l, fd, seq_id, timeout_sec)) {
             return;
         } else {
-            /* Don't apply much backpressure since this will be running on the sender. */
+            /* Don't apply much backpressure here since the client
+             * thread will get it when the message is done sending. */
             poll(NULL, 0, delay);
             if (delay < 5) { delay++; }
         }
@@ -155,6 +159,7 @@ static void handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t stat
     box->result = (bus_msg_result_t){
         .status = status,
     };
+    /* FIXME - make distinction upstream between sending fail and rejected send */
 }
 
 static ssize_t write_plain(bus *b, boxed_msg *box);
@@ -164,6 +169,8 @@ static bool enqueue_request_sent_message_to_listener(bus *b, boxed_msg *box);
 static handle_write_res handle_write(bus *b, boxed_msg *box) {
     SSL *ssl = box->ssl;
     ssize_t wrsz = 0;
+
+    /* Attempt a single write to the socket. */
     if (ssl == BUS_NO_SSL) {
         wrsz = write_plain(b, box);
     } else {
@@ -181,6 +188,7 @@ static handle_write_res handle_write(bus *b, boxed_msg *box) {
          * just go back to the poll() loop with no progress.
          * If we busywait on this, something is deeply wrong. */
     } else {
+        /* Update amount written so far */
         box->out_sent_size += wrsz;
     }
 
@@ -188,10 +196,10 @@ static handle_write_res handle_write(bus *b, boxed_msg *box) {
     size_t sent_size = box->out_sent_size;
     size_t rem = msg_size - sent_size;
 
-    BUS_LOG_SNPRINTF(b, 5-2, LOG_SENDER, b->udata, 64,
+    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
         "wrote %zd, rem is %zd", wrsz, rem);
 
-    if (rem == 0) {
+    if (rem == 0) {             /* check if whole message is written */
         struct timeval tv;
         if (0 == gettimeofday(&tv, NULL)) { box->tv_send_done = tv; }
 
@@ -213,10 +221,11 @@ static ssize_t write_plain(struct bus *b, boxed_msg *box) {
     size_t sent_size = box->out_sent_size;
     size_t rem = msg_size - sent_size;
     
-    BUS_LOG_SNPRINTF(b, 10-5, LOG_SENDER, b->udata, 64,
+    BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
         "write %p to %d, %zd bytes",
         (void*)&msg[sent_size], fd, rem);
 
+    /* Attempt a single write. ('for' is due to continue-based retry.) */
     for (;;) {
         ssize_t wrsz = write(fd, &msg[sent_size], rem);
         if (wrsz == -1) {
@@ -224,9 +233,9 @@ static ssize_t write_plain(struct bus *b, boxed_msg *box) {
                 errno = 0;
                 continue;
             } else {
-                /* close socket */
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                    "write: socket error writing, %d", errno);
+                /* FIXME: notify about closed socket */
+                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
+                    "write: socket error writing, %s", strerror(errno));
                 errno = 0;
                 return -1;
             }
@@ -250,7 +259,7 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
 
     while (rem > 0) {
         ssize_t wrsz = SSL_write(ssl, &msg[box->out_sent_size], rem);
-        BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
             "SSL_write: socket %d, write %zd => wrsz %zd",
             fd, rem, wrsz);
         if (wrsz > 0) {
@@ -265,7 +274,7 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
                 break;
                 
             case SSL_ERROR_WANT_READ:
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 64,
                     "SSL_write: socket %d: WANT_READ", fd);
                 assert(false);  // shouldn't get this; we're writing.
                 break;
@@ -279,29 +288,31 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
                      * the socket for too long */
                     continue;
                 } else {
-                    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                        "SSL_write on fd %d: SSL_ERROR_SYSCALL %d", fd, errno);
+                    BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
+                        "SSL_write on fd %d: SSL_ERROR_SYSCALL -- %s",
+                        fd, strerror(errno));
                     errno = 0;                    
                     return -1;
                 }
             }
             case SSL_ERROR_SSL:
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
                     "SSL_write: socket %d: error SSL (wrsz %zd)",
                     box->fd, wrsz);
 
+                /* Log error messages from OpenSSL */
                 for (;;) {
                     unsigned long e = ERR_get_error();
                     if (e == 0) { break; }  // no more errors
-                    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
+                    BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 128,
                         "SSL_write error: %s",
                         ERR_error_string(e, NULL));
                 }
                 return -1;                
             default:
             {
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                    "SSL_write: socket %d: error %d", box->fd, reason);
+                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
+                    "SSL_write on socket %d: match fail: error %d", box->fd, reason);
                 break;
             }
             }
@@ -330,7 +341,8 @@ static bool enqueue_request_sent_message_to_listener(bus *b, boxed_msg *box) {
         uint16_t backpressure = 0;
         /* If this succeeds, then this thread cannot touch the box anymore. */
         if (listener_expect_response(l, box, &backpressure)) {
-            bus_backpressure_delay(b, backpressure, 7);
+            bus_backpressure_delay(b, backpressure,
+                LISTENER_EXPECT_BACKPRESSURE_SHIFT);
             return true;
         } else {
             BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,

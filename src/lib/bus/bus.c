@@ -36,9 +36,7 @@
 #include "bus_ssl.h"
 #include "util.h"
 #include "yacht.h"
-
-/* Function pointers for pthreads. */
-void *listener_mainloop(void *arg);
+#include "atomic.h"
 
 static bool poll_on_completion(struct bus *b, int fd);
 static int listener_id_of_socket(struct bus *b, int fd);
@@ -47,11 +45,12 @@ static void noop_log_cb(log_event_t event,
 static void noop_error_cb(bus_unpack_cb_res_t result, void *socket_udata);
 static bool attempt_to_increase_resource_limits(struct bus *b);
 
+/* Function pointer for pthread start function. */
+void *listener_mainloop(void *arg);
+
 static void set_defaults(bus_config *cfg) {
     if (cfg->listener_count == 0) { cfg->listener_count = 1; }
 }
-
-#define DEF_FD_SET_SIZE2 4
 
 bool bus_init(bus_config *config, struct bus_result *res) {
     if (res == NULL) { return false; }
@@ -78,7 +77,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
 
     res->status = BUS_INIT_ERROR_ALLOC_FAIL;
 
-    bool log_lock_init = false;
+    uint8_t locks_initialized = 0;
     struct listener **ls = NULL;     /* listeners */
     struct threadpool *tp = NULL;
     bool *joined = NULL;
@@ -101,12 +100,12 @@ bool bus_init(bus_config *config, struct bus_result *res) {
         res->status = BUS_INIT_ERROR_MUTEX_INIT_FAIL;
         goto cleanup;
     }
+    locks_initialized++;
     if (0 != pthread_rwlock_init(&b->fd_set_lock, NULL)) {
         res->status = BUS_INIT_ERROR_MUTEX_INIT_FAIL;
         goto cleanup;
     }
-
-    log_lock_init = true;
+    locks_initialized++;
 
     attempt_to_increase_resource_limits(b);
 
@@ -177,8 +176,10 @@ cleanup:
     if (tp) { threadpool_free(tp); }
     if (joined) { free(joined); }
     if (b) {
-        if (log_lock_init) {
+        if (locks_initialized > 1) {
             pthread_rwlock_destroy(&b->fd_set_lock);
+        }
+        if (locks_initialized > 0) {
             pthread_mutex_destroy(&b->log_lock);
         }
         free(b);
@@ -265,8 +266,8 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
     box->out_seq_id = msg->seq_id;
     box->out_msg_size = msg->msg_size;
 
-    /* Store message by pointer, since the client thread using it is blocked
-     * until we are done sending. */
+    /* Store message by pointer, since the client code calling in is
+     * blocked until we are done sending. */
     box->out_msg = msg->msg;
 
     box->cb = msg->cb;
@@ -304,12 +305,12 @@ static bool poll_on_completion(struct bus *b, int fd) {
         int res = poll(fds, 1, -1);
         if (res == -1) {
             if (util_is_resumable_io_error(errno)) {
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
                     "poll_on_completion, resumable IO error %d", errno);
                 errno = 0;
                 continue;
             } else {
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 1, LOG_SENDING_REQUEST, b->udata, 64,
                     "poll_on_completion, non-resumable IO error %d", errno);
                 return false;
             }
@@ -330,25 +331,28 @@ static bool poll_on_completion(struct bus *b, int fd) {
                 assert(read_buf[0] == LISTENER_MSG_TAG);
 
                 msec = (read_buf[1] << 0) + (read_buf[2] << 8);
-                bus_backpressure_delay(b, msec, 3);
+                bus_backpressure_delay(b, msec, LISTENER_BACKPRESSURE_SHIFT);
                 BUS_LOG(b, 4, LOG_SENDING_REQUEST, "sent!", b->udata);
                 return true;
             } else if (sz == -1) {
                 if (util_is_resumable_io_error(errno)) {
+                    BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
+                        "poll_on_completion read, resumable IO error %d", errno);
                     errno = 0;
+                    continue;
                 } else {
-                    BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
+                    BUS_LOG_SNPRINTF(b, 2, LOG_SENDING_REQUEST, b->udata, 64,
                         "poll_on_completion read, non-resumable IO error %d", errno);
                     errno = 0;
                     return false;
                 }
             } else {
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 1, LOG_SENDING_REQUEST, b->udata, 64,
                     "poll_on_completion bad read size %zd", sz);
                 return false;
             }
         } else {
-            BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
+            BUS_LOG_SNPRINTF(b, 0, LOG_SENDING_REQUEST, b->udata, 64,
                 "poll_on_completion, blocking forever returned 0, errno %d", errno);
             assert(false);
         }
@@ -516,14 +520,20 @@ static void free_connection_cb(void *value, void *udata) {
 }
 
 bool bus_shutdown(bus *b) {
-    /* TODO: thread safety for shutdown being called concurrently on several client threads?
-     * Maybe use CAS-ing the fd_set to NULL as a flag.*/
-    struct yacht *fd_set = b->fd_set;
-    b->fd_set = NULL;
+    for (;;) {
+        shutdown_state_t ss = b->shutdown_state;
+        /* Another thread is already shutting things down. */
+        if (ss != SHUTDOWN_STATE_RUNNING) { return false; }
+        if (ATOMIC_BOOL_COMPARE_AND_SWAP(&b->shutdown_state,
+                SHUTDOWN_STATE_RUNNING, SHUTDOWN_STATE_SHUTTING_DOWN)) {
+            break;
+        }
+    }
 
-    if (fd_set) {
+    if (b->fd_set) {
         BUS_LOG(b, 2, LOG_SHUTDOWN, "removing all connections", b->udata);
-        yacht_free(fd_set, free_connection_cb, b);
+        yacht_free(b->fd_set, free_connection_cb, b);
+        b->fd_set = NULL;
     }
 
     BUS_LOG(b, 2, LOG_SHUTDOWN, "shutting down listener threads", b->udata);
@@ -547,6 +557,7 @@ bool bus_shutdown(bus *b) {
     }
 
     BUS_LOG(b, 2, LOG_SHUTDOWN, "done with shutdown", b->udata);
+    b->shutdown_state = SHUTDOWN_STATE_HALTED;
     return true;
 }
 
@@ -608,7 +619,10 @@ bool bus_process_boxed_message(struct bus *b,
 
 void bus_free(bus *b) {
     if (b == NULL) { return; }
-    bus_shutdown(b);
+    while (b->shutdown_state != SHUTDOWN_STATE_HALTED) {
+        if (bus_shutdown(b)) { break; }
+        poll(NULL, 0, 10);  // sleep 10 msec
+    }
 
     for (int i = 0; i < b->listener_count; i++) {
         BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
@@ -632,14 +646,12 @@ void bus_free(bus *b) {
     }
     BUS_LOG(b, 3, LOG_SHUTDOWN, "threadpool_free", b->udata);
     threadpool_free(b->threadpool);
-
     free(b->joined);
     free(b->threads);
-
+    pthread_rwlock_destroy(&b->fd_set_lock);
     pthread_mutex_destroy(&b->log_lock);
 
     bus_ssl_ctx_free(b);
-
     free(b);
 }
 

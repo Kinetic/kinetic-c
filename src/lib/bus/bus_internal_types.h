@@ -59,7 +59,14 @@ typedef struct boxed_msg {
     size_t out_sent_size;
 } boxed_msg;
 
+// Special "NO SSL" value, to distinguish from a NULL SSL handle.
 #define BUS_NO_SSL ((SSL *)-2)
+
+typedef enum {
+    SHUTDOWN_STATE_RUNNING = 0,
+    SHUTDOWN_STATE_SHUTTING_DOWN,
+    SHUTDOWN_STATE_HALTED,
+} shutdown_state_t;
 
 /* Message bus. */
 typedef struct bus {
@@ -78,6 +85,7 @@ typedef struct bus {
 
     bool *joined;
     pthread_t *threads;
+    shutdown_state_t shutdown_state;
 
     struct threadpool *threadpool;
     SSL_CTX *ssl_ctx;
@@ -121,5 +129,8 @@ typedef struct {
 
 /* Arbitrary byte used to tag writes from the listener. */
 #define LISTENER_MSG_TAG 0x15
+
+/* Starting size^2 for file descriptor hash table. */
+#define DEF_FD_SET_SIZE2 4
 
 #endif

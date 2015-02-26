@@ -23,6 +23,14 @@
 #include "bus_types.h"
 #include "bus_internal_types.h"
 
+/* How many bits to >> the backpressure value from commands
+ * delivered to the listener. */
+#define LISTENER_BACKPRESSURE_SHIFT 0 /* TODO */
+
+/* How many bits to >> the backpressure value from the listener when a
+ * send has completed. */
+#define LISTENER_EXPECT_BACKPRESSURE_SHIFT 7
+
 /* Manager of incoming messages from drives, both responses and
  * unsolicited status updates. */
 struct listener;

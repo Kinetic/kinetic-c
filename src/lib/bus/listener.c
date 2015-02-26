@@ -42,10 +42,10 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     struct listener *l = calloc(1, sizeof(*l));
     if (l == NULL) { return NULL; }
 
+    assert(b);
     l->bus = b;
     BUS_LOG(b, 2, LOG_LISTENER, "init", b->udata);
 
-    int pipe_count = 0;
     int pipes[2];
     if (0 != pipe(pipes)) {
         free(l);
@@ -56,7 +56,7 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     l->incoming_msg_pipe = pipes[0];
     l->fds[INCOMING_MSG_PIPE_ID].fd = l->incoming_msg_pipe;
     l->fds[INCOMING_MSG_PIPE_ID].events = POLLIN;
-    l->shutdown_notify_fd = SHUTDOWN_NO_FD;
+    l->shutdown_notify_fd = LISTENER_NO_FD;
 
     for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
         rx_info_t *info = &l->rx_info[i];
@@ -70,7 +70,7 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     }
     l->rx_info_freelist = &l->rx_info[0];
 
-    for (pipe_count = 0; pipe_count < MAX_QUEUE_MESSAGES; pipe_count++) {
+    for (int pipe_count = 0; pipe_count < MAX_QUEUE_MESSAGES; pipe_count++) {
         listener_msg *msg = &l->msgs[pipe_count];
         uint8_t *p_id = (uint8_t *)&msg->id;
         *p_id = pipe_count;  /* Set (const) ID. */
@@ -81,8 +81,8 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
                 close(msg->pipes[0]);
                 close(msg->pipes[1]);
             }
-            close(pipes[0]);
-            close(pipes[1]);
+            close(l->commit_pipe);
+            close(l->incoming_msg_pipe);
             free(l);
             return NULL;
         }
@@ -232,7 +232,9 @@ bool listener_shutdown(struct listener *l, int *notify_fd) {
 
 void listener_free(struct listener *l) {
     struct bus *b = l->bus;
-    /* assert: pthread must be join'd. */
+    /* Thread has joined but data has not been freed yet. */
+    assert(l->shutdown_notify_fd == LISTENER_SHUTDOWN_COMPLETE_FD);
+
     if (l) {
         for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
             rx_info_t *info = &l->rx_info[i];
@@ -244,6 +246,9 @@ void listener_free(struct listener *l) {
                 break;
             case RIS_EXPECT:
                 if (info->u.expect.box) {
+                    /* TODO: This can leak memory, since the caller's
+                     * callback is not being called. It should be called
+                     * with BUS_SEND_RX_FAILURE, if it's safe to do so. */
                     free(info->u.expect.box);
                     info->u.expect.box = NULL;
                 }
@@ -270,6 +275,9 @@ void listener_free(struct listener *l) {
             default:
                 break;
             }
+
+            close(msg->pipes[0]);
+            close(msg->pipes[1]);
         }
 
         if (l->read_buf) {
@@ -304,7 +312,7 @@ void *listener_mainloop(void *arg) {
      * communication is managed at the command interface, so it doesn't
      * need any internal locking. */
 
-    while (self->shutdown_notify_fd == SHUTDOWN_NO_FD) {
+    while (self->shutdown_notify_fd == LISTENER_NO_FD) {
         gettimeofday(&tv, NULL);  // TODO: clock_gettime
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
@@ -341,6 +349,7 @@ void *listener_mainloop(void *arg) {
     }
 
     notify_caller(self->shutdown_notify_fd);
+    self->shutdown_notify_fd = LISTENER_SHUTDOWN_COMPLETE_FD;
     return NULL;
 }
 
@@ -967,10 +976,10 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
     switch (info->state) {
     case RIS_HOLD:
         if (info->u.hold.has_result) {
-            /* FIXME: If we have a message that timed out, we need to
-             * free it, but don't know how. We should never get here,
-             * because it means the sender finished sending the message,
-             * but the listener never got the handler callback. */
+            /* If we have a message that timed out, we need to free it,
+             * but don't know how. We should never get here, because it
+             * means the sender finished sending the message, but the
+             * listener never got the handler callback. */
 
             if (info->u.hold.result.ok) {
                 void *msg = info->u.hold.result.u.success.msg;
@@ -984,8 +993,7 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
                 } else {
                     BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                         "LEAKING RESULT %p", (void *)&info->u.hold.result);
-                }
-                
+                }                
             }
         }
         break;
@@ -1052,6 +1060,7 @@ static listener_msg *get_free_msg(listener *l) {
                         nanosleep(&ts, NULL);
                     }
                     BUS_ASSERT(b, b->udata, head->type == MSG_NONE);
+                    memset(&head->u, 0, sizeof(head->u));
                     return head;
                 }
             }
@@ -1143,9 +1152,10 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
 }
 
 static void notify_caller(int fd) {
+    if (fd == -1) { return; }
     uint8_t reply_buf[sizeof(uint8_t) + sizeof(uint16_t)] = {LISTENER_MSG_TAG};
 
-    /* TODO: reply_buf[1:2] can be little-endian backpressure */
+    /* TODO: reply_buf[1:2] can be little-endian backpressure.  */
 
     for (;;) {
         ssize_t wres = write(fd, reply_buf, sizeof(reply_buf));
@@ -1389,7 +1399,6 @@ static void expect_response(listener *l, struct boxed_msg *box) {
         info->u.expect.error = RX_ERROR_NONE;
         info->u.expect.has_result = false;
         /* Switch over to sender's transferred timeout */
-        info->timeout_sec = box->timeout_sec;
         notify_message_failure(l, info, BUS_SEND_RX_TIMEOUT_EXPECT);
     }
 }

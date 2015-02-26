@@ -27,11 +27,9 @@
 #define LOG(...)
 #endif
 
-#define USE_BRENTS_VARIATION 0
-
 /* Yet Another C Hash Table:
- *   An (int set) hash table for tracking active file descriptors
- *   and their metadata. */
+ *   An (int -> void *metadata) hash table for tracking active file
+ *   descriptors and their metadata. */
 struct yacht {
     size_t size;
     size_t mask;
@@ -134,27 +132,6 @@ static bool insert(int *buckets, void **values,
             buckets[i] = key;
             values[i] = value;
             return true;
-        } else {
-#if USE_BRENTS_VARIATION
-            /* FIXME: This is not speeding things up significantly, and
-             *     during a grow the key / value being refiled need to
-             *     be updated in yacht_set or this will drop values.
-             *     Disable it for now. */
-
-            /* Brent's variation -- bump out key if not in its main spot  */
-            size_t ob = hash(bv) & mask;  /* other's primary bucket */
-            if (ob == i) {      /* keep looking for an open spot */
-                continue;
-            } else {            /* refile it instead */
-                int okey = buckets[i];
-                LOG(" -- SWAPPING KEYS, %d => %d\n", key, bv);
-                buckets[i] = key;
-                key = okey;
-                void *oval = values[i];
-                values[i] = value;
-                value = oval;
-            }
-#endif
         }
     }
     return false;               /* too full */
