@@ -46,6 +46,9 @@ bool sender_do_blocking_send(bus *b, boxed_msg *box) {
     
     int timeout_msec = box->timeout_sec * 1000;
 
+    struct timeval tv;
+    if (0 == gettimeofday(&tv, NULL)) { box->tv_send_start = tv; }
+
     struct pollfd fds[1];
     fds[0].fd = box->fd;
     fds[0].events = POLLOUT;
@@ -189,6 +192,9 @@ static handle_write_res handle_write(bus *b, boxed_msg *box) {
         "wrote %zd, rem is %zd", wrsz, rem);
 
     if (rem == 0) {
+        struct timeval tv;
+        if (0 == gettimeofday(&tv, NULL)) { box->tv_send_done = tv; }
+
         if (enqueue_request_sent_message_to_listener(b, box)) {
             return HW_DONE;
         } else {
