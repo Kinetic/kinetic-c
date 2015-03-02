@@ -257,7 +257,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
          * itself expose an error. We also don't know if we're going to
          * get a response or not. */
 
-        BUS_LOG_SNPRINTF(b, 3-3, LOG_MEMORY, b->udata, 128,
+        BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
             "get_hold_rx_info FAILED: fd %d, seq_id %lld",
             box->fd, (long long)box->out_seq_id);
 
@@ -266,7 +266,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
         BUS_ASSERT(b, b->udata, info);
         BUS_ASSERT(b, b->udata, info->state == RIS_INACTIVE);
 
-        BUS_LOG_SNPRINTF(b, 3-3, LOG_MEMORY, b->udata, 256,
+        BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 256,
             "Setting info %p (+%d)'s box to %p, which will be expired immediately (timeout %lld)",
             (void*)info, info->id, (void*)box, (long long)box->timeout_sec);
         
