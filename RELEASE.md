@@ -11,6 +11,8 @@ v0.12.0 (kinetic-protocol 3.0.5)
     * Passed KineticClientConfig copied and can be discarded after session creation
 * *KNOWN ISSUES*
     * KineticAdminClient_UpdateFirmware is incomplete
+* Fixed potential memory leak when logging Protobufs.
+* Fixed potential imbalance in concurrent operations semaphore.
 
 v0.11.2 (kinetic-protocol 3.0.5)
 --------------------------------
