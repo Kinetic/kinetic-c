@@ -120,6 +120,7 @@ static const char* GetOptString(OptionID opt_id);
 void PrintUsage(const char* exec)
 {
     printf("Usage: %s --<cmd> [options...]\n", exec);
+    printf("%s --help\n", exec);
     
     // Standard API operations
     printf("%s --noop"
