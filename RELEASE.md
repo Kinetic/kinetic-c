@@ -2,8 +2,8 @@ v0.12.0 (kinetic-protocol 3.0.5)
 --------------------------------
 * `KineticSession` is now supplied as an opaque instance pointer from `KineticClient_CreateSession`
     * Passed `KineticClientConfig` is now deep copied and can be discarded after session creation.
-* Updated KineticClient_Put to allow storing an object with an empty value with a NULL data pointer supplied.
-* Added new KineticAdminClient API (see `include/kinetic_admin_client.h`)
+* Updated `KineticClient_Put` to allow storing an object with an empty value with a NULL data pointer supplied.
+* Added new `KineticAdminClient` API (see `include/kinetic_admin_client.h`)
     * Reloacted existing admin methods to admin API
         * `KineticClient_InstantSecureErase` => `KineticAdminClient_InstantErase`/`KineticAdminClient_SecureErase`
         * `KineticClient_GetLog` => `KineticAdminClient_GetLog`
