@@ -421,7 +421,7 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
     /* Metadata about the connection. Note: This will be shared by the
      * client thread and the listener thread, but each will only modify
      * some of the fields. The client thread will free this. */
-    connection_info *ci = malloc(sizeof(*ci));
+    connection_info *ci = calloc(1, sizeof(*ci));
     if (ci == NULL) { goto cleanup; }
 
     SSL *ssl = NULL;
@@ -431,14 +431,13 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
     } else {
         ssl = BUS_NO_SSL;
     }
-    *ci = (connection_info){
-        .fd = fd,
-        .type = type,
-        .ssl = ssl,
-        .udata = udata,
-        .largest_rd_seq_id_seen = BUS_NO_SEQ_ID,
-        .largest_wr_seq_id_seen = BUS_NO_SEQ_ID,
-    };
+
+    *(int *)&ci->fd = fd;
+    *(bus_socket_t *)&ci->type = type;
+    ci->ssl = ssl;
+    ci->udata = udata;
+    ci->largest_rd_seq_id_seen = BUS_NO_SEQ_ID;
+    ci->largest_wr_seq_id_seen = BUS_NO_SEQ_ID;
 
     void *old_value = NULL;
     /* Lock hash table and save whether this FD uses SSL. */
