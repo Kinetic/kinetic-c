@@ -277,7 +277,7 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
 
 bool bus_send_request(struct bus *b, bus_user_msg *msg)
 {
-    if (b == NULL || msg == NULL || msg->fd == 0) {
+    if (b == NULL || msg == NULL || msg->fd == -1) {
         return false;
     }
 
@@ -291,6 +291,15 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg)
     bool res = sender_do_blocking_send(b, box);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
         "...request sent, result %d", res);
+
+    /* The send was rejected -- free the box, but don't call the error
+     * handling callback. */
+    if (!res) {
+        BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
+            "Freeing box since request was rejected: %p", box);
+        free(box);
+    }
+
     return res;
 }
 

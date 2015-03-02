@@ -34,7 +34,15 @@ bool bus_init(bus_config *config, struct bus_result *res);
 /* Send a request. Blocks until the request has been transmitted.
  * 
  * Assumes the FD has been registered with bus_register_socket;
- * sending to an unregistered socket is an error. */
+ * sending to an unregistered socket is an error.
+ *
+ * Returns true if the request has been accepted and the bus will
+ * attempt to handle the request and response. They can still fail,
+ * but the error status will be passed to the result handler callback.
+ *
+ * Returns false if the request has been rejected, due to a memory
+ * allocation error or invalid arguments.
+ * */
 bool bus_send_request(struct bus *b, bus_user_msg *msg);
 
 /* Get the string key for a log event ID. */

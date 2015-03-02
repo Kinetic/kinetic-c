@@ -30,10 +30,7 @@ typedef enum {
 
 static handle_write_res handle_write(bus *b, boxed_msg *box);
 static void handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status);
-static void attempt_to_enqueue_sending_request_message_to_listener(bus *b,
-    int fd, int64_t seq_id, int16_t timeout_sec);
-
-static void attempt_to_enqueue_sending_request_message_to_listener(struct bus *b,
+static bool attempt_to_enqueue_sending_request_message_to_listener(struct bus *b,
     int fd, int64_t seq_id, int16_t timeout_sec);
 
 #endif

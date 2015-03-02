@@ -218,7 +218,12 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         // Since the request PDU failed getting queued into the bus,
         // release this request from the throttle to clean up properly
         KineticCountingSemaphore_Give(sem);
-        status = KINETIC_STATUS_SOCKET_ERROR;
+
+        /* A false result from bus_send_request means that the request was
+         * rejected outright, so the usual asynchronous, callback-based
+         * error handling for errors during the request or response will
+         * not be used. */
+        status = KINETIC_STATUS_REQUEST_REJECTED;
     }
     else {
         status = KINETIC_STATUS_SUCCESS;
