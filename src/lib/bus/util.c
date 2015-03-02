@@ -19,9 +19,29 @@
 */
 #include <stdbool.h>
 #include <errno.h>
+#include <time.h>
 
 #include "util.h"
 
 bool util_is_resumable_io_error(int errno_) {
     return errno_ == EAGAIN || errno_ == EINTR || errno_ == EWOULDBLOCK;
+}
+
+bool util_timestamp(struct timeval *tv, bool relative) {
+    if (tv == NULL) {
+        return false;
+    }
+
+#ifdef __linux__
+    if (relative) {
+        struct timespec ts;
+        if (0 != clock_gettime(CLOCK_MONOTONIC, &ts)) {
+            return false;
+        }
+        tv.tv_sec = ts.tv_sec;
+        tv.tv_usec = tv.tv_nsec / 1000L;
+        return true;
+    }
+#endif
+    return (0 == gettimeofday(tv, NULL));
 }

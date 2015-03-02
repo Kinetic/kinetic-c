@@ -57,8 +57,14 @@ bool sender_do_blocking_send(bus *b, boxed_msg *box) {
     
     int timeout_msec = box->timeout_sec * 1000;
 
-    struct timeval tv;
-    if (0 == gettimeofday(&tv, NULL)) { box->tv_send_start = tv; }
+    struct timeval start;
+    if (util_timestamp(&start, true)) {
+        box->tv_send_start = start;
+    } else {
+        BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 128,
+            "gettimeofday failure: %d", errno);
+        return false;
+    }
 
     struct pollfd fds[1];
     fds[0].fd = box->fd;
@@ -83,7 +89,25 @@ bool sender_do_blocking_send(bus *b, boxed_msg *box) {
 
     int rem_msec = timeout_msec;
 
-    for (;;) {
+    while (rem_msec > 0) {
+        struct timeval now;
+        if (util_timestamp(&now, true)) {
+            size_t usec_elapsed = (((now.tv_sec - start.tv_sec) * 1000000)
+                + (now.tv_usec - start.tv_usec));
+            size_t msec_elapsed = usec_elapsed / 1000;
+
+            rem_msec = timeout_msec - msec_elapsed;
+        } else {
+            /* If gettimeofday fails here, the listener's hold message has
+             * already been sent; it will time out later. We need to treat
+             * this like a TX failure (including closing the socket) because
+             * we don't know what state the connection was left in. */
+            BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 128,
+                "gettimeofday failure in poll loop: %d", errno);
+            handle_failure(b, box, BUS_SEND_TX_FAILURE);
+            return true;
+        }
+
         int res = poll(fds, 1, rem_msec);
         BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
             "handle_write: poll res %d", res);
@@ -109,9 +133,6 @@ bool sender_do_blocking_send(bus *b, boxed_msg *box) {
                 handle_failure(b, box, BUS_SEND_TX_FAILURE);
                 return true;
             } else if (revents & POLLOUT) {
-                /* TODO: use gettimeofday to figure out actual elapsed time?
-                 * We're more concerned with timing out on the response than
-                 * on the send, though. */
                 handle_write_res hw_res = handle_write(b, box);
 
                 BUS_LOG_SNPRINTF(b, 4, LOG_SENDER, b->udata, 256,
@@ -131,12 +152,14 @@ bool sender_do_blocking_send(bus *b, boxed_msg *box) {
                 assert(false);  /* match fail */
             }
         } else if (res == 0) {  /* timeout */
-            BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
-                "do_blocking_send on %d: TX_TIMEOUT", box->fd);
-            handle_failure(b, box, BUS_SEND_TX_TIMEOUT);
-            return true;
+            break;
         }
     }
+    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
+        "do_blocking_send on <fd:%d, seq_id:%lld>: TX_TIMEOUT",
+        box->fd, (long long)box->out_seq_id);
+    handle_failure(b, box, BUS_SEND_TX_TIMEOUT);
+    return true;
 }
 
 static bool attempt_to_enqueue_sending_request_message_to_listener(struct bus *b,
@@ -236,7 +259,9 @@ static handle_write_res handle_write(bus *b, boxed_msg *box) {
 
     if (rem == 0) {             /* check if whole message is written */
         struct timeval tv;
-        if (0 == gettimeofday(&tv, NULL)) { box->tv_send_done = tv; }
+        if (util_timestamp(&tv, true)) {
+            box->tv_send_done = tv;
+        }
 
         if (enqueue_request_sent_message_to_listener(b, box)) {
             return HW_DONE;

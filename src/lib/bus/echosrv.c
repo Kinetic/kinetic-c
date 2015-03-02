@@ -198,7 +198,7 @@ static void tick_handler(config *cfg) {
 static void listen_loop_poll(config *cfg) {
     struct timeval tv;
 
-    gettimeofday(&tv, 0);
+    if (!util_timestamp(&tv, true)) { assert(false); }
     cfg->last_second = tv.tv_sec;
 
     assert(cfg->client_fds[0].fd == NO_CLIENT);
@@ -206,7 +206,7 @@ static void listen_loop_poll(config *cfg) {
     int delay = 1;
 
     for (;;) {
-        gettimeofday(&tv, 0);  // TODO: clock_gettime
+        if (!util_timestamp(&tv, true)) { assert(false); }
         if (tv.tv_sec != cfg->last_second) {
             tick_handler(cfg);
             cfg->last_second = tv.tv_sec;

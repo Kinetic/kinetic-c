@@ -35,6 +35,7 @@
 #include "bus.h"
 #include "atomic.h"
 #include "socket99.h"
+#include "util.h"
 
 typedef struct {
     uint32_t magic_number;
@@ -444,7 +445,9 @@ static void tick_handler(example_state *s) {
 
 static time_t get_cur_second(void) {
     struct timeval tv;
-    gettimeofday(&tv, 0);  // TODO: clock_gettime
+    if (!util_timestamp(&tv, true)) {
+        assert(false);
+    }
     return tv.tv_sec;
 }
 

@@ -302,7 +302,11 @@ void *listener_mainloop(void *arg) {
     struct bus *b = self->bus;
     struct timeval tv;
     
-    gettimeofday(&tv, NULL);
+    if (!util_timestamp(&tv, true)) {
+        BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
+            "timestamp failure: %d", errno);
+    }
+
     time_t last_sec = tv.tv_sec;
 
     /* The listener thread has full control over its execution -- the
@@ -313,7 +317,10 @@ void *listener_mainloop(void *arg) {
      * need any internal locking. */
 
     while (self->shutdown_notify_fd == LISTENER_NO_FD) {
-        gettimeofday(&tv, NULL);  // TODO: clock_gettime
+        if (!util_timestamp(&tv, true)) {
+            BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
+                "timestamp failure: %d", errno);
+        }
         time_t cur_sec = tv.tv_sec;
         if (cur_sec != last_sec) {
             tick_handler(self);
@@ -740,7 +747,7 @@ static void tick_handler(listener *l) {
             /* Check timeout */
             if (info->timeout_sec == 1) {
                 struct timeval tv;
-                if (-1 == gettimeofday(&tv, NULL)) {
+                if (!util_timestamp(&tv, false)) {
                     BUS_LOG(b, 0, LOG_LISTENER,
                         "gettimeofday failure in tick_handler!", b->udata);
                     continue;
@@ -778,7 +785,7 @@ static void tick_handler(listener *l) {
                 notify_message_failure(l, info, BUS_SEND_RX_FAILURE);
             } else if (info->timeout_sec == 1) {
                 struct timeval tv;
-                if (-1 == gettimeofday(&tv, NULL)) {
+                if (!util_timestamp(&tv, false)) {
                     BUS_LOG(b, 0, LOG_LISTENER,
                         "gettimeofday failure in tick_handler!", b->udata);
                     continue;
