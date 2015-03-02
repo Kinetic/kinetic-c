@@ -193,6 +193,7 @@ typedef enum {
     KINETIC_STATUS_DEVICE_LOCKED,           ///< The operation failed because the device is sercurely locked. An UNLOCK must be issued to unlock for use.
     KINETIC_STATUS_ACL_ERROR,               ///< A security operation failed due to bad ACL(s)
     KINETIC_STATUS_NOT_AUTHORIZED,          ///< Authorization failure
+    KINETIC_STATUS_INVALID_FILE,            ///< Specified file does not exist or could not be read/writtten
     KINETIC_STATUS_REQUEST_REJECTED,        ///< No request was attempted.
     KINETIC_STATUS_COUNT                    ///< Number of status codes in KineticStatusDescriptor
 } KineticStatus;

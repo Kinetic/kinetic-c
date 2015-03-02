@@ -25,7 +25,7 @@ bool ClusterVersionSet;
 
 void setUp(void)
 {
-    SystemTestSetup(3);
+    SystemTestSetup(1);
     ClusterVersionSet = false;
 }
 

@@ -58,7 +58,8 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_allocator.o \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
-	$(OUT_DIR)/kinetic_pdu.o \
+	$(OUT_DIR)/kinetic_response.o \
+	$(OUT_DIR)/kinetic_bus.o \
 	$(OUT_DIR)/kinetic_auth.o \
 	$(OUT_DIR)/kinetic_pdu_unpack.o \
 	$(OUT_DIR)/kinetic_proto.o \
@@ -68,7 +69,6 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_hmac.o \
 	$(OUT_DIR)/kinetic_controller.o \
 	$(OUT_DIR)/kinetic_device_info.o \
-	$(OUT_DIR)/kinetic_serial_allocator.o \
 	$(OUT_DIR)/kinetic_session.o \
 	$(OUT_DIR)/kinetic_types_internal.o \
 	$(OUT_DIR)/kinetic_types.o \

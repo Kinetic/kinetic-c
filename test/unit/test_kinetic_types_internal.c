@@ -35,16 +35,68 @@ void tearDown(void)
 {
 }
 
-void test_kinetic_internal_types_should_be_defined(void)
+void test_KINETIC_SOCKET_DESCRIPTOR_INVALID_is_negative_1(void)
 {
-    KineticPDU pdu; (void)pdu;
-    KineticConnection connection; (void)connection;
-    KineticHMAC hmac; (void)hmac;
-    KineticMessage msg; (void)msg;
-    KineticPDUHeader pduHeader; (void)pduHeader;
-    KineticOperation operation; (void)operation;
-
     TEST_ASSERT_EQUAL(-1, KINETIC_SOCKET_DESCRIPTOR_INVALID);
+}
+
+void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
+{
+    TEST_ASSERT_EQUAL(1 + 4 + 4, PDU_HEADER_LEN);
+    TEST_ASSERT_EQUAL(PDU_HEADER_LEN, sizeof(KineticPDUHeader));
+}
+
+void test_KineteicPDU_PDU_PROTO_MAX_LEN_should_be_1MB(void)
+{
+    TEST_ASSERT_EQUAL(1024 * 1024, PDU_PROTO_MAX_LEN);
+}
+
+void test_KineteicPDU_KINETIC_OBJ_SIZE_should_be_1MB(void)
+{
+    TEST_ASSERT_EQUAL(1024 * 1024, KINETIC_OBJ_SIZE);
+}
+
+void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_value_max_lengths(void)
+{
+    TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE, PDU_MAX_LEN);
+}
+
+void test_KineticRequest_Init_should_initialize_Request(void)
+{
+    KineticRequest request;
+    KineticConnection connection;
+    KineticSession session;
+    session.connection = &connection;
+
+    KineticRequest_Init(&request, &session);
+}
+
+void test_KineticRequest_Init_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
+{
+    KineticRequest request;
+    KineticConnection connection;
+    KineticSession session;
+    session.connection = &connection;
+    
+    KineticConnection_Init(&connection);
+    connection.sequence = 24;
+    connection.connectionID = 8765432;
+    session = (KineticSession) {
+        .config = (KineticSessionConfig) {
+            .clusterVersion = 1122334455667788,
+            .identity = 37,
+        }
+    };
+    connection.pSession = &session;
+    session.connection = &connection;
+    KineticRequest_Init(&request, &session);
+
+    TEST_ASSERT_TRUE(request.message.header.has_clusterVersion);
+    TEST_ASSERT_EQUAL_INT64(1122334455667788, request.message.header.clusterVersion);
+    TEST_ASSERT_TRUE(request.message.header.has_connectionID);
+    TEST_ASSERT_EQUAL_INT64(8765432, request.message.header.connectionID);
+    TEST_ASSERT_TRUE(request.message.header.has_sequence);
+    TEST_ASSERT_EQUAL_INT64(KINETIC_SEQUENCE_NOT_YET_BOUND, request.message.header.sequence);
 }
 
 void test_KineticProtoStatusCode_to_KineticStatus_should_map_from_internal_to_public_type(void)

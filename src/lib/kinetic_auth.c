@@ -30,7 +30,7 @@ KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const co
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticPDU * const pdu)
+KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticRequest * const pdu)
 {
     assert(config);
     assert(pdu);
@@ -73,7 +73,7 @@ KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config
     return KINETIC_STATUS_SUCCESS;
 }
 
-KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticPDU * const pdu, ByteArray pin)
+KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticRequest * const pdu, ByteArray pin)
 {
     assert(config);
     assert(pdu);

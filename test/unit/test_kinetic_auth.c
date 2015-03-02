@@ -32,14 +32,14 @@
 
 KineticConnection Connection;
 KineticSession Session;
-KineticPDU PDU;
+KineticRequest Request;
 
 void setUp(void)
 {
     KineticSessionConfig config = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
     KineticSession_Init(&Session, &config, &Connection);
     KineticLogger_Init("stdout", 3);
-    KineticPDU_InitWithCommand(&PDU, &Session);
+    KineticRequest_Init(&Request, &Session);
 }
 
 void tearDown(void)
@@ -84,17 +84,17 @@ void test_KineticAuth_PopulateHmac_should_return_HMAC_REQUIRED_if_HMAC_not_speci
         }
     };
 
-    KineticStatus status = KineticAuth_PopulateHmac(&session.config, &PDU);
+    KineticStatus status = KineticAuth_PopulateHmac(&session.config, &Request);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
 }
 
 void test_KineticAuth_PopulateHmac_should_add_and_populate_HMAC_authentication(void)
-{ LOG_LOCATION;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-    PDU.message.message.has_commandBytes = true;
+{
+    KineticRequest_Init(&Request, &Session);
+    Request.message.message.has_commandBytes = true;
     uint8_t dummyMessageBytes[16];
-    PDU.message.message.commandBytes = (ProtobufCBinaryData) {
+    Request.message.message.commandBytes = (ProtobufCBinaryData) {
         .data = dummyMessageBytes,
         .len = sizeof(dummyMessageBytes),
     };
@@ -109,24 +109,24 @@ void test_KineticAuth_PopulateHmac_should_add_and_populate_HMAC_authentication(v
     };
     strcpy((char*)session.config.keyData, hmacKey);
 
-    KineticStatus status = KineticAuth_PopulateHmac(&session.config, &PDU);
+    KineticStatus status = KineticAuth_PopulateHmac(&session.config, &Request);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    TEST_ASSERT_NULL(PDU.message.message.pinAuth);
-    TEST_ASSERT_TRUE(PDU.message.message.has_authType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, PDU.message.message.authType);
-    TEST_ASSERT_TRUE(PDU.message.message.hmacAuth->has_hmac);
-    TEST_ASSERT_EQUAL_PTR(PDU.message.hmacAuth.hmac.data, PDU.message.message.hmacAuth->hmac.data);
-    TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, PDU.message.message.hmacAuth->hmac.len);
-    TEST_ASSERT_EQUAL_PTR(PDU.message.hmacData, PDU.message.hmacAuth.hmac.data);
-    TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, PDU.message.hmacAuth.hmac.len);
-    TEST_ASSERT_TRUE(PDU.message.hmacAuth.has_identity);
-    TEST_ASSERT_EQUAL(1, PDU.message.hmacAuth.identity);
+    TEST_ASSERT_NULL(Request.message.message.pinAuth);
+    TEST_ASSERT_TRUE(Request.message.message.has_authType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, Request.message.message.authType);
+    TEST_ASSERT_TRUE(Request.message.message.hmacAuth->has_hmac);
+    TEST_ASSERT_EQUAL_PTR(Request.message.hmacAuth.hmac.data, Request.message.message.hmacAuth->hmac.data);
+    TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, Request.message.message.hmacAuth->hmac.len);
+    TEST_ASSERT_EQUAL_PTR(Request.message.hmacData, Request.message.hmacAuth.hmac.data);
+    TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, Request.message.hmacAuth.hmac.len);
+    TEST_ASSERT_TRUE(Request.message.hmacAuth.has_identity);
+    TEST_ASSERT_EQUAL(1, Request.message.hmacAuth.identity);
 }
 
 
 void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication(void)
-{ LOG_LOCATION;
+{
     char testPin[] = "192736aHUx@*G!Q";
     ByteArray pin = ByteArray_Create(testPin, strlen(testPin));
     LOGF0("pin data=%p, len=%zu", pin.data, pin.len);
@@ -138,14 +138,14 @@ void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication(void)
         }
     };
 
-    KineticStatus status = KineticAuth_PopulatePin(&session.config, &PDU, pin);
+    KineticStatus status = KineticAuth_PopulatePin(&session.config, &Request, pin);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    TEST_ASSERT_NULL(PDU.message.message.hmacAuth);
-    TEST_ASSERT_TRUE(PDU.message.message.has_authType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, PDU.message.message.authType);
-    TEST_ASSERT_TRUE(PDU.message.message.pinAuth->has_pin);
-    TEST_ASSERT_EQUAL_PTR(testPin, PDU.message.message.pinAuth->pin.data);
-    TEST_ASSERT_EQUAL(strlen(testPin), PDU.message.message.pinAuth->pin.len);
+    TEST_ASSERT_NULL(Request.message.message.hmacAuth);
+    TEST_ASSERT_TRUE(Request.message.message.has_authType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, Request.message.message.authType);
+    TEST_ASSERT_TRUE(Request.message.message.pinAuth->has_pin);
+    TEST_ASSERT_EQUAL_PTR(testPin, Request.message.message.pinAuth->pin.data);
+    TEST_ASSERT_EQUAL(strlen(testPin), Request.message.message.pinAuth->pin.len);
 }

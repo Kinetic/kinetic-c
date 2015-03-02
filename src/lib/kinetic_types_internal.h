@@ -53,7 +53,7 @@
 
 #define NUM_ELEMENTS(ARRAY) (sizeof(ARRAY)/sizeof((ARRAY)[0]))
 
-typedef struct _KineticPDU KineticPDU;
+typedef struct _KineticRequest KineticRequest;
 typedef struct _KineticOperation KineticOperation;
 typedef struct _KineticConnection KineticConnection;
 
@@ -172,7 +172,7 @@ typedef enum {
 
 
 // Kinetic PDU
-struct _KineticPDU {
+struct _KineticRequest {
     KineticMessage message;
     KineticProto_Command* command;
     bool pinAuth;
@@ -191,10 +191,8 @@ typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operat
 // Kinetic Operation
 struct _KineticOperation {
     KineticConnection* connection;
-    KineticPDU* request;
+    KineticRequest* request;
     KineticResponse* response;
-    bool valueEnabled;
-    bool sendValue;
     uint16_t timeoutSeconds;
     int64_t pendingClusterVersion;
     ByteArray* pin;
@@ -204,15 +202,8 @@ struct _KineticOperation {
     KineticP2P_Operation* p2pOp;
     KineticOperationCallback callback;
     KineticCompletionClosure closure;
+    ByteArray value;
 };
-
-// Kintic Serial Allocator
-// Used for allocating a contiguous hunk of memory to hold arbitrary variable-length response data
-typedef struct _KineticSerialAllocator {
-    uint8_t* buffer;
-    size_t used;
-    size_t total;
-} KineticSerialAllocator;
 
 
 KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
@@ -249,6 +240,6 @@ void KineticConnection_Init(KineticConnection* const con);
 void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con);
 void KineticMessage_Init(KineticMessage* const message);
 void KineticOperation_Init(KineticOperation* op, KineticSession const * const session);
-void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session);
+void KineticRequest_Init(KineticRequest* pdu, KineticSession const * const session);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

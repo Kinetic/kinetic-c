@@ -22,7 +22,7 @@
 #include "unity_helper.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_pdu.h"
+#include "kinetic_bus.h"
 #include "kinetic_nbo.h"
 #include "kinetic_proto.h"
 #include "kinetic_logger.h"
@@ -42,7 +42,7 @@
 #include <stdlib.h>
 
 static uint32_t ClusterVersion = 7;
-static KineticPDU PDU;
+static KineticRequest Request;
 static KineticConnection Connection;
 static KineticResponse Response;
 static KineticSession Session;
@@ -67,7 +67,7 @@ void setUp(void)
     Connection.connected = true;
     Connection.socket = 456;
     Connection.pSession = &Session;
-    KineticPDU_InitWithCommand(&PDU, &Session);
+    KineticRequest_Init(&Request, &Session);
     ByteArray_FillWithDummyData(Value);
 
     memset(si_buf, 0, SI_BUF_SIZE);
@@ -77,117 +77,6 @@ void tearDown(void)
 {
     memset(&Response, 0, sizeof(Response));
     KineticLogger_Close();
-}
-
-void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
-{
-    TEST_ASSERT_EQUAL(1 + 4 + 4, PDU_HEADER_LEN);
-    TEST_ASSERT_EQUAL(PDU_HEADER_LEN, sizeof(KineticPDUHeader));
-}
-
-void test_KineteicPDU_PDU_PROTO_MAX_LEN_should_be_1MB(void)
-{
-    TEST_ASSERT_EQUAL(1024 * 1024, PDU_PROTO_MAX_LEN);
-}
-
-void test_KineteicPDU_KINETIC_OBJ_SIZE_should_be_1MB(void)
-{
-    TEST_ASSERT_EQUAL(1024 * 1024, KINETIC_OBJ_SIZE);
-}
-
-void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_value_max_lengths(void)
-{
-    TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE, PDU_MAX_LEN);
-}
-
-
-void test_KineticPDU_Init_should_initialize_PDU(void)
-{
-    LOG_LOCATION;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-}
-
-void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
-{
-    LOG_LOCATION;
-    KineticConnection_Init(&Connection);
-    Connection.sequence = 24;
-    Connection.connectionID = 8765432;
-    Session = (KineticSession) {
-        .config = (KineticSessionConfig) {
-            .clusterVersion = 1122334455667788,
-            .identity = 37,
-        }
-    };
-    Connection.pSession = &Session;
-    Session.connection = &Connection;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-
-    TEST_ASSERT_TRUE(PDU.message.header.has_clusterVersion);
-    TEST_ASSERT_EQUAL_INT64(1122334455667788, PDU.message.header.clusterVersion);
-    TEST_ASSERT_TRUE(PDU.message.header.has_connectionID);
-    TEST_ASSERT_EQUAL_INT64(8765432, PDU.message.header.connectionID);
-    TEST_ASSERT_TRUE(PDU.message.header.has_sequence);
-    TEST_ASSERT_EQUAL_INT64(KINETIC_SEQUENCE_NOT_YET_BOUND, PDU.message.header.sequence);
-}
-
-
-
-void test_KineticPDU_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(void)
-{
-
-    KineticProto_Command Command;
-    memset(&Command, 0, sizeof(Command));
-    KineticProto_Command_KeyValue* keyValue = NULL;
-
-    keyValue = KineticPDU_GetKeyValue(NULL);
-    TEST_ASSERT_NULL(keyValue);
-
-    Response.command = NULL;
-    keyValue = KineticPDU_GetKeyValue(&Response);
-    TEST_ASSERT_NULL(keyValue);
-
-    Response.command = &Command;
-    Command.body = NULL;
-    keyValue = KineticPDU_GetKeyValue(&Response);
-    TEST_ASSERT_NULL(keyValue);
-}
-
-
-void test_KineticPDU_GetKeyRange_should_return_the_KineticProto_Command_Range_from_the_message_if_avaliable(void)
-{
-    Connection.pSession = &Session;
-    Session.connection = &Connection;
-    KineticPDU_InitWithCommand(&PDU, &Session);
-    KineticProto_Command_Range* range = NULL;
-
-    range = KineticPDU_GetKeyRange(NULL);
-    TEST_ASSERT_NULL(range);
-
-    range = KineticPDU_GetKeyRange(&Response);
-    TEST_ASSERT_NULL(range);
-    
-    KineticProto_Message Message;
-    memset(&Message, 0, sizeof(Message));
-    Response.proto = &Message;
-    range = KineticPDU_GetKeyRange(&Response);
-    TEST_ASSERT_NULL(range);
-
-    KineticProto_Command Command;
-    memset(&Command, 0, sizeof(Command));
-    Response.command = &Command;
-    range = KineticPDU_GetKeyRange(&Response);
-    TEST_ASSERT_NULL(range);
-
-    KineticProto_Command_Body Body;
-    memset(&Body, 0, sizeof(Body));
-    Response.command->body = &Body;
-
-    KineticProto_Command_Range Range;
-    memset(&Range, 0, sizeof(Range));
-    Body.range = &Range;
-    range = KineticPDU_GetKeyRange(&Response);
-    TEST_ASSERT_EQUAL_PTR(&Range, range);
 }
 
 bool unpack_header(uint8_t const * const read_buf,

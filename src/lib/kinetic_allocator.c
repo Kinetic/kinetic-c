@@ -113,13 +113,13 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
     }
     KineticOperation_Init(newOperation, connection->pSession);
     LOGF3("Allocating new PDU on connection (0x%0llX)", connection);
-    newOperation->request = (KineticPDU*)KineticCalloc(1, sizeof(KineticPDU));
+    newOperation->request = (KineticRequest*)KineticCalloc(1, sizeof(KineticRequest));
     if (newOperation->request == NULL) {
         LOG0("Failed allocating new PDU!");
         KineticFree(newOperation);
         return NULL;
     }
-    KineticPDU_InitWithCommand(newOperation->request, connection->pSession);
+    KineticRequest_Init(newOperation->request, connection->pSession);
     LOGF3("Allocated new operation (0x%0llX) on connection (0x%0llX)", newOperation, connection);
     return newOperation;
 }

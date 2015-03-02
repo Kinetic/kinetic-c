@@ -22,7 +22,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_socket.h"
-#include "kinetic_pdu.h"
+#include "kinetic_response.h"
 #include "kinetic_operation.h"
 #include "kinetic_controller.h"
 #include "kinetic_allocator.h"
@@ -135,8 +135,6 @@ KineticStatus KineticSession_Connect(KineticSession * const session)
     return KINETIC_STATUS_SUCCESS;
 
 connection_error_cleanup:
-
-    LOG_LOCATION;
 
     if (connection->si != NULL) {
         free(connection->si);

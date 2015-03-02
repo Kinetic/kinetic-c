@@ -33,7 +33,7 @@
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_message.h"
-#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_bus.h"
 #include "mock_kinetic_operation.h"
 #include "mock_acl.h"
 #include "protobuf-c/protobuf-c.h"
@@ -276,9 +276,7 @@ void test_KineticAdminClient_UnlockDevice_should_forward_erroneous_status_if_SSL
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SSL_REQUIRED, status);
 }
 
-
-
-void test_KineticAdminClient_KineticAdminClient_SetClusterVersion_should_work(void)
+void test_KineticAdminClient_SetClusterVersion_should_build_and_execute_operation(void)
 {
     KineticConnection connection;
     KineticSession session = {
@@ -287,7 +285,6 @@ void test_KineticAdminClient_KineticAdminClient_SetClusterVersion_should_work(vo
     };
     KineticOperation operation;
 
-    KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
     KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
     KineticOperation_BuildSetClusterVersion_Expect(&operation, 1402);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
@@ -295,4 +292,41 @@ void test_KineticAdminClient_KineticAdminClient_SetClusterVersion_should_work(vo
     KineticStatus status = KineticAdminClient_SetClusterVersion(&session, 1402);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticAdminClient_UpdateFirmware_should_build_and_execute_operation(void)
+{
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+    KineticOperation operation;
+    const char* path = "some/firmware/update.file";
+
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticOperation_BuildUpdateFirmware_ExpectAndReturn(&operation, path, KINETIC_STATUS_SUCCESS);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticAdminClient_UpdateFirmware(&session, path);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticAdminClient_UpdateFirmware_should_report_failure_if_failed_to_build(void)
+{
+    KineticConnection connection;
+    KineticSession session = {
+        .config = (KineticSessionConfig) {.port = 4321},
+        .connection = &connection
+    };
+    KineticOperation operation;
+    const char* path = "some/firmware/update.file";
+
+    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticOperation_BuildUpdateFirmware_ExpectAndReturn(&operation, path, KINETIC_STATUS_INVALID_REQUEST);
+
+    KineticStatus status = KineticAdminClient_UpdateFirmware(&session, path);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST, status);
 }

@@ -26,7 +26,7 @@
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
-#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_resourcewaiter.h"
@@ -73,8 +73,6 @@ void tearDown(void)
 
 void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_specified_range(void)
 {
-    LOG_LOCATION;
-
     ByteBuffer_AppendCString(&StartKey, "key_range_00_00");
     ByteBuffer_AppendCString(&EndKey, "key_range_00_03");
 

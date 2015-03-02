@@ -36,7 +36,7 @@ KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, K
 void KineticOperation_BuildNoop(KineticOperation* operation);
 
 KineticStatus KineticOperation_PutCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildPut(KineticOperation* const operation,
+KineticStatus KineticOperation_BuildPut(KineticOperation* const operation,
                                KineticEntry* const entry);
 
 KineticStatus KineticOperation_GetCallback(KineticOperation* const operation, KineticStatus const status);
@@ -87,5 +87,8 @@ void KineticOperation_BuildSetACL(KineticOperation* const operation, struct ACL 
 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status);
 void KineticOperation_BuildSetClusterVersion(KineticOperation* const operation, int64_t new_cluster_version);
+
+KineticStatus KineticOperation_UpdateFirmwareCallback(KineticOperation* const operation, KineticStatus const status);
+KineticStatus KineticOperation_BuildUpdateFirmware(KineticOperation* const operation, const char* fw_path);
 
 #endif // _KINETIC_OPERATION_H

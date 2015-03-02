@@ -29,14 +29,14 @@
 #include <pthread.h>
 #include <errno.h>
 
-#define MAX_ITERATIONS (2)
+#define MAX_ITERATIONS (1)
 #define NUM_COPIES (3)
 #define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
 
 #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
 
 STATIC const char HmacKeyString[] = "asdfasdf";
-STATIC const int TestDataSize = 500 * KINETIC_OBJ_SIZE;
+STATIC const int TestDataSize = 200 * KINETIC_OBJ_SIZE;
 
 struct kinetic_thread_arg {
     char ip[16];
@@ -71,7 +71,7 @@ void tearDown(void)
     }
 }
 
-void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
+void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_overlapped_IO_operations(void)
 {
     KineticSessionConfig sessionConfig = {
         .host = SYSTEM_TEST_HOST,

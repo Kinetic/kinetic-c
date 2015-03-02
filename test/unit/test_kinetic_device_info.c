@@ -23,7 +23,6 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
-#include "kinetic_serial_allocator.h"
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
 #include "unity_helper.h"
