@@ -305,7 +305,7 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg)
      * handling callback. */
     if (!res) {
         BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
-            "Freeing box since request was rejected: %p", box);
+            "Freeing box since request was rejected: %p", (void *)box);
         free(box);
     }
 
