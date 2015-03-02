@@ -754,7 +754,7 @@ static void tick_handler(listener *l) {
                 }
 
                 /* never got a response, but we don't have the callback
-                 * either -- the sender will notify about the timeout. */
+                 * either -- the client will notify about the timeout. */
                 BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                     "timing out hold info %p -- <fd:%d, seq_id:%lld> at (%ld.%ld)",
                     (void*)info, info->u.hold.fd, (long long)info->u.hold.seq_id,
@@ -986,7 +986,7 @@ static void release_rx_info(struct listener *l, rx_info_t *info) {
         if (info->u.hold.has_result) {
             /* If we have a message that timed out, we need to free it,
              * but don't know how. We should never get here, because it
-             * means the sender finished sending the message, but the
+             * means the client finished sending the message, but the
              * listener never got the handler callback. */
 
             if (info->u.hold.result.ok) {
@@ -1057,7 +1057,7 @@ static listener_msg *get_free_msg(listener *l) {
                 if (ATOMIC_BOOL_COMPARE_AND_SWAP(&l->msgs_in_use, miu, miu + 1)) {
                     BUS_LOG(l->bus, 5, LOG_LISTENER, "got free msg", l->bus->udata);
 
-                    /* Add counterpressure between the sender and the listener.
+                    /* Add counterpressure between the client and the listener.
                      * 10 * ((n >> 1) ** 2) microseconds */
                     int16_t delay = 10 * (miu >> 1) * (miu >> 1);
                     if (delay > 0) {
@@ -1379,12 +1379,12 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             info->u.expect.box = box;
             info->u.expect.error = RX_ERROR_NONE;
             info->u.expect.has_result = false;
-            /* Switch over to sender's transferred timeout */
+            /* Switch over to client's transferred timeout */
             info->timeout_sec = box->timeout_sec;
         }
     } else {                    /* use free info */
         /* If we get here, the listener thinks the HOLD message timed out,
-         * but the sender doesn't think things timed out badly enough to
+         * but the client doesn't think things timed out badly enough to
          * itself expose an error. We also don't know if we're going to
          * get a response or not. */
 
@@ -1406,7 +1406,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
         info->u.expect.box = box;
         info->u.expect.error = RX_ERROR_NONE;
         info->u.expect.has_result = false;
-        /* Switch over to sender's transferred timeout */
+        /* Switch over to client's transferred timeout */
         notify_message_failure(l, info, BUS_SEND_RX_TIMEOUT_EXPECT);
     }
 }

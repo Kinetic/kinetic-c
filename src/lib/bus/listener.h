@@ -41,13 +41,13 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg);
 bool listener_add_socket(struct listener *l, connection_info *ci, int *notify_fd);
 bool listener_remove_socket(struct listener *l, int fd, int *notify_fd);
 
-/* The sender is about to start a write, the sender should hold on to
+/* The client is about to start a write, the listener should hold on to
  * the response (with timeout) if it arrives before receiving further
- * instructions from the sender. */
+ * instructions from the client. */
 bool listener_hold_response(struct listener *l, int fd,
     int64_t seq_id, int16_t timeout_sec);
 
-/* The sender has finished a write, the listener should expect a response. */
+/* The client has finished a write, the listener should expect a response. */
 bool listener_expect_response(struct listener *l, boxed_msg *box,
     uint16_t *backpressure);
 

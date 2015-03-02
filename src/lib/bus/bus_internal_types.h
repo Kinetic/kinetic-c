@@ -30,7 +30,7 @@
 #include "bus.h"
 #include "yacht.h"
 
-/* Struct for a message that will be passed from sender to listener to
+/* Struct for a message that will be passed from client to listener to
  * threadpool, proceeding directly to the threadpool if there is an error
  * along the way. This must only have a single owner at a time. */
 typedef struct boxed_msg {
@@ -115,7 +115,7 @@ typedef struct {
     const bus_socket_t type;
     void *udata;                /* user connection data */
 
-    /* Shared, cleaned up by sender */
+    /* Shared, cleaned up by client */
     SSL *ssl;                   /* SSL handle. Must be valid or BUS_NO_SSL. */
 
     /* Set by client thread */

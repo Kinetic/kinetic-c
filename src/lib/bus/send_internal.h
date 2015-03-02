@@ -17,19 +17,20 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef SENDER_H
-#define SENDER_H
+#ifndef SEND_INTERNAL_H
+#define SEND_INTERNAL_H
 
-#include "bus_types.h"
-#include "bus_internal_types.h"
+#include "send.h"
 
-/* Do a blocking send.
- *
- * Returning true indicates that the message has been queued up for
- * delivery, but the request or response may still fail. Those errors
- * are handled by giving an error status code to the callback.
- * Returning false means that the send was rejected outright, and
- * the callback-based error handling will not be used. */
-bool sender_do_blocking_send(struct bus *b, boxed_msg *box);
+typedef enum {
+    HW_OK,
+    HW_DONE,
+    HW_ERROR = -1,
+} handle_write_res;
+
+static handle_write_res handle_write(bus *b, boxed_msg *box);
+static void handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status);
+static bool attempt_to_enqueue_sending_request_message_to_listener(struct bus *b,
+    int fd, int64_t seq_id, int16_t timeout_sec);
 
 #endif

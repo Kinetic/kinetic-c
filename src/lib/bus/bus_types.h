@@ -161,7 +161,6 @@ typedef void (bus_unexpected_msg_cb)(void *msg,
 /* Configuration for the messaging bus */
 typedef struct bus_config {
     /* If omitted, these fields will be set to defaults. */
-    int sender_count;
     int listener_count;
     struct threadpool_config threadpool_cfg;
 

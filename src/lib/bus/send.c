@@ -33,7 +33,7 @@
 #include "util.h"
 #include "atomic.h"
 #include "yacht.h"
-#include "sender_internal.h"
+#include "send_internal.h"
 
 /* Do a blocking send.
  *
@@ -42,7 +42,7 @@
  * are handled by giving an error status code to the callback.
  * Returning false means that the send was rejected outright, and
  * the callback-based error handling will not be used. */
-bool sender_do_blocking_send(bus *b, boxed_msg *box) {
+bool send_do_blocking_send(bus *b, boxed_msg *box) {
     /* Note: assumes that all locking and thread-safe seq_id allocation
      * has been handled upstream. If multiple client requests are queued
      * up to go out at the same time, they must go out in monotonic order,
@@ -74,7 +74,7 @@ bool sender_do_blocking_send(bus *b, boxed_msg *box) {
      * because (in rare cases) the response may arrive between finishing
      * the write and the listener processing the notification. In that
      * case, it should hold onto the unrecognized response until the
-     * sender notifies it (and passes it the callback).
+     * client notifies it (and passes it the callback).
      *
      * This timeout is several extra seconds so that we don't have
      * a window where the HOLD message has timed out, but the
@@ -387,7 +387,7 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
     return written;
 }
 
-/* Notify the listener that the sender has finished sending a message, and
+/* Notify the listener that the client has finished sending a message, and
  * transfer all details for handling the response to it. Blocking. */
 static bool enqueue_request_sent_message_to_listener(bus *b, boxed_msg *box) {
     /* Notify listener that it should expect a response to a

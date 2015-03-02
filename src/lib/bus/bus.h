@@ -65,9 +65,8 @@ bool bus_release_socket(struct bus *b, int fd, void **socket_udata_out);
  * has resolved. */
 bool bus_shutdown(struct bus *b);
 
-/* For a given file descriptor, get the listener / sender ID to use.
+/* For a given file descriptor, get the listener ID to use.
  * This will level sockets between multiple threads. */
-struct sender *bus_get_sender_for_socket(struct bus *b, int fd);
 struct listener *bus_get_listener_for_socket(struct bus *b, int fd);
 
 /* Schedule a task in the bus's threadpool. */

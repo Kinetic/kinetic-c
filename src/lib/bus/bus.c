@@ -29,7 +29,7 @@
 #include <sys/resource.h>
 
 #include "bus.h"
-#include "sender.h"
+#include "send.h"
 #include "listener.h"
 #include "threadpool.h"
 #include "bus_internal_types.h"
@@ -298,7 +298,7 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg)
 
     BUS_LOG_SNPRINTF(b, 3-0, LOG_SENDING_REQUEST, b->udata, 64,
         "Sending request <fd:%d, seq_id:%lld>", msg->fd, (long long)msg->seq_id);
-    bool res = sender_do_blocking_send(b, box);
+    bool res = send_do_blocking_send(b, box);
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDING_REQUEST, b->udata, 64,
         "...request sent, result %d", res);
 
@@ -404,13 +404,13 @@ const char *bus_log_event_str(log_event_t event) {
 }
 
 bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) {
-    /* Register a socket internally with a sender and listener. */
+    /* Register a socket internally with the listener. */
     int l_id = listener_id_of_socket(b, fd);
 
     BUS_LOG_SNPRINTF(b, 2, LOG_SOCKET_REGISTERED, b->udata, 64,
         "registering socket %d", fd);
 
-    /* Spread sockets throughout the different sender & listener processes. */
+    /* Spread sockets throughout the different listener threads. */
     struct listener *l = b->listeners[l_id];
     
     int pipes[2];
