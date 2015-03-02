@@ -345,7 +345,6 @@ void test_kinetic_client_throughput_test_kinetic_client_throughput_(void)
     KineticClientConfig config = {
         .logFile = "stdout",
         .logLevel = 0,
-        .writerThreads = 1,
         .readerThreads = 1,
         .maxThreadpoolThreads = 1,
     };

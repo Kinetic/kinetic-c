@@ -446,7 +446,6 @@ struct _KineticP2P_Operation {
  * if the corresponding field in the struct is 0.
  */
 #define KINETIC_CLIENT_DEFAULT_LOG_LEVEL 0
-#define KINETIC_CLIENT_DEFAULT_WRITER_THREADS 4
 #define KINETIC_CLIENT_DEFAULT_READER_THREADS 4
 #define KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS 8
 
@@ -459,7 +458,6 @@ struct _KineticP2P_Operation {
 typedef struct {
     const char *logFile;            ///< Path to log file. Specify 'stdout' to log to STDOUT or NULL to disable logging.
     int logLevel;                   ///< Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full)
-    uint8_t writerThreads;          ///< Number of threads used for handling outgoing requests
     uint8_t readerThreads;          ///< Number of threads used for handling incoming responses and status messages
     uint8_t maxThreadpoolThreads;   ///< Max number of threads to use for the threadpool that handles response callbacks.
 } KineticClientConfig;

@@ -258,7 +258,6 @@ bool KineticBus_Init(KineticClient * client, KineticClientConfig * config)
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = KineticController_HandleUnexpectedResponse,
         .bus_udata = NULL,
-        .sender_count = config->writerThreads,
         .listener_count = config->readerThreads,
         .threadpool_cfg = {
             .max_threads = config->maxThreadpoolThreads,

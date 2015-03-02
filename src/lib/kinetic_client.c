@@ -38,9 +38,6 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
     if (client == NULL) { return NULL; }
 
     /* Use defaults if set to 0. */
-    if (config->writerThreads == 0) {
-        config->writerThreads = KINETIC_CLIENT_DEFAULT_WRITER_THREADS;
-    }
     if (config->readerThreads == 0) {
         config->readerThreads = KINETIC_CLIENT_DEFAULT_READER_THREADS;
     }
