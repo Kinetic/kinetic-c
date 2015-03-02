@@ -92,7 +92,7 @@ typedef struct bus {
 
     /* Locked hash table for fd -> connection_info */
     struct yacht *fd_set;
-    pthread_rwlock_t fd_set_lock;
+    pthread_mutex_t fd_set_lock;
 } bus;
 
 /* Special timeout value indicating UNBOUND. */

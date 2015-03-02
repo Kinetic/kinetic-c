@@ -100,7 +100,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
         goto cleanup;
     }
     locks_initialized++;
-    if (0 != pthread_rwlock_init(&b->fd_set_lock, NULL)) {
+    if (0 != pthread_mutex_init(&b->fd_set_lock, NULL)) {
         res->status = BUS_INIT_ERROR_MUTEX_INIT_FAIL;
         goto cleanup;
     }
@@ -176,7 +176,7 @@ cleanup:
     if (joined) { free(joined); }
     if (b) {
         if (locks_initialized > 1) {
-            pthread_rwlock_destroy(&b->fd_set_lock);
+            pthread_mutex_destroy(&b->fd_set_lock);
         }
         if (locks_initialized > 0) {
             pthread_mutex_destroy(&b->log_lock);
@@ -239,13 +239,13 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
     assert(msg->fd != 0);
 
     /* Lock hash table and check whether this FD uses SSL. */
-    if (0 != pthread_rwlock_rdlock(&b->fd_set_lock)) { assert(false); }
+    if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
     void *value = NULL;
     connection_info *ci = NULL;
     if (yacht_get(b->fd_set, box->fd, &value)) {
         ci = (connection_info *)value;
     }
-    if (0 != pthread_rwlock_unlock(&b->fd_set_lock)) { assert(false); }
+    if (0 != pthread_mutex_unlock(&b->fd_set_lock)) { assert(false); }
 
     if (ci == NULL) {
         /* socket isn't registered, fail out */
@@ -442,9 +442,9 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
 
     void *old_value = NULL;
     /* Lock hash table and save whether this FD uses SSL. */
-    if (0 != pthread_rwlock_wrlock(&b->fd_set_lock)) { assert(false); }
+    if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
     bool set_ok = yacht_set(b->fd_set, fd, ci, &old_value);
-    if (0 != pthread_rwlock_unlock(&b->fd_set_lock)) { assert(false); }
+    if (0 != pthread_mutex_unlock(&b->fd_set_lock)) { assert(false); }
 
     if (set_ok) {
         assert(old_value == NULL);
@@ -492,9 +492,9 @@ bool bus_release_socket(struct bus *b, int fd, void **socket_udata_out) {
 
     /* Lock hash table and forget whether this FD uses SSL. */
     void *old_value = NULL;
-    if (0 != pthread_rwlock_wrlock(&b->fd_set_lock)) { assert(false); }
+    if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
     bool rm_ok = yacht_remove(b->fd_set, fd, &old_value);
-    if (0 != pthread_rwlock_unlock(&b->fd_set_lock)) { assert(false); }
+    if (0 != pthread_mutex_unlock(&b->fd_set_lock)) { assert(false); }
     assert(rm_ok);
 
     connection_info *ci = (connection_info *)old_value;
@@ -668,7 +668,7 @@ void bus_free(bus *b) {
     threadpool_free(b->threadpool);
     free(b->joined);
     free(b->threads);
-    pthread_rwlock_destroy(&b->fd_set_lock);
+    pthread_mutex_destroy(&b->fd_set_lock);
     pthread_mutex_destroy(&b->log_lock);
 
     bus_ssl_ctx_free(b);
