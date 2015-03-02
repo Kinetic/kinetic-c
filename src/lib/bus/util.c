@@ -38,8 +38,8 @@ bool util_timestamp(struct timeval *tv, bool relative) {
         if (0 != clock_gettime(CLOCK_MONOTONIC, &ts)) {
             return false;
         }
-        tv.tv_sec = ts.tv_sec;
-        tv.tv_usec = tv.tv_nsec / 1000L;
+        tv->tv_sec = ts.tv_sec;
+        tv->tv_usec = ts.tv_nsec / 1000L;
         return true;
     }
 #else
