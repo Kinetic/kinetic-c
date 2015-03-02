@@ -32,7 +32,7 @@ bool util_timestamp(struct timeval *tv, bool relative) {
         return false;
     }
 
-#ifdef __linux__
+#if 0
     if (relative) {
         struct timespec ts;
         if (0 != clock_gettime(CLOCK_MONOTONIC, &ts)) {
