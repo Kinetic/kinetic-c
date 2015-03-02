@@ -436,9 +436,9 @@ run: $(UTIL_EXEC)
 	exec $(UTIL_EXEC) --noop
 	exec $(UTIL_EXEC) --put
 	exec $(UTIL_EXEC) --get
-	exec $(UTIL_EXEC) --getnext key ""
-	exec $(UTIL_EXEC) --getprevious key ""
-	exec $(UTIL_EXEC) --delete
+	exec $(UTIL_EXEC) --getnext --key ""
+	exec $(UTIL_EXEC) --getprevious --key "zzzzzzzzzzzzzzzzz"
+	exec $(UTIL_EXEC) --delete --host 127.0.0.1
 	exec $(UTIL_EXEC) --getlog
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
