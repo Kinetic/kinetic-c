@@ -195,18 +195,6 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const 
     int64_t version);
 
 /**
- * @brief Executes a Firmware Download command to update the firmware on the Kinetic device.
- *
- * @param session       The connected KineticSession to use for the operation.
- * @param fw_path       Path to firmware update image file.
- *
- * @return              Returns the resulting KineticStatus.
- */
-KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
-    char const * const fw_path);
-
-
-/**
  * @brief Executes a SECURITY operation, setting one or more ACLs.
  *
  * @param session       The connected KineticSession to use for the operation
@@ -217,5 +205,16 @@ KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const ses
  */
 KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
                                         const char *ACLPath);
+
+/**
+ * @brief Executes a Firmware Download operation to update the firmware on the Kinetic device.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ * @param fw_path       Path to firmware update image file.
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
+    char const * const fw_path);
 
 #endif // _KINETIC_ADMIN_CLIENT_H
