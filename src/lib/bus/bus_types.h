@@ -234,7 +234,7 @@ typedef enum {
 typedef struct {
     int fd;
     bus_socket_t type;
-    uint64_t seq_id;
+    int64_t seq_id;
     uint8_t *msg;
     size_t msg_size;
     uint16_t timeout_sec;

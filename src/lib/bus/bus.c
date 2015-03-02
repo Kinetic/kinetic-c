@@ -258,6 +258,16 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
         box->ssl = ci->ssl;
     }
 
+    if ((msg->seq_id <= ci->largest_wr_seq_id_seen)
+            && (ci->largest_wr_seq_id_seen != BUS_NO_SEQ_ID)) {
+        BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
+            "rejecting request <fd:%d, seq_id:%lld> due to non-monotonic sequence ID, largest seen is %lld",
+            box->fd, (long long)msg->seq_id, (long long)ci->largest_wr_seq_id_seen);
+        free(box);
+    } else {
+        ci->largest_wr_seq_id_seen = msg->seq_id;
+    }
+    
     box->timeout_sec = (time_t)msg->timeout_sec;
     if (box->timeout_sec == 0) {
         box->timeout_sec = BUS_DEFAULT_TIMEOUT_SEC;
@@ -427,6 +437,8 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
         .type = type,
         .ssl = ssl,
         .udata = udata,
+        .largest_rd_seq_id_seen = BUS_NO_SEQ_ID,
+        .largest_wr_seq_id_seen = BUS_NO_SEQ_ID,
     };
 
     void *old_value = NULL;
