@@ -42,6 +42,8 @@ bool util_timestamp(struct timeval *tv, bool relative) {
         tv.tv_usec = tv.tv_nsec / 1000L;
         return true;
     }
+#else
+    (void)relative;
 #endif
     return (0 == gettimeofday(tv, NULL));
 }
