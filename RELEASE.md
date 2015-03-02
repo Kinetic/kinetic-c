@@ -7,6 +7,8 @@ v0.12.0 (kinetic-protocol 3.0.5)
         * KineticClient_InstantSecureErase => KineticAdminClient_InstantErase/KineticAdminClient_SecureErase
         * KineticClient_GetLog => KineticAdminClient_GetLog
         * KineticClient_FreeDeviceInfo -> KineticAdminClient_LogInfo
+* Updated `kinetic-c-util` to support new Admin API. Still need to add support for printing info returned from `KineticAdminClient_GetLog`
+* Changed `kinetic-c-util` API to use getopt_long for operations in addition to parameters and added usage info via --help/-?.
 * Fixed potential memory leak when logging Protobufs.
 * Fixed potential imbalance in concurrent operations semaphore.
 * Status code changes
