@@ -11,6 +11,9 @@ BUS_OBJS = \
 	bus.o \
 	bus_ssl.o \
 	listener.o \
+	listener_cmd.o \
+	listener_io.o \
+	listener_task.o \
 	send.o \
 	util.o \
 	yacht.o \

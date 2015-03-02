@@ -17,14 +17,16 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef LISTENER_INTERNAL_H
-#define LISTENER_INTERNAL_H
+#ifndef LISTENER_TASK_INTERNAL_H
+#define LISTENER_TASK_INTERNAL_H
 
 #include "bus_types.h"
 #include "bus_internal_types.h"
 #include "listener_internal_types.h"
 
-static listener_msg *get_free_msg(listener *l);
-static bool push_message(struct listener *l, listener_msg *msg, int *reply_fd);
+static void tick_handler(listener *l);
+static void clean_up_completed_info(listener *l, rx_info_t *info);
+static void retry_delivery(listener *l, rx_info_t *info);
+static void observe_backpressure(listener *l, size_t backpressure);
 
 #endif

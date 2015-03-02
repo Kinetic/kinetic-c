@@ -17,14 +17,13 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef LISTENER_INTERNAL_H
-#define LISTENER_INTERNAL_H
+#ifndef LISTENER_IO_H
+#define LISTENER_IO_H
 
 #include "bus_types.h"
 #include "bus_internal_types.h"
 #include "listener_internal_types.h"
 
-static listener_msg *get_free_msg(listener *l);
-static bool push_message(struct listener *l, listener_msg *msg, int *reply_fd);
+void ListenerIO_AttemptRecv(listener *l, int available);
 
 #endif

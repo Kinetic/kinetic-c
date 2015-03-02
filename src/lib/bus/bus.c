@@ -38,15 +38,14 @@
 #include "yacht.h"
 #include "atomic.h"
 
+#include "listener_task.h"
+
 static bool poll_on_completion(struct bus *b, int fd);
 static int listener_id_of_socket(struct bus *b, int fd);
 static void noop_log_cb(log_event_t event,
         int log_level, const char *msg, void *udata);
 static void noop_error_cb(bus_unpack_cb_res_t result, void *socket_udata);
 static bool attempt_to_increase_resource_limits(struct bus *b);
-
-/* Function pointer for pthread start function. */
-void *listener_mainloop(void *arg);
 
 static void set_defaults(bus_config *cfg) {
     if (cfg->listener_count == 0) { cfg->listener_count = 1; }
@@ -154,7 +153,7 @@ bool bus_init(bus_config *config, struct bus_result *res) {
 
     for (int i = 0; i < b->listener_count; i++) {
         int pcres = pthread_create(&b->threads[i], NULL,
-            listener_mainloop, (void *)b->listeners[i]);
+            ListenerTask_MainLoop, (void *)b->listeners[i]);
         if (pcres != 0) {
             res->status = BUS_INIT_ERROR_PTHREAD_INIT_FAIL;
             goto cleanup;

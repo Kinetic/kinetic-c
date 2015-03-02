@@ -54,6 +54,7 @@ bool listener_expect_response(struct listener *l, boxed_msg *box,
 /* Shut down the listener. Blocking. */
 bool listener_shutdown(struct listener *l, int *notify_fd);
 
+/* Free the listener, which must already be shut down. */
 void listener_free(struct listener *l);
 
 #endif

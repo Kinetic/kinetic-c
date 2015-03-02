@@ -17,14 +17,22 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef LISTENER_INTERNAL_H
-#define LISTENER_INTERNAL_H
+#ifndef LISTENER_IO_INTERNAL_H
+#define LISTENER_IO_INTERNAL_H
 
-#include "bus_types.h"
-#include "bus_internal_types.h"
-#include "listener_internal_types.h"
-
-static listener_msg *get_free_msg(listener *l);
-static bool push_message(struct listener *l, listener_msg *msg, int *reply_fd);
+static bool socket_read_plain(struct bus *b,
+    listener *l, int pfd_i, connection_info *ci);
+static bool socket_read_ssl(struct bus *b,
+    listener *l, int pfd_i, connection_info *ci);
+static bool sink_socket_read(struct bus *b,
+    listener *l, connection_info *ci, ssize_t size);
+static void print_SSL_error(struct bus *b,
+    connection_info *ci, int lvl, const char *prefix);
+static void set_error_for_socket(listener *l, int id,
+    int fd, rx_error_t err);
+static void process_unpacked_message(listener *l,
+    connection_info *ci, bus_unpack_cb_res_t result);
+static rx_info_t *find_info_by_sequence_id(listener *l,
+    int fd, int64_t seq_id);
 
 #endif

@@ -17,14 +17,21 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef LISTENER_INTERNAL_H
-#define LISTENER_INTERNAL_H
+#ifndef LISTENER_CMD_INTERNAL_H
+#define LISTENER_CMD_INTERNAL_H
 
 #include "bus_types.h"
 #include "bus_internal_types.h"
-#include "listener_internal_types.h"
+#include "listener_cmd.h"
 
-static listener_msg *get_free_msg(listener *l);
-static bool push_message(struct listener *l, listener_msg *msg, int *reply_fd);
+static void msg_handler(listener *l, listener_msg *pmsg);
+static void add_socket(listener *l, connection_info *ci, int notify_fd);
+static void remove_socket(listener *l, int fd, int notify_fd);
+static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_sec);
+static void expect_response(listener *l, boxed_msg *box);
+static void shutdown(listener *l, int notify_fd);
+
+static rx_info_t *get_free_rx_info(struct listener *l);
+static rx_info_t *get_hold_rx_info(listener *l, int fd, int64_t seq_id);
 
 #endif

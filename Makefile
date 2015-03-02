@@ -84,6 +84,9 @@ LIB_OBJS = \
 	$(OUT_DIR)/bus.o \
 	$(OUT_DIR)/bus_ssl.o \
 	$(OUT_DIR)/listener.o \
+	$(OUT_DIR)/listener_cmd.o \
+	$(OUT_DIR)/listener_io.o \
+	$(OUT_DIR)/listener_task.o \
 	$(OUT_DIR)/send.o \
 	$(OUT_DIR)/util.o \
 	$(OUT_DIR)/yacht.o \
