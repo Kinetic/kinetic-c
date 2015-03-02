@@ -467,14 +467,14 @@ void KineticOperation_Init(KineticOperation* op, KineticSession const * const se
     };
 }
 
-void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session)
+void KineticRequest_Init(KineticRequest* request, KineticSession const * const session)
 {
-    KINETIC_ASSERT(pdu != NULL);
+    KINETIC_ASSERT(request != NULL);
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(session->connection != NULL);
-    memset(pdu, 0, sizeof(KineticPDU));
-    KineticMessage_Init(&(pdu->message));
-    KineticMessage_HeaderInit(&(pdu->message.header), session);
-    pdu->command = &pdu->message.command;
-    pdu->command->header = &pdu->message.header;
+    memset(request, 0, sizeof(KineticRequest));
+    KineticMessage_Init(&(request->message));
+    KineticMessage_HeaderInit(&(request->message.header), session);
+    request->command = &request->message.command;
+    request->command->header = &request->message.header;
 }

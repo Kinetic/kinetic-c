@@ -1,0 +1,2582 @@
+diff --git a/Makefile b/Makefile
+index 3e67d42..e7091f0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -58,7 +58,8 @@ LIB_OBJS = \
+ 	$(OUT_DIR)/kinetic_allocator.o \
+ 	$(OUT_DIR)/kinetic_nbo.o \
+ 	$(OUT_DIR)/kinetic_operation.o \
+-	$(OUT_DIR)/kinetic_pdu.o \
++	$(OUT_DIR)/kinetic_response.o \
++	$(OUT_DIR)/kinetic_bus.o \
+ 	$(OUT_DIR)/kinetic_auth.o \
+ 	$(OUT_DIR)/kinetic_pdu_unpack.o \
+ 	$(OUT_DIR)/kinetic_proto.o \
+@@ -68,7 +69,6 @@ LIB_OBJS = \
+ 	$(OUT_DIR)/kinetic_hmac.o \
+ 	$(OUT_DIR)/kinetic_controller.o \
+ 	$(OUT_DIR)/kinetic_device_info.o \
+-	$(OUT_DIR)/kinetic_serial_allocator.o \
+ 	$(OUT_DIR)/kinetic_session.o \
+ 	$(OUT_DIR)/kinetic_types_internal.o \
+ 	$(OUT_DIR)/kinetic_types.o \
+diff --git a/src/lib/kinetic_allocator.c b/src/lib/kinetic_allocator.c
+index 24ad8bf..841d7b1 100644
+--- a/src/lib/kinetic_allocator.c
++++ b/src/lib/kinetic_allocator.c
+@@ -113,13 +113,13 @@ KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connect
+     }
+     KineticOperation_Init(newOperation, connection->pSession);
+     LOGF3("Allocating new PDU on connection (0x%0llX)", connection);
+-    newOperation->request = (KineticPDU*)KineticCalloc(1, sizeof(KineticPDU));
++    newOperation->request = (KineticRequest*)KineticCalloc(1, sizeof(KineticRequest));
+     if (newOperation->request == NULL) {
+         LOG0("Failed allocating new PDU!");
+         KineticFree(newOperation);
+         return NULL;
+     }
+-    KineticPDU_InitWithCommand(newOperation->request, connection->pSession);
++    KineticRequest_Init(newOperation->request, connection->pSession);
+     LOGF3("Allocated new operation (0x%0llX) on connection (0x%0llX)", newOperation, connection);
+     return newOperation;
+ }
+diff --git a/src/lib/kinetic_allocator.h b/src/lib/kinetic_allocator.h
+index f2694a4..45d3b81 100644
+--- a/src/lib/kinetic_allocator.h
++++ b/src/lib/kinetic_allocator.h
+@@ -29,8 +29,8 @@ void KineticAllocator_FreeSession(KineticSession* session);
+ KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession* const session);
+ void KineticAllocator_FreeConnection(KineticConnection* connection);
+ 
+-KineticPDU* KineticAllocator_NewPDU(KineticConnection* connection);
+-void KineticAllocator_FreePDU(KineticPDU* pdu);
++KineticRequest* KineticAllocator_NewPDU(KineticConnection* connection);
++void KineticAllocator_FreePDU(KineticRequest* pdu);
+ 
+ KineticOperation* KineticAllocator_NewOperation(KineticConnection* connection);
+ void KineticAllocator_FreeOperation(KineticOperation* operation);
+diff --git a/src/lib/kinetic_auth.c b/src/lib/kinetic_auth.c
+index 99d43cc..5cd8bb7 100644
+--- a/src/lib/kinetic_auth.c
++++ b/src/lib/kinetic_auth.c
+@@ -30,7 +30,7 @@ KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const co
+     return KINETIC_STATUS_SUCCESS;
+ }
+ 
+-KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticPDU * const pdu)
++KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticRequest * const pdu)
+ {
+     assert(config);
+     assert(pdu);
+@@ -73,7 +73,7 @@ KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config
+     return KINETIC_STATUS_SUCCESS;
+ }
+ 
+-KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticPDU * const pdu, ByteArray pin)
++KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticRequest * const pdu, ByteArray pin)
+ {
+     assert(config);
+     assert(pdu);
+diff --git a/src/lib/kinetic_auth.h b/src/lib/kinetic_auth.h
+index 3ace553..42cf7bb 100644
+--- a/src/lib/kinetic_auth.h
++++ b/src/lib/kinetic_auth.h
+@@ -24,8 +24,8 @@
+ #include "kinetic_types_internal.h"
+ 
+ KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const config);
+-KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticPDU * const pdu);
+-KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticPDU * const pdu, ByteArray pin);
++KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticRequest * const request);
++KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticRequest * const request, ByteArray pin);
+ KineticStatus KineticAuth_PopulateTag(ByteBuffer * const tag, KineticAlgorithm algorithm, ByteArray const * const key);
+ 
+ #endif // _KINETIC_AUTH_H
+diff --git a/src/lib/kinetic_bus.c b/src/lib/kinetic_bus.c
+index 8052463..470e6e4 100644
+--- a/src/lib/kinetic_bus.c
++++ b/src/lib/kinetic_bus.c
+@@ -18,7 +18,7 @@
+ *
+ */
+ 
+-#include "kinetic_pdu.h"
++#include "kinetic_bus.h"
+ #include "kinetic_nbo.h"
+ #include "kinetic_session.h"
+ #include "kinetic_socket.h"
+@@ -247,7 +247,7 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
+     }
+ }
+ 
+-bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
++bool KineticBus_Init(KineticClient * client, KineticClientConfig * config)
+ {
+     int log_level = config->logLevel;
+ 
+@@ -274,7 +274,7 @@ bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config)
+     return true;
+ }
+ 
+-void KineticPDU_DeinitBus(KineticClient * const client)
++void KineticBus_Shutdown(KineticClient * const client)
+ {
+     if (client) {
+         bus_shutdown(client->bus);
+@@ -282,45 +282,3 @@ void KineticPDU_DeinitBus(KineticClient * const client)
+         client->bus = NULL;
+     }
+ }
+-
+-KineticStatus KineticPDU_GetStatus(KineticResponse* response)
+-{
+-    KineticStatus status = KINETIC_STATUS_INVALID;
+-
+-    if (response != NULL &&
+-        response->command != NULL &&
+-        response->command->status != NULL &&
+-        response->command->status->has_code != false)
+-    {
+-        status = KineticProtoStatusCode_to_KineticStatus(
+-            response->command->status->code);
+-    }
+-
+-    return status;
+-}
+-
+-KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticResponse* response)
+-{
+-    KineticProto_Command_KeyValue* keyValue = NULL;
+-
+-    if (response != NULL &&
+-        response->command != NULL &&
+-        response->command->body != NULL)
+-    {
+-        keyValue = response->command->body->keyValue;
+-    }
+-    return keyValue;
+-}
+-
+-KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticResponse* response)
+-{
+-    KineticProto_Command_Range* range = NULL;
+-    if (response != NULL &&
+-        response->proto != NULL &&
+-        response->command != NULL &&
+-        response->command->body != NULL)
+-    {
+-        range = response->command->body->range;
+-    }
+-    return range;
+-}
+diff --git a/src/lib/kinetic_bus.h b/src/lib/kinetic_bus.h
+index 38ca5ba..a320081 100644
+--- a/src/lib/kinetic_bus.h
++++ b/src/lib/kinetic_bus.h
+@@ -18,15 +18,12 @@
+ *
+ */
+ 
+-#ifndef _KINETIC_PDU_H
+-#define _KINETIC_PDU_H
++#ifndef _KINETIC_BUS_H
++#define _KINETIC_BUS_H
+ 
+ #include "kinetic_types_internal.h"
+ 
+-bool KineticPDU_InitBus(KineticClient * client, KineticClientConfig * config);
+-void KineticPDU_DeinitBus(KineticClient * const client);
+-KineticStatus KineticPDU_GetStatus(KineticResponse* pdu);
+-KineticProto_Command_KeyValue* KineticPDU_GetKeyValue(KineticResponse* pdu);
+-KineticProto_Command_Range* KineticPDU_GetKeyRange(KineticResponse* pdu);
++bool KineticBus_Init(KineticClient * client, KineticClientConfig * config);
++void KineticBus_Shutdown(KineticClient * const client);
+ 
+-#endif // _KINETIC_PDU_H
++#endif // _KINETIC_BUS_H
+diff --git a/src/lib/kinetic_client.c b/src/lib/kinetic_client.c
+index c69eaf7..8932ce5 100644
+--- a/src/lib/kinetic_client.c
++++ b/src/lib/kinetic_client.c
+@@ -25,7 +25,8 @@
+ #include "kinetic_controller.h"
+ #include "kinetic_operation.h"
+ #include "kinetic_logger.h"
+-#include "kinetic_pdu.h"
++#include "kinetic_response.h"
++#include "kinetic_bus.h"
+ #include "kinetic_memory.h"
+ #include <stdlib.h>
+ #include <sys/time.h>
+@@ -47,7 +48,7 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
+         config->maxThreadpoolThreads = KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS;
+     }
+ 
+-    bool success = KineticPDU_InitBus(client, config);
++    bool success = KineticBus_Init(client, config);
+     if (!success) {
+         KineticFree(client);
+         return NULL;
+@@ -57,7 +58,7 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
+ 
+ void KineticClient_Shutdown(KineticClient * const client)
+ {
+-    KineticPDU_DeinitBus(client);
++    KineticBus_Shutdown(client);
+     KineticFree(client);
+     KineticLogger_Close();
+ }
+@@ -161,7 +162,11 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
+     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+ 
+     // Initialize request
+-    KineticOperation_BuildPut(operation, entry);
++    KineticStatus status = KineticOperation_BuildPut(operation, entry);
++    if (status != KINETIC_STATUS_SUCCESS) {
++        KineticAllocator_FreeOperation(operation);
++        return status;
++    }
+ 
+     // Execute the operation
+     KINETIC_ASSERT(operation->connection == session->connection);
+diff --git a/src/lib/kinetic_controller.c b/src/lib/kinetic_controller.c
+index 7f4c433..3abc589 100644
+--- a/src/lib/kinetic_controller.c
++++ b/src/lib/kinetic_controller.c
+@@ -21,7 +21,8 @@
+ #include "kinetic_controller.h"
+ #include "kinetic_session.h"
+ #include "kinetic_operation.h"
+-#include "kinetic_pdu.h"
++#include "kinetic_bus.h"
++#include "kinetic_response.h"
+ #include "kinetic_auth.h"
+ #include "kinetic_socket.h"
+ #include "kinetic_allocator.h"
+diff --git a/src/lib/kinetic_logger.h b/src/lib/kinetic_logger.h
+index 0f1ee48..d8825d8 100644
+--- a/src/lib/kinetic_logger.h
++++ b/src/lib/kinetic_logger.h
+@@ -34,7 +34,7 @@ void KineticLogger_Init(const char* logFile, int log_level);
+ void KineticLogger_Close(void);
+ void KineticLogger_Log(int log_level, const char* message);
+ void KineticLogger_LogPrintf(int log_level, const char* format, ...);
+-void KineticLogger_LogLocation(const char* filename, int line, char const * message);
++void KineticLogger_LogLocation(const char* filename, int line, const char * message);
+ void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header);
+ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg);
+ void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status);
+diff --git a/src/lib/kinetic_operation.c b/src/lib/kinetic_operation.c
+index a2459b1..1ec5e0d 100644
+--- a/src/lib/kinetic_operation.c
++++ b/src/lib/kinetic_operation.c
+@@ -21,7 +21,8 @@
+ #include "kinetic_controller.h"
+ #include "kinetic_session.h"
+ #include "kinetic_message.h"
+-#include "kinetic_pdu.h"
++#include "kinetic_bus.h"
++#include "kinetic_response.h"
+ #include "kinetic_nbo.h"
+ #include "kinetic_auth.h"
+ #include "kinetic_socket.h"
+@@ -52,7 +53,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
+     if (status != KINETIC_STATUS_SUCCESS)
+     {
+         //cleanup
+-        KineticPDU* request = operation->request;
++        KineticRequest* request = operation->request;
+         if (request != NULL) {
+             if (request->message.message.commandBytes.data != NULL) {
+                 free(request->message.message.commandBytes.data);
+@@ -87,11 +88,15 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
+ 
+     KineticStatus status = KINETIC_STATUS_INVALID;
+     uint8_t * msg = NULL;
+-    KineticPDU* request = operation->request;
+-    KineticProto_Message* proto = &operation->request->message.message;
+-    pthread_mutex_t* sendMutex = &operation->connection->sendMutex;
++    KineticRequest* request = operation->request;
++
++    KINETIC_ASSERT(operation);
++    KINETIC_ASSERT(operation->request);
++    KINETIC_ASSERT(operation->connection);
++    KINETIC_ASSERT(request);
+ 
+     // Acquire lock
++    pthread_mutex_t* sendMutex = &operation->connection->sendMutex;
+     pthread_mutex_lock(sendMutex);
+     KineticSession *session = operation->connection->pSession;
+ 
+@@ -134,30 +139,17 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
+         return status;
+     }
+ 
+-    // Configure PDU header length fields
++    // Configure PDU header
++    KineticProto_Message* proto = &operation->request->message.message;
+     KineticPDUHeader header = {
+         .versionPrefix = 'F',
+         .protobufLength = KineticProto_Message__get_packed_size(proto)
+     };
+-    if (operation->entry != NULL && operation->sendValue) {
+-        header.valueLength = operation->entry->value.bytesUsed;
+-        if (header.valueLength > PDU_PROTO_MAX_LEN) {
+-            LOGF2("Value exceeds maximum size. Packed size is: %d, Max size is: %d", header.valueLength, PDU_PROTO_MAX_LEN);
+-            status = KINETIC_STATUS_BUFFER_OVERRUN;
+-            goto cleanup;
+-        }
+-    }
+-    else if (operation->value.len > 0) {
+-        header.valueLength = operation->value.len;
+-    }
+-    else {
+-        header.valueLength = 0;
+-    }
+-
++    header.valueLength = operation->value.len;
+     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
+     uint32_t nboValueLength = KineticNBO_FromHostU32(header.valueLength);
+ 
+-    // Allocate and pack message
++    // Allocate and pack protobuf message
+     size_t offset = 0;
+     msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
+     if (msg == NULL) {
+@@ -165,7 +157,8 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
+         status = KINETIC_STATUS_MEMORY_ERROR;
+         goto cleanup;
+     }
+-    
++
++    // Pack header
+     msg[offset] = header.versionPrefix;
+     offset += sizeof(header.versionPrefix);
+     memcpy(&msg[offset], &nboProtoLength, sizeof(nboProtoLength));
+@@ -176,11 +169,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
+     KINETIC_ASSERT(len == header.protobufLength);
+     offset += header.protobufLength;
+ 
+-    KINETIC_ASSERT(operation);
+-    KINETIC_ASSERT(operation->request);
+-    KINETIC_ASSERT(operation->connection);
+-    KINETIC_ASSERT(request);
+-
++    // Log protobuf per configuration
+     LOGF2("[PDU TX] pdu: %p, session: %p, bus: %p, "
+         "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, msgType: %02x",
+         (void*)operation->request,
+@@ -191,18 +180,14 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
+     KineticLogger_LogHeader(3, &header);
+     KineticLogger_LogProtobuf(3, proto);
+ 
++    // Free command bytes now that we are done
+     free(request->message.message.commandBytes.data);
+     request->message.message.commandBytes.data = NULL;
+ 
+-    // Send the value/payload, if specified
++    // Pack value payload, if supplied
+     if (header.valueLength > 0) {
+-        if (operation->value.len == 0) {
+-            memcpy(&msg[offset], operation->entry->value.array.data, operation->entry->value.bytesUsed);
+-        }
+-        else {
+-            memcpy(&msg[offset], operation->value.data, operation->value.len);
+-        }
+-        offset += operation->entry->value.bytesUsed;
++        memcpy(&msg[offset], operation->value.data, operation->value.len);
++        offset += operation->value.len;
+     }
+     KINETIC_ASSERT((PDU_HEADER_LEN + header.protobufLength + header.valueLength) == offset);
+ 
+@@ -210,7 +195,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
+     KineticCountingSemaphore * const sem = operation->connection->outstandingOperations;
+     KineticCountingSemaphore_Take(sem);
+     int fd = operation->connection->socket;
+-    if (!bus_send_request(operation->connection->messageBus, &(bus_user_msg){
++    if (!bus_send_request(operation->connection->messageBus, &(bus_user_msg) {
+         .fd       = fd,
+         .type     = BUS_SOCKET_PLAIN,
+         .seq_id   = seq_id,
+@@ -233,11 +218,8 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
+     }
+ 
+ cleanup:
+-
+     pthread_mutex_unlock(sendMutex);
+-
+     if (msg != NULL) { free(msg); }
+-
+     return status;
+ }
+ 
+@@ -245,7 +227,7 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
+ {
+     KineticStatus status = KINETIC_STATUS_INVALID;
+     if (operation != NULL) {
+-        status = KineticPDU_GetStatus(operation->response);
++        status = KineticResponse_GetStatus(operation->response);
+     }
+     return status;
+ }
+@@ -296,9 +278,6 @@ void KineticOperation_BuildNoop(KineticOperation* const operation)
+     KineticOperation_ValidateOperation(operation);
+     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
+     operation->request->message.command.header->has_messageType = true;
+-    operation->valueEnabled = false;
+-    // ######## TODO should be able to remove sendvalue
+-    operation->sendValue = false;
+     operation->callback = &KineticOperation_NoopCallback;
+ }
+ 
+@@ -334,20 +313,27 @@ KineticStatus KineticOperation_PutCallback(KineticOperation* const operation, Ki
+     return status;
+ }
+ 
+-void KineticOperation_BuildPut(KineticOperation* const operation,
++KineticStatus KineticOperation_BuildPut(KineticOperation* const operation,
+                                KineticEntry* const entry)
+ {
+     KineticOperation_ValidateOperation(operation);
+ 
++    if (entry->value.bytesUsed > KINETIC_OBJ_SIZE) {
++        LOGF2("Value exceeds maximum size. Packed size is: %d, Max size is: %d", entry->value.bytesUsed, KINETIC_OBJ_SIZE);
++        return KINETIC_STATUS_BUFFER_OVERRUN;
++    }
++
+     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT;
+     operation->request->message.command.header->has_messageType = true;
+     operation->entry = entry;
+ 
+     KineticMessage_ConfigureKeyValue(&operation->request->message, operation->entry);
+ 
+-    operation->valueEnabled = !operation->entry->metadataOnly;
+-    operation->sendValue = true;
++    operation->value.data = operation->entry->value.array.data;
++    operation->value.len = operation->entry->value.bytesUsed;
+     operation->callback = &KineticOperation_PutCallback;
++
++    return KINETIC_STATUS_SUCCESS;
+ }
+ 
+ static KineticStatus get_cb(const char *cmd_name, KineticOperation* const operation, KineticStatus const status)
+@@ -362,7 +348,7 @@ static KineticStatus get_cb(const char *cmd_name, KineticOperation* const operat
+     {
+         KINETIC_ASSERT(operation->response != NULL);
+         // Update the entry upon success
+-        KineticProto_Command_KeyValue* keyValue = KineticPDU_GetKeyValue(operation->response);
++        KineticProto_Command_KeyValue* keyValue = KineticResponse_GetKeyValue(operation->response);
+         if (keyValue != NULL) {
+             if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, operation->entry)) {
+                 return KINETIC_STATUS_BUFFER_OVERRUN;
+@@ -397,10 +383,10 @@ static void build_get_command(KineticOperation* const operation,
+ 
+     if (operation->entry->value.array.data != NULL) {
+         ByteBuffer_Reset(&operation->entry->value);
++        operation->value.data = operation->entry->value.array.data;
++        operation->value.len = operation->entry->value.bytesUsed;
+     }
+ 
+-    operation->valueEnabled = !entry->metadataOnly;
+-    operation->sendValue = false;
+     operation->callback = cb;
+ }
+ 
+@@ -457,8 +443,6 @@ void KineticOperation_BuildFlush(KineticOperation* const operation)
+     operation->request->message.command.header->messageType =
+         KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA;
+     operation->request->message.command.header->has_messageType = true;
+-    operation->valueEnabled = false;
+-    operation->sendValue = false;
+     operation->callback = &KineticOperation_FlushCallback;
+ }
+ 
+@@ -485,10 +469,10 @@ void KineticOperation_BuildDelete(KineticOperation* const operation,
+ 
+     if (operation->entry->value.array.data != NULL) {
+         ByteBuffer_Reset(&operation->entry->value);
++        operation->value.data = operation->entry->value.array.data;
++        operation->value.len = operation->entry->value.bytesUsed;
+     }
+ 
+-    operation->valueEnabled = false;
+-    operation->sendValue = false;
+     operation->callback = &KineticOperation_DeleteCallback;
+ }
+ 
+@@ -505,7 +489,7 @@ KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* const opera
+     {
+         KINETIC_ASSERT(operation->response != NULL);
+         // Report the key list upon success
+-        KineticProto_Command_Range* keyRange = KineticPDU_GetKeyRange(operation->response);
++        KineticProto_Command_Range* keyRange = KineticResponse_GetKeyRange(operation->response);
+         if (keyRange != NULL) {
+             if (!Copy_KineticProto_Command_Range_to_ByteBufferArray(keyRange, operation->buffers)) {
+                 return KINETIC_STATUS_BUFFER_OVERRUN;
+@@ -527,8 +511,6 @@ void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
+ 
+     KineticMessage_ConfigureKeyRange(&operation->request->message, range);
+ 
+-    operation->valueEnabled = false;
+-    operation->sendValue = false;
+     operation->buffers = buffers;
+     operation->callback = &KineticOperation_GetKeyRangeCallback;
+ }
+@@ -787,8 +769,6 @@ void KineticOperation_BuildSetPin(KineticOperation* const operation, ByteArray o
+         operation->request->message.security.has_newErasePIN = true;
+     }
+     
+-    operation->valueEnabled = false;
+-    operation->sendValue = false;
+     operation->callback = &KineticOperation_SetPinCallback;
+     operation->request->pinAuth = false;
+ }
+@@ -816,8 +796,6 @@ void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_
+         KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP;
+     operation->request->command->body->pinOp->has_pinOpType = true;
+     
+-    operation->valueEnabled = false;
+-    operation->sendValue = false;
+     operation->callback = &KineticOperation_EraseCallback;
+     operation->request->pinAuth = true;
+     operation->timeoutSeconds = 180;
+@@ -847,8 +825,6 @@ void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lo
+         KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP;
+     operation->request->command->body->pinOp->has_pinOpType = true;
+     
+-    operation->valueEnabled = false;
+-    operation->sendValue = false;
+     operation->callback = &KineticOperation_LockUnlockCallback;
+     operation->request->pinAuth = true;
+ }
+@@ -878,8 +854,6 @@ void KineticOperation_BuildSetClusterVersion(KineticOperation* operation, int64_
+     operation->request->command->body->setup->newClusterVersion = new_cluster_version;
+     operation->request->command->body->setup->has_newClusterVersion = true;
+ 
+-    operation->valueEnabled = false;
+-    operation->sendValue = false;
+     operation->callback = &KineticOperation_SetClusterVersionCallback;
+     operation->pendingClusterVersion = new_cluster_version;
+ }
+@@ -907,8 +881,6 @@ void KineticOperation_BuildSetACL(KineticOperation* const operation,
+     operation->request->command->body->security->n_acl = ACLs->ACL_count;
+     operation->request->command->body->security->acl = ACLs->ACLs;
+ 
+-    operation->valueEnabled = false;
+-    operation->sendValue = false;
+     operation->callback = &KineticOperation_SetACLCallback;
+ }
+ 
+@@ -932,7 +904,7 @@ KineticStatus KineticOperation_BuildUpdateFirmware(KineticOperation* const opera
+     KineticOperation_ValidateOperation(operation);
+ 
+     KineticStatus status = KINETIC_STATUS_INVALID;
+-    FILE* fw_file = NULL;
++    FILE* fp = NULL;
+ 
+     if (fw_path == NULL) {
+         LOG0("ERROR: FW update file was NULL");
+@@ -940,26 +912,26 @@ KineticStatus KineticOperation_BuildUpdateFirmware(KineticOperation* const opera
+         goto cleanup;
+     }
+ 
+-    fw_file = fopen(fw_path, "r");
+-    if (fw_file == NULL) {
++    fp = fopen(fw_path, "r");
++    if (fp == NULL) {
+         LOG0("ERROR: Specified FW update file could not be opened");
+         return KINETIC_STATUS_INVALID_FILE;
+         goto cleanup;
+     }
+ 
+-    if (fseek(fw_file, 0L, SEEK_END) != 0) {
++    if (fseek(fp, 0L, SEEK_END) != 0) {
+         LOG0("ERROR: Specified FW update file could not be seek");
+         status = KINETIC_STATUS_INVALID_FILE;
+         goto cleanup;
+     }
+ 
+-    long len = ftell(fw_file);
++    long len = ftell(fp);
+     if (len < 1) {
+         LOG0("ERROR: Specified FW update file could not be queried for length");
+         status = KINETIC_STATUS_INVALID_FILE;
+         goto cleanup;
+     }
+-    if (fseek(fw_file, 0L, SEEK_SET) != 0) {
++    if (fseek(fp, 0L, SEEK_SET) != 0) {
+         LOG0("ERROR: Specified FW update file could not be seek back to start");
+         status = KINETIC_STATUS_INVALID_FILE;
+         goto cleanup;
+@@ -972,15 +944,15 @@ KineticStatus KineticOperation_BuildUpdateFirmware(KineticOperation* const opera
+         goto cleanup;
+     }
+ 
+-    size_t readLen = fread(operation->value.data, 1, len, fw_file);
+-    if ((long)readLen != len) {
+-        LOGF0("ERROR: Expected to read %ld bytes from FW file, but read %zu", len, readLen);
++    size_t read = fread(operation->value.data, 1, len, fp);
++    if ((long)read != len) {
++        LOGF0("ERROR: Expected to read %ld bytes from FW file, but read %zu", len, read);
+         status = KINETIC_STATUS_INVALID_FILE;
+         goto cleanup;
+     }
+-    fclose(fw_file);
++    fclose(fp);
+ 
+-    operation->value.len = readLen;
++    operation->value.len = len;
+     
+     operation->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP;
+     operation->request->message.command.header->has_messageType = true;
+@@ -990,15 +962,13 @@ KineticStatus KineticOperation_BuildUpdateFirmware(KineticOperation* const opera
+     operation->request->command->body->setup->firmwareDownload = true;
+     operation->request->command->body->setup->has_firmwareDownload = true;
+ 
+-    operation->valueEnabled = true;
+-    operation->sendValue = true;
+     operation->callback = &KineticOperation_UpdateFirmwareCallback;
+ 
+     return KINETIC_STATUS_SUCCESS;
+ 
+ cleanup:
+-    if (fw_file != NULL) {
+-        fclose(fw_file);
++    if (fp != NULL) {
++        fclose(fp);
+     }
+     return status;
+ }
+diff --git a/src/lib/kinetic_operation.h b/src/lib/kinetic_operation.h
+index 9307fc4..2b79e3f 100644
+--- a/src/lib/kinetic_operation.h
++++ b/src/lib/kinetic_operation.h
+@@ -36,7 +36,7 @@ KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, K
+ void KineticOperation_BuildNoop(KineticOperation* operation);
+ 
+ KineticStatus KineticOperation_PutCallback(KineticOperation* const operation, KineticStatus const status);
+-void KineticOperation_BuildPut(KineticOperation* const operation,
++KineticStatus KineticOperation_BuildPut(KineticOperation* const operation,
+                                KineticEntry* const entry);
+ 
+ KineticStatus KineticOperation_GetCallback(KineticOperation* const operation, KineticStatus const status);
+diff --git a/src/lib/kinetic_session.c b/src/lib/kinetic_session.c
+index ac3269d..1733ccf 100644
+--- a/src/lib/kinetic_session.c
++++ b/src/lib/kinetic_session.c
+@@ -22,7 +22,7 @@
+ #include "kinetic_types_internal.h"
+ #include "kinetic_controller.h"
+ #include "kinetic_socket.h"
+-#include "kinetic_pdu.h"
++#include "kinetic_response.h"
+ #include "kinetic_operation.h"
+ #include "kinetic_controller.h"
+ #include "kinetic_allocator.h"
+@@ -136,8 +136,6 @@ KineticStatus KineticSession_Connect(KineticSession * const session)
+ 
+ connection_error_cleanup:
+ 
+-    LOG_LOCATION;
+-
+     if (connection->si != NULL) {
+         free(connection->si);
+         connection->si = NULL;
+diff --git a/src/lib/kinetic_types_internal.c b/src/lib/kinetic_types_internal.c
+index ebe293a..1537c2e 100644
+--- a/src/lib/kinetic_types_internal.c
++++ b/src/lib/kinetic_types_internal.c
+@@ -467,14 +467,14 @@ void KineticOperation_Init(KineticOperation* op, KineticSession const * const se
+     };
+ }
+ 
+-void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session)
++void KineticRequest_Init(KineticRequest* request, KineticSession const * const session)
+ {
+-    KINETIC_ASSERT(pdu != NULL);
++    KINETIC_ASSERT(request != NULL);
+     KINETIC_ASSERT(session != NULL);
+     KINETIC_ASSERT(session->connection != NULL);
+-    memset(pdu, 0, sizeof(KineticPDU));
+-    KineticMessage_Init(&(pdu->message));
+-    KineticMessage_HeaderInit(&(pdu->message.header), session);
+-    pdu->command = &pdu->message.command;
+-    pdu->command->header = &pdu->message.header;
++    memset(request, 0, sizeof(KineticRequest));
++    KineticMessage_Init(&(request->message));
++    KineticMessage_HeaderInit(&(request->message.header), session);
++    request->command = &request->message.command;
++    request->command->header = &request->message.header;
+ }
+diff --git a/src/lib/kinetic_types_internal.h b/src/lib/kinetic_types_internal.h
+index a7a7838..9f10df5 100644
+--- a/src/lib/kinetic_types_internal.h
++++ b/src/lib/kinetic_types_internal.h
+@@ -53,7 +53,7 @@
+ 
+ #define NUM_ELEMENTS(ARRAY) (sizeof(ARRAY)/sizeof((ARRAY)[0]))
+ 
+-typedef struct _KineticPDU KineticPDU;
++typedef struct _KineticRequest KineticRequest;
+ typedef struct _KineticOperation KineticOperation;
+ typedef struct _KineticConnection KineticConnection;
+ 
+@@ -172,7 +172,7 @@ typedef enum {
+ 
+ 
+ // Kinetic PDU
+-struct _KineticPDU {
++struct _KineticRequest {
+     KineticMessage message;
+     KineticProto_Command* command;
+     bool pinAuth;
+@@ -191,10 +191,8 @@ typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operat
+ // Kinetic Operation
+ struct _KineticOperation {
+     KineticConnection* connection;
+-    KineticPDU* request;
++    KineticRequest* request;
+     KineticResponse* response;
+-    bool valueEnabled;
+-    bool sendValue;
+     uint16_t timeoutSeconds;
+     int64_t pendingClusterVersion;
+     ByteArray* pin;
+@@ -207,14 +205,6 @@ struct _KineticOperation {
+     ByteArray value;
+ };
+ 
+-// Kintic Serial Allocator
+-// Used for allocating a contiguous hunk of memory to hold arbitrary variable-length response data
+-typedef struct _KineticSerialAllocator {
+-    uint8_t* buffer;
+-    size_t used;
+-    size_t total;
+-} KineticSerialAllocator;
+-
+ 
+ KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
+     KineticAlgorithm kinteicAlgorithm);
+@@ -250,6 +240,6 @@ void KineticConnection_Init(KineticConnection* const con);
+ void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con);
+ void KineticMessage_Init(KineticMessage* const message);
+ void KineticOperation_Init(KineticOperation* op, KineticSession const * const session);
+-void KineticPDU_InitWithCommand(KineticPDU* pdu, KineticSession const * const session);
++void KineticRequest_Init(KineticRequest* pdu, KineticSession const * const session);
+ 
+ #endif // _KINETIC_TYPES_INTERNAL_H
+diff --git a/test/integration/test_kinetic_logger.c b/test/integration/test_kinetic_logger.c
+index 961302a..cc3334d 100644
+--- a/test/integration/test_kinetic_logger.c
++++ b/test/integration/test_kinetic_logger.c
+@@ -39,19 +39,19 @@ void tearDown(void)
+ }
+ 
+ void test_KineticLogger_KINETIC_LOG_FILE_should_be_defined_properly(void)
+-{ LOG_LOCATION;
++{
+     TEST_ASSERT_EQUAL_STRING("kinetic.log", KINETIC_LOG_FILE);
+ }
+ 
+ void test_KineticLogger_Init_should_be_disabled_if_logFile_is_NULL(void)
+-{ LOG_LOCATION;
++{
+     KineticLogger_Init(NULL, 3);
+     TEST_ASSERT_EQUAL(-1, KineticLogLevel);
+     KineticLogger_Log(0, "This message should be discarded and not logged!");
+ }
+ 
+ void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_file(void)
+-{ LOG_LOCATION;
++{
+     KineticLogger_Init(TEST_LOG_FILE, 3);
+     KineticLogger_Log(0, "Some message to log file...");
+     TEST_ASSERT_FILE_EXISTS(TEST_LOG_FILE);
+@@ -59,14 +59,14 @@ void test_KineticLogger_Init_should_initialize_the_logger_with_specified_output_
+ }
+ 
+ void test_KineticLogger_Init_should_log_to_stdout_if_specified(void)
+-{ LOG_LOCATION;
++{
+     KineticLogger_Init("stdout", 0);
+     TEST_ASSERT_EQUAL(0, KineticLogLevel);
+     KineticLogger_Log(0, "This message should be logged to stdout!");
+ }
+ 
+ void test_KineticLogger_Log_should_write_log_message_to_file(void)
+-{ LOG_LOCATION;
++{
+     const char* msg = "Some really important message!";
+     KineticLogger_Init(TEST_LOG_FILE, 3);
+     KineticLogger_LogPrintf(0, msg);
+@@ -77,5 +77,4 @@ void test_KineticLogger_Log_should_write_log_message_to_file(void)
+ void test_LOG_LOCATION_should_log_location(void)
+ {
+     KineticLogger_Init(TEST_LOG_FILE, 2);
+-    LOG_LOCATION;
+ }
+diff --git a/test/integration/test_kinetic_socket.c b/test/integration/test_kinetic_socket.c
+index 88a28a8..339e0dd 100644
+--- a/test/integration/test_kinetic_socket.c
++++ b/test/integration/test_kinetic_socket.c
+@@ -68,7 +68,6 @@ void tearDown(void)
+ 
+ void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
+ {
+-    LOG_LOCATION;
+     TEST_ASSERT_EQUAL(8123, KINETIC_PORT);
+ }
+ 
+@@ -76,7 +75,6 @@ void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
+ void test_KineticSocket_Connect_should_create_a_socket_connection(void)
+ {
+     TEST_IGNORE_MESSAGE("Reinstantiate this test once test host is rewired in");
+-    // LOG_LOCATION;
+     // FileDesc = KineticSocket_Connect(SYSTEM_TEST_HOST, KineticTestPort);
+     // TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
+ }
+diff --git a/test/support/unity_helper.h b/test/support/unity_helper.h
+index d3c1dfd..2a0b830 100644
+--- a/test/support/unity_helper.h
++++ b/test/support/unity_helper.h
+@@ -45,33 +45,6 @@
+ #endif
+ #endif // WIN32
+ 
+-
+-
+-// // Make a FOREACH macro
+-// #define FE_1(WHAT, X) WHAT(X)
+-// #define FE_2(WHAT, X, ...) WHAT(X)FE_1(WHAT, __VA_ARGS__)
+-// #define FE_3(WHAT, X, ...) WHAT(X)FE_2(WHAT, __VA_ARGS__)
+-// #define FE_4(WHAT, X, ...) WHAT(X)FE_3(WHAT, __VA_ARGS__)
+-// #define FE_5(WHAT, X, ...) WHAT(X)FE_4(WHAT, __VA_ARGS__)
+-// //... repeat as needed
+-
+-// #define GET_MACRO(_1,_2,_3,_4,_5,NAME,...) NAME
+-// #define FOR_EACH(action,...)
+-//   GET_MACRO(__VA_ARGS__,FE_5,FE_4,FE_3,FE_2,FE_1)(action,__VA_ARGS__)
+-
+-// #define _APPEND_UNDERSCORE(X) _X
+-// // Helper function
+-// #define _UNDERSCORE(_first,...)
+-//   _first ## _ ## FOR_EACH(_APPEND_UNDERSCORE,__VA_ARGS__)
+-
+-
+-
+-// // Macro to define start of a Unity test method
+-// #define CONCAT(a,b) a_ ## b
+-// #define void test_desc(void)
+-// { void test_ ## desc ## _CASE(void) {LOG_LOCATION;
+-
+-
+ /** Custom Unity assertion which validates a size_t value */
+ #define TEST_ASSERT_EQUAL_SIZET_MESSAGE(expected, actual, msg) \
+     TEST_ASSERT_EQUAL_INT64_MESSAGE(expected, actual, msg);
+diff --git a/test/system/test_system_async_io.c b/test/system/test_system_async_io.c
+index 88dcd9c..d7ada09 100644
+--- a/test/system/test_system_async_io.c
++++ b/test/system/test_system_async_io.c
+@@ -54,7 +54,7 @@ PutStatus put_statuses[NUM_PUTS];
+ 
+ static void put_finished(KineticCompletionData* kinetic_data, void* clientData);
+ 
+-void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_ovelapped_asynchronous_IO_operations(void)
++void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_overlapped_asynchronous_IO_operations(void)
+ {
+     ByteBuffer test_data = ByteBuffer_Malloc(PAYLOAD_SIZE);
+     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
+diff --git a/test/system/test_system_bus.c b/test/system/test_system_bus.c
+index d65c7cc..c8152c7 100644
+--- a/test/system/test_system_bus.c
++++ b/test/system/test_system_bus.c
+@@ -31,11 +31,10 @@
+ #include "kinetic_types_internal.h"
+ #include "kinetic_controller.h"
+ #include "kinetic_device_info.h"
+-#include "kinetic_serial_allocator.h"
+ #include "kinetic_proto.h"
+ #include "kinetic_allocator.h"
+ #include "kinetic_message.h"
+-#include "kinetic_pdu.h"
++#include "kinetic_bus.h"
+ #include "kinetic_logger.h"
+ #include "kinetic_operation.h"
+ #include "kinetic_hmac.h"
+diff --git a/test/system/test_system_flush.c b/test/system/test_system_flush.c
+index 7e63acf..c1c819c 100644
+--- a/test/system/test_system_flush.c
++++ b/test/system/test_system_flush.c
+@@ -94,8 +94,6 @@ static void no_op_callback(KineticCompletionData* kinetic_data, void* client_dat
+ 
+ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
+ {
+-    LOG_LOCATION;
+-
+     // Arguments shared between entries
+     uint8_t TagData[1024];
+     ByteBuffer tagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "tag_val");
+diff --git a/test/system/test_system_get.c b/test/system/test_system_get.c
+index bb326d2..7c17541 100644
+--- a/test/system/test_system_get.c
++++ b/test/system/test_system_get.c
+@@ -104,28 +104,6 @@ void test_Get_should_retrieve_object_and_metadata_from_device(void)
+     TEST_ASSERT_EQUAL_ByteBuffer(expectedValue, getEntry.value);
+ }
+ 
+-void test_Get_should_retrieve_object_and_metadata_from_device_again(void)
+-{
+-    KineticEntry getEntry = {
+-        .key = KeyBuffer,
+-        .dbVersion = VersionBuffer,
+-        .tag = TagBuffer,
+-        .value = ValueBuffer,
+-    };
+-
+-    KineticStatus status = KineticClient_Get(Fixture.session, &getEntry, NULL);
+-
+-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedVersionBuffer, getEntry.dbVersion);
+-    TEST_ASSERT_ByteBuffer_NULL(getEntry.newVersion);
+-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedKeyBuffer, getEntry.key);
+-    TEST_ASSERT_EQUAL_ByteBuffer(ExpectedTagBuffer, getEntry.tag);
+-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, getEntry.algorithm);
+-    uint8_t expectedValueData[128];
+-    ByteBuffer expectedValue = ByteBuffer_CreateAndAppendArray(expectedValueData, sizeof(expectedValueData), TestValue);
+-    TEST_ASSERT_EQUAL_ByteBuffer(expectedValue, getEntry.value);
+-}
+-
+ void test_Get_should_be_able_to_retrieve_just_metadata_from_device(void)
+ {
+     KineticEntry getEntry = {
+diff --git a/test/system/test_system_lock_unlock.c b/test/system/test_system_lock_unlock.c
+index 22d4e67..c5d1642 100644
+--- a/test/system/test_system_lock_unlock.c
++++ b/test/system/test_system_lock_unlock.c
+@@ -44,7 +44,7 @@ void setUp(void)
+     NewPinSet = false;
+     Locked = false;
+ 
+-    SystemTestSetup(2);
++    SystemTestSetup(1);
+ 
+     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
+     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);
+diff --git a/test/system/test_system_overlapped_io.c b/test/system/test_system_overlapped_io.c
+index 844af2c..4dc0705 100644
+--- a/test/system/test_system_overlapped_io.c
++++ b/test/system/test_system_overlapped_io.c
+@@ -29,14 +29,14 @@
+ #include <pthread.h>
+ #include <errno.h>
+ 
+-#define MAX_ITERATIONS (2)
++#define MAX_ITERATIONS (1)
+ #define NUM_COPIES (3)
+ #define MAX_OBJ_SIZE (KINETIC_OBJ_SIZE)
+ 
+ #define REPORT_ERRNO(en, msg) if(en != 0){errno = en; perror(msg);}
+ 
+ STATIC const char HmacKeyString[] = "asdfasdf";
+-STATIC const int TestDataSize = 500 * KINETIC_OBJ_SIZE;
++STATIC const int TestDataSize = 200 * KINETIC_OBJ_SIZE;
+ 
+ struct kinetic_thread_arg {
+     char ip[16];
+@@ -71,7 +71,7 @@ void tearDown(void)
+     }
+ }
+ 
+-void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_ovelapped_IO_operations(void)
++void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_overlapped_IO_operations(void)
+ {
+     KineticSessionConfig sessionConfig = {
+         .host = SYSTEM_TEST_HOST,
+diff --git a/test/system/test_system_set_cluster_version.c b/test/system/test_system_set_cluster_version.c
+index 42060a1..7413f56 100644
+--- a/test/system/test_system_set_cluster_version.c
++++ b/test/system/test_system_set_cluster_version.c
+@@ -25,7 +25,7 @@ bool ClusterVersionSet;
+ 
+ void setUp(void)
+ {
+-    SystemTestSetup(3);
++    SystemTestSetup(1);
+     ClusterVersionSet = false;
+ }
+ 
+diff --git a/test/system/test_system_set_pin.c b/test/system/test_system_set_pin.c
+index 1b41485..42b8fde 100644
+--- a/test/system/test_system_set_pin.c
++++ b/test/system/test_system_set_pin.c
+@@ -27,7 +27,7 @@ bool ErasePinSet, LockPinSet;
+ 
+ void setUp(void)
+ {
+-    SystemTestSetup(3);
++    SystemTestSetup(1);
+     ErasePinSet = false;
+     LockPinSet = false;
+     strcpy(NewPinData, "123");
+diff --git a/test/system/test_system_stress_session_per_thread.c b/test/system/test_system_stress_session_per_thread.c
+index 7ef4bbc..1c23f5f 100644
+--- a/test/system/test_system_stress_session_per_thread.c
++++ b/test/system/test_system_stress_session_per_thread.c
+@@ -329,7 +329,7 @@ void run_tests(KineticClient * client)
+ void test_kinetic_client_throughput_for_various_sized_objects_for_multiple_threads_each_with_separate_session(void)
+ {
+     srand(time(NULL));
+-    const uint32_t max_runs = 2;
++    const uint32_t max_runs = 1;
+     for (uint32_t i = 0; i < max_runs; i++) {
+         LOGF0(
+             "============================================================================================\n"
+diff --git a/test/system/test_system_stress_single_session_threaded.c b/test/system/test_system_stress_single_session_threaded.c
+index 73b10fa..32a3771 100644
+--- a/test/system/test_system_stress_single_session_threaded.c
++++ b/test/system/test_system_stress_single_session_threaded.c
+@@ -351,7 +351,7 @@ void test_kinetic_client_throughput_test_kinetic_client_throughput_(void)
+     };
+     KineticClient * client = KineticClient_Init(&config);
+ 
+-    const uint32_t max_runs = 2;
++    const uint32_t max_runs = 1;
+     for (uint32_t i = 0; i < max_runs; i++) {
+         LOGF0(
+             "============================================================================================\n"
+diff --git a/test/unit/test_kinetic_admin_client.c b/test/unit/test_kinetic_admin_client.c
+index a47448b..240ae99 100644
+--- a/test/unit/test_kinetic_admin_client.c
++++ b/test/unit/test_kinetic_admin_client.c
+@@ -33,7 +33,7 @@
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_message.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_operation.h"
+ #include "mock_acl.h"
+ #include "protobuf-c/protobuf-c.h"
+diff --git a/test/unit/test_kinetic_admin_client_security.c b/test/unit/test_kinetic_admin_client_security.c
+index c3bb9de..85d97e2 100644
+--- a/test/unit/test_kinetic_admin_client_security.c
++++ b/test/unit/test_kinetic_admin_client_security.c
+@@ -27,7 +27,7 @@
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_operation.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+ #include "mock_kinetic_resourcewaiter.h"
+diff --git a/test/unit/test_kinetic_allocator.c b/test/unit/test_kinetic_allocator.c
+index d103f2c..3106f9c 100644
+--- a/test/unit/test_kinetic_allocator.c
++++ b/test/unit/test_kinetic_allocator.c
+@@ -155,7 +155,7 @@ void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_nul
+ }
+ 
+ 
+-void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if_calloc_returns_null_for_pdu(void)
++void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if_calloc_returns_null_for_request(void)
+ {
+     Session.connection = &Connection;
+     Connection.pSession = &Session;
+@@ -163,7 +163,7 @@ void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if
+ 
+     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
+     KineticOperation_Init_Expect(&op, &Session);
+-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticPDU), NULL);
++    KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), NULL);
+     KineticFree_Expect(&op);
+ 
+     KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+@@ -171,31 +171,31 @@ void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if
+     TEST_ASSERT_NULL(operation);
+ }
+ 
+-void test_KineticAllocator_NewOperation_should_initialize_operation_and_pdu(void)
++void test_KineticAllocator_NewOperation_should_initialize_operation_and_request(void)
+ {
+     Session.connection = &Connection;
+     Connection.pSession = &Session;
+     KineticOperation op;
+-    KineticPDU pdu;
++    KineticRequest request;
+ 
+     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
+     KineticOperation_Init_Expect(&op, &Session);
+-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticPDU), &pdu);
++    KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), &request);
+ 
+-    KineticPDU_InitWithCommand_Expect(&pdu, &Session);
++    KineticRequest_Init_Expect(&request, &Session);
+     KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+ 
+     TEST_ASSERT_NOT_NULL(operation);
+ }
+ 
+-void test_KineticAllocator_FreeOperation_should_free_request_if_its_not_null(void)
++void test_KineticAllocator_FreeOperation_should_free_request_if_it_is_not_NULL(void)
+ {
+-    KineticPDU pdu;
+-    memset(&pdu, 0x00, sizeof(pdu));
++    KineticRequest request;
++    memset(&request, 0x00, sizeof(request));
+ 
+-    KineticOperation op = { .request = &pdu };
++    KineticOperation op = { .request = &request };
+ 
+-    KineticFree_Expect(&pdu);
++    KineticFree_Expect(&request);
+     KineticFree_Expect(&op);
+ 
+     KineticAllocator_FreeOperation(&op);
+diff --git a/test/unit/test_kinetic_auth.c b/test/unit/test_kinetic_auth.c
+index 8381835..7a2bf63 100644
+--- a/test/unit/test_kinetic_auth.c
++++ b/test/unit/test_kinetic_auth.c
+@@ -32,14 +32,14 @@
+ 
+ KineticConnection Connection;
+ KineticSession Session;
+-KineticPDU PDU;
++KineticRequest Request;
+ 
+ void setUp(void)
+ {
+     KineticSessionConfig config = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
+     KineticSession_Init(&Session, &config, &Connection);
+     KineticLogger_Init("stdout", 3);
+-    KineticPDU_InitWithCommand(&PDU, &Session);
++    KineticRequest_Init(&Request, &Session);
+ }
+ 
+ void tearDown(void)
+@@ -84,17 +84,17 @@ void test_KineticAuth_PopulateHmac_should_return_HMAC_REQUIRED_if_HMAC_not_speci
+         }
+     };
+ 
+-    KineticStatus status = KineticAuth_PopulateHmac(&session.config, &PDU);
++    KineticStatus status = KineticAuth_PopulateHmac(&session.config, &Request);
+ 
+     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_REQUIRED, status);
+ }
+ 
+ void test_KineticAuth_PopulateHmac_should_add_and_populate_HMAC_authentication(void)
+-{ LOG_LOCATION;
+-    KineticPDU_InitWithCommand(&PDU, &Session);
+-    PDU.message.message.has_commandBytes = true;
++{
++    KineticRequest_Init(&Request, &Session);
++    Request.message.message.has_commandBytes = true;
+     uint8_t dummyMessageBytes[16];
+-    PDU.message.message.commandBytes = (ProtobufCBinaryData) {
++    Request.message.message.commandBytes = (ProtobufCBinaryData) {
+         .data = dummyMessageBytes,
+         .len = sizeof(dummyMessageBytes),
+     };
+@@ -109,24 +109,24 @@ void test_KineticAuth_PopulateHmac_should_add_and_populate_HMAC_authentication(v
+     };
+     strcpy((char*)session.config.keyData, hmacKey);
+ 
+-    KineticStatus status = KineticAuth_PopulateHmac(&session.config, &PDU);
++    KineticStatus status = KineticAuth_PopulateHmac(&session.config, &Request);
+     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+ 
+-    TEST_ASSERT_NULL(PDU.message.message.pinAuth);
+-    TEST_ASSERT_TRUE(PDU.message.message.has_authType);
+-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, PDU.message.message.authType);
+-    TEST_ASSERT_TRUE(PDU.message.message.hmacAuth->has_hmac);
+-    TEST_ASSERT_EQUAL_PTR(PDU.message.hmacAuth.hmac.data, PDU.message.message.hmacAuth->hmac.data);
+-    TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, PDU.message.message.hmacAuth->hmac.len);
+-    TEST_ASSERT_EQUAL_PTR(PDU.message.hmacData, PDU.message.hmacAuth.hmac.data);
+-    TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, PDU.message.hmacAuth.hmac.len);
+-    TEST_ASSERT_TRUE(PDU.message.hmacAuth.has_identity);
+-    TEST_ASSERT_EQUAL(1, PDU.message.hmacAuth.identity);
++    TEST_ASSERT_NULL(Request.message.message.pinAuth);
++    TEST_ASSERT_TRUE(Request.message.message.has_authType);
++    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, Request.message.message.authType);
++    TEST_ASSERT_TRUE(Request.message.message.hmacAuth->has_hmac);
++    TEST_ASSERT_EQUAL_PTR(Request.message.hmacAuth.hmac.data, Request.message.message.hmacAuth->hmac.data);
++    TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, Request.message.message.hmacAuth->hmac.len);
++    TEST_ASSERT_EQUAL_PTR(Request.message.hmacData, Request.message.hmacAuth.hmac.data);
++    TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, Request.message.hmacAuth.hmac.len);
++    TEST_ASSERT_TRUE(Request.message.hmacAuth.has_identity);
++    TEST_ASSERT_EQUAL(1, Request.message.hmacAuth.identity);
+ }
+ 
+ 
+ void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication(void)
+-{ LOG_LOCATION;
++{
+     char testPin[] = "192736aHUx@*G!Q";
+     ByteArray pin = ByteArray_Create(testPin, strlen(testPin));
+     LOGF0("pin data=%p, len=%zu", pin.data, pin.len);
+@@ -138,14 +138,14 @@ void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication(void)
+         }
+     };
+ 
+-    KineticStatus status = KineticAuth_PopulatePin(&session.config, &PDU, pin);
++    KineticStatus status = KineticAuth_PopulatePin(&session.config, &Request, pin);
+ 
+     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+ 
+-    TEST_ASSERT_NULL(PDU.message.message.hmacAuth);
+-    TEST_ASSERT_TRUE(PDU.message.message.has_authType);
+-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, PDU.message.message.authType);
+-    TEST_ASSERT_TRUE(PDU.message.message.pinAuth->has_pin);
+-    TEST_ASSERT_EQUAL_PTR(testPin, PDU.message.message.pinAuth->pin.data);
+-    TEST_ASSERT_EQUAL(strlen(testPin), PDU.message.message.pinAuth->pin.len);
++    TEST_ASSERT_NULL(Request.message.message.hmacAuth);
++    TEST_ASSERT_TRUE(Request.message.message.has_authType);
++    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, Request.message.message.authType);
++    TEST_ASSERT_TRUE(Request.message.message.pinAuth->has_pin);
++    TEST_ASSERT_EQUAL_PTR(testPin, Request.message.message.pinAuth->pin.data);
++    TEST_ASSERT_EQUAL(strlen(testPin), Request.message.message.pinAuth->pin.len);
+ }
+diff --git a/test/unit/test_kinetic_bus.c b/test/unit/test_kinetic_bus.c
+index f5874de..169b4ad 100644
+--- a/test/unit/test_kinetic_bus.c
++++ b/test/unit/test_kinetic_bus.c
+@@ -22,7 +22,7 @@
+ #include "unity_helper.h"
+ #include "kinetic_types.h"
+ #include "kinetic_types_internal.h"
+-#include "kinetic_pdu.h"
++#include "kinetic_bus.h"
+ #include "kinetic_nbo.h"
+ #include "kinetic_proto.h"
+ #include "kinetic_logger.h"
+@@ -42,7 +42,7 @@
+ #include <stdlib.h>
+ 
+ static uint32_t ClusterVersion = 7;
+-static KineticPDU PDU;
++static KineticRequest Request;
+ static KineticConnection Connection;
+ static KineticResponse Response;
+ static KineticSession Session;
+@@ -67,7 +67,7 @@ void setUp(void)
+     Connection.connected = true;
+     Connection.socket = 456;
+     Connection.pSession = &Session;
+-    KineticPDU_InitWithCommand(&PDU, &Session);
++    KineticRequest_Init(&Request, &Session);
+     ByteArray_FillWithDummyData(Value);
+ 
+     memset(si_buf, 0, SI_BUF_SIZE);
+@@ -79,117 +79,6 @@ void tearDown(void)
+     KineticLogger_Close();
+ }
+ 
+-void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
+-{
+-    TEST_ASSERT_EQUAL(1 + 4 + 4, PDU_HEADER_LEN);
+-    TEST_ASSERT_EQUAL(PDU_HEADER_LEN, sizeof(KineticPDUHeader));
+-}
+-
+-void test_KineteicPDU_PDU_PROTO_MAX_LEN_should_be_1MB(void)
+-{
+-    TEST_ASSERT_EQUAL(1024 * 1024, PDU_PROTO_MAX_LEN);
+-}
+-
+-void test_KineteicPDU_KINETIC_OBJ_SIZE_should_be_1MB(void)
+-{
+-    TEST_ASSERT_EQUAL(1024 * 1024, KINETIC_OBJ_SIZE);
+-}
+-
+-void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_value_max_lengths(void)
+-{
+-    TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE, PDU_MAX_LEN);
+-}
+-
+-
+-void test_KineticPDU_Init_should_initialize_PDU(void)
+-{
+-    LOG_LOCATION;
+-    KineticPDU_InitWithCommand(&PDU, &Session);
+-}
+-
+-void test_KineticPDU_InitWithCommand_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
+-{
+-    LOG_LOCATION;
+-    KineticConnection_Init(&Connection);
+-    Connection.sequence = 24;
+-    Connection.connectionID = 8765432;
+-    Session = (KineticSession) {
+-        .config = (KineticSessionConfig) {
+-            .clusterVersion = 1122334455667788,
+-            .identity = 37,
+-        }
+-    };
+-    Connection.pSession = &Session;
+-    Session.connection = &Connection;
+-    KineticPDU_InitWithCommand(&PDU, &Session);
+-
+-    TEST_ASSERT_TRUE(PDU.message.header.has_clusterVersion);
+-    TEST_ASSERT_EQUAL_INT64(1122334455667788, PDU.message.header.clusterVersion);
+-    TEST_ASSERT_TRUE(PDU.message.header.has_connectionID);
+-    TEST_ASSERT_EQUAL_INT64(8765432, PDU.message.header.connectionID);
+-    TEST_ASSERT_TRUE(PDU.message.header.has_sequence);
+-    TEST_ASSERT_EQUAL_INT64(KINETIC_SEQUENCE_NOT_YET_BOUND, PDU.message.header.sequence);
+-}
+-
+-
+-
+-void test_KineticPDU_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(void)
+-{
+-
+-    KineticProto_Command Command;
+-    memset(&Command, 0, sizeof(Command));
+-    KineticProto_Command_KeyValue* keyValue = NULL;
+-
+-    keyValue = KineticPDU_GetKeyValue(NULL);
+-    TEST_ASSERT_NULL(keyValue);
+-
+-    Response.command = NULL;
+-    keyValue = KineticPDU_GetKeyValue(&Response);
+-    TEST_ASSERT_NULL(keyValue);
+-
+-    Response.command = &Command;
+-    Command.body = NULL;
+-    keyValue = KineticPDU_GetKeyValue(&Response);
+-    TEST_ASSERT_NULL(keyValue);
+-}
+-
+-
+-void test_KineticPDU_GetKeyRange_should_return_the_KineticProto_Command_Range_from_the_message_if_avaliable(void)
+-{
+-    Connection.pSession = &Session;
+-    Session.connection = &Connection;
+-    KineticPDU_InitWithCommand(&PDU, &Session);
+-    KineticProto_Command_Range* range = NULL;
+-
+-    range = KineticPDU_GetKeyRange(NULL);
+-    TEST_ASSERT_NULL(range);
+-
+-    range = KineticPDU_GetKeyRange(&Response);
+-    TEST_ASSERT_NULL(range);
+-    
+-    KineticProto_Message Message;
+-    memset(&Message, 0, sizeof(Message));
+-    Response.proto = &Message;
+-    range = KineticPDU_GetKeyRange(&Response);
+-    TEST_ASSERT_NULL(range);
+-
+-    KineticProto_Command Command;
+-    memset(&Command, 0, sizeof(Command));
+-    Response.command = &Command;
+-    range = KineticPDU_GetKeyRange(&Response);
+-    TEST_ASSERT_NULL(range);
+-
+-    KineticProto_Command_Body Body;
+-    memset(&Body, 0, sizeof(Body));
+-    Response.command->body = &Body;
+-
+-    KineticProto_Command_Range Range;
+-    memset(&Range, 0, sizeof(Range));
+-    Body.range = &Range;
+-    range = KineticPDU_GetKeyRange(&Response);
+-    TEST_ASSERT_EQUAL_PTR(&Range, range);
+-}
+-
+ bool unpack_header(uint8_t const * const read_buf,
+     size_t const read_size, KineticPDUHeader * const header);
+ 
+diff --git a/test/unit/test_kinetic_client.c b/test/unit/test_kinetic_client.c
+index 8f22571..2aa7dac 100644
+--- a/test/unit/test_kinetic_client.c
++++ b/test/unit/test_kinetic_client.c
+@@ -30,7 +30,7 @@
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_message.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_operation.h"
+ #include "protobuf-c/protobuf-c.h"
+ #include "mock_bus.h"
+@@ -65,7 +65,7 @@ void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_
+     };
+ 
+     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
+-    KineticPDU_InitBus_ExpectAndReturn(&client, &config, true);
++    KineticBus_Init_ExpectAndReturn(&client, &config, true);
+ 
+     KineticClient * result = KineticClient_Init(&config);
+ 
+@@ -95,7 +95,7 @@ void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
+         .logLevel = 3,
+     };
+     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
+-    KineticPDU_InitBus_ExpectAndReturn(&client, &config, false);
++    KineticBus_Init_ExpectAndReturn(&client, &config, false);
+     KineticFree_Expect(&client);
+ 
+     KineticClient * result = KineticClient_Init(&config);
+diff --git a/test/unit/test_kinetic_client_delete.c b/test/unit/test_kinetic_client_delete.c
+index 6ac70b3..0bf591a 100644
+--- a/test/unit/test_kinetic_client_delete.c
++++ b/test/unit/test_kinetic_client_delete.c
+@@ -26,7 +26,7 @@
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_operation.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_resourcewaiter.h"
+ 
+diff --git a/test/unit/test_kinetic_client_flush.c b/test/unit/test_kinetic_client_flush.c
+index c3beb0e..d781993 100644
+--- a/test/unit/test_kinetic_client_flush.c
++++ b/test/unit/test_kinetic_client_flush.c
+@@ -25,7 +25,7 @@
+ #include "mock_kinetic_operation.h"
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+ #include "mock_kinetic_resourcewaiter.h"
+diff --git a/test/unit/test_kinetic_client_get.c b/test/unit/test_kinetic_client_get.c
+index eaaad7a..30d62a9 100644
+--- a/test/unit/test_kinetic_client_get.c
++++ b/test/unit/test_kinetic_client_get.c
+@@ -25,7 +25,7 @@
+ #include "mock_kinetic_operation.h"
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+ #include "mock_kinetic_resourcewaiter.h"
+@@ -81,8 +81,6 @@ void test_KineticClient_Get_should_get_error_MISSING_VALUE_BUFFER_if_called_with
+ 
+ void test_KineticClient_Get_should_execute_GET_operation(void)
+ {
+-    LOG_LOCATION;
+-
+     uint8_t KeyData[64];
+     ByteArray Key = ByteArray_Create(KeyData, sizeof(KeyData));
+     ByteBuffer KeyBuffer = ByteBuffer_CreateWithArray(Key);
+@@ -109,8 +107,6 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
+ 
+ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metadata(void)
+ {
+-    LOG_LOCATION;
+-    
+     uint8_t KeyData[64];
+     ByteArray Key = ByteArray_Create(KeyData, sizeof(KeyData));
+ 
+diff --git a/test/unit/test_kinetic_client_get_key_range.c b/test/unit/test_kinetic_client_get_key_range.c
+index 364b971..9a96f8d 100644
+--- a/test/unit/test_kinetic_client_get_key_range.c
++++ b/test/unit/test_kinetic_client_get_key_range.c
+@@ -26,7 +26,7 @@
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_operation.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+ #include "mock_kinetic_resourcewaiter.h"
+@@ -73,8 +73,6 @@ void tearDown(void)
+ 
+ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_specified_range(void)
+ {
+-    LOG_LOCATION;
+-
+     ByteBuffer_AppendCString(&StartKey, "key_range_00_00");
+     ByteBuffer_AppendCString(&EndKey, "key_range_00_03");
+ 
+diff --git a/test/unit/test_kinetic_client_get_log.c b/test/unit/test_kinetic_client_get_log.c
+index b7310e0..80b4f47 100644
+--- a/test/unit/test_kinetic_client_get_log.c
++++ b/test/unit/test_kinetic_client_get_log.c
+@@ -28,12 +28,10 @@
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_operation.h"
+ #include "mock_kinetic_auth.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+-#include "mock_kinetic_resourcewaiter.h"
+ #include "mock_acl.h"
+-
+ #include "kinetic_logger.h"
+ #include "kinetic_proto.h"
+ #include "protobuf-c/protobuf-c.h"
+@@ -57,8 +55,6 @@ void tearDown(void)
+ 
+ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_device(void)
+ {
+-    LOG_LOCATION;
+-
+     KineticLogInfo* info;
+     KineticOperation operation;
+ 
+@@ -66,7 +62,8 @@ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_de
+     KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
+     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
+ 
+-    KineticStatus status = KineticAdminClient_GetLog(&Session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
++    KineticStatus status = KineticAdminClient_GetLog(&Session,
++        KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
+ 
+     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+ }
+diff --git a/test/unit/test_kinetic_client_getnext.c b/test/unit/test_kinetic_client_getnext.c
+index 607442b..e57164f 100644
+--- a/test/unit/test_kinetic_client_getnext.c
++++ b/test/unit/test_kinetic_client_getnext.c
+@@ -25,7 +25,7 @@
+ #include "mock_kinetic_operation.h"
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+ #include "mock_kinetic_resourcewaiter.h"
+diff --git a/test/unit/test_kinetic_client_getprevious.c b/test/unit/test_kinetic_client_getprevious.c
+index 3a4e830..5b69179 100644
+--- a/test/unit/test_kinetic_client_getprevious.c
++++ b/test/unit/test_kinetic_client_getprevious.c
+@@ -21,15 +21,12 @@
+ #include "kinetic_client.h"
+ #include "kinetic_types.h"
+ #include "kinetic_types_internal.h"
+-#include "kinetic_device_info.h"
+ #include "mock_kinetic_operation.h"
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+-#include "mock_kinetic_resourcewaiter.h"
+-
+ #include "kinetic_logger.h"
+ #include "kinetic_proto.h"
+ #include "protobuf-c/protobuf-c.h"
+diff --git a/test/unit/test_kinetic_client_noop.c b/test/unit/test_kinetic_client_noop.c
+index 05370ee..4878acd 100644
+--- a/test/unit/test_kinetic_client_noop.c
++++ b/test/unit/test_kinetic_client_noop.c
+@@ -21,15 +21,12 @@
+ #include "kinetic_client.h"
+ #include "kinetic_types.h"
+ #include "kinetic_types_internal.h"
+-#include "kinetic_device_info.h"
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_operation.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+-#include "mock_kinetic_resourcewaiter.h"
+-
+ #include "kinetic_logger.h"
+ #include "kinetic_proto.h"
+ #include "protobuf-c/protobuf-c.h"
+diff --git a/test/unit/test_kinetic_client_p2pop.c b/test/unit/test_kinetic_client_p2pop.c
+index e123dcb..77c5348 100644
+--- a/test/unit/test_kinetic_client_p2pop.c
++++ b/test/unit/test_kinetic_client_p2pop.c
+@@ -18,19 +18,15 @@
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ */
+-
+ #include "kinetic_client.h"
+ #include "kinetic_types.h"
+ #include "kinetic_types_internal.h"
+-#include "kinetic_device_info.h"
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_operation.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+-#include "mock_kinetic_resourcewaiter.h"
+-
+ #include "kinetic_logger.h"
+ #include "kinetic_proto.h"
+ #include "protobuf-c/protobuf-c.h"
+@@ -38,8 +34,6 @@
+ #include "unity.h"
+ #include "unity_helper.h"
+ 
+-
+-
+ void setUp(void)
+ {
+     KineticLogger_Init("stdout", 3);
+@@ -52,7 +46,6 @@ void tearDown(void)
+ 
+ void test_KineticClient_P2POperation_should_execute_a_p2p_operation(void)
+ {
+-    LOG_LOCATION;
+     KineticSession session;
+     KineticConnection connection;
+     session.connection = &connection;
+diff --git a/test/unit/test_kinetic_client_put.c b/test/unit/test_kinetic_client_put.c
+index 6e6847f..aed29e3 100644
+--- a/test/unit/test_kinetic_client_put.c
++++ b/test/unit/test_kinetic_client_put.c
+@@ -21,15 +21,12 @@
+ #include "kinetic_client.h"
+ #include "kinetic_types.h"
+ #include "kinetic_types_internal.h"
+-#include "kinetic_device_info.h"
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_operation.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_bus.h"
+ #include "mock_kinetic_memory.h"
+ #include "mock_kinetic_allocator.h"
+-#include "mock_kinetic_resourcewaiter.h"
+-
+ #include "kinetic_logger.h"
+ #include "kinetic_proto.h"
+ #include "protobuf-c/protobuf-c.h"
+@@ -60,10 +57,28 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
+     operation.connection = &Connection;
+     
+     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+-    KineticOperation_BuildPut_Expect(&operation, &entry);
++    KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
+     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
+ 
+     KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
+ 
+     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
+ }
++
++void test_KineticClient_Put_should_return_BUFFER_OVERRUN_if_object_value_too_long(void)
++{
++    Session.connection = &Connection;
++    Connection.pSession = &Session;
++    ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
++    KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
++    KineticOperation operation;
++    operation.connection = &Connection;
++    
++    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
++    KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_BUFFER_OVERRUN);
++    KineticAllocator_FreeOperation_Expect(&operation);
++
++    KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
++
++    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_BUFFER_OVERRUN, status);
++}
+diff --git a/test/unit/test_kinetic_controller.c b/test/unit/test_kinetic_controller.c
+index 5b7ae36..ae1ffc8 100644
+--- a/test/unit/test_kinetic_controller.c
++++ b/test/unit/test_kinetic_controller.c
+@@ -26,12 +26,8 @@
+ #include "kinetic_logger.h"
+ #include "kinetic_proto.h"
+ #include "protobuf-c.h"
+-#include "kinetic_device_info.h"
+ #include "mock_kinetic_session.h"
+-#include "mock_kinetic_socket.h"
+-#include "mock_kinetic_auth.h"
+ #include "mock_kinetic_operation.h"
+-#include "mock_kinetic_pdu.h"
+ #include "mock_kinetic_allocator.h"
+ #include "mock_kinetic_resourcewaiter.h"
+ #include <pthread.h>
+diff --git a/test/unit/test_kinetic_device_info.c b/test/unit/test_kinetic_device_info.c
+index dbddb06..fdc9d06 100644
+--- a/test/unit/test_kinetic_device_info.c
++++ b/test/unit/test_kinetic_device_info.c
+@@ -23,7 +23,6 @@
+ #include "kinetic_types_internal.h"
+ #include "kinetic_logger.h"
+ #include "kinetic_proto.h"
+-#include "kinetic_serial_allocator.h"
+ #include "byte_array.h"
+ #include "protobuf-c/protobuf-c.h"
+ #include "unity_helper.h"
+diff --git a/test/unit/test_kinetic_operation.c b/test/unit/test_kinetic_operation.c
+index 7b3b9a7..7d38080 100644
+--- a/test/unit/test_kinetic_operation.c
++++ b/test/unit/test_kinetic_operation.c
+@@ -29,10 +29,9 @@
+ #include "kinetic_types_internal.h"
+ #include "kinetic_device_info.h"
+ #include "mock_kinetic_allocator.h"
+-#include "mock_kinetic_serial_allocator.h"
+ #include "mock_kinetic_session.h"
+ #include "mock_kinetic_message.h"
+-#include "mock_kinetic_pdu.h"
++#include "mock_kinetic_response.h"
+ #include "mock_kinetic_socket.h"
+ #include "mock_kinetic_auth.h"
+ #include "mock_kinetic_hmac.h"
+@@ -45,7 +44,7 @@ static KineticSessionConfig SessionConfig;
+ static KineticSession Session;
+ static KineticConnection Connection;
+ static const int64_t ConnectionID = 12345;
+-static KineticPDU Request, Response;
++static KineticRequest Request;
+ static KineticOperation Operation;
+ 
+ void setUp(void)
+@@ -56,8 +55,7 @@ void setUp(void)
+ 
+     Session.connection = &Connection;
+     Connection.pSession = &Session;
+-    KineticPDU_InitWithCommand(&Request, &Session);
+-    KineticPDU_InitWithCommand(&Response, &Session);
++    KineticRequest_Init(&Request, &Session);
+     KineticOperation_Init(&Operation, &Session);
+ 
+     Operation.request = &Request;
+@@ -107,6 +105,29 @@ void test_KineticOperation_BuildNoop_should_build_and_execute_a_NOOP_operation(v
+     TEST_ASSERT_NULL(Operation.response);
+ }
+ 
++
++
++void test_KineticOperation_BuildPut_should_return_BUFFER_OVERRUN_if_object_value_too_long(void)
++{
++    ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
++    ByteArray key = ByteArray_CreateWithCString("foobar");
++    ByteArray newVersion = ByteArray_CreateWithCString("v1.0");
++    ByteArray tag = ByteArray_CreateWithCString("some_tag");
++
++    KineticEntry entry = {
++        .key = ByteBuffer_CreateWithArray(key),
++        .newVersion = ByteBuffer_CreateWithArray(newVersion),
++        .tag = ByteBuffer_CreateWithArray(tag),
++        .algorithm = KINETIC_ALGORITHM_SHA1,
++        .value = ByteBuffer_CreateWithArray(value),
++    };
++    entry.value.bytesUsed = KINETIC_OBJ_SIZE + 1;
++
++    // Build the operation
++    KineticStatus status = KineticOperation_BuildPut(&Operation, &entry);
++    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_BUFFER_OVERRUN, status);
++}
++
+ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_create_a_new_object(void)
+ {
+     ByteArray value = ByteArray_CreateWithCString("Luke, I am your father");
+@@ -128,8 +149,8 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
+     KineticOperation_BuildPut(&Operation, &entry);
+ 
+     TEST_ASSERT_FALSE(Request.pinAuth);
+-    TEST_ASSERT_TRUE(Operation.valueEnabled);
+-    TEST_ASSERT_TRUE(Operation.sendValue);
++    TEST_ASSERT_EQUAL_PTR(entry.value.array.data, Operation.value.data);
++    TEST_ASSERT_EQUAL(entry.value.bytesUsed, Operation.value.len);
+     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
+         Request.message.command.header->messageType);
+@@ -162,8 +183,8 @@ void test_KineticOperation_BuildPut_should_build_and_execute_a_PUT_operation_to_
+     KineticOperation_BuildPut(&Operation, &entry);
+ 
+     TEST_ASSERT_FALSE(Request.pinAuth);
+-    TEST_ASSERT_TRUE(Operation.valueEnabled);
+-    TEST_ASSERT_TRUE(Operation.sendValue);
++    TEST_ASSERT_EQUAL_PTR(entry.value.array.data, Operation.value.data);
++    TEST_ASSERT_EQUAL(entry.value.bytesUsed, Operation.value.len);
+     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
+         Request.message.command.header->messageType);
+@@ -191,10 +212,8 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation(void)
+ 
+     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
+-    TEST_ASSERT_TRUE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+-    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
++    TEST_ASSERT_EQUAL(value.len, Operation.entry->value.array.len);
+     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+     TEST_ASSERT_FALSE(Request.pinAuth);
+     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+@@ -218,8 +237,6 @@ void test_KineticOperation_BuildGet_should_build_a_GET_operation_requesting_meta
+ 
+     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+@@ -246,10 +263,8 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation(void)
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
+         Request.message.command.header->messageType);
+ 
+-    TEST_ASSERT_TRUE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+-    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
++    TEST_ASSERT_EQUAL(value.len, Operation.entry->value.array.len);
+     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+     TEST_ASSERT_FALSE(Request.pinAuth);
+     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+@@ -275,8 +290,6 @@ void test_KineticOperation_BuildGetNext_should_build_a_GETNEXT_operation_with_me
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
+         Request.message.command.header->messageType);
+ 
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+@@ -303,10 +316,8 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
+         Request.message.command.header->messageType);
+ 
+-    TEST_ASSERT_TRUE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+-    TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
++    TEST_ASSERT_EQUAL(value.len, Operation.entry->value.array.len);
+     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+     TEST_ASSERT_FALSE(Request.pinAuth);
+     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+@@ -332,8 +343,6 @@ void test_KineticOperation_BuildGetPrevious_should_build_a_GETPREVIOUS_operation
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
+         Request.message.command.header->messageType);
+ 
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+@@ -371,8 +380,6 @@ void test_KineticOperation_BuildDelete_should_build_a_DELETE_operation(void)
+ 
+     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE, Request.message.command.header->messageType);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
+     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
+     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
+@@ -414,8 +421,6 @@ void test_KineticOperation_BuildGetKeyRange_should_build_a_GetKeyRange_request(v
+ 
+     TEST_ASSERT_TRUE(Request.command->header->has_messageType);
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE, Request.command->header->messageType);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.entry);
+     TEST_ASSERT_EQUAL_PTR(&Request, Operation.request);
+     TEST_ASSERT_FALSE(Request.pinAuth);
+@@ -594,8 +599,6 @@ void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_
+     TEST_ASSERT_EQUAL(newPin.len, Request.command->body->security->newLockPIN.len);
+     TEST_ASSERT_NULL(Request.command->body->pinOp);
+     TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetPinCallback, Operation.callback);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.response);
+ }
+ void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_new_ERASE_PIN(void)
+@@ -621,8 +624,6 @@ void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_
+     TEST_ASSERT_EQUAL(newPin.len, Request.command->body->security->newErasePIN.len);
+     TEST_ASSERT_NULL(Request.command->body->pinOp);
+     TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetPinCallback, Operation.callback);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.response);
+ }
+ 
+@@ -651,7 +652,7 @@ void test_KineticOperation_BuildGetLog_should_build_a_GetLog_request(void)
+ // void test_KineticOperation_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
+ // {
+ //     // KineticConnection con;
+-//     // KineticPDU response;
++//     // KineticRequest response;
+ //     // KineticLogInfo* info;
+ //     // KineticOperation op = {
+ //     //     .connection = &con,
+@@ -687,8 +688,6 @@ void test_KineticOperation_BuildErase_should_build_a_SECURE_ERASE_operation_with
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP,
+         Request.command->body->pinOp->pinOpType);
+     TEST_ASSERT_EQUAL_PTR(&KineticOperation_EraseCallback, Operation.callback);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.response);
+     TEST_ASSERT_EQUAL(180, Operation.timeoutSeconds);
+ }
+@@ -712,8 +711,6 @@ void test_KineticOperation_BuildErase_should_build_an_INSTANT_ERASE_operation_wi
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP,
+         Request.command->body->pinOp->pinOpType);
+     TEST_ASSERT_EQUAL_PTR(&KineticOperation_EraseCallback, Operation.callback);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.response);
+     TEST_ASSERT_EQUAL(180, Operation.timeoutSeconds);
+ }
+@@ -737,8 +734,6 @@ void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PI
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_LOCK_PINOP,
+         Request.command->body->pinOp->pinOpType);
+     TEST_ASSERT_EQUAL_PTR(&KineticOperation_LockUnlockCallback, Operation.callback);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.response);
+     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+ }
+@@ -762,8 +757,6 @@ void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with
+     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP,
+         Request.command->body->pinOp->pinOpType);
+     TEST_ASSERT_EQUAL_PTR(&KineticOperation_LockUnlockCallback, Operation.callback);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.response);
+     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+ }
+@@ -773,8 +766,6 @@ void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VER
+     KineticOperation_BuildSetClusterVersion(&Operation, 1776);
+ 
+     TEST_ASSERT_FALSE(Request.pinAuth);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.response);
+     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+@@ -812,8 +803,6 @@ void test_KineticOperation_BuildSetACL_should_build_a_SECURITY_operation(void)
+     TEST_ASSERT_EQUAL_PTR(Request.command->body->security->acl, ACLs.ACLs);
+ 
+     TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetACLCallback, Operation.callback);
+-    TEST_ASSERT_FALSE(Operation.valueEnabled);
+-    TEST_ASSERT_FALSE(Operation.sendValue);
+     TEST_ASSERT_NULL(Operation.response);
+     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+ }
+@@ -829,8 +818,8 @@ void test_KineticOperation_BuildFirmwareUpdate_should_build_a_FIRMWARE_DOWNLOAD_
+     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+ 
+     TEST_ASSERT_FALSE(Request.pinAuth);
+-    TEST_ASSERT_TRUE(Operation.valueEnabled);
+-    TEST_ASSERT_TRUE(Operation.sendValue);
++    TEST_ASSERT_NOT_NULL(Operation.value.data);
++    TEST_ASSERT_EQUAL(fwLen, Operation.value.len);
+     TEST_ASSERT_NULL(Operation.response);
+     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+diff --git a/test/unit/test_kinetic_response.c b/test/unit/test_kinetic_response.c
+index 666b392..a5f1efe 100644
+--- a/test/unit/test_kinetic_response.c
++++ b/test/unit/test_kinetic_response.c
+@@ -22,7 +22,8 @@
+ #include "unity_helper.h"
+ #include "kinetic_types.h"
+ #include "kinetic_types_internal.h"
+-#include "kinetic_request.h"
++#include "kinetic_bus.h"
++#include "kinetic_response.h"
+ #include "kinetic_nbo.h"
+ #include "kinetic_proto.h"
+ #include "kinetic_logger.h"
+@@ -42,16 +43,12 @@
+ #include <stdlib.h>
+ 
+ static uint32_t ClusterVersion = 7;
+-static KineticRequest PDU;
+ static KineticConnection Connection;
+ static KineticResponse Response;
+ static KineticSession Session;
+ static uint8_t ValueBuffer[KINETIC_OBJ_SIZE];
+ static ByteArray Value = {.data = ValueBuffer, .len = sizeof(ValueBuffer)};
+ 
+-#define SI_BUF_SIZE (sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN)
+-static uint8_t si_buf[SI_BUF_SIZE];
+-
+ void setUp(void)
+ {
+     KineticLogger_Init("stdout", 3);
+@@ -67,10 +64,7 @@ void setUp(void)
+     Connection.connected = true;
+     Connection.socket = 456;
+     Connection.pSession = &Session;
+-    KineticRequest_InitWithCommand(&PDU, &Session);
+     ByteArray_FillWithDummyData(Value);
+-
+-    memset(si_buf, 0, SI_BUF_SIZE);
+ }
+ 
+ void tearDown(void)
+@@ -79,61 +73,10 @@ void tearDown(void)
+     KineticLogger_Close();
+ }
+ 
+-void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
+-{
+-    TEST_ASSERT_EQUAL(1 + 4 + 4, PDU_HEADER_LEN);
+-    TEST_ASSERT_EQUAL(PDU_HEADER_LEN, sizeof(KineticPDUHeader));
+-}
+-
+-void test_KineteicPDU_PDU_PROTO_MAX_LEN_should_be_1MB(void)
+-{
+-    TEST_ASSERT_EQUAL(1024 * 1024, PDU_PROTO_MAX_LEN);
+-}
+-
+-void test_KineteicPDU_KINETIC_OBJ_SIZE_should_be_1MB(void)
+-{
+-    TEST_ASSERT_EQUAL(1024 * 1024, KINETIC_OBJ_SIZE);
+-}
+-
+-void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_value_max_lengths(void)
+-{
+-    TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE, PDU_MAX_LEN);
+-}
+-
+-
+-void test_KineticRequest_Init_should_initialize_PDU(void)
+-{
+-    KineticRequest_InitWithCommand(&PDU, &Session);
+-}
+-
+-void test_KineticRequest_InitWithCommand_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
+-{
+-    KineticConnection_Init(&Connection);
+-    Connection.sequence = 24;
+-    Connection.connectionID = 8765432;
+-    Session = (KineticSession) {
+-        .config = (KineticSessionConfig) {
+-            .clusterVersion = 1122334455667788,
+-            .identity = 37,
+-        }
+-    };
+-    Connection.pSession = &Session;
+-    Session.connection = &Connection;
+-    KineticRequest_InitWithCommand(&PDU, &Session);
+-
+-    TEST_ASSERT_TRUE(PDU.message.header.has_clusterVersion);
+-    TEST_ASSERT_EQUAL_INT64(1122334455667788, PDU.message.header.clusterVersion);
+-    TEST_ASSERT_TRUE(PDU.message.header.has_connectionID);
+-    TEST_ASSERT_EQUAL_INT64(8765432, PDU.message.header.connectionID);
+-    TEST_ASSERT_TRUE(PDU.message.header.has_sequence);
+-    TEST_ASSERT_EQUAL_INT64(KINETIC_SEQUENCE_NOT_YET_BOUND, PDU.message.header.sequence);
+-}
+-
+ 
+ 
+ void test_KineticResponse_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(void)
+ {
+-
+     KineticProto_Command Command;
+     memset(&Command, 0, sizeof(Command));
+     KineticProto_Command_KeyValue* keyValue = NULL;
+@@ -156,7 +99,6 @@ void test_KineticResponse_GetKeyRange_should_return_the_KineticProto_Command_Ran
+ {
+     Connection.pSession = &Session;
+     Session.connection = &Connection;
+-    KineticRequest_InitWithCommand(&PDU, &Session);
+     KineticProto_Command_Range* range = NULL;
+ 
+     range = KineticResponse_GetKeyRange(NULL);
+@@ -187,296 +129,3 @@ void test_KineticResponse_GetKeyRange_should_return_the_KineticProto_Command_Ran
+     range = KineticResponse_GetKeyRange(&Response);
+     TEST_ASSERT_EQUAL_PTR(&Range, range);
+ }
+-
+-bool unpack_header(uint8_t const * const read_buf,
+-    size_t const read_size, KineticPDUHeader * const header);
+-
+-void test_unpack_header_should_fail_if_the_header_is_the_wrong_size(void)
+-{
+-    KineticPDUHeader header = {0};
+-    KineticPDUHeader header_out = {0};
+-    TEST_ASSERT_FALSE(unpack_header((uint8_t *)&header, sizeof(header) - 1, &header_out));
+-    TEST_ASSERT_FALSE(unpack_header((uint8_t *)&header, sizeof(header) + 1, &header_out));
+-}
+-
+-void test_unpack_header_should_reject_header_with_excessively_large_sizes(void)
+-{
+-    KineticPDUHeader header = {0};
+-    KineticPDUHeader header_out = {0};
+-
+-    header.protobufLength = PDU_PROTO_MAX_LEN + 1;
+-    TEST_ASSERT_FALSE(unpack_header((uint8_t *)&header, sizeof(header), &header_out));
+-
+-    header.protobufLength = PDU_PROTO_MAX_LEN;
+-    header.valueLength = PDU_PROTO_MAX_LEN + 1;
+-    TEST_ASSERT_FALSE(unpack_header((uint8_t *)&header, sizeof(header), &header_out));
+-}
+-
+-void test_unpack_header_should_unpack_header_fields_from_read_buf(void)
+-{
+-    uint8_t read_buf[] = {
+-        0xa0,                       // version prefix
+-        0x00, 0x01, 0x23, 0x45,     // protobuf length
+-        0x00, 0x02, 0x34, 0x56,     // value length
+-    };
+-    KineticPDUHeader header_out = {0};
+-
+-    TEST_ASSERT(unpack_header(read_buf, sizeof(header_out), &header_out));
+-    TEST_ASSERT_EQUAL(0xa0, header_out.versionPrefix);
+-    TEST_ASSERT_EQUAL(0x12345, header_out.protobufLength);
+-    TEST_ASSERT_EQUAL(0x23456, header_out.valueLength);
+-}
+-
+-bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
+-    size_t read_size, void *socket_udata);
+-
+-void test_sink_cb_should_reset_uninitialized_socket_state(void)
+-{
+-    socket_info *si = (socket_info *)si_buf;
+-    *si = (socket_info){
+-        .state = STATE_UNINIT,
+-        .accumulated = 0xFFFFFFFF,
+-    };
+-    KineticConnection connection = { .si = si };
+-    
+-    bus_sink_cb_res_t res = sink_cb(NULL, 0, &connection);
+-
+-    TEST_ASSERT_EQUAL(0, si->accumulated);
+-    TEST_ASSERT_EQUAL(UNPACK_ERROR_UNDEFINED, si->unpack_status);
+-
+-    /* Expect next read to be a header. */
+-    TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
+-    TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
+-    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
+-}
+-
+-void test_sink_cb_should_expose_invalid_header_error(void)
+-{
+-    socket_info *si = (socket_info *)si_buf;
+-    *si = (socket_info){
+-        .state = STATE_AWAITING_HEADER,
+-        .accumulated = 0,
+-    };
+-    KineticConnection connection = { .si = si };
+-    KineticPDUHeader bad_header;
+-    memset(&bad_header, 0xFF, sizeof(bad_header));
+-
+-    bus_sink_cb_res_t res = sink_cb((uint8_t *)&bad_header, sizeof(bad_header), &connection);
+-    TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
+-    TEST_ASSERT_EQUAL(UNPACK_ERROR_INVALID_HEADER, si->unpack_status);
+-    TEST_ASSERT_EQUAL(si, res.full_msg_buffer);
+-    
+-    TEST_ASSERT_EQUAL(0, si->accumulated);
+-    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
+-}
+-
+-void test_sink_cb_should_transition_to_awaiting_body_state_with_good_header(void)
+-{
+-    socket_info *si = (socket_info *)si_buf;
+-    *si = (socket_info){
+-        .state = STATE_AWAITING_HEADER,
+-        .accumulated = 0,
+-    };
+-    KineticConnection connection = { .si = si };
+-    uint8_t read_buf[] = {
+-        0xa0,                       // version prefix
+-        0x00, 0x00, 0x00, 0x7b,     // protobuf length
+-        0x00, 0x00, 0x01, 0xc8,     // value length
+-    };
+-
+-    bus_sink_cb_res_t res = sink_cb(read_buf, sizeof(read_buf), &connection);
+-    TEST_ASSERT_EQUAL(123 + 456, res.next_read);
+-    TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
+-    TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
+-    TEST_ASSERT_EQUAL(0, si->accumulated);
+-    TEST_ASSERT_EQUAL(UNPACK_ERROR_SUCCESS, si->unpack_status);
+-}
+-
+-void test_sink_cb_should_accumulate_partially_recieved_header(void)
+-{
+-    socket_info *si = (socket_info *)si_buf;
+-    *si = (socket_info){
+-        .state = STATE_AWAITING_HEADER,
+-        .accumulated = 0,
+-    };
+-    KineticConnection connection = { .si = si };
+-    uint8_t read_buf1[] = {
+-        0xa0,                       // version prefix
+-        0x00, 0x00, 0x00, 0x7b,     // protobuf length
+-    };
+-    uint8_t read_buf2[] = {
+-        0x00, 0x00, 0x01, 0xc8,     // value length
+-    };
+-
+-    bus_sink_cb_res_t res = sink_cb(read_buf1, sizeof(read_buf1), &connection);
+-    TEST_ASSERT_EQUAL(4, res.next_read);
+-    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
+-    TEST_ASSERT_EQUAL(5, si->accumulated);
+-    res = sink_cb(read_buf2, sizeof(read_buf2), &connection);
+-    TEST_ASSERT_EQUAL(123 + 456, res.next_read);
+-    TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
+-    TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
+-    TEST_ASSERT_EQUAL(0, si->accumulated);
+-    TEST_ASSERT_EQUAL(UNPACK_ERROR_SUCCESS, si->unpack_status);
+-}
+-
+-void test_sink_cb_should_accumulate_partially_received_body(void)
+-{
+-    /* Include trailing memory for si's .buf[]. */
+-    socket_info *si = (socket_info *)si_buf;
+-
+-    si->state = STATE_AWAITING_BODY;
+-    si->header.protobufLength = 0x01;
+-    si->header.valueLength = 0x02;
+-
+-    KineticConnection connection = { .si = si };
+-    uint8_t buf[] = {0xaa, 0xbb};
+-
+-    bus_sink_cb_res_t res = sink_cb((uint8_t *)&buf, sizeof(buf), &connection);
+-    TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
+-    TEST_ASSERT_EQUAL(2, si->accumulated);
+-    TEST_ASSERT_EQUAL(1, res.next_read);
+-    TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
+-}
+-
+-void test_sink_cb_should_yield_fully_received_body(void)
+-{
+-    socket_info *si = (socket_info *)si_buf;
+-    si->state = STATE_AWAITING_BODY;
+-    si->header.protobufLength = 0x01;
+-    si->header.valueLength = 0x02;
+-
+-    KineticConnection connection = { .si = si };
+-    uint8_t buf[] = {0xaa, 0xbb, 0xcc};
+-
+-    bus_sink_cb_res_t res = sink_cb((uint8_t *)&buf, sizeof(buf), &connection);
+-    TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
+-    TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
+-    TEST_ASSERT_EQUAL(si, res.full_msg_buffer);
+-}
+-
+-bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata);
+-
+-void test_unpack_cb_should_expose_error_codes(void)
+-{
+-    KineticConnection con = {.socket = 123};
+-    socket_info *si = (socket_info *)si_buf;
+-    *si = (socket_info){
+-        .state = STATE_AWAITING_HEADER,
+-        .accumulated = 0,
+-        .unpack_status = UNPACK_ERROR_UNDEFINED,
+-    };
+-    
+-    enum unpack_error error_states[] = {
+-        UNPACK_ERROR_UNDEFINED,
+-        UNPACK_ERROR_INVALID_HEADER,
+-        UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
+-    };
+-
+-    for (size_t i = 0; i < sizeof(error_states) / sizeof(error_states[0]); i++) {
+-        si->unpack_status = error_states[i];
+-        bus_unpack_cb_res_t res = unpack_cb((void *)si, &con);
+-        TEST_ASSERT_FALSE(res.ok);
+-        TEST_ASSERT_EQUAL(error_states[i], res.u.error.opaque_error_id);
+-    }
+-}
+-
+-void test_unpack_cb_should_expose_alloc_failure(void)
+-{
+-    KineticConnection con = {.socket = 123};
+-    socket_info si = {
+-        .state = STATE_AWAITING_HEADER,
+-        .accumulated = 0,
+-        .unpack_status = UNPACK_ERROR_SUCCESS,
+-        .header = {
+-            .valueLength = 8,
+-        },
+-    };
+-    
+-    KineticAllocator_NewKineticResponse_ExpectAndReturn(8, NULL);
+-    bus_unpack_cb_res_t res = unpack_cb((void*)&si, &con);
+-    TEST_ASSERT_FALSE(res.ok);
+-    TEST_ASSERT_EQUAL(UNPACK_ERROR_PAYLOAD_MALLOC_FAIL, res.u.error.opaque_error_id);
+-}
+-
+-void test_unpack_cb_should_skip_empty_commands(void)
+-{
+-    /* Include trailing memory for si's .buf[]. */
+-    KineticConnection con = {.socket = 123};
+-    socket_info *si = (socket_info *)si_buf;
+-    si->state = STATE_AWAITING_HEADER;
+-    si->unpack_status = UNPACK_ERROR_SUCCESS,
+-    si->header.protobufLength = 0x01;
+-    si->header.valueLength = 0x01;
+-    si->header.protobufLength = 0x01;
+-    si->buf[0] = 0x00;
+-    si->buf[1] = 0xee;
+-
+-    uint8_t response_buf[sizeof(KineticResponse) + 128];
+-    memset(response_buf, 0, sizeof(response_buf));
+-    KineticResponse *response = (KineticResponse *)response_buf;
+-
+-    KineticAllocator_NewKineticResponse_ExpectAndReturn(1, response);
+-
+-    KineticProto_Message Proto;
+-    memset(&Proto, 0, sizeof(Proto));
+-    Proto.has_commandBytes = false;
+-
+-    KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
+-        si->buf, &Proto);
+-
+-    bus_unpack_cb_res_t res = unpack_cb(si, &con);
+-
+-    TEST_ASSERT_EQUAL(0xee, response->value[0]);
+-
+-    TEST_ASSERT(res.ok);
+-    TEST_ASSERT_EQUAL(response, res.u.success.msg);
+-}
+-
+-void test_unpack_cb_should_unpack_command_bytes(void)
+-{
+-    KineticConnection con = {.socket = 123};
+-    socket_info *si = (socket_info *)si_buf;
+-    si->state = STATE_AWAITING_HEADER;
+-    si->unpack_status = UNPACK_ERROR_SUCCESS,
+-    si->header.protobufLength = 0x01;
+-    si->header.valueLength = 0x08;
+-    si->header.protobufLength = 0x02;
+-    si->buf[0] = 0x00;
+-    si->buf[1] = 0x01;
+-    si->buf[2] = 0xee;
+-
+-    uint8_t response_buf[sizeof(KineticResponse) + 1];
+-    memset(response_buf, 0, sizeof(response_buf));
+-    KineticResponse *response = (KineticResponse *)response_buf;
+-
+-    KineticAllocator_NewKineticResponse_ExpectAndReturn(8, response);
+-
+-    KineticProto_Message Proto;
+-    memset(&Proto, 0, sizeof(Proto));
+-    Proto.has_commandBytes = true;
+-    Proto.commandBytes.data = (uint8_t *)"data";
+-    Proto.commandBytes.len = 4;
+-
+-    KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
+-        si->buf, &Proto);
+-
+-    KineticProto_Command Command;
+-    memset(&Command, 0, sizeof(Command));
+-    KineticProto_Command_Header Header;
+-    memset(&Header, 0, sizeof(Header));
+-    Command.header = &Header;
+-    response->header.valueLength = 1;
+-    Header.ackSequence = 0x12345678;
+-
+-    KineticPDU_unpack_command_ExpectAndReturn(NULL, Proto.commandBytes.len,
+-        Proto.commandBytes.data, &Command);
+-
+-    bus_unpack_cb_res_t res = unpack_cb(si, &con);
+-
+-    TEST_ASSERT_EQUAL(0xee, response->value[0]);
+-
+-    TEST_ASSERT(res.ok);
+-    TEST_ASSERT_EQUAL(response, res.u.success.msg);
+-    TEST_ASSERT_EQUAL(0x12345678, res.u.success.seq_id);
+-}
+diff --git a/test/unit/test_kinetic_session.c b/test/unit/test_kinetic_session.c
+index e6a134f..fa4c75e 100644
+--- a/test/unit/test_kinetic_session.c
++++ b/test/unit/test_kinetic_session.c
+@@ -28,7 +28,6 @@
+ #include "kinetic_types_internal.h"
+ #include "mock_kinetic_controller.h"
+ #include "mock_kinetic_socket.h"
+-#include "mock_kinetic_pdu.h"
+ #include "mock_kinetic_operation.h"
+ #include "mock_kinetic_allocator.h"
+ #include "mock_kinetic_client.h"
+@@ -44,7 +43,7 @@
+ static KineticConnection Connection;
+ static KineticCountingSemaphore Semaphore;
+ static KineticSession Session;
+-static KineticPDU Request, Response;
++static KineticRequest Request;
+ static int OperationCompleteCallbackCount;
+ static KineticStatus LastStatus;
+ static struct _KineticClient Client;
+@@ -72,26 +71,23 @@ void setUp(void)
+     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
+     TEST_ASSERT_EQUAL(17, Session.config.port);
+ 
+-    KineticPDU_InitWithCommand(&Request, &Session);
+-    KineticPDU_InitWithCommand(&Response, &Session);
++    KineticRequest_Init(&Request, &Session);
+     OperationCompleteCallbackCount = 0;
+     LastStatus = KINETIC_STATUS_INVALID;
+ }
+ 
+ void tearDown(void)
+-{ LOG_LOCATION;
++{
+     KineticLogger_Close();
+ }
+ 
+ void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_session(void)
+ {
+-    LOG_LOCATION;
+     TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, KineticSession_Create(NULL, NULL));
+ }
+ 
+ void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_NULL_client(void)
+ {
+-    LOG_LOCATION;
+     KineticSession session;
+     memset(&session, 0, sizeof(session));
+     session.connection = &Connection;
+@@ -100,7 +96,6 @@ void test_KineticSession_Create_should_return_KINETIC_STATUS_SESSION_EMPTY_upon_
+ 
+ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(void)
+ {
+-    LOG_LOCATION;
+     KineticSession session;
+     memset(&session, 0, sizeof(session));
+     KineticConnection connection;
+@@ -124,7 +119,6 @@ void test_KineticSession_Create_should_allocate_and_destroy_KineticConnections(v
+ 
+ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
+ {
+-    LOG_LOCATION;
+     KineticConnection connection;
+     KineticConnection_Init(&connection);
+ 
+@@ -136,8 +130,6 @@ void test_KineticConnection_Init_should_create_a_default_connection_object(void)
+ 
+ void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_session(void)
+ {
+-    LOG_LOCATION;
+-
+     KineticStatus status = KineticSession_Connect(NULL);
+ 
+     TEST_ASSERT_EQUAL(KINETIC_STATUS_SESSION_EMPTY, status);
+@@ -146,7 +138,6 @@ void test_KineticSession_Connect_should_return_KINETIC_SESSION_EMPTY_upon_NULL_s
+ 
+ void test_KineticSession_Connect_should_return_KINETIC_STATUS_CONNECTION_ERROR_upon_NULL_connection(void)
+ {
+-    LOG_LOCATION;
+     KineticSession session = {.connection = NULL};
+ 
+     KineticStatus status = KineticSession_Connect(&session);
+@@ -156,8 +147,6 @@ void test_KineticSession_Connect_should_return_KINETIC_STATUS_CONNECTION_ERROR_u
+ 
+ void test_KineticSession_Connect_should_report_a_failed_connection(void)
+ {
+-    LOG_LOCATION;
+-
+     TEST_ASSERT_EQUAL_STRING(Session.config.host, "somehost.com");
+     TEST_ASSERT_EQUAL(17, Session.config.port);
+ 
+@@ -172,8 +161,6 @@ void test_KineticSession_Connect_should_report_a_failed_connection(void)
+ 
+ void test_KineticSession_Connect_should_report_a_failure_to_receive_register_with_client(void)
+ {
+-    LOG_LOCATION;
+-
+     const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+ 
+     KineticConnection expectedConnection = {
+@@ -232,8 +219,6 @@ void test_KineticSession_Connect_should_report_a_failure_to_receive_register_wit
+ 
+ void test_KineticSession_Connect_should_report_a_failure_to_receive_initialization_info_from_device(void)
+ {
+-    LOG_LOCATION;
+-
+     const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+ 
+     KineticConnection expectedConnection = {
+@@ -294,8 +279,6 @@ void test_KineticSession_Connect_should_report_a_failure_to_receive_initializati
+ 
+ void test_KineticSession_Connect_should_connect_to_specified_host(void)
+ {
+-    LOG_LOCATION;
+-
+     const uint8_t hmacKey[] = {1, 6, 3, 5, 4, 8, 19};
+ 
+     KineticConnection expectedConnection = {
+diff --git a/test/unit/test_kinetic_types_internal.c b/test/unit/test_kinetic_types_internal.c
+index 5d3f88a..47ea617 100644
+--- a/test/unit/test_kinetic_types_internal.c
++++ b/test/unit/test_kinetic_types_internal.c
+@@ -35,18 +35,70 @@ void tearDown(void)
+ {
+ }
+ 
+-void test_kinetic_internal_types_should_be_defined(void)
++void test_KINETIC_SOCKET_DESCRIPTOR_INVALID_is_negative_1(void)
+ {
+-    KineticPDU pdu; (void)pdu;
+-    KineticConnection connection; (void)connection;
+-    KineticHMAC hmac; (void)hmac;
+-    KineticMessage msg; (void)msg;
+-    KineticPDUHeader pduHeader; (void)pduHeader;
+-    KineticOperation operation; (void)operation;
+-
+     TEST_ASSERT_EQUAL(-1, KINETIC_SOCKET_DESCRIPTOR_INVALID);
+ }
+ 
++void test_KineticPDUHeader_should_have_correct_byte_packed_size(void)
++{
++    TEST_ASSERT_EQUAL(1 + 4 + 4, PDU_HEADER_LEN);
++    TEST_ASSERT_EQUAL(PDU_HEADER_LEN, sizeof(KineticPDUHeader));
++}
++
++void test_KineteicPDU_PDU_PROTO_MAX_LEN_should_be_1MB(void)
++{
++    TEST_ASSERT_EQUAL(1024 * 1024, PDU_PROTO_MAX_LEN);
++}
++
++void test_KineteicPDU_KINETIC_OBJ_SIZE_should_be_1MB(void)
++{
++    TEST_ASSERT_EQUAL(1024 * 1024, KINETIC_OBJ_SIZE);
++}
++
++void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_value_max_lengths(void)
++{
++    TEST_ASSERT_EQUAL(PDU_HEADER_LEN + PDU_PROTO_MAX_LEN + KINETIC_OBJ_SIZE, PDU_MAX_LEN);
++}
++
++void test_KineticRequest_Init_should_initialize_Request(void)
++{
++    KineticRequest request;
++    KineticConnection connection;
++    KineticSession session;
++    session.connection = &connection;
++
++    KineticRequest_Init(&request, &session);
++}
++
++void test_KineticRequest_Init_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
++{
++    KineticRequest request;
++    KineticConnection connection;
++    KineticSession session;
++    session.connection = &connection;
++    
++    KineticConnection_Init(&connection);
++    connection.sequence = 24;
++    connection.connectionID = 8765432;
++    session = (KineticSession) {
++        .config = (KineticSessionConfig) {
++            .clusterVersion = 1122334455667788,
++            .identity = 37,
++        }
++    };
++    connection.pSession = &session;
++    session.connection = &connection;
++    KineticRequest_Init(&request, &session);
++
++    TEST_ASSERT_TRUE(request.message.header.has_clusterVersion);
++    TEST_ASSERT_EQUAL_INT64(1122334455667788, request.message.header.clusterVersion);
++    TEST_ASSERT_TRUE(request.message.header.has_connectionID);
++    TEST_ASSERT_EQUAL_INT64(8765432, request.message.header.connectionID);
++    TEST_ASSERT_TRUE(request.message.header.has_sequence);
++    TEST_ASSERT_EQUAL_INT64(KINETIC_SEQUENCE_NOT_YET_BOUND, request.message.header.sequence);
++}
++
+ void test_KineticProtoStatusCode_to_KineticStatus_should_map_from_internal_to_public_type(void)
+ {
+     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS,

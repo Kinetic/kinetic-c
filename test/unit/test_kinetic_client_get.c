@@ -25,7 +25,7 @@
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
-#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_resourcewaiter.h"
@@ -81,8 +81,6 @@ void test_KineticClient_Get_should_get_error_MISSING_VALUE_BUFFER_if_called_with
 
 void test_KineticClient_Get_should_execute_GET_operation(void)
 {
-    LOG_LOCATION;
-
     uint8_t KeyData[64];
     ByteArray Key = ByteArray_Create(KeyData, sizeof(KeyData));
     ByteBuffer KeyBuffer = ByteBuffer_CreateWithArray(Key);
@@ -109,8 +107,6 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
 
 void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metadata(void)
 {
-    LOG_LOCATION;
-    
     uint8_t KeyData[64];
     ByteArray Key = ByteArray_Create(KeyData, sizeof(KeyData));
 

@@ -61,7 +61,7 @@ int KineticSocket_Connect(const char* host, int port)
     sprintf(port_str, "%d", port);
 
     // Open socket
-    LOGF0("Connecting to %s:%d", host, port);
+    LOGF1("Connecting to %s:%d", host, port);
     if (!socket99_open(&cfg, &result)) {
         char err_buf[256];
         socket99_snprintf(err_buf, 256, &result);

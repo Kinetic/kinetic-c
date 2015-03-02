@@ -66,11 +66,15 @@ void KineticLogger_Init(const char* log_file, int log_level)
         KineticLogLevel = log_level;
         
         if (strncmp(log_file, "stdout", 4) == 0 || strncmp(log_file, "STDOUT", 4) == 0) {
-            printf("\nLogging kinetic-c output to console (stdout) w/ log_level=%d\n", KineticLogLevel);
+            if (log_level > 0) {
+                printf("Logging kinetic-c output to console (stdout) w/ log_level=%d\n", KineticLogLevel);
+            }
             KineticLoggerHandle = stdout;
         }
         else {
-            printf("\nLogging kinetic-c output to %s w/ log_level=%d\n", log_file, KineticLogLevel);
+            if (log_level > 0) {
+                printf("Logging kinetic-c output to %s w/ log_level=%d\n", log_file, KineticLogLevel);
+            }
             KineticLoggerHandle = fopen(log_file, "a+");
             KINETIC_ASSERT(KineticLoggerHandle != NULL);
         }
@@ -372,7 +376,7 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
                             KineticProto_Command * cmd = KineticProto_command__unpack(NULL, value->len, value->data);
                             log_protobuf_message(log_level, &cmd->base, indent);
                             log_proto_level_end();
-                            free(cmd);
+                            KineticProto_command__free_unpacked(cmd, NULL);
                         }
                     }
                     else {

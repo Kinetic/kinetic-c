@@ -329,7 +329,7 @@ void run_tests(KineticClient * client)
 void test_kinetic_client_throughput_for_various_sized_objects_for_multiple_threads_each_with_separate_session(void)
 {
     srand(time(NULL));
-    const uint32_t max_runs = 2;
+    const uint32_t max_runs = 1;
     for (uint32_t i = 0; i < max_runs; i++) {
         LOGF0(
             "============================================================================================\n"

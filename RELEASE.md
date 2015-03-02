@@ -1,16 +1,27 @@
 v0.12.0 (kinetic-protocol 3.0.5)
 --------------------------------
-* Added new KineticAdminClient API (see include/kinetic_admin_client.h)
+* `KineticSession` is now supplied as an opaque instance pointer from `KineticClient_CreateSession`
+    * Passed `KineticClientConfig` is now deep copied and can be discarded after session creation.
+* Updated KineticClient_Put to allow storing an object with an empty value with a NULL data pointer supplied.
+* Added new KineticAdminClient API (see `include/kinetic_admin_client.h`)
     * Reloacted existing admin methods to admin API
-        * KineticClient_InstantSecureErase => KineticAdminClient_InstantErase/KineticAdminClient_SecureErase
-        * KineticClient_GetLog => KineticAdminClient_GetLog
-        * KineticClient_FreeDeviceInfo -> KineticAdminClient_LogInfo
-* Added `KINETIC_STATUS_NOT_AUTHORIZED` to KineticStatus enum.
-* Added KineticAdminClient_SetACL command.
-* KineticSession is now supplied as an opaque instance pointer from KineticClient_CreateSession
-    * Passed KineticClientConfig copied and can be discarded after session creation
-* *KNOWN ISSUES*
-    * KineticAdminClient_UpdateFirmware is incomplete
+        * `KineticClient_InstantSecureErase` => `KineticAdminClient_InstantErase`/`KineticAdminClient_SecureErase`
+        * `KineticClient_GetLog` => `KineticAdminClient_GetLog`
+        * `KineticClient_FreeDeviceInfo` => `KineticAdminClient_LogInfo`
+* Updated `kinetic-c-util` to support new Admin API. Still need to add support for printing info returned from `KineticAdminClient_GetLog`
+* Changed `kinetic-c-util` API to use `getopt_long` for operations in addition to parameters and added usage info via `--help`/`-?` option.
+* Fixed potential memory leak when logging protocol buffers.
+* Fixed potential imbalance in concurrent operations semaphore.
+* Status code changes
+    * Changed
+        * `KINETIC_STATUS_HMAC_EMPTY` => `KINETIC_STATUS_HMAC_REQUIRED`
+    * Added
+        * `KINETIC_STATUS_MISSING_PIN`
+        * `KINETIC_STATUS_SSL_REQUIRED`
+        * `KINETIC_STATUS_DEVICE_LOCKED`
+        * `KINETIC_STATUS_ACL_ERROR`
+        * `KINETIC_STATUS_NOT_AUTHORIZED`
+        * `KINETIC_STATUS_INVALID_FILE`
 
 v0.11.2 (kinetic-protocol 3.0.5)
 --------------------------------

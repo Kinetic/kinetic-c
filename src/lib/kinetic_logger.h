@@ -34,7 +34,7 @@ void KineticLogger_Init(const char* logFile, int log_level);
 void KineticLogger_Close(void);
 void KineticLogger_Log(int log_level, const char* message);
 void KineticLogger_LogPrintf(int log_level, const char* format, ...);
-void KineticLogger_LogLocation(const char* filename, int line, char const * message);
+void KineticLogger_LogLocation(const char* filename, int line, const char * message);
 void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header);
 void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg);
 void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status);

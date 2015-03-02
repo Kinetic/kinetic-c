@@ -27,7 +27,7 @@
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
-#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_resourcewaiter.h"

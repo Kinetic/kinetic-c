@@ -18,27 +18,21 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
-
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
-#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
-#include "mock_kinetic_resourcewaiter.h"
-
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
-
-
 
 void setUp(void)
 {
@@ -52,7 +46,6 @@ void tearDown(void)
 
 void test_KineticClient_P2POperation_should_execute_a_p2p_operation(void)
 {
-    LOG_LOCATION;
     KineticSession session;
     KineticConnection connection;
     session.connection = &connection;

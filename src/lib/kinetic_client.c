@@ -25,7 +25,8 @@
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
 #include "kinetic_logger.h"
-#include "kinetic_pdu.h"
+#include "kinetic_response.h"
+#include "kinetic_bus.h"
 #include "kinetic_memory.h"
 #include <stdlib.h>
 #include <sys/time.h>
@@ -47,7 +48,7 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
         config->maxThreadpoolThreads = KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS;
     }
 
-    bool success = KineticPDU_InitBus(client, config);
+    bool success = KineticBus_Init(client, config);
     if (!success) {
         KineticFree(client);
         return NULL;
@@ -57,7 +58,7 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
 
 void KineticClient_Shutdown(KineticClient * const client)
 {
-    KineticPDU_DeinitBus(client);
+    KineticBus_Shutdown(client);
     KineticFree(client);
     KineticLogger_Close();
 }
@@ -165,7 +166,11 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticOperation_BuildPut(operation, entry);
+    KineticStatus status = KineticOperation_BuildPut(operation, entry);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        KineticAllocator_FreeOperation(operation);
+        return status;
+    }
 
     // Execute the operation
     KINETIC_ASSERT(operation->connection == session->connection);
@@ -323,7 +328,6 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
         if (closure != NULL) {
             operation->closure = *closure;
         }
-        KineticOperation_Complete(operation, status);
         return status;
     }
 

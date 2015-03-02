@@ -68,7 +68,6 @@ void tearDown(void)
 
 void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
 {
-    LOG_LOCATION;
     TEST_ASSERT_EQUAL(8123, KINETIC_PORT);
 }
 
@@ -76,7 +75,6 @@ void test_KineticSocket_KINETIC_PORT_should_be_8123(void)
 void test_KineticSocket_Connect_should_create_a_socket_connection(void)
 {
     TEST_IGNORE_MESSAGE("Reinstantiate this test once test host is rewired in");
-    // LOG_LOCATION;
     // FileDesc = KineticSocket_Connect(SYSTEM_TEST_HOST, KineticTestPort);
     // TEST_ASSERT_TRUE_MESSAGE(FileDesc >= 0, "File descriptor invalid");
 }

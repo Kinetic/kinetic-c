@@ -28,12 +28,10 @@
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_auth.h"
-#include "mock_kinetic_pdu.h"
+#include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
-#include "mock_kinetic_resourcewaiter.h"
 #include "mock_acl.h"
-
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include "protobuf-c/protobuf-c.h"
@@ -57,8 +55,6 @@ void tearDown(void)
 
 void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_device(void)
 {
-    LOG_LOCATION;
-
     KineticLogInfo* info;
     KineticOperation operation;
 
@@ -66,7 +62,8 @@ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_de
     KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
-    KineticStatus status = KineticAdminClient_GetLog(&Session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
+    KineticStatus status = KineticAdminClient_GetLog(&Session,
+        KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }

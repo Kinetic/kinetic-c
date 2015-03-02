@@ -430,6 +430,7 @@ static void completion_cb(bus_msg_result_t *res, void *udata) {
         LOG(1, "BUS_SEND_RX_TIMEOUT\n");
         break;
     default:
+        fprintf(stderr, "match fail: %d\n", res->status);
         assert(false);
     }
 }
@@ -465,6 +466,7 @@ static void run_bus(example_state *s, struct bus *b) {
     s->last_second = get_cur_second();
 
     int sleep_counter = 0;
+    int dropped = 0;
 
     while (loop_flag) {
         time_t cur_second = get_cur_second();
@@ -500,6 +502,11 @@ static void run_bus(example_state *s, struct bus *b) {
             payload_size++;
             if (!bus_send_request(b, &msg)) {
                 LOG(1, " @@@ bus_send_request failed!\n");
+                dropped++;
+                if (dropped >= 100) {
+                    LOG(1, " @@@ more than 100 send failures, halting\n");
+                    loop_flag = false;
+                }
             }
             
             cur_socket_i++;

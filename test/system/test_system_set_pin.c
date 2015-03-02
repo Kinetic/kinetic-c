@@ -27,7 +27,7 @@ bool ErasePinSet, LockPinSet;
 
 void setUp(void)
 {
-    SystemTestSetup(3);
+    SystemTestSetup(1);
     ErasePinSet = false;
     LockPinSet = false;
     strcpy(NewPinData, "123");

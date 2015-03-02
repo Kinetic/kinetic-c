@@ -30,6 +30,7 @@ KineticCountingSemaphore * KineticCountingSemaphore_Create(uint32_t counts)
     pthread_mutex_init(&sem->mutex, NULL);
     pthread_cond_init(&sem->available, NULL);
     sem->count = counts;
+    sem->max = counts;
     sem->num_waiting = 0;
     return sem;
 }
@@ -72,6 +73,7 @@ void KineticCountingSemaphore_Give(KineticCountingSemaphore * const sem) // SIGN
     pthread_mutex_unlock(&sem->mutex);
     
     LOGF3("Concurrent ops throttle -- GIVE: %u => %u (waiting=%u)", before, after, waiting);
+    assert(sem->max >= after);
 }
 
 void KineticCountingSemaphore_Destroy(KineticCountingSemaphore * const sem)

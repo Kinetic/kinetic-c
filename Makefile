@@ -58,7 +58,8 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_allocator.o \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
-	$(OUT_DIR)/kinetic_pdu.o \
+	$(OUT_DIR)/kinetic_response.o \
+	$(OUT_DIR)/kinetic_bus.o \
 	$(OUT_DIR)/kinetic_auth.o \
 	$(OUT_DIR)/kinetic_pdu_unpack.o \
 	$(OUT_DIR)/kinetic_proto.o \
@@ -430,8 +431,15 @@ run: $(UTIL_EXEC)
 	@echo --------------------------------------------------------------------------------
 	@echo
 	# $(UTIL_EXEC) instanterase
-	$(UTIL_EXEC) noop
-	exec $(UTIL_EXEC) put get delete
+	exec $(UTIL_EXEC) --help
+	exec $(UTIL_EXEC) -?
+	exec $(UTIL_EXEC) --noop
+	exec $(UTIL_EXEC) --put
+	exec $(UTIL_EXEC) --get
+	exec $(UTIL_EXEC) --getnext key ""
+	exec $(UTIL_EXEC) --getprevious key ""
+	exec $(UTIL_EXEC) --delete
+	exec $(UTIL_EXEC) --getlog
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
 	@echo

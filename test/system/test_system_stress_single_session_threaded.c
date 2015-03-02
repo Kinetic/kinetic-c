@@ -351,7 +351,7 @@ void test_kinetic_client_throughput_test_kinetic_client_throughput_(void)
     };
     KineticClient * client = KineticClient_Init(&config);
 
-    const uint32_t max_runs = 2;
+    const uint32_t max_runs = 1;
     for (uint32_t i = 0; i < max_runs; i++) {
         LOGF0(
             "============================================================================================\n"

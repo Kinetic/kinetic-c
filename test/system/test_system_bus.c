@@ -34,7 +34,7 @@
 #include "kinetic_proto.h"
 #include "kinetic_allocator.h"
 #include "kinetic_message.h"
-#include "kinetic_pdu.h"
+#include "kinetic_bus.h"
 #include "kinetic_logger.h"
 #include "kinetic_operation.h"
 #include "kinetic_hmac.h"

@@ -26,12 +26,8 @@
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include "protobuf-c.h"
-#include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
-#include "mock_kinetic_socket.h"
-#include "mock_kinetic_auth.h"
 #include "mock_kinetic_operation.h"
-#include "mock_kinetic_pdu.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_resourcewaiter.h"
 #include <pthread.h>
