@@ -1,4 +1,4 @@
-.TH "kinetic_hmac.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_hmac.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -37,13 +37,13 @@ References KineticHMAC::algorithm, KINETIC_HMAC_MAX_LEN, KINETIC_PROTO_COMMAND_S
 .PP
 Definition at line 47 of file kinetic_hmac\&.c\&.
 .PP
-References ByteArray::data, KineticHMAC::data, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Init(), ByteArray::len, and KineticHMAC::len\&.
+References ByteArray::data, KineticHMAC::data, KINETIC_ASSERT, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Compute(), KineticHMAC_Init(), ByteArray::len, and KineticHMAC::len\&.
 .SS "bool KineticHMAC_Validate (const KineticProto_Message *msg, const \fBByteArray\fPkey)"
 
 .PP
-Definition at line 65 of file kinetic_hmac\&.c\&.
+Definition at line 67 of file kinetic_hmac\&.c\&.
 .PP
-References ByteArray::data, KineticHMAC::data, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, KineticHMAC_Init(), KineticLogger_LogByteArray(), ByteArray::len, KineticHMAC::len, and LOG0\&.
+References ByteArray::data, KineticHMAC::data, KINETIC_ASSERT, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, KineticHMAC_Compute(), KineticHMAC_Init(), KineticLogger_LogByteArray(), ByteArray::len, KineticHMAC::len, and LOG0\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

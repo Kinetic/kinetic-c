@@ -1,4 +1,4 @@
-.TH "listener" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "listener" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,10 +15,16 @@ listener \-
 .RI "struct \fBbus\fP * \fBbus\fP"
 .br
 .ti -1c
-.RI "struct casq * \fBq\fP"
+.RI "bool \fBshutdown\fP"
 .br
 .ti -1c
-.RI "bool \fBshutdown\fP"
+.RI "int \fBcommit_pipe\fP"
+.br
+.ti -1c
+.RI "int \fBincoming_msg_pipe\fP"
+.br
+.ti -1c
+.RI "bool \fBis_idle\fP"
 .br
 .ti -1c
 .RI "\fBrx_info_t\fP \fBrx_info\fP [(1024)]"
@@ -51,7 +57,7 @@ listener \-
 .RI "uint16_t \fBtracked_fds\fP"
 .br
 .ti -1c
-.RI "struct pollfd \fBfds\fP [1000]"
+.RI "struct pollfd \fBfds\fP [1000+1]"
 .br
 .ti -1c
 .RI "\fBconnection_info\fP * \fBfd_info\fP [1000]"
@@ -65,77 +71,85 @@ listener \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 101 of file listener_internal\&.h\&.
+Definition at line 106 of file listener_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "struct \fBbus\fP* listener::bus"
 
 .PP
-Definition at line 102 of file listener_internal\&.h\&.
-.SS "struct casq* listener::q"
-
-.PP
-Definition at line 103 of file listener_internal\&.h\&.
+Definition at line 107 of file listener_internal\&.h\&.
 .SS "bool listener::shutdown"
 
 .PP
-Definition at line 104 of file listener_internal\&.h\&.
-.SS "\fBrx_info_t\fP listener::rx_info[(1024)]"
-
-.PP
-Definition at line 106 of file listener_internal\&.h\&.
-.SS "\fBrx_info_t\fP* listener::rx_info_freelist"
-
-.PP
-Definition at line 107 of file listener_internal\&.h\&.
-.SS "uint16_t listener::rx_info_in_use"
-
-.PP
 Definition at line 108 of file listener_internal\&.h\&.
-.SS "uint16_t listener::rx_info_max_used"
-
-.PP
-Definition at line 109 of file listener_internal\&.h\&.
-.SS "\fBlistener_msg\fP listener::msgs[32]"
+.SS "int listener::commit_pipe"
 
 .PP
 Definition at line 111 of file listener_internal\&.h\&.
-.SS "\fBlistener_msg\fP* listener::msg_freelist"
+.SS "int listener::incoming_msg_pipe"
 
 .PP
 Definition at line 112 of file listener_internal\&.h\&.
-.SS "int16_t listener::msgs_in_use"
+.SS "bool listener::is_idle"
 
 .PP
 Definition at line 113 of file listener_internal\&.h\&.
-.SS "int64_t listener::largest_seq_id_seen"
+.SS "\fBrx_info_t\fP listener::rx_info[(1024)]"
 
 .PP
-Definition at line 114 of file listener_internal\&.h\&.
-.SS "size_t listener::upstream_backpressure"
+Definition at line 115 of file listener_internal\&.h\&.
+.SS "\fBrx_info_t\fP* listener::rx_info_freelist"
 
 .PP
 Definition at line 116 of file listener_internal\&.h\&.
-.SS "uint16_t listener::tracked_fds"
+.SS "uint16_t listener::rx_info_in_use"
+
+.PP
+Definition at line 117 of file listener_internal\&.h\&.
+.SS "uint16_t listener::rx_info_max_used"
 
 .PP
 Definition at line 118 of file listener_internal\&.h\&.
-.SS "struct pollfd listener::fds[1000]"
-
-.PP
-Definition at line 119 of file listener_internal\&.h\&.
-.SS "\fBconnection_info\fP* listener::fd_info[1000]"
+.SS "\fBlistener_msg\fP listener::msgs[32]"
 
 .PP
 Definition at line 120 of file listener_internal\&.h\&.
-.SS "size_t listener::read_buf_size"
+.SS "\fBlistener_msg\fP* listener::msg_freelist"
+
+.PP
+Definition at line 121 of file listener_internal\&.h\&.
+.SS "int16_t listener::msgs_in_use"
+
+.PP
+Definition at line 122 of file listener_internal\&.h\&.
+.SS "int64_t listener::largest_seq_id_seen"
 
 .PP
 Definition at line 123 of file listener_internal\&.h\&.
+.SS "size_t listener::upstream_backpressure"
+
+.PP
+Definition at line 125 of file listener_internal\&.h\&.
+.SS "uint16_t listener::tracked_fds"
+
+.PP
+Definition at line 127 of file listener_internal\&.h\&.
+.SS "struct pollfd listener::fds[1000+1]"
+
+.PP
+Definition at line 129 of file listener_internal\&.h\&.
+.SS "\fBconnection_info\fP* listener::fd_info[1000]"
+
+.PP
+Definition at line 130 of file listener_internal\&.h\&.
+.SS "size_t listener::read_buf_size"
+
+.PP
+Definition at line 133 of file listener_internal\&.h\&.
 .SS "uint8_t* listener::read_buf"
 
 .PP
-Definition at line 124 of file listener_internal\&.h\&.
+Definition at line 134 of file listener_internal\&.h\&.
 
 .SH "Author"
 .PP 

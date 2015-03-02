@@ -1,4 +1,4 @@
-.TH "write_file_nonblocking.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "write_file_nonblocking.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -40,10 +40,16 @@ write_file_nonblocking.c \-
 
 .in +1c
 .ti -1c
-.RI "FileTransferProgress * \fBstart_file_transfer\fP (\fBKineticSession\fP *session, char const *const filename, uint64_t keyPrefix, uint32_t maxOverlappedChunks)"
+.RI "FileTransferProgress * \fBstart_file_transfer\fP (KineticSession *session, char const *const filename, uint64_t keyPrefix, uint32_t maxOverlappedChunks)"
 .br
 .ti -1c
 .RI "\fBKineticStatus\fP \fBwait_for_put_finish\fP (FileTransferProgress *const transfer)"
+.br
+.ti -1c
+.RI "static int \fBput_chunk_of_file\fP (FileTransferProgress *transfer)"
+.br
+.ti -1c
+.RI "static void \fBput_chunk_of_file_finished\fP (\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
 .br
 .ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
@@ -57,20 +63,34 @@ write_file_nonblocking.c \-
 Definition at line 32 of file write_file_nonblocking\&.c\&.
 .SH "Function Documentation"
 .PP 
-.SS "FileTransferProgress * start_file_transfer (\fBKineticSession\fP *session, char const *constfilename, uint64_tkeyPrefix, uint32_tmaxOverlappedChunks)"
+.SS "FileTransferProgress * start_file_transfer (KineticSession *session, char const *constfilename, uint64_tkeyPrefix, uint32_tmaxOverlappedChunks)"
 
 .PP
 Definition at line 194 of file write_file_nonblocking\&.c\&.
+.PP
+References put_chunk_of_file()\&.
 .SS "\fBKineticStatus\fP wait_for_put_finish (FileTransferProgress *consttransfer)"
 
 .PP
 Definition at line 215 of file write_file_nonblocking\&.c\&.
+.SS "static int put_chunk_of_file (FileTransferProgress *transfer)\fC [static]\fP"
+
+.PP
+Definition at line 121 of file write_file_nonblocking\&.c\&.
+.PP
+References ByteBuffer_Create(), ByteBuffer_CreateAndAppend(), ByteBuffer_CreateAndAppendFormattedCString(), KINETIC_ALGORITHM_SHA1, Kinetic_GetStatusDescription(), KINETIC_STATUS_SUCCESS, KINETIC_SYNCHRONIZATION_WRITETHROUGH, KineticClient_Put(), and REPORT_ERRNO\&.
+.SS "static void put_chunk_of_file_finished (\fBKineticCompletionData\fP *kinetic_data, void *client_data)\fC [static]\fP"
+
+.PP
+Definition at line 166 of file write_file_nonblocking\&.c\&.
+.PP
+References Kinetic_GetStatusDescription(), KINETIC_STATUS_NOT_ATTEMPTED, KINETIC_STATUS_SUCCESS, put_chunk_of_file(), and KineticCompletionData::status\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 69 of file write_file_nonblocking\&.c\&.
 .PP
-References ByteArray_CreateWithCString(), KineticSession::config, KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), KineticClientConfig::logFile, start_file_transfer(), and wait_for_put_finish()\&.
+References ByteArray_CreateWithCString(), KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateSession(), KineticClient_DestroySession(), KineticClient_Init(), KineticClient_Shutdown(), KineticClientConfig::logFile, start_file_transfer(), and wait_for_put_finish()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

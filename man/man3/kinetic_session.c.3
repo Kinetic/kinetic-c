@@ -1,4 +1,4 @@
-.TH "kinetic_session.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_session.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,7 +14,7 @@ kinetic_session.c \-
 .br
 \fC#include 'kinetic_socket\&.h'\fP
 .br
-\fC#include 'kinetic_pdu\&.h'\fP
+\fC#include 'kinetic_response\&.h'\fP
 .br
 \fC#include 'kinetic_operation\&.h'\fP
 .br
@@ -35,48 +35,84 @@ kinetic_session.c \-
 \fC#include <sys/time\&.h>\fP
 .br
 
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBATOMIC_FETCH_AND_INCREMENT\fP(P)   __sync_fetch_and_add(P, 1)"
+.br
+.in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticSession_Create\fP (\fBKineticSession\fP *const session, KineticClient *const client)"
+.RI "\fBKineticStatus\fP \fBKineticSession_Create\fP (KineticSession *const session, KineticClient *const client)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticSession_Destroy\fP (\fBKineticSession\fP *const session)"
+.RI "\fBKineticStatus\fP \fBKineticSession_Destroy\fP (KineticSession *const session)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticSession_Connect\fP (\fBKineticSession\fP const *const session)"
+.RI "\fBKineticStatus\fP \fBKineticSession_Connect\fP (KineticSession *const session)"
 .br
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticSession_Disconnect\fP (\fBKineticSession\fP const *const session)"
+.RI "\fBKineticStatus\fP \fBKineticSession_Disconnect\fP (KineticSession const *const session)"
+.br
+.ti -1c
+.RI "int64_t \fBKineticSession_GetNextSequenceCount\fP (KineticSession const *const session)"
+.br
+.ti -1c
+.RI "int64_t \fBKineticSession_GetClusterVersion\fP (KineticSession const *const session)"
+.br
+.ti -1c
+.RI "void \fBKineticSession_SetClusterVersion\fP (KineticSession *const session, int64_t cluster_version)"
 .br
 .in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ATOMIC_FETCH_AND_INCREMENT(P)   __sync_fetch_and_add(P, 1)"
+
+.PP
+Definition at line 172 of file kinetic_session\&.c\&.
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticStatus\fP KineticSession_Create (\fBKineticSession\fP *constsession, KineticClient *constclient)"
+.SS "\fBKineticStatus\fP KineticSession_Create (KineticSession *constsession, KineticClient *constclient)"
 
 .PP
 Definition at line 37 of file kinetic_session\&.c\&.
 .PP
-References KineticSession::connection, KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeConnection(), KineticAllocator_NewConnection(), KineticCountingSemaphore_Create(), LOG0, KineticConnection::outstandingOperations, and KineticConnection::sendMutex\&.
-.SS "\fBKineticStatus\fP KineticSession_Destroy (\fBKineticSession\fP *constsession)"
+References KINETIC_ASSERT, KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeConnection(), KineticAllocator_NewConnection(), KineticCountingSemaphore_Create(), and LOG0\&.
+.SS "\fBKineticStatus\fP KineticSession_Destroy (KineticSession *constsession)"
 
 .PP
-Definition at line 71 of file kinetic_session\&.c\&.
+Definition at line 74 of file kinetic_session\&.c\&.
 .PP
-References KineticSession::connection, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeConnection(), KineticCountingSemaphore_Destroy(), and KineticConnection::outstandingOperations\&.
-.SS "\fBKineticStatus\fP KineticSession_Connect (\fBKineticSession\fP const *constsession)"
+References KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeConnection(), KineticAllocator_FreeSession(), and KineticCountingSemaphore_Destroy()\&.
+.SS "\fBKineticStatus\fP KineticSession_Connect (KineticSession *constsession)"
 
 .PP
-Definition at line 85 of file kinetic_session\&.c\&.
+Definition at line 91 of file kinetic_session\&.c\&.
 .PP
-References bus_register_socket(), BUS_SOCKET_PLAIN, KineticSession::config, KineticSession::connection, KineticSessionConfig::host, KINETIC_CONNECTION_TIMEOUT_SECS, KINETIC_SOCKET_DESCRIPTOR_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticResourceWaiter_WaitTilAvailable(), KineticSocket_Close(), KineticSocket_Connect(), LOG0, LOG_LOCATION, LOGF1, PDU_PROTO_MAX_LEN, and KineticSessionConfig::port\&.
-.SS "\fBKineticStatus\fP KineticSession_Disconnect (\fBKineticSession\fP const *constsession)"
+References bus_register_socket(), BUS_SOCKET_PLAIN, BUS_SOCKET_SSL, KINETIC_ASSERT, KINETIC_CONNECTION_TIMEOUT_SECS, KINETIC_SOCKET_DESCRIPTOR_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SUCCESS, KineticResourceWaiter_WaitTilAvailable(), KineticSocket_Close(), KineticSocket_Connect(), LOG0, LOGF1, and PDU_PROTO_MAX_LEN\&.
+.SS "\fBKineticStatus\fP KineticSession_Disconnect (KineticSession const *constsession)"
 
 .PP
-Definition at line 147 of file kinetic_session\&.c\&.
+Definition at line 151 of file kinetic_session\&.c\&.
 .PP
-References bus_release_socket(), KineticConnection::connected, KineticSession::connection, KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_EMPTY, and KINETIC_STATUS_SUCCESS\&.
+References bus_release_socket(), KINETIC_HANDLE_INVALID, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_EMPTY, and KINETIC_STATUS_SUCCESS\&.
+.SS "int64_t KineticSession_GetNextSequenceCount (KineticSession const *constsession)"
+
+.PP
+Definition at line 174 of file kinetic_session\&.c\&.
+.PP
+References ATOMIC_FETCH_AND_INCREMENT\&.
+.SS "int64_t KineticSession_GetClusterVersion (KineticSession const *constsession)"
+
+.PP
+Definition at line 181 of file kinetic_session\&.c\&.
+.SS "void KineticSession_SetClusterVersion (KineticSession *constsession, int64_tcluster_version)"
+
+.PP
+Definition at line 187 of file kinetic_session\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

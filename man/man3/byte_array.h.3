@@ -1,4 +1,4 @@
-.TH "byte_array.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "byte_array.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -189,7 +189,7 @@ References ByteBuffer_AppendCString(), and ByteBuffer_Create()\&.
 .PP
 Definition at line 221 of file byte_array\&.c\&.
 .PP
-References ByteBuffer_Create()\&.
+References append_formatted_cstring_va_list(), and ByteBuffer_Create()\&.
 .SS "\fBByteBuffer\fP ByteBuffer_CreateAndAppendDummyData (void *data, size_tmax_len, size_tlen)"
 
 .PP
@@ -243,7 +243,7 @@ References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteAr
 .PP
 Definition at line 205 of file byte_array\&.c\&.
 .PP
-References ByteBuffer::array, and ByteArray::data\&.
+References append_formatted_cstring_va_list(), ByteBuffer::array, and ByteArray::data\&.
 .SS "\fBByteBuffer\fP* ByteBuffer_AppendDummyData (\fBByteBuffer\fP *buffer, size_tlen)"
 
 .PP

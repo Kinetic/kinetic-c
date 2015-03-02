@@ -1,4 +1,4 @@
-.TH "get_key_range.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "get_key_range.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,17 +29,26 @@ get_key_range.c \-
 
 .in +1c
 .ti -1c
+.RI "static bool \fBcreate_entries\fP (KineticSession const *const session, const int count)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static bool create_entries (KineticSession const *constsession, const intcount)\fC [static]\fP"
+
+.PP
+Definition at line 117 of file get_key_range\&.c\&.
+.PP
+References ByteBuffer_CreateAndAppendFormattedCString(), KineticEntry::key, KINETIC_ALGORITHM_SHA1, KINETIC_STATUS_SUCCESS, and KineticClient_Put()\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 33 of file get_key_range\&.c\&.
 .PP
-References ByteBufferArray::buffers, ByteArray_CreateWithCString(), ByteBuffer_Create(), ByteBuffer_CreateAndAppendCString(), KineticSession::config, KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_GetKeyRange(), KineticClient_Init(), KineticClient_Shutdown(), KineticClientConfig::logFile, KineticKeyRange::startKey, and ByteBufferArray::used\&.
+References ByteBufferArray::buffers, ByteArray_CreateWithCString(), ByteBuffer_Create(), ByteBuffer_CreateAndAppendCString(), create_entries(), KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateSession(), KineticClient_DestroySession(), KineticClient_GetKeyRange(), KineticClient_Init(), KineticClient_Shutdown(), KineticClientConfig::logFile, KineticKeyRange::startKey, and ByteBufferArray::used\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

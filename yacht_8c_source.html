@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -94,10 +94,10 @@
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">void</span> **values;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;};</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> insert(<span class="keywordtype">int</span> *buckets, <span class="keywordtype">void</span> **values,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="yacht_8c.html#a2255d76fe39652a75ca67451e9c30d41">insert</a>(<span class="keywordtype">int</span> *buckets, <span class="keywordtype">void</span> **values,</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">size_t</span> mask, <span class="keywordtype">size_t</span> max_fill,</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> *value, <span class="keywordtype">void</span> **old_value);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> grow(<span class="keyword">struct</span> yacht *y);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="yacht_8c.html#aa533720f1c6dd735aee74c5ac2d3e4b9">grow</a>(<span class="keyword">struct</span> yacht *y);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
 <div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="yacht_8c.html#a783af37de2395ffe34618ed81dc4394c">   47</a></span>&#160;<span class="preprocessor">#define DEF_SZ2 4</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="yacht_8c.html#a6deebb67c6e9267ad4e978b992850398">   48</a></span>&#160;<span class="preprocessor">#define MAX_PROBES 16</span></div>
@@ -129,12 +129,12 @@
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
 <div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="yacht_8c.html#ad6161f686aaa2a898d0deb0c5e837446">   75</a></span>&#160;<span class="preprocessor">#define LARGE_PRIME (4294967291L </span><span class="comment">/* (2 ** 32) - 5 */</span><span class="preprocessor">)</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keyword">static</span> <span class="keywordtype">size_t</span> hash(<span class="keywordtype">int</span> key) {</div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b">   77</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">size_t</span> <a class="code" href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b">hash</a>(<span class="keywordtype">int</span> key) {</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">return</span> key * <a class="code" href="yacht_8c.html#ad6161f686aaa2a898d0deb0c5e837446">LARGE_PRIME</a>;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
 <div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="yacht_8h.html#a092cf4699adb37b6909b5055e1b712f6">   81</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8c.html#a092cf4699adb37b6909b5055e1b712f6">yacht_get</a>(<span class="keyword">struct</span> yacht *y, <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> **value) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">size_t</span> b = hash(key) &amp; y-&gt;mask;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">size_t</span> b = <a class="code" href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b">hash</a>(key) &amp; y-&gt;mask;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e">LOG</a>(<span class="stringliteral">&quot; -- getting key %d with bucket %zd\n&quot;</span>, key, b);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> o = 0; o &lt; y-&gt;size; o++) {</div>
@@ -163,18 +163,18 @@
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">for</span> (;;) {</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordtype">size_t</span> max = y-&gt;size / 2;</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordflow">if</span> (max &gt; 16) { max = <a class="code" href="yacht_8c.html#a6deebb67c6e9267ad4e978b992850398">MAX_PROBES</a>; }</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordflow">if</span> (insert(y-&gt;buckets, y-&gt;values, y-&gt;mask, max, key, value, old_value)) {</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="yacht_8c.html#a2255d76fe39652a75ca67451e9c30d41">insert</a>(y-&gt;buckets, y-&gt;values, y-&gt;mask, max, key, value, old_value)) {</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="keywordflow">if</span> (!grow(y)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="keywordflow">if</span> (!<a class="code" href="yacht_8c.html#aa533720f1c6dd735aee74c5ac2d3e4b9">grow</a>(y)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        }</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    }</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> insert(<span class="keywordtype">int</span> *buckets, <span class="keywordtype">void</span> **values,</div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="yacht_8c.html#a2255d76fe39652a75ca67451e9c30d41">  119</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="yacht_8c.html#a2255d76fe39652a75ca67451e9c30d41">insert</a>(<span class="keywordtype">int</span> *buckets, <span class="keywordtype">void</span> **values,</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordtype">size_t</span> mask, <span class="keywordtype">size_t</span> max_fill,</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> *value, <span class="keywordtype">void</span> **old_value) {</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">size_t</span> b = hash(key) &amp; mask;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">size_t</span> b = <a class="code" href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b">hash</a>(key) &amp; mask;</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> o = 0; o &lt; max_fill; o++) {</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordflow">if</span> (o &gt; 0) { <a class="code" href="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e">LOG</a>(<span class="stringliteral">&quot; -- o %zd (max_fill %zd)\n&quot;</span>, o, max_fill); }</div>
@@ -197,7 +197,7 @@
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">             *     Disable it for now. */</span></div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;            <span class="comment">/* Brent&#39;s variation -- bump out key if not in its main spot  */</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keywordtype">size_t</span> ob = hash(bv) &amp; mask;  <span class="comment">/* other&#39;s primary bucket */</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keywordtype">size_t</span> ob = <a class="code" href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b">hash</a>(bv) &amp; mask;  <span class="comment">/* other&#39;s primary bucket */</span></div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <span class="keywordflow">if</span> (ob == i) {      <span class="comment">/* keep looking for an open spot */</span></div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            } <span class="keywordflow">else</span> {            <span class="comment">/* refile it instead */</span></div>
@@ -215,7 +215,7 @@
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;               <span class="comment">/* too full */</span></div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;}</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> grow(<span class="keyword">struct</span> yacht *y) {</div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="yacht_8c.html#aa533720f1c6dd735aee74c5ac2d3e4b9">  163</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="yacht_8c.html#aa533720f1c6dd735aee74c5ac2d3e4b9">grow</a>(<span class="keyword">struct</span> yacht *y) {</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keywordtype">size_t</span> nsize = 2 * y-&gt;size;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <a class="code" href="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e">LOG</a>(<span class="stringliteral">&quot; -- growing %zd =&gt; %zd\n&quot;</span>, y-&gt;size, nsize);</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="keywordtype">size_t</span> nmask = nsize - 1;</div>
@@ -235,8 +235,8 @@
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; y-&gt;size; i++) {</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordtype">int</span> key = y-&gt;buckets[i];</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">if</span> (key != <a class="code" href="yacht_8h.html#abc750e49ca3e544c9361d83f00266f3e">YACHT_NO_KEY</a> &amp;&amp; key != <a class="code" href="yacht_8h.html#adba1f8c6361348c96ee597560aa4b35b">YACHT_DELETED</a>) {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">if</span> (!insert(nbuckets, nvalues, nmask, nsize, key, y-&gt;values[i], NULL)) {</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                <span class="keywordflow">goto</span> cleanup;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">if</span> (!<a class="code" href="yacht_8c.html#a2255d76fe39652a75ca67451e9c30d41">insert</a>(nbuckets, nvalues, nmask, nsize, key, y-&gt;values[i], NULL)) {</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>;</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            }</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        }</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    }</div>
@@ -247,7 +247,7 @@
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    y-&gt;values = nvalues;</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    y-&gt;mask = nmask;</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;cleanup:</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>:</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="keywordflow">if</span> (nbuckets) { free(nbuckets); }</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="keywordflow">if</span> (nvalues) { free(nvalues); }</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;</div>
@@ -256,7 +256,7 @@
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">/* Remove KEY from the table. */</span></div>
 <div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="yacht_8h.html#a0af6b1aa653ad32bef89b3e86e7582ed">  203</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8c.html#a0af6b1aa653ad32bef89b3e86e7582ed">yacht_remove</a>(<span class="keyword">struct</span> yacht *y, <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> **old_value) {</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="keywordtype">size_t</span> b = hash(key) &amp; y-&gt;mask;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="keywordtype">size_t</span> b = <a class="code" href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b">hash</a>(key) &amp; y-&gt;mask;</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <a class="code" href="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e">LOG</a>(<span class="stringliteral">&quot; -- removing %d with bucket %zd\n&quot;</span>, key, b);</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> o = 0; o &lt; y-&gt;size; o++) {</div>
@@ -301,8 +301,12 @@
 <div class="ttc" id="yacht_8c_html_a783af37de2395ffe34618ed81dc4394c"><div class="ttname"><a href="yacht_8c.html#a783af37de2395ffe34618ed81dc4394c">DEF_SZ2</a></div><div class="ttdeci">#define DEF_SZ2</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00047">yacht.c:47</a></div></div>
 <div class="ttc" id="yacht_8c_html_a092cf4699adb37b6909b5055e1b712f6"><div class="ttname"><a href="yacht_8c.html#a092cf4699adb37b6909b5055e1b712f6">yacht_get</a></div><div class="ttdeci">bool yacht_get(struct yacht *y, int key, void **value)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00081">yacht.c:81</a></div></div>
 <div class="ttc" id="yacht_8h_html_ae000cbf4995e80a3c416fe4e100d194b"><div class="ttname"><a href="yacht_8h.html#ae000cbf4995e80a3c416fe4e100d194b">yacht_free_cb</a></div><div class="ttdeci">void( yacht_free_cb)(void *value, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8h_source.html#l00052">yacht.h:52</a></div></div>
+<div class="ttc" id="sender_8c_html_a35be7855150c6a8fa847eba457e48bdc"><div class="ttname"><a href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a></div><div class="ttdeci">static void cleanup(sender *s)</div><div class="ttdef"><b>Definition:</b> <a href="sender_8c_source.html#l00405">sender.c:405</a></div></div>
+<div class="ttc" id="yacht_8c_html_afd02a43d996161ef9ebfd5502b0c193b"><div class="ttname"><a href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b">hash</a></div><div class="ttdeci">static size_t hash(int key)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00077">yacht.c:77</a></div></div>
 <div class="ttc" id="yacht_8c_html_ad6161f686aaa2a898d0deb0c5e837446"><div class="ttname"><a href="yacht_8c.html#ad6161f686aaa2a898d0deb0c5e837446">LARGE_PRIME</a></div><div class="ttdeci">#define LARGE_PRIME</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00075">yacht.c:75</a></div></div>
+<div class="ttc" id="yacht_8c_html_aa533720f1c6dd735aee74c5ac2d3e4b9"><div class="ttname"><a href="yacht_8c.html#aa533720f1c6dd735aee74c5ac2d3e4b9">grow</a></div><div class="ttdeci">static bool grow(struct yacht *y)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00163">yacht.c:163</a></div></div>
 <div class="ttc" id="yacht_8c_html_a3577749fb48d57a158b8ac1a0b3ab57e"><div class="ttname"><a href="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e">LOG</a></div><div class="ttdeci">#define LOG(...)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00027">yacht.c:27</a></div></div>
+<div class="ttc" id="yacht_8c_html_a2255d76fe39652a75ca67451e9c30d41"><div class="ttname"><a href="yacht_8c.html#a2255d76fe39652a75ca67451e9c30d41">insert</a></div><div class="ttdeci">static bool insert(int *buckets, void **values, size_t mask, size_t max_fill, int key, void *value, void **old_value)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00119">yacht.c:119</a></div></div>
 <div class="ttc" id="yacht_8c_html_a6deebb67c6e9267ad4e978b992850398"><div class="ttname"><a href="yacht_8c.html#a6deebb67c6e9267ad4e978b992850398">MAX_PROBES</a></div><div class="ttdeci">#define MAX_PROBES</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00048">yacht.c:48</a></div></div>
 <div class="ttc" id="yacht_8h_html"><div class="ttname"><a href="yacht_8h.html">yacht.h</a></div></div>
 <div class="ttc" id="yacht_8c_html_a1bc830375ef53847afcf2d39907669c5"><div class="ttname"><a href="yacht_8c.html#a1bc830375ef53847afcf2d39907669c5">yacht_member</a></div><div class="ttdeci">bool yacht_member(struct yacht *y, int key)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00099">yacht.c:99</a></div></div>

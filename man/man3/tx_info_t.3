@@ -1,4 +1,4 @@
-.TH "tx_info_t" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "tx_info_t" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -67,6 +67,9 @@ tx_info_t \-
 .br
 .ti -1c
 .RI "      time_t \fBtimeout_sec\fP"
+.br
+.ti -1c
+.RI "      time_t \fBorig_timeout_sec\fP"
 .br
 .ti -1c
 .RI "      \fBboxed_msg\fP * \fBbox\fP"
@@ -162,14 +165,18 @@ Definition at line 99 of file sender_internal\&.h\&.
 Definition at line 100 of file sender_internal\&.h\&.
 .SS "struct { \&.\&.\&. } ::u_enqueue  tx_info_t::enqueue"
 
+.SS "time_t tx_info_t::orig_timeout_sec"
+
+.PP
+Definition at line 106 of file sender_internal\&.h\&.
 .SS "size_t tx_info_t::sent_size"
 
 .PP
-Definition at line 107 of file sender_internal\&.h\&.
+Definition at line 108 of file sender_internal\&.h\&.
 .SS "\fBfd_info\fP* tx_info_t::fdi"
 
 .PP
-Definition at line 108 of file sender_internal\&.h\&.
+Definition at line 109 of file sender_internal\&.h\&.
 .SS "struct { \&.\&.\&. } ::u_write  tx_info_t::write"
 
 .SS "struct { \&.\&.\&. } ::u_notify  tx_info_t::notify"
@@ -177,13 +184,13 @@ Definition at line 108 of file sender_internal\&.h\&.
 .SS "uint16_t tx_info_t::backpressure"
 
 .PP
-Definition at line 118 of file sender_internal\&.h\&.
+Definition at line 119 of file sender_internal\&.h\&.
 .SS "struct { \&.\&.\&. }   tx_info_t::release"
 
 .SS "\fBtx_error_t\fP tx_info_t::error"
 
 .PP
-Definition at line 122 of file sender_internal\&.h\&.
+Definition at line 123 of file sender_internal\&.h\&.
 .SS "struct { \&.\&.\&. } ::u_error  tx_info_t::error"
 
 .SS "union { \&.\&.\&. }   tx_info_t::u"

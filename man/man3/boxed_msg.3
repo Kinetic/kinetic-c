@@ -1,4 +1,4 @@
-.TH "boxed_msg" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "boxed_msg" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,6 +22,12 @@ boxed_msg \-
 .br
 .ti -1c
 .RI "void * \fBudata\fP"
+.br
+.ti -1c
+.RI "struct timeval \fBtv_send_start\fP"
+.br
+.ti -1c
+.RI "struct timeval \fBtv_send_done\fP"
 .br
 .ti -1c
 .RI "int \fBfd\fP"
@@ -60,26 +66,34 @@ Definition at line 46 of file bus_internal_types\&.h\&.
 
 .PP
 Definition at line 47 of file bus_internal_types\&.h\&.
-.SS "int boxed_msg::fd"
+.SS "struct timeval boxed_msg::tv_send_start"
 
 .PP
 Definition at line 50 of file bus_internal_types\&.h\&.
-.SS "SSL* boxed_msg::ssl"
+.SS "struct timeval boxed_msg::tv_send_done"
 
 .PP
 Definition at line 51 of file bus_internal_types\&.h\&.
-.SS "int64_t boxed_msg::out_seq_id"
-
-.PP
-Definition at line 52 of file bus_internal_types\&.h\&.
-.SS "uint8_t* boxed_msg::out_msg"
-
-.PP
-Definition at line 53 of file bus_internal_types\&.h\&.
-.SS "size_t boxed_msg::out_msg_size"
+.SS "int boxed_msg::fd"
 
 .PP
 Definition at line 54 of file bus_internal_types\&.h\&.
+.SS "SSL* boxed_msg::ssl"
+
+.PP
+Definition at line 55 of file bus_internal_types\&.h\&.
+.SS "int64_t boxed_msg::out_seq_id"
+
+.PP
+Definition at line 56 of file bus_internal_types\&.h\&.
+.SS "uint8_t* boxed_msg::out_msg"
+
+.PP
+Definition at line 57 of file bus_internal_types\&.h\&.
+.SS "size_t boxed_msg::out_msg_size"
+
+.PP
+Definition at line 58 of file bus_internal_types\&.h\&.
 
 .SH "Author"
 .PP 

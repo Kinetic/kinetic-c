@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -67,7 +67,6 @@
       <li><a href="functions_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_p.html#index_p"><span>p</span></a></li>
-      <li><a href="functions_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_s.html#index_s"><span>s</span></a></li>
       <li class="current"><a href="functions_t.html#index_t"><span>t</span></a></li>
@@ -91,7 +90,7 @@
 </li>
 <li>target
 : <a class="el" href="struct___kinetic_proto___command___get_log___temperature.html#aa1d7fb82ec1e66674ba0195330c254ee">KineticProto_Command_GetLog_Temperature</a>
-, <a class="el" href="struct_kinetic_device_info___temperature.html#a86481d52dc935d778141e9b94e07c1e6">KineticDeviceInfo_Temperature</a>
+, <a class="el" href="struct_kinetic_log_info___temperature.html#aab3031a5be7774602a7b21ffe72cece1">KineticLogInfo_Temperature</a>
 </li>
 <li>task
 : <a class="el" href="structmarked__task.html#a8f1a37330fac3fb8dd5887288961a791">marked_task</a>
@@ -130,7 +129,7 @@
 </li>
 <li>temperatures
 : <a class="el" href="struct___kinetic_proto___command___get_log.html#a8935dd9002b54022f179c03bd8b86e3a">KineticProto_Command_GetLog</a>
-, <a class="el" href="struct_kinetic_device_info.html#af45283c54bcf1f0d430b56bfc1d8b245">KineticDeviceInfo</a>
+, <a class="el" href="struct_kinetic_log_info.html#a118d4214b1ebdaa15719ceba455a9cc8">KineticLogInfo</a>
 </li>
 <li>test_filter
 : <a class="el" href="structgreatest__run__info.html#a17ea347bfbdd751722df92a6d2a4234f">greatest_run_info</a>
@@ -162,6 +161,11 @@
 , <a class="el" href="structrx__info__t.html#ac1609e255d6ca05740ee00cc756232ac">rx_info_t</a>
 , <a class="el" href="structtx__info__t.html#a37b46822e03d5685d68f37102110bc0a">tx_info_t</a>
 </li>
+<li>timeoutSeconds
+: <a class="el" href="struct___kinetic_operation.html#a7781742e36414c350a26db70b023daab">KineticOperation</a>
+, <a class="el" href="struct___kinetic_session.html#a30cc8eedbe6e2db2145753df594100e7">KineticSession</a>
+, <a class="el" href="struct_kinetic_session_config.html#aade5d711e365852e68201df1b3b57177">KineticSessionConfig</a>
+</li>
 <li>TimeQuanta
 : <a class="el" href="struct___kinetic_proto___command___header.html#abc48e5355863811f3417537fd8ebcc04">KineticProto_Command_Header</a>
 </li>
@@ -171,7 +175,7 @@
 </li>
 <li>tlsPort
 : <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#affc1e6a8921682b77f255a9f9ff838f0">KineticProto_Command_GetLog_Configuration</a>
-, <a class="el" href="struct_kinetic_device_info___configuration.html#a43b4e67dc300fbb6d96b373b7bcc1949">KineticDeviceInfo_Configuration</a>
+, <a class="el" href="struct_kinetic_log_info___configuration.html#a30a2f97f713d45d14ea1698af841f927">KineticLogInfo_Configuration</a>
 </li>
 <li>TlsRequired
 : <a class="el" href="struct___kinetic_proto___command___security___a_c_l___scope.html#ae1c20c85bbf6a76dbadcb9cefeb5200f">KineticProto_Command_Security_ACL_Scope</a>
@@ -179,11 +183,14 @@
 <li>to_read_size
 : <a class="el" href="structconnection__info.html#aef449f1f96dfb53fd9655ea0cf803480">connection_info</a>
 </li>
-<li>total
-: <a class="el" href="struct_kinetic_serial_allocator.html#ab45e2320da51e4ee77378b0354f94202">KineticSerialAllocator</a>
-</li>
 <li>tracked_fds
 : <a class="el" href="structlistener.html#a5883abca1bdd50fcf2e0d5675f9216ad">listener</a>
+</li>
+<li>tv_send_done
+: <a class="el" href="structboxed__msg.html#a49ec8ddc4c8afaf6253712c6a3d41637">boxed_msg</a>
+</li>
+<li>tv_send_start
+: <a class="el" href="structboxed__msg.html#ab20694646677145e1e15d29fee973b4d">boxed_msg</a>
 </li>
 <li>tx_flags
 : <a class="el" href="structsender.html#a9c78ecf6abe562a015b465d2f718e5c5">sender</a>
@@ -194,6 +201,7 @@
 <li>type
 : <a class="el" href="structbus__user__msg.html#acf9730acc14dbf810ad303346df79e52">bus_user_msg</a>
 , <a class="el" href="structconnection__info.html#ab9f8d54036f15df03f070f271984c319">connection_info</a>
+, <a class="el" href="structhmac__key.html#a72f4fa6d05223a3a0938ac47034112d8">hmac_key</a>
 , <a class="el" href="structlistener__msg.html#a2e6e8423ecf60ca3fe3f787da52c1561">listener_msg</a>
 </li>
 <li>types

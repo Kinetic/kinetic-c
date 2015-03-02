@@ -1,4 +1,4 @@
-.TH "kinetic_resourcewaiter.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_resourcewaiter.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,8 @@ kinetic_resourcewaiter.c \-
 \fC#include 'kinetic_resourcewaiter\&.h'\fP
 .br
 \fC#include 'kinetic_resourcewaiter_types\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
 .br
 \fC#include <stdlib\&.h>\fP
 .br
@@ -40,19 +42,27 @@ kinetic_resourcewaiter.c \-
 .SS "void KineticResourceWaiter_Init (KineticResourceWaiter *constwaiter)"
 
 .PP
-Definition at line 27 of file kinetic_resourcewaiter\&.c\&.
+Definition at line 28 of file kinetic_resourcewaiter\&.c\&.
+.PP
+References KINETIC_ASSERT\&.
 .SS "void KineticResourceWaiter_SetAvailable (KineticResourceWaiter *constwaiter)"
 
 .PP
-Definition at line 34 of file kinetic_resourcewaiter\&.c\&.
+Definition at line 35 of file kinetic_resourcewaiter\&.c\&.
+.PP
+References KINETIC_ASSERT\&.
 .SS "bool KineticResourceWaiter_WaitTilAvailable (KineticResourceWaiter *constwaiter, uint32_tmax_wait_sec)"
 
 .PP
-Definition at line 47 of file kinetic_resourcewaiter\&.c\&.
+Definition at line 48 of file kinetic_resourcewaiter\&.c\&.
+.PP
+References KINETIC_ASSERT\&.
 .SS "void KineticResourceWaiter_Destroy (KineticResourceWaiter *constwaiter)"
 
 .PP
-Definition at line 72 of file kinetic_resourcewaiter\&.c\&.
+Definition at line 73 of file kinetic_resourcewaiter\&.c\&.
+.PP
+References KINETIC_ASSERT\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

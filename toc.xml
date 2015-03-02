@@ -6,11 +6,18 @@
         <topic label="base" href="struct___kinetic_proto___local.html#a1e8c017b9e39258fed61b08a3625931f"/>
         <topic label="protocolVersion" href="struct___kinetic_proto___local.html#ad7f03e7e4d23671f0f7f8883cc0e1937"/>
       </topic>
+      <topic label="ACL" href="struct_a_c_l.html">
+        <topic label="ACL_ceil" href="struct_a_c_l.html#a205e7d970fa1dd5bc0b77918d26b0da2"/>
+        <topic label="ACL_count" href="struct_a_c_l.html#aa678f3971d0a115e062efe2d9e4757ca"/>
+        <topic label="ACLs" href="struct_a_c_l.html#a31589a7069c3c8a793bd376b4aa9323f"/>
+      </topic>
       <topic label="boxed_msg" href="structboxed__msg.html">
         <topic label="result" href="structboxed__msg.html#a3ba93e50d6ae6093e131696a1f10c924"/>
         <topic label="timeout_sec" href="structboxed__msg.html#a6853ac26895f628959a9728a6d56d35c"/>
         <topic label="cb" href="structboxed__msg.html#a26aeab33d3d6055c2abb84d6bad2b567"/>
         <topic label="udata" href="structboxed__msg.html#a55d3b66bacb768d909a046a20269b8f9"/>
+        <topic label="tv_send_start" href="structboxed__msg.html#ab20694646677145e1e15d29fee973b4d"/>
+        <topic label="tv_send_done" href="structboxed__msg.html#a49ec8ddc4c8afaf6253712c6a3d41637"/>
         <topic label="fd" href="structboxed__msg.html#af9725c9490a7e20cba9d649dea8c5d48"/>
         <topic label="ssl" href="structboxed__msg.html#a0aa2362725170c931bb9e0f60a0b7c00"/>
         <topic label="out_seq_id" href="structboxed__msg.html#af95824a6049596447b014c9ad0666aaa"/>
@@ -150,6 +157,11 @@
         <topic label="equal" href="structgreatest__type__info.html#aa8f9c47140b85697d0df0a5b7c81c62b"/>
         <topic label="print" href="structgreatest__type__info.html#a2598cf881a4b3a1fc0566a7199c1127d"/>
       </topic>
+      <topic label="hmac_key" href="structhmac__key.html">
+        <topic label="type" href="structhmac__key.html#a72f4fa6d05223a3a0938ac47034112d8"/>
+        <topic label="length" href="structhmac__key.html#a54c85f5dbb39b2760243c1d86f81da4a"/>
+        <topic label="key" href="structhmac__key.html#a77ee34064e2ef07420c1733c90902ff9"/>
+      </topic>
       <topic label="KineticClient" href="struct___kinetic_client.html">
         <topic label="bus" href="struct___kinetic_client.html#a51d100a10b40c6fa5d6c769485103c56"/>
       </topic>
@@ -189,77 +201,7 @@
         <topic label="max" href="struct___kinetic_counting_semaphore.html#ae4d42b1493af577ff4b351d89d069a2c"/>
         <topic label="num_waiting" href="struct___kinetic_counting_semaphore.html#a2ec8ffa7243032a20e94c9c8aa0f37ec"/>
       </topic>
-      <topic label="KineticDeviceInfo" href="struct_kinetic_device_info.html">
-        <topic label="utilizations" href="struct_kinetic_device_info.html#a80a9b83a8ff3725066444c4fc60e1a54"/>
-        <topic label="numUtilizations" href="struct_kinetic_device_info.html#a98f17d4d4e1b0493a9599798a7e1021a"/>
-        <topic label="temperatures" href="struct_kinetic_device_info.html#af45283c54bcf1f0d430b56bfc1d8b245"/>
-        <topic label="numTemperatures" href="struct_kinetic_device_info.html#a49d3ae4bb10659f909076fda0e6c60ce"/>
-        <topic label="capacity" href="struct_kinetic_device_info.html#a90ca11225302d5aa989e28d3f01fba91"/>
-        <topic label="configuration" href="struct_kinetic_device_info.html#af447595843039264ac6b6b1535979762"/>
-        <topic label="statistics" href="struct_kinetic_device_info.html#a7c053fbb04a49a59d14089f2b947fc3f"/>
-        <topic label="numStatistics" href="struct_kinetic_device_info.html#a4e7e363d38b675cda44660d04307c01f"/>
-        <topic label="messages" href="struct_kinetic_device_info.html#a602548440d390c03d01fcea784651b65"/>
-        <topic label="limits" href="struct_kinetic_device_info.html#ae74c6e7d673bac4b9d2d538d507804f6"/>
-        <topic label="device" href="struct_kinetic_device_info.html#a88a3e6f3439eda322812c61c17527885"/>
-      </topic>
-      <topic label="KineticDeviceInfo_Capacity" href="struct_kinetic_device_info___capacity.html">
-        <topic label="nominalCapacityInBytes" href="struct_kinetic_device_info___capacity.html#acceee8e59aab5e140b8b03b49bdc3374"/>
-        <topic label="portionFull" href="struct_kinetic_device_info___capacity.html#ac6965e88e9286697719f230649a09706"/>
-      </topic>
-      <topic label="KineticDeviceInfo_Configuration" href="struct_kinetic_device_info___configuration.html">
-        <topic label="vendor" href="struct_kinetic_device_info___configuration.html#af7de3bc7733c54c7ba967649f4919e6c"/>
-        <topic label="model" href="struct_kinetic_device_info___configuration.html#a46e697f399233077844eb3896f138f56"/>
-        <topic label="serialNumber" href="struct_kinetic_device_info___configuration.html#a4853b215f44647003b24a636650c9337"/>
-        <topic label="worldWideName" href="struct_kinetic_device_info___configuration.html#a1c248378c9d9113a8ae698b01084b2c4"/>
-        <topic label="version" href="struct_kinetic_device_info___configuration.html#a2268d0aa3aee6faa2fe789ea3a319251"/>
-        <topic label="compilationDate" href="struct_kinetic_device_info___configuration.html#a71f53ad3973b153f7eab8a984b1d847f"/>
-        <topic label="sourceHash" href="struct_kinetic_device_info___configuration.html#a1cdf2cdb0eba996a3880d8bc408bab50"/>
-        <topic label="protocolVersion" href="struct_kinetic_device_info___configuration.html#a3a96719b8c04a7a9cf99636d9fefbf96"/>
-        <topic label="protocolCompilationDate" href="struct_kinetic_device_info___configuration.html#a8675e4c1e069e8db7aa94ee91093d1b7"/>
-        <topic label="protocolSourceHash" href="struct_kinetic_device_info___configuration.html#a400c8d7199dc2f911a92bc23cc436ab6"/>
-        <topic label="interfaces" href="struct_kinetic_device_info___configuration.html#a50db2891ab38d90744dc726d9711c619"/>
-        <topic label="numInterfaces" href="struct_kinetic_device_info___configuration.html#a63e01aec4f3c912fd5cb1705f3fa3a67"/>
-        <topic label="port" href="struct_kinetic_device_info___configuration.html#aaaa46b5727d68bca0d4971273eb52d49"/>
-        <topic label="tlsPort" href="struct_kinetic_device_info___configuration.html#a43b4e67dc300fbb6d96b373b7bcc1949"/>
-      </topic>
-      <topic label="KineticDeviceInfo_Device" href="struct_kinetic_device_info___device.html">
-        <topic label="name" href="struct_kinetic_device_info___device.html#a420bba1419a3cd0335d21ad3674a053d"/>
-      </topic>
-      <topic label="KineticDeviceInfo_Interface" href="struct_kinetic_device_info___interface.html">
-        <topic label="name" href="struct_kinetic_device_info___interface.html#ad69dfd81cab6c30f619e8a1509ae1e4c"/>
-        <topic label="MAC" href="struct_kinetic_device_info___interface.html#acc43b66caf8c884a7dfb1d991740c48b"/>
-        <topic label="ipv4Address" href="struct_kinetic_device_info___interface.html#afd572ace38ab0d7e45820e1be4453e48"/>
-        <topic label="ipv6Address" href="struct_kinetic_device_info___interface.html#a42dcbfb4526200ec90f82ff629a0b6bd"/>
-      </topic>
-      <topic label="KineticDeviceInfo_Limits" href="struct_kinetic_device_info___limits.html">
-        <topic label="maxKeySize" href="struct_kinetic_device_info___limits.html#a19bdabaa34e4e725034ef8964f4e7ab2"/>
-        <topic label="maxValueSize" href="struct_kinetic_device_info___limits.html#a94744cef585e4b30f9142162ba2edaa2"/>
-        <topic label="maxVersionSize" href="struct_kinetic_device_info___limits.html#adb6fb1b86676faae40d48decb434d319"/>
-        <topic label="maxTagSize" href="struct_kinetic_device_info___limits.html#acea516b78a19bb5c8ad3ca95ae2dcc20"/>
-        <topic label="maxConnections" href="struct_kinetic_device_info___limits.html#abeda60208d450388a9500c60bd03d365"/>
-        <topic label="maxOutstandingReadRequests" href="struct_kinetic_device_info___limits.html#a6cc16bb57933e86f169a3fa4b264724c"/>
-        <topic label="maxOutstandingWriteRequests" href="struct_kinetic_device_info___limits.html#aa6b4df48081d81cc781ca81f9a0fef66"/>
-        <topic label="maxMessageSize" href="struct_kinetic_device_info___limits.html#a98ed863aa7028970402e69f8bc4f6651"/>
-        <topic label="maxKeyRangeCount" href="struct_kinetic_device_info___limits.html#a18c7a0a8dc7cd509e2ee5c4c6c43b566"/>
-        <topic label="maxIdentityCount" href="struct_kinetic_device_info___limits.html#a780b0f45f01ebb64d182187c20345a9f"/>
-        <topic label="maxPinSize" href="struct_kinetic_device_info___limits.html#a7d7569c18b0efb18f7d1b53f4efe76f5"/>
-      </topic>
-      <topic label="KineticDeviceInfo_Statistics" href="struct_kinetic_device_info___statistics.html">
-        <topic label="messageType" href="struct_kinetic_device_info___statistics.html#a186ed9a223ef6b593cd5775ede005931"/>
-        <topic label="count" href="struct_kinetic_device_info___statistics.html#a7a6447733f3e66999d25c1df1b73a3aa"/>
-        <topic label="bytes" href="struct_kinetic_device_info___statistics.html#ae954815d2deba3af692bed1bc920dbfc"/>
-      </topic>
-      <topic label="KineticDeviceInfo_Temperature" href="struct_kinetic_device_info___temperature.html">
-        <topic label="name" href="struct_kinetic_device_info___temperature.html#a52480103d9d785018f1e53113d2f8b86"/>
-        <topic label="current" href="struct_kinetic_device_info___temperature.html#a8ee3cf22bf84d55d1374343f3128f8e8"/>
-        <topic label="minimum" href="struct_kinetic_device_info___temperature.html#ac76d4ea07a01fa63df446150db80a2b7"/>
-        <topic label="maximum" href="struct_kinetic_device_info___temperature.html#ab13b602b42ce38aa3ed32968b5672400"/>
-        <topic label="target" href="struct_kinetic_device_info___temperature.html#a86481d52dc935d778141e9b94e07c1e6"/>
-      </topic>
-      <topic label="KineticDeviceInfo_Utilization" href="struct_kinetic_device_info___utilization.html">
-        <topic label="name" href="struct_kinetic_device_info___utilization.html#a98c35e8e425cf1c7f19ab098f59db619"/>
-        <topic label="value" href="struct_kinetic_device_info___utilization.html#a4f2a30730672fee7af69b2f13d8c84b3"/>
-      </topic>
+      <topic label="KineticEngine" href="struct_kinetic_engine.html"/>
       <topic label="KineticEntry" href="struct_kinetic_entry.html">
         <topic label="key" href="struct_kinetic_entry.html#ab34b2be83d0c4bf878d51fa557f229ac"/>
         <topic label="value" href="struct_kinetic_entry.html#a59e00f6de104c463050dd6108e3564e3"/>
@@ -269,6 +211,7 @@
         <topic label="newVersion" href="struct_kinetic_entry.html#a3ab421a9388a1a203ca35c022e78c8e7"/>
         <topic label="metadataOnly" href="struct_kinetic_entry.html#a453aef7088b4e728ff250d8c8cd7414c"/>
         <topic label="force" href="struct_kinetic_entry.html#a96b9deeff3a41d9830590bd9ea9175c7"/>
+        <topic label="computeTag" href="struct_kinetic_entry.html#a5933ac63900c4c53d5e73fe6fe5b2aa9"/>
         <topic label="synchronization" href="struct_kinetic_entry.html#ac7d04e1dcbfc7794823542c61698b777"/>
       </topic>
       <topic label="KineticHMAC" href="struct_kinetic_h_m_a_c.html">
@@ -284,6 +227,77 @@
         <topic label="maxReturned" href="struct_kinetic_key_range.html#a160371c5c224acd9d706b46c2ff8c195"/>
         <topic label="reverse" href="struct_kinetic_key_range.html#a25e5103ae87da236464775a23afe9619"/>
       </topic>
+      <topic label="KineticLogInfo" href="struct_kinetic_log_info.html">
+        <topic label="utilizations" href="struct_kinetic_log_info.html#af99a1b4fa9bed4c2092fb6cbdcd7e241"/>
+        <topic label="numUtilizations" href="struct_kinetic_log_info.html#aec17891af8cc57b243e805f39ad0fd7d"/>
+        <topic label="temperatures" href="struct_kinetic_log_info.html#a118d4214b1ebdaa15719ceba455a9cc8"/>
+        <topic label="numTemperatures" href="struct_kinetic_log_info.html#a1812b3ee953619697ef7ed838a89620d"/>
+        <topic label="capacity" href="struct_kinetic_log_info.html#a47ffbe05f351bf355723d00190e7a801"/>
+        <topic label="configuration" href="struct_kinetic_log_info.html#a1c33a64ccca1fd06d0f1994f8f321234"/>
+        <topic label="statistics" href="struct_kinetic_log_info.html#a4dc7589a418451ae869bb3b45723bc14"/>
+        <topic label="numStatistics" href="struct_kinetic_log_info.html#a517d0d1a5693e73cc16eafaf94a97014"/>
+        <topic label="messages" href="struct_kinetic_log_info.html#a00a20bf3e79d8198311a5276bd0c0f6f"/>
+        <topic label="limits" href="struct_kinetic_log_info.html#a4a88cc1c804562fc1054d3f023f062fc"/>
+        <topic label="device" href="struct_kinetic_log_info.html#abc741ca2eae5215c3e664adc93cbb858"/>
+      </topic>
+      <topic label="KineticLogInfo_Capacity" href="struct_kinetic_log_info___capacity.html">
+        <topic label="nominalCapacityInBytes" href="struct_kinetic_log_info___capacity.html#ad9609d9335c4e95545cb7954fb6a1c67"/>
+        <topic label="portionFull" href="struct_kinetic_log_info___capacity.html#afffa9d4c4f7ae73a996cea8b1297bd5d"/>
+      </topic>
+      <topic label="KineticLogInfo_Configuration" href="struct_kinetic_log_info___configuration.html">
+        <topic label="vendor" href="struct_kinetic_log_info___configuration.html#a82d5f6e3ec73dbcd775a79a430bffd1c"/>
+        <topic label="model" href="struct_kinetic_log_info___configuration.html#a28756675fc88e79335ccd31de070c63b"/>
+        <topic label="serialNumber" href="struct_kinetic_log_info___configuration.html#a9ce791fbc9fbdbe76e4f505d64a32dad"/>
+        <topic label="worldWideName" href="struct_kinetic_log_info___configuration.html#a10ebffd00d2519f33adc70c49a122908"/>
+        <topic label="version" href="struct_kinetic_log_info___configuration.html#afd3dae5d0f2548fb7dba38ddeb0faf33"/>
+        <topic label="compilationDate" href="struct_kinetic_log_info___configuration.html#a24ef6c35749009bad6353efec71e51dd"/>
+        <topic label="sourceHash" href="struct_kinetic_log_info___configuration.html#ae407656b1647e37bd1f6b4d30c362472"/>
+        <topic label="protocolVersion" href="struct_kinetic_log_info___configuration.html#a345696c93ddcc04e7eb483a4994ec35f"/>
+        <topic label="protocolCompilationDate" href="struct_kinetic_log_info___configuration.html#ac6385c35c4cfd84715ad508ee1205ee4"/>
+        <topic label="protocolSourceHash" href="struct_kinetic_log_info___configuration.html#a41960c4f8d287ed1bf553728e2693af4"/>
+        <topic label="interfaces" href="struct_kinetic_log_info___configuration.html#a5a80d49bf95ccd035014e68f59d6745e"/>
+        <topic label="numInterfaces" href="struct_kinetic_log_info___configuration.html#a3717aa26306920acbd5d7eca10ea0995"/>
+        <topic label="port" href="struct_kinetic_log_info___configuration.html#a2e2534025f419a00765e5b9e6b09fee4"/>
+        <topic label="tlsPort" href="struct_kinetic_log_info___configuration.html#a30a2f97f713d45d14ea1698af841f927"/>
+      </topic>
+      <topic label="KineticLogInfo_Device" href="struct_kinetic_log_info___device.html">
+        <topic label="name" href="struct_kinetic_log_info___device.html#ac925eb7c9d5b78b625a884cd9cde0124"/>
+      </topic>
+      <topic label="KineticLogInfo_Interface" href="struct_kinetic_log_info___interface.html">
+        <topic label="name" href="struct_kinetic_log_info___interface.html#a22eb8833b8876b45bbd3658bc15f707c"/>
+        <topic label="MAC" href="struct_kinetic_log_info___interface.html#aa625dcb7cdc4242b0159ffebcc36a9f8"/>
+        <topic label="ipv4Address" href="struct_kinetic_log_info___interface.html#af0aaf59f5e5472bd7f47bd79cdca4622"/>
+        <topic label="ipv6Address" href="struct_kinetic_log_info___interface.html#a803762e5d1c28a26ca88761a222273ba"/>
+      </topic>
+      <topic label="KineticLogInfo_Limits" href="struct_kinetic_log_info___limits.html">
+        <topic label="maxKeySize" href="struct_kinetic_log_info___limits.html#af83c1fc5d0f39a4bc2d8fbca7d08b206"/>
+        <topic label="maxValueSize" href="struct_kinetic_log_info___limits.html#a1ecf89c58ddfbb62fa69f4f913f4be18"/>
+        <topic label="maxVersionSize" href="struct_kinetic_log_info___limits.html#afe72845c9ba1fe78d6aab36ef8e3179c"/>
+        <topic label="maxTagSize" href="struct_kinetic_log_info___limits.html#afba8bdd6770af2f7b750deca81e57bdc"/>
+        <topic label="maxConnections" href="struct_kinetic_log_info___limits.html#a8a9d9e5a3a1ae38382d77e29623e91b7"/>
+        <topic label="maxOutstandingReadRequests" href="struct_kinetic_log_info___limits.html#a868f33472cb7015bf65f63978e8ff701"/>
+        <topic label="maxOutstandingWriteRequests" href="struct_kinetic_log_info___limits.html#a4984c9279a2296bda2b76cdfb697c612"/>
+        <topic label="maxMessageSize" href="struct_kinetic_log_info___limits.html#a8191926c6b4e7ce2af57a125807f3de2"/>
+        <topic label="maxKeyRangeCount" href="struct_kinetic_log_info___limits.html#acd2fddac4b77bf2be42ca7fa20dafe00"/>
+        <topic label="maxIdentityCount" href="struct_kinetic_log_info___limits.html#a6af284d19c587438bec7af2a8bda5203"/>
+        <topic label="maxPinSize" href="struct_kinetic_log_info___limits.html#ad8da01c9769c8c81c5652fa20276068d"/>
+      </topic>
+      <topic label="KineticLogInfo_Statistics" href="struct_kinetic_log_info___statistics.html">
+        <topic label="messageType" href="struct_kinetic_log_info___statistics.html#a20a5f6dcb582b858196dc388dcba4fb0"/>
+        <topic label="count" href="struct_kinetic_log_info___statistics.html#af3f2be6a3a2aae89b2aaeb1d99cd623c"/>
+        <topic label="bytes" href="struct_kinetic_log_info___statistics.html#aca24f851de6e7c1cf1627cc74b09ef14"/>
+      </topic>
+      <topic label="KineticLogInfo_Temperature" href="struct_kinetic_log_info___temperature.html">
+        <topic label="name" href="struct_kinetic_log_info___temperature.html#a3f481c815ea05f60779495cc3bb7d6bd"/>
+        <topic label="current" href="struct_kinetic_log_info___temperature.html#a7590477d1139bf36dd4c3af21c2cce04"/>
+        <topic label="minimum" href="struct_kinetic_log_info___temperature.html#aa9eaa42a35ea05c3e736dd91f23dcd92"/>
+        <topic label="maximum" href="struct_kinetic_log_info___temperature.html#af743de843e22b477f85a7701a38f0fdc"/>
+        <topic label="target" href="struct_kinetic_log_info___temperature.html#aab3031a5be7774602a7b21ffe72cece1"/>
+      </topic>
+      <topic label="KineticLogInfo_Utilization" href="struct_kinetic_log_info___utilization.html">
+        <topic label="name" href="struct_kinetic_log_info___utilization.html#a7cfc02564d7214cbe4fdf5d849e5f549"/>
+        <topic label="value" href="struct_kinetic_log_info___utilization.html#ad7bd31d88075f9ac90877af4757d78f7"/>
+      </topic>
       <topic label="KineticMessage" href="struct_kinetic_message.html">
         <topic label="message" href="struct_kinetic_message.html#a63700292cc7197893877855a8bde5381"/>
         <topic label="hmacAuth" href="struct_kinetic_message.html#a224316d200e5d39713eedca0036313c5"/>
@@ -297,22 +311,25 @@
         <topic label="acl" href="struct_kinetic_message.html#a015dc94a860fa602da2aa4519549f1a0"/>
         <topic label="keyValue" href="struct_kinetic_message.html#a1dbf1c32720c9b1639f751f98d41d763"/>
         <topic label="keyRange" href="struct_kinetic_message.html#a8cffeff6f4b6660b6f3e0e9f502a7fcd"/>
+        <topic label="setup" href="struct_kinetic_message.html#a6f52f09049fa9cddab06da3d7994fa16"/>
         <topic label="getLog" href="struct_kinetic_message.html#a351d4c07b916dde6048890acf90e31c3"/>
         <topic label="getLogType" href="struct_kinetic_message.html#aa4867e12d41b7ec1e8e29b9d1692be17"/>
         <topic label="pinOp" href="struct_kinetic_message.html#ac62c902ab451f19204ceb10cffca45ae"/>
       </topic>
       <topic label="KineticOperation" href="struct___kinetic_operation.html">
         <topic label="connection" href="struct___kinetic_operation.html#a9501bcc7cf72e4886300e5eeedb79a0c"/>
-        <topic label="request" href="struct___kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc"/>
+        <topic label="request" href="struct___kinetic_operation.html#a170a418c0941f43a6d4f2861b91d2325"/>
         <topic label="response" href="struct___kinetic_operation.html#a0191c99ea2be1e3608c367080d994d71"/>
-        <topic label="valueEnabled" href="struct___kinetic_operation.html#a0573280c6741d56bd6f091058a99c1ce"/>
-        <topic label="sendValue" href="struct___kinetic_operation.html#a4ceadb1f36b4b9852ab8e65f8cc21729"/>
+        <topic label="timeoutSeconds" href="struct___kinetic_operation.html#a7781742e36414c350a26db70b023daab"/>
+        <topic label="pendingClusterVersion" href="struct___kinetic_operation.html#a2e8b9158b15347b702e13789c9fb07d3"/>
+        <topic label="pin" href="struct___kinetic_operation.html#a6b989ccd52e3a13c0b1be149274201c5"/>
         <topic label="entry" href="struct___kinetic_operation.html#a96efb9145bc9d56b2b5a6118bf433d0d"/>
         <topic label="buffers" href="struct___kinetic_operation.html#a0524c2ab9e5490d2d0a47369b69ae2f6"/>
-        <topic label="deviceInfo" href="struct___kinetic_operation.html#a18989ae27379642dee51604bd075431a"/>
+        <topic label="deviceInfo" href="struct___kinetic_operation.html#a0b3bb337fdfa8d4acb8075f07e921792"/>
         <topic label="p2pOp" href="struct___kinetic_operation.html#ad1043af5af3efffd0e576a63d8ee4cd1"/>
         <topic label="callback" href="struct___kinetic_operation.html#a0e76abf58099b6ee378ecce94d723798"/>
         <topic label="closure" href="struct___kinetic_operation.html#abf2c244091c0989d5028a13d2176a59a"/>
+        <topic label="value" href="struct___kinetic_operation.html#a85ffdfd17d3a03bf9d660b2e1f803770"/>
       </topic>
       <topic label="KineticP2P_Operation" href="struct___kinetic_p2_p___operation.html">
         <topic label="peer" href="struct___kinetic_p2_p___operation.html#ac32205ac1a2f8be70c83f0480e38fb33"/>
@@ -330,10 +347,6 @@
         <topic label="hostname" href="struct_kinetic_p2_p___peer.html#ad05f29013880464048d139696f4ad598"/>
         <topic label="port" href="struct_kinetic_p2_p___peer.html#a7aca8a7cb0c77dd219553896c836cec5"/>
         <topic label="tls" href="struct_kinetic_p2_p___peer.html#ac83f1d2226108f58c6cd63aa3d9b5d83"/>
-      </topic>
-      <topic label="KineticPDU" href="struct___kinetic_p_d_u.html">
-        <topic label="message" href="struct___kinetic_p_d_u.html#ae8bb33f5b2e2cbd0031ff505a98d6e07"/>
-        <topic label="command" href="struct___kinetic_p_d_u.html#a11ee6df846abc8e3b686aa5eb8ca6e26"/>
       </topic>
       <topic label="KineticProto_Command" href="struct___kinetic_proto___command.html">
         <topic label="base" href="struct___kinetic_proto___command.html#a53d74c5a9f728836ea96ec462a8573cf"/>
@@ -627,6 +640,11 @@
         <topic label="has_pin" href="struct___kinetic_proto___message___p_i_nauth.html#a89cdbdce7967ece1f5e84b3d51ddbae4"/>
         <topic label="pin" href="struct___kinetic_proto___message___p_i_nauth.html#a4854ac94c2fbd2c8201ad4eb78bec7bc"/>
       </topic>
+      <topic label="KineticRequest" href="struct___kinetic_request.html">
+        <topic label="message" href="struct___kinetic_request.html#ac642124368c935996b3700698010142b"/>
+        <topic label="command" href="struct___kinetic_request.html#ae464f1c227d146ebb3242ef09ab366a3"/>
+        <topic label="pinAuth" href="struct___kinetic_request.html#af7cc105fca64b2b8d72b54c5ea47a39f"/>
+      </topic>
       <topic label="KineticResourceWaiter" href="struct___kinetic_resource_waiter.html">
         <topic label="mutex" href="struct___kinetic_resource_waiter.html#afa726cf1ef471bdbe1199dd1dfb96e5c"/>
         <topic label="ready_cond" href="struct___kinetic_resource_waiter.html#af79c12debd1476a6ddc3ba87a91d26f6"/>
@@ -639,14 +657,10 @@
         <topic label="command" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f"/>
         <topic label="value" href="struct_kinetic_response.html#aa641b617cfdc33ed98e8815059d06921"/>
       </topic>
-      <topic label="KineticSerialAllocator" href="struct_kinetic_serial_allocator.html">
-        <topic label="buffer" href="struct_kinetic_serial_allocator.html#a9db8f55118e26ad2bc2aff148bc6b9db"/>
-        <topic label="used" href="struct_kinetic_serial_allocator.html#a12b3207f947f91187b1f0e4dbb9562d7"/>
-        <topic label="total" href="struct_kinetic_serial_allocator.html#ab45e2320da51e4ee77378b0354f94202"/>
-      </topic>
-      <topic label="KineticSession" href="struct_kinetic_session.html">
-        <topic label="config" href="struct_kinetic_session.html#a45587886059c9f68db0fb36a6b692b7d"/>
-        <topic label="connection" href="struct_kinetic_session.html#a57d1d01861409e3f9a3651cad67138d2"/>
+      <topic label="KineticSession" href="struct___kinetic_session.html">
+        <topic label="config" href="struct___kinetic_session.html#a45587886059c9f68db0fb36a6b692b7d"/>
+        <topic label="connection" href="struct___kinetic_session.html#a57d1d01861409e3f9a3651cad67138d2"/>
+        <topic label="timeoutSeconds" href="struct___kinetic_session.html#a30cc8eedbe6e2db2145753df594100e7"/>
       </topic>
       <topic label="KineticSessionConfig" href="struct_kinetic_session_config.html">
         <topic label="host" href="struct_kinetic_session_config.html#a6006141d44982fdf8748c65fe45946f3"/>
@@ -655,11 +669,15 @@
         <topic label="identity" href="struct_kinetic_session_config.html#aa8b4e198ae98bf699cb102350c8587da"/>
         <topic label="keyData" href="struct_kinetic_session_config.html#a0821f028dffd8e2e237aee0f4ed57189"/>
         <topic label="hmacKey" href="struct_kinetic_session_config.html#acb9f1d3dceb9739eb3c88db1f8150198"/>
+        <topic label="useSsl" href="struct_kinetic_session_config.html#ad54c41c33e139669cc653306bda69aef"/>
+        <topic label="timeoutSeconds" href="struct_kinetic_session_config.html#aade5d711e365852e68201df1b3b57177"/>
       </topic>
       <topic label="listener" href="structlistener.html">
         <topic label="bus" href="structlistener.html#a3b774e2e0ad1e58c3a0bdf7207cabbb6"/>
-        <topic label="q" href="structlistener.html#add8083c6b9b4228454bf0d281b008e21"/>
         <topic label="shutdown" href="structlistener.html#a38f8e5d2c9f44093adb69974440a3741"/>
+        <topic label="commit_pipe" href="structlistener.html#abc6abc228015127d7413688bbcad26b1"/>
+        <topic label="incoming_msg_pipe" href="structlistener.html#a5ac777bb848a219493fb3ac22902b703"/>
+        <topic label="is_idle" href="structlistener.html#ab64bf7942724f8b2209e840fec1b7101"/>
         <topic label="rx_info" href="structlistener.html#ab0d1685b2ada442ec0983c9319125d0c"/>
         <topic label="rx_info_freelist" href="structlistener.html#aba8752eae5f7b0b4bd13980ac118dbf8"/>
         <topic label="rx_info_in_use" href="structlistener.html#ac89de9e149ba59813be0e77f010eb591"/>
@@ -670,7 +688,7 @@
         <topic label="largest_seq_id_seen" href="structlistener.html#af08a9f4c1af7da34efd6602534ff6157"/>
         <topic label="upstream_backpressure" href="structlistener.html#a5a195c5e0ef1a2aaa14bab318f1451f8"/>
         <topic label="tracked_fds" href="structlistener.html#a5883abca1bdd50fcf2e0d5675f9216ad"/>
-        <topic label="fds" href="structlistener.html#a00f399cab62860fad164340a21d5efd1"/>
+        <topic label="fds" href="structlistener.html#ae15ac7bbebd8900e4441f15fdca4c535"/>
         <topic label="fd_info" href="structlistener.html#a66e7d5a3179530bd3658e758f11be642"/>
         <topic label="read_buf_size" href="structlistener.html#a78f69f0cfcea46e590a71e1fccf81b92"/>
         <topic label="read_buf" href="structlistener.html#ada742987f7ce7758fc4422a290948d97"/>
@@ -683,7 +701,7 @@
         <topic label="notify_fd" href="structlistener__msg.html#a6b0ba1341c3e8c74196c0453bf110e36"/>
         <topic label="add_socket" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027"/>
         <topic label="fd" href="structlistener__msg.html#a8d0dc639ff95796b83fb2788b89f6f4f"/>
-        <topic label="close_socket" href="structlistener__msg.html#a034f7c4ae5e2dcb215e9e088020dedff"/>
+        <topic label="remove_socket" href="structlistener__msg.html#a518c6e850864a64eb162d4482c6c3294"/>
         <topic label="seq_id" href="structlistener__msg.html#ae0458881feeceb91123a7492ddc29b1e"/>
         <topic label="timeout_sec" href="structlistener__msg.html#a6ffd4649aca55f63d7e5cd9d58c43f73"/>
         <topic label="hold" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4"/>
@@ -725,6 +743,7 @@
         <topic label="largest_seq_id_seen" href="structsender.html#a8c67df66dc04d78ec44a8717a3fe2e54"/>
         <topic label="active_fds" href="structsender.html#aa8f75e8e259d4c7fc1cd1337c5ffc48b"/>
         <topic label="fds" href="structsender.html#aff32b617c8187617c30fde60a778dc44"/>
+        <topic label="is_idle" href="structsender.html#a555122c7e76f98fbaadb430c6eafaa6d"/>
         <topic label="fd_hash_table" href="structsender.html#aff098306a5cefab0f1dc624bd3d1da04"/>
       </topic>
       <topic label="thread_context" href="structthread__context.html">
@@ -778,6 +797,7 @@
         <topic label="timeout_sec" href="structtx__info__t.html#a37b46822e03d5685d68f37102110bc0a"/>
         <topic label="box" href="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a"/>
         <topic label="enqueue" href="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180"/>
+        <topic label="orig_timeout_sec" href="structtx__info__t.html#a30fef92dc2359bb1195415a93a9250f8"/>
         <topic label="sent_size" href="structtx__info__t.html#a61afed662d74f641186fb125661639f5"/>
         <topic label="fdi" href="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309"/>
         <topic label="write" href="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92"/>
@@ -807,7 +827,6 @@
         <topic label="n" href="functions_n.html"/>
         <topic label="o" href="functions_o.html"/>
         <topic label="p" href="functions_p.html"/>
-        <topic label="q" href="functions_q.html"/>
         <topic label="r" href="functions_r.html"/>
         <topic label="s" href="functions_s.html"/>
         <topic label="t" href="functions_t.html"/>
@@ -832,7 +851,6 @@
         <topic label="n" href="functions_vars_n.html"/>
         <topic label="o" href="functions_vars_o.html"/>
         <topic label="p" href="functions_vars_p.html"/>
-        <topic label="q" href="functions_vars_q.html"/>
         <topic label="r" href="functions_vars_r.html"/>
         <topic label="s" href="functions_vars_s.html"/>
         <topic label="t" href="functions_vars_t.html"/>
@@ -844,26 +862,78 @@
   </topic>
   <topic label="Files">
     <topic label="File List" href="files.html">
+      <topic label="acl.c" href="acl_8c.html">
+        <topic label="PERM_TABLE_ROWS" href="acl_8c.html#a94956297f2442a6c3c5d32e37204b55b"/>
+        <topic label="read_next_ACL" href="acl_8c.html#a107438a6d6596720120680f697ed7e42"/>
+        <topic label="unpack_scopes" href="acl_8c.html#a026e618b71baa42fd9e205b34b7645de"/>
+        <topic label="str_of_permission" href="acl_8c.html#af0d190b71e5f1839aa2882d9f85d1332"/>
+        <topic label="permission_of_str" href="acl_8c.html#af0c46fc106790b42d0423a886c78e413"/>
+        <topic label="acl_of_file" href="acl_8c.html#ade3e551d6170855892f30b0f77acba2a"/>
+        <topic label="acl_of_string" href="acl_8c.html#a62b88a6ace9e1123da7d76eab4fdd8ba"/>
+        <topic label="acl_fprintf" href="acl_8c.html#a71b59535daa95640579b1c7014eba4cf"/>
+        <topic label="acl_free" href="acl_8c.html#a702c7814b7d3c65d0de1d659d69e5481"/>
+        <topic label="permission_table" href="acl_8c.html#a512d6e8e7a54eb1a7d7578071917acee"/>
+      </topic>
+      <topic label="acl.h" href="acl_8h.html">
+        <topic label="acl_of_file" href="acl_8h.html#ade3e551d6170855892f30b0f77acba2a"/>
+        <topic label="acl_of_string" href="acl_8h.html#a62b88a6ace9e1123da7d76eab4fdd8ba"/>
+        <topic label="acl_fprintf" href="acl_8h.html#a7dfaccfca606acc4a54fb1708e41a953"/>
+        <topic label="acl_free" href="acl_8h.html#a04c7335c1862be3718cc696f990b70d8"/>
+      </topic>
+      <topic label="acl_types.h" href="acl__types_8h.html">
+        <topic label="hmac_key" href="structhmac__key.html">
+          <topic label="type" href="structhmac__key.html#a72f4fa6d05223a3a0938ac47034112d8"/>
+          <topic label="length" href="structhmac__key.html#a54c85f5dbb39b2760243c1d86f81da4a"/>
+          <topic label="key" href="structhmac__key.html#a77ee34064e2ef07420c1733c90902ff9"/>
+        </topic>
+        <topic label="ACL" href="struct_a_c_l.html">
+          <topic label="ACL_ceil" href="struct_a_c_l.html#a205e7d970fa1dd5bc0b77918d26b0da2"/>
+          <topic label="ACL_count" href="struct_a_c_l.html#aa678f3971d0a115e062efe2d9e4757ca"/>
+          <topic label="ACLs" href="struct_a_c_l.html#a31589a7069c3c8a793bd376b4aa9323f"/>
+        </topic>
+        <topic label="ACL_MAX_PERMISSIONS" href="acl__types_8h.html#ae06b4f36e2c4cc310e38b4adb9205130"/>
+        <topic label="hmac_type_t" href="acl__types_8h.html#a3cc6ff4c4666692e441846848a711d1f">
+          <topic label="HMAC_UNKNOWN" href="acl__types_8h.html#a3cc6ff4c4666692e441846848a711d1face91062cb6b31c1e6d67ba3107bb45ae"/>
+          <topic label="HMAC_SHA1" href="acl__types_8h.html#a3cc6ff4c4666692e441846848a711d1fa6ff5f843a316c2d5b4b08b7238c874ce"/>
+          <topic label="HMAC_TYPE_COUNT" href="acl__types_8h.html#a3cc6ff4c4666692e441846848a711d1fa05f378fc7bcddaff846744c39728a10c"/>
+        </topic>
+        <topic label="acl_of_file_res" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6">
+          <topic label="ACL_OK" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a4402ffa882df1bff54f28f4f47776641"/>
+          <topic label="ACL_END_OF_STREAM" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a6fa115066d7b8458f164f4f87bfd1bbd"/>
+          <topic label="ACL_ERROR_NULL" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6aba728f37eb8f984e3fc086a608ee1b8e"/>
+          <topic label="ACL_ERROR_MEMORY" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a2ae5eb4abdb6ad6cde0826bfe07dc233"/>
+          <topic label="ACL_ERROR_JSON_FILE" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a7005aaee505c8218f785d0298b9e1121"/>
+          <topic label="ACL_ERROR_BAD_JSON" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6aa795d619a6b32bca66cdb672545545e4"/>
+          <topic label="ACL_ERROR_MISSING_FIELD" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6ab31627ad99a0e169a1db2cf5808915f4"/>
+          <topic label="ACL_ERROR_INVALID_FIELD" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a7b0c7396fdcbb97091f3d1a92fe72095"/>
+        </topic>
+      </topic>
       <topic label="atomic.h" href="atomic_8h.html">
         <topic label="ATOMIC_BOOL_COMPARE_AND_SWAP" href="atomic_8h.html#ac670f7588d6db0cf09e0a61540133489"/>
         <topic label="SPIN_ADJ" href="atomic_8h.html#a82415ab010832f4e05201f3fe3121a3c"/>
       </topic>
       <topic label="blocking_flush.c" href="blocking__flush_8c.html">
+        <topic label="do_flush" href="blocking__flush_8c.html#a4f6a0b1466d21328a89a2ad959660799"/>
         <topic label="main" href="blocking__flush_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="blocking_getkeyrange.c" href="blocking__getkeyrange_8c.html">
+        <topic label="do_put_and_getkeyrange" href="blocking__getkeyrange_8c.html#a3744c51bae94d6a5e2c5e7bae7d493f5"/>
         <topic label="main" href="blocking__getkeyrange_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="blocking_getnext_getprevious.c" href="blocking__getnext__getprevious_8c.html">
+        <topic label="do_put_and_getprevious_getnext" href="blocking__getnext__getprevious_8c.html#a35fa4bc1dffceb57c1c3cac729116fdd"/>
         <topic label="main" href="blocking__getnext__getprevious_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="blocking_noop.c" href="blocking__noop_8c.html">
+        <topic label="do_noop" href="blocking__noop_8c.html#afd999388502d7c384b0d1f06cfd62a80"/>
         <topic label="main" href="blocking__noop_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="blocking_put_delete.c" href="blocking__put__delete_8c.html">
+        <topic label="do_put_and_delete" href="blocking__put__delete_8c.html#adf3f3adc55e6a83c83d6a7f6b291c275"/>
         <topic label="main" href="blocking__put__delete_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="blocking_put_get.c" href="blocking__put__get_8c.html">
+        <topic label="do_put_and_get" href="blocking__put__get_8c.html#abdb700b13512c31f8ae58462fb630a14"/>
         <topic label="main" href="blocking__put__get_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="bus.c" href="bus_8c.html">
@@ -871,7 +941,15 @@
         <topic label="THREAD_SHUTDOWN_SECONDS" href="bus_8c.html#ac9db88b27b40f46d327f575228bd72ab"/>
         <topic label="listener_mainloop" href="bus_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0"/>
         <topic label="sender_mainloop" href="bus_8c.html#a4f1823592996205c3243bf49127a0004"/>
+        <topic label="poll_on_completion" href="bus_8c.html#af65a34f2a232288bc0aabe83521a47f7"/>
+        <topic label="sender_id_of_socket" href="bus_8c.html#a4d924998574ebf0270f4d56027b25494"/>
+        <topic label="listener_id_of_socket" href="bus_8c.html#a013694e272579d83c87e0039769be8a9"/>
+        <topic label="noop_log_cb" href="bus_8c.html#a207a3f520e7e3a9e770c6a2e57086218"/>
+        <topic label="noop_error_cb" href="bus_8c.html#aacccc95ac547d085c1cd5626a0f38c6a"/>
+        <topic label="attempt_to_increase_resource_limits" href="bus_8c.html#a6951664154426a9ee0fc68c69356cca7"/>
+        <topic label="set_defaults" href="bus_8c.html#aac77f6cd78d2c46f01b5c6e14e1b36ea"/>
         <topic label="bus_init" href="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451"/>
+        <topic label="box_msg" href="bus_8c.html#ac0b99f211ee9a81b08697c509640323f"/>
         <topic label="bus_send_request" href="bus_8c.html#a586029a1def1f27aa18916d5750cffe6"/>
         <topic label="bus_get_sender_for_socket" href="bus_8c.html#a8200fe8d77bbf9ebd2ee156835c3bb98"/>
         <topic label="bus_get_listener_for_socket" href="bus_8c.html#a22b25ecf4c0e11de50f551369307c811"/>
@@ -882,6 +960,8 @@
         <topic label="bus_shutdown" href="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9"/>
         <topic label="bus_lock_log" href="bus_8c.html#acc4bcbb78efe00f265027438dfea598f"/>
         <topic label="bus_unlock_log" href="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87"/>
+        <topic label="box_execute_cb" href="bus_8c.html#a1f25ceee49e76a60fcb43f4e39c3cddd"/>
+        <topic label="box_cleanup_cb" href="bus_8c.html#a9b0e16dd0bed640d22dfb26a0ec80d3c"/>
         <topic label="bus_process_boxed_message" href="bus_8c.html#a56eff9f2e0b0df727c0e825aaee531b8"/>
         <topic label="bus_free" href="bus_8c.html#af013638c2ed0336af67997ec31cb88c6"/>
       </topic>
@@ -915,8 +995,27 @@
           <topic label="STATE_AWAITING_HEADER" href="kinetic__types__internal_8h.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d"/>
           <topic label="STATE_AWAITING_BODY" href="kinetic__types__internal_8h.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12"/>
         </topic>
+        <topic label="run_bus" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d"/>
+        <topic label="parse_args" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c"/>
+        <topic label="get_cur_second" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10"/>
+        <topic label="log_cb" href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be"/>
+        <topic label="reset_transfer" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be"/>
+        <topic label="sink_cb" href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1"/>
+        <topic label="unpack_cb" href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f"/>
+        <topic label="unexpected_msg_cb" href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60"/>
         <topic label="main" href="bus__example_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
+        <topic label="signal_handler" href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d"/>
+        <topic label="register_signal_handler" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff"/>
+        <topic label="register_signal_handlers" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4"/>
+        <topic label="usage" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f"/>
+        <topic label="open_sockets" href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97"/>
+        <topic label="construct_msg" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15"/>
+        <topic label="completion_cb" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6"/>
+        <topic label="tick_handler" href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded"/>
         <topic label="state" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e"/>
+        <topic label="executable_name" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b"/>
+        <topic label="loop_flag" href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039"/>
+        <topic label="old_sigint_handler" href="bus__example_8c.html#a760a9af25c6b4b6479b9608d226a5073"/>
       </topic>
       <topic label="bus_internal_types.h" href="bus__internal__types_8h.html">
         <topic label="boxed_msg" href="structboxed__msg.html">
@@ -924,6 +1023,8 @@
           <topic label="timeout_sec" href="structboxed__msg.html#a6853ac26895f628959a9728a6d56d35c"/>
           <topic label="cb" href="structboxed__msg.html#a26aeab33d3d6055c2abb84d6bad2b567"/>
           <topic label="udata" href="structboxed__msg.html#a55d3b66bacb768d909a046a20269b8f9"/>
+          <topic label="tv_send_start" href="structboxed__msg.html#ab20694646677145e1e15d29fee973b4d"/>
+          <topic label="tv_send_done" href="structboxed__msg.html#a49ec8ddc4c8afaf6253712c6a3d41637"/>
           <topic label="fd" href="structboxed__msg.html#af9725c9490a7e20cba9d649dea8c5d48"/>
           <topic label="ssl" href="structboxed__msg.html#a0aa2362725170c931bb9e0f60a0b7c00"/>
           <topic label="out_seq_id" href="structboxed__msg.html#af95824a6049596447b014c9ad0666aaa"/>
@@ -974,17 +1075,21 @@
       <topic label="bus_ssl.c" href="bus__ssl_8c.html">
         <topic label="TIMEOUT_MSEC" href="bus__ssl_8c.html#ab949f03d24e211d2ac9cba33fa641619"/>
         <topic label="MAX_TIMEOUT" href="bus__ssl_8c.html#a85fda3522e69a1bf85f7dcd97b6023a1"/>
+        <topic label="init_client_SSL_CTX" href="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2"/>
+        <topic label="disable_SSL_compression" href="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3"/>
+        <topic label="disable_known_bad_ciphers" href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376"/>
+        <topic label="do_blocking_connection" href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15"/>
         <topic label="bus_ssl_init" href="bus__ssl_8c.html#ad7097b1068063cc1c875ea76d442b2c6"/>
         <topic label="bus_ssl_connect" href="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487"/>
         <topic label="bus_ssl_disconnect" href="bus__ssl_8c.html#ae30bd22a904c9649b3727e6a4917e0f7"/>
-        <topic label="bus_ssl_free" href="bus__ssl_8c.html#a264a7f1d1c67bbfa292a97e66e87751a"/>
+        <topic label="bus_ssl_ctx_free" href="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7"/>
       </topic>
       <topic label="bus_ssl.h" href="bus__ssl_8h.html">
         <topic label="KINETIC_USE_TLS_1_2" href="bus__ssl_8h.html#a49cb96458b3e449948dbe5f22778664a"/>
         <topic label="bus_ssl_init" href="bus__ssl_8h.html#ad7097b1068063cc1c875ea76d442b2c6"/>
         <topic label="bus_ssl_connect" href="bus__ssl_8h.html#a28804cfaf9b3cfe5f66de08f18b39487"/>
         <topic label="bus_ssl_disconnect" href="bus__ssl_8h.html#ae30bd22a904c9649b3727e6a4917e0f7"/>
-        <topic label="bus_ssl_free" href="bus__ssl_8h.html#a264a7f1d1c67bbfa292a97e66e87751a"/>
+        <topic label="bus_ssl_ctx_free" href="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7"/>
       </topic>
       <topic label="bus_types.h" href="bus__types_8h.html">
         <topic label="bus_sink_cb_res_t" href="structbus__sink__cb__res__t.html">
@@ -1037,9 +1142,11 @@
         </topic>
         <topic label="BUS_MAX_CONCURRENT_SENDS" href="bus__types_8h.html#a099e09d8e16ac9b34cdfb55f7b04ee79"/>
         <topic label="BUS_DEFAULT_TIMEOUT_SEC" href="bus__types_8h.html#a4bc947eb1281d1c88e3b4d40e6a55342"/>
+        <topic label="BUS_NO_SEQ_ID" href="bus__types_8h.html#a595edd6f23442eb6c7996422c864661c"/>
         <topic label="BUS_LOG" href="bus__types_8h.html#ad0848e09b437f5b33350bb3943bfb341"/>
         <topic label="BUS_LOG_STRINGIFY" href="bus__types_8h.html#a0f05543d810f13ef1aa2022b09ff66f7"/>
         <topic label="BUS_LOG_SNPRINTF" href="bus__types_8h.html#a0e922b04f1f4484595bbde779d2f676b"/>
+        <topic label="BUS_ASSERT" href="bus__types_8h.html#a4d89c9e9f5d4826669787c8ec484c301"/>
         <topic label="bus_log_cb" href="bus__types_8h.html#ad2ee1c939e7a462d980c301f088078a3"/>
         <topic label="bus_sink_cb" href="bus__types_8h.html#a2869f7812f71d97f451d512754567084"/>
         <topic label="bus_unpack_cb" href="bus__types_8h.html#a4e7668d3dd3e076ee17163a6dd5284be"/>
@@ -1055,6 +1162,7 @@
           <topic label="LOG_SENDER" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9a4bd338e1146b2d8497b0de609bc33dce"/>
           <topic label="LOG_LISTENER" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9aa07b2a8a2af88543b764666555083c42"/>
           <topic label="LOG_MEMORY" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9ae747105329d72a7cc23d5821a082f702"/>
+          <topic label="LOG_ASSERT" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9a537f80003a62ea5d18771f100fb65f70"/>
           <topic label="LOG_EVENT_TYPE_COUNT" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9a4d9d25459089ccd8d4be6a734dcf40ed"/>
         </topic>
         <topic label="bus_init_res_t" href="bus__types_8h.html#afdb4c4a3071613dc05cf764a6da038a1">
@@ -1093,6 +1201,7 @@
         </topic>
       </topic>
       <topic label="byte_array.c" href="byte__array_8c.html">
+        <topic label="append_formatted_cstring_va_list" href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5"/>
         <topic label="ByteArray_Create" href="byte__array_8c.html#a1029bfd0bb667fc593fe3e0733310a3e"/>
         <topic label="ByteArray_CreateWithCString" href="byte__array_8c.html#ad43c36dca8421ec3e2f48e55d8f9e413"/>
         <topic label="ByteArray_FillWithDummyData" href="byte__array_8c.html#a9f76a0b370ef0d1b71b6234110cdf750"/>
@@ -1159,22 +1268,8 @@
         <topic label="ByteBuffer_MallocAndAppend" href="byte__array_8h.html#ac9917b015e701a2b34825d5dfbe97c2a"/>
         <topic label="ByteBuffer_Free" href="byte__array_8h.html#a0129114878fbba14de8ba1d96d52aa90"/>
       </topic>
-      <topic label="casq.c" href="casq_8c.html">
-        <topic label="casq_new" href="casq_8c.html#a1e9768b47bcbefe43d90980b418e9c11"/>
-        <topic label="casq_push" href="casq_8c.html#a62af972d6bb4aee1b462e9cbc6c5dd8a"/>
-        <topic label="casq_empty" href="casq_8c.html#ad9b17ee313d9292b3abcab19c6452e99"/>
-        <topic label="casq_pop" href="casq_8c.html#abae1c3f5226dbf67219e16399a38250a"/>
-        <topic label="casq_free" href="casq_8c.html#a330da6e863b1f09453238a9b28482620"/>
-      </topic>
-      <topic label="casq.h" href="casq_8h.html">
-        <topic label="casq_free_cb" href="casq_8h.html#a51b46edbd6c34bc5c918ed93fa2725c7"/>
-        <topic label="casq_new" href="casq_8h.html#a1e9768b47bcbefe43d90980b418e9c11"/>
-        <topic label="casq_push" href="casq_8h.html#a62af972d6bb4aee1b462e9cbc6c5dd8a"/>
-        <topic label="casq_pop" href="casq_8h.html#abae1c3f5226dbf67219e16399a38250a"/>
-        <topic label="casq_empty" href="casq_8h.html#ad9b17ee313d9292b3abcab19c6452e99"/>
-        <topic label="casq_free" href="casq_8h.html#a330da6e863b1f09453238a9b28482620"/>
-      </topic>
       <topic label="discovery.c" href="discovery_8c.html">
+        <topic label="discover_service" href="discovery_8c.html#ac5c82c7f3e482ef75ee1659f78b43f91"/>
         <topic label="main" href="discovery_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="echosrv.c" href="echosrv_8c.html">
@@ -1183,12 +1278,26 @@
         <topic label="NO_CLIENT" href="echosrv_8c.html#ab1c2bdfea442df58c67f91a05b1bc18e"/>
         <topic label="LOG" href="echosrv_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a"/>
         <topic label="MAX_TIMEOUT" href="echosrv_8c.html#a85fda3522e69a1bf85f7dcd97b6023a1"/>
+        <topic label="init_polling" href="echosrv_8c.html#abffccc9f03c9953bf7c64c1c0aa9c1d4"/>
+        <topic label="open_ports" href="echosrv_8c.html#adb506c2def512366e3c2c3c842c3f4fd"/>
+        <topic label="handle_incoming_connections" href="echosrv_8c.html#a2c4f28acc72fce4e47a86b351fb8d569"/>
+        <topic label="handle_client_io" href="echosrv_8c.html#a72466c7fd977973c0e9d95501dc5ebc3"/>
+        <topic label="listen_loop_poll" href="echosrv_8c.html#a49d58a2175f08ad7c1bd27ca146cad86"/>
+        <topic label="register_client" href="echosrv_8c.html#a6c98d175934c997f2653cd4f97d08164"/>
+        <topic label="disconnect_client" href="echosrv_8c.html#a2700fdb6c0374b394629bb76f5102bcd"/>
+        <topic label="enqueue_write" href="echosrv_8c.html#a9e3cf1ca951044b5255114218ab4dea5"/>
+        <topic label="usage" href="echosrv_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f"/>
+        <topic label="parse_args" href="echosrv_8c.html#a3d153aa38c7a8217cb76a7a39f1f735f"/>
         <topic label="main" href="echosrv_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
+        <topic label="tick_handler" href="echosrv_8c.html#a5aff199498ee47e70b8162fe5bfd4f2a"/>
+        <topic label="read_buf" href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7"/>
       </topic>
       <topic label="get_key_range.c" href="get__key__range_8c.html">
+        <topic label="create_entries" href="get__key__range_8c.html#a2bfa6febab468edb77428e4aa2631381"/>
         <topic label="main" href="get__key__range_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="get_nonblocking.c" href="get__nonblocking_8c.html">
+        <topic label="get_finished" href="get__nonblocking_8c.html#a6db38fa56aad7caaaa24476104273356"/>
         <topic label="main" href="get__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="bus/greatest.h" href="bus_2greatest_8h.html">
@@ -1435,7 +1544,43 @@
         <topic label="greatest_type_info_string" href="threadpool_2greatest_8h.html#a07f049d1ae125a65024f68449f6b8d4a"/>
         <topic label="greatest_info" href="threadpool_2greatest_8h.html#ad018f113893f815b9b3bdea4d91f2cac"/>
       </topic>
+      <topic label="kinetic_admin_client.c" href="kinetic__admin__client_8c.html">
+        <topic label="KineticAdminClient_Init" href="kinetic__admin__client_8c.html#a86efe1787a17afed66c4f09fedd28098"/>
+        <topic label="KineticAdminClient_Shutdown" href="kinetic__admin__client_8c.html#acca611e9489d4770e2a5fc269382562e"/>
+        <topic label="KineticAdminClient_CreateSession" href="kinetic__admin__client_8c.html#a40b3e9483efbcc491bb3b84cb5ee5a29"/>
+        <topic label="KineticAdminClient_DestroySession" href="kinetic__admin__client_8c.html#aeefdcbb09cbfdd6c11fe81618b351b38"/>
+        <topic label="KineticAdminClient_SetErasePin" href="kinetic__admin__client_8c.html#a38e8ccefaed174972648d688b9a94fd4"/>
+        <topic label="KineticAdminClient_SecureErase" href="kinetic__admin__client_8c.html#abe24a79abc3176985cb4fa864772f793"/>
+        <topic label="KineticAdminClient_InstantErase" href="kinetic__admin__client_8c.html#a762e2902f0cbaf2afefa46475bf6cbe5"/>
+        <topic label="KineticAdminClient_SetLockPin" href="kinetic__admin__client_8c.html#a93e022a7bbd333dac53a17711fb135a9"/>
+        <topic label="KineticAdminClient_LockDevice" href="kinetic__admin__client_8c.html#a98772c3cb000a50647086fcc21bc34cc"/>
+        <topic label="KineticAdminClient_UnlockDevice" href="kinetic__admin__client_8c.html#a0ebb1e1b6bb4722e36f99dd4e018161e"/>
+        <topic label="KineticAdminClient_GetLog" href="kinetic__admin__client_8c.html#a4c9688de7dcd6bc0b978c94fa5ccb6cf"/>
+        <topic label="KineticClient_FreeLogInfo" href="kinetic__admin__client_8c.html#a2a0926b7c16681446b25dbf1adeb5b35"/>
+        <topic label="KineticAdminClient_SetClusterVersion" href="kinetic__admin__client_8c.html#a622cceb26cc481f8c2f78d849ca21b65"/>
+        <topic label="KineticAdminClient_SetACL" href="kinetic__admin__client_8c.html#a018a579090cc682a8d3a7ef29d5e181d"/>
+        <topic label="KineticAdminClient_UpdateFirmware" href="kinetic__admin__client_8c.html#a415021b155dcfc09e9e1a7180926e4d4"/>
+      </topic>
+      <topic label="kinetic_admin_client.h" href="kinetic__admin__client_8h.html">
+        <topic label="KineticAdminClient_Init" href="kinetic__admin__client_8h.html#a86efe1787a17afed66c4f09fedd28098"/>
+        <topic label="KineticAdminClient_Shutdown" href="kinetic__admin__client_8h.html#acca611e9489d4770e2a5fc269382562e"/>
+        <topic label="KineticAdminClient_CreateSession" href="kinetic__admin__client_8h.html#a40b3e9483efbcc491bb3b84cb5ee5a29"/>
+        <topic label="KineticAdminClient_DestroySession" href="kinetic__admin__client_8h.html#aeefdcbb09cbfdd6c11fe81618b351b38"/>
+        <topic label="KineticAdminClient_SetErasePin" href="kinetic__admin__client_8h.html#a38e8ccefaed174972648d688b9a94fd4"/>
+        <topic label="KineticAdminClient_SecureErase" href="kinetic__admin__client_8h.html#abe24a79abc3176985cb4fa864772f793"/>
+        <topic label="KineticAdminClient_InstantErase" href="kinetic__admin__client_8h.html#a762e2902f0cbaf2afefa46475bf6cbe5"/>
+        <topic label="KineticAdminClient_SetLockPin" href="kinetic__admin__client_8h.html#a93e022a7bbd333dac53a17711fb135a9"/>
+        <topic label="KineticAdminClient_LockDevice" href="kinetic__admin__client_8h.html#a98772c3cb000a50647086fcc21bc34cc"/>
+        <topic label="KineticAdminClient_UnlockDevice" href="kinetic__admin__client_8h.html#a0ebb1e1b6bb4722e36f99dd4e018161e"/>
+        <topic label="KineticAdminClient_GetLog" href="kinetic__admin__client_8h.html#a4c9688de7dcd6bc0b978c94fa5ccb6cf"/>
+        <topic label="KineticAdminClient_FreeLogInfo" href="kinetic__admin__client_8h.html#ac4b94eb57947ca4c2e11303cc8820586"/>
+        <topic label="KineticAdminClient_SetClusterVersion" href="kinetic__admin__client_8h.html#a622cceb26cc481f8c2f78d849ca21b65"/>
+        <topic label="KineticAdminClient_SetACL" href="kinetic__admin__client_8h.html#a018a579090cc682a8d3a7ef29d5e181d"/>
+        <topic label="KineticAdminClient_UpdateFirmware" href="kinetic__admin__client_8h.html#a415021b155dcfc09e9e1a7180926e4d4"/>
+      </topic>
       <topic label="kinetic_allocator.c" href="kinetic__allocator_8c.html">
+        <topic label="KineticAllocator_NewSession" href="kinetic__allocator_8c.html#a5d14b6571482ef2e5b0a77626ee731fb"/>
+        <topic label="KineticAllocator_FreeSession" href="kinetic__allocator_8c.html#a9024c1d1f7f5d4f5fb26a6bc38646c9b"/>
         <topic label="KineticAllocator_NewConnection" href="kinetic__allocator_8c.html#aa32172871b8d282fb4c9d7b667e9ddba"/>
         <topic label="KineticAllocator_FreeConnection" href="kinetic__allocator_8c.html#a870468e22b2d0dac6f7dc86f9ad5e92f"/>
         <topic label="KineticAllocator_NewKineticResponse" href="kinetic__allocator_8c.html#a1a3c242e31eaeea2efcedea00bfbece6"/>
@@ -1444,15 +1589,42 @@
         <topic label="KineticAllocator_FreeOperation" href="kinetic__allocator_8c.html#a4edf7f13ac63599495458bb59536a6cb"/>
       </topic>
       <topic label="kinetic_allocator.h" href="kinetic__allocator_8h.html">
-        <topic label="KineticAllocator_InitLists" href="kinetic__allocator_8h.html#ade87a99a948224add0a96d09b0f62cd9"/>
+        <topic label="KineticAllocator_NewSession" href="kinetic__allocator_8h.html#a5d14b6571482ef2e5b0a77626ee731fb"/>
+        <topic label="KineticAllocator_FreeSession" href="kinetic__allocator_8h.html#a9024c1d1f7f5d4f5fb26a6bc38646c9b"/>
         <topic label="KineticAllocator_NewConnection" href="kinetic__allocator_8h.html#aa32172871b8d282fb4c9d7b667e9ddba"/>
         <topic label="KineticAllocator_FreeConnection" href="kinetic__allocator_8h.html#a870468e22b2d0dac6f7dc86f9ad5e92f"/>
-        <topic label="KineticAllocator_NewPDU" href="kinetic__allocator_8h.html#a74633bbfb28f39b6388449643206573d"/>
-        <topic label="KineticAllocator_FreePDU" href="kinetic__allocator_8h.html#a167e4709ff5e3432eb9e1c991d7de869"/>
+        <topic label="KineticAllocator_NewPDU" href="kinetic__allocator_8h.html#af32eea935072a7bdb3c0df293cb4f501"/>
+        <topic label="KineticAllocator_FreePDU" href="kinetic__allocator_8h.html#a41742d01eeaa0065ff4b2073d4017307"/>
         <topic label="KineticAllocator_NewOperation" href="kinetic__allocator_8h.html#a316769b24a5c83955f95bb97a0347a50"/>
         <topic label="KineticAllocator_FreeOperation" href="kinetic__allocator_8h.html#a4edf7f13ac63599495458bb59536a6cb"/>
         <topic label="KineticAllocator_NewKineticResponse" href="kinetic__allocator_8h.html#a1a3c242e31eaeea2efcedea00bfbece6"/>
         <topic label="KineticAllocator_FreeKineticResponse" href="kinetic__allocator_8h.html#af8859e2a71ff081265087335265a7e1c"/>
+      </topic>
+      <topic label="kinetic_auth.c" href="kinetic__auth_8c.html">
+        <topic label="KineticAuth_EnsureSslEnabled" href="kinetic__auth_8c.html#a02755b4289edbf8c4fbd98e4cc1eeeda"/>
+        <topic label="KineticAuth_PopulateHmac" href="kinetic__auth_8c.html#aa2be5c984d8a988055650fc0f2cb773c"/>
+        <topic label="KineticAuth_PopulatePin" href="kinetic__auth_8c.html#a51420f0c22f79e384f49ec8801b929a0"/>
+        <topic label="KineticAuth_PopulateTag" href="kinetic__auth_8c.html#a0e627aa89df90f7150b8c4fc1830c9f0"/>
+      </topic>
+      <topic label="kinetic_auth.h" href="kinetic__auth_8h.html">
+        <topic label="KineticAuth_EnsureSslEnabled" href="kinetic__auth_8h.html#a02755b4289edbf8c4fbd98e4cc1eeeda"/>
+        <topic label="KineticAuth_PopulateHmac" href="kinetic__auth_8h.html#a277ce4676398ecfa77f21d9893f164c6"/>
+        <topic label="KineticAuth_PopulatePin" href="kinetic__auth_8h.html#a1b0c64709bda162bc83ac80d3a4971b9"/>
+        <topic label="KineticAuth_PopulateTag" href="kinetic__auth_8h.html#a0e627aa89df90f7150b8c4fc1830c9f0"/>
+      </topic>
+      <topic label="kinetic_bus.c" href="kinetic__bus_8c.html">
+        <topic label="log_cb" href="kinetic__bus_8c.html#a3df0ed001eb9f84319ce7925d738b6be"/>
+        <topic label="reset_transfer" href="kinetic__bus_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be"/>
+        <topic label="unpack_header" href="kinetic__bus_8c.html#afbe935be29005345b515ca0254080714"/>
+        <topic label="sink_cb" href="kinetic__bus_8c.html#a5798a66c22a0ede1e2c23722f45e36a1"/>
+        <topic label="log_response_seq_id" href="kinetic__bus_8c.html#aa502de7232e5497dbf1caf50f7d4834c"/>
+        <topic label="unpack_cb" href="kinetic__bus_8c.html#ad7077a38d35ab28ea412f902fefe006f"/>
+        <topic label="KineticBus_Init" href="kinetic__bus_8c.html#a9216d9da50c31f41dcf7e9b3ffc223cf"/>
+        <topic label="KineticBus_Shutdown" href="kinetic__bus_8c.html#a0a37aebabcbf7a27cb449fa29f647b87"/>
+      </topic>
+      <topic label="kinetic_bus.h" href="kinetic__bus_8h.html">
+        <topic label="KineticBus_Init" href="kinetic__bus_8h.html#a9216d9da50c31f41dcf7e9b3ffc223cf"/>
+        <topic label="KineticBus_Shutdown" href="kinetic__bus_8h.html#a0a37aebabcbf7a27cb449fa29f647b87"/>
       </topic>
       <topic label="kinetic_client.c" href="kinetic__client_8c.html">
         <topic label="GET_COMMAND" href="kinetic__client_8c.html#a8b5e7ada617be4214a95ff7958bfade5">
@@ -1462,26 +1634,26 @@
         </topic>
         <topic label="KineticClient_Init" href="kinetic__client_8c.html#aa7b2702d80f99a8661d48d61023b375c"/>
         <topic label="KineticClient_Shutdown" href="kinetic__client_8c.html#ac9b742b94364d909834e735d2b3bbc76"/>
-        <topic label="KineticClient_CreateConnection" href="kinetic__client_8c.html#ae6906744879c31aaa0d6e6f8414918aa"/>
-        <topic label="KineticClient_DestroyConnection" href="kinetic__client_8c.html#ad755b6ed9c732797c40d654fe12eb1cd"/>
+        <topic label="KineticClient_CreateSession" href="kinetic__client_8c.html#ac637de46df9f42b8202adbead6766980"/>
+        <topic label="KineticClient_DestroySession" href="kinetic__client_8c.html#a9f8fb5f05daffb0450f62b193da71a12"/>
         <topic label="KineticClient_NoOp" href="kinetic__client_8c.html#a277c2a4466cada1736801ffb473ace13"/>
         <topic label="KineticClient_Put" href="kinetic__client_8c.html#a58c9dfb7db6c42f6f85c16b1e5a29eab"/>
         <topic label="KineticClient_Flush" href="kinetic__client_8c.html#a6e37c5adefd0a463b11c324caec4f209"/>
+        <topic label="has_key" href="kinetic__client_8c.html#a34c6ac3a9d4b97549b13b84a8d3196ed"/>
+        <topic label="has_value_buffer" href="kinetic__client_8c.html#ab5ca1b6ea1d5dbb18b2fa2b9fbdd14e0"/>
+        <topic label="handle_get_command" href="kinetic__client_8c.html#a7cc43fbb93283513061cc556f57c0eca"/>
         <topic label="KineticClient_Get" href="kinetic__client_8c.html#a3b700cb923a3ad66cfbee6f93809713c"/>
         <topic label="KineticClient_GetPrevious" href="kinetic__client_8c.html#a7830a04ecda2e40cea89a169480a31a0"/>
         <topic label="KineticClient_GetNext" href="kinetic__client_8c.html#aca3fcd36f1086ba4d33ac152c7e01686"/>
         <topic label="KineticClient_Delete" href="kinetic__client_8c.html#ade4cb599dfc5a89b24e5db51f6ee79e8"/>
         <topic label="KineticClient_GetKeyRange" href="kinetic__client_8c.html#a2ded4406328e52e2e5e9e3e7f7cd0689"/>
-        <topic label="KineticClient_GetLog" href="kinetic__client_8c.html#a92a9e91b13877a38b2e5facb5f0cacb3"/>
-        <topic label="KineticClient_FreeDeviceInfo" href="kinetic__client_8c.html#a20dc6162df415bc1d65208b6201e7ff3"/>
         <topic label="KineticClient_P2POperation" href="kinetic__client_8c.html#af165b75323e1451b31e773cb13255745"/>
-        <topic label="KineticClient_InstantSecureErase" href="kinetic__client_8c.html#a8a3620eb346c4a710546ef225c75c71f"/>
       </topic>
       <topic label="kinetic_client.h" href="kinetic__client_8h.html">
         <topic label="KineticClient_Init" href="kinetic__client_8h.html#aa7b2702d80f99a8661d48d61023b375c"/>
         <topic label="KineticClient_Shutdown" href="kinetic__client_8h.html#ac9b742b94364d909834e735d2b3bbc76"/>
-        <topic label="KineticClient_CreateConnection" href="kinetic__client_8h.html#ae6906744879c31aaa0d6e6f8414918aa"/>
-        <topic label="KineticClient_DestroyConnection" href="kinetic__client_8h.html#ad755b6ed9c732797c40d654fe12eb1cd"/>
+        <topic label="KineticClient_CreateSession" href="kinetic__client_8h.html#ac637de46df9f42b8202adbead6766980"/>
+        <topic label="KineticClient_DestroySession" href="kinetic__client_8h.html#a9f8fb5f05daffb0450f62b193da71a12"/>
         <topic label="KineticClient_NoOp" href="kinetic__client_8h.html#a277c2a4466cada1736801ffb473ace13"/>
         <topic label="KineticClient_Put" href="kinetic__client_8h.html#a58c9dfb7db6c42f6f85c16b1e5a29eab"/>
         <topic label="KineticClient_Flush" href="kinetic__client_8h.html#a6e37c5adefd0a463b11c324caec4f209"/>
@@ -1490,21 +1662,20 @@
         <topic label="KineticClient_GetNext" href="kinetic__client_8h.html#aca3fcd36f1086ba4d33ac152c7e01686"/>
         <topic label="KineticClient_Delete" href="kinetic__client_8h.html#ade4cb599dfc5a89b24e5db51f6ee79e8"/>
         <topic label="KineticClient_GetKeyRange" href="kinetic__client_8h.html#a2ded4406328e52e2e5e9e3e7f7cd0689"/>
-        <topic label="KineticClient_GetLog" href="kinetic__client_8h.html#a92a9e91b13877a38b2e5facb5f0cacb3"/>
-        <topic label="KineticClient_FreeDeviceInfo" href="kinetic__client_8h.html#a20dc6162df415bc1d65208b6201e7ff3"/>
         <topic label="KineticClient_P2POperation" href="kinetic__client_8h.html#af165b75323e1451b31e773cb13255745"/>
-        <topic label="KineticClient_InstantSecureErase" href="kinetic__client_8h.html#a8a3620eb346c4a710546ef225c75c71f"/>
       </topic>
       <topic label="kinetic_controller.c" href="kinetic__controller_8c.html">
         <topic label="KineticController_CreateOperation" href="kinetic__controller_8c.html#ad4fe27fac91b48a17326954619478f44"/>
+        <topic label="DefaultCallback" href="kinetic__controller_8c.html#a2dbaf873b34b0edff07641deb5630092"/>
+        <topic label="DefaultClosure" href="kinetic__controller_8c.html#a0da2f128e6f80bbb475eebc181630a87"/>
         <topic label="KineticController_ExecuteOperation" href="kinetic__controller_8c.html#ac9a4252a775e193885639be40bd3d2a0"/>
         <topic label="bus_to_kinetic_status" href="kinetic__controller_8c.html#a79b2f6dcc349338aa767e037c481d58f"/>
+        <topic label="bus_error_string" href="kinetic__controller_8c.html#a096a026c18d48c651163a3dcfec33327"/>
         <topic label="KineticController_HandleUnexpectedResponse" href="kinetic__controller_8c.html#add3086b393c52587fbb6f608ec5646c5"/>
         <topic label="KineticController_HandleResult" href="kinetic__controller_8c.html#a807fc16fb4348e2792eca614323e953f"/>
       </topic>
       <topic label="kinetic_controller.h" href="kinetic__controller_8h.html">
         <topic label="KineticController_Init" href="kinetic__controller_8h.html#a2696cec04d495fb25499052ef0d35a42"/>
-        <topic label="KineticController_CreateOperation" href="kinetic__controller_8h.html#ad4fe27fac91b48a17326954619478f44"/>
         <topic label="KineticController_ExecuteOperation" href="kinetic__controller_8h.html#a317e37adb34e380e2266c764b0becf36"/>
         <topic label="KineticController_HandleUnexpectedResponse" href="kinetic__controller_8h.html#add3086b393c52587fbb6f608ec5646c5"/>
         <topic label="KineticController_HandleResult" href="kinetic__controller_8h.html#a807fc16fb4348e2792eca614323e953f"/>
@@ -1531,12 +1702,38 @@
         </topic>
       </topic>
       <topic label="kinetic_device_info.c" href="kinetic__device__info_8c.html">
-        <topic label="KineticDeviceInfo_Create" href="kinetic__device__info_8c.html#a5f061838bd7c675301f9a7e9bbee8758"/>
-        <topic label="KineticDeviceInfo_Free" href="kinetic__device__info_8c.html#a6c9a2961fbab286f1d4004a6fb5fbf5b"/>
+        <topic label="copy_str" href="kinetic__device__info_8c.html#a5b9491fcb30764489c7fb940d3ff9e96"/>
+        <topic label="copy_to_byte_array" href="kinetic__device__info_8c.html#ad4758e4399a3a2acd54d3817eb47cde1"/>
+        <topic label="free_byte_array" href="kinetic__device__info_8c.html#a1e549cc908717daf191fc403516015d3"/>
+        <topic label="KineticLogInfo_GetUtilizations" href="kinetic__device__info_8c.html#a39ae672abf0c68d8f21ef95b9f68c891"/>
+        <topic label="KineticLogInfo_GetTemperatures" href="kinetic__device__info_8c.html#a97f767612693b2e472770a53bcbd0ede"/>
+        <topic label="KineticLogInfo_GetCapacity" href="kinetic__device__info_8c.html#a6025bc29b1745667de905d842fceb44c"/>
+        <topic label="KineticLogInfo_GetConfiguration" href="kinetic__device__info_8c.html#abdb5dfbdba493a0cc78ef9cd2f818d46"/>
+        <topic label="KineticLogInfo_GetStatistics" href="kinetic__device__info_8c.html#ad96f9fe145d85dc624fed3f1253d6786"/>
+        <topic label="KineticLogInfo_GetMessages" href="kinetic__device__info_8c.html#a52c10569261e941d82a790fc9b618500"/>
+        <topic label="KineticLogInfo_GetLimits" href="kinetic__device__info_8c.html#afb145e5e38acdd3a87e5182dc1c1dd72"/>
+        <topic label="KineticLogInfo_GetDevice" href="kinetic__device__info_8c.html#a86b8fe116d27605b96fffc64d795b953"/>
+        <topic label="KineticLogInfo_Create" href="kinetic__device__info_8c.html#a412bf88528a63951675982966c220a2b"/>
+        <topic label="KineticLogInfo_Free" href="kinetic__device__info_8c.html#a660cad7d076e7dd0101a33efd6dd86a8"/>
       </topic>
       <topic label="kinetic_device_info.h" href="kinetic__device__info_8h.html">
-        <topic label="KineticDeviceInfo_Create" href="kinetic__device__info_8h.html#a5f061838bd7c675301f9a7e9bbee8758"/>
-        <topic label="KineticDeviceInfo_Free" href="kinetic__device__info_8h.html#a6c9a2961fbab286f1d4004a6fb5fbf5b"/>
+        <topic label="KineticLogInfo_Create" href="kinetic__device__info_8h.html#a412bf88528a63951675982966c220a2b"/>
+        <topic label="KineticLogInfo_Free" href="kinetic__device__info_8h.html#a660cad7d076e7dd0101a33efd6dd86a8"/>
+      </topic>
+      <topic label="kinetic_engine.c" href="kinetic__engine_8c.html">
+        <topic label="KineticEngine_Startup" href="kinetic__engine_8c.html#a132131794219b57f6d39c417b4802938"/>
+        <topic label="KineticEngine_CreateConnection" href="kinetic__engine_8c.html#aadc4dae64cf04af9302f4fe6fecc39ff"/>
+        <topic label="KineticEngine_DestroyConnection" href="kinetic__engine_8c.html#a941eb55de430821a07d10a0bac531cb7"/>
+        <topic label="KineticEngine_EnqueueOperation" href="kinetic__engine_8c.html#aef2c664886c053935e5ea6c156464905"/>
+        <topic label="KineticEngine_Shutdown" href="kinetic__engine_8c.html#a2e7e7fadc5af0c6991b53081f6b9d0f9"/>
+      </topic>
+      <topic label="kinetic_engine.h" href="kinetic__engine_8h.html">
+        <topic label="KineticEngine" href="struct_kinetic_engine.html"/>
+        <topic label="KineticEngine_Startup" href="kinetic__engine_8h.html#a132131794219b57f6d39c417b4802938"/>
+        <topic label="KineticEngine_CreateConnection" href="kinetic__engine_8h.html#aadc4dae64cf04af9302f4fe6fecc39ff"/>
+        <topic label="KineticEngine_DestroyConnection" href="kinetic__engine_8h.html#a941eb55de430821a07d10a0bac531cb7"/>
+        <topic label="KineticEngine_EnqueueOperation" href="kinetic__engine_8h.html#aef2c664886c053935e5ea6c156464905"/>
+        <topic label="KineticEngine_Shutdown" href="kinetic__engine_8h.html#a2e7e7fadc5af0c6991b53081f6b9d0f9"/>
       </topic>
       <topic label="kinetic_entry.c" href="kinetic__entry_8c.html">
         <topic label="KineticEntry_Init" href="kinetic__entry_8c.html#a1b909a825d2c5b681ed58b36bb6dbdc6"/>
@@ -1557,6 +1754,8 @@
         <topic label="KineticEntry_SetAlgorithm" href="kinetic__entry_8h.html#aeabf66e54d6ea85ab20c54ce717c7bec"/>
       </topic>
       <topic label="kinetic_hmac.c" href="kinetic__hmac_8c.html">
+        <topic label="LOG_HMAC" href="kinetic__hmac_8c.html#ae73a735d2b528cbcb279c9f80b609523"/>
+        <topic label="KineticHMAC_Compute" href="kinetic__hmac_8c.html#a3e5c642cab3b6c66a9a417f081e886ef"/>
         <topic label="KineticHMAC_Init" href="kinetic__hmac_8c.html#a560fa368e7286d678faa097df39a5e55"/>
         <topic label="KineticHMAC_Populate" href="kinetic__hmac_8c.html#afc2c3f733a1383b02b125f0c6d08e95b"/>
         <topic label="KineticHMAC_Validate" href="kinetic__hmac_8c.html#aa5f262809b134357770fe1b289797fb7"/>
@@ -1567,32 +1766,46 @@
         <topic label="KineticHMAC_Validate" href="kinetic__hmac_8h.html#aa5f262809b134357770fe1b289797fb7"/>
       </topic>
       <topic label="kinetic_logger.c" href="kinetic__logger_8c.html">
-        <topic label="KINETIC_LOGGER_BUFFER_STR_MAX_LEN" href="kinetic__logger_8c.html#afd9117f49e6fe26a09f07a8b4094668b"/>
-        <topic label="KINETIC_LOGGER_BUFFER_SIZE" href="kinetic__logger_8c.html#a46c0b1536713e7bd16d5d879b148fcbd"/>
-        <topic label="KINETIC_LOGGER_FLUSH_INTERVAL_SEC" href="kinetic__logger_8c.html#a3825b625f64850a03373ec53f7882557"/>
-        <topic label="KINETIC_LOGGER_SLEEP_TIME_SEC" href="kinetic__logger_8c.html#accf24c9dab82c503a41930746d2c0ea4"/>
-        <topic label="KINETIC_LOGGER_BUFFER_FLUSH_SIZE" href="kinetic__logger_8c.html#a929eb7f04063b2b0e8e4a6ef59b8f58e"/>
+        <topic label="BUFFER_SIZE" href="kinetic__logger_8c.html#a6b20d41d6252e9871430c242cb1a56e7"/>
+        <topic label="BUFFER_MAX_STRLEN" href="kinetic__logger_8c.html#aeb26962020b855f5a4e4888f92cc6f13"/>
         <topic label="LOG_INDENT" href="kinetic__logger_8c.html#a3af97540f61003b8cfc44f9a23d9ed5e"/>
-        <topic label="LOG_PROTO_INIT" href="kinetic__logger_8c.html#aa759dab3714df698270c4644b8559ed5"/>
-        <topic label="LOG_PROTO_LEVEL_START" href="kinetic__logger_8c.html#ad3a2abfb5107485323e52906371f1bbc"/>
-        <topic label="LOG_PROTO_LEVEL_END" href="kinetic__logger_8c.html#ac3d221b143080cbf9b6abe41272c07b0"/>
-        <topic label="LOG_PROTO_LEVEL_START_ARRAY" href="kinetic__logger_8c.html#aa604fb43091d3870e2d74ab8248c3f2c"/>
-        <topic label="LOG_PROTO_LEVEL_END_ARRAY" href="kinetic__logger_8c.html#a0451e133e0d5b557b7af956003efdb11"/>
+        <topic label="is_level_enabled" href="kinetic__logger_8c.html#a2756f3a2f8b1d66c06a84ccca5ea60db"/>
+        <topic label="lock_buffer" href="kinetic__logger_8c.html#a353b34d0d59ae46697c37e0008602f3d"/>
+        <topic label="unlock_buffer" href="kinetic__logger_8c.html#a913bb3ccf2f5321c5b3a743b7ffb29c9"/>
+        <topic label="flush_buffer" href="kinetic__logger_8c.html#a05a1424fd76b54b0abc9199b08bfc468"/>
+        <topic label="get_buffer" href="kinetic__logger_8c.html#a3f096a1f5da292db6bb41d4b42bceb2c"/>
+        <topic label="finish_buffer" href="kinetic__logger_8c.html#ad39381568420bd0de8529b1215af4748"/>
+        <topic label="log_protobuf_message" href="kinetic__logger_8c.html#a7e2a5b73cc92478c311143b987ff965d"/>
         <topic label="KineticLogger_Init" href="kinetic__logger_8c.html#a4be6e3e6d246591f27b1c8bcb4c911ab"/>
         <topic label="KineticLogger_Close" href="kinetic__logger_8c.html#a10716dedde03111fb55d990993a3c031"/>
         <topic label="KineticLogger_Log" href="kinetic__logger_8c.html#ad122c68480fdf25667ee3422a9514938"/>
         <topic label="KineticLogger_LogPrintf" href="kinetic__logger_8c.html#ad8a9ff07bbef2692cdd898a5c62553b4"/>
         <topic label="KineticLogger_LogLocation" href="kinetic__logger_8c.html#afe64352e6aab285bffe78ccf2b2ff595"/>
         <topic label="KineticLogger_LogHeader" href="kinetic__logger_8c.html#a209382d99015a79632efa289738f6dec"/>
+        <topic label="log_proto_level_start" href="kinetic__logger_8c.html#a694ee27e8efd7a2152da5b2f681212a5"/>
+        <topic label="log_proto_level_end" href="kinetic__logger_8c.html#a1d2384f64591467eefbc2c661cd835b5"/>
+        <topic label="log_proto_level_start_array" href="kinetic__logger_8c.html#a7cf80e4d2f0a1a50ea89102a1f113ed1"/>
+        <topic label="log_proto_level_end_array" href="kinetic__logger_8c.html#a3b5cc195118721f4c74477b4c0c7ed33"/>
+        <topic label="bytetoa" href="kinetic__logger_8c.html#affb1bdc42e98f0e1147141e95d72d74d"/>
         <topic label="KineticLogger_ByteArraySliceToCString" href="kinetic__logger_8c.html#a7f04a2ee23e533260754ce515744063f"/>
+        <topic label="LogUnboxed" href="kinetic__logger_8c.html#a803c36a9b8c2205f0a11fdd49dc2bd69"/>
         <topic label="KineticLogger_LogProtobuf" href="kinetic__logger_8c.html#adb2c0ba1c83448424d7148ea79f4192a"/>
         <topic label="KineticLogger_LogStatus" href="kinetic__logger_8c.html#ae8bf66757a616534b039c31ad863a519"/>
         <topic label="KineticLogger_LogByteArray" href="kinetic__logger_8c.html#adeef474b44c9d6e0c08b05b873aaf3ba"/>
         <topic label="KineticLogger_LogByteBuffer" href="kinetic__logger_8c.html#a6b725885ac7e8249ee9da46955c03e5e"/>
+        <topic label="KineticLogger_LogTimestamp" href="kinetic__logger_8c.html#a177e9a9cfe26101925b16a730c4b981c"/>
+        <topic label="KineticLogLevel" href="kinetic__logger_8c.html#a0ac1966d84e01ca1c06b9c71e9309b87"/>
+        <topic label="KineticLoggerHandle" href="kinetic__logger_8c.html#aa80c4b4b23d6df7b20c48c9983fba628"/>
+        <topic label="BufferMutex" href="kinetic__logger_8c.html#a8cb00c41aeab9a73f0546751362a7107"/>
+        <topic label="Buffer" href="kinetic__logger_8c.html#aaf1490d688e7cf0c41987d87572ff80a"/>
+        <topic label="indent" href="kinetic__logger_8c.html#a244f0b38bf3fd41bbfbbcd008af210cd"/>
+        <topic label="max_indent" href="kinetic__logger_8c.html#a8b9780f4f8a0e519a70a60471e28385c"/>
+        <topic label="indent_overflow" href="kinetic__logger_8c.html#ae00a4e3bbbf7cc963b0b06b0e75e314a"/>
       </topic>
       <topic label="kinetic_logger.h" href="kinetic__logger_8h.html">
         <topic label="KINETIC_LOGGER_DISABLED" href="kinetic__logger_8h.html#a66bc173cb1cc1a6ac0133983005e98fa"/>
         <topic label="KINETIC_LOGGER_FLUSH_THREAD_ENABLED" href="kinetic__logger_8h.html#a3a5ef8ba8694dfba28fbe1381da4c70e"/>
+        <topic label="KINETIC_LOGGER_LOG_SEQUENCE_ID" href="kinetic__logger_8h.html#aa43ecdcf5309915850672dd331b84f8e"/>
         <topic label="KINETIC_LOG_FILE" href="kinetic__logger_8h.html#ae9edfec85940b30f258236a221b51057"/>
         <topic label="BYTES_TO_CSTRING" href="kinetic__logger_8h.html#a1f53a109345e468584a1fd3510ed7a20"/>
         <topic label="LOG0" href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c"/>
@@ -1604,16 +1817,18 @@
         <topic label="LOGF2" href="kinetic__logger_8h.html#af4cc85a025fa7e0a8f3ce5c38c5385d9"/>
         <topic label="LOGF3" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100"/>
         <topic label="LOG_LOCATION" href="kinetic__logger_8h.html#ad7b252887c17c035e5591c68848cce61"/>
+        <topic label="KINETIC_ASSERT" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f"/>
         <topic label="KineticLogger_Init" href="kinetic__logger_8h.html#a055eec4603a284c28d78b080bd2402a7"/>
         <topic label="KineticLogger_Close" href="kinetic__logger_8h.html#a10716dedde03111fb55d990993a3c031"/>
         <topic label="KineticLogger_Log" href="kinetic__logger_8h.html#ad122c68480fdf25667ee3422a9514938"/>
         <topic label="KineticLogger_LogPrintf" href="kinetic__logger_8h.html#ad8a9ff07bbef2692cdd898a5c62553b4"/>
-        <topic label="KineticLogger_LogLocation" href="kinetic__logger_8h.html#a072522133050725a79ab31ee2664a740"/>
+        <topic label="KineticLogger_LogLocation" href="kinetic__logger_8h.html#afe64352e6aab285bffe78ccf2b2ff595"/>
         <topic label="KineticLogger_LogHeader" href="kinetic__logger_8h.html#a209382d99015a79632efa289738f6dec"/>
         <topic label="KineticLogger_LogProtobuf" href="kinetic__logger_8h.html#adb2c0ba1c83448424d7148ea79f4192a"/>
         <topic label="KineticLogger_LogStatus" href="kinetic__logger_8h.html#ae8bf66757a616534b039c31ad863a519"/>
         <topic label="KineticLogger_LogByteArray" href="kinetic__logger_8h.html#adeef474b44c9d6e0c08b05b873aaf3ba"/>
         <topic label="KineticLogger_LogByteBuffer" href="kinetic__logger_8h.html#a6b725885ac7e8249ee9da46955c03e5e"/>
+        <topic label="KineticLogger_LogTimestamp" href="kinetic__logger_8h.html#a177e9a9cfe26101925b16a730c4b981c"/>
         <topic label="KineticLogger_ByteArraySliceToCString" href="kinetic__logger_8h.html#a7f04a2ee23e533260754ce515744063f"/>
       </topic>
       <topic label="kinetic_memory.c" href="kinetic__memory_8c.html">
@@ -1634,6 +1849,7 @@
         <topic label="KineticMessage_ConfigureKeyRange" href="kinetic__message_8h.html#a203eff60f47299f8d08e7bee30fa8b73"/>
       </topic>
       <topic label="kinetic_nbo.c" href="kinetic__nbo_8c.html">
+        <topic label="KineticNBO_SwapByteOrder" href="kinetic__nbo_8c.html#ad2918622fe1dee2c4bde9237b8f089c1"/>
         <topic label="KineticNBO_FromHostU32" href="kinetic__nbo_8c.html#ab29859f82a05cd469391e003b4aac3ad"/>
         <topic label="KineticNBO_ToHostU32" href="kinetic__nbo_8c.html#a82d5bae248ec3e63c7fd40b55a9293ca"/>
         <topic label="KineticNBO_FromHostU64" href="kinetic__nbo_8c.html#a6d46a35964958e880f5acb8674fa79ea"/>
@@ -1647,14 +1863,23 @@
       </topic>
       <topic label="kinetic_operation.c" href="kinetic__operation_8c.html">
         <topic label="ATOMIC_FETCH_AND_INCREMENT" href="kinetic__operation_8c.html#a8e6ca0967c3f2508bd8dab901a6a6ba7"/>
+        <topic label="KineticOperation_ValidateOperation" href="kinetic__operation_8c.html#a1dd564b1f626c3f16a29348abea6003b"/>
+        <topic label="KineticOperation_SendRequestInner" href="kinetic__operation_8c.html#ac25ef0fa4d64bb4249e2d17d50ad1be3"/>
         <topic label="KineticOperation_SendRequest" href="kinetic__operation_8c.html#a267d9481a259bcc26147d166a3fc515a"/>
+        <topic label="log_request_seq_id" href="kinetic__operation_8c.html#a3f48a946d6e75703c0fb26b3c9c6d12b"/>
         <topic label="KineticOperation_GetStatus" href="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0"/>
+        <topic label="KineticOperation_Complete" href="kinetic__operation_8c.html#a8ed174b20d25b186335a498efc3d763e"/>
         <topic label="KineticOperation_NoopCallback" href="kinetic__operation_8c.html#a46daff6d8cff869d0036a59a7a09d603"/>
         <topic label="KineticOperation_BuildNoop" href="kinetic__operation_8c.html#a19c5d28a27474e8d0830a8b9d23f2231"/>
         <topic label="KineticOperation_PutCallback" href="kinetic__operation_8c.html#abb01363082088d09ba223f5151ec2530"/>
-        <topic label="KineticOperation_BuildPut" href="kinetic__operation_8c.html#a60c586cb8811f4820ec41d421a44797d"/>
+        <topic label="KineticOperation_BuildPut" href="kinetic__operation_8c.html#ad45895a6c57e35040ddbdf51355c99c7"/>
+        <topic label="get_cb" href="kinetic__operation_8c.html#ad0507db67815769c817ab85144b79d43"/>
+        <topic label="build_get_command" href="kinetic__operation_8c.html#a590cf6e8f9df909689a6463f4e643a52"/>
+        <topic label="get_cmd_cb" href="kinetic__operation_8c.html#afdf1624d08fc49a011f174dc970b200b"/>
         <topic label="KineticOperation_BuildGet" href="kinetic__operation_8c.html#ac9154d34805acb4d50877f8b6ae18595"/>
+        <topic label="getprevious_cmd_cb" href="kinetic__operation_8c.html#a975dd69b2c3e3cfd00b7f0c3f428011b"/>
         <topic label="KineticOperation_BuildGetPrevious" href="kinetic__operation_8c.html#a9684d8df50abd171ca69a284f744e6da"/>
+        <topic label="getnext_cmd_cb" href="kinetic__operation_8c.html#ae753a779ec93552881ea4f96da7c3d75"/>
         <topic label="KineticOperation_BuildGetNext" href="kinetic__operation_8c.html#a9c7a6245711f28ddc4e51056e2ef22f1"/>
         <topic label="KineticOperation_FlushCallback" href="kinetic__operation_8c.html#a2ce19a3752bb12152d86259eab6f95c4"/>
         <topic label="KineticOperation_BuildFlush" href="kinetic__operation_8c.html#aa895b78d6fca03a6b3c848d6a2b4020a"/>
@@ -1663,27 +1888,33 @@
         <topic label="KineticOperation_GetKeyRangeCallback" href="kinetic__operation_8c.html#aa2d3ea66edac0c72301191feef5fe693"/>
         <topic label="KineticOperation_BuildGetKeyRange" href="kinetic__operation_8c.html#ac88b3aa9c05e27f0ede2b4c2465e158b"/>
         <topic label="KineticOperation_GetLogCallback" href="kinetic__operation_8c.html#a92287f17ac6de8b67a70936f33401c7c"/>
-        <topic label="KineticOperation_BuildGetLog" href="kinetic__operation_8c.html#a8ef4faa6a804f6f69cb9d4cbe040a810"/>
+        <topic label="KineticOperation_BuildGetLog" href="kinetic__operation_8c.html#a830a5c5225dab9660bbe7cacc5f5bfb1"/>
         <topic label="destroy_p2pOp" href="kinetic__operation_8c.html#ade10b18ca3d5744ee90fca3e1b06a85a"/>
         <topic label="build_p2pOp" href="kinetic__operation_8c.html#a2b74ef47a9b375899c10ba5853dff346"/>
+        <topic label="populateP2PStatusCodes" href="kinetic__operation_8c.html#a00d30fecb3398349b69020ea0d39190d"/>
         <topic label="KineticOperation_P2POperationCallback" href="kinetic__operation_8c.html#ae9e64484dd1c76a00846528d5bde3818"/>
         <topic label="KineticOperation_BuildP2POperation" href="kinetic__operation_8c.html#a4e19baf1359764fbe2d439dcc932dd71"/>
-        <topic label="KineticOperation_InstantSecureEraseCallback" href="kinetic__operation_8c.html#a4ef26e667f80b1720096c352abdf0bef"/>
-        <topic label="KineticOperation_BuildInstantSecureErase" href="kinetic__operation_8c.html#aa70394e99f79cf3f08dd7b1b5dde6795"/>
-        <topic label="KineticOperation_SetClusterVersionCallback" href="kinetic__operation_8c.html#a3170f984f585e6a8374a9cfd4f302f51"/>
-        <topic label="KineticOperation_BuildSetClusterVersion" href="kinetic__operation_8c.html#a671425fcd78ed5135c679e40bcc33374"/>
-        <topic label="KineticOperation_Complete" href="kinetic__operation_8c.html#a8ed174b20d25b186335a498efc3d763e"/>
+        <topic label="KineticOperation_SetPinCallback" href="kinetic__operation_8c.html#a3207940a88471f31450e3b34e447b92c"/>
+        <topic label="KineticOperation_BuildSetPin" href="kinetic__operation_8c.html#a6e649fba444bc4e423ecf088cf152885"/>
+        <topic label="KineticOperation_EraseCallback" href="kinetic__operation_8c.html#a7daca7f5776650b1befd8fdf05c116f5"/>
+        <topic label="KineticOperation_BuildErase" href="kinetic__operation_8c.html#adcdd8679a1d18953266ba90a8f501ea4"/>
+        <topic label="KineticOperation_LockUnlockCallback" href="kinetic__operation_8c.html#ada7dc42b0a194b06849462a18f5d2a0d"/>
+        <topic label="KineticOperation_BuildLockUnlock" href="kinetic__operation_8c.html#a37b4f577265ad228c0508e8871fd364e"/>
+        <topic label="KineticOperation_SetClusterVersionCallback" href="kinetic__operation_8c.html#a48cebe7b82c47be101499305ba513bb8"/>
+        <topic label="KineticOperation_BuildSetClusterVersion" href="kinetic__operation_8c.html#a019d8a01dbfbed487379bee386597bd0"/>
+        <topic label="KineticOperation_SetACLCallback" href="kinetic__operation_8c.html#a6d0c743e9c20fbc51a8895741a2b8738"/>
+        <topic label="KineticOperation_BuildSetACL" href="kinetic__operation_8c.html#a930f8cd7f00cf35df65c5e7f22857604"/>
+        <topic label="KineticOperation_UpdateFirmwareCallback" href="kinetic__operation_8c.html#ad0436634dba5c54efcfd9931d0bd087b"/>
+        <topic label="KineticOperation_BuildUpdateFirmware" href="kinetic__operation_8c.html#a89b2c4d0633faef505afdcbed0506090"/>
       </topic>
       <topic label="kinetic_operation.h" href="kinetic__operation_8h.html">
         <topic label="KineticOperation_SendRequest" href="kinetic__operation_8h.html#a267d9481a259bcc26147d166a3fc515a"/>
-        <topic label="KineticOperation_AssociateResponseWithOperation" href="kinetic__operation_8h.html#a89e0c50021d088a66e7dd43b5bffdfb6"/>
-        <topic label="KineticOperation_GetTimeoutTime" href="kinetic__operation_8h.html#a790389f0f654a43da93c8af714e2f281"/>
-        <topic label="KineticOperation_SetTimeoutTime" href="kinetic__operation_8h.html#a2cd218545f9b11b8ffe04efea3b9ab27"/>
         <topic label="KineticOperation_GetStatus" href="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0"/>
+        <topic label="KineticOperation_Complete" href="kinetic__operation_8h.html#a8ed174b20d25b186335a498efc3d763e"/>
         <topic label="KineticOperation_NoopCallback" href="kinetic__operation_8h.html#a46daff6d8cff869d0036a59a7a09d603"/>
         <topic label="KineticOperation_BuildNoop" href="kinetic__operation_8h.html#a25c0d192edf098893390eb9236bb9888"/>
         <topic label="KineticOperation_PutCallback" href="kinetic__operation_8h.html#abb01363082088d09ba223f5151ec2530"/>
-        <topic label="KineticOperation_BuildPut" href="kinetic__operation_8h.html#a60c586cb8811f4820ec41d421a44797d"/>
+        <topic label="KineticOperation_BuildPut" href="kinetic__operation_8h.html#ad45895a6c57e35040ddbdf51355c99c7"/>
         <topic label="KineticOperation_GetCallback" href="kinetic__operation_8h.html#acdd537b48c4b4f3977f484b119ba9b85"/>
         <topic label="KineticOperation_BuildGet" href="kinetic__operation_8h.html#ac9154d34805acb4d50877f8b6ae18595"/>
         <topic label="KineticOperation_BuildGetNext" href="kinetic__operation_8h.html#a9c7a6245711f28ddc4e51056e2ef22f1"/>
@@ -1694,29 +1925,22 @@
         <topic label="KineticOperation_BuildDelete" href="kinetic__operation_8h.html#a5b9d3d9bf8bce1ff0d6ba269994a2a0b"/>
         <topic label="KineticOperation_GetKeyRangeCallback" href="kinetic__operation_8h.html#aa2d3ea66edac0c72301191feef5fe693"/>
         <topic label="KineticOperation_BuildGetKeyRange" href="kinetic__operation_8h.html#ac88b3aa9c05e27f0ede2b4c2465e158b"/>
-        <topic label="KineticOperation_GetLogCallback" href="kinetic__operation_8h.html#a92287f17ac6de8b67a70936f33401c7c"/>
-        <topic label="KineticOperation_BuildGetLog" href="kinetic__operation_8h.html#a8ef4faa6a804f6f69cb9d4cbe040a810"/>
         <topic label="KineticOperation_P2POperationCallback" href="kinetic__operation_8h.html#ae9e64484dd1c76a00846528d5bde3818"/>
         <topic label="KineticOperation_BuildP2POperation" href="kinetic__operation_8h.html#a4e19baf1359764fbe2d439dcc932dd71"/>
-        <topic label="KineticOperation_InstantSecureEraseCallback" href="kinetic__operation_8h.html#a4ef26e667f80b1720096c352abdf0bef"/>
-        <topic label="KineticOperation_BuildInstantSecureErase" href="kinetic__operation_8h.html#aa70394e99f79cf3f08dd7b1b5dde6795"/>
-        <topic label="KineticOperation_BuildSetClusterVersion" href="kinetic__operation_8h.html#a671425fcd78ed5135c679e40bcc33374"/>
-        <topic label="KineticOperation_Complete" href="kinetic__operation_8h.html#a8ed174b20d25b186335a498efc3d763e"/>
-        <topic label="KineticOperation_TimeoutOperations" href="kinetic__operation_8h.html#a7b6d1724eb75b7c589664fb51865cfb4"/>
-      </topic>
-      <topic label="kinetic_pdu.c" href="kinetic__pdu_8c.html">
-        <topic label="KineticPDU_InitBus" href="kinetic__pdu_8c.html#a4ab4b064ac464a789dcd0e4744613fc9"/>
-        <topic label="KineticPDU_DeinitBus" href="kinetic__pdu_8c.html#abf53b9591eab31f2de76d84015640f09"/>
-        <topic label="KineticPDU_GetStatus" href="kinetic__pdu_8c.html#ae62192717467b9fa0f62b5cc38c13d42"/>
-        <topic label="KineticPDU_GetKeyValue" href="kinetic__pdu_8c.html#a59089486a359571e0c62d36006216025"/>
-        <topic label="KineticPDU_GetKeyRange" href="kinetic__pdu_8c.html#a9fd5b6f0b8223ac6a380a0260a90c170"/>
-      </topic>
-      <topic label="kinetic_pdu.h" href="kinetic__pdu_8h.html">
-        <topic label="KineticPDU_InitBus" href="kinetic__pdu_8h.html#a4ab4b064ac464a789dcd0e4744613fc9"/>
-        <topic label="KineticPDU_DeinitBus" href="kinetic__pdu_8h.html#abf53b9591eab31f2de76d84015640f09"/>
-        <topic label="KineticPDU_GetStatus" href="kinetic__pdu_8h.html#a68dcd9638f117274cb58d3a8003def76"/>
-        <topic label="KineticPDU_GetKeyValue" href="kinetic__pdu_8h.html#a19cd58260bf48f5f7ec6d0d126472d5c"/>
-        <topic label="KineticPDU_GetKeyRange" href="kinetic__pdu_8h.html#a2ee9bd93d50ec86bf6f7b11b99cbaf77"/>
+        <topic label="KineticOperation_SetPinCallback" href="kinetic__operation_8h.html#a3207940a88471f31450e3b34e447b92c"/>
+        <topic label="KineticOperation_BuildSetPin" href="kinetic__operation_8h.html#a6e649fba444bc4e423ecf088cf152885"/>
+        <topic label="KineticOperation_EraseCallback" href="kinetic__operation_8h.html#a7daca7f5776650b1befd8fdf05c116f5"/>
+        <topic label="KineticOperation_BuildErase" href="kinetic__operation_8h.html#adcdd8679a1d18953266ba90a8f501ea4"/>
+        <topic label="KineticOperation_LockUnlockCallback" href="kinetic__operation_8h.html#ada7dc42b0a194b06849462a18f5d2a0d"/>
+        <topic label="KineticOperation_BuildLockUnlock" href="kinetic__operation_8h.html#a37b4f577265ad228c0508e8871fd364e"/>
+        <topic label="KineticOperation_GetLogCallback" href="kinetic__operation_8h.html#a92287f17ac6de8b67a70936f33401c7c"/>
+        <topic label="KineticOperation_BuildGetLog" href="kinetic__operation_8h.html#a830a5c5225dab9660bbe7cacc5f5bfb1"/>
+        <topic label="KineticOperation_SetACLCallback" href="kinetic__operation_8h.html#a6d0c743e9c20fbc51a8895741a2b8738"/>
+        <topic label="KineticOperation_BuildSetACL" href="kinetic__operation_8h.html#a930f8cd7f00cf35df65c5e7f22857604"/>
+        <topic label="KineticOperation_SetClusterVersionCallback" href="kinetic__operation_8h.html#a48cebe7b82c47be101499305ba513bb8"/>
+        <topic label="KineticOperation_BuildSetClusterVersion" href="kinetic__operation_8h.html#ab1bd12b71b3ee53c112c3ab00b50ede4"/>
+        <topic label="KineticOperation_UpdateFirmwareCallback" href="kinetic__operation_8h.html#ad0436634dba5c54efcfd9931d0bd087b"/>
+        <topic label="KineticOperation_BuildUpdateFirmware" href="kinetic__operation_8h.html#a89b2c4d0633faef505afdcbed0506090"/>
       </topic>
       <topic label="kinetic_pdu_unpack.c" href="kinetic__pdu__unpack_8c.html">
         <topic label="KineticPDU_unpack_command" href="kinetic__pdu__unpack_8c.html#a60eef152fd8a53bf8695d8f7405443ae"/>
@@ -1771,62 +1995,153 @@
         <topic label="KineticProto_command__unpack" href="kinetic__proto_8c.html#af4a50347f133627a7536be8c784b35b3"/>
         <topic label="KineticProto_command__free_unpacked" href="kinetic__proto_8c.html#a0fdd57eebbe700925ba1c154eb43f6f8"/>
         <topic label="KineticProto_local_protocol_version_default_value" href="kinetic__proto_8c.html#a1f077f299008fde3e5bb46d8fd2064ef"/>
+        <topic label="KineticProto_local__field_descriptors" href="kinetic__proto_8c.html#a38899d03ac1906d2031b12a646788bee"/>
+        <topic label="KineticProto_local__field_indices_by_name" href="kinetic__proto_8c.html#aa3bcbea987d41249c3bdb0370d402647"/>
+        <topic label="KineticProto_local__number_ranges" href="kinetic__proto_8c.html#a6688d69f8703179141e44b1caecb41b0"/>
         <topic label="KineticProto_local__descriptor" href="kinetic__proto_8c.html#a4305f0f6053061ccdf5977cbc2529f6a"/>
+        <topic label="KineticProto_Message_hmacauth__field_descriptors" href="kinetic__proto_8c.html#a2139014d5bd440e39e274f8080a14392"/>
+        <topic label="KineticProto_Message_hmacauth__field_indices_by_name" href="kinetic__proto_8c.html#ae7ba53c49025aaa413e8b7810c89b826"/>
+        <topic label="KineticProto_Message_hmacauth__number_ranges" href="kinetic__proto_8c.html#a0957b398fb628d0f5e9b276df5e8317e"/>
         <topic label="KineticProto_Message_hmacauth__descriptor" href="kinetic__proto_8c.html#aceb60fb84ad7fd6a123a41567a178eb1"/>
+        <topic label="KineticProto_Message_pinauth__field_descriptors" href="kinetic__proto_8c.html#ae4a318ab45a2cf84bd03d28dcaaee5be"/>
+        <topic label="KineticProto_Message_pinauth__field_indices_by_name" href="kinetic__proto_8c.html#aee84ac76b1a30497d25e519a24ef8170"/>
+        <topic label="KineticProto_Message_pinauth__number_ranges" href="kinetic__proto_8c.html#a5da581a4e06d4ca91ba9f437232a4437"/>
         <topic label="KineticProto_Message_pinauth__descriptor" href="kinetic__proto_8c.html#a04330b2fd569dbca5923e5362264c2bb"/>
         <topic label="KineticProto_Message_auth_type__enum_values_by_number" href="kinetic__proto_8c.html#a23ac504469d059507b9a4ec4491e950d"/>
+        <topic label="KineticProto_Message_auth_type__value_ranges" href="kinetic__proto_8c.html#acc1262c824c361edbd660404dac9a3af"/>
         <topic label="KineticProto_Message_auth_type__enum_values_by_name" href="kinetic__proto_8c.html#a1cdd335ab8b188d8e803169821d751f2"/>
         <topic label="KineticProto_Message_auth_type__descriptor" href="kinetic__proto_8c.html#af52fc02ba091272c04bdf58f6b1f6717"/>
+        <topic label="KineticProto_Message__field_descriptors" href="kinetic__proto_8c.html#a3ca8aaf78213047bcf85cfb6e2d73c7b"/>
+        <topic label="KineticProto_Message__field_indices_by_name" href="kinetic__proto_8c.html#adafa4a36902fb140a3a0c7da5cf4bea0"/>
+        <topic label="KineticProto_Message__number_ranges" href="kinetic__proto_8c.html#a6a2c79e5ad492b0b6decc2495d09580f"/>
         <topic label="KineticProto_Message__descriptor" href="kinetic__proto_8c.html#a2b4f080d4acb9068dd9d48ad77b3e694"/>
+        <topic label="KineticProto_command_header__field_descriptors" href="kinetic__proto_8c.html#a541e7b141f8a4120ab6a973f02b714d5"/>
+        <topic label="KineticProto_command_header__field_indices_by_name" href="kinetic__proto_8c.html#aee344137206ea9df422c54ac16cc0ac7"/>
+        <topic label="KineticProto_command_header__number_ranges" href="kinetic__proto_8c.html#a61369ace52270f1fe014bd00df2e62d6"/>
         <topic label="KineticProto_command_header__descriptor" href="kinetic__proto_8c.html#a0c70827b01e97149648ffefc37dccdf1"/>
+        <topic label="KineticProto_command_body__field_descriptors" href="kinetic__proto_8c.html#a007f12cbd19bf47cddfe9dcd3417209a"/>
+        <topic label="KineticProto_command_body__field_indices_by_name" href="kinetic__proto_8c.html#a03f073ab344c2e57750d263052368bd0"/>
+        <topic label="KineticProto_command_body__number_ranges" href="kinetic__proto_8c.html#a8b31b0e4bbff99114c2944b5f2d64299"/>
         <topic label="KineticProto_command_body__descriptor" href="kinetic__proto_8c.html#afac45dfce3def0fb0cb4028869b87a69"/>
         <topic label="KineticProto_command_status_status_code__enum_values_by_number" href="kinetic__proto_8c.html#a2dd71e6eb83a38f663c4b80982117425"/>
+        <topic label="KineticProto_command_status_status_code__value_ranges" href="kinetic__proto_8c.html#a93b49069d3d4e005c9a2f4bb26dea0cf"/>
         <topic label="KineticProto_command_status_status_code__enum_values_by_name" href="kinetic__proto_8c.html#af4d9be72b4eecbed7e89cd920db6e6e4"/>
         <topic label="KineticProto_command_status_status_code__descriptor" href="kinetic__proto_8c.html#a6f03786eb3f899755fc0a12a2897e31f"/>
+        <topic label="KineticProto_command_status__field_descriptors" href="kinetic__proto_8c.html#a94768e30bc9a3db0ba14ce306efc3913"/>
+        <topic label="KineticProto_command_status__field_indices_by_name" href="kinetic__proto_8c.html#a6d00e11377b0173ea5e03619d0a9ec65"/>
+        <topic label="KineticProto_command_status__number_ranges" href="kinetic__proto_8c.html#af0b31c7f247162e288aed819cca57826"/>
         <topic label="KineticProto_command_status__descriptor" href="kinetic__proto_8c.html#a3b84b39ee54e347a021135e7cfd5d8ed"/>
+        <topic label="KineticProto_command_key_value__field_descriptors" href="kinetic__proto_8c.html#ab4d98a0cd08e0961c22ed68c146fc642"/>
+        <topic label="KineticProto_command_key_value__field_indices_by_name" href="kinetic__proto_8c.html#a890c3fc1ae24c46f1762ac39e895a12e"/>
+        <topic label="KineticProto_command_key_value__number_ranges" href="kinetic__proto_8c.html#ac16b1d9426cf87c20db7d28d46f06b6c"/>
         <topic label="KineticProto_command_key_value__descriptor" href="kinetic__proto_8c.html#aeb9ddc4b268565d06636f1b4d8c64fa6"/>
+        <topic label="KineticProto_command_range__field_descriptors" href="kinetic__proto_8c.html#aed40262edb529e54396c64f14802c911"/>
+        <topic label="KineticProto_command_range__field_indices_by_name" href="kinetic__proto_8c.html#ad08ac693574652bb20cad3a6b83f3106"/>
+        <topic label="KineticProto_command_range__number_ranges" href="kinetic__proto_8c.html#a6524cdd04d70921108e08175866ba1d1"/>
         <topic label="KineticProto_command_range__descriptor" href="kinetic__proto_8c.html#ac80c046de93baa190e2fc5728f9e0c28"/>
+        <topic label="KineticProto_command_setup__field_descriptors" href="kinetic__proto_8c.html#a221cdc620551bf8283dea01447a58128"/>
+        <topic label="KineticProto_command_setup__field_indices_by_name" href="kinetic__proto_8c.html#a67e28d18e7770ca6f8835d5db8cc94d6"/>
+        <topic label="KineticProto_command_setup__number_ranges" href="kinetic__proto_8c.html#a311664c58183ab2cdb85a909e9ec0f01"/>
         <topic label="KineticProto_command_setup__descriptor" href="kinetic__proto_8c.html#a2a8669f505e1bb44a66717969899a171"/>
+        <topic label="KineticProto_command_p2_poperation_operation__field_descriptors" href="kinetic__proto_8c.html#ab3e00777bf65245625ff31915c84c56b"/>
+        <topic label="KineticProto_command_p2_poperation_operation__field_indices_by_name" href="kinetic__proto_8c.html#ab586a22c9c683b9fab30ec04e863998c"/>
+        <topic label="KineticProto_command_p2_poperation_operation__number_ranges" href="kinetic__proto_8c.html#a4bfa805e092dc0cd69b499d1a9da1b27"/>
         <topic label="KineticProto_command_p2_poperation_operation__descriptor" href="kinetic__proto_8c.html#ac08ac44727b75c3fa333f27fcf608953"/>
+        <topic label="KineticProto_command_p2_poperation_peer__field_descriptors" href="kinetic__proto_8c.html#abdc5dd5b70b98d98f2690251bd0903a5"/>
+        <topic label="KineticProto_command_p2_poperation_peer__field_indices_by_name" href="kinetic__proto_8c.html#a6db920b71749a6fb4335e9cefbb37393"/>
+        <topic label="KineticProto_command_p2_poperation_peer__number_ranges" href="kinetic__proto_8c.html#a20187e54bf609366a805b190185390c1"/>
         <topic label="KineticProto_command_p2_poperation_peer__descriptor" href="kinetic__proto_8c.html#a3540ad0c82429019206334003d031d46"/>
+        <topic label="KineticProto_command_p2_poperation__field_descriptors" href="kinetic__proto_8c.html#a11dadae350f5ddf74ee93e67ce974863"/>
+        <topic label="KineticProto_command_p2_poperation__field_indices_by_name" href="kinetic__proto_8c.html#a226d1348b8ce826c1c93cdb975124eb8"/>
+        <topic label="KineticProto_command_p2_poperation__number_ranges" href="kinetic__proto_8c.html#aea89b10bade4642e7d8447b7d0d39bb8"/>
         <topic label="KineticProto_command_p2_poperation__descriptor" href="kinetic__proto_8c.html#a3f20c4fd527b729ffadd19a76a566a76"/>
+        <topic label="KineticProto_command_get_log_utilization__field_descriptors" href="kinetic__proto_8c.html#a0f43b529bddc999f643a8375c7a0252c"/>
+        <topic label="KineticProto_command_get_log_utilization__field_indices_by_name" href="kinetic__proto_8c.html#aee46515c28c72eed818ba2c629b6c408"/>
+        <topic label="KineticProto_command_get_log_utilization__number_ranges" href="kinetic__proto_8c.html#a286d97affedc76c6e56de88fe1049297"/>
         <topic label="KineticProto_command_get_log_utilization__descriptor" href="kinetic__proto_8c.html#ae530e42415032d6becc7077dcfa887fe"/>
+        <topic label="KineticProto_command_get_log_temperature__field_descriptors" href="kinetic__proto_8c.html#a3ea70be0f36ae010ea5010713abfc970"/>
+        <topic label="KineticProto_command_get_log_temperature__field_indices_by_name" href="kinetic__proto_8c.html#a31e471afe688cf6a3c56c46b74181785"/>
+        <topic label="KineticProto_command_get_log_temperature__number_ranges" href="kinetic__proto_8c.html#a9e59034f9ccb4f8042d5f0babdb750e5"/>
         <topic label="KineticProto_command_get_log_temperature__descriptor" href="kinetic__proto_8c.html#a4d9202d2fc068dee441be061c962691a"/>
+        <topic label="KineticProto_command_get_log_capacity__field_descriptors" href="kinetic__proto_8c.html#a4062dc013e04be13573c6ff77efdf3a1"/>
+        <topic label="KineticProto_command_get_log_capacity__field_indices_by_name" href="kinetic__proto_8c.html#a81d41246a8897d35c74761851cf877f3"/>
+        <topic label="KineticProto_command_get_log_capacity__number_ranges" href="kinetic__proto_8c.html#a6b1e57cee27d7c10343c242beeca30e3"/>
         <topic label="KineticProto_command_get_log_capacity__descriptor" href="kinetic__proto_8c.html#a1e7ac907efc424ff949b187f7e6e0528"/>
+        <topic label="KineticProto_command_get_log_configuration_interface__field_descriptors" href="kinetic__proto_8c.html#ac892eaca0bb2bf68fcba39beb57e5806"/>
+        <topic label="KineticProto_command_get_log_configuration_interface__field_indices_by_name" href="kinetic__proto_8c.html#a7898856be02f980d6276b70836a42d35"/>
+        <topic label="KineticProto_command_get_log_configuration_interface__number_ranges" href="kinetic__proto_8c.html#a39c304d18a5b8e4835ee7165b17b158d"/>
         <topic label="KineticProto_command_get_log_configuration_interface__descriptor" href="kinetic__proto_8c.html#a737930d3d463b35cb8a534530e62b00d"/>
+        <topic label="KineticProto_command_get_log_configuration__field_descriptors" href="kinetic__proto_8c.html#a8bc6ac1436e338ebc64a3f4c84c25a7f"/>
+        <topic label="KineticProto_command_get_log_configuration__field_indices_by_name" href="kinetic__proto_8c.html#a0ce143c59e200902d1305f7d7493da87"/>
+        <topic label="KineticProto_command_get_log_configuration__number_ranges" href="kinetic__proto_8c.html#aa800db4a22639dc8d70f8b2ed7cd2c5a"/>
         <topic label="KineticProto_command_get_log_configuration__descriptor" href="kinetic__proto_8c.html#aa63349fdbefbdea060888ba8c87d5174"/>
+        <topic label="KineticProto_command_get_log_statistics__field_descriptors" href="kinetic__proto_8c.html#a61b9ab4c941faee9f63076e769eec14e"/>
+        <topic label="KineticProto_command_get_log_statistics__field_indices_by_name" href="kinetic__proto_8c.html#acd53539dcc01a7210ab7480d4438ab5d"/>
+        <topic label="KineticProto_command_get_log_statistics__number_ranges" href="kinetic__proto_8c.html#a8f37167fe6aa8dc110d632cd61c93de1"/>
         <topic label="KineticProto_command_get_log_statistics__descriptor" href="kinetic__proto_8c.html#a9793db4fbc24624f375dc566bf823a8b"/>
+        <topic label="KineticProto_command_get_log_limits__field_descriptors" href="kinetic__proto_8c.html#a49d483ddb15bb3d2fc6fa545925e4fe8"/>
+        <topic label="KineticProto_command_get_log_limits__field_indices_by_name" href="kinetic__proto_8c.html#a81da788f2556606baeea92bb2b3c559c"/>
+        <topic label="KineticProto_command_get_log_limits__number_ranges" href="kinetic__proto_8c.html#ad0f2ada5a0cc00903ee88b55de3e7734"/>
         <topic label="KineticProto_command_get_log_limits__descriptor" href="kinetic__proto_8c.html#a8f08524baed5e54c784ff7ed0657e3bf"/>
+        <topic label="KineticProto_command_get_log_device__field_descriptors" href="kinetic__proto_8c.html#a30a66c64e04aade59e1ce67bdfb35c13"/>
+        <topic label="KineticProto_command_get_log_device__field_indices_by_name" href="kinetic__proto_8c.html#ac3e1f28838dd7e9a796cdea0db0e39c8"/>
+        <topic label="KineticProto_command_get_log_device__number_ranges" href="kinetic__proto_8c.html#a7475b567cb308cd9c79160b62c69fbed"/>
         <topic label="KineticProto_command_get_log_device__descriptor" href="kinetic__proto_8c.html#a9399113dcf3a3975d509f68bd4ebeb0a"/>
         <topic label="KineticProto_command_get_log_type__enum_values_by_number" href="kinetic__proto_8c.html#a28f94e96f187c944933744bb4557b410"/>
+        <topic label="KineticProto_command_get_log_type__value_ranges" href="kinetic__proto_8c.html#a3036fa5191afb05410f485a13b195dd5"/>
         <topic label="KineticProto_command_get_log_type__enum_values_by_name" href="kinetic__proto_8c.html#a18e25af998351f3338970aceb7f247b8"/>
         <topic label="KineticProto_command_get_log_type__descriptor" href="kinetic__proto_8c.html#a3d3c0e7d5f1667386575986498af0de4"/>
+        <topic label="KineticProto_command_get_log__field_descriptors" href="kinetic__proto_8c.html#a20a61f45819908b0967d534e1abe1685"/>
+        <topic label="KineticProto_command_get_log__field_indices_by_name" href="kinetic__proto_8c.html#a50e885d4b995e78e33f163bc08295c8c"/>
+        <topic label="KineticProto_command_get_log__number_ranges" href="kinetic__proto_8c.html#ad7ccea5ce8ef0d8e3d5c8aec5d2ccafa"/>
         <topic label="KineticProto_command_get_log__descriptor" href="kinetic__proto_8c.html#aefaee231475fe191546a297fe6e4f398"/>
+        <topic label="KineticProto_command_security_acl_scope__field_descriptors" href="kinetic__proto_8c.html#aea55d35a052546a5e31ad14699d54aad"/>
+        <topic label="KineticProto_command_security_acl_scope__field_indices_by_name" href="kinetic__proto_8c.html#aa35dfc5cd11879c82992b4dd14d986f8"/>
+        <topic label="KineticProto_command_security_acl_scope__number_ranges" href="kinetic__proto_8c.html#a34478f7b4e1330be6874927a13f411f9"/>
         <topic label="KineticProto_command_security_acl_scope__descriptor" href="kinetic__proto_8c.html#a869e6fa09916cec570a8731da6a8ab13"/>
         <topic label="KineticProto_command_security_acl_hmacalgorithm__enum_values_by_number" href="kinetic__proto_8c.html#a8faf4dfa78fa016c7fb03f90b95b8c91"/>
+        <topic label="KineticProto_command_security_acl_hmacalgorithm__value_ranges" href="kinetic__proto_8c.html#a63378afc2b2f0c8b65be056fe37c6bf8"/>
         <topic label="KineticProto_command_security_acl_hmacalgorithm__enum_values_by_name" href="kinetic__proto_8c.html#aef419602edb02249a1c0cbbf8c5bce8e"/>
         <topic label="KineticProto_command_security_acl_hmacalgorithm__descriptor" href="kinetic__proto_8c.html#a46f1d80acde61140721e26d4f53e281a"/>
         <topic label="KineticProto_command_security_acl_permission__enum_values_by_number" href="kinetic__proto_8c.html#a8fa796b75015c52e43da5c7b1a5bf251"/>
+        <topic label="KineticProto_command_security_acl_permission__value_ranges" href="kinetic__proto_8c.html#aff7278420564befecc5a92da52351112"/>
         <topic label="KineticProto_command_security_acl_permission__enum_values_by_name" href="kinetic__proto_8c.html#ae0c2a77a2dec9a87ba58d2b1e11a34fb"/>
         <topic label="KineticProto_command_security_acl_permission__descriptor" href="kinetic__proto_8c.html#a2b292c3540cbbadfae19c94117bd9686"/>
+        <topic label="KineticProto_command_security_acl__field_descriptors" href="kinetic__proto_8c.html#aec6e02ef68b56b28c8a4001bf0ec192c"/>
+        <topic label="KineticProto_command_security_acl__field_indices_by_name" href="kinetic__proto_8c.html#ad5ea40a650c9a11d57925283b38546d7"/>
+        <topic label="KineticProto_command_security_acl__number_ranges" href="kinetic__proto_8c.html#a5d57550263d86854faa70f106921ecb8"/>
         <topic label="KineticProto_command_security_acl__descriptor" href="kinetic__proto_8c.html#aab913761ed8c395296d418d675d25050"/>
+        <topic label="KineticProto_command_security__field_descriptors" href="kinetic__proto_8c.html#a62dd101faa4fd6797e4fc7c66c03c7a1"/>
+        <topic label="KineticProto_command_security__field_indices_by_name" href="kinetic__proto_8c.html#ab85647e0f0a617d706cece3faa13dcf2"/>
+        <topic label="KineticProto_command_security__number_ranges" href="kinetic__proto_8c.html#a53b9344813932afb414ef35ddf2ca814"/>
         <topic label="KineticProto_command_security__descriptor" href="kinetic__proto_8c.html#adbcdc345a4280d2da87cee63714a6b5f"/>
         <topic label="KineticProto_command_pin_operation_pin_op_type__enum_values_by_number" href="kinetic__proto_8c.html#a9e9fb1aab410c49a0db1129aa2cf343f"/>
+        <topic label="KineticProto_command_pin_operation_pin_op_type__value_ranges" href="kinetic__proto_8c.html#accec341f360a4e57542339a9e90e98b7"/>
         <topic label="KineticProto_command_pin_operation_pin_op_type__enum_values_by_name" href="kinetic__proto_8c.html#a682820ed11beb2e43707652a17b1f744"/>
         <topic label="KineticProto_command_pin_operation_pin_op_type__descriptor" href="kinetic__proto_8c.html#a3e64d6b849a04cc692072a089d15f7f7"/>
+        <topic label="KineticProto_command_pin_operation__field_descriptors" href="kinetic__proto_8c.html#aa2666a65988a8477b4e9835ec4baab12"/>
+        <topic label="KineticProto_command_pin_operation__field_indices_by_name" href="kinetic__proto_8c.html#ab932582a28901b4e4b3f34dac615a1a1"/>
+        <topic label="KineticProto_command_pin_operation__number_ranges" href="kinetic__proto_8c.html#a1dad3777f4e7359ccf00b09da0c21922"/>
         <topic label="KineticProto_command_pin_operation__descriptor" href="kinetic__proto_8c.html#aa27e82106f148ee59cf6fc5314f34605"/>
         <topic label="KineticProto_command_synchronization__enum_values_by_number" href="kinetic__proto_8c.html#ab805c3b1ebcbce27f2543085af7b513c"/>
+        <topic label="KineticProto_command_synchronization__value_ranges" href="kinetic__proto_8c.html#a49130ec6d52ba8a60cfba07ae32e369e"/>
         <topic label="KineticProto_command_synchronization__enum_values_by_name" href="kinetic__proto_8c.html#ae64dc04585f17caffd01ccd26f0aeed9"/>
         <topic label="KineticProto_command_synchronization__descriptor" href="kinetic__proto_8c.html#a734fbbd60e5847c800c7e2f5e6d5c294"/>
         <topic label="KineticProto_command_priority__enum_values_by_number" href="kinetic__proto_8c.html#afd7feb5f5849ca59609c97f005fea3ff"/>
+        <topic label="KineticProto_command_priority__value_ranges" href="kinetic__proto_8c.html#a75ac62dc0b3023549503e65fe3837876"/>
         <topic label="KineticProto_command_priority__enum_values_by_name" href="kinetic__proto_8c.html#a76e37d3a6bd9c16d83bdafa94aa84ef7"/>
         <topic label="KineticProto_command_priority__descriptor" href="kinetic__proto_8c.html#a3a570c191c2ea937909e3699c96148be"/>
         <topic label="KineticProto_command_algorithm__enum_values_by_number" href="kinetic__proto_8c.html#a49d02f8ba137c09387cac8962a155d3e"/>
+        <topic label="KineticProto_command_algorithm__value_ranges" href="kinetic__proto_8c.html#adc1a3dd5f18149539fa77ffac1a733e9"/>
         <topic label="KineticProto_command_algorithm__enum_values_by_name" href="kinetic__proto_8c.html#a4450d3472b4531c87f289f55b972772b"/>
         <topic label="KineticProto_command_algorithm__descriptor" href="kinetic__proto_8c.html#aa4be7767ecac12b4f28c2aee218ae70a"/>
         <topic label="KineticProto_command_message_type__enum_values_by_number" href="kinetic__proto_8c.html#aac5fdae2040fd633720c1b46eae99ac0"/>
+        <topic label="KineticProto_command_message_type__value_ranges" href="kinetic__proto_8c.html#ad950ccc8469e6e00578033a7f4af6315"/>
         <topic label="KineticProto_command_message_type__enum_values_by_name" href="kinetic__proto_8c.html#a601d8c5b6aed416d6cf08df98d73d445"/>
         <topic label="KineticProto_command_message_type__descriptor" href="kinetic__proto_8c.html#a14f3a694d698fadf8ca916af7c0d561e"/>
+        <topic label="KineticProto_command__field_descriptors" href="kinetic__proto_8c.html#ad07523ae5580a91d7db3fe1d5b9da28a"/>
+        <topic label="KineticProto_command__field_indices_by_name" href="kinetic__proto_8c.html#a6fb844afba4fc7ff0512bd43f4efab91"/>
+        <topic label="KineticProto_command__number_ranges" href="kinetic__proto_8c.html#a4fbe860cee552d575062a06e80927149"/>
         <topic label="KineticProto_command__descriptor" href="kinetic__proto_8c.html#afe895a62c806efd640da0e6cca0d79ed"/>
       </topic>
       <topic label="kinetic_proto.h" href="kinetic__proto_8h.html">
@@ -2401,6 +2716,16 @@
           <topic label="num_waiting" href="struct___kinetic_resource_waiter.html#af31d6b98dd2b0cb6adf067d38ce050d7"/>
         </topic>
       </topic>
+      <topic label="kinetic_response.c" href="kinetic__response_8c.html">
+        <topic label="KineticResponse_GetStatus" href="kinetic__response_8c.html#adc08047406571602d0adbe1dbc8deddd"/>
+        <topic label="KineticResponse_GetKeyValue" href="kinetic__response_8c.html#a1f37a47006fdd8e7c80c63b976542132"/>
+        <topic label="KineticResponse_GetKeyRange" href="kinetic__response_8c.html#a860282f8ff1b501be1d89e093243b9cd"/>
+      </topic>
+      <topic label="kinetic_response.h" href="kinetic__response_8h.html">
+        <topic label="KineticResponse_GetStatus" href="kinetic__response_8h.html#a8a952709cd8ea19ae6f086e972d68b3f"/>
+        <topic label="KineticResponse_GetKeyValue" href="kinetic__response_8h.html#ab8264bee97d3893b395dd3e703141b4e"/>
+        <topic label="KineticResponse_GetKeyRange" href="kinetic__response_8h.html#ab63daf05b8abcecb2de385f68604c0e6"/>
+      </topic>
       <topic label="kinetic_semaphore.c" href="kinetic__semaphore_8c.html">
         <topic label="KineticSemaphore_Create" href="kinetic__semaphore_8c.html#ac986aca54aa35a98279b32f93c50b65e"/>
         <topic label="KineticSemaphore_Signal" href="kinetic__semaphore_8c.html#a65cf703f637d5f7c54861234720691c3"/>
@@ -2415,30 +2740,24 @@
         <topic label="KineticSemaphore_DestroyIfSignaled" href="kinetic__semaphore_8h.html#aaf0c5c37a7150ff89d5cbcb6b3536e98"/>
         <topic label="KineticSemaphore_WaitForSignalAndDestroy" href="kinetic__semaphore_8h.html#a22fe3f56f523b66a6c080c957d77ae2f"/>
       </topic>
-      <topic label="kinetic_serial_allocator.c" href="kinetic__serial__allocator_8c.html">
-        <topic label="KineticSerialAllocator_Create" href="kinetic__serial__allocator_8c.html#af594292bcd05e13afbef238d31fea362"/>
-        <topic label="KineticSerialAllocator_GetBuffer" href="kinetic__serial__allocator_8c.html#a652f3b6d0902396612a636381ae435b3"/>
-        <topic label="KineticSerialAllocator_AllocateChunk" href="kinetic__serial__allocator_8c.html#a5461e7660ca76f2e4df9895d2dc0ed0f"/>
-        <topic label="KineticSerialAllocator_TrimBuffer" href="kinetic__serial__allocator_8c.html#a305ba9f4b1446e84cefc09abb6391b32"/>
-      </topic>
-      <topic label="kinetic_serial_allocator.h" href="kinetic__serial__allocator_8h.html">
-        <topic label="KineticSerialAllocator_Create" href="kinetic__serial__allocator_8h.html#af594292bcd05e13afbef238d31fea362"/>
-        <topic label="KineticSerialAllocator_GetBuffer" href="kinetic__serial__allocator_8h.html#a652f3b6d0902396612a636381ae435b3"/>
-        <topic label="KineticSerialAllocator_AllocateChunk" href="kinetic__serial__allocator_8h.html#a5461e7660ca76f2e4df9895d2dc0ed0f"/>
-        <topic label="KineticSerialAllocator_TrimBuffer" href="kinetic__serial__allocator_8h.html#a305ba9f4b1446e84cefc09abb6391b32"/>
-      </topic>
       <topic label="kinetic_session.c" href="kinetic__session_8c.html">
+        <topic label="ATOMIC_FETCH_AND_INCREMENT" href="kinetic__session_8c.html#a8e6ca0967c3f2508bd8dab901a6a6ba7"/>
         <topic label="KineticSession_Create" href="kinetic__session_8c.html#a67475982c8ad488eefff28d771f323ec"/>
         <topic label="KineticSession_Destroy" href="kinetic__session_8c.html#a6233dbc9bb9a8f6cd88f648638cd78fb"/>
-        <topic label="KineticSession_Connect" href="kinetic__session_8c.html#aa55d1175dd76bdbf3e9a9bd7df393c90"/>
+        <topic label="KineticSession_Connect" href="kinetic__session_8c.html#aebfb40f21fcd263e8893e00b0daa0f6c"/>
         <topic label="KineticSession_Disconnect" href="kinetic__session_8c.html#afb3ef9466d871b3065ceb0c8a950ed6f"/>
+        <topic label="KineticSession_GetNextSequenceCount" href="kinetic__session_8c.html#aa0f5b9a8f4fa6ad110c62af497926213"/>
+        <topic label="KineticSession_GetClusterVersion" href="kinetic__session_8c.html#a26c0bbec7319f27306b5f0b1a5ff27a6"/>
+        <topic label="KineticSession_SetClusterVersion" href="kinetic__session_8c.html#a19ec1fa3c18d59940dac695349e01420"/>
       </topic>
       <topic label="kinetic_session.h" href="kinetic__session_8h.html">
         <topic label="KineticSession_Create" href="kinetic__session_8h.html#a67475982c8ad488eefff28d771f323ec"/>
         <topic label="KineticSession_Destroy" href="kinetic__session_8h.html#a6233dbc9bb9a8f6cd88f648638cd78fb"/>
-        <topic label="KineticSession_Connect" href="kinetic__session_8h.html#aa55d1175dd76bdbf3e9a9bd7df393c90"/>
+        <topic label="KineticSession_Connect" href="kinetic__session_8h.html#aebfb40f21fcd263e8893e00b0daa0f6c"/>
         <topic label="KineticSession_Disconnect" href="kinetic__session_8h.html#afb3ef9466d871b3065ceb0c8a950ed6f"/>
-        <topic label="KineticSession_IncrementSequence" href="kinetic__session_8h.html#a44e7320a40bc06a68387969d90da5840"/>
+        <topic label="KineticSession_GetNextSequenceCount" href="kinetic__session_8h.html#aa0f5b9a8f4fa6ad110c62af497926213"/>
+        <topic label="KineticSession_GetClusterVersion" href="kinetic__session_8h.html#a26c0bbec7319f27306b5f0b1a5ff27a6"/>
+        <topic label="KineticSession_SetClusterVersion" href="kinetic__session_8h.html#a19ec1fa3c18d59940dac695349e01420"/>
       </topic>
       <topic label="kinetic_socket.c" href="kinetic__socket_8c.html">
         <topic label="KineticSocket_Connect" href="kinetic__socket_8c.html#af9fb590d8d58c37b2f9b38b13da321cd"/>
@@ -2463,6 +2782,8 @@
       <topic label="kinetic_types.c" href="kinetic__types_8c.html">
         <topic label="Kinetic_GetStatusDescription" href="kinetic__types_8c.html#a82c4aac2c0a454092185b10d8809f1bc"/>
         <topic label="KineticMessageType_GetName" href="kinetic__types_8c.html#a38e38f8880dedd6a7ba66c374f34b264"/>
+        <topic label="KineticStatusInvalid" href="kinetic__types_8c.html#a21bd9abb61f3d6b4e9b7330c521a97e8"/>
+        <topic label="KineticStatusDescriptor" href="kinetic__types_8c.html#a38ab76ae6e26bfb79a8ead99577c26b8"/>
         <topic label="KineticMessageTypeNames" href="kinetic__types_8c.html#a15947f01729fd71d277a7ac1216c50e9"/>
       </topic>
       <topic label="kinetic_types.h" href="kinetic__types_8h.html">
@@ -2473,10 +2794,8 @@
           <topic label="identity" href="struct_kinetic_session_config.html#aa8b4e198ae98bf699cb102350c8587da"/>
           <topic label="keyData" href="struct_kinetic_session_config.html#a0821f028dffd8e2e237aee0f4ed57189"/>
           <topic label="hmacKey" href="struct_kinetic_session_config.html#acb9f1d3dceb9739eb3c88db1f8150198"/>
-        </topic>
-        <topic label="KineticSession" href="struct_kinetic_session.html">
-          <topic label="config" href="struct_kinetic_session.html#a45587886059c9f68db0fb36a6b692b7d"/>
-          <topic label="connection" href="struct_kinetic_session.html#a57d1d01861409e3f9a3651cad67138d2"/>
+          <topic label="useSsl" href="struct_kinetic_session_config.html#ad54c41c33e139669cc653306bda69aef"/>
+          <topic label="timeoutSeconds" href="struct_kinetic_session_config.html#aade5d711e365852e68201df1b3b57177"/>
         </topic>
         <topic label="KineticCompletionData" href="struct_kinetic_completion_data.html">
           <topic label="connectionID" href="struct_kinetic_completion_data.html#a69e0224ec877d8217bb81bc296282920"/>
@@ -2497,6 +2816,7 @@
           <topic label="newVersion" href="struct_kinetic_entry.html#a3ab421a9388a1a203ca35c022e78c8e7"/>
           <topic label="metadataOnly" href="struct_kinetic_entry.html#a453aef7088b4e728ff250d8c8cd7414c"/>
           <topic label="force" href="struct_kinetic_entry.html#a96b9deeff3a41d9830590bd9ea9175c7"/>
+          <topic label="computeTag" href="struct_kinetic_entry.html#a5933ac63900c4c53d5e73fe6fe5b2aa9"/>
           <topic label="synchronization" href="struct_kinetic_entry.html#ac7d04e1dcbfc7794823542c61698b777"/>
         </topic>
         <topic label="KineticKeyRange" href="struct_kinetic_key_range.html">
@@ -2507,76 +2827,76 @@
           <topic label="maxReturned" href="struct_kinetic_key_range.html#a160371c5c224acd9d706b46c2ff8c195"/>
           <topic label="reverse" href="struct_kinetic_key_range.html#a25e5103ae87da236464775a23afe9619"/>
         </topic>
-        <topic label="KineticDeviceInfo_Utilization" href="struct_kinetic_device_info___utilization.html">
-          <topic label="name" href="struct_kinetic_device_info___utilization.html#a98c35e8e425cf1c7f19ab098f59db619"/>
-          <topic label="value" href="struct_kinetic_device_info___utilization.html#a4f2a30730672fee7af69b2f13d8c84b3"/>
+        <topic label="KineticLogInfo_Utilization" href="struct_kinetic_log_info___utilization.html">
+          <topic label="name" href="struct_kinetic_log_info___utilization.html#a7cfc02564d7214cbe4fdf5d849e5f549"/>
+          <topic label="value" href="struct_kinetic_log_info___utilization.html#ad7bd31d88075f9ac90877af4757d78f7"/>
         </topic>
-        <topic label="KineticDeviceInfo_Temperature" href="struct_kinetic_device_info___temperature.html">
-          <topic label="name" href="struct_kinetic_device_info___temperature.html#a52480103d9d785018f1e53113d2f8b86"/>
-          <topic label="current" href="struct_kinetic_device_info___temperature.html#a8ee3cf22bf84d55d1374343f3128f8e8"/>
-          <topic label="minimum" href="struct_kinetic_device_info___temperature.html#ac76d4ea07a01fa63df446150db80a2b7"/>
-          <topic label="maximum" href="struct_kinetic_device_info___temperature.html#ab13b602b42ce38aa3ed32968b5672400"/>
-          <topic label="target" href="struct_kinetic_device_info___temperature.html#a86481d52dc935d778141e9b94e07c1e6"/>
+        <topic label="KineticLogInfo_Temperature" href="struct_kinetic_log_info___temperature.html">
+          <topic label="name" href="struct_kinetic_log_info___temperature.html#a3f481c815ea05f60779495cc3bb7d6bd"/>
+          <topic label="current" href="struct_kinetic_log_info___temperature.html#a7590477d1139bf36dd4c3af21c2cce04"/>
+          <topic label="minimum" href="struct_kinetic_log_info___temperature.html#aa9eaa42a35ea05c3e736dd91f23dcd92"/>
+          <topic label="maximum" href="struct_kinetic_log_info___temperature.html#af743de843e22b477f85a7701a38f0fdc"/>
+          <topic label="target" href="struct_kinetic_log_info___temperature.html#aab3031a5be7774602a7b21ffe72cece1"/>
         </topic>
-        <topic label="KineticDeviceInfo_Capacity" href="struct_kinetic_device_info___capacity.html">
-          <topic label="nominalCapacityInBytes" href="struct_kinetic_device_info___capacity.html#acceee8e59aab5e140b8b03b49bdc3374"/>
-          <topic label="portionFull" href="struct_kinetic_device_info___capacity.html#ac6965e88e9286697719f230649a09706"/>
+        <topic label="KineticLogInfo_Capacity" href="struct_kinetic_log_info___capacity.html">
+          <topic label="nominalCapacityInBytes" href="struct_kinetic_log_info___capacity.html#ad9609d9335c4e95545cb7954fb6a1c67"/>
+          <topic label="portionFull" href="struct_kinetic_log_info___capacity.html#afffa9d4c4f7ae73a996cea8b1297bd5d"/>
         </topic>
-        <topic label="KineticDeviceInfo_Interface" href="struct_kinetic_device_info___interface.html">
-          <topic label="name" href="struct_kinetic_device_info___interface.html#ad69dfd81cab6c30f619e8a1509ae1e4c"/>
-          <topic label="MAC" href="struct_kinetic_device_info___interface.html#acc43b66caf8c884a7dfb1d991740c48b"/>
-          <topic label="ipv4Address" href="struct_kinetic_device_info___interface.html#afd572ace38ab0d7e45820e1be4453e48"/>
-          <topic label="ipv6Address" href="struct_kinetic_device_info___interface.html#a42dcbfb4526200ec90f82ff629a0b6bd"/>
+        <topic label="KineticLogInfo_Interface" href="struct_kinetic_log_info___interface.html">
+          <topic label="name" href="struct_kinetic_log_info___interface.html#a22eb8833b8876b45bbd3658bc15f707c"/>
+          <topic label="MAC" href="struct_kinetic_log_info___interface.html#aa625dcb7cdc4242b0159ffebcc36a9f8"/>
+          <topic label="ipv4Address" href="struct_kinetic_log_info___interface.html#af0aaf59f5e5472bd7f47bd79cdca4622"/>
+          <topic label="ipv6Address" href="struct_kinetic_log_info___interface.html#a803762e5d1c28a26ca88761a222273ba"/>
         </topic>
-        <topic label="KineticDeviceInfo_Configuration" href="struct_kinetic_device_info___configuration.html">
-          <topic label="vendor" href="struct_kinetic_device_info___configuration.html#af7de3bc7733c54c7ba967649f4919e6c"/>
-          <topic label="model" href="struct_kinetic_device_info___configuration.html#a46e697f399233077844eb3896f138f56"/>
-          <topic label="serialNumber" href="struct_kinetic_device_info___configuration.html#a4853b215f44647003b24a636650c9337"/>
-          <topic label="worldWideName" href="struct_kinetic_device_info___configuration.html#a1c248378c9d9113a8ae698b01084b2c4"/>
-          <topic label="version" href="struct_kinetic_device_info___configuration.html#a2268d0aa3aee6faa2fe789ea3a319251"/>
-          <topic label="compilationDate" href="struct_kinetic_device_info___configuration.html#a71f53ad3973b153f7eab8a984b1d847f"/>
-          <topic label="sourceHash" href="struct_kinetic_device_info___configuration.html#a1cdf2cdb0eba996a3880d8bc408bab50"/>
-          <topic label="protocolVersion" href="struct_kinetic_device_info___configuration.html#a3a96719b8c04a7a9cf99636d9fefbf96"/>
-          <topic label="protocolCompilationDate" href="struct_kinetic_device_info___configuration.html#a8675e4c1e069e8db7aa94ee91093d1b7"/>
-          <topic label="protocolSourceHash" href="struct_kinetic_device_info___configuration.html#a400c8d7199dc2f911a92bc23cc436ab6"/>
-          <topic label="interfaces" href="struct_kinetic_device_info___configuration.html#a50db2891ab38d90744dc726d9711c619"/>
-          <topic label="numInterfaces" href="struct_kinetic_device_info___configuration.html#a63e01aec4f3c912fd5cb1705f3fa3a67"/>
-          <topic label="port" href="struct_kinetic_device_info___configuration.html#aaaa46b5727d68bca0d4971273eb52d49"/>
-          <topic label="tlsPort" href="struct_kinetic_device_info___configuration.html#a43b4e67dc300fbb6d96b373b7bcc1949"/>
+        <topic label="KineticLogInfo_Configuration" href="struct_kinetic_log_info___configuration.html">
+          <topic label="vendor" href="struct_kinetic_log_info___configuration.html#a82d5f6e3ec73dbcd775a79a430bffd1c"/>
+          <topic label="model" href="struct_kinetic_log_info___configuration.html#a28756675fc88e79335ccd31de070c63b"/>
+          <topic label="serialNumber" href="struct_kinetic_log_info___configuration.html#a9ce791fbc9fbdbe76e4f505d64a32dad"/>
+          <topic label="worldWideName" href="struct_kinetic_log_info___configuration.html#a10ebffd00d2519f33adc70c49a122908"/>
+          <topic label="version" href="struct_kinetic_log_info___configuration.html#afd3dae5d0f2548fb7dba38ddeb0faf33"/>
+          <topic label="compilationDate" href="struct_kinetic_log_info___configuration.html#a24ef6c35749009bad6353efec71e51dd"/>
+          <topic label="sourceHash" href="struct_kinetic_log_info___configuration.html#ae407656b1647e37bd1f6b4d30c362472"/>
+          <topic label="protocolVersion" href="struct_kinetic_log_info___configuration.html#a345696c93ddcc04e7eb483a4994ec35f"/>
+          <topic label="protocolCompilationDate" href="struct_kinetic_log_info___configuration.html#ac6385c35c4cfd84715ad508ee1205ee4"/>
+          <topic label="protocolSourceHash" href="struct_kinetic_log_info___configuration.html#a41960c4f8d287ed1bf553728e2693af4"/>
+          <topic label="interfaces" href="struct_kinetic_log_info___configuration.html#a5a80d49bf95ccd035014e68f59d6745e"/>
+          <topic label="numInterfaces" href="struct_kinetic_log_info___configuration.html#a3717aa26306920acbd5d7eca10ea0995"/>
+          <topic label="port" href="struct_kinetic_log_info___configuration.html#a2e2534025f419a00765e5b9e6b09fee4"/>
+          <topic label="tlsPort" href="struct_kinetic_log_info___configuration.html#a30a2f97f713d45d14ea1698af841f927"/>
         </topic>
-        <topic label="KineticDeviceInfo_Statistics" href="struct_kinetic_device_info___statistics.html">
-          <topic label="messageType" href="struct_kinetic_device_info___statistics.html#a186ed9a223ef6b593cd5775ede005931"/>
-          <topic label="count" href="struct_kinetic_device_info___statistics.html#a7a6447733f3e66999d25c1df1b73a3aa"/>
-          <topic label="bytes" href="struct_kinetic_device_info___statistics.html#ae954815d2deba3af692bed1bc920dbfc"/>
+        <topic label="KineticLogInfo_Statistics" href="struct_kinetic_log_info___statistics.html">
+          <topic label="messageType" href="struct_kinetic_log_info___statistics.html#a20a5f6dcb582b858196dc388dcba4fb0"/>
+          <topic label="count" href="struct_kinetic_log_info___statistics.html#af3f2be6a3a2aae89b2aaeb1d99cd623c"/>
+          <topic label="bytes" href="struct_kinetic_log_info___statistics.html#aca24f851de6e7c1cf1627cc74b09ef14"/>
         </topic>
-        <topic label="KineticDeviceInfo_Limits" href="struct_kinetic_device_info___limits.html">
-          <topic label="maxKeySize" href="struct_kinetic_device_info___limits.html#a19bdabaa34e4e725034ef8964f4e7ab2"/>
-          <topic label="maxValueSize" href="struct_kinetic_device_info___limits.html#a94744cef585e4b30f9142162ba2edaa2"/>
-          <topic label="maxVersionSize" href="struct_kinetic_device_info___limits.html#adb6fb1b86676faae40d48decb434d319"/>
-          <topic label="maxTagSize" href="struct_kinetic_device_info___limits.html#acea516b78a19bb5c8ad3ca95ae2dcc20"/>
-          <topic label="maxConnections" href="struct_kinetic_device_info___limits.html#abeda60208d450388a9500c60bd03d365"/>
-          <topic label="maxOutstandingReadRequests" href="struct_kinetic_device_info___limits.html#a6cc16bb57933e86f169a3fa4b264724c"/>
-          <topic label="maxOutstandingWriteRequests" href="struct_kinetic_device_info___limits.html#aa6b4df48081d81cc781ca81f9a0fef66"/>
-          <topic label="maxMessageSize" href="struct_kinetic_device_info___limits.html#a98ed863aa7028970402e69f8bc4f6651"/>
-          <topic label="maxKeyRangeCount" href="struct_kinetic_device_info___limits.html#a18c7a0a8dc7cd509e2ee5c4c6c43b566"/>
-          <topic label="maxIdentityCount" href="struct_kinetic_device_info___limits.html#a780b0f45f01ebb64d182187c20345a9f"/>
-          <topic label="maxPinSize" href="struct_kinetic_device_info___limits.html#a7d7569c18b0efb18f7d1b53f4efe76f5"/>
+        <topic label="KineticLogInfo_Limits" href="struct_kinetic_log_info___limits.html">
+          <topic label="maxKeySize" href="struct_kinetic_log_info___limits.html#af83c1fc5d0f39a4bc2d8fbca7d08b206"/>
+          <topic label="maxValueSize" href="struct_kinetic_log_info___limits.html#a1ecf89c58ddfbb62fa69f4f913f4be18"/>
+          <topic label="maxVersionSize" href="struct_kinetic_log_info___limits.html#afe72845c9ba1fe78d6aab36ef8e3179c"/>
+          <topic label="maxTagSize" href="struct_kinetic_log_info___limits.html#afba8bdd6770af2f7b750deca81e57bdc"/>
+          <topic label="maxConnections" href="struct_kinetic_log_info___limits.html#a8a9d9e5a3a1ae38382d77e29623e91b7"/>
+          <topic label="maxOutstandingReadRequests" href="struct_kinetic_log_info___limits.html#a868f33472cb7015bf65f63978e8ff701"/>
+          <topic label="maxOutstandingWriteRequests" href="struct_kinetic_log_info___limits.html#a4984c9279a2296bda2b76cdfb697c612"/>
+          <topic label="maxMessageSize" href="struct_kinetic_log_info___limits.html#a8191926c6b4e7ce2af57a125807f3de2"/>
+          <topic label="maxKeyRangeCount" href="struct_kinetic_log_info___limits.html#acd2fddac4b77bf2be42ca7fa20dafe00"/>
+          <topic label="maxIdentityCount" href="struct_kinetic_log_info___limits.html#a6af284d19c587438bec7af2a8bda5203"/>
+          <topic label="maxPinSize" href="struct_kinetic_log_info___limits.html#ad8da01c9769c8c81c5652fa20276068d"/>
         </topic>
-        <topic label="KineticDeviceInfo_Device" href="struct_kinetic_device_info___device.html">
-          <topic label="name" href="struct_kinetic_device_info___device.html#a420bba1419a3cd0335d21ad3674a053d"/>
+        <topic label="KineticLogInfo_Device" href="struct_kinetic_log_info___device.html">
+          <topic label="name" href="struct_kinetic_log_info___device.html#ac925eb7c9d5b78b625a884cd9cde0124"/>
         </topic>
-        <topic label="KineticDeviceInfo" href="struct_kinetic_device_info.html">
-          <topic label="utilizations" href="struct_kinetic_device_info.html#a80a9b83a8ff3725066444c4fc60e1a54"/>
-          <topic label="numUtilizations" href="struct_kinetic_device_info.html#a98f17d4d4e1b0493a9599798a7e1021a"/>
-          <topic label="temperatures" href="struct_kinetic_device_info.html#af45283c54bcf1f0d430b56bfc1d8b245"/>
-          <topic label="numTemperatures" href="struct_kinetic_device_info.html#a49d3ae4bb10659f909076fda0e6c60ce"/>
-          <topic label="capacity" href="struct_kinetic_device_info.html#a90ca11225302d5aa989e28d3f01fba91"/>
-          <topic label="configuration" href="struct_kinetic_device_info.html#af447595843039264ac6b6b1535979762"/>
-          <topic label="statistics" href="struct_kinetic_device_info.html#a7c053fbb04a49a59d14089f2b947fc3f"/>
-          <topic label="numStatistics" href="struct_kinetic_device_info.html#a4e7e363d38b675cda44660d04307c01f"/>
-          <topic label="messages" href="struct_kinetic_device_info.html#a602548440d390c03d01fcea784651b65"/>
-          <topic label="limits" href="struct_kinetic_device_info.html#ae74c6e7d673bac4b9d2d538d507804f6"/>
-          <topic label="device" href="struct_kinetic_device_info.html#a88a3e6f3439eda322812c61c17527885"/>
+        <topic label="KineticLogInfo" href="struct_kinetic_log_info.html">
+          <topic label="utilizations" href="struct_kinetic_log_info.html#af99a1b4fa9bed4c2092fb6cbdcd7e241"/>
+          <topic label="numUtilizations" href="struct_kinetic_log_info.html#aec17891af8cc57b243e805f39ad0fd7d"/>
+          <topic label="temperatures" href="struct_kinetic_log_info.html#a118d4214b1ebdaa15719ceba455a9cc8"/>
+          <topic label="numTemperatures" href="struct_kinetic_log_info.html#a1812b3ee953619697ef7ed838a89620d"/>
+          <topic label="capacity" href="struct_kinetic_log_info.html#a47ffbe05f351bf355723d00190e7a801"/>
+          <topic label="configuration" href="struct_kinetic_log_info.html#a1c33a64ccca1fd06d0f1994f8f321234"/>
+          <topic label="statistics" href="struct_kinetic_log_info.html#a4dc7589a418451ae869bb3b45723bc14"/>
+          <topic label="numStatistics" href="struct_kinetic_log_info.html#a517d0d1a5693e73cc16eafaf94a97014"/>
+          <topic label="messages" href="struct_kinetic_log_info.html#a00a20bf3e79d8198311a5276bd0c0f6f"/>
+          <topic label="limits" href="struct_kinetic_log_info.html#a4a88cc1c804562fc1054d3f023f062fc"/>
+          <topic label="device" href="struct_kinetic_log_info.html#abc741ca2eae5215c3e664adc93cbb858"/>
         </topic>
         <topic label="KineticP2P_Peer" href="struct_kinetic_p2_p___peer.html">
           <topic label="hostname" href="struct_kinetic_p2_p___peer.html#ad05f29013880464048d139696f4ad598"/>
@@ -2607,6 +2927,7 @@
         <topic label="KINETIC_TLS_PORT" href="kinetic__types_8h.html#a43b41ecab84ae37ab03051451c0aedc9"/>
         <topic label="KINETIC_HMAC_SHA1_LEN" href="kinetic__types_8h.html#a634c0f8d37b8f5980e51d9c7cf5e90e5"/>
         <topic label="KINETIC_HMAC_MAX_LEN" href="kinetic__types_8h.html#ab25f5f599fde5352c70e529ebba7a6da"/>
+        <topic label="KINETIC_PIN_MAX_LEN" href="kinetic__types_8h.html#a7d9980916a985ce09b403dd6d835efe1"/>
         <topic label="KINETIC_DEFAULT_KEY_LEN" href="kinetic__types_8h.html#adf35ed8ced54272941dc71fd889c6feb"/>
         <topic label="KINETIC_MAX_KEY_LEN" href="kinetic__types_8h.html#a7f225a5911212081b2f7c8d9c4b81c90"/>
         <topic label="KINETIC_MAX_VERSION_LEN" href="kinetic__types_8h.html#a5e316ff158aa7dc9efd6aa06b40c63d9"/>
@@ -2616,6 +2937,8 @@
         <topic label="LOG_FILE_NAME_MAX" href="kinetic__types_8h.html#acae020d3fbf250dee3e33035c261ab9e"/>
         <topic label="BOOL_TO_STRING" href="kinetic__types_8h.html#a77c3b6f6dc303295398cc6a1308a5e79"/>
         <topic label="KINETIC_SESSION_INIT" href="kinetic__types_8h.html#a2f0f476362d01ca4c7899cf1325c72e6"/>
+        <topic label="KINETIC_P2P_OPERATION_LIMIT" href="kinetic__types_8h.html#abaa05a6bc4a4faddc19e9fe8eee68ed1"/>
+        <topic label="KINETIC_P2P_MAX_NESTING" href="kinetic__types_8h.html#abb79428649147e2162ed75f6103b2b4b"/>
         <topic label="KINETIC_CLIENT_DEFAULT_LOG_LEVEL" href="kinetic__types_8h.html#af3b3ca91939b728ff6079e235a2e7076"/>
         <topic label="KINETIC_CLIENT_DEFAULT_WRITER_THREADS" href="kinetic__types_8h.html#a86714c3c1cfa6964686a72207c3506c3"/>
         <topic label="KINETIC_CLIENT_DEFAULT_READER_THREADS" href="kinetic__types_8h.html#a1139caf48a78b5227f8de332ab693314"/>
@@ -2643,7 +2966,7 @@
           <topic label="KINETIC_STATUS_SESSION_EMPTY" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ae004f902f39faff5c3117b7e4524f04b"/>
           <topic label="KINETIC_STATUS_SESSION_INVALID" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a145893949409e77de5f393f4ba4e70f4"/>
           <topic label="KINETIC_STATUS_HOST_EMPTY" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a7a20715bee191c5ee51d2461ffedacb0"/>
-          <topic label="KINETIC_STATUS_HMAC_EMPTY" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a72368b71976086bddf0308d32456c817"/>
+          <topic label="KINETIC_STATUS_HMAC_REQUIRED" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ac8e3dab7142dc48f2078b1f8847aff7a"/>
           <topic label="KINETIC_STATUS_NO_PDUS_AVAVILABLE" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a5b1cb4b9d3ce032c90510853fc53745f"/>
           <topic label="KINETIC_STATUS_DEVICE_BUSY" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a6c1bab895a12cbc908fc4ac3c912f2af"/>
           <topic label="KINETIC_STATUS_CONNECTION_ERROR" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa4e88b2b4f40b1d9e8f08a08f2be1018"/>
@@ -2661,17 +2984,23 @@
           <topic label="KINETIC_STATUS_SOCKET_ERROR" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a062cab06528a8ff0e145fd33fe7e6789"/>
           <topic label="KINETIC_STATUS_MISSING_KEY" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ae082ebc2e1ee44ec1c6690bd370e4962"/>
           <topic label="KINETIC_STATUS_MISSING_VALUE_BUFFER" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57af35c62d5b12c10b6362d6bb1d5dff2de"/>
+          <topic label="KINETIC_STATUS_MISSING_PIN" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a80ad95d062f0990be24cf520deccad33"/>
+          <topic label="KINETIC_STATUS_SSL_REQUIRED" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a1e3bbe217ab569dbbae40e2521c18c5f"/>
+          <topic label="KINETIC_STATUS_DEVICE_LOCKED" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ac589c731c41566144c53a8a430e12ade"/>
+          <topic label="KINETIC_STATUS_ACL_ERROR" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0621c91bfcd921f59615cc58051a964c"/>
+          <topic label="KINETIC_STATUS_NOT_AUTHORIZED" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a4142ff2d3039615341b6094ee3635462"/>
+          <topic label="KINETIC_STATUS_INVALID_FILE" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57abaef7e263ce024c1b02ea5be12e21325"/>
           <topic label="KINETIC_STATUS_COUNT" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa6a2bd5838c04467a4b7385b1a1e8cb4"/>
         </topic>
-        <topic label="KineticDeviceInfo_Type" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">
-          <topic label="KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507dad300215af8d48b27e86095e9313dc30d"/>
-          <topic label="KINETIC_DEVICE_INFO_TYPE_TEMPERATURES" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da37ad8e6c62a3ae6342abd75380fb8ffe"/>
-          <topic label="KINETIC_DEVICE_INFO_TYPE_CAPACITIES" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507dab9c895727dddd61bb20dddef9459232a"/>
-          <topic label="KINETIC_DEVICE_INFO_TYPE_CONFIGURATION" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507dac96617eafa01dff755e48f2db4bf7286"/>
-          <topic label="KINETIC_DEVICE_INFO_TYPE_STATISTICS" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da2b3afb56f7859e4197ec21db11a086ca"/>
-          <topic label="KINETIC_DEVICE_INFO_TYPE_MESSAGES" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da84ae3ba7d0b51f92085dc2ab07beed0b"/>
-          <topic label="KINETIC_DEVICE_INFO_TYPE_LIMITS" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da1a75f25b1f495a0ed63ca0616447ab63"/>
-          <topic label="KINETIC_DEVICE_INFO_TYPE_DEVICE" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507da6a54576c6b15e77dcdb54100269a149a"/>
+        <topic label="KineticLogInfo_Type" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fce">
+          <topic label="KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fcead300215af8d48b27e86095e9313dc30d"/>
+          <topic label="KINETIC_DEVICE_INFO_TYPE_TEMPERATURES" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fcea37ad8e6c62a3ae6342abd75380fb8ffe"/>
+          <topic label="KINETIC_DEVICE_INFO_TYPE_CAPACITIES" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fceab9c895727dddd61bb20dddef9459232a"/>
+          <topic label="KINETIC_DEVICE_INFO_TYPE_CONFIGURATION" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fceac96617eafa01dff755e48f2db4bf7286"/>
+          <topic label="KINETIC_DEVICE_INFO_TYPE_STATISTICS" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fcea2b3afb56f7859e4197ec21db11a086ca"/>
+          <topic label="KINETIC_DEVICE_INFO_TYPE_MESSAGES" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fcea84ae3ba7d0b51f92085dc2ab07beed0b"/>
+          <topic label="KINETIC_DEVICE_INFO_TYPE_LIMITS" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fcea1a75f25b1f495a0ed63ca0616447ab63"/>
+          <topic label="KINETIC_DEVICE_INFO_TYPE_DEVICE" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fcea6a54576c6b15e77dcdb54100269a149a"/>
         </topic>
         <topic label="KineticMessageType" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">
           <topic label="KINETIC_MESSAGE_TYPE_INVALID" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15fa14be56f724bcbb8c1da013cdf05a6c9a"/>
@@ -2712,7 +3041,6 @@
         <topic label="KineticMessageType_GetName" href="kinetic__types_8h.html#a38e38f8880dedd6a7ba66c374f34b264"/>
       </topic>
       <topic label="kinetic_types_internal.c" href="kinetic__types__internal_8c.html">
-        <topic label="KINETIC_PDU_HEADER_INIT" href="kinetic__types__internal_8c.html#aadb3b50142303f07107c0dccd980d2cd"/>
         <topic label="KineticProtoStatusCode_to_KineticStatus" href="kinetic__types__internal_8c.html#afef6c786c0ae708f69144e01b58a9f09"/>
         <topic label="KineticProto_Command_Synchronization_from_KineticSynchronization" href="kinetic__types__internal_8c.html#a514ed8ffd194ae8ecb5cd1e33a1845b4"/>
         <topic label="KineticSynchronization_from_KineticProto_Command_Synchronization" href="kinetic__types__internal_8c.html#a38b8ee716c8f48faa81ec0fc20c2ebe5"/>
@@ -2726,20 +3054,26 @@
         <topic label="Kinetic_TimevalZero" href="kinetic__types__internal_8c.html#a5081b34063b199edb5818ac94260a038"/>
         <topic label="Kinetic_TimevalIsZero" href="kinetic__types__internal_8c.html#ae08016165ab72a7ad14383d5eafff708"/>
         <topic label="Kinetic_TimevalAdd" href="kinetic__types__internal_8c.html#a2adf85c18351b5094b3f7b1784d49459"/>
+        <topic label="cmp_suseconds_t" href="kinetic__types__internal_8c.html#a54f9a9bf741efba1e89f33c4f9878ee9"/>
         <topic label="Kinetic_TimevalCmp" href="kinetic__types__internal_8c.html#a4a9f3c8864a793f00a125bad2b25d215"/>
-        <topic label="KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type" href="kinetic__types__internal_8c.html#a38e45c64e90e7b5508743454fd0c0568"/>
+        <topic label="KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type" href="kinetic__types__internal_8c.html#aaef3795753be2a7ba694ead687af9042"/>
         <topic label="KineticProto_Command_MessageType_to_KineticMessageType" href="kinetic__types__internal_8c.html#a67187990cf86b81a9b72b93f347d7c41"/>
+        <topic label="KineticSessionConfig_Copy" href="kinetic__types__internal_8c.html#ad3de2b4ad1eda7f59dca5ae76cf24c70"/>
+        <topic label="KineticSession_Init" href="kinetic__types__internal_8c.html#a6b1924a9a5139d7e33fbf9b5190917b8"/>
+        <topic label="KineticConnection_Init" href="kinetic__types__internal_8c.html#af17835e245e04e4132aa3a07098b002d"/>
         <topic label="KineticMessage_Init" href="kinetic__types__internal_8c.html#ac6ea752dfd491fffd99d4cad256f679d"/>
-        <topic label="Kinetic_auth_init_hmac" href="kinetic__types__internal_8c.html#a9ed27dbd5b91d48d9d59aa9613ffe4d5"/>
-        <topic label="Kinetic_auth_init_pinop" href="kinetic__types__internal_8c.html#ac799762669ad121854b44def2f142778"/>
-        <topic label="KineticMessage_HeaderInit" href="kinetic__types__internal_8c.html#aa62022ea14548feb753722318f59f3c3"/>
-        <topic label="KineticOperation_Init" href="kinetic__types__internal_8c.html#a08237b688a01e364ec6fb93e066c6c97"/>
-        <topic label="KineticPDU_Init" href="kinetic__types__internal_8c.html#afff41929edb9727bd7df65dc0f7c1b14"/>
-        <topic label="KineticPDU_InitWithCommand" href="kinetic__types__internal_8c.html#adb398056b18d7e4d4445aa4a9dcffabf"/>
+        <topic label="KineticMessage_HeaderInit" href="kinetic__types__internal_8c.html#aa5ea833452030aca925d616d01cb52b2"/>
+        <topic label="KineticOperation_Init" href="kinetic__types__internal_8c.html#a1f871d3846fc49a5062aa4a3a65002f3"/>
+        <topic label="KineticRequest_Init" href="kinetic__types__internal_8c.html#a913e39370ce76e818797b8f197313e18"/>
       </topic>
       <topic label="kinetic_types_internal.h" href="kinetic__types__internal_8h.html">
         <topic label="KineticClient" href="struct___kinetic_client.html">
           <topic label="bus" href="struct___kinetic_client.html#a51d100a10b40c6fa5d6c769485103c56"/>
+        </topic>
+        <topic label="KineticSession" href="struct___kinetic_session.html">
+          <topic label="config" href="struct___kinetic_session.html#a45587886059c9f68db0fb36a6b692b7d"/>
+          <topic label="connection" href="struct___kinetic_session.html#a57d1d01861409e3f9a3651cad67138d2"/>
+          <topic label="timeoutSeconds" href="struct___kinetic_session.html#a30cc8eedbe6e2db2145753df594100e7"/>
         </topic>
         <topic label="KineticConnection" href="struct___kinetic_connection.html">
           <topic label="connected" href="struct___kinetic_connection.html#a5bdd709737de27e845262d7b291bcc53"/>
@@ -2771,13 +3105,15 @@
           <topic label="acl" href="struct_kinetic_message.html#a015dc94a860fa602da2aa4519549f1a0"/>
           <topic label="keyValue" href="struct_kinetic_message.html#a1dbf1c32720c9b1639f751f98d41d763"/>
           <topic label="keyRange" href="struct_kinetic_message.html#a8cffeff6f4b6660b6f3e0e9f502a7fcd"/>
+          <topic label="setup" href="struct_kinetic_message.html#a6f52f09049fa9cddab06da3d7994fa16"/>
           <topic label="getLog" href="struct_kinetic_message.html#a351d4c07b916dde6048890acf90e31c3"/>
           <topic label="getLogType" href="struct_kinetic_message.html#aa4867e12d41b7ec1e8e29b9d1692be17"/>
           <topic label="pinOp" href="struct_kinetic_message.html#ac62c902ab451f19204ceb10cffca45ae"/>
         </topic>
-        <topic label="KineticPDU" href="struct___kinetic_p_d_u.html">
-          <topic label="message" href="struct___kinetic_p_d_u.html#ae8bb33f5b2e2cbd0031ff505a98d6e07"/>
-          <topic label="command" href="struct___kinetic_p_d_u.html#a11ee6df846abc8e3b686aa5eb8ca6e26"/>
+        <topic label="KineticRequest" href="struct___kinetic_request.html">
+          <topic label="message" href="struct___kinetic_request.html#ac642124368c935996b3700698010142b"/>
+          <topic label="command" href="struct___kinetic_request.html#ae464f1c227d146ebb3242ef09ab366a3"/>
+          <topic label="pinAuth" href="struct___kinetic_request.html#af7cc105fca64b2b8d72b54c5ea47a39f"/>
         </topic>
         <topic label="KineticResponse" href="struct_kinetic_response.html">
           <topic label="header" href="struct_kinetic_response.html#af39104124519d310cfa0750c81f70473"/>
@@ -2787,21 +3123,18 @@
         </topic>
         <topic label="KineticOperation" href="struct___kinetic_operation.html">
           <topic label="connection" href="struct___kinetic_operation.html#a9501bcc7cf72e4886300e5eeedb79a0c"/>
-          <topic label="request" href="struct___kinetic_operation.html#a05327c0a8b795a748548255b736e4ebc"/>
+          <topic label="request" href="struct___kinetic_operation.html#a170a418c0941f43a6d4f2861b91d2325"/>
           <topic label="response" href="struct___kinetic_operation.html#a0191c99ea2be1e3608c367080d994d71"/>
-          <topic label="valueEnabled" href="struct___kinetic_operation.html#a0573280c6741d56bd6f091058a99c1ce"/>
-          <topic label="sendValue" href="struct___kinetic_operation.html#a4ceadb1f36b4b9852ab8e65f8cc21729"/>
+          <topic label="timeoutSeconds" href="struct___kinetic_operation.html#a7781742e36414c350a26db70b023daab"/>
+          <topic label="pendingClusterVersion" href="struct___kinetic_operation.html#a2e8b9158b15347b702e13789c9fb07d3"/>
+          <topic label="pin" href="struct___kinetic_operation.html#a6b989ccd52e3a13c0b1be149274201c5"/>
           <topic label="entry" href="struct___kinetic_operation.html#a96efb9145bc9d56b2b5a6118bf433d0d"/>
           <topic label="buffers" href="struct___kinetic_operation.html#a0524c2ab9e5490d2d0a47369b69ae2f6"/>
-          <topic label="deviceInfo" href="struct___kinetic_operation.html#a18989ae27379642dee51604bd075431a"/>
+          <topic label="deviceInfo" href="struct___kinetic_operation.html#a0b3bb337fdfa8d4acb8075f07e921792"/>
           <topic label="p2pOp" href="struct___kinetic_operation.html#ad1043af5af3efffd0e576a63d8ee4cd1"/>
           <topic label="callback" href="struct___kinetic_operation.html#a0e76abf58099b6ee378ecce94d723798"/>
           <topic label="closure" href="struct___kinetic_operation.html#abf2c244091c0989d5028a13d2176a59a"/>
-        </topic>
-        <topic label="KineticSerialAllocator" href="struct_kinetic_serial_allocator.html">
-          <topic label="buffer" href="struct_kinetic_serial_allocator.html#a9db8f55118e26ad2bc2aff148bc6b9db"/>
-          <topic label="used" href="struct_kinetic_serial_allocator.html#a12b3207f947f91187b1f0e4dbb9562d7"/>
-          <topic label="total" href="struct_kinetic_serial_allocator.html#ab45e2320da51e4ee77378b0354f94202"/>
+          <topic label="value" href="struct___kinetic_operation.html#a85ffdfd17d3a03bf9d660b2e1f803770"/>
         </topic>
         <topic label="KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION" href="kinetic__types__internal_8h.html#a7972f8de8f23b0a2b731bdb70bf46adb"/>
         <topic label="KINETIC_SOCKET_DESCRIPTOR_INVALID" href="kinetic__types__internal_8h.html#a0bc19e020524d33828e824c007525fcd"/>
@@ -2851,19 +3184,19 @@
         <topic label="Kinetic_TimevalIsZero" href="kinetic__types__internal_8h.html#ae08016165ab72a7ad14383d5eafff708"/>
         <topic label="Kinetic_TimevalAdd" href="kinetic__types__internal_8h.html#a2adf85c18351b5094b3f7b1784d49459"/>
         <topic label="Kinetic_TimevalCmp" href="kinetic__types__internal_8h.html#a4a9f3c8864a793f00a125bad2b25d215"/>
-        <topic label="KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type" href="kinetic__types__internal_8h.html#a38e45c64e90e7b5508743454fd0c0568"/>
+        <topic label="KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type" href="kinetic__types__internal_8h.html#aaef3795753be2a7ba694ead687af9042"/>
         <topic label="KineticProto_Command_MessageType_to_KineticMessageType" href="kinetic__types__internal_8h.html#a67187990cf86b81a9b72b93f347d7c41"/>
+        <topic label="KineticConnection_Init" href="kinetic__types__internal_8h.html#af17835e245e04e4132aa3a07098b002d"/>
+        <topic label="KineticSession_Init" href="kinetic__types__internal_8h.html#a6b1924a9a5139d7e33fbf9b5190917b8"/>
         <topic label="KineticMessage_Init" href="kinetic__types__internal_8h.html#ac6ea752dfd491fffd99d4cad256f679d"/>
-        <topic label="KineticMessage_HeaderInit" href="kinetic__types__internal_8h.html#aa62022ea14548feb753722318f59f3c3"/>
-        <topic label="KineticOperation_Init" href="kinetic__types__internal_8h.html#a08237b688a01e364ec6fb93e066c6c97"/>
-        <topic label="KineticPDU_Init" href="kinetic__types__internal_8h.html#afff41929edb9727bd7df65dc0f7c1b14"/>
-        <topic label="KineticPDU_InitWithCommand" href="kinetic__types__internal_8h.html#adb398056b18d7e4d4445aa4a9dcffabf"/>
-        <topic label="Kinetic_auth_init_hmac" href="kinetic__types__internal_8h.html#a9ed27dbd5b91d48d9d59aa9613ffe4d5"/>
-        <topic label="Kinetic_auth_init_pinop" href="kinetic__types__internal_8h.html#ac799762669ad121854b44def2f142778"/>
+        <topic label="KineticOperation_Init" href="kinetic__types__internal_8h.html#a1f871d3846fc49a5062aa4a3a65002f3"/>
+        <topic label="KineticRequest_Init" href="kinetic__types__internal_8h.html#a151b6cf85fdabc3da6034179db9f1272"/>
         <topic label="KineticPDUHeader" href="kinetic__types__internal_8h.html#aeefc7ca996ea90f5703b1b8440092c5e"/>
       </topic>
       <topic label="listener.c" href="listener_8c.html">
         <topic label="DEFAULT_READ_BUF_SIZE" href="listener_8c.html#a55c36910fb23a47b98bb7467e508daa5"/>
+        <topic label="INCOMING_MSG_PIPE" href="listener_8c.html#a15740a5bfc8ef3fb9b927ef0007010bf"/>
+        <topic label="INCOMING_MSG_PIPE_ID" href="listener_8c.html#a45f028e5e02538a530e3fe313bfd728a"/>
         <topic label="MSG_BP_1QTR" href="listener_8c.html#ac68caa54ad7fc51c8f5815eeb6686f30"/>
         <topic label="MSG_BP_HALF" href="listener_8c.html#a7acc76219d8588ca99f58c2121988112"/>
         <topic label="MSG_BP_3QTR" href="listener_8c.html#a694eca96dcf9ed929ec1608f9c14c852"/>
@@ -2871,17 +3204,49 @@
         <topic label="RX_INFO_BP_HALF" href="listener_8c.html#a3e7f3829ff5668c512d1911a3201db71"/>
         <topic label="RX_INFO_BP_3QTR" href="listener_8c.html#a45f677274d8f1de84ae1cc842c43d0fe"/>
         <topic label="THREADPOOL_BP" href="listener_8c.html#a87e98e5aad28f7363d5f4217d2e8d10e"/>
-        <topic label="MAX_TIMEOUT" href="listener_8c.html#a85fda3522e69a1bf85f7dcd97b6023a1"/>
-        <topic label="RX_INFO_MAX_USED" href="listener_8c.html#aabe2d0057984d6caf7bc8ebf2b48b8e6"/>
+        <topic label="TIMEOUT_DELAY" href="listener_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6"/>
         <topic label="DUMP_READ" href="listener_8c.html#a1d7054af083649f8e410783fbf2e7b33"/>
+        <topic label="retry_delivery" href="listener_8c.html#a91845232ef24ffde41ff3689b0caa0c9"/>
         <topic label="listener_init" href="listener_8c.html#a0c3342b1bf0a6cade3e4729f40022ed7"/>
         <topic label="listener_add_socket" href="listener_8c.html#ac413d1ed53a01815b79baf2dc2f3ece5"/>
         <topic label="listener_remove_socket" href="listener_8c.html#a4926cd8003e7903476104018d81b35d2"/>
+        <topic label="get_backpressure" href="listener_8c.html#ae7c7515f7ab98011b61aa5d1d8d28751"/>
+        <topic label="observe_backpressure" href="listener_8c.html#ae71f036eb0a57423a8e2b225bcf32e12"/>
         <topic label="listener_hold_response" href="listener_8c.html#acbec5b5b8251c2787ebdb7ec4f73f20b"/>
         <topic label="listener_expect_response" href="listener_8c.html#ac4ca027f622cf5d1ab731f92f9cb66a8"/>
         <topic label="listener_shutdown" href="listener_8c.html#ac185ab098ac6d91c0474bf847ef64265"/>
         <topic label="listener_free" href="listener_8c.html#ae02746f8c243596cedd386fc1d7630e5"/>
         <topic label="listener_mainloop" href="listener_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0"/>
+        <topic label="check_and_flush_incoming_msg_pipe" href="listener_8c.html#a41d1e6df116c066e5c56dd646c3fe898"/>
+        <topic label="set_error_for_socket" href="listener_8c.html#affa8fc52abd48c60492b25fae5496d0a"/>
+        <topic label="print_SSL_error" href="listener_8c.html#aa4a0d6443a6bb65b3fee1027d8eef70f"/>
+        <topic label="socket_read_plain" href="listener_8c.html#a48e209edcf9421a36f6cd97eca45aa39"/>
+        <topic label="socket_read_ssl" href="listener_8c.html#a27540bed6e0ee31601a54a31613bd1ee"/>
+        <topic label="sink_socket_read" href="listener_8c.html#a11b801753f3195b71431c6ae11f4e2b7"/>
+        <topic label="attempt_recv" href="listener_8c.html#a09b57f3f2be5eb499e924308bab8f989"/>
+        <topic label="find_info_by_sequence_id" href="listener_8c.html#a5ef5faf6ec41a63ec7b82933b1eaaadd"/>
+        <topic label="process_unpacked_message" href="listener_8c.html#a37c58a09e6d324e7114a2becb2683bbd"/>
+        <topic label="tick_handler" href="listener_8c.html#aeedae561a63e857e130be4d40cca8588"/>
+        <topic label="dump_rx_info_table" href="listener_8c.html#a2b75e85745a6799df9e90def5caf0578"/>
+        <topic label="clean_up_completed_info" href="listener_8c.html#a21e5de0bee07a8e984f3c1408b8e3b62"/>
+        <topic label="notify_message_failure" href="listener_8c.html#ac36cf71f469df6618223f84af9c34ad2"/>
+        <topic label="get_free_rx_info" href="listener_8c.html#a86fe702b7851275f2bd50f8897dc87fe"/>
+        <topic label="get_connection_info" href="listener_8c.html#a3bdbad0ba5aa31b4f2dcdfe16ed379bc"/>
+        <topic label="release_rx_info" href="listener_8c.html#aa53f32f1fa516ebdbb8cc66bb752e712"/>
+        <topic label="get_free_msg" href="listener_8c.html#a7d7c8279976ea7b7aca15479f6892db4"/>
+        <topic label="release_msg" href="listener_8c.html#ac4aa4e12d23e8c53a5a958e335cf4a2b"/>
+        <topic label="push_message" href="listener_8c.html#abc9a1037551b3c8a9ae45f7b795ab8c3"/>
+        <topic label="msg_handler" href="listener_8c.html#abff7ce205d94f17798e20b45f8ddd289"/>
+        <topic label="notify_caller" href="listener_8c.html#a674dfc8997b3f8cd95eeb8afc76448c0"/>
+        <topic label="grow_read_buf" href="listener_8c.html#a138a357c639da15c5e88958123e660b0"/>
+        <topic label="add_socket" href="listener_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d"/>
+        <topic label="free_ci" href="listener_8c.html#af7c8c5f81320edf7ea28286384c59b40"/>
+        <topic label="remove_socket" href="listener_8c.html#ae12e728e14ca2922ae27678b00a151f3"/>
+        <topic label="hold_response" href="listener_8c.html#ab3d2bbc5f77d606f0040dee30e80648b"/>
+        <topic label="get_hold_rx_info" href="listener_8c.html#a635353fdc72baf5a4112e2d6a896000f"/>
+        <topic label="attempt_delivery" href="listener_8c.html#a7abf986a57b2b4a5ae53b48fc051aafb"/>
+        <topic label="expect_response" href="listener_8c.html#a568c4bcef944d6d127e88b8a673e2890"/>
+        <topic label="shutdown" href="listener_8c.html#aab8481f4406eb5406717e976f6d852a2"/>
       </topic>
       <topic label="listener.h" href="listener_8h.html">
         <topic label="listener_init" href="listener_8h.html#a0c3342b1bf0a6cade3e4729f40022ed7"/>
@@ -2901,7 +3266,7 @@
           <topic label="notify_fd" href="structlistener__msg.html#a6b0ba1341c3e8c74196c0453bf110e36"/>
           <topic label="add_socket" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027"/>
           <topic label="fd" href="structlistener__msg.html#a8d0dc639ff95796b83fb2788b89f6f4f"/>
-          <topic label="close_socket" href="structlistener__msg.html#a034f7c4ae5e2dcb215e9e088020dedff"/>
+          <topic label="remove_socket" href="structlistener__msg.html#a518c6e850864a64eb162d4482c6c3294"/>
           <topic label="seq_id" href="structlistener__msg.html#ae0458881feeceb91123a7492ddc29b1e"/>
           <topic label="timeout_sec" href="structlistener__msg.html#a6ffd4649aca55f63d7e5cd9d58c43f73"/>
           <topic label="hold" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4"/>
@@ -2928,8 +3293,10 @@
         </topic>
         <topic label="listener" href="structlistener.html">
           <topic label="bus" href="structlistener.html#a3b774e2e0ad1e58c3a0bdf7207cabbb6"/>
-          <topic label="q" href="structlistener.html#add8083c6b9b4228454bf0d281b008e21"/>
           <topic label="shutdown" href="structlistener.html#a38f8e5d2c9f44093adb69974440a3741"/>
+          <topic label="commit_pipe" href="structlistener.html#abc6abc228015127d7413688bbcad26b1"/>
+          <topic label="incoming_msg_pipe" href="structlistener.html#a5ac777bb848a219493fb3ac22902b703"/>
+          <topic label="is_idle" href="structlistener.html#ab64bf7942724f8b2209e840fec1b7101"/>
           <topic label="rx_info" href="structlistener.html#ab0d1685b2ada442ec0983c9319125d0c"/>
           <topic label="rx_info_freelist" href="structlistener.html#aba8752eae5f7b0b4bd13980ac118dbf8"/>
           <topic label="rx_info_in_use" href="structlistener.html#ac89de9e149ba59813be0e77f010eb591"/>
@@ -2940,7 +3307,7 @@
           <topic label="largest_seq_id_seen" href="structlistener.html#af08a9f4c1af7da34efd6602534ff6157"/>
           <topic label="upstream_backpressure" href="structlistener.html#a5a195c5e0ef1a2aaa14bab318f1451f8"/>
           <topic label="tracked_fds" href="structlistener.html#a5883abca1bdd50fcf2e0d5675f9216ad"/>
-          <topic label="fds" href="structlistener.html#a00f399cab62860fad164340a21d5efd1"/>
+          <topic label="fds" href="structlistener.html#ae15ac7bbebd8900e4441f15fdca4c535"/>
           <topic label="fd_info" href="structlistener.html#a66e7d5a3179530bd3658e758f11be642"/>
           <topic label="read_buf_size" href="structlistener.html#a78f69f0cfcea46e590a71e1fccf81b92"/>
           <topic label="read_buf" href="structlistener.html#ada742987f7ce7758fc4422a290948d97"/>
@@ -2948,11 +3315,14 @@
         <topic label="MAX_FDS" href="listener__internal_8h.html#a816ccaf3e5e64cc98f2b5613cc177398"/>
         <topic label="MAX_PENDING_MESSAGES" href="listener__internal_8h.html#ab8da6d181eef4debc5b438687fd9804a"/>
         <topic label="MAX_QUEUE_MESSAGES" href="listener__internal_8h.html#a6ee3565e40e9a157decfa328ac562140"/>
+        <topic label="MIN_DELAY" href="listener__internal_8h.html#ad3b51637a39a4ff75bd979b917cb89ef"/>
+        <topic label="MAX_DELAY" href="listener__internal_8h.html#a16027d8acc5301e440cefa086eb9db2a"/>
+        <topic label="INFINITE_DELAY" href="listener__internal_8h.html#ab893de6f8a0ec8b0e6dd8097ff398019"/>
         <topic label="msg_flag_t" href="listener__internal_8h.html#a86f29ffc383d560855689fdb7abc4093"/>
         <topic label="MSG_TYPE" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0b">
           <topic label="MSG_NONE" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba40e71b65f54da2ea5d97c37e720346b1"/>
           <topic label="MSG_ADD_SOCKET" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2"/>
-          <topic label="MSG_CLOSE_SOCKET" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba6bd4c94943ad32f17655509ab6ce600c"/>
+          <topic label="MSG_REMOVE_SOCKET" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba433ef8aba97342ee9a920c5046cd4d67"/>
           <topic label="MSG_HOLD_RESPONSE" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de"/>
           <topic label="MSG_EXPECT_RESPONSE" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed"/>
           <topic label="MSG_SHUTDOWN" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba621b8f7f84a5fe2cbb10c08ce2c58ff3"/>
@@ -2962,22 +3332,117 @@
           <topic label="RIS_EXPECT" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4"/>
           <topic label="RIS_INACTIVE" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41"/>
         </topic>
+        <topic label="tick_handler" href="listener__internal_8h.html#aeedae561a63e857e130be4d40cca8588"/>
+        <topic label="get_free_rx_info" href="listener__internal_8h.html#ab01748a18f035b2304ae416265a27e8d"/>
+        <topic label="release_rx_info" href="listener__internal_8h.html#aa53f32f1fa516ebdbb8cc66bb752e712"/>
+        <topic label="get_free_msg" href="listener__internal_8h.html#a7d7c8279976ea7b7aca15479f6892db4"/>
+        <topic label="push_message" href="listener__internal_8h.html#abc9a1037551b3c8a9ae45f7b795ab8c3"/>
+        <topic label="release_msg" href="listener__internal_8h.html#ac4aa4e12d23e8c53a5a958e335cf4a2b"/>
+        <topic label="attempt_recv" href="listener__internal_8h.html#ac952b94296b3ffa69d793f830ceae1e9"/>
+        <topic label="process_unpacked_message" href="listener__internal_8h.html#a37c58a09e6d324e7114a2becb2683bbd"/>
+        <topic label="notify_message_failure" href="listener__internal_8h.html#ac36cf71f469df6618223f84af9c34ad2"/>
+        <topic label="attempt_delivery" href="listener__internal_8h.html#a7abf986a57b2b4a5ae53b48fc051aafb"/>
+        <topic label="clean_up_completed_info" href="listener__internal_8h.html#a21e5de0bee07a8e984f3c1408b8e3b62"/>
+        <topic label="observe_backpressure" href="listener__internal_8h.html#ae71f036eb0a57423a8e2b225bcf32e12"/>
+        <topic label="grow_read_buf" href="listener__internal_8h.html#a138a357c639da15c5e88958123e660b0"/>
+        <topic label="check_and_flush_incoming_msg_pipe" href="listener__internal_8h.html#a41d1e6df116c066e5c56dd646c3fe898"/>
+        <topic label="get_hold_rx_info" href="listener__internal_8h.html#a635353fdc72baf5a4112e2d6a896000f"/>
+        <topic label="dump_rx_info_table" href="listener__internal_8h.html#a2b75e85745a6799df9e90def5caf0578"/>
+        <topic label="msg_handler" href="listener__internal_8h.html#a002c308d7296510bcb2df6331792ea09"/>
+        <topic label="add_socket" href="listener__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d"/>
+        <topic label="remove_socket" href="listener__internal_8h.html#ae12e728e14ca2922ae27678b00a151f3"/>
+        <topic label="hold_response" href="listener__internal_8h.html#ab3d2bbc5f77d606f0040dee30e80648b"/>
+        <topic label="expect_response" href="listener__internal_8h.html#ac2f4cfd7e199d3c933f72d46144dee42"/>
+        <topic label="shutdown" href="listener__internal_8h.html#aab8481f4406eb5406717e976f6d852a2"/>
+        <topic label="free_ci" href="listener__internal_8h.html#af7c8c5f81320edf7ea28286384c59b40"/>
       </topic>
       <topic label="main.c" href="main_8c.html">
+        <topic label="OPT_MIN" href="main_8c.html#a55a00b40a60585a501fcf058853489cb"/>
+        <topic label="OptionID" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83">
+          <topic label="OPT_NONE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a2ed357c9466d276e4ed1141e49f2f530"/>
+          <topic label="OPT_HELP" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a9f410d809faf25bd870728b96974502b"/>
+          <topic label="OPT_LOGLEVEL" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83aea99c9ede829a2018ae1a586af5643a0"/>
+          <topic label="OPT_HOST" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a1d607aec9c866da4a7b6cd9d76d18b90"/>
+          <topic label="OPT_PORT" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a12249dfdbfee36aa8508b9c2293a21dd"/>
+          <topic label="OPT_TLSPORT" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83ac9b4019a8fe84624d2eac63f7bc987b7"/>
+          <topic label="OPT_IDENTITY" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a0116cbe341da5ccd8b9adc9433ddb875"/>
+          <topic label="OPT_KEY" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83ad26569a6b70a086893fc7df6902e2309"/>
+          <topic label="OPT_VALUE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a997a46a56264122ca65fdc4d70c5e21f"/>
+          <topic label="OPT_CLUSTERVERSION" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83aeb1348887af409d41f2f2b4534753a62"/>
+          <topic label="OPT_FILE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a641661b1057912a690efd8389baad291"/>
+          <topic label="OPT_HMACKEY" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a14472660e85f8e5ee743ce6043596c44"/>
+          <topic label="OPT_NEWCLUSTERVERSION" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a850c17568330287a9b8d6406dd2aaf14"/>
+          <topic label="OPT_PIN" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a4cceb8a10e64557af720654015c92905"/>
+          <topic label="OPT_NEWPIN" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a98e7ff60099be03f6e65521efb5da9a9"/>
+          <topic label="OPT_LOGTYPE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83acffc3846641e1cb363509a50b2a15945"/>
+          <topic label="OPT_NOOP" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83afaa236abaec2991396e4921aed6fa659"/>
+          <topic label="OPT_PUT" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83aeaf60c17df7148ca87ffb82112512e37"/>
+          <topic label="OPT_GET" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a26785d43ae7bd6f6358f8cadbc713ef7"/>
+          <topic label="OPT_DELETE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a7f541b71f69b18e20783a3e9d88d9a49"/>
+          <topic label="OPT_GETNEXT" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a2a65448edf7bde6598aa021a243e186d"/>
+          <topic label="OPT_GETPREVIOUS" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a4dbd4ef296aed6910e6e8ed67bb57ce6"/>
+          <topic label="OPT_GETLOG" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83aaea7d881e6dcfbec426b4b6a5d254d00"/>
+          <topic label="OPT_GETVENDORLOG" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83ad14087bce29ac5a5077fff8b42f0c10a"/>
+          <topic label="OPT_SETERASEPIN" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a005c4b7198598dd8f9508e8a14f322f9"/>
+          <topic label="OPT_INSTANTERASE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a899217c2f522e4030168a7c0cc0503fc"/>
+          <topic label="OPT_SECUREERASE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a7dd382c7a1e3e9dfe99bee10f464afc0"/>
+          <topic label="OPT_SETLOCKPIN" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a837de1f4a3762ac664a9dec84f41deed"/>
+          <topic label="OPT_LOCKDEVICE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a5cb7d3ca9b3d068db9bf86c690446efb"/>
+          <topic label="OPT_UNLOCKDEVICE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a5db9d4fdc804cf64b8bedd2df0a7d89a"/>
+          <topic label="OPT_SETCLUSTERVERSION" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a31616c2256af9b8ed97220c9a965b952"/>
+          <topic label="OPT_SETACL" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a8585f77caa599dc3df98e1fe876c35de"/>
+          <topic label="OPT_UPDATEFIRMWARE" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a11c08830f17a52f848cd1333b25da451"/>
+          <topic label="OPT_MAX" href="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a071a0b4ca1a6ed34e7a1764730787720"/>
+        </topic>
+        <topic label="ParseOptions" href="main_8c.html#ac8671b12570e90053da9f034e7a265fe"/>
+        <topic label="ExecuteOperation" href="main_8c.html#a57e6fa09d0aa7bc65bdefb4034e51ffc"/>
+        <topic label="ConfigureEntry" href="main_8c.html#a11899ce4e556af8f5b7adaf23e389155"/>
+        <topic label="PrintLogInfo" href="main_8c.html#af965f3b1275191f0855813297eaf69ce"/>
+        <topic label="GetOptString" href="main_8c.html#a6c4590fb4c5d4f8f87c8250fc403ce75"/>
+        <topic label="PrintUsage" href="main_8c.html#a456168dda4622d587bbbe87f2619bdff"/>
         <topic label="main" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
+        <topic label="PrintEntry" href="main_8c.html#ae184f8b56849d57b7f4d412717d18490"/>
       </topic>
       <topic label="put_nonblocking.c" href="put__nonblocking_8c.html">
+        <topic label="put_finished" href="put__nonblocking_8c.html#a4cc5244bc7b6dd83d1bc8eae3bb37608"/>
         <topic label="main" href="put__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="sender.c" href="sender_8c.html">
         <topic label="CMD_FD" href="sender_8c.html#a3ea94b37cd6445d977af94a78e2c18e0"/>
+        <topic label="TIMEOUT_DELAY" href="sender_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6"/>
         <topic label="sender_init" href="sender_8c.html#a991ff0badb44cb746fe639fa54fe1c31"/>
         <topic label="sender_register_socket" href="sender_8c.html#a3c833ea734a4c9865acc47d91ddb7fd5"/>
         <topic label="sender_remove_socket" href="sender_8c.html#a7345f822ab1bc69dcc35cc871423ec19"/>
         <topic label="sender_send_request" href="sender_8c.html#ace027324e2b89c0f46e6798b23ec58ce"/>
         <topic label="sender_shutdown" href="sender_8c.html#a6387b60648d2aa6ae5d724ebf04ad3cc"/>
         <topic label="sender_free" href="sender_8c.html#acdaed429f2456b13e846d4e7f846bd65"/>
+        <topic label="get_free_tx_info" href="sender_8c.html#af18ed407301b3bdd9c44b3b05f2d54cf"/>
+        <topic label="release_tx_info" href="sender_8c.html#a9ae301320ba4b577b2462907678af613"/>
+        <topic label="get_notify_pipe" href="sender_8c.html#a8c2d8a592a292ec3105b6f1ad205f3dd"/>
+        <topic label="write_commit" href="sender_8c.html#a34859023ba746b0359f571dad003ab98"/>
+        <topic label="commit_event_and_block" href="sender_8c.html#ac06cfcb3ecfad06e23567ca1a7dac4db"/>
         <topic label="sender_mainloop" href="sender_8c.html#a4f1823592996205c3243bf49127a0004"/>
+        <topic label="free_fd_info_cb" href="sender_8c.html#a8d4592d298d6539a13dd31239360c7ad"/>
+        <topic label="cleanup" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc"/>
+        <topic label="register_socket_info" href="sender_8c.html#aa462f2b99191e54e839a69fc568972f1"/>
+        <topic label="increment_fd_refcount" href="sender_8c.html#a7bc45c02fed85ce85a834cf730f07c00"/>
+        <topic label="decrement_fd_refcount" href="sender_8c.html#a09ec64a8af8244d6b69a7e79fa9065f3"/>
+        <topic label="release_socket_info" href="sender_8c.html#a53ddb423772e634b4d099694d7bd5e37"/>
+        <topic label="handle_command" href="sender_8c.html#a09a13d151396fa2b4dbe11182cf0233b"/>
+        <topic label="enqueue_write" href="sender_8c.html#a84b7873113e88f5cfff8b30989a6197d"/>
+        <topic label="check_incoming_commands" href="sender_8c.html#a320db24cd0321f42690ae959b30d41b7"/>
+        <topic label="get_info_to_write_for_socket" href="sender_8c.html#a28642bbcae521b8f97ad49229df128f3"/>
+        <topic label="set_error_for_socket" href="sender_8c.html#a799e6b8d9f7b7982ad8e8c6bbc60d993"/>
+        <topic label="attempt_write" href="sender_8c.html#acf20e1c1edb201899b9592cb945685cd"/>
+        <topic label="socket_write_plain" href="sender_8c.html#a9f00925c05248b5902ffc10b99a55ce8"/>
+        <topic label="socket_write_ssl" href="sender_8c.html#a9485e7160a073a7740dc2f130ce19db4"/>
+        <topic label="update_sent" href="sender_8c.html#a20e2371bcf20b4f30b71726e0cad33fd"/>
+        <topic label="notify_caller" href="sender_8c.html#a72e4815c5de39d0c2c31c573eafce27a"/>
+        <topic label="tick_handler" href="sender_8c.html#ae1a455338f511c22140fd42d0f183257"/>
+        <topic label="tick_timeout" href="sender_8c.html#a728a121de75c640dd90c1992d870318f"/>
+        <topic label="attempt_to_enqueue_sending_request_message_to_listener" href="sender_8c.html#aa4ddfd50691169b408a005eda5862ccf"/>
+        <topic label="attempt_to_enqueue_request_sent_message_to_listener" href="sender_8c.html#a0c32f1070a14594306e76e6adc04ae68"/>
+        <topic label="notify_message_failure" href="sender_8c.html#a2f7209353ead92c91bfc8f84a8b4df50"/>
       </topic>
       <topic label="sender.h" href="sender_8h.html">
         <topic label="sender_init" href="sender_8h.html#a991ff0badb44cb746fe639fa54fe1c31"/>
@@ -3006,6 +3471,7 @@
           <topic label="timeout_sec" href="structtx__info__t.html#a37b46822e03d5685d68f37102110bc0a"/>
           <topic label="box" href="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a"/>
           <topic label="enqueue" href="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180"/>
+          <topic label="orig_timeout_sec" href="structtx__info__t.html#a30fef92dc2359bb1195415a93a9250f8"/>
           <topic label="sent_size" href="structtx__info__t.html#a61afed662d74f641186fb125661639f5"/>
           <topic label="fdi" href="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309"/>
           <topic label="write" href="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92"/>
@@ -3027,6 +3493,7 @@
           <topic label="largest_seq_id_seen" href="structsender.html#a8c67df66dc04d78ec44a8717a3fe2e54"/>
           <topic label="active_fds" href="structsender.html#aa8f75e8e259d4c7fc1cd1337c5ffc48b"/>
           <topic label="fds" href="structsender.html#aff32b617c8187617c30fde60a778dc44"/>
+          <topic label="is_idle" href="structsender.html#a555122c7e76f98fbaadb430c6eafaa6d"/>
           <topic label="fd_hash_table" href="structsender.html#aff098306a5cefab0f1dc624bd3d1da04"/>
         </topic>
         <topic label="MAX_TIMEOUT" href="sender__internal_8h.html#a85fda3522e69a1bf85f7dcd97b6023a1"/>
@@ -3058,44 +3525,80 @@
           <topic label="TIS_REQUEST_RELEASE" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a68e05ad950fdd5fe3ab4458659fa6db8"/>
           <topic label="TIS_ERROR" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a20183f762fba2c542ba2c0101ee3fc3a"/>
         </topic>
+        <topic label="get_free_tx_info" href="sender__internal_8h.html#af18ed407301b3bdd9c44b3b05f2d54cf"/>
+        <topic label="release_tx_info" href="sender__internal_8h.html#a9ae301320ba4b577b2462907678af613"/>
+        <topic label="get_notify_pipe" href="sender__internal_8h.html#a8c2d8a592a292ec3105b6f1ad205f3dd"/>
+        <topic label="write_commit" href="sender__internal_8h.html#a34859023ba746b0359f571dad003ab98"/>
+        <topic label="commit_event_and_block" href="sender__internal_8h.html#ac06cfcb3ecfad06e23567ca1a7dac4db"/>
+        <topic label="register_socket_info" href="sender__internal_8h.html#aa462f2b99191e54e839a69fc568972f1"/>
+        <topic label="increment_fd_refcount" href="sender__internal_8h.html#a7bc45c02fed85ce85a834cf730f07c00"/>
+        <topic label="decrement_fd_refcount" href="sender__internal_8h.html#a09ec64a8af8244d6b69a7e79fa9065f3"/>
+        <topic label="release_socket_info" href="sender__internal_8h.html#a53ddb423772e634b4d099694d7bd5e37"/>
+        <topic label="handle_command" href="sender__internal_8h.html#a09a13d151396fa2b4dbe11182cf0233b"/>
+        <topic label="enqueue_write" href="sender__internal_8h.html#a84b7873113e88f5cfff8b30989a6197d"/>
+        <topic label="check_incoming_commands" href="sender__internal_8h.html#a320db24cd0321f42690ae959b30d41b7"/>
+        <topic label="get_info_to_write_for_socket" href="sender__internal_8h.html#a28642bbcae521b8f97ad49229df128f3"/>
+        <topic label="set_error_for_socket" href="sender__internal_8h.html#a799e6b8d9f7b7982ad8e8c6bbc60d993"/>
+        <topic label="socket_write_plain" href="sender__internal_8h.html#a9f00925c05248b5902ffc10b99a55ce8"/>
+        <topic label="socket_write_ssl" href="sender__internal_8h.html#a9485e7160a073a7740dc2f130ce19db4"/>
+        <topic label="update_sent" href="sender__internal_8h.html#a20e2371bcf20b4f30b71726e0cad33fd"/>
+        <topic label="attempt_write" href="sender__internal_8h.html#acf20e1c1edb201899b9592cb945685cd"/>
+        <topic label="tick_handler" href="sender__internal_8h.html#ae1a455338f511c22140fd42d0f183257"/>
+        <topic label="notify_message_failure" href="sender__internal_8h.html#a2f7209353ead92c91bfc8f84a8b4df50"/>
+        <topic label="attempt_to_enqueue_sending_request_message_to_listener" href="sender__internal_8h.html#aa4ddfd50691169b408a005eda5862ccf"/>
+        <topic label="attempt_to_enqueue_request_sent_message_to_listener" href="sender__internal_8h.html#a0c32f1070a14594306e76e6adc04ae68"/>
+        <topic label="notify_caller" href="sender__internal_8h.html#a72e4815c5de39d0c2c31c573eafce27a"/>
+        <topic label="tick_timeout" href="sender__internal_8h.html#a728a121de75c640dd90c1992d870318f"/>
+        <topic label="cleanup" href="sender__internal_8h.html#a35be7855150c6a8fa847eba457e48bdc"/>
       </topic>
       <topic label="setup_teardown.c" href="setup__teardown_8c.html">
+        <topic label="usage" href="setup__teardown_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f"/>
+        <topic label="handle_args" href="setup__teardown_8c.html#adadd3681709665f0ec0410204b6b949b"/>
         <topic label="main" href="setup__teardown_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
-      </topic>
-      <topic label="test_casq.c" href="test__casq_8c.html">
-        <topic label="suite" href="test__casq_8c.html#a887eff6ca48753ca432bec7cf216b727"/>
-        <topic label="greatest_pre_test" href="test__casq_8c.html#ac59900de4d8846dc57b95c0c33f67a8a"/>
-        <topic label="greatest_post_test" href="test__casq_8c.html#ae5dffa9571ed5fdfafe708c33c1de633"/>
-        <topic label="greatest_do_pass" href="test__casq_8c.html#acd92099cbb1d06e4a3cedc7fd3a946b3"/>
-        <topic label="greatest_do_fail" href="test__casq_8c.html#a9a0ff3175f8bf037b8c9c52021b265ce"/>
-        <topic label="greatest_do_skip" href="test__casq_8c.html#a4fbe3e3e5c2c61a0e662444a14ebebf0"/>
-        <topic label="greatest_do_assert_equal_t" href="test__casq_8c.html#a7ba8bb47fdbaeb440ced9c62db3b18f7"/>
-        <topic label="greatest_usage" href="test__casq_8c.html#abac2e288f2cfdc2ae6c85697b3ea6992"/>
-        <topic label="GREATEST_SET_SETUP_CB" href="test__casq_8c.html#a1cdba027d4c078c75f98dc59ea64b682"/>
-        <topic label="GREATEST_SET_TEARDOWN_CB" href="test__casq_8c.html#a1fd800f99ae9d742d0cd880cdfb8b982"/>
-        <topic label="main" href="test__casq_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
-        <topic label="greatest_type_info_string" href="test__casq_8c.html#a07f049d1ae125a65024f68449f6b8d4a"/>
-        <topic label="greatest_info" href="test__casq_8c.html#ad018f113893f815b9b3bdea4d91f2cac"/>
+        <topic label="kinetic_host" href="setup__teardown_8c.html#aae8cba3a378869025232214f73c9a0c1"/>
+        <topic label="idle_seconds" href="setup__teardown_8c.html#a62fd2df65925b2bc16bb56c44a13f6bf"/>
       </topic>
       <topic label="test_threadpool.c" href="test__threadpool_8c.html">
         <topic label="ATOMIC_BOOL_COMPARE_AND_SWAP" href="test__threadpool_8c.html#ac670f7588d6db0cf09e0a61540133489"/>
+        <topic label="fibs" href="test__threadpool_8c.html#ad5bb66973f1a007da0717399dcf9b076"/>
+        <topic label="dump_stats" href="test__threadpool_8c.html#a2df1af795cfdca34e4e80bcac94d92ca"/>
+        <topic label="task_cb" href="test__threadpool_8c.html#ae47cca589331a74cd9872297ad5c35d9"/>
+        <topic label="inf_loop_cb" href="test__threadpool_8c.html#a51c5680668d75e69c3ba3880f50c97b0"/>
         <topic label="main" href="test__threadpool_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
+        <topic label="task_count" href="test__threadpool_8c.html#aa63345d9e4f42b4e5939065d8676a4f2"/>
       </topic>
       <topic label="test_threadpool_sequencing.c" href="test__threadpool__sequencing_8c.html">
         <topic label="MAX_TASKS" href="test__threadpool__sequencing_8c.html#aac747bed84189f8cfa509b94d488e622"/>
         <topic label="ATOMIC_BOOL_COMPARE_AND_SWAP" href="test__threadpool__sequencing_8c.html#ac670f7588d6db0cf09e0a61540133489"/>
         <topic label="SPIN_ADJ" href="test__threadpool__sequencing_8c.html#a82415ab010832f4e05201f3fe3121a3c"/>
+        <topic label="dump_stats" href="test__threadpool__sequencing_8c.html#a602a679191df93c2181c76daa4d20ce0"/>
+        <topic label="task_cb" href="test__threadpool__sequencing_8c.html#ae47cca589331a74cd9872297ad5c35d9"/>
         <topic label="main" href="test__threadpool__sequencing_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
+        <topic label="completed_count" href="test__threadpool__sequencing_8c.html#ad98a6ff87c95633c326280a3d286f192"/>
+        <topic label="limit" href="test__threadpool__sequencing_8c.html#abccf68b7cb494f01c3b32705841ec989"/>
       </topic>
       <topic label="test_threadpool_stress.c" href="test__threadpool__stress_8c.html">
         <topic label="ATOMIC_BOOL_COMPARE_AND_SWAP" href="test__threadpool__stress_8c.html#ac670f7588d6db0cf09e0a61540133489"/>
         <topic label="SPIN_ADJ" href="test__threadpool__stress_8c.html#a82415ab010832f4e05201f3fe3121a3c"/>
+        <topic label="dump_stats" href="test__threadpool__stress_8c.html#a602a679191df93c2181c76daa4d20ce0"/>
+        <topic label="fibs" href="test__threadpool__stress_8c.html#ad5bb66973f1a007da0717399dcf9b076"/>
+        <topic label="task_cb" href="test__threadpool__stress_8c.html#ae47cca589331a74cd9872297ad5c35d9"/>
         <topic label="main" href="test__threadpool__stress_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
+        <topic label="task_count" href="test__threadpool__stress_8c.html#aa63345d9e4f42b4e5939065d8676a4f2"/>
+        <topic label="last_count" href="test__threadpool__stress_8c.html#a82d8528c0ca5ad4b4e849a66f98f4b58"/>
       </topic>
       <topic label="test_yacht.c" href="test__yacht_8c.html">
+        <topic label="yacht_should_cleanly_init_and_free" href="test__yacht_8c.html#a6417c40235ab0012abd5edcac8ea9dbb"/>
+        <topic label="yacht_should_add_and_have_accurate_membership" href="test__yacht_8c.html#a4352bbf47e825b18e637d8d8fd400d47"/>
+        <topic label="yacht_should_add_and_remove_accurately" href="test__yacht_8c.html#a513af9cdcc63525ad95f1d4bb62f5992"/>
+        <topic label="yacht_should_add_and_remove_accurately_out_of_order" href="test__yacht_8c.html#a4204955240bb510692e8c8940f822da9"/>
+        <topic label="yacht_set_should_return_old_keys" href="test__yacht_8c.html#ac3af32cbf1b89b4729867193bb62c8e4"/>
+        <topic label="yacht_should_grow_and_add_and_remove_accurately_out_of_order" href="test__yacht_8c.html#a48c8f1a6dadafd652aa8801b72d89fcf"/>
         <topic label="suite" href="test__yacht_8c.html#a887eff6ca48753ca432bec7cf216b727"/>
+        <topic label="greatest_name_match" href="test__yacht_8c.html#a43001a5a794bfb28d4a9cb924f59d4ea"/>
         <topic label="greatest_pre_test" href="test__yacht_8c.html#ac59900de4d8846dc57b95c0c33f67a8a"/>
         <topic label="greatest_post_test" href="test__yacht_8c.html#ae5dffa9571ed5fdfafe708c33c1de633"/>
+        <topic label="greatest_run_suite" href="test__yacht_8c.html#afbabbad0481b632e3abfab67d58b0679"/>
         <topic label="greatest_do_pass" href="test__yacht_8c.html#acd92099cbb1d06e4a3cedc7fd3a946b3"/>
         <topic label="greatest_do_fail" href="test__yacht_8c.html#a9a0ff3175f8bf037b8c9c52021b265ce"/>
         <topic label="greatest_do_skip" href="test__yacht_8c.html#a4fbe3e3e5c2c61a0e662444a14ebebf0"/>
@@ -3103,19 +3606,30 @@
         <topic label="greatest_usage" href="test__yacht_8c.html#abac2e288f2cfdc2ae6c85697b3ea6992"/>
         <topic label="GREATEST_SET_SETUP_CB" href="test__yacht_8c.html#a1cdba027d4c078c75f98dc59ea64b682"/>
         <topic label="GREATEST_SET_TEARDOWN_CB" href="test__yacht_8c.html#a1fd800f99ae9d742d0cd880cdfb8b982"/>
+        <topic label="greatest_string_equal_cb" href="test__yacht_8c.html#a206e0df4e8470d5b1850e7b8795f62ec"/>
+        <topic label="greatest_string_printf_cb" href="test__yacht_8c.html#aef0b524c8b1685eeddb9d7e9badf7bde"/>
         <topic label="main" href="test__yacht_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
         <topic label="greatest_type_info_string" href="test__yacht_8c.html#a07f049d1ae125a65024f68449f6b8d4a"/>
         <topic label="greatest_info" href="test__yacht_8c.html#ad018f113893f815b9b3bdea4d91f2cac"/>
       </topic>
       <topic label="threadpool.c" href="threadpool_8c.html">
+        <topic label="MIN_DELAY" href="threadpool_8c.html#ad3b51637a39a4ff75bd979b917cb89ef"/>
         <topic label="DEFAULT_MAX_DELAY" href="threadpool_8c.html#ad57302b7cc2c3e9cc766ac7610b394e3"/>
+        <topic label="INFINITE_DELAY" href="threadpool_8c.html#ab893de6f8a0ec8b0e6dd8097ff398019"/>
         <topic label="DEFAULT_TASK_RINGBUF_SIZE2" href="threadpool_8c.html#a26c3a43d928f5c3dd1de6e86f973b1d7"/>
         <topic label="DEFAULT_MAX_THREADS" href="threadpool_8c.html#a540b2f03c9b9a640c3a649b886aaca9f"/>
+        <topic label="set_defaults" href="threadpool_8c.html#a7b680bd2baa44f2e1fea9b7ca7f4cd2d"/>
         <topic label="threadpool_init" href="threadpool_8c.html#a9a18a2a6a01f8c9b1f7c191ae999dc87"/>
         <topic label="threadpool_schedule" href="threadpool_8c.html#a04602c2dcddbb78c630433294c997fa7"/>
+        <topic label="commit_current_task" href="threadpool_8c.html#a300c822bbb69efa66c33324dfb0db2dc"/>
         <topic label="threadpool_stats" href="threadpool_8c.html#a4557ffcc7c15b5e7287e4ca5cbb32185"/>
         <topic label="threadpool_shutdown" href="threadpool_8c.html#a19960645eea868f0e146f55b4a7fae07"/>
         <topic label="threadpool_free" href="threadpool_8c.html#a0ed2977ea33edbee0f6864ccd25992d2"/>
+        <topic label="notify_new_task" href="threadpool_8c.html#af4e3146387f15306dbf72ebc78c303ea"/>
+        <topic label="notify_shutdown" href="threadpool_8c.html#a06dc58a119a1759cfbc8b83b31743d9d"/>
+        <topic label="spawn" href="threadpool_8c.html#ac4397bb8f5f8bd5319e041f69500112f"/>
+        <topic label="thread_task" href="threadpool_8c.html#ab0436b59d95636cb99c01f0032588981"/>
+        <topic label="release_current_task" href="threadpool_8c.html#ac12d38ecab7aa12950b224065abb6c0e"/>
       </topic>
       <topic label="threadpool.h" href="threadpool_8h.html">
         <topic label="threadpool_config" href="structthreadpool__config.html">
@@ -3185,6 +3699,12 @@
           <topic label="STATUS_SHUTDOWN" href="threadpool__internals_8h.html#ac528c02d3cccfb103d539b26ccdba6b2afe3be2ba8f0a700faab0406f0343865b"/>
           <topic label="STATUS_JOINED" href="threadpool__internals_8h.html#ac528c02d3cccfb103d539b26ccdba6b2adad3ec9357d1c8711a6b4ccca78ed29b"/>
         </topic>
+        <topic label="notify_new_task" href="threadpool__internals_8h.html#af4e3146387f15306dbf72ebc78c303ea"/>
+        <topic label="notify_shutdown" href="threadpool__internals_8h.html#a06dc58a119a1759cfbc8b83b31743d9d"/>
+        <topic label="spawn" href="threadpool__internals_8h.html#ac4397bb8f5f8bd5319e041f69500112f"/>
+        <topic label="thread_task" href="threadpool__internals_8h.html#ae3895b9bfe18d1f62bd5eba2a2c0e24f"/>
+        <topic label="commit_current_task" href="threadpool__internals_8h.html#a300c822bbb69efa66c33324dfb0db2dc"/>
+        <topic label="release_current_task" href="threadpool__internals_8h.html#ac12d38ecab7aa12950b224065abb6c0e"/>
       </topic>
       <topic label="util.c" href="util_8c.html">
         <topic label="util_is_resumable_io_error" href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc"/>
@@ -3206,6 +3726,8 @@
         <topic label="REPORT_ERRNO" href="write__file__nonblocking_8c.html#a88823d2711cfc178d2bd88a3b63a5880"/>
         <topic label="start_file_transfer" href="write__file__nonblocking_8c.html#ade333bfe61779fd62ab4e8de17446153"/>
         <topic label="wait_for_put_finish" href="write__file__nonblocking_8c.html#acbc92f8a729c18505d7150f48597146b"/>
+        <topic label="put_chunk_of_file" href="write__file__nonblocking_8c.html#a702f9e8e76dc3cbbd97e65c832e19220"/>
+        <topic label="put_chunk_of_file_finished" href="write__file__nonblocking_8c.html#aca8e409753711755967770cf3eb8add0"/>
         <topic label="main" href="write__file__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="yacht.c" href="yacht_8c.html">
@@ -3214,7 +3736,10 @@
         <topic label="DEF_SZ2" href="yacht_8c.html#a783af37de2395ffe34618ed81dc4394c"/>
         <topic label="MAX_PROBES" href="yacht_8c.html#a6deebb67c6e9267ad4e978b992850398"/>
         <topic label="LARGE_PRIME" href="yacht_8c.html#ad6161f686aaa2a898d0deb0c5e837446"/>
+        <topic label="insert" href="yacht_8c.html#a2255d76fe39652a75ca67451e9c30d41"/>
+        <topic label="grow" href="yacht_8c.html#aa533720f1c6dd735aee74c5ac2d3e4b9"/>
         <topic label="yacht_init" href="yacht_8c.html#ae600d53227b9e6873c318db2e8ec2cb5"/>
+        <topic label="hash" href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b"/>
         <topic label="yacht_get" href="yacht_8c.html#a092cf4699adb37b6909b5055e1b712f6"/>
         <topic label="yacht_member" href="yacht_8c.html#a1bc830375ef53847afcf2d39907669c5"/>
         <topic label="yacht_set" href="yacht_8c.html#a4329e19402c41e3f5b66ff2fa090952f"/>
@@ -3240,6 +3765,7 @@
         <topic label="b" href="globals_b.html"/>
         <topic label="c" href="globals_c.html"/>
         <topic label="d" href="globals_d.html"/>
+        <topic label="e" href="globals_e.html"/>
         <topic label="f" href="globals_f.html"/>
         <topic label="g" href="globals_g.html"/>
         <topic label="h" href="globals_h.html"/>
@@ -3248,6 +3774,7 @@
         <topic label="l" href="globals_l.html"/>
         <topic label="m" href="globals_m.html"/>
         <topic label="n" href="globals_n.html"/>
+        <topic label="o" href="globals_o.html"/>
         <topic label="p" href="globals_p.html"/>
         <topic label="r" href="globals_r.html"/>
         <topic label="s" href="globals_s.html"/>
@@ -3258,30 +3785,55 @@
       </topic>
       <topic label="Functions" href="globals_func.html">
         <topic label="_" href="globals_func.html"/>
+        <topic label="a" href="globals_func_a.html"/>
         <topic label="b" href="globals_func_b.html"/>
         <topic label="c" href="globals_func_c.html"/>
         <topic label="d" href="globals_func_d.html"/>
+        <topic label="e" href="globals_func_e.html"/>
+        <topic label="f" href="globals_func_f.html"/>
         <topic label="g" href="globals_func_g.html"/>
+        <topic label="h" href="globals_func_h.html"/>
+        <topic label="i" href="globals_func_i.html"/>
         <topic label="k" href="globals_func_k.html"/>
         <topic label="l" href="globals_func_l.html"/>
         <topic label="m" href="globals_func_m.html"/>
+        <topic label="n" href="globals_func_n.html"/>
+        <topic label="o" href="globals_func_o.html"/>
         <topic label="p" href="globals_func_p.html"/>
+        <topic label="r" href="globals_func_r.html"/>
         <topic label="s" href="globals_func_s.html"/>
         <topic label="t" href="globals_func_t.html"/>
         <topic label="u" href="globals_func_u.html"/>
         <topic label="w" href="globals_func_w.html"/>
         <topic label="y" href="globals_func_y.html"/>
       </topic>
-      <topic label="Variables" href="globals_vars.html"/>
+      <topic label="Variables" href="globals_vars.html">
+        <topic label="b" href="globals_vars.html"/>
+        <topic label="c" href="globals_vars_c.html"/>
+        <topic label="e" href="globals_vars_e.html"/>
+        <topic label="g" href="globals_vars_g.html"/>
+        <topic label="i" href="globals_vars_i.html"/>
+        <topic label="k" href="globals_vars_k.html"/>
+        <topic label="l" href="globals_vars_l.html"/>
+        <topic label="m" href="globals_vars_m.html"/>
+        <topic label="o" href="globals_vars_o.html"/>
+        <topic label="p" href="globals_vars_p.html"/>
+        <topic label="r" href="globals_vars_r.html"/>
+        <topic label="s" href="globals_vars_s.html"/>
+        <topic label="t" href="globals_vars_t.html"/>
+      </topic>
       <topic label="Typedefs" href="globals_type.html"/>
       <topic label="Enumerations" href="globals_enum.html"/>
       <topic label="Enumerator" href="globals_eval.html">
-        <topic label="b" href="globals_eval.html"/>
+        <topic label="a" href="globals_eval.html"/>
+        <topic label="b" href="globals_eval_b.html"/>
         <topic label="c" href="globals_eval_c.html"/>
         <topic label="g" href="globals_eval_g.html"/>
+        <topic label="h" href="globals_eval_h.html"/>
         <topic label="k" href="globals_eval_k.html"/>
         <topic label="l" href="globals_eval_l.html"/>
         <topic label="m" href="globals_eval_m.html"/>
+        <topic label="o" href="globals_eval_o.html"/>
         <topic label="r" href="globals_eval_r.html"/>
         <topic label="s" href="globals_eval_s.html"/>
         <topic label="t" href="globals_eval_t.html"/>
@@ -3301,6 +3853,7 @@
         <topic label="l" href="globals_defs_l.html"/>
         <topic label="m" href="globals_defs_m.html"/>
         <topic label="n" href="globals_defs_n.html"/>
+        <topic label="o" href="globals_defs_o.html"/>
         <topic label="p" href="globals_defs_p.html"/>
         <topic label="r" href="globals_defs_r.html"/>
         <topic label="s" href="globals_defs_s.html"/>

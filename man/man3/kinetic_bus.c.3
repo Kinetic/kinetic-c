@@ -1,0 +1,114 @@
+.TH "kinetic_bus.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_bus.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_bus\&.h'\fP
+.br
+\fC#include 'kinetic_nbo\&.h'\fP
+.br
+\fC#include 'kinetic_session\&.h'\fP
+.br
+\fC#include 'kinetic_socket\&.h'\fP
+.br
+\fC#include 'kinetic_hmac\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include 'kinetic_proto\&.h'\fP
+.br
+\fC#include 'kinetic_allocator\&.h'\fP
+.br
+\fC#include 'kinetic_controller\&.h'\fP
+.br
+\fC#include 'bus\&.h'\fP
+.br
+\fC#include 'kinetic_pdu_unpack\&.h'\fP
+.br
+\fC#include <time\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBlog_cb\fP (\fBlog_event_t\fP event, int log_level, const char *msg, void *udata)"
+.br
+.ti -1c
+.RI "static \fBbus_sink_cb_res_t\fP \fBreset_transfer\fP (socket_info *si)"
+.br
+.ti -1c
+.RI "static bool \fBunpack_header\fP (uint8_t const *const \fBread_buf\fP, size_t const read_size, \fBKineticPDUHeader\fP *const header)"
+.br
+.ti -1c
+.RI "static \fBbus_sink_cb_res_t\fP \fBsink_cb\fP (uint8_t *\fBread_buf\fP, size_t read_size, void *socket_udata)"
+.br
+.ti -1c
+.RI "static void \fBlog_response_seq_id\fP (int fd, int64_t seq_id)"
+.br
+.ti -1c
+.RI "static \fBbus_unpack_cb_res_t\fP \fBunpack_cb\fP (void *msg, void *socket_udata)"
+.br
+.ti -1c
+.RI "bool \fBKineticBus_Init\fP (KineticClient *client, \fBKineticClientConfig\fP *config)"
+.br
+.ti -1c
+.RI "void \fBKineticBus_Shutdown\fP (KineticClient *const client)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "static void log_cb (\fBlog_event_t\fPevent, intlog_level, const char *msg, void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 36 of file kinetic_bus\&.c\&.
+.PP
+References bus_log_event_str(), KineticLogger_Log(), and LOGF0\&.
+.SS "static \fBbus_sink_cb_res_t\fP reset_transfer (socket_info *si)\fC [static]\fP"
+
+.PP
+Definition at line 50 of file kinetic_bus\&.c\&.
+.PP
+References KineticPDUHeader, bus_sink_cb_res_t::next_read, STATE_AWAITING_HEADER, and UNPACK_ERROR_UNDEFINED\&.
+.SS "static bool unpack_header (uint8_t const *constread_buf, size_t constread_size, \fBKineticPDUHeader\fP *constheader)\fC [static]\fP"
+
+.PP
+Definition at line 62 of file kinetic_bus\&.c\&.
+.PP
+References KineticNBO_ToHostU32(), KineticPDUHeader, and PDU_PROTO_MAX_LEN\&.
+.SS "static \fBbus_sink_cb_res_t\fP sink_cb (uint8_t *read_buf, size_tread_size, void *socket_udata)\fC [static]\fP"
+
+.PP
+Definition at line 88 of file kinetic_bus\&.c\&.
+.PP
+References KINETIC_ASSERT, KineticPDUHeader, bus_sink_cb_res_t::next_read, PDU_HEADER_LEN, reset_transfer(), STATE_AWAITING_BODY, STATE_AWAITING_HEADER, STATE_UNINIT, UNPACK_ERROR_INVALID_HEADER, UNPACK_ERROR_SUCCESS, and unpack_header()\&.
+.SS "static void log_response_seq_id (intfd, int64_tseq_id)\fC [static]\fP"
+
+.PP
+Definition at line 169 of file kinetic_bus\&.c\&.
+.PP
+References LOGF2\&.
+.SS "static \fBbus_unpack_cb_res_t\fP unpack_cb (void *msg, void *socket_udata)\fC [static]\fP"
+
+.PP
+Definition at line 181 of file kinetic_bus\&.c\&.
+.PP
+References BUS_NO_SEQ_ID, KineticResponse::command, KineticResponse::header, KINETIC_ASSERT, KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS, KineticAllocator_NewKineticResponse(), KineticPDU_unpack_command(), KineticPDU_unpack_message(), log_response_seq_id(), KineticResponse::proto, UNPACK_ERROR_PAYLOAD_MALLOC_FAIL, UNPACK_ERROR_SUCCESS, and KineticResponse::value\&.
+.SS "bool KineticBus_Init (KineticClient *client, \fBKineticClientConfig\fP *config)"
+
+.PP
+Definition at line 250 of file kinetic_bus\&.c\&.
+.PP
+References KineticController_HandleUnexpectedResponse(), log_cb(), bus_config::log_cb, KineticClientConfig::logLevel, KineticClientConfig::maxThreadpoolThreads, KineticClientConfig::readerThreads, sink_cb(), unexpected_msg_cb(), unpack_cb(), and KineticClientConfig::writerThreads\&.
+.SS "void KineticBus_Shutdown (KineticClient *constclient)"
+
+.PP
+Definition at line 277 of file kinetic_bus\&.c\&.
+.PP
+References bus_free(), and bus_shutdown()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,0 +1,38 @@
+.TH "kinetic_bus.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_bus.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_types_internal\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBKineticBus_Init\fP (KineticClient *client, \fBKineticClientConfig\fP *config)"
+.br
+.ti -1c
+.RI "void \fBKineticBus_Shutdown\fP (KineticClient *const client)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "bool KineticBus_Init (KineticClient *client, \fBKineticClientConfig\fP *config)"
+
+.PP
+Definition at line 250 of file kinetic_bus\&.c\&.
+.PP
+References KineticController_HandleUnexpectedResponse(), log_cb(), bus_config::log_cb, KineticClientConfig::logLevel, KineticClientConfig::maxThreadpoolThreads, KineticClientConfig::readerThreads, sink_cb(), unexpected_msg_cb(), unpack_cb(), and KineticClientConfig::writerThreads\&.
+.SS "void KineticBus_Shutdown (KineticClient *constclient)"
+
+.PP
+Definition at line 277 of file kinetic_bus\&.c\&.
+.PP
+References bus_free(), and bus_shutdown()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

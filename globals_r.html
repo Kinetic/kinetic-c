@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -61,6 +61,7 @@
       <li><a href="globals_b.html#index_b"><span>b</span></a></li>
       <li><a href="globals_c.html#index_c"><span>c</span></a></li>
       <li><a href="globals_d.html#index_d"><span>d</span></a></li>
+      <li><a href="globals_e.html#index_e"><span>e</span></a></li>
       <li><a href="globals_f.html#index_f"><span>f</span></a></li>
       <li><a href="globals_g.html#index_g"><span>g</span></a></li>
       <li><a href="globals_h.html#index_h"><span>h</span></a></li>
@@ -69,6 +70,7 @@
       <li><a href="globals_l.html#index_l"><span>l</span></a></li>
       <li><a href="globals_m.html#index_m"><span>m</span></a></li>
       <li><a href="globals_n.html#index_n"><span>n</span></a></li>
+      <li><a href="globals_o.html#index_o"><span>o</span></a></li>
       <li><a href="globals_p.html#index_p"><span>p</span></a></li>
       <li class="current"><a href="globals_r.html#index_r"><span>r</span></a></li>
       <li><a href="globals_s.html#index_s"><span>s</span></a></li>
@@ -83,9 +85,59 @@
 <div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div>
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
+<li>read_buf
+: <a class="el" href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">echosrv.c</a>
+</li>
+<li>read_next_ACL()
+: <a class="el" href="acl_8c.html#a107438a6d6596720120680f697ed7e42">acl.c</a>
+</li>
+<li>register_client()
+: <a class="el" href="echosrv_8c.html#a6c98d175934c997f2653cd4f97d08164">echosrv.c</a>
+</li>
+<li>register_signal_handler()
+: <a class="el" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">bus_example.c</a>
+</li>
+<li>register_signal_handlers()
+: <a class="el" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">bus_example.c</a>
+</li>
+<li>register_socket_info()
+: <a class="el" href="sender_8c.html#aa462f2b99191e54e839a69fc568972f1">sender.c</a>
+, <a class="el" href="sender__internal_8h.html#aa462f2b99191e54e839a69fc568972f1">sender_internal.h</a>
+</li>
+<li>release_current_task()
+: <a class="el" href="threadpool_8c.html#ac12d38ecab7aa12950b224065abb6c0e">threadpool.c</a>
+, <a class="el" href="threadpool__internals_8h.html#ac12d38ecab7aa12950b224065abb6c0e">threadpool_internals.h</a>
+</li>
+<li>release_msg()
+: <a class="el" href="listener_8c.html#ac4aa4e12d23e8c53a5a958e335cf4a2b">listener.c</a>
+, <a class="el" href="listener__internal_8h.html#ac4aa4e12d23e8c53a5a958e335cf4a2b">listener_internal.h</a>
+</li>
+<li>release_rx_info()
+: <a class="el" href="listener_8c.html#aa53f32f1fa516ebdbb8cc66bb752e712">listener.c</a>
+, <a class="el" href="listener__internal_8h.html#aa53f32f1fa516ebdbb8cc66bb752e712">listener_internal.h</a>
+</li>
+<li>release_socket_info()
+: <a class="el" href="sender_8c.html#a53ddb423772e634b4d099694d7bd5e37">sender.c</a>
+, <a class="el" href="sender__internal_8h.html#a53ddb423772e634b4d099694d7bd5e37">sender_internal.h</a>
+</li>
+<li>release_tx_info()
+: <a class="el" href="sender_8c.html#a9ae301320ba4b577b2462907678af613">sender.c</a>
+, <a class="el" href="sender__internal_8h.html#a9ae301320ba4b577b2462907678af613">sender_internal.h</a>
+</li>
+<li>remove_socket()
+: <a class="el" href="listener_8c.html#ae12e728e14ca2922ae27678b00a151f3">listener.c</a>
+, <a class="el" href="listener__internal_8h.html#ae12e728e14ca2922ae27678b00a151f3">listener_internal.h</a>
+</li>
 <li>REPORT_ERRNO
 : <a class="el" href="write__file__blocking__threads_8c.html#a88823d2711cfc178d2bd88a3b63a5880">write_file_blocking_threads.c</a>
 , <a class="el" href="write__file__nonblocking_8c.html#a88823d2711cfc178d2bd88a3b63a5880">write_file_nonblocking.c</a>
+</li>
+<li>reset_transfer()
+: <a class="el" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">bus_example.c</a>
+, <a class="el" href="kinetic__bus_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">kinetic_bus.c</a>
+</li>
+<li>retry_delivery()
+: <a class="el" href="listener_8c.html#a91845232ef24ffde41ff3689b0caa0c9">listener.c</a>
 </li>
 <li>RIS_EXPECT
 : <a class="el" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4">listener_internal.h</a>
@@ -96,21 +148,24 @@
 <li>RIS_INACTIVE
 : <a class="el" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41">listener_internal.h</a>
 </li>
+<li>run_bus()
+: <a class="el" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">bus_example.c</a>
+</li>
 <li>RUN_SUITE
 : <a class="el" href="bus_2greatest_8h.html#a24d81276d45523c78c7432648cba646c">bus/greatest.h</a>
 , <a class="el" href="threadpool_2greatest_8h.html#a24d81276d45523c78c7432648cba646c">threadpool/greatest.h</a>
 </li>
 <li>RUN_TEST
-: <a class="el" href="bus_2greatest_8h.html#a338adb9f062605032a20b13dbfe172e0">bus/greatest.h</a>
-, <a class="el" href="threadpool_2greatest_8h.html#a338adb9f062605032a20b13dbfe172e0">threadpool/greatest.h</a>
+: <a class="el" href="threadpool_2greatest_8h.html#a338adb9f062605032a20b13dbfe172e0">threadpool/greatest.h</a>
+, <a class="el" href="bus_2greatest_8h.html#a338adb9f062605032a20b13dbfe172e0">bus/greatest.h</a>
 </li>
 <li>RUN_TEST1
 : <a class="el" href="bus_2greatest_8h.html#a6860f4aafe86be1ea0afdc8bf23a0827">bus/greatest.h</a>
 , <a class="el" href="threadpool_2greatest_8h.html#a6860f4aafe86be1ea0afdc8bf23a0827">threadpool/greatest.h</a>
 </li>
 <li>RUN_TESTp
-: <a class="el" href="bus_2greatest_8h.html#a6b38164fb342e3502eaf7693c04640c7">bus/greatest.h</a>
-, <a class="el" href="threadpool_2greatest_8h.html#a6b38164fb342e3502eaf7693c04640c7">threadpool/greatest.h</a>
+: <a class="el" href="threadpool_2greatest_8h.html#a6b38164fb342e3502eaf7693c04640c7">threadpool/greatest.h</a>
+, <a class="el" href="bus_2greatest_8h.html#a6b38164fb342e3502eaf7693c04640c7">bus/greatest.h</a>
 </li>
 <li>RX_ERROR_DONE
 : <a class="el" href="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3faad8599264218b768f6c1d792b256549e6">bus_internal_types.h</a>
@@ -144,9 +199,6 @@
 </li>
 <li>RX_INFO_BP_HALF
 : <a class="el" href="listener_8c.html#a3e7f3829ff5668c512d1911a3201db71">listener.c</a>
-</li>
-<li>RX_INFO_MAX_USED
-: <a class="el" href="listener_8c.html#aabe2d0057984d6caf7bc8ebf2b48b8e6">listener.c</a>
 </li>
 <li>rx_info_state
 : <a class="el" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5">listener_internal.h</a>

@@ -1,0 +1,91 @@
+.TH "acl_types.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+acl_types.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include 'kinetic_proto\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBhmac_key\fP"
+.br
+.ti -1c
+.RI "struct \fBACL\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBACL_MAX_PERMISSIONS\fP   8"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBhmac_type_t\fP "
+.br
+.ti -1c
+.RI "enum \fBacl_of_file_res\fP "
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ACL_MAX_PERMISSIONS   8"
+
+.PP
+Definition at line 27 of file acl_types\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBhmac_type_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIHMAC_UNKNOWN \fP\fP
+.TP
+\fB\fIHMAC_SHA1 \fP\fP
+.TP
+\fB\fIHMAC_TYPE_COUNT \fP\fP
+.PP
+Definition at line 9 of file acl_types\&.h\&.
+.SS "enum \fBacl_of_file_res\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIACL_OK \fP\fP
+.TP
+\fB\fIACL_END_OF_STREAM \fP\fP
+.TP
+\fB\fIACL_ERROR_NULL \fP\fP
+.TP
+\fB\fIACL_ERROR_MEMORY \fP\fP
+.TP
+\fB\fIACL_ERROR_JSON_FILE \fP\fP
+.TP
+\fB\fIACL_ERROR_BAD_JSON \fP\fP
+.TP
+\fB\fIACL_ERROR_MISSING_FIELD \fP\fP
+.TP
+\fB\fIACL_ERROR_INVALID_FIELD \fP\fP
+.PP
+Definition at line 29 of file acl_types\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

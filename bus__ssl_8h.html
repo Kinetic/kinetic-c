@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -74,8 +74,8 @@ Functions</h2></td></tr>
 <tr class="separator:a28804cfaf9b3cfe5f66de08f18b39487"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae30bd22a904c9649b3727e6a4917e0f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8h.html#ae30bd22a904c9649b3727e6a4917e0f7">bus_ssl_disconnect</a> (struct <a class="el" href="structbus.html">bus</a> *b, SSL *ssl)</td></tr>
 <tr class="separator:ae30bd22a904c9649b3727e6a4917e0f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a264a7f1d1c67bbfa292a97e66e87751a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8h.html#a264a7f1d1c67bbfa292a97e66e87751a">bus_ssl_free</a> (struct <a class="el" href="structbus.html">bus</a> *b)</td></tr>
-<tr class="separator:a264a7f1d1c67bbfa292a97e66e87751a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a2b616adc201d07b929909393da6ed7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl_ctx_free</a> (struct <a class="el" href="structbus.html">bus</a> *b)</td></tr>
+<tr class="separator:a6a2b616adc201d07b929909393da6ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a49cb96458b3e449948dbe5f22778664a"></a>
@@ -109,7 +109,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00035">35</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::ssl_ctx</a>.</p>
+<p>References <a class="el" href="bus__ssl_8c_source.html#l00088">init_client_SSL_CTX()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00085">bus::ssl_ctx</a>.</p>
 
 </div>
 </div>
@@ -139,7 +139,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00050">50</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00103">connection_info::fd</a>, <a class="el" href="bus__internal__types_8h_source.html#l00108">connection_info::ssl</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::ssl_ctx</a>.</p>
+<p>References <a class="el" href="bus__ssl_8c_source.html#l00131">do_blocking_connection()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00107">connection_info::fd</a>, <a class="el" href="bus__internal__types_8h_source.html#l00112">connection_info::ssl</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00085">bus::ssl_ctx</a>.</p>
 
 </div>
 </div>
@@ -171,12 +171,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a264a7f1d1c67bbfa292a97e66e87751a"></a>
+<a class="anchor" id="a6a2b616adc201d07b929909393da6ed7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void bus_ssl_free </td>
+          <td class="memname">void bus_ssl_ctx_free </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
           <td class="paramname"><em>b</em></td><td>)</td>
@@ -187,7 +187,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00081">81</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::ssl_ctx</a>.</p>
+<p>References <a class="el" href="bus__internal__types_8h_source.html#l00085">bus::ssl_ctx</a>.</p>
 
 </div>
 </div>

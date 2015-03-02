@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -71,10 +71,40 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:afd999388502d7c384b0d1f06cfd62a80"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="blocking__noop_8c.html#afd999388502d7c384b0d1f06cfd62a80">do_noop</a> (KineticSession *session)</td></tr>
+<tr class="separator:afd999388502d7c384b0d1f06cfd62a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="blocking__noop_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="afd999388502d7c384b0d1f06cfd62a80"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void do_noop </td>
+          <td>(</td>
+          <td class="paramtype">KineticSession *&#160;</td>
+          <td class="paramname"><em>session</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="blocking__noop_8c_source.html#l00034">34</a> of file <a class="el" href="blocking__noop_8c_source.html">blocking_noop.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8c_source.html#l00062">Kinetic_GetStatusDescription()</a>, and <a class="el" href="kinetic__client_8c_source.html#l00137">KineticClient_NoOp()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3c04138a5bfe5d72780bb7e82a18e627"></a>
 <div class="memitem">
 <div class="memproto">
@@ -101,7 +131,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="blocking__noop_8c_source.html#l00042">42</a> of file <a class="el" href="blocking__noop_8c_source.html">blocking_noop.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8c_source.html#l00038">ByteArray_CreateWithCString()</a>, <a class="el" href="kinetic__types_8h_source.html#l00145">KineticSession::config</a>, <a class="el" href="kinetic__types_8h_source.html#l00119">KineticSessionConfig::host</a>, <a class="el" href="kinetic__types_8c_source.html#l00056">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00040">KINETIC_PORT</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00066">KineticClient_CreateConnection()</a>, <a class="el" href="kinetic__client_8c_source.html#l00107">KineticClient_DestroyConnection()</a>, <a class="el" href="kinetic__client_8c_source.html#l00033">KineticClient_Init()</a>, <a class="el" href="kinetic__client_8c_source.html#l00059">KineticClient_Shutdown()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00443">KineticClientConfig::logFile</a>.</p>
+<p>References <a class="el" href="byte__array_8c_source.html#l00038">ByteArray_CreateWithCString()</a>, <a class="el" href="blocking__noop_8c_source.html#l00034">do_noop()</a>, <a class="el" href="kinetic__types_8h_source.html#l00120">KineticSessionConfig::host</a>, <a class="el" href="kinetic__types_8c_source.html#l00062">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00040">KINETIC_PORT</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00066">KineticClient_CreateSession()</a>, <a class="el" href="kinetic__client_8c_source.html#l00118">KineticClient_DestroySession()</a>, <a class="el" href="kinetic__client_8c_source.html#l00034">KineticClient_Init()</a>, <a class="el" href="kinetic__client_8c_source.html#l00059">KineticClient_Shutdown()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00459">KineticClientConfig::logFile</a>.</p>
 
 </div>
 </div>

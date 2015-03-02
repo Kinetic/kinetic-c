@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -75,8 +75,14 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a2255d76fe39652a75ca67451e9c30d41"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="yacht_8c.html#a2255d76fe39652a75ca67451e9c30d41">insert</a> (int *buckets, void **values, size_t mask, size_t max_fill, int key, void *value, void **old_value)</td></tr>
+<tr class="separator:a2255d76fe39652a75ca67451e9c30d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa533720f1c6dd735aee74c5ac2d3e4b9"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="yacht_8c.html#aa533720f1c6dd735aee74c5ac2d3e4b9">grow</a> (struct yacht *y)</td></tr>
+<tr class="separator:aa533720f1c6dd735aee74c5ac2d3e4b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae600d53227b9e6873c318db2e8ec2cb5"><td class="memItemLeft" align="right" valign="top">struct yacht *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="yacht_8c.html#ae600d53227b9e6873c318db2e8ec2cb5">yacht_init</a> (uint8_t sz2)</td></tr>
 <tr class="separator:ae600d53227b9e6873c318db2e8ec2cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd02a43d996161ef9ebfd5502b0c193b"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="yacht_8c.html#afd02a43d996161ef9ebfd5502b0c193b">hash</a> (int key)</td></tr>
+<tr class="separator:afd02a43d996161ef9ebfd5502b0c193b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a092cf4699adb37b6909b5055e1b712f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="yacht_8c.html#a092cf4699adb37b6909b5055e1b712f6">yacht_get</a> (struct yacht *y, int key, void **value)</td></tr>
 <tr class="separator:a092cf4699adb37b6909b5055e1b712f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bc830375ef53847afcf2d39907669c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="yacht_8c.html#a1bc830375ef53847afcf2d39907669c5">yacht_member</a> (struct yacht *y, int key)</td></tr>
@@ -164,6 +170,102 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a2255d76fe39652a75ca67451e9c30d41"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool insert </td>
+          <td>(</td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>buckets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void **&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>mask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>max_fill</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void **&#160;</td>
+          <td class="paramname"><em>old_value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="yacht_8c_source.html#l00119">119</a> of file <a class="el" href="yacht_8c_source.html">yacht.c</a>.</p>
+
+<p>References <a class="el" href="yacht_8c_source.html#l00077">hash()</a>, <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, <a class="el" href="yacht_8h_source.html#l00028">YACHT_DELETED</a>, and <a class="el" href="yacht_8h_source.html#l00027">YACHT_NO_KEY</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa533720f1c6dd735aee74c5ac2d3e4b9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool grow </td>
+          <td>(</td>
+          <td class="paramtype">struct yacht *&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="yacht_8c_source.html#l00163">163</a> of file <a class="el" href="yacht_8c_source.html">yacht.c</a>.</p>
+
+<p>References <a class="el" href="sender_8c_source.html#l00405">cleanup()</a>, <a class="el" href="yacht_8c_source.html#l00119">insert()</a>, <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, <a class="el" href="yacht_8h_source.html#l00028">YACHT_DELETED</a>, and <a class="el" href="yacht_8h_source.html#l00027">YACHT_NO_KEY</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ae600d53227b9e6873c318db2e8ec2cb5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -181,6 +283,34 @@ Functions</h2></td></tr>
 <p>Definition at line <a class="el" href="yacht_8c_source.html#l00051">51</a> of file <a class="el" href="yacht_8c_source.html">yacht.c</a>.</p>
 
 <p>References <a class="el" href="yacht_8c_source.html#l00047">DEF_SZ2</a>, <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, and <a class="el" href="yacht_8h_source.html#l00027">YACHT_NO_KEY</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afd02a43d996161ef9ebfd5502b0c193b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t hash </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="yacht_8c_source.html#l00077">77</a> of file <a class="el" href="yacht_8c_source.html">yacht.c</a>.</p>
+
+<p>References <a class="el" href="yacht_8c_source.html#l00075">LARGE_PRIME</a>.</p>
 
 </div>
 </div>
@@ -216,7 +346,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="yacht_8c_source.html#l00081">81</a> of file <a class="el" href="yacht_8c_source.html">yacht.c</a>.</p>
 
-<p>References <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, <a class="el" href="yacht_8h_source.html#l00028">YACHT_DELETED</a>, and <a class="el" href="yacht_8h_source.html#l00027">YACHT_NO_KEY</a>.</p>
+<p>References <a class="el" href="yacht_8c_source.html#l00077">hash()</a>, <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, <a class="el" href="yacht_8h_source.html#l00028">YACHT_DELETED</a>, and <a class="el" href="yacht_8h_source.html#l00027">YACHT_NO_KEY</a>.</p>
 
 </div>
 </div>
@@ -288,7 +418,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="yacht_8c_source.html#l00105">105</a> of file <a class="el" href="yacht_8c_source.html">yacht.c</a>.</p>
 
-<p>References <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, and <a class="el" href="yacht_8c_source.html#l00048">MAX_PROBES</a>.</p>
+<p>References <a class="el" href="yacht_8c_source.html#l00163">grow()</a>, <a class="el" href="yacht_8c_source.html#l00119">insert()</a>, <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, and <a class="el" href="yacht_8c_source.html#l00048">MAX_PROBES</a>.</p>
 
 </div>
 </div>
@@ -324,7 +454,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="yacht_8c_source.html#l00203">203</a> of file <a class="el" href="yacht_8c_source.html">yacht.c</a>.</p>
 
-<p>References <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, <a class="el" href="yacht_8h_source.html#l00028">YACHT_DELETED</a>, and <a class="el" href="yacht_8h_source.html#l00027">YACHT_NO_KEY</a>.</p>
+<p>References <a class="el" href="yacht_8c_source.html#l00077">hash()</a>, <a class="el" href="yacht_8c_source.html#l00027">LOG</a>, <a class="el" href="yacht_8h_source.html#l00028">YACHT_DELETED</a>, and <a class="el" href="yacht_8h_source.html#l00027">YACHT_NO_KEY</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "KineticMessage" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticMessage" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -48,6 +48,9 @@ KineticMessage \-
 .RI "KineticProto_Command_Range \fBkeyRange\fP"
 .br
 .ti -1c
+.RI "KineticProto_Command_Setup \fBsetup\fP"
+.br
+.ti -1c
 .RI "KineticProto_Command_GetLog \fBgetLog\fP"
 .br
 .ti -1c
@@ -59,69 +62,73 @@ KineticMessage \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 117 of file kinetic_types_internal\&.h\&.
+Definition at line 134 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "KineticProto_Message KineticMessage::message"
 
 .PP
-Definition at line 119 of file kinetic_types_internal\&.h\&.
+Definition at line 138 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Message_HMACauth KineticMessage::hmacAuth"
 
 .PP
-Definition at line 120 of file kinetic_types_internal\&.h\&.
+Definition at line 139 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Message_PINauth KineticMessage::pinAuth"
 
 .PP
-Definition at line 121 of file kinetic_types_internal\&.h\&.
+Definition at line 140 of file kinetic_types_internal\&.h\&.
 .SS "uint8_t KineticMessage::hmacData[\fBKINETIC_HMAC_MAX_LEN\fP]"
 
 .PP
-Definition at line 122 of file kinetic_types_internal\&.h\&.
+Definition at line 141 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command KineticMessage::command"
 
 .PP
-Definition at line 124 of file kinetic_types_internal\&.h\&.
+Definition at line 144 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Header KineticMessage::header"
 
 .PP
-Definition at line 125 of file kinetic_types_internal\&.h\&.
+Definition at line 145 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Body KineticMessage::body"
 
 .PP
-Definition at line 126 of file kinetic_types_internal\&.h\&.
+Definition at line 146 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Status KineticMessage::status"
 
 .PP
-Definition at line 127 of file kinetic_types_internal\&.h\&.
+Definition at line 147 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Security KineticMessage::security"
 
 .PP
-Definition at line 128 of file kinetic_types_internal\&.h\&.
+Definition at line 148 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Security_ACL KineticMessage::acl"
 
 .PP
-Definition at line 129 of file kinetic_types_internal\&.h\&.
+Definition at line 149 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_KeyValue KineticMessage::keyValue"
 
 .PP
-Definition at line 130 of file kinetic_types_internal\&.h\&.
+Definition at line 150 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_Range KineticMessage::keyRange"
 
 .PP
-Definition at line 131 of file kinetic_types_internal\&.h\&.
+Definition at line 151 of file kinetic_types_internal\&.h\&.
+.SS "KineticProto_Command_Setup KineticMessage::setup"
+
+.PP
+Definition at line 152 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_GetLog KineticMessage::getLog"
 
 .PP
-Definition at line 132 of file kinetic_types_internal\&.h\&.
+Definition at line 153 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticProto_Command_GetLog_Type\fP KineticMessage::getLogType"
 
 .PP
-Definition at line 133 of file kinetic_types_internal\&.h\&.
+Definition at line 154 of file kinetic_types_internal\&.h\&.
 .SS "KineticProto_Command_PinOperation KineticMessage::pinOp"
 
 .PP
-Definition at line 134 of file kinetic_types_internal\&.h\&.
+Definition at line 155 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

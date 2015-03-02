@@ -1,4 +1,4 @@
-.TH "sender.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "sender.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -38,37 +38,39 @@ sender.h \-
 .SS "struct \fBsender\fP* sender_init (struct \fBbus\fP *b, struct \fBbus_config\fP *cfg)"
 
 .PP
-Definition at line 42 of file sender\&.c\&.
+Definition at line 41 of file sender\&.c\&.
 .PP
 References sender::bus, BUS_LOG, BUS_LOG_SNPRINTF, sender::commit_pipe, sender::fd_hash_table, sender::fds, HASH_TABLE_SIZE2, tx_info_t::id, sender::incoming_command_pipe, LOG_SENDER, MAX_CONCURRENT_SENDS, sender::pipes, SENDER_FD_NOT_IN_USE, tx_info_t::state, TIS_UNDEF, sender::tx_info, bus::udata, and yacht_init()\&.
 .SS "bool sender_register_socket (struct \fBsender\fP *s, intfd, SSL *ssl)"
 
 .PP
-Definition at line 104 of file sender\&.c\&.
+Definition at line 105 of file sender\&.c\&.
 .PP
-References tx_info_t::add_socket, sender::bus, BUS_LOG_SNPRINTF, LOG_SENDER, tx_info_t::state, TIS_ADD_SOCKET, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
+References tx_info_t::add_socket, sender::bus, BUS_LOG_SNPRINTF, commit_event_and_block(), get_free_tx_info(), LOG_SENDER, release_tx_info(), tx_info_t::state, TIS_ADD_SOCKET, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
 .SS "bool sender_remove_socket (struct \fBsender\fP *s, intfd)"
 
 .PP
-Definition at line 121 of file sender\&.c\&.
+Definition at line 122 of file sender\&.c\&.
 .PP
-References tx_info_t::rm_socket, tx_info_t::state, TIS_RM_SOCKET, TX_ERROR_NONE, and tx_info_t::u\&.
+References commit_event_and_block(), get_free_tx_info(), release_tx_info(), tx_info_t::rm_socket, tx_info_t::state, TIS_RM_SOCKET, TX_ERROR_NONE, and tx_info_t::u\&.
 .SS "bool sender_send_request (struct \fBsender\fP *s, \fBboxed_msg\fP *box)"
 
 .PP
-Definition at line 132 of file sender\&.c\&.
+Definition at line 133 of file sender\&.c\&.
 .PP
-References sender::bus, BUS_LOG_SNPRINTF, tx_info_t::enqueue, boxed_msg::fd, LOG_SENDER, tx_info_t::state, boxed_msg::timeout_sec, TIS_REQUEST_ENQUEUE, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
+References sender::bus, BUS_LOG, BUS_LOG_SNPRINTF, commit_event_and_block(), tx_info_t::enqueue, boxed_msg::fd, get_free_tx_info(), LOG_SENDER, release_tx_info(), tx_info_t::state, boxed_msg::timeout_sec, TIS_REQUEST_ENQUEUE, boxed_msg::tv_send_start, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
 .SS "bool sender_shutdown (struct \fBsender\fP *s)"
 
 .PP
-Definition at line 151 of file sender\&.c\&.
+Definition at line 158 of file sender\&.c\&.
 .PP
-References sender::bus, BUS_LOG_SNPRINTF, sender::fd_hash_table, tx_info_t::id, LOG_SENDER, tx_info_t::state, TIS_SHUTDOWN, TX_ERROR_NONE, and bus::udata\&.
+References sender::bus, BUS_LOG_SNPRINTF, commit_event_and_block(), sender::fd_hash_table, get_free_tx_info(), tx_info_t::id, LOG_SENDER, release_tx_info(), tx_info_t::state, TIS_SHUTDOWN, TX_ERROR_NONE, and bus::udata\&.
 .SS "void sender_free (struct \fBsender\fP *s)"
 
 .PP
-Definition at line 167 of file sender\&.c\&.
+Definition at line 174 of file sender\&.c\&.
+.PP
+References cleanup()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

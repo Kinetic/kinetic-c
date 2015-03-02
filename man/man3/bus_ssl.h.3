@@ -1,4 +1,4 @@
-.TH "bus_ssl.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "bus_ssl.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -31,7 +31,7 @@ bus_ssl.h \-
 .RI "bool \fBbus_ssl_disconnect\fP (struct \fBbus\fP *b, SSL *ssl)"
 .br
 .ti -1c
-.RI "void \fBbus_ssl_free\fP (struct \fBbus\fP *b)"
+.RI "void \fBbus_ssl_ctx_free\fP (struct \fBbus\fP *b)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -47,18 +47,18 @@ Definition at line 28 of file bus_ssl\&.h\&.
 .PP
 Definition at line 35 of file bus_ssl\&.c\&.
 .PP
-References bus::ssl_ctx\&.
+References init_client_SSL_CTX(), and bus::ssl_ctx\&.
 .SS "bool bus_ssl_connect (struct \fBbus\fP *b, \fBconnection_info\fP *ci)"
 
 .PP
 Definition at line 50 of file bus_ssl\&.c\&.
 .PP
-References connection_info::fd, connection_info::ssl, and bus::ssl_ctx\&.
+References do_blocking_connection(), connection_info::fd, connection_info::ssl, and bus::ssl_ctx\&.
 .SS "bool bus_ssl_disconnect (struct \fBbus\fP *b, SSL *ssl)"
 
 .PP
 Definition at line 74 of file bus_ssl\&.c\&.
-.SS "void bus_ssl_free (struct \fBbus\fP *b)"
+.SS "void bus_ssl_ctx_free (struct \fBbus\fP *b)"
 
 .PP
 Definition at line 81 of file bus_ssl\&.c\&.

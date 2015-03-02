@@ -1,4 +1,4 @@
-.TH "KineticConnection" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticConnection" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -24,7 +24,7 @@ KineticConnection \-
 .RI "int64_t \fBsequence\fP"
 .br
 .ti -1c
-.RI "\fBKineticSession\fP * \fBpSession\fP"
+.RI "KineticSession * \fBpSession\fP"
 .br
 .ti -1c
 .RI "struct \fBbus\fP * \fBmessageBus\fP"
@@ -44,49 +44,49 @@ KineticConnection \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 95 of file kinetic_types_internal\&.h\&.
+Definition at line 112 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "bool KineticConnection::connected"
 
 .PP
-Definition at line 96 of file kinetic_types_internal\&.h\&.
+Definition at line 113 of file kinetic_types_internal\&.h\&.
 .SS "int KineticConnection::socket"
 
 .PP
-Definition at line 97 of file kinetic_types_internal\&.h\&.
+Definition at line 114 of file kinetic_types_internal\&.h\&.
 .SS "int64_t KineticConnection::connectionID"
 
 .PP
-Definition at line 98 of file kinetic_types_internal\&.h\&.
+Definition at line 115 of file kinetic_types_internal\&.h\&.
 .SS "int64_t KineticConnection::sequence"
 
 .PP
-Definition at line 99 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticSession\fP* KineticConnection::pSession"
+Definition at line 116 of file kinetic_types_internal\&.h\&.
+.SS "KineticSession* KineticConnection::pSession"
 
 .PP
-Definition at line 100 of file kinetic_types_internal\&.h\&.
+Definition at line 117 of file kinetic_types_internal\&.h\&.
 .SS "struct \fBbus\fP* KineticConnection::messageBus"
 
 .PP
-Definition at line 101 of file kinetic_types_internal\&.h\&.
+Definition at line 118 of file kinetic_types_internal\&.h\&.
 .SS "socket_info* KineticConnection::si"
 
 .PP
-Definition at line 102 of file kinetic_types_internal\&.h\&.
+Definition at line 119 of file kinetic_types_internal\&.h\&.
 .SS "pthread_mutex_t KineticConnection::sendMutex"
 
 .PP
-Definition at line 103 of file kinetic_types_internal\&.h\&.
+Definition at line 120 of file kinetic_types_internal\&.h\&.
 .SS "KineticResourceWaiter KineticConnection::connectionReady"
 
 .PP
-Definition at line 104 of file kinetic_types_internal\&.h\&.
+Definition at line 121 of file kinetic_types_internal\&.h\&.
 .SS "KineticCountingSemaphore* KineticConnection::outstandingOperations"
 
 .PP
-Definition at line 105 of file kinetic_types_internal\&.h\&.
+Definition at line 122 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

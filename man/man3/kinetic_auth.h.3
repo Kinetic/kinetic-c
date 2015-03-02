@@ -1,0 +1,56 @@
+.TH "kinetic_auth.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_auth.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_types_internal\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticAuth_EnsureSslEnabled\fP (\fBKineticSessionConfig\fP const *const config)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticAuth_PopulateHmac\fP (\fBKineticSessionConfig\fP const *const config, KineticRequest *const request)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticAuth_PopulatePin\fP (\fBKineticSessionConfig\fP const *const config, KineticRequest *const request, \fBByteArray\fP pin)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticAuth_PopulateTag\fP (\fBByteBuffer\fP *const tag, \fBKineticAlgorithm\fP algorithm, \fBByteArray\fP const *const key)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticStatus\fP KineticAuth_EnsureSslEnabled (\fBKineticSessionConfig\fP const *constconfig)"
+
+.PP
+Definition at line 26 of file kinetic_auth\&.c\&.
+.PP
+References KINETIC_STATUS_SSL_REQUIRED, KINETIC_STATUS_SUCCESS, and KineticSessionConfig::useSsl\&.
+.SS "\fBKineticStatus\fP KineticAuth_PopulateHmac (\fBKineticSessionConfig\fP const *constconfig, KineticRequest *constrequest)"
+
+.PP
+Definition at line 33 of file kinetic_auth\&.c\&.
+.PP
+References ByteArray::data, KineticSessionConfig::hmacKey, KineticSessionConfig::identity, KINETIC_HMAC_MAX_LEN, KINETIC_HMAC_SHA1_LEN, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, KINETIC_STATUS_HMAC_REQUIRED, KINETIC_STATUS_SUCCESS, KineticHMAC_Init(), KineticHMAC_Populate(), KineticProto_Message_hmacauth__init(), ByteArray::len, and LOG3\&.
+.SS "\fBKineticStatus\fP KineticAuth_PopulatePin (\fBKineticSessionConfig\fP const *constconfig, KineticRequest *constrequest, \fBByteArray\fPpin)"
+
+.PP
+Definition at line 76 of file kinetic_auth\&.c\&.
+.PP
+References KineticMessage::command, ByteArray::data, KineticMessage::header, KINETIC_PIN_MAX_LEN, KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, KINETIC_STATUS_SSL_REQUIRED, KINETIC_STATUS_SUCCESS, KineticProto_Message_pinauth__init(), ByteArray::len, LOG3, KineticMessage::message, KineticMessage::pinAuth, and KineticSessionConfig::useSsl\&.
+.SS "\fBKineticStatus\fP KineticAuth_PopulateTag (\fBByteBuffer\fP *consttag, \fBKineticAlgorithm\fPalgorithm, \fBByteArray\fP const *constkey)"
+
+.PP
+Definition at line 107 of file kinetic_auth\&.c\&.
+.PP
+References KINETIC_STATUS_INVALID\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

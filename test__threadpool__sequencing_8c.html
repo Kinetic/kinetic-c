@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -51,7 +51,8 @@
 <div class="header">
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">test_threadpool_sequencing.c File Reference</div>  </div>
 </div><!--header-->
@@ -80,8 +81,19 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a602a679191df93c2181c76daa4d20ce0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__threadpool__sequencing_8c.html#a602a679191df93c2181c76daa4d20ce0">dump_stats</a> (const char *prefix, struct <a class="el" href="structthreadpool__info.html">threadpool_info</a> *stats, size_t ticks)</td></tr>
+<tr class="separator:a602a679191df93c2181c76daa4d20ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae47cca589331a74cd9872297ad5c35d9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__threadpool__sequencing_8c.html#ae47cca589331a74cd9872297ad5c35d9">task_cb</a> (void *udata)</td></tr>
+<tr class="separator:ae47cca589331a74cd9872297ad5c35d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__threadpool__sequencing_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ad98a6ff87c95633c326280a3d286f192"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__threadpool__sequencing_8c.html#ad98a6ff87c95633c326280a3d286f192">completed_count</a> = 0</td></tr>
+<tr class="separator:ad98a6ff87c95633c326280a3d286f192"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abccf68b7cb494f01c3b32705841ec989"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__threadpool__sequencing_8c.html#abccf68b7cb494f01c3b32705841ec989">limit</a> = 1000000</td></tr>
+<tr class="separator:abccf68b7cb494f01c3b32705841ec989"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="aac747bed84189f8cfa509b94d488e622"></a>
@@ -170,6 +182,78 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a602a679191df93c2181c76daa4d20ce0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void dump_stats </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>prefix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structthreadpool__info.html">threadpool_info</a> *&#160;</td>
+          <td class="paramname"><em>stats</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>ticks</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="test__threadpool__sequencing_8c_source.html#l00037">37</a> of file <a class="el" href="test__threadpool__sequencing_8c_source.html">test_threadpool_sequencing.c</a>.</p>
+
+<p>References <a class="el" href="threadpool_8h_source.html#l00056">threadpool_info::active_threads</a>, <a class="el" href="threadpool_8h_source.html#l00058">threadpool_info::backlog_size</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00034">completed_count</a>, and <a class="el" href="threadpool_8h_source.html#l00057">threadpool_info::dormant_threads</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae47cca589331a74cd9872297ad5c35d9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void task_cb </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>udata</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="test__threadpool__sequencing_8c_source.html#l00066">66</a> of file <a class="el" href="test__threadpool__sequencing_8c_source.html">test_threadpool_sequencing.c</a>.</p>
+
+<p>References <a class="el" href="test__threadpool__sequencing_8c_source.html#l00034">completed_count</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00064">limit</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00048">SPIN_ADJ</a>, and <a class="el" href="threadpool_8c_source.html#l00094">threadpool_schedule()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3c04138a5bfe5d72780bb7e82a18e627"></a>
 <div class="memitem">
 <div class="memproto">
@@ -196,7 +280,52 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="test__threadpool__sequencing_8c_source.html#l00084">84</a> of file <a class="el" href="test__threadpool__sequencing_8c_source.html">test_threadpool_sequencing.c</a>.</p>
 
-<p>References <a class="el" href="test__threadpool__sequencing_8c_source.html#l00035">MAX_TASKS</a>, <a class="el" href="threadpool_8h_source.html#l00037">threadpool_config::max_threads</a>, <a class="el" href="threadpool_8h_source.html#l00049">threadpool_task::task</a>, <a class="el" href="threadpool_8h_source.html#l00035">threadpool_config::task_ringbuf_size2</a>, <a class="el" href="threadpool_8c_source.html#l00044">threadpool_init()</a>, <a class="el" href="threadpool_8c_source.html#l00092">threadpool_schedule()</a>, and <a class="el" href="threadpool_8c_source.html#l00143">threadpool_stats()</a>.</p>
+<p>References <a class="el" href="test__threadpool__sequencing_8c_source.html#l00034">completed_count</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00037">dump_stats()</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00064">limit</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00035">MAX_TASKS</a>, <a class="el" href="threadpool_8h_source.html#l00037">threadpool_config::max_threads</a>, <a class="el" href="threadpool_8h_source.html#l00049">threadpool_task::task</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00066">task_cb()</a>, <a class="el" href="threadpool_8h_source.html#l00035">threadpool_config::task_ringbuf_size2</a>, <a class="el" href="threadpool_8c_source.html#l00046">threadpool_init()</a>, <a class="el" href="threadpool_8c_source.html#l00094">threadpool_schedule()</a>, and <a class="el" href="threadpool_8c_source.html#l00145">threadpool_stats()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="ad98a6ff87c95633c326280a3d286f192"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t completed_count = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="test__threadpool__sequencing_8c_source.html#l00034">34</a> of file <a class="el" href="test__threadpool__sequencing_8c_source.html">test_threadpool_sequencing.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abccf68b7cb494f01c3b32705841ec989"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t limit = 1000000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="test__threadpool__sequencing_8c_source.html#l00064">64</a> of file <a class="el" href="test__threadpool__sequencing_8c_source.html">test_threadpool_sequencing.c</a>.</p>
 
 </div>
 </div>

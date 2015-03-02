@@ -1,4 +1,4 @@
-.TH "kinetic_allocator.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_allocator.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,7 +25,13 @@ kinetic_allocator.c \-
 
 .in +1c
 .ti -1c
-.RI "KineticConnection * \fBKineticAllocator_NewConnection\fP (struct \fBbus\fP *b, \fBKineticSession\fP *const session)"
+.RI "KineticSession * \fBKineticAllocator_NewSession\fP (struct \fBbus\fP *b, \fBKineticSessionConfig\fP *config)"
+.br
+.ti -1c
+.RI "void \fBKineticAllocator_FreeSession\fP (KineticSession *session)"
+.br
+.ti -1c
+.RI "KineticConnection * \fBKineticAllocator_NewConnection\fP (struct \fBbus\fP *b, KineticSession *const session)"
 .br
 .ti -1c
 .RI "void \fBKineticAllocator_FreeConnection\fP (KineticConnection *connection)"
@@ -45,42 +51,54 @@ kinetic_allocator.c \-
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "KineticConnection* KineticAllocator_NewConnection (struct \fBbus\fP *b, \fBKineticSession\fP *constsession)"
+.SS "KineticSession* KineticAllocator_NewSession (struct \fBbus\fP *b, \fBKineticSessionConfig\fP *config)"
 
 .PP
-Definition at line 29 of file kinetic_allocator\&.c\&.
+Definition at line 30 of file kinetic_allocator\&.c\&.
+.PP
+References ByteArray::data, KineticSessionConfig::hmacKey, KineticSessionConfig::host, KineticCalloc(), ByteArray::len, LOG0, and KineticSessionConfig::timeoutSeconds\&.
+.SS "void KineticAllocator_FreeSession (KineticSession *session)"
+
+.PP
+Definition at line 52 of file kinetic_allocator\&.c\&.
+.PP
+References KineticFree()\&.
+.SS "KineticConnection* KineticAllocator_NewConnection (struct \fBbus\fP *b, KineticSession *constsession)"
+
+.PP
+Definition at line 59 of file kinetic_allocator\&.c\&.
 .PP
 References KineticCalloc(), KineticResourceWaiter_Init(), and LOG0\&.
 .SS "void KineticAllocator_FreeConnection (KineticConnection *connection)"
 
 .PP
-Definition at line 43 of file kinetic_allocator\&.c\&.
+Definition at line 73 of file kinetic_allocator\&.c\&.
 .PP
-References KineticFree(), and KineticResourceWaiter_Destroy()\&.
+References KINETIC_ASSERT, KineticFree(), and KineticResourceWaiter_Destroy()\&.
 .SS "\fBKineticResponse\fP* KineticAllocator_NewKineticResponse (size_t constvalueLength)"
 
 .PP
-Definition at line 50 of file kinetic_allocator\&.c\&.
+Definition at line 80 of file kinetic_allocator\&.c\&.
 .PP
 References KineticCalloc(), and LOG0\&.
 .SS "void KineticAllocator_FreeKineticResponse (\fBKineticResponse\fP *response)"
 
 .PP
-Definition at line 60 of file kinetic_allocator\&.c\&.
+Definition at line 90 of file kinetic_allocator\&.c\&.
 .PP
-References KineticResponse::command, KineticFree(), and KineticResponse::proto\&.
+References KineticResponse::command, KINETIC_ASSERT, KineticFree(), and KineticResponse::proto\&.
 .SS "KineticOperation* KineticAllocator_NewOperation (KineticConnection *constconnection)"
 
 .PP
-Definition at line 73 of file kinetic_allocator\&.c\&.
+Definition at line 103 of file kinetic_allocator\&.c\&.
 .PP
-References KineticCalloc(), KineticFree(), KineticOperation_Init(), KineticPDU_InitWithCommand(), LOG0, LOGF0, and LOGF3\&.
+References KINETIC_ASSERT, KineticCalloc(), KineticFree(), KineticOperation_Init(), KineticRequest_Init(), LOG0, LOGF0, and LOGF3\&.
 .SS "void KineticAllocator_FreeOperation (KineticOperation *operation)"
 
 .PP
-Definition at line 96 of file kinetic_allocator\&.c\&.
+Definition at line 127 of file kinetic_allocator\&.c\&.
 .PP
-References KineticAllocator_FreeKineticResponse(), KineticFree(), and LOGF3\&.
+References KINETIC_ASSERT, KineticAllocator_FreeKineticResponse(), KineticFree(), and LOGF3\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

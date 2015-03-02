@@ -1,4 +1,4 @@
-.TH "bus_ssl.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "bus_ssl.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,6 +29,18 @@ bus_ssl.c \-
 
 .in +1c
 .ti -1c
+.RI "static bool \fBinit_client_SSL_CTX\fP (SSL_CTX **ctx_out)"
+.br
+.ti -1c
+.RI "static void \fBdisable_SSL_compression\fP (void)"
+.br
+.ti -1c
+.RI "static void \fBdisable_known_bad_ciphers\fP (SSL_CTX *ctx)"
+.br
+.ti -1c
+.RI "static bool \fBdo_blocking_connection\fP (struct \fBbus\fP *b, \fBconnection_info\fP *ci)"
+.br
+.ti -1c
 .RI "bool \fBbus_ssl_init\fP (struct \fBbus\fP *b)"
 .br
 .ti -1c
@@ -38,7 +50,7 @@ bus_ssl.c \-
 .RI "bool \fBbus_ssl_disconnect\fP (struct \fBbus\fP *b, SSL *ssl)"
 .br
 .ti -1c
-.RI "void \fBbus_ssl_free\fP (struct \fBbus\fP *b)"
+.RI "void \fBbus_ssl_ctx_free\fP (struct \fBbus\fP *b)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -53,23 +65,43 @@ Definition at line 26 of file bus_ssl\&.c\&.
 Definition at line 27 of file bus_ssl\&.c\&.
 .SH "Function Documentation"
 .PP 
+.SS "static bool init_client_SSL_CTX (SSL_CTX **ctx_out)\fC [static]\fP"
+
+.PP
+Definition at line 88 of file bus_ssl\&.c\&.
+.PP
+References disable_known_bad_ciphers(), and disable_SSL_compression()\&.
+.SS "static void disable_SSL_compression (void)\fC [static]\fP"
+
+.PP
+Definition at line 114 of file bus_ssl\&.c\&.
+.SS "static void disable_known_bad_ciphers (SSL_CTX *ctx)\fC [static]\fP"
+
+.PP
+Definition at line 123 of file bus_ssl\&.c\&.
+.SS "static bool do_blocking_connection (struct \fBbus\fP *b, \fBconnection_info\fP *ci)\fC [static]\fP"
+
+.PP
+Definition at line 131 of file bus_ssl\&.c\&.
+.PP
+References BUS_LOG, BUS_LOG_SNPRINTF, connection_info::fd, LOG_SOCKET_REGISTERED, MAX_TIMEOUT, connection_info::ssl, TIMEOUT_MSEC, bus::udata, and util_is_resumable_io_error()\&.
 .SS "bool bus_ssl_init (struct \fBbus\fP *b)"
 
 .PP
 Definition at line 35 of file bus_ssl\&.c\&.
 .PP
-References bus::ssl_ctx\&.
+References init_client_SSL_CTX(), and bus::ssl_ctx\&.
 .SS "bool bus_ssl_connect (struct \fBbus\fP *b, \fBconnection_info\fP *ci)"
 
 .PP
 Definition at line 50 of file bus_ssl\&.c\&.
 .PP
-References connection_info::fd, connection_info::ssl, and bus::ssl_ctx\&.
+References do_blocking_connection(), connection_info::fd, connection_info::ssl, and bus::ssl_ctx\&.
 .SS "bool bus_ssl_disconnect (struct \fBbus\fP *b, SSL *ssl)"
 
 .PP
 Definition at line 74 of file bus_ssl\&.c\&.
-.SS "void bus_ssl_free (struct \fBbus\fP *b)"
+.SS "void bus_ssl_ctx_free (struct \fBbus\fP *b)"
 
 .PP
 Definition at line 81 of file bus_ssl\&.c\&.

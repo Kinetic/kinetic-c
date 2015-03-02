@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -81,10 +81,10 @@
 <div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="bus__ssl_8c.html#ab949f03d24e211d2ac9cba33fa641619">   26</a></span>&#160;<span class="preprocessor">#define TIMEOUT_MSEC 100</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="bus__ssl_8c.html#a85fda3522e69a1bf85f7dcd97b6023a1">   27</a></span>&#160;<span class="preprocessor">#define MAX_TIMEOUT 10000</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> init_client_SSL_CTX(SSL_CTX **ctx_out);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> disable_SSL_compression(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> disable_known_bad_ciphers(SSL_CTX *ctx);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> do_blocking_connection(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structconnection__info.html">connection_info</a> *ci);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2">init_client_SSL_CTX</a>(SSL_CTX **ctx_out);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3">disable_SSL_compression</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376">disable_known_bad_ciphers</a>(SSL_CTX *ctx);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15">do_blocking_connection</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structconnection__info.html">connection_info</a> *ci);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">/* Initialize the SSL library internals for use by the messaging bus. */</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="bus__ssl_8h.html#ad7097b1068063cc1c875ea76d442b2c6">   35</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8c.html#ad7097b1068063cc1c875ea76d442b2c6">bus_ssl_init</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b) {</div>
@@ -94,7 +94,7 @@
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    OpenSSL_add_ssl_algorithms();</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    SSL_CTX *ctx = NULL;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">if</span> (!init_client_SSL_CTX(&amp;ctx)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2">init_client_SSL_CTX</a>(&amp;ctx)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    b-&gt;<a class="code" href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c">ssl_ctx</a> = ctx;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
@@ -113,10 +113,10 @@
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    ci-&gt;<a class="code" href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1">ssl</a> = ssl;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">if</span> (!SSL_set_fd(ci-&gt;<a class="code" href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1">ssl</a>, ci-&gt;<a class="code" href="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8">fd</a>)) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">if</span> (do_blocking_connection(b, ci)) {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15">do_blocking_connection</a>(b, ci)) {</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        SSL_free(ci-&gt;<a class="code" href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1">ssl</a>);</div>
@@ -132,15 +132,15 @@
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">/* Free all internal data for using SSL. */</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="bus__ssl_8h.html#a264a7f1d1c67bbfa292a97e66e87751a">   81</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="bus__ssl_8c.html#a264a7f1d1c67bbfa292a97e66e87751a">bus_ssl_free</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b) {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">/* Free all internal data for using SSL (the SSL_CTX). */</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7">   81</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl_ctx_free</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b) {</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">if</span> (b &amp;&amp; b-&gt;<a class="code" href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c">ssl_ctx</a>) {</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        SSL_CTX_free(b-&gt;<a class="code" href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c">ssl_ctx</a>);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        b-&gt;<a class="code" href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c">ssl_ctx</a> = NULL;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> init_client_SSL_CTX(SSL_CTX **ctx_out) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2">   88</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2">init_client_SSL_CTX</a>(SSL_CTX **ctx_out) {</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    SSL_CTX *ctx = NULL;</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    assert(ctx_out);</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
@@ -160,13 +160,13 @@
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    }</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    disable_SSL_compression();</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    disable_known_bad_ciphers(ctx);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <a class="code" href="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3">disable_SSL_compression</a>();</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376">disable_known_bad_ciphers</a>(ctx);</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    *ctx_out = ctx;</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;}</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> disable_SSL_compression(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3">  114</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3">disable_SSL_compression</a>(<span class="keywordtype">void</span>) {</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    STACK_OF(SSL_COMP) *ssl_comp_methods;</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    ssl_comp_methods = SSL_COMP_get_compression_methods();</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">int</span> n = sk_SSL_COMP_num(ssl_comp_methods);</div>
@@ -175,7 +175,7 @@
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    }</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;}</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> disable_known_bad_ciphers(SSL_CTX *ctx) {</div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376">  123</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376">disable_known_bad_ciphers</a>(SSL_CTX *ctx) {</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> CIPHER_LIST_CFG[] =</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      <span class="stringliteral">&quot;ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:&quot;</span></div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      <span class="stringliteral">&quot;ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS&quot;</span>;</div>
@@ -183,7 +183,7 @@
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    assert(res == 1);</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;}</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> do_blocking_connection(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structconnection__info.html">connection_info</a> *ci) {</div>
+<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15">  131</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15">do_blocking_connection</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structconnection__info.html">connection_info</a> *ci) {</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <a class="code" href="bus__types_8h.html#a0e922b04f1f4484595bbde779d2f676b">BUS_LOG_SNPRINTF</a>(b, 2, <a class="code" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9ad45ad6ac603b14bdfcc06b65752f98e1">LOG_SOCKET_REGISTERED</a>, b-&gt;<a class="code" href="structbus.html#a1063de7e8411d91e03e156557b87e4d7">udata</a>, 128,</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="stringliteral">&quot;SSL_Connect handshake for socket %d&quot;</span>, ci-&gt;<a class="code" href="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8">fd</a>);</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
@@ -280,24 +280,28 @@
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    </div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keywordflow">return</span> connected;</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;}</div>
+<div class="ttc" id="bus__ssl_8c_html_a20f49d1fda85fe2dd755a9c3500b3f15"><div class="ttname"><a href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15">do_blocking_connection</a></div><div class="ttdeci">static bool do_blocking_connection(struct bus *b, connection_info *ci)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00131">bus_ssl.c:131</a></div></div>
 <div class="ttc" id="bus__ssl_8c_html_ae30bd22a904c9649b3727e6a4917e0f7"><div class="ttname"><a href="bus__ssl_8c.html#ae30bd22a904c9649b3727e6a4917e0f7">bus_ssl_disconnect</a></div><div class="ttdeci">bool bus_ssl_disconnect(struct bus *b, SSL *ssl)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00074">bus_ssl.c:74</a></div></div>
 <div class="ttc" id="bus__ssl_8c_html_ab949f03d24e211d2ac9cba33fa641619"><div class="ttname"><a href="bus__ssl_8c.html#ab949f03d24e211d2ac9cba33fa641619">TIMEOUT_MSEC</a></div><div class="ttdeci">#define TIMEOUT_MSEC</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00026">bus_ssl.c:26</a></div></div>
 <div class="ttc" id="bus__ssl_8h_html"><div class="ttname"><a href="bus__ssl_8h.html">bus_ssl.h</a></div></div>
-<div class="ttc" id="bus__ssl_8c_html_a264a7f1d1c67bbfa292a97e66e87751a"><div class="ttname"><a href="bus__ssl_8c.html#a264a7f1d1c67bbfa292a97e66e87751a">bus_ssl_free</a></div><div class="ttdeci">void bus_ssl_free(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00081">bus_ssl.c:81</a></div></div>
-<div class="ttc" id="structconnection__info_html_a0655d6337cf80ac22943323121d118d1"><div class="ttname"><a href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1">connection_info::ssl</a></div><div class="ttdeci">SSL * ssl</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00108">bus_internal_types.h:108</a></div></div>
+<div class="ttc" id="structconnection__info_html_a0655d6337cf80ac22943323121d118d1"><div class="ttname"><a href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1">connection_info::ssl</a></div><div class="ttdeci">SSL * ssl</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00112">bus_internal_types.h:112</a></div></div>
 <div class="ttc" id="util_8c_html_a160b252716d51078cec50bc9f27bc2bc"><div class="ttname"><a href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a></div><div class="ttdeci">bool util_is_resumable_io_error(int errno_)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00025">util.c:25</a></div></div>
-<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00060">bus_internal_types.h:60</a></div></div>
-<div class="ttc" id="structbus_html_a1063de7e8411d91e03e156557b87e4d7"><div class="ttname"><a href="structbus.html#a1063de7e8411d91e03e156557b87e4d7">bus::udata</a></div><div class="ttdeci">void * udata</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00065">bus_internal_types.h:65</a></div></div>
+<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00064">bus_internal_types.h:64</a></div></div>
+<div class="ttc" id="structbus_html_a1063de7e8411d91e03e156557b87e4d7"><div class="ttname"><a href="structbus.html#a1063de7e8411d91e03e156557b87e4d7">bus::udata</a></div><div class="ttdeci">void * udata</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00069">bus_internal_types.h:69</a></div></div>
 <div class="ttc" id="bus__ssl_8c_html_a85fda3522e69a1bf85f7dcd97b6023a1"><div class="ttname"><a href="bus__ssl_8c.html#a85fda3522e69a1bf85f7dcd97b6023a1">MAX_TIMEOUT</a></div><div class="ttdeci">#define MAX_TIMEOUT</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00027">bus_ssl.c:27</a></div></div>
-<div class="ttc" id="structconnection__info_html_a0d081db32b7ce14db136e2f0685c07b8"><div class="ttname"><a href="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8">connection_info::fd</a></div><div class="ttdeci">int fd</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00103">bus_internal_types.h:103</a></div></div>
-<div class="ttc" id="bus__types_8h_html_a162815a6c98569dab6fa66f218ae63b9ad45ad6ac603b14bdfcc06b65752f98e1"><div class="ttname"><a href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9ad45ad6ac603b14bdfcc06b65752f98e1">LOG_SOCKET_REGISTERED</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00083">bus_types.h:83</a></div></div>
+<div class="ttc" id="bus__ssl_8c_html_a020f6491753fa0be948cf43ff85d1aa3"><div class="ttname"><a href="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3">disable_SSL_compression</a></div><div class="ttdeci">static void disable_SSL_compression(void)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00114">bus_ssl.c:114</a></div></div>
+<div class="ttc" id="structconnection__info_html_a0d081db32b7ce14db136e2f0685c07b8"><div class="ttname"><a href="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8">connection_info::fd</a></div><div class="ttdeci">int fd</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00107">bus_internal_types.h:107</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a162815a6c98569dab6fa66f218ae63b9ad45ad6ac603b14bdfcc06b65752f98e1"><div class="ttname"><a href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9ad45ad6ac603b14bdfcc06b65752f98e1">LOG_SOCKET_REGISTERED</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00097">bus_types.h:97</a></div></div>
 <div class="ttc" id="bus__ssl_8c_html_a28804cfaf9b3cfe5f66de08f18b39487"><div class="ttname"><a href="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487">bus_ssl_connect</a></div><div class="ttdeci">bool bus_ssl_connect(struct bus *b, connection_info *ci)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00050">bus_ssl.c:50</a></div></div>
-<div class="ttc" id="structbus_html_a7feda9eb15cbc6deab2508973acfe85c"><div class="ttname"><a href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c">bus::ssl_ctx</a></div><div class="ttdeci">SSL_CTX * ssl_ctx</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00081">bus_internal_types.h:81</a></div></div>
+<div class="ttc" id="structbus_html_a7feda9eb15cbc6deab2508973acfe85c"><div class="ttname"><a href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c">bus::ssl_ctx</a></div><div class="ttdeci">SSL_CTX * ssl_ctx</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00085">bus_internal_types.h:85</a></div></div>
 <div class="ttc" id="bus__ssl_8c_html_ad7097b1068063cc1c875ea76d442b2c6"><div class="ttname"><a href="bus__ssl_8c.html#ad7097b1068063cc1c875ea76d442b2c6">bus_ssl_init</a></div><div class="ttdeci">bool bus_ssl_init(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00035">bus_ssl.c:35</a></div></div>
 <div class="ttc" id="util_8h_html"><div class="ttname"><a href="util_8h.html">util.h</a></div></div>
-<div class="ttc" id="structconnection__info_html"><div class="ttname"><a href="structconnection__info.html">connection_info</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00102">bus_internal_types.h:102</a></div></div>
-<div class="ttc" id="bus__types_8h_html_a0e922b04f1f4484595bbde779d2f676b"><div class="ttname"><a href="bus__types_8h.html#a0e922b04f1f4484595bbde779d2f676b">BUS_LOG_SNPRINTF</a></div><div class="ttdeci">#define BUS_LOG_SNPRINTF(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT,...)</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00054">bus_types.h:54</a></div></div>
-<div class="ttc" id="bus__types_8h_html_ad0848e09b437f5b33350bb3943bfb341"><div class="ttname"><a href="bus__types_8h.html#ad0848e09b437f5b33350bb3943bfb341">BUS_LOG</a></div><div class="ttdeci">#define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA)</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00038">bus_types.h:38</a></div></div>
+<div class="ttc" id="structconnection__info_html"><div class="ttname"><a href="structconnection__info.html">connection_info</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00106">bus_internal_types.h:106</a></div></div>
+<div class="ttc" id="bus__ssl_8c_html_aea1fb37a35aa085c55f91711b51ec4f2"><div class="ttname"><a href="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2">init_client_SSL_CTX</a></div><div class="ttdeci">static bool init_client_SSL_CTX(SSL_CTX **ctx_out)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00088">bus_ssl.c:88</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a0e922b04f1f4484595bbde779d2f676b"><div class="ttname"><a href="bus__types_8h.html#a0e922b04f1f4484595bbde779d2f676b">BUS_LOG_SNPRINTF</a></div><div class="ttdeci">#define BUS_LOG_SNPRINTF(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT,...)</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00057">bus_types.h:57</a></div></div>
+<div class="ttc" id="bus__ssl_8c_html_a33171a60280a6211fea17aab31b5a376"><div class="ttname"><a href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376">disable_known_bad_ciphers</a></div><div class="ttdeci">static void disable_known_bad_ciphers(SSL_CTX *ctx)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00123">bus_ssl.c:123</a></div></div>
+<div class="ttc" id="bus__ssl_8c_html_a6a2b616adc201d07b929909393da6ed7"><div class="ttname"><a href="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl_ctx_free</a></div><div class="ttdeci">void bus_ssl_ctx_free(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00081">bus_ssl.c:81</a></div></div>
+<div class="ttc" id="bus__types_8h_html_ad0848e09b437f5b33350bb3943bfb341"><div class="ttname"><a href="bus__types_8h.html#ad0848e09b437f5b33350bb3943bfb341">BUS_LOG</a></div><div class="ttdeci">#define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA)</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00041">bus_types.h:41</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

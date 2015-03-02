@@ -1,4 +1,4 @@
-.TH "setup_teardown.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "setup_teardown.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,17 +29,53 @@ setup_teardown.c \-
 
 .in +1c
 .ti -1c
+.RI "static void \fBusage\fP (void)"
+.br
+.ti -1c
+.RI "static void \fBhandle_args\fP (int argc, char **argv)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static char * \fBkinetic_host\fP = 'localhost'"
+.br
+.ti -1c
+.RI "static long \fBidle_seconds\fP = 0"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static void usage (void)\fC [static]\fP"
+
+.PP
+Definition at line 35 of file setup_teardown\&.c\&.
+.SS "static void handle_args (intargc, char **argv)\fC [static]\fP"
+
+.PP
+Definition at line 40 of file setup_teardown\&.c\&.
+.PP
+References idle_seconds, kinetic_host, and usage()\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 57 of file setup_teardown\&.c\&.
 .PP
-References ByteArray_CreateWithCString(), KineticSession::config, KineticSessionConfig::host, HOST_NAME_MAX, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), KineticClientConfig::logFile, and KineticSessionConfig::port\&.
+References ByteArray_CreateWithCString(), handle_args(), KineticSessionConfig::host, idle_seconds, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateSession(), KineticClient_DestroySession(), KineticClient_Init(), KineticClient_Shutdown(), and KineticClientConfig::logFile\&.
+.SH "Variable Documentation"
+.PP 
+.SS "char* kinetic_host = 'localhost'\fC [static]\fP"
+
+.PP
+Definition at line 32 of file setup_teardown\&.c\&.
+.SS "long idle_seconds = 0\fC [static]\fP"
+
+.PP
+Definition at line 33 of file setup_teardown\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

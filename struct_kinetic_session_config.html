@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,22 +60,33 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a6006141d44982fdf8748c65fe45946f3"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session_config.html#a6006141d44982fdf8748c65fe45946f3">host</a> [256]</td></tr>
+<tr class="memdesc:a6006141d44982fdf8748c65fe45946f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Host name/IP address of Kinetic Device.  <a href="#a6006141d44982fdf8748c65fe45946f3">More...</a><br /></td></tr>
 <tr class="separator:a6006141d44982fdf8748c65fe45946f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3c117e8a53fb2bc7c14fc45dd0a38d2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session_config.html#ab3c117e8a53fb2bc7c14fc45dd0a38d2">port</a></td></tr>
+<tr class="memdesc:ab3c117e8a53fb2bc7c14fc45dd0a38d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port for Kinetic Device session.  <a href="#ab3c117e8a53fb2bc7c14fc45dd0a38d2">More...</a><br /></td></tr>
 <tr class="separator:ab3c117e8a53fb2bc7c14fc45dd0a38d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a070d1fe65b78cc2b731717a077a69640"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session_config.html#a070d1fe65b78cc2b731717a077a69640">clusterVersion</a></td></tr>
+<tr class="memdesc:a070d1fe65b78cc2b731717a077a69640"><td class="mdescLeft">&#160;</td><td class="mdescRight">The version number of this cluster definition.  <a href="#a070d1fe65b78cc2b731717a077a69640">More...</a><br /></td></tr>
 <tr class="separator:a070d1fe65b78cc2b731717a077a69640"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8b4e198ae98bf699cb102350c8587da"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session_config.html#aa8b4e198ae98bf699cb102350c8587da">identity</a></td></tr>
+<tr class="memdesc:aa8b4e198ae98bf699cb102350c8587da"><td class="mdescLeft">&#160;</td><td class="mdescRight">The identity associated with this request.  <a href="#aa8b4e198ae98bf699cb102350c8587da">More...</a><br /></td></tr>
 <tr class="separator:aa8b4e198ae98bf699cb102350c8587da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0821f028dffd8e2e237aee0f4ed57189"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session_config.html#a0821f028dffd8e2e237aee0f4ed57189">keyData</a> [(4096)]</td></tr>
+<tr class="memdesc:a0821f028dffd8e2e237aee0f4ed57189"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the identity's HMAC Key.  <a href="#a0821f028dffd8e2e237aee0f4ed57189">More...</a><br /></td></tr>
 <tr class="separator:a0821f028dffd8e2e237aee0f4ed57189"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb9f1d3dceb9739eb3c88db1f8150198"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session_config.html#acb9f1d3dceb9739eb3c88db1f8150198">hmacKey</a></td></tr>
 <tr class="separator:acb9f1d3dceb9739eb3c88db1f8150198"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad54c41c33e139669cc653306bda69aef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session_config.html#ad54c41c33e139669cc653306bda69aef">useSsl</a></td></tr>
+<tr class="memdesc:ad54c41c33e139669cc653306bda69aef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set to `true' to enable SSL for for this session.  <a href="#ad54c41c33e139669cc653306bda69aef">More...</a><br /></td></tr>
+<tr class="separator:ad54c41c33e139669cc653306bda69aef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aade5d711e365852e68201df1b3b57177"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kinetic_session_config.html#aade5d711e365852e68201df1b3b57177">timeoutSeconds</a></td></tr>
+<tr class="memdesc:aade5d711e365852e68201df1b3b57177"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operation timeout. If 0, use the default (10 seconds).  <a href="#aade5d711e365852e68201df1b3b57177">More...</a><br /></td></tr>
+<tr class="separator:aade5d711e365852e68201df1b3b57177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure used to specify the configuration for a session. </p>
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00117">117</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00118">118</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a6006141d44982fdf8748c65fe45946f3"></a>
 <div class="memitem">
@@ -87,7 +98,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00119">119</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Host name/IP address of Kinetic Device. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00120">120</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -101,7 +114,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00122">122</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Port for Kinetic Device session. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00123">123</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -115,7 +130,10 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00127">127</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>The version number of this cluster definition. </p>
+<p>If this is not equal to the value on the Kinetic Device, the request is rejected and will return <code>KINETIC_STATUS_VERSION_FAILURE</code> </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00128">128</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -129,7 +147,10 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00132">132</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>The identity associated with this request. </p>
+<p>See the <a class="el" href="struct_a_c_l.html">ACL</a> discussion above. The Kinetic Device will use this identity value to lookup the HMAC key (shared secret) to verify the HMAC. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00133">133</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -143,7 +164,10 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00136">136</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>This is the identity's HMAC Key. </p>
+<p>This is a shared secret between the client and the device, used to sign requests. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00137">137</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>
@@ -157,7 +181,39 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00137">137</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00138">138</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad54c41c33e139669cc653306bda69aef"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KineticSessionConfig::useSsl</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set to `true' to enable SSL for for this session. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00141">141</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aade5d711e365852e68201df1b3b57177"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t KineticSessionConfig::timeoutSeconds</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Operation timeout. If 0, use the default (10 seconds). </p>
+
+<p>Definition at line <a class="el" href="kinetic__types_8h_source.html#l00144">144</a> of file <a class="el" href="kinetic__types_8h_source.html">kinetic_types.h</a>.</p>
 
 </div>
 </div>

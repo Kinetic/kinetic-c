@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -61,6 +61,7 @@
       <li class="current"><a href="globals_b.html#index_b"><span>b</span></a></li>
       <li><a href="globals_c.html#index_c"><span>c</span></a></li>
       <li><a href="globals_d.html#index_d"><span>d</span></a></li>
+      <li><a href="globals_e.html#index_e"><span>e</span></a></li>
       <li><a href="globals_f.html#index_f"><span>f</span></a></li>
       <li><a href="globals_g.html#index_g"><span>g</span></a></li>
       <li><a href="globals_h.html#index_h"><span>h</span></a></li>
@@ -69,6 +70,7 @@
       <li><a href="globals_l.html#index_l"><span>l</span></a></li>
       <li><a href="globals_m.html#index_m"><span>m</span></a></li>
       <li><a href="globals_n.html#index_n"><span>n</span></a></li>
+      <li><a href="globals_o.html#index_o"><span>o</span></a></li>
       <li><a href="globals_p.html#index_p"><span>p</span></a></li>
       <li><a href="globals_r.html#index_r"><span>r</span></a></li>
       <li><a href="globals_s.html#index_s"><span>s</span></a></li>
@@ -86,17 +88,47 @@
 <li>BOOL_TO_STRING
 : <a class="el" href="kinetic__types_8h.html#a77c3b6f6dc303295398cc6a1308a5e79">kinetic_types.h</a>
 </li>
+<li>box_cleanup_cb()
+: <a class="el" href="bus_8c.html#a9b0e16dd0bed640d22dfb26a0ec80d3c">bus.c</a>
+</li>
+<li>box_execute_cb()
+: <a class="el" href="bus_8c.html#a1f25ceee49e76a60fcb43f4e39c3cddd">bus.c</a>
+</li>
+<li>box_msg()
+: <a class="el" href="bus_8c.html#ac0b99f211ee9a81b08697c509640323f">bus.c</a>
+</li>
 <li>BUF_SZ
 : <a class="el" href="echosrv_8c.html#a4962f06eca1fdb2c29f4496e090bdaf4">echosrv.c</a>
 </li>
+<li>Buffer
+: <a class="el" href="kinetic__logger_8c.html#aaf1490d688e7cf0c41987d87572ff80a">kinetic_logger.c</a>
+</li>
+<li>BUFFER_MAX_STRLEN
+: <a class="el" href="kinetic__logger_8c.html#aeb26962020b855f5a4e4888f92cc6f13">kinetic_logger.c</a>
+</li>
+<li>BUFFER_SIZE
+: <a class="el" href="kinetic__logger_8c.html#a6b20d41d6252e9871430c242cb1a56e7">kinetic_logger.c</a>
+</li>
+<li>BufferMutex
+: <a class="el" href="kinetic__logger_8c.html#a8cb00c41aeab9a73f0546751362a7107">kinetic_logger.c</a>
+</li>
+<li>build_get_command()
+: <a class="el" href="kinetic__operation_8c.html#a590cf6e8f9df909689a6463f4e643a52">kinetic_operation.c</a>
+</li>
 <li>build_p2pOp()
 : <a class="el" href="kinetic__operation_8c.html#a2b74ef47a9b375899c10ba5853dff346">kinetic_operation.c</a>
+</li>
+<li>BUS_ASSERT
+: <a class="el" href="bus__types_8h.html#a4d89c9e9f5d4826669787c8ec484c301">bus_types.h</a>
 </li>
 <li>BUS_DEFAULT_TIMEOUT_SEC
 : <a class="el" href="bus__types_8h.html#a4bc947eb1281d1c88e3b4d40e6a55342">bus_types.h</a>
 </li>
 <li>bus_error_cb
 : <a class="el" href="bus__types_8h.html#adf76fad7cfa121c5eb75eff2db1d1cd6">bus_types.h</a>
+</li>
+<li>bus_error_string()
+: <a class="el" href="kinetic__controller_8c.html#a096a026c18d48c651163a3dcfec33327">kinetic_controller.c</a>
 </li>
 <li>bus_free()
 : <a class="el" href="bus_8c.html#af013638c2ed0336af67997ec31cb88c6">bus.c</a>
@@ -172,6 +204,9 @@
 </li>
 <li>bus_msg_cb
 : <a class="el" href="bus__types_8h.html#a331766b45e83957173b8367a7c19b2d6">bus_types.h</a>
+</li>
+<li>BUS_NO_SEQ_ID
+: <a class="el" href="bus__types_8h.html#a595edd6f23442eb6c7996422c864661c">bus_types.h</a>
 </li>
 <li>BUS_NO_SSL
 : <a class="el" href="bus__internal__types_8h.html#a76bf250ccc8ac3e852f8785c68903a47">bus_internal_types.h</a>
@@ -258,16 +293,16 @@
 : <a class="el" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2">bus_types.h</a>
 </li>
 <li>bus_ssl_connect()
-: <a class="el" href="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487">bus_ssl.c</a>
-, <a class="el" href="bus__ssl_8h.html#a28804cfaf9b3cfe5f66de08f18b39487">bus_ssl.h</a>
+: <a class="el" href="bus__ssl_8h.html#a28804cfaf9b3cfe5f66de08f18b39487">bus_ssl.h</a>
+, <a class="el" href="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487">bus_ssl.c</a>
+</li>
+<li>bus_ssl_ctx_free()
+: <a class="el" href="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl.c</a>
+, <a class="el" href="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl.h</a>
 </li>
 <li>bus_ssl_disconnect()
 : <a class="el" href="bus__ssl_8c.html#ae30bd22a904c9649b3727e6a4917e0f7">bus_ssl.c</a>
 , <a class="el" href="bus__ssl_8h.html#ae30bd22a904c9649b3727e6a4917e0f7">bus_ssl.h</a>
-</li>
-<li>bus_ssl_free()
-: <a class="el" href="bus__ssl_8h.html#a264a7f1d1c67bbfa292a97e66e87751a">bus_ssl.h</a>
-, <a class="el" href="bus__ssl_8c.html#a264a7f1d1c67bbfa292a97e66e87751a">bus_ssl.c</a>
 </li>
 <li>bus_ssl_init()
 : <a class="el" href="bus__ssl_8c.html#ad7097b1068063cc1c875ea76d442b2c6">bus_ssl.c</a>
@@ -304,24 +339,24 @@
 , <a class="el" href="byte__array_8c.html#ad43c36dca8421ec3e2f48e55d8f9e413">byte_array.c</a>
 </li>
 <li>ByteArray_FillWithDummyData()
-: <a class="el" href="byte__array_8c.html#a9f76a0b370ef0d1b71b6234110cdf750">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#ac83d2ba4b7c5d653faa84af8a7c5bf6e">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#ac83d2ba4b7c5d653faa84af8a7c5bf6e">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#a9f76a0b370ef0d1b71b6234110cdf750">byte_array.c</a>
 </li>
 <li>ByteArray_GetSlice()
 : <a class="el" href="byte__array_8h.html#ad14df29a25c36cfc41eaf2b5ba200aed">byte_array.h</a>
 , <a class="el" href="byte__array_8c.html#a22f0c55397251be386a01f1ed6ae7dcc">byte_array.c</a>
 </li>
 <li>ByteBuffer_Append()
-: <a class="el" href="byte__array_8c.html#adda138a80ee9e83c91228835d5d3ab7b">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#adda138a80ee9e83c91228835d5d3ab7b">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#adda138a80ee9e83c91228835d5d3ab7b">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#adda138a80ee9e83c91228835d5d3ab7b">byte_array.c</a>
 </li>
 <li>ByteBuffer_AppendArray()
-: <a class="el" href="byte__array_8c.html#a294a1fea058cae9ec2b75e2d6c879f9b">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#a294a1fea058cae9ec2b75e2d6c879f9b">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#a294a1fea058cae9ec2b75e2d6c879f9b">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#a294a1fea058cae9ec2b75e2d6c879f9b">byte_array.c</a>
 </li>
 <li>ByteBuffer_AppendBuffer()
-: <a class="el" href="byte__array_8h.html#a8a2c9b3a72619f16a1ab79bb6a5fa254">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#a8a2c9b3a72619f16a1ab79bb6a5fa254">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#a8a2c9b3a72619f16a1ab79bb6a5fa254">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#a8a2c9b3a72619f16a1ab79bb6a5fa254">byte_array.h</a>
 </li>
 <li>ByteBuffer_AppendCString()
 : <a class="el" href="byte__array_8c.html#a4e419adb2a60fa7a5f632b74eb8aa9b9">byte_array.c</a>
@@ -340,8 +375,8 @@
 , <a class="el" href="byte__array_8h.html#ab9a38855ec827f618c1c67c5c2d909fc">byte_array.h</a>
 </li>
 <li>ByteBuffer_Consume()
-: <a class="el" href="byte__array_8c.html#ae38b9b3aacf94d37ccbbb2b238b8f502">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#ae38b9b3aacf94d37ccbbb2b238b8f502">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#ae38b9b3aacf94d37ccbbb2b238b8f502">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#ae38b9b3aacf94d37ccbbb2b238b8f502">byte_array.c</a>
 </li>
 <li>ByteBuffer_Create()
 : <a class="el" href="byte__array_8c.html#a8366cb95371c1aebfddb2b80625a981e">byte_array.c</a>
@@ -352,47 +387,50 @@
 , <a class="el" href="byte__array_8h.html#a87178b5390ee8e9f9e5926dd87400077">byte_array.h</a>
 </li>
 <li>ByteBuffer_CreateAndAppendArray()
-: <a class="el" href="byte__array_8c.html#a97165010b376a19e05156502e2aeee3b">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#a97165010b376a19e05156502e2aeee3b">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#a97165010b376a19e05156502e2aeee3b">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#a97165010b376a19e05156502e2aeee3b">byte_array.c</a>
 </li>
 <li>ByteBuffer_CreateAndAppendCString()
 : <a class="el" href="byte__array_8c.html#a0c83202d1364452aabb4ca367f0d00f5">byte_array.c</a>
 , <a class="el" href="byte__array_8h.html#a0c83202d1364452aabb4ca367f0d00f5">byte_array.h</a>
 </li>
 <li>ByteBuffer_CreateAndAppendDummyData()
-: <a class="el" href="byte__array_8h.html#a30773d7fa18abdd1f9fcf41337bf1f02">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#a30773d7fa18abdd1f9fcf41337bf1f02">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#a30773d7fa18abdd1f9fcf41337bf1f02">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#a30773d7fa18abdd1f9fcf41337bf1f02">byte_array.h</a>
 </li>
 <li>ByteBuffer_CreateAndAppendFormattedCString()
-: <a class="el" href="byte__array_8c.html#ad8a04a9ba648ea429ac1e0671857db0f">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#ad8a04a9ba648ea429ac1e0671857db0f">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#ad8a04a9ba648ea429ac1e0671857db0f">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#ad8a04a9ba648ea429ac1e0671857db0f">byte_array.c</a>
 </li>
 <li>ByteBuffer_CreateWithArray()
-: <a class="el" href="byte__array_8h.html#a3e9a5e85a93de22ffeed6d088be9995b">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#a3e9a5e85a93de22ffeed6d088be9995b">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#a3e9a5e85a93de22ffeed6d088be9995b">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#a3e9a5e85a93de22ffeed6d088be9995b">byte_array.h</a>
 </li>
 <li>ByteBuffer_Free()
-: <a class="el" href="byte__array_8h.html#a0129114878fbba14de8ba1d96d52aa90">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#a0129114878fbba14de8ba1d96d52aa90">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#a0129114878fbba14de8ba1d96d52aa90">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#a0129114878fbba14de8ba1d96d52aa90">byte_array.h</a>
 </li>
 <li>ByteBuffer_IsNull()
-: <a class="el" href="byte__array_8h.html#af56f0bdfd4ecebd1a4d9026fd9c8cd03">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#af56f0bdfd4ecebd1a4d9026fd9c8cd03">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#af56f0bdfd4ecebd1a4d9026fd9c8cd03">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#af56f0bdfd4ecebd1a4d9026fd9c8cd03">byte_array.h</a>
 </li>
 <li>ByteBuffer_Malloc()
 : <a class="el" href="byte__array_8h.html#a492ffde2f6533cfd5a1fb09330a8148c">byte_array.h</a>
 , <a class="el" href="byte__array_8c.html#a492ffde2f6533cfd5a1fb09330a8148c">byte_array.c</a>
 </li>
 <li>ByteBuffer_MallocAndAppend()
-: <a class="el" href="byte__array_8h.html#ac9917b015e701a2b34825d5dfbe97c2a">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#ac9917b015e701a2b34825d5dfbe97c2a">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#ac9917b015e701a2b34825d5dfbe97c2a">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#ac9917b015e701a2b34825d5dfbe97c2a">byte_array.h</a>
 </li>
 <li>ByteBuffer_Reset()
-: <a class="el" href="byte__array_8h.html#a4b0e7ea156628d159b781a9bc32a7e35">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#a4b0e7ea156628d159b781a9bc32a7e35">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#a4b0e7ea156628d159b781a9bc32a7e35">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#a4b0e7ea156628d159b781a9bc32a7e35">byte_array.h</a>
 </li>
 <li>BYTES_TO_CSTRING
 : <a class="el" href="kinetic__logger_8h.html#a1f53a109345e468584a1fd3510ed7a20">kinetic_logger.h</a>
+</li>
+<li>bytetoa()
+: <a class="el" href="kinetic__logger_8c.html#affb1bdc42e98f0e1147141e95d72d74d">kinetic_logger.c</a>
 </li>
 </ul>
 </div><!-- contents -->

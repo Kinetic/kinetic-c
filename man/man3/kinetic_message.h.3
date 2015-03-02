@@ -1,4 +1,4 @@
-.TH "kinetic_message.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_message.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -26,15 +26,15 @@ kinetic_message.h \-
 .SS "void KineticMessage_ConfigureKeyValue (\fBKineticMessage\fP *constmessage, const \fBKineticEntry\fP *entry)"
 
 .PP
-Definition at line 40 of file kinetic_message\&.c\&.
+Definition at line 39 of file kinetic_message\&.c\&.
 .PP
-References KineticEntry::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_BUFFER, KineticEntry::force, KineticMessage::keyValue, KineticProto_Command_Algorithm_from_KineticAlgorithm(), KineticProto_Command_Synchronization_from_KineticSynchronization(), KineticEntry::metadataOnly, and KineticEntry::synchronization\&.
+References KineticEntry::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_BUFFER, KineticEntry::force, KineticMessage::keyValue, KINETIC_ASSERT, KineticProto_Command_Algorithm_from_KineticAlgorithm(), KineticProto_Command_Synchronization_from_KineticSynchronization(), KineticEntry::metadataOnly, and KineticEntry::synchronization\&.
 .SS "void KineticMessage_ConfigureKeyRange (\fBKineticMessage\fP *constmessage, const \fBKineticKeyRange\fP *range)"
 
 .PP
-Definition at line 81 of file kinetic_message\&.c\&.
+Definition at line 80 of file kinetic_message\&.c\&.
 .PP
-References ByteBuffer::array, KineticMessage::body, ByteBuffer::bytesUsed, KineticMessage::command, ByteArray::data, KineticKeyRange::endKey, KineticKeyRange::endKeyInclusive, KineticMessage::keyRange, ByteArray::len, KineticKeyRange::maxReturned, KineticKeyRange::reverse, KineticKeyRange::startKey, and KineticKeyRange::startKeyInclusive\&.
+References ByteBuffer::array, KineticMessage::body, ByteBuffer::bytesUsed, KineticMessage::command, ByteArray::data, KineticKeyRange::endKey, KineticKeyRange::endKeyInclusive, KineticMessage::keyRange, KINETIC_ASSERT, ByteArray::len, KineticKeyRange::maxReturned, KineticKeyRange::reverse, KineticKeyRange::startKey, and KineticKeyRange::startKeyInclusive\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

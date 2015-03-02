@@ -1,0 +1,67 @@
+.TH "kinetic_response.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_response.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_response\&.h'\fP
+.br
+\fC#include 'kinetic_nbo\&.h'\fP
+.br
+\fC#include 'kinetic_session\&.h'\fP
+.br
+\fC#include 'kinetic_socket\&.h'\fP
+.br
+\fC#include 'kinetic_hmac\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include 'kinetic_proto\&.h'\fP
+.br
+\fC#include 'kinetic_allocator\&.h'\fP
+.br
+\fC#include 'kinetic_controller\&.h'\fP
+.br
+\fC#include 'kinetic_pdu_unpack\&.h'\fP
+.br
+\fC#include <time\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticResponse_GetStatus\fP (\fBKineticResponse\fP *response)"
+.br
+.ti -1c
+.RI "KineticProto_Command_KeyValue * \fBKineticResponse_GetKeyValue\fP (\fBKineticResponse\fP *response)"
+.br
+.ti -1c
+.RI "KineticProto_Command_Range * \fBKineticResponse_GetKeyRange\fP (\fBKineticResponse\fP *response)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticStatus\fP KineticResponse_GetStatus (\fBKineticResponse\fP *response)"
+
+.PP
+Definition at line 35 of file kinetic_response\&.c\&.
+.PP
+References KineticResponse::command, KINETIC_STATUS_INVALID, and KineticProtoStatusCode_to_KineticStatus()\&.
+.SS "KineticProto_Command_KeyValue* KineticResponse_GetKeyValue (\fBKineticResponse\fP *response)"
+
+.PP
+Definition at line 51 of file kinetic_response\&.c\&.
+.PP
+References KineticResponse::command\&.
+.SS "KineticProto_Command_Range* KineticResponse_GetKeyRange (\fBKineticResponse\fP *response)"
+
+.PP
+Definition at line 64 of file kinetic_response\&.c\&.
+.PP
+References KineticResponse::command, and KineticResponse::proto\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

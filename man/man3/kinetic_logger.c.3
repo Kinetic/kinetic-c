@@ -1,4 +1,4 @@
-.TH "kinetic_logger.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_logger.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,6 +7,8 @@ kinetic_logger.c \-
 .br
 .PP
 \fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include <stdarg\&.h>\fP
 .br
 \fC#include <stdio\&.h>\fP
 .br
@@ -27,42 +29,39 @@ kinetic_logger.c \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBKINETIC_LOGGER_BUFFER_STR_MAX_LEN\fP   512"
+.RI "#define \fBBUFFER_SIZE\fP   1024"
 .br
 .ti -1c
-.RI "#define \fBKINETIC_LOGGER_BUFFER_SIZE\fP   (0x1 << 12)"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_LOGGER_FLUSH_INTERVAL_SEC\fP   180"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_LOGGER_SLEEP_TIME_SEC\fP   10"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_LOGGER_BUFFER_FLUSH_SIZE\fP   (0\&.8 * \fBKINETIC_LOGGER_BUFFER_SIZE\fP)"
+.RI "#define \fBBUFFER_MAX_STRLEN\fP   (\fBBUFFER_SIZE\fP-2)"
 .br
 .ti -1c
 .RI "#define \fBLOG_INDENT\fP   '  '"
-.br
-.ti -1c
-.RI "#define \fBLOG_PROTO_INIT\fP()   indent_overflow = 0;"
-.br
-.ti -1c
-.RI "#define \fBLOG_PROTO_LEVEL_START\fP(__name)"
-.br
-.ti -1c
-.RI "#define \fBLOG_PROTO_LEVEL_END\fP()"
-.br
-.ti -1c
-.RI "#define \fBLOG_PROTO_LEVEL_START_ARRAY\fP(__name, __quantity)"
-.br
-.ti -1c
-.RI "#define \fBLOG_PROTO_LEVEL_END_ARRAY\fP()"
 .br
 .in -1c
 .SS "Functions"
 
 .in +1c
+.ti -1c
+.RI "static bool \fBis_level_enabled\fP (int log_level)"
+.br
+.ti -1c
+.RI "static void \fBlock_buffer\fP (void)"
+.br
+.ti -1c
+.RI "static void \fBunlock_buffer\fP (void)"
+.br
+.ti -1c
+.RI "static void \fBflush_buffer\fP (void)"
+.br
+.ti -1c
+.RI "static char * \fBget_buffer\fP (void)"
+.br
+.ti -1c
+.RI "static void \fBfinish_buffer\fP (void)"
+.br
+.ti -1c
+.RI "static void \fBlog_protobuf_message\fP (int log_level, const ProtobufCMessage *msg, char *\fBindent\fP)"
+.br
 .ti -1c
 .RI "void \fBKineticLogger_Init\fP (const char *log_file, int log_level)"
 .br
@@ -82,7 +81,25 @@ kinetic_logger.c \-
 .RI "void \fBKineticLogger_LogHeader\fP (int log_level, const \fBKineticPDUHeader\fP *header)"
 .br
 .ti -1c
+.RI "static void \fBlog_proto_level_start\fP (const char *name)"
+.br
+.ti -1c
+.RI "static void \fBlog_proto_level_end\fP (void)"
+.br
+.ti -1c
+.RI "static void \fBlog_proto_level_start_array\fP (const char *name, unsigned quantity)"
+.br
+.ti -1c
+.RI "static void \fBlog_proto_level_end_array\fP (void)"
+.br
+.ti -1c
+.RI "static int \fBbytetoa\fP (char *p_buf, uint8_t val)"
+.br
+.ti -1c
 .RI "int \fBKineticLogger_ByteArraySliceToCString\fP (char *p_buf, const \fBByteArray\fP bytes, const int start, const int count)"
+.br
+.ti -1c
+.RI "static void \fBLogUnboxed\fP (int log_level, void const *const fieldData, ProtobufCFieldDescriptor const *const fieldDesc, size_t const i, char *\fBindent\fP)"
 .br
 .ti -1c
 .RI "void \fBKineticLogger_LogProtobuf\fP (int log_level, const KineticProto_Message *msg)"
@@ -96,144 +113,227 @@ kinetic_logger.c \-
 .ti -1c
 .RI "void \fBKineticLogger_LogByteBuffer\fP (int log_level, const char *title, \fBByteBuffer\fP buffer)"
 .br
+.ti -1c
+.RI "void \fBKineticLogger_LogTimestamp\fP (int log_level, const char *title)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static int \fBKineticLogLevel\fP = -1"
+.br
+.ti -1c
+.RI "static FILE * \fBKineticLoggerHandle\fP = NULL"
+.br
+.ti -1c
+.RI "static pthread_mutex_t \fBBufferMutex\fP = PTHREAD_MUTEX_INITIALIZER"
+.br
+.ti -1c
+.RI "static char \fBBuffer\fP [1024]"
+.br
+.ti -1c
+.RI "static char \fBindent\fP [64] = ' '"
+.br
+.ti -1c
+.RI "static const size_t \fBmax_indent\fP = sizeof(\fBindent\fP)-3"
+.br
+.ti -1c
+.RI "static int \fBindent_overflow\fP = 0"
+.br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define KINETIC_LOGGER_BUFFER_STR_MAX_LEN   512"
-
-.PP
-Definition at line 31 of file kinetic_logger\&.c\&.
-.SS "#define KINETIC_LOGGER_BUFFER_SIZE   (0x1 << 12)"
+.SS "#define BUFFER_SIZE   1024"
 
 .PP
 Definition at line 32 of file kinetic_logger\&.c\&.
-.SS "#define KINETIC_LOGGER_FLUSH_INTERVAL_SEC   180"
+.SS "#define BUFFER_MAX_STRLEN   (\fBBUFFER_SIZE\fP-2)"
 
 .PP
 Definition at line 33 of file kinetic_logger\&.c\&.
-.SS "#define KINETIC_LOGGER_SLEEP_TIME_SEC   10"
-
-.PP
-Definition at line 34 of file kinetic_logger\&.c\&.
-.SS "#define KINETIC_LOGGER_BUFFER_FLUSH_SIZE   (0\&.8 * \fBKINETIC_LOGGER_BUFFER_SIZE\fP)"
-
-.PP
-Definition at line 35 of file kinetic_logger\&.c\&.
 .SS "#define LOG_INDENT   '  '"
 
 .PP
-Definition at line 180 of file kinetic_logger\&.c\&.
-.SS "#define LOG_PROTO_INIT()   indent_overflow = 0;"
-
-.PP
-Definition at line 185 of file kinetic_logger\&.c\&.
-.SS "#define LOG_PROTO_LEVEL_START(__name)"
-\fBValue:\fP
-.PP
-.nf
-KineticLogger_LogPrintf(0, "%s%s {", indent, __name); \
-    if (strlen(indent) < max_indent) { strcat(indent, LOG_INDENT); } \
-    else { indent_overflow++; }
-.fi
-.PP
-Definition at line 188 of file kinetic_logger\&.c\&.
-.SS "#define LOG_PROTO_LEVEL_END()"
-\fBValue:\fP
-.PP
-.nf
-if (indent_overflow == 0) { indent[strlen(indent) - 2] = '\0'; } \
-    else { indent_overflow--; } \\
-    KineticLogger_LogPrintf(0, "%s}", indent);
-.fi
-.PP
-Definition at line 193 of file kinetic_logger\&.c\&.
-.SS "#define LOG_PROTO_LEVEL_START_ARRAY(__name, __quantity)"
-\fBValue:\fP
-.PP
-.nf
-KineticLogger_LogPrintf(0, "%s%s: (%u elements)", (indent), (__name), (__quantity)); \\
-    KineticLogger_LogPrintf(0, "%s[", (indent)); \
-    if (strlen(indent) < max_indent) { strcat(indent, LOG_INDENT); } \
-    else { indent_overflow++; }
-.fi
-.PP
-Definition at line 198 of file kinetic_logger\&.c\&.
-.SS "#define LOG_PROTO_LEVEL_END_ARRAY()"
-\fBValue:\fP
-.PP
-.nf
-if (indent_overflow == 0) { indent[strlen(indent) - 2] = '\0'; } \
-    else { indent_overflow--; } \\
-    KineticLogger_LogPrintf(0, "%s]", (indent));
-.fi
-.PP
-Definition at line 204 of file kinetic_logger\&.c\&.
+Definition at line 150 of file kinetic_logger\&.c\&.
 .SH "Function Documentation"
 .PP 
+.SS "static bool is_level_enabled (intlog_level)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+Definition at line 541 of file kinetic_logger\&.c\&.
+.SS "static void lock_buffer (void)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+Definition at line 546 of file kinetic_logger\&.c\&.
+.PP
+References BufferMutex\&.
+.SS "static void unlock_buffer (void)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+Definition at line 551 of file kinetic_logger\&.c\&.
+.PP
+References BufferMutex\&.
+.SS "static void flush_buffer (void)\fC [static]\fP"
+
+.PP
+Definition at line 556 of file kinetic_logger\&.c\&.
+.PP
+References Buffer, and KineticLoggerHandle\&.
+.SS "static char * get_buffer (void)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+Definition at line 565 of file kinetic_logger\&.c\&.
+.PP
+References Buffer, and lock_buffer()\&.
+.SS "static void finish_buffer (void)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+Definition at line 571 of file kinetic_logger\&.c\&.
+.PP
+References flush_buffer(), and unlock_buffer()\&.
+.SS "static void log_protobuf_message (intlog_level, const ProtobufCMessage *msg, char *indent)\fC [static]\fP"
+
+.PP
+Definition at line 340 of file kinetic_logger\&.c\&.
+.PP
+References is_level_enabled(), KineticProto_command__free_unpacked(), KineticProto_command__unpack(), log_proto_level_end(), log_proto_level_end_array(), log_proto_level_start(), log_proto_level_start_array(), and LogUnboxed()\&.
 .SS "void KineticLogger_Init (const char *log_file, intlog_level)"
 
 .PP
-Definition at line 71 of file kinetic_logger\&.c\&.
+Definition at line 55 of file kinetic_logger\&.c\&.
+.PP
+References BufferMutex, KINETIC_ASSERT, KineticLoggerHandle, and KineticLogLevel\&.
 .SS "void KineticLogger_Close (void)"
 
 .PP
-Definition at line 101 of file kinetic_logger\&.c\&.
+Definition at line 84 of file kinetic_logger\&.c\&.
 .PP
-References Kinetic_GetErrnoDescription(), and LOGF0\&.
+References KineticLoggerHandle, and KineticLogLevel\&.
 .SS "void KineticLogger_Log (intlog_level, const char *message)"
+
+.PP
+Definition at line 94 of file kinetic_logger\&.c\&.
+.PP
+References KineticLogger_LogPrintf()\&.
+.SS "void KineticLogger_LogPrintf (intlog_level, const char *format, \&.\&.\&.)"
+
+.PP
+Definition at line 99 of file kinetic_logger\&.c\&.
+.PP
+References Buffer, BUFFER_MAX_STRLEN, finish_buffer(), get_buffer(), and is_level_enabled()\&.
+.SS "void KineticLogger_LogLocation (const char *filename, intline, const char *message)"
 
 .PP
 Definition at line 121 of file kinetic_logger\&.c\&.
 .PP
-References KINETIC_LOGGER_BUFFER_STR_MAX_LEN\&.
-.SS "void KineticLogger_LogPrintf (intlog_level, const char *format, \&.\&.\&.)"
-
-.PP
-Definition at line 133 of file kinetic_logger\&.c\&.
-.PP
-References KINETIC_LOGGER_BUFFER_STR_MAX_LEN\&.
-.SS "void KineticLogger_LogLocation (const char *filename, intline, const char *message)"
-
-.PP
-Definition at line 151 of file kinetic_logger\&.c\&.
-.PP
-References KineticLogger_LogPrintf()\&.
+References KineticLogger_LogPrintf(), and KineticLogLevel\&.
 .SS "void KineticLogger_LogHeader (intlog_level, const \fBKineticPDUHeader\fP *header)"
+
+.PP
+Definition at line 136 of file kinetic_logger\&.c\&.
+.PP
+References is_level_enabled(), KineticLogger_Log(), and KineticLogger_LogPrintf()\&.
+.SS "static void log_proto_level_start (const char *name)\fC [static]\fP"
+
+.PP
+Definition at line 156 of file kinetic_logger\&.c\&.
+.PP
+References indent, indent_overflow, KineticLogger_LogPrintf(), LOG_INDENT, and max_indent\&.
+.SS "static void log_proto_level_end (void)\fC [static]\fP"
 
 .PP
 Definition at line 167 of file kinetic_logger\&.c\&.
 .PP
-References KineticLogger_Log(), and KineticLogger_LogPrintf()\&.
+References indent, indent_overflow, and KineticLogger_LogPrintf()\&.
+.SS "static void log_proto_level_start_array (const char *name, unsignedquantity)\fC [static]\fP"
+
+.PP
+Definition at line 178 of file kinetic_logger\&.c\&.
+.PP
+References indent, indent_overflow, KineticLogger_LogPrintf(), LOG_INDENT, and max_indent\&.
+.SS "static void log_proto_level_end_array (void)\fC [static]\fP"
+
+.PP
+Definition at line 190 of file kinetic_logger\&.c\&.
+.PP
+References indent, indent_overflow, and KineticLogger_LogPrintf()\&.
+.SS "static int bytetoa (char *p_buf, uint8_tval)\fC [static]\fP"
+
+.PP
+Definition at line 201 of file kinetic_logger\&.c\&.
 .SS "int KineticLogger_ByteArraySliceToCString (char *p_buf, const \fBByteArray\fPbytes, const intstart, const intcount)"
 
 .PP
-Definition at line 229 of file kinetic_logger\&.c\&.
+Definition at line 221 of file kinetic_logger\&.c\&.
 .PP
-References ByteArray::data\&.
+References bytetoa(), and ByteArray::data\&.
+.SS "static void LogUnboxed (intlog_level, void const *constfieldData, ProtobufCFieldDescriptor const *constfieldDesc, size_t consti, char *indent)\fC [static]\fP"
+
+.PP
+Definition at line 233 of file kinetic_logger\&.c\&.
+.PP
+References BOOL_TO_STRING, KINETIC_ASSERT, KineticLogger_LogByteArray(), KineticLogger_LogPrintf(), log_proto_level_end(), log_proto_level_start(), and log_protobuf_message()\&.
 .SS "void KineticLogger_LogProtobuf (intlog_level, const KineticProto_Message *msg)"
 
 .PP
-Definition at line 411 of file kinetic_logger\&.c\&.
+Definition at line 403 of file kinetic_logger\&.c\&.
 .PP
-References KineticLogger_Log(), and LOG_PROTO_INIT\&.
+References indent, indent_overflow, is_level_enabled(), KineticLogger_Log(), and log_protobuf_message()\&.
 .SS "void KineticLogger_LogStatus (intlog_level, KineticProto_Command_Status *status)"
 
 .PP
-Definition at line 423 of file kinetic_logger\&.c\&.
+Definition at line 415 of file kinetic_logger\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS, and KineticLogger_LogPrintf()\&.
+References is_level_enabled(), KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS, and KineticLogger_LogPrintf()\&.
 .SS "void KineticLogger_LogByteArray (intlog_level, const char *title, \fBByteArray\fPbytes)"
 
 .PP
-Definition at line 480 of file kinetic_logger\&.c\&.
+Definition at line 472 of file kinetic_logger\&.c\&.
 .PP
-References ByteArray::data, KineticLogger_LogPrintf(), and ByteArray::len\&.
+References ByteArray::data, is_level_enabled(), KineticLogger_LogPrintf(), and ByteArray::len\&.
 .SS "void KineticLogger_LogByteBuffer (intlog_level, const char *title, \fBByteBuffer\fPbuffer)"
 
 .PP
-Definition at line 524 of file kinetic_logger\&.c\&.
+Definition at line 516 of file kinetic_logger\&.c\&.
 .PP
-References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and KineticLogger_LogByteArray()\&.
+References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, is_level_enabled(), and KineticLogger_LogByteArray()\&.
+.SS "void KineticLogger_LogTimestamp (intlog_level, const char *title)"
+
+.PP
+Definition at line 525 of file kinetic_logger\&.c\&.
+.PP
+References KineticLogger_LogPrintf()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "int KineticLogLevel = -1\fC [static]\fP"
+
+.PP
+Definition at line 35 of file kinetic_logger\&.c\&.
+.SS "FILE* KineticLoggerHandle = NULL\fC [static]\fP"
+
+.PP
+Definition at line 36 of file kinetic_logger\&.c\&.
+.SS "pthread_mutex_t BufferMutex = PTHREAD_MUTEX_INITIALIZER\fC [static]\fP"
+
+.PP
+Definition at line 37 of file kinetic_logger\&.c\&.
+.SS "char Buffer[1024]\fC [static]\fP"
+
+.PP
+Definition at line 38 of file kinetic_logger\&.c\&.
+.SS "char indent[64] = ' '\fC [static]\fP"
+
+.PP
+Definition at line 151 of file kinetic_logger\&.c\&.
+.SS "const size_t max_indent = sizeof(\fBindent\fP)-3\fC [static]\fP"
+
+.PP
+Definition at line 152 of file kinetic_logger\&.c\&.
+.SS "int indent_overflow = 0\fC [static]\fP"
+
+.PP
+Definition at line 153 of file kinetic_logger\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

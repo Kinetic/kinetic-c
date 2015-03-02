@@ -1,0 +1,58 @@
+.TH "acl.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+acl.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'acl_types\&.h'\fP
+.br
+\fC#include 'kinetic_proto\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBacl_of_file_res\fP \fBacl_of_file\fP (const char *path, struct \fBACL\fP **instance)"
+.br
+.ti -1c
+.RI "\fBacl_of_file_res\fP \fBacl_of_string\fP (const char *buf, size_t buf_size, struct \fBACL\fP **instance)"
+.br
+.ti -1c
+.RI "void \fBacl_fprintf\fP (FILE *f, struct \fBACL\fP *acl)"
+.br
+.ti -1c
+.RI "void \fBacl_free\fP (struct \fBACL\fP *acl)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBacl_of_file_res\fP acl_of_file (const char *path, struct \fBACL\fP **instance)"
+
+.PP
+Definition at line 71 of file acl\&.c\&.
+.PP
+References ACL_ERROR_BAD_JSON, ACL_ERROR_JSON_FILE, ACL_ERROR_MEMORY, ACL_ERROR_NULL, acl_of_string(), cleanup(), LOGF0, and LOGF2\&.
+.SS "\fBacl_of_file_res\fP acl_of_string (const char *buf, size_tbuf_size, struct \fBACL\fP **instance)"
+
+.PP
+Definition at line 127 of file acl\&.c\&.
+.PP
+References ACL::ACL_ceil, ACL::ACL_count, ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_MEMORY, ACL_OK, ACL::ACLs, cleanup(), LOG2, LOGF2, and read_next_ACL()\&.
+.SS "void acl_fprintf (FILE *f, struct \fBACL\fP *acl)"
+
+.PP
+Definition at line 382 of file acl\&.c\&.
+.PP
+References ACL::ACL_count, ACL::ACLs, and str_of_permission()\&.
+.SS "void acl_free (struct \fBACL\fP *acl)"
+
+.PP
+Definition at line 429 of file acl\&.c\&.
+.PP
+References ACL::ACL_count, and ACL::ACLs\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

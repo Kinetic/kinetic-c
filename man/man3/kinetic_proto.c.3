@@ -1,4 +1,4 @@
-.TH "kinetic_proto.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_proto.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -153,10 +153,43 @@ kinetic_proto.c \-
 .RI "char \fBKineticProto_local_protocol_version_default_value\fP [] = '3\&.0\&.5'"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_local__field_descriptors\fP [1]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_local__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_local__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_local__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_Message_hmacauth__field_descriptors\fP [2]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_Message_hmacauth__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_Message_hmacauth__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_Message_hmacauth__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_Message_pinauth__field_descriptors\fP [1]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_Message_pinauth__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_Message_pinauth__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_Message_pinauth__descriptor\fP"
@@ -165,16 +198,52 @@ kinetic_proto.c \-
 .RI "const ProtobufCEnumValue \fBKineticProto_Message_auth_type__enum_values_by_number\fP [4]"
 .br
 .ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_Message_auth_type__value_ranges\fP []"
+.br
+.ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_Message_auth_type__enum_values_by_name\fP [4]"
 .br
 .ti -1c
 .RI "const ProtobufCEnumDescriptor \fBKineticProto_Message_auth_type__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_Message__field_descriptors\fP [4]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_Message__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_Message__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_Message__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_header__field_descriptors\fP [9]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_header__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_header__number_ranges\fP [5+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_header__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_body__field_descriptors\fP [7]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_body__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_body__number_ranges\fP [2+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_body__descriptor\fP"
@@ -183,52 +252,220 @@ kinetic_proto.c \-
 .RI "const ProtobufCEnumValue \fBKineticProto_command_status_status_code__enum_values_by_number\fP [22]"
 .br
 .ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_status_status_code__value_ranges\fP []"
+.br
+.ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_status_status_code__enum_values_by_name\fP [22]"
 .br
 .ti -1c
 .RI "const ProtobufCEnumDescriptor \fBKineticProto_command_status_status_code__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_status__field_descriptors\fP [3]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_status__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_status__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_status__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_key_value__field_descriptors\fP [8]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_key_value__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_key_value__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_key_value__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_range__field_descriptors\fP [7]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_range__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_range__number_ranges\fP [2+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_range__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_setup__field_descriptors\fP [2]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_setup__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_setup__number_ranges\fP [2+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_setup__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_p2_poperation_operation__field_descriptors\fP [6]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_p2_poperation_operation__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_p2_poperation_operation__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_p2_poperation_operation__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_p2_poperation_peer__field_descriptors\fP [3]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_p2_poperation_peer__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_p2_poperation_peer__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_p2_poperation_peer__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_p2_poperation__field_descriptors\fP [3]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_p2_poperation__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_p2_poperation__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_p2_poperation__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log_utilization__field_descriptors\fP [2]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log_utilization__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_utilization__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log_utilization__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log_temperature__field_descriptors\fP [5]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log_temperature__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_temperature__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log_temperature__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log_capacity__field_descriptors\fP [2]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log_capacity__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_capacity__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log_capacity__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log_configuration_interface__field_descriptors\fP [4]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log_configuration_interface__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_configuration_interface__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log_configuration_interface__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log_configuration__field_descriptors\fP [13]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log_configuration__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_configuration__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log_configuration__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log_statistics__field_descriptors\fP [3]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log_statistics__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_statistics__number_ranges\fP [2+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log_statistics__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log_limits__field_descriptors\fP [11]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log_limits__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_limits__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log_limits__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log_device__field_descriptors\fP [1]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log_device__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_device__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log_device__descriptor\fP"
@@ -237,19 +474,47 @@ kinetic_proto.c \-
 .RI "const ProtobufCEnumValue \fBKineticProto_command_get_log_type__enum_values_by_number\fP [9]"
 .br
 .ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log_type__value_ranges\fP []"
+.br
+.ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_get_log_type__enum_values_by_name\fP [9]"
 .br
 .ti -1c
 .RI "const ProtobufCEnumDescriptor \fBKineticProto_command_get_log_type__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_get_log__field_descriptors\fP [9]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_get_log__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_get_log__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_get_log__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_security_acl_scope__field_descriptors\fP [4]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_security_acl_scope__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_security_acl_scope__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_security_acl_scope__descriptor\fP"
 .br
 .ti -1c
 .RI "const ProtobufCEnumValue \fBKineticProto_command_security_acl_hmacalgorithm__enum_values_by_number\fP [2]"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_security_acl_hmacalgorithm__value_ranges\fP []"
 .br
 .ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_security_acl_hmacalgorithm__enum_values_by_name\fP [2]"
@@ -261,13 +526,38 @@ kinetic_proto.c \-
 .RI "const ProtobufCEnumValue \fBKineticProto_command_security_acl_permission__enum_values_by_number\fP [9]"
 .br
 .ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_security_acl_permission__value_ranges\fP []"
+.br
+.ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_security_acl_permission__enum_values_by_name\fP [9]"
 .br
 .ti -1c
 .RI "const ProtobufCEnumDescriptor \fBKineticProto_command_security_acl_permission__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_security_acl__field_descriptors\fP [5]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_security_acl__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_security_acl__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_security_acl__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_security__field_descriptors\fP [5]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_security__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_security__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_security__descriptor\fP"
@@ -276,16 +566,33 @@ kinetic_proto.c \-
 .RI "const ProtobufCEnumValue \fBKineticProto_command_pin_operation_pin_op_type__enum_values_by_number\fP [5]"
 .br
 .ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_pin_operation_pin_op_type__value_ranges\fP []"
+.br
+.ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_pin_operation_pin_op_type__enum_values_by_name\fP [5]"
 .br
 .ti -1c
 .RI "const ProtobufCEnumDescriptor \fBKineticProto_command_pin_operation_pin_op_type__descriptor\fP"
 .br
 .ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command_pin_operation__field_descriptors\fP [1]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command_pin_operation__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_pin_operation__number_ranges\fP [1+1]"
+.br
+.ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command_pin_operation__descriptor\fP"
 .br
 .ti -1c
 .RI "const ProtobufCEnumValue \fBKineticProto_command_synchronization__enum_values_by_number\fP [4]"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_synchronization__value_ranges\fP []"
 .br
 .ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_synchronization__enum_values_by_name\fP [4]"
@@ -297,6 +604,9 @@ kinetic_proto.c \-
 .RI "const ProtobufCEnumValue \fBKineticProto_command_priority__enum_values_by_number\fP [5]"
 .br
 .ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_priority__value_ranges\fP []"
+.br
+.ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_priority__enum_values_by_name\fP [5]"
 .br
 .ti -1c
@@ -304,6 +614,9 @@ kinetic_proto.c \-
 .br
 .ti -1c
 .RI "const ProtobufCEnumValue \fBKineticProto_command_algorithm__enum_values_by_number\fP [6]"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_algorithm__value_ranges\fP []"
 .br
 .ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_algorithm__enum_values_by_name\fP [6]"
@@ -315,10 +628,24 @@ kinetic_proto.c \-
 .RI "const ProtobufCEnumValue \fBKineticProto_command_message_type__enum_values_by_number\fP [33]"
 .br
 .ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command_message_type__value_ranges\fP []"
+.br
+.ti -1c
 .RI "const ProtobufCEnumValueIndex \fBKineticProto_command_message_type__enum_values_by_name\fP [33]"
 .br
 .ti -1c
 .RI "const ProtobufCEnumDescriptor \fBKineticProto_command_message_type__descriptor\fP"
+.br
+.ti -1c
+.RI "static const 
+.br
+ProtobufCFieldDescriptor \fBKineticProto_command__field_descriptors\fP [3]"
+.br
+.ti -1c
+.RI "static const unsigned \fBKineticProto_command__field_indices_by_name\fP []"
+.br
+.ti -1c
+.RI "static const ProtobufCIntRange \fBKineticProto_command__number_ranges\fP [1+1]"
 .br
 .ti -1c
 .RI "const ProtobufCMessageDescriptor \fBKineticProto_command__descriptor\fP"
@@ -590,6 +917,48 @@ References KineticProto_command__descriptor\&.
 
 .PP
 Definition at line 255 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_local__field_descriptors[1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {
+        "protocolVersion",
+        1,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_STRING,
+        0,   
+        offsetof(KineticProto_Local, protocolVersion),
+        NULL,
+        &KineticProto_local_protocol_version_default_value,
+        0,             
+        0, NULL, NULL  
+    },
+}
+.fi
+.PP
+Definition at line 256 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_local__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+}
+.fi
+.PP
+Definition at line 270 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_local__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 1 }
+}
+.fi
+.PP
+Definition at line 273 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_local__descriptor"
 \fBInitial value:\fP
 .PP
@@ -611,6 +980,61 @@ Definition at line 255 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 277 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_Message_hmacauth__field_descriptors[2]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {
+        "identity",
+        1,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_INT64,
+        offsetof(KineticProto_Message_HMACauth, has_identity),
+        offsetof(KineticProto_Message_HMACauth, identity),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+    {
+        "hmac",
+        2,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_BYTES,
+        offsetof(KineticProto_Message_HMACauth, has_hmac),
+        offsetof(KineticProto_Message_HMACauth, hmac),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+}
+.fi
+.PP
+Definition at line 291 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_Message_hmacauth__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    1,   
+    0,   
+}
+.fi
+.PP
+Definition at line 317 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_Message_hmacauth__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 2 }
+}
+.fi
+.PP
+Definition at line 321 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_Message_hmacauth__descriptor"
 \fBInitial value:\fP
 .PP
@@ -632,6 +1056,48 @@ Definition at line 277 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 325 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_Message_pinauth__field_descriptors[1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {
+        "pin",
+        1,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_BYTES,
+        offsetof(KineticProto_Message_PINauth, has_pin),
+        offsetof(KineticProto_Message_PINauth, pin),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+}
+.fi
+.PP
+Definition at line 339 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_Message_pinauth__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+}
+.fi
+.PP
+Definition at line 353 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_Message_pinauth__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 1 }
+}
+.fi
+.PP
+Definition at line 356 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_Message_pinauth__descriptor"
 \fBInitial value:\fP
 .PP
@@ -666,6 +1132,16 @@ Definition at line 360 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 374 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_Message_auth_type__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {1, 1}, {0, 4}
+}
+.fi
+.PP
+Definition at line 380 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_Message_auth_type__enum_values_by_name[4]"
 \fBInitial value:\fP
 .PP
@@ -700,6 +1176,34 @@ Definition at line 383 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 389 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_Message__field_descriptors[4]\fC [static]\fP"
+
+.PP
+Definition at line 403 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_Message__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+    3,   
+    1,   
+    2,   
+}
+.fi
+.PP
+Definition at line 453 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_Message__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 4, 0 },
+    { 0, 4 }
+}
+.fi
+.PP
+Definition at line 459 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_Message__descriptor"
 \fBInitial value:\fP
 .PP
@@ -721,6 +1225,43 @@ Definition at line 389 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 463 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_header__field_descriptors[9]\fC [static]\fP"
+
+.PP
+Definition at line 477 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_header__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    8,   
+    3,   
+    0,   
+    1,   
+    6,   
+    4,   
+    7,   
+    2,   
+    5,   
+}
+.fi
+.PP
+Definition at line 587 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_header__number_ranges[5+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 3, 1 },
+    { 6, 3 },
+    { 9, 5 },
+    { 12, 7 },
+    { 0, 9 }
+}
+.fi
+.PP
+Definition at line 598 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_header__descriptor"
 \fBInitial value:\fP
 .PP
@@ -742,6 +1283,38 @@ Definition at line 463 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 606 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_body__field_descriptors[7]\fC [static]\fP"
+
+.PP
+Definition at line 620 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_body__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    4,   
+    0,   
+    3,   
+    6,   
+    1,   
+    5,   
+    2,   
+}
+.fi
+.PP
+Definition at line 706 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_body__number_ranges[2+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 6, 4 },
+    { 0, 7 }
+}
+.fi
+.PP
+Definition at line 715 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_body__descriptor"
 \fBInitial value:\fP
 .PP
@@ -794,6 +1367,16 @@ Definition at line 720 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 734 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_status_status_code__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {0, 22}
+}
+.fi
+.PP
+Definition at line 758 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_status_status_code__enum_values_by_name[22]"
 \fBInitial value:\fP
 .PP
@@ -846,6 +1429,33 @@ Definition at line 761 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 785 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_status__field_descriptors[3]\fC [static]\fP"
+
+.PP
+Definition at line 799 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_status__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+    2,   
+    1,   
+}
+.fi
+.PP
+Definition at line 837 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_status__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 3 }
+}
+.fi
+.PP
+Definition at line 842 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_status__descriptor"
 \fBInitial value:\fP
 .PP
@@ -867,6 +1477,38 @@ Definition at line 785 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 846 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_key_value__field_descriptors[8]\fC [static]\fP"
+
+.PP
+Definition at line 860 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_key_value__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    4,   
+    2,   
+    6,   
+    1,   
+    5,   
+    0,   
+    7,   
+    3,   
+}
+.fi
+.PP
+Definition at line 958 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_key_value__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 2, 0 },
+    { 0, 8 }
+}
+.fi
+.PP
+Definition at line 968 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_key_value__descriptor"
 \fBInitial value:\fP
 .PP
@@ -888,6 +1530,38 @@ Definition at line 846 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 972 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_range__field_descriptors[7]\fC [static]\fP"
+
+.PP
+Definition at line 986 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_range__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    1,   
+    3,   
+    6,   
+    4,   
+    5,   
+    0,   
+    2,   
+}
+.fi
+.PP
+Definition at line 1072 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_range__number_ranges[2+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 8, 6 },
+    { 0, 7 }
+}
+.fi
+.PP
+Definition at line 1081 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_range__descriptor"
 \fBInitial value:\fP
 .PP
@@ -909,6 +1583,62 @@ Definition at line 972 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1086 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_setup__field_descriptors[2]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {
+        "newClusterVersion",
+        1,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_INT64,
+        offsetof(KineticProto_Command_Setup, has_newClusterVersion),
+        offsetof(KineticProto_Command_Setup, newClusterVersion),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+    {
+        "firmwareDownload",
+        5,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_BOOL,
+        offsetof(KineticProto_Command_Setup, has_firmwareDownload),
+        offsetof(KineticProto_Command_Setup, firmwareDownload),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+}
+.fi
+.PP
+Definition at line 1100 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_setup__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    1,   
+    0,   
+}
+.fi
+.PP
+Definition at line 1126 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_setup__number_ranges[2+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 5, 1 },
+    { 0, 2 }
+}
+.fi
+.PP
+Definition at line 1130 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_setup__descriptor"
 \fBInitial value:\fP
 .PP
@@ -930,6 +1660,36 @@ Definition at line 1086 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1135 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_p2_poperation_operation__field_descriptors[6]\fC [static]\fP"
+
+.PP
+Definition at line 1149 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_p2_poperation_operation__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    3,   
+    0,   
+    2,   
+    5,   
+    4,   
+    1,   
+}
+.fi
+.PP
+Definition at line 1223 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_p2_poperation_operation__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 3, 0 },
+    { 0, 6 }
+}
+.fi
+.PP
+Definition at line 1231 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_p2_poperation_operation__descriptor"
 \fBInitial value:\fP
 .PP
@@ -951,6 +1711,33 @@ Definition at line 1135 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1235 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_p2_poperation_peer__field_descriptors[3]\fC [static]\fP"
+
+.PP
+Definition at line 1249 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_p2_poperation_peer__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+    1,   
+    2,   
+}
+.fi
+.PP
+Definition at line 1287 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_p2_poperation_peer__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 3 }
+}
+.fi
+.PP
+Definition at line 1292 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_p2_poperation_peer__descriptor"
 \fBInitial value:\fP
 .PP
@@ -972,6 +1759,33 @@ Definition at line 1235 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1296 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_p2_poperation__field_descriptors[3]\fC [static]\fP"
+
+.PP
+Definition at line 1310 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_p2_poperation__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    2,   
+    1,   
+    0,   
+}
+.fi
+.PP
+Definition at line 1348 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_p2_poperation__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 3 }
+}
+.fi
+.PP
+Definition at line 1353 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_p2_poperation__descriptor"
 \fBInitial value:\fP
 .PP
@@ -993,6 +1807,61 @@ Definition at line 1296 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1357 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log_utilization__field_descriptors[2]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {
+        "name",
+        1,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_STRING,
+        0,   
+        offsetof(KineticProto_Command_GetLog_Utilization, name),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+    {
+        "value",
+        2,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_FLOAT,
+        offsetof(KineticProto_Command_GetLog_Utilization, has_value),
+        offsetof(KineticProto_Command_GetLog_Utilization, value),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+}
+.fi
+.PP
+Definition at line 1371 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log_utilization__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+    1,   
+}
+.fi
+.PP
+Definition at line 1397 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_utilization__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 2 }
+}
+.fi
+.PP
+Definition at line 1401 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log_utilization__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1014,6 +1883,35 @@ Definition at line 1357 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1405 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log_temperature__field_descriptors[5]\fC [static]\fP"
+
+.PP
+Definition at line 1419 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log_temperature__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    1,   
+    3,   
+    2,   
+    0,   
+    4,   
+}
+.fi
+.PP
+Definition at line 1481 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_temperature__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 5 }
+}
+.fi
+.PP
+Definition at line 1488 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log_temperature__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1035,6 +1933,61 @@ Definition at line 1405 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1492 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log_capacity__field_descriptors[2]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {
+        "nominalCapacityInBytes",
+        4,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_UINT64,
+        offsetof(KineticProto_Command_GetLog_Capacity, has_nominalCapacityInBytes),
+        offsetof(KineticProto_Command_GetLog_Capacity, nominalCapacityInBytes),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+    {
+        "portionFull",
+        5,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_FLOAT,
+        offsetof(KineticProto_Command_GetLog_Capacity, has_portionFull),
+        offsetof(KineticProto_Command_GetLog_Capacity, portionFull),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+}
+.fi
+.PP
+Definition at line 1506 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log_capacity__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+    1,   
+}
+.fi
+.PP
+Definition at line 1532 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_capacity__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 4, 0 },
+    { 0, 2 }
+}
+.fi
+.PP
+Definition at line 1536 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log_capacity__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1056,6 +2009,34 @@ Definition at line 1492 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1540 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log_configuration_interface__field_descriptors[4]\fC [static]\fP"
+
+.PP
+Definition at line 1554 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log_configuration_interface__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    1,   
+    2,   
+    3,   
+    0,   
+}
+.fi
+.PP
+Definition at line 1604 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_configuration_interface__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 4 }
+}
+.fi
+.PP
+Definition at line 1610 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log_configuration_interface__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1077,6 +2058,43 @@ Definition at line 1540 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1614 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log_configuration__field_descriptors[13]\fC [static]\fP"
+
+.PP
+Definition at line 1628 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log_configuration__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    7,   
+    4,   
+    1,   
+    5,   
+    11,   
+    12,   
+    10,   
+    2,   
+    8,   
+    6,   
+    0,   
+    3,   
+    9,   
+}
+.fi
+.PP
+Definition at line 1786 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_configuration__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 5, 0 },
+    { 0, 13 }
+}
+.fi
+.PP
+Definition at line 1801 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log_configuration__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1098,6 +2116,34 @@ Definition at line 1614 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1805 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log_statistics__field_descriptors[3]\fC [static]\fP"
+
+.PP
+Definition at line 1819 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log_statistics__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    2,   
+    1,   
+    0,   
+}
+.fi
+.PP
+Definition at line 1857 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_statistics__number_ranges[2+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 4, 1 },
+    { 0, 3 }
+}
+.fi
+.PP
+Definition at line 1862 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log_statistics__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1119,6 +2165,41 @@ Definition at line 1805 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 1867 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log_limits__field_descriptors[11]\fC [static]\fP"
+
+.PP
+Definition at line 1881 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log_limits__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    4,   
+    9,   
+    8,   
+    0,   
+    7,   
+    5,   
+    6,   
+    10,   
+    3,   
+    1,   
+    2,   
+}
+.fi
+.PP
+Definition at line 2015 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_limits__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 11 }
+}
+.fi
+.PP
+Definition at line 2028 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log_limits__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1140,6 +2221,48 @@ Definition at line 1867 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2032 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log_device__field_descriptors[1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {
+        "name",
+        1,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_BYTES,
+        offsetof(KineticProto_Command_GetLog_Device, has_name),
+        offsetof(KineticProto_Command_GetLog_Device, name),
+        NULL,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+}
+.fi
+.PP
+Definition at line 2046 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log_device__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+}
+.fi
+.PP
+Definition at line 2060 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_device__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 1 }
+}
+.fi
+.PP
+Definition at line 2063 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log_device__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1179,6 +2302,16 @@ Definition at line 2067 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2081 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log_type__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {0, 9}
+}
+.fi
+.PP
+Definition at line 2092 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_get_log_type__enum_values_by_name[9]"
 \fBInitial value:\fP
 .PP
@@ -1218,6 +2351,39 @@ Definition at line 2095 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2106 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_get_log__field_descriptors[9]\fC [static]\fP"
+
+.PP
+Definition at line 2120 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_get_log__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    3,   
+    4,   
+    8,   
+    7,   
+    6,   
+    5,   
+    2,   
+    0,   
+    1,   
+}
+.fi
+.PP
+Definition at line 2230 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_get_log__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 9 }
+}
+.fi
+.PP
+Definition at line 2241 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_get_log__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1239,6 +2405,34 @@ Definition at line 2106 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2245 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_security_acl_scope__field_descriptors[4]\fC [static]\fP"
+
+.PP
+Definition at line 2259 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_security_acl_scope__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    3,   
+    0,   
+    2,   
+    1,   
+}
+.fi
+.PP
+Definition at line 2309 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_security_acl_scope__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 4 }
+}
+.fi
+.PP
+Definition at line 2315 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_security_acl_scope__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1271,6 +2465,16 @@ Definition at line 2319 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2333 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_security_acl_hmacalgorithm__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {1, 1}, {0, 2}
+}
+.fi
+.PP
+Definition at line 2337 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_security_acl_hmacalgorithm__enum_values_by_name[2]"
 \fBInitial value:\fP
 .PP
@@ -1321,6 +2525,16 @@ Definition at line 2344 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2358 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_security_acl_permission__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {7, 7}, {0, 9}
+}
+.fi
+.PP
+Definition at line 2369 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_security_acl_permission__enum_values_by_name[9]"
 \fBInitial value:\fP
 .PP
@@ -1360,6 +2574,35 @@ Definition at line 2372 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2383 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_security_acl__field_descriptors[5]\fC [static]\fP"
+
+.PP
+Definition at line 2397 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_security_acl__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    2,   
+    0,   
+    1,   
+    4,   
+    3,   
+}
+.fi
+.PP
+Definition at line 2459 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_security_acl__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 5 }
+}
+.fi
+.PP
+Definition at line 2466 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_security_acl__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1381,6 +2624,35 @@ Definition at line 2383 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2470 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_security__field_descriptors[5]\fC [static]\fP"
+
+.PP
+Definition at line 2484 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_security__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+    4,   
+    2,   
+    3,   
+    1,   
+}
+.fi
+.PP
+Definition at line 2546 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_security__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 2, 0 },
+    { 0, 5 }
+}
+.fi
+.PP
+Definition at line 2553 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_security__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1416,6 +2688,16 @@ Definition at line 2557 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2571 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_pin_operation_pin_op_type__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {1, 1}, {0, 5}
+}
+.fi
+.PP
+Definition at line 2578 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_pin_operation_pin_op_type__enum_values_by_name[5]"
 \fBInitial value:\fP
 .PP
@@ -1451,6 +2733,48 @@ Definition at line 2581 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2588 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command_pin_operation__field_descriptors[1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {
+        "pinOpType",
+        1,
+        PROTOBUF_C_LABEL_OPTIONAL,
+        PROTOBUF_C_TYPE_ENUM,
+        offsetof(KineticProto_Command_PinOperation, has_pinOpType),
+        offsetof(KineticProto_Command_PinOperation, pinOpType),
+        &KineticProto_command_pin_operation_pin_op_type__descriptor,
+        NULL,
+        0,             
+        0, NULL, NULL  
+    },
+}
+.fi
+.PP
+Definition at line 2602 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command_pin_operation__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    0,   
+}
+.fi
+.PP
+Definition at line 2616 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_pin_operation__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 1 }
+}
+.fi
+.PP
+Definition at line 2619 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command_pin_operation__descriptor"
 \fBInitial value:\fP
 .PP
@@ -1485,6 +2809,16 @@ Definition at line 2623 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2637 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_synchronization__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {1, 1}, {0, 4}
+}
+.fi
+.PP
+Definition at line 2643 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_synchronization__enum_values_by_name[4]"
 \fBInitial value:\fP
 .PP
@@ -1533,6 +2867,16 @@ Definition at line 2652 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2666 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_priority__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    {1, 0}, {3, 1}, {5, 2}, {7, 3}, {9, 4}, {0, 5}
+}
+.fi
+.PP
+Definition at line 2673 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_priority__enum_values_by_name[5]"
 \fBInitial value:\fP
 .PP
@@ -1583,6 +2927,16 @@ Definition at line 2683 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2697 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_algorithm__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {1, 1}, {0, 6}
+}
+.fi
+.PP
+Definition at line 2705 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_algorithm__enum_values_by_name[6]"
 \fBInitial value:\fP
 .PP
@@ -1623,6 +2977,16 @@ Definition at line 2716 of file kinetic_proto\&.c\&.
 
 .PP
 Definition at line 2730 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command_message_type__value_ranges[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { -1, 0}, {1, 1}, {15, 13}, {21, 15}, {35, 27}, {0, 33}
+}
+.fi
+.PP
+Definition at line 2765 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCEnumValueIndex KineticProto_command_message_type__enum_values_by_name[33]"
 
 .PP
@@ -1648,6 +3012,33 @@ Definition at line 2768 of file kinetic_proto\&.c\&.
 .fi
 .PP
 Definition at line 2803 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCFieldDescriptor KineticProto_command__field_descriptors[3]\fC [static]\fP"
+
+.PP
+Definition at line 2817 of file kinetic_proto\&.c\&.
+.SS "const unsigned KineticProto_command__field_indices_by_name[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    1,   
+    0,   
+    2,   
+}
+.fi
+.PP
+Definition at line 2855 of file kinetic_proto\&.c\&.
+.SS "const ProtobufCIntRange KineticProto_command__number_ranges[1+1]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { 1, 0 },
+    { 0, 3 }
+}
+.fi
+.PP
+Definition at line 2860 of file kinetic_proto\&.c\&.
 .SS "const ProtobufCMessageDescriptor KineticProto_command__descriptor"
 \fBInitial value:\fP
 .PP

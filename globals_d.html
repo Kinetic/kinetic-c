@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -61,6 +61,7 @@
       <li><a href="globals_b.html#index_b"><span>b</span></a></li>
       <li><a href="globals_c.html#index_c"><span>c</span></a></li>
       <li class="current"><a href="globals_d.html#index_d"><span>d</span></a></li>
+      <li><a href="globals_e.html#index_e"><span>e</span></a></li>
       <li><a href="globals_f.html#index_f"><span>f</span></a></li>
       <li><a href="globals_g.html#index_g"><span>g</span></a></li>
       <li><a href="globals_h.html#index_h"><span>h</span></a></li>
@@ -69,6 +70,7 @@
       <li><a href="globals_l.html#index_l"><span>l</span></a></li>
       <li><a href="globals_m.html#index_m"><span>m</span></a></li>
       <li><a href="globals_n.html#index_n"><span>n</span></a></li>
+      <li><a href="globals_o.html#index_o"><span>o</span></a></li>
       <li><a href="globals_p.html#index_p"><span>p</span></a></li>
       <li><a href="globals_r.html#index_r"><span>r</span></a></li>
       <li><a href="globals_s.html#index_s"><span>s</span></a></li>
@@ -83,6 +85,10 @@
 <div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div>
 
 <h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
+<li>decrement_fd_refcount()
+: <a class="el" href="sender_8c.html#a09ec64a8af8244d6b69a7e79fa9065f3">sender.c</a>
+, <a class="el" href="sender__internal_8h.html#a09ec64a8af8244d6b69a7e79fa9065f3">sender_internal.h</a>
+</li>
 <li>DEF_FD_SET_SIZE2
 : <a class="el" href="bus_8c.html#a7129e5f5219981ae2b4d3babdc5f6a73">bus.c</a>
 </li>
@@ -104,11 +110,59 @@
 <li>DEFAULT_TASK_RINGBUF_SIZE2
 : <a class="el" href="threadpool_8c.html#a26c3a43d928f5c3dd1de6e86f973b1d7">threadpool.c</a>
 </li>
+<li>DefaultCallback()
+: <a class="el" href="kinetic__controller_8c.html#a2dbaf873b34b0edff07641deb5630092">kinetic_controller.c</a>
+</li>
+<li>DefaultClosure()
+: <a class="el" href="kinetic__controller_8c.html#a0da2f128e6f80bbb475eebc181630a87">kinetic_controller.c</a>
+</li>
 <li>destroy_p2pOp()
 : <a class="el" href="kinetic__operation_8c.html#ade10b18ca3d5744ee90fca3e1b06a85a">kinetic_operation.c</a>
 </li>
+<li>disable_known_bad_ciphers()
+: <a class="el" href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376">bus_ssl.c</a>
+</li>
+<li>disable_SSL_compression()
+: <a class="el" href="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3">bus_ssl.c</a>
+</li>
+<li>disconnect_client()
+: <a class="el" href="echosrv_8c.html#a2700fdb6c0374b394629bb76f5102bcd">echosrv.c</a>
+</li>
+<li>discover_service()
+: <a class="el" href="discovery_8c.html#ac5c82c7f3e482ef75ee1659f78b43f91">discovery.c</a>
+</li>
+<li>do_blocking_connection()
+: <a class="el" href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15">bus_ssl.c</a>
+</li>
+<li>do_flush()
+: <a class="el" href="blocking__flush_8c.html#a4f6a0b1466d21328a89a2ad959660799">blocking_flush.c</a>
+</li>
+<li>do_noop()
+: <a class="el" href="blocking__noop_8c.html#afd999388502d7c384b0d1f06cfd62a80">blocking_noop.c</a>
+</li>
+<li>do_put_and_delete()
+: <a class="el" href="blocking__put__delete_8c.html#adf3f3adc55e6a83c83d6a7f6b291c275">blocking_put_delete.c</a>
+</li>
+<li>do_put_and_get()
+: <a class="el" href="blocking__put__get_8c.html#abdb700b13512c31f8ae58462fb630a14">blocking_put_get.c</a>
+</li>
+<li>do_put_and_getkeyrange()
+: <a class="el" href="blocking__getkeyrange_8c.html#a3744c51bae94d6a5e2c5e7bae7d493f5">blocking_getkeyrange.c</a>
+</li>
+<li>do_put_and_getprevious_getnext()
+: <a class="el" href="blocking__getnext__getprevious_8c.html#a35fa4bc1dffceb57c1c3cac729116fdd">blocking_getnext_getprevious.c</a>
+</li>
 <li>DUMP_READ
 : <a class="el" href="listener_8c.html#a1d7054af083649f8e410783fbf2e7b33">listener.c</a>
+</li>
+<li>dump_rx_info_table()
+: <a class="el" href="listener__internal_8h.html#a2b75e85745a6799df9e90def5caf0578">listener_internal.h</a>
+, <a class="el" href="listener_8c.html#a2b75e85745a6799df9e90def5caf0578">listener.c</a>
+</li>
+<li>dump_stats()
+: <a class="el" href="test__threadpool_8c.html#a2df1af795cfdca34e4e80bcac94d92ca">test_threadpool.c</a>
+, <a class="el" href="test__threadpool__sequencing_8c.html#a602a679191df93c2181c76daa4d20ce0">test_threadpool_sequencing.c</a>
+, <a class="el" href="test__threadpool__stress_8c.html#a602a679191df93c2181c76daa4d20ce0">test_threadpool_stress.c</a>
 </li>
 </ul>
 </div><!-- contents -->

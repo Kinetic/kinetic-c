@@ -1,4 +1,4 @@
-.TH "yacht.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "yacht.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -81,13 +81,13 @@ References DEF_SZ2, LOG, and YACHT_NO_KEY\&.
 .PP
 Definition at line 105 of file yacht\&.c\&.
 .PP
-References LOG, and MAX_PROBES\&.
+References grow(), insert(), LOG, and MAX_PROBES\&.
 .SS "bool yacht_get (struct yacht *y, intkey, void **value)"
 
 .PP
 Definition at line 81 of file yacht\&.c\&.
 .PP
-References LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
+References hash(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
 .SS "bool yacht_member (struct yacht *y, intkey)"
 
 .PP
@@ -99,7 +99,7 @@ References LOG, and yacht_get()\&.
 .PP
 Definition at line 203 of file yacht\&.c\&.
 .PP
-References LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
+References hash(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
 .SS "void yacht_free (struct yacht *y, \fByacht_free_cb\fP *cb, void *udata)"
 
 .PP

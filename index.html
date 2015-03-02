@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -69,8 +69,9 @@
 </li>
 </ul>
 </li>
-<li><a href="https://github.com/json-c/json-c">json-c</a> for JSON-formatted ACL definition files<ul>
+<li><a href="https://github.com/json-c/json-c">json-c</a> for JSON-formatted <a class="el" href="struct_a_c_l.html">ACL</a> definition files<ul>
 <li>Installation<ul>
+<li>via package manager<ul>
 <li>Linux (using apt-get)<ul>
 <li><code>&gt; sudo apt-get install json-c</code></li>
 </ul>
@@ -85,6 +86,13 @@
 </li>
 </ul>
 </li>
+<li>via Git submodule (from bundled source)<ul>
+<li><code>&gt; make json</code></li>
+<li><code>&gt; sudo make install_json</code></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -93,14 +101,14 @@
 <h2>Getting Started </h2>
 <p><b>Clone the repo</b> </p><pre class="fragment">&gt; git clone --recursive https://github.com/seagate/kinetic-c.git
 &gt; cd kinetic-c
-&gt; bundle install # ensure you have all RubyGems at the proper versions
 </pre><p><b>Update to the latest version (previously cloned)</b> </p><pre class="fragment">&gt; git pull
-&gt; make clean
+&gt; make config # ensures all git submodules are up to date
 </pre><p><b>Build and install static library</b> </p><pre class="fragment">&gt; make
 &gt; sudo make install
-</pre><p><b>Clean and uninstall old versions</b> </p><pre class="fragment">&gt; make clean
+</pre><p><b>Clean and uninstall any old versions</b> </p><pre class="fragment">&gt; make clean
 &gt; sudo make uninstall
-</pre><p><b>Build example utility and run tests against Kinetic Device simulator</b> </p><pre class="fragment">&gt; make all # this is what Travis-CI build does does for regression testing
+</pre><p><b>Build example utility and run tests against Kinetic Device simulator</b> </p><pre class="fragment">&gt; make start_sims # starts bundled kinetic-java simulators for testing
+&gt; make all # this is what Travis-CI build does does for regression testing
 </pre><h1>API Documentation </h1>
 <p><a href="http://seagate.github.io/kinetic-c/">Kinetic-C API Documentation</a> (generated with Doxygen)</p><ul>
 <li><a href="http://seagate.github.io/kinetic-c/kinetic__client_8h.html">Kinetic-C API</a></li>
@@ -113,53 +121,45 @@
 </ul>
 </li>
 </ul>
-<p><b>NOTE: Configuration structures <code><a class="el" href="struct_kinetic_client_config.html" title="Configuration values for the KineticClient connection. ">KineticClientConfig</a></code> and <code><a class="el" href="struct_kinetic_session_config.html" title="Structure used to specify the configuration for a session. ">KineticSessionConfig</a></code> should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure backwards compatibility!</b></p>
+<p><b>NOTE: Configuration structures <code><a class="el" href="struct_kinetic_client_config.html" title="Configuration values for the KineticClient connection. ">KineticClientConfig</a></code> and <code><a class="el" href="struct_kinetic_session_config.html" title="Structure used to specify the configuration for a session. ">KineticSessionConfig</a></code> should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure forward/backward compatibility upon changes to these structure definitions!</b></p>
 <h1>Client Test Utility </h1>
 <p>Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.</p>
 <ul>
 <li><code>kinetic-c-util</code> builds/links against Kinetic C static library (.a)</li>
 <li><code>kinetic-c-util.x.y.z</code> builds/links against Kinetic C dynamic library (.so)</li>
 </ul>
-<p>The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.</p>
-<h2>Options </h2>
+<h2>Usage </h2>
+<pre class="fragment">$ cd bin
+$ ./kinetic-c-util --help
+Usage: ./kinetic-c-util --&lt;cmd&gt; [options...]
+./kinetic-c-util --help
+./kinetic-c-util --noop [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --put [--key &lt;key&gt;] [--value &lt;value&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --get [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --getnext [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --getprevious [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --delete [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --setclusterversion &lt;--newclusterversion &lt;newclusterversion&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --seterasepin &lt;--pin &lt;oldpin&gt;&gt; &lt;--newpin &lt;newerasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --instanterase &lt;--pin &lt;erasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --secureerase &lt;--pin &lt;erasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --setlockpin &lt;--pin &lt;oldpin&gt;&gt; &lt;--newpin &lt;newpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --lockdevice &lt;--pin &lt;lockpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --unlockdevice &lt;--pin &lt;lockpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --setacl &lt;--file &lt;acl_json_file&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --getlog [--type &lt;utilization|temperature|capacity|configuration|message|statistic|limits&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./kinetic-c-util --updatefirmware &lt;--file &lt;file&gt;&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;] [--pin &lt;pin&gt;]
+</pre><h1>Kinetic C Client I/O Examples </h1>
 <ul>
-<li><code>--host [HostName/IP]</code> or <code>-h [HostName/IP]</code> - Set the Kinetic Device host</li>
-</ul>
-<h2>Operations </h2>
-<ul>
-<li><code>kinetic-c-util [--host|-h hostname|123.253.253.23] [noop] [put] [get] [delete] [instanterase]</code><ul>
-<li><code>./bin/kinetic-c-util noop</code><ul>
-<li>Execute a NoOp (ping) operation to verify the Kinetic Device is ready</li>
-</ul>
-</li>
-<li><code>./bin/kinetic-c-util put</code><ul>
-<li>Execute a Put operation to store a key/value entry</li>
-</ul>
-</li>
-<li><code>./bin/kinetic-c-util get</code><ul>
-<li>Execute a Get operation to retrieve a key/value entry</li>
-</ul>
-</li>
-<li><code>./bin/kinetic-c-util delete</code><ul>
-<li>Execute a Delete operation to destroy a key/value entry</li>
-</ul>
-</li>
-<li><code>./bin/kinetic-c-util instanterase</code> <em>INCOMPLETE</em><ul>
-<li>Execute an InstantSecureErase operation to erase ALL content from the device</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1>Kinetic C Client I/O Examples </h1>
-<ul>
+<li><a href="src/examples/blocking_put_get.c">`blocking_put_get`</a> - Blocking put w/get.</li>
+<li><a href="src/examples/blocking_put_delete.c">`blocking_put_delete`</a> - Blocking put w/delete.</li>
 <li><a href="src/examples/put_nonblocking.c">`put_nonblocking`</a> - Single thread, single connection, nonblocking put operation.</li>
 <li><a href="src/examples/get_nonblocking.c">`get_nonblocking`</a> - Single thread, single connection, nonblocking get operation.</li>
+<li><a href="src/examples/get_key_range.c">`get_key_range`</a> - Query a range of keys from a device.</li>
 <li><a href="src/examples/write_file_blocking.c">`write_file_blocking`</a> - Single thread, single connection, blocking operation.</li>
 <li><a href="src/examples/write_file_blocking_threads.c">`write_file_blocking_threads`</a> - Multiple threads, single connection, blocking operations.</li>
 <li><a href="src/examples/write_file_nonblocking.c">`write_file_nonblocking`</a> - Single thread, single connection, multiple non-blocking operations</li>
-<li><a href="src/examples/write_file_blocking_threads.c">`write_file_blocking_threads`</a> - Multiple threads, single connection, multiple non-blocking operations.</li>
-<li><a href="src/examples/get_key_range.c">`get_key_range`</a> - Query a range of keys from a device. </li>
+<li><a href="src/examples/write_file_blocking_threads.c">`write_file_blocking_threads`</a> - Multiple threads, single connection, multiple non-blocking operations. </li>
 </ul>
 </div></div><!-- contents -->
 <!-- start footer part -->

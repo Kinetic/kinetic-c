@@ -1,0 +1,146 @@
+.TH "acl.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+acl.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include 'acl\&.h'\fP
+.br
+\fC#include 'json\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBPERM_TABLE_ROWS\fP   sizeof(\fBpermission_table\fP)/sizeof(\fBpermission_table\fP)[0]"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBacl_of_file_res\fP \fBread_next_ACL\fP (const char *buf, size_t buf_size, size_t offset, size_t *new_offset, struct json_tokener *tokener, KineticProto_Command_Security_ACL **instance)"
+.br
+.ti -1c
+.RI "static \fBacl_of_file_res\fP \fBunpack_scopes\fP (KineticProto_Command_Security_ACL *acl, int scope_count, json_object *scopes)"
+.br
+.ti -1c
+.RI "static const char * \fBstr_of_permission\fP (\fBKineticProto_Command_Security_ACL_Permission\fP perm)"
+.br
+.ti -1c
+.RI "static 
+.br
+\fBKineticProto_Command_Security_ACL_Permission\fP \fBpermission_of_str\fP (const char *str)"
+.br
+.ti -1c
+.RI "\fBacl_of_file_res\fP \fBacl_of_file\fP (const char *path, struct \fBACL\fP **instance)"
+.br
+.ti -1c
+.RI "\fBacl_of_file_res\fP \fBacl_of_string\fP (const char *buf, size_t buf_size, struct \fBACL\fP **instance)"
+.br
+.ti -1c
+.RI "void \fBacl_fprintf\fP (FILE *f, struct \fBACL\fP *ACLs)"
+.br
+.ti -1c
+.RI "void \fBacl_free\fP (struct \fBACL\fP *ACLs)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static permission_pair \fBpermission_table\fP []"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define PERM_TABLE_ROWS   sizeof(\fBpermission_table\fP)/sizeof(\fBpermission_table\fP)[0]"
+
+.PP
+Definition at line 46 of file acl\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "static \fBacl_of_file_res\fP read_next_ACL (const char *buf, size_tbuf_size, size_toffset, size_t *new_offset, struct json_tokener *tokener, KineticProto_Command_Security_ACL **instance)\fC [static]\fP"
+
+.PP
+Definition at line 194 of file acl\&.c\&.
+.PP
+References ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_INVALID_FIELD, ACL_ERROR_MEMORY, ACL_ERROR_MISSING_FIELD, ACL_OK, cleanup(), KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticProto_command_security_acl__init(), LOGF2, and unpack_scopes()\&.
+.SS "static \fBacl_of_file_res\fP unpack_scopes (KineticProto_Command_Security_ACL *acl, intscope_count, json_object *scopes)\fC [static]\fP"
+
+.PP
+Definition at line 281 of file acl\&.c\&.
+.PP
+References ACL_ERROR_INVALID_FIELD, ACL_ERROR_MEMORY, ACL_MAX_PERMISSIONS, ACL_OK, cleanup(), KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION, KineticProto_command_security_acl_scope__init(), and permission_of_str()\&.
+.SS "static const char* str_of_permission (\fBKineticProto_Command_Security_ACL_Permission\fPperm)\fC [static]\fP"
+
+.PP
+Definition at line 54 of file acl\&.c\&.
+.PP
+References PERM_TABLE_ROWS, and permission_table\&.
+.SS "static \fBKineticProto_Command_Security_ACL_Permission\fP permission_of_str (const char *str)\fC [static]\fP"
+
+.PP
+Definition at line 62 of file acl\&.c\&.
+.PP
+References KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION, PERM_TABLE_ROWS, and permission_table\&.
+.SS "\fBacl_of_file_res\fP acl_of_file (const char *path, struct \fBACL\fP **instance)"
+
+.PP
+Definition at line 71 of file acl\&.c\&.
+.PP
+References ACL_ERROR_BAD_JSON, ACL_ERROR_JSON_FILE, ACL_ERROR_MEMORY, ACL_ERROR_NULL, acl_of_string(), cleanup(), LOGF0, and LOGF2\&.
+.SS "\fBacl_of_file_res\fP acl_of_string (const char *buf, size_tbuf_size, struct \fBACL\fP **instance)"
+
+.PP
+Definition at line 127 of file acl\&.c\&.
+.PP
+References ACL::ACL_ceil, ACL::ACL_count, ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_MEMORY, ACL_OK, ACL::ACLs, cleanup(), LOG2, LOGF2, and read_next_ACL()\&.
+.SS "void acl_fprintf (FILE *f, struct \fBACL\fP *ACLs)"
+
+.PP
+Definition at line 382 of file acl\&.c\&.
+.PP
+References ACL::ACL_count, ACL::ACLs, and str_of_permission()\&.
+.SS "void acl_free (struct \fBACL\fP *ACLs)"
+
+.PP
+Definition at line 429 of file acl\&.c\&.
+.PP
+References ACL::ACL_count, and ACL::ACLs\&.
+.SH "Variable Documentation"
+.PP 
+.SS "permission_pair permission_table[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION, "INVALID" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_READ, "READ" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_WRITE, "WRITE" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_DELETE, "DELETE" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_RANGE, "RANGE" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SETUP, "SETUP" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_P2POP, "P2POP" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_GETLOG, "GETLOG" },
+    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SECURITY, "SECURITY" },
+}
+.fi
+.PP
+Definition at line 34 of file acl\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

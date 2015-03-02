@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -67,7 +67,6 @@
       <li><a href="functions_vars_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_vars_o.html#index_o"><span>o</span></a></li>
       <li class="current"><a href="functions_vars_p.html#index_p"><span>p</span></a></li>
-      <li><a href="functions_vars_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_vars_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_vars_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_vars_t.html#index_t"><span>t</span></a></li>
@@ -101,14 +100,19 @@
 : <a class="el" href="struct___kinetic_p2_p___operation.html#ac32205ac1a2f8be70c83f0480e38fb33">KineticP2P_Operation</a>
 , <a class="el" href="struct___kinetic_proto___command___p2_p_operation.html#a8de0cc460a9422e5ff00b5dd9fecb165">KineticProto_Command_P2POperation</a>
 </li>
+<li>pendingClusterVersion
+: <a class="el" href="struct___kinetic_operation.html#a2e8b9158b15347b702e13789c9fb07d3">KineticOperation</a>
+</li>
 <li>permission
 : <a class="el" href="struct___kinetic_proto___command___security___a_c_l___scope.html#a3eca715539253911c1820bfb83428267">KineticProto_Command_Security_ACL_Scope</a>
 </li>
 <li>pin
-: <a class="el" href="struct___kinetic_proto___message___p_i_nauth.html#a4854ac94c2fbd2c8201ad4eb78bec7bc">KineticProto_Message_PINauth</a>
+: <a class="el" href="struct___kinetic_operation.html#a6b989ccd52e3a13c0b1be149274201c5">KineticOperation</a>
+, <a class="el" href="struct___kinetic_proto___message___p_i_nauth.html#a4854ac94c2fbd2c8201ad4eb78bec7bc">KineticProto_Message_PINauth</a>
 </li>
 <li>pinAuth
 : <a class="el" href="struct___kinetic_proto___message.html#a220f95994286d3819bf74d41a3a9067c">KineticProto_Message</a>
+, <a class="el" href="struct___kinetic_request.html#af7cc105fca64b2b8d72b54c5ea47a39f">KineticRequest</a>
 , <a class="el" href="struct_kinetic_message.html#a8db73a9cdb40162f8831aee558519ac8">KineticMessage</a>
 </li>
 <li>pinOp
@@ -124,13 +128,13 @@
 <li>port
 : <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#a0c172409541f2ec3b92297d70a8a3989">KineticProto_Command_GetLog_Configuration</a>
 , <a class="el" href="struct___kinetic_proto___command___p2_p_operation___peer.html#afd42b4eb061bb77c2a51d5811b024826">KineticProto_Command_P2POperation_Peer</a>
-, <a class="el" href="struct_kinetic_device_info___configuration.html#aaaa46b5727d68bca0d4971273eb52d49">KineticDeviceInfo_Configuration</a>
+, <a class="el" href="struct_kinetic_log_info___configuration.html#a2e2534025f419a00765e5b9e6b09fee4">KineticLogInfo_Configuration</a>
 , <a class="el" href="struct_kinetic_p2_p___peer.html#a7aca8a7cb0c77dd219553896c836cec5">KineticP2P_Peer</a>
 , <a class="el" href="struct_kinetic_session_config.html#ab3c117e8a53fb2bc7c14fc45dd0a38d2">KineticSessionConfig</a>
 </li>
 <li>portionFull
 : <a class="el" href="struct___kinetic_proto___command___get_log___capacity.html#ae9335e4d74971dd1aef035ad89ba7f9a">KineticProto_Command_GetLog_Capacity</a>
-, <a class="el" href="struct_kinetic_device_info___capacity.html#ac6965e88e9286697719f230649a09706">KineticDeviceInfo_Capacity</a>
+, <a class="el" href="struct_kinetic_log_info___capacity.html#afffa9d4c4f7ae73a996cea8b1297bd5d">KineticLogInfo_Capacity</a>
 </li>
 <li>post_suite
 : <a class="el" href="structgreatest__suite__info.html#a094a535313bce6aae217e190b11b41a6">greatest_suite_info</a>
@@ -155,16 +159,16 @@
 </li>
 <li>protocolCompilationDate
 : <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#a5920adfc8eb7f40b8c1957bd62b5bcf5">KineticProto_Command_GetLog_Configuration</a>
-, <a class="el" href="struct_kinetic_device_info___configuration.html#a8675e4c1e069e8db7aa94ee91093d1b7">KineticDeviceInfo_Configuration</a>
+, <a class="el" href="struct_kinetic_log_info___configuration.html#ac6385c35c4cfd84715ad508ee1205ee4">KineticLogInfo_Configuration</a>
 </li>
 <li>protocolSourceHash
 : <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#a9862c61e0a5bfdeac7164d1fa2305b58">KineticProto_Command_GetLog_Configuration</a>
-, <a class="el" href="struct_kinetic_device_info___configuration.html#a400c8d7199dc2f911a92bc23cc436ab6">KineticDeviceInfo_Configuration</a>
+, <a class="el" href="struct_kinetic_log_info___configuration.html#a41960c4f8d287ed1bf553728e2693af4">KineticLogInfo_Configuration</a>
 </li>
 <li>protocolVersion
 : <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#a482d06dd3d5fad6e03c2434a71d85af9">KineticProto_Command_GetLog_Configuration</a>
 , <a class="el" href="struct___kinetic_proto___local.html#ad7f03e7e4d23671f0f7f8883cc0e1937">_KineticProto_Local</a>
-, <a class="el" href="struct_kinetic_device_info___configuration.html#a3a96719b8c04a7a9cf99636d9fefbf96">KineticDeviceInfo_Configuration</a>
+, <a class="el" href="struct_kinetic_log_info___configuration.html#a345696c93ddcc04e7eb483a4994ec35f">KineticLogInfo_Configuration</a>
 </li>
 <li>pSession
 : <a class="el" href="struct___kinetic_connection.html#afb22914fb92631ca2e5db32e94a8d6b3">KineticConnection</a>

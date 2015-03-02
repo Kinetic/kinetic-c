@@ -1,4 +1,4 @@
-.TH "kinetic_device_info.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_device_info.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,26 +19,125 @@ kinetic_device_info.c \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticDeviceInfo\fP * \fBKineticDeviceInfo_Create\fP (const KineticProto_Command_GetLog *getLog)"
+.RI "static char * \fBcopy_str\fP (const char *s)"
 .br
 .ti -1c
-.RI "void \fBKineticDeviceInfo_Free\fP (\fBKineticDeviceInfo\fP *kdi)"
+.RI "static \fBByteArray\fP \fBcopy_to_byte_array\fP (uint8_t *data, size_t length)"
+.br
+.ti -1c
+.RI "static void \fBfree_byte_array\fP (\fBByteArray\fP ba)"
+.br
+.ti -1c
+.RI "static \fBKineticLogInfo_Utilization\fP * \fBKineticLogInfo_GetUtilizations\fP (const KineticProto_Command_GetLog *getLog, size_t *numUtilizations)"
+.br
+.ti -1c
+.RI "static \fBKineticLogInfo_Temperature\fP * \fBKineticLogInfo_GetTemperatures\fP (const KineticProto_Command_GetLog *getLog, size_t *numTemperatures)"
+.br
+.ti -1c
+.RI "static \fBKineticLogInfo_Capacity\fP * \fBKineticLogInfo_GetCapacity\fP (const KineticProto_Command_GetLog *getLog)"
+.br
+.ti -1c
+.RI "static 
+.br
+\fBKineticLogInfo_Configuration\fP * \fBKineticLogInfo_GetConfiguration\fP (const KineticProto_Command_GetLog *getLog)"
+.br
+.ti -1c
+.RI "static \fBKineticLogInfo_Statistics\fP * \fBKineticLogInfo_GetStatistics\fP (const KineticProto_Command_GetLog *getLog, size_t *numStatistics)"
+.br
+.ti -1c
+.RI "static \fBByteArray\fP \fBKineticLogInfo_GetMessages\fP (const KineticProto_Command_GetLog *getLog)"
+.br
+.ti -1c
+.RI "static \fBKineticLogInfo_Limits\fP * \fBKineticLogInfo_GetLimits\fP (const KineticProto_Command_GetLog *getLog)"
+.br
+.ti -1c
+.RI "static \fBKineticLogInfo_Device\fP * \fBKineticLogInfo_GetDevice\fP (const KineticProto_Command_GetLog *getLog)"
+.br
+.ti -1c
+.RI "\fBKineticLogInfo\fP * \fBKineticLogInfo_Create\fP (const KineticProto_Command_GetLog *getLog)"
+.br
+.ti -1c
+.RI "void \fBKineticLogInfo_Free\fP (\fBKineticLogInfo\fP *kdi)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticDeviceInfo\fP* KineticDeviceInfo_Create (const KineticProto_Command_GetLog *getLog)"
+.SS "static char* copy_str (const char *s)\fC [static]\fP"
+
+.PP
+Definition at line 27 of file kinetic_device_info\&.c\&.
+.SS "static \fBByteArray\fP copy_to_byte_array (uint8_t *data, size_tlength)\fC [static]\fP"
+
+.PP
+Definition at line 41 of file kinetic_device_info\&.c\&.
+.PP
+References ByteArray::data, and ByteArray::len\&.
+.SS "static void free_byte_array (\fBByteArray\fPba)\fC [static]\fP"
+
+.PP
+Definition at line 50 of file kinetic_device_info\&.c\&.
+.PP
+References ByteArray::data\&.
+.SS "static \fBKineticLogInfo_Utilization\fP* KineticLogInfo_GetUtilizations (const KineticProto_Command_GetLog *getLog, size_t *numUtilizations)\fC [static]\fP"
+
+.PP
+Definition at line 54 of file kinetic_device_info\&.c\&.
+.PP
+References copy_str(), KineticLogInfo_Utilization::name, and KineticLogInfo_Utilization::value\&.
+.SS "static \fBKineticLogInfo_Temperature\fP* KineticLogInfo_GetTemperatures (const KineticProto_Command_GetLog *getLog, size_t *numTemperatures)\fC [static]\fP"
+
+.PP
+Definition at line 80 of file kinetic_device_info\&.c\&.
+.PP
+References copy_str(), KineticLogInfo_Temperature::current, KineticLogInfo_Temperature::maximum, KineticLogInfo_Temperature::minimum, KineticLogInfo_Temperature::name, and KineticLogInfo_Temperature::target\&.
+.SS "static \fBKineticLogInfo_Capacity\fP* KineticLogInfo_GetCapacity (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+
+.PP
+Definition at line 101 of file kinetic_device_info\&.c\&.
+.PP
+References KineticLogInfo_Capacity::nominalCapacityInBytes, and KineticLogInfo_Capacity::portionFull\&.
+.SS "static \fBKineticLogInfo_Configuration\fP* KineticLogInfo_GetConfiguration (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+
+.PP
+Definition at line 112 of file kinetic_device_info\&.c\&.
+.PP
+References cleanup(), KineticLogInfo_Configuration::compilationDate, copy_str(), copy_to_byte_array(), ByteArray::data, free_byte_array(), KineticLogInfo_Configuration::interfaces, KineticLogInfo_Interface::ipv4Address, KineticLogInfo_Interface::ipv6Address, KineticLogInfo_Interface::MAC, KineticLogInfo_Configuration::model, KineticLogInfo_Interface::name, KineticLogInfo_Configuration::numInterfaces, KineticLogInfo_Configuration::protocolCompilationDate, KineticLogInfo_Configuration::protocolSourceHash, KineticLogInfo_Configuration::protocolVersion, KineticLogInfo_Configuration::serialNumber, KineticLogInfo_Configuration::sourceHash, KineticLogInfo_Configuration::vendor, KineticLogInfo_Configuration::version, and KineticLogInfo_Configuration::worldWideName\&.
+.SS "static \fBKineticLogInfo_Statistics\fP* KineticLogInfo_GetStatistics (const KineticProto_Command_GetLog *getLog, size_t *numStatistics)\fC [static]\fP"
+
+.PP
+Definition at line 195 of file kinetic_device_info\&.c\&.
+.PP
+References KineticLogInfo_Statistics::bytes, KineticLogInfo_Statistics::count, and KineticLogInfo_Statistics::messageType\&.
+.SS "static \fBByteArray\fP KineticLogInfo_GetMessages (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+
+.PP
+Definition at line 217 of file kinetic_device_info\&.c\&.
+.PP
+References copy_to_byte_array()\&.
+.SS "static \fBKineticLogInfo_Limits\fP* KineticLogInfo_GetLimits (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+
+.PP
+Definition at line 224 of file kinetic_device_info\&.c\&.
+.PP
+References KineticLogInfo_Limits::maxConnections, KineticLogInfo_Limits::maxIdentityCount, KineticLogInfo_Limits::maxKeyRangeCount, KineticLogInfo_Limits::maxKeySize, KineticLogInfo_Limits::maxMessageSize, KineticLogInfo_Limits::maxOutstandingReadRequests, KineticLogInfo_Limits::maxOutstandingWriteRequests, KineticLogInfo_Limits::maxPinSize, KineticLogInfo_Limits::maxTagSize, KineticLogInfo_Limits::maxValueSize, and KineticLogInfo_Limits::maxVersionSize\&.
+.SS "static \fBKineticLogInfo_Device\fP* KineticLogInfo_GetDevice (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+
+.PP
+Definition at line 244 of file kinetic_device_info\&.c\&.
+.PP
+References copy_to_byte_array(), and KineticLogInfo_Device::name\&.
+.SS "\fBKineticLogInfo\fP* KineticLogInfo_Create (const KineticProto_Command_GetLog *getLog)"
 
 .PP
 Definition at line 257 of file kinetic_device_info\&.c\&.
 .PP
-References KineticDeviceInfo::capacity, KineticDeviceInfo::configuration, ByteArray::data, KineticDeviceInfo::device, KineticDeviceInfo::limits, LOGF2, KineticDeviceInfo::messages, KineticDeviceInfo::numStatistics, KineticDeviceInfo::numTemperatures, KineticDeviceInfo::numUtilizations, KineticDeviceInfo::statistics, KineticDeviceInfo::temperatures, and KineticDeviceInfo::utilizations\&.
-.SS "void KineticDeviceInfo_Free (\fBKineticDeviceInfo\fP *kdi)"
+References KineticLogInfo::capacity, cleanup(), KineticLogInfo::configuration, ByteArray::data, KineticLogInfo::device, KINETIC_ASSERT, KineticLogInfo_GetCapacity(), KineticLogInfo_GetConfiguration(), KineticLogInfo_GetDevice(), KineticLogInfo_GetLimits(), KineticLogInfo_GetMessages(), KineticLogInfo_GetStatistics(), KineticLogInfo_GetTemperatures(), KineticLogInfo_GetUtilizations(), KineticLogInfo::limits, LOGF2, KineticLogInfo::messages, KineticLogInfo::numStatistics, KineticLogInfo::numTemperatures, KineticLogInfo::numUtilizations, KineticLogInfo::statistics, KineticLogInfo::temperatures, and KineticLogInfo::utilizations\&.
+.SS "void KineticLogInfo_Free (\fBKineticLogInfo\fP *kdi)"
 
 .PP
 Definition at line 323 of file kinetic_device_info\&.c\&.
 .PP
-References KineticDeviceInfo::capacity, KineticDeviceInfo_Configuration::compilationDate, KineticDeviceInfo::configuration, ByteArray::data, KineticDeviceInfo::device, KineticDeviceInfo_Configuration::interfaces, KineticDeviceInfo_Interface::ipv4Address, KineticDeviceInfo_Interface::ipv6Address, KineticDeviceInfo::limits, KineticDeviceInfo_Interface::MAC, KineticDeviceInfo::messages, KineticDeviceInfo_Configuration::model, KineticDeviceInfo_Utilization::name, KineticDeviceInfo_Temperature::name, KineticDeviceInfo_Interface::name, KineticDeviceInfo_Device::name, KineticDeviceInfo_Configuration::numInterfaces, KineticDeviceInfo::numTemperatures, KineticDeviceInfo::numUtilizations, KineticDeviceInfo_Configuration::protocolCompilationDate, KineticDeviceInfo_Configuration::protocolSourceHash, KineticDeviceInfo_Configuration::protocolVersion, KineticDeviceInfo_Configuration::serialNumber, KineticDeviceInfo_Configuration::sourceHash, KineticDeviceInfo::statistics, KineticDeviceInfo::temperatures, KineticDeviceInfo::utilizations, KineticDeviceInfo_Configuration::vendor, KineticDeviceInfo_Configuration::version, and KineticDeviceInfo_Configuration::worldWideName\&.
+References KineticLogInfo::capacity, KineticLogInfo_Configuration::compilationDate, KineticLogInfo::configuration, ByteArray::data, KineticLogInfo::device, KineticLogInfo_Configuration::interfaces, KineticLogInfo_Interface::ipv4Address, KineticLogInfo_Interface::ipv6Address, KineticLogInfo::limits, KineticLogInfo_Interface::MAC, KineticLogInfo::messages, KineticLogInfo_Configuration::model, KineticLogInfo_Utilization::name, KineticLogInfo_Temperature::name, KineticLogInfo_Interface::name, KineticLogInfo_Device::name, KineticLogInfo_Configuration::numInterfaces, KineticLogInfo::numTemperatures, KineticLogInfo::numUtilizations, KineticLogInfo_Configuration::protocolCompilationDate, KineticLogInfo_Configuration::protocolSourceHash, KineticLogInfo_Configuration::protocolVersion, KineticLogInfo_Configuration::serialNumber, KineticLogInfo_Configuration::sourceHash, KineticLogInfo::statistics, KineticLogInfo::temperatures, KineticLogInfo::utilizations, KineticLogInfo_Configuration::vendor, KineticLogInfo_Configuration::version, and KineticLogInfo_Configuration::worldWideName\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

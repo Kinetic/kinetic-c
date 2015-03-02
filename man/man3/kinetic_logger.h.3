@@ -1,4 +1,4 @@
-.TH "kinetic_logger.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_logger.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,6 +21,9 @@ kinetic_logger.h \-
 .br
 .ti -1c
 .RI "#define \fBKINETIC_LOGGER_FLUSH_THREAD_ENABLED\fP   false"
+.br
+.ti -1c
+.RI "#define \fBKINETIC_LOGGER_LOG_SEQUENCE_ID\fP   true"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_LOG_FILE\fP   'kinetic\&.log'"
@@ -55,6 +58,9 @@ kinetic_logger.h \-
 .ti -1c
 .RI "#define \fBLOG_LOCATION\fP   \fBKineticLogger_LogLocation\fP(__FILE__, __LINE__, \fB__func__\fP);"
 .br
+.ti -1c
+.RI "#define \fBKINETIC_ASSERT\fP(cond)"
+.br
 .in -1c
 .SS "Functions"
 
@@ -72,7 +78,7 @@ kinetic_logger.h \-
 .RI "void \fBKineticLogger_LogPrintf\fP (int log_level, const char *format,\&.\&.\&.)"
 .br
 .ti -1c
-.RI "void \fBKineticLogger_LogLocation\fP (const char *filename, int line, char const *message)"
+.RI "void \fBKineticLogger_LogLocation\fP (const char *filename, int line, const char *message)"
 .br
 .ti -1c
 .RI "void \fBKineticLogger_LogHeader\fP (int log_level, const \fBKineticPDUHeader\fP *header)"
@@ -90,6 +96,9 @@ kinetic_logger.h \-
 .RI "void \fBKineticLogger_LogByteBuffer\fP (int log_level, const char *title, \fBByteBuffer\fP buffer)"
 .br
 .ti -1c
+.RI "void \fBKineticLogger_LogTimestamp\fP (int log_level, const char *title)"
+.br
+.ti -1c
 .RI "int \fBKineticLogger_ByteArraySliceToCString\fP (char *p_buf, const \fBByteArray\fP bytes, const int start, const int count)"
 .br
 .in -1c
@@ -103,10 +112,14 @@ Definition at line 28 of file kinetic_logger\&.h\&.
 
 .PP
 Definition at line 29 of file kinetic_logger\&.h\&.
-.SS "#define KINETIC_LOG_FILE   'kinetic\&.log'"
+.SS "#define KINETIC_LOGGER_LOG_SEQUENCE_ID   true"
 
 .PP
 Definition at line 30 of file kinetic_logger\&.h\&.
+.SS "#define KINETIC_LOG_FILE   'kinetic\&.log'"
+
+.PP
+Definition at line 31 of file kinetic_logger\&.h\&.
 .SS "#define BYTES_TO_CSTRING(_buf_start, _array, _array_start, _count)"
 \fBValue:\fP
 .PP
@@ -117,109 +130,132 @@ Definition at line 30 of file kinetic_logger\&.h\&.
 }
 .fi
 .PP
-Definition at line 44 of file kinetic_logger\&.h\&.
+Definition at line 46 of file kinetic_logger\&.h\&.
 .SS "#define LOG0(message)   \fBKineticLogger_Log\fP(0, message)"
 
 .PP
-Definition at line 52 of file kinetic_logger\&.h\&.
+Definition at line 54 of file kinetic_logger\&.h\&.
 .SS "#define LOG1(message)   \fBKineticLogger_Log\fP(1, message)"
 
 .PP
-Definition at line 53 of file kinetic_logger\&.h\&.
+Definition at line 55 of file kinetic_logger\&.h\&.
 .SS "#define LOG2(message)   \fBKineticLogger_Log\fP(2, message)"
 
 .PP
-Definition at line 54 of file kinetic_logger\&.h\&.
+Definition at line 56 of file kinetic_logger\&.h\&.
 .SS "#define LOG3(message)   \fBKineticLogger_Log\fP(3, message)"
 
 .PP
-Definition at line 55 of file kinetic_logger\&.h\&.
+Definition at line 57 of file kinetic_logger\&.h\&.
 .SS "#define LOGF0(message, \&.\&.\&.)   \fBKineticLogger_LogPrintf\fP(0, message, __VA_ARGS__)"
 
 .PP
-Definition at line 56 of file kinetic_logger\&.h\&.
+Definition at line 58 of file kinetic_logger\&.h\&.
 .SS "#define LOGF1(message, \&.\&.\&.)   \fBKineticLogger_LogPrintf\fP(1, message, __VA_ARGS__)"
 
 .PP
-Definition at line 57 of file kinetic_logger\&.h\&.
+Definition at line 59 of file kinetic_logger\&.h\&.
 .SS "#define LOGF2(message, \&.\&.\&.)   \fBKineticLogger_LogPrintf\fP(2, message, __VA_ARGS__)"
 
 .PP
-Definition at line 58 of file kinetic_logger\&.h\&.
+Definition at line 60 of file kinetic_logger\&.h\&.
 .SS "#define LOGF3(message, \&.\&.\&.)   \fBKineticLogger_LogPrintf\fP(3, message, __VA_ARGS__)"
 
 .PP
-Definition at line 59 of file kinetic_logger\&.h\&.
+Definition at line 61 of file kinetic_logger\&.h\&.
 .SS "#define LOG_LOCATION   \fBKineticLogger_LogLocation\fP(__FILE__, __LINE__, \fB__func__\fP);"
 
 .PP
-Definition at line 60 of file kinetic_logger\&.h\&.
+Definition at line 62 of file kinetic_logger\&.h\&.
+.SS "#define KINETIC_ASSERT(cond)"
+\fBValue:\fP
+.PP
+.nf
+{ \
+        if(!(cond)) \
+        { \\
+            LOGF0("ASSERT FAILURE at %s:%d in %s: assert(" #cond ")", \
+            __FILE__, (int)__LINE__, __FUNCTION__); \
+            assert(cond); \
+        } \
+    }
+.fi
+.PP
+Definition at line 63 of file kinetic_logger\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "void KineticLogger_Init (const char *logFile, intlog_level)"
 
 .PP
-Definition at line 71 of file kinetic_logger\&.c\&.
+Definition at line 55 of file kinetic_logger\&.c\&.
+.PP
+References BufferMutex, KINETIC_ASSERT, KineticLoggerHandle, and KineticLogLevel\&.
 .SS "void KineticLogger_Close (void)"
 
 .PP
-Definition at line 101 of file kinetic_logger\&.c\&.
+Definition at line 84 of file kinetic_logger\&.c\&.
 .PP
-References Kinetic_GetErrnoDescription(), and LOGF0\&.
+References KineticLoggerHandle, and KineticLogLevel\&.
 .SS "void KineticLogger_Log (intlog_level, const char *message)"
+
+.PP
+Definition at line 94 of file kinetic_logger\&.c\&.
+.PP
+References KineticLogger_LogPrintf()\&.
+.SS "void KineticLogger_LogPrintf (intlog_level, const char *format, \&.\&.\&.)"
+
+.PP
+Definition at line 99 of file kinetic_logger\&.c\&.
+.PP
+References Buffer, BUFFER_MAX_STRLEN, finish_buffer(), get_buffer(), and is_level_enabled()\&.
+.SS "void KineticLogger_LogLocation (const char *filename, intline, const char *message)"
 
 .PP
 Definition at line 121 of file kinetic_logger\&.c\&.
 .PP
-References KINETIC_LOGGER_BUFFER_STR_MAX_LEN\&.
-.SS "void KineticLogger_LogPrintf (intlog_level, const char *format, \&.\&.\&.)"
-
-.PP
-Definition at line 133 of file kinetic_logger\&.c\&.
-.PP
-References KINETIC_LOGGER_BUFFER_STR_MAX_LEN\&.
-.SS "void KineticLogger_LogLocation (const char *filename, intline, char const *message)"
-
-.PP
-Definition at line 151 of file kinetic_logger\&.c\&.
-.PP
-References KineticLogger_LogPrintf()\&.
+References KineticLogger_LogPrintf(), and KineticLogLevel\&.
 .SS "void KineticLogger_LogHeader (intlog_level, const \fBKineticPDUHeader\fP *header)"
 
 .PP
-Definition at line 167 of file kinetic_logger\&.c\&.
+Definition at line 136 of file kinetic_logger\&.c\&.
 .PP
-References KineticLogger_Log(), and KineticLogger_LogPrintf()\&.
+References is_level_enabled(), KineticLogger_Log(), and KineticLogger_LogPrintf()\&.
 .SS "void KineticLogger_LogProtobuf (intlog_level, const KineticProto_Message *msg)"
 
 .PP
-Definition at line 411 of file kinetic_logger\&.c\&.
+Definition at line 403 of file kinetic_logger\&.c\&.
 .PP
-References KineticLogger_Log(), and LOG_PROTO_INIT\&.
+References indent, indent_overflow, is_level_enabled(), KineticLogger_Log(), and log_protobuf_message()\&.
 .SS "void KineticLogger_LogStatus (intlog_level, KineticProto_Command_Status *status)"
 
 .PP
-Definition at line 423 of file kinetic_logger\&.c\&.
+Definition at line 415 of file kinetic_logger\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS, and KineticLogger_LogPrintf()\&.
+References is_level_enabled(), KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS, and KineticLogger_LogPrintf()\&.
 .SS "void KineticLogger_LogByteArray (intlog_level, const char *title, \fBByteArray\fPbytes)"
 
 .PP
-Definition at line 480 of file kinetic_logger\&.c\&.
+Definition at line 472 of file kinetic_logger\&.c\&.
 .PP
-References ByteArray::data, KineticLogger_LogPrintf(), and ByteArray::len\&.
+References ByteArray::data, is_level_enabled(), KineticLogger_LogPrintf(), and ByteArray::len\&.
 .SS "void KineticLogger_LogByteBuffer (intlog_level, const char *title, \fBByteBuffer\fPbuffer)"
 
 .PP
-Definition at line 524 of file kinetic_logger\&.c\&.
+Definition at line 516 of file kinetic_logger\&.c\&.
 .PP
-References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and KineticLogger_LogByteArray()\&.
+References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, is_level_enabled(), and KineticLogger_LogByteArray()\&.
+.SS "void KineticLogger_LogTimestamp (intlog_level, const char *title)"
+
+.PP
+Definition at line 525 of file kinetic_logger\&.c\&.
+.PP
+References KineticLogger_LogPrintf()\&.
 .SS "int KineticLogger_ByteArraySliceToCString (char *p_buf, const \fBByteArray\fPbytes, const intstart, const intcount)"
 
 .PP
-Definition at line 229 of file kinetic_logger\&.c\&.
+Definition at line 221 of file kinetic_logger\&.c\&.
 .PP
-References ByteArray::data\&.
+References bytetoa(), and ByteArray::data\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

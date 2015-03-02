@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -62,53 +62,44 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aa7b2702d80f99a8661d48d61023b375c"><td class="memItemLeft" align="right" valign="top">KineticClient *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#aa7b2702d80f99a8661d48d61023b375c">KineticClient_Init</a> (<a class="el" href="struct_kinetic_client_config.html">KineticClientConfig</a> *config)</td></tr>
-<tr class="memdesc:aa7b2702d80f99a8661d48d61023b375c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Kinetic API and configures logging destination.  <a href="#aa7b2702d80f99a8661d48d61023b375c">More...</a><br /></td></tr>
+<tr class="memdesc:aa7b2702d80f99a8661d48d61023b375c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Kinetic API and configures logging.  <a href="#aa7b2702d80f99a8661d48d61023b375c">More...</a><br /></td></tr>
 <tr class="separator:aa7b2702d80f99a8661d48d61023b375c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9b742b94364d909834e735d2b3bbc76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#ac9b742b94364d909834e735d2b3bbc76">KineticClient_Shutdown</a> (KineticClient *const client)</td></tr>
-<tr class="memdesc:ac9b742b94364d909834e735d2b3bbc76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs shutdown/cleanup of the kinetic-c client lib.  <a href="#ac9b742b94364d909834e735d2b3bbc76">More...</a><br /></td></tr>
+<tr class="memdesc:ac9b742b94364d909834e735d2b3bbc76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs shutdown/cleanup of the kinetic-c client library.  <a href="#ac9b742b94364d909834e735d2b3bbc76">More...</a><br /></td></tr>
 <tr class="separator:ac9b742b94364d909834e735d2b3bbc76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6906744879c31aaa0d6e6f8414918aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#ae6906744879c31aaa0d6e6f8414918aa">KineticClient_CreateConnection</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> *const session, KineticClient *const client)</td></tr>
-<tr class="memdesc:ae6906744879c31aaa0d6e6f8414918aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Kinetic API, configures logging destination, establishes a connection to the specified Kinetic Device, and establishes a session.  <a href="#ae6906744879c31aaa0d6e6f8414918aa">More...</a><br /></td></tr>
-<tr class="separator:ae6906744879c31aaa0d6e6f8414918aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad755b6ed9c732797c40d654fe12eb1cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#ad755b6ed9c732797c40d654fe12eb1cd">KineticClient_DestroyConnection</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> *const session)</td></tr>
-<tr class="memdesc:ad755b6ed9c732797c40d654fe12eb1cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes the connection to a host.  <a href="#ad755b6ed9c732797c40d654fe12eb1cd">More...</a><br /></td></tr>
-<tr class="separator:ad755b6ed9c732797c40d654fe12eb1cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a277c2a4466cada1736801ffb473ace13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a277c2a4466cada1736801ffb473ace13">KineticClient_NoOp</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session)</td></tr>
+<tr class="memitem:ac637de46df9f42b8202adbead6766980"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#ac637de46df9f42b8202adbead6766980">KineticClient_CreateSession</a> (<a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a> *const config, KineticClient *const client, KineticSession **session)</td></tr>
+<tr class="memdesc:ac637de46df9f42b8202adbead6766980"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a session with the Kinetic Device per specified configuration.  <a href="#ac637de46df9f42b8202adbead6766980">More...</a><br /></td></tr>
+<tr class="separator:ac637de46df9f42b8202adbead6766980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f8fb5f05daffb0450f62b193da71a12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a9f8fb5f05daffb0450f62b193da71a12">KineticClient_DestroySession</a> (KineticSession *const session)</td></tr>
+<tr class="memdesc:a9f8fb5f05daffb0450f62b193da71a12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes the connection to a host.  <a href="#a9f8fb5f05daffb0450f62b193da71a12">More...</a><br /></td></tr>
+<tr class="separator:a9f8fb5f05daffb0450f62b193da71a12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a277c2a4466cada1736801ffb473ace13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a277c2a4466cada1736801ffb473ace13">KineticClient_NoOp</a> (KineticSession const *const session)</td></tr>
 <tr class="memdesc:a277c2a4466cada1736801ffb473ace13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a NOOP command to test whether the Kinetic Device is operational.  <a href="#a277c2a4466cada1736801ffb473ace13">More...</a><br /></td></tr>
 <tr class="separator:a277c2a4466cada1736801ffb473ace13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58c9dfb7db6c42f6f85c16b1e5a29eab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a58c9dfb7db6c42f6f85c16b1e5a29eab">KineticClient_Put</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memitem:a58c9dfb7db6c42f6f85c16b1e5a29eab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a58c9dfb7db6c42f6f85c16b1e5a29eab">KineticClient_Put</a> (KineticSession const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:a58c9dfb7db6c42f6f85c16b1e5a29eab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a PUT command to store/update an entry on the Kinetic Device.  <a href="#a58c9dfb7db6c42f6f85c16b1e5a29eab">More...</a><br /></td></tr>
 <tr class="separator:a58c9dfb7db6c42f6f85c16b1e5a29eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e37c5adefd0a463b11c324caec4f209"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a6e37c5adefd0a463b11c324caec4f209">KineticClient_Flush</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memitem:a6e37c5adefd0a463b11c324caec4f209"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a6e37c5adefd0a463b11c324caec4f209">KineticClient_Flush</a> (KineticSession const *const session, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:a6e37c5adefd0a463b11c324caec4f209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a FLUSHALLDATA command to flush pending PUTs or DELETEs.  <a href="#a6e37c5adefd0a463b11c324caec4f209">More...</a><br /></td></tr>
 <tr class="separator:a6e37c5adefd0a463b11c324caec4f209"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b700cb923a3ad66cfbee6f93809713c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a3b700cb923a3ad66cfbee6f93809713c">KineticClient_Get</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memitem:a3b700cb923a3ad66cfbee6f93809713c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a3b700cb923a3ad66cfbee6f93809713c">KineticClient_Get</a> (KineticSession const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:a3b700cb923a3ad66cfbee6f93809713c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GET command to retrieve an entry from the Kinetic Device.  <a href="#a3b700cb923a3ad66cfbee6f93809713c">More...</a><br /></td></tr>
 <tr class="separator:a3b700cb923a3ad66cfbee6f93809713c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7830a04ecda2e40cea89a169480a31a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a7830a04ecda2e40cea89a169480a31a0">KineticClient_GetPrevious</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memitem:a7830a04ecda2e40cea89a169480a31a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a7830a04ecda2e40cea89a169480a31a0">KineticClient_GetPrevious</a> (KineticSession const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:a7830a04ecda2e40cea89a169480a31a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GETPREVIOUS command to retrieve the next entry from the Kinetic Device.  <a href="#a7830a04ecda2e40cea89a169480a31a0">More...</a><br /></td></tr>
 <tr class="separator:a7830a04ecda2e40cea89a169480a31a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca3fcd36f1086ba4d33ac152c7e01686"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#aca3fcd36f1086ba4d33ac152c7e01686">KineticClient_GetNext</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memitem:aca3fcd36f1086ba4d33ac152c7e01686"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#aca3fcd36f1086ba4d33ac152c7e01686">KineticClient_GetNext</a> (KineticSession const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:aca3fcd36f1086ba4d33ac152c7e01686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GETNEXT command to retrieve the next entry from the Kinetic Device.  <a href="#aca3fcd36f1086ba4d33ac152c7e01686">More...</a><br /></td></tr>
 <tr class="separator:aca3fcd36f1086ba4d33ac152c7e01686"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade4cb599dfc5a89b24e5db51f6ee79e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#ade4cb599dfc5a89b24e5db51f6ee79e8">KineticClient_Delete</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memitem:ade4cb599dfc5a89b24e5db51f6ee79e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#ade4cb599dfc5a89b24e5db51f6ee79e8">KineticClient_Delete</a> (KineticSession const *const session, <a class="el" href="struct_kinetic_entry.html">KineticEntry</a> *const entry, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:ade4cb599dfc5a89b24e5db51f6ee79e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a DELETE command to delete an entry from the Kinetic Device.  <a href="#ade4cb599dfc5a89b24e5db51f6ee79e8">More...</a><br /></td></tr>
 <tr class="separator:ade4cb599dfc5a89b24e5db51f6ee79e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ded4406328e52e2e5e9e3e7f7cd0689"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a2ded4406328e52e2e5e9e3e7f7cd0689">KineticClient_GetKeyRange</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="struct_kinetic_key_range.html">KineticKeyRange</a> *range, <a class="el" href="struct_byte_buffer_array.html">ByteBufferArray</a> *keys, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memitem:a2ded4406328e52e2e5e9e3e7f7cd0689"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a2ded4406328e52e2e5e9e3e7f7cd0689">KineticClient_GetKeyRange</a> (KineticSession const *const session, <a class="el" href="struct_kinetic_key_range.html">KineticKeyRange</a> *range, <a class="el" href="struct_byte_buffer_array.html">ByteBufferArray</a> *keys, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:a2ded4406328e52e2e5e9e3e7f7cd0689"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GETKEYRANGE command to retrieve a set of keys in the range specified range from the Kinetic Device.  <a href="#a2ded4406328e52e2e5e9e3e7f7cd0689">More...</a><br /></td></tr>
 <tr class="separator:a2ded4406328e52e2e5e9e3e7f7cd0689"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92a9e91b13877a38b2e5facb5f0cacb3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a92a9e91b13877a38b2e5facb5f0cacb3">KineticClient_GetLog</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a> type, <a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> **info, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
-<tr class="memdesc:a92a9e91b13877a38b2e5facb5f0cacb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a GETLOG command to retrieve specific configuration and/or operational data from the Kinetic Device.  <a href="#a92a9e91b13877a38b2e5facb5f0cacb3">More...</a><br /></td></tr>
-<tr class="separator:a92a9e91b13877a38b2e5facb5f0cacb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20dc6162df415bc1d65208b6201e7ff3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a20dc6162df415bc1d65208b6201e7ff3">KineticClient_FreeDeviceInfo</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, <a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> *info)</td></tr>
-<tr class="memdesc:a20dc6162df415bc1d65208b6201e7ff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the <a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> result from KineticClient_GetLog.  <a href="#a20dc6162df415bc1d65208b6201e7ff3">More...</a><br /></td></tr>
-<tr class="separator:a20dc6162df415bc1d65208b6201e7ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af165b75323e1451b31e773cb13255745"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#af165b75323e1451b31e773cb13255745">KineticClient_P2POperation</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session, KineticP2P_Operation *const p2pOp, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
+<tr class="memitem:af165b75323e1451b31e773cb13255745"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#af165b75323e1451b31e773cb13255745">KineticClient_P2POperation</a> (KineticSession const *const session, KineticP2P_Operation *const p2pOp, <a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *closure)</td></tr>
 <tr class="memdesc:af165b75323e1451b31e773cb13255745"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic Device to copy a set of keys (and associated value and metadata) to another Kinetic Device.  <a href="#af165b75323e1451b31e773cb13255745">More...</a><br /></td></tr>
 <tr class="separator:af165b75323e1451b31e773cb13255745"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a3620eb346c4a710546ef225c75c71f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__client_8h.html#a8a3620eb346c4a710546ef225c75c71f">KineticClient_InstantSecureErase</a> (<a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const session)</td></tr>
-<tr class="memdesc:a8a3620eb346c4a710546ef225c75c71f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes an InstantSecureErase command to erase all data from the Kinetic device.  <a href="#a8a3620eb346c4a710546ef225c75c71f">More...</a><br /></td></tr>
-<tr class="separator:a8a3620eb346c4a710546ef225c75c71f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="aa7b2702d80f99a8661d48d61023b375c"></a>
@@ -125,18 +116,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initializes the Kinetic API and configures logging destination. </p>
+<p>Initializes the Kinetic API and configures logging. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">config</td><td>A configuration struct.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns a pointer to a <code>KineticClient</code>. You need to pass this pointer to <a class="el" href="kinetic__client_8h.html#ae6906744879c31aaa0d6e6f8414918aa" title="Initializes the Kinetic API, configures logging destination, establishes a connection to the specifie...">KineticClient_CreateConnection()</a> to create new connections. Once you are finished will the <code>KineticClient</code>, and there are no active connections. The pointer should be release with <a class="el" href="kinetic__client_8h.html#ac9b742b94364d909834e735d2b3bbc76" title="Performs shutdown/cleanup of the kinetic-c client lib. ">KineticClient_Shutdown()</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns a pointer to a <code>KineticClient</code>. You need to pass this pointer to <a class="el" href="kinetic__client_8h.html#ac637de46df9f42b8202adbead6766980" title="Creates a session with the Kinetic Device per specified configuration. ">KineticClient_CreateSession()</a> to create new connections. Once you are finished will the <code>KineticClient</code>, and there are no active connections. The pointer should be release with <a class="el" href="kinetic__client_8h.html#ac9b742b94364d909834e735d2b3bbc76" title="Performs shutdown/cleanup of the kinetic-c client library. ">KineticClient_Shutdown()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00033">33</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00034">34</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00434">KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS</a>, <a class="el" href="kinetic__types_8h_source.html#l00433">KINETIC_CLIENT_DEFAULT_READER_THREADS</a>, <a class="el" href="kinetic__types_8h_source.html#l00432">KINETIC_CLIENT_DEFAULT_WRITER_THREADS</a>, <a class="el" href="kinetic__memory_8c_source.html#l00024">KineticCalloc()</a>, <a class="el" href="kinetic__memory_8c_source.html#l00029">KineticFree()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00071">KineticLogger_Init()</a>, <a class="el" href="kinetic__pdu_8c_source.html#l00227">KineticPDU_InitBus()</a>, <a class="el" href="kinetic__types_8h_source.html#l00443">KineticClientConfig::logFile</a>, <a class="el" href="kinetic__types_8h_source.html#l00444">KineticClientConfig::logLevel</a>, <a class="el" href="kinetic__types_8h_source.html#l00447">KineticClientConfig::maxThreadpoolThreads</a>, <a class="el" href="kinetic__types_8h_source.html#l00446">KineticClientConfig::readerThreads</a>, and <a class="el" href="kinetic__types_8h_source.html#l00445">KineticClientConfig::writerThreads</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00450">KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS</a>, <a class="el" href="kinetic__types_8h_source.html#l00449">KINETIC_CLIENT_DEFAULT_READER_THREADS</a>, <a class="el" href="kinetic__types_8h_source.html#l00448">KINETIC_CLIENT_DEFAULT_WRITER_THREADS</a>, <a class="el" href="kinetic__bus_8c_source.html#l00250">KineticBus_Init()</a>, <a class="el" href="kinetic__memory_8c_source.html#l00024">KineticCalloc()</a>, <a class="el" href="kinetic__memory_8c_source.html#l00029">KineticFree()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00055">KineticLogger_Init()</a>, <a class="el" href="kinetic__types_8h_source.html#l00459">KineticClientConfig::logFile</a>, <a class="el" href="kinetic__types_8h_source.html#l00460">KineticClientConfig::logLevel</a>, <a class="el" href="kinetic__types_8h_source.html#l00463">KineticClientConfig::maxThreadpoolThreads</a>, <a class="el" href="kinetic__types_8h_source.html#l00462">KineticClientConfig::readerThreads</a>, and <a class="el" href="kinetic__types_8h_source.html#l00461">KineticClientConfig::writerThreads</a>.</p>
 
 </div>
 </div>
@@ -154,7 +145,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Performs shutdown/cleanup of the kinetic-c client lib. </p>
+<p>Performs shutdown/cleanup of the kinetic-c client library. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">client</td><td>The pointer returned from <code>KineticClient_Init</code> </td></tr>
@@ -164,25 +155,31 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00059">59</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__memory_8c_source.html#l00029">KineticFree()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00101">KineticLogger_Close()</a>, and <a class="el" href="kinetic__pdu_8c_source.html#l00254">KineticPDU_DeinitBus()</a>.</p>
+<p>References <a class="el" href="kinetic__bus_8c_source.html#l00277">KineticBus_Shutdown()</a>, <a class="el" href="kinetic__memory_8c_source.html#l00029">KineticFree()</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00084">KineticLogger_Close()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae6906744879c31aaa0d6e6f8414918aa"></a>
+<a class="anchor" id="ac637de46df9f42b8202adbead6766980"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_CreateConnection </td>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_CreateSession </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> *const&#160;</td>
-          <td class="paramname"><em>session</em>, </td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a> *const&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">KineticClient *const&#160;</td>
-          <td class="paramname"><em>client</em>&#160;</td>
+          <td class="paramname"><em>client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">KineticSession **&#160;</td>
+          <td class="paramname"><em>session</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -192,30 +189,31 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initializes the Kinetic API, configures logging destination, establishes a connection to the specified Kinetic Device, and establishes a session. </p>
+<p>Creates a session with the Kinetic Device per specified configuration. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>Configured <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to connect .config <code><a class="el" href="struct_kinetic_session_config.html" title="Structure used to specify the configuration for a session. ">KineticSessionConfig</a></code> structure which must be configured by the client prior to creating the device connection. .host Host name or IP address to connect to .port Port to establish socket connection on .clusterVersion Cluster version to use for the session .identity Identity to use for the session .hmacKey Key to use for HMAC calculations (NULL-terminated string) .connection Pointer to dynamically allocated connection which will be populated upon establishment of a connection.</td></tr>
-    <tr><td class="paramname">client</td><td>The KineticClient pointer returned from <a class="el" href="kinetic__client_8h.html#aa7b2702d80f99a8661d48d61023b375c" title="Initializes the Kinetic API and configures logging destination. ">KineticClient_Init()</a></td></tr>
+    <tr><td class="paramname">config</td><td><code><a class="el" href="struct_kinetic_session_config.html" title="Structure used to specify the configuration for a session. ">KineticSessionConfig</a></code> structure which must be configured by the client prior to creating the device connection. .host Host name or IP address to connect to .port Port to establish socket connection on .clusterVersion Cluster version to use for the session .identity Identity to use for the session .hmacKey Key to use for HMAC calculations (NULL-terminated string) .pin PIN to use for PIN-based operations </td></tr>
+    <tr><td class="paramname">client</td><td>The <code>KineticClient</code> pointer returned from <a class="el" href="kinetic__client_8h.html#aa7b2702d80f99a8661d48d61023b375c" title="Initializes the Kinetic API and configures logging. ">KineticClient_Init()</a> </td></tr>
+    <tr><td class="paramname">session</td><td>Pointer to a KineticSession pointer that will be populated with the allocated/created session upon success.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns the resulting <code>KineticStatus</code>, and <code>session-&gt;connection</code> will be populated with a session instance pointer upon success. The client should call <a class="el" href="kinetic__client_8h.html#ad755b6ed9c732797c40d654fe12eb1cd" title="Closes the connection to a host. ">KineticClient_DestroyConnection()</a> in order to shutdown a connection and cleanup resources when done using a <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the resulting <code>KineticStatus</code>, and <code>session</code> will be populated with a pointer to the session instance upon success. The client should call <a class="el" href="kinetic__client_8h.html#a9f8fb5f05daffb0450f62b193da71a12" title="Closes the connection to a host. ">KineticClient_DestroySession()</a> in order to shutdown a connection and cleanup resources when done using a <code>KineticSession</code>. </dd></dl>
 
 <p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00066">66</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00145">KineticSession::config</a>, <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00137">KineticSessionConfig::hmacKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00119">KineticSessionConfig::host</a>, <a class="el" href="kinetic__types_8c_source.html#l00056">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00177">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00174">KINETIC_STATUS_HMAC_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00173">KINETIC_STATUS_HOST_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00171">KINETIC_STATUS_SESSION_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__session_8c_source.html#l00085">KineticSession_Connect()</a>, <a class="el" href="kinetic__session_8c_source.html#l00037">KineticSession_Create()</a>, <a class="el" href="kinetic__session_8c_source.html#l00071">KineticSession_Destroy()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00056">LOGF0</a>, and <a class="el" href="kinetic__types_8h_source.html#l00122">KineticSessionConfig::port</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00138">KineticSessionConfig::hmacKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00120">KineticSessionConfig::host</a>, <a class="el" href="kinetic__types_8h_source.html#l00176">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00173">KINETIC_STATUS_HMAC_REQUIRED</a>, <a class="el" href="kinetic__types_8h_source.html#l00172">KINETIC_STATUS_HOST_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SESSION_EMPTY</a>, <a class="el" href="kinetic__types_8h_source.html#l00171">KINETIC_STATUS_SESSION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00052">KineticAllocator_FreeSession()</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00030">KineticAllocator_NewSession()</a>, <a class="el" href="kinetic__session_8c_source.html#l00091">KineticSession_Connect()</a>, <a class="el" href="kinetic__session_8c_source.html#l00037">KineticSession_Create()</a>, <a class="el" href="kinetic__session_8c_source.html#l00074">KineticSession_Destroy()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00054">LOG0</a>, <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF0</a>, and <a class="el" href="kinetic__types_8h_source.html#l00123">KineticSessionConfig::port</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ad755b6ed9c732797c40d654fe12eb1cd"></a>
+<a class="anchor" id="a9f8fb5f05daffb0450f62b193da71a12"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_DestroyConnection </td>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_DestroySession </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> *const&#160;</td>
+          <td class="paramtype">KineticSession *const&#160;</td>
           <td class="paramname"><em>session</em></td><td>)</td>
           <td></td>
         </tr>
@@ -225,15 +223,15 @@ Functions</h2></td></tr>
 <p>Closes the connection to a host. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <code><a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a></code> to close. The connection instance will be freed by this call after closing the connection.</td></tr>
+    <tr><td class="paramname">session</td><td>The connected <code>KineticSession</code> to close. The session instance will be freed by this call after closing the connection, so the pointer should not longer be used.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00107">107</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00118">118</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00177">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00172">KINETIC_STATUS_SESSION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__session_8c_source.html#l00071">KineticSession_Destroy()</a>, <a class="el" href="kinetic__session_8c_source.html#l00147">KineticSession_Disconnect()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00052">LOG0</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00176">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00171">KINETIC_STATUS_SESSION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__session_8c_source.html#l00074">KineticSession_Destroy()</a>, <a class="el" href="kinetic__session_8c_source.html#l00151">KineticSession_Disconnect()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00054">LOG0</a>.</p>
 
 </div>
 </div>
@@ -244,7 +242,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_NoOp </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em></td><td>)</td>
           <td></td>
         </tr>
@@ -254,15 +252,15 @@ Functions</h2></td></tr>
 <p>Executes a NOOP command to test whether the Kinetic Device is operational. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation.</td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00127">127</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00137">137</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00187">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00032">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00080">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00238">KineticOperation_BuildNoop()</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00103">KineticAllocator_NewOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00082">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00276">KineticOperation_BuildNoop()</a>.</p>
 
 </div>
 </div>
@@ -273,7 +271,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_Put </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -299,7 +297,7 @@ Functions</h2></td></tr>
 <p>Executes a PUT command to store/update an entry on the Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation. </td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation. </td></tr>
     <tr><td class="paramname">entry</td><td>Key/value entry for object to store. 'value' must specify the data to be stored. If a closure is provided this pointer must remain valid until the closure callback is called.</td></tr>
     <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
   </table>
@@ -307,9 +305,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00139">139</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00149">149</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00054">ByteBuffer::array</a>, <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00187">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00032">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00080">KineticController_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00281">KineticOperation_BuildPut()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00100">KineticConnection::pSession</a>, and <a class="el" href="kinetic__types_8h_source.html#l00238">KineticEntry::value</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00054">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00127">KineticAllocator_FreeOperation()</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00103">KineticAllocator_NewOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00082">KineticController_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00316">KineticOperation_BuildPut()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, and <a class="el" href="kinetic__types_8h_source.html#l00243">KineticEntry::value</a>.</p>
 
 </div>
 </div>
@@ -320,7 +318,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_Flush </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -340,16 +338,16 @@ Functions</h2></td></tr>
 <p>Executes a FLUSHALLDATA command to flush pending PUTs or DELETEs. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation. </td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation. </td></tr>
     <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00163">163</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00181">181</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00187">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00032">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00080">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00397">KineticOperation_BuildFlush()</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00103">KineticAllocator_NewOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00082">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00439">KineticOperation_BuildFlush()</a>.</p>
 
 </div>
 </div>
@@ -360,7 +358,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_Get </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -386,7 +384,7 @@ Functions</h2></td></tr>
 <p>Executes a GET command to retrieve an entry from the Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation. </td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation. </td></tr>
     <tr><td class="paramname">entry</td><td>Key/value entry for object to retrieve. 'value' will be populated unless 'metadataOnly' is set to 'true'. If a closure is provided this pointer must remain valid until the closure callback is called. </td></tr>
     <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
   </table>
@@ -394,9 +392,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00234">234</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00252">252</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__client_8c_source.html#l00190">CMD_GET</a>.</p>
+<p>References <a class="el" href="kinetic__client_8c_source.html#l00208">CMD_GET</a>, and <a class="el" href="kinetic__client_8c_source.html#l00213">handle_get_command()</a>.</p>
 
 </div>
 </div>
@@ -407,7 +405,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_GetPrevious </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -433,7 +431,7 @@ Functions</h2></td></tr>
 <p>Executes a GETPREVIOUS command to retrieve the next entry from the Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation. </td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation. </td></tr>
     <tr><td class="paramname">entry</td><td>Key/value entry for object to retrieve. 'value' will be populated unless 'metadataOnly' is set to 'true'. The key and value fields will be populated with the previous key and its corresponding value, according to lexicographical byte order. If a closure is provided this pointer must remain valid until the closure callback is called.</td></tr>
     <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
   </table>
@@ -441,9 +439,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00241">241</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00259">259</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__client_8c_source.html#l00192">CMD_GET_PREVIOUS</a>.</p>
+<p>References <a class="el" href="kinetic__client_8c_source.html#l00210">CMD_GET_PREVIOUS</a>, and <a class="el" href="kinetic__client_8c_source.html#l00213">handle_get_command()</a>.</p>
 
 </div>
 </div>
@@ -454,7 +452,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_GetNext </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -480,7 +478,7 @@ Functions</h2></td></tr>
 <p>Executes a GETNEXT command to retrieve the next entry from the Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation. </td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation. </td></tr>
     <tr><td class="paramname">entry</td><td>Key/value entry for object to retrieve. 'value' will be populated unless 'metadataOnly' is set to 'true'. The key and value fields will be populated with the next key and its corresponding value, according to lexicographical byte order. If a closure is provided this pointer must remain valid until the closure callback is called.</td></tr>
     <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
   </table>
@@ -488,9 +486,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00248">248</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00266">266</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__client_8c_source.html#l00191">CMD_GET_NEXT</a>.</p>
+<p>References <a class="el" href="kinetic__client_8c_source.html#l00209">CMD_GET_NEXT</a>, and <a class="el" href="kinetic__client_8c_source.html#l00213">handle_get_command()</a>.</p>
 
 </div>
 </div>
@@ -501,7 +499,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_Delete </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -527,7 +525,7 @@ Functions</h2></td></tr>
 <p>Executes a DELETE command to delete an entry from the Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation. </td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation. </td></tr>
     <tr><td class="paramname">entry</td><td>Key/value entry for object to delete. 'value' is not used for this operation. </td></tr>
     <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
   </table>
@@ -535,9 +533,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00255">255</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00273">273</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00187">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00032">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00080">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00418">KineticOperation_BuildDelete()</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00103">KineticAllocator_NewOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00082">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00459">KineticOperation_BuildDelete()</a>.</p>
 
 </div>
 </div>
@@ -548,7 +546,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_GetKeyRange </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -580,7 +578,7 @@ Functions</h2></td></tr>
 <p>Executes a GETKEYRANGE command to retrieve a set of keys in the range specified range from the Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation </td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation </td></tr>
     <tr><td class="paramname">range</td><td><a class="el" href="struct_kinetic_key_range.html" title="Kinetic Key Range request structure. ">KineticKeyRange</a> specifying keys to return </td></tr>
     <tr><td class="paramname">keys</td><td><a class="el" href="struct_byte_buffer_array.html">ByteBufferArray</a> to store the retrieved keys. If a closure is provided, this must point to valid memory until the closure callback is called. </td></tr>
     <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
@@ -589,102 +587,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns 0 upon success, -1 or the Kinetic status code upon failure </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00273">273</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00291">291</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00059">ByteBufferArray::buffers</a>, <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="byte__array_8h_source.html#l00060">ByteBufferArray::count</a>, <a class="el" href="kinetic__types_8h_source.html#l00187">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00032">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00080">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00461">KineticOperation_BuildGetKeyRange()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a92a9e91b13877a38b2e5facb5f0cacb3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_GetLog </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
-          <td class="paramname"><em>session</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a>&#160;</td>
-          <td class="paramname"><em>type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> **&#160;</td>
-          <td class="paramname"><em>info</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a> *&#160;</td>
-          <td class="paramname"><em>closure</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Executes a GETLOG command to retrieve specific configuration and/or operational data from the Kinetic Device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation </td></tr>
-    <tr><td class="paramname">type</td><td>KineticLogDataType specifying data type to retrieve. </td></tr>
-    <tr><td class="paramname">info</td><td><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> pointer, which will be assigned to a dynamically allocated structure populated with the requested data, if successful. The client should call free() on this pointer in order to free the root and any nested structures. </td></tr>
-    <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns 0 upon success, -1 or the Kinetic status code upon failure </dd></dl>
-
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00295">295</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00187">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00032">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00080">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00502">KineticOperation_BuildGetLog()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a20dc6162df415bc1d65208b6201e7ff3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void KineticClient_FreeDeviceInfo </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
-          <td class="paramname"><em>session</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> *&#160;</td>
-          <td class="paramname"><em>info</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Free the <a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> result from KineticClient_GetLog. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation </td></tr>
-    <tr><td class="paramname">info</td><td>The <a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> result to free. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00314">314</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__device__info_8c_source.html#l00323">KineticDeviceInfo_Free()</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00059">ByteBufferArray::buffers</a>, <a class="el" href="byte__array_8h_source.html#l00060">ByteBufferArray::count</a>, <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00103">KineticAllocator_NewOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00082">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00502">KineticOperation_BuildGetKeyRange()</a>.</p>
 
 </div>
 </div>
@@ -695,7 +600,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_P2POperation </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -721,7 +626,7 @@ Functions</h2></td></tr>
 <p>Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic Device to copy a set of keys (and associated value and metadata) to another Kinetic Device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation </td></tr>
+    <tr><td class="paramname">session</td><td>The connected KineticSession to use for the operation </td></tr>
     <tr><td class="paramname">p2pOp</td><td>KineticP2P_Operation pointer. This pointer needs to remain valid during the duration of the operation. The results of P2P operation(s) will be stored in the resultStatus field of this structure. </td></tr>
     <tr><td class="paramname">closure</td><td>Optional closure. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread.</td></tr>
   </table>
@@ -729,38 +634,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns 0 upon success, -1 or the Kinetic status code upon failure. Note that P2P operations can be nested. This status code pertains to the initial top-level P2P operation. You'll need to check the resultStatus in the p2pOp structure to check the status of the individual P2P operations. </dd></dl>
 
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00326">326</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00313">313</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00187">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__controller_8c_source.html#l00032">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00080">KineticController_ExecuteOperation()</a>, <a class="el" href="kinetic__operation_8c_source.html#l00671">KineticOperation_BuildP2POperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00757">KineticOperation_Complete()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a8a3620eb346c4a710546ef225c75c71f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticClient_InstantSecureErase </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_session.html">KineticSession</a> const *const&#160;</td>
-          <td class="paramname"><em>session</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Executes an InstantSecureErase command to erase all data from the Kinetic device. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">session</td><td>The connected <a class="el" href="struct_kinetic_session.html" title="An instance of a session with a Kinetic device. ">KineticSession</a> to use for the operation.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns the resulting KineticStatus. </dd></dl>
-
-<p>Definition at line <a class="el" href="kinetic__client_8c_source.html#l00352">352</a> of file <a class="el" href="kinetic__client_8c_source.html">kinetic_client.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00150">KineticSession::connection</a>, <a class="el" href="kinetic__types_8h_source.html#l00187">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__controller_8c_source.html#l00032">KineticController_CreateOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00080">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00704">KineticOperation_BuildInstantSecureErase()</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00186">KINETIC_STATUS_MEMORY_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00103">KineticAllocator_NewOperation()</a>, <a class="el" href="kinetic__controller_8c_source.html#l00082">KineticController_ExecuteOperation()</a>, and <a class="el" href="kinetic__operation_8c_source.html#l00707">KineticOperation_BuildP2POperation()</a>.</p>
 
 </div>
 </div>

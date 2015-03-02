@@ -1,4 +1,4 @@
-.TH "blocking_flush.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "blocking_flush.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -33,17 +33,26 @@ blocking_flush.c \-
 
 .in +1c
 .ti -1c
+.RI "static void \fBdo_flush\fP (KineticSession *session)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static void do_flush (KineticSession *session)\fC [static]\fP"
+
+.PP
+Definition at line 34 of file blocking_flush\&.c\&.
+.PP
+References Kinetic_GetStatusDescription(), and KineticClient_Flush()\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 43 of file blocking_flush\&.c\&.
 .PP
-References ByteArray_CreateWithCString(), KineticSession::config, KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), and KineticClientConfig::logFile\&.
+References ByteArray_CreateWithCString(), do_flush(), KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateSession(), KineticClient_DestroySession(), KineticClient_Init(), KineticClient_Shutdown(), and KineticClientConfig::logFile\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

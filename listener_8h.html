@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -57,7 +57,6 @@
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="bus__types_8h_source.html">bus_types.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="casq_8h_source.html">casq.h</a>&quot;</code><br />
 </div>
 <p><a href="listener_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -103,9 +102,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00041">41</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00043">43</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="listener__internal_8h_source.html#l00102">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00038">BUS_LOG</a>, <a class="el" href="casq_8c_source.html#l00037">casq_new()</a>, <a class="el" href="listener__internal_8h_source.html#l00034">listener_msg::id</a>, <a class="el" href="listener__internal_8h_source.html#l00067">rx_info_t::id</a>, <a class="el" href="bus__types_8h_source.html#l00087">LOG_LISTENER</a>, <a class="el" href="listener__internal_8h_source.html#l00094">MAX_PENDING_MESSAGES</a>, <a class="el" href="listener__internal_8h_source.html#l00097">MAX_QUEUE_MESSAGES</a>, <a class="el" href="listener__internal_8h_source.html#l00112">listener::msg_freelist</a>, <a class="el" href="listener__internal_8h_source.html#l00111">listener::msgs</a>, <a class="el" href="listener__internal_8h_source.html#l00036">listener_msg::next</a>, <a class="el" href="listener__internal_8h_source.html#l00068">rx_info_t::next</a>, <a class="el" href="listener__internal_8h_source.html#l00103">listener::q</a>, <a class="el" href="listener__internal_8h_source.html#l00062">RIS_INACTIVE</a>, <a class="el" href="listener__internal_8h_source.html#l00106">listener::rx_info</a>, <a class="el" href="listener__internal_8h_source.html#l00107">listener::rx_info_freelist</a>, <a class="el" href="listener__internal_8h_source.html#l00109">listener::rx_info_max_used</a>, <a class="el" href="listener__internal_8h_source.html#l00070">rx_info_t::state</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00065">bus::udata</a>.</p>
+<p>References <a class="el" href="listener__internal_8h_source.html#l00107">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="listener__internal_8h_source.html#l00111">listener::commit_pipe</a>, <a class="el" href="listener__internal_8h_source.html#l00129">listener::fds</a>, <a class="el" href="listener__internal_8h_source.html#l00034">listener_msg::id</a>, <a class="el" href="listener__internal_8h_source.html#l00067">rx_info_t::id</a>, <a class="el" href="listener__internal_8h_source.html#l00112">listener::incoming_msg_pipe</a>, <a class="el" href="listener_8c_source.html#l00039">INCOMING_MSG_PIPE_ID</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="listener__internal_8h_source.html#l00094">MAX_PENDING_MESSAGES</a>, <a class="el" href="listener__internal_8h_source.html#l00097">MAX_QUEUE_MESSAGES</a>, <a class="el" href="listener__internal_8h_source.html#l00121">listener::msg_freelist</a>, <a class="el" href="listener__internal_8h_source.html#l00120">listener::msgs</a>, <a class="el" href="listener__internal_8h_source.html#l00036">listener_msg::next</a>, <a class="el" href="listener__internal_8h_source.html#l00068">rx_info_t::next</a>, <a class="el" href="listener__internal_8h_source.html#l00062">RIS_INACTIVE</a>, <a class="el" href="listener__internal_8h_source.html#l00115">listener::rx_info</a>, <a class="el" href="listener__internal_8h_source.html#l00116">listener::rx_info_freelist</a>, <a class="el" href="listener__internal_8h_source.html#l00118">listener::rx_info_max_used</a>, <a class="el" href="listener__internal_8h_source.html#l00070">rx_info_t::state</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>.</p>
 
 </div>
 </div>
@@ -139,9 +138,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00082">82</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00088">88</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027">listener_msg::add_socket</a>, <a class="el" href="listener__internal_8h_source.html#l00025">MSG_ADD_SOCKET</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
+<p>References <a class="el" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027">listener_msg::add_socket</a>, <a class="el" href="listener_8c_source.html#l01008">get_free_msg()</a>, <a class="el" href="listener__internal_8h_source.html#l00025">MSG_ADD_SOCKET</a>, <a class="el" href="listener_8c_source.html#l01065">push_message()</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
 
 </div>
 </div>
@@ -169,9 +168,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00094">94</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00100">100</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="structlistener__msg.html#a034f7c4ae5e2dcb215e9e088020dedff">listener_msg::close_socket</a>, <a class="el" href="listener__internal_8h_source.html#l00026">MSG_CLOSE_SOCKET</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
+<p>References <a class="el" href="listener_8c_source.html#l01008">get_free_msg()</a>, <a class="el" href="listener__internal_8h_source.html#l00026">MSG_REMOVE_SOCKET</a>, <a class="el" href="listener_8c_source.html#l01065">push_message()</a>, <a class="el" href="structlistener__msg.html#a518c6e850864a64eb162d4482c6c3294">listener_msg::remove_socket</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
 
 </div>
 </div>
@@ -211,9 +210,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00153">153</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00159">159</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="listener__internal_8h_source.html#l00102">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00038">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00054">BUS_LOG_SNPRINTF</a>, <a class="el" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4">listener_msg::hold</a>, <a class="el" href="bus__types_8h_source.html#l00087">LOG_LISTENER</a>, <a class="el" href="bus__types_8h_source.html#l00088">LOG_MEMORY</a>, <a class="el" href="listener__internal_8h_source.html#l00027">MSG_HOLD_RESPONSE</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00065">bus::udata</a>.</p>
+<p>References <a class="el" href="listener__internal_8h_source.html#l00107">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener_8c_source.html#l01008">get_free_msg()</a>, <a class="el" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4">listener_msg::hold</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="listener__internal_8h_source.html#l00027">MSG_HOLD_RESPONSE</a>, <a class="el" href="listener_8c_source.html#l01065">push_message()</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>.</p>
 
 </div>
 </div>
@@ -247,9 +246,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00180">180</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00186">186</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="listener__internal_8h_source.html#l00102">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00054">BUS_LOG_SNPRINTF</a>, <a class="el" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be">listener_msg::expect</a>, <a class="el" href="bus__types_8h_source.html#l00088">LOG_MEMORY</a>, <a class="el" href="listener__internal_8h_source.html#l00028">MSG_EXPECT_RESPONSE</a>, <a class="el" href="bus__internal__types_8h_source.html#l00052">boxed_msg::out_seq_id</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00065">bus::udata</a>.</p>
+<p>References <a class="el" href="listener__internal_8h_source.html#l00107">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be">listener_msg::expect</a>, <a class="el" href="listener_8c_source.html#l00119">get_backpressure()</a>, <a class="el" href="listener_8c_source.html#l01008">get_free_msg()</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="listener__internal_8h_source.html#l00028">MSG_EXPECT_RESPONSE</a>, <a class="el" href="bus__internal__types_8h_source.html#l00056">boxed_msg::out_seq_id</a>, <a class="el" href="listener_8c_source.html#l01065">push_message()</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>.</p>
 
 </div>
 </div>
@@ -267,9 +266,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00206">206</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00212">212</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="listener__internal_8h_source.html#l00029">MSG_SHUTDOWN</a>, and <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>.</p>
+<p>References <a class="el" href="listener_8c_source.html#l01008">get_free_msg()</a>, <a class="el" href="listener__internal_8h_source.html#l00029">MSG_SHUTDOWN</a>, <a class="el" href="listener_8c_source.html#l01065">push_message()</a>, and <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>.</p>
 
 </div>
 </div>
@@ -287,9 +286,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00229">229</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00220">220</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="listener__internal_8h_source.html#l00102">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00054">BUS_LOG_SNPRINTF</a>, <a class="el" href="casq_8c_source.html#l00145">casq_free()</a>, <a class="el" href="structrx__info__t.html#a7aa7c18547fd393ad4b22a9ea6eb7267">rx_info_t::expect</a>, <a class="el" href="listener__internal_8h_source.html#l00119">listener::fds</a>, <a class="el" href="bus__types_8h_source.html#l00087">LOG_LISTENER</a>, <a class="el" href="listener__internal_8h_source.html#l00094">MAX_PENDING_MESSAGES</a>, <a class="el" href="listener__internal_8h_source.html#l00103">listener::q</a>, <a class="el" href="listener__internal_8h_source.html#l00124">listener::read_buf</a>, <a class="el" href="listener__internal_8h_source.html#l00061">RIS_EXPECT</a>, <a class="el" href="listener__internal_8h_source.html#l00060">RIS_HOLD</a>, <a class="el" href="listener__internal_8h_source.html#l00062">RIS_INACTIVE</a>, <a class="el" href="listener__internal_8h_source.html#l00106">listener::rx_info</a>, <a class="el" href="listener__internal_8h_source.html#l00070">rx_info_t::state</a>, <a class="el" href="listener__internal_8h_source.html#l00118">listener::tracked_fds</a>, <a class="el" href="structrx__info__t.html#a92273c68b1cc0dd89592e5cd1e6ecd7b">rx_info_t::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00065">bus::udata</a>.</p>
+<p>References <a class="el" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027">listener_msg::add_socket</a>, <a class="el" href="listener__internal_8h_source.html#l00107">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00082">BUS_ASSERT</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener__internal_8h_source.html#l00111">listener::commit_pipe</a>, <a class="el" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be">listener_msg::expect</a>, <a class="el" href="structrx__info__t.html#a7aa7c18547fd393ad4b22a9ea6eb7267">rx_info_t::expect</a>, <a class="el" href="listener__internal_8h_source.html#l00129">listener::fds</a>, <a class="el" href="listener_8c_source.html#l01197">free_ci()</a>, <a class="el" href="listener_8c_source.html#l00038">INCOMING_MSG_PIPE</a>, <a class="el" href="listener__internal_8h_source.html#l00112">listener::incoming_msg_pipe</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="listener__internal_8h_source.html#l00094">MAX_PENDING_MESSAGES</a>, <a class="el" href="listener__internal_8h_source.html#l00097">MAX_QUEUE_MESSAGES</a>, <a class="el" href="listener__internal_8h_source.html#l00025">MSG_ADD_SOCKET</a>, <a class="el" href="listener__internal_8h_source.html#l00028">MSG_EXPECT_RESPONSE</a>, <a class="el" href="listener__internal_8h_source.html#l00120">listener::msgs</a>, <a class="el" href="listener__internal_8h_source.html#l00134">listener::read_buf</a>, <a class="el" href="listener_8c_source.html#l01205">remove_socket()</a>, <a class="el" href="listener__internal_8h_source.html#l00061">RIS_EXPECT</a>, <a class="el" href="listener__internal_8h_source.html#l00060">RIS_HOLD</a>, <a class="el" href="listener__internal_8h_source.html#l00062">RIS_INACTIVE</a>, <a class="el" href="listener__internal_8h_source.html#l00115">listener::rx_info</a>, <a class="el" href="listener__internal_8h_source.html#l00070">rx_info_t::state</a>, <a class="el" href="listener__internal_8h_source.html#l00127">listener::tracked_fds</a>, <a class="el" href="listener__internal_8h_source.html#l00035">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, <a class="el" href="structrx__info__t.html#a92273c68b1cc0dd89592e5cd1e6ecd7b">rx_info_t::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "discovery.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "discovery.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,15 +25,26 @@ discovery.c \-
 
 .in +1c
 .ti -1c
+.RI "static int \fBdiscover_service\fP (void)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static int discover_service (void)\fC [static]\fP"
+
+.PP
+Definition at line 49 of file discovery\&.c\&.
+.PP
+References KINETIC_PORT\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 37 of file discovery\&.c\&.
+.PP
+References discover_service()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

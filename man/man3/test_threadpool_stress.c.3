@@ -1,4 +1,4 @@
-.TH "test_threadpool_stress.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "test_threadpool_stress.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -37,7 +37,26 @@ test_threadpool_stress.c \-
 
 .in +1c
 .ti -1c
+.RI "static void \fBdump_stats\fP (const char *prefix, struct \fBthreadpool_info\fP *stats, size_t ticks)"
+.br
+.ti -1c
+.RI "static size_t \fBfibs\fP (size_t arg)"
+.br
+.ti -1c
+.RI "static void \fBtask_cb\fP (void *udata)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static size_t \fBtask_count\fP = 0"
+.br
+.ti -1c
+.RI "static size_t \fBlast_count\fP = 0"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -63,12 +82,38 @@ do {                                                                \
 Definition at line 48 of file test_threadpool_stress\&.c\&.
 .SH "Function Documentation"
 .PP 
+.SS "static void dump_stats (const char *prefix, struct \fBthreadpool_info\fP *stats, size_tticks)\fC [static]\fP"
+
+.PP
+Definition at line 35 of file test_threadpool_stress\&.c\&.
+.PP
+References threadpool_info::active_threads, threadpool_info::backlog_size, threadpool_info::dormant_threads, last_count, and task_count\&.
+.SS "static size_t fibs (size_targ)\fC [static]\fP"
+
+.PP
+Definition at line 58 of file test_threadpool_stress\&.c\&.
+.SS "static void task_cb (void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 63 of file test_threadpool_stress\&.c\&.
+.PP
+References fibs(), SPIN_ADJ, and task_count\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 70 of file test_threadpool_stress\&.c\&.
 .PP
-References threadpool_config::max_threads, threadpool_task::task, threadpool_config::task_ringbuf_size2, threadpool_init(), threadpool_schedule(), and threadpool_stats()\&.
+References dump_stats(), threadpool_config::max_threads, threadpool_task::task, task_cb(), threadpool_config::task_ringbuf_size2, threadpool_init(), threadpool_schedule(), and threadpool_stats()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "size_t task_count = 0\fC [static]\fP"
+
+.PP
+Definition at line 32 of file test_threadpool_stress\&.c\&.
+.SS "size_t last_count = 0\fC [static]\fP"
+
+.PP
+Definition at line 33 of file test_threadpool_stress\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -50,7 +50,6 @@
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">kinetic_types_internal.c File Reference</div>  </div>
@@ -64,11 +63,6 @@
 </div>
 <p><a href="kinetic__types__internal_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:aadb3b50142303f07107c0dccd980d2cd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#aadb3b50142303f07107c0dccd980d2cd">KINETIC_PDU_HEADER_INIT</a>&#160;&#160;&#160;(<a class="el" href="kinetic__types__internal_8h.html#aeefc7ca996ea90f5703b1b8440092c5e">KineticPDUHeader</a>) {.versionPrefix = 'F'}</td></tr>
-<tr class="separator:aadb3b50142303f07107c0dccd980d2cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:afef6c786c0ae708f69144e01b58a9f09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#afef6c786c0ae708f69144e01b58a9f09">KineticProtoStatusCode_to_KineticStatus</a> (<a class="el" href="kinetic__proto_8h.html#ada0e7deb7fbeacf14479b65d88fce20c">KineticProto_Command_Status_StatusCode</a> protoStatus)</td></tr>
@@ -97,42 +91,29 @@ Functions</h2></td></tr>
 <tr class="separator:ae08016165ab72a7ad14383d5eafff708"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2adf85c18351b5094b3f7b1784d49459"><td class="memItemLeft" align="right" valign="top">struct timeval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a2adf85c18351b5094b3f7b1784d49459">Kinetic_TimevalAdd</a> (struct timeval const a, struct timeval const b)</td></tr>
 <tr class="separator:a2adf85c18351b5094b3f7b1784d49459"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54f9a9bf741efba1e89f33c4f9878ee9"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a54f9a9bf741efba1e89f33c4f9878ee9">cmp_suseconds_t</a> (suseconds_t const a, suseconds_t const b)</td></tr>
+<tr class="separator:a54f9a9bf741efba1e89f33c4f9878ee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a9f3c8864a793f00a125bad2b25d215"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a4a9f3c8864a793f00a125bad2b25d215">Kinetic_TimevalCmp</a> (struct timeval const a, struct timeval const b)</td></tr>
 <tr class="separator:a4a9f3c8864a793f00a125bad2b25d215"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38e45c64e90e7b5508743454fd0c0568"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8c">KineticProto_Command_GetLog_Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a38e45c64e90e7b5508743454fd0c0568">KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type</a> (<a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a> type)</td></tr>
-<tr class="separator:a38e45c64e90e7b5508743454fd0c0568"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaef3795753be2a7ba694ead687af9042"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8c">KineticProto_Command_GetLog_Type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#aaef3795753be2a7ba694ead687af9042">KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type</a> (<a class="el" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fce">KineticLogInfo_Type</a> type)</td></tr>
+<tr class="separator:aaef3795753be2a7ba694ead687af9042"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67187990cf86b81a9b72b93f347d7c41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a00f738045cd3e7be4d876e341453c15f">KineticMessageType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a67187990cf86b81a9b72b93f347d7c41">KineticProto_Command_MessageType_to_KineticMessageType</a> (<a class="el" href="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1">KineticProto_Command_MessageType</a> type)</td></tr>
 <tr class="separator:a67187990cf86b81a9b72b93f347d7c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3de2b4ad1eda7f59dca5ae76cf24c70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#ad3de2b4ad1eda7f59dca5ae76cf24c70">KineticSessionConfig_Copy</a> (<a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a> *dest, <a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a> *src)</td></tr>
+<tr class="separator:ad3de2b4ad1eda7f59dca5ae76cf24c70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b1924a9a5139d7e33fbf9b5190917b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a6b1924a9a5139d7e33fbf9b5190917b8">KineticSession_Init</a> (KineticSession *const session, <a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a> *const config, KineticConnection *const con)</td></tr>
+<tr class="separator:a6b1924a9a5139d7e33fbf9b5190917b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af17835e245e04e4132aa3a07098b002d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#af17835e245e04e4132aa3a07098b002d">KineticConnection_Init</a> (KineticConnection *const con)</td></tr>
+<tr class="separator:af17835e245e04e4132aa3a07098b002d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6ea752dfd491fffd99d4cad256f679d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#ac6ea752dfd491fffd99d4cad256f679d">KineticMessage_Init</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const message)</td></tr>
 <tr class="separator:ac6ea752dfd491fffd99d4cad256f679d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ed27dbd5b91d48d9d59aa9613ffe4d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a9ed27dbd5b91d48d9d59aa9613ffe4d5">Kinetic_auth_init_hmac</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const msg, int identity, <a class="el" href="struct_byte_array.html">ByteArray</a> hmac)</td></tr>
-<tr class="separator:a9ed27dbd5b91d48d9d59aa9613ffe4d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac799762669ad121854b44def2f142778"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#ac799762669ad121854b44def2f142778">Kinetic_auth_init_pinop</a> (<a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const msg)</td></tr>
-<tr class="separator:ac799762669ad121854b44def2f142778"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa62022ea14548feb753722318f59f3c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#aa62022ea14548feb753722318f59f3c3">KineticMessage_HeaderInit</a> (KineticProto_Command_Header *hdr, KineticConnection *con)</td></tr>
-<tr class="separator:aa62022ea14548feb753722318f59f3c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08237b688a01e364ec6fb93e066c6c97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a08237b688a01e364ec6fb93e066c6c97">KineticOperation_Init</a> (KineticOperation *op, KineticConnection *con)</td></tr>
-<tr class="separator:a08237b688a01e364ec6fb93e066c6c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afff41929edb9727bd7df65dc0f7c1b14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#afff41929edb9727bd7df65dc0f7c1b14">KineticPDU_Init</a> (KineticPDU *pdu, KineticConnection *con)</td></tr>
-<tr class="separator:afff41929edb9727bd7df65dc0f7c1b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb398056b18d7e4d4445aa4a9dcffabf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#adb398056b18d7e4d4445aa4a9dcffabf">KineticPDU_InitWithCommand</a> (KineticPDU *pdu, KineticConnection *con)</td></tr>
-<tr class="separator:adb398056b18d7e4d4445aa4a9dcffabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5ea833452030aca925d616d01cb52b2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#aa5ea833452030aca925d616d01cb52b2">KineticMessage_HeaderInit</a> (KineticProto_Command_Header *hdr, KineticSession const *const session)</td></tr>
+<tr class="separator:aa5ea833452030aca925d616d01cb52b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f871d3846fc49a5062aa4a3a65002f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a1f871d3846fc49a5062aa4a3a65002f3">KineticOperation_Init</a> (KineticOperation *op, KineticSession const *const session)</td></tr>
+<tr class="separator:a1f871d3846fc49a5062aa4a3a65002f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a913e39370ce76e818797b8f197313e18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__types__internal_8c.html#a913e39370ce76e818797b8f197313e18">KineticRequest_Init</a> (KineticRequest *request, KineticSession const *const session)</td></tr>
+<tr class="separator:a913e39370ce76e818797b8f197313e18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="aadb3b50142303f07107c0dccd980d2cd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define KINETIC_PDU_HEADER_INIT&#160;&#160;&#160;(<a class="el" href="kinetic__types__internal_8h.html#aeefc7ca996ea90f5703b1b8440092c5e">KineticPDUHeader</a>) {.versionPrefix = 'F'}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00455">455</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="afef6c786c0ae708f69144e01b58a9f09"></a>
 <div class="memitem">
@@ -150,7 +131,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00028">28</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00089">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00088">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00084">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00080">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00083">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00094">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST</a>, <a class="el" href="kinetic__proto_8h_source.html#l00077">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00095">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00092">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00093">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM</a>, <a class="el" href="kinetic__proto_8h_source.html#l00078">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00081">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00085">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND</a>, <a class="el" href="kinetic__proto_8h_source.html#l00090">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00091">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00087">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY</a>, <a class="el" href="kinetic__proto_8h_source.html#l00079">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00082">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00086">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH</a>, <a class="el" href="kinetic__types_8h_source.html#l00182">KINETIC_STATUS_CLUSTER_MISMATCH</a>, <a class="el" href="kinetic__types_8h_source.html#l00177">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00184">KINETIC_STATUS_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00176">KINETIC_STATUS_DEVICE_BUSY</a>, <a class="el" href="kinetic__types_8h_source.html#l00168">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00178">KINETIC_STATUS_INVALID_REQUEST</a>, <a class="el" href="kinetic__types_8h_source.html#l00185">KINETIC_STATUS_NOT_FOUND</a>, <a class="el" href="kinetic__types_8h_source.html#l00180">KINETIC_STATUS_OPERATION_FAILED</a>, <a class="el" href="kinetic__types_8h_source.html#l00170">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__types_8h_source.html#l00183">KINETIC_STATUS_VERSION_MISMATCH</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00089">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00096">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00088">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00084">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00080">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00083">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00094">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST</a>, <a class="el" href="kinetic__proto_8h_source.html#l00077">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00095">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00092">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00093">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM</a>, <a class="el" href="kinetic__proto_8h_source.html#l00078">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00081">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED</a>, <a class="el" href="kinetic__proto_8h_source.html#l00085">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND</a>, <a class="el" href="kinetic__proto_8h_source.html#l00090">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00091">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR</a>, <a class="el" href="kinetic__proto_8h_source.html#l00087">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY</a>, <a class="el" href="kinetic__proto_8h_source.html#l00079">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00082">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00086">KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH</a>, <a class="el" href="kinetic__types_8h_source.html#l00181">KINETIC_STATUS_CLUSTER_MISMATCH</a>, <a class="el" href="kinetic__types_8h_source.html#l00176">KINETIC_STATUS_CONNECTION_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00183">KINETIC_STATUS_DATA_ERROR</a>, <a class="el" href="kinetic__types_8h_source.html#l00175">KINETIC_STATUS_DEVICE_BUSY</a>, <a class="el" href="kinetic__types_8h_source.html#l00193">KINETIC_STATUS_DEVICE_LOCKED</a>, <a class="el" href="kinetic__types_8h_source.html#l00167">KINETIC_STATUS_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00177">KINETIC_STATUS_INVALID_REQUEST</a>, <a class="el" href="kinetic__types_8h_source.html#l00195">KINETIC_STATUS_NOT_AUTHORIZED</a>, <a class="el" href="kinetic__types_8h_source.html#l00184">KINETIC_STATUS_NOT_FOUND</a>, <a class="el" href="kinetic__types_8h_source.html#l00179">KINETIC_STATUS_OPERATION_FAILED</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__types_8h_source.html#l00182">KINETIC_STATUS_VERSION_MISMATCH</a>.</p>
 
 </div>
 </div>
@@ -168,9 +149,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00089">89</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00096">96</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00142">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH</a>, <a class="el" href="kinetic__proto_8h_source.html#l00139">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION</a>, <a class="el" href="kinetic__proto_8h_source.html#l00141">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK</a>, <a class="el" href="kinetic__proto_8h_source.html#l00140">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH</a>, <a class="el" href="kinetic__types_8h_source.html#l00098">KINETIC_SYNCHRONIZATION_FLUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00083">KINETIC_SYNCHRONIZATION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00091">KINETIC_SYNCHRONIZATION_WRITEBACK</a>, and <a class="el" href="kinetic__types_8h_source.html#l00087">KINETIC_SYNCHRONIZATION_WRITETHROUGH</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00142">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH</a>, <a class="el" href="kinetic__proto_8h_source.html#l00139">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION</a>, <a class="el" href="kinetic__proto_8h_source.html#l00141">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK</a>, <a class="el" href="kinetic__proto_8h_source.html#l00140">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH</a>, <a class="el" href="kinetic__types_8h_source.html#l00099">KINETIC_SYNCHRONIZATION_FLUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00084">KINETIC_SYNCHRONIZATION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00092">KINETIC_SYNCHRONIZATION_WRITEBACK</a>, and <a class="el" href="kinetic__types_8h_source.html#l00088">KINETIC_SYNCHRONIZATION_WRITETHROUGH</a>.</p>
 
 </div>
 </div>
@@ -188,9 +169,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00111">111</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00118">118</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__proto_8h_source.html#l00142">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH</a>, <a class="el" href="kinetic__proto_8h_source.html#l00139">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION</a>, <a class="el" href="kinetic__proto_8h_source.html#l00141">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK</a>, <a class="el" href="kinetic__proto_8h_source.html#l00140">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH</a>, <a class="el" href="kinetic__types_8h_source.html#l00098">KINETIC_SYNCHRONIZATION_FLUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00083">KINETIC_SYNCHRONIZATION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00091">KINETIC_SYNCHRONIZATION_WRITEBACK</a>, and <a class="el" href="kinetic__types_8h_source.html#l00087">KINETIC_SYNCHRONIZATION_WRITETHROUGH</a>.</p>
+<p>References <a class="el" href="kinetic__proto_8h_source.html#l00142">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH</a>, <a class="el" href="kinetic__proto_8h_source.html#l00139">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION</a>, <a class="el" href="kinetic__proto_8h_source.html#l00141">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK</a>, <a class="el" href="kinetic__proto_8h_source.html#l00140">KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH</a>, <a class="el" href="kinetic__types_8h_source.html#l00099">KINETIC_SYNCHRONIZATION_FLUSH</a>, <a class="el" href="kinetic__types_8h_source.html#l00084">KINETIC_SYNCHRONIZATION_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00092">KINETIC_SYNCHRONIZATION_WRITEBACK</a>, and <a class="el" href="kinetic__types_8h_source.html#l00088">KINETIC_SYNCHRONIZATION_WRITETHROUGH</a>.</p>
 
 </div>
 </div>
@@ -208,9 +189,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00134">134</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00141">141</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00074">KINETIC_ALGORITHM_CRC32</a>, <a class="el" href="kinetic__types_8h_source.html#l00075">KINETIC_ALGORITHM_CRC64</a>, <a class="el" href="kinetic__types_8h_source.html#l00070">KINETIC_ALGORITHM_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00071">KINETIC_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__types_8h_source.html#l00072">KINETIC_ALGORITHM_SHA2</a>, <a class="el" href="kinetic__types_8h_source.html#l00073">KINETIC_ALGORITHM_SHA3</a>, <a class="el" href="kinetic__proto_8h_source.html#l00158">KINETIC_PROTO_COMMAND_ALGORITHM_CRC32</a>, <a class="el" href="kinetic__proto_8h_source.html#l00159">KINETIC_PROTO_COMMAND_ALGORITHM_CRC64</a>, <a class="el" href="kinetic__proto_8h_source.html#l00154">KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM</a>, <a class="el" href="kinetic__proto_8h_source.html#l00155">KINETIC_PROTO_COMMAND_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__proto_8h_source.html#l00156">KINETIC_PROTO_COMMAND_ALGORITHM_SHA2</a>, and <a class="el" href="kinetic__proto_8h_source.html#l00157">KINETIC_PROTO_COMMAND_ALGORITHM_SHA3</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00075">KINETIC_ALGORITHM_CRC32</a>, <a class="el" href="kinetic__types_8h_source.html#l00076">KINETIC_ALGORITHM_CRC64</a>, <a class="el" href="kinetic__types_8h_source.html#l00071">KINETIC_ALGORITHM_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00072">KINETIC_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__types_8h_source.html#l00073">KINETIC_ALGORITHM_SHA2</a>, <a class="el" href="kinetic__types_8h_source.html#l00074">KINETIC_ALGORITHM_SHA3</a>, <a class="el" href="kinetic__proto_8h_source.html#l00158">KINETIC_PROTO_COMMAND_ALGORITHM_CRC32</a>, <a class="el" href="kinetic__proto_8h_source.html#l00159">KINETIC_PROTO_COMMAND_ALGORITHM_CRC64</a>, <a class="el" href="kinetic__proto_8h_source.html#l00154">KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM</a>, <a class="el" href="kinetic__proto_8h_source.html#l00155">KINETIC_PROTO_COMMAND_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__proto_8h_source.html#l00156">KINETIC_PROTO_COMMAND_ALGORITHM_SHA2</a>, and <a class="el" href="kinetic__proto_8h_source.html#l00157">KINETIC_PROTO_COMMAND_ALGORITHM_SHA3</a>.</p>
 
 </div>
 </div>
@@ -228,9 +209,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00165">165</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00172">172</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00074">KINETIC_ALGORITHM_CRC32</a>, <a class="el" href="kinetic__types_8h_source.html#l00075">KINETIC_ALGORITHM_CRC64</a>, <a class="el" href="kinetic__types_8h_source.html#l00070">KINETIC_ALGORITHM_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00071">KINETIC_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__types_8h_source.html#l00072">KINETIC_ALGORITHM_SHA2</a>, <a class="el" href="kinetic__types_8h_source.html#l00073">KINETIC_ALGORITHM_SHA3</a>, <a class="el" href="kinetic__proto_8h_source.html#l00158">KINETIC_PROTO_COMMAND_ALGORITHM_CRC32</a>, <a class="el" href="kinetic__proto_8h_source.html#l00159">KINETIC_PROTO_COMMAND_ALGORITHM_CRC64</a>, <a class="el" href="kinetic__proto_8h_source.html#l00154">KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM</a>, <a class="el" href="kinetic__proto_8h_source.html#l00155">KINETIC_PROTO_COMMAND_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__proto_8h_source.html#l00156">KINETIC_PROTO_COMMAND_ALGORITHM_SHA2</a>, and <a class="el" href="kinetic__proto_8h_source.html#l00157">KINETIC_PROTO_COMMAND_ALGORITHM_SHA3</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00075">KINETIC_ALGORITHM_CRC32</a>, <a class="el" href="kinetic__types_8h_source.html#l00076">KINETIC_ALGORITHM_CRC64</a>, <a class="el" href="kinetic__types_8h_source.html#l00071">KINETIC_ALGORITHM_INVALID</a>, <a class="el" href="kinetic__types_8h_source.html#l00072">KINETIC_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__types_8h_source.html#l00073">KINETIC_ALGORITHM_SHA2</a>, <a class="el" href="kinetic__types_8h_source.html#l00074">KINETIC_ALGORITHM_SHA3</a>, <a class="el" href="kinetic__proto_8h_source.html#l00158">KINETIC_PROTO_COMMAND_ALGORITHM_CRC32</a>, <a class="el" href="kinetic__proto_8h_source.html#l00159">KINETIC_PROTO_COMMAND_ALGORITHM_CRC64</a>, <a class="el" href="kinetic__proto_8h_source.html#l00154">KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM</a>, <a class="el" href="kinetic__proto_8h_source.html#l00155">KINETIC_PROTO_COMMAND_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__proto_8h_source.html#l00156">KINETIC_PROTO_COMMAND_ALGORITHM_SHA2</a>, and <a class="el" href="kinetic__proto_8h_source.html#l00157">KINETIC_PROTO_COMMAND_ALGORITHM_SHA3</a>.</p>
 
 </div>
 </div>
@@ -248,7 +229,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00193">193</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00200">200</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
 <p>References <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>.</p>
 
@@ -278,7 +259,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00202">202</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00209">209</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
 <p>References <a class="el" href="byte__array_8h_source.html#l00054">ByteBuffer::array</a>, <a class="el" href="byte__array_8h_source.html#l00055">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>.</p>
 
@@ -308,9 +289,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00220">220</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00227">227</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00243">KineticEntry::algorithm</a>, <a class="el" href="byte__array_8h_source.html#l00054">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00135">ByteBuffer_Append()</a>, <a class="el" href="byte__array_8c_source.html#l00062">ByteBuffer_Reset()</a>, <a class="el" href="byte__array_8h_source.html#l00055">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00241">KineticEntry::dbVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00237">KineticEntry::key</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00165">KineticAlgorithm_from_KineticProto_Command_Algorithm()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00053">LOG1</a>, and <a class="el" href="kinetic__types_8h_source.html#l00242">KineticEntry::tag</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00248">KineticEntry::algorithm</a>, <a class="el" href="byte__array_8h_source.html#l00054">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00135">ByteBuffer_Append()</a>, <a class="el" href="byte__array_8c_source.html#l00062">ByteBuffer_Reset()</a>, <a class="el" href="byte__array_8h_source.html#l00055">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00246">KineticEntry::dbVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00242">KineticEntry::key</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00172">KineticAlgorithm_from_KineticProto_Command_Algorithm()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00055">LOG1</a>, and <a class="el" href="kinetic__types_8h_source.html#l00247">KineticEntry::tag</a>.</p>
 
 </div>
 </div>
@@ -338,9 +319,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00271">271</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00278">278</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00059">ByteBufferArray::buffers</a>, <a class="el" href="byte__array_8c_source.html#l00135">ByteBuffer_Append()</a>, <a class="el" href="byte__array_8c_source.html#l00062">ByteBuffer_Reset()</a>, <a class="el" href="byte__array_8h_source.html#l00060">ByteBufferArray::count</a>, <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF2</a>, and <a class="el" href="byte__array_8h_source.html#l00061">ByteBufferArray::used</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00059">ByteBufferArray::buffers</a>, <a class="el" href="byte__array_8c_source.html#l00135">ByteBuffer_Append()</a>, <a class="el" href="byte__array_8c_source.html#l00062">ByteBuffer_Reset()</a>, <a class="el" href="byte__array_8h_source.html#l00060">ByteBufferArray::count</a>, <a class="el" href="kinetic__logger_8h_source.html#l00060">LOGF2</a>, and <a class="el" href="byte__array_8h_source.html#l00061">ByteBufferArray::used</a>.</p>
 
 </div>
 </div>
@@ -374,7 +355,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00288">288</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00295">295</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
 </div>
 </div>
@@ -392,7 +373,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00303">303</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00309">309</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
 </div>
 </div>
@@ -410,7 +391,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00311">311</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00317">317</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
 </div>
 </div>
@@ -438,7 +419,43 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00316">316</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00322">322</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a54f9a9bf741efba1e89f33c4f9878ee9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int cmp_suseconds_t </td>
+          <td>(</td>
+          <td class="paramtype">suseconds_t const&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">suseconds_t const&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00336">336</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
 </div>
 </div>
@@ -466,27 +483,29 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00343">343</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00349">349</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00336">cmp_suseconds_t()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a38e45c64e90e7b5508743454fd0c0568"></a>
+<a class="anchor" id="aaef3795753be2a7ba694ead687af9042"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8c">KineticProto_Command_GetLog_Type</a> KineticDeviceInfo_Type_to_KineticProto_Command_GetLog_Type </td>
+          <td class="memname"><a class="el" href="kinetic__proto_8h.html#a8bb98b937b3bae0d302ea57124680a8c">KineticProto_Command_GetLog_Type</a> KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a0659f218c5ddd6a07d0e17e99f6e507d">KineticDeviceInfo_Type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fce">KineticLogInfo_Type</a>&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00348">348</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00354">354</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00288">KINETIC_DEVICE_INFO_TYPE_CAPACITIES</a>, <a class="el" href="kinetic__types_8h_source.html#l00289">KINETIC_DEVICE_INFO_TYPE_CONFIGURATION</a>, <a class="el" href="kinetic__types_8h_source.html#l00293">KINETIC_DEVICE_INFO_TYPE_DEVICE</a>, <a class="el" href="kinetic__types_8h_source.html#l00292">KINETIC_DEVICE_INFO_TYPE_LIMITS</a>, <a class="el" href="kinetic__types_8h_source.html#l00291">KINETIC_DEVICE_INFO_TYPE_MESSAGES</a>, <a class="el" href="kinetic__types_8h_source.html#l00290">KINETIC_DEVICE_INFO_TYPE_STATISTICS</a>, <a class="el" href="kinetic__types_8h_source.html#l00287">KINETIC_DEVICE_INFO_TYPE_TEMPERATURES</a>, <a class="el" href="kinetic__types_8h_source.html#l00286">KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00106">KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION</a>, <a class="el" href="kinetic__proto_8h_source.html#l00105">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES</a>, <a class="el" href="kinetic__proto_8h_source.html#l00110">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00102">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00109">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00108">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES</a>, <a class="el" href="kinetic__proto_8h_source.html#l00107">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00104">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES</a>, and <a class="el" href="kinetic__proto_8h_source.html#l00103">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00294">KINETIC_DEVICE_INFO_TYPE_CAPACITIES</a>, <a class="el" href="kinetic__types_8h_source.html#l00295">KINETIC_DEVICE_INFO_TYPE_CONFIGURATION</a>, <a class="el" href="kinetic__types_8h_source.html#l00299">KINETIC_DEVICE_INFO_TYPE_DEVICE</a>, <a class="el" href="kinetic__types_8h_source.html#l00298">KINETIC_DEVICE_INFO_TYPE_LIMITS</a>, <a class="el" href="kinetic__types_8h_source.html#l00297">KINETIC_DEVICE_INFO_TYPE_MESSAGES</a>, <a class="el" href="kinetic__types_8h_source.html#l00296">KINETIC_DEVICE_INFO_TYPE_STATISTICS</a>, <a class="el" href="kinetic__types_8h_source.html#l00293">KINETIC_DEVICE_INFO_TYPE_TEMPERATURES</a>, <a class="el" href="kinetic__types_8h_source.html#l00292">KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00106">KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION</a>, <a class="el" href="kinetic__proto_8h_source.html#l00105">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES</a>, <a class="el" href="kinetic__proto_8h_source.html#l00110">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00102">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE</a>, <a class="el" href="kinetic__proto_8h_source.html#l00109">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00108">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES</a>, <a class="el" href="kinetic__proto_8h_source.html#l00107">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS</a>, <a class="el" href="kinetic__proto_8h_source.html#l00104">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES</a>, and <a class="el" href="kinetic__proto_8h_source.html#l00103">KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS</a>.</p>
 
 </div>
 </div>
@@ -504,7 +523,93 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00376">376</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00382">382</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad3de2b4ad1eda7f59dca5ae76cf24c70"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticSessionConfig_Copy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a> *&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a> *&#160;</td>
+          <td class="paramname"><em>src</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00387">387</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00138">KineticSessionConfig::hmacKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00137">KineticSessionConfig::keyData</a>, <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, and <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6b1924a9a5139d7e33fbf9b5190917b8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticSession_Init </td>
+          <td>(</td>
+          <td class="paramtype">KineticSession *const&#160;</td>
+          <td class="paramname"><em>session</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a> *const&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">KineticConnection *const&#160;</td>
+          <td class="paramname"><em>con</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00398">398</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00120">KineticSessionConfig::host</a>, <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00415">KineticConnection_Init()</a>, and <a class="el" href="kinetic__types__internal_8c_source.html#l00387">KineticSessionConfig_Copy()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af17835e245e04e4132aa3a07098b002d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KineticConnection_Init </td>
+          <td>(</td>
+          <td class="paramtype">KineticConnection *const&#160;</td>
+          <td class="paramname"><em>con</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00415">415</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>.</p>
 
 </div>
 </div>
@@ -522,72 +627,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00381">381</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00126">KineticMessage::body</a>, <a class="el" href="byte__array_8h_source.html#l00040">BYTE_ARRAY_NONE</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00124">KineticMessage::command</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00132">KineticMessage::getLog</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00125">KineticMessage::header</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00120">KineticMessage::hmacAuth</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00131">KineticMessage::keyRange</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00130">KineticMessage::keyValue</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00401">Kinetic_auth_init_hmac()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00424">Kinetic_auth_init_pinop()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00220">KineticProto_command__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00115">KineticProto_command_body__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00195">KineticProto_command_get_log__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00110">KineticProto_command_header__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00125">KineticProto_command_key_value__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00215">KineticProto_command_pin_operation__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00130">KineticProto_command_range__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00120">KineticProto_command_status__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00075">KineticProto_Message__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00065">KineticProto_Message_hmacauth__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00070">KineticProto_Message_pinauth__init()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00119">KineticMessage::message</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00121">KineticMessage::pinAuth</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00134">KineticMessage::pinOp</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00127">KineticMessage::status</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a9ed27dbd5b91d48d9d59aa9613ffe4d5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Kinetic_auth_init_hmac </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const&#160;</td>
-          <td class="paramname"><em>msg</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>identity</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td>
-          <td class="paramname"><em>hmac</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00401">401</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00124">KineticMessage::command</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00125">KineticMessage::header</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00120">KineticMessage::hmacAuth</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00122">KineticMessage::hmacData</a>, <a class="el" href="kinetic__types_8h_source.html#l00043">KINETIC_HMAC_MAX_LEN</a>, <a class="el" href="kinetic__proto_8h_source.html#l00071">KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH</a>, <a class="el" href="kinetic__proto_8c_source.html#l00065">KineticProto_Message_hmacauth__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00070">KineticProto_Message_pinauth__init()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00119">KineticMessage::message</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00121">KineticMessage::pinAuth</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ac799762669ad121854b44def2f142778"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Kinetic_auth_init_pinop </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_message.html">KineticMessage</a> *const&#160;</td>
-          <td class="paramname"><em>msg</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
 <p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00424">424</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00146">KineticMessage::body</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00144">KineticMessage::command</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00153">KineticMessage::getLog</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00145">KineticMessage::header</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00139">KineticMessage::hmacAuth</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00151">KineticMessage::keyRange</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00150">KineticMessage::keyValue</a>, <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__proto_8c_source.html#l00220">KineticProto_command__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00115">KineticProto_command_body__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00195">KineticProto_command_get_log__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00110">KineticProto_command_header__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00125">KineticProto_command_key_value__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00215">KineticProto_command_pin_operation__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00130">KineticProto_command_range__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00210">KineticProto_command_security__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00135">KineticProto_command_setup__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00120">KineticProto_command_status__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00075">KineticProto_Message__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00065">KineticProto_Message_hmacauth__init()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00070">KineticProto_Message_pinauth__init()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00138">KineticMessage::message</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00140">KineticMessage::pinAuth</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00155">KineticMessage::pinOp</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00148">KineticMessage::security</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00152">KineticMessage::setup</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00147">KineticMessage::status</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="aa62022ea14548feb753722318f59f3c3"></a>
+<a class="anchor" id="aa5ea833452030aca925d616d01cb52b2"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void KineticMessage_HeaderInit </td>
+          <td class="memname">static void KineticMessage_HeaderInit </td>
           <td>(</td>
           <td class="paramtype">KineticProto_Command_Header *&#160;</td>
           <td class="paramname"><em>hdr</em>, </td>
@@ -595,8 +649,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>con</em>&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
+          <td class="paramname"><em>session</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -604,15 +658,20 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00430">430</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00443">443</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00085">KINETIC_SEQUENCE_NOT_YET_BOUND</a>, and <a class="el" href="kinetic__proto_8c_source.html#l00606">KineticProto_command_header__descriptor</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00101">KINETIC_SEQUENCE_NOT_YET_BOUND</a>, and <a class="el" href="kinetic__proto_8c_source.html#l00606">KineticProto_command_header__descriptor</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a08237b688a01e364ec6fb93e066c6c97"></a>
+<a class="anchor" id="a1f871d3846fc49a5062aa4a3a65002f3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -625,8 +684,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>con</em>&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
+          <td class="paramname"><em>session</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -636,25 +695,27 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00446">446</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00459">459</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="afff41929edb9727bd7df65dc0f7c1b14"></a>
+<a class="anchor" id="a913e39370ce76e818797b8f197313e18"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void KineticPDU_Init </td>
+          <td class="memname">void KineticRequest_Init </td>
           <td>(</td>
-          <td class="paramtype">KineticPDU *&#160;</td>
-          <td class="paramname"><em>pdu</em>, </td>
+          <td class="paramtype">KineticRequest *&#160;</td>
+          <td class="paramname"><em>request</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>con</em>&#160;</td>
+          <td class="paramtype">KineticSession const *const&#160;</td>
+          <td class="paramname"><em>session</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -664,39 +725,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00458">458</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00470">470</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00401">Kinetic_auth_init_hmac()</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00430">KineticMessage_HeaderInit()</a>, and <a class="el" href="kinetic__types__internal_8c_source.html#l00381">KineticMessage_Init()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="adb398056b18d7e4d4445aa4a9dcffabf"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void KineticPDU_InitWithCommand </td>
-          <td>(</td>
-          <td class="paramtype">KineticPDU *&#160;</td>
-          <td class="paramname"><em>pdu</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">KineticConnection *&#160;</td>
-          <td class="paramname"><em>con</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="kinetic__types__internal_8c_source.html#l00469">469</a> of file <a class="el" href="kinetic__types__internal_8c_source.html">kinetic_types_internal.c</a>.</p>
-
-<p>References <a class="el" href="kinetic__types__internal_8c_source.html#l00458">KineticPDU_Init()</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types__internal_8c_source.html#l00443">KineticMessage_HeaderInit()</a>, and <a class="el" href="kinetic__types__internal_8c_source.html#l00424">KineticMessage_Init()</a>.</p>
 
 </div>
 </div>

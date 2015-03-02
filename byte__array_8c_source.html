@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -80,7 +80,7 @@
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;sys/param.h&gt;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">static</span> <a class="code" href="struct_byte_buffer.html">ByteBuffer</a>* append_formatted_cstring_va_list(<a class="code" href="struct_byte_buffer.html">ByteBuffer</a>* buffer,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">static</span> <a class="code" href="struct_byte_buffer.html">ByteBuffer</a>* <a class="code" href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5">append_formatted_cstring_va_list</a>(<a class="code" href="struct_byte_buffer.html">ByteBuffer</a>* buffer,</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* format, va_list args);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="byte__array_8c.html#a1029bfd0bb667fc593fe3e0733310a3e">   31</a></span>&#160;<a class="code" href="struct_byte_array.html">ByteArray</a> <a class="code" href="byte__array_8c.html#a1029bfd0bb667fc593fe3e0733310a3e">ByteArray_Create</a>(<span class="keywordtype">void</span>* data, <span class="keywordtype">size_t</span> len)</div>
@@ -243,7 +243,7 @@
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;}</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keyword">static</span> <a class="code" href="struct_byte_buffer.html">ByteBuffer</a>* append_formatted_cstring_va_list(<a class="code" href="struct_byte_buffer.html">ByteBuffer</a>* buffer, <span class="keyword">const</span> <span class="keywordtype">char</span>* format, va_list args)</div>
+<div class="line"><a name="l00191"></a><span class="lineno"><a class="line" href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5">  191</a></span>&#160;<span class="keyword">static</span> <a class="code" href="struct_byte_buffer.html">ByteBuffer</a>* <a class="code" href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5">append_formatted_cstring_va_list</a>(<a class="code" href="struct_byte_buffer.html">ByteBuffer</a>* buffer, <span class="keyword">const</span> <span class="keywordtype">char</span>* format, va_list args)</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;{</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="keywordtype">char</span>* start = (<span class="keywordtype">char</span>*)&amp;buffer-&gt;<a class="code" href="struct_byte_buffer.html#a6cbbf0173ee65e5c229a358fbf1b8aae">array</a>.<a class="code" href="struct_byte_array.html#aad2e9b4bac5a6198e4ef08b3b6890981">data</a>[buffer-&gt;<a class="code" href="struct_byte_buffer.html#ac8b4d499aec3223045e239e80f7e49c8">bytesUsed</a>];</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keywordtype">long</span> startLen = (<span class="keywordtype">long</span>)buffer-&gt;<a class="code" href="struct_byte_buffer.html#ac8b4d499aec3223045e239e80f7e49c8">bytesUsed</a>;</div>
@@ -266,7 +266,7 @@
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    va_list args;</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    va_start(args, format);</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    failed = (append_formatted_cstring_va_list(buffer, format, args) == NULL);</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    failed = (<a class="code" href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5">append_formatted_cstring_va_list</a>(buffer, format, args) == NULL);</div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    va_end(args);</div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;</div>
@@ -279,7 +279,7 @@
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    va_list args;</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    va_start(args, format);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordflow">if</span> (append_formatted_cstring_va_list(&amp;buf, format, args) == NULL) {</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5">append_formatted_cstring_va_list</a>(&amp;buf, format, args) == NULL) {</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        memset(&amp;buf, 0, <span class="keyword">sizeof</span>(<a class="code" href="struct_byte_buffer.html">ByteBuffer</a>));</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    }</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    va_end(args);</div>
@@ -351,6 +351,7 @@
 <div class="ttc" id="byte__array_8h_html"><div class="ttname"><a href="byte__array_8h.html">byte_array.h</a></div></div>
 <div class="ttc" id="byte__array_8c_html_adda138a80ee9e83c91228835d5d3ab7b"><div class="ttname"><a href="byte__array_8c.html#adda138a80ee9e83c91228835d5d3ab7b">ByteBuffer_Append</a></div><div class="ttdeci">ByteBuffer * ByteBuffer_Append(ByteBuffer *buffer, const void *data, size_t len)</div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8c_source.html#l00135">byte_array.c:135</a></div></div>
 <div class="ttc" id="byte__array_8c_html_a9f76a0b370ef0d1b71b6234110cdf750"><div class="ttname"><a href="byte__array_8c.html#a9f76a0b370ef0d1b71b6234110cdf750">ByteArray_FillWithDummyData</a></div><div class="ttdeci">void ByteArray_FillWithDummyData(ByteArray array)</div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8c_source.html#l00045">byte_array.c:45</a></div></div>
+<div class="ttc" id="byte__array_8c_html_a69eb81af367b07bce9096d6b1b1efbf5"><div class="ttname"><a href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5">append_formatted_cstring_va_list</a></div><div class="ttdeci">static ByteBuffer * append_formatted_cstring_va_list(ByteBuffer *buffer, const char *format, va_list args)</div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8c_source.html#l00191">byte_array.c:191</a></div></div>
 <div class="ttc" id="struct_byte_array_html_a9a69ed98466be27ba69a44764c16f694"><div class="ttname"><a href="struct_byte_array.html#a9a69ed98466be27ba69a44764c16f694">ByteArray::len</a></div><div class="ttdeci">size_t len</div><div class="ttdoc">Number of bytes in the data field. </div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00035">byte_array.h:35</a></div></div>
 <div class="ttc" id="byte__array_8h_html_a284b2fa610ec1be5d86406563d8107ce"><div class="ttname"><a href="byte__array_8h.html#a284b2fa610ec1be5d86406563d8107ce">BYTE_ARRAY_NONE</a></div><div class="ttdeci">#define BYTE_ARRAY_NONE</div><div class="ttdoc">Convenience macro to represent an empty array with no data. </div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00040">byte_array.h:40</a></div></div>
 <div class="ttc" id="byte__array_8c_html_a1029bfd0bb667fc593fe3e0733310a3e"><div class="ttname"><a href="byte__array_8c.html#a1029bfd0bb667fc593fe3e0733310a3e">ByteArray_Create</a></div><div class="ttdeci">ByteArray ByteArray_Create(void *data, size_t len)</div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8c_source.html#l00031">byte_array.c:31</a></div></div>

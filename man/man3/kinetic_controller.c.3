@@ -1,4 +1,4 @@
-.TH "kinetic_controller.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_controller.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,7 +12,11 @@ kinetic_controller.c \-
 .br
 \fC#include 'kinetic_operation\&.h'\fP
 .br
-\fC#include 'kinetic_pdu\&.h'\fP
+\fC#include 'kinetic_bus\&.h'\fP
+.br
+\fC#include 'kinetic_response\&.h'\fP
+.br
+\fC#include 'kinetic_auth\&.h'\fP
 .br
 \fC#include 'kinetic_socket\&.h'\fP
 .br
@@ -31,13 +35,22 @@ kinetic_controller.c \-
 
 .in +1c
 .ti -1c
-.RI "KineticOperation * \fBKineticController_CreateOperation\fP (\fBKineticSession\fP const *const session)"
+.RI "KineticOperation * \fBKineticController_CreateOperation\fP (KineticSession const *const session)"
+.br
+.ti -1c
+.RI "static void \fBDefaultCallback\fP (\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
+.br
+.ti -1c
+.RI "static \fBKineticCompletionClosure\fP \fBDefaultClosure\fP (DefaultCallbackData *const data)"
 .br
 .ti -1c
 .RI "\fBKineticStatus\fP \fBKineticController_ExecuteOperation\fP (KineticOperation *operation, \fBKineticCompletionClosure\fP *const closure)"
 .br
 .ti -1c
 .RI "\fBKineticStatus\fP \fBbus_to_kinetic_status\fP (\fBbus_send_status_t\fP const status)"
+.br
+.ti -1c
+.RI "static const char * \fBbus_error_string\fP (\fBbus_send_status_t\fP t)"
 .br
 .ti -1c
 .RI "void \fBKineticController_HandleUnexpectedResponse\fP (void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)"
@@ -48,36 +61,54 @@ kinetic_controller.c \-
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "KineticOperation* KineticController_CreateOperation (\fBKineticSession\fP const *constsession)"
+.SS "KineticOperation* KineticController_CreateOperation (KineticSession const *constsession)"
 
 .PP
-Definition at line 32 of file kinetic_controller\&.c\&.
+Definition at line 34 of file kinetic_controller\&.c\&.
 .PP
-References KineticSession::connection, KineticAllocator_NewOperation(), LOG0, and LOGF3\&.
+References KineticAllocator_NewOperation(), LOG0, and LOGF3\&.
+.SS "static void DefaultCallback (\fBKineticCompletionData\fP *kinetic_data, void *client_data)\fC [static]\fP"
+
+.PP
+Definition at line 64 of file kinetic_controller\&.c\&.
+.PP
+References KineticCompletionData::status\&.
+.SS "static \fBKineticCompletionClosure\fP DefaultClosure (DefaultCallbackData *constdata)\fC [static]\fP"
+
+.PP
+Definition at line 74 of file kinetic_controller\&.c\&.
+.PP
+References KineticCompletionClosure::callback, and DefaultCallback()\&.
 .SS "\fBKineticStatus\fP KineticController_ExecuteOperation (KineticOperation *operation, \fBKineticCompletionClosure\fP *constclosure)"
 
 .PP
-Definition at line 80 of file kinetic_controller\&.c\&.
+Definition at line 82 of file kinetic_controller\&.c\&.
 .PP
-References KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, and KineticOperation_SendRequest()\&.
+References DefaultClosure(), KINETIC_ASSERT, KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, and KineticOperation_SendRequest()\&.
 .SS "\fBKineticStatus\fP bus_to_kinetic_status (\fBbus_send_status_t\fP conststatus)"
 
 .PP
-Definition at line 120 of file kinetic_controller\&.c\&.
+Definition at line 122 of file kinetic_controller\&.c\&.
 .PP
-References BUS_SEND_BAD_RESPONSE, BUS_SEND_RX_FAILURE, BUS_SEND_RX_TIMEOUT, BUS_SEND_RX_TIMEOUT_EXPECT, BUS_SEND_SUCCESS, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT, BUS_SEND_UNDEFINED, BUS_SEND_UNREGISTERED_SOCKET, KINETIC_STATUS_INVALID, KINETIC_STATUS_OPERATION_TIMEDOUT, KINETIC_STATUS_SOCKET_ERROR, KINETIC_STATUS_SOCKET_TIMEOUT, KINETIC_STATUS_SUCCESS, LOGF0, and LOGF3\&.
+References BUS_SEND_BAD_RESPONSE, BUS_SEND_RX_FAILURE, BUS_SEND_RX_TIMEOUT, BUS_SEND_RX_TIMEOUT_EXPECT, BUS_SEND_SUCCESS, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT, BUS_SEND_UNDEFINED, BUS_SEND_UNREGISTERED_SOCKET, KINETIC_ASSERT, KINETIC_STATUS_INVALID, KINETIC_STATUS_OPERATION_TIMEDOUT, KINETIC_STATUS_SOCKET_ERROR, KINETIC_STATUS_SOCKET_TIMEOUT, KINETIC_STATUS_SUCCESS, LOGF0, and LOGF3\&.
+.SS "static const char* bus_error_string (\fBbus_send_status_t\fPt)\fC [static]\fP"
+
+.PP
+Definition at line 167 of file kinetic_controller\&.c\&.
+.PP
+References BUS_SEND_BAD_RESPONSE, BUS_SEND_RX_FAILURE, BUS_SEND_RX_TIMEOUT, BUS_SEND_RX_TIMEOUT_EXPECT, BUS_SEND_SUCCESS, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT, BUS_SEND_UNDEFINED, and BUS_SEND_UNREGISTERED_SOCKET\&.
 .SS "void KineticController_HandleUnexpectedResponse (void *msg, int64_tseq_id, void *bus_udata, void *socket_udata)"
 
 .PP
-Definition at line 189 of file kinetic_controller\&.c\&.
+Definition at line 191 of file kinetic_controller\&.c\&.
 .PP
-References KineticResponse::command, KineticResponse::header, KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS, KineticAllocator_FreeKineticResponse(), KineticLogger_LogPrintf(), KineticLogger_LogProtobuf(), KineticResourceWaiter_SetAvailable(), LOG0, LOGF2, and KineticResponse::proto\&.
+References KineticResponse::command, KineticResponse::header, KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS, KineticAllocator_FreeKineticResponse(), KineticLogger_LogPrintf(), KineticLogger_LogProtobuf(), KineticLogger_LogTimestamp(), KineticResourceWaiter_SetAvailable(), LOG0, LOGF2, and KineticResponse::proto\&.
 .SS "void KineticController_HandleResult (\fBbus_msg_result_t\fP *res, void *udata)"
 
 .PP
-Definition at line 250 of file kinetic_controller\&.c\&.
+Definition at line 252 of file kinetic_controller\&.c\&.
 .PP
-References bus_to_kinetic_status(), KineticResponse::command, KineticResponse::header, Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticLogger_LogProtobuf(), KineticOperation_Complete(), KineticProtoStatusCode_to_KineticStatus(), LOGF0, LOGF2, KineticResponse::proto, bus_msg_result_t::response, bus_msg_result_t::status, and bus_msg_result_t::u\&.
+References bus_error_string(), BUS_SEND_RX_TIMEOUT, bus_to_kinetic_status(), KineticResponse::command, KineticResponse::header, KINETIC_ASSERT, Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticLogger_LogHeader(), KineticLogger_LogProtobuf(), KineticLogger_LogTimestamp(), KineticOperation_Complete(), KineticProtoStatusCode_to_KineticStatus(), LOGF0, LOGF2, KineticResponse::proto, bus_msg_result_t::response, bus_msg_result_t::status, and bus_msg_result_t::u\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

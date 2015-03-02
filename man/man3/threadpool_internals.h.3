@@ -1,4 +1,4 @@
-.TH "threadpool_internals.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "threadpool_internals.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -46,6 +46,28 @@ threadpool_internals.h \-
 .in +1c
 .ti -1c
 .RI "enum \fBthread_status_t\fP "
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBnotify_new_task\fP (struct \fBthreadpool\fP *t)"
+.br
+.ti -1c
+.RI "static bool \fBnotify_shutdown\fP (struct \fBthreadpool\fP *t)"
+.br
+.ti -1c
+.RI "static bool \fBspawn\fP (struct \fBthreadpool\fP *t)"
+.br
+.ti -1c
+.RI "static void * \fBthread_task\fP (void *\fBthread_info\fP)"
+.br
+.ti -1c
+.RI "static void \fBcommit_current_task\fP (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_t wh)"
+.br
+.ti -1c
+.RI "static void \fBrelease_current_task\fP (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_t rh)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -96,6 +118,20 @@ Definition at line 92 of file threadpool_internals\&.h\&.
 \fB\fISTATUS_JOINED \fP\fP
 .PP
 Definition at line 25 of file threadpool_internals\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "static void notify_new_task (struct \fBthreadpool\fP *t)\fC [static]\fP"
+
+.SS "static bool notify_shutdown (struct \fBthreadpool\fP *t)\fC [static]\fP"
+
+.SS "static bool spawn (struct \fBthreadpool\fP *t)\fC [static]\fP"
+
+.SS "static void* thread_task (void *thread_info)\fC [static]\fP"
+
+.SS "static void commit_current_task (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_twh)\fC [static]\fP"
+
+.SS "static void release_current_task (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_trh)\fC [static]\fP"
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "test_yacht.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "test_yacht.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,13 +15,37 @@ test_yacht.c \-
 
 .in +1c
 .ti -1c
+.RI "static int \fByacht_should_cleanly_init_and_free\fP (void)"
+.br
+.ti -1c
+.RI "static int \fByacht_should_add_and_have_accurate_membership\fP (void)"
+.br
+.ti -1c
+.RI "static int \fByacht_should_add_and_remove_accurately\fP (uint8_t sz2)"
+.br
+.ti -1c
+.RI "static int \fByacht_should_add_and_remove_accurately_out_of_order\fP (uint8_t sz2)"
+.br
+.ti -1c
+.RI "static int \fByacht_set_should_return_old_keys\fP (uint8_t sz2)"
+.br
+.ti -1c
+.RI "static int \fByacht_should_grow_and_add_and_remove_accurately_out_of_order\fP (uint8_t sz2)"
+.br
+.ti -1c
 .RI "void \fBsuite\fP (void)"
+.br
+.ti -1c
+.RI "static int \fBgreatest_name_match\fP (const char *name, const char *filter)"
 .br
 .ti -1c
 .RI "int \fBgreatest_pre_test\fP (const char *name)"
 .br
 .ti -1c
 .RI "void \fBgreatest_post_test\fP (const char *name, int res)"
+.br
+.ti -1c
+.RI "static void \fBgreatest_run_suite\fP (\fBgreatest_suite_cb\fP *suite_cb, const char *suite_name)"
 .br
 .ti -1c
 .RI "void \fBgreatest_do_pass\fP (const char *name)"
@@ -45,6 +69,12 @@ test_yacht.c \-
 .RI "void \fBGREATEST_SET_TEARDOWN_CB\fP (\fBgreatest_teardown_cb\fP *cb, void *udata)"
 .br
 .ti -1c
+.RI "static int \fBgreatest_string_equal_cb\fP (const void *exp, const void *got, void *udata)"
+.br
+.ti -1c
+.RI "static int \fBgreatest_string_printf_cb\fP (const void *t, void *udata)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
 .br
 .in -1c
@@ -52,7 +82,7 @@ test_yacht.c \-
 
 .in +1c
 .ti -1c
-.RI "\fBgreatest_type_info\fP \fBgreatest_type_info_string\fP = { greatest_string_equal_cb, greatest_string_printf_cb, }"
+.RI "\fBgreatest_type_info\fP \fBgreatest_type_info_string\fP = { \fBgreatest_string_equal_cb\fP, \fBgreatest_string_printf_cb\fP, }"
 .br
 .ti -1c
 .RI "\fBgreatest_run_info\fP \fBgreatest_info\fP"
@@ -60,17 +90,61 @@ test_yacht.c \-
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static int yacht_should_cleanly_init_and_free (void)\fC [static]\fP"
+
+.PP
+Definition at line 25 of file test_yacht\&.c\&.
+.PP
+References ASSERT, PASS, yacht_free(), and yacht_init()\&.
+.SS "static int yacht_should_add_and_have_accurate_membership (void)\fC [static]\fP"
+
+.PP
+Definition at line 32 of file test_yacht\&.c\&.
+.PP
+References ASSERT, PASS, yacht_free(), yacht_init(), yacht_member(), and yacht_set()\&.
+.SS "static int yacht_should_add_and_remove_accurately (uint8_tsz2)\fC [static]\fP"
+
+.PP
+Definition at line 46 of file test_yacht\&.c\&.
+.PP
+References ASSERT, ASSERT_EQ, PASS, yacht_free(), yacht_init(), yacht_member(), yacht_remove(), and yacht_set()\&.
+.SS "static int yacht_should_add_and_remove_accurately_out_of_order (uint8_tsz2)\fC [static]\fP"
+
+.PP
+Definition at line 73 of file test_yacht\&.c\&.
+.PP
+References ASSERT, PASS, yacht_free(), yacht_init(), yacht_member(), yacht_remove(), and yacht_set()\&.
+.SS "static int yacht_set_should_return_old_keys (uint8_tsz2)\fC [static]\fP"
+
+.PP
+Definition at line 99 of file test_yacht\&.c\&.
+.PP
+References ASSERT, ASSERT_EQ, PASS, yacht_free(), yacht_get(), yacht_init(), yacht_member(), and yacht_set()\&.
+.SS "static int yacht_should_grow_and_add_and_remove_accurately_out_of_order (uint8_tsz2)\fC [static]\fP"
+
+.PP
+Definition at line 126 of file test_yacht\&.c\&.
+.PP
+References ASSERT, ASSERT_EQ, PASS, yacht_free(), yacht_init(), yacht_member(), yacht_remove(), and yacht_set()\&.
 .SS "void suite (void)"
 
 .PP
 Definition at line 160 of file test_yacht\&.c\&.
 .PP
-References RUN_TEST, and RUN_TESTp\&.
+References RUN_TEST, RUN_TESTp, yacht_set_should_return_old_keys(), yacht_should_add_and_have_accurate_membership(), yacht_should_add_and_remove_accurately(), yacht_should_add_and_remove_accurately_out_of_order(), yacht_should_cleanly_init_and_free(), and yacht_should_grow_and_add_and_remove_accurately_out_of_order()\&.
+.SS "static int greatest_name_match (const char *name, const char *filter)\fC [static]\fP"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
 .SS "int greatest_pre_test (const char *name)"
 
 .PP
 Definition at line 179 of file test_yacht\&.c\&.
 .SS "void greatest_post_test (const char *name, intres)"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "static void greatest_run_suite (\fBgreatest_suite_cb\fP *suite_cb, const char *suite_name)\fC [static]\fP"
 
 .PP
 Definition at line 179 of file test_yacht\&.c\&.
@@ -102,6 +176,14 @@ Definition at line 179 of file test_yacht\&.c\&.
 
 .PP
 Definition at line 179 of file test_yacht\&.c\&.
+.SS "static int greatest_string_equal_cb (const void *exp, const void *got, void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
+.SS "static int greatest_string_printf_cb (const void *t, void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 179 of file test_yacht\&.c\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
@@ -110,7 +192,7 @@ Definition at line 181 of file test_yacht\&.c\&.
 References GREATEST_MAIN_BEGIN, GREATEST_MAIN_END, RUN_SUITE, and suite()\&.
 .SH "Variable Documentation"
 .PP 
-.SS "\fBgreatest_type_info\fP greatest_type_info_string = { greatest_string_equal_cb, greatest_string_printf_cb, }"
+.SS "\fBgreatest_type_info\fP greatest_type_info_string = { \fBgreatest_string_equal_cb\fP, \fBgreatest_string_printf_cb\fP, }"
 
 .PP
 Definition at line 179 of file test_yacht\&.c\&.

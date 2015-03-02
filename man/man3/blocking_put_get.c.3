@@ -1,4 +1,4 @@
-.TH "blocking_put_get.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "blocking_put_get.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -33,17 +33,26 @@ blocking_put_get.c \-
 
 .in +1c
 .ti -1c
+.RI "static void \fBdo_put_and_get\fP (KineticSession *session)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static void do_put_and_get (KineticSession *session)\fC [static]\fP"
+
+.PP
+Definition at line 34 of file blocking_put_get\&.c\&.
+.PP
+References ByteBuffer::array, ByteBuffer_Append(), ByteBuffer_Free(), ByteBuffer_Malloc(), ByteBuffer_MallocAndAppend(), ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::key, KINETIC_ALGORITHM_SHA1, Kinetic_GetStatusDescription(), KINETIC_SYNCHRONIZATION_WRITETHROUGH, KineticClient_Get(), KineticClient_Put(), and KineticEntry::value\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 96 of file blocking_put_get\&.c\&.
 .PP
-References ByteArray_CreateWithCString(), KineticSession::config, KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), and KineticClientConfig::logFile\&.
+References ByteArray_CreateWithCString(), do_put_and_get(), KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_SUCCESS, KineticClient_CreateSession(), KineticClient_DestroySession(), KineticClient_Init(), KineticClient_Shutdown(), and KineticClientConfig::logFile\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

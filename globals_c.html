@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -61,6 +61,7 @@
       <li><a href="globals_b.html#index_b"><span>b</span></a></li>
       <li class="current"><a href="globals_c.html#index_c"><span>c</span></a></li>
       <li><a href="globals_d.html#index_d"><span>d</span></a></li>
+      <li><a href="globals_e.html#index_e"><span>e</span></a></li>
       <li><a href="globals_f.html#index_f"><span>f</span></a></li>
       <li><a href="globals_g.html#index_g"><span>g</span></a></li>
       <li><a href="globals_h.html#index_h"><span>h</span></a></li>
@@ -69,6 +70,7 @@
       <li><a href="globals_l.html#index_l"><span>l</span></a></li>
       <li><a href="globals_m.html#index_m"><span>m</span></a></li>
       <li><a href="globals_n.html#index_n"><span>n</span></a></li>
+      <li><a href="globals_o.html#index_o"><span>o</span></a></li>
       <li><a href="globals_p.html#index_p"><span>p</span></a></li>
       <li><a href="globals_r.html#index_r"><span>r</span></a></li>
       <li><a href="globals_s.html#index_s"><span>s</span></a></li>
@@ -83,28 +85,21 @@
 <div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div>
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
-<li>casq_empty()
-: <a class="el" href="casq_8c.html#ad9b17ee313d9292b3abcab19c6452e99">casq.c</a>
-, <a class="el" href="casq_8h.html#ad9b17ee313d9292b3abcab19c6452e99">casq.h</a>
+<li>check_and_flush_incoming_msg_pipe()
+: <a class="el" href="listener_8c.html#a41d1e6df116c066e5c56dd646c3fe898">listener.c</a>
+, <a class="el" href="listener__internal_8h.html#a41d1e6df116c066e5c56dd646c3fe898">listener_internal.h</a>
 </li>
-<li>casq_free()
-: <a class="el" href="casq_8h.html#a330da6e863b1f09453238a9b28482620">casq.h</a>
-, <a class="el" href="casq_8c.html#a330da6e863b1f09453238a9b28482620">casq.c</a>
+<li>check_incoming_commands()
+: <a class="el" href="sender__internal_8h.html#a320db24cd0321f42690ae959b30d41b7">sender_internal.h</a>
+, <a class="el" href="sender_8c.html#a320db24cd0321f42690ae959b30d41b7">sender.c</a>
 </li>
-<li>casq_free_cb
-: <a class="el" href="casq_8h.html#a51b46edbd6c34bc5c918ed93fa2725c7">casq.h</a>
+<li>clean_up_completed_info()
+: <a class="el" href="listener_8c.html#a21e5de0bee07a8e984f3c1408b8e3b62">listener.c</a>
+, <a class="el" href="listener__internal_8h.html#a21e5de0bee07a8e984f3c1408b8e3b62">listener_internal.h</a>
 </li>
-<li>casq_new()
-: <a class="el" href="casq_8c.html#a1e9768b47bcbefe43d90980b418e9c11">casq.c</a>
-, <a class="el" href="casq_8h.html#a1e9768b47bcbefe43d90980b418e9c11">casq.h</a>
-</li>
-<li>casq_pop()
-: <a class="el" href="casq_8c.html#abae1c3f5226dbf67219e16399a38250a">casq.c</a>
-, <a class="el" href="casq_8h.html#abae1c3f5226dbf67219e16399a38250a">casq.h</a>
-</li>
-<li>casq_push()
-: <a class="el" href="casq_8c.html#a62af972d6bb4aee1b462e9cbc6c5dd8a">casq.c</a>
-, <a class="el" href="casq_8h.html#a62af972d6bb4aee1b462e9cbc6c5dd8a">casq.h</a>
+<li>cleanup()
+: <a class="el" href="sender__internal_8h.html#a35be7855150c6a8fa847eba457e48bdc">sender_internal.h</a>
+, <a class="el" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">sender.c</a>
 </li>
 <li>CMD_FD
 : <a class="el" href="sender_8c.html#a3ea94b37cd6445d977af94a78e2c18e0">sender.c</a>
@@ -118,20 +113,52 @@
 <li>CMD_GET_PREVIOUS
 : <a class="el" href="kinetic__client_8c.html#a8b5e7ada617be4214a95ff7958bfade5acfe07764da33aa846965748eb0339367">kinetic_client.c</a>
 </li>
+<li>cmp_suseconds_t()
+: <a class="el" href="kinetic__types__internal_8c.html#a54f9a9bf741efba1e89f33c4f9878ee9">kinetic_types_internal.c</a>
+</li>
+<li>commit_current_task()
+: <a class="el" href="threadpool_8c.html#a300c822bbb69efa66c33324dfb0db2dc">threadpool.c</a>
+, <a class="el" href="threadpool__internals_8h.html#a300c822bbb69efa66c33324dfb0db2dc">threadpool_internals.h</a>
+</li>
+<li>commit_event_and_block()
+: <a class="el" href="sender_8c.html#ac06cfcb3ecfad06e23567ca1a7dac4db">sender.c</a>
+, <a class="el" href="sender__internal_8h.html#ac06cfcb3ecfad06e23567ca1a7dac4db">sender_internal.h</a>
+</li>
+<li>completed_count
+: <a class="el" href="test__threadpool__sequencing_8c.html#ad98a6ff87c95633c326280a3d286f192">test_threadpool_sequencing.c</a>
+</li>
+<li>completion_cb()
+: <a class="el" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">bus_example.c</a>
+</li>
 <li>CONFIG_FIELD_BYTE_BUFFER
 : <a class="el" href="kinetic__message_8c.html#a880c65867677a47bb31aafbdef780554">kinetic_message.c</a>
 </li>
+<li>ConfigureEntry()
+: <a class="el" href="main_8c.html#a11899ce4e556af8f5b7adaf23e389155">main.c</a>
+</li>
+<li>construct_msg()
+: <a class="el" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">bus_example.c</a>
+</li>
 <li>Copy_KineticProto_Command_KeyValue_to_KineticEntry()
-: <a class="el" href="kinetic__types__internal_8h.html#a63da104d395a3aa0eb1827b9e35866e5">kinetic_types_internal.h</a>
-, <a class="el" href="kinetic__types__internal_8c.html#a63da104d395a3aa0eb1827b9e35866e5">kinetic_types_internal.c</a>
+: <a class="el" href="kinetic__types__internal_8c.html#a63da104d395a3aa0eb1827b9e35866e5">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a63da104d395a3aa0eb1827b9e35866e5">kinetic_types_internal.h</a>
 </li>
 <li>Copy_KineticProto_Command_Range_to_ByteBufferArray()
-: <a class="el" href="kinetic__types__internal_8c.html#a9f4d5dba93dfa2424d7ec1387480f913">kinetic_types_internal.c</a>
-, <a class="el" href="kinetic__types__internal_8h.html#a9f4d5dba93dfa2424d7ec1387480f913">kinetic_types_internal.h</a>
+: <a class="el" href="kinetic__types__internal_8h.html#a9f4d5dba93dfa2424d7ec1387480f913">kinetic_types_internal.h</a>
+, <a class="el" href="kinetic__types__internal_8c.html#a9f4d5dba93dfa2424d7ec1387480f913">kinetic_types_internal.c</a>
 </li>
 <li>Copy_ProtobufCBinaryData_to_ByteBuffer()
-: <a class="el" href="kinetic__types__internal_8h.html#a05ea858e50c6c21a3246a833d02eb895">kinetic_types_internal.h</a>
-, <a class="el" href="kinetic__types__internal_8c.html#a05ea858e50c6c21a3246a833d02eb895">kinetic_types_internal.c</a>
+: <a class="el" href="kinetic__types__internal_8c.html#a05ea858e50c6c21a3246a833d02eb895">kinetic_types_internal.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a05ea858e50c6c21a3246a833d02eb895">kinetic_types_internal.h</a>
+</li>
+<li>copy_str()
+: <a class="el" href="kinetic__device__info_8c.html#a5b9491fcb30764489c7fb940d3ff9e96">kinetic_device_info.c</a>
+</li>
+<li>copy_to_byte_array()
+: <a class="el" href="kinetic__device__info_8c.html#ad4758e4399a3a2acd54d3817eb47cde1">kinetic_device_info.c</a>
+</li>
+<li>create_entries()
+: <a class="el" href="get__key__range_8c.html#a2bfa6febab468edb77428e4aa2631381">get_key_range.c</a>
 </li>
 </ul>
 </div><!-- contents -->

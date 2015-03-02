@@ -1,4 +1,4 @@
-.TH "test_threadpool.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "test_threadpool.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -32,7 +32,26 @@ test_threadpool.c \-
 
 .in +1c
 .ti -1c
+.RI "static size_t \fBfibs\fP (size_t arg)"
+.br
+.ti -1c
+.RI "static void \fBdump_stats\fP (const char *prefix, struct \fBthreadpool_info\fP *stats)"
+.br
+.ti -1c
+.RI "static void \fBtask_cb\fP (void *udata)"
+.br
+.ti -1c
+.RI "static void \fBinf_loop_cb\fP (void *env)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static size_t \fBtask_count\fP = 0"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -43,12 +62,38 @@ test_threadpool.c \-
 Definition at line 42 of file test_threadpool\&.c\&.
 .SH "Function Documentation"
 .PP 
+.SS "static size_t fibs (size_targ)\fC [static]\fP"
+
+.PP
+Definition at line 31 of file test_threadpool\&.c\&.
+.SS "static void dump_stats (const char *prefix, struct \fBthreadpool_info\fP *stats)\fC [static]\fP"
+
+.PP
+Definition at line 36 of file test_threadpool\&.c\&.
+.PP
+References threadpool_info::active_threads, threadpool_info::backlog_size, and threadpool_info::dormant_threads\&.
+.SS "static void task_cb (void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 45 of file test_threadpool\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, dump_stats(), fibs(), task_count, and threadpool_stats()\&.
+.SS "static void inf_loop_cb (void *env)\fC [static]\fP"
+
+.PP
+Definition at line 68 of file test_threadpool\&.c\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 75 of file test_threadpool\&.c\&.
 .PP
-References threadpool_config::max_threads, threadpool_task::task, threadpool_config::task_ringbuf_size2, THREAD_SHUTDOWN_SECONDS, threadpool_free(), threadpool_init(), threadpool_schedule(), threadpool_shutdown(), and threadpool_stats()\&.
+References dump_stats(), inf_loop_cb(), limit, threadpool_config::max_threads, threadpool_task::task, task_cb(), task_count, threadpool_config::task_ringbuf_size2, THREAD_SHUTDOWN_SECONDS, threadpool_free(), threadpool_init(), threadpool_schedule(), threadpool_shutdown(), and threadpool_stats()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "size_t task_count = 0\fC [static]\fP"
+
+.PP
+Definition at line 29 of file test_threadpool\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

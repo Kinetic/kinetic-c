@@ -1,4 +1,4 @@
-.TH "KineticClientConfig" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticClientConfig" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -41,7 +41,7 @@ Configuration values for the KineticClient connection\&.
 
 Configuration for the KineticClient connection\&. If fields are zeroed out, default values will be used\&. 
 .PP
-Definition at line 442 of file kinetic_types\&.h\&.
+Definition at line 458 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "const char* KineticClientConfig::logFile"
@@ -49,31 +49,31 @@ Definition at line 442 of file kinetic_types\&.h\&.
 .PP
 Path to log file\&. Specify 'stdout' to log to STDOUT or NULL to disable logging\&. 
 .PP
-Definition at line 443 of file kinetic_types\&.h\&.
+Definition at line 459 of file kinetic_types\&.h\&.
 .SS "int KineticClientConfig::logLevel"
 
 .PP
 Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full) 
 .PP
-Definition at line 444 of file kinetic_types\&.h\&.
+Definition at line 460 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticClientConfig::writerThreads"
 
 .PP
 Number of threads used for handling outgoing requests\&. 
 .PP
-Definition at line 445 of file kinetic_types\&.h\&.
+Definition at line 461 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticClientConfig::readerThreads"
 
 .PP
 Number of threads used for handling incoming responses and status messages\&. 
 .PP
-Definition at line 446 of file kinetic_types\&.h\&.
+Definition at line 462 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticClientConfig::maxThreadpoolThreads"
 
 .PP
 Max number of threads to use for the threadpool that handles response callbacks\&. 
 .PP
-Definition at line 447 of file kinetic_types\&.h\&.
+Definition at line 463 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

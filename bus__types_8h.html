@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -85,18 +85,22 @@ Macros</h2></td></tr>
 <tr class="separator:a099e09d8e16ac9b34cdfb55f7b04ee79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bc947eb1281d1c88e3b4d40e6a55342"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#a4bc947eb1281d1c88e3b4d40e6a55342">BUS_DEFAULT_TIMEOUT_SEC</a>&#160;&#160;&#160;10</td></tr>
 <tr class="separator:a4bc947eb1281d1c88e3b4d40e6a55342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a595edd6f23442eb6c7996422c864661c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#a595edd6f23442eb6c7996422c864661c">BUS_NO_SEQ_ID</a>&#160;&#160;&#160;(-1)</td></tr>
+<tr class="separator:a595edd6f23442eb6c7996422c864661c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0848e09b437f5b33350bb3943bfb341"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#ad0848e09b437f5b33350bb3943bfb341">BUS_LOG</a>(B, LEVEL, EVENT_KEY, MSG, UDATA)</td></tr>
 <tr class="separator:ad0848e09b437f5b33350bb3943bfb341"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f05543d810f13ef1aa2022b09ff66f7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#a0f05543d810f13ef1aa2022b09ff66f7">BUS_LOG_STRINGIFY</a>(X)&#160;&#160;&#160;#X</td></tr>
 <tr class="separator:a0f05543d810f13ef1aa2022b09ff66f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e922b04f1f4484595bbde779d2f676b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#a0e922b04f1f4484595bbde779d2f676b">BUS_LOG_SNPRINTF</a>(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT,...)</td></tr>
 <tr class="separator:a0e922b04f1f4484595bbde779d2f676b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d89c9e9f5d4826669787c8ec484c301"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#a4d89c9e9f5d4826669787c8ec484c301">BUS_ASSERT</a>(B, UDATA, COND)</td></tr>
+<tr class="separator:a4d89c9e9f5d4826669787c8ec484c301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:ad2ee1c939e7a462d980c301f088078a3"><td class="memItemLeft" align="right" valign="top">typedef void(&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#ad2ee1c939e7a462d980c301f088078a3">bus_log_cb</a> )(<a class="el" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a> event, int log_level, const char *msg, void *udata)</td></tr>
 <tr class="separator:ad2ee1c939e7a462d980c301f088078a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2869f7812f71d97f451d512754567084"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a>(&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#a2869f7812f71d97f451d512754567084">bus_sink_cb</a> )(uint8_t *read_buf, size_t read_size, void *socket_udata)</td></tr>
+<tr class="memitem:a2869f7812f71d97f451d512754567084"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a>(&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#a2869f7812f71d97f451d512754567084">bus_sink_cb</a> )(uint8_t *<a class="el" href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">read_buf</a>, size_t read_size, void *socket_udata)</td></tr>
 <tr class="separator:a2869f7812f71d97f451d512754567084"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e7668d3dd3e076ee17163a6dd5284be"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structbus__unpack__cb__res__t.html">bus_unpack_cb_res_t</a>(&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__types_8h.html#a4e7668d3dd3e076ee17163a6dd5284be">bus_unpack_cb</a> )(void *msg, void *socket_udata)</td></tr>
 <tr class="separator:a4e7668d3dd3e076ee17163a6dd5284be"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,6 +150,20 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="bus__types_8h_source.html#l00036">36</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a595edd6f23442eb6c7996422c864661c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BUS_NO_SEQ_ID&#160;&#160;&#160;(-1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00039">39</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -202,12 +220,12 @@ Enumerations</h2></td></tr>
 <div class="line"><a class="code" href="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87">            bus_unlock_log</a>(_b);                                        \</div>
 <div class="line">        }                                                              \</div>
 <div class="line">    } <span class="keywordflow">while</span> (0)                                                        \</div>
-<div class="ttc" id="bus__types_8h_html_a162815a6c98569dab6fa66f218ae63b9"><div class="ttname"><a href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a></div><div class="ttdeci">log_event_t</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00080">bus_types.h:80</a></div></div>
-<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00060">bus_internal_types.h:60</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a162815a6c98569dab6fa66f218ae63b9"><div class="ttname"><a href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a></div><div class="ttdeci">log_event_t</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00094">bus_types.h:94</a></div></div>
+<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00064">bus_internal_types.h:64</a></div></div>
 <div class="ttc" id="bus_8c_html_a78abbe3ffa07e668c7df0fb28fe8ad87"><div class="ttname"><a href="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87">bus_unlock_log</a></div><div class="ttdeci">void bus_unlock_log(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00604">bus.c:604</a></div></div>
 <div class="ttc" id="bus_8c_html_acc4bcbb78efe00f265027438dfea598f"><div class="ttname"><a href="bus_8c.html#acc4bcbb78efe00f265027438dfea598f">bus_lock_log</a></div><div class="ttdeci">void bus_lock_log(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00600">bus.c:600</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00038">38</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00041">41</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -225,7 +243,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00052">52</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00055">55</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -305,12 +323,57 @@ Enumerations</h2></td></tr>
 <div class="line"><a class="code" href="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87">            bus_unlock_log</a>(_b);                                        \</div>
 <div class="line">        }                                                              \</div>
 <div class="line">    } <span class="keywordflow">while</span> (0)                                                        \</div>
-<div class="ttc" id="bus__types_8h_html_a162815a6c98569dab6fa66f218ae63b9"><div class="ttname"><a href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a></div><div class="ttdeci">log_event_t</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00080">bus_types.h:80</a></div></div>
-<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00060">bus_internal_types.h:60</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a162815a6c98569dab6fa66f218ae63b9"><div class="ttname"><a href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a></div><div class="ttdeci">log_event_t</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00094">bus_types.h:94</a></div></div>
+<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00064">bus_internal_types.h:64</a></div></div>
 <div class="ttc" id="bus_8c_html_a78abbe3ffa07e668c7df0fb28fe8ad87"><div class="ttname"><a href="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87">bus_unlock_log</a></div><div class="ttdeci">void bus_unlock_log(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00604">bus.c:604</a></div></div>
 <div class="ttc" id="bus_8c_html_acc4bcbb78efe00f265027438dfea598f"><div class="ttname"><a href="bus_8c.html#acc4bcbb78efe00f265027438dfea598f">bus_lock_log</a></div><div class="ttdeci">void bus_lock_log(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00600">bus.c:600</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00054">54</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00057">57</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4d89c9e9f5d4826669787c8ec484c301"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BUS_ASSERT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">B, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">UDATA, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">COND&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> { \</div>
+<div class="line">        if(!(COND)) \</div>
+<div class="line">        { <a class="code" href="bus__types_8h.html#a0e922b04f1f4484595bbde779d2f676b">\</a></div>
+<div class="line"><a class="code" href="bus__types_8h.html#a0e922b04f1f4484595bbde779d2f676b">            BUS_LOG_SNPRINTF</a>(B, 0, <a class="code" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9a537f80003a62ea5d18771f100fb65f70">LOG_ASSERT</a>, UDATA, 128, \</div>
+<div class="line">                <span class="stringliteral">&quot;BUS FAILURE at %s:%d in %s: assert(&quot;</span> #COND <span class="stringliteral">&quot;)&quot;</span>, \</div>
+<div class="line">                __FILE__, (<span class="keywordtype">int</span>)__LINE__, __FUNCTION__); \</div>
+<div class="line">            assert(COND); \</div>
+<div class="line">        } \</div>
+<div class="line">    } <span class="keywordflow">while</span>(0)</div>
+<div class="ttc" id="bus__types_8h_html_a162815a6c98569dab6fa66f218ae63b9a537f80003a62ea5d18771f100fb65f70"><div class="ttname"><a href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9a537f80003a62ea5d18771f100fb65f70">LOG_ASSERT</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00103">bus_types.h:103</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a0e922b04f1f4484595bbde779d2f676b"><div class="ttname"><a href="bus__types_8h.html#a0e922b04f1f4484595bbde779d2f676b">BUS_LOG_SNPRINTF</a></div><div class="ttdeci">#define BUS_LOG_SNPRINTF(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT,...)</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00057">bus_types.h:57</a></div></div>
+</div><!-- fragment -->
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00082">82</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -325,7 +388,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00094">94</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00109">109</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -334,12 +397,12 @@ Enumerations</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a>( bus_sink_cb)(uint8_t *read_buf, size_t read_size, void *socket_udata)</td>
+          <td class="memname">typedef <a class="el" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a>( bus_sink_cb)(uint8_t *<a class="el" href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">read_buf</a>, size_t read_size, void *socket_udata)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00114">114</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00129">129</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -353,7 +416,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00135">135</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00150">150</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -367,7 +430,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00138">138</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00153">153</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -381,7 +444,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00143">143</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00158">158</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -395,7 +458,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00211">211</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00226">226</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -426,11 +489,13 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a162815a6c98569dab6fa66f218ae63b9ae747105329d72a7cc23d5821a082f702"></a>LOG_MEMORY&#160;</td><td class="fielddoc">
 </td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a162815a6c98569dab6fa66f218ae63b9a537f80003a62ea5d18771f100fb65f70"></a>LOG_ASSERT&#160;</td><td class="fielddoc">
+</td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a162815a6c98569dab6fa66f218ae63b9a4d9d25459089ccd8d4be6a734dcf40ed"></a>LOG_EVENT_TYPE_COUNT&#160;</td><td class="fielddoc">
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00080">80</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00094">94</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -466,7 +531,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00165">165</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00180">180</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -500,7 +565,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00178">178</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00193">193</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -520,7 +585,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00213">213</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00228">228</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>
@@ -546,7 +611,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00232">232</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__types_8h_source.html#l00247">247</a> of file <a class="el" href="bus__types_8h_source.html">bus_types.h</a>.</p>
 
 </div>
 </div>

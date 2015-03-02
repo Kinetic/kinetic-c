@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -53,7 +53,8 @@
 <a href="#nested-classes">Data Structures</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">sender_internal.h File Reference</div>  </div>
 </div><!--header-->
@@ -95,6 +96,59 @@ Enumerations</h2></td></tr>
 <tr class="separator:af90fe8ec02f1fbe06dc28b5c552f791d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac023b5eb9cc1556b98d7c4bc752a9429"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429">tx_info_state</a> </td></tr>
 <tr class="separator:ac023b5eb9cc1556b98d7c4bc752a9429"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:af18ed407301b3bdd9c44b3b05f2d54cf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#af18ed407301b3bdd9c44b3b05f2d54cf">get_free_tx_info</a> (struct <a class="el" href="structsender.html">sender</a> *s)</td></tr>
+<tr class="separator:af18ed407301b3bdd9c44b3b05f2d54cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ae301320ba4b577b2462907678af613"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a9ae301320ba4b577b2462907678af613">release_tx_info</a> (struct <a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info)</td></tr>
+<tr class="separator:a9ae301320ba4b577b2462907678af613"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c2d8a592a292ec3105b6f1ad205f3dd"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a8c2d8a592a292ec3105b6f1ad205f3dd">get_notify_pipe</a> (struct <a class="el" href="structsender.html">sender</a> *s, int id)</td></tr>
+<tr class="separator:a8c2d8a592a292ec3105b6f1ad205f3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34859023ba746b0359f571dad003ab98"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a34859023ba746b0359f571dad003ab98">write_commit</a> (struct <a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info)</td></tr>
+<tr class="separator:a34859023ba746b0359f571dad003ab98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac06cfcb3ecfad06e23567ca1a7dac4db"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791d">tx_error_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#ac06cfcb3ecfad06e23567ca1a7dac4db">commit_event_and_block</a> (struct <a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info)</td></tr>
+<tr class="separator:ac06cfcb3ecfad06e23567ca1a7dac4db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa462f2b99191e54e839a69fc568972f1"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#aa462f2b99191e54e839a69fc568972f1">register_socket_info</a> (<a class="el" href="structsender.html">sender</a> *s, int fd, SSL *ssl)</td></tr>
+<tr class="separator:aa462f2b99191e54e839a69fc568972f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bc45c02fed85ce85a834cf730f07c00"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a7bc45c02fed85ce85a834cf730f07c00">increment_fd_refcount</a> (<a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structfd__info.html">fd_info</a> *fdi)</td></tr>
+<tr class="separator:a7bc45c02fed85ce85a834cf730f07c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09ec64a8af8244d6b69a7e79fa9065f3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a09ec64a8af8244d6b69a7e79fa9065f3">decrement_fd_refcount</a> (<a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structfd__info.html">fd_info</a> *fdi)</td></tr>
+<tr class="separator:a09ec64a8af8244d6b69a7e79fa9065f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53ddb423772e634b4d099694d7bd5e37"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a53ddb423772e634b4d099694d7bd5e37">release_socket_info</a> (<a class="el" href="structsender.html">sender</a> *s, int fd)</td></tr>
+<tr class="separator:a53ddb423772e634b4d099694d7bd5e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09a13d151396fa2b4dbe11182cf0233b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a09a13d151396fa2b4dbe11182cf0233b">handle_command</a> (<a class="el" href="structsender.html">sender</a> *s, int id)</td></tr>
+<tr class="separator:a09a13d151396fa2b4dbe11182cf0233b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84b7873113e88f5cfff8b30989a6197d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a84b7873113e88f5cfff8b30989a6197d">enqueue_write</a> (struct <a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info)</td></tr>
+<tr class="separator:a84b7873113e88f5cfff8b30989a6197d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a320db24cd0321f42690ae959b30d41b7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a320db24cd0321f42690ae959b30d41b7">check_incoming_commands</a> (struct <a class="el" href="structsender.html">sender</a> *s)</td></tr>
+<tr class="separator:a320db24cd0321f42690ae959b30d41b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28642bbcae521b8f97ad49229df128f3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a28642bbcae521b8f97ad49229df128f3">get_info_to_write_for_socket</a> (<a class="el" href="structsender.html">sender</a> *s, int fd)</td></tr>
+<tr class="separator:a28642bbcae521b8f97ad49229df128f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a799e6b8d9f7b7982ad8e8c6bbc60d993"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a799e6b8d9f7b7982ad8e8c6bbc60d993">set_error_for_socket</a> (<a class="el" href="structsender.html">sender</a> *s, int fd, <a class="el" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791d">tx_error_t</a> error)</td></tr>
+<tr class="separator:a799e6b8d9f7b7982ad8e8c6bbc60d993"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f00925c05248b5902ffc10b99a55ce8"><td class="memItemLeft" align="right" valign="top">static ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a9f00925c05248b5902ffc10b99a55ce8">socket_write_plain</a> (<a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info)</td></tr>
+<tr class="separator:a9f00925c05248b5902ffc10b99a55ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9485e7160a073a7740dc2f130ce19db4"><td class="memItemLeft" align="right" valign="top">static ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a9485e7160a073a7740dc2f130ce19db4">socket_write_ssl</a> (<a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info, SSL *ssl)</td></tr>
+<tr class="separator:a9485e7160a073a7740dc2f130ce19db4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20e2371bcf20b4f30b71726e0cad33fd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a20e2371bcf20b4f30b71726e0cad33fd">update_sent</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info, ssize_t sent)</td></tr>
+<tr class="separator:a20e2371bcf20b4f30b71726e0cad33fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf20e1c1edb201899b9592cb945685cd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#acf20e1c1edb201899b9592cb945685cd">attempt_write</a> (<a class="el" href="structsender.html">sender</a> *s, int available)</td></tr>
+<tr class="separator:acf20e1c1edb201899b9592cb945685cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1a455338f511c22140fd42d0f183257"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#ae1a455338f511c22140fd42d0f183257">tick_handler</a> (<a class="el" href="structsender.html">sender</a> *s)</td></tr>
+<tr class="separator:ae1a455338f511c22140fd42d0f183257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f7209353ead92c91bfc8f84a8b4df50"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a2f7209353ead92c91bfc8f84a8b4df50">notify_message_failure</a> (<a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info, <a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a> status)</td></tr>
+<tr class="separator:a2f7209353ead92c91bfc8f84a8b4df50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4ddfd50691169b408a005eda5862ccf"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#aa4ddfd50691169b408a005eda5862ccf">attempt_to_enqueue_sending_request_message_to_listener</a> (<a class="el" href="structsender.html">sender</a> *s, int fd, int64_t seq_id, int16_t timeout_sec)</td></tr>
+<tr class="separator:aa4ddfd50691169b408a005eda5862ccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c32f1070a14594306e76e6adc04ae68"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a0c32f1070a14594306e76e6adc04ae68">attempt_to_enqueue_request_sent_message_to_listener</a> (<a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info)</td></tr>
+<tr class="separator:a0c32f1070a14594306e76e6adc04ae68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72e4815c5de39d0c2c31c573eafce27a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a72e4815c5de39d0c2c31c573eafce27a">notify_caller</a> (<a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info, bool success)</td></tr>
+<tr class="separator:a72e4815c5de39d0c2c31c573eafce27a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a728a121de75c640dd90c1992d870318f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a728a121de75c640dd90c1992d870318f">tick_timeout</a> (<a class="el" href="structsender.html">sender</a> *s, <a class="el" href="structtx__info__t.html">tx_info_t</a> *info)</td></tr>
+<tr class="separator:a728a121de75c640dd90c1992d870318f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35be7855150c6a8fa847eba457e48bdc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sender__internal_8h.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a> (<a class="el" href="structsender.html">sender</a> *s)</td></tr>
+<tr class="separator:a35be7855150c6a8fa847eba457e48bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a85fda3522e69a1bf85f7dcd97b6023a1"></a>
@@ -250,6 +304,871 @@ Enumerations</h2></td></tr>
 </table>
 
 <p>Definition at line <a class="el" href="sender__internal_8h_source.html#l00052">52</a> of file <a class="el" href="sender__internal_8h_source.html">sender_internal.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="af18ed407301b3bdd9c44b3b05f2d54cf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structtx__info__t.html">tx_info_t</a>* get_free_tx_info </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9ae301320ba4b577b2462907678af613"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void release_tx_info </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8c2d8a592a292ec3105b6f1ad205f3dd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int get_notify_pipe </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a34859023ba746b0359f571dad003ab98"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool write_commit </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac06cfcb3ecfad06e23567ca1a7dac4db"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791d">tx_error_t</a> commit_event_and_block </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa462f2b99191e54e839a69fc568972f1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool register_socket_info </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SSL *&#160;</td>
+          <td class="paramname"><em>ssl</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7bc45c02fed85ce85a834cf730f07c00"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void increment_fd_refcount </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structfd__info.html">fd_info</a> *&#160;</td>
+          <td class="paramname"><em>fdi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a09ec64a8af8244d6b69a7e79fa9065f3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void decrement_fd_refcount </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structfd__info.html">fd_info</a> *&#160;</td>
+          <td class="paramname"><em>fdi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a53ddb423772e634b4d099694d7bd5e37"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool release_socket_info </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a09a13d151396fa2b4dbe11182cf0233b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void handle_command </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a84b7873113e88f5cfff8b30989a6197d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void enqueue_write </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a320db24cd0321f42690ae959b30d41b7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool check_incoming_commands </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a28642bbcae521b8f97ad49229df128f3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structtx__info__t.html">tx_info_t</a>* get_info_to_write_for_socket </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a799e6b8d9f7b7982ad8e8c6bbc60d993"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void set_error_for_socket </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791d">tx_error_t</a>&#160;</td>
+          <td class="paramname"><em>error</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9f00925c05248b5902ffc10b99a55ce8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ssize_t socket_write_plain </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9485e7160a073a7740dc2f130ce19db4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ssize_t socket_write_ssl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SSL *&#160;</td>
+          <td class="paramname"><em>ssl</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a20e2371bcf20b4f30b71726e0cad33fd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void update_sent </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ssize_t&#160;</td>
+          <td class="paramname"><em>sent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acf20e1c1edb201899b9592cb945685cd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void attempt_write </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>available</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae1a455338f511c22140fd42d0f183257"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void tick_handler </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2f7209353ead92c91bfc8f84a8b4df50"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void notify_message_failure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a>&#160;</td>
+          <td class="paramname"><em>status</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa4ddfd50691169b408a005eda5862ccf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void attempt_to_enqueue_sending_request_message_to_listener </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>seq_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int16_t&#160;</td>
+          <td class="paramname"><em>timeout_sec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0c32f1070a14594306e76e6adc04ae68"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void attempt_to_enqueue_request_sent_message_to_listener </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a72e4815c5de39d0c2c31c573eafce27a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void notify_caller </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>success</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a728a121de75c640dd90c1992d870318f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void tick_timeout </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtx__info__t.html">tx_info_t</a> *&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a35be7855150c6a8fa847eba457e48bdc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void cleanup </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structsender.html">sender</a> *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "get_nonblocking.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "get_nonblocking.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,17 +25,26 @@ get_nonblocking.c \-
 
 .in +1c
 .ti -1c
+.RI "static void \fBget_finished\fP (\fBKineticCompletionData\fP *kinetic_data, void *clientData)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static void get_finished (\fBKineticCompletionData\fP *kinetic_data, void *clientData)\fC [static]\fP"
+
+.PP
+Definition at line 158 of file get_nonblocking\&.c\&.
+.PP
+References KineticSemaphore_Signal(), and KineticCompletionData::status\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 35 of file get_nonblocking\&.c\&.
 .PP
-References ByteBuffer::array, ByteArray_CreateWithCString(), ByteBuffer_Append(), ByteBuffer_Free(), ByteBuffer_Malloc(), ByteBuffer_MallocAndAppend(), ByteBuffer::bytesUsed, KineticSession::config, ByteArray::data, KineticSessionConfig::host, KineticEntry::key, KINETIC_ALGORITHM_SHA1, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KINETIC_SYNCHRONIZATION_WRITETHROUGH, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Get(), KineticClient_Init(), KineticClient_Put(), KineticClient_Shutdown(), KineticSemaphore_Create(), KineticSemaphore_WaitForSignalAndDestroy(), and KineticClientConfig::logFile\&.
+References ByteBuffer::array, ByteArray_CreateWithCString(), ByteBuffer_Append(), ByteBuffer_Free(), ByteBuffer_Malloc(), ByteBuffer_MallocAndAppend(), ByteBuffer::bytesUsed, ByteArray::data, get_finished(), KineticSessionConfig::host, KineticEntry::key, KINETIC_ALGORITHM_SHA1, Kinetic_GetStatusDescription(), KINETIC_PORT, KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KINETIC_SYNCHRONIZATION_WRITETHROUGH, KineticClient_CreateSession(), KineticClient_DestroySession(), KineticClient_Get(), KineticClient_Init(), KineticClient_Put(), KineticClient_Shutdown(), KineticSemaphore_Create(), KineticSemaphore_WaitForSignalAndDestroy(), and KineticClientConfig::logFile\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

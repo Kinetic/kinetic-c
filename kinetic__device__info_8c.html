@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -64,18 +64,387 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5f061838bd7c675301f9a7e9bbee8758"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a5f061838bd7c675301f9a7e9bbee8758">KineticDeviceInfo_Create</a> (const KineticProto_Command_GetLog *getLog)</td></tr>
-<tr class="separator:a5f061838bd7c675301f9a7e9bbee8758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c9a2961fbab286f1d4004a6fb5fbf5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a6c9a2961fbab286f1d4004a6fb5fbf5b">KineticDeviceInfo_Free</a> (<a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> *kdi)</td></tr>
-<tr class="separator:a6c9a2961fbab286f1d4004a6fb5fbf5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b9491fcb30764489c7fb940d3ff9e96"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a5b9491fcb30764489c7fb940d3ff9e96">copy_str</a> (const char *s)</td></tr>
+<tr class="separator:a5b9491fcb30764489c7fb940d3ff9e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4758e4399a3a2acd54d3817eb47cde1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#ad4758e4399a3a2acd54d3817eb47cde1">copy_to_byte_array</a> (uint8_t *data, size_t length)</td></tr>
+<tr class="separator:ad4758e4399a3a2acd54d3817eb47cde1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e549cc908717daf191fc403516015d3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a1e549cc908717daf191fc403516015d3">free_byte_array</a> (<a class="el" href="struct_byte_array.html">ByteArray</a> ba)</td></tr>
+<tr class="separator:a1e549cc908717daf191fc403516015d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ae672abf0c68d8f21ef95b9f68c891"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_kinetic_log_info___utilization.html">KineticLogInfo_Utilization</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a39ae672abf0c68d8f21ef95b9f68c891">KineticLogInfo_GetUtilizations</a> (const KineticProto_Command_GetLog *getLog, size_t *numUtilizations)</td></tr>
+<tr class="separator:a39ae672abf0c68d8f21ef95b9f68c891"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97f767612693b2e472770a53bcbd0ede"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_kinetic_log_info___temperature.html">KineticLogInfo_Temperature</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a97f767612693b2e472770a53bcbd0ede">KineticLogInfo_GetTemperatures</a> (const KineticProto_Command_GetLog *getLog, size_t *numTemperatures)</td></tr>
+<tr class="separator:a97f767612693b2e472770a53bcbd0ede"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6025bc29b1745667de905d842fceb44c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_kinetic_log_info___capacity.html">KineticLogInfo_Capacity</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a6025bc29b1745667de905d842fceb44c">KineticLogInfo_GetCapacity</a> (const KineticProto_Command_GetLog *getLog)</td></tr>
+<tr class="separator:a6025bc29b1745667de905d842fceb44c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdb5dfbdba493a0cc78ef9cd2f818d46"><td class="memItemLeft" align="right" valign="top">static <br class="typebreak" />
+<a class="el" href="struct_kinetic_log_info___configuration.html">KineticLogInfo_Configuration</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#abdb5dfbdba493a0cc78ef9cd2f818d46">KineticLogInfo_GetConfiguration</a> (const KineticProto_Command_GetLog *getLog)</td></tr>
+<tr class="separator:abdb5dfbdba493a0cc78ef9cd2f818d46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad96f9fe145d85dc624fed3f1253d6786"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_kinetic_log_info___statistics.html">KineticLogInfo_Statistics</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#ad96f9fe145d85dc624fed3f1253d6786">KineticLogInfo_GetStatistics</a> (const KineticProto_Command_GetLog *getLog, size_t *numStatistics)</td></tr>
+<tr class="separator:ad96f9fe145d85dc624fed3f1253d6786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52c10569261e941d82a790fc9b618500"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a52c10569261e941d82a790fc9b618500">KineticLogInfo_GetMessages</a> (const KineticProto_Command_GetLog *getLog)</td></tr>
+<tr class="separator:a52c10569261e941d82a790fc9b618500"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb145e5e38acdd3a87e5182dc1c1dd72"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_kinetic_log_info___limits.html">KineticLogInfo_Limits</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#afb145e5e38acdd3a87e5182dc1c1dd72">KineticLogInfo_GetLimits</a> (const KineticProto_Command_GetLog *getLog)</td></tr>
+<tr class="separator:afb145e5e38acdd3a87e5182dc1c1dd72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86b8fe116d27605b96fffc64d795b953"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_kinetic_log_info___device.html">KineticLogInfo_Device</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a86b8fe116d27605b96fffc64d795b953">KineticLogInfo_GetDevice</a> (const KineticProto_Command_GetLog *getLog)</td></tr>
+<tr class="separator:a86b8fe116d27605b96fffc64d795b953"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a412bf88528a63951675982966c220a2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_log_info.html">KineticLogInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a412bf88528a63951675982966c220a2b">KineticLogInfo_Create</a> (const KineticProto_Command_GetLog *getLog)</td></tr>
+<tr class="separator:a412bf88528a63951675982966c220a2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a660cad7d076e7dd0101a33efd6dd86a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__device__info_8c.html#a660cad7d076e7dd0101a33efd6dd86a8">KineticLogInfo_Free</a> (<a class="el" href="struct_kinetic_log_info.html">KineticLogInfo</a> *kdi)</td></tr>
+<tr class="separator:a660cad7d076e7dd0101a33efd6dd86a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a5f061838bd7c675301f9a7e9bbee8758"></a>
+<a class="anchor" id="a5b9491fcb30764489c7fb940d3ff9e96"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* copy_str </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00027">27</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad4758e4399a3a2acd54d3817eb47cde1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_byte_array.html">ByteArray</a> copy_to_byte_array </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00041">41</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1e549cc908717daf191fc403516015d3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void free_byte_array </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td>
+          <td class="paramname"><em>ba</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00050">50</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a39ae672abf0c68d8f21ef95b9f68c891"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_kinetic_log_info___utilization.html">KineticLogInfo_Utilization</a>* KineticLogInfo_GetUtilizations </td>
+          <td>(</td>
+          <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
+          <td class="paramname"><em>getLog</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>numUtilizations</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00054">54</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__device__info_8c_source.html#l00027">copy_str()</a>, <a class="el" href="kinetic__types_8h_source.html#l00302">KineticLogInfo_Utilization::name</a>, and <a class="el" href="kinetic__types_8h_source.html#l00303">KineticLogInfo_Utilization::value</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97f767612693b2e472770a53bcbd0ede"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_kinetic_log_info___temperature.html">KineticLogInfo_Temperature</a>* KineticLogInfo_GetTemperatures </td>
+          <td>(</td>
+          <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
+          <td class="paramname"><em>getLog</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>numTemperatures</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00080">80</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__device__info_8c_source.html#l00027">copy_str()</a>, <a class="el" href="kinetic__types_8h_source.html#l00307">KineticLogInfo_Temperature::current</a>, <a class="el" href="kinetic__types_8h_source.html#l00309">KineticLogInfo_Temperature::maximum</a>, <a class="el" href="kinetic__types_8h_source.html#l00308">KineticLogInfo_Temperature::minimum</a>, <a class="el" href="kinetic__types_8h_source.html#l00306">KineticLogInfo_Temperature::name</a>, and <a class="el" href="kinetic__types_8h_source.html#l00310">KineticLogInfo_Temperature::target</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6025bc29b1745667de905d842fceb44c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_kinetic_log_info___capacity.html">KineticLogInfo_Capacity</a>* KineticLogInfo_GetCapacity </td>
+          <td>(</td>
+          <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
+          <td class="paramname"><em>getLog</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00101">101</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00313">KineticLogInfo_Capacity::nominalCapacityInBytes</a>, and <a class="el" href="kinetic__types_8h_source.html#l00314">KineticLogInfo_Capacity::portionFull</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abdb5dfbdba493a0cc78ef9cd2f818d46"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_kinetic_log_info___configuration.html">KineticLogInfo_Configuration</a>* KineticLogInfo_GetConfiguration </td>
+          <td>(</td>
+          <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
+          <td class="paramname"><em>getLog</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00112">112</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="sender_8c_source.html#l00405">cleanup()</a>, <a class="el" href="kinetic__types_8h_source.html#l00328">KineticLogInfo_Configuration::compilationDate</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00027">copy_str()</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00041">copy_to_byte_array()</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00050">free_byte_array()</a>, <a class="el" href="kinetic__types_8h_source.html#l00333">KineticLogInfo_Configuration::interfaces</a>, <a class="el" href="kinetic__types_8h_source.html#l00319">KineticLogInfo_Interface::ipv4Address</a>, <a class="el" href="kinetic__types_8h_source.html#l00320">KineticLogInfo_Interface::ipv6Address</a>, <a class="el" href="kinetic__types_8h_source.html#l00318">KineticLogInfo_Interface::MAC</a>, <a class="el" href="kinetic__types_8h_source.html#l00324">KineticLogInfo_Configuration::model</a>, <a class="el" href="kinetic__types_8h_source.html#l00317">KineticLogInfo_Interface::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00334">KineticLogInfo_Configuration::numInterfaces</a>, <a class="el" href="kinetic__types_8h_source.html#l00331">KineticLogInfo_Configuration::protocolCompilationDate</a>, <a class="el" href="kinetic__types_8h_source.html#l00332">KineticLogInfo_Configuration::protocolSourceHash</a>, <a class="el" href="kinetic__types_8h_source.html#l00330">KineticLogInfo_Configuration::protocolVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00325">KineticLogInfo_Configuration::serialNumber</a>, <a class="el" href="kinetic__types_8h_source.html#l00329">KineticLogInfo_Configuration::sourceHash</a>, <a class="el" href="kinetic__types_8h_source.html#l00323">KineticLogInfo_Configuration::vendor</a>, <a class="el" href="kinetic__types_8h_source.html#l00327">KineticLogInfo_Configuration::version</a>, and <a class="el" href="kinetic__types_8h_source.html#l00326">KineticLogInfo_Configuration::worldWideName</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad96f9fe145d85dc624fed3f1253d6786"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_kinetic_log_info___statistics.html">KineticLogInfo_Statistics</a>* KineticLogInfo_GetStatistics </td>
+          <td>(</td>
+          <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
+          <td class="paramname"><em>getLog</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>numStatistics</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00195">195</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00376">KineticLogInfo_Statistics::bytes</a>, <a class="el" href="kinetic__types_8h_source.html#l00375">KineticLogInfo_Statistics::count</a>, and <a class="el" href="kinetic__types_8h_source.html#l00374">KineticLogInfo_Statistics::messageType</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a52c10569261e941d82a790fc9b618500"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_byte_array.html">ByteArray</a> KineticLogInfo_GetMessages </td>
+          <td>(</td>
+          <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
+          <td class="paramname"><em>getLog</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00217">217</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__device__info_8c_source.html#l00041">copy_to_byte_array()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afb145e5e38acdd3a87e5182dc1c1dd72"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_kinetic_log_info___limits.html">KineticLogInfo_Limits</a>* KineticLogInfo_GetLimits </td>
+          <td>(</td>
+          <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
+          <td class="paramname"><em>getLog</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00224">224</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00383">KineticLogInfo_Limits::maxConnections</a>, <a class="el" href="kinetic__types_8h_source.html#l00388">KineticLogInfo_Limits::maxIdentityCount</a>, <a class="el" href="kinetic__types_8h_source.html#l00387">KineticLogInfo_Limits::maxKeyRangeCount</a>, <a class="el" href="kinetic__types_8h_source.html#l00379">KineticLogInfo_Limits::maxKeySize</a>, <a class="el" href="kinetic__types_8h_source.html#l00386">KineticLogInfo_Limits::maxMessageSize</a>, <a class="el" href="kinetic__types_8h_source.html#l00384">KineticLogInfo_Limits::maxOutstandingReadRequests</a>, <a class="el" href="kinetic__types_8h_source.html#l00385">KineticLogInfo_Limits::maxOutstandingWriteRequests</a>, <a class="el" href="kinetic__types_8h_source.html#l00389">KineticLogInfo_Limits::maxPinSize</a>, <a class="el" href="kinetic__types_8h_source.html#l00382">KineticLogInfo_Limits::maxTagSize</a>, <a class="el" href="kinetic__types_8h_source.html#l00380">KineticLogInfo_Limits::maxValueSize</a>, and <a class="el" href="kinetic__types_8h_source.html#l00381">KineticLogInfo_Limits::maxVersionSize</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a86b8fe116d27605b96fffc64d795b953"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_kinetic_log_info___device.html">KineticLogInfo_Device</a>* KineticLogInfo_GetDevice </td>
+          <td>(</td>
+          <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
+          <td class="paramname"><em>getLog</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00244">244</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__device__info_8c_source.html#l00041">copy_to_byte_array()</a>, and <a class="el" href="kinetic__types_8h_source.html#l00392">KineticLogInfo_Device::name</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a412bf88528a63951675982966c220a2b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a>* KineticDeviceInfo_Create </td>
+          <td class="memname"><a class="el" href="struct_kinetic_log_info.html">KineticLogInfo</a>* KineticLogInfo_Create </td>
           <td>(</td>
           <td class="paramtype">const KineticProto_Command_GetLog *&#160;</td>
           <td class="paramname"><em>getLog</em></td><td>)</td>
@@ -86,18 +455,18 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00257">257</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00393">KineticDeviceInfo::capacity</a>, <a class="el" href="kinetic__types_8h_source.html#l00394">KineticDeviceInfo::configuration</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00399">KineticDeviceInfo::device</a>, <a class="el" href="kinetic__types_8h_source.html#l00398">KineticDeviceInfo::limits</a>, <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF2</a>, <a class="el" href="kinetic__types_8h_source.html#l00397">KineticDeviceInfo::messages</a>, <a class="el" href="kinetic__types_8h_source.html#l00396">KineticDeviceInfo::numStatistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00392">KineticDeviceInfo::numTemperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00390">KineticDeviceInfo::numUtilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00395">KineticDeviceInfo::statistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00391">KineticDeviceInfo::temperatures</a>, and <a class="el" href="kinetic__types_8h_source.html#l00389">KineticDeviceInfo::utilizations</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00399">KineticLogInfo::capacity</a>, <a class="el" href="sender_8c_source.html#l00405">cleanup()</a>, <a class="el" href="kinetic__types_8h_source.html#l00400">KineticLogInfo::configuration</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00405">KineticLogInfo::device</a>, <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00101">KineticLogInfo_GetCapacity()</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00112">KineticLogInfo_GetConfiguration()</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00244">KineticLogInfo_GetDevice()</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00224">KineticLogInfo_GetLimits()</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00217">KineticLogInfo_GetMessages()</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00195">KineticLogInfo_GetStatistics()</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00080">KineticLogInfo_GetTemperatures()</a>, <a class="el" href="kinetic__device__info_8c_source.html#l00054">KineticLogInfo_GetUtilizations()</a>, <a class="el" href="kinetic__types_8h_source.html#l00404">KineticLogInfo::limits</a>, <a class="el" href="kinetic__logger_8h_source.html#l00060">LOGF2</a>, <a class="el" href="kinetic__types_8h_source.html#l00403">KineticLogInfo::messages</a>, <a class="el" href="kinetic__types_8h_source.html#l00402">KineticLogInfo::numStatistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00398">KineticLogInfo::numTemperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00396">KineticLogInfo::numUtilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00401">KineticLogInfo::statistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00397">KineticLogInfo::temperatures</a>, and <a class="el" href="kinetic__types_8h_source.html#l00395">KineticLogInfo::utilizations</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a6c9a2961fbab286f1d4004a6fb5fbf5b"></a>
+<a class="anchor" id="a660cad7d076e7dd0101a33efd6dd86a8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void KineticDeviceInfo_Free </td>
+          <td class="memname">void KineticLogInfo_Free </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_kinetic_device_info.html">KineticDeviceInfo</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_log_info.html">KineticLogInfo</a> *&#160;</td>
           <td class="paramname"><em>kdi</em></td><td>)</td>
           <td></td>
         </tr>
@@ -106,7 +475,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__device__info_8c_source.html#l00323">323</a> of file <a class="el" href="kinetic__device__info_8c_source.html">kinetic_device_info.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00393">KineticDeviceInfo::capacity</a>, <a class="el" href="kinetic__types_8h_source.html#l00322">KineticDeviceInfo_Configuration::compilationDate</a>, <a class="el" href="kinetic__types_8h_source.html#l00394">KineticDeviceInfo::configuration</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00399">KineticDeviceInfo::device</a>, <a class="el" href="kinetic__types_8h_source.html#l00327">KineticDeviceInfo_Configuration::interfaces</a>, <a class="el" href="kinetic__types_8h_source.html#l00313">KineticDeviceInfo_Interface::ipv4Address</a>, <a class="el" href="kinetic__types_8h_source.html#l00314">KineticDeviceInfo_Interface::ipv6Address</a>, <a class="el" href="kinetic__types_8h_source.html#l00398">KineticDeviceInfo::limits</a>, <a class="el" href="kinetic__types_8h_source.html#l00312">KineticDeviceInfo_Interface::MAC</a>, <a class="el" href="kinetic__types_8h_source.html#l00397">KineticDeviceInfo::messages</a>, <a class="el" href="kinetic__types_8h_source.html#l00318">KineticDeviceInfo_Configuration::model</a>, <a class="el" href="kinetic__types_8h_source.html#l00296">KineticDeviceInfo_Utilization::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00300">KineticDeviceInfo_Temperature::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00311">KineticDeviceInfo_Interface::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00386">KineticDeviceInfo_Device::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00328">KineticDeviceInfo_Configuration::numInterfaces</a>, <a class="el" href="kinetic__types_8h_source.html#l00392">KineticDeviceInfo::numTemperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00390">KineticDeviceInfo::numUtilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00325">KineticDeviceInfo_Configuration::protocolCompilationDate</a>, <a class="el" href="kinetic__types_8h_source.html#l00326">KineticDeviceInfo_Configuration::protocolSourceHash</a>, <a class="el" href="kinetic__types_8h_source.html#l00324">KineticDeviceInfo_Configuration::protocolVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00319">KineticDeviceInfo_Configuration::serialNumber</a>, <a class="el" href="kinetic__types_8h_source.html#l00323">KineticDeviceInfo_Configuration::sourceHash</a>, <a class="el" href="kinetic__types_8h_source.html#l00395">KineticDeviceInfo::statistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00391">KineticDeviceInfo::temperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00389">KineticDeviceInfo::utilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00317">KineticDeviceInfo_Configuration::vendor</a>, <a class="el" href="kinetic__types_8h_source.html#l00321">KineticDeviceInfo_Configuration::version</a>, and <a class="el" href="kinetic__types_8h_source.html#l00320">KineticDeviceInfo_Configuration::worldWideName</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00399">KineticLogInfo::capacity</a>, <a class="el" href="kinetic__types_8h_source.html#l00328">KineticLogInfo_Configuration::compilationDate</a>, <a class="el" href="kinetic__types_8h_source.html#l00400">KineticLogInfo::configuration</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00405">KineticLogInfo::device</a>, <a class="el" href="kinetic__types_8h_source.html#l00333">KineticLogInfo_Configuration::interfaces</a>, <a class="el" href="kinetic__types_8h_source.html#l00319">KineticLogInfo_Interface::ipv4Address</a>, <a class="el" href="kinetic__types_8h_source.html#l00320">KineticLogInfo_Interface::ipv6Address</a>, <a class="el" href="kinetic__types_8h_source.html#l00404">KineticLogInfo::limits</a>, <a class="el" href="kinetic__types_8h_source.html#l00318">KineticLogInfo_Interface::MAC</a>, <a class="el" href="kinetic__types_8h_source.html#l00403">KineticLogInfo::messages</a>, <a class="el" href="kinetic__types_8h_source.html#l00324">KineticLogInfo_Configuration::model</a>, <a class="el" href="kinetic__types_8h_source.html#l00302">KineticLogInfo_Utilization::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00306">KineticLogInfo_Temperature::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00317">KineticLogInfo_Interface::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00392">KineticLogInfo_Device::name</a>, <a class="el" href="kinetic__types_8h_source.html#l00334">KineticLogInfo_Configuration::numInterfaces</a>, <a class="el" href="kinetic__types_8h_source.html#l00398">KineticLogInfo::numTemperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00396">KineticLogInfo::numUtilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00331">KineticLogInfo_Configuration::protocolCompilationDate</a>, <a class="el" href="kinetic__types_8h_source.html#l00332">KineticLogInfo_Configuration::protocolSourceHash</a>, <a class="el" href="kinetic__types_8h_source.html#l00330">KineticLogInfo_Configuration::protocolVersion</a>, <a class="el" href="kinetic__types_8h_source.html#l00325">KineticLogInfo_Configuration::serialNumber</a>, <a class="el" href="kinetic__types_8h_source.html#l00329">KineticLogInfo_Configuration::sourceHash</a>, <a class="el" href="kinetic__types_8h_source.html#l00401">KineticLogInfo::statistics</a>, <a class="el" href="kinetic__types_8h_source.html#l00397">KineticLogInfo::temperatures</a>, <a class="el" href="kinetic__types_8h_source.html#l00395">KineticLogInfo::utilizations</a>, <a class="el" href="kinetic__types_8h_source.html#l00323">KineticLogInfo_Configuration::vendor</a>, <a class="el" href="kinetic__types_8h_source.html#l00327">KineticLogInfo_Configuration::version</a>, and <a class="el" href="kinetic__types_8h_source.html#l00326">KineticLogInfo_Configuration::worldWideName</a>.</p>
 
 </div>
 </div>

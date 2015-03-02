@@ -1,4 +1,4 @@
-.TH "byte_array.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "byte_array.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -24,6 +24,9 @@ byte_array.c \-
 .SS "Functions"
 
 .in +1c
+.ti -1c
+.RI "static \fBByteBuffer\fP * \fBappend_formatted_cstring_va_list\fP (\fBByteBuffer\fP *buffer, const char *format, va_list args)"
+.br
 .ti -1c
 .RI "\fBByteArray\fP \fBByteArray_Create\fP (void *data, size_t len)"
 .br
@@ -99,6 +102,12 @@ byte_array.c \-
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static \fBByteBuffer\fP * append_formatted_cstring_va_list (\fBByteBuffer\fP *buffer, const char *format, va_listargs)\fC [static]\fP"
+
+.PP
+Definition at line 191 of file byte_array\&.c\&.
+.PP
+References ByteBuffer::array, ByteBuffer_BytesRemaining(), ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
 .SS "\fBByteArray\fP ByteArray_Create (void *data, size_tlen)"
 
 .PP
@@ -204,13 +213,13 @@ References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteAr
 .PP
 Definition at line 205 of file byte_array\&.c\&.
 .PP
-References ByteBuffer::array, and ByteArray::data\&.
+References append_formatted_cstring_va_list(), ByteBuffer::array, and ByteArray::data\&.
 .SS "\fBByteBuffer\fP ByteBuffer_CreateAndAppendFormattedCString (void *data, size_tmax_len, const char *format, \&.\&.\&.)"
 
 .PP
 Definition at line 221 of file byte_array\&.c\&.
 .PP
-References ByteBuffer_Create()\&.
+References append_formatted_cstring_va_list(), and ByteBuffer_Create()\&.
 .SS "\fBByteBuffer\fP* ByteBuffer_AppendDummyData (\fBByteBuffer\fP *buffer, size_tlen)"
 
 .PP

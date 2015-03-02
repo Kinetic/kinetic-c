@@ -1,4 +1,4 @@
-.TH "kinetic_nbo.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_nbo.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,6 +12,9 @@ kinetic_nbo.c \-
 .SS "Functions"
 
 .in +1c
+.ti -1c
+.RI "static uint64_t \fBKineticNBO_SwapByteOrder\fP (uint8_t *pByte, size_t len)"
+.br
 .ti -1c
 .RI "uint32_t \fBKineticNBO_FromHostU32\fP (uint32_t valueHost)"
 .br
@@ -27,22 +30,34 @@ kinetic_nbo.c \-
 .in -1c
 .SH "Function Documentation"
 .PP 
+.SS "static uint64_t KineticNBO_SwapByteOrder (uint8_t *pByte, size_tlen)\fC [static]\fP"
+
+.PP
+Definition at line 23 of file kinetic_nbo\&.c\&.
 .SS "uint32_t KineticNBO_FromHostU32 (uint32_tvalueHost)"
 
 .PP
 Definition at line 32 of file kinetic_nbo\&.c\&.
+.PP
+References KineticNBO_SwapByteOrder()\&.
 .SS "uint32_t KineticNBO_ToHostU32 (uint32_tvalueNBO)"
 
 .PP
 Definition at line 38 of file kinetic_nbo\&.c\&.
+.PP
+References KineticNBO_SwapByteOrder()\&.
 .SS "uint64_t KineticNBO_FromHostU64 (uint64_tvalueHost)"
 
 .PP
 Definition at line 44 of file kinetic_nbo\&.c\&.
+.PP
+References KineticNBO_SwapByteOrder()\&.
 .SS "uint64_t KineticNBO_ToHostU64 (uint64_tvalueNBO)"
 
 .PP
 Definition at line 50 of file kinetic_nbo\&.c\&.
+.PP
+References KineticNBO_SwapByteOrder()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

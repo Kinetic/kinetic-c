@@ -1,4 +1,4 @@
-.TH "sender.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "sender.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -28,8 +28,6 @@ sender.c \-
 .br
 \fC#include 'listener\&.h'\fP
 .br
-\fC#include 'casq\&.h'\fP
-.br
 \fC#include 'util\&.h'\fP
 .br
 \fC#include 'atomic\&.h'\fP
@@ -44,6 +42,9 @@ sender.c \-
 .in +1c
 .ti -1c
 .RI "#define \fBCMD_FD\fP   (1)"
+.br
+.ti -1c
+.RI "#define \fBTIMEOUT_DELAY\fP   100"
 .br
 .in -1c
 .SS "Functions"
@@ -68,7 +69,85 @@ sender.c \-
 .RI "void \fBsender_free\fP (struct \fBsender\fP *s)"
 .br
 .ti -1c
+.RI "static \fBtx_info_t\fP * \fBget_free_tx_info\fP (struct \fBsender\fP *s)"
+.br
+.ti -1c
+.RI "static void \fBrelease_tx_info\fP (struct \fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static int \fBget_notify_pipe\fP (struct \fBsender\fP *s, int id)"
+.br
+.ti -1c
+.RI "static bool \fBwrite_commit\fP (struct \fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static \fBtx_error_t\fP \fBcommit_event_and_block\fP (struct \fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
 .RI "void * \fBsender_mainloop\fP (void *arg)"
+.br
+.ti -1c
+.RI "static void \fBfree_fd_info_cb\fP (void *value, void *udata)"
+.br
+.ti -1c
+.RI "static void \fBcleanup\fP (\fBsender\fP *s)"
+.br
+.ti -1c
+.RI "static bool \fBregister_socket_info\fP (\fBsender\fP *s, int fd, SSL *ssl)"
+.br
+.ti -1c
+.RI "static void \fBincrement_fd_refcount\fP (\fBsender\fP *s, \fBfd_info\fP *fdi)"
+.br
+.ti -1c
+.RI "static void \fBdecrement_fd_refcount\fP (\fBsender\fP *s, \fBfd_info\fP *fdi)"
+.br
+.ti -1c
+.RI "static bool \fBrelease_socket_info\fP (\fBsender\fP *s, int fd)"
+.br
+.ti -1c
+.RI "static void \fBhandle_command\fP (\fBsender\fP *s, int id)"
+.br
+.ti -1c
+.RI "static void \fBenqueue_write\fP (struct \fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static bool \fBcheck_incoming_commands\fP (struct \fBsender\fP *s)"
+.br
+.ti -1c
+.RI "static \fBtx_info_t\fP * \fBget_info_to_write_for_socket\fP (\fBsender\fP *s, int fd)"
+.br
+.ti -1c
+.RI "static void \fBset_error_for_socket\fP (\fBsender\fP *s, int fd, \fBtx_error_t\fP error)"
+.br
+.ti -1c
+.RI "static void \fBattempt_write\fP (\fBsender\fP *s, int available)"
+.br
+.ti -1c
+.RI "static ssize_t \fBsocket_write_plain\fP (\fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static ssize_t \fBsocket_write_ssl\fP (\fBsender\fP *s, \fBtx_info_t\fP *info, SSL *ssl)"
+.br
+.ti -1c
+.RI "static void \fBupdate_sent\fP (struct \fBbus\fP *b, \fBsender\fP *s, \fBtx_info_t\fP *info, ssize_t sent)"
+.br
+.ti -1c
+.RI "static void \fBnotify_caller\fP (\fBsender\fP *s, \fBtx_info_t\fP *info, bool success)"
+.br
+.ti -1c
+.RI "static void \fBtick_handler\fP (\fBsender\fP *s)"
+.br
+.ti -1c
+.RI "static void \fBtick_timeout\fP (\fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static void \fBattempt_to_enqueue_sending_request_message_to_listener\fP (\fBsender\fP *s, int fd, int64_t seq_id, int16_t timeout_sec)"
+.br
+.ti -1c
+.RI "static void \fBattempt_to_enqueue_request_sent_message_to_listener\fP (\fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static void \fBnotify_message_failure\fP (\fBsender\fP *s, \fBtx_info_t\fP *info, \fBbus_send_status_t\fP status)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -76,49 +155,211 @@ sender.c \-
 .SS "#define CMD_FD   (1)"
 
 .PP
-Definition at line 40 of file sender\&.c\&.
+Definition at line 39 of file sender\&.c\&.
+.SS "#define TIMEOUT_DELAY   100"
+
+.PP
+Definition at line 330 of file sender\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "struct \fBsender\fP* sender_init (struct \fBbus\fP *b, struct \fBbus_config\fP *cfg)"
 
 .PP
-Definition at line 42 of file sender\&.c\&.
+Definition at line 41 of file sender\&.c\&.
 .PP
 References sender::bus, BUS_LOG, BUS_LOG_SNPRINTF, sender::commit_pipe, sender::fd_hash_table, sender::fds, HASH_TABLE_SIZE2, tx_info_t::id, sender::incoming_command_pipe, LOG_SENDER, MAX_CONCURRENT_SENDS, sender::pipes, SENDER_FD_NOT_IN_USE, tx_info_t::state, TIS_UNDEF, sender::tx_info, bus::udata, and yacht_init()\&.
 .SS "bool sender_register_socket (struct \fBsender\fP *s, intfd, SSL *ssl)"
 
 .PP
-Definition at line 104 of file sender\&.c\&.
+Definition at line 105 of file sender\&.c\&.
 .PP
-References tx_info_t::add_socket, sender::bus, BUS_LOG_SNPRINTF, LOG_SENDER, tx_info_t::state, TIS_ADD_SOCKET, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
+References tx_info_t::add_socket, sender::bus, BUS_LOG_SNPRINTF, commit_event_and_block(), get_free_tx_info(), LOG_SENDER, release_tx_info(), tx_info_t::state, TIS_ADD_SOCKET, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
 .SS "bool sender_remove_socket (struct \fBsender\fP *s, intfd)"
 
 .PP
-Definition at line 121 of file sender\&.c\&.
+Definition at line 122 of file sender\&.c\&.
 .PP
-References tx_info_t::rm_socket, tx_info_t::state, TIS_RM_SOCKET, TX_ERROR_NONE, and tx_info_t::u\&.
+References commit_event_and_block(), get_free_tx_info(), release_tx_info(), tx_info_t::rm_socket, tx_info_t::state, TIS_RM_SOCKET, TX_ERROR_NONE, and tx_info_t::u\&.
 .SS "bool sender_send_request (struct \fBsender\fP *s, \fBboxed_msg\fP *box)"
 
 .PP
-Definition at line 132 of file sender\&.c\&.
+Definition at line 133 of file sender\&.c\&.
 .PP
-References sender::bus, BUS_LOG_SNPRINTF, tx_info_t::enqueue, boxed_msg::fd, LOG_SENDER, tx_info_t::state, boxed_msg::timeout_sec, TIS_REQUEST_ENQUEUE, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
+References sender::bus, BUS_LOG, BUS_LOG_SNPRINTF, commit_event_and_block(), tx_info_t::enqueue, boxed_msg::fd, get_free_tx_info(), LOG_SENDER, release_tx_info(), tx_info_t::state, boxed_msg::timeout_sec, TIS_REQUEST_ENQUEUE, boxed_msg::tv_send_start, TX_ERROR_NONE, tx_info_t::u, and bus::udata\&.
 .SS "bool sender_shutdown (struct \fBsender\fP *s)"
 
 .PP
-Definition at line 151 of file sender\&.c\&.
+Definition at line 158 of file sender\&.c\&.
 .PP
-References sender::bus, BUS_LOG_SNPRINTF, sender::fd_hash_table, tx_info_t::id, LOG_SENDER, tx_info_t::state, TIS_SHUTDOWN, TX_ERROR_NONE, and bus::udata\&.
+References sender::bus, BUS_LOG_SNPRINTF, commit_event_and_block(), sender::fd_hash_table, get_free_tx_info(), tx_info_t::id, LOG_SENDER, release_tx_info(), tx_info_t::state, TIS_SHUTDOWN, TX_ERROR_NONE, and bus::udata\&.
 .SS "void sender_free (struct \fBsender\fP *s)"
 
 .PP
-Definition at line 167 of file sender\&.c\&.
+Definition at line 174 of file sender\&.c\&.
+.PP
+References cleanup()\&.
+.SS "static \fBtx_info_t\fP* get_free_tx_info (struct \fBsender\fP *s)\fC [static]\fP"
+
+.PP
+Definition at line 181 of file sender\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, sender::bus, BUS_LOG, BUS_LOG_SNPRINTF, tx_info_t::done_pipe, get_notify_pipe(), tx_info_t::id, LOG_SENDER, MAX_CONCURRENT_SENDS, tx_info_t::state, TIS_UNDEF, sender::tx_flags, sender::tx_info, and bus::udata\&.
+.SS "static void release_tx_info (struct \fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 207 of file sender\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, sender::bus, BUS_LOG_SNPRINTF, tx_info_t::id, LOG_SENDER, MAX_CONCURRENT_SENDS, tx_info_t::state, TIS_UNDEF, sender::tx_flags, and bus::udata\&.
+.SS "static int get_notify_pipe (struct \fBsender\fP *s, intid)\fC [static]\fP"
+
+.PP
+Definition at line 227 of file sender\&.c\&.
+.PP
+References sender::pipes\&.
+.SS "static bool write_commit (struct \fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 231 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, sender::commit_pipe, tx_info_t::id, LOG_SENDER, and bus::udata\&.
+.SS "static \fBtx_error_t\fP commit_event_and_block (struct \fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 255 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, tx_info_t::done_pipe, LOG_SENDER, SENDER_FD_NOT_IN_USE, TX_ERROR_CLOSED, TX_ERROR_NONE, TX_ERROR_WRITE_FAILURE, bus::udata, and write_commit()\&.
 .SS "void* sender_mainloop (void *arg)"
 
 .PP
-Definition at line 323 of file sender\&.c\&.
+Definition at line 332 of file sender\&.c\&.
 .PP
-References BUS_LOG, BUS_LOG_SNPRINTF, CMD_FD, LOG_SENDER, MAX_TIMEOUT, bus::udata, and util_is_resumable_io_error()\&.
+References attempt_write(), BUS_LOG, BUS_LOG_SNPRINTF, check_incoming_commands(), cleanup(), CMD_FD, LOG_SENDER, tick_handler(), TIMEOUT_DELAY, bus::udata, and util_is_resumable_io_error()\&.
+.SS "static void free_fd_info_cb (void *value, void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 395 of file sender\&.c\&.
+.PP
+References fd_info::ssl\&.
+.SS "static void cleanup (\fBsender\fP *s)\fC [static]\fP"
+
+.PP
+Definition at line 405 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG, BUS_LOG_SNPRINTF, sender::commit_pipe, sender::fd_hash_table, free_fd_info_cb(), sender::incoming_command_pipe, LOG_SENDER, LOG_SHUTDOWN, MAX_CONCURRENT_SENDS, sender::pipes, tx_info_t::state, TIS_SHUTDOWN, sender::tx_info, bus::udata, and yacht_free()\&.
+.SS "static bool register_socket_info (\fBsender\fP *s, intfd, SSL *ssl)\fC [static]\fP"
+
+.PP
+Definition at line 437 of file sender\&.c\&.
+.PP
+References fd_info::fd, sender::fd_hash_table, fd_info::largest_seq_id_seen, fd_info::refcount, sender::shutdown, fd_info::ssl, and yacht_set()\&.
+.SS "static void increment_fd_refcount (\fBsender\fP *s, \fBfd_info\fP *fdi)\fC [static]\fP"
+
+.PP
+Definition at line 457 of file sender\&.c\&.
+.PP
+References sender::active_fds, fd_info::fd, sender::fds, fd_info::refcount, and SENDER_FD_NOT_IN_USE\&.
+.SS "static void decrement_fd_refcount (\fBsender\fP *s, \fBfd_info\fP *fdi)\fC [static]\fP"
+
+.PP
+Definition at line 472 of file sender\&.c\&.
+.PP
+References sender::active_fds, CMD_FD, fd_info::fd, sender::fds, MAX_CONCURRENT_SENDS, fd_info::refcount, and SENDER_FD_NOT_IN_USE\&.
+.SS "static bool release_socket_info (\fBsender\fP *s, intfd)\fC [static]\fP"
+
+.PP
+Definition at line 498 of file sender\&.c\&.
+.PP
+References fd_info::errored, fd_info::fd, sender::fd_hash_table, fd_info::refcount, set_error_for_socket(), sender::shutdown, TX_ERROR_CLOSED, and yacht_remove()\&.
+.SS "static void handle_command (\fBsender\fP *s, intid)\fC [static]\fP"
+
+.PP
+Definition at line 520 of file sender\&.c\&.
+.PP
+References tx_info_t::add_socket, sender::bus, BUS_LOG_SNPRINTF, enqueue_write(), sender::is_idle, LOG_SENDER, MAX_CONCURRENT_SENDS, notify_caller(), register_socket_info(), release_socket_info(), tx_info_t::rm_socket, sender::shutdown, tx_info_t::state, TIS_ADD_SOCKET, TIS_REQUEST_ENQUEUE, TIS_RM_SOCKET, TIS_SHUTDOWN, sender::tx_info, tx_info_t::u, and bus::udata\&.
+.SS "static void enqueue_write (struct \fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 572 of file sender\&.c\&.
+.PP
+References attempt_to_enqueue_sending_request_message_to_listener(), sender::bus, BUS_LOG_SNPRINTF, BUS_NO_SEQ_ID, tx_info_t::enqueue, fd_info::errored, sender::fd_hash_table, increment_fd_refcount(), fd_info::largest_seq_id_seen, LOG_SENDER, set_error_for_socket(), tx_info_t::state, TIS_REQUEST_ENQUEUE, TIS_REQUEST_WRITE, TX_ERROR_BAD_SEQUENCE_ID, TX_ERROR_CLOSED, TX_ERROR_UNREGISTERED_SOCKET, tx_info_t::u, bus::udata, tx_info_t::write, and yacht_get()\&.
+.SS "static bool check_incoming_commands (struct \fBsender\fP *s)\fC [static]\fP"
+
+.PP
+Definition at line 631 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, handle_command(), sender::incoming_command_pipe, LOG_SENDER, and bus::udata\&.
+.SS "static \fBtx_info_t\fP* get_info_to_write_for_socket (\fBsender\fP *s, intfd)\fC [static]\fP"
+
+.PP
+Definition at line 659 of file sender\&.c\&.
+.PP
+References MAX_CONCURRENT_SENDS, tx_info_t::state, TIS_REQUEST_WRITE, sender::tx_flags, sender::tx_info, tx_info_t::u, and tx_info_t::write\&.
+.SS "static void set_error_for_socket (\fBsender\fP *s, intfd, \fBtx_error_t\fPerror)\fC [static]\fP"
+
+.PP
+Definition at line 688 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, BUS_SEND_TX_FAILURE, BUS_SEND_UNDEFINED, BUS_SEND_UNREGISTERED_SOCKET, decrement_fd_refcount(), tx_info_t::enqueue, tx_info_t::error, fd_info::errored, sender::fd_hash_table, LOG_SENDER, MAX_CONCURRENT_SENDS, tx_info_t::notify, notify_message_failure(), tx_info_t::state, TIS_ERROR, TIS_REQUEST_ENQUEUE, TIS_REQUEST_WRITE, TIS_RESPONSE_NOTIFY, TX_ERROR_UNREGISTERED_SOCKET, sender::tx_flags, sender::tx_info, tx_info_t::u, bus::udata, tx_info_t::write, and yacht_get()\&.
+.SS "static void attempt_write (\fBsender\fP *s, intavailable)\fC [static]\fP"
+
+.PP
+Definition at line 759 of file sender\&.c\&.
+.PP
+References sender::active_fds, sender::bus, BUS_LOG_SNPRINTF, BUS_NO_SSL, CMD_FD, sender::fds, get_info_to_write_for_socket(), LOG_SENDER, SENDER_FD_NOT_IN_USE, set_error_for_socket(), socket_write_plain(), socket_write_ssl(), tx_info_t::state, TIS_REQUEST_WRITE, TX_ERROR_POLLERR, TX_ERROR_POLLHUP, tx_info_t::u, bus::udata, and tx_info_t::write\&.
+.SS "static ssize_t socket_write_plain (\fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 803 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, tx_info_t::id, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, set_error_for_socket(), tx_info_t::state, TIS_REQUEST_WRITE, TX_ERROR_WRITE_FAILURE, tx_info_t::u, bus::udata, update_sent(), util_is_resumable_io_error(), and tx_info_t::write\&.
+.SS "static ssize_t socket_write_ssl (\fBsender\fP *s, \fBtx_info_t\fP *info, SSL *ssl)\fC [static]\fP"
+
+.PP
+Definition at line 842 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, set_error_for_socket(), tx_info_t::state, TIS_REQUEST_WRITE, TX_ERROR_WRITE_FAILURE, tx_info_t::u, bus::udata, update_sent(), util_is_resumable_io_error(), and tx_info_t::write\&.
+.SS "static void update_sent (struct \fBbus\fP *b, \fBsender\fP *s, \fBtx_info_t\fP *info, ssize_tsent)\fC [static]\fP"
+
+.PP
+Definition at line 898 of file sender\&.c\&.
+.PP
+References attempt_to_enqueue_request_sent_message_to_listener(), BUS_LOG, BUS_LOG_SNPRINTF, decrement_fd_refcount(), LOG_SENDER, tx_info_t::notify, boxed_msg::out_msg, boxed_msg::out_msg_size, tx_info_t::state, TIS_REQUEST_WRITE, TIS_RESPONSE_NOTIFY, tx_info_t::u, bus::udata, and tx_info_t::write\&.
+.SS "static void notify_caller (\fBsender\fP *s, \fBtx_info_t\fP *info, boolsuccess)\fC [static]\fP"
+
+.PP
+Definition at line 936 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, tx_info_t::error, tx_info_t::id, LOG_SENDER, sender::pipes, tx_info_t::release, tx_info_t::state, TIS_ERROR, TIS_REQUEST_RELEASE, tx_info_t::u, and bus::udata\&.
+.SS "static void tick_handler (\fBsender\fP *s)\fC [static]\fP"
+
+.PP
+Definition at line 987 of file sender\&.c\&.
+.PP
+References sender::active_fds, attempt_to_enqueue_request_sent_message_to_listener(), sender::bus, BUS_LOG_SNPRINTF, sender::is_idle, LOG_SENDER, MAX_CONCURRENT_SENDS, tx_info_t::state, tick_timeout(), TIS_REQUEST_WRITE, TIS_RESPONSE_NOTIFY, TIS_UNDEF, sender::tx_flags, sender::tx_info, and bus::udata\&.
+.SS "static void tick_timeout (\fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 1033 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG, BUS_LOG_SNPRINTF, BUS_SEND_TX_TIMEOUT, tx_info_t::error, LOG_SENDER, tx_info_t::notify, notify_message_failure(), tx_info_t::state, TIS_ERROR, TIS_REQUEST_WRITE, TIS_RESPONSE_NOTIFY, TX_ERROR_NOTIFY_TIMEOUT, TX_ERROR_WRITE_TIMEOUT, tx_info_t::u, bus::udata, and tx_info_t::write\&.
+.SS "static void attempt_to_enqueue_sending_request_message_to_listener (\fBsender\fP *s, intfd, int64_tseq_id, int16_ttimeout_sec)\fC [static]\fP"
+
+.PP
+Definition at line 1096 of file sender\&.c\&.
+.PP
+References sender::bus, bus_get_listener_for_socket(), BUS_LOG_SNPRINTF, listener_hold_response(), LOG_SENDER, and bus::udata\&.
+.SS "static void attempt_to_enqueue_request_sent_message_to_listener (\fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 1120 of file sender\&.c\&.
+.PP
+References sender::bus, bus_get_listener_for_socket(), BUS_LOG, BUS_LOG_SNPRINTF, tx_info_t::id, listener_expect_response(), LOG_SENDER, tx_info_t::notify, notify_caller(), tx_info_t::release, tx_info_t::state, TIS_REQUEST_RELEASE, TIS_RESPONSE_NOTIFY, tx_info_t::u, and bus::udata\&.
+.SS "static void notify_message_failure (\fBsender\fP *s, \fBtx_info_t\fP *info, \fBbus_send_status_t\fPstatus)\fC [static]\fP"
+
+.PP
+Definition at line 1154 of file sender\&.c\&.
+.PP
+References sender::bus, BUS_LOG_SNPRINTF, bus_process_boxed_message(), tx_info_t::error, tx_info_t::id, LOG_SENDER, notify_caller(), boxed_msg::result, tx_info_t::state, bus_msg_result_t::status, TIS_ERROR, tx_info_t::u, and bus::udata\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "kinetic_controller.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_controller.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,10 +15,7 @@ kinetic_controller.h \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticController_Init\fP (\fBKineticSession\fP const *const session)"
-.br
-.ti -1c
-.RI "KineticOperation * \fBKineticController_CreateOperation\fP (\fBKineticSession\fP const *const session)"
+.RI "\fBKineticStatus\fP \fBKineticController_Init\fP (KineticSession const *const session)"
 .br
 .ti -1c
 .RI "\fBKineticStatus\fP \fBKineticController_ExecuteOperation\fP (KineticOperation *operation, \fBKineticCompletionClosure\fP *closure)"
@@ -32,32 +29,26 @@ kinetic_controller.h \-
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticStatus\fP KineticController_Init (\fBKineticSession\fP const *constsession)"
+.SS "\fBKineticStatus\fP KineticController_Init (KineticSession const *constsession)"
 
-.SS "KineticOperation* KineticController_CreateOperation (\fBKineticSession\fP const *constsession)"
-
-.PP
-Definition at line 32 of file kinetic_controller\&.c\&.
-.PP
-References KineticSession::connection, KineticAllocator_NewOperation(), LOG0, and LOGF3\&.
 .SS "\fBKineticStatus\fP KineticController_ExecuteOperation (KineticOperation *operation, \fBKineticCompletionClosure\fP *closure)"
 
 .PP
-Definition at line 80 of file kinetic_controller\&.c\&.
+Definition at line 82 of file kinetic_controller\&.c\&.
 .PP
-References KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, and KineticOperation_SendRequest()\&.
+References DefaultClosure(), KINETIC_ASSERT, KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, and KineticOperation_SendRequest()\&.
 .SS "void KineticController_HandleUnexpectedResponse (void *msg, int64_tseq_id, void *bus_udata, void *socket_udata)"
 
 .PP
-Definition at line 189 of file kinetic_controller\&.c\&.
+Definition at line 191 of file kinetic_controller\&.c\&.
 .PP
-References KineticResponse::command, KineticResponse::header, KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS, KineticAllocator_FreeKineticResponse(), KineticLogger_LogPrintf(), KineticLogger_LogProtobuf(), KineticResourceWaiter_SetAvailable(), LOG0, LOGF2, and KineticResponse::proto\&.
+References KineticResponse::command, KineticResponse::header, KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS, KineticAllocator_FreeKineticResponse(), KineticLogger_LogPrintf(), KineticLogger_LogProtobuf(), KineticLogger_LogTimestamp(), KineticResourceWaiter_SetAvailable(), LOG0, LOGF2, and KineticResponse::proto\&.
 .SS "void KineticController_HandleResult (\fBbus_msg_result_t\fP *res, void *udata)"
 
 .PP
-Definition at line 250 of file kinetic_controller\&.c\&.
+Definition at line 252 of file kinetic_controller\&.c\&.
 .PP
-References bus_to_kinetic_status(), KineticResponse::command, KineticResponse::header, Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticLogger_LogProtobuf(), KineticOperation_Complete(), KineticProtoStatusCode_to_KineticStatus(), LOGF0, LOGF2, KineticResponse::proto, bus_msg_result_t::response, bus_msg_result_t::status, and bus_msg_result_t::u\&.
+References bus_error_string(), BUS_SEND_RX_TIMEOUT, bus_to_kinetic_status(), KineticResponse::command, KineticResponse::header, KINETIC_ASSERT, Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticLogger_LogHeader(), KineticLogger_LogProtobuf(), KineticLogger_LogTimestamp(), KineticOperation_Complete(), KineticProtoStatusCode_to_KineticStatus(), LOGF0, LOGF2, KineticResponse::proto, bus_msg_result_t::response, bus_msg_result_t::status, and bus_msg_result_t::u\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

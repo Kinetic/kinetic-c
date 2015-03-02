@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -64,6 +64,10 @@ Data Fields</h2></td></tr>
 <tr class="separator:a26aeab33d3d6055c2abb84d6bad2b567"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55d3b66bacb768d909a046a20269b8f9"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a55d3b66bacb768d909a046a20269b8f9">udata</a></td></tr>
 <tr class="separator:a55d3b66bacb768d909a046a20269b8f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab20694646677145e1e15d29fee973b4d"><td class="memItemLeft" align="right" valign="top">struct timeval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#ab20694646677145e1e15d29fee973b4d">tv_send_start</a></td></tr>
+<tr class="separator:ab20694646677145e1e15d29fee973b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49ec8ddc4c8afaf6253712c6a3d41637"><td class="memItemLeft" align="right" valign="top">struct timeval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a49ec8ddc4c8afaf6253712c6a3d41637">tv_send_done</a></td></tr>
+<tr class="separator:a49ec8ddc4c8afaf6253712c6a3d41637"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9725c9490a7e20cba9d649dea8c5d48"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#af9725c9490a7e20cba9d649dea8c5d48">fd</a></td></tr>
 <tr class="separator:af9725c9490a7e20cba9d649dea8c5d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0aa2362725170c931bb9e0f60a0b7c00"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a0aa2362725170c931bb9e0f60a0b7c00">ssl</a></td></tr>
@@ -135,6 +139,34 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab20694646677145e1e15d29fee973b4d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct timeval boxed_msg::tv_send_start</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00050">50</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a49ec8ddc4c8afaf6253712c6a3d41637"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct timeval boxed_msg::tv_send_done</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00051">51</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="af9725c9490a7e20cba9d649dea8c5d48"></a>
 <div class="memitem">
 <div class="memproto">
@@ -145,7 +177,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00050">50</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00054">54</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -159,7 +191,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00051">51</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00055">55</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -173,7 +205,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00052">52</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00056">56</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -187,7 +219,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00053">53</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00057">57</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -201,7 +233,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00054">54</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00058">58</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>

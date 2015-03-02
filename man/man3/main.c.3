@@ -1,4 +1,4 @@
-.TH "main.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "main.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,26 +8,186 @@ main.c \-
 .PP
 \fC#include 'kinetic_client\&.h'\fP
 .br
+\fC#include 'kinetic_admin_client\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
 \fC#include <stdio\&.h>\fP
 .br
 \fC#include <getopt\&.h>\fP
 .br
 
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBOPT_MIN\fP   \fBOPT_NOOP\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBOptionID\fP "
+.br
+.in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
+.RI "static int \fBParseOptions\fP (const int argc, char **const argv, struct UtilConfig *cfg)"
+.br
+.ti -1c
+.RI "static \fBKineticStatus\fP \fBExecuteOperation\fP (struct UtilConfig *cfg)"
+.br
+.ti -1c
+.RI "static void \fBConfigureEntry\fP (struct UtilConfig *cfg, const char *key, const char *tag, const char *version, \fBKineticAlgorithm\fP algorithm, const char *value)"
+.br
+.ti -1c
+.RI "static void \fBPrintLogInfo\fP (\fBKineticLogInfo_Type\fP type, \fBKineticLogInfo\fP *info)"
+.br
+.ti -1c
+.RI "static const char * \fBGetOptString\fP (\fBOptionID\fP opt_id)"
+.br
+.ti -1c
+.RI "void \fBPrintUsage\fP (const char *exec)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
 .br
+.ti -1c
+.RI "static void \fBPrintEntry\fP (\fBKineticEntry\fP *entry)"
+.br
 .in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define OPT_MIN   \fBOPT_NOOP\fP"
+
+.PP
+Definition at line 96 of file main\&.c\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBOptionID\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIOPT_NONE \fP\fP
+.TP
+\fB\fIOPT_HELP \fP\fP
+.TP
+\fB\fIOPT_LOGLEVEL \fP\fP
+.TP
+\fB\fIOPT_HOST \fP\fP
+.TP
+\fB\fIOPT_PORT \fP\fP
+.TP
+\fB\fIOPT_TLSPORT \fP\fP
+.TP
+\fB\fIOPT_IDENTITY \fP\fP
+.TP
+\fB\fIOPT_KEY \fP\fP
+.TP
+\fB\fIOPT_VALUE \fP\fP
+.TP
+\fB\fIOPT_CLUSTERVERSION \fP\fP
+.TP
+\fB\fIOPT_FILE \fP\fP
+.TP
+\fB\fIOPT_HMACKEY \fP\fP
+.TP
+\fB\fIOPT_NEWCLUSTERVERSION \fP\fP
+.TP
+\fB\fIOPT_PIN \fP\fP
+.TP
+\fB\fIOPT_NEWPIN \fP\fP
+.TP
+\fB\fIOPT_LOGTYPE \fP\fP
+.TP
+\fB\fIOPT_NOOP \fP\fP
+.TP
+\fB\fIOPT_PUT \fP\fP
+.TP
+\fB\fIOPT_GET \fP\fP
+.TP
+\fB\fIOPT_DELETE \fP\fP
+.TP
+\fB\fIOPT_GETNEXT \fP\fP
+.TP
+\fB\fIOPT_GETPREVIOUS \fP\fP
+.TP
+\fB\fIOPT_GETLOG \fP\fP
+.TP
+\fB\fIOPT_GETVENDORLOG \fP\fP
+.TP
+\fB\fIOPT_SETERASEPIN \fP\fP
+.TP
+\fB\fIOPT_INSTANTERASE \fP\fP
+.TP
+\fB\fIOPT_SECUREERASE \fP\fP
+.TP
+\fB\fIOPT_SETLOCKPIN \fP\fP
+.TP
+\fB\fIOPT_LOCKDEVICE \fP\fP
+.TP
+\fB\fIOPT_UNLOCKDEVICE \fP\fP
+.TP
+\fB\fIOPT_SETCLUSTERVERSION \fP\fP
+.TP
+\fB\fIOPT_SETACL \fP\fP
+.TP
+\fB\fIOPT_UPDATEFIRMWARE \fP\fP
+.TP
+\fB\fIOPT_MAX \fP\fP
+.PP
+Definition at line 27 of file main\&.c\&.
 .SH "Function Documentation"
 .PP 
+.SS "int ParseOptions (const intargc, char **constargv, struct UtilConfig *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 521 of file main\&.c\&.
+.PP
+References ByteArray_Create(), ConfigureEntry(), HOST_NAME_MAX, KINETIC_ALGORITHM_SHA1, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, KINETIC_DEVICE_INFO_TYPE_DEVICE, KINETIC_DEVICE_INFO_TYPE_LIMITS, KINETIC_DEVICE_INFO_TYPE_MESSAGES, KINETIC_DEVICE_INFO_TYPE_STATISTICS, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, KINETIC_MAX_KEY_LEN, KINETIC_PORT, KINETIC_TLS_PORT, OPT_CLUSTERVERSION, OPT_DELETE, OPT_FILE, OPT_GET, OPT_GETLOG, OPT_GETNEXT, OPT_GETPREVIOUS, OPT_GETVENDORLOG, OPT_HELP, OPT_HMACKEY, OPT_HOST, OPT_IDENTITY, OPT_INSTANTERASE, OPT_KEY, OPT_LOCKDEVICE, OPT_LOGLEVEL, OPT_LOGTYPE, OPT_NEWCLUSTERVERSION, OPT_NEWPIN, OPT_NOOP, OPT_PIN, OPT_PORT, OPT_PUT, OPT_SECUREERASE, OPT_SETACL, OPT_SETCLUSTERVERSION, OPT_SETERASEPIN, OPT_SETLOCKPIN, OPT_TLSPORT, OPT_UNLOCKDEVICE, OPT_UPDATEFIRMWARE, OPT_VALUE, and PrintUsage()\&.
+.SS "\fBKineticStatus\fP ExecuteOperation (struct UtilConfig *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 319 of file main\&.c\&.
+.PP
+References ByteArray_Create(), GetOptString(), Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticAdminClient_GetLog(), KineticAdminClient_InstantErase(), KineticAdminClient_LockDevice(), KineticAdminClient_SecureErase(), KineticAdminClient_SetACL(), KineticAdminClient_SetClusterVersion(), KineticAdminClient_SetErasePin(), KineticAdminClient_SetLockPin(), KineticAdminClient_UnlockDevice(), KineticAdminClient_UpdateFirmware(), KineticClient_Delete(), KineticClient_Get(), KineticClient_GetNext(), KineticClient_GetPrevious(), KineticClient_NoOp(), KineticClient_Put(), OPT_DELETE, OPT_GET, OPT_GETLOG, OPT_GETNEXT, OPT_GETPREVIOUS, OPT_INSTANTERASE, OPT_LOCKDEVICE, OPT_NOOP, OPT_PUT, OPT_SECUREERASE, OPT_SETACL, OPT_SETCLUSTERVERSION, OPT_SETERASEPIN, OPT_SETLOCKPIN, OPT_UNLOCKDEVICE, OPT_UPDATEFIRMWARE, PrintEntry(), and PrintLogInfo()\&.
+.SS "void ConfigureEntry (struct UtilConfig *cfg, const char *key, const char *tag, const char *version, \fBKineticAlgorithm\fPalgorithm, const char *value)\fC [static]\fP"
+
+.PP
+Definition at line 481 of file main\&.c\&.
+.PP
+References ByteBuffer_Create(), and ByteBuffer_CreateAndAppendCString()\&.
+.SS "static void PrintLogInfo (\fBKineticLogInfo_Type\fPtype, \fBKineticLogInfo\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 234 of file main\&.c\&.
+.SS "static const char * GetOptString (\fBOptionID\fPopt_id)\fC [static]\fP"
+
+.PP
+Definition at line 240 of file main\&.c\&.
+.PP
+References OPT_CLUSTERVERSION, OPT_DELETE, OPT_FILE, OPT_GET, OPT_GETLOG, OPT_GETNEXT, OPT_GETPREVIOUS, OPT_GETVENDORLOG, OPT_HELP, OPT_HMACKEY, OPT_HOST, OPT_IDENTITY, OPT_INSTANTERASE, OPT_KEY, OPT_LOCKDEVICE, OPT_LOGLEVEL, OPT_LOGTYPE, OPT_NEWCLUSTERVERSION, OPT_NEWPIN, OPT_NOOP, OPT_PIN, OPT_PORT, OPT_PUT, OPT_SECUREERASE, OPT_SETACL, OPT_SETCLUSTERVERSION, OPT_SETERASEPIN, OPT_SETLOCKPIN, OPT_TLSPORT, OPT_UNLOCKDEVICE, OPT_UPDATEFIRMWARE, and OPT_VALUE\&.
+.SS "void PrintUsage (const char *exec)"
+
+.PP
+Definition at line 120 of file main\&.c\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
-Definition at line 61 of file main\&.c\&.
+Definition at line 167 of file main\&.c\&.
 .PP
-References KineticSession::config, KineticSessionConfig::host, Kinetic_GetStatusDescription(), KINETIC_STATUS_SUCCESS, KineticClient_CreateConnection(), KineticClient_DestroyConnection(), KineticClient_Init(), KineticClient_Shutdown(), KineticClientConfig::logFile, and KineticSessionConfig::port\&.
+References ExecuteOperation(), Kinetic_GetStatusDescription(), KINETIC_STATUS_SUCCESS, KineticClient_CreateSession(), KineticClient_Init(), KineticClientConfig::logFile, OPT_NONE, ParseOptions(), and PrintUsage()\&.
+.SS "static void PrintEntry (\fBKineticEntry\fP *entry)\fC [static]\fP"
+
+.PP
+Definition at line 221 of file main\&.c\&.
+.PP
+References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::key, and KineticEntry::value\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

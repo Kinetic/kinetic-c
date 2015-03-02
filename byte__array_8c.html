@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -67,6 +67,8 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a69eb81af367b07bce9096d6b1b1efbf5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_byte_buffer.html">ByteBuffer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5">append_formatted_cstring_va_list</a> (<a class="el" href="struct_byte_buffer.html">ByteBuffer</a> *buffer, const char *format, va_list args)</td></tr>
+<tr class="separator:a69eb81af367b07bce9096d6b1b1efbf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1029bfd0bb667fc593fe3e0733310a3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#a1029bfd0bb667fc593fe3e0733310a3e">ByteArray_Create</a> (void *data, size_t len)</td></tr>
 <tr class="separator:a1029bfd0bb667fc593fe3e0733310a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad43c36dca8421ec3e2f48e55d8f9e413"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="byte__array_8c.html#ad43c36dca8421ec3e2f48e55d8f9e413">ByteArray_CreateWithCString</a> (const char *str)</td></tr>
@@ -117,6 +119,50 @@ Functions</h2></td></tr>
 <tr class="separator:a0129114878fbba14de8ba1d96d52aa90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a69eb81af367b07bce9096d6b1b1efbf5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="struct_byte_buffer.html">ByteBuffer</a> * append_formatted_cstring_va_list </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_byte_buffer.html">ByteBuffer</a> *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="byte__array_8c_source.html#l00191">191</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
+
+<p>References <a class="el" href="byte__array_8h_source.html#l00054">ByteBuffer::array</a>, <a class="el" href="byte__array_8c_source.html#l00111">ByteBuffer_BytesRemaining()</a>, <a class="el" href="byte__array_8h_source.html#l00055">ByteBuffer::bytesUsed</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, and <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a1029bfd0bb667fc593fe3e0733310a3e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -655,7 +701,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="byte__array_8c_source.html#l00205">205</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00054">ByteBuffer::array</a>, and <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>.</p>
+<p>References <a class="el" href="byte__array_8c_source.html#l00191">append_formatted_cstring_va_list()</a>, <a class="el" href="byte__array_8h_source.html#l00054">ByteBuffer::array</a>, and <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>.</p>
 
 </div>
 </div>
@@ -697,7 +743,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="byte__array_8c_source.html#l00221">221</a> of file <a class="el" href="byte__array_8c_source.html">byte_array.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8c_source.html#l00068">ByteBuffer_Create()</a>.</p>
+<p>References <a class="el" href="byte__array_8c_source.html#l00191">append_formatted_cstring_va_list()</a>, and <a class="el" href="byte__array_8c_source.html#l00068">ByteBuffer_Create()</a>.</p>
 
 </div>
 </div>

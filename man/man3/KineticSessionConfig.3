@@ -1,4 +1,4 @@
-.TH "KineticSessionConfig" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticSessionConfig" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,53 +17,88 @@ Structure used to specify the configuration for a session\&.
 .ti -1c
 .RI "char \fBhost\fP [256]"
 .br
+.RI "\fIHost name/IP address of Kinetic Device\&. \fP"
 .ti -1c
 .RI "int \fBport\fP"
 .br
+.RI "\fIPort for Kinetic Device session\&. \fP"
 .ti -1c
 .RI "int64_t \fBclusterVersion\fP"
 .br
+.RI "\fIThe version number of this cluster definition\&. \fP"
 .ti -1c
 .RI "int64_t \fBidentity\fP"
 .br
+.RI "\fIThe identity associated with this request\&. \fP"
 .ti -1c
 .RI "uint8_t \fBkeyData\fP [(4096)]"
 .br
+.RI "\fIThis is the identity's HMAC Key\&. \fP"
 .ti -1c
 .RI "\fBByteArray\fP \fBhmacKey\fP"
 .br
+.ti -1c
+.RI "bool \fBuseSsl\fP"
+.br
+.RI "\fISet to `true' to enable SSL for for this session\&. \fP"
+.ti -1c
+.RI "uint16_t \fBtimeoutSeconds\fP"
+.br
+.RI "\fIOperation timeout\&. If 0, use the default (10 seconds)\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Structure used to specify the configuration for a session\&. 
 .PP
-Definition at line 117 of file kinetic_types\&.h\&.
+Definition at line 118 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "char KineticSessionConfig::host[256]"
 
 .PP
-Definition at line 119 of file kinetic_types\&.h\&.
+Host name/IP address of Kinetic Device\&. 
+.PP
+Definition at line 120 of file kinetic_types\&.h\&.
 .SS "int KineticSessionConfig::port"
 
 .PP
-Definition at line 122 of file kinetic_types\&.h\&.
+Port for Kinetic Device session\&. 
+.PP
+Definition at line 123 of file kinetic_types\&.h\&.
 .SS "int64_t KineticSessionConfig::clusterVersion"
 
 .PP
-Definition at line 127 of file kinetic_types\&.h\&.
+The version number of this cluster definition\&. If this is not equal to the value on the Kinetic Device, the request is rejected and will return \fCKINETIC_STATUS_VERSION_FAILURE\fP 
+.PP
+Definition at line 128 of file kinetic_types\&.h\&.
 .SS "int64_t KineticSessionConfig::identity"
 
 .PP
-Definition at line 132 of file kinetic_types\&.h\&.
+The identity associated with this request\&. See the \fBACL\fP discussion above\&. The Kinetic Device will use this identity value to lookup the HMAC key (shared secret) to verify the HMAC\&. 
+.PP
+Definition at line 133 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticSessionConfig::keyData[(4096)]"
 
 .PP
-Definition at line 136 of file kinetic_types\&.h\&.
+This is the identity's HMAC Key\&. This is a shared secret between the client and the device, used to sign requests\&. 
+.PP
+Definition at line 137 of file kinetic_types\&.h\&.
 .SS "\fBByteArray\fP KineticSessionConfig::hmacKey"
 
 .PP
-Definition at line 137 of file kinetic_types\&.h\&.
+Definition at line 138 of file kinetic_types\&.h\&.
+.SS "bool KineticSessionConfig::useSsl"
+
+.PP
+Set to `true' to enable SSL for for this session\&. 
+.PP
+Definition at line 141 of file kinetic_types\&.h\&.
+.SS "uint16_t KineticSessionConfig::timeoutSeconds"
+
+.PP
+Operation timeout\&. If 0, use the default (10 seconds)\&. 
+.PP
+Definition at line 144 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

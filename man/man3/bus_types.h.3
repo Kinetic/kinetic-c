@@ -1,4 +1,4 @@
-.TH "bus_types.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "bus_types.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -45,6 +45,9 @@ bus_types.h \-
 .RI "#define \fBBUS_DEFAULT_TIMEOUT_SEC\fP   10"
 .br
 .ti -1c
+.RI "#define \fBBUS_NO_SEQ_ID\fP   (-1)"
+.br
+.ti -1c
 .RI "#define \fBBUS_LOG\fP(B, LEVEL, EVENT_KEY, MSG, UDATA)"
 .br
 .ti -1c
@@ -52,6 +55,9 @@ bus_types.h \-
 .br
 .ti -1c
 .RI "#define \fBBUS_LOG_SNPRINTF\fP(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "#define \fBBUS_ASSERT\fP(B, UDATA, COND)"
 .br
 .in -1c
 .SS "Typedefs"
@@ -61,7 +67,7 @@ bus_types.h \-
 .RI "typedef void( \fBbus_log_cb\fP )(\fBlog_event_t\fP event, int log_level, const char *msg, void *udata)"
 .br
 .ti -1c
-.RI "typedef \fBbus_sink_cb_res_t\fP( \fBbus_sink_cb\fP )(uint8_t *read_buf, size_t read_size, void *socket_udata)"
+.RI "typedef \fBbus_sink_cb_res_t\fP( \fBbus_sink_cb\fP )(uint8_t *\fBread_buf\fP, size_t read_size, void *socket_udata)"
 .br
 .ti -1c
 .RI "typedef \fBbus_unpack_cb_res_t\fP( \fBbus_unpack_cb\fP )(void *msg, void *socket_udata)"
@@ -105,6 +111,10 @@ Definition at line 33 of file bus_types\&.h\&.
 
 .PP
 Definition at line 36 of file bus_types\&.h\&.
+.SS "#define BUS_NO_SEQ_ID   (-1)"
+
+.PP
+Definition at line 39 of file bus_types\&.h\&.
 .SS "#define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA)"
 \fBValue:\fP
 .PP
@@ -123,11 +133,11 @@ do {                                                               \
     } while (0)                                                        \
 .fi
 .PP
-Definition at line 38 of file bus_types\&.h\&.
+Definition at line 41 of file bus_types\&.h\&.
 .SS "#define BUS_LOG_STRINGIFY(X)   #X"
 
 .PP
-Definition at line 52 of file bus_types\&.h\&.
+Definition at line 55 of file bus_types\&.h\&.
 .SS "#define BUS_LOG_SNPRINTF(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT, \&.\&.\&.)"
 \fBValue:\fP
 .PP
@@ -157,33 +167,49 @@ do {                                                               \
     } while (0)                                                        \
 .fi
 .PP
-Definition at line 54 of file bus_types\&.h\&.
+Definition at line 57 of file bus_types\&.h\&.
+.SS "#define BUS_ASSERT(B, UDATA, COND)"
+\fBValue:\fP
+.PP
+.nf
+do { \
+        if(!(COND)) \
+        { \\
+            BUS_LOG_SNPRINTF(B, 0, LOG_ASSERT, UDATA, 128, \
+                "BUS FAILURE at %s:%d in %s: assert(" #COND ")", \
+                __FILE__, (int)__LINE__, __FUNCTION__); \
+            assert(COND); \
+        } \
+    } while(0)
+.fi
+.PP
+Definition at line 82 of file bus_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef void( bus_log_cb)(\fBlog_event_t\fP event, int log_level, const char *msg, void *udata)"
 
 .PP
-Definition at line 94 of file bus_types\&.h\&.
-.SS "typedef \fBbus_sink_cb_res_t\fP( bus_sink_cb)(uint8_t *read_buf, size_t read_size, void *socket_udata)"
+Definition at line 109 of file bus_types\&.h\&.
+.SS "typedef \fBbus_sink_cb_res_t\fP( bus_sink_cb)(uint8_t *\fBread_buf\fP, size_t read_size, void *socket_udata)"
 
 .PP
-Definition at line 114 of file bus_types\&.h\&.
+Definition at line 129 of file bus_types\&.h\&.
 .SS "typedef \fBbus_unpack_cb_res_t\fP( bus_unpack_cb)(void *msg, void *socket_udata)"
 
 .PP
-Definition at line 135 of file bus_types\&.h\&.
+Definition at line 150 of file bus_types\&.h\&.
 .SS "typedef void( bus_error_cb)(\fBbus_unpack_cb_res_t\fP result, void *socket_udata)"
 
 .PP
-Definition at line 138 of file bus_types\&.h\&.
+Definition at line 153 of file bus_types\&.h\&.
 .SS "typedef void( bus_unexpected_msg_cb)(void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)"
 
 .PP
-Definition at line 143 of file bus_types\&.h\&.
+Definition at line 158 of file bus_types\&.h\&.
 .SS "typedef void( bus_msg_cb)(\fBbus_msg_result_t\fP *res, void *udata)"
 
 .PP
-Definition at line 211 of file bus_types\&.h\&.
+Definition at line 226 of file bus_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBlog_event_t\fP"
@@ -208,9 +234,11 @@ Definition at line 211 of file bus_types\&.h\&.
 .TP
 \fB\fILOG_MEMORY \fP\fP
 .TP
+\fB\fILOG_ASSERT \fP\fP
+.TP
 \fB\fILOG_EVENT_TYPE_COUNT \fP\fP
 .PP
-Definition at line 80 of file bus_types\&.h\&.
+Definition at line 94 of file bus_types\&.h\&.
 .SS "enum \fBbus_init_res_t\fP"
 
 .PP
@@ -237,7 +265,7 @@ Definition at line 80 of file bus_types\&.h\&.
 .TP
 \fB\fIBUS_INIT_ERROR_MUTEX_INIT_FAIL \fP\fP
 .PP
-Definition at line 165 of file bus_types\&.h\&.
+Definition at line 180 of file bus_types\&.h\&.
 .SS "enum \fBbus_send_status_t\fP"
 
 .PP
@@ -262,7 +290,7 @@ Definition at line 165 of file bus_types\&.h\&.
 .TP
 \fB\fIBUS_SEND_RX_TIMEOUT_EXPECT \fP\fP
 .PP
-Definition at line 178 of file bus_types\&.h\&.
+Definition at line 193 of file bus_types\&.h\&.
 .SS "enum \fBbus_socket_t\fP"
 
 .PP
@@ -273,7 +301,7 @@ Definition at line 178 of file bus_types\&.h\&.
 .TP
 \fB\fIBUS_SOCKET_SSL \fP\fP
 .PP
-Definition at line 213 of file bus_types\&.h\&.
+Definition at line 228 of file bus_types\&.h\&.
 .SS "enum \fBbus_status_res_t\fP"
 
 .PP
@@ -290,7 +318,7 @@ Definition at line 213 of file bus_types\&.h\&.
 .TP
 \fB\fIBUS_RESPONSE_FAILURE_HUP \fP\fP
 .PP
-Definition at line 232 of file bus_types\&.h\&.
+Definition at line 247 of file bus_types\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

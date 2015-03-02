@@ -1,4 +1,4 @@
-.TH "kinetic_device_info.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_device_info.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,26 +15,26 @@ kinetic_device_info.h \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticDeviceInfo\fP * \fBKineticDeviceInfo_Create\fP (const KineticProto_Command_GetLog *getLog)"
+.RI "\fBKineticLogInfo\fP * \fBKineticLogInfo_Create\fP (const KineticProto_Command_GetLog *getLog)"
 .br
 .ti -1c
-.RI "void \fBKineticDeviceInfo_Free\fP (\fBKineticDeviceInfo\fP *kdi)"
+.RI "void \fBKineticLogInfo_Free\fP (\fBKineticLogInfo\fP *kdi)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticDeviceInfo\fP* KineticDeviceInfo_Create (const KineticProto_Command_GetLog *getLog)"
+.SS "\fBKineticLogInfo\fP* KineticLogInfo_Create (const KineticProto_Command_GetLog *getLog)"
 
 .PP
 Definition at line 257 of file kinetic_device_info\&.c\&.
 .PP
-References KineticDeviceInfo::capacity, KineticDeviceInfo::configuration, ByteArray::data, KineticDeviceInfo::device, KineticDeviceInfo::limits, LOGF2, KineticDeviceInfo::messages, KineticDeviceInfo::numStatistics, KineticDeviceInfo::numTemperatures, KineticDeviceInfo::numUtilizations, KineticDeviceInfo::statistics, KineticDeviceInfo::temperatures, and KineticDeviceInfo::utilizations\&.
-.SS "void KineticDeviceInfo_Free (\fBKineticDeviceInfo\fP *kdi)"
+References KineticLogInfo::capacity, cleanup(), KineticLogInfo::configuration, ByteArray::data, KineticLogInfo::device, KINETIC_ASSERT, KineticLogInfo_GetCapacity(), KineticLogInfo_GetConfiguration(), KineticLogInfo_GetDevice(), KineticLogInfo_GetLimits(), KineticLogInfo_GetMessages(), KineticLogInfo_GetStatistics(), KineticLogInfo_GetTemperatures(), KineticLogInfo_GetUtilizations(), KineticLogInfo::limits, LOGF2, KineticLogInfo::messages, KineticLogInfo::numStatistics, KineticLogInfo::numTemperatures, KineticLogInfo::numUtilizations, KineticLogInfo::statistics, KineticLogInfo::temperatures, and KineticLogInfo::utilizations\&.
+.SS "void KineticLogInfo_Free (\fBKineticLogInfo\fP *kdi)"
 
 .PP
 Definition at line 323 of file kinetic_device_info\&.c\&.
 .PP
-References KineticDeviceInfo::capacity, KineticDeviceInfo_Configuration::compilationDate, KineticDeviceInfo::configuration, ByteArray::data, KineticDeviceInfo::device, KineticDeviceInfo_Configuration::interfaces, KineticDeviceInfo_Interface::ipv4Address, KineticDeviceInfo_Interface::ipv6Address, KineticDeviceInfo::limits, KineticDeviceInfo_Interface::MAC, KineticDeviceInfo::messages, KineticDeviceInfo_Configuration::model, KineticDeviceInfo_Utilization::name, KineticDeviceInfo_Temperature::name, KineticDeviceInfo_Interface::name, KineticDeviceInfo_Device::name, KineticDeviceInfo_Configuration::numInterfaces, KineticDeviceInfo::numTemperatures, KineticDeviceInfo::numUtilizations, KineticDeviceInfo_Configuration::protocolCompilationDate, KineticDeviceInfo_Configuration::protocolSourceHash, KineticDeviceInfo_Configuration::protocolVersion, KineticDeviceInfo_Configuration::serialNumber, KineticDeviceInfo_Configuration::sourceHash, KineticDeviceInfo::statistics, KineticDeviceInfo::temperatures, KineticDeviceInfo::utilizations, KineticDeviceInfo_Configuration::vendor, KineticDeviceInfo_Configuration::version, and KineticDeviceInfo_Configuration::worldWideName\&.
+References KineticLogInfo::capacity, KineticLogInfo_Configuration::compilationDate, KineticLogInfo::configuration, ByteArray::data, KineticLogInfo::device, KineticLogInfo_Configuration::interfaces, KineticLogInfo_Interface::ipv4Address, KineticLogInfo_Interface::ipv6Address, KineticLogInfo::limits, KineticLogInfo_Interface::MAC, KineticLogInfo::messages, KineticLogInfo_Configuration::model, KineticLogInfo_Utilization::name, KineticLogInfo_Temperature::name, KineticLogInfo_Interface::name, KineticLogInfo_Device::name, KineticLogInfo_Configuration::numInterfaces, KineticLogInfo::numTemperatures, KineticLogInfo::numUtilizations, KineticLogInfo_Configuration::protocolCompilationDate, KineticLogInfo_Configuration::protocolSourceHash, KineticLogInfo_Configuration::protocolVersion, KineticLogInfo_Configuration::serialNumber, KineticLogInfo_Configuration::sourceHash, KineticLogInfo::statistics, KineticLogInfo::temperatures, KineticLogInfo::utilizations, KineticLogInfo_Configuration::vendor, KineticLogInfo_Configuration::version, and KineticLogInfo_Configuration::worldWideName\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

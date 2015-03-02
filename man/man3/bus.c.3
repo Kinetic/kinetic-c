@@ -1,4 +1,4 @@
-.TH "bus.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "bus.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -63,7 +63,31 @@ bus.c \-
 .RI "void * \fBsender_mainloop\fP (void *arg)"
 .br
 .ti -1c
+.RI "static bool \fBpoll_on_completion\fP (struct \fBbus\fP *b, int fd)"
+.br
+.ti -1c
+.RI "static int \fBsender_id_of_socket\fP (struct \fBbus\fP *b, int fd)"
+.br
+.ti -1c
+.RI "static int \fBlistener_id_of_socket\fP (struct \fBbus\fP *b, int fd)"
+.br
+.ti -1c
+.RI "static void \fBnoop_log_cb\fP (\fBlog_event_t\fP event, int log_level, const char *msg, void *udata)"
+.br
+.ti -1c
+.RI "static void \fBnoop_error_cb\fP (\fBbus_unpack_cb_res_t\fP result, void *socket_udata)"
+.br
+.ti -1c
+.RI "static bool \fBattempt_to_increase_resource_limits\fP (struct \fBbus\fP *b)"
+.br
+.ti -1c
+.RI "static void \fBset_defaults\fP (\fBbus_config\fP *cfg)"
+.br
+.ti -1c
 .RI "bool \fBbus_init\fP (\fBbus_config\fP *config, struct \fBbus_result\fP *res)"
+.br
+.ti -1c
+.RI "static \fBboxed_msg\fP * \fBbox_msg\fP (struct \fBbus\fP *b, \fBbus_user_msg\fP *msg)"
 .br
 .ti -1c
 .RI "bool \fBbus_send_request\fP (struct \fBbus\fP *b, \fBbus_user_msg\fP *msg)"
@@ -96,6 +120,12 @@ bus.c \-
 .RI "void \fBbus_unlock_log\fP (struct \fBbus\fP *b)"
 .br
 .ti -1c
+.RI "static void \fBbox_execute_cb\fP (void *udata)"
+.br
+.ti -1c
+.RI "static void \fBbox_cleanup_cb\fP (void *udata)"
+.br
+.ti -1c
 .RI "bool \fBbus_process_boxed_message\fP (struct \fBbus\fP *b, struct \fBboxed_msg\fP *box, size_t *backpressure)"
 .br
 .ti -1c
@@ -117,39 +147,83 @@ Definition at line 643 of file bus\&.c\&.
 .SS "void* listener_mainloop (void *arg)"
 
 .PP
-Definition at line 274 of file listener\&.c\&.
+Definition at line 280 of file listener\&.c\&.
 .PP
-References BUS_LOG, BUS_LOG_SNPRINTF, casq_pop(), LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_TIMEOUT, bus::udata, and util_is_resumable_io_error()\&.
+References attempt_recv(), BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, check_and_flush_incoming_msg_pipe(), INCOMING_MSG_PIPE, LOG_LISTENER, tick_handler(), TIMEOUT_DELAY, bus::udata, and util_is_resumable_io_error()\&.
 .SS "void* sender_mainloop (void *arg)"
 
 .PP
-Definition at line 323 of file sender\&.c\&.
+Definition at line 332 of file sender\&.c\&.
 .PP
-References BUS_LOG, BUS_LOG_SNPRINTF, CMD_FD, LOG_SENDER, MAX_TIMEOUT, bus::udata, and util_is_resumable_io_error()\&.
+References attempt_write(), BUS_LOG, BUS_LOG_SNPRINTF, check_incoming_commands(), cleanup(), CMD_FD, LOG_SENDER, tick_handler(), TIMEOUT_DELAY, bus::udata, and util_is_resumable_io_error()\&.
+.SS "static bool poll_on_completion (struct \fBbus\fP *b, intfd)\fC [static]\fP"
+
+.PP
+Definition at line 334 of file bus\&.c\&.
+.PP
+References BUS_LOG, BUS_LOG_SNPRINTF, LOG_SENDING_REQUEST, read_buf, bus::udata, and util_is_resumable_io_error()\&.
+.SS "static int sender_id_of_socket (struct \fBbus\fP *b, intfd)\fC [static]\fP"
+
+.PP
+Definition at line 403 of file bus\&.c\&.
+.PP
+References bus::sender_count\&.
+.SS "static int listener_id_of_socket (struct \fBbus\fP *b, intfd)\fC [static]\fP"
+
+.PP
+Definition at line 409 of file bus\&.c\&.
+.PP
+References bus::listener_count\&.
+.SS "static void noop_log_cb (\fBlog_event_t\fPevent, intlog_level, const char *msg, void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 690 of file bus\&.c\&.
+.SS "static void noop_error_cb (\fBbus_unpack_cb_res_t\fPresult, void *socket_udata)\fC [static]\fP"
+
+.PP
+Definition at line 698 of file bus\&.c\&.
+.SS "static bool attempt_to_increase_resource_limits (struct \fBbus\fP *b)\fC [static]\fP"
+
+.PP
+Definition at line 230 of file bus\&.c\&.
+.PP
+References BUS_LOG_SNPRINTF, LOG_MEMORY, and bus::udata\&.
+.SS "static void set_defaults (\fBbus_config\fP *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 52 of file bus\&.c\&.
+.PP
+References bus_config::listener_count, and bus_config::sender_count\&.
 .SS "bool bus_init (\fBbus_config\fP *config, struct \fBbus_result\fP *res)"
 
 .PP
 Definition at line 59 of file bus\&.c\&.
 .PP
-References bus_result::bus, BUS_INIT_ERROR_ALLOC_FAIL, BUS_INIT_ERROR_LISTENER_INIT_FAIL, BUS_INIT_ERROR_MISSING_SINK_CB, BUS_INIT_ERROR_MISSING_UNPACK_CB, BUS_INIT_ERROR_MUTEX_INIT_FAIL, BUS_INIT_ERROR_NULL, BUS_INIT_ERROR_PTHREAD_INIT_FAIL, BUS_INIT_ERROR_SENDER_INIT_FAIL, BUS_INIT_ERROR_THREADPOOL_INIT_FAIL, BUS_LOG, BUS_LOG_SNPRINTF, bus_ssl_init(), bus_config::bus_udata, DEF_FD_SET_SIZE2, bus::error_cb, bus_config::error_cb, bus::fd_set, bus::fd_set_lock, bus::joined, bus::listener_count, bus_config::listener_count, listener_free(), listener_init(), listener_mainloop(), bus::listeners, bus::log_cb, bus_config::log_cb, LOG_INITIALIZATION, bus::log_level, bus_config::log_level, bus::log_lock, bus::sender_count, bus_config::sender_count, sender_free(), sender_init(), sender_mainloop(), bus::senders, bus::sink_cb, bus_config::sink_cb, bus_result::status, bus::threadpool, bus_config::threadpool_cfg, threadpool_free(), threadpool_init(), bus::threads, bus::udata, bus::unexpected_msg_cb, bus_config::unexpected_msg_cb, bus::unpack_cb, bus_config::unpack_cb, yacht_free(), and yacht_init()\&.
+References attempt_to_increase_resource_limits(), bus_result::bus, BUS_INIT_ERROR_ALLOC_FAIL, BUS_INIT_ERROR_LISTENER_INIT_FAIL, BUS_INIT_ERROR_MISSING_SINK_CB, BUS_INIT_ERROR_MISSING_UNPACK_CB, BUS_INIT_ERROR_MUTEX_INIT_FAIL, BUS_INIT_ERROR_NULL, BUS_INIT_ERROR_PTHREAD_INIT_FAIL, BUS_INIT_ERROR_SENDER_INIT_FAIL, BUS_INIT_ERROR_THREADPOOL_INIT_FAIL, BUS_LOG, BUS_LOG_SNPRINTF, bus_ssl_init(), bus_config::bus_udata, cleanup(), DEF_FD_SET_SIZE2, bus::error_cb, bus_config::error_cb, bus::fd_set, bus::fd_set_lock, bus::joined, bus::listener_count, bus_config::listener_count, listener_free(), listener_init(), listener_mainloop(), bus::listeners, bus::log_cb, bus_config::log_cb, LOG_INITIALIZATION, bus::log_level, bus_config::log_level, bus::log_lock, noop_error_cb(), noop_log_cb(), bus::sender_count, bus_config::sender_count, sender_free(), sender_init(), sender_mainloop(), bus::senders, set_defaults(), bus::sink_cb, bus_config::sink_cb, bus_result::status, bus::threadpool, bus_config::threadpool_cfg, threadpool_free(), threadpool_init(), threadpool::threads, bus::threads, bus::udata, bus::unexpected_msg_cb, bus_config::unexpected_msg_cb, bus::unpack_cb, bus_config::unpack_cb, yacht_free(), and yacht_init()\&.
+.SS "static \fBboxed_msg\fP* box_msg (struct \fBbus\fP *b, \fBbus_user_msg\fP *msg)\fC [static]\fP"
+
+.PP
+Definition at line 268 of file bus\&.c\&.
+.PP
+References BUS_DEFAULT_TIMEOUT_SEC, BUS_LOG_SNPRINTF, boxed_msg::cb, bus_user_msg::cb, boxed_msg::fd, bus_user_msg::fd, bus::fd_set, bus::fd_set_lock, LOG_MEMORY, bus_user_msg::msg, bus_user_msg::msg_size, boxed_msg::out_msg, boxed_msg::out_msg_size, boxed_msg::out_seq_id, bus_user_msg::seq_id, boxed_msg::ssl, boxed_msg::timeout_sec, bus_user_msg::timeout_sec, boxed_msg::udata, bus::udata, bus_user_msg::udata, and yacht_get()\&.
 .SS "bool bus_send_request (struct \fBbus\fP *b, \fBbus_user_msg\fP *msg)"
 
 .PP
 Definition at line 312 of file bus\&.c\&.
 .PP
-References BUS_LOG_SNPRINTF, bus_user_msg::fd, LOG_SENDING_REQUEST, sender_send_request(), bus::senders, bus_user_msg::seq_id, and bus::udata\&.
+References box_msg(), BUS_LOG_SNPRINTF, bus_user_msg::fd, LOG_SENDING_REQUEST, sender_id_of_socket(), sender_send_request(), bus::senders, bus_user_msg::seq_id, and bus::udata\&.
 .SS "struct \fBsender\fP* bus_get_sender_for_socket (struct \fBbus\fP *b, intfd)"
 
 .PP
 Definition at line 414 of file bus\&.c\&.
 .PP
-References bus::senders\&.
+References sender_id_of_socket(), and bus::senders\&.
 .SS "struct \fBlistener\fP* bus_get_listener_for_socket (struct \fBbus\fP *b, intfd)"
 
 .PP
 Definition at line 418 of file bus\&.c\&.
 .PP
-References bus::listeners\&.
+References listener_id_of_socket(), and bus::listeners\&.
 .SS "const char* bus_log_event_str (\fBlog_event_t\fPevent)"
 
 .PP
@@ -161,13 +235,13 @@ References LOG_INITIALIZATION, LOG_LISTENER, LOG_MEMORY, LOG_NEW_CLIENT, LOG_SEN
 .PP
 Definition at line 438 of file bus\&.c\&.
 .PP
-References BUS_LOG, BUS_LOG_SNPRINTF, BUS_NO_SSL, BUS_SOCKET_SSL, bus_ssl_connect(), connection_info::fd, bus::fd_set, bus::fd_set_lock, connection_info::largest_seq_id_seen, listener_add_socket(), bus::listeners, LOG_SOCKET_REGISTERED, sender_register_socket(), bus::senders, connection_info::ssl, connection_info::to_read_size, connection_info::type, bus::udata, connection_info::udata, and yacht_set()\&.
+References BUS_LOG, BUS_LOG_SNPRINTF, BUS_NO_SSL, BUS_SOCKET_SSL, bus_ssl_connect(), cleanup(), connection_info::fd, bus::fd_set, bus::fd_set_lock, connection_info::largest_seq_id_seen, listener_add_socket(), listener_id_of_socket(), bus::listeners, LOG_SOCKET_REGISTERED, poll_on_completion(), sender_id_of_socket(), sender_register_socket(), bus::senders, connection_info::ssl, connection_info::to_read_size, connection_info::type, bus::udata, connection_info::udata, and yacht_set()\&.
 .SS "bool bus_release_socket (struct \fBbus\fP *b, intfd)"
 
 .PP
 Definition at line 515 of file bus\&.c\&.
 .PP
-References BUS_LOG_SNPRINTF, BUS_NO_SSL, bus_ssl_disconnect(), bus::fd_set, bus::fd_set_lock, listener_remove_socket(), bus::listeners, LOG_SOCKET_REGISTERED, sender_remove_socket(), bus::senders, bus::udata, and yacht_remove()\&.
+References BUS_LOG_SNPRINTF, BUS_NO_SSL, bus_ssl_disconnect(), bus::fd_set, bus::fd_set_lock, listener_id_of_socket(), listener_remove_socket(), bus::listeners, LOG_SOCKET_REGISTERED, sender_id_of_socket(), sender_remove_socket(), bus::senders, bus::udata, and yacht_remove()\&.
 .SS "bool bus_schedule_threadpool_task (struct \fBbus\fP *b, struct \fBthreadpool_task\fP *task, size_t *backpressure)"
 
 .PP
@@ -192,18 +266,28 @@ References bus::log_lock\&.
 Definition at line 604 of file bus\&.c\&.
 .PP
 References bus::log_lock\&.
+.SS "static void box_execute_cb (void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 608 of file bus\&.c\&.
+.PP
+References boxed_msg::cb, boxed_msg::result, and boxed_msg::udata\&.
+.SS "static void box_cleanup_cb (void *udata)\fC [static]\fP"
+
+.PP
+Definition at line 619 of file bus\&.c\&.
 .SS "bool bus_process_boxed_message (struct \fBbus\fP *b, struct \fBboxed_msg\fP *box, size_t *backpressure)"
 
 .PP
 Definition at line 626 of file bus\&.c\&.
 .PP
-References BUS_LOG_SNPRINTF, bus_schedule_threadpool_task(), BUS_SEND_UNDEFINED, LOG_MEMORY, boxed_msg::result, bus_msg_result_t::status, threadpool_task::task, and bus::udata\&.
+References box_cleanup_cb(), box_execute_cb(), BUS_LOG_SNPRINTF, bus_schedule_threadpool_task(), BUS_SEND_UNDEFINED, LOG_MEMORY, boxed_msg::result, bus_msg_result_t::status, threadpool_task::task, and bus::udata\&.
 .SS "void bus_free (\fBbus\fP *b)"
 
 .PP
 Definition at line 645 of file bus\&.c\&.
 .PP
-References BUS_LOG, BUS_LOG_SNPRINTF, bus_shutdown(), bus_ssl_free(), bus::fd_set, bus::joined, bus::listener_count, listener_free(), bus::listeners, bus::log_lock, LOG_SHUTDOWN, bus::sender_count, sender_free(), bus::senders, THREAD_SHUTDOWN_SECONDS, bus::threadpool, threadpool_free(), threadpool_shutdown(), bus::threads, bus::udata, and yacht_free()\&.
+References BUS_LOG, BUS_LOG_SNPRINTF, bus_shutdown(), bus_ssl_ctx_free(), bus::fd_set, bus::joined, limit, bus::listener_count, listener_free(), bus::listeners, bus::log_lock, LOG_SHUTDOWN, bus::sender_count, sender_free(), bus::senders, THREAD_SHUTDOWN_SECONDS, bus::threadpool, threadpool_free(), threadpool_shutdown(), bus::threads, bus::udata, and yacht_free()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

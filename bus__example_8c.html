@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.11.1</span>
+   &#160;<span id="projectnumber">v0.12.0-beta</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -66,6 +66,7 @@
 <code>#include &lt;err.h&gt;</code><br />
 <code>#include &lt;signal.h&gt;</code><br />
 <code>#include &lt;sys/time.h&gt;</code><br />
+<code>#include &lt;poll.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="bus_8h_source.html">bus.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="atomic_8h_source.html">atomic.h</a>&quot;</code><br />
 <code>#include &quot;socket99.h&quot;</code><br />
@@ -94,13 +95,51 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a3d270a951f9c3bd2ef6fff2519405b3d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a> (example_state *s, struct <a class="el" href="structbus.html">bus</a> *b)</td></tr>
+<tr class="separator:a3d270a951f9c3bd2ef6fff2519405b3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd69230e76dc00c5fede73206368755c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a> (int argc, char **argv, example_state *s)</td></tr>
+<tr class="separator:afd69230e76dc00c5fede73206368755c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c37834be505d13ba9199ab5fea89e10"><td class="memItemLeft" align="right" valign="top">static time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a> (void)</td></tr>
+<tr class="separator:a1c37834be505d13ba9199ab5fea89e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3df0ed001eb9f84319ce7925d738b6be"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">log_cb</a> (<a class="el" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a> event, int log_level, const char *msg, void *udata)</td></tr>
+<tr class="separator:a3df0ed001eb9f84319ce7925d738b6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4fcb2f94ac4eb68f0eb89b1a5a340be"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a> (socket_info *si)</td></tr>
+<tr class="separator:ac4fcb2f94ac4eb68f0eb89b1a5a340be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5798a66c22a0ede1e2c23722f45e36a1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">sink_cb</a> (uint8_t *<a class="el" href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">read_buf</a>, size_t read_size, void *socket_udata)</td></tr>
+<tr class="separator:a5798a66c22a0ede1e2c23722f45e36a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7077a38d35ab28ea412f902fefe006f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structbus__unpack__cb__res__t.html">bus_unpack_cb_res_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">unpack_cb</a> (void *msg, void *socket_udata)</td></tr>
+<tr class="separator:ad7077a38d35ab28ea412f902fefe006f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a365bce7e19566046a2b8b67124c66c60"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">unexpected_msg_cb</a> (void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)</td></tr>
+<tr class="separator:a365bce7e19566046a2b8b67124c66c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af15bb01e2a9c45feb32c7a6e75d5898d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">signal_handler</a> (int arg)</td></tr>
+<tr class="separator:af15bb01e2a9c45feb32c7a6e75d5898d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5381656966734abe40e4e00beca8feff"><td class="memItemLeft" align="right" valign="top">static sig_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a> (int sig)</td></tr>
+<tr class="separator:a5381656966734abe40e4e00beca8feff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d8ddf7b0b56ad697eb0d2cef3e6b8d4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">register_signal_handlers</a> (void)</td></tr>
+<tr class="separator:a8d8ddf7b0b56ad697eb0d2cef3e6b8d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad96d407a911fbb914fa8e4cfbf2faf0f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a> (void)</td></tr>
+<tr class="separator:ad96d407a911fbb914fa8e4cfbf2faf0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3d3d15c2e862b08a8694cd6775b9c97"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">open_sockets</a> (example_state *s)</td></tr>
+<tr class="separator:ae3d3d15c2e862b08a8694cd6775b9c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8332de1d33138a5f520d3d97b6632a15"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">construct_msg</a> (uint8_t *buf, size_t buf_size, size_t payload_size, int64_t seq_id)</td></tr>
+<tr class="separator:a8332de1d33138a5f520d3d97b6632a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a9a97612f93b3169c7485304e0947c6"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">completion_cb</a> (<a class="el" href="structbus__msg__result__t.html">bus_msg_result_t</a> *res, void *udata)</td></tr>
+<tr class="separator:a4a9a97612f93b3169c7485304e0947c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59d1755cf30846b9def3e0b0dba1eded"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">tick_handler</a> (example_state *s)</td></tr>
+<tr class="separator:a59d1755cf30846b9def3e0b0dba1eded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a4b581400c3a7aa504454224ae23fef2e"><td class="memItemLeft" align="right" valign="top">example_state&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a></td></tr>
 <tr class="separator:a4b581400c3a7aa504454224ae23fef2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32deb937f03b2c4859a8e9cb22bb1c4b"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a> = NULL</td></tr>
+<tr class="separator:a32deb937f03b2c4859a8e9cb22bb1c4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30f695d6333e56d635a11e44533ff039"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039">loop_flag</a> = true</td></tr>
+<tr class="separator:a30f695d6333e56d635a11e44533ff039"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a760a9af25c6b4b6479b9608d226a5073"><td class="memItemLeft" align="right" valign="top">static sig_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__example_8c.html#a760a9af25c6b4b6479b9608d226a5073">old_sigint_handler</a> = NULL</td></tr>
+<tr class="separator:a760a9af25c6b4b6479b9608d226a5073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a54061e5993a5517320d425f44408cc86"></a>
@@ -113,7 +152,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00044">44</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00045">45</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
 </div>
 </div>
@@ -127,7 +166,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00046">46</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00047">47</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
 </div>
 </div>
@@ -141,7 +180,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00047">47</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00048">48</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
 </div>
 </div>
@@ -155,7 +194,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00048">48</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00049">49</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
 </div>
 </div>
@@ -183,7 +222,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00094">94</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00095">95</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
 </div>
 </div>
@@ -197,7 +236,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00394">394</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00395">395</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
 </div>
 </div>
@@ -226,11 +265,325 @@ Variables</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00050">50</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00051">51</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a3d270a951f9c3bd2ef6fff2519405b3d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void run_bus </td>
+          <td>(</td>
+          <td class="paramtype">example_state *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00451">451</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus_8c_source.html#l00438">bus_register_socket()</a>, <a class="el" href="bus_8c_source.html#l00312">bus_send_request()</a>, <a class="el" href="bus__types_8h_source.html#l00229">BUS_SOCKET_PLAIN</a>, <a class="el" href="bus__example_8c_source.html#l00397">completion_cb()</a>, <a class="el" href="bus__example_8c_source.html#l00376">construct_msg()</a>, <a class="el" href="bus__example_8c_source.html#l00048">DEFAULT_BUF_SIZE</a>, <a class="el" href="bus__types_8h_source.html#l00234">bus_user_msg::fd</a>, <a class="el" href="bus__example_8c_source.html#l00445">get_cur_second()</a>, <a class="el" href="bus__example_8c_source.html#l00095">LOG</a>, <a class="el" href="bus__example_8c_source.html#l00346">open_sockets()</a>, <a class="el" href="bus__example_8c_source.html#l00292">register_signal_handlers()</a>, and <a class="el" href="bus__example_8c_source.html#l00438">tick_handler()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afd69230e76dc00c5fede73206368755c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void parse_args </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>argv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">example_state *&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00306">306</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__example_8c_source.html#l00048">DEFAULT_BUF_SIZE</a>, and <a class="el" href="bus__example_8c_source.html#l00297">usage()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1c37834be505d13ba9199ab5fea89e10"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static time_t get_cur_second </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00445">445</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3df0ed001eb9f84319ce7925d738b6be"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void log_cb </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a>&#160;</td>
+          <td class="paramname"><em>event</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>udata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00088">88</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus_8c_source.html#l00423">bus_log_event_str()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac4fcb2f94ac4eb68f0eb89b1a5a340be"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> reset_transfer </td>
+          <td>(</td>
+          <td class="paramtype">socket_info *&#160;</td>
+          <td class="paramname"><em>si</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00100">100</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__types_8h_source.html#l00113">bus_sink_cb_res_t::next_read</a>, and <a class="el" href="bus__example_8c_source.html#l00053">STATE_AWAITING_HEADER</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5798a66c22a0ede1e2c23722f45e36a1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> sink_cb </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>read_buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>read_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>socket_udata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00111">111</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__example_8c_source.html#l00048">DEFAULT_BUF_SIZE</a>, <a class="el" href="bus__example_8c_source.html#l00045">MAGIC_NUMBER</a>, <a class="el" href="bus__types_8h_source.html#l00113">bus_sink_cb_res_t::next_read</a>, <a class="el" href="bus__example_8c_source.html#l00100">reset_transfer()</a>, <a class="el" href="bus__example_8c_source.html#l00054">STATE_AWAITING_BODY</a>, <a class="el" href="bus__example_8c_source.html#l00053">STATE_AWAITING_HEADER</a>, and <a class="el" href="bus__example_8c_source.html#l00052">STATE_UNINIT</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad7077a38d35ab28ea412f902fefe006f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structbus__unpack__cb__res__t.html">bus_unpack_cb_res_t</a> unpack_cb </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>socket_udata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00209">209</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a365bce7e19566046a2b8b67124c66c60"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void unexpected_msg_cb </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>seq_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>bus_udata</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>socket_udata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00232">232</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3c04138a5bfe5d72780bb7e82a18e627"></a>
 <div class="memitem">
 <div class="memproto">
@@ -255,9 +608,263 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00239">239</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00240">240</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00193">bus_result::bus</a>, <a class="el" href="bus_8c_source.html#l00645">bus_free()</a>, <a class="el" href="bus_8c_source.html#l00059">bus_init()</a>, <a class="el" href="bus_8c_source.html#l00555">bus_shutdown()</a>, <a class="el" href="bus__example_8c_source.html#l00094">LOG</a>, <a class="el" href="bus__types_8h_source.html#l00160">bus_config::log_cb</a>, <a class="el" href="bus__example_8c_source.html#l00081">state</a>, and <a class="el" href="bus__types_8h_source.html#l00192">bus_result::status</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00208">bus_result::bus</a>, <a class="el" href="bus_8c_source.html#l00645">bus_free()</a>, <a class="el" href="bus_8c_source.html#l00059">bus_init()</a>, <a class="el" href="bus_8c_source.html#l00555">bus_shutdown()</a>, <a class="el" href="bus__example_8c_source.html#l00098">executable_name</a>, <a class="el" href="bus__example_8c_source.html#l00445">get_cur_second()</a>, <a class="el" href="bus__example_8c_source.html#l00095">LOG</a>, <a class="el" href="bus__example_8c_source.html#l00088">log_cb()</a>, <a class="el" href="bus__types_8h_source.html#l00175">bus_config::log_cb</a>, <a class="el" href="bus__example_8c_source.html#l00306">parse_args()</a>, <a class="el" href="bus__example_8c_source.html#l00451">run_bus()</a>, <a class="el" href="bus__example_8c_source.html#l00111">sink_cb()</a>, <a class="el" href="bus__example_8c_source.html#l00082">state</a>, <a class="el" href="bus__types_8h_source.html#l00207">bus_result::status</a>, <a class="el" href="bus__example_8c_source.html#l00232">unexpected_msg_cb()</a>, and <a class="el" href="bus__example_8c_source.html#l00209">unpack_cb()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af15bb01e2a9c45feb32c7a6e75d5898d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void signal_handler </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>arg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00277">277</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__example_8c_source.html#l00095">LOG</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5381656966734abe40e4e00beca8feff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static sig_t register_signal_handler </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>sig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00286">286</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__example_8c_source.html#l00277">signal_handler()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8d8ddf7b0b56ad697eb0d2cef3e6b8d4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void register_signal_handlers </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00292">292</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__example_8c_source.html#l00286">register_signal_handler()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad96d407a911fbb914fa8e4cfbf2faf0f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void usage </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00297">297</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__example_8c_source.html#l00098">executable_name</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae3d3d15c2e862b08a8694cd6775b9c97"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void open_sockets </td>
+          <td>(</td>
+          <td class="paramtype">example_state *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00346">346</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8332de1d33138a5f520d3d97b6632a15"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static size_t construct_msg </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>buf_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>payload_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>seq_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00376">376</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__example_8c_source.html#l00045">MAGIC_NUMBER</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4a9a97612f93b3169c7485304e0947c6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void completion_cb </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structbus__msg__result__t.html">bus_msg_result_t</a> *&#160;</td>
+          <td class="paramname"><em>res</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>udata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00397">397</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="atomic_8h_source.html#l00023">ATOMIC_BOOL_COMPARE_AND_SWAP</a>, <a class="el" href="bus__types_8h_source.html#l00199">BUS_SEND_RX_FAILURE</a>, <a class="el" href="bus__types_8h_source.html#l00198">BUS_SEND_RX_TIMEOUT</a>, <a class="el" href="bus__types_8h_source.html#l00195">BUS_SEND_SUCCESS</a>, <a class="el" href="bus__types_8h_source.html#l00197">BUS_SEND_TX_FAILURE</a>, <a class="el" href="bus__types_8h_source.html#l00196">BUS_SEND_TX_TIMEOUT</a>, <a class="el" href="bus__example_8c_source.html#l00095">LOG</a>, <a class="el" href="structbus__msg__result__t.html#ac4e4674f7a4c28cb5807f78d7552fe24">bus_msg_result_t::response</a>, <a class="el" href="bus__example_8c_source.html#l00082">state</a>, <a class="el" href="bus__types_8h_source.html#l00213">bus_msg_result_t::status</a>, and <a class="el" href="structbus__msg__result__t.html#a241466c461e3be2accbb0b0f351a71dc">bus_msg_result_t::u</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a59d1755cf30846b9def3e0b0dba1eded"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void tick_handler </td>
+          <td>(</td>
+          <td class="paramtype">example_state *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00438">438</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+<p>References <a class="el" href="bus__example_8c_source.html#l00095">LOG</a>.</p>
 
 </div>
 </div>
@@ -272,7 +879,73 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00081">81</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00082">82</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a32deb937f03b2c4859a8e9cb22bb1c4b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* executable_name = NULL</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00098">98</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a30f695d6333e56d635a11e44533ff039"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool loop_flag = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00274">274</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a760a9af25c6b4b6479b9608d226a5073"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">sig_t old_sigint_handler = NULL</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__example_8c_source.html#l00275">275</a> of file <a class="el" href="bus__example_8c_source.html">bus_example.c</a>.</p>
 
 </div>
 </div>

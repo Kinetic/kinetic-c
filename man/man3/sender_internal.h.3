@@ -1,4 +1,4 @@
-.TH "sender_internal.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "sender_internal.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -56,6 +56,85 @@ sender_internal.h \-
 .br
 .ti -1c
 .RI "enum \fBtx_info_state\fP "
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBtx_info_t\fP * \fBget_free_tx_info\fP (struct \fBsender\fP *s)"
+.br
+.ti -1c
+.RI "static void \fBrelease_tx_info\fP (struct \fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static int \fBget_notify_pipe\fP (struct \fBsender\fP *s, int id)"
+.br
+.ti -1c
+.RI "static bool \fBwrite_commit\fP (struct \fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static \fBtx_error_t\fP \fBcommit_event_and_block\fP (struct \fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static bool \fBregister_socket_info\fP (\fBsender\fP *s, int fd, SSL *ssl)"
+.br
+.ti -1c
+.RI "static void \fBincrement_fd_refcount\fP (\fBsender\fP *s, \fBfd_info\fP *fdi)"
+.br
+.ti -1c
+.RI "static void \fBdecrement_fd_refcount\fP (\fBsender\fP *s, \fBfd_info\fP *fdi)"
+.br
+.ti -1c
+.RI "static bool \fBrelease_socket_info\fP (\fBsender\fP *s, int fd)"
+.br
+.ti -1c
+.RI "static void \fBhandle_command\fP (\fBsender\fP *s, int id)"
+.br
+.ti -1c
+.RI "static void \fBenqueue_write\fP (struct \fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static bool \fBcheck_incoming_commands\fP (struct \fBsender\fP *s)"
+.br
+.ti -1c
+.RI "static \fBtx_info_t\fP * \fBget_info_to_write_for_socket\fP (\fBsender\fP *s, int fd)"
+.br
+.ti -1c
+.RI "static void \fBset_error_for_socket\fP (\fBsender\fP *s, int fd, \fBtx_error_t\fP error)"
+.br
+.ti -1c
+.RI "static ssize_t \fBsocket_write_plain\fP (\fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static ssize_t \fBsocket_write_ssl\fP (\fBsender\fP *s, \fBtx_info_t\fP *info, SSL *ssl)"
+.br
+.ti -1c
+.RI "static void \fBupdate_sent\fP (struct \fBbus\fP *b, \fBsender\fP *s, \fBtx_info_t\fP *info, ssize_t sent)"
+.br
+.ti -1c
+.RI "static void \fBattempt_write\fP (\fBsender\fP *s, int available)"
+.br
+.ti -1c
+.RI "static void \fBtick_handler\fP (\fBsender\fP *s)"
+.br
+.ti -1c
+.RI "static void \fBnotify_message_failure\fP (\fBsender\fP *s, \fBtx_info_t\fP *info, \fBbus_send_status_t\fP status)"
+.br
+.ti -1c
+.RI "static void \fBattempt_to_enqueue_sending_request_message_to_listener\fP (\fBsender\fP *s, int fd, int64_t seq_id, int16_t timeout_sec)"
+.br
+.ti -1c
+.RI "static void \fBattempt_to_enqueue_request_sent_message_to_listener\fP (\fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static void \fBnotify_caller\fP (\fBsender\fP *s, \fBtx_info_t\fP *info, bool success)"
+.br
+.ti -1c
+.RI "static void \fBtick_timeout\fP (\fBsender\fP *s, \fBtx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static void \fBcleanup\fP (\fBsender\fP *s)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -140,6 +219,58 @@ Definition at line 39 of file sender_internal\&.h\&.
 \fB\fITIS_ERROR \fP\fP
 .PP
 Definition at line 52 of file sender_internal\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "static \fBtx_info_t\fP* get_free_tx_info (struct \fBsender\fP *s)\fC [static]\fP"
+
+.SS "static void release_tx_info (struct \fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static int get_notify_pipe (struct \fBsender\fP *s, intid)\fC [static]\fP"
+
+.SS "static bool write_commit (struct \fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static \fBtx_error_t\fP commit_event_and_block (struct \fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static bool register_socket_info (\fBsender\fP *s, intfd, SSL *ssl)\fC [static]\fP"
+
+.SS "static void increment_fd_refcount (\fBsender\fP *s, \fBfd_info\fP *fdi)\fC [static]\fP"
+
+.SS "static void decrement_fd_refcount (\fBsender\fP *s, \fBfd_info\fP *fdi)\fC [static]\fP"
+
+.SS "static bool release_socket_info (\fBsender\fP *s, intfd)\fC [static]\fP"
+
+.SS "static void handle_command (\fBsender\fP *s, intid)\fC [static]\fP"
+
+.SS "static void enqueue_write (struct \fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static bool check_incoming_commands (struct \fBsender\fP *s)\fC [static]\fP"
+
+.SS "static \fBtx_info_t\fP* get_info_to_write_for_socket (\fBsender\fP *s, intfd)\fC [static]\fP"
+
+.SS "static void set_error_for_socket (\fBsender\fP *s, intfd, \fBtx_error_t\fPerror)\fC [static]\fP"
+
+.SS "static ssize_t socket_write_plain (\fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static ssize_t socket_write_ssl (\fBsender\fP *s, \fBtx_info_t\fP *info, SSL *ssl)\fC [static]\fP"
+
+.SS "static void update_sent (struct \fBbus\fP *b, \fBsender\fP *s, \fBtx_info_t\fP *info, ssize_tsent)\fC [static]\fP"
+
+.SS "static void attempt_write (\fBsender\fP *s, intavailable)\fC [static]\fP"
+
+.SS "static void tick_handler (\fBsender\fP *s)\fC [static]\fP"
+
+.SS "static void notify_message_failure (\fBsender\fP *s, \fBtx_info_t\fP *info, \fBbus_send_status_t\fPstatus)\fC [static]\fP"
+
+.SS "static void attempt_to_enqueue_sending_request_message_to_listener (\fBsender\fP *s, intfd, int64_tseq_id, int16_ttimeout_sec)\fC [static]\fP"
+
+.SS "static void attempt_to_enqueue_request_sent_message_to_listener (\fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static void notify_caller (\fBsender\fP *s, \fBtx_info_t\fP *info, boolsuccess)\fC [static]\fP"
+
+.SS "static void tick_timeout (\fBsender\fP *s, \fBtx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static void cleanup (\fBsender\fP *s)\fC [static]\fP"
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "KineticOperation" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "KineticOperation" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,16 +15,19 @@ KineticOperation \-
 .RI "KineticConnection * \fBconnection\fP"
 .br
 .ti -1c
-.RI "KineticPDU * \fBrequest\fP"
+.RI "KineticRequest * \fBrequest\fP"
 .br
 .ti -1c
 .RI "\fBKineticResponse\fP * \fBresponse\fP"
 .br
 .ti -1c
-.RI "bool \fBvalueEnabled\fP"
+.RI "uint16_t \fBtimeoutSeconds\fP"
 .br
 .ti -1c
-.RI "bool \fBsendValue\fP"
+.RI "int64_t \fBpendingClusterVersion\fP"
+.br
+.ti -1c
+.RI "\fBByteArray\fP * \fBpin\fP"
 .br
 .ti -1c
 .RI "\fBKineticEntry\fP * \fBentry\fP"
@@ -33,7 +36,7 @@ KineticOperation \-
 .RI "\fBByteBufferArray\fP * \fBbuffers\fP"
 .br
 .ti -1c
-.RI "\fBKineticDeviceInfo\fP ** \fBdeviceInfo\fP"
+.RI "\fBKineticLogInfo\fP ** \fBdeviceInfo\fP"
 .br
 .ti -1c
 .RI "KineticP2P_Operation * \fBp2pOp\fP"
@@ -44,56 +47,67 @@ KineticOperation \-
 .ti -1c
 .RI "\fBKineticCompletionClosure\fP \fBclosure\fP"
 .br
+.ti -1c
+.RI "\fBByteArray\fP \fBvalue\fP"
+.br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 170 of file kinetic_types_internal\&.h\&.
+Definition at line 191 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "KineticConnection* KineticOperation::connection"
 
 .PP
-Definition at line 171 of file kinetic_types_internal\&.h\&.
-.SS "KineticPDU* KineticOperation::request"
+Definition at line 192 of file kinetic_types_internal\&.h\&.
+.SS "KineticRequest* KineticOperation::request"
 
 .PP
-Definition at line 172 of file kinetic_types_internal\&.h\&.
+Definition at line 193 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticResponse\fP* KineticOperation::response"
 
 .PP
-Definition at line 173 of file kinetic_types_internal\&.h\&.
-.SS "bool KineticOperation::valueEnabled"
+Definition at line 194 of file kinetic_types_internal\&.h\&.
+.SS "uint16_t KineticOperation::timeoutSeconds"
 
 .PP
-Definition at line 174 of file kinetic_types_internal\&.h\&.
-.SS "bool KineticOperation::sendValue"
+Definition at line 195 of file kinetic_types_internal\&.h\&.
+.SS "int64_t KineticOperation::pendingClusterVersion"
 
 .PP
-Definition at line 175 of file kinetic_types_internal\&.h\&.
+Definition at line 196 of file kinetic_types_internal\&.h\&.
+.SS "\fBByteArray\fP* KineticOperation::pin"
+
+.PP
+Definition at line 197 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticEntry\fP* KineticOperation::entry"
 
 .PP
-Definition at line 176 of file kinetic_types_internal\&.h\&.
+Definition at line 198 of file kinetic_types_internal\&.h\&.
 .SS "\fBByteBufferArray\fP* KineticOperation::buffers"
 
 .PP
-Definition at line 177 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticDeviceInfo\fP** KineticOperation::deviceInfo"
+Definition at line 199 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticLogInfo\fP** KineticOperation::deviceInfo"
 
 .PP
-Definition at line 178 of file kinetic_types_internal\&.h\&.
+Definition at line 200 of file kinetic_types_internal\&.h\&.
 .SS "KineticP2P_Operation* KineticOperation::p2pOp"
 
 .PP
-Definition at line 179 of file kinetic_types_internal\&.h\&.
+Definition at line 201 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticOperationCallback\fP KineticOperation::callback"
 
 .PP
-Definition at line 180 of file kinetic_types_internal\&.h\&.
+Definition at line 202 of file kinetic_types_internal\&.h\&.
 .SS "\fBKineticCompletionClosure\fP KineticOperation::closure"
 
 .PP
-Definition at line 181 of file kinetic_types_internal\&.h\&.
+Definition at line 203 of file kinetic_types_internal\&.h\&.
+.SS "\fBByteArray\fP KineticOperation::value"
+
+.PP
+Definition at line 204 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

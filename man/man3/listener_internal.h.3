@@ -1,4 +1,4 @@
-.TH "listener_internal.h" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "listener_internal.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -31,6 +31,15 @@ listener_internal.h \-
 .ti -1c
 .RI "#define \fBMAX_QUEUE_MESSAGES\fP   32"
 .br
+.ti -1c
+.RI "#define \fBMIN_DELAY\fP   10"
+.br
+.ti -1c
+.RI "#define \fBMAX_DELAY\fP   100"
+.br
+.ti -1c
+.RI "#define \fBINFINITE_DELAY\fP   (-1)"
+.br
 .in -1c
 .SS "Typedefs"
 
@@ -49,6 +58,79 @@ listener_internal.h \-
 .RI "enum \fBrx_info_state\fP "
 .br
 .in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBtick_handler\fP (\fBlistener\fP *l)"
+.br
+.ti -1c
+.RI "static \fBrx_info_t\fP * \fBget_free_rx_info\fP (\fBlistener\fP *l)"
+.br
+.ti -1c
+.RI "static void \fBrelease_rx_info\fP (struct \fBlistener\fP *l, \fBrx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static \fBlistener_msg\fP * \fBget_free_msg\fP (\fBlistener\fP *l)"
+.br
+.ti -1c
+.RI "static bool \fBpush_message\fP (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)"
+.br
+.ti -1c
+.RI "static void \fBrelease_msg\fP (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)"
+.br
+.ti -1c
+.RI "static void \fBattempt_recv\fP (\fBlistener\fP *l, int avaliable)"
+.br
+.ti -1c
+.RI "static void \fBprocess_unpacked_message\fP (\fBlistener\fP *l, \fBconnection_info\fP *ci, \fBbus_unpack_cb_res_t\fP result)"
+.br
+.ti -1c
+.RI "static void \fBnotify_message_failure\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info, \fBbus_send_status_t\fP status)"
+.br
+.ti -1c
+.RI "static void \fBattempt_delivery\fP (\fBlistener\fP *l, struct \fBrx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static void \fBclean_up_completed_info\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static void \fBobserve_backpressure\fP (\fBlistener\fP *l, size_t backpressure)"
+.br
+.ti -1c
+.RI "static bool \fBgrow_read_buf\fP (\fBlistener\fP *l, size_t nsize)"
+.br
+.ti -1c
+.RI "static void \fBcheck_and_flush_incoming_msg_pipe\fP (\fBlistener\fP *l, int *res)"
+.br
+.ti -1c
+.RI "static \fBrx_info_t\fP * \fBget_hold_rx_info\fP (\fBlistener\fP *l, int fd, int64_t seq_id)"
+.br
+.ti -1c
+.RI "static void \fBdump_rx_info_table\fP (\fBlistener\fP *l)"
+.br
+.ti -1c
+.RI "static void \fBmsg_handler\fP (\fBlistener\fP *l, \fBlistener_msg\fP *msg)"
+.br
+.ti -1c
+.RI "static void \fBadd_socket\fP (\fBlistener\fP *l, \fBconnection_info\fP *ci, int notify_fd)"
+.br
+.ti -1c
+.RI "static void \fBremove_socket\fP (\fBlistener\fP *l, int fd)"
+.br
+.ti -1c
+.RI "static void \fBhold_response\fP (\fBlistener\fP *l, int fd, int64_t seq_id, int16_t timeout_sec)"
+.br
+.ti -1c
+.RI "static void \fBexpect_response\fP (\fBlistener\fP *l, \fBboxed_msg\fP *box)"
+.br
+.ti -1c
+.RI "static void \fBshutdown\fP (\fBlistener\fP *l)"
+.br
+.ti -1c
+.RI "static void \fBfree_ci\fP (\fBconnection_info\fP *ci)"
+.br
+.in -1c
 .SH "Macro Definition Documentation"
 .PP 
 .SS "#define MAX_FDS   1000"
@@ -63,6 +145,18 @@ Definition at line 94 of file listener_internal\&.h\&.
 
 .PP
 Definition at line 97 of file listener_internal\&.h\&.
+.SS "#define MIN_DELAY   10"
+
+.PP
+Definition at line 101 of file listener_internal\&.h\&.
+.SS "#define MAX_DELAY   100"
+
+.PP
+Definition at line 102 of file listener_internal\&.h\&.
+.SS "#define INFINITE_DELAY   (-1)"
+
+.PP
+Definition at line 103 of file listener_internal\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef uint32_t \fBmsg_flag_t\fP"
@@ -81,7 +175,7 @@ Definition at line 98 of file listener_internal\&.h\&.
 .TP
 \fB\fIMSG_ADD_SOCKET \fP\fP
 .TP
-\fB\fIMSG_CLOSE_SOCKET \fP\fP
+\fB\fIMSG_REMOVE_SOCKET \fP\fP
 .TP
 \fB\fIMSG_HOLD_RESPONSE \fP\fP
 .TP
@@ -103,6 +197,54 @@ Definition at line 23 of file listener_internal\&.h\&.
 \fB\fIRIS_INACTIVE \fP\fP
 .PP
 Definition at line 59 of file listener_internal\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "static void tick_handler (\fBlistener\fP *l)\fC [static]\fP"
+
+.SS "static \fBrx_info_t\fP* get_free_rx_info (\fBlistener\fP *l)\fC [static]\fP"
+
+.SS "static void release_rx_info (struct \fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static \fBlistener_msg\fP* get_free_msg (\fBlistener\fP *l)\fC [static]\fP"
+
+.SS "static bool push_message (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)\fC [static]\fP"
+
+.SS "static void release_msg (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)\fC [static]\fP"
+
+.SS "static void attempt_recv (\fBlistener\fP *l, intavaliable)\fC [static]\fP"
+
+.SS "static void process_unpacked_message (\fBlistener\fP *l, \fBconnection_info\fP *ci, \fBbus_unpack_cb_res_t\fPresult)\fC [static]\fP"
+
+.SS "static void notify_message_failure (\fBlistener\fP *l, \fBrx_info_t\fP *info, \fBbus_send_status_t\fPstatus)\fC [static]\fP"
+
+.SS "static void attempt_delivery (\fBlistener\fP *l, struct \fBrx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static void clean_up_completed_info (\fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
+
+.SS "static void observe_backpressure (\fBlistener\fP *l, size_tbackpressure)\fC [static]\fP"
+
+.SS "static bool grow_read_buf (\fBlistener\fP *l, size_tnsize)\fC [static]\fP"
+
+.SS "static void check_and_flush_incoming_msg_pipe (\fBlistener\fP *l, int *res)\fC [static]\fP"
+
+.SS "static \fBrx_info_t\fP* get_hold_rx_info (\fBlistener\fP *l, intfd, int64_tseq_id)\fC [static]\fP"
+
+.SS "static void dump_rx_info_table (\fBlistener\fP *l)\fC [static]\fP"
+
+.SS "static void msg_handler (\fBlistener\fP *l, \fBlistener_msg\fP *msg)\fC [static]\fP"
+
+.SS "static void add_socket (\fBlistener\fP *l, \fBconnection_info\fP *ci, intnotify_fd)\fC [static]\fP"
+
+.SS "static void remove_socket (\fBlistener\fP *l, intfd)\fC [static]\fP"
+
+.SS "static void hold_response (\fBlistener\fP *l, intfd, int64_tseq_id, int16_ttimeout_sec)\fC [static]\fP"
+
+.SS "static void expect_response (\fBlistener\fP *l, \fBboxed_msg\fP *box)\fC [static]\fP"
+
+.SS "static void shutdown (\fBlistener\fP *l)\fC [static]\fP"
+
+.SS "static void free_ci (\fBconnection_info\fP *ci)\fC [static]\fP"
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

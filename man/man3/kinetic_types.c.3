@@ -1,4 +1,4 @@
-.TH "kinetic_types.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,6 +27,12 @@ kinetic_types.c \-
 
 .in +1c
 .ti -1c
+.RI "static const char * \fBKineticStatusInvalid\fP = 'INVALID_STATUS_CODE'"
+.br
+.ti -1c
+.RI "static const char * \fBKineticStatusDescriptor\fP []"
+.br
+.ti -1c
 .RI "const char * \fBKineticMessageTypeNames\fP [33]"
 .br
 .in -1c
@@ -49,9 +55,9 @@ Pointer to the appropriate string representation for the specified status\&.
 .PP
 
 .PP
-Definition at line 56 of file kinetic_types\&.c\&.
+Definition at line 62 of file kinetic_types\&.c\&.
 .PP
-References KINETIC_STATUS_COUNT\&.
+References KINETIC_STATUS_COUNT, KineticStatusDescriptor, and KineticStatusInvalid\&.
 .SS "const char* KineticMessageType_GetName (\fBKineticMessageType\fPtype)"
 
 .PP
@@ -69,15 +75,23 @@ Pointer to the appropriate string representation for the specified type\&.
 .PP
 
 .PP
-Definition at line 101 of file kinetic_types\&.c\&.
+Definition at line 107 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_MESSAGE_TYPE_DELETE, KINETIC_MESSAGE_TYPE_DELETE_RESPONSE, KINETIC_MESSAGE_TYPE_FLUSHALLDATA, KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE, KINETIC_MESSAGE_TYPE_GET, KINETIC_MESSAGE_TYPE_GET_RESPONSE, KINETIC_MESSAGE_TYPE_GETKEYRANGE, KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE, KINETIC_MESSAGE_TYPE_GETLOG, KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE, KINETIC_MESSAGE_TYPE_GETNEXT, KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE, KINETIC_MESSAGE_TYPE_GETPREVIOUS, KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE, KINETIC_MESSAGE_TYPE_GETVERSION, KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE, KINETIC_MESSAGE_TYPE_INVALID, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE, KINETIC_MESSAGE_TYPE_MEDIASCAN, KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE, KINETIC_MESSAGE_TYPE_NOOP, KINETIC_MESSAGE_TYPE_NOOP_RESPONSE, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE, KINETIC_MESSAGE_TYPE_PINOP, KINETIC_MESSAGE_TYPE_PINOP_RESPONSE, KINETIC_MESSAGE_TYPE_PUT, KINETIC_MESSAGE_TYPE_PUT_RESPONSE, KINETIC_MESSAGE_TYPE_SECURITY, KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE, KINETIC_MESSAGE_TYPE_SETUP, and KINETIC_MESSAGE_TYPE_SETUP_RESPONSE\&.
 .SH "Variable Documentation"
 .PP 
+.SS "const char* KineticStatusInvalid = 'INVALID_STATUS_CODE'\fC [static]\fP"
+
+.PP
+Definition at line 24 of file kinetic_types\&.c\&.
+.SS "const char* KineticStatusDescriptor[]\fC [static]\fP"
+
+.PP
+Definition at line 25 of file kinetic_types\&.c\&.
 .SS "const char* KineticMessageTypeNames[33]"
 
 .PP
-Definition at line 64 of file kinetic_types\&.c\&.
+Definition at line 70 of file kinetic_types\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

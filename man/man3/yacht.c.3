@@ -1,4 +1,4 @@
-.TH "yacht.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "yacht.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -32,7 +32,16 @@ yacht.c \-
 
 .in +1c
 .ti -1c
+.RI "static bool \fBinsert\fP (int *buckets, void **values, size_t mask, size_t max_fill, int key, void *value, void **old_value)"
+.br
+.ti -1c
+.RI "static bool \fBgrow\fP (struct yacht *y)"
+.br
+.ti -1c
 .RI "struct yacht * \fByacht_init\fP (uint8_t sz2)"
+.br
+.ti -1c
+.RI "static size_t \fBhash\fP (int key)"
 .br
 .ti -1c
 .RI "bool \fByacht_get\fP (struct yacht *y, int key, void **value)"
@@ -74,18 +83,36 @@ Definition at line 48 of file yacht\&.c\&.
 Definition at line 75 of file yacht\&.c\&.
 .SH "Function Documentation"
 .PP 
+.SS "static bool insert (int *buckets, void **values, size_tmask, size_tmax_fill, intkey, void *value, void **old_value)\fC [static]\fP"
+
+.PP
+Definition at line 119 of file yacht\&.c\&.
+.PP
+References hash(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
+.SS "static bool grow (struct yacht *y)\fC [static]\fP"
+
+.PP
+Definition at line 163 of file yacht\&.c\&.
+.PP
+References cleanup(), insert(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
 .SS "struct yacht* yacht_init (uint8_tsz2)"
 
 .PP
 Definition at line 51 of file yacht\&.c\&.
 .PP
 References DEF_SZ2, LOG, and YACHT_NO_KEY\&.
+.SS "static size_t hash (intkey)\fC [static]\fP"
+
+.PP
+Definition at line 77 of file yacht\&.c\&.
+.PP
+References LARGE_PRIME\&.
 .SS "bool yacht_get (struct yacht *y, intkey, void **value)"
 
 .PP
 Definition at line 81 of file yacht\&.c\&.
 .PP
-References LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
+References hash(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
 .SS "bool yacht_member (struct yacht *y, intkey)"
 
 .PP
@@ -97,13 +124,13 @@ References LOG, and yacht_get()\&.
 .PP
 Definition at line 105 of file yacht\&.c\&.
 .PP
-References LOG, and MAX_PROBES\&.
+References grow(), insert(), LOG, and MAX_PROBES\&.
 .SS "bool yacht_remove (struct yacht *y, intkey, void **old_value)"
 
 .PP
 Definition at line 203 of file yacht\&.c\&.
 .PP
-References LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
+References hash(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
 .SS "void yacht_free (struct yacht *y, \fByacht_free_cb\fP *cb, void *udata)"
 
 .PP

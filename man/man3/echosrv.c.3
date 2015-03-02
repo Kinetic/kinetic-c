@@ -1,4 +1,4 @@
-.TH "echosrv.c" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "echosrv.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -56,7 +56,47 @@ echosrv.c \-
 
 .in +1c
 .ti -1c
+.RI "static void \fBinit_polling\fP (config *cfg)"
+.br
+.ti -1c
+.RI "static void \fBopen_ports\fP (config *cfg)"
+.br
+.ti -1c
+.RI "static void \fBhandle_incoming_connections\fP (config *cfg, int available)"
+.br
+.ti -1c
+.RI "static void \fBhandle_client_io\fP (config *cfg, int available)"
+.br
+.ti -1c
+.RI "static void \fBlisten_loop_poll\fP (config *cfg)"
+.br
+.ti -1c
+.RI "static void \fBregister_client\fP (config *cfg, int cfd, struct sockaddr *addr, socklen_t addr_len)"
+.br
+.ti -1c
+.RI "static void \fBdisconnect_client\fP (config *cfg, int fd)"
+.br
+.ti -1c
+.RI "static void \fBenqueue_write\fP (config *cfg, int fd, uint8_t *buf, size_t write_size)"
+.br
+.ti -1c
+.RI "static void \fBusage\fP (void)"
+.br
+.ti -1c
+.RI "static void \fBparse_args\fP (int argc, char **argv, config *cfg)"
+.br
+.ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.ti -1c
+.RI "static void \fBtick_handler\fP (config *cfg)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static uint8_t \fBread_buf\fP [(2 *1024L *1024)]"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -92,10 +132,82 @@ Definition at line 46 of file echosrv\&.c\&.
 Definition at line 187 of file echosrv\&.c\&.
 .SH "Function Documentation"
 .PP 
+.SS "static void init_polling (config *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 137 of file echosrv\&.c\&.
+.PP
+References MAX_CLIENTS, and NO_CLIENT\&.
+.SS "static void open_ports (config *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 162 of file echosrv\&.c\&.
+.PP
+References LOG\&.
+.SS "static void handle_incoming_connections (config *cfg, intavailable)\fC [static]\fP"
+
+.PP
+Definition at line 275 of file echosrv\&.c\&.
+.PP
+References LOG, and register_client()\&.
+.SS "static void handle_client_io (config *cfg, intavailable)\fC [static]\fP"
+
+.PP
+Definition at line 332 of file echosrv\&.c\&.
+.PP
+References BUF_SZ, disconnect_client(), enqueue_write(), LOG, read_buf, and util_is_resumable_io_error()\&.
+.SS "static void listen_loop_poll (config *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 198 of file echosrv\&.c\&.
+.PP
+References handle_client_io(), handle_incoming_connections(), LOG, MAX_CLIENTS, MAX_TIMEOUT, NO_CLIENT, tick_handler(), and util_is_resumable_io_error()\&.
+.SS "static void register_client (config *cfg, intcfd, struct sockaddr *addr, socklen_taddr_len)\fC [static]\fP"
+
+.PP
+Definition at line 304 of file echosrv\&.c\&.
+.PP
+References LOG, MAX_CLIENTS, and NO_CLIENT\&.
+.SS "static void disconnect_client (config *cfg, intfd)\fC [static]\fP"
+
+.PP
+Definition at line 416 of file echosrv\&.c\&.
+.PP
+References LOG, MAX_CLIENTS, and NO_CLIENT\&.
+.SS "static void enqueue_write (config *cfg, intfd, uint8_t *buf, size_twrite_size)\fC [static]\fP"
+
+.PP
+Definition at line 392 of file echosrv\&.c\&.
+.PP
+References BUF_SZ, and LOG\&.
+.SS "static void usage (void)\fC [static]\fP"
+
+.PP
+Definition at line 91 of file echosrv\&.c\&.
+.SS "static void parse_args (intargc, char **argv, config *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 99 of file echosrv\&.c\&.
+.PP
+References usage()\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 125 of file echosrv\&.c\&.
+.PP
+References init_polling(), listen_loop_poll(), open_ports(), and parse_args()\&.
+.SS "static void tick_handler (config *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 189 of file echosrv\&.c\&.
+.PP
+References LOG\&.
+.SH "Variable Documentation"
+.PP 
+.SS "uint8_t read_buf[(2 *1024L *1024)]\fC [static]\fP"
+
+.PP
+Definition at line 44 of file echosrv\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

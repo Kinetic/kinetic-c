@@ -1,4 +1,4 @@
-.TH "sender" 3 "Wed Feb 11 2015" "Version v0.11.1" "kinetic-c" \" -*- nroff -*-
+.TH "sender" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -42,58 +42,65 @@ sender \-
 .RI "struct pollfd \fBfds\fP [32+1]"
 .br
 .ti -1c
+.RI "bool \fBis_idle\fP"
+.br
+.ti -1c
 .RI "struct yacht * \fBfd_hash_table\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 129 of file sender_internal\&.h\&.
+Definition at line 130 of file sender_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "struct \fBbus\fP* sender::bus"
 
 .PP
-Definition at line 130 of file sender_internal\&.h\&.
+Definition at line 131 of file sender_internal\&.h\&.
 .SS "bool sender::shutdown"
 
 .PP
-Definition at line 131 of file sender_internal\&.h\&.
+Definition at line 132 of file sender_internal\&.h\&.
 .SS "\fBtx_flag_t\fP sender::tx_flags"
 
 .PP
-Definition at line 138 of file sender_internal\&.h\&.
+Definition at line 139 of file sender_internal\&.h\&.
 .SS "\fBtx_info_t\fP sender::tx_info[32]"
 
 .PP
-Definition at line 139 of file sender_internal\&.h\&.
+Definition at line 140 of file sender_internal\&.h\&.
 .SS "int sender::pipes[32][2]"
 
 .PP
-Definition at line 141 of file sender_internal\&.h\&.
+Definition at line 142 of file sender_internal\&.h\&.
 .SS "int sender::commit_pipe"
 
 .PP
-Definition at line 145 of file sender_internal\&.h\&.
+Definition at line 146 of file sender_internal\&.h\&.
 .SS "int sender::incoming_command_pipe"
 
 .PP
-Definition at line 146 of file sender_internal\&.h\&.
+Definition at line 147 of file sender_internal\&.h\&.
 .SS "int64_t sender::largest_seq_id_seen"
 
 .PP
-Definition at line 148 of file sender_internal\&.h\&.
+Definition at line 149 of file sender_internal\&.h\&.
 .SS "uint8_t sender::active_fds"
 
 .PP
-Definition at line 155 of file sender_internal\&.h\&.
+Definition at line 156 of file sender_internal\&.h\&.
 .SS "struct pollfd sender::fds[32+1]"
 
 .PP
-Definition at line 156 of file sender_internal\&.h\&.
+Definition at line 157 of file sender_internal\&.h\&.
+.SS "bool sender::is_idle"
+
+.PP
+Definition at line 158 of file sender_internal\&.h\&.
 .SS "struct yacht* sender::fd_hash_table"
 
 .PP
-Definition at line 161 of file sender_internal\&.h\&.
+Definition at line 163 of file sender_internal\&.h\&.
 
 .SH "Author"
 .PP 
