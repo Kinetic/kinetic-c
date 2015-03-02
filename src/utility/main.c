@@ -119,62 +119,44 @@ static const char* GetOptString(OptionID opt_id);
 
 void PrintUsage(const char* exec)
 {
-    fprintf(stderr,
-      "Usage: %s --<cmd> [options...]\n", exec);
+    printf("Usage: %s --<cmd> [options...]\n", exec);
     
     // Standard API operations
-    fprintf(stderr,
-      "%s --noop"
+    printf("%s --noop"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --put [--key <key>] [--value <value>]"
+    printf("%s --put [--key <key>] [--value <value>]"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --get [--key <key>]"
+    printf("%s --get [--key <key>]"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --getnext [--key <key>]"
+    printf("%s --getnext [--key <key>]"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --getprevious [--key <key>]"
+    printf("%s --getprevious [--key <key>]"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --delete [--key <key>]"
+    printf("%s --delete [--key <key>]"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
     
     // Admin API operations
-    fprintf(stderr,
-      "%s --setclusterversion <--newclusterversion <newclusterversion>>"
+    printf("%s --setclusterversion <--newclusterversion <newclusterversion>>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --seterasepin <--pin <oldpin>> <--newpin <newerasepin>>"
+    printf("%s --seterasepin <--pin <oldpin>> <--newpin <newerasepin>>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --instanterase <--pin <erasepin>>"
+    printf("%s --instanterase <--pin <erasepin>>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --secureerase <--pin <erasepin>>"
+    printf("%s --secureerase <--pin <erasepin>>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --setlockpin <--pin <oldpin>> <--newpin <newpin>>"
+    printf("%s --setlockpin <--pin <oldpin>> <--newpin <newpin>>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --lockdevice <--pin <lockpin>>"
+    printf("%s --lockdevice <--pin <lockpin>>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --unlockdevice <--pin <lockpin>>"
+    printf("%s --unlockdevice <--pin <lockpin>>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --setacl <--file <acl_json_file>>"
+    printf("%s --setacl <--file <acl_json_file>>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --getlog [--type <utilization|temperature|capacity|configuration|message|statistic|limits>"
+    printf("%s --getlog [--type <utilization|temperature|capacity|configuration|message|statistic|limits>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    // fprintf(stderr,
-    //   "%s --getvendorspecificdevicelog <--name <vendorspecificname>>"
+    // printf("%s --getvendorspecificdevicelog <--name <vendorspecificname>>"
     //   " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    fprintf(stderr,
-      "%s --updatefirmware <--file <file>>"
+    printf("%s --updatefirmware <--file <file>>"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>] [--pin <pin>]\n", exec);
 }
 
@@ -696,6 +678,8 @@ int ParseOptions(
                 exit(-1);
 
             case OPT_HELP:
+                PrintUsage(argv[0]);
+                exit(0);
             default:
                 PrintUsage(argv[0]);
                 exit(-1);
