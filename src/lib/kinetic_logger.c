@@ -66,11 +66,15 @@ void KineticLogger_Init(const char* log_file, int log_level)
         KineticLogLevel = log_level;
         
         if (strncmp(log_file, "stdout", 4) == 0 || strncmp(log_file, "STDOUT", 4) == 0) {
-            printf("\nLogging kinetic-c output to console (stdout) w/ log_level=%d\n", KineticLogLevel);
+            if (log_level > 0) {
+                printf("Logging kinetic-c output to console (stdout) w/ log_level=%d\n", KineticLogLevel);
+            }
             KineticLoggerHandle = stdout;
         }
         else {
-            printf("\nLogging kinetic-c output to %s w/ log_level=%d\n", log_file, KineticLogLevel);
+            if (log_level > 0) {
+                printf("Logging kinetic-c output to %s w/ log_level=%d\n", log_file, KineticLogLevel);
+            }
             KineticLoggerHandle = fopen(log_file, "a+");
             KINETIC_ASSERT(KineticLoggerHandle != NULL);
         }
