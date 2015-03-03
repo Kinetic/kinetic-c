@@ -24,12 +24,16 @@ Prerequisites
             * `> brew install openssl`
 * [json-c](https://github.com/json-c/json-c) for JSON-formatted ACL definition files
     * Installation
-        * Linux (using apt-get)
-            * `> sudo apt-get install json-c`
-        * Linux (using yum)
-            * `> sudo yum install json-c`
-        * OSX (using [Homebrew](http://brew.sh/))
-            * `> brew install openssl`
+        * via package manager
+            * Linux (using apt-get)
+                * `> sudo apt-get install json-c`
+            * Linux (using yum)
+                * `> sudo yum install json-c`
+            * OSX (using [Homebrew](http://brew.sh/))
+                * `> brew install openssl`
+        * via Git submodule (from bundled source)
+            * `> make json`
+            * `> sudo make install_json`
             
 A release of OpenSSL that provides TLS 1.1 or newer is required.
 
@@ -44,25 +48,25 @@ Getting Started
 
     > git clone --recursive https://github.com/seagate/kinetic-c.git
     > cd kinetic-c
-    > bundle install # ensure you have all RubyGems at the proper versions
 
 **Update to the latest version (previously cloned)**
 
     > git pull
-    > make clean
+    > make config # ensures all git submodules are up to date
 
 **Build and install static library**
 
     > make
     > sudo make install
 
-**Clean and uninstall old versions**
+**Clean and uninstall any old versions**
 
     > make clean
     > sudo make uninstall
 
 **Build example utility and run tests against Kinetic Device simulator**
 
+    > make start_sims # starts bundled kinetic-java simulators for testing
     > make all # this is what Travis-CI build does does for regression testing
 
 API Documentation
@@ -75,7 +79,7 @@ API Documentation
     * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c
         * e.g. object keys, object value data, etc.
 
-**NOTE: Configuration structures `KineticClientConfig` and `KineticSessionConfig` should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure backwards compatibility!**
+**NOTE: Configuration structures `KineticClientConfig` and `KineticSessionConfig` should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure forward/backward compatibility upon changes to these structure definitions!**
 
 Client Test Utility
 ===========================
@@ -85,35 +89,39 @@ Code examples are included for reference as part of a test utility. The source c
 * `kinetic-c-util` builds/links against Kinetic C static library (.a)
 * `kinetic-c-util.x.y.z` builds/links against Kinetic C dynamic library (.so)
 
-The project Makefile can be used as a reference for developing a Makefile for building for a new custom Kinetic C client.
-
-Options
--------
-
-* `--host [HostName/IP]` or `-h [HostName/IP]` - Set the Kinetic Device host
-
-Operations
+Usage
 ----------
 
-* `kinetic-c-util [--host|-h hostname|123.253.253.23] [noop] [put] [get] [delete] [instanterase]`
-    * `./bin/kinetic-c-util noop`
-        * Execute a NoOp (ping) operation to verify the Kinetic Device is ready
-    * `./bin/kinetic-c-util put`
-        * Execute a Put operation to store a key/value entry
-    * `./bin/kinetic-c-util get`
-        * Execute a Get operation to retrieve a key/value entry
-    * `./bin/kinetic-c-util delete`
-        * Execute a Delete operation to destroy a key/value entry
-    * `./bin/kinetic-c-util instanterase` *INCOMPLETE*
-        * Execute an InstantSecureErase operation to erase ALL content from the device
+    $ cd bin
+    $ ./kinetic-c-util --help
+    Usage: ./kinetic-c-util --<cmd> [options...]
+    ./kinetic-c-util --help
+    ./kinetic-c-util --noop [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --put [--key <key>] [--value <value>] [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --get [--key <key>] [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --getnext [--key <key>] [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --getprevious [--key <key>] [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --delete [--key <key>] [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --setclusterversion <--newclusterversion <newclusterversion>> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --seterasepin <--pin <oldpin>> <--newpin <newerasepin>> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --instanterase <--pin <erasepin>> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --secureerase <--pin <erasepin>> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --setlockpin <--pin <oldpin>> <--newpin <newpin>> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --lockdevice <--pin <lockpin>> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --unlockdevice <--pin <lockpin>> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --setacl <--file <acl_json_file>> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --getlog [--type <utilization|temperature|capacity|configuration|message|statistic|limits> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./kinetic-c-util --updatefirmware <--file <file>> [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>] [--pin <pin>]
 
 Kinetic C Client I/O Examples
 =============================
 
+* [`blocking_put_get`](src/examples/blocking_put_get.c) - Blocking put w/get.
+* [`blocking_put_delete`](src/examples/blocking_put_delete.c) - Blocking put w/delete.
 * [`put_nonblocking`](src/examples/put_nonblocking.c) - Single thread, single connection, nonblocking put operation.
 * [`get_nonblocking`](src/examples/get_nonblocking.c) - Single thread, single connection, nonblocking get operation.
+* [`get_key_range`](src/examples/get_key_range.c) - Query a range of keys from a device.
 * [`write_file_blocking`](src/examples/write_file_blocking.c) - Single thread, single connection, blocking operation.
 * [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, blocking operations.
 * [`write_file_nonblocking`](src/examples/write_file_nonblocking.c) - Single thread, single connection, multiple non-blocking operations
 * [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, multiple non-blocking operations.
-* [`get_key_range`](src/examples/get_key_range.c) - Query a range of keys from a device.

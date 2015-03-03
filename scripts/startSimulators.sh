@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 BASE_DIR=`dirname "$0"`
-BASE_DIR=`cd "$BASE_DIR"; pwd`
+BASE_DIR=`cd "$BASE_DIR/../vendor/kinetic-simulator/"; pwd`
 
 JAVA=""
 if [ "$JAVA_HOME" != "" ]; then

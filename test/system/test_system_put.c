@@ -21,29 +21,20 @@
 #include "kinetic_client.h"
 
 static KineticEntry Entry;
-static uint8_t KeyData[1024];
+static uint8_t KeyData[64];
 static ByteBuffer KeyBuffer;
-static uint8_t OtherKeyData[1024];
-static ByteBuffer OtherKeyBuffer;
-static uint8_t TagData[1024];
+static uint8_t TagData[64];
 static ByteBuffer TagBuffer;
-static uint8_t VersionData[1024];
+static uint8_t VersionData[64];
 static ByteBuffer VersionBuffer;
-static uint8_t NewVersionData[1024];
-static ByteBuffer NewVersionBuffer;
-static uint8_t OtherVersionData[1024];
-static ByteBuffer OtherVersionBuffer;
 static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
 void setUp(void)
 {
     SystemTestSetup(2);
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "PUT test key");
-    OtherKeyBuffer = ByteBuffer_CreateAndAppendCString(OtherKeyData, sizeof(OtherKeyData), "Some other PUT test key");
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
     VersionBuffer = ByteBuffer_CreateAndAppendCString(VersionData, sizeof(VersionData), "v1.0");
-    NewVersionBuffer = ByteBuffer_CreateAndAppendCString(NewVersionData, sizeof(NewVersionData), "v2.0");
-    OtherVersionBuffer = ByteBuffer_CreateAndAppendCString(OtherVersionData, sizeof(OtherVersionData), "v3.0");
     ValueBuffer = ByteBuffer_CreateAndAppendCString(ValueData, sizeof(ValueData), "lorem ipsum... blah blah blah... etc.");
 }
 
@@ -65,66 +56,14 @@ void test_Put_should_create_new_object_on_device(void)
 
     KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
     TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
     TEST_ASSERT_EQUAL_ByteBuffer(KeyBuffer, Entry.key);
-
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }
 
-void test_Put_should_create_another_new_object_on_device(void)
-{
-    Entry = (KineticEntry) {
-        .key = OtherKeyBuffer,
-        .newVersion = VersionBuffer,
-        .tag = TagBuffer,
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ValueBuffer,
-        .force = true,
-    };
-
-    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
-    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
-    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
-    TEST_ASSERT_EQUAL_ByteBuffer(OtherKeyBuffer, Entry.key);
-    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
-
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
-}
-
-void test_Put_should_handle_0_length_keys(void)
-{
-    uint8_t KeyData0[128];
-    ByteBuffer KeyBuffer0 = ByteBuffer_CreateAndAppendCString(KeyData0,
-        sizeof(KeyData0), "");
-
-    Entry = (KineticEntry) {
-        .key = KeyBuffer0,
-        .newVersion = VersionBuffer,
-        .tag = TagBuffer,
-        .algorithm = KINETIC_ALGORITHM_SHA1,
-        .value = ValueBuffer,
-        .force = true,
-    };
-
-    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
-    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
-    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
-    TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, Entry.key.bytesUsed,
-        "ByteBuffer used lengths do not match!");
-
-    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
-}
-
-void test_Put_should_handle_0_length_values(void)
+void test_Put_should_handle_non_null_buffer_with_length_of_0(void)
 {
     uint8_t ValueData0[128];
     ByteBuffer ValueBuffer0 = ByteBuffer_CreateAndAppendCString(ValueData0,
@@ -132,7 +71,6 @@ void test_Put_should_handle_0_length_values(void)
 
     Entry = (KineticEntry) {
         .key = KeyBuffer,
-        .newVersion = VersionBuffer,
         .tag = TagBuffer,
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .value = ValueBuffer0,
@@ -141,12 +79,36 @@ void test_Put_should_handle_0_length_values(void)
 
     KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-
-    TEST_ASSERT_EQUAL_ByteBuffer(VersionBuffer, Entry.dbVersion);
     TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
     TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
     TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, Entry.value.bytesUsed,
         "ByteBuffer used lengths do not match!");
+    TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
+}
 
+void test_Put_should_handle_NULL_buffer_if_length_specified_as_0(void)
+{
+    ByteArray Value0 = {
+        .data = NULL,
+        .len = 0
+    };
+    ByteBuffer ValueBuffer0 = {
+        .array = Value0
+    };
+
+    Entry = (KineticEntry) {
+        .key = KeyBuffer,
+        .tag = TagBuffer,
+        .algorithm = KINETIC_ALGORITHM_SHA1,
+        .value = ValueBuffer0,
+        .force = true,
+    };
+
+    KineticStatus status = KineticClient_Put(Fixture.session, &Entry, NULL);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_ByteBuffer_NULL(Entry.newVersion);
+    TEST_ASSERT_EQUAL_ByteBuffer(TagBuffer, Entry.tag);
+    TEST_ASSERT_EQUAL_SIZET_MESSAGE(0, Entry.value.bytesUsed,
+        "ByteBuffer used lengths do not match!");
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, Entry.algorithm);
 }

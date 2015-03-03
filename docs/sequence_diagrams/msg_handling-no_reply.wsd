@@ -1,30 +1,21 @@
 title Kinetic C message handling (w/ response time-out)
 
-parallel {
-    Client -> Sender: client enqueues request
-    note left of Client: client is blocked
-}
+Client -> Client: pack request
+activate Client
 
-Sender -> Listener: hold responses for <FD, SEQ_ID>
-activate Sender
+Client -> Listener: hold responses for <FD, SEQ_ID>
 activate Listener
 
-Sender -> Drive: send request
+Client -> Drive: send request
 activate Drive
 
-Sender -> Client: notify Client
+Client -> Listener: expect response for <FD, SEQ_ID>
+Listener -> Client: acknowledgement with backpressure
 
-parallel {
-    Client -> Client: backpressure
+Client -> Client: backpressure
+deactivate Client
 
-    Sender -> Listener: expect response for <FD, SEQ_ID>
-    deactivate Sender
-}
-
-parallel {
-    note left of Client: client is unblocked
-    Listener -> Listener: wait
-}
+Listener -> Listener: wait
 
 note right of Listener: TIME OUT
 deactivate Listener
