@@ -41,7 +41,7 @@
 #endif
 
 #ifndef SESSION_PIN
-#define SESSION_PIN "123"
+#define SESSION_PIN "1234"
 #endif
 
 #ifndef SESSION_IDENTITY
