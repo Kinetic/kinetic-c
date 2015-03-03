@@ -109,6 +109,7 @@ static void ConfigureEntry(
     const char * tag,
     const char * version,
     KineticAlgorithm algorithm,
+    bool force,
     const char * value);
 static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info);
 static const char* GetOptString(OptionID opt_id);
@@ -233,8 +234,110 @@ static void PrintEntry(KineticEntry * entry)
 
 static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
 {
-    (void)type;
-    (void)info;
+    size_t i;
+    switch (type) {
+
+        case KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS:
+            printf("Device Utilizations:\n");
+            for (i = 0; i < info->numUtilizations; i++) {
+                printf("  %s: %.2f %%\n",
+                    info->utilizations[i].name,
+                    info->utilizations[i].value * 100.0f);
+            }
+            break;
+        
+        case KINETIC_DEVICE_INFO_TYPE_CAPACITIES:
+            printf("Device Capacities:\n");
+            printf("  nominalCapacity: %.3f MB\n", info->capacity->nominalCapacityInBytes / (1024.0f * 1024.0f));
+            printf("  portionFull:     %.2f %%\n", info->capacity->portionFull * 100.0f);
+            break;
+        
+        case KINETIC_DEVICE_INFO_TYPE_TEMPERATURES:
+            printf("Device Temperatures:\n");
+            for (i = 0; i < info->numTemperatures; i++) {
+                printf("  %s: current=%.1f, min=%.1f, max=%.1f, target=%.1f\n",
+                    info->temperatures[i].name,
+                    info->temperatures[i].current, info->temperatures[i].minimum,
+                    info->temperatures[i].maximum, info->temperatures[i].target);
+            }
+            break;
+        
+        case KINETIC_DEVICE_INFO_TYPE_CONFIGURATION:
+            printf("Device Configuration:\n");
+            printf("  vendor: %s\n", info->configuration->vendor);
+            printf("  model: %s\n", info->configuration->model);
+            printf("  serialNumber: %s\n", (char*)info->configuration->serialNumber.data);
+            printf("  worldWideName: %s\n", (char*)info->configuration->worldWideName.data);
+            printf("  version: %s\n", info->configuration->version);
+            printf("  compilationDate: %s\n", info->configuration->compilationDate);
+            printf("  sourceHash: %s\n", info->configuration->sourceHash);
+            printf("  protocolVersion: %s\n", info->configuration->protocolVersion);
+            printf("  protocolCompilationDate: %s\n", info->configuration->protocolCompilationDate);
+            printf("  protocolSourceHash: %s\n", info->configuration->protocolSourceHash);
+            for (i = 0; i < info->configuration->numInterfaces; i++) {
+                KineticLogInfo_Interface* iface = &info->configuration->interfaces[i];
+                printf("  interface: %s\n", iface->name);
+                char buf[1024];
+                memset(buf, 0, sizeof(buf));
+                memcpy(buf, iface->MAC.data, iface->MAC.len);
+                printf("    MAC: %s\n", buf);
+                memset(buf, 0, sizeof(buf));
+                memcpy(buf, iface->ipv4Address.data, iface->ipv4Address.len);
+                printf("    ipv4Address: %s\n", buf);
+                memset(buf, 0, sizeof(buf));
+                memcpy(buf, iface->ipv6Address.data, iface->ipv6Address.len);
+                printf("    ipv6Address: %s\n", buf);
+            }
+            printf("  port: %d\n", info->configuration->port);
+            printf("  tlsPort: %d\n", info->configuration->tlsPort);
+            break;
+        
+        case KINETIC_DEVICE_INFO_TYPE_STATISTICS:
+            printf("Device Statistics:\n");
+            for (i = 0; i < info->numStatistics; i++) {
+                printf("  %s: count=%llu, bytes=%llu\n",
+                    KineticMessageType_GetName(info->statistics[i].messageType),
+                    info->statistics[i].count, info->statistics[i].bytes);
+            }
+            break;
+        
+        case KINETIC_DEVICE_INFO_TYPE_MESSAGES:
+            printf("Device Log Messages:\n"); {
+                char* msgs = calloc(1, info->messages.len + 1);
+                memcpy(msgs, info->messages.data, info->messages.len);
+                printf("  %s\n", msgs);
+                free(msgs);
+            }
+            break;
+        
+        case KINETIC_DEVICE_INFO_TYPE_LIMITS:
+            printf("Device Limits:\n");
+            printf("  maxKeySize: %u\n",                  info->limits->maxKeySize);
+            printf("  maxValueSize: %u\n",                info->limits->maxValueSize);
+            printf("  maxVersionSize: %u\n",              info->limits->maxVersionSize);
+            printf("  maxTagSize: %u\n",                  info->limits->maxTagSize);
+            printf("  maxConnections: %u\n",              info->limits->maxConnections);
+            printf("  maxOutstandingReadRequests: %u\n",  info->limits->maxOutstandingReadRequests);
+            printf("  maxOutstandingWriteRequests: %u\n", info->limits->maxOutstandingWriteRequests);
+            printf("  maxMessageSize: %u\n",              info->limits->maxMessageSize);
+            printf("  maxKeyRangeCount: %u\n",            info->limits->maxKeyRangeCount);
+            printf("  maxIdentityCount: %u\n",            info->limits->maxIdentityCount);
+            printf("  maxPinSize: %u\n",                  info->limits->maxPinSize);
+            break;
+        
+        case KINETIC_DEVICE_INFO_TYPE_DEVICE:
+            printf("Device Info:\n"); {
+                char* dev = calloc(1, info->device->name.len + 1);
+                memcpy(dev, info->device->name.data, info->device->name.len);
+                printf("  %s\n", dev);
+                free(dev);
+            }
+            break;
+        
+        default:
+            fprintf(stderr, "Unknown log type! (%d)\n", type);
+            break;
+    }
 }
 
 static const char* GetOptString(OptionID opt_id)
@@ -327,15 +430,17 @@ KineticStatus ExecuteOperation(
         case OPT_NOOP:
             status = KineticClient_NoOp(cfg->session);
             if (status == KINETIC_STATUS_SUCCESS) {
-                printf("NoOp operation completed successfully.\n"
-                       " Kinetic Device is alive and well!\n"); }
+                printf("NoOp operation completed successfully."
+                    " Kinetic Device is alive and well!\n"); }
             break;
 
         case OPT_PUT:
             status = KineticClient_Put(cfg->session, &cfg->entry, NULL);
             if (status == KINETIC_STATUS_SUCCESS) {
-                printf("Put operation completed successfully.\n"
-                       " Your data has been stored!\n"); }
+                printf("Put operation completed successfully."
+                       " Your data has been stored!\n");
+                PrintEntry(&cfg->entry);
+            }
             break;
 
         case OPT_GET:
@@ -377,6 +482,10 @@ KineticStatus ExecuteOperation(
                        "The device log info has been retrieved!\n");
                 // TODO: report returned log info per specified type
                 PrintLogInfo(cfg->logType, logInfo);
+            }
+            else if (status == KINETIC_STATUS_NOT_FOUND) {
+                fprintf(stderr, "The requested log type is not present on the kinetic device!");
+                status = KINETIC_STATUS_SUCCESS;
             }
             break;
 
@@ -479,7 +588,7 @@ KineticStatus ExecuteOperation(
 }
 
 void ConfigureEntry(struct UtilConfig * cfg, const char* key, const char* tag,
-    const char* version, KineticAlgorithm algorithm, const char* value)
+    const char* version, KineticAlgorithm algorithm, bool force, const char* value)
 {
     assert(cfg != NULL);
 
@@ -491,6 +600,7 @@ void ConfigureEntry(struct UtilConfig * cfg, const char* key, const char* tag,
         .dbVersion = ByteBuffer_Create(cfg->versionData, sizeof(cfg->versionData), 0),
         .algorithm = algorithm,
         .value = ByteBuffer_CreateAndAppendCString(cfg->valueData, sizeof(cfg->valueData), value),
+        .force = force,
     };
 }
 
@@ -538,6 +648,7 @@ int ParseOptions(
         char version[64];
         char tag[64];
         KineticAlgorithm algorithm;
+        bool force;
         char value[1024];
     } opts = {
         .logLevel = 0,
@@ -552,6 +663,7 @@ int ParseOptions(
         // .version = "v1.0",
         .tag = "SomeTagValue",
         .algorithm = KINETIC_ALGORITHM_SHA1,
+        .force = true,
         .value = "hello world!",
     };
 
@@ -676,7 +788,6 @@ int ParseOptions(
                 fprintf(stderr, "Multiple operations specified!\n");
                 PrintUsage(argv[0]);
                 exit(-1);
-
             case OPT_HELP:
                 PrintUsage(argv[0]);
                 exit(0);
@@ -706,7 +817,7 @@ int ParseOptions(
 
     // Populate and configure the entry to be used for operations
     ConfigureEntry(cfg,
-        opts.key, opts.tag, opts.version, opts.algorithm, opts.value);
+        opts.key, opts.tag, opts.version, opts.algorithm, opts.force, opts.value);
 
     cfg->opID = opts.opID;
 
@@ -739,8 +850,6 @@ int ParseOptions(
         fprintf(stderr, "Invalid log info type: %s\n", opts.logType);
         exit(1);
     }
-
-    cfg->logType = (KineticLogInfo_Type)opts.logType;
 
     return optind;
 }
