@@ -22,6 +22,8 @@ v0.12.0 (kinetic-protocol 3.0.5)
         * `KINETIC_STATUS_ACL_ERROR`
         * `KINETIC_STATUS_NOT_AUTHORIZED`
         * `KINETIC_STATUS_INVALID_FILE`
+* Set larger timeouts for operations that tend to take approx. 10 seconds, to prevent non-deterministic failures.
+* API change: Eliminated KineticClientConfig.writerThreads, since sender threads are gone.
 
 v0.11.2 (kinetic-protocol 3.0.5)
 --------------------------------
