@@ -65,6 +65,28 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
 }
 
+void test_KineticClient_Put_should_allow_NULL_pointer_to_value_data_if_length_is_zero(void)
+{
+    Session.connection = &Connection;
+    Connection.pSession = &Session;
+    ByteArray value = {
+        .data = NULL,
+        .len = 0,
+    };
+
+    KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
+    KineticOperation operation;
+    operation.connection = &Connection;
+    
+    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
+    KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
+
+    KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
+}
+
 void test_KineticClient_Put_should_return_BUFFER_OVERRUN_if_object_value_too_long(void)
 {
     Session.connection = &Connection;
@@ -75,6 +97,7 @@ void test_KineticClient_Put_should_return_BUFFER_OVERRUN_if_object_value_too_lon
     operation.connection = &Connection;
     
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+
     KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_BUFFER_OVERRUN);
     KineticAllocator_FreeOperation_Expect(&operation);
 

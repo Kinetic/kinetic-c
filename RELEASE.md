@@ -1,13 +1,16 @@
 v0.12.0 (kinetic-protocol 3.0.5)
 --------------------------------
-* KineticSession is now supplied as an opaque instance pointer from KineticClient_CreateSession
-    * Passed KineticClientConfig copied and can be discarded after session creation
-* Added new KineticAdminClient API (see include/kinetic_admin_client.h)
+* `KineticSession` is now supplied as an opaque instance pointer from `KineticClient_CreateSession`
+    * Passed `KineticClientConfig` is now deep copied and can be discarded after session creation.
+* Updated `KineticClient_Put` to allow storing an object with an empty value with a NULL data pointer supplied.
+* Added new `KineticAdminClient` API (see `include/kinetic_admin_client.h`)
     * Reloacted existing admin methods to admin API
-        * KineticClient_InstantSecureErase => KineticAdminClient_InstantErase/KineticAdminClient_SecureErase
-        * KineticClient_GetLog => KineticAdminClient_GetLog
-        * KineticClient_FreeDeviceInfo -> KineticAdminClient_LogInfo
-* Fixed potential memory leak when logging Protobufs.
+        * `KineticClient_InstantSecureErase` => `KineticAdminClient_InstantErase`/`KineticAdminClient_SecureErase`
+        * `KineticClient_GetLog` => `KineticAdminClient_GetLog`
+        * `KineticClient_FreeDeviceInfo` => `KineticAdminClient_LogInfo`
+* Updated `kinetic-c-util` to support new Admin API. Still need to add support for printing info returned from `KineticAdminClient_GetLog`
+* Changed `kinetic-c-util` API to use `getopt_long` for operations in addition to parameters and added usage info via `--help`/`-?` option.
+* Fixed potential memory leak when logging protocol buffers.
 * Fixed potential imbalance in concurrent operations semaphore.
 * Status code changes
     * Changed
@@ -22,7 +25,14 @@ v0.12.0 (kinetic-protocol 3.0.5)
 
 v0.11.2 (kinetic-protocol 3.0.5)
 --------------------------------
-* Changed all threads to be block indefinitely and be fully event-driven.
+* Changed all threads to block indefinitely and be fully event-driven.
+* Added logging of all assertions to provide debugging info in the absence of debug symbols.
+* Fixed race condition in message bus listener which could lead to data corruption.
+* Fixed race condition that could cause more than the max number of thread pool threads to be created.
+* Fixed potential buffer overrun in logger.
+* Fixed bug with mishandling of unsolicited status responses from the drive prior to drive terminating connection.
+* Removed ruby/rake as non-development build prerequisites.
+* Added make json, json_install and json_uninstall tasks for json-c.
 
 v0.11.1 (kinetic-protocol 3.0.5)
 --------------------------------

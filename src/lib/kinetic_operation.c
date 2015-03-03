@@ -204,7 +204,7 @@ static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const o
         .cb       = KineticController_HandleResult,
         .udata    = operation,
         .timeout_sec = operation->timeoutSeconds,
-    }))
+        }))
     {
         LOGF0("Failed queuing request %p for transmit on fd=%d w/seq=%lld",
             (void*)request, fd, (long long)seq_id);

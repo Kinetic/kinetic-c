@@ -77,7 +77,6 @@ struct _KineticSession {
     uint16_t timeoutSeconds;
 };
 
-
 // #TODO remove packed attribute and replace uses of sizeof(KineticPDUHeader)
 //  with a constant
 typedef struct __attribute__((__packed__)) _KineticPDUHeader {

@@ -309,7 +309,6 @@ static const char* GetOptString(OptionID opt_id)
         default:
             str = "<UNKNOWN OPTION>"; break;
     };
-
     return str;
 }
 

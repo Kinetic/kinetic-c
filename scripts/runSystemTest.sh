@@ -15,9 +15,6 @@ passfile=./bin/systest/$1.testpass
 
 rm -f $passfile > /dev/null
 
-echo ================================================================================
-echo Running system test: $test
-echo ================================================================================
 $test | tee $log
 cat $log | tail -n 1 | grep -e "OK" &> /dev/null
 if [[ $? -ne 0 ]]; then
@@ -25,5 +22,3 @@ if [[ $? -ne 0 ]]; then
 else
     touch $passfile
 fi
-echo ================================================================================
-echo

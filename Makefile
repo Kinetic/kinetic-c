@@ -98,16 +98,18 @@ makedirs:
 
 all: default json test system_tests test_internals run examples
 
-clean: makedirs update_git_submodules
+clean: makedirs
 	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util $(DISCOVERY_UTIL_EXEC)
 	rm -rf ./bin/**/*
 	rm -f ./bin/*.*
 	rm -f $(OUT_DIR)/*.o $(OUT_DIR)/*.a *.core *.log
-	bundle exec rake clobber
+	if rake --version > /dev/null 2>&1; then if bundle --version > /dev/null 2>&1; then bundle exec rake clobber; fi; fi
 	cd ${SOCKET99} && make clean
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
 	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make clean; fi;
+
+config: makedirs update_git_submodules
 
 update_git_submodules:
 	git submodule update --init
@@ -303,12 +305,12 @@ update_simulator:
 	cp vendor/kinetic-java/kinetic-simulator/target/*.jar vendor/kinetic-java-simulator/
 
 start_sims:
-	./vendor/kinetic-simulator/startSimulators.sh
+	./scripts/startSimulators.sh
 
 start_simulator: start_sims
 
 stop_sims:
-	./vendor/kinetic-simulator/stopSimulators.sh
+	./scripts/stopSimulators.sh
 
 stop_simulator: stop_sims
 
@@ -434,9 +436,9 @@ run: $(UTIL_EXEC)
 	exec $(UTIL_EXEC) --noop
 	exec $(UTIL_EXEC) --put
 	exec $(UTIL_EXEC) --get
-	exec $(UTIL_EXEC) --getnext key ""
-	exec $(UTIL_EXEC) --getprevious key ""
-	exec $(UTIL_EXEC) --delete
+	exec $(UTIL_EXEC) --getnext --key ""
+	exec $(UTIL_EXEC) --getprevious --key "zzzzzzzzzzzzzzzzz"
+	exec $(UTIL_EXEC) --delete --host 127.0.0.1
 	exec $(UTIL_EXEC) --getlog
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!

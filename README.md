@@ -24,12 +24,16 @@ Prerequisites
             * `> brew install openssl`
 * [json-c](https://github.com/json-c/json-c) for JSON-formatted ACL definition files
     * Installation
-        * Linux (using apt-get)
-            * `> sudo apt-get install json-c`
-        * Linux (using yum)
-            * `> sudo yum install json-c`
-        * OSX (using [Homebrew](http://brew.sh/))
-            * `> brew install openssl`
+        * via package manager
+            * Linux (using apt-get)
+                * `> sudo apt-get install json-c`
+            * Linux (using yum)
+                * `> sudo yum install json-c`
+            * OSX (using [Homebrew](http://brew.sh/))
+                * `> brew install openssl`
+        * via Git submodule (from bundled source)
+            * `> make json`
+            * `> sudo make install_json`
             
 A release of OpenSSL that provides TLS 1.1 or newer is required.
 
@@ -44,25 +48,25 @@ Getting Started
 
     > git clone --recursive https://github.com/seagate/kinetic-c.git
     > cd kinetic-c
-    > bundle install # ensure you have all RubyGems at the proper versions
 
 **Update to the latest version (previously cloned)**
 
     > git pull
-    > make clean
+    > make config # ensures all git submodules are up to date
 
 **Build and install static library**
 
     > make
     > sudo make install
 
-**Clean and uninstall old versions**
+**Clean and uninstall any old versions**
 
     > make clean
     > sudo make uninstall
 
 **Build example utility and run tests against Kinetic Device simulator**
 
+    > make start_sims # starts bundled kinetic-java simulators for testing
     > make all # this is what Travis-CI build does does for regression testing
 
 API Documentation
@@ -112,10 +116,12 @@ Usage
 Kinetic C Client I/O Examples
 =============================
 
+* [`blocking_put_get`](src/examples/blocking_put_get.c) - Blocking put w/get.
+* [`blocking_put_delete`](src/examples/blocking_put_delete.c) - Blocking put w/delete.
 * [`put_nonblocking`](src/examples/put_nonblocking.c) - Single thread, single connection, nonblocking put operation.
 * [`get_nonblocking`](src/examples/get_nonblocking.c) - Single thread, single connection, nonblocking get operation.
+* [`get_key_range`](src/examples/get_key_range.c) - Query a range of keys from a device.
 * [`write_file_blocking`](src/examples/write_file_blocking.c) - Single thread, single connection, blocking operation.
 * [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, blocking operations.
 * [`write_file_nonblocking`](src/examples/write_file_nonblocking.c) - Single thread, single connection, multiple non-blocking operations
 * [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, multiple non-blocking operations.
-* [`get_key_range`](src/examples/get_key_range.c) - Query a range of keys from a device.
