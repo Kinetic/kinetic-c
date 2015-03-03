@@ -30,7 +30,7 @@ void setUp(void)
     SystemTestSetup(1);
     ErasePinSet = false;
     LockPinSet = false;
-    strcpy(NewPinData, "123");
+    strcpy(NewPinData, SESSION_PIN);
     OldPin = ByteArray_Create(OldPinData, 0);
     NewPin = ByteArray_Create(NewPinData, strlen(NewPinData));
 }

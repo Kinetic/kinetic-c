@@ -25,19 +25,6 @@
 #include <sys/time.h>
 #include <errno.h>
 
-#define KINETIC_TEST_PORT1            (8123)
-#define KINETIC_TEST_PORT2            (8124)
-
-#define KINETIC_TEST_HOST1  "localhost"
-#define KINETIC_TEST_HOST2  "localhost"
-
-// #define KINETIC_TEST_PORT1            (8123)
-// #define KINETIC_TEST_PORT2            (8123)
-
-// #define KINETIC_TEST_HOST1  "10.138.123.78"
-// #define KINETIC_TEST_HOST2  "10.138.123.128"
-
-
 void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t value_size)
 {
     printf("\n"
@@ -46,28 +33,23 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
         "========================================\n"
         "Entry Size: %zu bytes\n"
         "Count:      %zu entries\n",
-        value_size, num_ops );
+        value_size, num_ops);
 
     ByteBuffer test_data = ByteBuffer_Malloc(value_size);
     ByteBuffer_AppendDummyData(&test_data, test_data.array.len);
 
-    // Initialize kinetic-c and configure sessions
+    // Create session with primary device
     const char HmacKeyString[] = "asdfasdf";
     KineticSession* session1;
     KineticSessionConfig config1 = {
-        .host = KINETIC_TEST_HOST1,
-        .port = KINETIC_TEST_PORT1,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    // Establish connection
+    strncpy(config1.host, GetSystemTestHost1(), sizeof(config1.host)-1); 
+    config1.port = GetSystemTestPort1();
     KineticStatus status = KineticClient_CreateSession(&config1, client, &session1);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
-            Kinetic_GetStatusDescription(status));
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     uint8_t tag_data[] = {0x00, 0x01, 0x02, 0x03};
     ByteBuffer tag = ByteBuffer_Create(tag_data, sizeof(tag_data), sizeof(tag_data));
@@ -95,27 +77,22 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
             };
 
             KineticStatus status = KineticClient_Put(session1, &entries[put], NULL);
-
-            if (status != KINETIC_STATUS_SUCCESS) {
-                fprintf(stderr, "PUT failed w/status: %s\n", Kinetic_GetStatusDescription(status));
-                TEST_FAIL();
-            }
+            TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         }
     }
 
-
-    KineticSession* session2;
+    // Configure session for peer device
     KineticSessionConfig config2 = {
-        .host = KINETIC_TEST_HOST2,
-        .port = KINETIC_TEST_PORT2,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
+    strncpy(config2.host, GetSystemTestHost2(), sizeof(config2.host)-1); 
+    config2.port = GetSystemTestPort2();
 
+    // P2P copy to another drive
     printf("Starting P2P copy of %ld entries from %s:%d, to %s:%d\n",
         (long)num_ops, config1.host, (int)config1.port, config2.host, (int)config2.port);
-    // P2P copy to another drive
     {
         struct timeval start_time;
         gettimeofday(&start_time, NULL);
@@ -130,25 +107,19 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
         }
 
         KineticP2P_Operation p2pOp = {
-            .peer = {
-                .hostname = KINETIC_TEST_HOST2,
-                .port = KINETIC_TEST_PORT2,
-                .tls = false,
-            },
+            .peer = {.tls = false},
             .numOperations = num_ops,
             .operations = ops
         };
+        p2pOp.peer.hostname = (char*)GetSystemTestHost2();
+        p2pOp.peer.port = GetSystemTestPort2();
 
         status = KineticClient_P2POperation(session1, &p2pOp, NULL);
-
         TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
         struct timeval stop_time;
         gettimeofday(&stop_time, NULL);
-
         size_t bytes_copied = num_ops * test_data.array.len;
-
-
         int64_t elapsed_us = ((stop_time.tv_sec - start_time.tv_sec) * 1000000)
             + (stop_time.tv_usec - start_time.tv_usec);
         float elapsed_ms = elapsed_us / 1000.0f;
@@ -165,20 +136,16 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
             bandwidth);
     }
 
+    // Establish connection to peer device
     printf("GET'ing copied keys from %s:%d to verify copy was successful\n", config2.host, (int)config2.port);
-    // Establish connection
+    KineticSession* session2;
     status = KineticClient_CreateSession(&config2, client, &session2);
-    if (status != KINETIC_STATUS_SUCCESS) {
-        fprintf(stderr, "Failed connecting to the Kinetic device w/status: %s\n",
-            Kinetic_GetStatusDescription(status));
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // GET values to verify that the copy succeeded
     {
         ByteBuffer test_get_datas[num_ops];
-        for (size_t i = 0; i < num_ops; i++)
-        {
+        for (size_t i = 0; i < num_ops; i++) {
             test_get_datas[i] = ByteBuffer_Malloc(value_size);
         }
 
@@ -192,10 +159,7 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
             };
 
             status = KineticClient_Get(session2, &entries[get], NULL);
-            if (status != KINETIC_STATUS_SUCCESS) {
-                fprintf(stderr, "GET failed w/status: %s\n", Kinetic_GetStatusDescription(status));
-                TEST_FAIL();
-            }
+            TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
             TEST_ASSERT_EQUAL_ByteBuffer(test_data, entries[get].value);
 
             entries[get] = (KineticEntry) {
@@ -207,11 +171,7 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
 
             // Delete keys to clean up after ourselves
             status = KineticClient_Delete(session2, &entries[get], NULL);
-
-            if (status != KINETIC_STATUS_SUCCESS) {
-                fprintf(stderr, "DELETE failed w/status: %s\n", Kinetic_GetStatusDescription(status));
-                TEST_FAIL();
-            }
+            TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
         }
 
         for (size_t i = 0; i < num_ops; i++) {
@@ -229,9 +189,9 @@ void test_p2p_throughput(void)
 {
     KineticClientConfig config = {
         .logFile = "stdout",
-        .logLevel = 0,
+        .logLevel = 1,
     };
     KineticClient * client = KineticClient_Init(&config);
-    run_p2p_throughput_test(client, 50, KINETIC_OBJ_SIZE);
+    run_p2p_throughput_test(client, 200, KINETIC_OBJ_SIZE);
     KineticClient_Shutdown(client);   
 }

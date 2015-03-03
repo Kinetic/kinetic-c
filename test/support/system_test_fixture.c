@@ -25,6 +25,139 @@
 
 SystemTestFixture Fixture = {.connected = false};
 
+static void LoadConfiguration(void)
+{
+    if (!Fixture.configurationLoaded) {
+
+        //----------------------------------------------------------------------
+        // Configure test device #1
+
+        // Configure host
+        char * host = getenv("KINETIC_HOST");
+        if (host == NULL) {
+            host = getenv("KINETIC_HOST1");
+        }
+        if (host == NULL) {
+            strncpy(Fixture.host1, "127.0.0.1", sizeof(Fixture.host1)-1);
+        }
+        else {
+            strncpy(Fixture.host1, host, sizeof(Fixture.host1)-1);
+        }
+
+        // Configure standard port
+        char * portString = getenv("KINETIC_PORT");
+        if (portString == NULL) {
+            portString = getenv("KINETIC_PORT1");
+        }
+        if (portString == NULL) {
+            Fixture.port1 = KINETIC_PORT;
+        }
+        else {
+            errno = 0;
+            long port = strtol(portString, NULL, 0);
+            if (port == 0 && errno != 0) {
+                TEST_ASSERT_EQUAL_MESSAGE(0, errno, "Failed parsing kinetic device port! (errno != 0)");
+            }
+            Fixture.port1 = (int)port;
+        }
+
+        // Configure TLS port
+        char * tlsPortString = getenv("KINETIC_TLS_PORT");
+        if (tlsPortString == NULL) {
+            tlsPortString = getenv("KINETIC_TLS_PORT1");
+        }
+        if (tlsPortString == NULL) {
+            Fixture.tlsPort1 = KINETIC_TLS_PORT;
+        }
+        else {
+            errno = 0;
+            long port = strtol(tlsPortString, NULL, 0);
+            if (port == 0 && errno != 0) {
+                TEST_ASSERT_EQUAL_MESSAGE(0, errno, "Failed parsing kinetic device TLS port! (errno != 0)");
+            }
+            Fixture.tlsPort1 = (int)port;
+        }
+
+        //----------------------------------------------------------------------
+        // Configure test device #2
+
+        // Configure host
+        host = getenv("KINETIC_HOST2");
+        if (host == NULL) {
+            strncpy(Fixture.host2, "127.0.0.1", sizeof(Fixture.host2)-1);
+        }
+        else {
+            strncpy(Fixture.host2, host, sizeof(Fixture.host2)-1);
+        }
+
+        // Configure standard port
+        portString = getenv("KINETIC_PORT2");
+        if (portString == NULL) {
+            Fixture.port2 = KINETIC_PORT+1;
+        }
+        else {
+            errno = 0;
+            long port = strtol(portString, NULL, 0);
+            if (port == 0 && errno != 0) {
+                TEST_ASSERT_EQUAL_MESSAGE(0, errno, "Failed parsing kinetic device port! (errno != 0)");
+            }
+            Fixture.port2 = (int)port;
+        }
+
+        // Configure TLS port
+        tlsPortString = getenv("KINETIC_TLS_PORT2");
+        if (tlsPortString == NULL) {
+            Fixture.tlsPort2 = KINETIC_TLS_PORT+1;
+        }
+        else {
+            errno = 0;
+            long port = strtol(tlsPortString, NULL, 0);
+            if (port == 0 && errno != 0) {
+                TEST_ASSERT_EQUAL_MESSAGE(0, errno, "Failed parsing kinetic device TLS port! (errno != 0)");
+            }
+            Fixture.tlsPort2 = (int)port;
+        }
+
+        Fixture.configurationLoaded = true;
+    }
+}
+
+const char* GetSystemTestHost1(void)
+{
+    LoadConfiguration();
+    return Fixture.host1;
+}
+
+int GetSystemTestPort1(void)
+{
+    LoadConfiguration();
+    return Fixture.port1;
+}
+
+int GetSystemTestTlsPort1(void)
+{
+    LoadConfiguration();
+    return Fixture.tlsPort1;
+}
+
+const char* GetSystemTestHost2(void)
+{
+    LoadConfiguration();
+    return Fixture.host2;
+}
+
+int GetSystemTestPort2(void)
+{
+    LoadConfiguration();
+    return Fixture.port2;
+}
+
+int GetSystemTestTlsPort2(void)
+{
+    LoadConfiguration();
+    return Fixture.tlsPort2;
+}
+
 void SystemTestSetup(int log_level)
 {
     const uint8_t *key = (const uint8_t *)SESSION_HMAC_KEY;
@@ -45,25 +178,25 @@ void SystemTestSetupWithIdentity(int log_level, int64_t identity,
     };
 
     KineticSessionConfig config = {
-        .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_PORT,
         .clusterVersion = SESSION_CLUSTER_VERSION,
         .identity = identity,
         .hmacKey = ByteArray_Create((void *)key, key_size),
     };
-    strcpy((char*)config.keyData, SESSION_HMAC_KEY);
+    strncpy((char*)config.host, GetSystemTestHost1(), sizeof(config.host)-1);
+    config.port = GetSystemTestPort1();
+    strncpy((char*)config.keyData, SESSION_HMAC_KEY, sizeof(config.keyData)-1);
     KineticStatus status = KineticClient_CreateSession(&config, Fixture.client, &Fixture.session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     KineticSessionConfig adminConfig = {
-        .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_TLS_PORT,
         .clusterVersion = SESSION_CLUSTER_VERSION,
         .identity = identity,
         .hmacKey = ByteArray_Create((void *)key, key_size),
         .useSsl = true,
     };
-    strcpy((char*)config.keyData, SESSION_HMAC_KEY);
+    strncpy(adminConfig.host, GetSystemTestHost1(), sizeof(adminConfig.host)-1);
+    adminConfig.port = GetSystemTestTlsPort1();
+    strncpy((char*)adminConfig.keyData, SESSION_HMAC_KEY, sizeof(adminConfig.keyData)-1);
     status = KineticAdminClient_CreateSession(&adminConfig, Fixture.client, &Fixture.adminSession);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
@@ -84,5 +217,7 @@ void SystemTestShutDown(void)
 
 bool SystemTestIsUnderSimulator(void)
 {
-    return (0 == strncmp(SYSTEM_TEST_HOST, "localhost", strlen("localhost")));
+    LoadConfiguration();
+    return ((0 == strncmp(Fixture.host1, "localhost", strlen("localhost"))) ||
+            (0 == strncmp(Fixture.host1, "127.0.0.1", strlen("127.0.0.1"))));
 }

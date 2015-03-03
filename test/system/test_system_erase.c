@@ -84,7 +84,7 @@ void setUp(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Set the erase PIN to something non-empty
-    strcpy(NewPinData, "123");
+    strcpy(NewPinData, SESSION_PIN);
     OldPin = ByteArray_Create(OldPinData, 0);
     NewPin = ByteArray_Create(NewPinData, strlen(NewPinData));
     status = KineticAdminClient_SetErasePin(Fixture.adminSession,

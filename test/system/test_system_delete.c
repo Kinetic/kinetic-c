@@ -30,7 +30,7 @@ static ByteBuffer ValueBuffer;
 
 void setUp(void)
 {
-    SystemTestSetup(1);
+    SystemTestSetup(2);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "DELETE test key");
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
@@ -58,8 +58,6 @@ void test_Delete_should_delete_an_object_from_device(void)
     };
     status = KineticClient_Put(Fixture.session, &putEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-    // TEST_ASSERT_EQUAL_ByteArray(Key, putEntry.key.array);
-    // TEST_ASSERT_EQUAL_ByteArray(Tag, putEntry.tag.array);
     TEST_ASSERT_EQUAL(KINETIC_ALGORITHM_SHA1, putEntry.algorithm);
 
     // Validate the object exists initially

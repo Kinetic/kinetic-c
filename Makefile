@@ -19,11 +19,11 @@ OPENSSL_PATH ?=	.
 #===============================================================================
 CC ?= gcc
 OPTIMIZE = -O3
-SYSTEM_TEST_HOST ?= \"localhost\"
-SESSION_HMAC_KEY ?= \"asdfasdf\"
-SESSION_PIN ?= \"1234\"
+KINETIC_HOST1 ?= localhost
+SESSION_HMAC_KEY ?= asdfasdf
+SESSION_PIN ?= 1234
 WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
-CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1 -DSYSTEM_TEST_HOST=${SYSTEM_TEST_HOST}
+CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread -ljson-c
 NUM_SIMS ?= 2
@@ -434,16 +434,43 @@ run: $(UTIL_EXEC)
 	@echo Running test utility: $(UTIL_EXEC)
 	@echo --------------------------------------------------------------------------------
 	@echo
-	# $(UTIL_EXEC) instanterase
+	# exec $(UTIL_EXEC) --seterasepin --pin "" --newpin 1234
+	# exec $(UTIL_EXEC) --instanterase --pin 1234
+	# exec $(UTIL_EXEC) --seterasepin --pin 1234 --newpin ""
+	# @echo
 	exec $(UTIL_EXEC) --help
+	@echo
 	exec $(UTIL_EXEC) -?
-	exec $(UTIL_EXEC) --noop
-	exec $(UTIL_EXEC) --put
-	exec $(UTIL_EXEC) --get
-	exec $(UTIL_EXEC) --getnext --key ""
-	exec $(UTIL_EXEC) --getprevious --key "zzzzzzzzzzzzzzzzz"
-	exec $(UTIL_EXEC) --delete --host 127.0.0.1
-	exec $(UTIL_EXEC) --getlog
+	@echo
+	exec $(UTIL_EXEC) --noop --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --put --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --get --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getnext --key "A" --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getprevious --key "zzzzzzzzzzzzzzzzz" --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --delete --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --logtype utilizations --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --logtype temperatures --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --logtype capacities --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --logtype configuration --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --logtype statistics --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --logtype messages --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --logtype limits --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getlog --logtype device --host $(KINETIC_HOST1)
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
 	@echo

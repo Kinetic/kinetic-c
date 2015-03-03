@@ -28,10 +28,6 @@
 #include "unity.h"
 #include "unity_helper.h"
 
-#ifndef SYSTEM_TEST_HOST
-#define SYSTEM_TEST_HOST "localhost"
-#endif
-
 #ifndef SESSION_CLUSTER_VERSION
 #define SESSION_CLUSTER_VERSION 0
 #endif
@@ -54,6 +50,13 @@ typedef struct _SystemTestFixture {
     bool connected;
     int64_t expectedSequence;
     KineticClient * client;
+    char host1[257];
+    int port1;
+    int tlsPort1;
+    char host2[257];
+    int port2;
+    int tlsPort2;
+    bool configurationLoaded;
 } SystemTestFixture;
 
 extern SystemTestFixture Fixture;
@@ -63,6 +66,12 @@ void SystemTestSetupWithIdentity(int log_level, int64_t identity,
     const uint8_t *key, size_t key_size);
 void SystemTestShutDown(void);
 bool SystemTestIsUnderSimulator(void);
+const char* GetSystemTestHost1(void);
+int GetSystemTestPort1(void);
+int GetSystemTestTlsPort1(void);
+const char* GetSystemTestHost2(void);
+int GetSystemTestPort2(void);
+int GetSystemTestTlsPort2(void);
 
 #define SYSTEM_TEST_SUITE_TEARDOWN void test_Suite_TearDown(void) {SystemTestShutDown();}
 
