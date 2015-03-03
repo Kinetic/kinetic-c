@@ -776,6 +776,7 @@ void KineticOperation_BuildSetPin(KineticOperation* const operation, ByteArray o
     
     operation->callback = &KineticOperation_SetPinCallback;
     operation->request->pinAuth = false;
+    operation->timeoutSeconds = KineticOperation_TimeoutSetPin;
 }
 
 KineticStatus KineticOperation_EraseCallback(KineticOperation* const operation, KineticStatus const status)
@@ -803,7 +804,7 @@ void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_
     
     operation->callback = &KineticOperation_EraseCallback;
     operation->request->pinAuth = true;
-    operation->timeoutSeconds = 180;
+    operation->timeoutSeconds = KineticOperation_TimeoutErase;
 }
 
 KineticStatus KineticOperation_LockUnlockCallback(KineticOperation* const operation, KineticStatus const status)
@@ -832,6 +833,7 @@ void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lo
     
     operation->callback = &KineticOperation_LockUnlockCallback;
     operation->request->pinAuth = true;
+    operation->timeoutSeconds = KineticOperation_TimeoutLockUnlock;
 }
 
 KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status)
@@ -887,6 +889,7 @@ void KineticOperation_BuildSetACL(KineticOperation* const operation,
     operation->request->command->body->security->acl = ACLs->ACLs;
 
     operation->callback = &KineticOperation_SetACLCallback;
+    operation->timeoutSeconds = KineticOperation_TimeoutSetACL;
 }
 
 KineticStatus KineticOperation_UpdateFirmwareCallback(KineticOperation* const operation, KineticStatus const status)

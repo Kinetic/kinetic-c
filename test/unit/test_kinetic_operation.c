@@ -585,7 +585,7 @@ void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_
     KineticOperation_BuildSetPin(&Operation, oldPin, newPin, true);
 
     TEST_ASSERT_FALSE(Request.pinAuth);
-    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetPin, Operation.timeoutSeconds);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
         Request.message.command.header->messageType);
@@ -610,7 +610,7 @@ void test_KineticOperation_BuildSetPin_should_build_a_SECURITY_operation_to_set_
     KineticOperation_BuildSetPin(&Operation, oldPin, newPin, false);
 
     TEST_ASSERT_FALSE(Request.pinAuth);
-    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetPin, Operation.timeoutSeconds);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
         Request.message.command.header->messageType);
@@ -712,7 +712,7 @@ void test_KineticOperation_BuildErase_should_build_an_INSTANT_ERASE_operation_wi
         Request.command->body->pinOp->pinOpType);
     TEST_ASSERT_EQUAL_PTR(&KineticOperation_EraseCallback, Operation.callback);
     TEST_ASSERT_NULL(Operation.response);
-    TEST_ASSERT_EQUAL(180, Operation.timeoutSeconds);
+    TEST_ASSERT_EQUAL(KineticOperation_TimeoutErase, Operation.timeoutSeconds);
 }
 
 void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PIN_auth(void)
@@ -735,7 +735,7 @@ void test_KineticOperation_BuildLockUnlock_should_build_a_LOCK_operation_with_PI
         Request.command->body->pinOp->pinOpType);
     TEST_ASSERT_EQUAL_PTR(&KineticOperation_LockUnlockCallback, Operation.callback);
     TEST_ASSERT_NULL(Operation.response);
-    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_EQUAL(KineticOperation_TimeoutLockUnlock, Operation.timeoutSeconds);
 }
 
 void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with_PIN_auth(void)
@@ -758,7 +758,7 @@ void test_KineticOperation_BuildLockUnlock_should_build_an_UNLOCK_operation_with
         Request.command->body->pinOp->pinOpType);
     TEST_ASSERT_EQUAL_PTR(&KineticOperation_LockUnlockCallback, Operation.callback);
     TEST_ASSERT_NULL(Operation.response);
-    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_EQUAL(KineticOperation_TimeoutLockUnlock, Operation.timeoutSeconds);
 }
 
 void test_KineticOperation_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VERSION_operation_with_PIN_auth(void)
@@ -804,7 +804,7 @@ void test_KineticOperation_BuildSetACL_should_build_a_SECURITY_operation(void)
 
     TEST_ASSERT_EQUAL_PTR(&KineticOperation_SetACLCallback, Operation.callback);
     TEST_ASSERT_NULL(Operation.response);
-    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetACL, Operation.timeoutSeconds);
 }
 
 void test_KineticOperation_BuildFirmwareUpdate_should_build_a_FIRMWARE_DOWNLOAD_operation(void)

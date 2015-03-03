@@ -28,6 +28,16 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation
 void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);
 
 
+/* Operations with non-standard timeouts. */
+typedef enum {
+    KineticOperation_TimeoutSetACL = 30,
+    KineticOperation_TimeoutSetPin = 30,
+    KineticOperation_TimeoutLockUnlock = 30,
+    KineticOperation_TimeoutErase = 180,
+} KineticOperation_NonstandardTimeout;
+
+
+
 /*******************************************************************************
  * Client Operations
 *******************************************************************************/
