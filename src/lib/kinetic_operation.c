@@ -23,25 +23,27 @@
 #include "kinetic_message.h"
 #include "kinetic_bus.h"
 #include "kinetic_response.h"
-#include "kinetic_nbo.h"
-#include "kinetic_auth.h"
-#include "kinetic_socket.h"
 #include "kinetic_device_info.h"
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
-#include <pthread.h>
+#include "kinetic_request.h"
+
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/time.h>
 #include <stdio.h>
 
-#include "bus.h"
 #include "acl.h"
 
 #define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
 
+#ifdef TEST
+uint8_t * msg = NULL;
+size_t msgSize = 0;
+#endif
+
 static void KineticOperation_ValidateOperation(KineticOperation* operation);
-static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation);
+static KineticStatus KineticOperation_SendRequestInLock(KineticOperation* const operation);
 
 KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 {
@@ -49,26 +51,17 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     KINETIC_ASSERT(operation->connection != NULL);
     KINETIC_ASSERT(operation->request != NULL);
     
-    KineticStatus status = KineticOperation_SendRequestInner(operation);
-    if (status != KINETIC_STATUS_SUCCESS)
-    {
-        //cleanup
-        KineticRequest* request = operation->request;
-        if (request != NULL) {
-            if (request->message.message.commandBytes.data != NULL) {
-                free(request->message.message.commandBytes.data);
-                request->message.message.commandBytes.data = NULL;
-            }
-            free(request);
-            operation->request = NULL;
-        }
+    if (!KineticRequest_LockOperation(operation)) {
+        return KINETIC_STATUS_CONNECTION_ERROR;
     }
-
+    KineticStatus status = KineticOperation_SendRequestInLock(operation);
+    KineticRequest_UnlockOperation(operation);
     return status;
 }
 
 static void log_request_seq_id(int fd, int64_t seq_id, KineticMessageType mt)
 {
+    #ifndef TEST
     #if KINETIC_LOGGER_LOG_SEQUENCE_ID
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -79,151 +72,66 @@ static void log_request_seq_id(int fd, int64_t seq_id, KineticMessageType mt)
     (void)seq_id;
     (void)mt;
     #endif
-}    
+    #endif
+}
 
-// TODO: Assess refactoring this method by dissecting out Operation and relocate to kinetic_pdu
-static KineticStatus KineticOperation_SendRequestInner(KineticOperation* const operation)
+/* Send request.
+ * Note: This whole function operates with operation->connection->sendMutex locked. */
+static KineticStatus KineticOperation_SendRequestInLock(KineticOperation* const operation)
 {
     LOGF3("\nSending PDU via fd=%d", operation->connection->socket);
-
-    KineticStatus status = KINETIC_STATUS_INVALID;
-    uint8_t * msg = NULL;
-    KineticRequest* request = operation->request;
-
     KINETIC_ASSERT(operation);
     KINETIC_ASSERT(operation->request);
     KINETIC_ASSERT(operation->connection);
-    KINETIC_ASSERT(request);
+    KineticRequest* request = operation->request;
 
-    // Acquire lock
-    pthread_mutex_t* sendMutex = &operation->connection->sendMutex;
-    pthread_mutex_lock(sendMutex);
-    KineticSession *session = operation->connection->pSession;
-
-    // Populate sequence count and increment it for next operation
+    int64_t seq_id = KineticSession_GetNextSequenceCount(operation->connection->pSession);
     KINETIC_ASSERT(request->message.header.sequence == KINETIC_SEQUENCE_NOT_YET_BOUND);
-    int64_t seq_id = KineticSession_GetNextSequenceCount(session);
     request->message.header.sequence = seq_id;
 
-    // Pack the command, if available
-    size_t expectedLen = KineticProto_command__get_packed_size(&request->message.command);
-    request->message.message.commandBytes.data = (uint8_t*)malloc(expectedLen);
-    if(request->message.message.commandBytes.data == NULL)
-    {
-        LOG0("Failed to allocate command bytes!");
-        status = KINETIC_STATUS_MEMORY_ERROR;
-        goto cleanup;
+    size_t expectedLen = KineticRequest_PackCommand(request);
+    if (expectedLen == KINETIC_REQUEST_PACK_FAILURE) {
+        return KINETIC_STATUS_MEMORY_ERROR;
     }
-    size_t packedLen = KineticProto_command__pack(
-        &request->message.command,
-        request->message.message.commandBytes.data);
-    KINETIC_ASSERT(packedLen == expectedLen);
-    request->message.message.commandBytes.len = packedLen;
-    request->message.message.has_commandBytes = true;
-    KineticLogger_LogByteArray(3, "commandBytes", (ByteArray){
-        .data = request->message.message.commandBytes.data,
-        .len = request->message.message.commandBytes.len,
-    });
+    uint8_t * commandData = request->message.message.commandBytes.data;
 
     log_request_seq_id(operation->connection->socket, seq_id, request->message.header.messageType);
 
-    // Populate the HMAC/PIN for protobuf authentication
-    if (operation->pin != NULL) {
-        status = KineticAuth_PopulatePin(&session->config, operation->request, *operation->pin);
-    }
-    else {
-        status = KineticAuth_PopulateHmac(&session->config, operation->request);
-    }
+    KineticSession *session = operation->connection->pSession;
+    KineticStatus status = KineticRequest_PopulateAuthentication(&session->config,
+        operation->request, operation->pin);
     if (status != KINETIC_STATUS_SUCCESS) {
-        LOG0("Failed populating authentication info for new request!");
+        if (commandData) { free(commandData); }
+        return status;        
+    }
+
+    #ifndef TEST
+    uint8_t * msg = NULL;
+    size_t msgSize = 0;
+    #endif
+    status = KineticRequest_PackMessage(operation, &msg, &msgSize);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        if (commandData) { free(commandData); }
         return status;
     }
 
-    // Configure PDU header
-    KineticProto_Message* proto = &operation->request->message.message;
-    KineticPDUHeader header = {
-        .versionPrefix = 'F',
-        .protobufLength = KineticProto_Message__get_packed_size(proto)
-    };
-    header.valueLength = operation->value.len;
-    uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
-    uint32_t nboValueLength = KineticNBO_FromHostU32(header.valueLength);
-
-    // Allocate and pack protobuf message
-    size_t offset = 0;
-    msg = malloc(PDU_HEADER_LEN + header.protobufLength + header.valueLength);
-    if (msg == NULL) {
-        LOG0("Failed to allocate outgoing message!");
-        status = KINETIC_STATUS_MEMORY_ERROR;
-        goto cleanup;
-    }
-
-    // Pack header
-    msg[offset] = header.versionPrefix;
-    offset += sizeof(header.versionPrefix);
-    memcpy(&msg[offset], &nboProtoLength, sizeof(nboProtoLength));
-    offset += sizeof(nboProtoLength);
-    memcpy(&msg[offset], &nboValueLength, sizeof(nboValueLength));
-    offset += sizeof(nboValueLength);
-    size_t len = KineticProto_Message__pack(&request->message.message, &msg[offset]);
-    KINETIC_ASSERT(len == header.protobufLength);
-    offset += header.protobufLength;
-
-    // Log protobuf per configuration
-    LOGF2("[PDU TX] pdu: %p, session: %p, bus: %p, "
-        "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, msgType: %02x",
-        (void*)operation->request,
-        (void*)operation->connection->pSession, (void*)operation->connection->messageBus,
-        operation->connection->socket, (long long)request->message.header.sequence,
-        header.protobufLength, header.valueLength,
-        (void*)operation, request->message.header.messageType);
-    KineticLogger_LogHeader(3, &header);
-    KineticLogger_LogProtobuf(3, proto);
-
-    // Free command bytes now that we are done
-    free(request->message.message.commandBytes.data);
-    request->message.message.commandBytes.data = NULL;
-
-    // Pack value payload, if supplied
-    if (header.valueLength > 0) {
-        memcpy(&msg[offset], operation->value.data, operation->value.len);
-        offset += operation->value.len;
-    }
-    KINETIC_ASSERT((PDU_HEADER_LEN + header.protobufLength + header.valueLength) == offset);
-
-    // Claim a send PDU for proper throttling of concurrent requests to avoid flooding the drive
+    if (commandData) { free(commandData); }
     KineticCountingSemaphore * const sem = operation->connection->outstandingOperations;
-    KineticCountingSemaphore_Take(sem);
-    int fd = operation->connection->socket;
-    if (!bus_send_request(operation->connection->messageBus, &(bus_user_msg) {
-        .fd       = fd,
-        .type     = BUS_SOCKET_PLAIN,
-        .seq_id   = seq_id,
-        .msg      = msg,
-        .msg_size = offset,
-        .cb       = KineticController_HandleResult,
-        .udata    = operation,
-        .timeout_sec = operation->timeoutSeconds,
-        }))
-    {
-        LOGF0("Failed queuing request %p for transmit on fd=%d w/seq=%lld",
-            (void*)request, fd, (long long)seq_id);
-        // Since the request PDU failed getting queued into the bus,
-        // release this request from the throttle to clean up properly
-        KineticCountingSemaphore_Give(sem);
+    KineticCountingSemaphore_Take(sem);  // limit total concurrent requests
 
+    if (!KineticRequest_SendRequest(operation, msg, msgSize)) {
+        LOGF0("Failed queuing request %p for transmit on fd=%d w/seq=%lld",
+            (void*)request, operation->connection->socket, (long long)seq_id);
         /* A false result from bus_send_request means that the request was
          * rejected outright, so the usual asynchronous, callback-based
          * error handling for errors during the request or response will
          * not be used. */
+        KineticCountingSemaphore_Give(sem);
         status = KINETIC_STATUS_REQUEST_REJECTED;
-    }
-    else {
+    } else {
         status = KINETIC_STATUS_SUCCESS;
     }
 
-cleanup:
-    pthread_mutex_unlock(sendMutex);
     if (msg != NULL) { free(msg); }
     return status;
 }
