@@ -305,12 +305,12 @@ update_simulator:
 	cp vendor/kinetic-java/kinetic-simulator/target/*.jar vendor/kinetic-java-simulator/
 
 start_sims:
-	./vendor/kinetic-simulator/startSimulators.sh
+	./scripts/startSimulators.sh
 
 start_simulator: start_sims
 
 stop_sims:
-	./vendor/kinetic-simulator/stopSimulators.sh
+	./scripts/stopSimulators.sh
 
 stop_simulator: stop_sims
 
