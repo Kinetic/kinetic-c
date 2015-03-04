@@ -89,6 +89,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/listener_io.o \
 	$(OUT_DIR)/listener_task.o \
 	$(OUT_DIR)/send.o \
+	$(OUT_DIR)/syscall.o \
 	$(OUT_DIR)/util.o \
 	$(OUT_DIR)/yacht.o \
 

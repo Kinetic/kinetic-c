@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <err.h>
 #include <assert.h>
-#include <poll.h>
+#include "syscall.h"
 
 #include "listener_cmd.h"
 #include "listener_cmd_internal.h"
@@ -33,7 +33,7 @@ void ListenerCmd_NotifyCaller(int fd) {
     /* TODO: reply_buf[1:2] can be little-endian backpressure.  */
 
     for (;;) {
-        ssize_t wres = write(fd, reply_buf, sizeof(reply_buf));
+        ssize_t wres = syscall_write(fd, reply_buf, sizeof(reply_buf));
         if (wres == sizeof(reply_buf)) { break; }
         if (wres == -1) {
             if (errno == EINTR) {
@@ -55,7 +55,7 @@ void ListenerCmd_CheckIncomingMessages(listener *l, int *res) {
     if (events & POLLIN) {
         char buf[64];
         for (;;) {
-            ssize_t rd = read(l->fds[INCOMING_MSG_PIPE_ID].fd, buf, sizeof(buf));
+            ssize_t rd = syscall_read(l->fds[INCOMING_MSG_PIPE_ID].fd, buf, sizeof(buf));
             if (rd == -1) {
                 if (errno == EINTR) {
                     errno = 0;

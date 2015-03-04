@@ -15,6 +15,7 @@ BUS_OBJS = \
 	listener_io.o \
 	listener_task.o \
 	send.o \
+	syscall.o \
 	util.o \
 	yacht.o \
 

@@ -21,6 +21,7 @@
 #include <assert.h>
 
 #include "bus_ssl.h"
+#include "syscall.h"
 #include "util.h"
 
 #define TIMEOUT_MSEC 100
@@ -138,7 +139,7 @@ static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd) {
     size_t elapsed = 0;
 
     while (!connected) {
-        int pres = poll(fds, 1, TIMEOUT_MSEC);
+        int pres = syscall_poll(fds, 1, TIMEOUT_MSEC);
         BUS_LOG_SNPRINTF(b, 5, LOG_SOCKET_REGISTERED, b->udata, 128,
             "SSL_Connect handshake for socket %d, poll res %d", fd, pres);
 

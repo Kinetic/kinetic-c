@@ -33,6 +33,7 @@
 #include "listener_cmd.h"
 #include "listener_task.h"
 #include "listener_internal.h"
+#include "syscall.h"
 #include "util.h"
 #include "atomic.h"
 
@@ -76,11 +77,11 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
         if (0 != pipe(msg->pipes)) {
             for (int i = 0; i < pipe_count; i++) {
                 listener_msg *msg = &l->msgs[i];
-                close(msg->pipes[0]);
-                close(msg->pipes[1]);
+                syscall_close(msg->pipes[0]);
+                syscall_close(msg->pipes[1]);
             }
-            close(l->commit_pipe);
-            close(l->incoming_msg_pipe);
+            syscall_close(l->commit_pipe);
+            syscall_close(l->incoming_msg_pipe);
             free(l);
             return NULL;
         }
@@ -225,16 +226,16 @@ void listener_free(struct listener *l) {
                 break;
             }
 
-            close(msg->pipes[0]);
-            close(msg->pipes[1]);
+            syscall_close(msg->pipes[0]);
+            syscall_close(msg->pipes[1]);
         }
 
         if (l->read_buf) {
             free(l->read_buf);
         }                
 
-        close(l->commit_pipe);
-        close(l->incoming_msg_pipe);
+        syscall_close(l->commit_pipe);
+        syscall_close(l->incoming_msg_pipe);
 
         free(l);
     }
@@ -250,7 +251,7 @@ static bool push_message(struct listener *l, listener_msg *msg, int *reply_fd) {
     if (reply_fd) { *reply_fd = msg->pipes[0]; }
 
     for (;;) {
-        ssize_t wr = write(l->commit_pipe, msg_buf, sizeof(msg_buf));
+        ssize_t wr = syscall_write(l->commit_pipe, msg_buf, sizeof(msg_buf));
         if (wr == sizeof(msg_buf)) {
             return true;  // committed
         } else {

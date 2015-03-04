@@ -20,6 +20,7 @@
 #include "listener_task.h"
 #include "listener_task_internal.h"
 #include "util.h"
+#include "syscall.h"
 
 #include <assert.h>
 #include "listener_cmd.h"
@@ -60,7 +61,7 @@ void *ListenerTask_MainLoop(void *arg) {
         }
 
         int delay = (self->is_idle ? -1 : TIMEOUT_DELAY);
-        int res = poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, delay);
+        int res = syscall_poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, delay);
         BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
             "poll res %d", res);
 

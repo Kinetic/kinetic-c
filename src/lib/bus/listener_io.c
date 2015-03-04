@@ -24,6 +24,7 @@
 #include <assert.h>
 
 #include "listener_task.h"
+#include "syscall.h"
 #include "util.h"
 
 void ListenerIO_AttemptRecv(listener *l, int available) {
@@ -70,7 +71,7 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
 }
     
 static bool socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
-    ssize_t size = read(ci->fd, l->read_buf, ci->to_read_size);
+    ssize_t size = syscall_read(ci->fd, l->read_buf, ci->to_read_size);
     if (size == -1) {
         if (util_is_resumable_io_error(errno)) {
             errno = 0;
@@ -104,11 +105,11 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
     BUS_ASSERT(b, b->udata, ci->ssl);
     for (;;) {
         // ssize_t pending = SSL_pending(ci->ssl);
-        ssize_t size = (ssize_t)SSL_read(ci->ssl, l->read_buf, ci->to_read_size);
+        ssize_t size = (ssize_t)syscall_SSL_read(ci->ssl, l->read_buf, ci->to_read_size);
         // fprintf(stderr, "=== PENDING: %zd, got %zd ===\n", pending, size);
         
         if (size == -1) {
-            int reason = SSL_get_error(ci->ssl, size);
+            int reason = syscall_SSL_get_error(ci->ssl, size);
             switch (reason) {
             case SSL_ERROR_WANT_READ:
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,

@@ -23,13 +23,13 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <assert.h>
-#include <poll.h>
 #include <errno.h>
 
 #include "bus.h"
 #include "bus_types.h"
 #include "bus_internal_types.h"
 #include "listener.h"
+#include "syscall.h"
 #include "util.h"
 #include "atomic.h"
 #include "yacht.h"
@@ -108,7 +108,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
             return true;
         }
 
-        int res = poll(fds, 1, rem_msec);
+        int res = syscall_poll(fds, 1, rem_msec);
         BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
             "handle_write: poll res %d", res);
         if (res == -1) {
@@ -178,7 +178,7 @@ static bool attempt_to_enqueue_sending_request_message_to_listener(struct bus *b
         } else {
             /* Don't apply much backpressure here since the client
              * thread will get it when the message is done sending. */
-            poll(NULL, 0, delay);
+            syscall_poll(NULL, 0, delay);
             if (delay < 5) { delay++; }
         }
     }
@@ -208,7 +208,7 @@ static void handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t stat
         } else {
             retries++;
             const int delay = 5;
-            poll(NULL, 0, delay);
+            syscall_poll(NULL, 0, delay);
             if (retries > 0 && (retries & 255) == 0) {
                 BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 64,
                     "looping on handle_failure retry: %zd", retries);
@@ -287,7 +287,7 @@ static ssize_t write_plain(struct bus *b, boxed_msg *box) {
 
     /* Attempt a single write. ('for' is due to continue-based retry.) */
     for (;;) {
-        ssize_t wrsz = write(fd, &msg[sent_size], rem);
+        ssize_t wrsz = syscall_write(fd, &msg[sent_size], rem);
         if (wrsz == -1) {
             if (util_is_resumable_io_error(errno)) {
                 errno = 0;
@@ -318,7 +318,7 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
     assert(rem >= 0);
 
     while (rem > 0) {
-        ssize_t wrsz = SSL_write(ssl, &msg[box->out_sent_size], rem);
+        ssize_t wrsz = syscall_SSL_write(ssl, &msg[box->out_sent_size], rem);
         BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
             "SSL_write: socket %d, write %zd => wrsz %zd",
             fd, rem, wrsz);
@@ -326,7 +326,7 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
             written += wrsz;
             return written;
         } else if (wrsz < 0) {
-            int reason = SSL_get_error(ssl, wrsz);
+            int reason = syscall_SSL_get_error(ssl, wrsz);
             switch (reason) {
             case SSL_ERROR_WANT_WRITE:
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
@@ -408,7 +408,7 @@ static bool enqueue_request_sent_message_to_listener(bus *b, boxed_msg *box) {
         } else {
             BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
                 "enqueue_request_sent: failed delivery %d", retries);
-            poll(NULL, 0, 10);  // delay
+            syscall_poll(NULL, 0, 10);  // delay
         }
     }
 

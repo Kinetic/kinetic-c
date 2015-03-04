@@ -22,7 +22,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <poll.h>
 #include <errno.h>
 #include <assert.h>
 #include <limits.h>
@@ -36,6 +35,7 @@
 #include "bus_ssl.h"
 #include "util.h"
 #include "yacht.h"
+#include "syscall.h"
 #include "atomic.h"
 
 #include "listener_task.h"
@@ -320,7 +320,7 @@ static bool poll_on_completion(struct bus *b, int fd) {
 
     for (;;) {
         BUS_LOG(b, 5, LOG_SENDING_REQUEST, "Polling on completion...tick...", b->udata);
-        int res = poll(fds, 1, -1);
+        int res = syscall_poll(fds, 1, -1);
         if (res == -1) {
             if (util_is_resumable_io_error(errno)) {
                 BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
@@ -342,7 +342,7 @@ static bool poll_on_completion(struct bus *b, int fd) {
             }
 
             BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Reading alert pipe...", b->udata);
-            ssize_t sz = read(fd, read_buf, sizeof(read_buf));
+            ssize_t sz = syscall_read(fd, read_buf, sizeof(read_buf));
 
             if (sz == sizeof(read_buf)) {
                 /* Payload: little-endian uint16_t, msec of backpressure. */
@@ -587,7 +587,7 @@ void bus_backpressure_delay(struct bus *b, size_t backpressure, uint8_t shift) {
     if (backpressure > 0) {
         BUS_LOG_SNPRINTF(b, 8, LOG_SENDER, b->udata, 64,
             "backpressure %zd", backpressure);
-        poll(NULL, 0, backpressure);
+        syscall_poll(NULL, 0, backpressure);
     }
 }
 
@@ -640,7 +640,7 @@ void bus_free(bus *b) {
     if (b == NULL) { return; }
     while (b->shutdown_state != SHUTDOWN_STATE_HALTED) {
         if (bus_shutdown(b)) { break; }
-        poll(NULL, 0, 10);  // sleep 10 msec
+        syscall_poll(NULL, 0, 10);  // sleep 10 msec
     }
 
     for (int i = 0; i < b->listener_count; i++) {
@@ -655,7 +655,7 @@ void bus_free(bus *b) {
         BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
             "threadpool_shutdown -- %d", i);
         if (threadpool_shutdown(b->threadpool, false)) { break; }
-        (void)poll(NULL, 0, 10);
+        (void)syscall_poll(NULL, 0, 10);
 
         if (i == limit - 1) {
             BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
