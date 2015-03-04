@@ -1,0 +1,31 @@
+.TH "send.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+send.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'bus_types\&.h'\fP
+.br
+\fC#include 'bus_internal_types\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBsend_do_blocking_send\fP (struct \fBbus\fP *b, \fBboxed_msg\fP *box)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "bool send_do_blocking_send (struct \fBbus\fP *b, \fBboxed_msg\fP *box)"
+
+.PP
+Definition at line 45 of file send\&.c\&.
+.PP
+References attempt_to_enqueue_sending_request_message_to_listener(), BUS_LOG_SNPRINTF, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT, BUS_SEND_UNREGISTERED_SOCKET, boxed_msg::fd, handle_failure(), handle_write(), HW_DONE, HW_ERROR, HW_OK, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, boxed_msg::out_sent_size, boxed_msg::out_seq_id, boxed_msg::timeout_sec, boxed_msg::tv_send_start, bus::udata, and util_timestamp()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

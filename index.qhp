@@ -30,6 +30,7 @@
               <section title="out_seq_id" ref="structboxed__msg.html#af95824a6049596447b014c9ad0666aaa" />
               <section title="out_msg" ref="structboxed__msg.html#a4bbd440c3391b3bfd7f108016cc5d457" />
               <section title="out_msg_size" ref="structboxed__msg.html#afa5e562c823076e36c4c92d909e4ef5d" />
+              <section title="out_sent_size" ref="structboxed__msg.html#abbb3d56b8df85679e47e45f83fdcebcd" />
             </section>
             <section title="bus" ref="structbus.html">
               <section title="sink_cb" ref="structbus.html#a3f72ca0a4bdb9978a9e012045623f933" />
@@ -40,19 +41,17 @@
               <section title="log_level" ref="structbus.html#a5ad9f0ac1d3f3f27a2fecb343b8ed2a0" />
               <section title="log_cb" ref="structbus.html#a1160376c92f0c8fce674ca77fa41335a" />
               <section title="log_lock" ref="structbus.html#ace72e36be8085e1cb2935af8b11207b7" />
-              <section title="sender_count" ref="structbus.html#a0c515f6e769e09d43fca4b11a62e8344" />
-              <section title="senders" ref="structbus.html#a89364a094feac4f2e881ac3f9972a483" />
               <section title="listener_count" ref="structbus.html#aeaebf543f45a2c9d6b3af31826c8af69" />
               <section title="listeners" ref="structbus.html#a63745ef2fca7e862f1301380892f0f22" />
               <section title="joined" ref="structbus.html#ac4589956d09754001506dab138c33432" />
               <section title="threads" ref="structbus.html#af44407d0ffd23017d659329d06a2af89" />
+              <section title="shutdown_state" ref="structbus.html#a873b1c898dbdee192950caea56b37729" />
               <section title="threadpool" ref="structbus.html#a1d57acc6c3586d4994215fb0efcac63e" />
               <section title="ssl_ctx" ref="structbus.html#a7feda9eb15cbc6deab2508973acfe85c" />
               <section title="fd_set" ref="structbus.html#a02b724a103e70fd7eea516e8c4b2556c" />
               <section title="fd_set_lock" ref="structbus.html#a01464a80aa897f2caa81b063402d1f28" />
             </section>
             <section title="bus_config" ref="structbus__config.html">
-              <section title="sender_count" ref="structbus__config.html#a2a469e8bdb721bc038f4009e190d9a0c" />
               <section title="listener_count" ref="structbus__config.html#a0f99f64476e50779df44d82c04d82397" />
               <section title="threadpool_cfg" ref="structbus__config.html#a4608cd6cb48070f425d5196e6bdc8051" />
               <section title="sink_cb" ref="structbus__config.html#ad20a0495c65231d9c50a9493531847a9" />
@@ -92,7 +91,7 @@
             <section title="bus_user_msg" ref="structbus__user__msg.html">
               <section title="fd" ref="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953" />
               <section title="type" ref="structbus__user__msg.html#acf9730acc14dbf810ad303346df79e52" />
-              <section title="seq_id" ref="structbus__user__msg.html#ace4aaba434c6505167d760dbd7994c95" />
+              <section title="seq_id" ref="structbus__user__msg.html#a3e8b1951c9628bf2745c3229af24b145" />
               <section title="msg" ref="structbus__user__msg.html#a2a7a830b6e51f212377c9b84d400e61a" />
               <section title="msg_size" ref="structbus__user__msg.html#a5167279f6c1b270eb5cab8813417582b" />
               <section title="timeout_sec" ref="structbus__user__msg.html#a0ce147ac612c037bdc4317b4032840d1" />
@@ -113,20 +112,14 @@
               <section title="used" ref="struct_byte_buffer_array.html#af6423547071ca14bcbd0a5d160fcba88" />
             </section>
             <section title="connection_info" ref="structconnection__info.html">
-              <section title="fd" ref="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8" />
+              <section title="fd" ref="structconnection__info.html#a6776f202bed7509222507f0d1db67500" />
+              <section title="type" ref="structconnection__info.html#a19201693299c03819f5cf5f7d110e8fb" />
+              <section title="udata" ref="structconnection__info.html#a848a07967f74e31333fddea49fab9668" />
+              <section title="ssl" ref="structconnection__info.html#a0655d6337cf80ac22943323121d118d1" />
+              <section title="largest_wr_seq_id_seen" ref="structconnection__info.html#a2ffb2a7b8d44fcb0405452391ee351b4" />
               <section title="error" ref="structconnection__info.html#aef3103f14c4cabe24a02e72a5ad62a16" />
               <section title="to_read_size" ref="structconnection__info.html#aef449f1f96dfb53fd9655ea0cf803480" />
-              <section title="largest_seq_id_seen" ref="structconnection__info.html#a7357df379b73912945c71edcb2e7bfe5" />
-              <section title="ssl" ref="structconnection__info.html#a0655d6337cf80ac22943323121d118d1" />
-              <section title="type" ref="structconnection__info.html#ab9f8d54036f15df03f070f271984c319" />
-              <section title="udata" ref="structconnection__info.html#a848a07967f74e31333fddea49fab9668" />
-            </section>
-            <section title="fd_info" ref="structfd__info.html">
-              <section title="fd" ref="structfd__info.html#ae854a5754cd0716eba8aabed12a6cd1e" />
-              <section title="ssl" ref="structfd__info.html#abce68830a0316490cb9a01d13e4e47b9" />
-              <section title="refcount" ref="structfd__info.html#a6f4437e27ab87d3f6a9d962a422e288f" />
-              <section title="largest_seq_id_seen" ref="structfd__info.html#a1ba7b197cc1ebf0355ee8ef8b4d705a3" />
-              <section title="errored" ref="structfd__info.html#a056b8cc22b630361dd331eca978f1d38" />
+              <section title="largest_rd_seq_id_seen" ref="structconnection__info.html#ab615d35e7a56f24003a371db6343ffe4" />
             </section>
             <section title="greatest_run_info" ref="structgreatest__run__info.html">
               <section title="flags" ref="structgreatest__run__info.html#ae8471c5288b7b2d6d6da2ed661671b8e" />
@@ -175,7 +168,6 @@
             <section title="KineticClientConfig" ref="struct_kinetic_client_config.html">
               <section title="logFile" ref="struct_kinetic_client_config.html#a200c4b5a44ff14aa20f9cb20df708a5b" />
               <section title="logLevel" ref="struct_kinetic_client_config.html#af2847d4cbb33b1104133778e207f5569" />
-              <section title="writerThreads" ref="struct_kinetic_client_config.html#ab9cc6db700bcbe64ed91b8589af0cd57" />
               <section title="readerThreads" ref="struct_kinetic_client_config.html#a7554ee4d63821eb7ce0d5c59d632018a" />
               <section title="maxThreadpoolThreads" ref="struct_kinetic_client_config.html#aedd2dc97b7736cfed0a748c991d0236f" />
             </section>
@@ -681,7 +673,7 @@
             </section>
             <section title="listener" ref="structlistener.html">
               <section title="bus" ref="structlistener.html#a3b774e2e0ad1e58c3a0bdf7207cabbb6" />
-              <section title="shutdown" ref="structlistener.html#a38f8e5d2c9f44093adb69974440a3741" />
+              <section title="shutdown_notify_fd" ref="structlistener.html#a98d02f437be02437df79939b196d178a" />
               <section title="commit_pipe" ref="structlistener.html#abc6abc228015127d7413688bbcad26b1" />
               <section title="incoming_msg_pipe" ref="structlistener.html#a5ac777bb848a219493fb3ac22902b703" />
               <section title="is_idle" ref="structlistener.html#ab64bf7942724f8b2209e840fec1b7101" />
@@ -704,6 +696,7 @@
               <section title="id" ref="structlistener__msg.html#a8bb0870834ca5fd0c183192f8748c718" />
               <section title="type" ref="structlistener__msg.html#a2e6e8423ecf60ca3fe3f787da52c1561" />
               <section title="next" ref="structlistener__msg.html#a856d225df0b476a85b12946457ad6513" />
+              <section title="pipes" ref="structlistener__msg.html#a7cbeff39416d25e0f81ae37286f59f37" />
               <section title="info" ref="structlistener__msg.html#a3ad14d5e8c3aace68db10da5e70c0f99" />
               <section title="notify_fd" ref="structlistener__msg.html#a6b0ba1341c3e8c74196c0453bf110e36" />
               <section title="add_socket" ref="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027" />
@@ -714,7 +707,6 @@
               <section title="hold" ref="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4" />
               <section title="box" ref="structlistener__msg.html#a39f0b0ecbdab57c7e35fef63d74f290d" />
               <section title="expect" ref="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be" />
-              <section title="unused" ref="structlistener__msg.html#aee243d33b555bb733bfeff7d2b116435" />
               <section title="shutdown" ref="structlistener__msg.html#a6d465300533fe5aa78e626247ee36d09" />
               <section title="u" ref="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb" />
             </section>
@@ -738,20 +730,6 @@
               <section title="error" ref="structrx__info__t.html#a3dda876455d854d92bc8f3c7104db728" />
               <section title="expect" ref="structrx__info__t.html#a7aa7c18547fd393ad4b22a9ea6eb7267" />
               <section title="u" ref="structrx__info__t.html#a92273c68b1cc0dd89592e5cd1e6ecd7b" />
-            </section>
-            <section title="sender" ref="structsender.html">
-              <section title="bus" ref="structsender.html#a757588eec51f26a7d24b7dd72662aad2" />
-              <section title="shutdown" ref="structsender.html#a562a8defcf71bd924f000e3919cd7065" />
-              <section title="tx_flags" ref="structsender.html#a9c78ecf6abe562a015b465d2f718e5c5" />
-              <section title="tx_info" ref="structsender.html#a7ea1a5cf71cd395158628fe887c74542" />
-              <section title="pipes" ref="structsender.html#a1f817ab1d64dacd856b891b8347bb527" />
-              <section title="commit_pipe" ref="structsender.html#a5d9bfeef7350314f6c03cda33569e00c" />
-              <section title="incoming_command_pipe" ref="structsender.html#a0ce70524aee2f28afdbb2dceace8100a" />
-              <section title="largest_seq_id_seen" ref="structsender.html#a8c67df66dc04d78ec44a8717a3fe2e54" />
-              <section title="active_fds" ref="structsender.html#aa8f75e8e259d4c7fc1cd1337c5ffc48b" />
-              <section title="fds" ref="structsender.html#aff32b617c8187617c30fde60a778dc44" />
-              <section title="is_idle" ref="structsender.html#a555122c7e76f98fbaadb430c6eafaa6d" />
-              <section title="fd_hash_table" ref="structsender.html#aff098306a5cefab0f1dc624bd3d1da04" />
             </section>
             <section title="thread_context" ref="structthread__context.html">
               <section title="t" ref="structthread__context.html#a737c06ed49032111c8c8c29ad39f521f" />
@@ -792,28 +770,6 @@
               <section title="task" ref="structthreadpool__task.html#a5e7d8e5dededc5d3d883bcdf0cd4db97" />
               <section title="cleanup" ref="structthreadpool__task.html#a0859c59120434648d22ea1686e68e1ce" />
               <section title="udata" ref="structthreadpool__task.html#a4f1f8ebfee18c4a5eb98a4cf9525e577" />
-            </section>
-            <section title="tx_info_t" ref="structtx__info__t.html">
-              <section title="id" ref="structtx__info__t.html#aee200e8d32eccb08f126ae3104058e67" />
-              <section title="done_pipe" ref="structtx__info__t.html#a37de7f02faa45a0cba93b35395be52ba" />
-              <section title="state" ref="structtx__info__t.html#a08ee9b3e37cda4f0ca22e67afa14f51d" />
-              <section title="fd" ref="structtx__info__t.html#a2292418fbcac8b8ba7c293bac184ced4" />
-              <section title="ssl" ref="structtx__info__t.html#a6e94516f2ca594ec49e1733346e13cb1" />
-              <section title="add_socket" ref="structtx__info__t.html#a8b45629d2d63915b01497ab2aa07ce88" />
-              <section title="rm_socket" ref="structtx__info__t.html#aa4d8bd6c3afe21286e04e81d145cf981" />
-              <section title="timeout_sec" ref="structtx__info__t.html#a37b46822e03d5685d68f37102110bc0a" />
-              <section title="box" ref="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a" />
-              <section title="enqueue" ref="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180" />
-              <section title="orig_timeout_sec" ref="structtx__info__t.html#a30fef92dc2359bb1195415a93a9250f8" />
-              <section title="sent_size" ref="structtx__info__t.html#a61afed662d74f641186fb125661639f5" />
-              <section title="fdi" ref="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309" />
-              <section title="write" ref="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92" />
-              <section title="notify" ref="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d" />
-              <section title="backpressure" ref="structtx__info__t.html#ad5806f7db0c0dcf5c87f96f29975de23" />
-              <section title="release" ref="structtx__info__t.html#a2445fd10412433bffce13104c1258a09" />
-              <section title="error" ref="structtx__info__t.html#a58c7097345d6030639c29df528bdc813" />
-              <section title="error" ref="structtx__info__t.html#ace7818c75a0e304fc57fda8f1634dd31" />
-              <section title="u" ref="structtx__info__t.html#abe3950d61af476a551829f85ae8219c2" />
             </section>
           </section>
           <section title="Data Fields" ref="functions.html">
@@ -944,12 +900,8 @@
               <section title="main" ref="blocking__put__get_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
             </section>
             <section title="bus.c" ref="bus_8c.html">
-              <section title="DEF_FD_SET_SIZE2" ref="bus_8c.html#a7129e5f5219981ae2b4d3babdc5f6a73" />
               <section title="THREAD_SHUTDOWN_SECONDS" ref="bus_8c.html#ac9db88b27b40f46d327f575228bd72ab" />
-              <section title="listener_mainloop" ref="bus_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0" />
-              <section title="sender_mainloop" ref="bus_8c.html#a4f1823592996205c3243bf49127a0004" />
               <section title="poll_on_completion" ref="bus_8c.html#af65a34f2a232288bc0aabe83521a47f7" />
-              <section title="sender_id_of_socket" ref="bus_8c.html#a4d924998574ebf0270f4d56027b25494" />
               <section title="listener_id_of_socket" ref="bus_8c.html#a013694e272579d83c87e0039769be8a9" />
               <section title="noop_log_cb" ref="bus_8c.html#a207a3f520e7e3a9e770c6a2e57086218" />
               <section title="noop_error_cb" ref="bus_8c.html#aacccc95ac547d085c1cd5626a0f38c6a" />
@@ -958,13 +910,14 @@
               <section title="bus_init" ref="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451" />
               <section title="box_msg" ref="bus_8c.html#ac0b99f211ee9a81b08697c509640323f" />
               <section title="bus_send_request" ref="bus_8c.html#a586029a1def1f27aa18916d5750cffe6" />
-              <section title="bus_get_sender_for_socket" ref="bus_8c.html#a8200fe8d77bbf9ebd2ee156835c3bb98" />
               <section title="bus_get_listener_for_socket" ref="bus_8c.html#a22b25ecf4c0e11de50f551369307c811" />
               <section title="bus_log_event_str" ref="bus_8c.html#a60692c56f07f224511783c1b4ed45c02" />
               <section title="bus_register_socket" ref="bus_8c.html#aece2c000aa2f834b76a77ce032a2d0d2" />
-              <section title="bus_release_socket" ref="bus_8c.html#a2119dbab02464f8c6ea0dd724d497666" />
+              <section title="bus_release_socket" ref="bus_8c.html#a8a4bd5912f0de341b8fc65040b70fc00" />
               <section title="bus_schedule_threadpool_task" ref="bus_8c.html#acfd818006ce9f3cb485667d288af9d81" />
+              <section title="free_connection_cb" ref="bus_8c.html#afe8e6487b9bc3c72b5159f9b3932ec5c" />
               <section title="bus_shutdown" ref="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9" />
+              <section title="bus_backpressure_delay" ref="bus_8c.html#a189082d10346e2334dfad2365445d16b" />
               <section title="bus_lock_log" ref="bus_8c.html#acc4bcbb78efe00f265027438dfea598f" />
               <section title="bus_unlock_log" ref="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87" />
               <section title="box_execute_cb" ref="bus_8c.html#a1f25ceee49e76a60fcb43f4e39c3cddd" />
@@ -977,15 +930,15 @@
               <section title="bus_send_request" ref="bus_8h.html#a586029a1def1f27aa18916d5750cffe6" />
               <section title="bus_log_event_str" ref="bus_8h.html#a60692c56f07f224511783c1b4ed45c02" />
               <section title="bus_register_socket" ref="bus_8h.html#acd5ad66702ebaae2fe54a81e6f747199" />
-              <section title="bus_release_socket" ref="bus_8h.html#a2119dbab02464f8c6ea0dd724d497666" />
+              <section title="bus_release_socket" ref="bus_8h.html#a8a4bd5912f0de341b8fc65040b70fc00" />
               <section title="bus_shutdown" ref="bus_8h.html#aec91507d9ff9f03cf3de0bed9498827b" />
-              <section title="bus_get_sender_for_socket" ref="bus_8h.html#a8200fe8d77bbf9ebd2ee156835c3bb98" />
               <section title="bus_get_listener_for_socket" ref="bus_8h.html#a22b25ecf4c0e11de50f551369307c811" />
               <section title="bus_schedule_threadpool_task" ref="bus_8h.html#acfd818006ce9f3cb485667d288af9d81" />
               <section title="bus_lock_log" ref="bus_8h.html#acc4bcbb78efe00f265027438dfea598f" />
               <section title="bus_unlock_log" ref="bus_8h.html#a78abbe3ffa07e668c7df0fb28fe8ad87" />
               <section title="bus_free" ref="bus_8h.html#a5fd7f7fb81f7a5bf439a2692486ff60d" />
               <section title="bus_process_boxed_message" ref="bus_8h.html#a56eff9f2e0b0df727c0e825aaee531b8" />
+              <section title="bus_backpressure_delay" ref="bus_8h.html#a189082d10346e2334dfad2365445d16b" />
             </section>
             <section title="bus_example.c" ref="bus__example_8c.html">
               <section title="MAGIC_NUMBER" ref="bus__example_8c.html#a54061e5993a5517320d425f44408cc86" />
@@ -1037,6 +990,7 @@
                 <section title="out_seq_id" ref="structboxed__msg.html#af95824a6049596447b014c9ad0666aaa" />
                 <section title="out_msg" ref="structboxed__msg.html#a4bbd440c3391b3bfd7f108016cc5d457" />
                 <section title="out_msg_size" ref="structboxed__msg.html#afa5e562c823076e36c4c92d909e4ef5d" />
+                <section title="out_sent_size" ref="structboxed__msg.html#abbb3d56b8df85679e47e45f83fdcebcd" />
               </section>
               <section title="bus" ref="structbus.html">
                 <section title="sink_cb" ref="structbus.html#a3f72ca0a4bdb9978a9e012045623f933" />
@@ -1047,28 +1001,35 @@
                 <section title="log_level" ref="structbus.html#a5ad9f0ac1d3f3f27a2fecb343b8ed2a0" />
                 <section title="log_cb" ref="structbus.html#a1160376c92f0c8fce674ca77fa41335a" />
                 <section title="log_lock" ref="structbus.html#ace72e36be8085e1cb2935af8b11207b7" />
-                <section title="sender_count" ref="structbus.html#a0c515f6e769e09d43fca4b11a62e8344" />
-                <section title="senders" ref="structbus.html#a89364a094feac4f2e881ac3f9972a483" />
                 <section title="listener_count" ref="structbus.html#aeaebf543f45a2c9d6b3af31826c8af69" />
                 <section title="listeners" ref="structbus.html#a63745ef2fca7e862f1301380892f0f22" />
                 <section title="joined" ref="structbus.html#ac4589956d09754001506dab138c33432" />
                 <section title="threads" ref="structbus.html#af44407d0ffd23017d659329d06a2af89" />
+                <section title="shutdown_state" ref="structbus.html#a873b1c898dbdee192950caea56b37729" />
                 <section title="threadpool" ref="structbus.html#a1d57acc6c3586d4994215fb0efcac63e" />
                 <section title="ssl_ctx" ref="structbus.html#a7feda9eb15cbc6deab2508973acfe85c" />
                 <section title="fd_set" ref="structbus.html#a02b724a103e70fd7eea516e8c4b2556c" />
                 <section title="fd_set_lock" ref="structbus.html#a01464a80aa897f2caa81b063402d1f28" />
               </section>
               <section title="connection_info" ref="structconnection__info.html">
-                <section title="fd" ref="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8" />
+                <section title="fd" ref="structconnection__info.html#a6776f202bed7509222507f0d1db67500" />
+                <section title="type" ref="structconnection__info.html#a19201693299c03819f5cf5f7d110e8fb" />
+                <section title="udata" ref="structconnection__info.html#a848a07967f74e31333fddea49fab9668" />
+                <section title="ssl" ref="structconnection__info.html#a0655d6337cf80ac22943323121d118d1" />
+                <section title="largest_wr_seq_id_seen" ref="structconnection__info.html#a2ffb2a7b8d44fcb0405452391ee351b4" />
                 <section title="error" ref="structconnection__info.html#aef3103f14c4cabe24a02e72a5ad62a16" />
                 <section title="to_read_size" ref="structconnection__info.html#aef449f1f96dfb53fd9655ea0cf803480" />
-                <section title="largest_seq_id_seen" ref="structconnection__info.html#a7357df379b73912945c71edcb2e7bfe5" />
-                <section title="ssl" ref="structconnection__info.html#a0655d6337cf80ac22943323121d118d1" />
-                <section title="type" ref="structconnection__info.html#ab9f8d54036f15df03f070f271984c319" />
-                <section title="udata" ref="structconnection__info.html#a848a07967f74e31333fddea49fab9668" />
+                <section title="largest_rd_seq_id_seen" ref="structconnection__info.html#ab615d35e7a56f24003a371db6343ffe4" />
               </section>
               <section title="BUS_NO_SSL" ref="bus__internal__types_8h.html#a76bf250ccc8ac3e852f8785c68903a47" />
               <section title="TIMEOUT_NOT_YET_SET" ref="bus__internal__types_8h.html#a82f24c54131d866631239cc371581955" />
+              <section title="LISTENER_MSG_TAG" ref="bus__internal__types_8h.html#ac2614000c9ba78a93265c20646fcc2ae" />
+              <section title="DEF_FD_SET_SIZE2" ref="bus__internal__types_8h.html#a7129e5f5219981ae2b4d3babdc5f6a73" />
+              <section title="shutdown_state_t" ref="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4e">
+                <section title="SHUTDOWN_STATE_RUNNING" ref="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea3da66d8f533391529e253a9a0389774d" />
+                <section title="SHUTDOWN_STATE_SHUTTING_DOWN" ref="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea20a95bda47f269835aae66b2d8152caf" />
+                <section title="SHUTDOWN_STATE_HALTED" ref="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea3d7ff9fa774c3ac46f21b11feb359828" />
+              </section>
               <section title="rx_error_t" ref="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3fa">
                 <section title="RX_ERROR_NONE" ref="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3faa1417a57269c97681c54f7e5e7b7503f1" />
                 <section title="RX_ERROR_READY_FOR_DELIVERY" ref="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3faa2ef7ec149b385fb940423126ae61f891" />
@@ -1085,16 +1046,16 @@
               <section title="init_client_SSL_CTX" ref="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2" />
               <section title="disable_SSL_compression" ref="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3" />
               <section title="disable_known_bad_ciphers" ref="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376" />
-              <section title="do_blocking_connection" ref="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15" />
+              <section title="do_blocking_connection" ref="bus__ssl_8c.html#af0ed2b19cdae16ebbbdbe082be5063b1" />
               <section title="bus_ssl_init" ref="bus__ssl_8c.html#ad7097b1068063cc1c875ea76d442b2c6" />
-              <section title="bus_ssl_connect" ref="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487" />
+              <section title="bus_ssl_connect" ref="bus__ssl_8c.html#aa25887b884806027c8cff1aa770072f3" />
               <section title="bus_ssl_disconnect" ref="bus__ssl_8c.html#ae30bd22a904c9649b3727e6a4917e0f7" />
               <section title="bus_ssl_ctx_free" ref="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7" />
             </section>
             <section title="bus_ssl.h" ref="bus__ssl_8h.html">
               <section title="KINETIC_USE_TLS_1_2" ref="bus__ssl_8h.html#a49cb96458b3e449948dbe5f22778664a" />
               <section title="bus_ssl_init" ref="bus__ssl_8h.html#ad7097b1068063cc1c875ea76d442b2c6" />
-              <section title="bus_ssl_connect" ref="bus__ssl_8h.html#a28804cfaf9b3cfe5f66de08f18b39487" />
+              <section title="bus_ssl_connect" ref="bus__ssl_8h.html#aa25887b884806027c8cff1aa770072f3" />
               <section title="bus_ssl_disconnect" ref="bus__ssl_8h.html#ae30bd22a904c9649b3727e6a4917e0f7" />
               <section title="bus_ssl_ctx_free" ref="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7" />
             </section>
@@ -1113,7 +1074,6 @@
                 <section title="u" ref="structbus__unpack__cb__res__t.html#ac71a45a4335a5f7e32f68fe9d92aae91" />
               </section>
               <section title="bus_config" ref="structbus__config.html">
-                <section title="sender_count" ref="structbus__config.html#a2a469e8bdb721bc038f4009e190d9a0c" />
                 <section title="listener_count" ref="structbus__config.html#a0f99f64476e50779df44d82c04d82397" />
                 <section title="threadpool_cfg" ref="structbus__config.html#a4608cd6cb48070f425d5196e6bdc8051" />
                 <section title="sink_cb" ref="structbus__config.html#ad20a0495c65231d9c50a9493531847a9" />
@@ -1140,7 +1100,7 @@
               <section title="bus_user_msg" ref="structbus__user__msg.html">
                 <section title="fd" ref="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953" />
                 <section title="type" ref="structbus__user__msg.html#acf9730acc14dbf810ad303346df79e52" />
-                <section title="seq_id" ref="structbus__user__msg.html#ace4aaba434c6505167d760dbd7994c95" />
+                <section title="seq_id" ref="structbus__user__msg.html#a3e8b1951c9628bf2745c3229af24b145" />
                 <section title="msg" ref="structbus__user__msg.html#a2a7a830b6e51f212377c9b84d400e61a" />
                 <section title="msg_size" ref="structbus__user__msg.html#a5167279f6c1b270eb5cab8813417582b" />
                 <section title="timeout_sec" ref="structbus__user__msg.html#a0ce147ac612c037bdc4317b4032840d1" />
@@ -1194,6 +1154,7 @@
                 <section title="BUS_SEND_BAD_RESPONSE" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aadd9779e34cdfcee87a3548baaf020ba3" />
                 <section title="BUS_SEND_UNREGISTERED_SOCKET" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aad373d2f8bb961b04fa9e2c2a21ee7dc1" />
                 <section title="BUS_SEND_RX_TIMEOUT_EXPECT" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84" />
+                <section title="BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa1305feede4d01715a05e893622b4c0e4" />
               </section>
               <section title="bus_socket_t" ref="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2">
                 <section title="BUS_SOCKET_PLAIN" ref="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb" />
@@ -1871,7 +1832,7 @@
             <section title="kinetic_operation.c" ref="kinetic__operation_8c.html">
               <section title="ATOMIC_FETCH_AND_INCREMENT" ref="kinetic__operation_8c.html#a8e6ca0967c3f2508bd8dab901a6a6ba7" />
               <section title="KineticOperation_ValidateOperation" ref="kinetic__operation_8c.html#a1dd564b1f626c3f16a29348abea6003b" />
-              <section title="KineticOperation_SendRequestInner" ref="kinetic__operation_8c.html#ac25ef0fa4d64bb4249e2d17d50ad1be3" />
+              <section title="KineticOperation_SendRequestInLock" ref="kinetic__operation_8c.html#a5317e92dc71dfa1df7acc0cf3f3be48e" />
               <section title="KineticOperation_SendRequest" ref="kinetic__operation_8c.html#a267d9481a259bcc26147d166a3fc515a" />
               <section title="log_request_seq_id" ref="kinetic__operation_8c.html#a3f48a946d6e75703c0fb26b3c9c6d12b" />
               <section title="KineticOperation_GetStatus" ref="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
@@ -1915,6 +1876,12 @@
               <section title="KineticOperation_BuildUpdateFirmware" ref="kinetic__operation_8c.html#a89b2c4d0633faef505afdcbed0506090" />
             </section>
             <section title="kinetic_operation.h" ref="kinetic__operation_8h.html">
+              <section title="KineticOperation_NonstandardTimeout" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11">
+                <section title="KineticOperation_TimeoutSetACL" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a200aecb997dcc9989d97140e6a36cdaa" />
+                <section title="KineticOperation_TimeoutSetPin" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a95f6c656c72ab0c29ccb4d61e8876062" />
+                <section title="KineticOperation_TimeoutLockUnlock" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a48826c3d7bb917828ee732e6f7c18a80" />
+                <section title="KineticOperation_TimeoutErase" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a8ef8806548580abe016ce513eab97fe1" />
+              </section>
               <section title="KineticOperation_SendRequest" ref="kinetic__operation_8h.html#a267d9481a259bcc26147d166a3fc515a" />
               <section title="KineticOperation_GetStatus" ref="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
               <section title="KineticOperation_Complete" ref="kinetic__operation_8h.html#a8ed174b20d25b186335a498efc3d763e" />
@@ -2703,6 +2670,23 @@
               <section title="KineticProto_command_algorithm__descriptor" ref="kinetic__proto_8h.html#aa4be7767ecac12b4f28c2aee218ae70a" />
               <section title="KineticProto_command_message_type__descriptor" ref="kinetic__proto_8h.html#a14f3a694d698fadf8ca916af7c0d561e" />
             </section>
+            <section title="kinetic_request.c" ref="kinetic__request_8c.html">
+              <section title="KineticRequest_PackCommand" ref="kinetic__request_8c.html#a22e92e6d39ecb48e2d3fcef993e17ba3" />
+              <section title="KineticRequest_PopulateAuthentication" ref="kinetic__request_8c.html#adf6d20f5e4ab9d40ed6f4351a68520c9" />
+              <section title="KineticRequest_PackMessage" ref="kinetic__request_8c.html#a604311e368349bb3695db1f44a59ee20" />
+              <section title="KineticRequest_SendRequest" ref="kinetic__request_8c.html#af4443dd94ce141114c37ddfc782967d7" />
+              <section title="KineticRequest_LockOperation" ref="kinetic__request_8c.html#af957f9c9ba08f70e12bff0e97e6b0bce" />
+              <section title="KineticRequest_UnlockOperation" ref="kinetic__request_8c.html#a633cdb1a73a6768566c4b7f9af534652" />
+            </section>
+            <section title="kinetic_request.h" ref="kinetic__request_8h.html">
+              <section title="KINETIC_REQUEST_PACK_FAILURE" ref="kinetic__request_8h.html#a3449d8c8442581494de7948a7ca24215" />
+              <section title="KineticRequest_PackCommand" ref="kinetic__request_8h.html#a22e92e6d39ecb48e2d3fcef993e17ba3" />
+              <section title="KineticRequest_PopulateAuthentication" ref="kinetic__request_8h.html#adf6d20f5e4ab9d40ed6f4351a68520c9" />
+              <section title="KineticRequest_PackMessage" ref="kinetic__request_8h.html#a278c7eb32b12868faeb5a861d45e1e53" />
+              <section title="KineticRequest_SendRequest" ref="kinetic__request_8h.html#af4443dd94ce141114c37ddfc782967d7" />
+              <section title="KineticRequest_LockOperation" ref="kinetic__request_8h.html#af957f9c9ba08f70e12bff0e97e6b0bce" />
+              <section title="KineticRequest_UnlockOperation" ref="kinetic__request_8h.html#a633cdb1a73a6768566c4b7f9af534652" />
+            </section>
             <section title="kinetic_resourcewaiter.c" ref="kinetic__resourcewaiter_8c.html">
               <section title="KineticResourceWaiter_Init" ref="kinetic__resourcewaiter_8c.html#ab8d207b74ec58acf48157292629bcc19" />
               <section title="KineticResourceWaiter_SetAvailable" ref="kinetic__resourcewaiter_8c.html#ab949799c5111ec8604edb07df3ecd85a" />
@@ -2925,7 +2909,6 @@
               <section title="KineticClientConfig" ref="struct_kinetic_client_config.html">
                 <section title="logFile" ref="struct_kinetic_client_config.html#a200c4b5a44ff14aa20f9cb20df708a5b" />
                 <section title="logLevel" ref="struct_kinetic_client_config.html#af2847d4cbb33b1104133778e207f5569" />
-                <section title="writerThreads" ref="struct_kinetic_client_config.html#ab9cc6db700bcbe64ed91b8589af0cd57" />
                 <section title="readerThreads" ref="struct_kinetic_client_config.html#a7554ee4d63821eb7ce0d5c59d632018a" />
                 <section title="maxThreadpoolThreads" ref="struct_kinetic_client_config.html#aedd2dc97b7736cfed0a748c991d0236f" />
               </section>
@@ -2947,7 +2930,6 @@
               <section title="KINETIC_P2P_OPERATION_LIMIT" ref="kinetic__types_8h.html#abaa05a6bc4a4faddc19e9fe8eee68ed1" />
               <section title="KINETIC_P2P_MAX_NESTING" ref="kinetic__types_8h.html#abb79428649147e2162ed75f6103b2b4b" />
               <section title="KINETIC_CLIENT_DEFAULT_LOG_LEVEL" ref="kinetic__types_8h.html#af3b3ca91939b728ff6079e235a2e7076" />
-              <section title="KINETIC_CLIENT_DEFAULT_WRITER_THREADS" ref="kinetic__types_8h.html#a86714c3c1cfa6964686a72207c3506c3" />
               <section title="KINETIC_CLIENT_DEFAULT_READER_THREADS" ref="kinetic__types_8h.html#a1139caf48a78b5227f8de332ab693314" />
               <section title="KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS" ref="kinetic__types_8h.html#acaccd20ff47192379bc8c497407bfc03" />
               <section title="KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN" ref="kinetic__types_8h.html#a19eed82e573d877a85b41792b553b1df" />
@@ -2997,6 +2979,7 @@
                 <section title="KINETIC_STATUS_ACL_ERROR" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0621c91bfcd921f59615cc58051a964c" />
                 <section title="KINETIC_STATUS_NOT_AUTHORIZED" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a4142ff2d3039615341b6094ee3635462" />
                 <section title="KINETIC_STATUS_INVALID_FILE" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57abaef7e263ce024c1b02ea5be12e21325" />
+                <section title="KINETIC_STATUS_REQUEST_REJECTED" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57adc5bcd24e5b2700860be2e9328511e31" />
                 <section title="KINETIC_STATUS_COUNT" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa6a2bd5838c04467a4b7385b1a1e8cb4" />
               </section>
               <section title="KineticLogInfo_Type" ref="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fce">
@@ -3201,74 +3184,63 @@
               <section title="KineticPDUHeader" ref="kinetic__types__internal_8h.html#aeefc7ca996ea90f5703b1b8440092c5e" />
             </section>
             <section title="listener.c" ref="listener_8c.html">
-              <section title="DEFAULT_READ_BUF_SIZE" ref="listener_8c.html#a55c36910fb23a47b98bb7467e508daa5" />
-              <section title="INCOMING_MSG_PIPE" ref="listener_8c.html#a15740a5bfc8ef3fb9b927ef0007010bf" />
-              <section title="INCOMING_MSG_PIPE_ID" ref="listener_8c.html#a45f028e5e02538a530e3fe313bfd728a" />
-              <section title="MSG_BP_1QTR" ref="listener_8c.html#ac68caa54ad7fc51c8f5815eeb6686f30" />
-              <section title="MSG_BP_HALF" ref="listener_8c.html#a7acc76219d8588ca99f58c2121988112" />
-              <section title="MSG_BP_3QTR" ref="listener_8c.html#a694eca96dcf9ed929ec1608f9c14c852" />
-              <section title="RX_INFO_BP_1QTR" ref="listener_8c.html#a7fc0ffea5ec4b8882f719f0d054e3824" />
-              <section title="RX_INFO_BP_HALF" ref="listener_8c.html#a3e7f3829ff5668c512d1911a3201db71" />
-              <section title="RX_INFO_BP_3QTR" ref="listener_8c.html#a45f677274d8f1de84ae1cc842c43d0fe" />
-              <section title="THREADPOOL_BP" ref="listener_8c.html#a87e98e5aad28f7363d5f4217d2e8d10e" />
-              <section title="TIMEOUT_DELAY" ref="listener_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6" />
-              <section title="DUMP_READ" ref="listener_8c.html#a1d7054af083649f8e410783fbf2e7b33" />
-              <section title="retry_delivery" ref="listener_8c.html#a91845232ef24ffde41ff3689b0caa0c9" />
               <section title="listener_init" ref="listener_8c.html#a0c3342b1bf0a6cade3e4729f40022ed7" />
-              <section title="listener_add_socket" ref="listener_8c.html#ac413d1ed53a01815b79baf2dc2f3ece5" />
-              <section title="listener_remove_socket" ref="listener_8c.html#a4926cd8003e7903476104018d81b35d2" />
-              <section title="get_backpressure" ref="listener_8c.html#ae7c7515f7ab98011b61aa5d1d8d28751" />
-              <section title="observe_backpressure" ref="listener_8c.html#ae71f036eb0a57423a8e2b225bcf32e12" />
+              <section title="listener_add_socket" ref="listener_8c.html#ab80e1a8ec62bff3ad6a1b69eca150f1d" />
+              <section title="listener_remove_socket" ref="listener_8c.html#af3f377ca9b433af51d906a103eee304f" />
               <section title="listener_hold_response" ref="listener_8c.html#acbec5b5b8251c2787ebdb7ec4f73f20b" />
               <section title="listener_expect_response" ref="listener_8c.html#ac4ca027f622cf5d1ab731f92f9cb66a8" />
-              <section title="listener_shutdown" ref="listener_8c.html#ac185ab098ac6d91c0474bf847ef64265" />
+              <section title="listener_shutdown" ref="listener_8c.html#a29137171fd3f0a2f878c450544927c56" />
               <section title="listener_free" ref="listener_8c.html#ae02746f8c243596cedd386fc1d7630e5" />
-              <section title="listener_mainloop" ref="listener_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0" />
-              <section title="check_and_flush_incoming_msg_pipe" ref="listener_8c.html#a41d1e6df116c066e5c56dd646c3fe898" />
-              <section title="set_error_for_socket" ref="listener_8c.html#affa8fc52abd48c60492b25fae5496d0a" />
-              <section title="print_SSL_error" ref="listener_8c.html#aa4a0d6443a6bb65b3fee1027d8eef70f" />
-              <section title="socket_read_plain" ref="listener_8c.html#a48e209edcf9421a36f6cd97eca45aa39" />
-              <section title="socket_read_ssl" ref="listener_8c.html#a27540bed6e0ee31601a54a31613bd1ee" />
-              <section title="sink_socket_read" ref="listener_8c.html#a11b801753f3195b71431c6ae11f4e2b7" />
-              <section title="attempt_recv" ref="listener_8c.html#a09b57f3f2be5eb499e924308bab8f989" />
-              <section title="find_info_by_sequence_id" ref="listener_8c.html#a5ef5faf6ec41a63ec7b82933b1eaaadd" />
-              <section title="process_unpacked_message" ref="listener_8c.html#a37c58a09e6d324e7114a2becb2683bbd" />
-              <section title="tick_handler" ref="listener_8c.html#aeedae561a63e857e130be4d40cca8588" />
-              <section title="dump_rx_info_table" ref="listener_8c.html#a2b75e85745a6799df9e90def5caf0578" />
-              <section title="clean_up_completed_info" ref="listener_8c.html#a21e5de0bee07a8e984f3c1408b8e3b62" />
-              <section title="notify_message_failure" ref="listener_8c.html#ac36cf71f469df6618223f84af9c34ad2" />
-              <section title="get_free_rx_info" ref="listener_8c.html#a86fe702b7851275f2bd50f8897dc87fe" />
-              <section title="get_connection_info" ref="listener_8c.html#a3bdbad0ba5aa31b4f2dcdfe16ed379bc" />
-              <section title="release_rx_info" ref="listener_8c.html#aa53f32f1fa516ebdbb8cc66bb752e712" />
+              <section title="push_message" ref="listener_8c.html#a00065dea96385786e952e23319beb799" />
               <section title="get_free_msg" ref="listener_8c.html#a7d7c8279976ea7b7aca15479f6892db4" />
-              <section title="release_msg" ref="listener_8c.html#ac4aa4e12d23e8c53a5a958e335cf4a2b" />
-              <section title="push_message" ref="listener_8c.html#abc9a1037551b3c8a9ae45f7b795ab8c3" />
-              <section title="msg_handler" ref="listener_8c.html#abff7ce205d94f17798e20b45f8ddd289" />
-              <section title="notify_caller" ref="listener_8c.html#a674dfc8997b3f8cd95eeb8afc76448c0" />
-              <section title="grow_read_buf" ref="listener_8c.html#a138a357c639da15c5e88958123e660b0" />
-              <section title="add_socket" ref="listener_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d" />
-              <section title="free_ci" ref="listener_8c.html#af7c8c5f81320edf7ea28286384c59b40" />
-              <section title="remove_socket" ref="listener_8c.html#ae12e728e14ca2922ae27678b00a151f3" />
-              <section title="hold_response" ref="listener_8c.html#ab3d2bbc5f77d606f0040dee30e80648b" />
-              <section title="get_hold_rx_info" ref="listener_8c.html#a635353fdc72baf5a4112e2d6a896000f" />
-              <section title="attempt_delivery" ref="listener_8c.html#a7abf986a57b2b4a5ae53b48fc051aafb" />
-              <section title="expect_response" ref="listener_8c.html#a568c4bcef944d6d127e88b8a673e2890" />
-              <section title="shutdown" ref="listener_8c.html#aab8481f4406eb5406717e976f6d852a2" />
             </section>
             <section title="listener.h" ref="listener_8h.html">
+              <section title="LISTENER_BACKPRESSURE_SHIFT" ref="listener_8h.html#a98cbdaeea07cc02d68f1e960e199e87a" />
+              <section title="LISTENER_EXPECT_BACKPRESSURE_SHIFT" ref="listener_8h.html#a142b7ddbed12a525d556a51b76d074ab" />
               <section title="listener_init" ref="listener_8h.html#a0c3342b1bf0a6cade3e4729f40022ed7" />
-              <section title="listener_add_socket" ref="listener_8h.html#ac413d1ed53a01815b79baf2dc2f3ece5" />
-              <section title="listener_remove_socket" ref="listener_8h.html#a4926cd8003e7903476104018d81b35d2" />
+              <section title="listener_add_socket" ref="listener_8h.html#ab80e1a8ec62bff3ad6a1b69eca150f1d" />
+              <section title="listener_remove_socket" ref="listener_8h.html#af3f377ca9b433af51d906a103eee304f" />
               <section title="listener_hold_response" ref="listener_8h.html#acbec5b5b8251c2787ebdb7ec4f73f20b" />
               <section title="listener_expect_response" ref="listener_8h.html#ac4ca027f622cf5d1ab731f92f9cb66a8" />
-              <section title="listener_shutdown" ref="listener_8h.html#ac185ab098ac6d91c0474bf847ef64265" />
+              <section title="listener_shutdown" ref="listener_8h.html#a29137171fd3f0a2f878c450544927c56" />
               <section title="listener_free" ref="listener_8h.html#ae02746f8c243596cedd386fc1d7630e5" />
             </section>
+            <section title="listener_cmd.c" ref="listener__cmd_8c.html">
+              <section title="ListenerCmd_NotifyCaller" ref="listener__cmd_8c.html#a643355d8f006114f3186791239b7d4ec" />
+              <section title="ListenerCmd_CheckIncomingMessages" ref="listener__cmd_8c.html#af3a2e40b666b88497011b99357eec493" />
+              <section title="msg_handler" ref="listener__cmd_8c.html#abff7ce205d94f17798e20b45f8ddd289" />
+              <section title="add_socket" ref="listener__cmd_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d" />
+              <section title="remove_socket" ref="listener__cmd_8c.html#a6a844acc520512e0dbe5aae6b71da07b" />
+              <section title="hold_response" ref="listener__cmd_8c.html#ab3d2bbc5f77d606f0040dee30e80648b" />
+              <section title="get_hold_rx_info" ref="listener__cmd_8c.html#a635353fdc72baf5a4112e2d6a896000f" />
+              <section title="expect_response" ref="listener__cmd_8c.html#a568c4bcef944d6d127e88b8a673e2890" />
+              <section title="shutdown" ref="listener__cmd_8c.html#acb20f311c191ce18331d753f8aa78983" />
+              <section title="get_free_rx_info" ref="listener__cmd_8c.html#a86fe702b7851275f2bd50f8897dc87fe" />
+            </section>
+            <section title="listener_cmd.h" ref="listener__cmd_8h.html">
+              <section title="ListenerCmd_NotifyCaller" ref="listener__cmd_8h.html#a643355d8f006114f3186791239b7d4ec" />
+              <section title="ListenerCmd_CheckIncomingMessages" ref="listener__cmd_8h.html#af3a2e40b666b88497011b99357eec493" />
+            </section>
+            <section title="listener_cmd_internal.h" ref="listener__cmd__internal_8h.html">
+              <section title="msg_handler" ref="listener__cmd__internal_8h.html#abff7ce205d94f17798e20b45f8ddd289" />
+              <section title="add_socket" ref="listener__cmd__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d" />
+              <section title="remove_socket" ref="listener__cmd__internal_8h.html#a6a844acc520512e0dbe5aae6b71da07b" />
+              <section title="hold_response" ref="listener__cmd__internal_8h.html#ab3d2bbc5f77d606f0040dee30e80648b" />
+              <section title="expect_response" ref="listener__cmd__internal_8h.html#ac2f4cfd7e199d3c933f72d46144dee42" />
+              <section title="shutdown" ref="listener__cmd__internal_8h.html#acb20f311c191ce18331d753f8aa78983" />
+              <section title="get_free_rx_info" ref="listener__cmd__internal_8h.html#a86fe702b7851275f2bd50f8897dc87fe" />
+              <section title="get_hold_rx_info" ref="listener__cmd__internal_8h.html#a635353fdc72baf5a4112e2d6a896000f" />
+            </section>
             <section title="listener_internal.h" ref="listener__internal_8h.html">
+              <section title="get_free_msg" ref="listener__internal_8h.html#a7d7c8279976ea7b7aca15479f6892db4" />
+              <section title="push_message" ref="listener__internal_8h.html#a00065dea96385786e952e23319beb799" />
+            </section>
+            <section title="listener_internal_types.h" ref="listener__internal__types_8h.html">
               <section title="listener_msg" ref="structlistener__msg.html">
                 <section title="id" ref="structlistener__msg.html#a8bb0870834ca5fd0c183192f8748c718" />
                 <section title="type" ref="structlistener__msg.html#a2e6e8423ecf60ca3fe3f787da52c1561" />
                 <section title="next" ref="structlistener__msg.html#a856d225df0b476a85b12946457ad6513" />
+                <section title="pipes" ref="structlistener__msg.html#a7cbeff39416d25e0f81ae37286f59f37" />
                 <section title="info" ref="structlistener__msg.html#a3ad14d5e8c3aace68db10da5e70c0f99" />
                 <section title="notify_fd" ref="structlistener__msg.html#a6b0ba1341c3e8c74196c0453bf110e36" />
                 <section title="add_socket" ref="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027" />
@@ -3279,7 +3251,6 @@
                 <section title="hold" ref="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4" />
                 <section title="box" ref="structlistener__msg.html#a39f0b0ecbdab57c7e35fef63d74f290d" />
                 <section title="expect" ref="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be" />
-                <section title="unused" ref="structlistener__msg.html#aee243d33b555bb733bfeff7d2b116435" />
                 <section title="shutdown" ref="structlistener__msg.html#a6d465300533fe5aa78e626247ee36d09" />
                 <section title="u" ref="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb" />
               </section>
@@ -3300,7 +3271,7 @@
               </section>
               <section title="listener" ref="structlistener.html">
                 <section title="bus" ref="structlistener.html#a3b774e2e0ad1e58c3a0bdf7207cabbb6" />
-                <section title="shutdown" ref="structlistener.html#a38f8e5d2c9f44093adb69974440a3741" />
+                <section title="shutdown_notify_fd" ref="structlistener.html#a98d02f437be02437df79939b196d178a" />
                 <section title="commit_pipe" ref="structlistener.html#abc6abc228015127d7413688bbcad26b1" />
                 <section title="incoming_msg_pipe" ref="structlistener.html#a5ac777bb848a219493fb3ac22902b703" />
                 <section title="is_idle" ref="structlistener.html#ab64bf7942724f8b2209e840fec1b7101" />
@@ -3319,49 +3290,93 @@
                 <section title="read_buf_size" ref="structlistener.html#a78f69f0cfcea46e590a71e1fccf81b92" />
                 <section title="read_buf" ref="structlistener.html#ada742987f7ce7758fc4422a290948d97" />
               </section>
-              <section title="MAX_FDS" ref="listener__internal_8h.html#a816ccaf3e5e64cc98f2b5613cc177398" />
-              <section title="MAX_PENDING_MESSAGES" ref="listener__internal_8h.html#ab8da6d181eef4debc5b438687fd9804a" />
-              <section title="MAX_QUEUE_MESSAGES" ref="listener__internal_8h.html#a6ee3565e40e9a157decfa328ac562140" />
-              <section title="MIN_DELAY" ref="listener__internal_8h.html#ad3b51637a39a4ff75bd979b917cb89ef" />
-              <section title="MAX_DELAY" ref="listener__internal_8h.html#a16027d8acc5301e440cefa086eb9db2a" />
-              <section title="INFINITE_DELAY" ref="listener__internal_8h.html#ab893de6f8a0ec8b0e6dd8097ff398019" />
-              <section title="msg_flag_t" ref="listener__internal_8h.html#a86f29ffc383d560855689fdb7abc4093" />
-              <section title="MSG_TYPE" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0b">
-                <section title="MSG_NONE" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba40e71b65f54da2ea5d97c37e720346b1" />
-                <section title="MSG_ADD_SOCKET" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2" />
-                <section title="MSG_REMOVE_SOCKET" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba433ef8aba97342ee9a920c5046cd4d67" />
-                <section title="MSG_HOLD_RESPONSE" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de" />
-                <section title="MSG_EXPECT_RESPONSE" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed" />
-                <section title="MSG_SHUTDOWN" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba621b8f7f84a5fe2cbb10c08ce2c58ff3" />
+              <section title="DEFAULT_READ_BUF_SIZE" ref="listener__internal__types_8h.html#a55c36910fb23a47b98bb7467e508daa5" />
+              <section title="INCOMING_MSG_PIPE" ref="listener__internal__types_8h.html#a15740a5bfc8ef3fb9b927ef0007010bf" />
+              <section title="INCOMING_MSG_PIPE_ID" ref="listener__internal__types_8h.html#a45f028e5e02538a530e3fe313bfd728a" />
+              <section title="MAX_FDS" ref="listener__internal__types_8h.html#a816ccaf3e5e64cc98f2b5613cc177398" />
+              <section title="MAX_PENDING_MESSAGES" ref="listener__internal__types_8h.html#ab8da6d181eef4debc5b438687fd9804a" />
+              <section title="MAX_QUEUE_MESSAGES" ref="listener__internal__types_8h.html#a6ee3565e40e9a157decfa328ac562140" />
+              <section title="MIN_DELAY" ref="listener__internal__types_8h.html#ad3b51637a39a4ff75bd979b917cb89ef" />
+              <section title="MAX_DELAY" ref="listener__internal__types_8h.html#a16027d8acc5301e440cefa086eb9db2a" />
+              <section title="INFINITE_DELAY" ref="listener__internal__types_8h.html#ab893de6f8a0ec8b0e6dd8097ff398019" />
+              <section title="LISTENER_NO_FD" ref="listener__internal__types_8h.html#a9edc873b66adf46bf716ceb7ab77bb07" />
+              <section title="LISTENER_SHUTDOWN_COMPLETE_FD" ref="listener__internal__types_8h.html#a2283299012dd873e0a5e3b77dc417b08" />
+              <section title="msg_flag_t" ref="listener__internal__types_8h.html#a86f29ffc383d560855689fdb7abc4093" />
+              <section title="MSG_TYPE" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0b">
+                <section title="MSG_NONE" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba40e71b65f54da2ea5d97c37e720346b1" />
+                <section title="MSG_ADD_SOCKET" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2" />
+                <section title="MSG_REMOVE_SOCKET" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba433ef8aba97342ee9a920c5046cd4d67" />
+                <section title="MSG_HOLD_RESPONSE" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de" />
+                <section title="MSG_EXPECT_RESPONSE" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed" />
+                <section title="MSG_SHUTDOWN" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba621b8f7f84a5fe2cbb10c08ce2c58ff3" />
               </section>
-              <section title="rx_info_state" ref="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5">
-                <section title="RIS_HOLD" ref="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5aaf352ec9825784a31574ea3823fb7c82" />
-                <section title="RIS_EXPECT" ref="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4" />
-                <section title="RIS_INACTIVE" ref="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41" />
+              <section title="rx_info_state" ref="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5">
+                <section title="RIS_HOLD" ref="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5aaf352ec9825784a31574ea3823fb7c82" />
+                <section title="RIS_EXPECT" ref="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4" />
+                <section title="RIS_INACTIVE" ref="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41" />
               </section>
-              <section title="tick_handler" ref="listener__internal_8h.html#aeedae561a63e857e130be4d40cca8588" />
-              <section title="get_free_rx_info" ref="listener__internal_8h.html#ab01748a18f035b2304ae416265a27e8d" />
-              <section title="release_rx_info" ref="listener__internal_8h.html#aa53f32f1fa516ebdbb8cc66bb752e712" />
-              <section title="get_free_msg" ref="listener__internal_8h.html#a7d7c8279976ea7b7aca15479f6892db4" />
-              <section title="push_message" ref="listener__internal_8h.html#abc9a1037551b3c8a9ae45f7b795ab8c3" />
-              <section title="release_msg" ref="listener__internal_8h.html#ac4aa4e12d23e8c53a5a958e335cf4a2b" />
-              <section title="attempt_recv" ref="listener__internal_8h.html#ac952b94296b3ffa69d793f830ceae1e9" />
-              <section title="process_unpacked_message" ref="listener__internal_8h.html#a37c58a09e6d324e7114a2becb2683bbd" />
-              <section title="notify_message_failure" ref="listener__internal_8h.html#ac36cf71f469df6618223f84af9c34ad2" />
-              <section title="attempt_delivery" ref="listener__internal_8h.html#a7abf986a57b2b4a5ae53b48fc051aafb" />
-              <section title="clean_up_completed_info" ref="listener__internal_8h.html#a21e5de0bee07a8e984f3c1408b8e3b62" />
-              <section title="observe_backpressure" ref="listener__internal_8h.html#ae71f036eb0a57423a8e2b225bcf32e12" />
-              <section title="grow_read_buf" ref="listener__internal_8h.html#a138a357c639da15c5e88958123e660b0" />
-              <section title="check_and_flush_incoming_msg_pipe" ref="listener__internal_8h.html#a41d1e6df116c066e5c56dd646c3fe898" />
-              <section title="get_hold_rx_info" ref="listener__internal_8h.html#a635353fdc72baf5a4112e2d6a896000f" />
-              <section title="dump_rx_info_table" ref="listener__internal_8h.html#a2b75e85745a6799df9e90def5caf0578" />
-              <section title="msg_handler" ref="listener__internal_8h.html#a002c308d7296510bcb2df6331792ea09" />
-              <section title="add_socket" ref="listener__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d" />
-              <section title="remove_socket" ref="listener__internal_8h.html#ae12e728e14ca2922ae27678b00a151f3" />
-              <section title="hold_response" ref="listener__internal_8h.html#ab3d2bbc5f77d606f0040dee30e80648b" />
-              <section title="expect_response" ref="listener__internal_8h.html#ac2f4cfd7e199d3c933f72d46144dee42" />
-              <section title="shutdown" ref="listener__internal_8h.html#aab8481f4406eb5406717e976f6d852a2" />
-              <section title="free_ci" ref="listener__internal_8h.html#af7c8c5f81320edf7ea28286384c59b40" />
+            </section>
+            <section title="listener_io.c" ref="listener__io_8c.html">
+              <section title="DUMP_READ" ref="listener__io_8c.html#a1d7054af083649f8e410783fbf2e7b33" />
+              <section title="ListenerIO_AttemptRecv" ref="listener__io_8c.html#a3494b6d56e053563e19231fdda8ce6c8" />
+              <section title="socket_read_plain" ref="listener__io_8c.html#a48e209edcf9421a36f6cd97eca45aa39" />
+              <section title="print_SSL_error" ref="listener__io_8c.html#aa4a0d6443a6bb65b3fee1027d8eef70f" />
+              <section title="socket_read_ssl" ref="listener__io_8c.html#a27540bed6e0ee31601a54a31613bd1ee" />
+              <section title="sink_socket_read" ref="listener__io_8c.html#a11b801753f3195b71431c6ae11f4e2b7" />
+              <section title="set_error_for_socket" ref="listener__io_8c.html#affa8fc52abd48c60492b25fae5496d0a" />
+              <section title="find_info_by_sequence_id" ref="listener__io_8c.html#a5ef5faf6ec41a63ec7b82933b1eaaadd" />
+              <section title="process_unpacked_message" ref="listener__io_8c.html#a37c58a09e6d324e7114a2becb2683bbd" />
+            </section>
+            <section title="listener_io.h" ref="listener__io_8h.html">
+              <section title="ListenerIO_AttemptRecv" ref="listener__io_8h.html#a3494b6d56e053563e19231fdda8ce6c8" />
+            </section>
+            <section title="listener_io_internal.h" ref="listener__io__internal_8h.html">
+              <section title="socket_read_plain" ref="listener__io__internal_8h.html#a48e209edcf9421a36f6cd97eca45aa39" />
+              <section title="socket_read_ssl" ref="listener__io__internal_8h.html#a27540bed6e0ee31601a54a31613bd1ee" />
+              <section title="sink_socket_read" ref="listener__io__internal_8h.html#a11b801753f3195b71431c6ae11f4e2b7" />
+              <section title="print_SSL_error" ref="listener__io__internal_8h.html#aa4a0d6443a6bb65b3fee1027d8eef70f" />
+              <section title="set_error_for_socket" ref="listener__io__internal_8h.html#affa8fc52abd48c60492b25fae5496d0a" />
+              <section title="process_unpacked_message" ref="listener__io__internal_8h.html#a37c58a09e6d324e7114a2becb2683bbd" />
+              <section title="find_info_by_sequence_id" ref="listener__io__internal_8h.html#a5ef5faf6ec41a63ec7b82933b1eaaadd" />
+            </section>
+            <section title="listener_task.c" ref="listener__task_8c.html">
+              <section title="TIMEOUT_DELAY" ref="listener__task_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6" />
+              <section title="MSG_BP_1QTR" ref="listener__task_8c.html#ac68caa54ad7fc51c8f5815eeb6686f30" />
+              <section title="MSG_BP_HALF" ref="listener__task_8c.html#a7acc76219d8588ca99f58c2121988112" />
+              <section title="MSG_BP_3QTR" ref="listener__task_8c.html#a694eca96dcf9ed929ec1608f9c14c852" />
+              <section title="RX_INFO_BP_1QTR" ref="listener__task_8c.html#a7fc0ffea5ec4b8882f719f0d054e3824" />
+              <section title="RX_INFO_BP_HALF" ref="listener__task_8c.html#a3e7f3829ff5668c512d1911a3201db71" />
+              <section title="RX_INFO_BP_3QTR" ref="listener__task_8c.html#a45f677274d8f1de84ae1cc842c43d0fe" />
+              <section title="THREADPOOL_BP" ref="listener__task_8c.html#a87e98e5aad28f7363d5f4217d2e8d10e" />
+              <section title="ListenerTask_MainLoop" ref="listener__task_8c.html#aa15828328e387b91fce029728b33af0b" />
+              <section title="tick_handler" ref="listener__task_8c.html#aeedae561a63e857e130be4d40cca8588" />
+              <section title="ListenerTask_DumpRXInfoTable" ref="listener__task_8c.html#ab7ad0a7cb1818c0849a8e21204d89b0e" />
+              <section title="retry_delivery" ref="listener__task_8c.html#a91845232ef24ffde41ff3689b0caa0c9" />
+              <section title="clean_up_completed_info" ref="listener__task_8c.html#a21e5de0bee07a8e984f3c1408b8e3b62" />
+              <section title="ListenerTask_NotifyMessageFailure" ref="listener__task_8c.html#a7d8487504334e548f1d668b12d8fe3de" />
+              <section title="get_connection_info" ref="listener__task_8c.html#a3bdbad0ba5aa31b4f2dcdfe16ed379bc" />
+              <section title="ListenerTask_ReleaseRXInfo" ref="listener__task_8c.html#acd90b4d0e9b1520e1598993662932e55" />
+              <section title="ListenerTask_ReleaseMsg" ref="listener__task_8c.html#ab7578ac5f274bba1ca78cc8c4048eba2" />
+              <section title="ListenerTask_GrowReadBuf" ref="listener__task_8c.html#ade7318781f948e86471ec58d880d201d" />
+              <section title="ListenerTask_AttemptDelivery" ref="listener__task_8c.html#a89f2c54c450dd6f6c6d35b9da42b8ab4" />
+              <section title="observe_backpressure" ref="listener__task_8c.html#ae71f036eb0a57423a8e2b225bcf32e12" />
+              <section title="ListenerTask_GetBackpressure" ref="listener__task_8c.html#a42bfa01483c2ac1c72f3e03897fe4e0a" />
+            </section>
+            <section title="listener_task.h" ref="listener__task_8h.html">
+              <section title="ListenerTask_MainLoop" ref="listener__task_8h.html#aa15828328e387b91fce029728b33af0b" />
+              <section title="ListenerTask_ReleaseMsg" ref="listener__task_8h.html#aa6b7728c195142eea1c0ab676cda1299" />
+              <section title="ListenerTask_ReleaseRXInfo" ref="listener__task_8h.html#abb2ea3b0531f8ee9cdd7d75c4127f6f2" />
+              <section title="ListenerTask_GrowReadBuf" ref="listener__task_8h.html#ade7318781f948e86471ec58d880d201d" />
+              <section title="ListenerTask_AttemptDelivery" ref="listener__task_8h.html#a89f2c54c450dd6f6c6d35b9da42b8ab4" />
+              <section title="ListenerTask_NotifyMessageFailure" ref="listener__task_8h.html#a7d8487504334e548f1d668b12d8fe3de" />
+              <section title="ListenerTask_GetBackpressure" ref="listener__task_8h.html#a42bfa01483c2ac1c72f3e03897fe4e0a" />
+              <section title="ListenerTask_DumpRXInfoTable" ref="listener__task_8h.html#ab7ad0a7cb1818c0849a8e21204d89b0e" />
+            </section>
+            <section title="listener_task_internal.h" ref="listener__task__internal_8h.html">
+              <section title="tick_handler" ref="listener__task__internal_8h.html#aeedae561a63e857e130be4d40cca8588" />
+              <section title="clean_up_completed_info" ref="listener__task__internal_8h.html#a21e5de0bee07a8e984f3c1408b8e3b62" />
+              <section title="retry_delivery" ref="listener__task__internal_8h.html#a91845232ef24ffde41ff3689b0caa0c9" />
+              <section title="observe_backpressure" ref="listener__task__internal_8h.html#ae71f036eb0a57423a8e2b225bcf32e12" />
             </section>
             <section title="main.c" ref="main_8c.html">
               <section title="OPT_MIN" ref="main_8c.html#a55a00b40a60585a501fcf058853489cb" />
@@ -3403,7 +3418,7 @@
               </section>
               <section title="ParseOptions" ref="main_8c.html#ac8671b12570e90053da9f034e7a265fe" />
               <section title="ExecuteOperation" ref="main_8c.html#a57e6fa09d0aa7bc65bdefb4034e51ffc" />
-              <section title="ConfigureEntry" ref="main_8c.html#a11899ce4e556af8f5b7adaf23e389155" />
+              <section title="ConfigureEntry" ref="main_8c.html#af72d3fdb1f8c16ed4490769876486cd6" />
               <section title="PrintLogInfo" ref="main_8c.html#af965f3b1275191f0855813297eaf69ce" />
               <section title="GetOptString" ref="main_8c.html#a6c4590fb4c5d4f8f87c8250fc403ce75" />
               <section title="PrintUsage" ref="main_8c.html#a456168dda4622d587bbbe87f2619bdff" />
@@ -3414,149 +3429,27 @@
               <section title="put_finished" ref="put__nonblocking_8c.html#a4cc5244bc7b6dd83d1bc8eae3bb37608" />
               <section title="main" ref="put__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
             </section>
-            <section title="sender.c" ref="sender_8c.html">
-              <section title="CMD_FD" ref="sender_8c.html#a3ea94b37cd6445d977af94a78e2c18e0" />
-              <section title="TIMEOUT_DELAY" ref="sender_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6" />
-              <section title="sender_init" ref="sender_8c.html#a991ff0badb44cb746fe639fa54fe1c31" />
-              <section title="sender_register_socket" ref="sender_8c.html#a3c833ea734a4c9865acc47d91ddb7fd5" />
-              <section title="sender_remove_socket" ref="sender_8c.html#a7345f822ab1bc69dcc35cc871423ec19" />
-              <section title="sender_send_request" ref="sender_8c.html#ace027324e2b89c0f46e6798b23ec58ce" />
-              <section title="sender_shutdown" ref="sender_8c.html#a6387b60648d2aa6ae5d724ebf04ad3cc" />
-              <section title="sender_free" ref="sender_8c.html#acdaed429f2456b13e846d4e7f846bd65" />
-              <section title="get_free_tx_info" ref="sender_8c.html#af18ed407301b3bdd9c44b3b05f2d54cf" />
-              <section title="release_tx_info" ref="sender_8c.html#a9ae301320ba4b577b2462907678af613" />
-              <section title="get_notify_pipe" ref="sender_8c.html#a8c2d8a592a292ec3105b6f1ad205f3dd" />
-              <section title="write_commit" ref="sender_8c.html#a34859023ba746b0359f571dad003ab98" />
-              <section title="commit_event_and_block" ref="sender_8c.html#ac06cfcb3ecfad06e23567ca1a7dac4db" />
-              <section title="sender_mainloop" ref="sender_8c.html#a4f1823592996205c3243bf49127a0004" />
-              <section title="free_fd_info_cb" ref="sender_8c.html#a8d4592d298d6539a13dd31239360c7ad" />
-              <section title="cleanup" ref="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc" />
-              <section title="register_socket_info" ref="sender_8c.html#aa462f2b99191e54e839a69fc568972f1" />
-              <section title="increment_fd_refcount" ref="sender_8c.html#a7bc45c02fed85ce85a834cf730f07c00" />
-              <section title="decrement_fd_refcount" ref="sender_8c.html#a09ec64a8af8244d6b69a7e79fa9065f3" />
-              <section title="release_socket_info" ref="sender_8c.html#a53ddb423772e634b4d099694d7bd5e37" />
-              <section title="handle_command" ref="sender_8c.html#a09a13d151396fa2b4dbe11182cf0233b" />
-              <section title="enqueue_write" ref="sender_8c.html#a84b7873113e88f5cfff8b30989a6197d" />
-              <section title="check_incoming_commands" ref="sender_8c.html#a320db24cd0321f42690ae959b30d41b7" />
-              <section title="get_info_to_write_for_socket" ref="sender_8c.html#a28642bbcae521b8f97ad49229df128f3" />
-              <section title="set_error_for_socket" ref="sender_8c.html#a799e6b8d9f7b7982ad8e8c6bbc60d993" />
-              <section title="attempt_write" ref="sender_8c.html#acf20e1c1edb201899b9592cb945685cd" />
-              <section title="socket_write_plain" ref="sender_8c.html#a9f00925c05248b5902ffc10b99a55ce8" />
-              <section title="socket_write_ssl" ref="sender_8c.html#a9485e7160a073a7740dc2f130ce19db4" />
-              <section title="update_sent" ref="sender_8c.html#a20e2371bcf20b4f30b71726e0cad33fd" />
-              <section title="notify_caller" ref="sender_8c.html#a72e4815c5de39d0c2c31c573eafce27a" />
-              <section title="tick_handler" ref="sender_8c.html#ae1a455338f511c22140fd42d0f183257" />
-              <section title="tick_timeout" ref="sender_8c.html#a728a121de75c640dd90c1992d870318f" />
-              <section title="attempt_to_enqueue_sending_request_message_to_listener" ref="sender_8c.html#aa4ddfd50691169b408a005eda5862ccf" />
-              <section title="attempt_to_enqueue_request_sent_message_to_listener" ref="sender_8c.html#a0c32f1070a14594306e76e6adc04ae68" />
-              <section title="notify_message_failure" ref="sender_8c.html#a2f7209353ead92c91bfc8f84a8b4df50" />
+            <section title="send.c" ref="send_8c.html">
+              <section title="send_do_blocking_send" ref="send_8c.html#a645fe26b9a92bcea62862692048e1d82" />
+              <section title="attempt_to_enqueue_sending_request_message_to_listener" ref="send_8c.html#a0a3d5df230238208188a316c900123c4" />
+              <section title="handle_failure" ref="send_8c.html#ae31cb52695b7c4b86ad52413e7cf4966" />
+              <section title="write_plain" ref="send_8c.html#a3404e5d173399e27c14e908066e81935" />
+              <section title="write_ssl" ref="send_8c.html#ae247d808874e3f3b30659f5406200efa" />
+              <section title="enqueue_request_sent_message_to_listener" ref="send_8c.html#a59e4fb5e681e9d9d3b8ae1f647ea005a" />
+              <section title="handle_write" ref="send_8c.html#a6664eefee5b7a9db746a8c9a76a5d764" />
             </section>
-            <section title="sender.h" ref="sender_8h.html">
-              <section title="sender_init" ref="sender_8h.html#a991ff0badb44cb746fe639fa54fe1c31" />
-              <section title="sender_register_socket" ref="sender_8h.html#a3c833ea734a4c9865acc47d91ddb7fd5" />
-              <section title="sender_remove_socket" ref="sender_8h.html#a7345f822ab1bc69dcc35cc871423ec19" />
-              <section title="sender_send_request" ref="sender_8h.html#ace027324e2b89c0f46e6798b23ec58ce" />
-              <section title="sender_shutdown" ref="sender_8h.html#a6387b60648d2aa6ae5d724ebf04ad3cc" />
-              <section title="sender_free" ref="sender_8h.html#acdaed429f2456b13e846d4e7f846bd65" />
+            <section title="send.h" ref="send_8h.html">
+              <section title="send_do_blocking_send" ref="send_8h.html#a472ea0cb8ac1873fe772996d75745bc6" />
             </section>
-            <section title="sender_internal.h" ref="sender__internal_8h.html">
-              <section title="fd_info" ref="structfd__info.html">
-                <section title="fd" ref="structfd__info.html#ae854a5754cd0716eba8aabed12a6cd1e" />
-                <section title="ssl" ref="structfd__info.html#abce68830a0316490cb9a01d13e4e47b9" />
-                <section title="refcount" ref="structfd__info.html#a6f4437e27ab87d3f6a9d962a422e288f" />
-                <section title="largest_seq_id_seen" ref="structfd__info.html#a1ba7b197cc1ebf0355ee8ef8b4d705a3" />
-                <section title="errored" ref="structfd__info.html#a056b8cc22b630361dd331eca978f1d38" />
+            <section title="send_internal.h" ref="send__internal_8h.html">
+              <section title="handle_write_res" ref="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">
+                <section title="HW_OK" ref="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51" />
+                <section title="HW_DONE" ref="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91" />
+                <section title="HW_ERROR" ref="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157" />
               </section>
-              <section title="tx_info_t" ref="structtx__info__t.html">
-                <section title="id" ref="structtx__info__t.html#aee200e8d32eccb08f126ae3104058e67" />
-                <section title="done_pipe" ref="structtx__info__t.html#a37de7f02faa45a0cba93b35395be52ba" />
-                <section title="state" ref="structtx__info__t.html#a08ee9b3e37cda4f0ca22e67afa14f51d" />
-                <section title="fd" ref="structtx__info__t.html#a2292418fbcac8b8ba7c293bac184ced4" />
-                <section title="ssl" ref="structtx__info__t.html#a6e94516f2ca594ec49e1733346e13cb1" />
-                <section title="add_socket" ref="structtx__info__t.html#a8b45629d2d63915b01497ab2aa07ce88" />
-                <section title="rm_socket" ref="structtx__info__t.html#aa4d8bd6c3afe21286e04e81d145cf981" />
-                <section title="timeout_sec" ref="structtx__info__t.html#a37b46822e03d5685d68f37102110bc0a" />
-                <section title="box" ref="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a" />
-                <section title="enqueue" ref="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180" />
-                <section title="orig_timeout_sec" ref="structtx__info__t.html#a30fef92dc2359bb1195415a93a9250f8" />
-                <section title="sent_size" ref="structtx__info__t.html#a61afed662d74f641186fb125661639f5" />
-                <section title="fdi" ref="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309" />
-                <section title="write" ref="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92" />
-                <section title="notify" ref="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d" />
-                <section title="backpressure" ref="structtx__info__t.html#ad5806f7db0c0dcf5c87f96f29975de23" />
-                <section title="release" ref="structtx__info__t.html#a2445fd10412433bffce13104c1258a09" />
-                <section title="error" ref="structtx__info__t.html#a58c7097345d6030639c29df528bdc813" />
-                <section title="error" ref="structtx__info__t.html#ace7818c75a0e304fc57fda8f1634dd31" />
-                <section title="u" ref="structtx__info__t.html#abe3950d61af476a551829f85ae8219c2" />
-              </section>
-              <section title="sender" ref="structsender.html">
-                <section title="bus" ref="structsender.html#a757588eec51f26a7d24b7dd72662aad2" />
-                <section title="shutdown" ref="structsender.html#a562a8defcf71bd924f000e3919cd7065" />
-                <section title="tx_flags" ref="structsender.html#a9c78ecf6abe562a015b465d2f718e5c5" />
-                <section title="tx_info" ref="structsender.html#a7ea1a5cf71cd395158628fe887c74542" />
-                <section title="pipes" ref="structsender.html#a1f817ab1d64dacd856b891b8347bb527" />
-                <section title="commit_pipe" ref="structsender.html#a5d9bfeef7350314f6c03cda33569e00c" />
-                <section title="incoming_command_pipe" ref="structsender.html#a0ce70524aee2f28afdbb2dceace8100a" />
-                <section title="largest_seq_id_seen" ref="structsender.html#a8c67df66dc04d78ec44a8717a3fe2e54" />
-                <section title="active_fds" ref="structsender.html#aa8f75e8e259d4c7fc1cd1337c5ffc48b" />
-                <section title="fds" ref="structsender.html#aff32b617c8187617c30fde60a778dc44" />
-                <section title="is_idle" ref="structsender.html#a555122c7e76f98fbaadb430c6eafaa6d" />
-                <section title="fd_hash_table" ref="structsender.html#aff098306a5cefab0f1dc624bd3d1da04" />
-              </section>
-              <section title="MAX_TIMEOUT" ref="sender__internal_8h.html#a85fda3522e69a1bf85f7dcd97b6023a1" />
-              <section title="TX_TIMEOUT" ref="sender__internal_8h.html#ad380e380939eae9a5d6c8f228f0fe7c8" />
-              <section title="MAX_CONCURRENT_SENDS" ref="sender__internal_8h.html#acf81eb49715fa84e816bfdfb0ce18748" />
-              <section title="HASH_TABLE_SIZE2" ref="sender__internal_8h.html#a2071bea833e4fa740cb66ccd81930b65" />
-              <section title="SENDER_FD_NOT_IN_USE" ref="sender__internal_8h.html#a11970f2c99571e46862c6df7c94ad3c9" />
-              <section title="tx_flag_t" ref="sender__internal_8h.html#a0a54b2062cf1b4a9c1ced43140ee52e0" />
-              <section title="tx_error_t" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791d">
-                <section title="TX_ERROR_NONE" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da272f9f119a84f84620a50f59921074be" />
-                <section title="TX_ERROR_POLLHUP" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791dab8356e960ab720f20eb581b181e209a7" />
-                <section title="TX_ERROR_POLLERR" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da67df9b4158d09359ab1bd26ae70a705f" />
-                <section title="TX_ERROR_WRITE_FAILURE" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791daaa9e491fcf49c45d98906510f1b54610" />
-                <section title="TX_ERROR_UNREGISTERED_SOCKET" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da0c6c852bec7890ea64fea30d5467d3a2" />
-                <section title="TX_ERROR_CLOSED" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da86ef1bee9b4f29fe9fe5c636ce612e84" />
-                <section title="TX_ERROR_NOTIFY_LISTENER_FAILURE" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da1ec35b178c0921ad83c84d9440adad5b" />
-                <section title="TX_ERROR_WRITE_TIMEOUT" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da6929c1525a8bde9a975507eee7268f06" />
-                <section title="TX_ERROR_NOTIFY_TIMEOUT" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791dafdaba8b14c1932b324b036a9412dd737" />
-                <section title="TX_ERROR_BAD_SEQUENCE_ID" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da90d3001daa8fa6c7c556cf48320ec0f5" />
-              </section>
-              <section title="tx_info_state" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429">
-                <section title="TIS_UNDEF" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a88e9115c62fc7e1f7b9944d2a881887a" />
-                <section title="TIS_ADD_SOCKET" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a52925d46fb93fbb25c715bb8ce7231f3" />
-                <section title="TIS_RM_SOCKET" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a60ea7691c6acb15519e2bbf2b0b287db" />
-                <section title="TIS_SHUTDOWN" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a2a021f11ce2f51d6e36e185d78837333" />
-                <section title="TIS_REQUEST_ENQUEUE" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a6837eed2976f14f01d8790c5c0959060" />
-                <section title="TIS_REQUEST_WRITE" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429ad6cf66e7a3fb15e87da97d330c6c3c03" />
-                <section title="TIS_RESPONSE_NOTIFY" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a638663893162c362d9513932571f83d3" />
-                <section title="TIS_REQUEST_RELEASE" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a68e05ad950fdd5fe3ab4458659fa6db8" />
-                <section title="TIS_ERROR" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a20183f762fba2c542ba2c0101ee3fc3a" />
-              </section>
-              <section title="get_free_tx_info" ref="sender__internal_8h.html#af18ed407301b3bdd9c44b3b05f2d54cf" />
-              <section title="release_tx_info" ref="sender__internal_8h.html#a9ae301320ba4b577b2462907678af613" />
-              <section title="get_notify_pipe" ref="sender__internal_8h.html#a8c2d8a592a292ec3105b6f1ad205f3dd" />
-              <section title="write_commit" ref="sender__internal_8h.html#a34859023ba746b0359f571dad003ab98" />
-              <section title="commit_event_and_block" ref="sender__internal_8h.html#ac06cfcb3ecfad06e23567ca1a7dac4db" />
-              <section title="register_socket_info" ref="sender__internal_8h.html#aa462f2b99191e54e839a69fc568972f1" />
-              <section title="increment_fd_refcount" ref="sender__internal_8h.html#a7bc45c02fed85ce85a834cf730f07c00" />
-              <section title="decrement_fd_refcount" ref="sender__internal_8h.html#a09ec64a8af8244d6b69a7e79fa9065f3" />
-              <section title="release_socket_info" ref="sender__internal_8h.html#a53ddb423772e634b4d099694d7bd5e37" />
-              <section title="handle_command" ref="sender__internal_8h.html#a09a13d151396fa2b4dbe11182cf0233b" />
-              <section title="enqueue_write" ref="sender__internal_8h.html#a84b7873113e88f5cfff8b30989a6197d" />
-              <section title="check_incoming_commands" ref="sender__internal_8h.html#a320db24cd0321f42690ae959b30d41b7" />
-              <section title="get_info_to_write_for_socket" ref="sender__internal_8h.html#a28642bbcae521b8f97ad49229df128f3" />
-              <section title="set_error_for_socket" ref="sender__internal_8h.html#a799e6b8d9f7b7982ad8e8c6bbc60d993" />
-              <section title="socket_write_plain" ref="sender__internal_8h.html#a9f00925c05248b5902ffc10b99a55ce8" />
-              <section title="socket_write_ssl" ref="sender__internal_8h.html#a9485e7160a073a7740dc2f130ce19db4" />
-              <section title="update_sent" ref="sender__internal_8h.html#a20e2371bcf20b4f30b71726e0cad33fd" />
-              <section title="attempt_write" ref="sender__internal_8h.html#acf20e1c1edb201899b9592cb945685cd" />
-              <section title="tick_handler" ref="sender__internal_8h.html#ae1a455338f511c22140fd42d0f183257" />
-              <section title="notify_message_failure" ref="sender__internal_8h.html#a2f7209353ead92c91bfc8f84a8b4df50" />
-              <section title="attempt_to_enqueue_sending_request_message_to_listener" ref="sender__internal_8h.html#aa4ddfd50691169b408a005eda5862ccf" />
-              <section title="attempt_to_enqueue_request_sent_message_to_listener" ref="sender__internal_8h.html#a0c32f1070a14594306e76e6adc04ae68" />
-              <section title="notify_caller" ref="sender__internal_8h.html#a72e4815c5de39d0c2c31c573eafce27a" />
-              <section title="tick_timeout" ref="sender__internal_8h.html#a728a121de75c640dd90c1992d870318f" />
-              <section title="cleanup" ref="sender__internal_8h.html#a35be7855150c6a8fa847eba457e48bdc" />
+              <section title="handle_write" ref="send__internal_8h.html#a6664eefee5b7a9db746a8c9a76a5d764" />
+              <section title="handle_failure" ref="send__internal_8h.html#ae31cb52695b7c4b86ad52413e7cf4966" />
+              <section title="attempt_to_enqueue_sending_request_message_to_listener" ref="send__internal_8h.html#a0a3d5df230238208188a316c900123c4" />
             </section>
             <section title="setup_teardown.c" ref="setup__teardown_8c.html">
               <section title="usage" ref="setup__teardown_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f" />
@@ -3715,9 +3608,11 @@
             </section>
             <section title="util.c" ref="util_8c.html">
               <section title="util_is_resumable_io_error" ref="util_8c.html#a160b252716d51078cec50bc9f27bc2bc" />
+              <section title="util_timestamp" ref="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9" />
             </section>
             <section title="util.h" ref="util_8h.html">
               <section title="util_is_resumable_io_error" ref="util_8h.html#a160b252716d51078cec50bc9f27bc2bc" />
+              <section title="util_timestamp" ref="util_8h.html#ad63ab11f5adebc0730d970d7742ccfd9" />
             </section>
             <section title="write_file_blocking.c" ref="write__file__blocking_8c.html">
               <section title="store_data" ref="write__file__blocking_8c.html#af4bd70c5ec166142c87bbc3825a4721c" />
@@ -3739,7 +3634,6 @@
             </section>
             <section title="yacht.c" ref="yacht_8c.html">
               <section title="LOG" ref="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e" />
-              <section title="USE_BRENTS_VARIATION" ref="yacht_8c.html#a5ac70b00c9ad8d06bbfa7f2c32df2e62" />
               <section title="DEF_SZ2" ref="yacht_8c.html#a783af37de2395ffe34618ed81dc4394c" />
               <section title="MAX_PROBES" ref="yacht_8c.html#a6deebb67c6e9267ad4e978b992850398" />
               <section title="LARGE_PRIME" ref="yacht_8c.html#ad6161f686aaa2a898d0deb0c5e837446" />
@@ -3843,7 +3737,6 @@
               <section title="o" ref="globals_eval_o.html" />
               <section title="r" ref="globals_eval_r.html" />
               <section title="s" ref="globals_eval_s.html" />
-              <section title="t" ref="globals_eval_t.html" />
               <section title="u" ref="globals_eval_u.html" />
             </section>
             <section title="Macros" ref="globals_defs.html">
@@ -3865,7 +3758,6 @@
               <section title="r" ref="globals_defs_r.html" />
               <section title="s" ref="globals_defs_s.html" />
               <section title="t" ref="globals_defs_t.html" />
-              <section title="u" ref="globals_defs_u.html" />
               <section title="y" ref="globals_defs_y.html" />
             </section>
           </section>
@@ -3913,12 +3805,8 @@
       <keyword name="main" id="blocking_put_delete.c::main" ref="blocking__put__delete_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
       <keyword name="do_put_and_get" id="blocking_put_get.c::do_put_and_get" ref="blocking__put__get_8c.html#abdb700b13512c31f8ae58462fb630a14" />
       <keyword name="main" id="blocking_put_get.c::main" ref="blocking__put__get_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
-      <keyword name="DEF_FD_SET_SIZE2" id="bus.c::DEF_FD_SET_SIZE2" ref="bus_8c.html#a7129e5f5219981ae2b4d3babdc5f6a73" />
       <keyword name="THREAD_SHUTDOWN_SECONDS" id="bus.c::THREAD_SHUTDOWN_SECONDS" ref="bus_8c.html#ac9db88b27b40f46d327f575228bd72ab" />
-      <keyword name="listener_mainloop" id="bus.c::listener_mainloop" ref="bus_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0" />
-      <keyword name="sender_mainloop" id="bus.c::sender_mainloop" ref="bus_8c.html#a4f1823592996205c3243bf49127a0004" />
       <keyword name="poll_on_completion" id="bus.c::poll_on_completion" ref="bus_8c.html#af65a34f2a232288bc0aabe83521a47f7" />
-      <keyword name="sender_id_of_socket" id="bus.c::sender_id_of_socket" ref="bus_8c.html#a4d924998574ebf0270f4d56027b25494" />
       <keyword name="listener_id_of_socket" id="bus.c::listener_id_of_socket" ref="bus_8c.html#a013694e272579d83c87e0039769be8a9" />
       <keyword name="noop_log_cb" id="bus.c::noop_log_cb" ref="bus_8c.html#a207a3f520e7e3a9e770c6a2e57086218" />
       <keyword name="noop_error_cb" id="bus.c::noop_error_cb" ref="bus_8c.html#aacccc95ac547d085c1cd5626a0f38c6a" />
@@ -3927,13 +3815,14 @@
       <keyword name="bus_init" id="bus.c::bus_init" ref="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451" />
       <keyword name="box_msg" id="bus.c::box_msg" ref="bus_8c.html#ac0b99f211ee9a81b08697c509640323f" />
       <keyword name="bus_send_request" id="bus.c::bus_send_request" ref="bus_8c.html#a586029a1def1f27aa18916d5750cffe6" />
-      <keyword name="bus_get_sender_for_socket" id="bus.c::bus_get_sender_for_socket" ref="bus_8c.html#a8200fe8d77bbf9ebd2ee156835c3bb98" />
       <keyword name="bus_get_listener_for_socket" id="bus.c::bus_get_listener_for_socket" ref="bus_8c.html#a22b25ecf4c0e11de50f551369307c811" />
       <keyword name="bus_log_event_str" id="bus.c::bus_log_event_str" ref="bus_8c.html#a60692c56f07f224511783c1b4ed45c02" />
       <keyword name="bus_register_socket" id="bus.c::bus_register_socket" ref="bus_8c.html#aece2c000aa2f834b76a77ce032a2d0d2" />
-      <keyword name="bus_release_socket" id="bus.c::bus_release_socket" ref="bus_8c.html#a2119dbab02464f8c6ea0dd724d497666" />
+      <keyword name="bus_release_socket" id="bus.c::bus_release_socket" ref="bus_8c.html#a8a4bd5912f0de341b8fc65040b70fc00" />
       <keyword name="bus_schedule_threadpool_task" id="bus.c::bus_schedule_threadpool_task" ref="bus_8c.html#acfd818006ce9f3cb485667d288af9d81" />
+      <keyword name="free_connection_cb" id="bus.c::free_connection_cb" ref="bus_8c.html#afe8e6487b9bc3c72b5159f9b3932ec5c" />
       <keyword name="bus_shutdown" id="bus.c::bus_shutdown" ref="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9" />
+      <keyword name="bus_backpressure_delay" id="bus.c::bus_backpressure_delay" ref="bus_8c.html#a189082d10346e2334dfad2365445d16b" />
       <keyword name="bus_lock_log" id="bus.c::bus_lock_log" ref="bus_8c.html#acc4bcbb78efe00f265027438dfea598f" />
       <keyword name="bus_unlock_log" id="bus.c::bus_unlock_log" ref="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87" />
       <keyword name="box_execute_cb" id="bus.c::box_execute_cb" ref="bus_8c.html#a1f25ceee49e76a60fcb43f4e39c3cddd" />
@@ -3944,15 +3833,15 @@
       <keyword name="bus_send_request" id="bus.h::bus_send_request" ref="bus_8h.html#a586029a1def1f27aa18916d5750cffe6" />
       <keyword name="bus_log_event_str" id="bus.h::bus_log_event_str" ref="bus_8h.html#a60692c56f07f224511783c1b4ed45c02" />
       <keyword name="bus_register_socket" id="bus.h::bus_register_socket" ref="bus_8h.html#acd5ad66702ebaae2fe54a81e6f747199" />
-      <keyword name="bus_release_socket" id="bus.h::bus_release_socket" ref="bus_8h.html#a2119dbab02464f8c6ea0dd724d497666" />
+      <keyword name="bus_release_socket" id="bus.h::bus_release_socket" ref="bus_8h.html#a8a4bd5912f0de341b8fc65040b70fc00" />
       <keyword name="bus_shutdown" id="bus.h::bus_shutdown" ref="bus_8h.html#aec91507d9ff9f03cf3de0bed9498827b" />
-      <keyword name="bus_get_sender_for_socket" id="bus.h::bus_get_sender_for_socket" ref="bus_8h.html#a8200fe8d77bbf9ebd2ee156835c3bb98" />
       <keyword name="bus_get_listener_for_socket" id="bus.h::bus_get_listener_for_socket" ref="bus_8h.html#a22b25ecf4c0e11de50f551369307c811" />
       <keyword name="bus_schedule_threadpool_task" id="bus.h::bus_schedule_threadpool_task" ref="bus_8h.html#acfd818006ce9f3cb485667d288af9d81" />
       <keyword name="bus_lock_log" id="bus.h::bus_lock_log" ref="bus_8h.html#acc4bcbb78efe00f265027438dfea598f" />
       <keyword name="bus_unlock_log" id="bus.h::bus_unlock_log" ref="bus_8h.html#a78abbe3ffa07e668c7df0fb28fe8ad87" />
       <keyword name="bus_free" id="bus.h::bus_free" ref="bus_8h.html#a5fd7f7fb81f7a5bf439a2692486ff60d" />
       <keyword name="bus_process_boxed_message" id="bus.h::bus_process_boxed_message" ref="bus_8h.html#a56eff9f2e0b0df727c0e825aaee531b8" />
+      <keyword name="bus_backpressure_delay" id="bus.h::bus_backpressure_delay" ref="bus_8h.html#a189082d10346e2334dfad2365445d16b" />
       <keyword name="MAGIC_NUMBER" id="bus_example.c::MAGIC_NUMBER" ref="bus__example_8c.html#a54061e5993a5517320d425f44408cc86" />
       <keyword name="MAX_SOCKETS" id="bus_example.c::MAX_SOCKETS" ref="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776" />
       <keyword name="DEFAULT_BUF_SIZE" id="bus_example.c::DEFAULT_BUF_SIZE" ref="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d" />
@@ -3988,6 +3877,11 @@
       <keyword name="STATE_AWAITING_BODY" id="bus_example.c::STATE_AWAITING_BODY" ref="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12" />
       <keyword name="BUS_NO_SSL" id="bus_internal_types.h::BUS_NO_SSL" ref="bus__internal__types_8h.html#a76bf250ccc8ac3e852f8785c68903a47" />
       <keyword name="TIMEOUT_NOT_YET_SET" id="bus_internal_types.h::TIMEOUT_NOT_YET_SET" ref="bus__internal__types_8h.html#a82f24c54131d866631239cc371581955" />
+      <keyword name="LISTENER_MSG_TAG" id="bus_internal_types.h::LISTENER_MSG_TAG" ref="bus__internal__types_8h.html#ac2614000c9ba78a93265c20646fcc2ae" />
+      <keyword name="DEF_FD_SET_SIZE2" id="bus_internal_types.h::DEF_FD_SET_SIZE2" ref="bus__internal__types_8h.html#a7129e5f5219981ae2b4d3babdc5f6a73" />
+      <keyword name="SHUTDOWN_STATE_RUNNING" id="bus_internal_types.h::SHUTDOWN_STATE_RUNNING" ref="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea3da66d8f533391529e253a9a0389774d" />
+      <keyword name="SHUTDOWN_STATE_SHUTTING_DOWN" id="bus_internal_types.h::SHUTDOWN_STATE_SHUTTING_DOWN" ref="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea20a95bda47f269835aae66b2d8152caf" />
+      <keyword name="SHUTDOWN_STATE_HALTED" id="bus_internal_types.h::SHUTDOWN_STATE_HALTED" ref="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea3d7ff9fa774c3ac46f21b11feb359828" />
       <keyword name="RX_ERROR_NONE" id="bus_internal_types.h::RX_ERROR_NONE" ref="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3faa1417a57269c97681c54f7e5e7b7503f1" />
       <keyword name="RX_ERROR_READY_FOR_DELIVERY" id="bus_internal_types.h::RX_ERROR_READY_FOR_DELIVERY" ref="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3faa2ef7ec149b385fb940423126ae61f891" />
       <keyword name="RX_ERROR_DONE" id="bus_internal_types.h::RX_ERROR_DONE" ref="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3faad8599264218b768f6c1d792b256549e6" />
@@ -4000,14 +3894,14 @@
       <keyword name="init_client_SSL_CTX" id="bus_ssl.c::init_client_SSL_CTX" ref="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2" />
       <keyword name="disable_SSL_compression" id="bus_ssl.c::disable_SSL_compression" ref="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3" />
       <keyword name="disable_known_bad_ciphers" id="bus_ssl.c::disable_known_bad_ciphers" ref="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376" />
-      <keyword name="do_blocking_connection" id="bus_ssl.c::do_blocking_connection" ref="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15" />
+      <keyword name="do_blocking_connection" id="bus_ssl.c::do_blocking_connection" ref="bus__ssl_8c.html#af0ed2b19cdae16ebbbdbe082be5063b1" />
       <keyword name="bus_ssl_init" id="bus_ssl.c::bus_ssl_init" ref="bus__ssl_8c.html#ad7097b1068063cc1c875ea76d442b2c6" />
-      <keyword name="bus_ssl_connect" id="bus_ssl.c::bus_ssl_connect" ref="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487" />
+      <keyword name="bus_ssl_connect" id="bus_ssl.c::bus_ssl_connect" ref="bus__ssl_8c.html#aa25887b884806027c8cff1aa770072f3" />
       <keyword name="bus_ssl_disconnect" id="bus_ssl.c::bus_ssl_disconnect" ref="bus__ssl_8c.html#ae30bd22a904c9649b3727e6a4917e0f7" />
       <keyword name="bus_ssl_ctx_free" id="bus_ssl.c::bus_ssl_ctx_free" ref="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7" />
       <keyword name="KINETIC_USE_TLS_1_2" id="bus_ssl.h::KINETIC_USE_TLS_1_2" ref="bus__ssl_8h.html#a49cb96458b3e449948dbe5f22778664a" />
       <keyword name="bus_ssl_init" id="bus_ssl.h::bus_ssl_init" ref="bus__ssl_8h.html#ad7097b1068063cc1c875ea76d442b2c6" />
-      <keyword name="bus_ssl_connect" id="bus_ssl.h::bus_ssl_connect" ref="bus__ssl_8h.html#a28804cfaf9b3cfe5f66de08f18b39487" />
+      <keyword name="bus_ssl_connect" id="bus_ssl.h::bus_ssl_connect" ref="bus__ssl_8h.html#aa25887b884806027c8cff1aa770072f3" />
       <keyword name="bus_ssl_disconnect" id="bus_ssl.h::bus_ssl_disconnect" ref="bus__ssl_8h.html#ae30bd22a904c9649b3727e6a4917e0f7" />
       <keyword name="bus_ssl_ctx_free" id="bus_ssl.h::bus_ssl_ctx_free" ref="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7" />
       <keyword name="BUS_MAX_CONCURRENT_SENDS" id="bus_types.h::BUS_MAX_CONCURRENT_SENDS" ref="bus__types_8h.html#a099e09d8e16ac9b34cdfb55f7b04ee79" />
@@ -4052,6 +3946,7 @@
       <keyword name="BUS_SEND_BAD_RESPONSE" id="bus_types.h::BUS_SEND_BAD_RESPONSE" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aadd9779e34cdfcee87a3548baaf020ba3" />
       <keyword name="BUS_SEND_UNREGISTERED_SOCKET" id="bus_types.h::BUS_SEND_UNREGISTERED_SOCKET" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aad373d2f8bb961b04fa9e2c2a21ee7dc1" />
       <keyword name="BUS_SEND_RX_TIMEOUT_EXPECT" id="bus_types.h::BUS_SEND_RX_TIMEOUT_EXPECT" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84" />
+      <keyword name="BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER" id="bus_types.h::BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER" ref="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa1305feede4d01715a05e893622b4c0e4" />
       <keyword name="BUS_SOCKET_PLAIN" id="bus_types.h::BUS_SOCKET_PLAIN" ref="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb" />
       <keyword name="BUS_SOCKET_SSL" id="bus_types.h::BUS_SOCKET_SSL" ref="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2ae50613e7167203c0f237328f0391aa51" />
       <keyword name="BUS_REQUEST_SUCCESS" id="bus_types.h::BUS_REQUEST_SUCCESS" ref="bus__types_8h.html#a57ad19e042110dc3559f626fde746945ad6a0b87444666fb3e0aee54b85bf804d" />
@@ -4545,7 +4440,7 @@
       <keyword name="KineticNBO_ToHostU64" id="kinetic_nbo.h::KineticNBO_ToHostU64" ref="kinetic__nbo_8h.html#a8fb11d2dd5ed25e5563bc7af2aeb7ebb" />
       <keyword name="ATOMIC_FETCH_AND_INCREMENT" id="kinetic_operation.c::ATOMIC_FETCH_AND_INCREMENT" ref="kinetic__operation_8c.html#a8e6ca0967c3f2508bd8dab901a6a6ba7" />
       <keyword name="KineticOperation_ValidateOperation" id="kinetic_operation.c::KineticOperation_ValidateOperation" ref="kinetic__operation_8c.html#a1dd564b1f626c3f16a29348abea6003b" />
-      <keyword name="KineticOperation_SendRequestInner" id="kinetic_operation.c::KineticOperation_SendRequestInner" ref="kinetic__operation_8c.html#ac25ef0fa4d64bb4249e2d17d50ad1be3" />
+      <keyword name="KineticOperation_SendRequestInLock" id="kinetic_operation.c::KineticOperation_SendRequestInLock" ref="kinetic__operation_8c.html#a5317e92dc71dfa1df7acc0cf3f3be48e" />
       <keyword name="KineticOperation_SendRequest" id="kinetic_operation.c::KineticOperation_SendRequest" ref="kinetic__operation_8c.html#a267d9481a259bcc26147d166a3fc515a" />
       <keyword name="log_request_seq_id" id="kinetic_operation.c::log_request_seq_id" ref="kinetic__operation_8c.html#a3f48a946d6e75703c0fb26b3c9c6d12b" />
       <keyword name="KineticOperation_GetStatus" id="kinetic_operation.c::KineticOperation_GetStatus" ref="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0" />
@@ -4620,6 +4515,10 @@
       <keyword name="KineticOperation_BuildSetClusterVersion" id="kinetic_operation.h::KineticOperation_BuildSetClusterVersion" ref="kinetic__operation_8h.html#ab1bd12b71b3ee53c112c3ab00b50ede4" />
       <keyword name="KineticOperation_UpdateFirmwareCallback" id="kinetic_operation.h::KineticOperation_UpdateFirmwareCallback" ref="kinetic__operation_8h.html#ad0436634dba5c54efcfd9931d0bd087b" />
       <keyword name="KineticOperation_BuildUpdateFirmware" id="kinetic_operation.h::KineticOperation_BuildUpdateFirmware" ref="kinetic__operation_8h.html#a89b2c4d0633faef505afdcbed0506090" />
+      <keyword name="KineticOperation_TimeoutSetACL" id="kinetic_operation.h::KineticOperation_TimeoutSetACL" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a200aecb997dcc9989d97140e6a36cdaa" />
+      <keyword name="KineticOperation_TimeoutSetPin" id="kinetic_operation.h::KineticOperation_TimeoutSetPin" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a95f6c656c72ab0c29ccb4d61e8876062" />
+      <keyword name="KineticOperation_TimeoutLockUnlock" id="kinetic_operation.h::KineticOperation_TimeoutLockUnlock" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a48826c3d7bb917828ee732e6f7c18a80" />
+      <keyword name="KineticOperation_TimeoutErase" id="kinetic_operation.h::KineticOperation_TimeoutErase" ref="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a8ef8806548580abe016ce513eab97fe1" />
       <keyword name="KineticPDU_unpack_command" id="kinetic_pdu_unpack.c::KineticPDU_unpack_command" ref="kinetic__pdu__unpack_8c.html#a60eef152fd8a53bf8695d8f7405443ae" />
       <keyword name="KineticPDU_unpack_message" id="kinetic_pdu_unpack.c::KineticPDU_unpack_message" ref="kinetic__pdu__unpack_8c.html#accfbd7a3274a6dc76a3b4bd1c8374b80" />
       <keyword name="KineticPDU_unpack_command" id="kinetic_pdu_unpack.h::KineticPDU_unpack_command" ref="kinetic__pdu__unpack_8h.html#a60eef152fd8a53bf8695d8f7405443ae" />
@@ -5050,6 +4949,19 @@
       <keyword name="KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIASCAN_RESPONSE" id="kinetic_proto.h::KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIASCAN_RESPONSE" ref="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a64c58f1f5c664c6e36b34172d361a257" />
       <keyword name="KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIAOPTIMIZE" id="kinetic_proto.h::KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIAOPTIMIZE" ref="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1ac5c46abbf725b495836c6b1b992a595a" />
       <keyword name="KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE" id="kinetic_proto.h::KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE" ref="kinetic__proto_8h.html#af6e457ce03789ee6cbde3761c77464a1a9f713aff49fc68c177f525d0fae8b3d8" />
+      <keyword name="KineticRequest_PackCommand" id="kinetic_request.c::KineticRequest_PackCommand" ref="kinetic__request_8c.html#a22e92e6d39ecb48e2d3fcef993e17ba3" />
+      <keyword name="KineticRequest_PopulateAuthentication" id="kinetic_request.c::KineticRequest_PopulateAuthentication" ref="kinetic__request_8c.html#adf6d20f5e4ab9d40ed6f4351a68520c9" />
+      <keyword name="KineticRequest_PackMessage" id="kinetic_request.c::KineticRequest_PackMessage" ref="kinetic__request_8c.html#a604311e368349bb3695db1f44a59ee20" />
+      <keyword name="KineticRequest_SendRequest" id="kinetic_request.c::KineticRequest_SendRequest" ref="kinetic__request_8c.html#af4443dd94ce141114c37ddfc782967d7" />
+      <keyword name="KineticRequest_LockOperation" id="kinetic_request.c::KineticRequest_LockOperation" ref="kinetic__request_8c.html#af957f9c9ba08f70e12bff0e97e6b0bce" />
+      <keyword name="KineticRequest_UnlockOperation" id="kinetic_request.c::KineticRequest_UnlockOperation" ref="kinetic__request_8c.html#a633cdb1a73a6768566c4b7f9af534652" />
+      <keyword name="KINETIC_REQUEST_PACK_FAILURE" id="kinetic_request.h::KINETIC_REQUEST_PACK_FAILURE" ref="kinetic__request_8h.html#a3449d8c8442581494de7948a7ca24215" />
+      <keyword name="KineticRequest_PackCommand" id="kinetic_request.h::KineticRequest_PackCommand" ref="kinetic__request_8h.html#a22e92e6d39ecb48e2d3fcef993e17ba3" />
+      <keyword name="KineticRequest_PopulateAuthentication" id="kinetic_request.h::KineticRequest_PopulateAuthentication" ref="kinetic__request_8h.html#adf6d20f5e4ab9d40ed6f4351a68520c9" />
+      <keyword name="KineticRequest_PackMessage" id="kinetic_request.h::KineticRequest_PackMessage" ref="kinetic__request_8h.html#a278c7eb32b12868faeb5a861d45e1e53" />
+      <keyword name="KineticRequest_SendRequest" id="kinetic_request.h::KineticRequest_SendRequest" ref="kinetic__request_8h.html#af4443dd94ce141114c37ddfc782967d7" />
+      <keyword name="KineticRequest_LockOperation" id="kinetic_request.h::KineticRequest_LockOperation" ref="kinetic__request_8h.html#af957f9c9ba08f70e12bff0e97e6b0bce" />
+      <keyword name="KineticRequest_UnlockOperation" id="kinetic_request.h::KineticRequest_UnlockOperation" ref="kinetic__request_8h.html#a633cdb1a73a6768566c4b7f9af534652" />
       <keyword name="KineticResourceWaiter_Init" id="kinetic_resourcewaiter.c::KineticResourceWaiter_Init" ref="kinetic__resourcewaiter_8c.html#ab8d207b74ec58acf48157292629bcc19" />
       <keyword name="KineticResourceWaiter_SetAvailable" id="kinetic_resourcewaiter.c::KineticResourceWaiter_SetAvailable" ref="kinetic__resourcewaiter_8c.html#ab949799c5111ec8604edb07df3ecd85a" />
       <keyword name="KineticResourceWaiter_WaitTilAvailable" id="kinetic_resourcewaiter.c::KineticResourceWaiter_WaitTilAvailable" ref="kinetic__resourcewaiter_8c.html#ac8daf48d8708f25c6f478b48d1753ed4" />
@@ -5126,7 +5038,6 @@
       <keyword name="KINETIC_P2P_OPERATION_LIMIT" id="kinetic_types.h::KINETIC_P2P_OPERATION_LIMIT" ref="kinetic__types_8h.html#abaa05a6bc4a4faddc19e9fe8eee68ed1" />
       <keyword name="KINETIC_P2P_MAX_NESTING" id="kinetic_types.h::KINETIC_P2P_MAX_NESTING" ref="kinetic__types_8h.html#abb79428649147e2162ed75f6103b2b4b" />
       <keyword name="KINETIC_CLIENT_DEFAULT_LOG_LEVEL" id="kinetic_types.h::KINETIC_CLIENT_DEFAULT_LOG_LEVEL" ref="kinetic__types_8h.html#af3b3ca91939b728ff6079e235a2e7076" />
-      <keyword name="KINETIC_CLIENT_DEFAULT_WRITER_THREADS" id="kinetic_types.h::KINETIC_CLIENT_DEFAULT_WRITER_THREADS" ref="kinetic__types_8h.html#a86714c3c1cfa6964686a72207c3506c3" />
       <keyword name="KINETIC_CLIENT_DEFAULT_READER_THREADS" id="kinetic_types.h::KINETIC_CLIENT_DEFAULT_READER_THREADS" ref="kinetic__types_8h.html#a1139caf48a78b5227f8de332ab693314" />
       <keyword name="KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS" id="kinetic_types.h::KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS" ref="kinetic__types_8h.html#acaccd20ff47192379bc8c497407bfc03" />
       <keyword name="KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN" id="kinetic_types.h::KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN" ref="kinetic__types_8h.html#a19eed82e573d877a85b41792b553b1df" />
@@ -5173,6 +5084,7 @@
       <keyword name="KINETIC_STATUS_ACL_ERROR" id="kinetic_types.h::KINETIC_STATUS_ACL_ERROR" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0621c91bfcd921f59615cc58051a964c" />
       <keyword name="KINETIC_STATUS_NOT_AUTHORIZED" id="kinetic_types.h::KINETIC_STATUS_NOT_AUTHORIZED" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a4142ff2d3039615341b6094ee3635462" />
       <keyword name="KINETIC_STATUS_INVALID_FILE" id="kinetic_types.h::KINETIC_STATUS_INVALID_FILE" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57abaef7e263ce024c1b02ea5be12e21325" />
+      <keyword name="KINETIC_STATUS_REQUEST_REJECTED" id="kinetic_types.h::KINETIC_STATUS_REQUEST_REJECTED" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57adc5bcd24e5b2700860be2e9328511e31" />
       <keyword name="KINETIC_STATUS_COUNT" id="kinetic_types.h::KINETIC_STATUS_COUNT" ref="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa6a2bd5838c04467a4b7385b1a1e8cb4" />
       <keyword name="KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS" id="kinetic_types.h::KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS" ref="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fcead300215af8d48b27e86095e9313dc30d" />
       <keyword name="KINETIC_DEVICE_INFO_TYPE_TEMPERATURES" id="kinetic_types.h::KINETIC_DEVICE_INFO_TYPE_TEMPERATURES" ref="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fcea37ad8e6c62a3ae6342abd75380fb8ffe" />
@@ -5289,109 +5201,121 @@
       <keyword name="KINETIC_PDU_TYPE_REQUEST" id="kinetic_types_internal.h::KINETIC_PDU_TYPE_REQUEST" ref="kinetic__types__internal_8h.html#a3b2dc08e44838e78d8b07dbf71583faba7e9fde16e985663f08e83755bdfcd17f" />
       <keyword name="KINETIC_PDU_TYPE_RESPONSE" id="kinetic_types_internal.h::KINETIC_PDU_TYPE_RESPONSE" ref="kinetic__types__internal_8h.html#a3b2dc08e44838e78d8b07dbf71583faba2b244422044d47418434cded168c1012" />
       <keyword name="KINETIC_PDU_TYPE_UNSOLICITED" id="kinetic_types_internal.h::KINETIC_PDU_TYPE_UNSOLICITED" ref="kinetic__types__internal_8h.html#a3b2dc08e44838e78d8b07dbf71583faba70be82f66c35e6da94318e07de0aa15f" />
-      <keyword name="DEFAULT_READ_BUF_SIZE" id="listener.c::DEFAULT_READ_BUF_SIZE" ref="listener_8c.html#a55c36910fb23a47b98bb7467e508daa5" />
-      <keyword name="INCOMING_MSG_PIPE" id="listener.c::INCOMING_MSG_PIPE" ref="listener_8c.html#a15740a5bfc8ef3fb9b927ef0007010bf" />
-      <keyword name="INCOMING_MSG_PIPE_ID" id="listener.c::INCOMING_MSG_PIPE_ID" ref="listener_8c.html#a45f028e5e02538a530e3fe313bfd728a" />
-      <keyword name="MSG_BP_1QTR" id="listener.c::MSG_BP_1QTR" ref="listener_8c.html#ac68caa54ad7fc51c8f5815eeb6686f30" />
-      <keyword name="MSG_BP_HALF" id="listener.c::MSG_BP_HALF" ref="listener_8c.html#a7acc76219d8588ca99f58c2121988112" />
-      <keyword name="MSG_BP_3QTR" id="listener.c::MSG_BP_3QTR" ref="listener_8c.html#a694eca96dcf9ed929ec1608f9c14c852" />
-      <keyword name="RX_INFO_BP_1QTR" id="listener.c::RX_INFO_BP_1QTR" ref="listener_8c.html#a7fc0ffea5ec4b8882f719f0d054e3824" />
-      <keyword name="RX_INFO_BP_HALF" id="listener.c::RX_INFO_BP_HALF" ref="listener_8c.html#a3e7f3829ff5668c512d1911a3201db71" />
-      <keyword name="RX_INFO_BP_3QTR" id="listener.c::RX_INFO_BP_3QTR" ref="listener_8c.html#a45f677274d8f1de84ae1cc842c43d0fe" />
-      <keyword name="THREADPOOL_BP" id="listener.c::THREADPOOL_BP" ref="listener_8c.html#a87e98e5aad28f7363d5f4217d2e8d10e" />
-      <keyword name="TIMEOUT_DELAY" id="listener.c::TIMEOUT_DELAY" ref="listener_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6" />
-      <keyword name="DUMP_READ" id="listener.c::DUMP_READ" ref="listener_8c.html#a1d7054af083649f8e410783fbf2e7b33" />
-      <keyword name="retry_delivery" id="listener.c::retry_delivery" ref="listener_8c.html#a91845232ef24ffde41ff3689b0caa0c9" />
       <keyword name="listener_init" id="listener.c::listener_init" ref="listener_8c.html#a0c3342b1bf0a6cade3e4729f40022ed7" />
-      <keyword name="listener_add_socket" id="listener.c::listener_add_socket" ref="listener_8c.html#ac413d1ed53a01815b79baf2dc2f3ece5" />
-      <keyword name="listener_remove_socket" id="listener.c::listener_remove_socket" ref="listener_8c.html#a4926cd8003e7903476104018d81b35d2" />
-      <keyword name="get_backpressure" id="listener.c::get_backpressure" ref="listener_8c.html#ae7c7515f7ab98011b61aa5d1d8d28751" />
-      <keyword name="observe_backpressure" id="listener.c::observe_backpressure" ref="listener_8c.html#ae71f036eb0a57423a8e2b225bcf32e12" />
+      <keyword name="listener_add_socket" id="listener.c::listener_add_socket" ref="listener_8c.html#ab80e1a8ec62bff3ad6a1b69eca150f1d" />
+      <keyword name="listener_remove_socket" id="listener.c::listener_remove_socket" ref="listener_8c.html#af3f377ca9b433af51d906a103eee304f" />
       <keyword name="listener_hold_response" id="listener.c::listener_hold_response" ref="listener_8c.html#acbec5b5b8251c2787ebdb7ec4f73f20b" />
       <keyword name="listener_expect_response" id="listener.c::listener_expect_response" ref="listener_8c.html#ac4ca027f622cf5d1ab731f92f9cb66a8" />
-      <keyword name="listener_shutdown" id="listener.c::listener_shutdown" ref="listener_8c.html#ac185ab098ac6d91c0474bf847ef64265" />
+      <keyword name="listener_shutdown" id="listener.c::listener_shutdown" ref="listener_8c.html#a29137171fd3f0a2f878c450544927c56" />
       <keyword name="listener_free" id="listener.c::listener_free" ref="listener_8c.html#ae02746f8c243596cedd386fc1d7630e5" />
-      <keyword name="listener_mainloop" id="listener.c::listener_mainloop" ref="listener_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0" />
-      <keyword name="check_and_flush_incoming_msg_pipe" id="listener.c::check_and_flush_incoming_msg_pipe" ref="listener_8c.html#a41d1e6df116c066e5c56dd646c3fe898" />
-      <keyword name="set_error_for_socket" id="listener.c::set_error_for_socket" ref="listener_8c.html#affa8fc52abd48c60492b25fae5496d0a" />
-      <keyword name="print_SSL_error" id="listener.c::print_SSL_error" ref="listener_8c.html#aa4a0d6443a6bb65b3fee1027d8eef70f" />
-      <keyword name="socket_read_plain" id="listener.c::socket_read_plain" ref="listener_8c.html#a48e209edcf9421a36f6cd97eca45aa39" />
-      <keyword name="socket_read_ssl" id="listener.c::socket_read_ssl" ref="listener_8c.html#a27540bed6e0ee31601a54a31613bd1ee" />
-      <keyword name="sink_socket_read" id="listener.c::sink_socket_read" ref="listener_8c.html#a11b801753f3195b71431c6ae11f4e2b7" />
-      <keyword name="attempt_recv" id="listener.c::attempt_recv" ref="listener_8c.html#a09b57f3f2be5eb499e924308bab8f989" />
-      <keyword name="find_info_by_sequence_id" id="listener.c::find_info_by_sequence_id" ref="listener_8c.html#a5ef5faf6ec41a63ec7b82933b1eaaadd" />
-      <keyword name="process_unpacked_message" id="listener.c::process_unpacked_message" ref="listener_8c.html#a37c58a09e6d324e7114a2becb2683bbd" />
-      <keyword name="tick_handler" id="listener.c::tick_handler" ref="listener_8c.html#aeedae561a63e857e130be4d40cca8588" />
-      <keyword name="dump_rx_info_table" id="listener.c::dump_rx_info_table" ref="listener_8c.html#a2b75e85745a6799df9e90def5caf0578" />
-      <keyword name="clean_up_completed_info" id="listener.c::clean_up_completed_info" ref="listener_8c.html#a21e5de0bee07a8e984f3c1408b8e3b62" />
-      <keyword name="notify_message_failure" id="listener.c::notify_message_failure" ref="listener_8c.html#ac36cf71f469df6618223f84af9c34ad2" />
-      <keyword name="get_free_rx_info" id="listener.c::get_free_rx_info" ref="listener_8c.html#a86fe702b7851275f2bd50f8897dc87fe" />
-      <keyword name="get_connection_info" id="listener.c::get_connection_info" ref="listener_8c.html#a3bdbad0ba5aa31b4f2dcdfe16ed379bc" />
-      <keyword name="release_rx_info" id="listener.c::release_rx_info" ref="listener_8c.html#aa53f32f1fa516ebdbb8cc66bb752e712" />
+      <keyword name="push_message" id="listener.c::push_message" ref="listener_8c.html#a00065dea96385786e952e23319beb799" />
       <keyword name="get_free_msg" id="listener.c::get_free_msg" ref="listener_8c.html#a7d7c8279976ea7b7aca15479f6892db4" />
-      <keyword name="release_msg" id="listener.c::release_msg" ref="listener_8c.html#ac4aa4e12d23e8c53a5a958e335cf4a2b" />
-      <keyword name="push_message" id="listener.c::push_message" ref="listener_8c.html#abc9a1037551b3c8a9ae45f7b795ab8c3" />
-      <keyword name="msg_handler" id="listener.c::msg_handler" ref="listener_8c.html#abff7ce205d94f17798e20b45f8ddd289" />
-      <keyword name="notify_caller" id="listener.c::notify_caller" ref="listener_8c.html#a674dfc8997b3f8cd95eeb8afc76448c0" />
-      <keyword name="grow_read_buf" id="listener.c::grow_read_buf" ref="listener_8c.html#a138a357c639da15c5e88958123e660b0" />
-      <keyword name="add_socket" id="listener.c::add_socket" ref="listener_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d" />
-      <keyword name="free_ci" id="listener.c::free_ci" ref="listener_8c.html#af7c8c5f81320edf7ea28286384c59b40" />
-      <keyword name="remove_socket" id="listener.c::remove_socket" ref="listener_8c.html#ae12e728e14ca2922ae27678b00a151f3" />
-      <keyword name="hold_response" id="listener.c::hold_response" ref="listener_8c.html#ab3d2bbc5f77d606f0040dee30e80648b" />
-      <keyword name="get_hold_rx_info" id="listener.c::get_hold_rx_info" ref="listener_8c.html#a635353fdc72baf5a4112e2d6a896000f" />
-      <keyword name="attempt_delivery" id="listener.c::attempt_delivery" ref="listener_8c.html#a7abf986a57b2b4a5ae53b48fc051aafb" />
-      <keyword name="expect_response" id="listener.c::expect_response" ref="listener_8c.html#a568c4bcef944d6d127e88b8a673e2890" />
-      <keyword name="shutdown" id="listener.c::shutdown" ref="listener_8c.html#aab8481f4406eb5406717e976f6d852a2" />
+      <keyword name="LISTENER_BACKPRESSURE_SHIFT" id="listener.h::LISTENER_BACKPRESSURE_SHIFT" ref="listener_8h.html#a98cbdaeea07cc02d68f1e960e199e87a" />
+      <keyword name="LISTENER_EXPECT_BACKPRESSURE_SHIFT" id="listener.h::LISTENER_EXPECT_BACKPRESSURE_SHIFT" ref="listener_8h.html#a142b7ddbed12a525d556a51b76d074ab" />
       <keyword name="listener_init" id="listener.h::listener_init" ref="listener_8h.html#a0c3342b1bf0a6cade3e4729f40022ed7" />
-      <keyword name="listener_add_socket" id="listener.h::listener_add_socket" ref="listener_8h.html#ac413d1ed53a01815b79baf2dc2f3ece5" />
-      <keyword name="listener_remove_socket" id="listener.h::listener_remove_socket" ref="listener_8h.html#a4926cd8003e7903476104018d81b35d2" />
+      <keyword name="listener_add_socket" id="listener.h::listener_add_socket" ref="listener_8h.html#ab80e1a8ec62bff3ad6a1b69eca150f1d" />
+      <keyword name="listener_remove_socket" id="listener.h::listener_remove_socket" ref="listener_8h.html#af3f377ca9b433af51d906a103eee304f" />
       <keyword name="listener_hold_response" id="listener.h::listener_hold_response" ref="listener_8h.html#acbec5b5b8251c2787ebdb7ec4f73f20b" />
       <keyword name="listener_expect_response" id="listener.h::listener_expect_response" ref="listener_8h.html#ac4ca027f622cf5d1ab731f92f9cb66a8" />
-      <keyword name="listener_shutdown" id="listener.h::listener_shutdown" ref="listener_8h.html#ac185ab098ac6d91c0474bf847ef64265" />
+      <keyword name="listener_shutdown" id="listener.h::listener_shutdown" ref="listener_8h.html#a29137171fd3f0a2f878c450544927c56" />
       <keyword name="listener_free" id="listener.h::listener_free" ref="listener_8h.html#ae02746f8c243596cedd386fc1d7630e5" />
-      <keyword name="MAX_FDS" id="listener_internal.h::MAX_FDS" ref="listener__internal_8h.html#a816ccaf3e5e64cc98f2b5613cc177398" />
-      <keyword name="MAX_PENDING_MESSAGES" id="listener_internal.h::MAX_PENDING_MESSAGES" ref="listener__internal_8h.html#ab8da6d181eef4debc5b438687fd9804a" />
-      <keyword name="MAX_QUEUE_MESSAGES" id="listener_internal.h::MAX_QUEUE_MESSAGES" ref="listener__internal_8h.html#a6ee3565e40e9a157decfa328ac562140" />
-      <keyword name="MIN_DELAY" id="listener_internal.h::MIN_DELAY" ref="listener__internal_8h.html#ad3b51637a39a4ff75bd979b917cb89ef" />
-      <keyword name="MAX_DELAY" id="listener_internal.h::MAX_DELAY" ref="listener__internal_8h.html#a16027d8acc5301e440cefa086eb9db2a" />
-      <keyword name="INFINITE_DELAY" id="listener_internal.h::INFINITE_DELAY" ref="listener__internal_8h.html#ab893de6f8a0ec8b0e6dd8097ff398019" />
-      <keyword name="msg_flag_t" id="listener_internal.h::msg_flag_t" ref="listener__internal_8h.html#a86f29ffc383d560855689fdb7abc4093" />
-      <keyword name="tick_handler" id="listener_internal.h::tick_handler" ref="listener__internal_8h.html#aeedae561a63e857e130be4d40cca8588" />
-      <keyword name="get_free_rx_info" id="listener_internal.h::get_free_rx_info" ref="listener__internal_8h.html#ab01748a18f035b2304ae416265a27e8d" />
-      <keyword name="release_rx_info" id="listener_internal.h::release_rx_info" ref="listener__internal_8h.html#aa53f32f1fa516ebdbb8cc66bb752e712" />
+      <keyword name="ListenerCmd_NotifyCaller" id="listener_cmd.c::ListenerCmd_NotifyCaller" ref="listener__cmd_8c.html#a643355d8f006114f3186791239b7d4ec" />
+      <keyword name="ListenerCmd_CheckIncomingMessages" id="listener_cmd.c::ListenerCmd_CheckIncomingMessages" ref="listener__cmd_8c.html#af3a2e40b666b88497011b99357eec493" />
+      <keyword name="msg_handler" id="listener_cmd.c::msg_handler" ref="listener__cmd_8c.html#abff7ce205d94f17798e20b45f8ddd289" />
+      <keyword name="add_socket" id="listener_cmd.c::add_socket" ref="listener__cmd_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d" />
+      <keyword name="remove_socket" id="listener_cmd.c::remove_socket" ref="listener__cmd_8c.html#a6a844acc520512e0dbe5aae6b71da07b" />
+      <keyword name="hold_response" id="listener_cmd.c::hold_response" ref="listener__cmd_8c.html#ab3d2bbc5f77d606f0040dee30e80648b" />
+      <keyword name="get_hold_rx_info" id="listener_cmd.c::get_hold_rx_info" ref="listener__cmd_8c.html#a635353fdc72baf5a4112e2d6a896000f" />
+      <keyword name="expect_response" id="listener_cmd.c::expect_response" ref="listener__cmd_8c.html#a568c4bcef944d6d127e88b8a673e2890" />
+      <keyword name="shutdown" id="listener_cmd.c::shutdown" ref="listener__cmd_8c.html#acb20f311c191ce18331d753f8aa78983" />
+      <keyword name="get_free_rx_info" id="listener_cmd.c::get_free_rx_info" ref="listener__cmd_8c.html#a86fe702b7851275f2bd50f8897dc87fe" />
+      <keyword name="ListenerCmd_NotifyCaller" id="listener_cmd.h::ListenerCmd_NotifyCaller" ref="listener__cmd_8h.html#a643355d8f006114f3186791239b7d4ec" />
+      <keyword name="ListenerCmd_CheckIncomingMessages" id="listener_cmd.h::ListenerCmd_CheckIncomingMessages" ref="listener__cmd_8h.html#af3a2e40b666b88497011b99357eec493" />
+      <keyword name="msg_handler" id="listener_cmd_internal.h::msg_handler" ref="listener__cmd__internal_8h.html#abff7ce205d94f17798e20b45f8ddd289" />
+      <keyword name="add_socket" id="listener_cmd_internal.h::add_socket" ref="listener__cmd__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d" />
+      <keyword name="remove_socket" id="listener_cmd_internal.h::remove_socket" ref="listener__cmd__internal_8h.html#a6a844acc520512e0dbe5aae6b71da07b" />
+      <keyword name="hold_response" id="listener_cmd_internal.h::hold_response" ref="listener__cmd__internal_8h.html#ab3d2bbc5f77d606f0040dee30e80648b" />
+      <keyword name="expect_response" id="listener_cmd_internal.h::expect_response" ref="listener__cmd__internal_8h.html#ac2f4cfd7e199d3c933f72d46144dee42" />
+      <keyword name="shutdown" id="listener_cmd_internal.h::shutdown" ref="listener__cmd__internal_8h.html#acb20f311c191ce18331d753f8aa78983" />
+      <keyword name="get_free_rx_info" id="listener_cmd_internal.h::get_free_rx_info" ref="listener__cmd__internal_8h.html#a86fe702b7851275f2bd50f8897dc87fe" />
+      <keyword name="get_hold_rx_info" id="listener_cmd_internal.h::get_hold_rx_info" ref="listener__cmd__internal_8h.html#a635353fdc72baf5a4112e2d6a896000f" />
       <keyword name="get_free_msg" id="listener_internal.h::get_free_msg" ref="listener__internal_8h.html#a7d7c8279976ea7b7aca15479f6892db4" />
-      <keyword name="push_message" id="listener_internal.h::push_message" ref="listener__internal_8h.html#abc9a1037551b3c8a9ae45f7b795ab8c3" />
-      <keyword name="release_msg" id="listener_internal.h::release_msg" ref="listener__internal_8h.html#ac4aa4e12d23e8c53a5a958e335cf4a2b" />
-      <keyword name="attempt_recv" id="listener_internal.h::attempt_recv" ref="listener__internal_8h.html#ac952b94296b3ffa69d793f830ceae1e9" />
-      <keyword name="process_unpacked_message" id="listener_internal.h::process_unpacked_message" ref="listener__internal_8h.html#a37c58a09e6d324e7114a2becb2683bbd" />
-      <keyword name="notify_message_failure" id="listener_internal.h::notify_message_failure" ref="listener__internal_8h.html#ac36cf71f469df6618223f84af9c34ad2" />
-      <keyword name="attempt_delivery" id="listener_internal.h::attempt_delivery" ref="listener__internal_8h.html#a7abf986a57b2b4a5ae53b48fc051aafb" />
-      <keyword name="clean_up_completed_info" id="listener_internal.h::clean_up_completed_info" ref="listener__internal_8h.html#a21e5de0bee07a8e984f3c1408b8e3b62" />
-      <keyword name="observe_backpressure" id="listener_internal.h::observe_backpressure" ref="listener__internal_8h.html#ae71f036eb0a57423a8e2b225bcf32e12" />
-      <keyword name="grow_read_buf" id="listener_internal.h::grow_read_buf" ref="listener__internal_8h.html#a138a357c639da15c5e88958123e660b0" />
-      <keyword name="check_and_flush_incoming_msg_pipe" id="listener_internal.h::check_and_flush_incoming_msg_pipe" ref="listener__internal_8h.html#a41d1e6df116c066e5c56dd646c3fe898" />
-      <keyword name="get_hold_rx_info" id="listener_internal.h::get_hold_rx_info" ref="listener__internal_8h.html#a635353fdc72baf5a4112e2d6a896000f" />
-      <keyword name="dump_rx_info_table" id="listener_internal.h::dump_rx_info_table" ref="listener__internal_8h.html#a2b75e85745a6799df9e90def5caf0578" />
-      <keyword name="msg_handler" id="listener_internal.h::msg_handler" ref="listener__internal_8h.html#a002c308d7296510bcb2df6331792ea09" />
-      <keyword name="add_socket" id="listener_internal.h::add_socket" ref="listener__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d" />
-      <keyword name="remove_socket" id="listener_internal.h::remove_socket" ref="listener__internal_8h.html#ae12e728e14ca2922ae27678b00a151f3" />
-      <keyword name="hold_response" id="listener_internal.h::hold_response" ref="listener__internal_8h.html#ab3d2bbc5f77d606f0040dee30e80648b" />
-      <keyword name="expect_response" id="listener_internal.h::expect_response" ref="listener__internal_8h.html#ac2f4cfd7e199d3c933f72d46144dee42" />
-      <keyword name="shutdown" id="listener_internal.h::shutdown" ref="listener__internal_8h.html#aab8481f4406eb5406717e976f6d852a2" />
-      <keyword name="free_ci" id="listener_internal.h::free_ci" ref="listener__internal_8h.html#af7c8c5f81320edf7ea28286384c59b40" />
-      <keyword name="MSG_NONE" id="listener_internal.h::MSG_NONE" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba40e71b65f54da2ea5d97c37e720346b1" />
-      <keyword name="MSG_ADD_SOCKET" id="listener_internal.h::MSG_ADD_SOCKET" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2" />
-      <keyword name="MSG_REMOVE_SOCKET" id="listener_internal.h::MSG_REMOVE_SOCKET" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba433ef8aba97342ee9a920c5046cd4d67" />
-      <keyword name="MSG_HOLD_RESPONSE" id="listener_internal.h::MSG_HOLD_RESPONSE" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de" />
-      <keyword name="MSG_EXPECT_RESPONSE" id="listener_internal.h::MSG_EXPECT_RESPONSE" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed" />
-      <keyword name="MSG_SHUTDOWN" id="listener_internal.h::MSG_SHUTDOWN" ref="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba621b8f7f84a5fe2cbb10c08ce2c58ff3" />
-      <keyword name="RIS_HOLD" id="listener_internal.h::RIS_HOLD" ref="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5aaf352ec9825784a31574ea3823fb7c82" />
-      <keyword name="RIS_EXPECT" id="listener_internal.h::RIS_EXPECT" ref="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4" />
-      <keyword name="RIS_INACTIVE" id="listener_internal.h::RIS_INACTIVE" ref="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41" />
+      <keyword name="push_message" id="listener_internal.h::push_message" ref="listener__internal_8h.html#a00065dea96385786e952e23319beb799" />
+      <keyword name="DEFAULT_READ_BUF_SIZE" id="listener_internal_types.h::DEFAULT_READ_BUF_SIZE" ref="listener__internal__types_8h.html#a55c36910fb23a47b98bb7467e508daa5" />
+      <keyword name="INCOMING_MSG_PIPE" id="listener_internal_types.h::INCOMING_MSG_PIPE" ref="listener__internal__types_8h.html#a15740a5bfc8ef3fb9b927ef0007010bf" />
+      <keyword name="INCOMING_MSG_PIPE_ID" id="listener_internal_types.h::INCOMING_MSG_PIPE_ID" ref="listener__internal__types_8h.html#a45f028e5e02538a530e3fe313bfd728a" />
+      <keyword name="MAX_FDS" id="listener_internal_types.h::MAX_FDS" ref="listener__internal__types_8h.html#a816ccaf3e5e64cc98f2b5613cc177398" />
+      <keyword name="MAX_PENDING_MESSAGES" id="listener_internal_types.h::MAX_PENDING_MESSAGES" ref="listener__internal__types_8h.html#ab8da6d181eef4debc5b438687fd9804a" />
+      <keyword name="MAX_QUEUE_MESSAGES" id="listener_internal_types.h::MAX_QUEUE_MESSAGES" ref="listener__internal__types_8h.html#a6ee3565e40e9a157decfa328ac562140" />
+      <keyword name="MIN_DELAY" id="listener_internal_types.h::MIN_DELAY" ref="listener__internal__types_8h.html#ad3b51637a39a4ff75bd979b917cb89ef" />
+      <keyword name="MAX_DELAY" id="listener_internal_types.h::MAX_DELAY" ref="listener__internal__types_8h.html#a16027d8acc5301e440cefa086eb9db2a" />
+      <keyword name="INFINITE_DELAY" id="listener_internal_types.h::INFINITE_DELAY" ref="listener__internal__types_8h.html#ab893de6f8a0ec8b0e6dd8097ff398019" />
+      <keyword name="LISTENER_NO_FD" id="listener_internal_types.h::LISTENER_NO_FD" ref="listener__internal__types_8h.html#a9edc873b66adf46bf716ceb7ab77bb07" />
+      <keyword name="LISTENER_SHUTDOWN_COMPLETE_FD" id="listener_internal_types.h::LISTENER_SHUTDOWN_COMPLETE_FD" ref="listener__internal__types_8h.html#a2283299012dd873e0a5e3b77dc417b08" />
+      <keyword name="msg_flag_t" id="listener_internal_types.h::msg_flag_t" ref="listener__internal__types_8h.html#a86f29ffc383d560855689fdb7abc4093" />
+      <keyword name="MSG_NONE" id="listener_internal_types.h::MSG_NONE" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba40e71b65f54da2ea5d97c37e720346b1" />
+      <keyword name="MSG_ADD_SOCKET" id="listener_internal_types.h::MSG_ADD_SOCKET" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2" />
+      <keyword name="MSG_REMOVE_SOCKET" id="listener_internal_types.h::MSG_REMOVE_SOCKET" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba433ef8aba97342ee9a920c5046cd4d67" />
+      <keyword name="MSG_HOLD_RESPONSE" id="listener_internal_types.h::MSG_HOLD_RESPONSE" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de" />
+      <keyword name="MSG_EXPECT_RESPONSE" id="listener_internal_types.h::MSG_EXPECT_RESPONSE" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed" />
+      <keyword name="MSG_SHUTDOWN" id="listener_internal_types.h::MSG_SHUTDOWN" ref="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba621b8f7f84a5fe2cbb10c08ce2c58ff3" />
+      <keyword name="RIS_HOLD" id="listener_internal_types.h::RIS_HOLD" ref="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5aaf352ec9825784a31574ea3823fb7c82" />
+      <keyword name="RIS_EXPECT" id="listener_internal_types.h::RIS_EXPECT" ref="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4" />
+      <keyword name="RIS_INACTIVE" id="listener_internal_types.h::RIS_INACTIVE" ref="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41" />
+      <keyword name="DUMP_READ" id="listener_io.c::DUMP_READ" ref="listener__io_8c.html#a1d7054af083649f8e410783fbf2e7b33" />
+      <keyword name="ListenerIO_AttemptRecv" id="listener_io.c::ListenerIO_AttemptRecv" ref="listener__io_8c.html#a3494b6d56e053563e19231fdda8ce6c8" />
+      <keyword name="socket_read_plain" id="listener_io.c::socket_read_plain" ref="listener__io_8c.html#a48e209edcf9421a36f6cd97eca45aa39" />
+      <keyword name="print_SSL_error" id="listener_io.c::print_SSL_error" ref="listener__io_8c.html#aa4a0d6443a6bb65b3fee1027d8eef70f" />
+      <keyword name="socket_read_ssl" id="listener_io.c::socket_read_ssl" ref="listener__io_8c.html#a27540bed6e0ee31601a54a31613bd1ee" />
+      <keyword name="sink_socket_read" id="listener_io.c::sink_socket_read" ref="listener__io_8c.html#a11b801753f3195b71431c6ae11f4e2b7" />
+      <keyword name="set_error_for_socket" id="listener_io.c::set_error_for_socket" ref="listener__io_8c.html#affa8fc52abd48c60492b25fae5496d0a" />
+      <keyword name="find_info_by_sequence_id" id="listener_io.c::find_info_by_sequence_id" ref="listener__io_8c.html#a5ef5faf6ec41a63ec7b82933b1eaaadd" />
+      <keyword name="process_unpacked_message" id="listener_io.c::process_unpacked_message" ref="listener__io_8c.html#a37c58a09e6d324e7114a2becb2683bbd" />
+      <keyword name="ListenerIO_AttemptRecv" id="listener_io.h::ListenerIO_AttemptRecv" ref="listener__io_8h.html#a3494b6d56e053563e19231fdda8ce6c8" />
+      <keyword name="socket_read_plain" id="listener_io_internal.h::socket_read_plain" ref="listener__io__internal_8h.html#a48e209edcf9421a36f6cd97eca45aa39" />
+      <keyword name="socket_read_ssl" id="listener_io_internal.h::socket_read_ssl" ref="listener__io__internal_8h.html#a27540bed6e0ee31601a54a31613bd1ee" />
+      <keyword name="sink_socket_read" id="listener_io_internal.h::sink_socket_read" ref="listener__io__internal_8h.html#a11b801753f3195b71431c6ae11f4e2b7" />
+      <keyword name="print_SSL_error" id="listener_io_internal.h::print_SSL_error" ref="listener__io__internal_8h.html#aa4a0d6443a6bb65b3fee1027d8eef70f" />
+      <keyword name="set_error_for_socket" id="listener_io_internal.h::set_error_for_socket" ref="listener__io__internal_8h.html#affa8fc52abd48c60492b25fae5496d0a" />
+      <keyword name="process_unpacked_message" id="listener_io_internal.h::process_unpacked_message" ref="listener__io__internal_8h.html#a37c58a09e6d324e7114a2becb2683bbd" />
+      <keyword name="find_info_by_sequence_id" id="listener_io_internal.h::find_info_by_sequence_id" ref="listener__io__internal_8h.html#a5ef5faf6ec41a63ec7b82933b1eaaadd" />
+      <keyword name="TIMEOUT_DELAY" id="listener_task.c::TIMEOUT_DELAY" ref="listener__task_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6" />
+      <keyword name="MSG_BP_1QTR" id="listener_task.c::MSG_BP_1QTR" ref="listener__task_8c.html#ac68caa54ad7fc51c8f5815eeb6686f30" />
+      <keyword name="MSG_BP_HALF" id="listener_task.c::MSG_BP_HALF" ref="listener__task_8c.html#a7acc76219d8588ca99f58c2121988112" />
+      <keyword name="MSG_BP_3QTR" id="listener_task.c::MSG_BP_3QTR" ref="listener__task_8c.html#a694eca96dcf9ed929ec1608f9c14c852" />
+      <keyword name="RX_INFO_BP_1QTR" id="listener_task.c::RX_INFO_BP_1QTR" ref="listener__task_8c.html#a7fc0ffea5ec4b8882f719f0d054e3824" />
+      <keyword name="RX_INFO_BP_HALF" id="listener_task.c::RX_INFO_BP_HALF" ref="listener__task_8c.html#a3e7f3829ff5668c512d1911a3201db71" />
+      <keyword name="RX_INFO_BP_3QTR" id="listener_task.c::RX_INFO_BP_3QTR" ref="listener__task_8c.html#a45f677274d8f1de84ae1cc842c43d0fe" />
+      <keyword name="THREADPOOL_BP" id="listener_task.c::THREADPOOL_BP" ref="listener__task_8c.html#a87e98e5aad28f7363d5f4217d2e8d10e" />
+      <keyword name="ListenerTask_MainLoop" id="listener_task.c::ListenerTask_MainLoop" ref="listener__task_8c.html#aa15828328e387b91fce029728b33af0b" />
+      <keyword name="tick_handler" id="listener_task.c::tick_handler" ref="listener__task_8c.html#aeedae561a63e857e130be4d40cca8588" />
+      <keyword name="ListenerTask_DumpRXInfoTable" id="listener_task.c::ListenerTask_DumpRXInfoTable" ref="listener__task_8c.html#ab7ad0a7cb1818c0849a8e21204d89b0e" />
+      <keyword name="retry_delivery" id="listener_task.c::retry_delivery" ref="listener__task_8c.html#a91845232ef24ffde41ff3689b0caa0c9" />
+      <keyword name="clean_up_completed_info" id="listener_task.c::clean_up_completed_info" ref="listener__task_8c.html#a21e5de0bee07a8e984f3c1408b8e3b62" />
+      <keyword name="ListenerTask_NotifyMessageFailure" id="listener_task.c::ListenerTask_NotifyMessageFailure" ref="listener__task_8c.html#a7d8487504334e548f1d668b12d8fe3de" />
+      <keyword name="get_connection_info" id="listener_task.c::get_connection_info" ref="listener__task_8c.html#a3bdbad0ba5aa31b4f2dcdfe16ed379bc" />
+      <keyword name="ListenerTask_ReleaseRXInfo" id="listener_task.c::ListenerTask_ReleaseRXInfo" ref="listener__task_8c.html#acd90b4d0e9b1520e1598993662932e55" />
+      <keyword name="ListenerTask_ReleaseMsg" id="listener_task.c::ListenerTask_ReleaseMsg" ref="listener__task_8c.html#ab7578ac5f274bba1ca78cc8c4048eba2" />
+      <keyword name="ListenerTask_GrowReadBuf" id="listener_task.c::ListenerTask_GrowReadBuf" ref="listener__task_8c.html#ade7318781f948e86471ec58d880d201d" />
+      <keyword name="ListenerTask_AttemptDelivery" id="listener_task.c::ListenerTask_AttemptDelivery" ref="listener__task_8c.html#a89f2c54c450dd6f6c6d35b9da42b8ab4" />
+      <keyword name="observe_backpressure" id="listener_task.c::observe_backpressure" ref="listener__task_8c.html#ae71f036eb0a57423a8e2b225bcf32e12" />
+      <keyword name="ListenerTask_GetBackpressure" id="listener_task.c::ListenerTask_GetBackpressure" ref="listener__task_8c.html#a42bfa01483c2ac1c72f3e03897fe4e0a" />
+      <keyword name="ListenerTask_MainLoop" id="listener_task.h::ListenerTask_MainLoop" ref="listener__task_8h.html#aa15828328e387b91fce029728b33af0b" />
+      <keyword name="ListenerTask_ReleaseMsg" id="listener_task.h::ListenerTask_ReleaseMsg" ref="listener__task_8h.html#aa6b7728c195142eea1c0ab676cda1299" />
+      <keyword name="ListenerTask_ReleaseRXInfo" id="listener_task.h::ListenerTask_ReleaseRXInfo" ref="listener__task_8h.html#abb2ea3b0531f8ee9cdd7d75c4127f6f2" />
+      <keyword name="ListenerTask_GrowReadBuf" id="listener_task.h::ListenerTask_GrowReadBuf" ref="listener__task_8h.html#ade7318781f948e86471ec58d880d201d" />
+      <keyword name="ListenerTask_AttemptDelivery" id="listener_task.h::ListenerTask_AttemptDelivery" ref="listener__task_8h.html#a89f2c54c450dd6f6c6d35b9da42b8ab4" />
+      <keyword name="ListenerTask_NotifyMessageFailure" id="listener_task.h::ListenerTask_NotifyMessageFailure" ref="listener__task_8h.html#a7d8487504334e548f1d668b12d8fe3de" />
+      <keyword name="ListenerTask_GetBackpressure" id="listener_task.h::ListenerTask_GetBackpressure" ref="listener__task_8h.html#a42bfa01483c2ac1c72f3e03897fe4e0a" />
+      <keyword name="ListenerTask_DumpRXInfoTable" id="listener_task.h::ListenerTask_DumpRXInfoTable" ref="listener__task_8h.html#ab7ad0a7cb1818c0849a8e21204d89b0e" />
+      <keyword name="tick_handler" id="listener_task_internal.h::tick_handler" ref="listener__task__internal_8h.html#aeedae561a63e857e130be4d40cca8588" />
+      <keyword name="clean_up_completed_info" id="listener_task_internal.h::clean_up_completed_info" ref="listener__task__internal_8h.html#a21e5de0bee07a8e984f3c1408b8e3b62" />
+      <keyword name="retry_delivery" id="listener_task_internal.h::retry_delivery" ref="listener__task__internal_8h.html#a91845232ef24ffde41ff3689b0caa0c9" />
+      <keyword name="observe_backpressure" id="listener_task_internal.h::observe_backpressure" ref="listener__task__internal_8h.html#ae71f036eb0a57423a8e2b225bcf32e12" />
       <keyword name="OPT_MIN" id="main.c::OPT_MIN" ref="main_8c.html#a55a00b40a60585a501fcf058853489cb" />
       <keyword name="ParseOptions" id="main.c::ParseOptions" ref="main_8c.html#ac8671b12570e90053da9f034e7a265fe" />
       <keyword name="ExecuteOperation" id="main.c::ExecuteOperation" ref="main_8c.html#a57e6fa09d0aa7bc65bdefb4034e51ffc" />
-      <keyword name="ConfigureEntry" id="main.c::ConfigureEntry" ref="main_8c.html#a11899ce4e556af8f5b7adaf23e389155" />
+      <keyword name="ConfigureEntry" id="main.c::ConfigureEntry" ref="main_8c.html#af72d3fdb1f8c16ed4490769876486cd6" />
       <keyword name="PrintLogInfo" id="main.c::PrintLogInfo" ref="main_8c.html#af965f3b1275191f0855813297eaf69ce" />
       <keyword name="GetOptString" id="main.c::GetOptString" ref="main_8c.html#a6c4590fb4c5d4f8f87c8250fc403ce75" />
       <keyword name="PrintUsage" id="main.c::PrintUsage" ref="main_8c.html#a456168dda4622d587bbbe87f2619bdff" />
@@ -5433,97 +5357,20 @@
       <keyword name="OPT_MAX" id="main.c::OPT_MAX" ref="main_8c.html#a33b464dc0c6472cdf58af32e9754db83a071a0b4ca1a6ed34e7a1764730787720" />
       <keyword name="put_finished" id="put_nonblocking.c::put_finished" ref="put__nonblocking_8c.html#a4cc5244bc7b6dd83d1bc8eae3bb37608" />
       <keyword name="main" id="put_nonblocking.c::main" ref="put__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
-      <keyword name="CMD_FD" id="sender.c::CMD_FD" ref="sender_8c.html#a3ea94b37cd6445d977af94a78e2c18e0" />
-      <keyword name="TIMEOUT_DELAY" id="sender.c::TIMEOUT_DELAY" ref="sender_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6" />
-      <keyword name="sender_init" id="sender.c::sender_init" ref="sender_8c.html#a991ff0badb44cb746fe639fa54fe1c31" />
-      <keyword name="sender_register_socket" id="sender.c::sender_register_socket" ref="sender_8c.html#a3c833ea734a4c9865acc47d91ddb7fd5" />
-      <keyword name="sender_remove_socket" id="sender.c::sender_remove_socket" ref="sender_8c.html#a7345f822ab1bc69dcc35cc871423ec19" />
-      <keyword name="sender_send_request" id="sender.c::sender_send_request" ref="sender_8c.html#ace027324e2b89c0f46e6798b23ec58ce" />
-      <keyword name="sender_shutdown" id="sender.c::sender_shutdown" ref="sender_8c.html#a6387b60648d2aa6ae5d724ebf04ad3cc" />
-      <keyword name="sender_free" id="sender.c::sender_free" ref="sender_8c.html#acdaed429f2456b13e846d4e7f846bd65" />
-      <keyword name="get_free_tx_info" id="sender.c::get_free_tx_info" ref="sender_8c.html#af18ed407301b3bdd9c44b3b05f2d54cf" />
-      <keyword name="release_tx_info" id="sender.c::release_tx_info" ref="sender_8c.html#a9ae301320ba4b577b2462907678af613" />
-      <keyword name="get_notify_pipe" id="sender.c::get_notify_pipe" ref="sender_8c.html#a8c2d8a592a292ec3105b6f1ad205f3dd" />
-      <keyword name="write_commit" id="sender.c::write_commit" ref="sender_8c.html#a34859023ba746b0359f571dad003ab98" />
-      <keyword name="commit_event_and_block" id="sender.c::commit_event_and_block" ref="sender_8c.html#ac06cfcb3ecfad06e23567ca1a7dac4db" />
-      <keyword name="sender_mainloop" id="sender.c::sender_mainloop" ref="sender_8c.html#a4f1823592996205c3243bf49127a0004" />
-      <keyword name="free_fd_info_cb" id="sender.c::free_fd_info_cb" ref="sender_8c.html#a8d4592d298d6539a13dd31239360c7ad" />
-      <keyword name="cleanup" id="sender.c::cleanup" ref="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc" />
-      <keyword name="register_socket_info" id="sender.c::register_socket_info" ref="sender_8c.html#aa462f2b99191e54e839a69fc568972f1" />
-      <keyword name="increment_fd_refcount" id="sender.c::increment_fd_refcount" ref="sender_8c.html#a7bc45c02fed85ce85a834cf730f07c00" />
-      <keyword name="decrement_fd_refcount" id="sender.c::decrement_fd_refcount" ref="sender_8c.html#a09ec64a8af8244d6b69a7e79fa9065f3" />
-      <keyword name="release_socket_info" id="sender.c::release_socket_info" ref="sender_8c.html#a53ddb423772e634b4d099694d7bd5e37" />
-      <keyword name="handle_command" id="sender.c::handle_command" ref="sender_8c.html#a09a13d151396fa2b4dbe11182cf0233b" />
-      <keyword name="enqueue_write" id="sender.c::enqueue_write" ref="sender_8c.html#a84b7873113e88f5cfff8b30989a6197d" />
-      <keyword name="check_incoming_commands" id="sender.c::check_incoming_commands" ref="sender_8c.html#a320db24cd0321f42690ae959b30d41b7" />
-      <keyword name="get_info_to_write_for_socket" id="sender.c::get_info_to_write_for_socket" ref="sender_8c.html#a28642bbcae521b8f97ad49229df128f3" />
-      <keyword name="set_error_for_socket" id="sender.c::set_error_for_socket" ref="sender_8c.html#a799e6b8d9f7b7982ad8e8c6bbc60d993" />
-      <keyword name="attempt_write" id="sender.c::attempt_write" ref="sender_8c.html#acf20e1c1edb201899b9592cb945685cd" />
-      <keyword name="socket_write_plain" id="sender.c::socket_write_plain" ref="sender_8c.html#a9f00925c05248b5902ffc10b99a55ce8" />
-      <keyword name="socket_write_ssl" id="sender.c::socket_write_ssl" ref="sender_8c.html#a9485e7160a073a7740dc2f130ce19db4" />
-      <keyword name="update_sent" id="sender.c::update_sent" ref="sender_8c.html#a20e2371bcf20b4f30b71726e0cad33fd" />
-      <keyword name="notify_caller" id="sender.c::notify_caller" ref="sender_8c.html#a72e4815c5de39d0c2c31c573eafce27a" />
-      <keyword name="tick_handler" id="sender.c::tick_handler" ref="sender_8c.html#ae1a455338f511c22140fd42d0f183257" />
-      <keyword name="tick_timeout" id="sender.c::tick_timeout" ref="sender_8c.html#a728a121de75c640dd90c1992d870318f" />
-      <keyword name="attempt_to_enqueue_sending_request_message_to_listener" id="sender.c::attempt_to_enqueue_sending_request_message_to_listener" ref="sender_8c.html#aa4ddfd50691169b408a005eda5862ccf" />
-      <keyword name="attempt_to_enqueue_request_sent_message_to_listener" id="sender.c::attempt_to_enqueue_request_sent_message_to_listener" ref="sender_8c.html#a0c32f1070a14594306e76e6adc04ae68" />
-      <keyword name="notify_message_failure" id="sender.c::notify_message_failure" ref="sender_8c.html#a2f7209353ead92c91bfc8f84a8b4df50" />
-      <keyword name="sender_init" id="sender.h::sender_init" ref="sender_8h.html#a991ff0badb44cb746fe639fa54fe1c31" />
-      <keyword name="sender_register_socket" id="sender.h::sender_register_socket" ref="sender_8h.html#a3c833ea734a4c9865acc47d91ddb7fd5" />
-      <keyword name="sender_remove_socket" id="sender.h::sender_remove_socket" ref="sender_8h.html#a7345f822ab1bc69dcc35cc871423ec19" />
-      <keyword name="sender_send_request" id="sender.h::sender_send_request" ref="sender_8h.html#ace027324e2b89c0f46e6798b23ec58ce" />
-      <keyword name="sender_shutdown" id="sender.h::sender_shutdown" ref="sender_8h.html#a6387b60648d2aa6ae5d724ebf04ad3cc" />
-      <keyword name="sender_free" id="sender.h::sender_free" ref="sender_8h.html#acdaed429f2456b13e846d4e7f846bd65" />
-      <keyword name="MAX_TIMEOUT" id="sender_internal.h::MAX_TIMEOUT" ref="sender__internal_8h.html#a85fda3522e69a1bf85f7dcd97b6023a1" />
-      <keyword name="TX_TIMEOUT" id="sender_internal.h::TX_TIMEOUT" ref="sender__internal_8h.html#ad380e380939eae9a5d6c8f228f0fe7c8" />
-      <keyword name="MAX_CONCURRENT_SENDS" id="sender_internal.h::MAX_CONCURRENT_SENDS" ref="sender__internal_8h.html#acf81eb49715fa84e816bfdfb0ce18748" />
-      <keyword name="HASH_TABLE_SIZE2" id="sender_internal.h::HASH_TABLE_SIZE2" ref="sender__internal_8h.html#a2071bea833e4fa740cb66ccd81930b65" />
-      <keyword name="SENDER_FD_NOT_IN_USE" id="sender_internal.h::SENDER_FD_NOT_IN_USE" ref="sender__internal_8h.html#a11970f2c99571e46862c6df7c94ad3c9" />
-      <keyword name="tx_flag_t" id="sender_internal.h::tx_flag_t" ref="sender__internal_8h.html#a0a54b2062cf1b4a9c1ced43140ee52e0" />
-      <keyword name="get_free_tx_info" id="sender_internal.h::get_free_tx_info" ref="sender__internal_8h.html#af18ed407301b3bdd9c44b3b05f2d54cf" />
-      <keyword name="release_tx_info" id="sender_internal.h::release_tx_info" ref="sender__internal_8h.html#a9ae301320ba4b577b2462907678af613" />
-      <keyword name="get_notify_pipe" id="sender_internal.h::get_notify_pipe" ref="sender__internal_8h.html#a8c2d8a592a292ec3105b6f1ad205f3dd" />
-      <keyword name="write_commit" id="sender_internal.h::write_commit" ref="sender__internal_8h.html#a34859023ba746b0359f571dad003ab98" />
-      <keyword name="commit_event_and_block" id="sender_internal.h::commit_event_and_block" ref="sender__internal_8h.html#ac06cfcb3ecfad06e23567ca1a7dac4db" />
-      <keyword name="register_socket_info" id="sender_internal.h::register_socket_info" ref="sender__internal_8h.html#aa462f2b99191e54e839a69fc568972f1" />
-      <keyword name="increment_fd_refcount" id="sender_internal.h::increment_fd_refcount" ref="sender__internal_8h.html#a7bc45c02fed85ce85a834cf730f07c00" />
-      <keyword name="decrement_fd_refcount" id="sender_internal.h::decrement_fd_refcount" ref="sender__internal_8h.html#a09ec64a8af8244d6b69a7e79fa9065f3" />
-      <keyword name="release_socket_info" id="sender_internal.h::release_socket_info" ref="sender__internal_8h.html#a53ddb423772e634b4d099694d7bd5e37" />
-      <keyword name="handle_command" id="sender_internal.h::handle_command" ref="sender__internal_8h.html#a09a13d151396fa2b4dbe11182cf0233b" />
-      <keyword name="enqueue_write" id="sender_internal.h::enqueue_write" ref="sender__internal_8h.html#a84b7873113e88f5cfff8b30989a6197d" />
-      <keyword name="check_incoming_commands" id="sender_internal.h::check_incoming_commands" ref="sender__internal_8h.html#a320db24cd0321f42690ae959b30d41b7" />
-      <keyword name="get_info_to_write_for_socket" id="sender_internal.h::get_info_to_write_for_socket" ref="sender__internal_8h.html#a28642bbcae521b8f97ad49229df128f3" />
-      <keyword name="set_error_for_socket" id="sender_internal.h::set_error_for_socket" ref="sender__internal_8h.html#a799e6b8d9f7b7982ad8e8c6bbc60d993" />
-      <keyword name="socket_write_plain" id="sender_internal.h::socket_write_plain" ref="sender__internal_8h.html#a9f00925c05248b5902ffc10b99a55ce8" />
-      <keyword name="socket_write_ssl" id="sender_internal.h::socket_write_ssl" ref="sender__internal_8h.html#a9485e7160a073a7740dc2f130ce19db4" />
-      <keyword name="update_sent" id="sender_internal.h::update_sent" ref="sender__internal_8h.html#a20e2371bcf20b4f30b71726e0cad33fd" />
-      <keyword name="attempt_write" id="sender_internal.h::attempt_write" ref="sender__internal_8h.html#acf20e1c1edb201899b9592cb945685cd" />
-      <keyword name="tick_handler" id="sender_internal.h::tick_handler" ref="sender__internal_8h.html#ae1a455338f511c22140fd42d0f183257" />
-      <keyword name="notify_message_failure" id="sender_internal.h::notify_message_failure" ref="sender__internal_8h.html#a2f7209353ead92c91bfc8f84a8b4df50" />
-      <keyword name="attempt_to_enqueue_sending_request_message_to_listener" id="sender_internal.h::attempt_to_enqueue_sending_request_message_to_listener" ref="sender__internal_8h.html#aa4ddfd50691169b408a005eda5862ccf" />
-      <keyword name="attempt_to_enqueue_request_sent_message_to_listener" id="sender_internal.h::attempt_to_enqueue_request_sent_message_to_listener" ref="sender__internal_8h.html#a0c32f1070a14594306e76e6adc04ae68" />
-      <keyword name="notify_caller" id="sender_internal.h::notify_caller" ref="sender__internal_8h.html#a72e4815c5de39d0c2c31c573eafce27a" />
-      <keyword name="tick_timeout" id="sender_internal.h::tick_timeout" ref="sender__internal_8h.html#a728a121de75c640dd90c1992d870318f" />
-      <keyword name="cleanup" id="sender_internal.h::cleanup" ref="sender__internal_8h.html#a35be7855150c6a8fa847eba457e48bdc" />
-      <keyword name="TX_ERROR_NONE" id="sender_internal.h::TX_ERROR_NONE" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da272f9f119a84f84620a50f59921074be" />
-      <keyword name="TX_ERROR_POLLHUP" id="sender_internal.h::TX_ERROR_POLLHUP" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791dab8356e960ab720f20eb581b181e209a7" />
-      <keyword name="TX_ERROR_POLLERR" id="sender_internal.h::TX_ERROR_POLLERR" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da67df9b4158d09359ab1bd26ae70a705f" />
-      <keyword name="TX_ERROR_WRITE_FAILURE" id="sender_internal.h::TX_ERROR_WRITE_FAILURE" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791daaa9e491fcf49c45d98906510f1b54610" />
-      <keyword name="TX_ERROR_UNREGISTERED_SOCKET" id="sender_internal.h::TX_ERROR_UNREGISTERED_SOCKET" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da0c6c852bec7890ea64fea30d5467d3a2" />
-      <keyword name="TX_ERROR_CLOSED" id="sender_internal.h::TX_ERROR_CLOSED" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da86ef1bee9b4f29fe9fe5c636ce612e84" />
-      <keyword name="TX_ERROR_NOTIFY_LISTENER_FAILURE" id="sender_internal.h::TX_ERROR_NOTIFY_LISTENER_FAILURE" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da1ec35b178c0921ad83c84d9440adad5b" />
-      <keyword name="TX_ERROR_WRITE_TIMEOUT" id="sender_internal.h::TX_ERROR_WRITE_TIMEOUT" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da6929c1525a8bde9a975507eee7268f06" />
-      <keyword name="TX_ERROR_NOTIFY_TIMEOUT" id="sender_internal.h::TX_ERROR_NOTIFY_TIMEOUT" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791dafdaba8b14c1932b324b036a9412dd737" />
-      <keyword name="TX_ERROR_BAD_SEQUENCE_ID" id="sender_internal.h::TX_ERROR_BAD_SEQUENCE_ID" ref="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da90d3001daa8fa6c7c556cf48320ec0f5" />
-      <keyword name="TIS_UNDEF" id="sender_internal.h::TIS_UNDEF" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a88e9115c62fc7e1f7b9944d2a881887a" />
-      <keyword name="TIS_ADD_SOCKET" id="sender_internal.h::TIS_ADD_SOCKET" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a52925d46fb93fbb25c715bb8ce7231f3" />
-      <keyword name="TIS_RM_SOCKET" id="sender_internal.h::TIS_RM_SOCKET" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a60ea7691c6acb15519e2bbf2b0b287db" />
-      <keyword name="TIS_SHUTDOWN" id="sender_internal.h::TIS_SHUTDOWN" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a2a021f11ce2f51d6e36e185d78837333" />
-      <keyword name="TIS_REQUEST_ENQUEUE" id="sender_internal.h::TIS_REQUEST_ENQUEUE" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a6837eed2976f14f01d8790c5c0959060" />
-      <keyword name="TIS_REQUEST_WRITE" id="sender_internal.h::TIS_REQUEST_WRITE" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429ad6cf66e7a3fb15e87da97d330c6c3c03" />
-      <keyword name="TIS_RESPONSE_NOTIFY" id="sender_internal.h::TIS_RESPONSE_NOTIFY" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a638663893162c362d9513932571f83d3" />
-      <keyword name="TIS_REQUEST_RELEASE" id="sender_internal.h::TIS_REQUEST_RELEASE" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a68e05ad950fdd5fe3ab4458659fa6db8" />
-      <keyword name="TIS_ERROR" id="sender_internal.h::TIS_ERROR" ref="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a20183f762fba2c542ba2c0101ee3fc3a" />
+      <keyword name="send_do_blocking_send" id="send.c::send_do_blocking_send" ref="send_8c.html#a645fe26b9a92bcea62862692048e1d82" />
+      <keyword name="attempt_to_enqueue_sending_request_message_to_listener" id="send.c::attempt_to_enqueue_sending_request_message_to_listener" ref="send_8c.html#a0a3d5df230238208188a316c900123c4" />
+      <keyword name="handle_failure" id="send.c::handle_failure" ref="send_8c.html#ae31cb52695b7c4b86ad52413e7cf4966" />
+      <keyword name="write_plain" id="send.c::write_plain" ref="send_8c.html#a3404e5d173399e27c14e908066e81935" />
+      <keyword name="write_ssl" id="send.c::write_ssl" ref="send_8c.html#ae247d808874e3f3b30659f5406200efa" />
+      <keyword name="enqueue_request_sent_message_to_listener" id="send.c::enqueue_request_sent_message_to_listener" ref="send_8c.html#a59e4fb5e681e9d9d3b8ae1f647ea005a" />
+      <keyword name="handle_write" id="send.c::handle_write" ref="send_8c.html#a6664eefee5b7a9db746a8c9a76a5d764" />
+      <keyword name="send_do_blocking_send" id="send.h::send_do_blocking_send" ref="send_8h.html#a472ea0cb8ac1873fe772996d75745bc6" />
+      <keyword name="handle_write" id="send_internal.h::handle_write" ref="send__internal_8h.html#a6664eefee5b7a9db746a8c9a76a5d764" />
+      <keyword name="handle_failure" id="send_internal.h::handle_failure" ref="send__internal_8h.html#ae31cb52695b7c4b86ad52413e7cf4966" />
+      <keyword name="attempt_to_enqueue_sending_request_message_to_listener" id="send_internal.h::attempt_to_enqueue_sending_request_message_to_listener" ref="send__internal_8h.html#a0a3d5df230238208188a316c900123c4" />
+      <keyword name="HW_OK" id="send_internal.h::HW_OK" ref="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51" />
+      <keyword name="HW_DONE" id="send_internal.h::HW_DONE" ref="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91" />
+      <keyword name="HW_ERROR" id="send_internal.h::HW_ERROR" ref="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157" />
       <keyword name="usage" id="setup_teardown.c::usage" ref="setup__teardown_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f" />
       <keyword name="handle_args" id="setup_teardown.c::handle_args" ref="setup__teardown_8c.html#adadd3681709665f0ec0410204b6b949b" />
       <keyword name="main" id="setup_teardown.c::main" ref="setup__teardown_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
@@ -5616,7 +5463,9 @@
       <keyword name="STATUS_SHUTDOWN" id="threadpool_internals.h::STATUS_SHUTDOWN" ref="threadpool__internals_8h.html#ac528c02d3cccfb103d539b26ccdba6b2afe3be2ba8f0a700faab0406f0343865b" />
       <keyword name="STATUS_JOINED" id="threadpool_internals.h::STATUS_JOINED" ref="threadpool__internals_8h.html#ac528c02d3cccfb103d539b26ccdba6b2adad3ec9357d1c8711a6b4ccca78ed29b" />
       <keyword name="util_is_resumable_io_error" id="util.c::util_is_resumable_io_error" ref="util_8c.html#a160b252716d51078cec50bc9f27bc2bc" />
+      <keyword name="util_timestamp" id="util.c::util_timestamp" ref="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9" />
       <keyword name="util_is_resumable_io_error" id="util.h::util_is_resumable_io_error" ref="util_8h.html#a160b252716d51078cec50bc9f27bc2bc" />
+      <keyword name="util_timestamp" id="util.h::util_timestamp" ref="util_8h.html#ad63ab11f5adebc0730d970d7742ccfd9" />
       <keyword name="store_data" id="write_file_blocking.c::store_data" ref="write__file__blocking_8c.html#af4bd70c5ec166142c87bbc3825a4721c" />
       <keyword name="main" id="write_file_blocking.c::main" ref="write__file__blocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
       <keyword name="NUM_FILES" id="write_file_blocking_threads.c::NUM_FILES" ref="write__file__blocking__threads_8c.html#a7e72e0268904c2467ce256cc0f78925c" />
@@ -5630,7 +5479,6 @@
       <keyword name="put_chunk_of_file_finished" id="write_file_nonblocking.c::put_chunk_of_file_finished" ref="write__file__nonblocking_8c.html#aca8e409753711755967770cf3eb8add0" />
       <keyword name="main" id="write_file_nonblocking.c::main" ref="write__file__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627" />
       <keyword name="LOG" id="yacht.c::LOG" ref="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e" />
-      <keyword name="USE_BRENTS_VARIATION" id="yacht.c::USE_BRENTS_VARIATION" ref="yacht_8c.html#a5ac70b00c9ad8d06bbfa7f2c32df2e62" />
       <keyword name="DEF_SZ2" id="yacht.c::DEF_SZ2" ref="yacht_8c.html#a783af37de2395ffe34618ed81dc4394c" />
       <keyword name="MAX_PROBES" id="yacht.c::MAX_PROBES" ref="yacht_8c.html#a6deebb67c6e9267ad4e978b992850398" />
       <keyword name="LARGE_PRIME" id="yacht.c::LARGE_PRIME" ref="yacht_8c.html#ad6161f686aaa2a898d0deb0c5e837446" />
@@ -5672,6 +5520,7 @@
       <keyword name="out_seq_id" id="boxed_msg::out_seq_id" ref="structboxed__msg.html#af95824a6049596447b014c9ad0666aaa" />
       <keyword name="out_msg" id="boxed_msg::out_msg" ref="structboxed__msg.html#a4bbd440c3391b3bfd7f108016cc5d457" />
       <keyword name="out_msg_size" id="boxed_msg::out_msg_size" ref="structboxed__msg.html#afa5e562c823076e36c4c92d909e4ef5d" />
+      <keyword name="out_sent_size" id="boxed_msg::out_sent_size" ref="structboxed__msg.html#abbb3d56b8df85679e47e45f83fdcebcd" />
       <keyword name="bus" id="bus" ref="structbus.html" />
       <keyword name="sink_cb" id="bus::sink_cb" ref="structbus.html#a3f72ca0a4bdb9978a9e012045623f933" />
       <keyword name="unpack_cb" id="bus::unpack_cb" ref="structbus.html#af3baa79892ebffd5a3ef91bbd32f1c37" />
@@ -5681,18 +5530,16 @@
       <keyword name="log_level" id="bus::log_level" ref="structbus.html#a5ad9f0ac1d3f3f27a2fecb343b8ed2a0" />
       <keyword name="log_cb" id="bus::log_cb" ref="structbus.html#a1160376c92f0c8fce674ca77fa41335a" />
       <keyword name="log_lock" id="bus::log_lock" ref="structbus.html#ace72e36be8085e1cb2935af8b11207b7" />
-      <keyword name="sender_count" id="bus::sender_count" ref="structbus.html#a0c515f6e769e09d43fca4b11a62e8344" />
-      <keyword name="senders" id="bus::senders" ref="structbus.html#a89364a094feac4f2e881ac3f9972a483" />
       <keyword name="listener_count" id="bus::listener_count" ref="structbus.html#aeaebf543f45a2c9d6b3af31826c8af69" />
       <keyword name="listeners" id="bus::listeners" ref="structbus.html#a63745ef2fca7e862f1301380892f0f22" />
       <keyword name="joined" id="bus::joined" ref="structbus.html#ac4589956d09754001506dab138c33432" />
       <keyword name="threads" id="bus::threads" ref="structbus.html#af44407d0ffd23017d659329d06a2af89" />
+      <keyword name="shutdown_state" id="bus::shutdown_state" ref="structbus.html#a873b1c898dbdee192950caea56b37729" />
       <keyword name="threadpool" id="bus::threadpool" ref="structbus.html#a1d57acc6c3586d4994215fb0efcac63e" />
       <keyword name="ssl_ctx" id="bus::ssl_ctx" ref="structbus.html#a7feda9eb15cbc6deab2508973acfe85c" />
       <keyword name="fd_set" id="bus::fd_set" ref="structbus.html#a02b724a103e70fd7eea516e8c4b2556c" />
       <keyword name="fd_set_lock" id="bus::fd_set_lock" ref="structbus.html#a01464a80aa897f2caa81b063402d1f28" />
       <keyword name="bus_config" id="bus_config" ref="structbus__config.html" />
-      <keyword name="sender_count" id="bus_config::sender_count" ref="structbus__config.html#a2a469e8bdb721bc038f4009e190d9a0c" />
       <keyword name="listener_count" id="bus_config::listener_count" ref="structbus__config.html#a0f99f64476e50779df44d82c04d82397" />
       <keyword name="threadpool_cfg" id="bus_config::threadpool_cfg" ref="structbus__config.html#a4608cd6cb48070f425d5196e6bdc8051" />
       <keyword name="sink_cb" id="bus_config::sink_cb" ref="structbus__config.html#ad20a0495c65231d9c50a9493531847a9" />
@@ -5727,7 +5574,7 @@
       <keyword name="bus_user_msg" id="bus_user_msg" ref="structbus__user__msg.html" />
       <keyword name="fd" id="bus_user_msg::fd" ref="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953" />
       <keyword name="type" id="bus_user_msg::type" ref="structbus__user__msg.html#acf9730acc14dbf810ad303346df79e52" />
-      <keyword name="seq_id" id="bus_user_msg::seq_id" ref="structbus__user__msg.html#ace4aaba434c6505167d760dbd7994c95" />
+      <keyword name="seq_id" id="bus_user_msg::seq_id" ref="structbus__user__msg.html#a3e8b1951c9628bf2745c3229af24b145" />
       <keyword name="msg" id="bus_user_msg::msg" ref="structbus__user__msg.html#a2a7a830b6e51f212377c9b84d400e61a" />
       <keyword name="msg_size" id="bus_user_msg::msg_size" ref="structbus__user__msg.html#a5167279f6c1b270eb5cab8813417582b" />
       <keyword name="timeout_sec" id="bus_user_msg::timeout_sec" ref="structbus__user__msg.html#a0ce147ac612c037bdc4317b4032840d1" />
@@ -5744,19 +5591,14 @@
       <keyword name="count" id="ByteBufferArray::count" ref="struct_byte_buffer_array.html#a7393d4a746768e5a69219677a7d9f18c" />
       <keyword name="used" id="ByteBufferArray::used" ref="struct_byte_buffer_array.html#af6423547071ca14bcbd0a5d160fcba88" />
       <keyword name="connection_info" id="connection_info" ref="structconnection__info.html" />
-      <keyword name="fd" id="connection_info::fd" ref="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8" />
+      <keyword name="fd" id="connection_info::fd" ref="structconnection__info.html#a6776f202bed7509222507f0d1db67500" />
+      <keyword name="type" id="connection_info::type" ref="structconnection__info.html#a19201693299c03819f5cf5f7d110e8fb" />
+      <keyword name="udata" id="connection_info::udata" ref="structconnection__info.html#a848a07967f74e31333fddea49fab9668" />
+      <keyword name="ssl" id="connection_info::ssl" ref="structconnection__info.html#a0655d6337cf80ac22943323121d118d1" />
+      <keyword name="largest_wr_seq_id_seen" id="connection_info::largest_wr_seq_id_seen" ref="structconnection__info.html#a2ffb2a7b8d44fcb0405452391ee351b4" />
       <keyword name="error" id="connection_info::error" ref="structconnection__info.html#aef3103f14c4cabe24a02e72a5ad62a16" />
       <keyword name="to_read_size" id="connection_info::to_read_size" ref="structconnection__info.html#aef449f1f96dfb53fd9655ea0cf803480" />
-      <keyword name="largest_seq_id_seen" id="connection_info::largest_seq_id_seen" ref="structconnection__info.html#a7357df379b73912945c71edcb2e7bfe5" />
-      <keyword name="ssl" id="connection_info::ssl" ref="structconnection__info.html#a0655d6337cf80ac22943323121d118d1" />
-      <keyword name="type" id="connection_info::type" ref="structconnection__info.html#ab9f8d54036f15df03f070f271984c319" />
-      <keyword name="udata" id="connection_info::udata" ref="structconnection__info.html#a848a07967f74e31333fddea49fab9668" />
-      <keyword name="fd_info" id="fd_info" ref="structfd__info.html" />
-      <keyword name="fd" id="fd_info::fd" ref="structfd__info.html#ae854a5754cd0716eba8aabed12a6cd1e" />
-      <keyword name="ssl" id="fd_info::ssl" ref="structfd__info.html#abce68830a0316490cb9a01d13e4e47b9" />
-      <keyword name="refcount" id="fd_info::refcount" ref="structfd__info.html#a6f4437e27ab87d3f6a9d962a422e288f" />
-      <keyword name="largest_seq_id_seen" id="fd_info::largest_seq_id_seen" ref="structfd__info.html#a1ba7b197cc1ebf0355ee8ef8b4d705a3" />
-      <keyword name="errored" id="fd_info::errored" ref="structfd__info.html#a056b8cc22b630361dd331eca978f1d38" />
+      <keyword name="largest_rd_seq_id_seen" id="connection_info::largest_rd_seq_id_seen" ref="structconnection__info.html#ab615d35e7a56f24003a371db6343ffe4" />
       <keyword name="greatest_run_info" id="greatest_run_info" ref="structgreatest__run__info.html" />
       <keyword name="flags" id="greatest_run_info::flags" ref="structgreatest__run__info.html#ae8471c5288b7b2d6d6da2ed661671b8e" />
       <keyword name="tests_run" id="greatest_run_info::tests_run" ref="structgreatest__run__info.html#ae06d2fa15a0008b8943acb98082a9ca6" />
@@ -5799,7 +5641,6 @@
       <keyword name="KineticClientConfig" id="KineticClientConfig" ref="struct_kinetic_client_config.html" />
       <keyword name="logFile" id="KineticClientConfig::logFile" ref="struct_kinetic_client_config.html#a200c4b5a44ff14aa20f9cb20df708a5b" />
       <keyword name="logLevel" id="KineticClientConfig::logLevel" ref="struct_kinetic_client_config.html#af2847d4cbb33b1104133778e207f5569" />
-      <keyword name="writerThreads" id="KineticClientConfig::writerThreads" ref="struct_kinetic_client_config.html#ab9cc6db700bcbe64ed91b8589af0cd57" />
       <keyword name="readerThreads" id="KineticClientConfig::readerThreads" ref="struct_kinetic_client_config.html#a7554ee4d63821eb7ce0d5c59d632018a" />
       <keyword name="maxThreadpoolThreads" id="KineticClientConfig::maxThreadpoolThreads" ref="struct_kinetic_client_config.html#aedd2dc97b7736cfed0a748c991d0236f" />
       <keyword name="KineticCompletionClosure" id="KineticCompletionClosure" ref="struct_kinetic_completion_closure.html" />
@@ -6252,7 +6093,7 @@
       <keyword name="timeoutSeconds" id="KineticSessionConfig::timeoutSeconds" ref="struct_kinetic_session_config.html#aade5d711e365852e68201df1b3b57177" />
       <keyword name="listener" id="listener" ref="structlistener.html" />
       <keyword name="bus" id="listener::bus" ref="structlistener.html#a3b774e2e0ad1e58c3a0bdf7207cabbb6" />
-      <keyword name="shutdown" id="listener::shutdown" ref="structlistener.html#a38f8e5d2c9f44093adb69974440a3741" />
+      <keyword name="shutdown_notify_fd" id="listener::shutdown_notify_fd" ref="structlistener.html#a98d02f437be02437df79939b196d178a" />
       <keyword name="commit_pipe" id="listener::commit_pipe" ref="structlistener.html#abc6abc228015127d7413688bbcad26b1" />
       <keyword name="incoming_msg_pipe" id="listener::incoming_msg_pipe" ref="structlistener.html#a5ac777bb848a219493fb3ac22902b703" />
       <keyword name="is_idle" id="listener::is_idle" ref="structlistener.html#ab64bf7942724f8b2209e840fec1b7101" />
@@ -6274,10 +6115,12 @@
       <keyword name="id" id="listener_msg::id" ref="structlistener__msg.html#a8bb0870834ca5fd0c183192f8748c718" />
       <keyword name="type" id="listener_msg::type" ref="structlistener__msg.html#a2e6e8423ecf60ca3fe3f787da52c1561" />
       <keyword name="next" id="listener_msg::next" ref="structlistener__msg.html#a856d225df0b476a85b12946457ad6513" />
+      <keyword name="pipes" id="listener_msg::pipes" ref="structlistener__msg.html#a7cbeff39416d25e0f81ae37286f59f37" />
       <keyword name="info" id="listener_msg::@6::@7::info" ref="structlistener__msg_1_1@6_1_1@7.html#a882a4e5bd58b99f9b68471008187f7f6" />
       <keyword name="notify_fd" id="listener_msg::@6::@7::notify_fd" ref="structlistener__msg_1_1@6_1_1@7.html#aa04b78ddae0d03c1faafef6a4d5ef3e3" />
       <keyword name="add_socket" id="listener_msg::@6::add_socket" ref="unionlistener__msg_1_1@6.html#a73f42d51afe0dee90c2f0f4cb7fd4a52" />
       <keyword name="fd" id="listener_msg::@6::@8::fd" ref="structlistener__msg_1_1@6_1_1@8.html#a6483500e725cbfd1a3a0f88e2c6fff81" />
+      <keyword name="notify_fd" id="listener_msg::@6::@8::notify_fd" ref="structlistener__msg_1_1@6_1_1@8.html#a5539272d4b3faa243054e8995fbabe0b" />
       <keyword name="remove_socket" id="listener_msg::@6::remove_socket" ref="unionlistener__msg_1_1@6.html#ad7349ffc9810dbd0e53c36ee382d1c8d" />
       <keyword name="fd" id="listener_msg::@6::@9::fd" ref="structlistener__msg_1_1@6_1_1@9.html#ac10c25246e1b4dc875696f6d5873196a" />
       <keyword name="seq_id" id="listener_msg::@6::@9::seq_id" ref="structlistener__msg_1_1@6_1_1@9.html#a668488ae5a56bca39c370d20132b6757" />
@@ -6285,7 +6128,7 @@
       <keyword name="hold" id="listener_msg::@6::hold" ref="unionlistener__msg_1_1@6.html#aacc241e44311c8699e3323e14ae60c99" />
       <keyword name="box" id="listener_msg::@6::@10::box" ref="structlistener__msg_1_1@6_1_1@10.html#aa388e4e9e5da0f512a79eac86d25be0f" />
       <keyword name="expect" id="listener_msg::@6::expect" ref="unionlistener__msg_1_1@6.html#a9419f58e8da9f163f5718af4a9eae701" />
-      <keyword name="unused" id="listener_msg::@6::@11::unused" ref="structlistener__msg_1_1@6_1_1@11.html#a3eedd3aa7983ad881a2fda3a443c5c6c" />
+      <keyword name="notify_fd" id="listener_msg::@6::@11::notify_fd" ref="structlistener__msg_1_1@6_1_1@11.html#a85191ab4f275a9688c86dc52588fbab7" />
       <keyword name="shutdown" id="listener_msg::@6::shutdown" ref="unionlistener__msg_1_1@6.html#a2b91b970dffa983a674ff783ab0a28e3" />
       <keyword name="u" id="listener_msg::u" ref="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb" />
       <keyword name="marked_task" id="marked_task" ref="structmarked__task.html" />
@@ -6309,19 +6152,6 @@
       <keyword name="result" id="rx_info_t::@12::@14::result" ref="structrx__info__t_1_1@12_1_1@14.html#a869c5e4625ca0bb9ce536d359327b9c9" />
       <keyword name="expect" id="rx_info_t::@12::expect" ref="unionrx__info__t_1_1@12.html#ab6aa8c89c57b04fab3b097cd5abc7e07" />
       <keyword name="u" id="rx_info_t::u" ref="structrx__info__t.html#a92273c68b1cc0dd89592e5cd1e6ecd7b" />
-      <keyword name="sender" id="sender" ref="structsender.html" />
-      <keyword name="bus" id="sender::bus" ref="structsender.html#a757588eec51f26a7d24b7dd72662aad2" />
-      <keyword name="shutdown" id="sender::shutdown" ref="structsender.html#a562a8defcf71bd924f000e3919cd7065" />
-      <keyword name="tx_flags" id="sender::tx_flags" ref="structsender.html#a9c78ecf6abe562a015b465d2f718e5c5" />
-      <keyword name="tx_info" id="sender::tx_info" ref="structsender.html#a7ea1a5cf71cd395158628fe887c74542" />
-      <keyword name="pipes" id="sender::pipes" ref="structsender.html#a1f817ab1d64dacd856b891b8347bb527" />
-      <keyword name="commit_pipe" id="sender::commit_pipe" ref="structsender.html#a5d9bfeef7350314f6c03cda33569e00c" />
-      <keyword name="incoming_command_pipe" id="sender::incoming_command_pipe" ref="structsender.html#a0ce70524aee2f28afdbb2dceace8100a" />
-      <keyword name="largest_seq_id_seen" id="sender::largest_seq_id_seen" ref="structsender.html#a8c67df66dc04d78ec44a8717a3fe2e54" />
-      <keyword name="active_fds" id="sender::active_fds" ref="structsender.html#aa8f75e8e259d4c7fc1cd1337c5ffc48b" />
-      <keyword name="fds" id="sender::fds" ref="structsender.html#aff32b617c8187617c30fde60a778dc44" />
-      <keyword name="is_idle" id="sender::is_idle" ref="structsender.html#a555122c7e76f98fbaadb430c6eafaa6d" />
-      <keyword name="fd_hash_table" id="sender::fd_hash_table" ref="structsender.html#aff098306a5cefab0f1dc624bd3d1da04" />
       <keyword name="thread_context" id="thread_context" ref="structthread__context.html" />
       <keyword name="t" id="thread_context::t" ref="structthread__context.html#a737c06ed49032111c8c8c29ad39f521f" />
       <keyword name="ti" id="thread_context::ti" ref="structthread__context.html#a33424d8b3ed5ebe26bef0eb2c937fa70" />
@@ -6356,37 +6186,6 @@
       <keyword name="task" id="threadpool_task::task" ref="structthreadpool__task.html#a5e7d8e5dededc5d3d883bcdf0cd4db97" />
       <keyword name="cleanup" id="threadpool_task::cleanup" ref="structthreadpool__task.html#a0859c59120434648d22ea1686e68e1ce" />
       <keyword name="udata" id="threadpool_task::udata" ref="structthreadpool__task.html#a4f1f8ebfee18c4a5eb98a4cf9525e577" />
-      <keyword name="tx_info_t" id="tx_info_t" ref="structtx__info__t.html" />
-      <keyword name="id" id="tx_info_t::id" ref="structtx__info__t.html#aee200e8d32eccb08f126ae3104058e67" />
-      <keyword name="done_pipe" id="tx_info_t::done_pipe" ref="structtx__info__t.html#a37de7f02faa45a0cba93b35395be52ba" />
-      <keyword name="state" id="tx_info_t::state" ref="structtx__info__t.html#a08ee9b3e37cda4f0ca22e67afa14f51d" />
-      <keyword name="fd" id="tx_info_t::@15::@16::fd" ref="structtx__info__t_1_1@15_1_1@16.html#ab17bbd43fc5f80eb59aaa7e2020b4808" />
-      <keyword name="ssl" id="tx_info_t::@15::@16::ssl" ref="structtx__info__t_1_1@15_1_1@16.html#a9437e950fc1de36d0e6d1e9c04232829" />
-      <keyword name="add_socket" id="tx_info_t::@15::add_socket" ref="uniontx__info__t_1_1@15.html#a1dcaf4f4c791f5100499cd9abfb3b71d" />
-      <keyword name="fd" id="tx_info_t::@15::@17::fd" ref="structtx__info__t_1_1@15_1_1@17.html#a01ff99b6ca329d6edaa19631a8933ce0" />
-      <keyword name="rm_socket" id="tx_info_t::@15::rm_socket" ref="uniontx__info__t_1_1@15.html#ab1d9802c65a2d188a4e39e8c4a9e6545" />
-      <keyword name="fd" id="tx_info_t::@15::u_enqueue::fd" ref="structtx__info__t_1_1@15_1_1u__enqueue.html#a973c7af73aca7a5e9d0eed9412854ca0" />
-      <keyword name="timeout_sec" id="tx_info_t::@15::u_enqueue::timeout_sec" ref="structtx__info__t_1_1@15_1_1u__enqueue.html#ab45fc70494ada38ab88192b6710d67ac" />
-      <keyword name="box" id="tx_info_t::@15::u_enqueue::box" ref="structtx__info__t_1_1@15_1_1u__enqueue.html#ad2342848ba32e258db9d037c2b5939b8" />
-      <keyword name="enqueue" id="tx_info_t::@15::enqueue" ref="uniontx__info__t_1_1@15.html#aa6de8dcd7706182ac3269a9eacbe4edf" />
-      <keyword name="fd" id="tx_info_t::@15::u_write::fd" ref="structtx__info__t_1_1@15_1_1u__write.html#a709ae0d741f23af20c4b4e6be3528ef5" />
-      <keyword name="timeout_sec" id="tx_info_t::@15::u_write::timeout_sec" ref="structtx__info__t_1_1@15_1_1u__write.html#a10c8deedf53f947a5752a23270044a77" />
-      <keyword name="orig_timeout_sec" id="tx_info_t::@15::u_write::orig_timeout_sec" ref="structtx__info__t_1_1@15_1_1u__write.html#a9277860924ee910852dea531da635818" />
-      <keyword name="box" id="tx_info_t::@15::u_write::box" ref="structtx__info__t_1_1@15_1_1u__write.html#a3c91439a433e3d5cdc1c533393f5d161" />
-      <keyword name="sent_size" id="tx_info_t::@15::u_write::sent_size" ref="structtx__info__t_1_1@15_1_1u__write.html#ab8e4007794e5c4bdb303f5c9b60787ea" />
-      <keyword name="fdi" id="tx_info_t::@15::u_write::fdi" ref="structtx__info__t_1_1@15_1_1u__write.html#ae27433160e8a9bfdd95d0657164ef3a3" />
-      <keyword name="write" id="tx_info_t::@15::write" ref="uniontx__info__t_1_1@15.html#a9eadf3e2e3ed3fd0b69cdeb1667a3b9d" />
-      <keyword name="fd" id="tx_info_t::@15::u_notify::fd" ref="structtx__info__t_1_1@15_1_1u__notify.html#a8a8138f1cb697a4f2bf1fe6c9729c349" />
-      <keyword name="timeout_sec" id="tx_info_t::@15::u_notify::timeout_sec" ref="structtx__info__t_1_1@15_1_1u__notify.html#a73a37acbe329369caba0d7a5a3961c3a" />
-      <keyword name="box" id="tx_info_t::@15::u_notify::box" ref="structtx__info__t_1_1@15_1_1u__notify.html#a6533732fb5050b81b2019b079c8ebb19" />
-      <keyword name="notify" id="tx_info_t::@15::notify" ref="uniontx__info__t_1_1@15.html#a0b4c9606cdb7efd57bf179f1e01324c6" />
-      <keyword name="backpressure" id="tx_info_t::@15::@18::backpressure" ref="structtx__info__t_1_1@15_1_1@18.html#a1c6d378bb64a3cdd45d900c15d2355b9" />
-      <keyword name="release" id="tx_info_t::@15::release" ref="uniontx__info__t_1_1@15.html#ae046645f9e52812500715590ed20c818" />
-      <keyword name="error" id="tx_info_t::@15::u_error::error" ref="structtx__info__t_1_1@15_1_1u__error.html#a3037af8a4a9ba10145462bf32034f80c" />
-      <keyword name="box" id="tx_info_t::@15::u_error::box" ref="structtx__info__t_1_1@15_1_1u__error.html#a0a0e86a5004aa1399ea4672601141769" />
-      <keyword name="backpressure" id="tx_info_t::@15::u_error::backpressure" ref="structtx__info__t_1_1@15_1_1u__error.html#aac20d5a5287fd3fe15e888ed13da94eb" />
-      <keyword name="error" id="tx_info_t::@15::error" ref="uniontx__info__t_1_1@15.html#aa04a49242a99af09d96c02f840cd4707" />
-      <keyword name="u" id="tx_info_t::u" ref="structtx__info__t.html#abe3950d61af476a551829f85ae8219c2" />
     </keywords>
     <files>
       <file>tabs.css</file>
@@ -6481,6 +6280,8 @@
       <file>kinetic__pdu__unpack_8h_source.html</file>
       <file>kinetic__proto_8c_source.html</file>
       <file>kinetic__proto_8h_source.html</file>
+      <file>kinetic__request_8c_source.html</file>
+      <file>kinetic__request_8h_source.html</file>
       <file>kinetic__resourcewaiter_8c_source.html</file>
       <file>kinetic__resourcewaiter_8h_source.html</file>
       <file>kinetic__resourcewaiter__types_8h_source.html</file>
@@ -6498,13 +6299,23 @@
       <file>kinetic__types__internal_8h_source.html</file>
       <file>listener_8c_source.html</file>
       <file>listener_8h_source.html</file>
+      <file>listener__cmd_8c_source.html</file>
+      <file>listener__cmd_8h_source.html</file>
+      <file>listener__cmd__internal_8h_source.html</file>
       <file>listener__internal_8h_source.html</file>
+      <file>listener__internal__types_8h_source.html</file>
+      <file>listener__io_8c_source.html</file>
+      <file>listener__io_8h_source.html</file>
+      <file>listener__io__internal_8h_source.html</file>
+      <file>listener__task_8c_source.html</file>
+      <file>listener__task_8h_source.html</file>
+      <file>listener__task__internal_8h_source.html</file>
       <file>main_8c_source.html</file>
       <file>put__nonblocking_8c_source.html</file>
       <file>_r_e_a_d_m_e_8md_source.html</file>
-      <file>sender_8c_source.html</file>
-      <file>sender_8h_source.html</file>
-      <file>sender__internal_8h_source.html</file>
+      <file>send_8c_source.html</file>
+      <file>send_8h_source.html</file>
+      <file>send__internal_8h_source.html</file>
       <file>setup__teardown_8c_source.html</file>
       <file>test__threadpool_8c_source.html</file>
       <file>test__threadpool__sequencing_8c_source.html</file>
@@ -6583,6 +6394,8 @@
       <file>kinetic__pdu__unpack_8h.html</file>
       <file>kinetic__proto_8c.html</file>
       <file>kinetic__proto_8h.html</file>
+      <file>kinetic__request_8c.html</file>
+      <file>kinetic__request_8h.html</file>
       <file>kinetic__resourcewaiter_8c.html</file>
       <file>kinetic__resourcewaiter_8h.html</file>
       <file>kinetic__resourcewaiter__types_8h.html</file>
@@ -6600,13 +6413,23 @@
       <file>kinetic__types__internal_8h.html</file>
       <file>listener_8c.html</file>
       <file>listener_8h.html</file>
+      <file>listener__cmd_8c.html</file>
+      <file>listener__cmd_8h.html</file>
+      <file>listener__cmd__internal_8h.html</file>
       <file>listener__internal_8h.html</file>
+      <file>listener__internal__types_8h.html</file>
+      <file>listener__io_8c.html</file>
+      <file>listener__io_8h.html</file>
+      <file>listener__io__internal_8h.html</file>
+      <file>listener__task_8c.html</file>
+      <file>listener__task_8h.html</file>
+      <file>listener__task__internal_8h.html</file>
       <file>main_8c.html</file>
       <file>put__nonblocking_8c.html</file>
       <file>_r_e_a_d_m_e_8md.html</file>
-      <file>sender_8c.html</file>
-      <file>sender_8h.html</file>
-      <file>sender__internal_8h.html</file>
+      <file>send_8c.html</file>
+      <file>send_8h.html</file>
+      <file>send__internal_8h.html</file>
       <file>setup__teardown_8c.html</file>
       <file>test__threadpool_8c.html</file>
       <file>test__threadpool__sequencing_8c.html</file>
@@ -6637,7 +6460,6 @@
       <file>struct_byte_buffer.html</file>
       <file>struct_byte_buffer_array.html</file>
       <file>structconnection__info.html</file>
-      <file>structfd__info.html</file>
       <file>structgreatest__run__info.html</file>
       <file>structgreatest__suite__info.html</file>
       <file>structgreatest__type__info.html</file>
@@ -6701,14 +6523,12 @@
       <file>structlistener__msg.html</file>
       <file>structmarked__task.html</file>
       <file>structrx__info__t.html</file>
-      <file>structsender.html</file>
       <file>structthread__context.html</file>
       <file>structthread__info.html</file>
       <file>structthreadpool.html</file>
       <file>structthreadpool__config.html</file>
       <file>structthreadpool__info.html</file>
       <file>structthreadpool__task.html</file>
-      <file>structtx__info__t.html</file>
       <file>dir_11ba4a55636d0a3968e72050e48c52c1.html</file>
       <file>dir_e931c1a3f0014e624d0645a271726ad2.html</file>
       <file>dir_d44c64559bbebec7f509842c48db8b23.html</file>
@@ -6851,7 +6671,6 @@
       <file>globals_eval_o.html</file>
       <file>globals_eval_r.html</file>
       <file>globals_eval_s.html</file>
-      <file>globals_eval_t.html</file>
       <file>globals_eval_u.html</file>
       <file>globals_defs.html</file>
       <file>globals_defs_a.html</file>
@@ -6871,7 +6690,6 @@
       <file>globals_defs_r.html</file>
       <file>globals_defs_s.html</file>
       <file>globals_defs_t.html</file>
-      <file>globals_defs_u.html</file>
       <file>globals_defs_y.html</file>
     </files>
   </filterSection>

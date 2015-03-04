@@ -1,4 +1,4 @@
-.TH "KineticEntry" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "KineticEntry" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -61,7 +61,7 @@ Kinetic object instance\&.
 
 The \fBByteBuffer\fP attributes must be allocated and freed by the client, if used\&. 
 .PP
-Definition at line 241 of file kinetic_types\&.h\&.
+Definition at line 242 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBByteBuffer\fP KineticEntry::key"
@@ -69,61 +69,61 @@ Definition at line 241 of file kinetic_types\&.h\&.
 .PP
 Key associated with the object stored on disk\&. 
 .PP
-Definition at line 242 of file kinetic_types\&.h\&.
+Definition at line 243 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticEntry::value"
 
 .PP
 Value data associated with the key\&. 
 .PP
-Definition at line 243 of file kinetic_types\&.h\&.
+Definition at line 244 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticEntry::dbVersion"
 
 .PP
 Current version of the entry (optional) 
 .PP
-Definition at line 246 of file kinetic_types\&.h\&.
+Definition at line 247 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticEntry::tag"
 
 .PP
 Generated authentication hash per the specified \fCalgorithm\fP 
 .PP
-Definition at line 247 of file kinetic_types\&.h\&.
+Definition at line 248 of file kinetic_types\&.h\&.
 .SS "\fBKineticAlgorithm\fP KineticEntry::algorithm"
 
 .PP
 Algorithm used to generate the specified \fCtag\fP 
 .PP
-Definition at line 248 of file kinetic_types\&.h\&.
+Definition at line 249 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticEntry::newVersion"
 
 .PP
 New version for the object to assume once written to disk (optional) 
 .PP
-Definition at line 251 of file kinetic_types\&.h\&.
+Definition at line 252 of file kinetic_types\&.h\&.
 .SS "bool KineticEntry::metadataOnly"
 
 .PP
 If set for a GET request, will return only the metadata for the specified object (\fCvalue\fP will not be retrieved) 
 .PP
-Definition at line 252 of file kinetic_types\&.h\&.
+Definition at line 253 of file kinetic_types\&.h\&.
 .SS "bool KineticEntry::force"
 
 .PP
 If set for a GET/DELETE request, will override \fCversion\fP checking\&. 
 .PP
-Definition at line 253 of file kinetic_types\&.h\&.
+Definition at line 254 of file kinetic_types\&.h\&.
 .SS "bool KineticEntry::computeTag"
 
 .PP
 If set and an algorithm is specified, the tag will be populated with the calculated hash for integrity checking\&. 
 .PP
-Definition at line 254 of file kinetic_types\&.h\&.
+Definition at line 255 of file kinetic_types\&.h\&.
 .SS "\fBKineticSynchronization\fP KineticEntry::synchronization"
 
 .PP
 Synchronization method to use for PUT/DELETE requests\&. 
 .PP
-Definition at line 255 of file kinetic_types\&.h\&.
+Definition at line 256 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

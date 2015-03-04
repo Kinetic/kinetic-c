@@ -56,6 +56,8 @@
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;time.h&gt;</code><br />
+<code>#include &lt;sys/time.h&gt;</code><br />
 </div>
 <p><a href="util_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -63,6 +65,8 @@
 Functions</h2></td></tr>
 <tr class="memitem:a160b252716d51078cec50bc9f27bc2bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a> (int errno_)</td></tr>
 <tr class="separator:a160b252716d51078cec50bc9f27bc2bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad63ab11f5adebc0730d970d7742ccfd9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#ad63ab11f5adebc0730d970d7742ccfd9">util_timestamp</a> (struct timeval *tv, bool relative)</td></tr>
+<tr class="separator:ad63ab11f5adebc0730d970d7742ccfd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a160b252716d51078cec50bc9f27bc2bc"></a>
@@ -79,7 +83,35 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00025">25</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00026">26</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad63ab11f5adebc0730d970d7742ccfd9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool util_timestamp </td>
+          <td>(</td>
+          <td class="paramtype">struct timeval *&#160;</td>
+          <td class="paramname"><em>tv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>relative</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="util_8c_source.html#l00030">30</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "listener_msg" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "listener_msg" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@ listener_msg \-
 .br
 .PP
 .PP
-\fC#include <listener_internal\&.h>\fP
+\fC#include <listener_internal_types\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
@@ -19,6 +19,9 @@ listener_msg \-
 .br
 .ti -1c
 .RI "struct \fBlistener_msg\fP * \fBnext\fP"
+.br
+.ti -1c
+.RI "int \fBpipes\fP [2]"
 .br
 .ti -1c
 .RI "union {"
@@ -40,6 +43,9 @@ listener_msg \-
 .br
 .ti -1c
 .RI "      int \fBfd\fP"
+.br
+.ti -1c
+.RI "      int \fBnotify_fd\fP"
 .br
 .ti -1c
 .RI "   } \fBremove_socket\fP"
@@ -72,7 +78,7 @@ listener_msg \-
 .RI "   struct {"
 .br
 .ti -1c
-.RI "      int \fBunused\fP"
+.RI "      int \fBnotify_fd\fP"
 .br
 .ti -1c
 .RI "   } \fBshutdown\fP"
@@ -83,57 +89,57 @@ listener_msg \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 33 of file listener_internal\&.h\&.
+Definition at line 42 of file listener_internal_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "const uint8_t listener_msg::id"
 
 .PP
-Definition at line 34 of file listener_internal\&.h\&.
+Definition at line 43 of file listener_internal_types\&.h\&.
 .SS "\fBMSG_TYPE\fP listener_msg::type"
 
 .PP
-Definition at line 35 of file listener_internal\&.h\&.
+Definition at line 44 of file listener_internal_types\&.h\&.
 .SS "struct \fBlistener_msg\fP* listener_msg::next"
 
 .PP
-Definition at line 36 of file listener_internal\&.h\&.
+Definition at line 45 of file listener_internal_types\&.h\&.
+.SS "int listener_msg::pipes[2]"
+
+.PP
+Definition at line 46 of file listener_internal_types\&.h\&.
 .SS "\fBconnection_info\fP* listener_msg::info"
 
 .PP
-Definition at line 39 of file listener_internal\&.h\&.
+Definition at line 50 of file listener_internal_types\&.h\&.
 .SS "int listener_msg::notify_fd"
 
 .PP
-Definition at line 40 of file listener_internal\&.h\&.
+Definition at line 51 of file listener_internal_types\&.h\&.
 .SS "struct { \&.\&.\&. }   listener_msg::add_socket"
 
 .SS "int listener_msg::fd"
 
 .PP
-Definition at line 43 of file listener_internal\&.h\&.
+Definition at line 54 of file listener_internal_types\&.h\&.
 .SS "struct { \&.\&.\&. }   listener_msg::remove_socket"
 
 .SS "int64_t listener_msg::seq_id"
 
 .PP
-Definition at line 47 of file listener_internal\&.h\&.
+Definition at line 59 of file listener_internal_types\&.h\&.
 .SS "int16_t listener_msg::timeout_sec"
 
 .PP
-Definition at line 48 of file listener_internal\&.h\&.
+Definition at line 60 of file listener_internal_types\&.h\&.
 .SS "struct { \&.\&.\&. }   listener_msg::hold"
 
 .SS "\fBboxed_msg\fP* listener_msg::box"
 
 .PP
-Definition at line 51 of file listener_internal\&.h\&.
+Definition at line 63 of file listener_internal_types\&.h\&.
 .SS "struct { \&.\&.\&. }   listener_msg::expect"
 
-.SS "int listener_msg::unused"
-
-.PP
-Definition at line 54 of file listener_internal\&.h\&.
 .SS "struct { \&.\&.\&. }   listener_msg::shutdown"
 
 .SS "union { \&.\&.\&. }   listener_msg::u"

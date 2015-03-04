@@ -1,4 +1,4 @@
-.TH "KineticClientConfig" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "KineticClientConfig" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,10 +22,6 @@ Configuration values for the KineticClient connection\&.
 .RI "int \fBlogLevel\fP"
 .br
 .RI "\fILogging level (-1:none, 0:error, 1:info, 2:verbose, 3:full) \fP"
-.ti -1c
-.RI "uint8_t \fBwriterThreads\fP"
-.br
-.RI "\fINumber of threads used for handling outgoing requests\&. \fP"
 .ti -1c
 .RI "uint8_t \fBreaderThreads\fP"
 .br
@@ -56,24 +52,18 @@ Definition at line 459 of file kinetic_types\&.h\&.
 Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full) 
 .PP
 Definition at line 460 of file kinetic_types\&.h\&.
-.SS "uint8_t KineticClientConfig::writerThreads"
-
-.PP
-Number of threads used for handling outgoing requests\&. 
-.PP
-Definition at line 461 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticClientConfig::readerThreads"
 
 .PP
 Number of threads used for handling incoming responses and status messages\&. 
 .PP
-Definition at line 462 of file kinetic_types\&.h\&.
+Definition at line 461 of file kinetic_types\&.h\&.
 .SS "uint8_t KineticClientConfig::maxThreadpoolThreads"
 
 .PP
 Max number of threads to use for the threadpool that handles response callbacks\&. 
 .PP
-Definition at line 463 of file kinetic_types\&.h\&.
+Definition at line 462 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

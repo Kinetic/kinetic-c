@@ -1,4 +1,4 @@
-.TH "rx_info_t" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "rx_info_t" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@ rx_info_t \-
 .br
 .PP
 .PP
-\fC#include <listener_internal\&.h>\fP
+\fC#include <listener_internal_types\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
@@ -68,51 +68,51 @@ rx_info_t \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 66 of file listener_internal\&.h\&.
+Definition at line 78 of file listener_internal_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "const uint16_t rx_info_t::id"
 
 .PP
-Definition at line 67 of file listener_internal\&.h\&.
+Definition at line 79 of file listener_internal_types\&.h\&.
 .SS "struct \fBrx_info_t\fP* rx_info_t::next"
 
 .PP
-Definition at line 68 of file listener_internal\&.h\&.
+Definition at line 80 of file listener_internal_types\&.h\&.
 .SS "\fBrx_info_state\fP rx_info_t::state"
 
 .PP
-Definition at line 70 of file listener_internal\&.h\&.
+Definition at line 82 of file listener_internal_types\&.h\&.
 .SS "time_t rx_info_t::timeout_sec"
 
 .PP
-Definition at line 71 of file listener_internal\&.h\&.
+Definition at line 83 of file listener_internal_types\&.h\&.
 .SS "int rx_info_t::fd"
 
 .PP
-Definition at line 75 of file listener_internal\&.h\&.
+Definition at line 87 of file listener_internal_types\&.h\&.
 .SS "int64_t rx_info_t::seq_id"
 
 .PP
-Definition at line 76 of file listener_internal\&.h\&.
+Definition at line 88 of file listener_internal_types\&.h\&.
 .SS "bool rx_info_t::has_result"
 
 .PP
-Definition at line 77 of file listener_internal\&.h\&.
+Definition at line 89 of file listener_internal_types\&.h\&.
 .SS "\fBbus_unpack_cb_res_t\fP rx_info_t::result"
 
 .PP
-Definition at line 78 of file listener_internal\&.h\&.
+Definition at line 90 of file listener_internal_types\&.h\&.
 .SS "struct { \&.\&.\&. }   rx_info_t::hold"
 
 .SS "\fBboxed_msg\fP* rx_info_t::box"
 
 .PP
-Definition at line 81 of file listener_internal\&.h\&.
+Definition at line 93 of file listener_internal_types\&.h\&.
 .SS "\fBrx_error_t\fP rx_info_t::error"
 
 .PP
-Definition at line 82 of file listener_internal\&.h\&.
+Definition at line 94 of file listener_internal_types\&.h\&.
 .SS "struct { \&.\&.\&. }   rx_info_t::expect"
 
 .SS "union { \&.\&.\&. }   rx_info_t::u"

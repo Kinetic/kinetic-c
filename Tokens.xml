@@ -402,16 +402,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>DEF_FD_SET_SIZE2</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>bus_8c.html</Path>
-    <Anchor>a7129e5f5219981ae2b4d3babdc5f6a73</Anchor>
-    <DeclaredIn>bus.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>THREAD_SHUTDOWN_SECONDS</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
@@ -422,42 +412,12 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>listener_mainloop</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>bus_8c.html</Path>
-    <Anchor>ade9975ecc1b8d24e514e7fbfc03221d0</Anchor>
-    <DeclaredIn>bus.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_mainloop</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>bus_8c.html</Path>
-    <Anchor>a4f1823592996205c3243bf49127a0004</Anchor>
-    <DeclaredIn>bus.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>poll_on_completion</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>bus_8c.html</Path>
     <Anchor>af65a34f2a232288bc0aabe83521a47f7</Anchor>
-    <DeclaredIn>bus.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_id_of_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>bus_8c.html</Path>
-    <Anchor>a4d924998574ebf0270f4d56027b25494</Anchor>
     <DeclaredIn>bus.c</DeclaredIn>
   </Token>
   <Token>
@@ -542,16 +502,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>bus_get_sender_for_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>bus_8c.html</Path>
-    <Anchor>a8200fe8d77bbf9ebd2ee156835c3bb98</Anchor>
-    <DeclaredIn>bus.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>bus_get_listener_for_socket</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -587,7 +537,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>bus_8c.html</Path>
-    <Anchor>a2119dbab02464f8c6ea0dd724d497666</Anchor>
+    <Anchor>a8a4bd5912f0de341b8fc65040b70fc00</Anchor>
     <DeclaredIn>bus.c</DeclaredIn>
   </Token>
   <Token>
@@ -602,12 +552,32 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>free_connection_cb</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>bus_8c.html</Path>
+    <Anchor>afe8e6487b9bc3c72b5159f9b3932ec5c</Anchor>
+    <DeclaredIn>bus.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>bus_shutdown</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>bus_8c.html</Path>
     <Anchor>af61c3cf6bff2b4547e454015e5ee73e9</Anchor>
+    <DeclaredIn>bus.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>bus_backpressure_delay</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>bus_8c.html</Path>
+    <Anchor>a189082d10346e2334dfad2365445d16b</Anchor>
     <DeclaredIn>bus.c</DeclaredIn>
   </Token>
   <Token>
@@ -717,7 +687,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>bus_8h.html</Path>
-    <Anchor>a2119dbab02464f8c6ea0dd724d497666</Anchor>
+    <Anchor>a8a4bd5912f0de341b8fc65040b70fc00</Anchor>
     <DeclaredIn>bus.h</DeclaredIn>
   </Token>
   <Token>
@@ -728,16 +698,6 @@
     </TokenIdentifier>
     <Path>bus_8h.html</Path>
     <Anchor>aec91507d9ff9f03cf3de0bed9498827b</Anchor>
-    <DeclaredIn>bus.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>bus_get_sender_for_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>bus_8h.html</Path>
-    <Anchor>a8200fe8d77bbf9ebd2ee156835c3bb98</Anchor>
     <DeclaredIn>bus.h</DeclaredIn>
   </Token>
   <Token>
@@ -798,6 +758,16 @@
     </TokenIdentifier>
     <Path>bus_8h.html</Path>
     <Anchor>a56eff9f2e0b0df727c0e825aaee531b8</Anchor>
+    <DeclaredIn>bus.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>bus_backpressure_delay</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>bus_8h.html</Path>
+    <Anchor>a189082d10346e2334dfad2365445d16b</Anchor>
     <DeclaredIn>bus.h</DeclaredIn>
   </Token>
   <Token>
@@ -1152,6 +1122,56 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>LISTENER_MSG_TAG</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>bus__internal__types_8h.html</Path>
+    <Anchor>ac2614000c9ba78a93265c20646fcc2ae</Anchor>
+    <DeclaredIn>bus_internal_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>DEF_FD_SET_SIZE2</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>bus__internal__types_8h.html</Path>
+    <Anchor>a7129e5f5219981ae2b4d3babdc5f6a73</Anchor>
+    <DeclaredIn>bus_internal_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>SHUTDOWN_STATE_RUNNING</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>bus__internal__types_8h.html</Path>
+    <Anchor>a6fe4e46ccd8bedd14692b999d7a1bf4ea3da66d8f533391529e253a9a0389774d</Anchor>
+    <DeclaredIn>bus_internal_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>SHUTDOWN_STATE_SHUTTING_DOWN</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>bus__internal__types_8h.html</Path>
+    <Anchor>a6fe4e46ccd8bedd14692b999d7a1bf4ea20a95bda47f269835aae66b2d8152caf</Anchor>
+    <DeclaredIn>bus_internal_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>SHUTDOWN_STATE_HALTED</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>bus__internal__types_8h.html</Path>
+    <Anchor>a6fe4e46ccd8bedd14692b999d7a1bf4ea3d7ff9fa774c3ac46f21b11feb359828</Anchor>
+    <DeclaredIn>bus_internal_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>RX_ERROR_NONE</Name>
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
@@ -1277,7 +1297,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>bus__ssl_8c.html</Path>
-    <Anchor>a20f49d1fda85fe2dd755a9c3500b3f15</Anchor>
+    <Anchor>af0ed2b19cdae16ebbbdbe082be5063b1</Anchor>
     <DeclaredIn>bus_ssl.c</DeclaredIn>
   </Token>
   <Token>
@@ -1297,7 +1317,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>bus__ssl_8c.html</Path>
-    <Anchor>a28804cfaf9b3cfe5f66de08f18b39487</Anchor>
+    <Anchor>aa25887b884806027c8cff1aa770072f3</Anchor>
     <DeclaredIn>bus_ssl.c</DeclaredIn>
   </Token>
   <Token>
@@ -1347,7 +1367,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>bus__ssl_8h.html</Path>
-    <Anchor>a28804cfaf9b3cfe5f66de08f18b39487</Anchor>
+    <Anchor>aa25887b884806027c8cff1aa770072f3</Anchor>
     <DeclaredIn>bus_ssl.h</DeclaredIn>
   </Token>
   <Token>
@@ -1788,6 +1808,16 @@
     </TokenIdentifier>
     <Path>bus__types_8h.html</Path>
     <Anchor>a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84</Anchor>
+    <DeclaredIn>bus_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>bus__types_8h.html</Path>
+    <Anchor>a3f10842947032a2f6fc237770d4cf76aa1305feede4d01715a05e893622b4c0e4</Anchor>
     <DeclaredIn>bus_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -6779,12 +6809,12 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KineticOperation_SendRequestInner</Name>
+      <Name>KineticOperation_SendRequestInLock</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>kinetic__operation_8c.html</Path>
-    <Anchor>ac25ef0fa4d64bb4249e2d17d50ad1be3</Anchor>
+    <Anchor>a5317e92dc71dfa1df7acc0cf3f3be48e</Anchor>
     <DeclaredIn>kinetic_operation.c</DeclaredIn>
   </Token>
   <Token>
@@ -7525,6 +7555,46 @@
     </TokenIdentifier>
     <Path>kinetic__operation_8h.html</Path>
     <Anchor>a89b2c4d0633faef505afdcbed0506090</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_TimeoutSetACL</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a6b666300ae998946808fcf7560b5cf11a200aecb997dcc9989d97140e6a36cdaa</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_TimeoutSetPin</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a6b666300ae998946808fcf7560b5cf11a95f6c656c72ab0c29ccb4d61e8876062</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_TimeoutLockUnlock</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a6b666300ae998946808fcf7560b5cf11a48826c3d7bb917828ee732e6f7c18a80</Anchor>
+    <DeclaredIn>kinetic_operation.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticOperation_TimeoutErase</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__operation_8h.html</Path>
+    <Anchor>a6b666300ae998946808fcf7560b5cf11a8ef8806548580abe016ce513eab97fe1</Anchor>
     <DeclaredIn>kinetic_operation.h</DeclaredIn>
   </Token>
   <Token>
@@ -11829,6 +11899,136 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>KineticRequest_PackCommand</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8c.html</Path>
+    <Anchor>a22e92e6d39ecb48e2d3fcef993e17ba3</Anchor>
+    <DeclaredIn>kinetic_request.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_PopulateAuthentication</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8c.html</Path>
+    <Anchor>adf6d20f5e4ab9d40ed6f4351a68520c9</Anchor>
+    <DeclaredIn>kinetic_request.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_PackMessage</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8c.html</Path>
+    <Anchor>a604311e368349bb3695db1f44a59ee20</Anchor>
+    <DeclaredIn>kinetic_request.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_SendRequest</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8c.html</Path>
+    <Anchor>af4443dd94ce141114c37ddfc782967d7</Anchor>
+    <DeclaredIn>kinetic_request.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_LockOperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8c.html</Path>
+    <Anchor>af957f9c9ba08f70e12bff0e97e6b0bce</Anchor>
+    <DeclaredIn>kinetic_request.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_UnlockOperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8c.html</Path>
+    <Anchor>a633cdb1a73a6768566c4b7f9af534652</Anchor>
+    <DeclaredIn>kinetic_request.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_REQUEST_PACK_FAILURE</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8h.html</Path>
+    <Anchor>a3449d8c8442581494de7948a7ca24215</Anchor>
+    <DeclaredIn>kinetic_request.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_PackCommand</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8h.html</Path>
+    <Anchor>a22e92e6d39ecb48e2d3fcef993e17ba3</Anchor>
+    <DeclaredIn>kinetic_request.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_PopulateAuthentication</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8h.html</Path>
+    <Anchor>adf6d20f5e4ab9d40ed6f4351a68520c9</Anchor>
+    <DeclaredIn>kinetic_request.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_PackMessage</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8h.html</Path>
+    <Anchor>a278c7eb32b12868faeb5a861d45e1e53</Anchor>
+    <DeclaredIn>kinetic_request.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_SendRequest</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8h.html</Path>
+    <Anchor>af4443dd94ce141114c37ddfc782967d7</Anchor>
+    <DeclaredIn>kinetic_request.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_LockOperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8h.html</Path>
+    <Anchor>af957f9c9ba08f70e12bff0e97e6b0bce</Anchor>
+    <DeclaredIn>kinetic_request.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KineticRequest_UnlockOperation</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>kinetic__request_8h.html</Path>
+    <Anchor>a633cdb1a73a6768566c4b7f9af534652</Anchor>
+    <DeclaredIn>kinetic_request.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>KineticResourceWaiter_Init</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
@@ -12604,16 +12804,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>KINETIC_CLIENT_DEFAULT_WRITER_THREADS</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>kinetic__types_8h.html</Path>
-    <Anchor>a86714c3c1cfa6964686a72207c3506c3</Anchor>
-    <DeclaredIn>kinetic_types.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>KINETIC_CLIENT_DEFAULT_READER_THREADS</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
@@ -13111,6 +13301,17 @@
     <Path>kinetic__types_8h.html</Path>
     <Anchor>a455d29140e6816c61eba35e8f52b0d57abaef7e263ce024c1b02ea5be12e21325</Anchor>
     <Abstract>Specified file does not exist or could not be read/writtten. </Abstract>
+    <DeclaredIn>kinetic_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>KINETIC_STATUS_REQUEST_REJECTED</Name>
+      <APILanguage>c</APILanguage>
+      <Type>econst</Type>
+    </TokenIdentifier>
+    <Path>kinetic__types_8h.html</Path>
+    <Anchor>a455d29140e6816c61eba35e8f52b0d57adc5bcd24e5b2700860be2e9328511e31</Anchor>
+    <Abstract>No request was attempted. </Abstract>
     <DeclaredIn>kinetic_types.h</DeclaredIn>
   </Token>
   <Token>
@@ -14308,13 +14509,413 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>listener_init</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>a0c3342b1bf0a6cade3e4729f40022ed7</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_add_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>ab80e1a8ec62bff3ad6a1b69eca150f1d</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_remove_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>af3f377ca9b433af51d906a103eee304f</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_hold_response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>acbec5b5b8251c2787ebdb7ec4f73f20b</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_expect_response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>ac4ca027f622cf5d1ab731f92f9cb66a8</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_shutdown</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>a29137171fd3f0a2f878c450544927c56</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_free</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>ae02746f8c243596cedd386fc1d7630e5</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>push_message</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>a00065dea96385786e952e23319beb799</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>get_free_msg</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8c.html</Path>
+    <Anchor>a7d7c8279976ea7b7aca15479f6892db4</Anchor>
+    <DeclaredIn>listener.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>LISTENER_BACKPRESSURE_SHIFT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>a98cbdaeea07cc02d68f1e960e199e87a</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>LISTENER_EXPECT_BACKPRESSURE_SHIFT</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>a142b7ddbed12a525d556a51b76d074ab</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_init</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>a0c3342b1bf0a6cade3e4729f40022ed7</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_add_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>ab80e1a8ec62bff3ad6a1b69eca150f1d</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_remove_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>af3f377ca9b433af51d906a103eee304f</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_hold_response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>acbec5b5b8251c2787ebdb7ec4f73f20b</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_expect_response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>ac4ca027f622cf5d1ab731f92f9cb66a8</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_shutdown</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>a29137171fd3f0a2f878c450544927c56</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>listener_free</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener_8h.html</Path>
+    <Anchor>ae02746f8c243596cedd386fc1d7630e5</Anchor>
+    <DeclaredIn>listener.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerCmd_NotifyCaller</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>a643355d8f006114f3186791239b7d4ec</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerCmd_CheckIncomingMessages</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>af3a2e40b666b88497011b99357eec493</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>msg_handler</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>abff7ce205d94f17798e20b45f8ddd289</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>add_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>a1b411c7d4e360af4ce5f7c05bb4d807d</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>remove_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>a6a844acc520512e0dbe5aae6b71da07b</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>hold_response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>ab3d2bbc5f77d606f0040dee30e80648b</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>get_hold_rx_info</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>a635353fdc72baf5a4112e2d6a896000f</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>expect_response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>a568c4bcef944d6d127e88b8a673e2890</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>shutdown</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>acb20f311c191ce18331d753f8aa78983</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>get_free_rx_info</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8c.html</Path>
+    <Anchor>a86fe702b7851275f2bd50f8897dc87fe</Anchor>
+    <DeclaredIn>listener_cmd.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerCmd_NotifyCaller</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8h.html</Path>
+    <Anchor>a643355d8f006114f3186791239b7d4ec</Anchor>
+    <DeclaredIn>listener_cmd.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerCmd_CheckIncomingMessages</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd_8h.html</Path>
+    <Anchor>af3a2e40b666b88497011b99357eec493</Anchor>
+    <DeclaredIn>listener_cmd.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>msg_handler</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd__internal_8h.html</Path>
+    <Anchor>abff7ce205d94f17798e20b45f8ddd289</Anchor>
+    <DeclaredIn>listener_cmd_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>add_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd__internal_8h.html</Path>
+    <Anchor>a1b411c7d4e360af4ce5f7c05bb4d807d</Anchor>
+    <DeclaredIn>listener_cmd_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>remove_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd__internal_8h.html</Path>
+    <Anchor>a6a844acc520512e0dbe5aae6b71da07b</Anchor>
+    <DeclaredIn>listener_cmd_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>hold_response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd__internal_8h.html</Path>
+    <Anchor>ab3d2bbc5f77d606f0040dee30e80648b</Anchor>
+    <DeclaredIn>listener_cmd_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>expect_response</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd__internal_8h.html</Path>
+    <Anchor>ac2f4cfd7e199d3c933f72d46144dee42</Anchor>
+    <DeclaredIn>listener_cmd_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>shutdown</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd__internal_8h.html</Path>
+    <Anchor>acb20f311c191ce18331d753f8aa78983</Anchor>
+    <DeclaredIn>listener_cmd_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>get_free_rx_info</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd__internal_8h.html</Path>
+    <Anchor>a86fe702b7851275f2bd50f8897dc87fe</Anchor>
+    <DeclaredIn>listener_cmd_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>get_hold_rx_info</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__cmd__internal_8h.html</Path>
+    <Anchor>a635353fdc72baf5a4112e2d6a896000f</Anchor>
+    <DeclaredIn>listener_cmd_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>get_free_msg</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__internal_8h.html</Path>
+    <Anchor>a7d7c8279976ea7b7aca15479f6892db4</Anchor>
+    <DeclaredIn>listener_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>push_message</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__internal_8h.html</Path>
+    <Anchor>a00065dea96385786e952e23319beb799</Anchor>
+    <DeclaredIn>listener_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>DEFAULT_READ_BUF_SIZE</Name>
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener_8c.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>a55c36910fb23a47b98bb7467e508daa5</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14322,9 +14923,9 @@
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener_8c.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>a15740a5bfc8ef3fb9b927ef0007010bf</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14332,579 +14933,9 @@
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener_8c.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>a45f028e5e02538a530e3fe313bfd728a</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>MSG_BP_1QTR</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ac68caa54ad7fc51c8f5815eeb6686f30</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>MSG_BP_HALF</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a7acc76219d8588ca99f58c2121988112</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>MSG_BP_3QTR</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a694eca96dcf9ed929ec1608f9c14c852</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>RX_INFO_BP_1QTR</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a7fc0ffea5ec4b8882f719f0d054e3824</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>RX_INFO_BP_HALF</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a3e7f3829ff5668c512d1911a3201db71</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>RX_INFO_BP_3QTR</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a45f677274d8f1de84ae1cc842c43d0fe</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>THREADPOOL_BP</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a87e98e5aad28f7363d5f4217d2e8d10e</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIMEOUT_DELAY</Name>
-      <APILanguage>c</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a8032a941e3dca02cdfade5cc3cfe1dc6</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>DUMP_READ</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a1d7054af083649f8e410783fbf2e7b33</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>retry_delivery</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a91845232ef24ffde41ff3689b0caa0c9</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_init</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a0c3342b1bf0a6cade3e4729f40022ed7</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_add_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ac413d1ed53a01815b79baf2dc2f3ece5</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_remove_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a4926cd8003e7903476104018d81b35d2</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_backpressure</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ae7c7515f7ab98011b61aa5d1d8d28751</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>observe_backpressure</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ae71f036eb0a57423a8e2b225bcf32e12</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_hold_response</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>acbec5b5b8251c2787ebdb7ec4f73f20b</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_expect_response</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ac4ca027f622cf5d1ab731f92f9cb66a8</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_shutdown</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ac185ab098ac6d91c0474bf847ef64265</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_free</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ae02746f8c243596cedd386fc1d7630e5</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_mainloop</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ade9975ecc1b8d24e514e7fbfc03221d0</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>check_and_flush_incoming_msg_pipe</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a41d1e6df116c066e5c56dd646c3fe898</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>set_error_for_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>affa8fc52abd48c60492b25fae5496d0a</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>print_SSL_error</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>aa4a0d6443a6bb65b3fee1027d8eef70f</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>socket_read_plain</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a48e209edcf9421a36f6cd97eca45aa39</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>socket_read_ssl</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a27540bed6e0ee31601a54a31613bd1ee</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sink_socket_read</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a11b801753f3195b71431c6ae11f4e2b7</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>attempt_recv</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a09b57f3f2be5eb499e924308bab8f989</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>find_info_by_sequence_id</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a5ef5faf6ec41a63ec7b82933b1eaaadd</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>process_unpacked_message</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a37c58a09e6d324e7114a2becb2683bbd</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tick_handler</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>aeedae561a63e857e130be4d40cca8588</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>dump_rx_info_table</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a2b75e85745a6799df9e90def5caf0578</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>clean_up_completed_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a21e5de0bee07a8e984f3c1408b8e3b62</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>notify_message_failure</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ac36cf71f469df6618223f84af9c34ad2</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_free_rx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a86fe702b7851275f2bd50f8897dc87fe</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_connection_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a3bdbad0ba5aa31b4f2dcdfe16ed379bc</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>release_rx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>aa53f32f1fa516ebdbb8cc66bb752e712</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_free_msg</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a7d7c8279976ea7b7aca15479f6892db4</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>release_msg</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ac4aa4e12d23e8c53a5a958e335cf4a2b</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>push_message</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>abc9a1037551b3c8a9ae45f7b795ab8c3</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>msg_handler</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>abff7ce205d94f17798e20b45f8ddd289</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>notify_caller</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a674dfc8997b3f8cd95eeb8afc76448c0</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>grow_read_buf</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a138a357c639da15c5e88958123e660b0</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>add_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a1b411c7d4e360af4ce5f7c05bb4d807d</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>free_ci</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>af7c8c5f81320edf7ea28286384c59b40</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>remove_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ae12e728e14ca2922ae27678b00a151f3</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>hold_response</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>ab3d2bbc5f77d606f0040dee30e80648b</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_hold_rx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a635353fdc72baf5a4112e2d6a896000f</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>attempt_delivery</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a7abf986a57b2b4a5ae53b48fc051aafb</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>expect_response</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>a568c4bcef944d6d127e88b8a673e2890</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>shutdown</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8c.html</Path>
-    <Anchor>aab8481f4406eb5406717e976f6d852a2</Anchor>
-    <DeclaredIn>listener.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_init</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8h.html</Path>
-    <Anchor>a0c3342b1bf0a6cade3e4729f40022ed7</Anchor>
-    <DeclaredIn>listener.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_add_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8h.html</Path>
-    <Anchor>ac413d1ed53a01815b79baf2dc2f3ece5</Anchor>
-    <DeclaredIn>listener.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_remove_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8h.html</Path>
-    <Anchor>a4926cd8003e7903476104018d81b35d2</Anchor>
-    <DeclaredIn>listener.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_hold_response</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8h.html</Path>
-    <Anchor>acbec5b5b8251c2787ebdb7ec4f73f20b</Anchor>
-    <DeclaredIn>listener.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_expect_response</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8h.html</Path>
-    <Anchor>ac4ca027f622cf5d1ab731f92f9cb66a8</Anchor>
-    <DeclaredIn>listener.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_shutdown</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8h.html</Path>
-    <Anchor>ac185ab098ac6d91c0474bf847ef64265</Anchor>
-    <DeclaredIn>listener.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>listener_free</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener_8h.html</Path>
-    <Anchor>ae02746f8c243596cedd386fc1d7630e5</Anchor>
-    <DeclaredIn>listener.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14912,9 +14943,9 @@
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>a816ccaf3e5e64cc98f2b5613cc177398</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14922,9 +14953,9 @@
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>ab8da6d181eef4debc5b438687fd9804a</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14932,9 +14963,9 @@
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>a6ee3565e40e9a157decfa328ac562140</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14942,9 +14973,9 @@
       <APILanguage>c</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>ad3b51637a39a4ff75bd979b917cb89ef</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14952,9 +14983,9 @@
       <APILanguage>unknown</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>a16027d8acc5301e440cefa086eb9db2a</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14962,9 +14993,29 @@
       <APILanguage>c</APILanguage>
       <Type>macro</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>ab893de6f8a0ec8b0e6dd8097ff398019</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>LISTENER_NO_FD</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__internal__types_8h.html</Path>
+    <Anchor>a9edc873b66adf46bf716ceb7ab77bb07</Anchor>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>LISTENER_SHUTDOWN_COMPLETE_FD</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__internal__types_8h.html</Path>
+    <Anchor>a2283299012dd873e0a5e3b77dc417b08</Anchor>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -14972,239 +15023,9 @@
       <APILanguage>c</APILanguage>
       <Type>tdef</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>a86f29ffc383d560855689fdb7abc4093</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tick_handler</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>aeedae561a63e857e130be4d40cca8588</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_free_rx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>ab01748a18f035b2304ae416265a27e8d</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>release_rx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>aa53f32f1fa516ebdbb8cc66bb752e712</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_free_msg</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a7d7c8279976ea7b7aca15479f6892db4</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>push_message</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>abc9a1037551b3c8a9ae45f7b795ab8c3</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>release_msg</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>ac4aa4e12d23e8c53a5a958e335cf4a2b</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>attempt_recv</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>ac952b94296b3ffa69d793f830ceae1e9</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>process_unpacked_message</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a37c58a09e6d324e7114a2becb2683bbd</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>notify_message_failure</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>ac36cf71f469df6618223f84af9c34ad2</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>attempt_delivery</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a7abf986a57b2b4a5ae53b48fc051aafb</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>clean_up_completed_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a21e5de0bee07a8e984f3c1408b8e3b62</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>observe_backpressure</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>ae71f036eb0a57423a8e2b225bcf32e12</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>grow_read_buf</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a138a357c639da15c5e88958123e660b0</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>check_and_flush_incoming_msg_pipe</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a41d1e6df116c066e5c56dd646c3fe898</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_hold_rx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a635353fdc72baf5a4112e2d6a896000f</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>dump_rx_info_table</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a2b75e85745a6799df9e90def5caf0578</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>msg_handler</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a002c308d7296510bcb2df6331792ea09</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>add_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>a1b411c7d4e360af4ce5f7c05bb4d807d</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>remove_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>ae12e728e14ca2922ae27678b00a151f3</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>hold_response</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>ab3d2bbc5f77d606f0040dee30e80648b</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>expect_response</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>ac2f4cfd7e199d3c933f72d46144dee42</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>shutdown</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>aab8481f4406eb5406717e976f6d852a2</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>free_ci</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
-    <Anchor>af7c8c5f81320edf7ea28286384c59b40</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15212,9 +15033,9 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>acbbd5f70828660265bd996e23b58ce0ba40e71b65f54da2ea5d97c37e720346b1</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15222,9 +15043,9 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15232,9 +15053,9 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>acbbd5f70828660265bd996e23b58ce0ba433ef8aba97342ee9a920c5046cd4d67</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15242,9 +15063,9 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15252,9 +15073,9 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15262,9 +15083,9 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>acbbd5f70828660265bd996e23b58ce0ba621b8f7f84a5fe2cbb10c08ce2c58ff3</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15272,9 +15093,9 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>af1e9517007b6ff2eb101b2c2884a5be5aaf352ec9825784a31574ea3823fb7c82</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15282,9 +15103,9 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15292,9 +15113,509 @@
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>listener__internal_8h.html</Path>
+    <Path>listener__internal__types_8h.html</Path>
     <Anchor>af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41</Anchor>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>DUMP_READ</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>a1d7054af083649f8e410783fbf2e7b33</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerIO_AttemptRecv</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>a3494b6d56e053563e19231fdda8ce6c8</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>socket_read_plain</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>a48e209edcf9421a36f6cd97eca45aa39</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>print_SSL_error</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>aa4a0d6443a6bb65b3fee1027d8eef70f</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>socket_read_ssl</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>a27540bed6e0ee31601a54a31613bd1ee</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>sink_socket_read</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>a11b801753f3195b71431c6ae11f4e2b7</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>set_error_for_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>affa8fc52abd48c60492b25fae5496d0a</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>find_info_by_sequence_id</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>a5ef5faf6ec41a63ec7b82933b1eaaadd</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>process_unpacked_message</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8c.html</Path>
+    <Anchor>a37c58a09e6d324e7114a2becb2683bbd</Anchor>
+    <DeclaredIn>listener_io.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerIO_AttemptRecv</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io_8h.html</Path>
+    <Anchor>a3494b6d56e053563e19231fdda8ce6c8</Anchor>
+    <DeclaredIn>listener_io.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>socket_read_plain</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io__internal_8h.html</Path>
+    <Anchor>a48e209edcf9421a36f6cd97eca45aa39</Anchor>
+    <DeclaredIn>listener_io_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>socket_read_ssl</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io__internal_8h.html</Path>
+    <Anchor>a27540bed6e0ee31601a54a31613bd1ee</Anchor>
+    <DeclaredIn>listener_io_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>sink_socket_read</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io__internal_8h.html</Path>
+    <Anchor>a11b801753f3195b71431c6ae11f4e2b7</Anchor>
+    <DeclaredIn>listener_io_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>print_SSL_error</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io__internal_8h.html</Path>
+    <Anchor>aa4a0d6443a6bb65b3fee1027d8eef70f</Anchor>
+    <DeclaredIn>listener_io_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>set_error_for_socket</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io__internal_8h.html</Path>
+    <Anchor>affa8fc52abd48c60492b25fae5496d0a</Anchor>
+    <DeclaredIn>listener_io_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>process_unpacked_message</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io__internal_8h.html</Path>
+    <Anchor>a37c58a09e6d324e7114a2becb2683bbd</Anchor>
+    <DeclaredIn>listener_io_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>find_info_by_sequence_id</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__io__internal_8h.html</Path>
+    <Anchor>a5ef5faf6ec41a63ec7b82933b1eaaadd</Anchor>
+    <DeclaredIn>listener_io_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>TIMEOUT_DELAY</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a8032a941e3dca02cdfade5cc3cfe1dc6</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>MSG_BP_1QTR</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>ac68caa54ad7fc51c8f5815eeb6686f30</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>MSG_BP_HALF</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a7acc76219d8588ca99f58c2121988112</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>MSG_BP_3QTR</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a694eca96dcf9ed929ec1608f9c14c852</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>RX_INFO_BP_1QTR</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a7fc0ffea5ec4b8882f719f0d054e3824</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>RX_INFO_BP_HALF</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a3e7f3829ff5668c512d1911a3201db71</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>RX_INFO_BP_3QTR</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a45f677274d8f1de84ae1cc842c43d0fe</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>THREADPOOL_BP</Name>
+      <APILanguage>unknown</APILanguage>
+      <Type>macro</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a87e98e5aad28f7363d5f4217d2e8d10e</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_MainLoop</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>aa15828328e387b91fce029728b33af0b</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>tick_handler</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>aeedae561a63e857e130be4d40cca8588</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_DumpRXInfoTable</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>ab7ad0a7cb1818c0849a8e21204d89b0e</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>retry_delivery</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a91845232ef24ffde41ff3689b0caa0c9</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>clean_up_completed_info</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a21e5de0bee07a8e984f3c1408b8e3b62</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_NotifyMessageFailure</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a7d8487504334e548f1d668b12d8fe3de</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>get_connection_info</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a3bdbad0ba5aa31b4f2dcdfe16ed379bc</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_ReleaseRXInfo</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>acd90b4d0e9b1520e1598993662932e55</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_ReleaseMsg</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>ab7578ac5f274bba1ca78cc8c4048eba2</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_GrowReadBuf</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>ade7318781f948e86471ec58d880d201d</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_AttemptDelivery</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a89f2c54c450dd6f6c6d35b9da42b8ab4</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>observe_backpressure</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>ae71f036eb0a57423a8e2b225bcf32e12</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_GetBackpressure</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8c.html</Path>
+    <Anchor>a42bfa01483c2ac1c72f3e03897fe4e0a</Anchor>
+    <DeclaredIn>listener_task.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_MainLoop</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8h.html</Path>
+    <Anchor>aa15828328e387b91fce029728b33af0b</Anchor>
+    <DeclaredIn>listener_task.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_ReleaseMsg</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8h.html</Path>
+    <Anchor>aa6b7728c195142eea1c0ab676cda1299</Anchor>
+    <DeclaredIn>listener_task.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_ReleaseRXInfo</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8h.html</Path>
+    <Anchor>abb2ea3b0531f8ee9cdd7d75c4127f6f2</Anchor>
+    <DeclaredIn>listener_task.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_GrowReadBuf</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8h.html</Path>
+    <Anchor>ade7318781f948e86471ec58d880d201d</Anchor>
+    <DeclaredIn>listener_task.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_AttemptDelivery</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8h.html</Path>
+    <Anchor>a89f2c54c450dd6f6c6d35b9da42b8ab4</Anchor>
+    <DeclaredIn>listener_task.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_NotifyMessageFailure</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8h.html</Path>
+    <Anchor>a7d8487504334e548f1d668b12d8fe3de</Anchor>
+    <DeclaredIn>listener_task.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_GetBackpressure</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8h.html</Path>
+    <Anchor>a42bfa01483c2ac1c72f3e03897fe4e0a</Anchor>
+    <DeclaredIn>listener_task.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ListenerTask_DumpRXInfoTable</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task_8h.html</Path>
+    <Anchor>ab7ad0a7cb1818c0849a8e21204d89b0e</Anchor>
+    <DeclaredIn>listener_task.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>tick_handler</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task__internal_8h.html</Path>
+    <Anchor>aeedae561a63e857e130be4d40cca8588</Anchor>
+    <DeclaredIn>listener_task_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>clean_up_completed_info</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task__internal_8h.html</Path>
+    <Anchor>a21e5de0bee07a8e984f3c1408b8e3b62</Anchor>
+    <DeclaredIn>listener_task_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>retry_delivery</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task__internal_8h.html</Path>
+    <Anchor>a91845232ef24ffde41ff3689b0caa0c9</Anchor>
+    <DeclaredIn>listener_task_internal.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>observe_backpressure</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>listener__task__internal_8h.html</Path>
+    <Anchor>ae71f036eb0a57423a8e2b225bcf32e12</Anchor>
+    <DeclaredIn>listener_task_internal.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -15333,7 +15654,7 @@
       <Type>func</Type>
     </TokenIdentifier>
     <Path>main_8c.html</Path>
-    <Anchor>a11899ce4e556af8f5b7adaf23e389155</Anchor>
+    <Anchor>af72d3fdb1f8c16ed4490769876486cd6</Anchor>
     <DeclaredIn>main.c</DeclaredIn>
   </Token>
   <Token>
@@ -15748,323 +16069,13 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>CMD_FD</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a3ea94b37cd6445d977af94a78e2c18e0</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIMEOUT_DELAY</Name>
-      <APILanguage>c</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a8032a941e3dca02cdfade5cc3cfe1dc6</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_init</Name>
+      <Name>send_do_blocking_send</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a991ff0badb44cb746fe639fa54fe1c31</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_register_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a3c833ea734a4c9865acc47d91ddb7fd5</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_remove_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a7345f822ab1bc69dcc35cc871423ec19</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_send_request</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>ace027324e2b89c0f46e6798b23ec58ce</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_shutdown</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a6387b60648d2aa6ae5d724ebf04ad3cc</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_free</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>acdaed429f2456b13e846d4e7f846bd65</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_free_tx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>af18ed407301b3bdd9c44b3b05f2d54cf</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>release_tx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a9ae301320ba4b577b2462907678af613</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_notify_pipe</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a8c2d8a592a292ec3105b6f1ad205f3dd</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>write_commit</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a34859023ba746b0359f571dad003ab98</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>commit_event_and_block</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>ac06cfcb3ecfad06e23567ca1a7dac4db</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_mainloop</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a4f1823592996205c3243bf49127a0004</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>free_fd_info_cb</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a8d4592d298d6539a13dd31239360c7ad</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>cleanup</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a35be7855150c6a8fa847eba457e48bdc</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>register_socket_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>aa462f2b99191e54e839a69fc568972f1</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>increment_fd_refcount</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a7bc45c02fed85ce85a834cf730f07c00</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>decrement_fd_refcount</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a09ec64a8af8244d6b69a7e79fa9065f3</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>release_socket_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a53ddb423772e634b4d099694d7bd5e37</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>handle_command</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a09a13d151396fa2b4dbe11182cf0233b</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>enqueue_write</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a84b7873113e88f5cfff8b30989a6197d</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>check_incoming_commands</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a320db24cd0321f42690ae959b30d41b7</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_info_to_write_for_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a28642bbcae521b8f97ad49229df128f3</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>set_error_for_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a799e6b8d9f7b7982ad8e8c6bbc60d993</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>attempt_write</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>acf20e1c1edb201899b9592cb945685cd</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>socket_write_plain</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a9f00925c05248b5902ffc10b99a55ce8</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>socket_write_ssl</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a9485e7160a073a7740dc2f130ce19db4</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>update_sent</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a20e2371bcf20b4f30b71726e0cad33fd</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>notify_caller</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a72e4815c5de39d0c2c31c573eafce27a</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tick_handler</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>ae1a455338f511c22140fd42d0f183257</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tick_timeout</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a728a121de75c640dd90c1992d870318f</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
+    <Path>send_8c.html</Path>
+    <Anchor>a645fe26b9a92bcea62862692048e1d82</Anchor>
+    <DeclaredIn>send.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -16072,349 +16083,89 @@
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>aa4ddfd50691169b408a005eda5862ccf</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
+    <Path>send_8c.html</Path>
+    <Anchor>a0a3d5df230238208188a316c900123c4</Anchor>
+    <DeclaredIn>send.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>attempt_to_enqueue_request_sent_message_to_listener</Name>
+      <Name>handle_failure</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a0c32f1070a14594306e76e6adc04ae68</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
+    <Path>send_8c.html</Path>
+    <Anchor>ae31cb52695b7c4b86ad52413e7cf4966</Anchor>
+    <DeclaredIn>send.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>notify_message_failure</Name>
+      <Name>write_plain</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8c.html</Path>
-    <Anchor>a2f7209353ead92c91bfc8f84a8b4df50</Anchor>
-    <DeclaredIn>sender.c</DeclaredIn>
+    <Path>send_8c.html</Path>
+    <Anchor>a3404e5d173399e27c14e908066e81935</Anchor>
+    <DeclaredIn>send.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>sender_init</Name>
+      <Name>write_ssl</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8h.html</Path>
-    <Anchor>a991ff0badb44cb746fe639fa54fe1c31</Anchor>
-    <DeclaredIn>sender.h</DeclaredIn>
+    <Path>send_8c.html</Path>
+    <Anchor>ae247d808874e3f3b30659f5406200efa</Anchor>
+    <DeclaredIn>send.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>sender_register_socket</Name>
+      <Name>enqueue_request_sent_message_to_listener</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8h.html</Path>
-    <Anchor>a3c833ea734a4c9865acc47d91ddb7fd5</Anchor>
-    <DeclaredIn>sender.h</DeclaredIn>
+    <Path>send_8c.html</Path>
+    <Anchor>a59e4fb5e681e9d9d3b8ae1f647ea005a</Anchor>
+    <DeclaredIn>send.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>sender_remove_socket</Name>
+      <Name>handle_write</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8h.html</Path>
-    <Anchor>a7345f822ab1bc69dcc35cc871423ec19</Anchor>
-    <DeclaredIn>sender.h</DeclaredIn>
+    <Path>send_8c.html</Path>
+    <Anchor>a6664eefee5b7a9db746a8c9a76a5d764</Anchor>
+    <DeclaredIn>send.c</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>sender_send_request</Name>
+      <Name>send_do_blocking_send</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8h.html</Path>
-    <Anchor>ace027324e2b89c0f46e6798b23ec58ce</Anchor>
-    <DeclaredIn>sender.h</DeclaredIn>
+    <Path>send_8h.html</Path>
+    <Anchor>a472ea0cb8ac1873fe772996d75745bc6</Anchor>
+    <DeclaredIn>send.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>sender_shutdown</Name>
+      <Name>handle_write</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8h.html</Path>
-    <Anchor>a6387b60648d2aa6ae5d724ebf04ad3cc</Anchor>
-    <DeclaredIn>sender.h</DeclaredIn>
+    <Path>send__internal_8h.html</Path>
+    <Anchor>a6664eefee5b7a9db746a8c9a76a5d764</Anchor>
+    <DeclaredIn>send_internal.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>sender_free</Name>
+      <Name>handle_failure</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender_8h.html</Path>
-    <Anchor>acdaed429f2456b13e846d4e7f846bd65</Anchor>
-    <DeclaredIn>sender.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>MAX_TIMEOUT</Name>
-      <APILanguage>c</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a85fda3522e69a1bf85f7dcd97b6023a1</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_TIMEOUT</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ad380e380939eae9a5d6c8f228f0fe7c8</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>MAX_CONCURRENT_SENDS</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>acf81eb49715fa84e816bfdfb0ce18748</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>HASH_TABLE_SIZE2</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a2071bea833e4fa740cb66ccd81930b65</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>SENDER_FD_NOT_IN_USE</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a11970f2c99571e46862c6df7c94ad3c9</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tx_flag_t</Name>
-      <APILanguage>c</APILanguage>
-      <Type>tdef</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a0a54b2062cf1b4a9c1ced43140ee52e0</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_free_tx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af18ed407301b3bdd9c44b3b05f2d54cf</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>release_tx_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a9ae301320ba4b577b2462907678af613</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_notify_pipe</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a8c2d8a592a292ec3105b6f1ad205f3dd</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>write_commit</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a34859023ba746b0359f571dad003ab98</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>commit_event_and_block</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac06cfcb3ecfad06e23567ca1a7dac4db</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>register_socket_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>aa462f2b99191e54e839a69fc568972f1</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>increment_fd_refcount</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a7bc45c02fed85ce85a834cf730f07c00</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>decrement_fd_refcount</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a09ec64a8af8244d6b69a7e79fa9065f3</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>release_socket_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a53ddb423772e634b4d099694d7bd5e37</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>handle_command</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a09a13d151396fa2b4dbe11182cf0233b</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>enqueue_write</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a84b7873113e88f5cfff8b30989a6197d</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>check_incoming_commands</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a320db24cd0321f42690ae959b30d41b7</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>get_info_to_write_for_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a28642bbcae521b8f97ad49229df128f3</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>set_error_for_socket</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a799e6b8d9f7b7982ad8e8c6bbc60d993</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>socket_write_plain</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a9f00925c05248b5902ffc10b99a55ce8</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>socket_write_ssl</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a9485e7160a073a7740dc2f130ce19db4</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>update_sent</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a20e2371bcf20b4f30b71726e0cad33fd</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>attempt_write</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>acf20e1c1edb201899b9592cb945685cd</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tick_handler</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ae1a455338f511c22140fd42d0f183257</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>notify_message_failure</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a2f7209353ead92c91bfc8f84a8b4df50</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
+    <Path>send__internal_8h.html</Path>
+    <Anchor>ae31cb52695b7c4b86ad52413e7cf4966</Anchor>
+    <DeclaredIn>send_internal.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -16422,239 +16173,39 @@
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>aa4ddfd50691169b408a005eda5862ccf</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
+    <Path>send__internal_8h.html</Path>
+    <Anchor>a0a3d5df230238208188a316c900123c4</Anchor>
+    <DeclaredIn>send_internal.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>attempt_to_enqueue_request_sent_message_to_listener</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a0c32f1070a14594306e76e6adc04ae68</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>notify_caller</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a72e4815c5de39d0c2c31c573eafce27a</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tick_timeout</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a728a121de75c640dd90c1992d870318f</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>cleanup</Name>
-      <APILanguage>c</APILanguage>
-      <Type>func</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>a35be7855150c6a8fa847eba457e48bdc</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_ERROR_NONE</Name>
+      <Name>HW_OK</Name>
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791da272f9f119a84f84620a50f59921074be</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
+    <Path>send__internal_8h.html</Path>
+    <Anchor>a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51</Anchor>
+    <DeclaredIn>send_internal.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>TX_ERROR_POLLHUP</Name>
+      <Name>HW_DONE</Name>
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791dab8356e960ab720f20eb581b181e209a7</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
+    <Path>send__internal_8h.html</Path>
+    <Anchor>a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91</Anchor>
+    <DeclaredIn>send_internal.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>TX_ERROR_POLLERR</Name>
+      <Name>HW_ERROR</Name>
       <APILanguage>c</APILanguage>
       <Type>econst</Type>
     </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791da67df9b4158d09359ab1bd26ae70a705f</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_ERROR_WRITE_FAILURE</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791daaa9e491fcf49c45d98906510f1b54610</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_ERROR_UNREGISTERED_SOCKET</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791da0c6c852bec7890ea64fea30d5467d3a2</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_ERROR_CLOSED</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791da86ef1bee9b4f29fe9fe5c636ce612e84</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_ERROR_NOTIFY_LISTENER_FAILURE</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791da1ec35b178c0921ad83c84d9440adad5b</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_ERROR_WRITE_TIMEOUT</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791da6929c1525a8bde9a975507eee7268f06</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_ERROR_NOTIFY_TIMEOUT</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791dafdaba8b14c1932b324b036a9412dd737</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TX_ERROR_BAD_SEQUENCE_ID</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>af90fe8ec02f1fbe06dc28b5c552f791da90d3001daa8fa6c7c556cf48320ec0f5</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_UNDEF</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429a88e9115c62fc7e1f7b9944d2a881887a</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_ADD_SOCKET</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429a52925d46fb93fbb25c715bb8ce7231f3</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_RM_SOCKET</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429a60ea7691c6acb15519e2bbf2b0b287db</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_SHUTDOWN</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429a2a021f11ce2f51d6e36e185d78837333</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_REQUEST_ENQUEUE</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429a6837eed2976f14f01d8790c5c0959060</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_REQUEST_WRITE</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429ad6cf66e7a3fb15e87da97d330c6c3c03</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_RESPONSE_NOTIFY</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429a638663893162c362d9513932571f83d3</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_REQUEST_RELEASE</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429a68e05ad950fdd5fe3ab4458659fa6db8</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>TIS_ERROR</Name>
-      <APILanguage>c</APILanguage>
-      <Type>econst</Type>
-    </TokenIdentifier>
-    <Path>sender__internal_8h.html</Path>
-    <Anchor>ac023b5eb9cc1556b98d7c4bc752a9429a20183f762fba2c542ba2c0101ee3fc3a</Anchor>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
+    <Path>send__internal_8h.html</Path>
+    <Anchor>a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157</Anchor>
+    <DeclaredIn>send_internal.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -17578,12 +17129,32 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>util_timestamp</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>util_8c.html</Path>
+    <Anchor>ad63ab11f5adebc0730d970d7742ccfd9</Anchor>
+    <DeclaredIn>util.c</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>util_is_resumable_io_error</Name>
       <APILanguage>c</APILanguage>
       <Type>func</Type>
     </TokenIdentifier>
     <Path>util_8h.html</Path>
     <Anchor>a160b252716d51078cec50bc9f27bc2bc</Anchor>
+    <DeclaredIn>util.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>util_timestamp</Name>
+      <APILanguage>c</APILanguage>
+      <Type>func</Type>
+    </TokenIdentifier>
+    <Path>util_8h.html</Path>
+    <Anchor>ad63ab11f5adebc0730d970d7742ccfd9</Anchor>
     <DeclaredIn>util.h</DeclaredIn>
   </Token>
   <Token>
@@ -17714,16 +17285,6 @@
     </TokenIdentifier>
     <Path>yacht_8c.html</Path>
     <Anchor>a3577749fb48d57a158b8ac1a0b3ab57e</Anchor>
-    <DeclaredIn>yacht.c</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>USE_BRENTS_VARIATION</Name>
-      <APILanguage>unknown</APILanguage>
-      <Type>macro</Type>
-    </TokenIdentifier>
-    <Path>yacht_8c.html</Path>
-    <Anchor>a5ac70b00c9ad8d06bbfa7f2c32df2e62</Anchor>
     <DeclaredIn>yacht.c</DeclaredIn>
   </Token>
   <Token>
@@ -18135,6 +17696,16 @@
   </Token>
   <Token>
     <TokenIdentifier>
+      <Name>out_sent_size</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>boxed_msg</Scope>
+    </TokenIdentifier>
+    <Path>structboxed__msg.html</Path>
+    <Anchor>abbb3d56b8df85679e47e45f83fdcebcd</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
       <Name>bus</Name>
       <APILanguage>c</APILanguage>
       <Type>cl</Type>
@@ -18225,26 +17796,6 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>sender_count</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>bus</Scope>
-    </TokenIdentifier>
-    <Path>structbus.html</Path>
-    <Anchor>a0c515f6e769e09d43fca4b11a62e8344</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>senders</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>bus</Scope>
-    </TokenIdentifier>
-    <Path>structbus.html</Path>
-    <Anchor>a89364a094feac4f2e881ac3f9972a483</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
       <Name>listener_count</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
@@ -18282,6 +17833,16 @@
     </TokenIdentifier>
     <Path>structbus.html</Path>
     <Anchor>af44407d0ffd23017d659329d06a2af89</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>shutdown_state</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>bus</Scope>
+    </TokenIdentifier>
+    <Path>structbus.html</Path>
+    <Anchor>a873b1c898dbdee192950caea56b37729</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -18332,16 +17893,6 @@
     </TokenIdentifier>
     <Path>structbus__config.html</Path>
     <DeclaredIn>bus_types.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender_count</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>bus_config</Scope>
-    </TokenIdentifier>
-    <Path>structbus__config.html</Path>
-    <Anchor>a2a469e8bdb721bc038f4009e190d9a0c</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -18591,7 +18142,7 @@
       <Scope>bus_user_msg</Scope>
     </TokenIdentifier>
     <Path>structbus__user__msg.html</Path>
-    <Anchor>ace4aaba434c6505167d760dbd7994c95</Anchor>
+    <Anchor>a3e8b1951c9628bf2745c3229af24b145</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -18767,7 +18318,47 @@
       <Scope>connection_info</Scope>
     </TokenIdentifier>
     <Path>structconnection__info.html</Path>
-    <Anchor>a0d081db32b7ce14db136e2f0685c07b8</Anchor>
+    <Anchor>a6776f202bed7509222507f0d1db67500</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>type</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>connection_info</Scope>
+    </TokenIdentifier>
+    <Path>structconnection__info.html</Path>
+    <Anchor>a19201693299c03819f5cf5f7d110e8fb</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>udata</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>connection_info</Scope>
+    </TokenIdentifier>
+    <Path>structconnection__info.html</Path>
+    <Anchor>a848a07967f74e31333fddea49fab9668</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>ssl</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>connection_info</Scope>
+    </TokenIdentifier>
+    <Path>structconnection__info.html</Path>
+    <Anchor>a0655d6337cf80ac22943323121d118d1</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>largest_wr_seq_id_seen</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>connection_info</Scope>
+    </TokenIdentifier>
+    <Path>structconnection__info.html</Path>
+    <Anchor>a2ffb2a7b8d44fcb0405452391ee351b4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -18791,103 +18382,13 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>largest_seq_id_seen</Name>
+      <Name>largest_rd_seq_id_seen</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>connection_info</Scope>
     </TokenIdentifier>
     <Path>structconnection__info.html</Path>
-    <Anchor>a7357df379b73912945c71edcb2e7bfe5</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>ssl</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>connection_info</Scope>
-    </TokenIdentifier>
-    <Path>structconnection__info.html</Path>
-    <Anchor>a0655d6337cf80ac22943323121d118d1</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>type</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>connection_info</Scope>
-    </TokenIdentifier>
-    <Path>structconnection__info.html</Path>
-    <Anchor>ab9f8d54036f15df03f070f271984c319</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>udata</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>connection_info</Scope>
-    </TokenIdentifier>
-    <Path>structconnection__info.html</Path>
-    <Anchor>a848a07967f74e31333fddea49fab9668</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>fd_info</Name>
-      <APILanguage>c</APILanguage>
-      <Type>cl</Type>
-      <Scope>fd_info</Scope>
-    </TokenIdentifier>
-    <Path>structfd__info.html</Path>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>fd</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>fd_info</Scope>
-    </TokenIdentifier>
-    <Path>structfd__info.html</Path>
-    <Anchor>ae854a5754cd0716eba8aabed12a6cd1e</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>ssl</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>fd_info</Scope>
-    </TokenIdentifier>
-    <Path>structfd__info.html</Path>
-    <Anchor>abce68830a0316490cb9a01d13e4e47b9</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>refcount</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>fd_info</Scope>
-    </TokenIdentifier>
-    <Path>structfd__info.html</Path>
-    <Anchor>a6f4437e27ab87d3f6a9d962a422e288f</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>largest_seq_id_seen</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>fd_info</Scope>
-    </TokenIdentifier>
-    <Path>structfd__info.html</Path>
-    <Anchor>a1ba7b197cc1ebf0355ee8ef8b4d705a3</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>errored</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>fd_info</Scope>
-    </TokenIdentifier>
-    <Path>structfd__info.html</Path>
-    <Anchor>a056b8cc22b630361dd331eca978f1d38</Anchor>
+    <Anchor>ab615d35e7a56f24003a371db6343ffe4</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -19312,17 +18813,6 @@
     <Path>struct_kinetic_client_config.html</Path>
     <Anchor>af2847d4cbb33b1104133778e207f5569</Anchor>
     <Abstract>Logging level (-1:none, 0:error, 1:info, 2:verbose, 3:full) </Abstract>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>writerThreads</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>KineticClientConfig</Scope>
-    </TokenIdentifier>
-    <Path>struct_kinetic_client_config.html</Path>
-    <Anchor>ab9cc6db700bcbe64ed91b8589af0cd57</Anchor>
-    <Abstract>Number of threads used for handling outgoing requests. </Abstract>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -23873,7 +23363,7 @@
       <Scope>listener</Scope>
     </TokenIdentifier>
     <Path>structlistener.html</Path>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -23887,13 +23377,13 @@
   </Token>
   <Token>
     <TokenIdentifier>
-      <Name>shutdown</Name>
+      <Name>shutdown_notify_fd</Name>
       <APILanguage>cpp</APILanguage>
       <Type>data</Type>
       <Scope>listener</Scope>
     </TokenIdentifier>
     <Path>structlistener.html</Path>
-    <Anchor>a38f8e5d2c9f44093adb69974440a3741</Anchor>
+    <Anchor>a98d02f437be02437df79939b196d178a</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -24073,7 +23563,7 @@
       <Scope>listener_msg</Scope>
     </TokenIdentifier>
     <Path>structlistener__msg.html</Path>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -24104,6 +23594,16 @@
     </TokenIdentifier>
     <Path>structlistener__msg.html</Path>
     <Anchor>a856d225df0b476a85b12946457ad6513</Anchor>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>pipes</Name>
+      <APILanguage>cpp</APILanguage>
+      <Type>data</Type>
+      <Scope>listener_msg</Scope>
+    </TokenIdentifier>
+    <Path>structlistener__msg.html</Path>
+    <Anchor>a7cbeff39416d25e0f81ae37286f59f37</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -24173,7 +23673,7 @@
       <Scope>rx_info_t</Scope>
     </TokenIdentifier>
     <Path>structrx__info__t.html</Path>
-    <DeclaredIn>listener_internal.h</DeclaredIn>
+    <DeclaredIn>listener_internal_types.h</DeclaredIn>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -24224,136 +23724,6 @@
     </TokenIdentifier>
     <Path>structrx__info__t.html</Path>
     <Anchor>a92273c68b1cc0dd89592e5cd1e6ecd7b</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>sender</Name>
-      <APILanguage>c</APILanguage>
-      <Type>cl</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>bus</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a757588eec51f26a7d24b7dd72662aad2</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>shutdown</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a562a8defcf71bd924f000e3919cd7065</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tx_flags</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a9c78ecf6abe562a015b465d2f718e5c5</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tx_info</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a7ea1a5cf71cd395158628fe887c74542</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>pipes</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a1f817ab1d64dacd856b891b8347bb527</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>commit_pipe</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a5d9bfeef7350314f6c03cda33569e00c</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>incoming_command_pipe</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a0ce70524aee2f28afdbb2dceace8100a</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>largest_seq_id_seen</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a8c67df66dc04d78ec44a8717a3fe2e54</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>active_fds</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>aa8f75e8e259d4c7fc1cd1337c5ffc48b</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>fds</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>aff32b617c8187617c30fde60a778dc44</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>is_idle</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>a555122c7e76f98fbaadb430c6eafaa6d</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>fd_hash_table</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>sender</Scope>
-    </TokenIdentifier>
-    <Path>structsender.html</Path>
-    <Anchor>aff098306a5cefab0f1dc624bd3d1da04</Anchor>
   </Token>
   <Token>
     <TokenIdentifier>
@@ -24694,55 +24064,5 @@
     </TokenIdentifier>
     <Path>structthreadpool__task.html</Path>
     <Anchor>a4f1f8ebfee18c4a5eb98a4cf9525e577</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>tx_info_t</Name>
-      <APILanguage>c</APILanguage>
-      <Type>cl</Type>
-      <Scope>tx_info_t</Scope>
-    </TokenIdentifier>
-    <Path>structtx__info__t.html</Path>
-    <DeclaredIn>sender_internal.h</DeclaredIn>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>id</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>tx_info_t</Scope>
-    </TokenIdentifier>
-    <Path>structtx__info__t.html</Path>
-    <Anchor>aee200e8d32eccb08f126ae3104058e67</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>done_pipe</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>tx_info_t</Scope>
-    </TokenIdentifier>
-    <Path>structtx__info__t.html</Path>
-    <Anchor>a37de7f02faa45a0cba93b35395be52ba</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>state</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>tx_info_t</Scope>
-    </TokenIdentifier>
-    <Path>structtx__info__t.html</Path>
-    <Anchor>a08ee9b3e37cda4f0ca22e67afa14f51d</Anchor>
-  </Token>
-  <Token>
-    <TokenIdentifier>
-      <Name>u</Name>
-      <APILanguage>cpp</APILanguage>
-      <Type>data</Type>
-      <Scope>tx_info_t</Scope>
-    </TokenIdentifier>
-    <Path>structtx__info__t.html</Path>
-    <Anchor>abe3950d61af476a551829f85ae8219c2</Anchor>
   </Token>
 </Tokens>

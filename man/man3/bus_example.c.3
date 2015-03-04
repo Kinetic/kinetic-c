@@ -1,4 +1,4 @@
-.TH "bus_example.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "bus_example.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,6 +29,8 @@ bus_example.c \-
 \fC#include 'atomic\&.h'\fP
 .br
 \fC#include 'socket99\&.h'\fP
+.br
+\fC#include 'util\&.h'\fP
 .br
 
 .SS "Macros"
@@ -136,27 +138,27 @@ bus_example.c \-
 .SS "#define MAGIC_NUMBER   3"
 
 .PP
-Definition at line 45 of file bus_example\&.c\&.
+Definition at line 46 of file bus_example\&.c\&.
 .SS "#define MAX_SOCKETS   1000"
 
 .PP
-Definition at line 47 of file bus_example\&.c\&.
+Definition at line 48 of file bus_example\&.c\&.
 .SS "#define DEFAULT_BUF_SIZE   (1024 * 1024 + sizeof(prot_header_t))"
 
 .PP
-Definition at line 48 of file bus_example\&.c\&.
+Definition at line 49 of file bus_example\&.c\&.
 .SS "#define PRINT_RESPONSES   0"
 
 .PP
-Definition at line 49 of file bus_example\&.c\&.
+Definition at line 50 of file bus_example\&.c\&.
 .SS "#define LOG(VERBOSITY, \&.\&.\&.)   do { if (state\&.verbosity >= VERBOSITY) { printf(__VA_ARGS__); } } while(0)"
 
 .PP
-Definition at line 95 of file bus_example\&.c\&.
+Definition at line 96 of file bus_example\&.c\&.
 .SS "#define INCREMENT_COMPLETION_COUNTER   1"
 
 .PP
-Definition at line 395 of file bus_example\&.c\&.
+Definition at line 396 of file bus_example\&.c\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBsocket_state\fP"
@@ -177,101 +179,103 @@ Definition at line 395 of file bus_example\&.c\&.
 .TP
 \fB\fISTATE_AWAITING_BODY \fP\fP
 .PP
-Definition at line 51 of file bus_example\&.c\&.
+Definition at line 52 of file bus_example\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "static void run_bus (example_state *s, struct \fBbus\fP *b)\fC [static]\fP"
 
 .PP
-Definition at line 451 of file bus_example\&.c\&.
+Definition at line 454 of file bus_example\&.c\&.
 .PP
 References bus_register_socket(), bus_send_request(), BUS_SOCKET_PLAIN, completion_cb(), construct_msg(), DEFAULT_BUF_SIZE, bus_user_msg::fd, get_cur_second(), LOG, open_sockets(), register_signal_handlers(), and tick_handler()\&.
 .SS "static void parse_args (intargc, char **argv, example_state *s)\fC [static]\fP"
 
 .PP
-Definition at line 306 of file bus_example\&.c\&.
+Definition at line 307 of file bus_example\&.c\&.
 .PP
 References DEFAULT_BUF_SIZE, and usage()\&.
 .SS "static time_t get_cur_second (void)\fC [static]\fP"
 
 .PP
-Definition at line 445 of file bus_example\&.c\&.
+Definition at line 446 of file bus_example\&.c\&.
+.PP
+References util_timestamp()\&.
 .SS "static void log_cb (\fBlog_event_t\fPevent, intlog_level, const char *msg, void *udata)\fC [static]\fP"
 
 .PP
-Definition at line 88 of file bus_example\&.c\&.
+Definition at line 89 of file bus_example\&.c\&.
 .PP
 References bus_log_event_str()\&.
 .SS "static \fBbus_sink_cb_res_t\fP reset_transfer (socket_info *si)\fC [static]\fP"
 
 .PP
-Definition at line 100 of file bus_example\&.c\&.
+Definition at line 101 of file bus_example\&.c\&.
 .PP
 References bus_sink_cb_res_t::next_read, and STATE_AWAITING_HEADER\&.
 .SS "static \fBbus_sink_cb_res_t\fP sink_cb (uint8_t *read_buf, size_tread_size, void *socket_udata)\fC [static]\fP"
 
 .PP
-Definition at line 111 of file bus_example\&.c\&.
+Definition at line 112 of file bus_example\&.c\&.
 .PP
 References DEFAULT_BUF_SIZE, MAGIC_NUMBER, bus_sink_cb_res_t::next_read, reset_transfer(), STATE_AWAITING_BODY, STATE_AWAITING_HEADER, and STATE_UNINIT\&.
 .SS "static \fBbus_unpack_cb_res_t\fP unpack_cb (void *msg, void *socket_udata)\fC [static]\fP"
 
 .PP
-Definition at line 209 of file bus_example\&.c\&.
+Definition at line 210 of file bus_example\&.c\&.
 .SS "static void unexpected_msg_cb (void *msg, int64_tseq_id, void *bus_udata, void *socket_udata)\fC [static]\fP"
 
 .PP
-Definition at line 232 of file bus_example\&.c\&.
+Definition at line 233 of file bus_example\&.c\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
-Definition at line 240 of file bus_example\&.c\&.
+Definition at line 241 of file bus_example\&.c\&.
 .PP
 References bus_result::bus, bus_free(), bus_init(), bus_shutdown(), executable_name, get_cur_second(), LOG, log_cb(), bus_config::log_cb, parse_args(), run_bus(), sink_cb(), state, bus_result::status, unexpected_msg_cb(), and unpack_cb()\&.
 .SS "static void signal_handler (intarg)\fC [static]\fP"
 
 .PP
-Definition at line 277 of file bus_example\&.c\&.
+Definition at line 278 of file bus_example\&.c\&.
 .PP
 References LOG\&.
 .SS "static sig_t register_signal_handler (intsig)\fC [static]\fP"
 
 .PP
-Definition at line 286 of file bus_example\&.c\&.
+Definition at line 287 of file bus_example\&.c\&.
 .PP
 References signal_handler()\&.
 .SS "static void register_signal_handlers (void)\fC [static]\fP"
 
 .PP
-Definition at line 292 of file bus_example\&.c\&.
+Definition at line 293 of file bus_example\&.c\&.
 .PP
 References register_signal_handler()\&.
 .SS "static void usage (void)\fC [static]\fP"
 
 .PP
-Definition at line 297 of file bus_example\&.c\&.
+Definition at line 298 of file bus_example\&.c\&.
 .PP
 References executable_name\&.
 .SS "static void open_sockets (example_state *s)\fC [static]\fP"
 
 .PP
-Definition at line 346 of file bus_example\&.c\&.
+Definition at line 347 of file bus_example\&.c\&.
 .SS "static size_t construct_msg (uint8_t *buf, size_tbuf_size, size_tpayload_size, int64_tseq_id)\fC [static]\fP"
 
 .PP
-Definition at line 376 of file bus_example\&.c\&.
+Definition at line 377 of file bus_example\&.c\&.
 .PP
 References MAGIC_NUMBER\&.
 .SS "static void completion_cb (\fBbus_msg_result_t\fP *res, void *udata)\fC [static]\fP"
 
 .PP
-Definition at line 397 of file bus_example\&.c\&.
+Definition at line 398 of file bus_example\&.c\&.
 .PP
 References ATOMIC_BOOL_COMPARE_AND_SWAP, BUS_SEND_RX_FAILURE, BUS_SEND_RX_TIMEOUT, BUS_SEND_SUCCESS, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT, LOG, bus_msg_result_t::response, state, bus_msg_result_t::status, and bus_msg_result_t::u\&.
 .SS "static void tick_handler (example_state *s)\fC [static]\fP"
 
 .PP
-Definition at line 438 of file bus_example\&.c\&.
+Definition at line 439 of file bus_example\&.c\&.
 .PP
 References LOG\&.
 .SH "Variable Documentation"
@@ -279,19 +283,19 @@ References LOG\&.
 .SS "example_state state"
 
 .PP
-Definition at line 82 of file bus_example\&.c\&.
+Definition at line 83 of file bus_example\&.c\&.
 .SS "const char* executable_name = NULL\fC [static]\fP"
 
 .PP
-Definition at line 98 of file bus_example\&.c\&.
+Definition at line 99 of file bus_example\&.c\&.
 .SS "bool loop_flag = true\fC [static]\fP"
 
 .PP
-Definition at line 274 of file bus_example\&.c\&.
+Definition at line 275 of file bus_example\&.c\&.
 .SS "sig_t old_sigint_handler = NULL\fC [static]\fP"
 
 .PP
-Definition at line 275 of file bus_example\&.c\&.
+Definition at line 276 of file bus_example\&.c\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

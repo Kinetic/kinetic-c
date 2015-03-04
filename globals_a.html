@@ -132,8 +132,8 @@
 : <a class="el" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a4402ffa882df1bff54f28f4f47776641">acl_types.h</a>
 </li>
 <li>add_socket()
-: <a class="el" href="listener_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d">listener.c</a>
-, <a class="el" href="listener__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d">listener_internal.h</a>
+: <a class="el" href="listener__cmd_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d">listener_cmd.c</a>
+, <a class="el" href="listener__cmd__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d">listener_cmd_internal.h</a>
 </li>
 <li>append_formatted_cstring_va_list()
 : <a class="el" href="byte__array_8c.html#a69eb81af367b07bce9096d6b1b1efbf5">byte_array.c</a>
@@ -155,20 +155,20 @@
 , <a class="el" href="threadpool_2greatest_8h.html#a40acf0553710db7509eb5fe1ab64f871">threadpool/greatest.h</a>
 </li>
 <li>ASSERT_EQUAL_Tm
-: <a class="el" href="bus_2greatest_8h.html#a4f0cf380bb3063ae8d49c1dcd772f447">bus/greatest.h</a>
-, <a class="el" href="threadpool_2greatest_8h.html#a4f0cf380bb3063ae8d49c1dcd772f447">threadpool/greatest.h</a>
+: <a class="el" href="threadpool_2greatest_8h.html#a4f0cf380bb3063ae8d49c1dcd772f447">threadpool/greatest.h</a>
+, <a class="el" href="bus_2greatest_8h.html#a4f0cf380bb3063ae8d49c1dcd772f447">bus/greatest.h</a>
 </li>
 <li>ASSERT_FALSE
 : <a class="el" href="bus_2greatest_8h.html#a75ad6d81a4da695c39522d3eacf6ef84">bus/greatest.h</a>
 , <a class="el" href="threadpool_2greatest_8h.html#a75ad6d81a4da695c39522d3eacf6ef84">threadpool/greatest.h</a>
 </li>
 <li>ASSERT_FALSEm
-: <a class="el" href="bus_2greatest_8h.html#a26f77d49fe022fce10c430c476213474">bus/greatest.h</a>
-, <a class="el" href="threadpool_2greatest_8h.html#a26f77d49fe022fce10c430c476213474">threadpool/greatest.h</a>
+: <a class="el" href="threadpool_2greatest_8h.html#a26f77d49fe022fce10c430c476213474">threadpool/greatest.h</a>
+, <a class="el" href="bus_2greatest_8h.html#a26f77d49fe022fce10c430c476213474">bus/greatest.h</a>
 </li>
 <li>ASSERT_STR_EQ
-: <a class="el" href="bus_2greatest_8h.html#a018c0b801a6b09c44c66b7bd3a1a6f53">bus/greatest.h</a>
-, <a class="el" href="threadpool_2greatest_8h.html#a018c0b801a6b09c44c66b7bd3a1a6f53">threadpool/greatest.h</a>
+: <a class="el" href="threadpool_2greatest_8h.html#a018c0b801a6b09c44c66b7bd3a1a6f53">threadpool/greatest.h</a>
+, <a class="el" href="bus_2greatest_8h.html#a018c0b801a6b09c44c66b7bd3a1a6f53">bus/greatest.h</a>
 </li>
 <li>ASSERT_STR_EQm
 : <a class="el" href="bus_2greatest_8h.html#a93e83951cba1404a90c9144c17deefca">bus/greatest.h</a>
@@ -179,9 +179,9 @@
 , <a class="el" href="threadpool_2greatest_8h.html#aec86bc1e3102fef095697e37ccc6babb">threadpool/greatest.h</a>
 </li>
 <li>ATOMIC_BOOL_COMPARE_AND_SWAP
-: <a class="el" href="test__threadpool_8c.html#ac670f7588d6db0cf09e0a61540133489">test_threadpool.c</a>
+: <a class="el" href="test__threadpool__sequencing_8c.html#ac670f7588d6db0cf09e0a61540133489">test_threadpool_sequencing.c</a>
+, <a class="el" href="test__threadpool_8c.html#ac670f7588d6db0cf09e0a61540133489">test_threadpool.c</a>
 , <a class="el" href="atomic_8h.html#ac670f7588d6db0cf09e0a61540133489">atomic.h</a>
-, <a class="el" href="test__threadpool__sequencing_8c.html#ac670f7588d6db0cf09e0a61540133489">test_threadpool_sequencing.c</a>
 , <a class="el" href="test__threadpool__stress_8c.html#ac670f7588d6db0cf09e0a61540133489">test_threadpool_stress.c</a>
 , <a class="el" href="threadpool__internals_8h.html#ac670f7588d6db0cf09e0a61540133489">threadpool_internals.h</a>
 </li>
@@ -189,28 +189,12 @@
 : <a class="el" href="kinetic__session_8c.html#a8e6ca0967c3f2508bd8dab901a6a6ba7">kinetic_session.c</a>
 , <a class="el" href="kinetic__operation_8c.html#a8e6ca0967c3f2508bd8dab901a6a6ba7">kinetic_operation.c</a>
 </li>
-<li>attempt_delivery()
-: <a class="el" href="listener_8c.html#a7abf986a57b2b4a5ae53b48fc051aafb">listener.c</a>
-, <a class="el" href="listener__internal_8h.html#a7abf986a57b2b4a5ae53b48fc051aafb">listener_internal.h</a>
-</li>
-<li>attempt_recv()
-: <a class="el" href="listener_8c.html#a09b57f3f2be5eb499e924308bab8f989">listener.c</a>
-, <a class="el" href="listener__internal_8h.html#ac952b94296b3ffa69d793f830ceae1e9">listener_internal.h</a>
-</li>
-<li>attempt_to_enqueue_request_sent_message_to_listener()
-: <a class="el" href="sender__internal_8h.html#a0c32f1070a14594306e76e6adc04ae68">sender_internal.h</a>
-, <a class="el" href="sender_8c.html#a0c32f1070a14594306e76e6adc04ae68">sender.c</a>
-</li>
 <li>attempt_to_enqueue_sending_request_message_to_listener()
-: <a class="el" href="sender_8c.html#aa4ddfd50691169b408a005eda5862ccf">sender.c</a>
-, <a class="el" href="sender__internal_8h.html#aa4ddfd50691169b408a005eda5862ccf">sender_internal.h</a>
+: <a class="el" href="send_8c.html#a0a3d5df230238208188a316c900123c4">send.c</a>
+, <a class="el" href="send__internal_8h.html#a0a3d5df230238208188a316c900123c4">send_internal.h</a>
 </li>
 <li>attempt_to_increase_resource_limits()
 : <a class="el" href="bus_8c.html#a6951664154426a9ee0fc68c69356cca7">bus.c</a>
-</li>
-<li>attempt_write()
-: <a class="el" href="sender__internal_8h.html#acf20e1c1edb201899b9592cb945685cd">sender_internal.h</a>
-, <a class="el" href="sender_8c.html#acf20e1c1edb201899b9592cb945685cd">sender.c</a>
 </li>
 </ul>
 </div><!-- contents -->

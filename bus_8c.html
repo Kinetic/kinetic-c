@@ -67,33 +67,27 @@
 <code>#include &lt;limits.h&gt;</code><br />
 <code>#include &lt;sys/resource.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="bus_8h_source.html">bus.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="sender_8h_source.html">sender.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="send_8h_source.html">send.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="listener_8h_source.html">listener.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="threadpool_8h_source.html">threadpool.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="bus__ssl_8h_source.html">bus_ssl.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="util_8h_source.html">util.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="yacht_8h_source.html">yacht.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="atomic_8h_source.html">atomic.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="listener__task_8h_source.html">listener_task.h</a>&quot;</code><br />
 </div>
 <p><a href="bus_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a7129e5f5219981ae2b4d3babdc5f6a73"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a7129e5f5219981ae2b4d3babdc5f6a73">DEF_FD_SET_SIZE2</a>&#160;&#160;&#160;4</td></tr>
-<tr class="separator:a7129e5f5219981ae2b4d3babdc5f6a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9db88b27b40f46d327f575228bd72ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#ac9db88b27b40f46d327f575228bd72ab">THREAD_SHUTDOWN_SECONDS</a>&#160;&#160;&#160;5</td></tr>
 <tr class="separator:ac9db88b27b40f46d327f575228bd72ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ade9975ecc1b8d24e514e7fbfc03221d0"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0">listener_mainloop</a> (void *arg)</td></tr>
-<tr class="separator:ade9975ecc1b8d24e514e7fbfc03221d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f1823592996205c3243bf49127a0004"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a4f1823592996205c3243bf49127a0004">sender_mainloop</a> (void *arg)</td></tr>
-<tr class="separator:a4f1823592996205c3243bf49127a0004"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af65a34f2a232288bc0aabe83521a47f7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#af65a34f2a232288bc0aabe83521a47f7">poll_on_completion</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd)</td></tr>
 <tr class="separator:af65a34f2a232288bc0aabe83521a47f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d924998574ebf0270f4d56027b25494"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a4d924998574ebf0270f4d56027b25494">sender_id_of_socket</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd)</td></tr>
-<tr class="separator:a4d924998574ebf0270f4d56027b25494"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a013694e272579d83c87e0039769be8a9"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a013694e272579d83c87e0039769be8a9">listener_id_of_socket</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd)</td></tr>
 <tr class="separator:a013694e272579d83c87e0039769be8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a207a3f520e7e3a9e770c6a2e57086218"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a207a3f520e7e3a9e770c6a2e57086218">noop_log_cb</a> (<a class="el" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a> event, int log_level, const char *msg, void *udata)</td></tr>
@@ -110,20 +104,22 @@ Functions</h2></td></tr>
 <tr class="separator:ac0b99f211ee9a81b08697c509640323f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a586029a1def1f27aa18916d5750cffe6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a586029a1def1f27aa18916d5750cffe6">bus_send_request</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structbus__user__msg.html">bus_user_msg</a> *msg)</td></tr>
 <tr class="separator:a586029a1def1f27aa18916d5750cffe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8200fe8d77bbf9ebd2ee156835c3bb98"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structsender.html">sender</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a8200fe8d77bbf9ebd2ee156835c3bb98">bus_get_sender_for_socket</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd)</td></tr>
-<tr class="separator:a8200fe8d77bbf9ebd2ee156835c3bb98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22b25ecf4c0e11de50f551369307c811"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a22b25ecf4c0e11de50f551369307c811">bus_get_listener_for_socket</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd)</td></tr>
 <tr class="separator:a22b25ecf4c0e11de50f551369307c811"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60692c56f07f224511783c1b4ed45c02"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a60692c56f07f224511783c1b4ed45c02">bus_log_event_str</a> (<a class="el" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a> event)</td></tr>
 <tr class="separator:a60692c56f07f224511783c1b4ed45c02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aece2c000aa2f834b76a77ce032a2d0d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#aece2c000aa2f834b76a77ce032a2d0d2">bus_register_socket</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2">bus_socket_t</a> type, int fd, void *udata)</td></tr>
 <tr class="separator:aece2c000aa2f834b76a77ce032a2d0d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2119dbab02464f8c6ea0dd724d497666"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a2119dbab02464f8c6ea0dd724d497666">bus_release_socket</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd)</td></tr>
-<tr class="separator:a2119dbab02464f8c6ea0dd724d497666"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a4bd5912f0de341b8fc65040b70fc00"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a8a4bd5912f0de341b8fc65040b70fc00">bus_release_socket</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd, void **socket_udata_out)</td></tr>
+<tr class="separator:a8a4bd5912f0de341b8fc65040b70fc00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfd818006ce9f3cb485667d288af9d81"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#acfd818006ce9f3cb485667d288af9d81">bus_schedule_threadpool_task</a> (struct <a class="el" href="structbus.html">bus</a> *b, struct <a class="el" href="structthreadpool__task.html">threadpool_task</a> *task, size_t *backpressure)</td></tr>
 <tr class="separator:acfd818006ce9f3cb485667d288af9d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe8e6487b9bc3c72b5159f9b3932ec5c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#afe8e6487b9bc3c72b5159f9b3932ec5c">free_connection_cb</a> (void *value, void *udata)</td></tr>
+<tr class="separator:afe8e6487b9bc3c72b5159f9b3932ec5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af61c3cf6bff2b4547e454015e5ee73e9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9">bus_shutdown</a> (<a class="el" href="structbus.html">bus</a> *b)</td></tr>
 <tr class="separator:af61c3cf6bff2b4547e454015e5ee73e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a189082d10346e2334dfad2365445d16b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a189082d10346e2334dfad2365445d16b">bus_backpressure_delay</a> (struct <a class="el" href="structbus.html">bus</a> *b, size_t backpressure, uint8_t shift)</td></tr>
+<tr class="separator:a189082d10346e2334dfad2365445d16b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc4bcbb78efe00f265027438dfea598f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#acc4bcbb78efe00f265027438dfea598f">bus_lock_log</a> (struct <a class="el" href="structbus.html">bus</a> *b)</td></tr>
 <tr class="separator:acc4bcbb78efe00f265027438dfea598f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78abbe3ffa07e668c7df0fb28fe8ad87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87">bus_unlock_log</a> (struct <a class="el" href="structbus.html">bus</a> *b)</td></tr>
@@ -138,20 +134,6 @@ Functions</h2></td></tr>
 <tr class="separator:af013638c2ed0336af67997ec31cb88c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="a7129e5f5219981ae2b4d3babdc5f6a73"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEF_FD_SET_SIZE2&#160;&#160;&#160;4</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00057">57</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="ac9db88b27b40f46d327f575228bd72ab"></a>
 <div class="memitem">
 <div class="memproto">
@@ -162,51 +144,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00643">643</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00637">637</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ade9975ecc1b8d24e514e7fbfc03221d0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* listener_mainloop </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>arg</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00280">280</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
-
-<p>References <a class="el" href="listener_8c_source.html#l00411">attempt_recv()</a>, <a class="el" href="bus__types_8h_source.html#l00082">BUS_ASSERT</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener_8c_source.html#l00329">check_and_flush_incoming_msg_pipe()</a>, <a class="el" href="listener_8c_source.html#l00038">INCOMING_MSG_PIPE</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="listener_8c_source.html#l00687">tick_handler()</a>, <a class="el" href="listener_8c_source.html#l00278">TIMEOUT_DELAY</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, and <a class="el" href="util_8c_source.html#l00025">util_is_resumable_io_error()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a4f1823592996205c3243bf49127a0004"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* sender_mainloop </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>arg</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="sender_8c_source.html#l00332">332</a> of file <a class="el" href="sender_8c_source.html">sender.c</a>.</p>
-
-<p>References <a class="el" href="sender_8c_source.html#l00759">attempt_write()</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="sender_8c_source.html#l00631">check_incoming_commands()</a>, <a class="el" href="sender_8c_source.html#l00405">cleanup()</a>, <a class="el" href="sender_8c_source.html#l00039">CMD_FD</a>, <a class="el" href="bus__types_8h_source.html#l00100">LOG_SENDER</a>, <a class="el" href="sender_8c_source.html#l00987">tick_handler()</a>, <a class="el" href="sender_8c_source.html#l00330">TIMEOUT_DELAY</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, and <a class="el" href="util_8c_source.html#l00025">util_is_resumable_io_error()</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="af65a34f2a232288bc0aabe83521a47f7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -239,47 +181,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00334">334</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00315">315</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00098">LOG_SENDING_REQUEST</a>, <a class="el" href="echosrv_8c_source.html#l00044">read_buf</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, and <a class="el" href="util_8c_source.html#l00025">util_is_resumable_io_error()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a4d924998574ebf0270f4d56027b25494"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int sender_id_of_socket </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>fd</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00403">403</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
-
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00075">bus::sender_count</a>.</p>
+<p>References <a class="el" href="bus_8c_source.html#l00583">bus_backpressure_delay()</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener_8h_source.html#l00028">LISTENER_BACKPRESSURE_SHIFT</a>, <a class="el" href="bus__internal__types_8h_source.html#l00131">LISTENER_MSG_TAG</a>, <a class="el" href="bus__types_8h_source.html#l00098">LOG_SENDING_REQUEST</a>, <a class="el" href="echosrv_8c_source.html#l00044">read_buf</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, and <a class="el" href="util_8c_source.html#l00026">util_is_resumable_io_error()</a>.</p>
 
 </div>
 </div>
@@ -315,9 +219,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00409">409</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00380">380</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00078">bus::listener_count</a>.</p>
+<p>References <a class="el" href="bus__internal__types_8h_source.html#l00083">bus::listener_count</a>.</p>
 
 </div>
 </div>
@@ -365,7 +269,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00690">690</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00677">677</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
 </div>
 </div>
@@ -401,7 +305,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00698">698</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00685">685</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
 </div>
 </div>
@@ -427,9 +331,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00230">230</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00193">193</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>
@@ -455,9 +359,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00052">52</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00050">50</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00165">bus_config::listener_count</a>, and <a class="el" href="bus__types_8h_source.html#l00164">bus_config::sender_count</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00164">bus_config::listener_count</a>.</p>
 
 </div>
 </div>
@@ -485,9 +389,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00059">59</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00054">54</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus_8c_source.html#l00230">attempt_to_increase_resource_limits()</a>, <a class="el" href="bus__types_8h_source.html#l00208">bus_result::bus</a>, <a class="el" href="bus__types_8h_source.html#l00185">BUS_INIT_ERROR_ALLOC_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00187">BUS_INIT_ERROR_LISTENER_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00183">BUS_INIT_ERROR_MISSING_SINK_CB</a>, <a class="el" href="bus__types_8h_source.html#l00184">BUS_INIT_ERROR_MISSING_UNPACK_CB</a>, <a class="el" href="bus__types_8h_source.html#l00190">BUS_INIT_ERROR_MUTEX_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00182">BUS_INIT_ERROR_NULL</a>, <a class="el" href="bus__types_8h_source.html#l00189">BUS_INIT_ERROR_PTHREAD_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00186">BUS_INIT_ERROR_SENDER_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00188">BUS_INIT_ERROR_THREADPOOL_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__ssl_8c_source.html#l00035">bus_ssl_init()</a>, <a class="el" href="bus__types_8h_source.html#l00177">bus_config::bus_udata</a>, <a class="el" href="sender_8c_source.html#l00405">cleanup()</a>, <a class="el" href="bus_8c_source.html#l00057">DEF_FD_SET_SIZE2</a>, <a class="el" href="bus__internal__types_8h_source.html#l00068">bus::error_cb</a>, <a class="el" href="bus__types_8h_source.html#l00172">bus_config::error_cb</a>, <a class="el" href="bus__internal__types_8h_source.html#l00088">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00089">bus::fd_set_lock</a>, <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::joined</a>, <a class="el" href="bus__internal__types_8h_source.html#l00078">bus::listener_count</a>, <a class="el" href="bus__types_8h_source.html#l00165">bus_config::listener_count</a>, <a class="el" href="listener_8c_source.html#l00220">listener_free()</a>, <a class="el" href="listener_8c_source.html#l00043">listener_init()</a>, <a class="el" href="listener_8c_source.html#l00280">listener_mainloop()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00079">bus::listeners</a>, <a class="el" href="bus__internal__types_8h_source.html#l00072">bus::log_cb</a>, <a class="el" href="bus__types_8h_source.html#l00175">bus_config::log_cb</a>, <a class="el" href="bus__types_8h_source.html#l00095">LOG_INITIALIZATION</a>, <a class="el" href="bus__internal__types_8h_source.html#l00071">bus::log_level</a>, <a class="el" href="bus__types_8h_source.html#l00174">bus_config::log_level</a>, <a class="el" href="bus__internal__types_8h_source.html#l00073">bus::log_lock</a>, <a class="el" href="bus_8c_source.html#l00698">noop_error_cb()</a>, <a class="el" href="bus_8c_source.html#l00690">noop_log_cb()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00075">bus::sender_count</a>, <a class="el" href="bus__types_8h_source.html#l00164">bus_config::sender_count</a>, <a class="el" href="sender_8c_source.html#l00174">sender_free()</a>, <a class="el" href="sender_8c_source.html#l00041">sender_init()</a>, <a class="el" href="sender_8c_source.html#l00332">sender_mainloop()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00076">bus::senders</a>, <a class="el" href="bus_8c_source.html#l00052">set_defaults()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00065">bus::sink_cb</a>, <a class="el" href="bus__types_8h_source.html#l00169">bus_config::sink_cb</a>, <a class="el" href="bus__types_8h_source.html#l00207">bus_result::status</a>, <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::threadpool</a>, <a class="el" href="bus__types_8h_source.html#l00166">bus_config::threadpool_cfg</a>, <a class="el" href="threadpool_8c_source.html#l00196">threadpool_free()</a>, <a class="el" href="threadpool_8c_source.html#l00046">threadpool_init()</a>, <a class="el" href="threadpool__internals_8h_source.html#l00082">threadpool::threads</a>, <a class="el" href="bus__internal__types_8h_source.html#l00082">bus::threads</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, <a class="el" href="bus__internal__types_8h_source.html#l00067">bus::unexpected_msg_cb</a>, <a class="el" href="bus__types_8h_source.html#l00171">bus_config::unexpected_msg_cb</a>, <a class="el" href="bus__internal__types_8h_source.html#l00066">bus::unpack_cb</a>, <a class="el" href="bus__types_8h_source.html#l00170">bus_config::unpack_cb</a>, <a class="el" href="yacht_8c_source.html#l00231">yacht_free()</a>, and <a class="el" href="yacht_8c_source.html#l00051">yacht_init()</a>.</p>
+<p>References <a class="el" href="bus_8c_source.html#l00193">attempt_to_increase_resource_limits()</a>, <a class="el" href="bus__types_8h_source.html#l00208">bus_result::bus</a>, <a class="el" href="bus__types_8h_source.html#l00184">BUS_INIT_ERROR_ALLOC_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00186">BUS_INIT_ERROR_LISTENER_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00182">BUS_INIT_ERROR_MISSING_SINK_CB</a>, <a class="el" href="bus__types_8h_source.html#l00183">BUS_INIT_ERROR_MISSING_UNPACK_CB</a>, <a class="el" href="bus__types_8h_source.html#l00189">BUS_INIT_ERROR_MUTEX_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00181">BUS_INIT_ERROR_NULL</a>, <a class="el" href="bus__types_8h_source.html#l00188">BUS_INIT_ERROR_PTHREAD_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00187">BUS_INIT_ERROR_THREADPOOL_INIT_FAIL</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__ssl_8c_source.html#l00035">bus_ssl_init()</a>, <a class="el" href="bus__types_8h_source.html#l00176">bus_config::bus_udata</a>, <a class="el" href="bus__internal__types_8h_source.html#l00134">DEF_FD_SET_SIZE2</a>, <a class="el" href="bus__internal__types_8h_source.html#l00076">bus::error_cb</a>, <a class="el" href="bus__types_8h_source.html#l00171">bus_config::error_cb</a>, <a class="el" href="bus__internal__types_8h_source.html#l00094">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00095">bus::fd_set_lock</a>, <a class="el" href="bus__internal__types_8h_source.html#l00086">bus::joined</a>, <a class="el" href="bus__internal__types_8h_source.html#l00083">bus::listener_count</a>, <a class="el" href="bus__types_8h_source.html#l00164">bus_config::listener_count</a>, <a class="el" href="listener_8c_source.html#l00182">listener_free()</a>, <a class="el" href="listener_8c_source.html#l00039">listener_init()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::listeners</a>, <a class="el" href="listener__task_8c_source.html#l00031">ListenerTask_MainLoop()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00080">bus::log_cb</a>, <a class="el" href="bus__types_8h_source.html#l00174">bus_config::log_cb</a>, <a class="el" href="bus__types_8h_source.html#l00095">LOG_INITIALIZATION</a>, <a class="el" href="bus__internal__types_8h_source.html#l00079">bus::log_level</a>, <a class="el" href="bus__types_8h_source.html#l00173">bus_config::log_level</a>, <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::log_lock</a>, <a class="el" href="bus_8c_source.html#l00685">noop_error_cb()</a>, <a class="el" href="bus_8c_source.html#l00677">noop_log_cb()</a>, <a class="el" href="bus_8c_source.html#l00050">set_defaults()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00073">bus::sink_cb</a>, <a class="el" href="bus__types_8h_source.html#l00168">bus_config::sink_cb</a>, <a class="el" href="bus__types_8h_source.html#l00207">bus_result::status</a>, <a class="el" href="bus__internal__types_8h_source.html#l00090">bus::threadpool</a>, <a class="el" href="bus__types_8h_source.html#l00165">bus_config::threadpool_cfg</a>, <a class="el" href="threadpool_8c_source.html#l00196">threadpool_free()</a>, <a class="el" href="threadpool_8c_source.html#l00046">threadpool_init()</a>, <a class="el" href="threadpool__internals_8h_source.html#l00082">threadpool::threads</a>, <a class="el" href="bus__internal__types_8h_source.html#l00087">bus::threads</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, <a class="el" href="bus__internal__types_8h_source.html#l00075">bus::unexpected_msg_cb</a>, <a class="el" href="bus__types_8h_source.html#l00170">bus_config::unexpected_msg_cb</a>, <a class="el" href="bus__internal__types_8h_source.html#l00074">bus::unpack_cb</a>, <a class="el" href="bus__types_8h_source.html#l00169">bus_config::unpack_cb</a>, <a class="el" href="yacht_8c_source.html#l00208">yacht_free()</a>, and <a class="el" href="yacht_8c_source.html#l00049">yacht_init()</a>.</p>
 
 </div>
 </div>
@@ -523,9 +427,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00268">268</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00231">231</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00036">BUS_DEFAULT_TIMEOUT_SEC</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__internal__types_8h_source.html#l00046">boxed_msg::cb</a>, <a class="el" href="bus__types_8h_source.html#l00241">bus_user_msg::cb</a>, <a class="el" href="bus__internal__types_8h_source.html#l00054">boxed_msg::fd</a>, <a class="el" href="bus__types_8h_source.html#l00234">bus_user_msg::fd</a>, <a class="el" href="bus__internal__types_8h_source.html#l00088">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00089">bus::fd_set_lock</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="bus__types_8h_source.html#l00237">bus_user_msg::msg</a>, <a class="el" href="bus__types_8h_source.html#l00238">bus_user_msg::msg_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00057">boxed_msg::out_msg</a>, <a class="el" href="bus__internal__types_8h_source.html#l00058">boxed_msg::out_msg_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00056">boxed_msg::out_seq_id</a>, <a class="el" href="bus__types_8h_source.html#l00236">bus_user_msg::seq_id</a>, <a class="el" href="bus__internal__types_8h_source.html#l00055">boxed_msg::ssl</a>, <a class="el" href="bus__internal__types_8h_source.html#l00043">boxed_msg::timeout_sec</a>, <a class="el" href="bus__types_8h_source.html#l00239">bus_user_msg::timeout_sec</a>, <a class="el" href="bus__internal__types_8h_source.html#l00047">boxed_msg::udata</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, <a class="el" href="bus__types_8h_source.html#l00242">bus_user_msg::udata</a>, and <a class="el" href="yacht_8c_source.html#l00081">yacht_get()</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00036">BUS_DEFAULT_TIMEOUT_SEC</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00039">BUS_NO_SEQ_ID</a>, <a class="el" href="bus__internal__types_8h_source.html#l00046">boxed_msg::cb</a>, <a class="el" href="bus__types_8h_source.html#l00241">bus_user_msg::cb</a>, <a class="el" href="bus__internal__types_8h_source.html#l00054">boxed_msg::fd</a>, <a class="el" href="bus__types_8h_source.html#l00234">bus_user_msg::fd</a>, <a class="el" href="bus__internal__types_8h_source.html#l00094">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00095">bus::fd_set_lock</a>, <a class="el" href="bus__internal__types_8h_source.html#l00122">connection_info::largest_wr_seq_id_seen</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="bus__types_8h_source.html#l00237">bus_user_msg::msg</a>, <a class="el" href="bus__types_8h_source.html#l00238">bus_user_msg::msg_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00057">boxed_msg::out_msg</a>, <a class="el" href="bus__internal__types_8h_source.html#l00058">boxed_msg::out_msg_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00056">boxed_msg::out_seq_id</a>, <a class="el" href="bus__types_8h_source.html#l00236">bus_user_msg::seq_id</a>, <a class="el" href="bus__internal__types_8h_source.html#l00055">boxed_msg::ssl</a>, <a class="el" href="bus__internal__types_8h_source.html#l00119">connection_info::ssl</a>, <a class="el" href="bus__internal__types_8h_source.html#l00043">boxed_msg::timeout_sec</a>, <a class="el" href="bus__types_8h_source.html#l00239">bus_user_msg::timeout_sec</a>, <a class="el" href="bus__internal__types_8h_source.html#l00047">boxed_msg::udata</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, <a class="el" href="bus__types_8h_source.html#l00242">bus_user_msg::udata</a>, and <a class="el" href="yacht_8c_source.html#l00079">yacht_get()</a>.</p>
 
 </div>
 </div>
@@ -553,39 +457,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00312">312</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00287">287</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus_8c_source.html#l00268">box_msg()</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00234">bus_user_msg::fd</a>, <a class="el" href="bus__types_8h_source.html#l00098">LOG_SENDING_REQUEST</a>, <a class="el" href="bus_8c_source.html#l00403">sender_id_of_socket()</a>, <a class="el" href="sender_8c_source.html#l00133">sender_send_request()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00076">bus::senders</a>, <a class="el" href="bus__types_8h_source.html#l00236">bus_user_msg::seq_id</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a8200fe8d77bbf9ebd2ee156835c3bb98"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">struct <a class="el" href="structsender.html">sender</a>* bus_get_sender_for_socket </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>fd</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00414">414</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
-
-<p>References <a class="el" href="bus_8c_source.html#l00403">sender_id_of_socket()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00076">bus::senders</a>.</p>
+<p>References <a class="el" href="bus_8c_source.html#l00231">box_msg()</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00234">bus_user_msg::fd</a>, <a class="el" href="bus__types_8h_source.html#l00098">LOG_SENDING_REQUEST</a>, <a class="el" href="send_8c_source.html#l00045">send_do_blocking_send()</a>, <a class="el" href="bus__types_8h_source.html#l00236">bus_user_msg::seq_id</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>
@@ -613,9 +487,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00418">418</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00385">385</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus_8c_source.html#l00409">listener_id_of_socket()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00079">bus::listeners</a>.</p>
+<p>References <a class="el" href="bus_8c_source.html#l00380">listener_id_of_socket()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::listeners</a>.</p>
 
 </div>
 </div>
@@ -633,7 +507,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00423">423</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00390">390</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
 <p>References <a class="el" href="bus__types_8h_source.html#l00095">LOG_INITIALIZATION</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="bus__types_8h_source.html#l00096">LOG_NEW_CLIENT</a>, <a class="el" href="bus__types_8h_source.html#l00100">LOG_SENDER</a>, <a class="el" href="bus__types_8h_source.html#l00098">LOG_SENDING_REQUEST</a>, <a class="el" href="bus__types_8h_source.html#l00099">LOG_SHUTDOWN</a>, and <a class="el" href="bus__types_8h_source.html#l00097">LOG_SOCKET_REGISTERED</a>.</p>
 
@@ -675,13 +549,13 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00438">438</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00405">405</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__internal__types_8h_source.html#l00061">BUS_NO_SSL</a>, <a class="el" href="bus__types_8h_source.html#l00230">BUS_SOCKET_SSL</a>, <a class="el" href="bus__ssl_8c_source.html#l00050">bus_ssl_connect()</a>, <a class="el" href="sender_8c_source.html#l00405">cleanup()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00107">connection_info::fd</a>, <a class="el" href="bus__internal__types_8h_source.html#l00088">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00089">bus::fd_set_lock</a>, <a class="el" href="bus__internal__types_8h_source.html#l00110">connection_info::largest_seq_id_seen</a>, <a class="el" href="listener_8c_source.html#l00088">listener_add_socket()</a>, <a class="el" href="bus_8c_source.html#l00409">listener_id_of_socket()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00079">bus::listeners</a>, <a class="el" href="bus__types_8h_source.html#l00097">LOG_SOCKET_REGISTERED</a>, <a class="el" href="bus_8c_source.html#l00334">poll_on_completion()</a>, <a class="el" href="bus_8c_source.html#l00403">sender_id_of_socket()</a>, <a class="el" href="sender_8c_source.html#l00105">sender_register_socket()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00076">bus::senders</a>, <a class="el" href="bus__internal__types_8h_source.html#l00112">connection_info::ssl</a>, <a class="el" href="bus__internal__types_8h_source.html#l00109">connection_info::to_read_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00114">connection_info::type</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, <a class="el" href="bus__internal__types_8h_source.html#l00115">connection_info::udata</a>, and <a class="el" href="yacht_8c_source.html#l00105">yacht_set()</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00039">BUS_NO_SEQ_ID</a>, <a class="el" href="bus__internal__types_8h_source.html#l00063">BUS_NO_SSL</a>, <a class="el" href="bus__types_8h_source.html#l00230">BUS_SOCKET_SSL</a>, <a class="el" href="bus__ssl_8c_source.html#l00050">bus_ssl_connect()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00114">connection_info::fd</a>, <a class="el" href="bus__internal__types_8h_source.html#l00094">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00095">bus::fd_set_lock</a>, <a class="el" href="bus__internal__types_8h_source.html#l00127">connection_info::largest_rd_seq_id_seen</a>, <a class="el" href="bus__internal__types_8h_source.html#l00122">connection_info::largest_wr_seq_id_seen</a>, <a class="el" href="listener_8c_source.html#l00099">listener_add_socket()</a>, <a class="el" href="bus_8c_source.html#l00380">listener_id_of_socket()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::listeners</a>, <a class="el" href="bus__types_8h_source.html#l00097">LOG_SOCKET_REGISTERED</a>, <a class="el" href="bus_8c_source.html#l00315">poll_on_completion()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00119">connection_info::ssl</a>, <a class="el" href="bus__internal__types_8h_source.html#l00115">connection_info::type</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, <a class="el" href="bus__internal__types_8h_source.html#l00116">connection_info::udata</a>, and <a class="el" href="yacht_8c_source.html#l00103">yacht_set()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2119dbab02464f8c6ea0dd724d497666"></a>
+<a class="anchor" id="a8a4bd5912f0de341b8fc65040b70fc00"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -695,7 +569,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>fd</em>&#160;</td>
+          <td class="paramname"><em>fd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void **&#160;</td>
+          <td class="paramname"><em>socket_udata_out</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -705,9 +585,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00515">515</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00474">474</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__internal__types_8h_source.html#l00061">BUS_NO_SSL</a>, <a class="el" href="bus__ssl_8c_source.html#l00074">bus_ssl_disconnect()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00088">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00089">bus::fd_set_lock</a>, <a class="el" href="bus_8c_source.html#l00409">listener_id_of_socket()</a>, <a class="el" href="listener_8c_source.html#l00100">listener_remove_socket()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00079">bus::listeners</a>, <a class="el" href="bus__types_8h_source.html#l00097">LOG_SOCKET_REGISTERED</a>, <a class="el" href="bus_8c_source.html#l00403">sender_id_of_socket()</a>, <a class="el" href="sender_8c_source.html#l00122">sender_remove_socket()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00076">bus::senders</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, and <a class="el" href="yacht_8c_source.html#l00203">yacht_remove()</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__internal__types_8h_source.html#l00063">BUS_NO_SSL</a>, <a class="el" href="bus__ssl_8c_source.html#l00072">bus_ssl_disconnect()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00094">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00095">bus::fd_set_lock</a>, <a class="el" href="bus_8c_source.html#l00380">listener_id_of_socket()</a>, <a class="el" href="listener_8c_source.html#l00110">listener_remove_socket()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::listeners</a>, <a class="el" href="bus__types_8h_source.html#l00097">LOG_SOCKET_REGISTERED</a>, <a class="el" href="bus_8c_source.html#l00315">poll_on_completion()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00119">connection_info::ssl</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, <a class="el" href="bus__internal__types_8h_source.html#l00116">connection_info::udata</a>, and <a class="el" href="yacht_8c_source.html#l00180">yacht_remove()</a>.</p>
 
 </div>
 </div>
@@ -741,9 +621,47 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00550">550</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00516">516</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::threadpool</a>, and <a class="el" href="threadpool_8c_source.html#l00094">threadpool_schedule()</a>.</p>
+<p>References <a class="el" href="bus__internal__types_8h_source.html#l00090">bus::threadpool</a>, and <a class="el" href="threadpool_8c_source.html#l00094">threadpool_schedule()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afe8e6487b9bc3c72b5159f9b3932ec5c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void free_connection_cb </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>udata</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00521">521</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+
+<p>References <a class="el" href="bus__internal__types_8h_source.html#l00114">connection_info::fd</a>, <a class="el" href="bus_8c_source.html#l00380">listener_id_of_socket()</a>, <a class="el" href="listener_8c_source.html#l00110">listener_remove_socket()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::listeners</a>, and <a class="el" href="bus_8c_source.html#l00315">poll_on_completion()</a>.</p>
 
 </div>
 </div>
@@ -761,9 +679,45 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00555">555</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00541">541</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::joined</a>, <a class="el" href="bus__internal__types_8h_source.html#l00078">bus::listener_count</a>, <a class="el" href="listener_8c_source.html#l00212">listener_shutdown()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00079">bus::listeners</a>, <a class="el" href="bus__types_8h_source.html#l00099">LOG_SHUTDOWN</a>, <a class="el" href="bus__internal__types_8h_source.html#l00075">bus::sender_count</a>, <a class="el" href="sender_8c_source.html#l00158">sender_shutdown()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00076">bus::senders</a>, <a class="el" href="bus__internal__types_8h_source.html#l00082">bus::threads</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>.</p>
+<p>References <a class="el" href="atomic_8h_source.html#l00023">ATOMIC_BOOL_COMPARE_AND_SWAP</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__internal__types_8h_source.html#l00094">bus::fd_set</a>, <a class="el" href="bus_8c_source.html#l00521">free_connection_cb()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00086">bus::joined</a>, <a class="el" href="bus__internal__types_8h_source.html#l00083">bus::listener_count</a>, <a class="el" href="listener_8c_source.html#l00173">listener_shutdown()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::listeners</a>, <a class="el" href="bus__types_8h_source.html#l00099">LOG_SHUTDOWN</a>, <a class="el" href="bus_8c_source.html#l00315">poll_on_completion()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00088">bus::shutdown_state</a>, <a class="el" href="bus__internal__types_8h_source.html#l00068">SHUTDOWN_STATE_HALTED</a>, <a class="el" href="bus__internal__types_8h_source.html#l00066">SHUTDOWN_STATE_RUNNING</a>, <a class="el" href="bus__internal__types_8h_source.html#l00067">SHUTDOWN_STATE_SHUTTING_DOWN</a>, <a class="el" href="bus__internal__types_8h_source.html#l00087">bus::threads</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, and <a class="el" href="yacht_8c_source.html#l00208">yacht_free()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a189082d10346e2334dfad2365445d16b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void bus_backpressure_delay </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>backpressure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>shift</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00583">583</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+
+<p>References <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00100">LOG_SENDER</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>
@@ -781,9 +735,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00600">600</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00594">594</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00073">bus::log_lock</a>.</p>
+<p>References <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::log_lock</a>.</p>
 
 </div>
 </div>
@@ -801,9 +755,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00604">604</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00598">598</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00073">bus::log_lock</a>.</p>
+<p>References <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::log_lock</a>.</p>
 
 </div>
 </div>
@@ -829,7 +783,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00608">608</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00602">602</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
 <p>References <a class="el" href="bus__internal__types_8h_source.html#l00046">boxed_msg::cb</a>, <a class="el" href="bus__internal__types_8h_source.html#l00040">boxed_msg::result</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00047">boxed_msg::udata</a>.</p>
 
@@ -857,7 +811,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00619">619</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00613">613</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
 </div>
 </div>
@@ -891,9 +845,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00626">626</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00620">620</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus_8c_source.html#l00619">box_cleanup_cb()</a>, <a class="el" href="bus_8c_source.html#l00608">box_execute_cb()</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus_8c_source.html#l00550">bus_schedule_threadpool_task()</a>, <a class="el" href="bus__types_8h_source.html#l00194">BUS_SEND_UNDEFINED</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="bus__internal__types_8h_source.html#l00040">boxed_msg::result</a>, <a class="el" href="bus__types_8h_source.html#l00213">bus_msg_result_t::status</a>, <a class="el" href="threadpool_8h_source.html#l00049">threadpool_task::task</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>.</p>
+<p>References <a class="el" href="bus_8c_source.html#l00613">box_cleanup_cb()</a>, <a class="el" href="bus_8c_source.html#l00602">box_execute_cb()</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus_8c_source.html#l00516">bus_schedule_threadpool_task()</a>, <a class="el" href="bus__types_8h_source.html#l00193">BUS_SEND_UNDEFINED</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="bus__internal__types_8h_source.html#l00040">boxed_msg::result</a>, <a class="el" href="bus__types_8h_source.html#l00213">bus_msg_result_t::status</a>, <a class="el" href="threadpool_8h_source.html#l00049">threadpool_task::task</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>
@@ -911,9 +865,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus_8c_source.html#l00645">645</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
+<p>Definition at line <a class="el" href="bus_8c_source.html#l00639">639</a> of file <a class="el" href="bus_8c_source.html">bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus_8c_source.html#l00555">bus_shutdown()</a>, <a class="el" href="bus__ssl_8c_source.html#l00081">bus_ssl_ctx_free()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00088">bus::fd_set</a>, <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::joined</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00064">limit</a>, <a class="el" href="bus__internal__types_8h_source.html#l00078">bus::listener_count</a>, <a class="el" href="listener_8c_source.html#l00220">listener_free()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00079">bus::listeners</a>, <a class="el" href="bus__internal__types_8h_source.html#l00073">bus::log_lock</a>, <a class="el" href="bus__types_8h_source.html#l00099">LOG_SHUTDOWN</a>, <a class="el" href="bus__internal__types_8h_source.html#l00075">bus::sender_count</a>, <a class="el" href="sender_8c_source.html#l00174">sender_free()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00076">bus::senders</a>, <a class="el" href="bus_8c_source.html#l00643">THREAD_SHUTDOWN_SECONDS</a>, <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::threadpool</a>, <a class="el" href="threadpool_8c_source.html#l00196">threadpool_free()</a>, <a class="el" href="threadpool_8c_source.html#l00159">threadpool_shutdown()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00082">bus::threads</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, and <a class="el" href="yacht_8c_source.html#l00231">yacht_free()</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus_8c_source.html#l00541">bus_shutdown()</a>, <a class="el" href="bus__ssl_8c_source.html#l00079">bus_ssl_ctx_free()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00095">bus::fd_set_lock</a>, <a class="el" href="bus__internal__types_8h_source.html#l00086">bus::joined</a>, <a class="el" href="test__threadpool__sequencing_8c_source.html#l00064">limit</a>, <a class="el" href="bus__internal__types_8h_source.html#l00083">bus::listener_count</a>, <a class="el" href="listener_8c_source.html#l00182">listener_free()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00084">bus::listeners</a>, <a class="el" href="bus__internal__types_8h_source.html#l00081">bus::log_lock</a>, <a class="el" href="bus__types_8h_source.html#l00099">LOG_SHUTDOWN</a>, <a class="el" href="bus__internal__types_8h_source.html#l00088">bus::shutdown_state</a>, <a class="el" href="bus__internal__types_8h_source.html#l00068">SHUTDOWN_STATE_HALTED</a>, <a class="el" href="bus_8c_source.html#l00637">THREAD_SHUTDOWN_SECONDS</a>, <a class="el" href="bus__internal__types_8h_source.html#l00090">bus::threadpool</a>, <a class="el" href="threadpool_8c_source.html#l00196">threadpool_free()</a>, <a class="el" href="threadpool_8c_source.html#l00159">threadpool_shutdown()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00087">bus::threads</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "bus_internal_types.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "bus_internal_types.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -43,10 +43,19 @@ bus_internal_types.h \-
 .ti -1c
 .RI "#define \fBTIMEOUT_NOT_YET_SET\fP   ((time_t)(-1))"
 .br
+.ti -1c
+.RI "#define \fBLISTENER_MSG_TAG\fP   0x15"
+.br
+.ti -1c
+.RI "#define \fBDEF_FD_SET_SIZE2\fP   4"
+.br
 .in -1c
 .SS "Enumerations"
 
 .in +1c
+.ti -1c
+.RI "enum \fBshutdown_state_t\fP "
+.br
 .ti -1c
 .RI "enum \fBrx_error_t\fP "
 .br
@@ -56,13 +65,34 @@ bus_internal_types.h \-
 .SS "#define BUS_NO_SSL   ((SSL *)-2)"
 
 .PP
-Definition at line 61 of file bus_internal_types\&.h\&.
+Definition at line 63 of file bus_internal_types\&.h\&.
 .SS "#define TIMEOUT_NOT_YET_SET   ((time_t)(-1))"
 
 .PP
-Definition at line 93 of file bus_internal_types\&.h\&.
+Definition at line 99 of file bus_internal_types\&.h\&.
+.SS "#define LISTENER_MSG_TAG   0x15"
+
+.PP
+Definition at line 131 of file bus_internal_types\&.h\&.
+.SS "#define DEF_FD_SET_SIZE2   4"
+
+.PP
+Definition at line 134 of file bus_internal_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
+.SS "enum \fBshutdown_state_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fISHUTDOWN_STATE_RUNNING \fP\fP
+.TP
+\fB\fISHUTDOWN_STATE_SHUTTING_DOWN \fP\fP
+.TP
+\fB\fISHUTDOWN_STATE_HALTED \fP\fP
+.PP
+Definition at line 65 of file bus_internal_types\&.h\&.
 .SS "enum \fBrx_error_t\fP"
 
 .PP
@@ -83,7 +113,7 @@ Definition at line 93 of file bus_internal_types\&.h\&.
 .TP
 \fB\fIRX_ERROR_TIMEOUT \fP\fP
 .PP
-Definition at line 95 of file bus_internal_types\&.h\&.
+Definition at line 101 of file bus_internal_types\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

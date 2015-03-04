@@ -1,0 +1,86 @@
+.TH "kinetic_request.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_request.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_request\&.h'\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include 'kinetic_session\&.h'\fP
+.br
+\fC#include 'kinetic_auth\&.h'\fP
+.br
+\fC#include 'kinetic_nbo\&.h'\fP
+.br
+\fC#include 'kinetic_controller\&.h'\fP
+.br
+\fC#include 'byte_array\&.h'\fP
+.br
+\fC#include 'bus\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBKineticRequest_PackCommand\fP (KineticRequest *request)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticRequest_PopulateAuthentication\fP (\fBKineticSessionConfig\fP *config, KineticRequest *request, \fBByteArray\fP *pin)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticRequest_PackMessage\fP (KineticOperation *operation, uint8_t **out_msg, size_t *msgSize)"
+.br
+.ti -1c
+.RI "bool \fBKineticRequest_SendRequest\fP (KineticOperation *operation, uint8_t *msg, size_t msgSize)"
+.br
+.ti -1c
+.RI "bool \fBKineticRequest_LockOperation\fP (KineticOperation *operation)"
+.br
+.ti -1c
+.RI "bool \fBKineticRequest_UnlockOperation\fP (KineticOperation *operation)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "size_t KineticRequest_PackCommand (KineticRequest *request)"
+
+.PP
+Definition at line 36 of file kinetic_request\&.c\&.
+.PP
+References KINETIC_ASSERT, KINETIC_REQUEST_PACK_FAILURE, KineticLogger_LogByteArray(), KineticProto_command__get_packed_size(), KineticProto_command__pack(), and LOGF0\&.
+.SS "\fBKineticStatus\fP KineticRequest_PopulateAuthentication (\fBKineticSessionConfig\fP *config, KineticRequest *request, \fBByteArray\fP *pin)"
+
+.PP
+Definition at line 62 of file kinetic_request\&.c\&.
+.PP
+References KineticAuth_PopulateHmac(), and KineticAuth_PopulatePin()\&.
+.SS "\fBKineticStatus\fP KineticRequest_PackMessage (KineticOperation *operation, uint8_t **out_msg, size_t *msgSize)"
+
+.PP
+Definition at line 72 of file kinetic_request\&.c\&.
+.PP
+References KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SUCCESS, KineticLogger_LogHeader(), KineticLogger_LogProtobuf(), KineticNBO_FromHostU32(), KineticPDUHeader, KineticProto_Message__get_packed_size(), KineticProto_Message__pack(), LOG0, LOGF2, and PDU_HEADER_LEN\&.
+.SS "bool KineticRequest_SendRequest (KineticOperation *operation, uint8_t *msg, size_tmsgSize)"
+
+.PP
+Definition at line 132 of file kinetic_request\&.c\&.
+.PP
+References bus_send_request(), BUS_SOCKET_PLAIN, bus_user_msg::fd, KINETIC_ASSERT, and KineticController_HandleResult()\&.
+.SS "bool KineticRequest_LockOperation (KineticOperation *operation)"
+
+.PP
+Definition at line 150 of file kinetic_request\&.c\&.
+.SS "bool KineticRequest_UnlockOperation (KineticOperation *operation)"
+
+.PP
+Definition at line 155 of file kinetic_request\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "acl.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "acl.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -78,13 +78,13 @@ Definition at line 46 of file acl\&.c\&.
 .PP
 Definition at line 194 of file acl\&.c\&.
 .PP
-References ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_INVALID_FIELD, ACL_ERROR_MEMORY, ACL_ERROR_MISSING_FIELD, ACL_OK, cleanup(), KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticProto_command_security_acl__init(), LOGF2, and unpack_scopes()\&.
+References ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_INVALID_FIELD, ACL_ERROR_MEMORY, ACL_ERROR_MISSING_FIELD, ACL_OK, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticProto_command_security_acl__init(), LOGF2, and unpack_scopes()\&.
 .SS "static \fBacl_of_file_res\fP unpack_scopes (KineticProto_Command_Security_ACL *acl, intscope_count, json_object *scopes)\fC [static]\fP"
 
 .PP
 Definition at line 281 of file acl\&.c\&.
 .PP
-References ACL_ERROR_INVALID_FIELD, ACL_ERROR_MEMORY, ACL_MAX_PERMISSIONS, ACL_OK, cleanup(), KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION, KineticProto_command_security_acl_scope__init(), and permission_of_str()\&.
+References ACL_ERROR_INVALID_FIELD, ACL_ERROR_MEMORY, ACL_MAX_PERMISSIONS, ACL_OK, KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION, KineticProto_command_security_acl_scope__init(), and permission_of_str()\&.
 .SS "static const char* str_of_permission (\fBKineticProto_Command_Security_ACL_Permission\fPperm)\fC [static]\fP"
 
 .PP
@@ -102,13 +102,13 @@ References KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION, PER
 .PP
 Definition at line 71 of file acl\&.c\&.
 .PP
-References ACL_ERROR_BAD_JSON, ACL_ERROR_JSON_FILE, ACL_ERROR_MEMORY, ACL_ERROR_NULL, acl_of_string(), cleanup(), LOGF0, and LOGF2\&.
+References ACL_ERROR_BAD_JSON, ACL_ERROR_JSON_FILE, ACL_ERROR_MEMORY, ACL_ERROR_NULL, acl_of_string(), LOGF0, and LOGF2\&.
 .SS "\fBacl_of_file_res\fP acl_of_string (const char *buf, size_tbuf_size, struct \fBACL\fP **instance)"
 
 .PP
 Definition at line 127 of file acl\&.c\&.
 .PP
-References ACL::ACL_ceil, ACL::ACL_count, ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_MEMORY, ACL_OK, ACL::ACLs, cleanup(), LOG2, LOGF2, and read_next_ACL()\&.
+References ACL::ACL_ceil, ACL::ACL_count, ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_MEMORY, ACL_OK, ACL::ACLs, LOG2, LOGF2, and read_next_ACL()\&.
 .SS "void acl_fprintf (FILE *f, struct \fBACL\fP *ACLs)"
 
 .PP

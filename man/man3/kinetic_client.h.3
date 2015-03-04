@@ -1,4 +1,4 @@
-.TH "kinetic_client.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_client.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -86,7 +86,7 @@ Returns a pointer to a \fCKineticClient\fP\&. You need to pass this pointer to \
 .PP
 Definition at line 34 of file kinetic_client\&.c\&.
 .PP
-References KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS, KINETIC_CLIENT_DEFAULT_READER_THREADS, KINETIC_CLIENT_DEFAULT_WRITER_THREADS, KineticBus_Init(), KineticCalloc(), KineticFree(), KineticLogger_Init(), KineticClientConfig::logFile, KineticClientConfig::logLevel, KineticClientConfig::maxThreadpoolThreads, KineticClientConfig::readerThreads, and KineticClientConfig::writerThreads\&.
+References KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS, KINETIC_CLIENT_DEFAULT_READER_THREADS, KineticBus_Init(), KineticCalloc(), KineticFree(), KineticLogger_Init(), KineticClientConfig::logFile, KineticClientConfig::logLevel, KineticClientConfig::maxThreadpoolThreads, and KineticClientConfig::readerThreads\&.
 .SS "void KineticClient_Shutdown (KineticClient *constclient)"
 
 .PP
@@ -99,7 +99,7 @@ Performs shutdown/cleanup of the kinetic-c client library\&.
 .PP
 
 .PP
-Definition at line 59 of file kinetic_client\&.c\&.
+Definition at line 56 of file kinetic_client\&.c\&.
 .PP
 References KineticBus_Shutdown(), KineticFree(), and KineticLogger_Close()\&.
 .SS "\fBKineticStatus\fP KineticClient_CreateSession (\fBKineticSessionConfig\fP *constconfig, KineticClient *constclient, KineticSession **session)"
@@ -123,7 +123,7 @@ Returns the resulting \fCKineticStatus\fP, and \fCsession\fP will be populated w
 .PP
 
 .PP
-Definition at line 66 of file kinetic_client\&.c\&.
+Definition at line 63 of file kinetic_client\&.c\&.
 .PP
 References ByteArray::data, KineticSessionConfig::hmacKey, KineticSessionConfig::host, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_HMAC_REQUIRED, KINETIC_STATUS_HOST_EMPTY, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SESSION_EMPTY, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeSession(), KineticAllocator_NewSession(), KineticSession_Connect(), KineticSession_Create(), KineticSession_Destroy(), ByteArray::len, LOG0, LOGF0, and KineticSessionConfig::port\&.
 .SS "\fBKineticStatus\fP KineticClient_DestroySession (KineticSession *constsession)"
@@ -143,7 +143,7 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 118 of file kinetic_client\&.c\&.
+Definition at line 115 of file kinetic_client\&.c\&.
 .PP
 References KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_SESSION_INVALID, KINETIC_STATUS_SUCCESS, KineticSession_Destroy(), KineticSession_Disconnect(), and LOG0\&.
 .SS "\fBKineticStatus\fP KineticClient_NoOp (KineticSession const *constsession)"
@@ -163,7 +163,7 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 137 of file kinetic_client\&.c\&.
+Definition at line 134 of file kinetic_client\&.c\&.
 .PP
 References KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildNoop()\&.
 .SS "\fBKineticStatus\fP KineticClient_Put (KineticSession const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
@@ -187,7 +187,7 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 149 of file kinetic_client\&.c\&.
+Definition at line 146 of file kinetic_client\&.c\&.
 .PP
 References ByteBuffer::array, ByteArray::data, KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeOperation(), KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), KineticOperation_BuildPut(), ByteArray::len, and KineticEntry::value\&.
 .SS "\fBKineticStatus\fP KineticClient_Flush (KineticSession const *constsession, \fBKineticCompletionClosure\fP *closure)"
@@ -209,7 +209,7 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 181 of file kinetic_client\&.c\&.
+Definition at line 178 of file kinetic_client\&.c\&.
 .PP
 References KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildFlush()\&.
 .SS "\fBKineticStatus\fP KineticClient_Get (KineticSession const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
@@ -233,7 +233,7 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 252 of file kinetic_client\&.c\&.
+Definition at line 249 of file kinetic_client\&.c\&.
 .PP
 References CMD_GET, and handle_get_command()\&.
 .SS "\fBKineticStatus\fP KineticClient_GetPrevious (KineticSession const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
@@ -257,7 +257,7 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 259 of file kinetic_client\&.c\&.
+Definition at line 256 of file kinetic_client\&.c\&.
 .PP
 References CMD_GET_PREVIOUS, and handle_get_command()\&.
 .SS "\fBKineticStatus\fP KineticClient_GetNext (KineticSession const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
@@ -281,7 +281,7 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 266 of file kinetic_client\&.c\&.
+Definition at line 263 of file kinetic_client\&.c\&.
 .PP
 References CMD_GET_NEXT, and handle_get_command()\&.
 .SS "\fBKineticStatus\fP KineticClient_Delete (KineticSession const *constsession, \fBKineticEntry\fP *constentry, \fBKineticCompletionClosure\fP *closure)"
@@ -305,7 +305,7 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 273 of file kinetic_client\&.c\&.
+Definition at line 270 of file kinetic_client\&.c\&.
 .PP
 References KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildDelete()\&.
 .SS "\fBKineticStatus\fP KineticClient_GetKeyRange (KineticSession const *constsession, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *keys, \fBKineticCompletionClosure\fP *closure)"
@@ -331,7 +331,7 @@ Returns 0 upon success, -1 or the Kinetic status code upon failure
 .PP
 
 .PP
-Definition at line 291 of file kinetic_client\&.c\&.
+Definition at line 288 of file kinetic_client\&.c\&.
 .PP
 References ByteBufferArray::buffers, ByteBufferArray::count, KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildGetKeyRange()\&.
 .SS "\fBKineticStatus\fP KineticClient_P2POperation (KineticSession const *constsession, KineticP2P_Operation *constp2pOp, \fBKineticCompletionClosure\fP *closure)"
@@ -355,7 +355,7 @@ Returns 0 upon success, -1 or the Kinetic status code upon failure\&. Note that 
 .PP
 
 .PP
-Definition at line 313 of file kinetic_client\&.c\&.
+Definition at line 310 of file kinetic_client\&.c\&.
 .PP
 References KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildP2POperation()\&.
 .SH "Author"

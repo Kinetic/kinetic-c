@@ -1,4 +1,4 @@
-.TH "listener" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "listener" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@ listener \-
 .br
 .PP
 .PP
-\fC#include <listener_internal\&.h>\fP
+\fC#include <listener_internal_types\&.h>\fP
 .SS "Data Fields"
 
 .in +1c
@@ -15,7 +15,7 @@ listener \-
 .RI "struct \fBbus\fP * \fBbus\fP"
 .br
 .ti -1c
-.RI "bool \fBshutdown\fP"
+.RI "int \fBshutdown_notify_fd\fP"
 .br
 .ti -1c
 .RI "int \fBcommit_pipe\fP"
@@ -71,85 +71,85 @@ listener \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 106 of file listener_internal\&.h\&.
+Definition at line 122 of file listener_internal_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "struct \fBbus\fP* listener::bus"
 
 .PP
-Definition at line 107 of file listener_internal\&.h\&.
-.SS "bool listener::shutdown"
+Definition at line 123 of file listener_internal_types\&.h\&.
+.SS "int listener::shutdown_notify_fd"
 
 .PP
-Definition at line 108 of file listener_internal\&.h\&.
+Definition at line 130 of file listener_internal_types\&.h\&.
 .SS "int listener::commit_pipe"
 
 .PP
-Definition at line 111 of file listener_internal\&.h\&.
+Definition at line 133 of file listener_internal_types\&.h\&.
 .SS "int listener::incoming_msg_pipe"
 
 .PP
-Definition at line 112 of file listener_internal\&.h\&.
+Definition at line 134 of file listener_internal_types\&.h\&.
 .SS "bool listener::is_idle"
 
 .PP
-Definition at line 113 of file listener_internal\&.h\&.
+Definition at line 135 of file listener_internal_types\&.h\&.
 .SS "\fBrx_info_t\fP listener::rx_info[(1024)]"
 
 .PP
-Definition at line 115 of file listener_internal\&.h\&.
+Definition at line 137 of file listener_internal_types\&.h\&.
 .SS "\fBrx_info_t\fP* listener::rx_info_freelist"
 
 .PP
-Definition at line 116 of file listener_internal\&.h\&.
+Definition at line 138 of file listener_internal_types\&.h\&.
 .SS "uint16_t listener::rx_info_in_use"
 
 .PP
-Definition at line 117 of file listener_internal\&.h\&.
+Definition at line 139 of file listener_internal_types\&.h\&.
 .SS "uint16_t listener::rx_info_max_used"
 
 .PP
-Definition at line 118 of file listener_internal\&.h\&.
+Definition at line 140 of file listener_internal_types\&.h\&.
 .SS "\fBlistener_msg\fP listener::msgs[32]"
 
 .PP
-Definition at line 120 of file listener_internal\&.h\&.
+Definition at line 142 of file listener_internal_types\&.h\&.
 .SS "\fBlistener_msg\fP* listener::msg_freelist"
 
 .PP
-Definition at line 121 of file listener_internal\&.h\&.
+Definition at line 143 of file listener_internal_types\&.h\&.
 .SS "int16_t listener::msgs_in_use"
 
 .PP
-Definition at line 122 of file listener_internal\&.h\&.
+Definition at line 144 of file listener_internal_types\&.h\&.
 .SS "int64_t listener::largest_seq_id_seen"
 
 .PP
-Definition at line 123 of file listener_internal\&.h\&.
+Definition at line 145 of file listener_internal_types\&.h\&.
 .SS "size_t listener::upstream_backpressure"
 
 .PP
-Definition at line 125 of file listener_internal\&.h\&.
+Definition at line 147 of file listener_internal_types\&.h\&.
 .SS "uint16_t listener::tracked_fds"
 
 .PP
-Definition at line 127 of file listener_internal\&.h\&.
+Definition at line 149 of file listener_internal_types\&.h\&.
 .SS "struct pollfd listener::fds[1000+1]"
 
 .PP
-Definition at line 129 of file listener_internal\&.h\&.
+Definition at line 151 of file listener_internal_types\&.h\&.
 .SS "\fBconnection_info\fP* listener::fd_info[1000]"
 
 .PP
-Definition at line 130 of file listener_internal\&.h\&.
+Definition at line 152 of file listener_internal_types\&.h\&.
 .SS "size_t listener::read_buf_size"
 
 .PP
-Definition at line 133 of file listener_internal\&.h\&.
+Definition at line 155 of file listener_internal_types\&.h\&.
 .SS "uint8_t* listener::read_buf"
 
 .PP
-Definition at line 134 of file listener_internal\&.h\&.
+Definition at line 156 of file listener_internal_types\&.h\&.
 
 .SH "Author"
 .PP 

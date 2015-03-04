@@ -1,4 +1,4 @@
-.TH "main.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "main.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -41,7 +41,7 @@ main.c \-
 .RI "static \fBKineticStatus\fP \fBExecuteOperation\fP (struct UtilConfig *cfg)"
 .br
 .ti -1c
-.RI "static void \fBConfigureEntry\fP (struct UtilConfig *cfg, const char *key, const char *tag, const char *version, \fBKineticAlgorithm\fP algorithm, const char *value)"
+.RI "static void \fBConfigureEntry\fP (struct UtilConfig *cfg, const char *key, const char *tag, const char *version, \fBKineticAlgorithm\fP algorithm, bool force, const char *value)"
 .br
 .ti -1c
 .RI "static void \fBPrintLogInfo\fP (\fBKineticLogInfo_Type\fP type, \fBKineticLogInfo\fP *info)"
@@ -147,45 +147,47 @@ Definition at line 27 of file main\&.c\&.
 .SS "int ParseOptions (const intargc, char **constargv, struct UtilConfig *cfg)\fC [static]\fP"
 
 .PP
-Definition at line 521 of file main\&.c\&.
+Definition at line 631 of file main\&.c\&.
 .PP
 References ByteArray_Create(), ConfigureEntry(), HOST_NAME_MAX, KINETIC_ALGORITHM_SHA1, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, KINETIC_DEVICE_INFO_TYPE_DEVICE, KINETIC_DEVICE_INFO_TYPE_LIMITS, KINETIC_DEVICE_INFO_TYPE_MESSAGES, KINETIC_DEVICE_INFO_TYPE_STATISTICS, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, KINETIC_MAX_KEY_LEN, KINETIC_PORT, KINETIC_TLS_PORT, OPT_CLUSTERVERSION, OPT_DELETE, OPT_FILE, OPT_GET, OPT_GETLOG, OPT_GETNEXT, OPT_GETPREVIOUS, OPT_GETVENDORLOG, OPT_HELP, OPT_HMACKEY, OPT_HOST, OPT_IDENTITY, OPT_INSTANTERASE, OPT_KEY, OPT_LOCKDEVICE, OPT_LOGLEVEL, OPT_LOGTYPE, OPT_NEWCLUSTERVERSION, OPT_NEWPIN, OPT_NOOP, OPT_PIN, OPT_PORT, OPT_PUT, OPT_SECUREERASE, OPT_SETACL, OPT_SETCLUSTERVERSION, OPT_SETERASEPIN, OPT_SETLOCKPIN, OPT_TLSPORT, OPT_UNLOCKDEVICE, OPT_UPDATEFIRMWARE, OPT_VALUE, and PrintUsage()\&.
 .SS "\fBKineticStatus\fP ExecuteOperation (struct UtilConfig *cfg)\fC [static]\fP"
 
 .PP
-Definition at line 319 of file main\&.c\&.
+Definition at line 422 of file main\&.c\&.
 .PP
-References ByteArray_Create(), GetOptString(), Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_SUCCESS, KineticAdminClient_GetLog(), KineticAdminClient_InstantErase(), KineticAdminClient_LockDevice(), KineticAdminClient_SecureErase(), KineticAdminClient_SetACL(), KineticAdminClient_SetClusterVersion(), KineticAdminClient_SetErasePin(), KineticAdminClient_SetLockPin(), KineticAdminClient_UnlockDevice(), KineticAdminClient_UpdateFirmware(), KineticClient_Delete(), KineticClient_Get(), KineticClient_GetNext(), KineticClient_GetPrevious(), KineticClient_NoOp(), KineticClient_Put(), OPT_DELETE, OPT_GET, OPT_GETLOG, OPT_GETNEXT, OPT_GETPREVIOUS, OPT_INSTANTERASE, OPT_LOCKDEVICE, OPT_NOOP, OPT_PUT, OPT_SECUREERASE, OPT_SETACL, OPT_SETCLUSTERVERSION, OPT_SETERASEPIN, OPT_SETLOCKPIN, OPT_UNLOCKDEVICE, OPT_UPDATEFIRMWARE, PrintEntry(), and PrintLogInfo()\&.
-.SS "void ConfigureEntry (struct UtilConfig *cfg, const char *key, const char *tag, const char *version, \fBKineticAlgorithm\fPalgorithm, const char *value)\fC [static]\fP"
+References ByteArray_Create(), GetOptString(), Kinetic_GetStatusDescription(), KINETIC_STATUS_INVALID, KINETIC_STATUS_NOT_FOUND, KINETIC_STATUS_SUCCESS, KineticAdminClient_GetLog(), KineticAdminClient_InstantErase(), KineticAdminClient_LockDevice(), KineticAdminClient_SecureErase(), KineticAdminClient_SetACL(), KineticAdminClient_SetClusterVersion(), KineticAdminClient_SetErasePin(), KineticAdminClient_SetLockPin(), KineticAdminClient_UnlockDevice(), KineticAdminClient_UpdateFirmware(), KineticClient_Delete(), KineticClient_Get(), KineticClient_GetNext(), KineticClient_GetPrevious(), KineticClient_NoOp(), KineticClient_Put(), OPT_DELETE, OPT_GET, OPT_GETLOG, OPT_GETNEXT, OPT_GETPREVIOUS, OPT_INSTANTERASE, OPT_LOCKDEVICE, OPT_NOOP, OPT_PUT, OPT_SECUREERASE, OPT_SETACL, OPT_SETCLUSTERVERSION, OPT_SETERASEPIN, OPT_SETLOCKPIN, OPT_UNLOCKDEVICE, OPT_UPDATEFIRMWARE, PrintEntry(), and PrintLogInfo()\&.
+.SS "void ConfigureEntry (struct UtilConfig *cfg, const char *key, const char *tag, const char *version, \fBKineticAlgorithm\fPalgorithm, boolforce, const char *value)\fC [static]\fP"
 
 .PP
-Definition at line 481 of file main\&.c\&.
+Definition at line 590 of file main\&.c\&.
 .PP
 References ByteBuffer_Create(), and ByteBuffer_CreateAndAppendCString()\&.
 .SS "static void PrintLogInfo (\fBKineticLogInfo_Type\fPtype, \fBKineticLogInfo\fP *info)\fC [static]\fP"
 
 .PP
-Definition at line 234 of file main\&.c\&.
+Definition at line 235 of file main\&.c\&.
+.PP
+References KineticLogInfo_Statistics::bytes, KineticLogInfo::capacity, KineticLogInfo_Configuration::compilationDate, KineticLogInfo::configuration, KineticLogInfo_Statistics::count, KineticLogInfo_Temperature::current, ByteArray::data, KineticLogInfo::device, KineticLogInfo_Configuration::interfaces, KineticLogInfo_Interface::ipv4Address, KineticLogInfo_Interface::ipv6Address, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, KINETIC_DEVICE_INFO_TYPE_DEVICE, KINETIC_DEVICE_INFO_TYPE_LIMITS, KINETIC_DEVICE_INFO_TYPE_MESSAGES, KINETIC_DEVICE_INFO_TYPE_STATISTICS, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, KineticMessageType_GetName(), ByteArray::len, KineticLogInfo::limits, KineticLogInfo_Interface::MAC, KineticLogInfo_Limits::maxConnections, KineticLogInfo_Limits::maxIdentityCount, KineticLogInfo_Temperature::maximum, KineticLogInfo_Limits::maxKeyRangeCount, KineticLogInfo_Limits::maxKeySize, KineticLogInfo_Limits::maxMessageSize, KineticLogInfo_Limits::maxOutstandingReadRequests, KineticLogInfo_Limits::maxOutstandingWriteRequests, KineticLogInfo_Limits::maxPinSize, KineticLogInfo_Limits::maxTagSize, KineticLogInfo_Limits::maxValueSize, KineticLogInfo_Limits::maxVersionSize, KineticLogInfo::messages, KineticLogInfo_Statistics::messageType, KineticLogInfo_Temperature::minimum, KineticLogInfo_Configuration::model, KineticLogInfo_Utilization::name, KineticLogInfo_Temperature::name, KineticLogInfo_Interface::name, KineticLogInfo_Device::name, KineticLogInfo_Capacity::nominalCapacityInBytes, KineticLogInfo_Configuration::numInterfaces, KineticLogInfo::numStatistics, KineticLogInfo::numTemperatures, KineticLogInfo::numUtilizations, KineticLogInfo_Configuration::port, KineticLogInfo_Capacity::portionFull, KineticLogInfo_Configuration::protocolCompilationDate, KineticLogInfo_Configuration::protocolSourceHash, KineticLogInfo_Configuration::protocolVersion, KineticLogInfo_Configuration::serialNumber, KineticLogInfo_Configuration::sourceHash, KineticLogInfo::statistics, KineticLogInfo_Temperature::target, KineticLogInfo::temperatures, KineticLogInfo_Configuration::tlsPort, KineticLogInfo::utilizations, KineticLogInfo_Utilization::value, KineticLogInfo_Configuration::vendor, KineticLogInfo_Configuration::version, and KineticLogInfo_Configuration::worldWideName\&.
 .SS "static const char * GetOptString (\fBOptionID\fPopt_id)\fC [static]\fP"
 
 .PP
-Definition at line 240 of file main\&.c\&.
+Definition at line 343 of file main\&.c\&.
 .PP
 References OPT_CLUSTERVERSION, OPT_DELETE, OPT_FILE, OPT_GET, OPT_GETLOG, OPT_GETNEXT, OPT_GETPREVIOUS, OPT_GETVENDORLOG, OPT_HELP, OPT_HMACKEY, OPT_HOST, OPT_IDENTITY, OPT_INSTANTERASE, OPT_KEY, OPT_LOCKDEVICE, OPT_LOGLEVEL, OPT_LOGTYPE, OPT_NEWCLUSTERVERSION, OPT_NEWPIN, OPT_NOOP, OPT_PIN, OPT_PORT, OPT_PUT, OPT_SECUREERASE, OPT_SETACL, OPT_SETCLUSTERVERSION, OPT_SETERASEPIN, OPT_SETLOCKPIN, OPT_TLSPORT, OPT_UNLOCKDEVICE, OPT_UPDATEFIRMWARE, and OPT_VALUE\&.
 .SS "void PrintUsage (const char *exec)"
 
 .PP
-Definition at line 120 of file main\&.c\&.
+Definition at line 121 of file main\&.c\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
-Definition at line 167 of file main\&.c\&.
+Definition at line 168 of file main\&.c\&.
 .PP
 References ExecuteOperation(), Kinetic_GetStatusDescription(), KINETIC_STATUS_SUCCESS, KineticClient_CreateSession(), KineticClient_Init(), KineticClientConfig::logFile, OPT_NONE, ParseOptions(), and PrintUsage()\&.
 .SS "static void PrintEntry (\fBKineticEntry\fP *entry)\fC [static]\fP"
 
 .PP
-Definition at line 221 of file main\&.c\&.
+Definition at line 222 of file main\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::key, and KineticEntry::value\&.
 .SH "Author"

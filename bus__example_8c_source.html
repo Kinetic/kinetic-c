@@ -90,555 +90,560 @@
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="bus_8h.html">bus.h</a>&quot;</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="atomic_8h.html">atomic.h</a>&quot;</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;socket99.h&quot;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    uint32_t magic_number;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    uint32_t size;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    int64_t seq_id;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;} prot_header_t;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86">   45</a></span>&#160;<span class="preprocessor">#define MAGIC_NUMBER 3</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776">   47</a></span>&#160;<span class="preprocessor">#define MAX_SOCKETS 1000</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">   48</a></span>&#160;<span class="preprocessor">#define DEFAULT_BUF_SIZE (1024 * 1024 + sizeof(prot_header_t))</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a8b77334e6ec4ef6738fce01997be2c29">   49</a></span>&#160;<span class="preprocessor">#define PRINT_RESPONSES 0</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">   51</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">socket_state</a> {</div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d">   52</a></span>&#160;    <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d">STATE_UNINIT</a> = 0,</div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">   53</a></span>&#160;    <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>,</div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">   54</a></span>&#160;    <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">STATE_AWAITING_BODY</a>,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">enum</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">socket_state</a> <a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">size_t</span> cur_payload_size;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">size_t</span> used;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    uint8_t buf[];</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;} socket_info;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">int</span> port_low;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">int</span> port_high;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">int</span> verbosity;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">size_t</span> buf_size;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">int</span> sockets_used;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">int</span> sockets[<a class="code" href="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776">MAX_SOCKETS</a>];</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    time_t last_second;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">size_t</span> ticks;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">size_t</span> sent_msgs;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">size_t</span> completed_deliveries;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">size_t</span> max_seq_id;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    socket_info *info[<a class="code" href="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776">MAX_SOCKETS</a>];</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} example_state;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">   82</a></span>&#160;example_state <a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a>(example_state *s, <span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv, example_state *s);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">static</span> time_t <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">   88</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">log_cb</a>(<a class="code" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a> event, <span class="keywordtype">int</span> log_level, <span class="keyword">const</span> <span class="keywordtype">char</span> *msg, <span class="keywordtype">void</span> *udata) {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    example_state *s = (example_state *)udata;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *event_str = <a class="code" href="bus_8c.html#a60692c56f07f224511783c1b4ed45c02">bus_log_event_str</a>(event);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    fprintf(<span class="comment">/*stderr*/</span>stdout, <span class="stringliteral">&quot;%ld -- %s[%d] -- %s\n&quot;</span>,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        s-&gt;last_second, event_str, log_level, msg);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">   95</a></span>&#160;<span class="preprocessor">#define LOG(VERBOSITY, ...)                     \</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">    do { if (state.verbosity &gt;= VERBOSITY) { printf(__VA_ARGS__); } } while(0)</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">   98</a></span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a> = NULL;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">  100</a></span>&#160;<span class="keyword">static</span> <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> <a class="code" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a>(socket_info *si) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="comment">//printf(&quot;EXPECT: header of %zd bytes\n&quot;, sizeof(prot_header_t));</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = { <span class="comment">/* prime pump with header size */</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = <span class="keyword">sizeof</span>(prot_header_t),</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    };</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    si-&gt;state = <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    si-&gt;used = 0;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;}</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">  111</a></span>&#160;<span class="keyword">static</span> <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> <a class="code" href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">sink_cb</a>(uint8_t *<a class="code" href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">read_buf</a>,</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordtype">size_t</span> read_size, <span class="keywordtype">void</span> *socket_udata) {</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    socket_info *si = (socket_info *)socket_udata;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    assert(si);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">switch</span> (si-&gt;state) {</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d">STATE_UNINIT</a>:</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    {</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        assert(read_size == 0);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a>(si);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    }</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>:</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    {</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordtype">bool</span> valid_header = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordtype">bool</span> split_header = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">size_t</span> header_rem = <span class="keyword">sizeof</span>(prot_header_t) - si-&gt;used;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        if (read_size &gt; header_rem) {</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            printf(<span class="stringliteral">&quot;surplus read_size %zd\n&quot;</span>, read_size);</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            printf(<span class="stringliteral">&quot;header_rem %zd (sizeof(prot_header_t) %zd)\n&quot;</span>, header_rem, <span class="keyword">sizeof</span>(prot_header_t));</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            assert(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (read_size &lt; <span class="keyword">sizeof</span>(prot_header_t)) {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="comment">//printf(&quot;split header, %zd\n&quot;, read_size);</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            split_header = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        }</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordtype">size_t</span> copied = read_size;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="keywordflow">if</span> (copied &gt; header_rem) { copied = header_rem; }</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        memcpy(&amp;si-&gt;buf[si-&gt;used], read_buf, copied);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        si-&gt;used += copied;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordflow">if</span> (si-&gt;used &lt; <span class="keyword">sizeof</span>(prot_header_t)) {</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = {</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = <span class="keyword">sizeof</span>(prot_header_t) - si-&gt;used,</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            };</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            si-&gt;state = <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        }</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        assert(si-&gt;used == <span class="keyword">sizeof</span>(prot_header_t));</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        prot_header_t *header = (prot_header_t *)&amp;si-&gt;buf[0];</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        if (si-&gt;used &lt; <span class="keyword">sizeof</span>(prot_header_t)) {</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            printf(<span class="stringliteral">&quot;INVALID HEADER A: read_size %zd\n&quot;</span>, si-&gt;used);</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            valid_header = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (header-&gt;magic_number != <a class="code" href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86">MAGIC_NUMBER</a>) {</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            printf(<span class="stringliteral">&quot;INVALID HEADER B: magic number 0x%08x\n&quot;</span>, header-&gt;magic_number);</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            valid_header = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        }</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordflow">if</span> (valid_header) {</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;            prot_header_t *header = (prot_header_t *)&amp;si-&gt;buf[0];</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            si-&gt;cur_payload_size = header-&gt;size;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            memcpy(&amp;si-&gt;buf[si-&gt;used], read_buf + copied, read_size - copied);</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            si-&gt;used += read_size - copied;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = {</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = header-&gt;size,</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            };</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            si-&gt;state = <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">STATE_AWAITING_BODY</a>;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            assert(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a>(si);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        }</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    }</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">STATE_AWAITING_BODY</a>:</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        assert(<a class="code" href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">DEFAULT_BUF_SIZE</a> - si-&gt;used &gt;= read_size);</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        memcpy(&amp;si-&gt;buf[si-&gt;used], read_buf, read_size);</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        si-&gt;used += read_size;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        assert(si-&gt;used &lt;= si-&gt;cur_payload_size + <span class="keyword">sizeof</span>(prot_header_t));</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keywordtype">size_t</span> rem = si-&gt;cur_payload_size + <span class="keyword">sizeof</span>(prot_header_t) - si-&gt;used;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        if (rem == 0) {</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = {</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = <span class="keyword">sizeof</span>(prot_header_t),</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                .full_msg_buffer = read_buf,</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            };</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            si-&gt;state = <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            si-&gt;used = 0;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = {</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = rem,</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            };</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        }</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    }</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        assert(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    }</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;}</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
-<div class="line"><a name="l00209"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">  209</a></span>&#160;<span class="keyword">static</span> <a class="code" href="structbus__unpack__cb__res__t.html">bus_unpack_cb_res_t</a> <a class="code" href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">unpack_cb</a>(<span class="keywordtype">void</span> *msg, <span class="keywordtype">void</span> *socket_udata) {</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="comment">/* just got .full_msg_buffer from sink_cb -- pass it along as-is */</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    socket_info *si = (socket_info *)socket_udata;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    prot_header_t *header = (prot_header_t *)&amp;si-&gt;buf[0];</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    uint8_t *payload = (uint8_t *)&amp;si-&gt;buf[<span class="keyword">sizeof</span>(prot_header_t)];</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="preprocessor">#if PRINT_RESPONSES</span></div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; si-&gt;used; i++) {</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordflow">if</span> ((i &amp; 15) == 0 &amp;&amp; i &gt; 0) { printf(<span class="stringliteral">&quot;\n&quot;</span>); }</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        printf(<span class="stringliteral">&quot;%02x &quot;</span>, si-&gt;buf[i]);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    }</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <a class="code" href="structbus__unpack__cb__res__t.html">bus_unpack_cb_res_t</a> res = {</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        .ok = <span class="keyword">true</span>,</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        .u.success = {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            .seq_id = header-&gt;seq_id,</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            .msg = payload,</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        },</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    };</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;}</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;</div>
-<div class="line"><a name="l00232"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">  232</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">unexpected_msg_cb</a>(<span class="keywordtype">void</span> *msg,</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        int64_t seq_id, <span class="keywordtype">void</span> *bus_udata, <span class="keywordtype">void</span> *socket_udata) {</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    printf(<span class="stringliteral">&quot;\n\n\nUNEXPECTED MESSAGE: %p, seq_id %lld, bus_udata %p, socket_udata %p\n\n\n\n&quot;</span>,</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        msg, (<span class="keywordtype">long</span> <span class="keywordtype">long</span>)seq_id, bus_udata, socket_udata);</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    assert(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;}</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;</div>
-<div class="line"><a name="l00240"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">  240</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="bus__example_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv) {</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <a class="code" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a> = argv[0];</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>.last_second = <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>();</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <a class="code" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a>(argc, argv, &amp;<a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>);</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <a class="code" href="structbus__config.html">bus_config</a> cfg = {</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        .<a class="code" href="structbus__config.html#a297dac13672376d63468a1ffd390cef8">log_cb</a> = <a class="code" href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">log_cb</a>,</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        .log_level = <a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>.verbosity,</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        .sink_cb = <a class="code" href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">sink_cb</a>,</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        .unpack_cb = <a class="code" href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">unpack_cb</a>,</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        .unexpected_msg_cb = <a class="code" href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">unexpected_msg_cb</a>,</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        .bus_udata = &amp;<a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>,</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    };</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <a class="code" href="structbus__result.html">bus_result</a> res = {0};</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451">bus_init</a>(&amp;cfg, &amp;res)) {</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(0, <span class="stringliteral">&quot;failed to init bus: %d\n&quot;</span>, res.<a class="code" href="structbus__result.html#a3257dd0f3116387d8a2b65159605f984">status</a>);</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    }</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keyword">struct </span><a class="code" href="structbus.html">bus</a> *b = res.<a class="code" href="structbus__result.html#aabd61449d17f5f5d086b22f88b8cee6d">bus</a>;</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <a class="code" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a>(&amp;<a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>, b);</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keywordflow">if</span> (b) {</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;shutting down\n&quot;</span>);</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <a class="code" href="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9">bus_shutdown</a>(b);</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <a class="code" href="bus_8c.html#af013638c2ed0336af67997ec31cb88c6">bus_free</a>(b);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    }</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;}</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;</div>
-<div class="line"><a name="l00274"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039">  274</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039">loop_flag</a> = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a760a9af25c6b4b6479b9608d226a5073">  275</a></span>&#160;<span class="keyword">static</span> sig_t <a class="code" href="bus__example_8c.html#a760a9af25c6b4b6479b9608d226a5073">old_sigint_handler</a> = NULL;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;</div>
-<div class="line"><a name="l00277"></a><span class="lineno"><a class="line" href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">  277</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">signal_handler</a>(<span class="keywordtype">int</span> arg) {</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    loop_flag = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(3, <span class="stringliteral">&quot;-- caught signal %d\n&quot;</span>, arg);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordflow">if</span> (arg == SIGINT) {</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        signal(arg, old_sigint_handler);</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    }</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    (void)arg;</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;}</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;</div>
-<div class="line"><a name="l00286"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">  286</a></span>&#160;<span class="keyword">static</span> sig_t <a class="code" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a>(<span class="keywordtype">int</span> sig) {</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    sig_t old_handler = signal(sig, <a class="code" href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">signal_handler</a>);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="keywordflow">if</span> (old_handler == SIG_ERR) { err(1, <span class="stringliteral">&quot;signal&quot;</span>); }</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordflow">return</span> old_handler;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;}</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;</div>
-<div class="line"><a name="l00292"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">  292</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">register_signal_handlers</a>(<span class="keywordtype">void</span>) {</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    (void)<a class="code" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a>(SIGPIPE);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    old_sigint_handler = <a class="code" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a>(SIGINT);</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;}</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
-<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">  297</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a>(<span class="keywordtype">void</span>) {</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    fprintf(stderr,</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="stringliteral">&quot;Usage: %s [-b BUF_SIZE] [-l LOW_PORT] [-h HIGH_PORT] [-s STOP_AT_SEQUENCE_ID] [-v] \n&quot;</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="stringliteral">&quot;    If only one of -l or -h are specified, it will use just that one port.\n&quot;</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="stringliteral">&quot;    -v can be used multiple times to increase verbosity.\n&quot;</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        , <a class="code" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a>);</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    exit(1);</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;}</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
-<div class="line"><a name="l00306"></a><span class="lineno"><a class="line" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">  306</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv, example_state *s) {</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="keywordtype">int</span> a = 0;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    s-&gt;buf_size = <a class="code" href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">DEFAULT_BUF_SIZE</a>;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keywordflow">while</span> ((a = getopt(argc, argv, <span class="stringliteral">&quot;b:l:h:s:v&quot;</span>)) != -1) {</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="keywordflow">switch</span> (a) {</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;b&#39;</span>:               <span class="comment">/* buffer size */</span></div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            s-&gt;buf_size = atol(optarg);</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;l&#39;</span>:               <span class="comment">/* low port */</span></div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            s-&gt;port_low = atoi(optarg);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;h&#39;</span>:               <span class="comment">/* high port */</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            s-&gt;port_high = atoi(optarg);</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;s&#39;</span>:               <span class="comment">/* stop loop at sequence ID */</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            s-&gt;max_seq_id = atoi(optarg);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>:               <span class="comment">/* verbosity */</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            s-&gt;verbosity++;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            fprintf(stderr, <span class="stringliteral">&quot;illegal option: -- %c\n&quot;</span>, a);</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            <a class="code" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a>();</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        }</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    } </div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="keywordflow">if</span> (s-&gt;port_low == 0) { s-&gt;port_low = s-&gt;port_high; }</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="keywordflow">if</span> (s-&gt;port_high == 0) { s-&gt;port_high = s-&gt;port_low; }</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keywordflow">if</span> (s-&gt;port_high &lt; s-&gt;port_low || s-&gt;port_low == 0) { <a class="code" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a>(); }</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keywordflow">if</span> (s-&gt;verbosity &gt; 0) {</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        printf(<span class="stringliteral">&quot;bus_size: %zd\n&quot;</span>, s-&gt;buf_size);</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        printf(<span class="stringliteral">&quot;port_low: %d\n&quot;</span>, s-&gt;port_low);</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        printf(<span class="stringliteral">&quot;port_high: %d\n&quot;</span>, s-&gt;port_high);</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        printf(<span class="stringliteral">&quot;verbosity: %d\n&quot;</span>, s-&gt;verbosity);</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    }</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;}</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;</div>
-<div class="line"><a name="l00346"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">  346</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">open_sockets</a>(example_state *s) {</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="keywordtype">int</span> socket_count = s-&gt;port_high - s-&gt;port_low + 1;</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="keywordtype">size_t</span> info_size = <span class="keyword">sizeof</span>(socket_info) + s-&gt;buf_size;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="comment">/* open socket(s) */</span></div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    for (<span class="keywordtype">int</span> i = 0; i &lt; socket_count; i++) {</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keywordtype">int</span> port = i + s-&gt;port_low;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        socket99_config cfg = {</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            .host = <span class="stringliteral">&quot;127.0.0.1&quot;</span>,</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;            .port = port,</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            .nonblocking = <span class="keyword">true</span>,</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        };</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        socket99_result res;</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        <span class="keywordflow">if</span> (!socket99_open(&amp;cfg, &amp;res)) {</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            socket99_fprintf(stderr, &amp;res);</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;            exit(1);</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        }</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        s-&gt;sockets[i] = res.fd;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        s-&gt;sockets_used++;</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        socket_info *si = malloc(info_size);</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        assert(si);</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        memset(si, 0, info_size);</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        s-&gt;info[i] = si;</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    }</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;}</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;</div>
-<div class="line"><a name="l00376"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">  376</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">size_t</span> <a class="code" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">construct_msg</a>(uint8_t *buf, <span class="keywordtype">size_t</span> buf_size, <span class="keywordtype">size_t</span> payload_size, int64_t seq_id) {</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    <span class="keywordtype">size_t</span> header_size = <span class="keyword">sizeof</span>(prot_header_t);</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    assert(buf_size &gt; header_size);</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    prot_header_t *header = (prot_header_t *)buf;</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    uint8_t *payload = &amp;buf[header_size];</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; payload_size; i++) {</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        payload[i] = (uint8_t)(0xFF &amp; i);</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    }</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    header-&gt;magic_number = <a class="code" href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86">MAGIC_NUMBER</a>;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    header-&gt;seq_id = seq_id;</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    header-&gt;size = payload_size;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordflow">return</span> header_size + payload_size;</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;}</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;<span class="comment">/* Should it CAS on the completion counter?</span></div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="comment"> * This should account for nearly all CPU usage. */</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a6f0597838b98c2b1bd2a123c795bf754">  395</a></span>&#160;<span class="preprocessor">#define INCREMENT_COMPLETION_COUNTER 1</span></div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;</div>
-<div class="line"><a name="l00397"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">  397</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">completion_cb</a>(<a class="code" href="structbus__msg__result__t.html">bus_msg_result_t</a> *res, <span class="keywordtype">void</span> *<a class="code" href="structbus.html#a1063de7e8411d91e03e156557b87e4d7">udata</a>) {</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    example_state *s = &amp;<a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>;</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    socket_info *si = (socket_info *)udata;</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="keywordflow">switch</span> (res-&gt;<a class="code" href="structbus__msg__result__t.html#a36104df5573606bc88588a136b014d87">status</a>) {</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa52308a11e747d3a138fc7fd799af3650">BUS_SEND_SUCCESS</a>:</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    {</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="preprocessor">#if INCREMENT_COMPLETION_COUNTER</span></div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="keywordflow">for</span> (;;) {</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;            <span class="keywordtype">size_t</span> cur = s-&gt;completed_deliveries;</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="atomic_8h.html#ac670f7588d6db0cf09e0a61540133489">ATOMIC_BOOL_COMPARE_AND_SWAP</a>(&amp;s-&gt;completed_deliveries, cur, cur + 1)) {</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;                <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(3, <span class="stringliteral">&quot; -- ! got %zd bytes, seq_id 0x%08llx, %p\n&quot;</span>,</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;                    si-&gt;cur_payload_size, res-&gt;<a class="code" href="structbus__msg__result__t.html#a241466c461e3be2accbb0b0f351a71dc">u</a>.<a class="code" href="structbus__msg__result__t.html#ac4e4674f7a4c28cb5807f78d7552fe24">response</a>.seq_id,</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;                    res-&gt;<a class="code" href="structbus__msg__result__t.html#a241466c461e3be2accbb0b0f351a71dc">u</a>.<a class="code" href="structbus__msg__result__t.html#ac4e4674f7a4c28cb5807f78d7552fe24">response</a>.opaque_msg);</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;            }</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        }</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        (void)s;</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        (void)si;</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    }</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa6410b998e2e53a079a014a870b1e8e92">BUS_SEND_TX_TIMEOUT</a>:</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;BUS_SEND_TIMEOUT\n&quot;</span>);</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa8ce56c063db51d0e642d2eb4bca90322">BUS_SEND_TX_FAILURE</a>:</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;BUS_SEND_TX_FAILURE\n&quot;</span>);</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143">BUS_SEND_RX_FAILURE</a>:</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;BUS_SEND_RX_FAILURE\n&quot;</span>);</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aaf6d2907a2f1da7b3245815fb46db31e4">BUS_SEND_RX_TIMEOUT</a>:</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;BUS_SEND_RX_TIMEOUT\n&quot;</span>);</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;        fprintf(stderr, <span class="stringliteral">&quot;match fail: %d\n&quot;</span>, res-&gt;<a class="code" href="structbus__msg__result__t.html#a36104df5573606bc88588a136b014d87">status</a>);</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;        assert(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    }</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;}</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;</div>
-<div class="line"><a name="l00438"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">  438</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">tick_handler</a>(example_state *s) {</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    s-&gt;ticks++;</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;%ld -- %zd ticks, %zd requests, %zd responses (delta %zd)\n&quot;</span>,</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        s-&gt;last_second, s-&gt;ticks, s-&gt;sent_msgs, s-&gt;completed_deliveries,</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        s-&gt;completed_deliveries - s-&gt;sent_msgs);</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;}</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;</div>
-<div class="line"><a name="l00445"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">  445</a></span>&#160;<span class="keyword">static</span> time_t <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>(<span class="keywordtype">void</span>) {</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    <span class="keyword">struct </span>timeval tv;</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    gettimeofday(&amp;tv, 0);  <span class="comment">// TODO: clock_gettime</span></div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    <span class="keywordflow">return</span> tv.tv_sec;</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;}</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;</div>
-<div class="line"><a name="l00451"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">  451</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a>(example_state *s, <span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b) {</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;    <a class="code" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">register_signal_handlers</a>();</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;    <a class="code" href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">open_sockets</a>(s);</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; s-&gt;sockets_used; i++) {</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        <a class="code" href="bus_8c.html#aece2c000aa2f834b76a77ce032a2d0d2">bus_register_socket</a>(b, <a class="code" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb">BUS_SOCKET_PLAIN</a>, s-&gt;sockets[i], s-&gt;info[i]);</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    }</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;    <span class="keywordtype">int</span> cur_socket_i = 0;</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    int64_t seq_id = 1;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="util_8h.html">util.h</a>&quot;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    uint32_t magic_number;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    uint32_t size;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    int64_t seq_id;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} prot_header_t;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86">   46</a></span>&#160;<span class="preprocessor">#define MAGIC_NUMBER 3</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776">   48</a></span>&#160;<span class="preprocessor">#define MAX_SOCKETS 1000</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">   49</a></span>&#160;<span class="preprocessor">#define DEFAULT_BUF_SIZE (1024 * 1024 + sizeof(prot_header_t))</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a8b77334e6ec4ef6738fce01997be2c29">   50</a></span>&#160;<span class="preprocessor">#define PRINT_RESPONSES 0</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">   52</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">socket_state</a> {</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d">   53</a></span>&#160;    <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d">STATE_UNINIT</a> = 0,</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">   54</a></span>&#160;    <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>,</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">   55</a></span>&#160;    <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">STATE_AWAITING_BODY</a>,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;};</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">enum</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">socket_state</a> <a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">size_t</span> cur_payload_size;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">size_t</span> used;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    uint8_t buf[];</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;} socket_info;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">int</span> port_low;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">int</span> port_high;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">int</span> verbosity;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">size_t</span> buf_size;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">int</span> sockets_used;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">int</span> sockets[<a class="code" href="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776">MAX_SOCKETS</a>];</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    time_t last_second;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">size_t</span> ticks;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">size_t</span> sent_msgs;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">size_t</span> completed_deliveries;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">size_t</span> max_seq_id;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    socket_info *info[<a class="code" href="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776">MAX_SOCKETS</a>];</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} example_state;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">   83</a></span>&#160;example_state <a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a>(example_state *s, <span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv, example_state *s);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">static</span> time_t <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">   89</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">log_cb</a>(<a class="code" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a> event, <span class="keywordtype">int</span> log_level, <span class="keyword">const</span> <span class="keywordtype">char</span> *msg, <span class="keywordtype">void</span> *udata) {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    example_state *s = (example_state *)udata;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *event_str = <a class="code" href="bus_8c.html#a60692c56f07f224511783c1b4ed45c02">bus_log_event_str</a>(event);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    fprintf(<span class="comment">/*stderr*/</span>stdout, <span class="stringliteral">&quot;%ld -- %s[%d] -- %s\n&quot;</span>,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        s-&gt;last_second, event_str, log_level, msg);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">   96</a></span>&#160;<span class="preprocessor">#define LOG(VERBOSITY, ...)                     \</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">    do { if (state.verbosity &gt;= VERBOSITY) { printf(__VA_ARGS__); } } while(0)</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">   99</a></span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a> = NULL;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">  101</a></span>&#160;<span class="keyword">static</span> <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> <a class="code" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a>(socket_info *si) {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">//printf(&quot;EXPECT: header of %zd bytes\n&quot;, sizeof(prot_header_t));</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = { <span class="comment">/* prime pump with header size */</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = <span class="keyword">sizeof</span>(prot_header_t),</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    };</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    si-&gt;state = <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    si-&gt;used = 0;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;}</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">  112</a></span>&#160;<span class="keyword">static</span> <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> <a class="code" href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">sink_cb</a>(uint8_t *<a class="code" href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">read_buf</a>,</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordtype">size_t</span> read_size, <span class="keywordtype">void</span> *socket_udata) {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    socket_info *si = (socket_info *)socket_udata;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    assert(si);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordflow">switch</span> (si-&gt;state) {</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d">STATE_UNINIT</a>:</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        assert(read_size == 0);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a>(si);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    }</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>:</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    {</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordtype">bool</span> valid_header = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordtype">bool</span> split_header = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordtype">size_t</span> header_rem = <span class="keyword">sizeof</span>(prot_header_t) - si-&gt;used;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        if (read_size &gt; header_rem) {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            printf(<span class="stringliteral">&quot;surplus read_size %zd\n&quot;</span>, read_size);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            printf(<span class="stringliteral">&quot;header_rem %zd (sizeof(prot_header_t) %zd)\n&quot;</span>, header_rem, <span class="keyword">sizeof</span>(prot_header_t));</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            assert(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (read_size &lt; <span class="keyword">sizeof</span>(prot_header_t)) {</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="comment">//printf(&quot;split header, %zd\n&quot;, read_size);</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            split_header = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        }</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="keywordtype">size_t</span> copied = read_size;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keywordflow">if</span> (copied &gt; header_rem) { copied = header_rem; }</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        memcpy(&amp;si-&gt;buf[si-&gt;used], read_buf, copied);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        si-&gt;used += copied;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">if</span> (si-&gt;used &lt; <span class="keyword">sizeof</span>(prot_header_t)) {</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = {</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = <span class="keyword">sizeof</span>(prot_header_t) - si-&gt;used,</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            };</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            si-&gt;state = <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        }</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        assert(si-&gt;used == <span class="keyword">sizeof</span>(prot_header_t));</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        prot_header_t *header = (prot_header_t *)&amp;si-&gt;buf[0];</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        if (si-&gt;used &lt; <span class="keyword">sizeof</span>(prot_header_t)) {</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            printf(<span class="stringliteral">&quot;INVALID HEADER A: read_size %zd\n&quot;</span>, si-&gt;used);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            valid_header = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (header-&gt;magic_number != <a class="code" href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86">MAGIC_NUMBER</a>) {</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            printf(<span class="stringliteral">&quot;INVALID HEADER B: magic number 0x%08x\n&quot;</span>, header-&gt;magic_number);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;            valid_header = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        }</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordflow">if</span> (valid_header) {</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            prot_header_t *header = (prot_header_t *)&amp;si-&gt;buf[0];</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            si-&gt;cur_payload_size = header-&gt;size;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            memcpy(&amp;si-&gt;buf[si-&gt;used], read_buf + copied, read_size - copied);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            si-&gt;used += read_size - copied;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = {</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = header-&gt;size,</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            };</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            si-&gt;state = <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">STATE_AWAITING_BODY</a>;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            assert(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a>(si);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        }</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    }</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">STATE_AWAITING_BODY</a>:</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    {</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        assert(<a class="code" href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">DEFAULT_BUF_SIZE</a> - si-&gt;used &gt;= read_size);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        memcpy(&amp;si-&gt;buf[si-&gt;used], read_buf, read_size);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        si-&gt;used += read_size;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        assert(si-&gt;used &lt;= si-&gt;cur_payload_size + <span class="keyword">sizeof</span>(prot_header_t));</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordtype">size_t</span> rem = si-&gt;cur_payload_size + <span class="keyword">sizeof</span>(prot_header_t) - si-&gt;used;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        if (rem == 0) {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = {</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = <span class="keyword">sizeof</span>(prot_header_t),</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                .full_msg_buffer = read_buf,</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            };</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            si-&gt;state = <a class="code" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a>;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            si-&gt;used = 0;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            <a class="code" href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a> res = {</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                .<a class="code" href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">next_read</a> = rem,</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            };</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        }</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    }</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        assert(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    }</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;}</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
+<div class="line"><a name="l00210"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">  210</a></span>&#160;<span class="keyword">static</span> <a class="code" href="structbus__unpack__cb__res__t.html">bus_unpack_cb_res_t</a> <a class="code" href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">unpack_cb</a>(<span class="keywordtype">void</span> *msg, <span class="keywordtype">void</span> *socket_udata) {</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="comment">/* just got .full_msg_buffer from sink_cb -- pass it along as-is */</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    socket_info *si = (socket_info *)socket_udata;</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    prot_header_t *header = (prot_header_t *)&amp;si-&gt;buf[0];</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    uint8_t *payload = (uint8_t *)&amp;si-&gt;buf[<span class="keyword">sizeof</span>(prot_header_t)];</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="preprocessor">#if PRINT_RESPONSES</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; si-&gt;used; i++) {</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <span class="keywordflow">if</span> ((i &amp; 15) == 0 &amp;&amp; i &gt; 0) { printf(<span class="stringliteral">&quot;\n&quot;</span>); }</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        printf(<span class="stringliteral">&quot;%02x &quot;</span>, si-&gt;buf[i]);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    }</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <a class="code" href="structbus__unpack__cb__res__t.html">bus_unpack_cb_res_t</a> res = {</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        .ok = <span class="keyword">true</span>,</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        .u.success = {</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            .seq_id = header-&gt;seq_id,</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            .msg = payload,</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        },</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    };</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;}</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;</div>
+<div class="line"><a name="l00233"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">  233</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">unexpected_msg_cb</a>(<span class="keywordtype">void</span> *msg,</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        int64_t seq_id, <span class="keywordtype">void</span> *bus_udata, <span class="keywordtype">void</span> *socket_udata) {</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    printf(<span class="stringliteral">&quot;\n\n\nUNEXPECTED MESSAGE: %p, seq_id %lld, bus_udata %p, socket_udata %p\n\n\n\n&quot;</span>,</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        msg, (<span class="keywordtype">long</span> <span class="keywordtype">long</span>)seq_id, bus_udata, socket_udata);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    assert(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;}</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;</div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">  241</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="bus__example_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv) {</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <a class="code" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a> = argv[0];</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>.last_second = <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>();</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <a class="code" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a>(argc, argv, &amp;<a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <a class="code" href="structbus__config.html">bus_config</a> cfg = {</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        .<a class="code" href="structbus__config.html#a297dac13672376d63468a1ffd390cef8">log_cb</a> = <a class="code" href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">log_cb</a>,</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        .log_level = <a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>.verbosity,</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        .sink_cb = <a class="code" href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">sink_cb</a>,</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        .unpack_cb = <a class="code" href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">unpack_cb</a>,</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        .unexpected_msg_cb = <a class="code" href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">unexpected_msg_cb</a>,</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        .bus_udata = &amp;<a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>,</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    };</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <a class="code" href="structbus__result.html">bus_result</a> res = {0};</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451">bus_init</a>(&amp;cfg, &amp;res)) {</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(0, <span class="stringliteral">&quot;failed to init bus: %d\n&quot;</span>, res.<a class="code" href="structbus__result.html#a3257dd0f3116387d8a2b65159605f984">status</a>);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    }</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keyword">struct </span><a class="code" href="structbus.html">bus</a> *b = res.<a class="code" href="structbus__result.html#aabd61449d17f5f5d086b22f88b8cee6d">bus</a>;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <a class="code" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a>(&amp;<a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>, b);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <span class="keywordflow">if</span> (b) {</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;shutting down\n&quot;</span>);</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <a class="code" href="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9">bus_shutdown</a>(b);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <a class="code" href="bus_8c.html#af013638c2ed0336af67997ec31cb88c6">bus_free</a>(b);</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    }</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;}</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;</div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039">  275</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039">loop_flag</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00276"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a760a9af25c6b4b6479b9608d226a5073">  276</a></span>&#160;<span class="keyword">static</span> sig_t <a class="code" href="bus__example_8c.html#a760a9af25c6b4b6479b9608d226a5073">old_sigint_handler</a> = NULL;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
+<div class="line"><a name="l00278"></a><span class="lineno"><a class="line" href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">  278</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">signal_handler</a>(<span class="keywordtype">int</span> arg) {</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    loop_flag = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(3, <span class="stringliteral">&quot;-- caught signal %d\n&quot;</span>, arg);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keywordflow">if</span> (arg == SIGINT) {</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        signal(arg, old_sigint_handler);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    (void)arg;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;}</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
+<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">  287</a></span>&#160;<span class="keyword">static</span> sig_t <a class="code" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a>(<span class="keywordtype">int</span> sig) {</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    sig_t old_handler = signal(sig, <a class="code" href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">signal_handler</a>);</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordflow">if</span> (old_handler == SIG_ERR) { err(1, <span class="stringliteral">&quot;signal&quot;</span>); }</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordflow">return</span> old_handler;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;}</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
+<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">  293</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">register_signal_handlers</a>(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    (void)<a class="code" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a>(SIGPIPE);</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    old_sigint_handler = <a class="code" href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a>(SIGINT);</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;}</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;</div>
+<div class="line"><a name="l00298"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">  298</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a>(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    fprintf(stderr,</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="stringliteral">&quot;Usage: %s [-b BUF_SIZE] [-l LOW_PORT] [-h HIGH_PORT] [-s STOP_AT_SEQUENCE_ID] [-v] \n&quot;</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="stringliteral">&quot;    If only one of -l or -h are specified, it will use just that one port.\n&quot;</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="stringliteral">&quot;    -v can be used multiple times to increase verbosity.\n&quot;</span></div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        , <a class="code" href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a>);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    exit(1);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;}</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;</div>
+<div class="line"><a name="l00307"></a><span class="lineno"><a class="line" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">  307</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv, example_state *s) {</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="keywordtype">int</span> a = 0;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    s-&gt;buf_size = <a class="code" href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">DEFAULT_BUF_SIZE</a>;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <span class="keywordflow">while</span> ((a = getopt(argc, argv, <span class="stringliteral">&quot;b:l:h:s:v&quot;</span>)) != -1) {</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordflow">switch</span> (a) {</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;b&#39;</span>:               <span class="comment">/* buffer size */</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            s-&gt;buf_size = atol(optarg);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;l&#39;</span>:               <span class="comment">/* low port */</span></div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            s-&gt;port_low = atoi(optarg);</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;h&#39;</span>:               <span class="comment">/* high port */</span></div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            s-&gt;port_high = atoi(optarg);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;s&#39;</span>:               <span class="comment">/* stop loop at sequence ID */</span></div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            s-&gt;max_seq_id = atoi(optarg);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>:               <span class="comment">/* verbosity */</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            s-&gt;verbosity++;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            fprintf(stderr, <span class="stringliteral">&quot;illegal option: -- %c\n&quot;</span>, a);</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <a class="code" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a>();</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        }</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    } </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="keywordflow">if</span> (s-&gt;port_low == 0) { s-&gt;port_low = s-&gt;port_high; }</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keywordflow">if</span> (s-&gt;port_high == 0) { s-&gt;port_high = s-&gt;port_low; }</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <span class="keywordflow">if</span> (s-&gt;port_high &lt; s-&gt;port_low || s-&gt;port_low == 0) { <a class="code" href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a>(); }</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <span class="keywordflow">if</span> (s-&gt;verbosity &gt; 0) {</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        printf(<span class="stringliteral">&quot;bus_size: %zd\n&quot;</span>, s-&gt;buf_size);</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        printf(<span class="stringliteral">&quot;port_low: %d\n&quot;</span>, s-&gt;port_low);</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        printf(<span class="stringliteral">&quot;port_high: %d\n&quot;</span>, s-&gt;port_high);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        printf(<span class="stringliteral">&quot;verbosity: %d\n&quot;</span>, s-&gt;verbosity);</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    }</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;}</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;</div>
+<div class="line"><a name="l00347"></a><span class="lineno"><a class="line" href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">  347</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">open_sockets</a>(example_state *s) {</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keywordtype">int</span> socket_count = s-&gt;port_high - s-&gt;port_low + 1;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="keywordtype">size_t</span> info_size = <span class="keyword">sizeof</span>(socket_info) + s-&gt;buf_size;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="comment">/* open socket(s) */</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    for (<span class="keywordtype">int</span> i = 0; i &lt; socket_count; i++) {</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keywordtype">int</span> port = i + s-&gt;port_low;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        socket99_config cfg = {</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;            .host = <span class="stringliteral">&quot;127.0.0.1&quot;</span>,</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            .port = port,</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            .nonblocking = <span class="keyword">true</span>,</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        };</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        socket99_result res;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        <span class="keywordflow">if</span> (!socket99_open(&amp;cfg, &amp;res)) {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;            socket99_fprintf(stderr, &amp;res);</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            exit(1);</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        s-&gt;sockets[i] = res.fd;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        s-&gt;sockets_used++;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        socket_info *si = malloc(info_size);</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        assert(si);</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        memset(si, 0, info_size);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        s-&gt;info[i] = si;</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    }</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;}</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;</div>
+<div class="line"><a name="l00377"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">  377</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">size_t</span> <a class="code" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">construct_msg</a>(uint8_t *buf, <span class="keywordtype">size_t</span> buf_size, <span class="keywordtype">size_t</span> payload_size, int64_t seq_id) {</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="keywordtype">size_t</span> header_size = <span class="keyword">sizeof</span>(prot_header_t);</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    assert(buf_size &gt; header_size);</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    prot_header_t *header = (prot_header_t *)buf;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    uint8_t *payload = &amp;buf[header_size];</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; payload_size; i++) {</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        payload[i] = (uint8_t)(0xFF &amp; i);</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    }</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    header-&gt;magic_number = <a class="code" href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86">MAGIC_NUMBER</a>;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    header-&gt;seq_id = seq_id;</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    header-&gt;size = payload_size;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="keywordflow">return</span> header_size + payload_size;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;}</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="comment">/* Should it CAS on the completion counter?</span></div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;<span class="comment"> * This should account for nearly all CPU usage. */</span></div>
+<div class="line"><a name="l00396"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a6f0597838b98c2b1bd2a123c795bf754">  396</a></span>&#160;<span class="preprocessor">#define INCREMENT_COMPLETION_COUNTER 1</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;</div>
+<div class="line"><a name="l00398"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">  398</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">completion_cb</a>(<a class="code" href="structbus__msg__result__t.html">bus_msg_result_t</a> *res, <span class="keywordtype">void</span> *<a class="code" href="structbus.html#a1063de7e8411d91e03e156557b87e4d7">udata</a>) {</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    example_state *s = &amp;<a class="code" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a>;</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    socket_info *si = (socket_info *)udata;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordflow">switch</span> (res-&gt;<a class="code" href="structbus__msg__result__t.html#a36104df5573606bc88588a136b014d87">status</a>) {</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa52308a11e747d3a138fc7fd799af3650">BUS_SEND_SUCCESS</a>:</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    {</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;<span class="preprocessor">#if INCREMENT_COMPLETION_COUNTER</span></div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        <span class="keywordflow">for</span> (;;) {</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <span class="keywordtype">size_t</span> cur = s-&gt;completed_deliveries;</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="atomic_8h.html#ac670f7588d6db0cf09e0a61540133489">ATOMIC_BOOL_COMPARE_AND_SWAP</a>(&amp;s-&gt;completed_deliveries, cur, cur + 1)) {</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;                <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(3, <span class="stringliteral">&quot; -- ! got %zd bytes, seq_id 0x%08llx, %p\n&quot;</span>,</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;                    si-&gt;cur_payload_size, res-&gt;<a class="code" href="structbus__msg__result__t.html#a241466c461e3be2accbb0b0f351a71dc">u</a>.<a class="code" href="structbus__msg__result__t.html#ac4e4674f7a4c28cb5807f78d7552fe24">response</a>.seq_id,</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;                    res-&gt;<a class="code" href="structbus__msg__result__t.html#a241466c461e3be2accbb0b0f351a71dc">u</a>.<a class="code" href="structbus__msg__result__t.html#ac4e4674f7a4c28cb5807f78d7552fe24">response</a>.opaque_msg);</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;            }</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        }</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        (void)s;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        (void)si;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    }</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa6410b998e2e53a079a014a870b1e8e92">BUS_SEND_TX_TIMEOUT</a>:</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;BUS_SEND_TIMEOUT\n&quot;</span>);</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa8ce56c063db51d0e642d2eb4bca90322">BUS_SEND_TX_FAILURE</a>:</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;BUS_SEND_TX_FAILURE\n&quot;</span>);</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143">BUS_SEND_RX_FAILURE</a>:</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;BUS_SEND_RX_FAILURE\n&quot;</span>);</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    <span class="keywordflow">case</span> <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aaf6d2907a2f1da7b3245815fb46db31e4">BUS_SEND_RX_TIMEOUT</a>:</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;BUS_SEND_RX_TIMEOUT\n&quot;</span>);</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;        fprintf(stderr, <span class="stringliteral">&quot;match fail: %d\n&quot;</span>, res-&gt;<a class="code" href="structbus__msg__result__t.html#a36104df5573606bc88588a136b014d87">status</a>);</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;        assert(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    }</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;}</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;</div>
+<div class="line"><a name="l00439"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">  439</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">tick_handler</a>(example_state *s) {</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    s-&gt;ticks++;</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot;%ld -- %zd ticks, %zd requests, %zd responses (delta %zd)\n&quot;</span>,</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        s-&gt;last_second, s-&gt;ticks, s-&gt;sent_msgs, s-&gt;completed_deliveries,</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        s-&gt;completed_deliveries - s-&gt;sent_msgs);</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;}</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;</div>
+<div class="line"><a name="l00446"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">  446</a></span>&#160;<span class="keyword">static</span> time_t <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    <span class="keyword">struct </span>timeval tv;</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9">util_timestamp</a>(&amp;tv, <span class="keyword">true</span>)) {</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        assert(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    }</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    <span class="keywordflow">return</span> tv.tv_sec;</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;}</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;</div>
+<div class="line"><a name="l00454"></a><span class="lineno"><a class="line" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">  454</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a>(example_state *s, <span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b) {</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    <a class="code" href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">register_signal_handlers</a>();</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;    <a class="code" href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">open_sockets</a>(s);</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; s-&gt;sockets_used; i++) {</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        <a class="code" href="bus_8c.html#aece2c000aa2f834b76a77ce032a2d0d2">bus_register_socket</a>(b, <a class="code" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb">BUS_SOCKET_PLAIN</a>, s-&gt;sockets[i], s-&gt;info[i]);</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    }</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    uint8_t msg_buf[<a class="code" href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">DEFAULT_BUF_SIZE</a>];</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    <span class="keywordtype">size_t</span> buf_size = <span class="keyword">sizeof</span>(msg_buf);</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    <span class="keywordtype">size_t</span> payload_size = seq_id;</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;    s-&gt;last_second = <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>();</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    <span class="keywordtype">int</span> sleep_counter = 0;</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keywordtype">int</span> dropped = 0;</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    <span class="keywordtype">int</span> cur_socket_i = 0;</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    int64_t seq_id = 1;</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    uint8_t msg_buf[<a class="code" href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">DEFAULT_BUF_SIZE</a>];</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;    <span class="keywordtype">size_t</span> buf_size = <span class="keyword">sizeof</span>(msg_buf);</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    <span class="keywordtype">size_t</span> payload_size = seq_id;</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    s-&gt;last_second = <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>();</div>
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <span class="keywordflow">while</span> (loop_flag) {</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        time_t cur_second = <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>();</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        <span class="keywordflow">if</span> (cur_second != s-&gt;last_second) {</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;            <a class="code" href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">tick_handler</a>(s);</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;            s-&gt;last_second = cur_second;</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;            payload_size = 8;</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;            <span class="keywordflow">if</span> (sleep_counter &gt; 0) {</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;                sleep_counter--;</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;                <span class="keywordflow">if</span> (sleep_counter == 0) {</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;                    printf(<span class="stringliteral">&quot; -- resuming\n&quot;</span>);</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;                }</div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((cur_second &amp; 0x3f) == 0x00) {</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;                printf(<span class="stringliteral">&quot; -- sleeping for 10 seconds\n&quot;</span>);</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;                sleep_counter = 10;</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;            }</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;        }</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <span class="keywordflow">if</span> (sleep_counter == 0) {</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            <span class="keywordtype">size_t</span> msg_size = <a class="code" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">construct_msg</a>(msg_buf, buf_size,</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;                100 * <span class="comment">/*payload_size * */</span> 1024L, seq_id);</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;            <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(3, <span class="stringliteral">&quot; @@ sending message with %zd bytes\n&quot;</span>, msg_size);</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;            <a class="code" href="structbus__user__msg.html">bus_user_msg</a> msg = {</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;                .<a class="code" href="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953">fd</a> = s-&gt;sockets[cur_socket_i],</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;                .seq_id = seq_id,</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;                .msg = msg_buf,</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;                .msg_size = msg_size,</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;                .cb = <a class="code" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">completion_cb</a>,</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;                .udata = s-&gt;info[cur_socket_i],</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;            };</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;            </div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;            s-&gt;sent_msgs++;</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;            payload_size++;</div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;            <span class="keywordflow">if</span> (!<a class="code" href="bus_8c.html#a586029a1def1f27aa18916d5750cffe6">bus_send_request</a>(b, &amp;msg)) {</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot; @@@ bus_send_request failed!\n&quot;</span>);</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                dropped++;</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                <span class="keywordflow">if</span> (dropped &gt;= 100) {</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                    <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot; @@@ more than 100 send failures, halting\n&quot;</span>);</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                    loop_flag = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                }</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;            }</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;            </div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;            cur_socket_i++;</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;            <span class="keywordflow">if</span> (cur_socket_i == s-&gt;sockets_used) {</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                cur_socket_i = 0;</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;            }</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;            seq_id++;</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;            <span class="keywordflow">if</span> (seq_id == s-&gt;max_seq_id) {</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;                loop_flag = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;            }</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;            poll(NULL, 0, 1000);</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        }</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    }</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;}</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <span class="keywordtype">int</span> sleep_counter = 0;</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;    <span class="keywordtype">int</span> dropped = 0;</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    <span class="keywordflow">while</span> (loop_flag) {</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        time_t cur_second = <a class="code" href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a>();</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <span class="keywordflow">if</span> (cur_second != s-&gt;last_second) {</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;            <a class="code" href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">tick_handler</a>(s);</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;            s-&gt;last_second = cur_second;</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;            payload_size = 8;</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;            <span class="keywordflow">if</span> (sleep_counter &gt; 0) {</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;                sleep_counter--;</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;                <span class="keywordflow">if</span> (sleep_counter == 0) {</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;                    printf(<span class="stringliteral">&quot; -- resuming\n&quot;</span>);</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;                }</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;            } <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((cur_second &amp; 0x3f) == 0x00) {</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;                printf(<span class="stringliteral">&quot; -- sleeping for 10 seconds\n&quot;</span>);</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;                sleep_counter = 10;</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;            }</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;        }</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;        <span class="keywordflow">if</span> (sleep_counter == 0) {</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;            <span class="keywordtype">size_t</span> msg_size = <a class="code" href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">construct_msg</a>(msg_buf, buf_size,</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;                100 * <span class="comment">/*payload_size * */</span> 1024L, seq_id);</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;            <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(3, <span class="stringliteral">&quot; @@ sending message with %zd bytes\n&quot;</span>, msg_size);</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;            <a class="code" href="structbus__user__msg.html">bus_user_msg</a> msg = {</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;                .<a class="code" href="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953">fd</a> = s-&gt;sockets[cur_socket_i],</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;                .seq_id = seq_id,</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;                .msg = msg_buf,</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;                .msg_size = msg_size,</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;                .cb = <a class="code" href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">completion_cb</a>,</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;                .udata = s-&gt;info[cur_socket_i],</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;            };</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;            </div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            s-&gt;sent_msgs++;</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;            payload_size++;</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;            <span class="keywordflow">if</span> (!<a class="code" href="bus_8c.html#a586029a1def1f27aa18916d5750cffe6">bus_send_request</a>(b, &amp;msg)) {</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot; @@@ bus_send_request failed!\n&quot;</span>);</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                dropped++;</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                <span class="keywordflow">if</span> (dropped &gt;= 100) {</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                    <a class="code" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>(1, <span class="stringliteral">&quot; @@@ more than 100 send failures, halting\n&quot;</span>);</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                    loop_flag = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                }</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;            }</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;            </div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;            cur_socket_i++;</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;            <span class="keywordflow">if</span> (cur_socket_i == s-&gt;sockets_used) {</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;                cur_socket_i = 0;</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;            }</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;            seq_id++;</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;            <span class="keywordflow">if</span> (seq_id == s-&gt;max_seq_id) {</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;                loop_flag = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;            }</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;            poll(NULL, 0, 1000);</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;        }</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;    }</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;}</div>
 <div class="ttc" id="bus_8h_html"><div class="ttname"><a href="bus_8h.html">bus.h</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a4a9a97612f93b3169c7485304e0947c6"><div class="ttname"><a href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">completion_cb</a></div><div class="ttdeci">static void completion_cb(bus_msg_result_t *res, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00397">bus_example.c:397</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a4a9a97612f93b3169c7485304e0947c6"><div class="ttname"><a href="bus__example_8c.html#a4a9a97612f93b3169c7485304e0947c6">completion_cb</a></div><div class="ttdeci">static void completion_cb(bus_msg_result_t *res, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00398">bus_example.c:398</a></div></div>
 <div class="ttc" id="structbus__user__msg_html"><div class="ttname"><a href="structbus__user__msg.html">bus_user_msg</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00233">bus_types.h:233</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a3d270a951f9c3bd2ef6fff2519405b3d"><div class="ttname"><a href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a></div><div class="ttdeci">static void run_bus(example_state *s, struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00451">bus_example.c:451</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a3d270a951f9c3bd2ef6fff2519405b3d"><div class="ttname"><a href="bus__example_8c.html#a3d270a951f9c3bd2ef6fff2519405b3d">run_bus</a></div><div class="ttdeci">static void run_bus(example_state *s, struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00454">bus_example.c:454</a></div></div>
 <div class="ttc" id="structbus__sink__cb__res__t_html"><div class="ttname"><a href="structbus__sink__cb__res__t.html">bus_sink_cb_res_t</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00112">bus_types.h:112</a></div></div>
-<div class="ttc" id="bus_8c_html_af013638c2ed0336af67997ec31cb88c6"><div class="ttname"><a href="bus_8c.html#af013638c2ed0336af67997ec31cb88c6">bus_free</a></div><div class="ttdeci">void bus_free(bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00645">bus.c:645</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a3df0ed001eb9f84319ce7925d738b6be"><div class="ttname"><a href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">log_cb</a></div><div class="ttdeci">static void log_cb(log_event_t event, int log_level, const char *msg, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00088">bus_example.c:88</a></div></div>
+<div class="ttc" id="bus_8c_html_af013638c2ed0336af67997ec31cb88c6"><div class="ttname"><a href="bus_8c.html#af013638c2ed0336af67997ec31cb88c6">bus_free</a></div><div class="ttdeci">void bus_free(bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00639">bus.c:639</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a3df0ed001eb9f84319ce7925d738b6be"><div class="ttname"><a href="bus__example_8c.html#a3df0ed001eb9f84319ce7925d738b6be">log_cb</a></div><div class="ttdeci">static void log_cb(log_event_t event, int log_level, const char *msg, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00089">bus_example.c:89</a></div></div>
 <div class="ttc" id="bus__types_8h_html_a162815a6c98569dab6fa66f218ae63b9"><div class="ttname"><a href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9">log_event_t</a></div><div class="ttdeci">log_event_t</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00094">bus_types.h:94</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a32deb937f03b2c4859a8e9cb22bb1c4b"><div class="ttname"><a href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a></div><div class="ttdeci">static const char * executable_name</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00098">bus_example.c:98</a></div></div>
-<div class="ttc" id="bus_8c_html_a54e47c2cacbc18b4c7d77f4e8041c451"><div class="ttname"><a href="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451">bus_init</a></div><div class="ttdeci">bool bus_init(bus_config *config, struct bus_result *res)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00059">bus.c:59</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a5381656966734abe40e4e00beca8feff"><div class="ttname"><a href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a></div><div class="ttdeci">static sig_t register_signal_handler(int sig)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00286">bus_example.c:286</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12"><div class="ttname"><a href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">STATE_AWAITING_BODY</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00054">bus_example.c:54</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a30f695d6333e56d635a11e44533ff039"><div class="ttname"><a href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039">loop_flag</a></div><div class="ttdeci">static bool loop_flag</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00274">bus_example.c:274</a></div></div>
-<div class="ttc" id="bus__example_8c_html_afd69230e76dc00c5fede73206368755c"><div class="ttname"><a href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a></div><div class="ttdeci">static void parse_args(int argc, char **argv, example_state *s)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00306">bus_example.c:306</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a32deb937f03b2c4859a8e9cb22bb1c4b"><div class="ttname"><a href="bus__example_8c.html#a32deb937f03b2c4859a8e9cb22bb1c4b">executable_name</a></div><div class="ttdeci">static const char * executable_name</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00099">bus_example.c:99</a></div></div>
+<div class="ttc" id="bus_8c_html_a54e47c2cacbc18b4c7d77f4e8041c451"><div class="ttname"><a href="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451">bus_init</a></div><div class="ttdeci">bool bus_init(bus_config *config, struct bus_result *res)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00054">bus.c:54</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a5381656966734abe40e4e00beca8feff"><div class="ttname"><a href="bus__example_8c.html#a5381656966734abe40e4e00beca8feff">register_signal_handler</a></div><div class="ttdeci">static sig_t register_signal_handler(int sig)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00287">bus_example.c:287</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12"><div class="ttname"><a href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">STATE_AWAITING_BODY</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00055">bus_example.c:55</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a30f695d6333e56d635a11e44533ff039"><div class="ttname"><a href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039">loop_flag</a></div><div class="ttdeci">static bool loop_flag</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00275">bus_example.c:275</a></div></div>
+<div class="ttc" id="bus__example_8c_html_afd69230e76dc00c5fede73206368755c"><div class="ttname"><a href="bus__example_8c.html#afd69230e76dc00c5fede73206368755c">parse_args</a></div><div class="ttdeci">static void parse_args(int argc, char **argv, example_state *s)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00307">bus_example.c:307</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a981084675f7732309de1d3a29a10d6f7"><div class="ttname"><a href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">read_buf</a></div><div class="ttdeci">static uint8_t read_buf[(2 *1024L *1024)]</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00044">echosrv.c:44</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a5798a66c22a0ede1e2c23722f45e36a1"><div class="ttname"><a href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">sink_cb</a></div><div class="ttdeci">static bus_sink_cb_res_t sink_cb(uint8_t *read_buf, size_t read_size, void *socket_udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00111">bus_example.c:111</a></div></div>
-<div class="ttc" id="bus__example_8c_html_ae3d3d15c2e862b08a8694cd6775b9c97"><div class="ttname"><a href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">open_sockets</a></div><div class="ttdeci">static void open_sockets(example_state *s)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00346">bus_example.c:346</a></div></div>
-<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00064">bus_internal_types.h:64</a></div></div>
-<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aa6410b998e2e53a079a014a870b1e8e92"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa6410b998e2e53a079a014a870b1e8e92">BUS_SEND_TX_TIMEOUT</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00196">bus_types.h:196</a></div></div>
-<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aa8ce56c063db51d0e642d2eb4bca90322"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa8ce56c063db51d0e642d2eb4bca90322">BUS_SEND_TX_FAILURE</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00197">bus_types.h:197</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a8d8ddf7b0b56ad697eb0d2cef3e6b8d4"><div class="ttname"><a href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">register_signal_handlers</a></div><div class="ttdeci">static void register_signal_handlers(void)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00292">bus_example.c:292</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a5798a66c22a0ede1e2c23722f45e36a1"><div class="ttname"><a href="bus__example_8c.html#a5798a66c22a0ede1e2c23722f45e36a1">sink_cb</a></div><div class="ttdeci">static bus_sink_cb_res_t sink_cb(uint8_t *read_buf, size_t read_size, void *socket_udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00112">bus_example.c:112</a></div></div>
+<div class="ttc" id="bus__example_8c_html_ae3d3d15c2e862b08a8694cd6775b9c97"><div class="ttname"><a href="bus__example_8c.html#ae3d3d15c2e862b08a8694cd6775b9c97">open_sockets</a></div><div class="ttdeci">static void open_sockets(example_state *s)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00347">bus_example.c:347</a></div></div>
+<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00072">bus_internal_types.h:72</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aa6410b998e2e53a079a014a870b1e8e92"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa6410b998e2e53a079a014a870b1e8e92">BUS_SEND_TX_TIMEOUT</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00195">bus_types.h:195</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aa8ce56c063db51d0e642d2eb4bca90322"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa8ce56c063db51d0e642d2eb4bca90322">BUS_SEND_TX_FAILURE</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00196">bus_types.h:196</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a8d8ddf7b0b56ad697eb0d2cef3e6b8d4"><div class="ttname"><a href="bus__example_8c.html#a8d8ddf7b0b56ad697eb0d2cef3e6b8d4">register_signal_handlers</a></div><div class="ttdeci">static void register_signal_handlers(void)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00293">bus_example.c:293</a></div></div>
 <div class="ttc" id="structbus__user__msg_html_a4cdbd4a0dd186d560a250ff0dd86d953"><div class="ttname"><a href="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953">bus_user_msg::fd</a></div><div class="ttdeci">int fd</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00234">bus_types.h:234</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d"><div class="ttname"><a href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00053">bus_example.c:53</a></div></div>
-<div class="ttc" id="structbus_html_a1063de7e8411d91e03e156557b87e4d7"><div class="ttname"><a href="structbus.html#a1063de7e8411d91e03e156557b87e4d7">bus::udata</a></div><div class="ttdeci">void * udata</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00069">bus_internal_types.h:69</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d"><div class="ttname"><a href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d">STATE_UNINIT</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00052">bus_example.c:52</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a4a055720116545d1fd52227e417488f8"><div class="ttname"><a href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">socket_state</a></div><div class="ttdeci">socket_state</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00051">bus_example.c:51</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d"><div class="ttname"><a href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">STATE_AWAITING_HEADER</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00054">bus_example.c:54</a></div></div>
+<div class="ttc" id="structbus_html_a1063de7e8411d91e03e156557b87e4d7"><div class="ttname"><a href="structbus.html#a1063de7e8411d91e03e156557b87e4d7">bus::udata</a></div><div class="ttdeci">void * udata</div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00077">bus_internal_types.h:77</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d"><div class="ttname"><a href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8a0075eeb0f3377fa2dad84d3656ab8c6d">STATE_UNINIT</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00053">bus_example.c:53</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a4a055720116545d1fd52227e417488f8"><div class="ttname"><a href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">socket_state</a></div><div class="ttdeci">socket_state</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00052">bus_example.c:52</a></div></div>
 <div class="ttc" id="structbus__msg__result__t_html"><div class="ttname"><a href="structbus__msg__result__t.html">bus_msg_result_t</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00212">bus_types.h:212</a></div></div>
-<div class="ttc" id="bus__example_8c_html_ad7077a38d35ab28ea412f902fefe006f"><div class="ttname"><a href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">unpack_cb</a></div><div class="ttdeci">static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00209">bus_example.c:209</a></div></div>
-<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aa52308a11e747d3a138fc7fd799af3650"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa52308a11e747d3a138fc7fd799af3650">BUS_SEND_SUCCESS</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00195">bus_types.h:195</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="bus__example_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00240">bus_example.c:240</a></div></div>
+<div class="ttc" id="bus__example_8c_html_ad7077a38d35ab28ea412f902fefe006f"><div class="ttname"><a href="bus__example_8c.html#ad7077a38d35ab28ea412f902fefe006f">unpack_cb</a></div><div class="ttdeci">static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00210">bus_example.c:210</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aa52308a11e747d3a138fc7fd799af3650"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa52308a11e747d3a138fc7fd799af3650">BUS_SEND_SUCCESS</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00194">bus_types.h:194</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="bus__example_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00241">bus_example.c:241</a></div></div>
 <div class="ttc" id="structbus__msg__result__t_html_a36104df5573606bc88588a136b014d87"><div class="ttname"><a href="structbus__msg__result__t.html#a36104df5573606bc88588a136b014d87">bus_msg_result_t::status</a></div><div class="ttdeci">bus_send_status_t status</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00213">bus_types.h:213</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a1c37834be505d13ba9199ab5fea89e10"><div class="ttname"><a href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a></div><div class="ttdeci">static time_t get_cur_second(void)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00445">bus_example.c:445</a></div></div>
-<div class="ttc" id="bus__example_8c_html_ad96d407a911fbb914fa8e4cfbf2faf0f"><div class="ttname"><a href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a></div><div class="ttdeci">static void usage(void)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00297">bus_example.c:297</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a1c37834be505d13ba9199ab5fea89e10"><div class="ttname"><a href="bus__example_8c.html#a1c37834be505d13ba9199ab5fea89e10">get_cur_second</a></div><div class="ttdeci">static time_t get_cur_second(void)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00446">bus_example.c:446</a></div></div>
+<div class="ttc" id="bus__example_8c_html_ad96d407a911fbb914fa8e4cfbf2faf0f"><div class="ttname"><a href="bus__example_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a></div><div class="ttdeci">static void usage(void)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00298">bus_example.c:298</a></div></div>
 <div class="ttc" id="structbus__unpack__cb__res__t_html"><div class="ttname"><a href="structbus__unpack__cb__res__t.html">bus_unpack_cb_res_t</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00134">bus_types.h:134</a></div></div>
-<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143">BUS_SEND_RX_FAILURE</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00199">bus_types.h:199</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa37a96bb393d9718bce1fbaa09a420143">BUS_SEND_RX_FAILURE</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00198">bus_types.h:198</a></div></div>
 <div class="ttc" id="bus__types_8h_html_ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb"><div class="ttname"><a href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb">BUS_SOCKET_PLAIN</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00229">bus_types.h:229</a></div></div>
+<div class="ttc" id="util_8h_html"><div class="ttname"><a href="util_8h.html">util.h</a></div></div>
 <div class="ttc" id="structbus__result_html"><div class="ttname"><a href="structbus__result.html">bus_result</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00206">bus_types.h:206</a></div></div>
 <div class="ttc" id="structbus__msg__result__t_html_ac4e4674f7a4c28cb5807f78d7552fe24"><div class="ttname"><a href="structbus__msg__result__t.html#ac4e4674f7a4c28cb5807f78d7552fe24">bus_msg_result_t::response</a></div><div class="ttdeci">struct bus_msg_result_t::@3::@5 response</div></div>
-<div class="ttc" id="bus__example_8c_html_a1fc9bbfb06b0f44506946af9ba39169d"><div class="ttname"><a href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">DEFAULT_BUF_SIZE</a></div><div class="ttdeci">#define DEFAULT_BUF_SIZE</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00048">bus_example.c:48</a></div></div>
+<div class="ttc" id="util_8c_html_ad63ab11f5adebc0730d970d7742ccfd9"><div class="ttname"><a href="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9">util_timestamp</a></div><div class="ttdeci">bool util_timestamp(struct timeval *tv, bool relative)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00030">util.c:30</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a1fc9bbfb06b0f44506946af9ba39169d"><div class="ttname"><a href="bus__example_8c.html#a1fc9bbfb06b0f44506946af9ba39169d">DEFAULT_BUF_SIZE</a></div><div class="ttdeci">#define DEFAULT_BUF_SIZE</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00049">bus_example.c:49</a></div></div>
 <div class="ttc" id="atomic_8h_html"><div class="ttname"><a href="atomic_8h.html">atomic.h</a></div></div>
-<div class="ttc" id="bus__example_8c_html_af15bb01e2a9c45feb32c7a6e75d5898d"><div class="ttname"><a href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">signal_handler</a></div><div class="ttdeci">static void signal_handler(int arg)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00277">bus_example.c:277</a></div></div>
-<div class="ttc" id="bus__example_8c_html_ab54cda52ee639aa3c47cfa330904e776"><div class="ttname"><a href="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776">MAX_SOCKETS</a></div><div class="ttdeci">#define MAX_SOCKETS</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00047">bus_example.c:47</a></div></div>
-<div class="ttc" id="bus_8c_html_a60692c56f07f224511783c1b4ed45c02"><div class="ttname"><a href="bus_8c.html#a60692c56f07f224511783c1b4ed45c02">bus_log_event_str</a></div><div class="ttdeci">const char * bus_log_event_str(log_event_t event)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00423">bus.c:423</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a54061e5993a5517320d425f44408cc86"><div class="ttname"><a href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86">MAGIC_NUMBER</a></div><div class="ttdeci">#define MAGIC_NUMBER</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00045">bus_example.c:45</a></div></div>
-<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aaf6d2907a2f1da7b3245815fb46db31e4"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aaf6d2907a2f1da7b3245815fb46db31e4">BUS_SEND_RX_TIMEOUT</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00198">bus_types.h:198</a></div></div>
-<div class="ttc" id="bus__example_8c_html_ac4fcb2f94ac4eb68f0eb89b1a5a340be"><div class="ttname"><a href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a></div><div class="ttdeci">static bus_sink_cb_res_t reset_transfer(socket_info *si)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00100">bus_example.c:100</a></div></div>
+<div class="ttc" id="bus__example_8c_html_af15bb01e2a9c45feb32c7a6e75d5898d"><div class="ttname"><a href="bus__example_8c.html#af15bb01e2a9c45feb32c7a6e75d5898d">signal_handler</a></div><div class="ttdeci">static void signal_handler(int arg)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00278">bus_example.c:278</a></div></div>
+<div class="ttc" id="bus__example_8c_html_ab54cda52ee639aa3c47cfa330904e776"><div class="ttname"><a href="bus__example_8c.html#ab54cda52ee639aa3c47cfa330904e776">MAX_SOCKETS</a></div><div class="ttdeci">#define MAX_SOCKETS</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00048">bus_example.c:48</a></div></div>
+<div class="ttc" id="bus_8c_html_a60692c56f07f224511783c1b4ed45c02"><div class="ttname"><a href="bus_8c.html#a60692c56f07f224511783c1b4ed45c02">bus_log_event_str</a></div><div class="ttdeci">const char * bus_log_event_str(log_event_t event)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00390">bus.c:390</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a54061e5993a5517320d425f44408cc86"><div class="ttname"><a href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86">MAGIC_NUMBER</a></div><div class="ttdeci">#define MAGIC_NUMBER</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00046">bus_example.c:46</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76aaf6d2907a2f1da7b3245815fb46db31e4"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aaf6d2907a2f1da7b3245815fb46db31e4">BUS_SEND_RX_TIMEOUT</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00197">bus_types.h:197</a></div></div>
+<div class="ttc" id="bus__example_8c_html_ac4fcb2f94ac4eb68f0eb89b1a5a340be"><div class="ttname"><a href="bus__example_8c.html#ac4fcb2f94ac4eb68f0eb89b1a5a340be">reset_transfer</a></div><div class="ttdeci">static bus_sink_cb_res_t reset_transfer(socket_info *si)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00101">bus_example.c:101</a></div></div>
 <div class="ttc" id="atomic_8h_html_ac670f7588d6db0cf09e0a61540133489"><div class="ttname"><a href="atomic_8h.html#ac670f7588d6db0cf09e0a61540133489">ATOMIC_BOOL_COMPARE_AND_SWAP</a></div><div class="ttdeci">#define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)</div><div class="ttdef"><b>Definition:</b> <a href="atomic_8h_source.html#l00023">atomic.h:23</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a760a9af25c6b4b6479b9608d226a5073"><div class="ttname"><a href="bus__example_8c.html#a760a9af25c6b4b6479b9608d226a5073">old_sigint_handler</a></div><div class="ttdeci">static sig_t old_sigint_handler</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00275">bus_example.c:275</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a760a9af25c6b4b6479b9608d226a5073"><div class="ttname"><a href="bus__example_8c.html#a760a9af25c6b4b6479b9608d226a5073">old_sigint_handler</a></div><div class="ttdeci">static sig_t old_sigint_handler</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00276">bus_example.c:276</a></div></div>
 <div class="ttc" id="structbus__msg__result__t_html_a241466c461e3be2accbb0b0f351a71dc"><div class="ttname"><a href="structbus__msg__result__t.html#a241466c461e3be2accbb0b0f351a71dc">bus_msg_result_t::u</a></div><div class="ttdeci">union bus_msg_result_t::@3 u</div></div>
-<div class="ttc" id="bus__example_8c_html_a365bce7e19566046a2b8b67124c66c60"><div class="ttname"><a href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">unexpected_msg_cb</a></div><div class="ttdeci">static void unexpected_msg_cb(void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00232">bus_example.c:232</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a365bce7e19566046a2b8b67124c66c60"><div class="ttname"><a href="bus__example_8c.html#a365bce7e19566046a2b8b67124c66c60">unexpected_msg_cb</a></div><div class="ttdeci">static void unexpected_msg_cb(void *msg, int64_t seq_id, void *bus_udata, void *socket_udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00233">bus_example.c:233</a></div></div>
 <div class="ttc" id="structbus__result_html_aabd61449d17f5f5d086b22f88b8cee6d"><div class="ttname"><a href="structbus__result.html#aabd61449d17f5f5d086b22f88b8cee6d">bus_result::bus</a></div><div class="ttdeci">struct bus * bus</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00208">bus_types.h:208</a></div></div>
-<div class="ttc" id="structbus__config_html_a297dac13672376d63468a1ffd390cef8"><div class="ttname"><a href="structbus__config.html#a297dac13672376d63468a1ffd390cef8">bus_config::log_cb</a></div><div class="ttdeci">bus_log_cb * log_cb</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00175">bus_types.h:175</a></div></div>
-<div class="ttc" id="bus__example_8c_html_af9dfa04c3b2b4bf7b65a1e2052ca735a"><div class="ttname"><a href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a></div><div class="ttdeci">#define LOG(VERBOSITY,...)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00095">bus_example.c:95</a></div></div>
-<div class="ttc" id="bus_8c_html_a586029a1def1f27aa18916d5750cffe6"><div class="ttname"><a href="bus_8c.html#a586029a1def1f27aa18916d5750cffe6">bus_send_request</a></div><div class="ttdeci">bool bus_send_request(struct bus *b, bus_user_msg *msg)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00312">bus.c:312</a></div></div>
+<div class="ttc" id="structbus__config_html_a297dac13672376d63468a1ffd390cef8"><div class="ttname"><a href="structbus__config.html#a297dac13672376d63468a1ffd390cef8">bus_config::log_cb</a></div><div class="ttdeci">bus_log_cb * log_cb</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00174">bus_types.h:174</a></div></div>
+<div class="ttc" id="bus__example_8c_html_af9dfa04c3b2b4bf7b65a1e2052ca735a"><div class="ttname"><a href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a></div><div class="ttdeci">#define LOG(VERBOSITY,...)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00096">bus_example.c:96</a></div></div>
+<div class="ttc" id="bus_8c_html_a586029a1def1f27aa18916d5750cffe6"><div class="ttname"><a href="bus_8c.html#a586029a1def1f27aa18916d5750cffe6">bus_send_request</a></div><div class="ttdeci">bool bus_send_request(struct bus *b, bus_user_msg *msg)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00287">bus.c:287</a></div></div>
 <div class="ttc" id="structbus__result_html_a3257dd0f3116387d8a2b65159605f984"><div class="ttname"><a href="structbus__result.html#a3257dd0f3116387d8a2b65159605f984">bus_result::status</a></div><div class="ttdeci">bus_init_res_t status</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00207">bus_types.h:207</a></div></div>
 <div class="ttc" id="structbus__config_html"><div class="ttname"><a href="structbus__config.html">bus_config</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00162">bus_types.h:162</a></div></div>
 <div class="ttc" id="structbus__sink__cb__res__t_html_a1a6030d83e51938e0647935e4bea3c2e"><div class="ttname"><a href="structbus__sink__cb__res__t.html#a1a6030d83e51938e0647935e4bea3c2e">bus_sink_cb_res_t::next_read</a></div><div class="ttdeci">size_t next_read</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00113">bus_types.h:113</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a4b581400c3a7aa504454224ae23fef2e"><div class="ttname"><a href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a></div><div class="ttdeci">example_state state</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00082">bus_example.c:82</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a8332de1d33138a5f520d3d97b6632a15"><div class="ttname"><a href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">construct_msg</a></div><div class="ttdeci">static size_t construct_msg(uint8_t *buf, size_t buf_size, size_t payload_size, int64_t seq_id)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00376">bus_example.c:376</a></div></div>
-<div class="ttc" id="bus__example_8c_html_a59d1755cf30846b9def3e0b0dba1eded"><div class="ttname"><a href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">tick_handler</a></div><div class="ttdeci">static void tick_handler(example_state *s)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00438">bus_example.c:438</a></div></div>
-<div class="ttc" id="bus_8c_html_af61c3cf6bff2b4547e454015e5ee73e9"><div class="ttname"><a href="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9">bus_shutdown</a></div><div class="ttdeci">bool bus_shutdown(bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00555">bus.c:555</a></div></div>
-<div class="ttc" id="bus_8c_html_aece2c000aa2f834b76a77ce032a2d0d2"><div class="ttname"><a href="bus_8c.html#aece2c000aa2f834b76a77ce032a2d0d2">bus_register_socket</a></div><div class="ttdeci">bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00438">bus.c:438</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a4b581400c3a7aa504454224ae23fef2e"><div class="ttname"><a href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">state</a></div><div class="ttdeci">example_state state</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00083">bus_example.c:83</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a8332de1d33138a5f520d3d97b6632a15"><div class="ttname"><a href="bus__example_8c.html#a8332de1d33138a5f520d3d97b6632a15">construct_msg</a></div><div class="ttdeci">static size_t construct_msg(uint8_t *buf, size_t buf_size, size_t payload_size, int64_t seq_id)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00377">bus_example.c:377</a></div></div>
+<div class="ttc" id="bus__example_8c_html_a59d1755cf30846b9def3e0b0dba1eded"><div class="ttname"><a href="bus__example_8c.html#a59d1755cf30846b9def3e0b0dba1eded">tick_handler</a></div><div class="ttdeci">static void tick_handler(example_state *s)</div><div class="ttdef"><b>Definition:</b> <a href="bus__example_8c_source.html#l00439">bus_example.c:439</a></div></div>
+<div class="ttc" id="bus_8c_html_af61c3cf6bff2b4547e454015e5ee73e9"><div class="ttname"><a href="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9">bus_shutdown</a></div><div class="ttdeci">bool bus_shutdown(bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00541">bus.c:541</a></div></div>
+<div class="ttc" id="bus_8c_html_aece2c000aa2f834b76a77ce032a2d0d2"><div class="ttname"><a href="bus_8c.html#aece2c000aa2f834b76a77ce032a2d0d2">bus_register_socket</a></div><div class="ttdeci">bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="bus_8c_source.html#l00405">bus.c:405</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

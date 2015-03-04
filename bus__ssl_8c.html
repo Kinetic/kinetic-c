@@ -78,12 +78,12 @@ Functions</h2></td></tr>
 <tr class="separator:a020f6491753fa0be948cf43ff85d1aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33171a60280a6211fea17aab31b5a376"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376">disable_known_bad_ciphers</a> (SSL_CTX *ctx)</td></tr>
 <tr class="separator:a33171a60280a6211fea17aab31b5a376"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20f49d1fda85fe2dd755a9c3500b3f15"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15">do_blocking_connection</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structconnection__info.html">connection_info</a> *ci)</td></tr>
-<tr class="separator:a20f49d1fda85fe2dd755a9c3500b3f15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0ed2b19cdae16ebbbdbe082be5063b1"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8c.html#af0ed2b19cdae16ebbbdbe082be5063b1">do_blocking_connection</a> (struct <a class="el" href="structbus.html">bus</a> *b, SSL *ssl, int fd)</td></tr>
+<tr class="separator:af0ed2b19cdae16ebbbdbe082be5063b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7097b1068063cc1c875ea76d442b2c6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8c.html#ad7097b1068063cc1c875ea76d442b2c6">bus_ssl_init</a> (struct <a class="el" href="structbus.html">bus</a> *b)</td></tr>
 <tr class="separator:ad7097b1068063cc1c875ea76d442b2c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28804cfaf9b3cfe5f66de08f18b39487"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487">bus_ssl_connect</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structconnection__info.html">connection_info</a> *ci)</td></tr>
-<tr class="separator:a28804cfaf9b3cfe5f66de08f18b39487"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa25887b884806027c8cff1aa770072f3"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8c.html#aa25887b884806027c8cff1aa770072f3">bus_ssl_connect</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd)</td></tr>
+<tr class="separator:aa25887b884806027c8cff1aa770072f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae30bd22a904c9649b3727e6a4917e0f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8c.html#ae30bd22a904c9649b3727e6a4917e0f7">bus_ssl_disconnect</a> (struct <a class="el" href="structbus.html">bus</a> *b, SSL *ssl)</td></tr>
 <tr class="separator:ae30bd22a904c9649b3727e6a4917e0f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a2b616adc201d07b929909393da6ed7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl_ctx_free</a> (struct <a class="el" href="structbus.html">bus</a> *b)</td></tr>
@@ -141,9 +141,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00088">88</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00086">86</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
-<p>References <a class="el" href="bus__ssl_8c_source.html#l00123">disable_known_bad_ciphers()</a>, and <a class="el" href="bus__ssl_8c_source.html#l00114">disable_SSL_compression()</a>.</p>
+<p>References <a class="el" href="bus__ssl_8c_source.html#l00121">disable_known_bad_ciphers()</a>, and <a class="el" href="bus__ssl_8c_source.html#l00112">disable_SSL_compression()</a>.</p>
 
 </div>
 </div>
@@ -169,7 +169,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00114">114</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00112">112</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
 </div>
 </div>
@@ -195,11 +195,11 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00123">123</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00121">121</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a20f49d1fda85fe2dd755a9c3500b3f15"></a>
+<a class="anchor" id="af0ed2b19cdae16ebbbdbe082be5063b1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -215,8 +215,14 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structconnection__info.html">connection_info</a> *&#160;</td>
-          <td class="paramname"><em>ci</em>&#160;</td>
+          <td class="paramtype">SSL *&#160;</td>
+          <td class="paramname"><em>ssl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -231,9 +237,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00131">131</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00129">129</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__internal__types_8h_source.html#l00107">connection_info::fd</a>, <a class="el" href="bus__types_8h_source.html#l00097">LOG_SOCKET_REGISTERED</a>, <a class="el" href="bus__ssl_8c_source.html#l00027">MAX_TIMEOUT</a>, <a class="el" href="bus__internal__types_8h_source.html#l00112">connection_info::ssl</a>, <a class="el" href="bus__ssl_8c_source.html#l00026">TIMEOUT_MSEC</a>, <a class="el" href="bus__internal__types_8h_source.html#l00069">bus::udata</a>, and <a class="el" href="util_8c_source.html#l00025">util_is_resumable_io_error()</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00097">LOG_SOCKET_REGISTERED</a>, <a class="el" href="bus__ssl_8c_source.html#l00027">MAX_TIMEOUT</a>, <a class="el" href="bus__ssl_8c_source.html#l00026">TIMEOUT_MSEC</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, and <a class="el" href="util_8c_source.html#l00026">util_is_resumable_io_error()</a>.</p>
 
 </div>
 </div>
@@ -253,16 +259,16 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00035">35</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
-<p>References <a class="el" href="bus__ssl_8c_source.html#l00088">init_client_SSL_CTX()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00085">bus::ssl_ctx</a>.</p>
+<p>References <a class="el" href="bus__ssl_8c_source.html#l00086">init_client_SSL_CTX()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00091">bus::ssl_ctx</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a28804cfaf9b3cfe5f66de08f18b39487"></a>
+<a class="anchor" id="aa25887b884806027c8cff1aa770072f3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool bus_ssl_connect </td>
+          <td class="memname">SSL* bus_ssl_connect </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
           <td class="paramname"><em>b</em>, </td>
@@ -270,8 +276,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structconnection__info.html">connection_info</a> *&#160;</td>
-          <td class="paramname"><em>ci</em>&#160;</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -283,7 +289,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00050">50</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
-<p>References <a class="el" href="bus__ssl_8c_source.html#l00131">do_blocking_connection()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00107">connection_info::fd</a>, <a class="el" href="bus__internal__types_8h_source.html#l00112">connection_info::ssl</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00085">bus::ssl_ctx</a>.</p>
+<p>References <a class="el" href="bus__ssl_8c_source.html#l00129">do_blocking_connection()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00091">bus::ssl_ctx</a>.</p>
 
 </div>
 </div>
@@ -311,7 +317,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00074">74</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00072">72</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
 </div>
 </div>
@@ -329,9 +335,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00081">81</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
+<p>Definition at line <a class="el" href="bus__ssl_8c_source.html#l00079">79</a> of file <a class="el" href="bus__ssl_8c_source.html">bus_ssl.c</a>.</p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00085">bus::ssl_ctx</a>.</p>
+<p>References <a class="el" href="bus__internal__types_8h_source.html#l00091">bus::ssl_ctx</a>.</p>
 
 </div>
 </div>

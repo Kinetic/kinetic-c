@@ -111,16 +111,16 @@
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">struct </span><a class="code" href="structthread__info.html">thread_info</a> *threads = NULL;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    t = malloc(<span class="keyword">sizeof</span>(*t));</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">if</span> (t == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">if</span> (t == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">size_t</span> tasks_sz = (1 &lt;&lt; cfg-&gt;<a class="code" href="structthreadpool__config.html#ad8b8555c2ff4f7f471ddcc35297e7e3f">task_ringbuf_size2</a>) * <span class="keyword">sizeof</span>(*tasks);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">size_t</span> threads_sz = cfg-&gt;<a class="code" href="structthreadpool__config.html#a2bd6081206a78be4ae4f714f0a9dfe28">max_threads</a> * <span class="keyword">sizeof</span>(<span class="keyword">struct </span><a class="code" href="structthread__info.html">thread_info</a>);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    tasks = malloc(tasks_sz);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">if</span> (tasks == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">if</span> (tasks == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    threads = malloc(threads_sz);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> (threads == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> (threads == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    memset(t, 0, <span class="keyword">sizeof</span>(*t));</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    memset(threads, 0, threads_sz);</div>
@@ -139,7 +139,7 @@
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    t-&gt;<a class="code" href="structthreadpool.html#af332f40f8c1eff62baf02447d3611cfa">max_delay</a> = cfg-&gt;<a class="code" href="structthreadpool__config.html#ae7deca9bd496a5de12d5c7fb9aa3079c">max_delay</a>;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="structthread__info.html#aaffe846b8f2c19940c13a1f4aeaf9a70">t</a>;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>:</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;cleanup:</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">if</span> (t) { free(t); }</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordflow">if</span> (tasks) { free(tasks); }</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">if</span> (threads) { free(threads); }</div>
@@ -433,7 +433,6 @@
 <div class="ttc" id="structthreadpool_html_a0a285c2de9634418e1d68054a1e9caa5"><div class="ttname"><a href="structthreadpool.html#a0a285c2de9634418e1d68054a1e9caa5">threadpool::task_reserve_head</a></div><div class="ttdeci">size_t task_reserve_head</div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00066">threadpool_internals.h:66</a></div></div>
 <div class="ttc" id="structthreadpool_html_a8bf60006c3b06823e1f15052d24840ce"><div class="ttname"><a href="structthreadpool.html#a8bf60006c3b06823e1f15052d24840ce">threadpool::shutting_down</a></div><div class="ttdeci">bool shutting_down</div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00079">threadpool_internals.h:79</a></div></div>
 <div class="ttc" id="threadpool__internals_8h_html_ac528c02d3cccfb103d539b26ccdba6b2ad137ee018516fc14367c6b34176cb636"><div class="ttname"><a href="threadpool__internals_8h.html#ac528c02d3cccfb103d539b26ccdba6b2ad137ee018516fc14367c6b34176cb636">STATUS_ASLEEP</a></div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00027">threadpool_internals.h:27</a></div></div>
-<div class="ttc" id="sender_8c_html_a35be7855150c6a8fa847eba457e48bdc"><div class="ttname"><a href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a></div><div class="ttdeci">static void cleanup(sender *s)</div><div class="ttdef"><b>Definition:</b> <a href="sender_8c_source.html#l00405">sender.c:405</a></div></div>
 <div class="ttc" id="structthreadpool_html_a3acbdc36ee1adfb2db5ce1d19f3aae69"><div class="ttname"><a href="structthreadpool.html#a3acbdc36ee1adfb2db5ce1d19f3aae69">threadpool::task_ringbuf_size2</a></div><div class="ttdeci">uint8_t task_ringbuf_size2</div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00077">threadpool_internals.h:77</a></div></div>
 <div class="ttc" id="structthreadpool_html_af332f40f8c1eff62baf02447d3611cfa"><div class="ttname"><a href="structthreadpool.html#af332f40f8c1eff62baf02447d3611cfa">threadpool::max_delay</a></div><div class="ttdeci">size_t max_delay</div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00076">threadpool_internals.h:76</a></div></div>
 <div class="ttc" id="structthread__info_html_a9fe1b6ca6944390956e02a9f5d6cc35a"><div class="ttname"><a href="structthread__info.html#a9fe1b6ca6944390956e02a9f5d6cc35a">thread_info::parent_fd</a></div><div class="ttdeci">int parent_fd</div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00036">threadpool_internals.h:36</a></div></div>

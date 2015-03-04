@@ -23,6 +23,7 @@
         <topic label="out_seq_id" href="structboxed__msg.html#af95824a6049596447b014c9ad0666aaa"/>
         <topic label="out_msg" href="structboxed__msg.html#a4bbd440c3391b3bfd7f108016cc5d457"/>
         <topic label="out_msg_size" href="structboxed__msg.html#afa5e562c823076e36c4c92d909e4ef5d"/>
+        <topic label="out_sent_size" href="structboxed__msg.html#abbb3d56b8df85679e47e45f83fdcebcd"/>
       </topic>
       <topic label="bus" href="structbus.html">
         <topic label="sink_cb" href="structbus.html#a3f72ca0a4bdb9978a9e012045623f933"/>
@@ -33,19 +34,17 @@
         <topic label="log_level" href="structbus.html#a5ad9f0ac1d3f3f27a2fecb343b8ed2a0"/>
         <topic label="log_cb" href="structbus.html#a1160376c92f0c8fce674ca77fa41335a"/>
         <topic label="log_lock" href="structbus.html#ace72e36be8085e1cb2935af8b11207b7"/>
-        <topic label="sender_count" href="structbus.html#a0c515f6e769e09d43fca4b11a62e8344"/>
-        <topic label="senders" href="structbus.html#a89364a094feac4f2e881ac3f9972a483"/>
         <topic label="listener_count" href="structbus.html#aeaebf543f45a2c9d6b3af31826c8af69"/>
         <topic label="listeners" href="structbus.html#a63745ef2fca7e862f1301380892f0f22"/>
         <topic label="joined" href="structbus.html#ac4589956d09754001506dab138c33432"/>
         <topic label="threads" href="structbus.html#af44407d0ffd23017d659329d06a2af89"/>
+        <topic label="shutdown_state" href="structbus.html#a873b1c898dbdee192950caea56b37729"/>
         <topic label="threadpool" href="structbus.html#a1d57acc6c3586d4994215fb0efcac63e"/>
         <topic label="ssl_ctx" href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c"/>
         <topic label="fd_set" href="structbus.html#a02b724a103e70fd7eea516e8c4b2556c"/>
         <topic label="fd_set_lock" href="structbus.html#a01464a80aa897f2caa81b063402d1f28"/>
       </topic>
       <topic label="bus_config" href="structbus__config.html">
-        <topic label="sender_count" href="structbus__config.html#a2a469e8bdb721bc038f4009e190d9a0c"/>
         <topic label="listener_count" href="structbus__config.html#a0f99f64476e50779df44d82c04d82397"/>
         <topic label="threadpool_cfg" href="structbus__config.html#a4608cd6cb48070f425d5196e6bdc8051"/>
         <topic label="sink_cb" href="structbus__config.html#ad20a0495c65231d9c50a9493531847a9"/>
@@ -85,7 +84,7 @@
       <topic label="bus_user_msg" href="structbus__user__msg.html">
         <topic label="fd" href="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953"/>
         <topic label="type" href="structbus__user__msg.html#acf9730acc14dbf810ad303346df79e52"/>
-        <topic label="seq_id" href="structbus__user__msg.html#ace4aaba434c6505167d760dbd7994c95"/>
+        <topic label="seq_id" href="structbus__user__msg.html#a3e8b1951c9628bf2745c3229af24b145"/>
         <topic label="msg" href="structbus__user__msg.html#a2a7a830b6e51f212377c9b84d400e61a"/>
         <topic label="msg_size" href="structbus__user__msg.html#a5167279f6c1b270eb5cab8813417582b"/>
         <topic label="timeout_sec" href="structbus__user__msg.html#a0ce147ac612c037bdc4317b4032840d1"/>
@@ -106,20 +105,14 @@
         <topic label="used" href="struct_byte_buffer_array.html#af6423547071ca14bcbd0a5d160fcba88"/>
       </topic>
       <topic label="connection_info" href="structconnection__info.html">
-        <topic label="fd" href="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8"/>
+        <topic label="fd" href="structconnection__info.html#a6776f202bed7509222507f0d1db67500"/>
+        <topic label="type" href="structconnection__info.html#a19201693299c03819f5cf5f7d110e8fb"/>
+        <topic label="udata" href="structconnection__info.html#a848a07967f74e31333fddea49fab9668"/>
+        <topic label="ssl" href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1"/>
+        <topic label="largest_wr_seq_id_seen" href="structconnection__info.html#a2ffb2a7b8d44fcb0405452391ee351b4"/>
         <topic label="error" href="structconnection__info.html#aef3103f14c4cabe24a02e72a5ad62a16"/>
         <topic label="to_read_size" href="structconnection__info.html#aef449f1f96dfb53fd9655ea0cf803480"/>
-        <topic label="largest_seq_id_seen" href="structconnection__info.html#a7357df379b73912945c71edcb2e7bfe5"/>
-        <topic label="ssl" href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1"/>
-        <topic label="type" href="structconnection__info.html#ab9f8d54036f15df03f070f271984c319"/>
-        <topic label="udata" href="structconnection__info.html#a848a07967f74e31333fddea49fab9668"/>
-      </topic>
-      <topic label="fd_info" href="structfd__info.html">
-        <topic label="fd" href="structfd__info.html#ae854a5754cd0716eba8aabed12a6cd1e"/>
-        <topic label="ssl" href="structfd__info.html#abce68830a0316490cb9a01d13e4e47b9"/>
-        <topic label="refcount" href="structfd__info.html#a6f4437e27ab87d3f6a9d962a422e288f"/>
-        <topic label="largest_seq_id_seen" href="structfd__info.html#a1ba7b197cc1ebf0355ee8ef8b4d705a3"/>
-        <topic label="errored" href="structfd__info.html#a056b8cc22b630361dd331eca978f1d38"/>
+        <topic label="largest_rd_seq_id_seen" href="structconnection__info.html#ab615d35e7a56f24003a371db6343ffe4"/>
       </topic>
       <topic label="greatest_run_info" href="structgreatest__run__info.html">
         <topic label="flags" href="structgreatest__run__info.html#ae8471c5288b7b2d6d6da2ed661671b8e"/>
@@ -168,7 +161,6 @@
       <topic label="KineticClientConfig" href="struct_kinetic_client_config.html">
         <topic label="logFile" href="struct_kinetic_client_config.html#a200c4b5a44ff14aa20f9cb20df708a5b"/>
         <topic label="logLevel" href="struct_kinetic_client_config.html#af2847d4cbb33b1104133778e207f5569"/>
-        <topic label="writerThreads" href="struct_kinetic_client_config.html#ab9cc6db700bcbe64ed91b8589af0cd57"/>
         <topic label="readerThreads" href="struct_kinetic_client_config.html#a7554ee4d63821eb7ce0d5c59d632018a"/>
         <topic label="maxThreadpoolThreads" href="struct_kinetic_client_config.html#aedd2dc97b7736cfed0a748c991d0236f"/>
       </topic>
@@ -674,7 +666,7 @@
       </topic>
       <topic label="listener" href="structlistener.html">
         <topic label="bus" href="structlistener.html#a3b774e2e0ad1e58c3a0bdf7207cabbb6"/>
-        <topic label="shutdown" href="structlistener.html#a38f8e5d2c9f44093adb69974440a3741"/>
+        <topic label="shutdown_notify_fd" href="structlistener.html#a98d02f437be02437df79939b196d178a"/>
         <topic label="commit_pipe" href="structlistener.html#abc6abc228015127d7413688bbcad26b1"/>
         <topic label="incoming_msg_pipe" href="structlistener.html#a5ac777bb848a219493fb3ac22902b703"/>
         <topic label="is_idle" href="structlistener.html#ab64bf7942724f8b2209e840fec1b7101"/>
@@ -697,6 +689,7 @@
         <topic label="id" href="structlistener__msg.html#a8bb0870834ca5fd0c183192f8748c718"/>
         <topic label="type" href="structlistener__msg.html#a2e6e8423ecf60ca3fe3f787da52c1561"/>
         <topic label="next" href="structlistener__msg.html#a856d225df0b476a85b12946457ad6513"/>
+        <topic label="pipes" href="structlistener__msg.html#a7cbeff39416d25e0f81ae37286f59f37"/>
         <topic label="info" href="structlistener__msg.html#a3ad14d5e8c3aace68db10da5e70c0f99"/>
         <topic label="notify_fd" href="structlistener__msg.html#a6b0ba1341c3e8c74196c0453bf110e36"/>
         <topic label="add_socket" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027"/>
@@ -707,7 +700,6 @@
         <topic label="hold" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4"/>
         <topic label="box" href="structlistener__msg.html#a39f0b0ecbdab57c7e35fef63d74f290d"/>
         <topic label="expect" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be"/>
-        <topic label="unused" href="structlistener__msg.html#aee243d33b555bb733bfeff7d2b116435"/>
         <topic label="shutdown" href="structlistener__msg.html#a6d465300533fe5aa78e626247ee36d09"/>
         <topic label="u" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb"/>
       </topic>
@@ -731,20 +723,6 @@
         <topic label="error" href="structrx__info__t.html#a3dda876455d854d92bc8f3c7104db728"/>
         <topic label="expect" href="structrx__info__t.html#a7aa7c18547fd393ad4b22a9ea6eb7267"/>
         <topic label="u" href="structrx__info__t.html#a92273c68b1cc0dd89592e5cd1e6ecd7b"/>
-      </topic>
-      <topic label="sender" href="structsender.html">
-        <topic label="bus" href="structsender.html#a757588eec51f26a7d24b7dd72662aad2"/>
-        <topic label="shutdown" href="structsender.html#a562a8defcf71bd924f000e3919cd7065"/>
-        <topic label="tx_flags" href="structsender.html#a9c78ecf6abe562a015b465d2f718e5c5"/>
-        <topic label="tx_info" href="structsender.html#a7ea1a5cf71cd395158628fe887c74542"/>
-        <topic label="pipes" href="structsender.html#a1f817ab1d64dacd856b891b8347bb527"/>
-        <topic label="commit_pipe" href="structsender.html#a5d9bfeef7350314f6c03cda33569e00c"/>
-        <topic label="incoming_command_pipe" href="structsender.html#a0ce70524aee2f28afdbb2dceace8100a"/>
-        <topic label="largest_seq_id_seen" href="structsender.html#a8c67df66dc04d78ec44a8717a3fe2e54"/>
-        <topic label="active_fds" href="structsender.html#aa8f75e8e259d4c7fc1cd1337c5ffc48b"/>
-        <topic label="fds" href="structsender.html#aff32b617c8187617c30fde60a778dc44"/>
-        <topic label="is_idle" href="structsender.html#a555122c7e76f98fbaadb430c6eafaa6d"/>
-        <topic label="fd_hash_table" href="structsender.html#aff098306a5cefab0f1dc624bd3d1da04"/>
       </topic>
       <topic label="thread_context" href="structthread__context.html">
         <topic label="t" href="structthread__context.html#a737c06ed49032111c8c8c29ad39f521f"/>
@@ -785,28 +763,6 @@
         <topic label="task" href="structthreadpool__task.html#a5e7d8e5dededc5d3d883bcdf0cd4db97"/>
         <topic label="cleanup" href="structthreadpool__task.html#a0859c59120434648d22ea1686e68e1ce"/>
         <topic label="udata" href="structthreadpool__task.html#a4f1f8ebfee18c4a5eb98a4cf9525e577"/>
-      </topic>
-      <topic label="tx_info_t" href="structtx__info__t.html">
-        <topic label="id" href="structtx__info__t.html#aee200e8d32eccb08f126ae3104058e67"/>
-        <topic label="done_pipe" href="structtx__info__t.html#a37de7f02faa45a0cba93b35395be52ba"/>
-        <topic label="state" href="structtx__info__t.html#a08ee9b3e37cda4f0ca22e67afa14f51d"/>
-        <topic label="fd" href="structtx__info__t.html#a2292418fbcac8b8ba7c293bac184ced4"/>
-        <topic label="ssl" href="structtx__info__t.html#a6e94516f2ca594ec49e1733346e13cb1"/>
-        <topic label="add_socket" href="structtx__info__t.html#a8b45629d2d63915b01497ab2aa07ce88"/>
-        <topic label="rm_socket" href="structtx__info__t.html#aa4d8bd6c3afe21286e04e81d145cf981"/>
-        <topic label="timeout_sec" href="structtx__info__t.html#a37b46822e03d5685d68f37102110bc0a"/>
-        <topic label="box" href="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a"/>
-        <topic label="enqueue" href="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180"/>
-        <topic label="orig_timeout_sec" href="structtx__info__t.html#a30fef92dc2359bb1195415a93a9250f8"/>
-        <topic label="sent_size" href="structtx__info__t.html#a61afed662d74f641186fb125661639f5"/>
-        <topic label="fdi" href="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309"/>
-        <topic label="write" href="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92"/>
-        <topic label="notify" href="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d"/>
-        <topic label="backpressure" href="structtx__info__t.html#ad5806f7db0c0dcf5c87f96f29975de23"/>
-        <topic label="release" href="structtx__info__t.html#a2445fd10412433bffce13104c1258a09"/>
-        <topic label="error" href="structtx__info__t.html#a58c7097345d6030639c29df528bdc813"/>
-        <topic label="error" href="structtx__info__t.html#ace7818c75a0e304fc57fda8f1634dd31"/>
-        <topic label="u" href="structtx__info__t.html#abe3950d61af476a551829f85ae8219c2"/>
       </topic>
     </topic>
     <topic label="Data Fields" href="functions.html">
@@ -937,12 +893,8 @@
         <topic label="main" href="blocking__put__get_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
       <topic label="bus.c" href="bus_8c.html">
-        <topic label="DEF_FD_SET_SIZE2" href="bus_8c.html#a7129e5f5219981ae2b4d3babdc5f6a73"/>
         <topic label="THREAD_SHUTDOWN_SECONDS" href="bus_8c.html#ac9db88b27b40f46d327f575228bd72ab"/>
-        <topic label="listener_mainloop" href="bus_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0"/>
-        <topic label="sender_mainloop" href="bus_8c.html#a4f1823592996205c3243bf49127a0004"/>
         <topic label="poll_on_completion" href="bus_8c.html#af65a34f2a232288bc0aabe83521a47f7"/>
-        <topic label="sender_id_of_socket" href="bus_8c.html#a4d924998574ebf0270f4d56027b25494"/>
         <topic label="listener_id_of_socket" href="bus_8c.html#a013694e272579d83c87e0039769be8a9"/>
         <topic label="noop_log_cb" href="bus_8c.html#a207a3f520e7e3a9e770c6a2e57086218"/>
         <topic label="noop_error_cb" href="bus_8c.html#aacccc95ac547d085c1cd5626a0f38c6a"/>
@@ -951,13 +903,14 @@
         <topic label="bus_init" href="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451"/>
         <topic label="box_msg" href="bus_8c.html#ac0b99f211ee9a81b08697c509640323f"/>
         <topic label="bus_send_request" href="bus_8c.html#a586029a1def1f27aa18916d5750cffe6"/>
-        <topic label="bus_get_sender_for_socket" href="bus_8c.html#a8200fe8d77bbf9ebd2ee156835c3bb98"/>
         <topic label="bus_get_listener_for_socket" href="bus_8c.html#a22b25ecf4c0e11de50f551369307c811"/>
         <topic label="bus_log_event_str" href="bus_8c.html#a60692c56f07f224511783c1b4ed45c02"/>
         <topic label="bus_register_socket" href="bus_8c.html#aece2c000aa2f834b76a77ce032a2d0d2"/>
-        <topic label="bus_release_socket" href="bus_8c.html#a2119dbab02464f8c6ea0dd724d497666"/>
+        <topic label="bus_release_socket" href="bus_8c.html#a8a4bd5912f0de341b8fc65040b70fc00"/>
         <topic label="bus_schedule_threadpool_task" href="bus_8c.html#acfd818006ce9f3cb485667d288af9d81"/>
+        <topic label="free_connection_cb" href="bus_8c.html#afe8e6487b9bc3c72b5159f9b3932ec5c"/>
         <topic label="bus_shutdown" href="bus_8c.html#af61c3cf6bff2b4547e454015e5ee73e9"/>
+        <topic label="bus_backpressure_delay" href="bus_8c.html#a189082d10346e2334dfad2365445d16b"/>
         <topic label="bus_lock_log" href="bus_8c.html#acc4bcbb78efe00f265027438dfea598f"/>
         <topic label="bus_unlock_log" href="bus_8c.html#a78abbe3ffa07e668c7df0fb28fe8ad87"/>
         <topic label="box_execute_cb" href="bus_8c.html#a1f25ceee49e76a60fcb43f4e39c3cddd"/>
@@ -970,15 +923,15 @@
         <topic label="bus_send_request" href="bus_8h.html#a586029a1def1f27aa18916d5750cffe6"/>
         <topic label="bus_log_event_str" href="bus_8h.html#a60692c56f07f224511783c1b4ed45c02"/>
         <topic label="bus_register_socket" href="bus_8h.html#acd5ad66702ebaae2fe54a81e6f747199"/>
-        <topic label="bus_release_socket" href="bus_8h.html#a2119dbab02464f8c6ea0dd724d497666"/>
+        <topic label="bus_release_socket" href="bus_8h.html#a8a4bd5912f0de341b8fc65040b70fc00"/>
         <topic label="bus_shutdown" href="bus_8h.html#aec91507d9ff9f03cf3de0bed9498827b"/>
-        <topic label="bus_get_sender_for_socket" href="bus_8h.html#a8200fe8d77bbf9ebd2ee156835c3bb98"/>
         <topic label="bus_get_listener_for_socket" href="bus_8h.html#a22b25ecf4c0e11de50f551369307c811"/>
         <topic label="bus_schedule_threadpool_task" href="bus_8h.html#acfd818006ce9f3cb485667d288af9d81"/>
         <topic label="bus_lock_log" href="bus_8h.html#acc4bcbb78efe00f265027438dfea598f"/>
         <topic label="bus_unlock_log" href="bus_8h.html#a78abbe3ffa07e668c7df0fb28fe8ad87"/>
         <topic label="bus_free" href="bus_8h.html#a5fd7f7fb81f7a5bf439a2692486ff60d"/>
         <topic label="bus_process_boxed_message" href="bus_8h.html#a56eff9f2e0b0df727c0e825aaee531b8"/>
+        <topic label="bus_backpressure_delay" href="bus_8h.html#a189082d10346e2334dfad2365445d16b"/>
       </topic>
       <topic label="bus_example.c" href="bus__example_8c.html">
         <topic label="MAGIC_NUMBER" href="bus__example_8c.html#a54061e5993a5517320d425f44408cc86"/>
@@ -1030,6 +983,7 @@
           <topic label="out_seq_id" href="structboxed__msg.html#af95824a6049596447b014c9ad0666aaa"/>
           <topic label="out_msg" href="structboxed__msg.html#a4bbd440c3391b3bfd7f108016cc5d457"/>
           <topic label="out_msg_size" href="structboxed__msg.html#afa5e562c823076e36c4c92d909e4ef5d"/>
+          <topic label="out_sent_size" href="structboxed__msg.html#abbb3d56b8df85679e47e45f83fdcebcd"/>
         </topic>
         <topic label="bus" href="structbus.html">
           <topic label="sink_cb" href="structbus.html#a3f72ca0a4bdb9978a9e012045623f933"/>
@@ -1040,28 +994,35 @@
           <topic label="log_level" href="structbus.html#a5ad9f0ac1d3f3f27a2fecb343b8ed2a0"/>
           <topic label="log_cb" href="structbus.html#a1160376c92f0c8fce674ca77fa41335a"/>
           <topic label="log_lock" href="structbus.html#ace72e36be8085e1cb2935af8b11207b7"/>
-          <topic label="sender_count" href="structbus.html#a0c515f6e769e09d43fca4b11a62e8344"/>
-          <topic label="senders" href="structbus.html#a89364a094feac4f2e881ac3f9972a483"/>
           <topic label="listener_count" href="structbus.html#aeaebf543f45a2c9d6b3af31826c8af69"/>
           <topic label="listeners" href="structbus.html#a63745ef2fca7e862f1301380892f0f22"/>
           <topic label="joined" href="structbus.html#ac4589956d09754001506dab138c33432"/>
           <topic label="threads" href="structbus.html#af44407d0ffd23017d659329d06a2af89"/>
+          <topic label="shutdown_state" href="structbus.html#a873b1c898dbdee192950caea56b37729"/>
           <topic label="threadpool" href="structbus.html#a1d57acc6c3586d4994215fb0efcac63e"/>
           <topic label="ssl_ctx" href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c"/>
           <topic label="fd_set" href="structbus.html#a02b724a103e70fd7eea516e8c4b2556c"/>
           <topic label="fd_set_lock" href="structbus.html#a01464a80aa897f2caa81b063402d1f28"/>
         </topic>
         <topic label="connection_info" href="structconnection__info.html">
-          <topic label="fd" href="structconnection__info.html#a0d081db32b7ce14db136e2f0685c07b8"/>
+          <topic label="fd" href="structconnection__info.html#a6776f202bed7509222507f0d1db67500"/>
+          <topic label="type" href="structconnection__info.html#a19201693299c03819f5cf5f7d110e8fb"/>
+          <topic label="udata" href="structconnection__info.html#a848a07967f74e31333fddea49fab9668"/>
+          <topic label="ssl" href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1"/>
+          <topic label="largest_wr_seq_id_seen" href="structconnection__info.html#a2ffb2a7b8d44fcb0405452391ee351b4"/>
           <topic label="error" href="structconnection__info.html#aef3103f14c4cabe24a02e72a5ad62a16"/>
           <topic label="to_read_size" href="structconnection__info.html#aef449f1f96dfb53fd9655ea0cf803480"/>
-          <topic label="largest_seq_id_seen" href="structconnection__info.html#a7357df379b73912945c71edcb2e7bfe5"/>
-          <topic label="ssl" href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1"/>
-          <topic label="type" href="structconnection__info.html#ab9f8d54036f15df03f070f271984c319"/>
-          <topic label="udata" href="structconnection__info.html#a848a07967f74e31333fddea49fab9668"/>
+          <topic label="largest_rd_seq_id_seen" href="structconnection__info.html#ab615d35e7a56f24003a371db6343ffe4"/>
         </topic>
         <topic label="BUS_NO_SSL" href="bus__internal__types_8h.html#a76bf250ccc8ac3e852f8785c68903a47"/>
         <topic label="TIMEOUT_NOT_YET_SET" href="bus__internal__types_8h.html#a82f24c54131d866631239cc371581955"/>
+        <topic label="LISTENER_MSG_TAG" href="bus__internal__types_8h.html#ac2614000c9ba78a93265c20646fcc2ae"/>
+        <topic label="DEF_FD_SET_SIZE2" href="bus__internal__types_8h.html#a7129e5f5219981ae2b4d3babdc5f6a73"/>
+        <topic label="shutdown_state_t" href="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4e">
+          <topic label="SHUTDOWN_STATE_RUNNING" href="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea3da66d8f533391529e253a9a0389774d"/>
+          <topic label="SHUTDOWN_STATE_SHUTTING_DOWN" href="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea20a95bda47f269835aae66b2d8152caf"/>
+          <topic label="SHUTDOWN_STATE_HALTED" href="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea3d7ff9fa774c3ac46f21b11feb359828"/>
+        </topic>
         <topic label="rx_error_t" href="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3fa">
           <topic label="RX_ERROR_NONE" href="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3faa1417a57269c97681c54f7e5e7b7503f1"/>
           <topic label="RX_ERROR_READY_FOR_DELIVERY" href="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3faa2ef7ec149b385fb940423126ae61f891"/>
@@ -1078,16 +1039,16 @@
         <topic label="init_client_SSL_CTX" href="bus__ssl_8c.html#aea1fb37a35aa085c55f91711b51ec4f2"/>
         <topic label="disable_SSL_compression" href="bus__ssl_8c.html#a020f6491753fa0be948cf43ff85d1aa3"/>
         <topic label="disable_known_bad_ciphers" href="bus__ssl_8c.html#a33171a60280a6211fea17aab31b5a376"/>
-        <topic label="do_blocking_connection" href="bus__ssl_8c.html#a20f49d1fda85fe2dd755a9c3500b3f15"/>
+        <topic label="do_blocking_connection" href="bus__ssl_8c.html#af0ed2b19cdae16ebbbdbe082be5063b1"/>
         <topic label="bus_ssl_init" href="bus__ssl_8c.html#ad7097b1068063cc1c875ea76d442b2c6"/>
-        <topic label="bus_ssl_connect" href="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487"/>
+        <topic label="bus_ssl_connect" href="bus__ssl_8c.html#aa25887b884806027c8cff1aa770072f3"/>
         <topic label="bus_ssl_disconnect" href="bus__ssl_8c.html#ae30bd22a904c9649b3727e6a4917e0f7"/>
         <topic label="bus_ssl_ctx_free" href="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7"/>
       </topic>
       <topic label="bus_ssl.h" href="bus__ssl_8h.html">
         <topic label="KINETIC_USE_TLS_1_2" href="bus__ssl_8h.html#a49cb96458b3e449948dbe5f22778664a"/>
         <topic label="bus_ssl_init" href="bus__ssl_8h.html#ad7097b1068063cc1c875ea76d442b2c6"/>
-        <topic label="bus_ssl_connect" href="bus__ssl_8h.html#a28804cfaf9b3cfe5f66de08f18b39487"/>
+        <topic label="bus_ssl_connect" href="bus__ssl_8h.html#aa25887b884806027c8cff1aa770072f3"/>
         <topic label="bus_ssl_disconnect" href="bus__ssl_8h.html#ae30bd22a904c9649b3727e6a4917e0f7"/>
         <topic label="bus_ssl_ctx_free" href="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7"/>
       </topic>
@@ -1106,7 +1067,6 @@
           <topic label="u" href="structbus__unpack__cb__res__t.html#ac71a45a4335a5f7e32f68fe9d92aae91"/>
         </topic>
         <topic label="bus_config" href="structbus__config.html">
-          <topic label="sender_count" href="structbus__config.html#a2a469e8bdb721bc038f4009e190d9a0c"/>
           <topic label="listener_count" href="structbus__config.html#a0f99f64476e50779df44d82c04d82397"/>
           <topic label="threadpool_cfg" href="structbus__config.html#a4608cd6cb48070f425d5196e6bdc8051"/>
           <topic label="sink_cb" href="structbus__config.html#ad20a0495c65231d9c50a9493531847a9"/>
@@ -1133,7 +1093,7 @@
         <topic label="bus_user_msg" href="structbus__user__msg.html">
           <topic label="fd" href="structbus__user__msg.html#a4cdbd4a0dd186d560a250ff0dd86d953"/>
           <topic label="type" href="structbus__user__msg.html#acf9730acc14dbf810ad303346df79e52"/>
-          <topic label="seq_id" href="structbus__user__msg.html#ace4aaba434c6505167d760dbd7994c95"/>
+          <topic label="seq_id" href="structbus__user__msg.html#a3e8b1951c9628bf2745c3229af24b145"/>
           <topic label="msg" href="structbus__user__msg.html#a2a7a830b6e51f212377c9b84d400e61a"/>
           <topic label="msg_size" href="structbus__user__msg.html#a5167279f6c1b270eb5cab8813417582b"/>
           <topic label="timeout_sec" href="structbus__user__msg.html#a0ce147ac612c037bdc4317b4032840d1"/>
@@ -1187,6 +1147,7 @@
           <topic label="BUS_SEND_BAD_RESPONSE" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aadd9779e34cdfcee87a3548baaf020ba3"/>
           <topic label="BUS_SEND_UNREGISTERED_SOCKET" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aad373d2f8bb961b04fa9e2c2a21ee7dc1"/>
           <topic label="BUS_SEND_RX_TIMEOUT_EXPECT" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa2a1199466b7810e5a38a193624bbea84"/>
+          <topic label="BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa1305feede4d01715a05e893622b4c0e4"/>
         </topic>
         <topic label="bus_socket_t" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2">
           <topic label="BUS_SOCKET_PLAIN" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2a436dba0b719636cb6c50507f33eef3eb"/>
@@ -1864,7 +1825,7 @@
       <topic label="kinetic_operation.c" href="kinetic__operation_8c.html">
         <topic label="ATOMIC_FETCH_AND_INCREMENT" href="kinetic__operation_8c.html#a8e6ca0967c3f2508bd8dab901a6a6ba7"/>
         <topic label="KineticOperation_ValidateOperation" href="kinetic__operation_8c.html#a1dd564b1f626c3f16a29348abea6003b"/>
-        <topic label="KineticOperation_SendRequestInner" href="kinetic__operation_8c.html#ac25ef0fa4d64bb4249e2d17d50ad1be3"/>
+        <topic label="KineticOperation_SendRequestInLock" href="kinetic__operation_8c.html#a5317e92dc71dfa1df7acc0cf3f3be48e"/>
         <topic label="KineticOperation_SendRequest" href="kinetic__operation_8c.html#a267d9481a259bcc26147d166a3fc515a"/>
         <topic label="log_request_seq_id" href="kinetic__operation_8c.html#a3f48a946d6e75703c0fb26b3c9c6d12b"/>
         <topic label="KineticOperation_GetStatus" href="kinetic__operation_8c.html#adbf3eeef54dcdb65dfaf75f2e0312cd0"/>
@@ -1908,6 +1869,12 @@
         <topic label="KineticOperation_BuildUpdateFirmware" href="kinetic__operation_8c.html#a89b2c4d0633faef505afdcbed0506090"/>
       </topic>
       <topic label="kinetic_operation.h" href="kinetic__operation_8h.html">
+        <topic label="KineticOperation_NonstandardTimeout" href="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11">
+          <topic label="KineticOperation_TimeoutSetACL" href="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a200aecb997dcc9989d97140e6a36cdaa"/>
+          <topic label="KineticOperation_TimeoutSetPin" href="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a95f6c656c72ab0c29ccb4d61e8876062"/>
+          <topic label="KineticOperation_TimeoutLockUnlock" href="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a48826c3d7bb917828ee732e6f7c18a80"/>
+          <topic label="KineticOperation_TimeoutErase" href="kinetic__operation_8h.html#a6b666300ae998946808fcf7560b5cf11a8ef8806548580abe016ce513eab97fe1"/>
+        </topic>
         <topic label="KineticOperation_SendRequest" href="kinetic__operation_8h.html#a267d9481a259bcc26147d166a3fc515a"/>
         <topic label="KineticOperation_GetStatus" href="kinetic__operation_8h.html#adbf3eeef54dcdb65dfaf75f2e0312cd0"/>
         <topic label="KineticOperation_Complete" href="kinetic__operation_8h.html#a8ed174b20d25b186335a498efc3d763e"/>
@@ -2696,6 +2663,23 @@
         <topic label="KineticProto_command_algorithm__descriptor" href="kinetic__proto_8h.html#aa4be7767ecac12b4f28c2aee218ae70a"/>
         <topic label="KineticProto_command_message_type__descriptor" href="kinetic__proto_8h.html#a14f3a694d698fadf8ca916af7c0d561e"/>
       </topic>
+      <topic label="kinetic_request.c" href="kinetic__request_8c.html">
+        <topic label="KineticRequest_PackCommand" href="kinetic__request_8c.html#a22e92e6d39ecb48e2d3fcef993e17ba3"/>
+        <topic label="KineticRequest_PopulateAuthentication" href="kinetic__request_8c.html#adf6d20f5e4ab9d40ed6f4351a68520c9"/>
+        <topic label="KineticRequest_PackMessage" href="kinetic__request_8c.html#a604311e368349bb3695db1f44a59ee20"/>
+        <topic label="KineticRequest_SendRequest" href="kinetic__request_8c.html#af4443dd94ce141114c37ddfc782967d7"/>
+        <topic label="KineticRequest_LockOperation" href="kinetic__request_8c.html#af957f9c9ba08f70e12bff0e97e6b0bce"/>
+        <topic label="KineticRequest_UnlockOperation" href="kinetic__request_8c.html#a633cdb1a73a6768566c4b7f9af534652"/>
+      </topic>
+      <topic label="kinetic_request.h" href="kinetic__request_8h.html">
+        <topic label="KINETIC_REQUEST_PACK_FAILURE" href="kinetic__request_8h.html#a3449d8c8442581494de7948a7ca24215"/>
+        <topic label="KineticRequest_PackCommand" href="kinetic__request_8h.html#a22e92e6d39ecb48e2d3fcef993e17ba3"/>
+        <topic label="KineticRequest_PopulateAuthentication" href="kinetic__request_8h.html#adf6d20f5e4ab9d40ed6f4351a68520c9"/>
+        <topic label="KineticRequest_PackMessage" href="kinetic__request_8h.html#a278c7eb32b12868faeb5a861d45e1e53"/>
+        <topic label="KineticRequest_SendRequest" href="kinetic__request_8h.html#af4443dd94ce141114c37ddfc782967d7"/>
+        <topic label="KineticRequest_LockOperation" href="kinetic__request_8h.html#af957f9c9ba08f70e12bff0e97e6b0bce"/>
+        <topic label="KineticRequest_UnlockOperation" href="kinetic__request_8h.html#a633cdb1a73a6768566c4b7f9af534652"/>
+      </topic>
       <topic label="kinetic_resourcewaiter.c" href="kinetic__resourcewaiter_8c.html">
         <topic label="KineticResourceWaiter_Init" href="kinetic__resourcewaiter_8c.html#ab8d207b74ec58acf48157292629bcc19"/>
         <topic label="KineticResourceWaiter_SetAvailable" href="kinetic__resourcewaiter_8c.html#ab949799c5111ec8604edb07df3ecd85a"/>
@@ -2918,7 +2902,6 @@
         <topic label="KineticClientConfig" href="struct_kinetic_client_config.html">
           <topic label="logFile" href="struct_kinetic_client_config.html#a200c4b5a44ff14aa20f9cb20df708a5b"/>
           <topic label="logLevel" href="struct_kinetic_client_config.html#af2847d4cbb33b1104133778e207f5569"/>
-          <topic label="writerThreads" href="struct_kinetic_client_config.html#ab9cc6db700bcbe64ed91b8589af0cd57"/>
           <topic label="readerThreads" href="struct_kinetic_client_config.html#a7554ee4d63821eb7ce0d5c59d632018a"/>
           <topic label="maxThreadpoolThreads" href="struct_kinetic_client_config.html#aedd2dc97b7736cfed0a748c991d0236f"/>
         </topic>
@@ -2940,7 +2923,6 @@
         <topic label="KINETIC_P2P_OPERATION_LIMIT" href="kinetic__types_8h.html#abaa05a6bc4a4faddc19e9fe8eee68ed1"/>
         <topic label="KINETIC_P2P_MAX_NESTING" href="kinetic__types_8h.html#abb79428649147e2162ed75f6103b2b4b"/>
         <topic label="KINETIC_CLIENT_DEFAULT_LOG_LEVEL" href="kinetic__types_8h.html#af3b3ca91939b728ff6079e235a2e7076"/>
-        <topic label="KINETIC_CLIENT_DEFAULT_WRITER_THREADS" href="kinetic__types_8h.html#a86714c3c1cfa6964686a72207c3506c3"/>
         <topic label="KINETIC_CLIENT_DEFAULT_READER_THREADS" href="kinetic__types_8h.html#a1139caf48a78b5227f8de332ab693314"/>
         <topic label="KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS" href="kinetic__types_8h.html#acaccd20ff47192379bc8c497407bfc03"/>
         <topic label="KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN" href="kinetic__types_8h.html#a19eed82e573d877a85b41792b553b1df"/>
@@ -2990,6 +2972,7 @@
           <topic label="KINETIC_STATUS_ACL_ERROR" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a0621c91bfcd921f59615cc58051a964c"/>
           <topic label="KINETIC_STATUS_NOT_AUTHORIZED" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57a4142ff2d3039615341b6094ee3635462"/>
           <topic label="KINETIC_STATUS_INVALID_FILE" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57abaef7e263ce024c1b02ea5be12e21325"/>
+          <topic label="KINETIC_STATUS_REQUEST_REJECTED" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57adc5bcd24e5b2700860be2e9328511e31"/>
           <topic label="KINETIC_STATUS_COUNT" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57aa6a2bd5838c04467a4b7385b1a1e8cb4"/>
         </topic>
         <topic label="KineticLogInfo_Type" href="kinetic__types_8h.html#a48ff3dbaf797ae87d8027be341072fce">
@@ -3194,74 +3177,63 @@
         <topic label="KineticPDUHeader" href="kinetic__types__internal_8h.html#aeefc7ca996ea90f5703b1b8440092c5e"/>
       </topic>
       <topic label="listener.c" href="listener_8c.html">
-        <topic label="DEFAULT_READ_BUF_SIZE" href="listener_8c.html#a55c36910fb23a47b98bb7467e508daa5"/>
-        <topic label="INCOMING_MSG_PIPE" href="listener_8c.html#a15740a5bfc8ef3fb9b927ef0007010bf"/>
-        <topic label="INCOMING_MSG_PIPE_ID" href="listener_8c.html#a45f028e5e02538a530e3fe313bfd728a"/>
-        <topic label="MSG_BP_1QTR" href="listener_8c.html#ac68caa54ad7fc51c8f5815eeb6686f30"/>
-        <topic label="MSG_BP_HALF" href="listener_8c.html#a7acc76219d8588ca99f58c2121988112"/>
-        <topic label="MSG_BP_3QTR" href="listener_8c.html#a694eca96dcf9ed929ec1608f9c14c852"/>
-        <topic label="RX_INFO_BP_1QTR" href="listener_8c.html#a7fc0ffea5ec4b8882f719f0d054e3824"/>
-        <topic label="RX_INFO_BP_HALF" href="listener_8c.html#a3e7f3829ff5668c512d1911a3201db71"/>
-        <topic label="RX_INFO_BP_3QTR" href="listener_8c.html#a45f677274d8f1de84ae1cc842c43d0fe"/>
-        <topic label="THREADPOOL_BP" href="listener_8c.html#a87e98e5aad28f7363d5f4217d2e8d10e"/>
-        <topic label="TIMEOUT_DELAY" href="listener_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6"/>
-        <topic label="DUMP_READ" href="listener_8c.html#a1d7054af083649f8e410783fbf2e7b33"/>
-        <topic label="retry_delivery" href="listener_8c.html#a91845232ef24ffde41ff3689b0caa0c9"/>
         <topic label="listener_init" href="listener_8c.html#a0c3342b1bf0a6cade3e4729f40022ed7"/>
-        <topic label="listener_add_socket" href="listener_8c.html#ac413d1ed53a01815b79baf2dc2f3ece5"/>
-        <topic label="listener_remove_socket" href="listener_8c.html#a4926cd8003e7903476104018d81b35d2"/>
-        <topic label="get_backpressure" href="listener_8c.html#ae7c7515f7ab98011b61aa5d1d8d28751"/>
-        <topic label="observe_backpressure" href="listener_8c.html#ae71f036eb0a57423a8e2b225bcf32e12"/>
+        <topic label="listener_add_socket" href="listener_8c.html#ab80e1a8ec62bff3ad6a1b69eca150f1d"/>
+        <topic label="listener_remove_socket" href="listener_8c.html#af3f377ca9b433af51d906a103eee304f"/>
         <topic label="listener_hold_response" href="listener_8c.html#acbec5b5b8251c2787ebdb7ec4f73f20b"/>
         <topic label="listener_expect_response" href="listener_8c.html#ac4ca027f622cf5d1ab731f92f9cb66a8"/>
-        <topic label="listener_shutdown" href="listener_8c.html#ac185ab098ac6d91c0474bf847ef64265"/>
+        <topic label="listener_shutdown" href="listener_8c.html#a29137171fd3f0a2f878c450544927c56"/>
         <topic label="listener_free" href="listener_8c.html#ae02746f8c243596cedd386fc1d7630e5"/>
-        <topic label="listener_mainloop" href="listener_8c.html#ade9975ecc1b8d24e514e7fbfc03221d0"/>
-        <topic label="check_and_flush_incoming_msg_pipe" href="listener_8c.html#a41d1e6df116c066e5c56dd646c3fe898"/>
-        <topic label="set_error_for_socket" href="listener_8c.html#affa8fc52abd48c60492b25fae5496d0a"/>
-        <topic label="print_SSL_error" href="listener_8c.html#aa4a0d6443a6bb65b3fee1027d8eef70f"/>
-        <topic label="socket_read_plain" href="listener_8c.html#a48e209edcf9421a36f6cd97eca45aa39"/>
-        <topic label="socket_read_ssl" href="listener_8c.html#a27540bed6e0ee31601a54a31613bd1ee"/>
-        <topic label="sink_socket_read" href="listener_8c.html#a11b801753f3195b71431c6ae11f4e2b7"/>
-        <topic label="attempt_recv" href="listener_8c.html#a09b57f3f2be5eb499e924308bab8f989"/>
-        <topic label="find_info_by_sequence_id" href="listener_8c.html#a5ef5faf6ec41a63ec7b82933b1eaaadd"/>
-        <topic label="process_unpacked_message" href="listener_8c.html#a37c58a09e6d324e7114a2becb2683bbd"/>
-        <topic label="tick_handler" href="listener_8c.html#aeedae561a63e857e130be4d40cca8588"/>
-        <topic label="dump_rx_info_table" href="listener_8c.html#a2b75e85745a6799df9e90def5caf0578"/>
-        <topic label="clean_up_completed_info" href="listener_8c.html#a21e5de0bee07a8e984f3c1408b8e3b62"/>
-        <topic label="notify_message_failure" href="listener_8c.html#ac36cf71f469df6618223f84af9c34ad2"/>
-        <topic label="get_free_rx_info" href="listener_8c.html#a86fe702b7851275f2bd50f8897dc87fe"/>
-        <topic label="get_connection_info" href="listener_8c.html#a3bdbad0ba5aa31b4f2dcdfe16ed379bc"/>
-        <topic label="release_rx_info" href="listener_8c.html#aa53f32f1fa516ebdbb8cc66bb752e712"/>
+        <topic label="push_message" href="listener_8c.html#a00065dea96385786e952e23319beb799"/>
         <topic label="get_free_msg" href="listener_8c.html#a7d7c8279976ea7b7aca15479f6892db4"/>
-        <topic label="release_msg" href="listener_8c.html#ac4aa4e12d23e8c53a5a958e335cf4a2b"/>
-        <topic label="push_message" href="listener_8c.html#abc9a1037551b3c8a9ae45f7b795ab8c3"/>
-        <topic label="msg_handler" href="listener_8c.html#abff7ce205d94f17798e20b45f8ddd289"/>
-        <topic label="notify_caller" href="listener_8c.html#a674dfc8997b3f8cd95eeb8afc76448c0"/>
-        <topic label="grow_read_buf" href="listener_8c.html#a138a357c639da15c5e88958123e660b0"/>
-        <topic label="add_socket" href="listener_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d"/>
-        <topic label="free_ci" href="listener_8c.html#af7c8c5f81320edf7ea28286384c59b40"/>
-        <topic label="remove_socket" href="listener_8c.html#ae12e728e14ca2922ae27678b00a151f3"/>
-        <topic label="hold_response" href="listener_8c.html#ab3d2bbc5f77d606f0040dee30e80648b"/>
-        <topic label="get_hold_rx_info" href="listener_8c.html#a635353fdc72baf5a4112e2d6a896000f"/>
-        <topic label="attempt_delivery" href="listener_8c.html#a7abf986a57b2b4a5ae53b48fc051aafb"/>
-        <topic label="expect_response" href="listener_8c.html#a568c4bcef944d6d127e88b8a673e2890"/>
-        <topic label="shutdown" href="listener_8c.html#aab8481f4406eb5406717e976f6d852a2"/>
       </topic>
       <topic label="listener.h" href="listener_8h.html">
+        <topic label="LISTENER_BACKPRESSURE_SHIFT" href="listener_8h.html#a98cbdaeea07cc02d68f1e960e199e87a"/>
+        <topic label="LISTENER_EXPECT_BACKPRESSURE_SHIFT" href="listener_8h.html#a142b7ddbed12a525d556a51b76d074ab"/>
         <topic label="listener_init" href="listener_8h.html#a0c3342b1bf0a6cade3e4729f40022ed7"/>
-        <topic label="listener_add_socket" href="listener_8h.html#ac413d1ed53a01815b79baf2dc2f3ece5"/>
-        <topic label="listener_remove_socket" href="listener_8h.html#a4926cd8003e7903476104018d81b35d2"/>
+        <topic label="listener_add_socket" href="listener_8h.html#ab80e1a8ec62bff3ad6a1b69eca150f1d"/>
+        <topic label="listener_remove_socket" href="listener_8h.html#af3f377ca9b433af51d906a103eee304f"/>
         <topic label="listener_hold_response" href="listener_8h.html#acbec5b5b8251c2787ebdb7ec4f73f20b"/>
         <topic label="listener_expect_response" href="listener_8h.html#ac4ca027f622cf5d1ab731f92f9cb66a8"/>
-        <topic label="listener_shutdown" href="listener_8h.html#ac185ab098ac6d91c0474bf847ef64265"/>
+        <topic label="listener_shutdown" href="listener_8h.html#a29137171fd3f0a2f878c450544927c56"/>
         <topic label="listener_free" href="listener_8h.html#ae02746f8c243596cedd386fc1d7630e5"/>
       </topic>
+      <topic label="listener_cmd.c" href="listener__cmd_8c.html">
+        <topic label="ListenerCmd_NotifyCaller" href="listener__cmd_8c.html#a643355d8f006114f3186791239b7d4ec"/>
+        <topic label="ListenerCmd_CheckIncomingMessages" href="listener__cmd_8c.html#af3a2e40b666b88497011b99357eec493"/>
+        <topic label="msg_handler" href="listener__cmd_8c.html#abff7ce205d94f17798e20b45f8ddd289"/>
+        <topic label="add_socket" href="listener__cmd_8c.html#a1b411c7d4e360af4ce5f7c05bb4d807d"/>
+        <topic label="remove_socket" href="listener__cmd_8c.html#a6a844acc520512e0dbe5aae6b71da07b"/>
+        <topic label="hold_response" href="listener__cmd_8c.html#ab3d2bbc5f77d606f0040dee30e80648b"/>
+        <topic label="get_hold_rx_info" href="listener__cmd_8c.html#a635353fdc72baf5a4112e2d6a896000f"/>
+        <topic label="expect_response" href="listener__cmd_8c.html#a568c4bcef944d6d127e88b8a673e2890"/>
+        <topic label="shutdown" href="listener__cmd_8c.html#acb20f311c191ce18331d753f8aa78983"/>
+        <topic label="get_free_rx_info" href="listener__cmd_8c.html#a86fe702b7851275f2bd50f8897dc87fe"/>
+      </topic>
+      <topic label="listener_cmd.h" href="listener__cmd_8h.html">
+        <topic label="ListenerCmd_NotifyCaller" href="listener__cmd_8h.html#a643355d8f006114f3186791239b7d4ec"/>
+        <topic label="ListenerCmd_CheckIncomingMessages" href="listener__cmd_8h.html#af3a2e40b666b88497011b99357eec493"/>
+      </topic>
+      <topic label="listener_cmd_internal.h" href="listener__cmd__internal_8h.html">
+        <topic label="msg_handler" href="listener__cmd__internal_8h.html#abff7ce205d94f17798e20b45f8ddd289"/>
+        <topic label="add_socket" href="listener__cmd__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d"/>
+        <topic label="remove_socket" href="listener__cmd__internal_8h.html#a6a844acc520512e0dbe5aae6b71da07b"/>
+        <topic label="hold_response" href="listener__cmd__internal_8h.html#ab3d2bbc5f77d606f0040dee30e80648b"/>
+        <topic label="expect_response" href="listener__cmd__internal_8h.html#ac2f4cfd7e199d3c933f72d46144dee42"/>
+        <topic label="shutdown" href="listener__cmd__internal_8h.html#acb20f311c191ce18331d753f8aa78983"/>
+        <topic label="get_free_rx_info" href="listener__cmd__internal_8h.html#a86fe702b7851275f2bd50f8897dc87fe"/>
+        <topic label="get_hold_rx_info" href="listener__cmd__internal_8h.html#a635353fdc72baf5a4112e2d6a896000f"/>
+      </topic>
       <topic label="listener_internal.h" href="listener__internal_8h.html">
+        <topic label="get_free_msg" href="listener__internal_8h.html#a7d7c8279976ea7b7aca15479f6892db4"/>
+        <topic label="push_message" href="listener__internal_8h.html#a00065dea96385786e952e23319beb799"/>
+      </topic>
+      <topic label="listener_internal_types.h" href="listener__internal__types_8h.html">
         <topic label="listener_msg" href="structlistener__msg.html">
           <topic label="id" href="structlistener__msg.html#a8bb0870834ca5fd0c183192f8748c718"/>
           <topic label="type" href="structlistener__msg.html#a2e6e8423ecf60ca3fe3f787da52c1561"/>
           <topic label="next" href="structlistener__msg.html#a856d225df0b476a85b12946457ad6513"/>
+          <topic label="pipes" href="structlistener__msg.html#a7cbeff39416d25e0f81ae37286f59f37"/>
           <topic label="info" href="structlistener__msg.html#a3ad14d5e8c3aace68db10da5e70c0f99"/>
           <topic label="notify_fd" href="structlistener__msg.html#a6b0ba1341c3e8c74196c0453bf110e36"/>
           <topic label="add_socket" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027"/>
@@ -3272,7 +3244,6 @@
           <topic label="hold" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4"/>
           <topic label="box" href="structlistener__msg.html#a39f0b0ecbdab57c7e35fef63d74f290d"/>
           <topic label="expect" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be"/>
-          <topic label="unused" href="structlistener__msg.html#aee243d33b555bb733bfeff7d2b116435"/>
           <topic label="shutdown" href="structlistener__msg.html#a6d465300533fe5aa78e626247ee36d09"/>
           <topic label="u" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb"/>
         </topic>
@@ -3293,7 +3264,7 @@
         </topic>
         <topic label="listener" href="structlistener.html">
           <topic label="bus" href="structlistener.html#a3b774e2e0ad1e58c3a0bdf7207cabbb6"/>
-          <topic label="shutdown" href="structlistener.html#a38f8e5d2c9f44093adb69974440a3741"/>
+          <topic label="shutdown_notify_fd" href="structlistener.html#a98d02f437be02437df79939b196d178a"/>
           <topic label="commit_pipe" href="structlistener.html#abc6abc228015127d7413688bbcad26b1"/>
           <topic label="incoming_msg_pipe" href="structlistener.html#a5ac777bb848a219493fb3ac22902b703"/>
           <topic label="is_idle" href="structlistener.html#ab64bf7942724f8b2209e840fec1b7101"/>
@@ -3312,49 +3283,93 @@
           <topic label="read_buf_size" href="structlistener.html#a78f69f0cfcea46e590a71e1fccf81b92"/>
           <topic label="read_buf" href="structlistener.html#ada742987f7ce7758fc4422a290948d97"/>
         </topic>
-        <topic label="MAX_FDS" href="listener__internal_8h.html#a816ccaf3e5e64cc98f2b5613cc177398"/>
-        <topic label="MAX_PENDING_MESSAGES" href="listener__internal_8h.html#ab8da6d181eef4debc5b438687fd9804a"/>
-        <topic label="MAX_QUEUE_MESSAGES" href="listener__internal_8h.html#a6ee3565e40e9a157decfa328ac562140"/>
-        <topic label="MIN_DELAY" href="listener__internal_8h.html#ad3b51637a39a4ff75bd979b917cb89ef"/>
-        <topic label="MAX_DELAY" href="listener__internal_8h.html#a16027d8acc5301e440cefa086eb9db2a"/>
-        <topic label="INFINITE_DELAY" href="listener__internal_8h.html#ab893de6f8a0ec8b0e6dd8097ff398019"/>
-        <topic label="msg_flag_t" href="listener__internal_8h.html#a86f29ffc383d560855689fdb7abc4093"/>
-        <topic label="MSG_TYPE" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0b">
-          <topic label="MSG_NONE" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba40e71b65f54da2ea5d97c37e720346b1"/>
-          <topic label="MSG_ADD_SOCKET" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2"/>
-          <topic label="MSG_REMOVE_SOCKET" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba433ef8aba97342ee9a920c5046cd4d67"/>
-          <topic label="MSG_HOLD_RESPONSE" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de"/>
-          <topic label="MSG_EXPECT_RESPONSE" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed"/>
-          <topic label="MSG_SHUTDOWN" href="listener__internal_8h.html#acbbd5f70828660265bd996e23b58ce0ba621b8f7f84a5fe2cbb10c08ce2c58ff3"/>
+        <topic label="DEFAULT_READ_BUF_SIZE" href="listener__internal__types_8h.html#a55c36910fb23a47b98bb7467e508daa5"/>
+        <topic label="INCOMING_MSG_PIPE" href="listener__internal__types_8h.html#a15740a5bfc8ef3fb9b927ef0007010bf"/>
+        <topic label="INCOMING_MSG_PIPE_ID" href="listener__internal__types_8h.html#a45f028e5e02538a530e3fe313bfd728a"/>
+        <topic label="MAX_FDS" href="listener__internal__types_8h.html#a816ccaf3e5e64cc98f2b5613cc177398"/>
+        <topic label="MAX_PENDING_MESSAGES" href="listener__internal__types_8h.html#ab8da6d181eef4debc5b438687fd9804a"/>
+        <topic label="MAX_QUEUE_MESSAGES" href="listener__internal__types_8h.html#a6ee3565e40e9a157decfa328ac562140"/>
+        <topic label="MIN_DELAY" href="listener__internal__types_8h.html#ad3b51637a39a4ff75bd979b917cb89ef"/>
+        <topic label="MAX_DELAY" href="listener__internal__types_8h.html#a16027d8acc5301e440cefa086eb9db2a"/>
+        <topic label="INFINITE_DELAY" href="listener__internal__types_8h.html#ab893de6f8a0ec8b0e6dd8097ff398019"/>
+        <topic label="LISTENER_NO_FD" href="listener__internal__types_8h.html#a9edc873b66adf46bf716ceb7ab77bb07"/>
+        <topic label="LISTENER_SHUTDOWN_COMPLETE_FD" href="listener__internal__types_8h.html#a2283299012dd873e0a5e3b77dc417b08"/>
+        <topic label="msg_flag_t" href="listener__internal__types_8h.html#a86f29ffc383d560855689fdb7abc4093"/>
+        <topic label="MSG_TYPE" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0b">
+          <topic label="MSG_NONE" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba40e71b65f54da2ea5d97c37e720346b1"/>
+          <topic label="MSG_ADD_SOCKET" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2"/>
+          <topic label="MSG_REMOVE_SOCKET" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba433ef8aba97342ee9a920c5046cd4d67"/>
+          <topic label="MSG_HOLD_RESPONSE" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de"/>
+          <topic label="MSG_EXPECT_RESPONSE" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed"/>
+          <topic label="MSG_SHUTDOWN" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba621b8f7f84a5fe2cbb10c08ce2c58ff3"/>
         </topic>
-        <topic label="rx_info_state" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5">
-          <topic label="RIS_HOLD" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5aaf352ec9825784a31574ea3823fb7c82"/>
-          <topic label="RIS_EXPECT" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4"/>
-          <topic label="RIS_INACTIVE" href="listener__internal_8h.html#af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41"/>
+        <topic label="rx_info_state" href="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5">
+          <topic label="RIS_HOLD" href="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5aaf352ec9825784a31574ea3823fb7c82"/>
+          <topic label="RIS_EXPECT" href="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5a998259d8038c0afd6ab2774d0b62eee4"/>
+          <topic label="RIS_INACTIVE" href="listener__internal__types_8h.html#af1e9517007b6ff2eb101b2c2884a5be5ac61118b6f475986649dfe0fadd773f41"/>
         </topic>
-        <topic label="tick_handler" href="listener__internal_8h.html#aeedae561a63e857e130be4d40cca8588"/>
-        <topic label="get_free_rx_info" href="listener__internal_8h.html#ab01748a18f035b2304ae416265a27e8d"/>
-        <topic label="release_rx_info" href="listener__internal_8h.html#aa53f32f1fa516ebdbb8cc66bb752e712"/>
-        <topic label="get_free_msg" href="listener__internal_8h.html#a7d7c8279976ea7b7aca15479f6892db4"/>
-        <topic label="push_message" href="listener__internal_8h.html#abc9a1037551b3c8a9ae45f7b795ab8c3"/>
-        <topic label="release_msg" href="listener__internal_8h.html#ac4aa4e12d23e8c53a5a958e335cf4a2b"/>
-        <topic label="attempt_recv" href="listener__internal_8h.html#ac952b94296b3ffa69d793f830ceae1e9"/>
-        <topic label="process_unpacked_message" href="listener__internal_8h.html#a37c58a09e6d324e7114a2becb2683bbd"/>
-        <topic label="notify_message_failure" href="listener__internal_8h.html#ac36cf71f469df6618223f84af9c34ad2"/>
-        <topic label="attempt_delivery" href="listener__internal_8h.html#a7abf986a57b2b4a5ae53b48fc051aafb"/>
-        <topic label="clean_up_completed_info" href="listener__internal_8h.html#a21e5de0bee07a8e984f3c1408b8e3b62"/>
-        <topic label="observe_backpressure" href="listener__internal_8h.html#ae71f036eb0a57423a8e2b225bcf32e12"/>
-        <topic label="grow_read_buf" href="listener__internal_8h.html#a138a357c639da15c5e88958123e660b0"/>
-        <topic label="check_and_flush_incoming_msg_pipe" href="listener__internal_8h.html#a41d1e6df116c066e5c56dd646c3fe898"/>
-        <topic label="get_hold_rx_info" href="listener__internal_8h.html#a635353fdc72baf5a4112e2d6a896000f"/>
-        <topic label="dump_rx_info_table" href="listener__internal_8h.html#a2b75e85745a6799df9e90def5caf0578"/>
-        <topic label="msg_handler" href="listener__internal_8h.html#a002c308d7296510bcb2df6331792ea09"/>
-        <topic label="add_socket" href="listener__internal_8h.html#a1b411c7d4e360af4ce5f7c05bb4d807d"/>
-        <topic label="remove_socket" href="listener__internal_8h.html#ae12e728e14ca2922ae27678b00a151f3"/>
-        <topic label="hold_response" href="listener__internal_8h.html#ab3d2bbc5f77d606f0040dee30e80648b"/>
-        <topic label="expect_response" href="listener__internal_8h.html#ac2f4cfd7e199d3c933f72d46144dee42"/>
-        <topic label="shutdown" href="listener__internal_8h.html#aab8481f4406eb5406717e976f6d852a2"/>
-        <topic label="free_ci" href="listener__internal_8h.html#af7c8c5f81320edf7ea28286384c59b40"/>
+      </topic>
+      <topic label="listener_io.c" href="listener__io_8c.html">
+        <topic label="DUMP_READ" href="listener__io_8c.html#a1d7054af083649f8e410783fbf2e7b33"/>
+        <topic label="ListenerIO_AttemptRecv" href="listener__io_8c.html#a3494b6d56e053563e19231fdda8ce6c8"/>
+        <topic label="socket_read_plain" href="listener__io_8c.html#a48e209edcf9421a36f6cd97eca45aa39"/>
+        <topic label="print_SSL_error" href="listener__io_8c.html#aa4a0d6443a6bb65b3fee1027d8eef70f"/>
+        <topic label="socket_read_ssl" href="listener__io_8c.html#a27540bed6e0ee31601a54a31613bd1ee"/>
+        <topic label="sink_socket_read" href="listener__io_8c.html#a11b801753f3195b71431c6ae11f4e2b7"/>
+        <topic label="set_error_for_socket" href="listener__io_8c.html#affa8fc52abd48c60492b25fae5496d0a"/>
+        <topic label="find_info_by_sequence_id" href="listener__io_8c.html#a5ef5faf6ec41a63ec7b82933b1eaaadd"/>
+        <topic label="process_unpacked_message" href="listener__io_8c.html#a37c58a09e6d324e7114a2becb2683bbd"/>
+      </topic>
+      <topic label="listener_io.h" href="listener__io_8h.html">
+        <topic label="ListenerIO_AttemptRecv" href="listener__io_8h.html#a3494b6d56e053563e19231fdda8ce6c8"/>
+      </topic>
+      <topic label="listener_io_internal.h" href="listener__io__internal_8h.html">
+        <topic label="socket_read_plain" href="listener__io__internal_8h.html#a48e209edcf9421a36f6cd97eca45aa39"/>
+        <topic label="socket_read_ssl" href="listener__io__internal_8h.html#a27540bed6e0ee31601a54a31613bd1ee"/>
+        <topic label="sink_socket_read" href="listener__io__internal_8h.html#a11b801753f3195b71431c6ae11f4e2b7"/>
+        <topic label="print_SSL_error" href="listener__io__internal_8h.html#aa4a0d6443a6bb65b3fee1027d8eef70f"/>
+        <topic label="set_error_for_socket" href="listener__io__internal_8h.html#affa8fc52abd48c60492b25fae5496d0a"/>
+        <topic label="process_unpacked_message" href="listener__io__internal_8h.html#a37c58a09e6d324e7114a2becb2683bbd"/>
+        <topic label="find_info_by_sequence_id" href="listener__io__internal_8h.html#a5ef5faf6ec41a63ec7b82933b1eaaadd"/>
+      </topic>
+      <topic label="listener_task.c" href="listener__task_8c.html">
+        <topic label="TIMEOUT_DELAY" href="listener__task_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6"/>
+        <topic label="MSG_BP_1QTR" href="listener__task_8c.html#ac68caa54ad7fc51c8f5815eeb6686f30"/>
+        <topic label="MSG_BP_HALF" href="listener__task_8c.html#a7acc76219d8588ca99f58c2121988112"/>
+        <topic label="MSG_BP_3QTR" href="listener__task_8c.html#a694eca96dcf9ed929ec1608f9c14c852"/>
+        <topic label="RX_INFO_BP_1QTR" href="listener__task_8c.html#a7fc0ffea5ec4b8882f719f0d054e3824"/>
+        <topic label="RX_INFO_BP_HALF" href="listener__task_8c.html#a3e7f3829ff5668c512d1911a3201db71"/>
+        <topic label="RX_INFO_BP_3QTR" href="listener__task_8c.html#a45f677274d8f1de84ae1cc842c43d0fe"/>
+        <topic label="THREADPOOL_BP" href="listener__task_8c.html#a87e98e5aad28f7363d5f4217d2e8d10e"/>
+        <topic label="ListenerTask_MainLoop" href="listener__task_8c.html#aa15828328e387b91fce029728b33af0b"/>
+        <topic label="tick_handler" href="listener__task_8c.html#aeedae561a63e857e130be4d40cca8588"/>
+        <topic label="ListenerTask_DumpRXInfoTable" href="listener__task_8c.html#ab7ad0a7cb1818c0849a8e21204d89b0e"/>
+        <topic label="retry_delivery" href="listener__task_8c.html#a91845232ef24ffde41ff3689b0caa0c9"/>
+        <topic label="clean_up_completed_info" href="listener__task_8c.html#a21e5de0bee07a8e984f3c1408b8e3b62"/>
+        <topic label="ListenerTask_NotifyMessageFailure" href="listener__task_8c.html#a7d8487504334e548f1d668b12d8fe3de"/>
+        <topic label="get_connection_info" href="listener__task_8c.html#a3bdbad0ba5aa31b4f2dcdfe16ed379bc"/>
+        <topic label="ListenerTask_ReleaseRXInfo" href="listener__task_8c.html#acd90b4d0e9b1520e1598993662932e55"/>
+        <topic label="ListenerTask_ReleaseMsg" href="listener__task_8c.html#ab7578ac5f274bba1ca78cc8c4048eba2"/>
+        <topic label="ListenerTask_GrowReadBuf" href="listener__task_8c.html#ade7318781f948e86471ec58d880d201d"/>
+        <topic label="ListenerTask_AttemptDelivery" href="listener__task_8c.html#a89f2c54c450dd6f6c6d35b9da42b8ab4"/>
+        <topic label="observe_backpressure" href="listener__task_8c.html#ae71f036eb0a57423a8e2b225bcf32e12"/>
+        <topic label="ListenerTask_GetBackpressure" href="listener__task_8c.html#a42bfa01483c2ac1c72f3e03897fe4e0a"/>
+      </topic>
+      <topic label="listener_task.h" href="listener__task_8h.html">
+        <topic label="ListenerTask_MainLoop" href="listener__task_8h.html#aa15828328e387b91fce029728b33af0b"/>
+        <topic label="ListenerTask_ReleaseMsg" href="listener__task_8h.html#aa6b7728c195142eea1c0ab676cda1299"/>
+        <topic label="ListenerTask_ReleaseRXInfo" href="listener__task_8h.html#abb2ea3b0531f8ee9cdd7d75c4127f6f2"/>
+        <topic label="ListenerTask_GrowReadBuf" href="listener__task_8h.html#ade7318781f948e86471ec58d880d201d"/>
+        <topic label="ListenerTask_AttemptDelivery" href="listener__task_8h.html#a89f2c54c450dd6f6c6d35b9da42b8ab4"/>
+        <topic label="ListenerTask_NotifyMessageFailure" href="listener__task_8h.html#a7d8487504334e548f1d668b12d8fe3de"/>
+        <topic label="ListenerTask_GetBackpressure" href="listener__task_8h.html#a42bfa01483c2ac1c72f3e03897fe4e0a"/>
+        <topic label="ListenerTask_DumpRXInfoTable" href="listener__task_8h.html#ab7ad0a7cb1818c0849a8e21204d89b0e"/>
+      </topic>
+      <topic label="listener_task_internal.h" href="listener__task__internal_8h.html">
+        <topic label="tick_handler" href="listener__task__internal_8h.html#aeedae561a63e857e130be4d40cca8588"/>
+        <topic label="clean_up_completed_info" href="listener__task__internal_8h.html#a21e5de0bee07a8e984f3c1408b8e3b62"/>
+        <topic label="retry_delivery" href="listener__task__internal_8h.html#a91845232ef24ffde41ff3689b0caa0c9"/>
+        <topic label="observe_backpressure" href="listener__task__internal_8h.html#ae71f036eb0a57423a8e2b225bcf32e12"/>
       </topic>
       <topic label="main.c" href="main_8c.html">
         <topic label="OPT_MIN" href="main_8c.html#a55a00b40a60585a501fcf058853489cb"/>
@@ -3396,7 +3411,7 @@
         </topic>
         <topic label="ParseOptions" href="main_8c.html#ac8671b12570e90053da9f034e7a265fe"/>
         <topic label="ExecuteOperation" href="main_8c.html#a57e6fa09d0aa7bc65bdefb4034e51ffc"/>
-        <topic label="ConfigureEntry" href="main_8c.html#a11899ce4e556af8f5b7adaf23e389155"/>
+        <topic label="ConfigureEntry" href="main_8c.html#af72d3fdb1f8c16ed4490769876486cd6"/>
         <topic label="PrintLogInfo" href="main_8c.html#af965f3b1275191f0855813297eaf69ce"/>
         <topic label="GetOptString" href="main_8c.html#a6c4590fb4c5d4f8f87c8250fc403ce75"/>
         <topic label="PrintUsage" href="main_8c.html#a456168dda4622d587bbbe87f2619bdff"/>
@@ -3407,149 +3422,27 @@
         <topic label="put_finished" href="put__nonblocking_8c.html#a4cc5244bc7b6dd83d1bc8eae3bb37608"/>
         <topic label="main" href="put__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627"/>
       </topic>
-      <topic label="sender.c" href="sender_8c.html">
-        <topic label="CMD_FD" href="sender_8c.html#a3ea94b37cd6445d977af94a78e2c18e0"/>
-        <topic label="TIMEOUT_DELAY" href="sender_8c.html#a8032a941e3dca02cdfade5cc3cfe1dc6"/>
-        <topic label="sender_init" href="sender_8c.html#a991ff0badb44cb746fe639fa54fe1c31"/>
-        <topic label="sender_register_socket" href="sender_8c.html#a3c833ea734a4c9865acc47d91ddb7fd5"/>
-        <topic label="sender_remove_socket" href="sender_8c.html#a7345f822ab1bc69dcc35cc871423ec19"/>
-        <topic label="sender_send_request" href="sender_8c.html#ace027324e2b89c0f46e6798b23ec58ce"/>
-        <topic label="sender_shutdown" href="sender_8c.html#a6387b60648d2aa6ae5d724ebf04ad3cc"/>
-        <topic label="sender_free" href="sender_8c.html#acdaed429f2456b13e846d4e7f846bd65"/>
-        <topic label="get_free_tx_info" href="sender_8c.html#af18ed407301b3bdd9c44b3b05f2d54cf"/>
-        <topic label="release_tx_info" href="sender_8c.html#a9ae301320ba4b577b2462907678af613"/>
-        <topic label="get_notify_pipe" href="sender_8c.html#a8c2d8a592a292ec3105b6f1ad205f3dd"/>
-        <topic label="write_commit" href="sender_8c.html#a34859023ba746b0359f571dad003ab98"/>
-        <topic label="commit_event_and_block" href="sender_8c.html#ac06cfcb3ecfad06e23567ca1a7dac4db"/>
-        <topic label="sender_mainloop" href="sender_8c.html#a4f1823592996205c3243bf49127a0004"/>
-        <topic label="free_fd_info_cb" href="sender_8c.html#a8d4592d298d6539a13dd31239360c7ad"/>
-        <topic label="cleanup" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc"/>
-        <topic label="register_socket_info" href="sender_8c.html#aa462f2b99191e54e839a69fc568972f1"/>
-        <topic label="increment_fd_refcount" href="sender_8c.html#a7bc45c02fed85ce85a834cf730f07c00"/>
-        <topic label="decrement_fd_refcount" href="sender_8c.html#a09ec64a8af8244d6b69a7e79fa9065f3"/>
-        <topic label="release_socket_info" href="sender_8c.html#a53ddb423772e634b4d099694d7bd5e37"/>
-        <topic label="handle_command" href="sender_8c.html#a09a13d151396fa2b4dbe11182cf0233b"/>
-        <topic label="enqueue_write" href="sender_8c.html#a84b7873113e88f5cfff8b30989a6197d"/>
-        <topic label="check_incoming_commands" href="sender_8c.html#a320db24cd0321f42690ae959b30d41b7"/>
-        <topic label="get_info_to_write_for_socket" href="sender_8c.html#a28642bbcae521b8f97ad49229df128f3"/>
-        <topic label="set_error_for_socket" href="sender_8c.html#a799e6b8d9f7b7982ad8e8c6bbc60d993"/>
-        <topic label="attempt_write" href="sender_8c.html#acf20e1c1edb201899b9592cb945685cd"/>
-        <topic label="socket_write_plain" href="sender_8c.html#a9f00925c05248b5902ffc10b99a55ce8"/>
-        <topic label="socket_write_ssl" href="sender_8c.html#a9485e7160a073a7740dc2f130ce19db4"/>
-        <topic label="update_sent" href="sender_8c.html#a20e2371bcf20b4f30b71726e0cad33fd"/>
-        <topic label="notify_caller" href="sender_8c.html#a72e4815c5de39d0c2c31c573eafce27a"/>
-        <topic label="tick_handler" href="sender_8c.html#ae1a455338f511c22140fd42d0f183257"/>
-        <topic label="tick_timeout" href="sender_8c.html#a728a121de75c640dd90c1992d870318f"/>
-        <topic label="attempt_to_enqueue_sending_request_message_to_listener" href="sender_8c.html#aa4ddfd50691169b408a005eda5862ccf"/>
-        <topic label="attempt_to_enqueue_request_sent_message_to_listener" href="sender_8c.html#a0c32f1070a14594306e76e6adc04ae68"/>
-        <topic label="notify_message_failure" href="sender_8c.html#a2f7209353ead92c91bfc8f84a8b4df50"/>
+      <topic label="send.c" href="send_8c.html">
+        <topic label="send_do_blocking_send" href="send_8c.html#a645fe26b9a92bcea62862692048e1d82"/>
+        <topic label="attempt_to_enqueue_sending_request_message_to_listener" href="send_8c.html#a0a3d5df230238208188a316c900123c4"/>
+        <topic label="handle_failure" href="send_8c.html#ae31cb52695b7c4b86ad52413e7cf4966"/>
+        <topic label="write_plain" href="send_8c.html#a3404e5d173399e27c14e908066e81935"/>
+        <topic label="write_ssl" href="send_8c.html#ae247d808874e3f3b30659f5406200efa"/>
+        <topic label="enqueue_request_sent_message_to_listener" href="send_8c.html#a59e4fb5e681e9d9d3b8ae1f647ea005a"/>
+        <topic label="handle_write" href="send_8c.html#a6664eefee5b7a9db746a8c9a76a5d764"/>
       </topic>
-      <topic label="sender.h" href="sender_8h.html">
-        <topic label="sender_init" href="sender_8h.html#a991ff0badb44cb746fe639fa54fe1c31"/>
-        <topic label="sender_register_socket" href="sender_8h.html#a3c833ea734a4c9865acc47d91ddb7fd5"/>
-        <topic label="sender_remove_socket" href="sender_8h.html#a7345f822ab1bc69dcc35cc871423ec19"/>
-        <topic label="sender_send_request" href="sender_8h.html#ace027324e2b89c0f46e6798b23ec58ce"/>
-        <topic label="sender_shutdown" href="sender_8h.html#a6387b60648d2aa6ae5d724ebf04ad3cc"/>
-        <topic label="sender_free" href="sender_8h.html#acdaed429f2456b13e846d4e7f846bd65"/>
+      <topic label="send.h" href="send_8h.html">
+        <topic label="send_do_blocking_send" href="send_8h.html#a472ea0cb8ac1873fe772996d75745bc6"/>
       </topic>
-      <topic label="sender_internal.h" href="sender__internal_8h.html">
-        <topic label="fd_info" href="structfd__info.html">
-          <topic label="fd" href="structfd__info.html#ae854a5754cd0716eba8aabed12a6cd1e"/>
-          <topic label="ssl" href="structfd__info.html#abce68830a0316490cb9a01d13e4e47b9"/>
-          <topic label="refcount" href="structfd__info.html#a6f4437e27ab87d3f6a9d962a422e288f"/>
-          <topic label="largest_seq_id_seen" href="structfd__info.html#a1ba7b197cc1ebf0355ee8ef8b4d705a3"/>
-          <topic label="errored" href="structfd__info.html#a056b8cc22b630361dd331eca978f1d38"/>
+      <topic label="send_internal.h" href="send__internal_8h.html">
+        <topic label="handle_write_res" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">
+          <topic label="HW_OK" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51"/>
+          <topic label="HW_DONE" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91"/>
+          <topic label="HW_ERROR" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157"/>
         </topic>
-        <topic label="tx_info_t" href="structtx__info__t.html">
-          <topic label="id" href="structtx__info__t.html#aee200e8d32eccb08f126ae3104058e67"/>
-          <topic label="done_pipe" href="structtx__info__t.html#a37de7f02faa45a0cba93b35395be52ba"/>
-          <topic label="state" href="structtx__info__t.html#a08ee9b3e37cda4f0ca22e67afa14f51d"/>
-          <topic label="fd" href="structtx__info__t.html#a2292418fbcac8b8ba7c293bac184ced4"/>
-          <topic label="ssl" href="structtx__info__t.html#a6e94516f2ca594ec49e1733346e13cb1"/>
-          <topic label="add_socket" href="structtx__info__t.html#a8b45629d2d63915b01497ab2aa07ce88"/>
-          <topic label="rm_socket" href="structtx__info__t.html#aa4d8bd6c3afe21286e04e81d145cf981"/>
-          <topic label="timeout_sec" href="structtx__info__t.html#a37b46822e03d5685d68f37102110bc0a"/>
-          <topic label="box" href="structtx__info__t.html#aeb9686679e70b52dd23abd5762ac446a"/>
-          <topic label="enqueue" href="structtx__info__t.html#ad0f1f6e0acb30354094a4608cc99d180"/>
-          <topic label="orig_timeout_sec" href="structtx__info__t.html#a30fef92dc2359bb1195415a93a9250f8"/>
-          <topic label="sent_size" href="structtx__info__t.html#a61afed662d74f641186fb125661639f5"/>
-          <topic label="fdi" href="structtx__info__t.html#a3805e192b19f4b131b44a133c37b0309"/>
-          <topic label="write" href="structtx__info__t.html#a30e8e23981970ec644da004ca5c50d92"/>
-          <topic label="notify" href="structtx__info__t.html#a52aa750a257925e89854e2ce9e130c3d"/>
-          <topic label="backpressure" href="structtx__info__t.html#ad5806f7db0c0dcf5c87f96f29975de23"/>
-          <topic label="release" href="structtx__info__t.html#a2445fd10412433bffce13104c1258a09"/>
-          <topic label="error" href="structtx__info__t.html#a58c7097345d6030639c29df528bdc813"/>
-          <topic label="error" href="structtx__info__t.html#ace7818c75a0e304fc57fda8f1634dd31"/>
-          <topic label="u" href="structtx__info__t.html#abe3950d61af476a551829f85ae8219c2"/>
-        </topic>
-        <topic label="sender" href="structsender.html">
-          <topic label="bus" href="structsender.html#a757588eec51f26a7d24b7dd72662aad2"/>
-          <topic label="shutdown" href="structsender.html#a562a8defcf71bd924f000e3919cd7065"/>
-          <topic label="tx_flags" href="structsender.html#a9c78ecf6abe562a015b465d2f718e5c5"/>
-          <topic label="tx_info" href="structsender.html#a7ea1a5cf71cd395158628fe887c74542"/>
-          <topic label="pipes" href="structsender.html#a1f817ab1d64dacd856b891b8347bb527"/>
-          <topic label="commit_pipe" href="structsender.html#a5d9bfeef7350314f6c03cda33569e00c"/>
-          <topic label="incoming_command_pipe" href="structsender.html#a0ce70524aee2f28afdbb2dceace8100a"/>
-          <topic label="largest_seq_id_seen" href="structsender.html#a8c67df66dc04d78ec44a8717a3fe2e54"/>
-          <topic label="active_fds" href="structsender.html#aa8f75e8e259d4c7fc1cd1337c5ffc48b"/>
-          <topic label="fds" href="structsender.html#aff32b617c8187617c30fde60a778dc44"/>
-          <topic label="is_idle" href="structsender.html#a555122c7e76f98fbaadb430c6eafaa6d"/>
-          <topic label="fd_hash_table" href="structsender.html#aff098306a5cefab0f1dc624bd3d1da04"/>
-        </topic>
-        <topic label="MAX_TIMEOUT" href="sender__internal_8h.html#a85fda3522e69a1bf85f7dcd97b6023a1"/>
-        <topic label="TX_TIMEOUT" href="sender__internal_8h.html#ad380e380939eae9a5d6c8f228f0fe7c8"/>
-        <topic label="MAX_CONCURRENT_SENDS" href="sender__internal_8h.html#acf81eb49715fa84e816bfdfb0ce18748"/>
-        <topic label="HASH_TABLE_SIZE2" href="sender__internal_8h.html#a2071bea833e4fa740cb66ccd81930b65"/>
-        <topic label="SENDER_FD_NOT_IN_USE" href="sender__internal_8h.html#a11970f2c99571e46862c6df7c94ad3c9"/>
-        <topic label="tx_flag_t" href="sender__internal_8h.html#a0a54b2062cf1b4a9c1ced43140ee52e0"/>
-        <topic label="tx_error_t" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791d">
-          <topic label="TX_ERROR_NONE" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da272f9f119a84f84620a50f59921074be"/>
-          <topic label="TX_ERROR_POLLHUP" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791dab8356e960ab720f20eb581b181e209a7"/>
-          <topic label="TX_ERROR_POLLERR" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da67df9b4158d09359ab1bd26ae70a705f"/>
-          <topic label="TX_ERROR_WRITE_FAILURE" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791daaa9e491fcf49c45d98906510f1b54610"/>
-          <topic label="TX_ERROR_UNREGISTERED_SOCKET" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da0c6c852bec7890ea64fea30d5467d3a2"/>
-          <topic label="TX_ERROR_CLOSED" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da86ef1bee9b4f29fe9fe5c636ce612e84"/>
-          <topic label="TX_ERROR_NOTIFY_LISTENER_FAILURE" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da1ec35b178c0921ad83c84d9440adad5b"/>
-          <topic label="TX_ERROR_WRITE_TIMEOUT" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da6929c1525a8bde9a975507eee7268f06"/>
-          <topic label="TX_ERROR_NOTIFY_TIMEOUT" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791dafdaba8b14c1932b324b036a9412dd737"/>
-          <topic label="TX_ERROR_BAD_SEQUENCE_ID" href="sender__internal_8h.html#af90fe8ec02f1fbe06dc28b5c552f791da90d3001daa8fa6c7c556cf48320ec0f5"/>
-        </topic>
-        <topic label="tx_info_state" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429">
-          <topic label="TIS_UNDEF" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a88e9115c62fc7e1f7b9944d2a881887a"/>
-          <topic label="TIS_ADD_SOCKET" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a52925d46fb93fbb25c715bb8ce7231f3"/>
-          <topic label="TIS_RM_SOCKET" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a60ea7691c6acb15519e2bbf2b0b287db"/>
-          <topic label="TIS_SHUTDOWN" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a2a021f11ce2f51d6e36e185d78837333"/>
-          <topic label="TIS_REQUEST_ENQUEUE" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a6837eed2976f14f01d8790c5c0959060"/>
-          <topic label="TIS_REQUEST_WRITE" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429ad6cf66e7a3fb15e87da97d330c6c3c03"/>
-          <topic label="TIS_RESPONSE_NOTIFY" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a638663893162c362d9513932571f83d3"/>
-          <topic label="TIS_REQUEST_RELEASE" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a68e05ad950fdd5fe3ab4458659fa6db8"/>
-          <topic label="TIS_ERROR" href="sender__internal_8h.html#ac023b5eb9cc1556b98d7c4bc752a9429a20183f762fba2c542ba2c0101ee3fc3a"/>
-        </topic>
-        <topic label="get_free_tx_info" href="sender__internal_8h.html#af18ed407301b3bdd9c44b3b05f2d54cf"/>
-        <topic label="release_tx_info" href="sender__internal_8h.html#a9ae301320ba4b577b2462907678af613"/>
-        <topic label="get_notify_pipe" href="sender__internal_8h.html#a8c2d8a592a292ec3105b6f1ad205f3dd"/>
-        <topic label="write_commit" href="sender__internal_8h.html#a34859023ba746b0359f571dad003ab98"/>
-        <topic label="commit_event_and_block" href="sender__internal_8h.html#ac06cfcb3ecfad06e23567ca1a7dac4db"/>
-        <topic label="register_socket_info" href="sender__internal_8h.html#aa462f2b99191e54e839a69fc568972f1"/>
-        <topic label="increment_fd_refcount" href="sender__internal_8h.html#a7bc45c02fed85ce85a834cf730f07c00"/>
-        <topic label="decrement_fd_refcount" href="sender__internal_8h.html#a09ec64a8af8244d6b69a7e79fa9065f3"/>
-        <topic label="release_socket_info" href="sender__internal_8h.html#a53ddb423772e634b4d099694d7bd5e37"/>
-        <topic label="handle_command" href="sender__internal_8h.html#a09a13d151396fa2b4dbe11182cf0233b"/>
-        <topic label="enqueue_write" href="sender__internal_8h.html#a84b7873113e88f5cfff8b30989a6197d"/>
-        <topic label="check_incoming_commands" href="sender__internal_8h.html#a320db24cd0321f42690ae959b30d41b7"/>
-        <topic label="get_info_to_write_for_socket" href="sender__internal_8h.html#a28642bbcae521b8f97ad49229df128f3"/>
-        <topic label="set_error_for_socket" href="sender__internal_8h.html#a799e6b8d9f7b7982ad8e8c6bbc60d993"/>
-        <topic label="socket_write_plain" href="sender__internal_8h.html#a9f00925c05248b5902ffc10b99a55ce8"/>
-        <topic label="socket_write_ssl" href="sender__internal_8h.html#a9485e7160a073a7740dc2f130ce19db4"/>
-        <topic label="update_sent" href="sender__internal_8h.html#a20e2371bcf20b4f30b71726e0cad33fd"/>
-        <topic label="attempt_write" href="sender__internal_8h.html#acf20e1c1edb201899b9592cb945685cd"/>
-        <topic label="tick_handler" href="sender__internal_8h.html#ae1a455338f511c22140fd42d0f183257"/>
-        <topic label="notify_message_failure" href="sender__internal_8h.html#a2f7209353ead92c91bfc8f84a8b4df50"/>
-        <topic label="attempt_to_enqueue_sending_request_message_to_listener" href="sender__internal_8h.html#aa4ddfd50691169b408a005eda5862ccf"/>
-        <topic label="attempt_to_enqueue_request_sent_message_to_listener" href="sender__internal_8h.html#a0c32f1070a14594306e76e6adc04ae68"/>
-        <topic label="notify_caller" href="sender__internal_8h.html#a72e4815c5de39d0c2c31c573eafce27a"/>
-        <topic label="tick_timeout" href="sender__internal_8h.html#a728a121de75c640dd90c1992d870318f"/>
-        <topic label="cleanup" href="sender__internal_8h.html#a35be7855150c6a8fa847eba457e48bdc"/>
+        <topic label="handle_write" href="send__internal_8h.html#a6664eefee5b7a9db746a8c9a76a5d764"/>
+        <topic label="handle_failure" href="send__internal_8h.html#ae31cb52695b7c4b86ad52413e7cf4966"/>
+        <topic label="attempt_to_enqueue_sending_request_message_to_listener" href="send__internal_8h.html#a0a3d5df230238208188a316c900123c4"/>
       </topic>
       <topic label="setup_teardown.c" href="setup__teardown_8c.html">
         <topic label="usage" href="setup__teardown_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f"/>
@@ -3708,9 +3601,11 @@
       </topic>
       <topic label="util.c" href="util_8c.html">
         <topic label="util_is_resumable_io_error" href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc"/>
+        <topic label="util_timestamp" href="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9"/>
       </topic>
       <topic label="util.h" href="util_8h.html">
         <topic label="util_is_resumable_io_error" href="util_8h.html#a160b252716d51078cec50bc9f27bc2bc"/>
+        <topic label="util_timestamp" href="util_8h.html#ad63ab11f5adebc0730d970d7742ccfd9"/>
       </topic>
       <topic label="write_file_blocking.c" href="write__file__blocking_8c.html">
         <topic label="store_data" href="write__file__blocking_8c.html#af4bd70c5ec166142c87bbc3825a4721c"/>
@@ -3732,7 +3627,6 @@
       </topic>
       <topic label="yacht.c" href="yacht_8c.html">
         <topic label="LOG" href="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e"/>
-        <topic label="USE_BRENTS_VARIATION" href="yacht_8c.html#a5ac70b00c9ad8d06bbfa7f2c32df2e62"/>
         <topic label="DEF_SZ2" href="yacht_8c.html#a783af37de2395ffe34618ed81dc4394c"/>
         <topic label="MAX_PROBES" href="yacht_8c.html#a6deebb67c6e9267ad4e978b992850398"/>
         <topic label="LARGE_PRIME" href="yacht_8c.html#ad6161f686aaa2a898d0deb0c5e837446"/>
@@ -3836,7 +3730,6 @@
         <topic label="o" href="globals_eval_o.html"/>
         <topic label="r" href="globals_eval_r.html"/>
         <topic label="s" href="globals_eval_s.html"/>
-        <topic label="t" href="globals_eval_t.html"/>
         <topic label="u" href="globals_eval_u.html"/>
       </topic>
       <topic label="Macros" href="globals_defs.html">
@@ -3858,7 +3751,6 @@
         <topic label="r" href="globals_defs_r.html"/>
         <topic label="s" href="globals_defs_s.html"/>
         <topic label="t" href="globals_defs_t.html"/>
-        <topic label="u" href="globals_defs_u.html"/>
         <topic label="y" href="globals_defs_y.html"/>
       </topic>
     </topic>

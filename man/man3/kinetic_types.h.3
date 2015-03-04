@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -157,9 +157,6 @@ kinetic_types.h \-
 .br
 .RI "\fIDefault values for the \fBKineticClientConfig\fP struct, which will be used if the corresponding field in the struct is 0\&. \fP"
 .ti -1c
-.RI "#define \fBKINETIC_CLIENT_DEFAULT_WRITER_THREADS\fP   4"
-.br
-.ti -1c
 .RI "#define \fBKINETIC_CLIENT_DEFAULT_READER_THREADS\fP   4"
 .br
 .ti -1c
@@ -291,21 +288,17 @@ Definition at line 152 of file kinetic_types\&.h\&.
 .PP
 Limit for P2P operations\&. 
 .PP
-Definition at line 436 of file kinetic_types\&.h\&.
+Definition at line 437 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_P2P_MAX_NESTING   1000"
 
 .PP
 Limit for P2P operation nesting\&. 
 .PP
-Definition at line 441 of file kinetic_types\&.h\&.
+Definition at line 442 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_CLIENT_DEFAULT_LOG_LEVEL   0"
 
 .PP
 Default values for the \fBKineticClientConfig\fP struct, which will be used if the corresponding field in the struct is 0\&. 
-.PP
-Definition at line 447 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_CLIENT_DEFAULT_WRITER_THREADS   4"
-
 .PP
 Definition at line 448 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_CLIENT_DEFAULT_READER_THREADS   4"
@@ -319,7 +312,7 @@ Definition at line 450 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN   (1024 * 1024 * 4)"
 
 .PP
-Definition at line 475 of file kinetic_types\&.h\&.
+Definition at line 474 of file kinetic_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef void(* KineticCompletionCallback)(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
@@ -336,7 +329,7 @@ Operation completion callback function prototype\&.
 .PP
 
 .PP
-Definition at line 225 of file kinetic_types\&.h\&.
+Definition at line 226 of file kinetic_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBKineticAlgorithm\fP"
@@ -483,6 +476,9 @@ Authorization failure\&.
 \fB\fIKINETIC_STATUS_INVALID_FILE \fP\fP
 Specified file does not exist or could not be read/writtten\&. 
 .TP
+\fB\fIKINETIC_STATUS_REQUEST_REJECTED \fP\fP
+No request was attempted\&. 
+.TP
 \fB\fIKINETIC_STATUS_COUNT \fP\fP
 Number of status codes in KineticStatusDescriptor\&. 
 .PP
@@ -509,7 +505,7 @@ Definition at line 166 of file kinetic_types\&.h\&.
 .TP
 \fB\fIKINETIC_DEVICE_INFO_TYPE_DEVICE \fP\fP
 .PP
-Definition at line 291 of file kinetic_types\&.h\&.
+Definition at line 292 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticMessageType\fP"
 
 .PP
@@ -614,7 +610,7 @@ MEDIAOPTIMIZE_RESPONSE\&.
 \fB\fIKINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE \fP\fP
 MEDIAOPTIMIZE\&. 
 .PP
-Definition at line 338 of file kinetic_types\&.h\&.
+Definition at line 339 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
@@ -634,7 +630,7 @@ Pointer to the appropriate string representation for the specified status\&.
 .PP
 
 .PP
-Definition at line 62 of file kinetic_types\&.c\&.
+Definition at line 63 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_STATUS_COUNT, KineticStatusDescriptor, and KineticStatusInvalid\&.
 .SS "const char* KineticMessageType_GetName (\fBKineticMessageType\fPtype)"
@@ -654,7 +650,7 @@ Pointer to the appropriate string representation for the specified type\&.
 .PP
 
 .PP
-Definition at line 107 of file kinetic_types\&.c\&.
+Definition at line 108 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_MESSAGE_TYPE_DELETE, KINETIC_MESSAGE_TYPE_DELETE_RESPONSE, KINETIC_MESSAGE_TYPE_FLUSHALLDATA, KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE, KINETIC_MESSAGE_TYPE_GET, KINETIC_MESSAGE_TYPE_GET_RESPONSE, KINETIC_MESSAGE_TYPE_GETKEYRANGE, KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE, KINETIC_MESSAGE_TYPE_GETLOG, KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE, KINETIC_MESSAGE_TYPE_GETNEXT, KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE, KINETIC_MESSAGE_TYPE_GETPREVIOUS, KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE, KINETIC_MESSAGE_TYPE_GETVERSION, KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE, KINETIC_MESSAGE_TYPE_INVALID, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE, KINETIC_MESSAGE_TYPE_MEDIASCAN, KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE, KINETIC_MESSAGE_TYPE_NOOP, KINETIC_MESSAGE_TYPE_NOOP_RESPONSE, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE, KINETIC_MESSAGE_TYPE_PINOP, KINETIC_MESSAGE_TYPE_PINOP_RESPONSE, KINETIC_MESSAGE_TYPE_PUT, KINETIC_MESSAGE_TYPE_PUT_RESPONSE, KINETIC_MESSAGE_TYPE_SECURITY, KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE, KINETIC_MESSAGE_TYPE_SETUP, and KINETIC_MESSAGE_TYPE_SETUP_RESPONSE\&.
 .SH "Author"

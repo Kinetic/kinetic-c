@@ -1,0 +1,115 @@
+.TH "listener_io.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+listener_io.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'listener_io\&.h'\fP
+.br
+\fC#include 'listener_io_internal\&.h'\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include 'listener_task\&.h'\fP
+.br
+\fC#include 'util\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDUMP_READ\fP   0"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBListenerIO_AttemptRecv\fP (\fBlistener\fP *l, int available)"
+.br
+.ti -1c
+.RI "static bool \fBsocket_read_plain\fP (struct \fBbus\fP *b, \fBlistener\fP *l, int pfd_i, \fBconnection_info\fP *ci)"
+.br
+.ti -1c
+.RI "static void \fBprint_SSL_error\fP (struct \fBbus\fP *b, \fBconnection_info\fP *ci, int lvl, const char *prefix)"
+.br
+.ti -1c
+.RI "static bool \fBsocket_read_ssl\fP (struct \fBbus\fP *b, \fBlistener\fP *l, int pfd_i, \fBconnection_info\fP *ci)"
+.br
+.ti -1c
+.RI "static bool \fBsink_socket_read\fP (struct \fBbus\fP *b, \fBlistener\fP *l, \fBconnection_info\fP *ci, ssize_t size)"
+.br
+.ti -1c
+.RI "static void \fBset_error_for_socket\fP (\fBlistener\fP *l, int id, int fd, \fBrx_error_t\fP err)"
+.br
+.ti -1c
+.RI "static \fBrx_info_t\fP * \fBfind_info_by_sequence_id\fP (\fBlistener\fP *l, int fd, int64_t seq_id)"
+.br
+.ti -1c
+.RI "static void \fBprocess_unpacked_message\fP (\fBlistener\fP *l, \fBconnection_info\fP *ci, \fBbus_unpack_cb_res_t\fP result)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define DUMP_READ   0"
+
+.PP
+Definition at line 156 of file listener_io\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "void ListenerIO_AttemptRecv (\fBlistener\fP *l, intavailable)"
+
+.PP
+Definition at line 29 of file listener_io\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, BUS_SOCKET_PLAIN, BUS_SOCKET_SSL, connection_info::fd, listener::fd_info, listener::fds, INCOMING_MSG_PIPE, LOG_LISTENER, listener::read_buf_size, RX_ERROR_POLLERR, RX_ERROR_POLLHUP, set_error_for_socket(), socket_read_plain(), socket_read_ssl(), connection_info::to_read_size, listener::tracked_fds, connection_info::type, and bus::udata\&.
+.SS "static bool socket_read_plain (struct \fBbus\fP *b, \fBlistener\fP *l, intpfd_i, \fBconnection_info\fP *ci)\fC [static]\fP"
+
+.PP
+Definition at line 72 of file listener_io\&.c\&.
+.PP
+References BUS_LOG_SNPRINTF, connection_info::fd, LOG_LISTENER, listener::read_buf, RX_ERROR_READ_FAILURE, set_error_for_socket(), sink_socket_read(), connection_info::to_read_size, bus::udata, and util_is_resumable_io_error()\&.
+.SS "static void print_SSL_error (struct \fBbus\fP *b, \fBconnection_info\fP *ci, intlvl, const char *prefix)\fC [static]\fP"
+
+.PP
+Definition at line 95 of file listener_io\&.c\&.
+.PP
+References BUS_LOG_SNPRINTF, connection_info::fd, LOG_LISTENER, and bus::udata\&.
+.SS "static bool socket_read_ssl (struct \fBbus\fP *b, \fBlistener\fP *l, intpfd_i, \fBconnection_info\fP *ci)\fC [static]\fP"
+
+.PP
+Definition at line 103 of file listener_io\&.c\&.
+.PP
+References BUS_ASSERT, BUS_LOG_SNPRINTF, connection_info::fd, LOG_LISTENER, print_SSL_error(), listener::read_buf, RX_ERROR_POLLHUP, RX_ERROR_READ_FAILURE, set_error_for_socket(), sink_socket_read(), connection_info::ssl, connection_info::to_read_size, bus::udata, and util_is_resumable_io_error()\&.
+.SS "static bool sink_socket_read (struct \fBbus\fP *b, \fBlistener\fP *l, \fBconnection_info\fP *ci, ssize_tsize)\fC [static]\fP"
+
+.PP
+Definition at line 158 of file listener_io\&.c\&.
+.PP
+References BUS_ASSERT, bus_lock_log(), BUS_LOG, BUS_LOG_SNPRINTF, bus_unlock_log(), bus_sink_cb_res_t::full_msg_buffer, ListenerTask_GrowReadBuf(), LOG_LISTENER, LOG_MEMORY, bus_sink_cb_res_t::next_read, bus_unpack_cb_res_t::ok, process_unpacked_message(), listener::read_buf, listener::read_buf_size, bus::sink_cb, bus_unpack_cb_res_t::success, connection_info::to_read_size, bus_unpack_cb_res_t::u, bus::udata, connection_info::udata, and bus::unpack_cb\&.
+.SS "static void set_error_for_socket (\fBlistener\fP *l, intid, intfd, \fBrx_error_t\fPerr)\fC [static]\fP"
+
+.PP
+Definition at line 201 of file listener_io\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, rx_info_t::expect, boxed_msg::fd, listener::fds, INCOMING_MSG_PIPE, ListenerTask_ReleaseRXInfo(), LOG_LISTENER, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, rx_info_t::u, and bus::udata\&.
+.SS "static \fBrx_info_t\fP* find_info_by_sequence_id (\fBlistener\fP *l, intfd, int64_tseq_id)\fC [static]\fP"
+
+.PP
+Definition at line 235 of file listener_io\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, ListenerTask_DumpRXInfoTable(), bus::log_level, LOG_LISTENER, LOG_MEMORY, boxed_msg::out_seq_id, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, rx_info_t::u, and bus::udata\&.
+.SS "static void process_unpacked_message (\fBlistener\fP *l, \fBconnection_info\fP *ci, \fBbus_unpack_cb_res_t\fPresult)\fC [static]\fP"
+
+.PP
+Definition at line 280 of file listener_io\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, BUS_NO_SEQ_ID, bus_unpack_cb_res_t::error, bus::error_cb, rx_info_t::expect, connection_info::fd, find_info_by_sequence_id(), rx_info_t::hold, rx_info_t::id, connection_info::largest_rd_seq_id_seen, ListenerTask_AttemptDelivery(), LOG_LISTENER, bus_unpack_cb_res_t::ok, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_READY_FOR_DELIVERY, rx_info_t::state, bus_unpack_cb_res_t::success, rx_info_t::u, bus_unpack_cb_res_t::u, bus::udata, connection_info::udata, and bus::unexpected_msg_cb\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

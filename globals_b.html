@@ -121,6 +121,10 @@
 <li>BUS_ASSERT
 : <a class="el" href="bus__types_8h.html#a4d89c9e9f5d4826669787c8ec484c301">bus_types.h</a>
 </li>
+<li>bus_backpressure_delay()
+: <a class="el" href="bus_8c.html#a189082d10346e2334dfad2365445d16b">bus.c</a>
+, <a class="el" href="bus_8h.html#a189082d10346e2334dfad2365445d16b">bus.h</a>
+</li>
 <li>BUS_DEFAULT_TIMEOUT_SEC
 : <a class="el" href="bus__types_8h.html#a4bc947eb1281d1c88e3b4d40e6a55342">bus_types.h</a>
 </li>
@@ -137,10 +141,6 @@
 <li>bus_get_listener_for_socket()
 : <a class="el" href="bus_8c.html#a22b25ecf4c0e11de50f551369307c811">bus.c</a>
 , <a class="el" href="bus_8h.html#a22b25ecf4c0e11de50f551369307c811">bus.h</a>
-</li>
-<li>bus_get_sender_for_socket()
-: <a class="el" href="bus_8c.html#a8200fe8d77bbf9ebd2ee156835c3bb98">bus.c</a>
-, <a class="el" href="bus_8h.html#a8200fe8d77bbf9ebd2ee156835c3bb98">bus.h</a>
 </li>
 <li>bus_init()
 : <a class="el" href="bus_8c.html#a54e47c2cacbc18b4c7d77f4e8041c451">bus.c</a>
@@ -220,8 +220,8 @@
 , <a class="el" href="bus_8h.html#acd5ad66702ebaae2fe54a81e6f747199">bus.h</a>
 </li>
 <li>bus_release_socket()
-: <a class="el" href="bus_8c.html#a2119dbab02464f8c6ea0dd724d497666">bus.c</a>
-, <a class="el" href="bus_8h.html#a2119dbab02464f8c6ea0dd724d497666">bus.h</a>
+: <a class="el" href="bus_8c.html#a8a4bd5912f0de341b8fc65040b70fc00">bus.c</a>
+, <a class="el" href="bus_8h.html#a8a4bd5912f0de341b8fc65040b70fc00">bus.h</a>
 </li>
 <li>BUS_REQUEST_SEND_FAILURE_HUP
 : <a class="el" href="bus__types_8h.html#a57ad19e042110dc3559f626fde746945afda0f61aa5785da0f1e87dd2378d3a78">bus_types.h</a>
@@ -270,6 +270,9 @@
 <li>BUS_SEND_TX_TIMEOUT
 : <a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa6410b998e2e53a079a014a870b1e8e92">bus_types.h</a>
 </li>
+<li>BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER
+: <a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aa1305feede4d01715a05e893622b4c0e4">bus_types.h</a>
+</li>
 <li>BUS_SEND_UNDEFINED
 : <a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76aac751933daf8666d264d442649b932c49">bus_types.h</a>
 </li>
@@ -293,8 +296,8 @@
 : <a class="el" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2">bus_types.h</a>
 </li>
 <li>bus_ssl_connect()
-: <a class="el" href="bus__ssl_8h.html#a28804cfaf9b3cfe5f66de08f18b39487">bus_ssl.h</a>
-, <a class="el" href="bus__ssl_8c.html#a28804cfaf9b3cfe5f66de08f18b39487">bus_ssl.c</a>
+: <a class="el" href="bus__ssl_8c.html#aa25887b884806027c8cff1aa770072f3">bus_ssl.c</a>
+, <a class="el" href="bus__ssl_8h.html#aa25887b884806027c8cff1aa770072f3">bus_ssl.h</a>
 </li>
 <li>bus_ssl_ctx_free()
 : <a class="el" href="bus__ssl_8c.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl.c</a>
@@ -331,8 +334,8 @@
 : <a class="el" href="byte__array_8h.html#a9da5f8699370d9eb7841f4b13ebb54cb">byte_array.h</a>
 </li>
 <li>ByteArray_Create()
-: <a class="el" href="byte__array_8h.html#a1029bfd0bb667fc593fe3e0733310a3e">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#a1029bfd0bb667fc593fe3e0733310a3e">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#a1029bfd0bb667fc593fe3e0733310a3e">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#a1029bfd0bb667fc593fe3e0733310a3e">byte_array.h</a>
 </li>
 <li>ByteArray_CreateWithCString()
 : <a class="el" href="byte__array_8h.html#ad43c36dca8421ec3e2f48e55d8f9e413">byte_array.h</a>
@@ -347,8 +350,8 @@
 , <a class="el" href="byte__array_8c.html#a22f0c55397251be386a01f1ed6ae7dcc">byte_array.c</a>
 </li>
 <li>ByteBuffer_Append()
-: <a class="el" href="byte__array_8h.html#adda138a80ee9e83c91228835d5d3ab7b">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#adda138a80ee9e83c91228835d5d3ab7b">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#adda138a80ee9e83c91228835d5d3ab7b">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#adda138a80ee9e83c91228835d5d3ab7b">byte_array.h</a>
 </li>
 <li>ByteBuffer_AppendArray()
 : <a class="el" href="byte__array_8h.html#a294a1fea058cae9ec2b75e2d6c879f9b">byte_array.h</a>
@@ -367,28 +370,28 @@
 , <a class="el" href="byte__array_8c.html#a79508f7b5ab71930a01221f6d1276592">byte_array.c</a>
 </li>
 <li>ByteBuffer_AppendFormattedCString()
-: <a class="el" href="byte__array_8h.html#a5e38219f5c8c12454449c0bafc878994">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#a5e38219f5c8c12454449c0bafc878994">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#a5e38219f5c8c12454449c0bafc878994">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#a5e38219f5c8c12454449c0bafc878994">byte_array.h</a>
 </li>
 <li>ByteBuffer_BytesRemaining()
-: <a class="el" href="byte__array_8c.html#ab9a38855ec827f618c1c67c5c2d909fc">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#ab9a38855ec827f618c1c67c5c2d909fc">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#ab9a38855ec827f618c1c67c5c2d909fc">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#ab9a38855ec827f618c1c67c5c2d909fc">byte_array.c</a>
 </li>
 <li>ByteBuffer_Consume()
 : <a class="el" href="byte__array_8h.html#ae38b9b3aacf94d37ccbbb2b238b8f502">byte_array.h</a>
 , <a class="el" href="byte__array_8c.html#ae38b9b3aacf94d37ccbbb2b238b8f502">byte_array.c</a>
 </li>
 <li>ByteBuffer_Create()
-: <a class="el" href="byte__array_8c.html#a8366cb95371c1aebfddb2b80625a981e">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#a8366cb95371c1aebfddb2b80625a981e">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#a8366cb95371c1aebfddb2b80625a981e">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#a8366cb95371c1aebfddb2b80625a981e">byte_array.c</a>
 </li>
 <li>ByteBuffer_CreateAndAppend()
 : <a class="el" href="byte__array_8c.html#a87178b5390ee8e9f9e5926dd87400077">byte_array.c</a>
 , <a class="el" href="byte__array_8h.html#a87178b5390ee8e9f9e5926dd87400077">byte_array.h</a>
 </li>
 <li>ByteBuffer_CreateAndAppendArray()
-: <a class="el" href="byte__array_8h.html#a97165010b376a19e05156502e2aeee3b">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#a97165010b376a19e05156502e2aeee3b">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#a97165010b376a19e05156502e2aeee3b">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#a97165010b376a19e05156502e2aeee3b">byte_array.h</a>
 </li>
 <li>ByteBuffer_CreateAndAppendCString()
 : <a class="el" href="byte__array_8c.html#a0c83202d1364452aabb4ca367f0d00f5">byte_array.c</a>
@@ -399,12 +402,12 @@
 , <a class="el" href="byte__array_8h.html#a30773d7fa18abdd1f9fcf41337bf1f02">byte_array.h</a>
 </li>
 <li>ByteBuffer_CreateAndAppendFormattedCString()
-: <a class="el" href="byte__array_8h.html#ad8a04a9ba648ea429ac1e0671857db0f">byte_array.h</a>
-, <a class="el" href="byte__array_8c.html#ad8a04a9ba648ea429ac1e0671857db0f">byte_array.c</a>
+: <a class="el" href="byte__array_8c.html#ad8a04a9ba648ea429ac1e0671857db0f">byte_array.c</a>
+, <a class="el" href="byte__array_8h.html#ad8a04a9ba648ea429ac1e0671857db0f">byte_array.h</a>
 </li>
 <li>ByteBuffer_CreateWithArray()
-: <a class="el" href="byte__array_8c.html#a3e9a5e85a93de22ffeed6d088be9995b">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#a3e9a5e85a93de22ffeed6d088be9995b">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#a3e9a5e85a93de22ffeed6d088be9995b">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#a3e9a5e85a93de22ffeed6d088be9995b">byte_array.c</a>
 </li>
 <li>ByteBuffer_Free()
 : <a class="el" href="byte__array_8c.html#a0129114878fbba14de8ba1d96d52aa90">byte_array.c</a>
@@ -419,8 +422,8 @@
 , <a class="el" href="byte__array_8c.html#a492ffde2f6533cfd5a1fb09330a8148c">byte_array.c</a>
 </li>
 <li>ByteBuffer_MallocAndAppend()
-: <a class="el" href="byte__array_8c.html#ac9917b015e701a2b34825d5dfbe97c2a">byte_array.c</a>
-, <a class="el" href="byte__array_8h.html#ac9917b015e701a2b34825d5dfbe97c2a">byte_array.h</a>
+: <a class="el" href="byte__array_8h.html#ac9917b015e701a2b34825d5dfbe97c2a">byte_array.h</a>
+, <a class="el" href="byte__array_8c.html#ac9917b015e701a2b34825d5dfbe97c2a">byte_array.c</a>
 </li>
 <li>ByteBuffer_Reset()
 : <a class="el" href="byte__array_8c.html#a4b0e7ea156628d159b781a9bc32a7e35">byte_array.c</a>

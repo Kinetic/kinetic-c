@@ -1,4 +1,4 @@
-.TH "listener.c" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "listener.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,6 +30,10 @@ listener.c \-
 .br
 \fC#include 'listener\&.h'\fP
 .br
+\fC#include 'listener_cmd\&.h'\fP
+.br
+\fC#include 'listener_task\&.h'\fP
+.br
 \fC#include 'listener_internal\&.h'\fP
 .br
 \fC#include 'util\&.h'\fP
@@ -37,66 +41,17 @@ listener.c \-
 \fC#include 'atomic\&.h'\fP
 .br
 
-.SS "Macros"
-
-.in +1c
-.ti -1c
-.RI "#define \fBDEFAULT_READ_BUF_SIZE\fP   (1024L * 1024L)"
-.br
-.ti -1c
-.RI "#define \fBINCOMING_MSG_PIPE\fP   1"
-.br
-.ti -1c
-.RI "#define \fBINCOMING_MSG_PIPE_ID\fP   0"
-.br
-.ti -1c
-.RI "#define \fBMSG_BP_1QTR\fP   (0\&.25)"
-.br
-.ti -1c
-.RI "#define \fBMSG_BP_HALF\fP   (0\&.5)"
-.br
-.ti -1c
-.RI "#define \fBMSG_BP_3QTR\fP   (2\&.0)"
-.br
-.ti -1c
-.RI "#define \fBRX_INFO_BP_1QTR\fP   (0\&.5)"
-.br
-.ti -1c
-.RI "#define \fBRX_INFO_BP_HALF\fP   (0\&.5)"
-.br
-.ti -1c
-.RI "#define \fBRX_INFO_BP_3QTR\fP   (2\&.0)"
-.br
-.ti -1c
-.RI "#define \fBTHREADPOOL_BP\fP   (1\&.0)"
-.br
-.ti -1c
-.RI "#define \fBTIMEOUT_DELAY\fP   100"
-.br
-.ti -1c
-.RI "#define \fBDUMP_READ\fP   0"
-.br
-.in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "static void \fBretry_delivery\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info)"
-.br
-.ti -1c
 .RI "struct \fBlistener\fP * \fBlistener_init\fP (struct \fBbus\fP *b, struct \fBbus_config\fP *cfg)"
 .br
 .ti -1c
-.RI "bool \fBlistener_add_socket\fP (struct \fBlistener\fP *l, \fBconnection_info\fP *ci, int notify_fd)"
+.RI "bool \fBlistener_add_socket\fP (struct \fBlistener\fP *l, \fBconnection_info\fP *ci, int *notify_fd)"
 .br
 .ti -1c
-.RI "bool \fBlistener_remove_socket\fP (struct \fBlistener\fP *l, int fd)"
-.br
-.ti -1c
-.RI "static uint16_t \fBget_backpressure\fP (struct \fBlistener\fP *l)"
-.br
-.ti -1c
-.RI "static void \fBobserve_backpressure\fP (\fBlistener\fP *l, size_t backpressure)"
+.RI "bool \fBlistener_remove_socket\fP (struct \fBlistener\fP *l, int fd, int *notify_fd)"
 .br
 .ti -1c
 .RI "bool \fBlistener_hold_response\fP (struct \fBlistener\fP *l, int fd, int64_t seq_id, int16_t timeout_sec)"
@@ -105,401 +60,74 @@ listener.c \-
 .RI "bool \fBlistener_expect_response\fP (struct \fBlistener\fP *l, \fBboxed_msg\fP *box, uint16_t *backpressure)"
 .br
 .ti -1c
-.RI "bool \fBlistener_shutdown\fP (struct \fBlistener\fP *l)"
+.RI "bool \fBlistener_shutdown\fP (struct \fBlistener\fP *l, int *notify_fd)"
 .br
 .ti -1c
 .RI "void \fBlistener_free\fP (struct \fBlistener\fP *l)"
 .br
 .ti -1c
-.RI "void * \fBlistener_mainloop\fP (void *arg)"
-.br
-.ti -1c
-.RI "static void \fBcheck_and_flush_incoming_msg_pipe\fP (\fBlistener\fP *l, int *res)"
-.br
-.ti -1c
-.RI "static void \fBset_error_for_socket\fP (\fBlistener\fP *l, int id, int fd, \fBrx_error_t\fP err)"
-.br
-.ti -1c
-.RI "static void \fBprint_SSL_error\fP (struct \fBbus\fP *b, \fBconnection_info\fP *ci, int lvl, const char *prefix)"
-.br
-.ti -1c
-.RI "static bool \fBsocket_read_plain\fP (struct \fBbus\fP *b, \fBlistener\fP *l, int pfd_i, \fBconnection_info\fP *ci)"
-.br
-.ti -1c
-.RI "static bool \fBsocket_read_ssl\fP (struct \fBbus\fP *b, \fBlistener\fP *l, int pfd_i, \fBconnection_info\fP *ci)"
-.br
-.ti -1c
-.RI "static bool \fBsink_socket_read\fP (struct \fBbus\fP *b, \fBlistener\fP *l, \fBconnection_info\fP *ci, ssize_t size)"
-.br
-.ti -1c
-.RI "static void \fBattempt_recv\fP (\fBlistener\fP *l, int available)"
-.br
-.ti -1c
-.RI "static \fBrx_info_t\fP * \fBfind_info_by_sequence_id\fP (\fBlistener\fP *l, int fd, int64_t seq_id)"
-.br
-.ti -1c
-.RI "static void \fBprocess_unpacked_message\fP (\fBlistener\fP *l, \fBconnection_info\fP *ci, \fBbus_unpack_cb_res_t\fP result)"
-.br
-.ti -1c
-.RI "static void \fBtick_handler\fP (\fBlistener\fP *l)"
-.br
-.ti -1c
-.RI "static void \fBdump_rx_info_table\fP (\fBlistener\fP *l)"
-.br
-.ti -1c
-.RI "static void \fBclean_up_completed_info\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info)"
-.br
-.ti -1c
-.RI "static void \fBnotify_message_failure\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info, \fBbus_send_status_t\fP status)"
-.br
-.ti -1c
-.RI "static \fBrx_info_t\fP * \fBget_free_rx_info\fP (struct \fBlistener\fP *l)"
-.br
-.ti -1c
-.RI "static \fBconnection_info\fP * \fBget_connection_info\fP (struct \fBlistener\fP *l, int fd)"
-.br
-.ti -1c
-.RI "static void \fBrelease_rx_info\fP (struct \fBlistener\fP *l, \fBrx_info_t\fP *info)"
+.RI "static bool \fBpush_message\fP (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg, int *reply_fd)"
 .br
 .ti -1c
 .RI "static \fBlistener_msg\fP * \fBget_free_msg\fP (\fBlistener\fP *l)"
 .br
-.ti -1c
-.RI "static void \fBrelease_msg\fP (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)"
-.br
-.ti -1c
-.RI "static bool \fBpush_message\fP (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)"
-.br
-.ti -1c
-.RI "static void \fBmsg_handler\fP (\fBlistener\fP *l, \fBlistener_msg\fP *pmsg)"
-.br
-.ti -1c
-.RI "static void \fBnotify_caller\fP (int fd)"
-.br
-.ti -1c
-.RI "static bool \fBgrow_read_buf\fP (\fBlistener\fP *l, size_t nsize)"
-.br
-.ti -1c
-.RI "static void \fBadd_socket\fP (\fBlistener\fP *l, \fBconnection_info\fP *ci, int notify_fd)"
-.br
-.ti -1c
-.RI "static void \fBfree_ci\fP (\fBconnection_info\fP *ci)"
-.br
-.ti -1c
-.RI "static void \fBremove_socket\fP (\fBlistener\fP *l, int fd)"
-.br
-.ti -1c
-.RI "static void \fBhold_response\fP (\fBlistener\fP *l, int fd, int64_t seq_id, int16_t timeout_sec)"
-.br
-.ti -1c
-.RI "static \fBrx_info_t\fP * \fBget_hold_rx_info\fP (\fBlistener\fP *l, int fd, int64_t seq_id)"
-.br
-.ti -1c
-.RI "static void \fBattempt_delivery\fP (\fBlistener\fP *l, struct \fBrx_info_t\fP *info)"
-.br
-.ti -1c
-.RI "static void \fBexpect_response\fP (\fBlistener\fP *l, struct \fBboxed_msg\fP *box)"
-.br
-.ti -1c
-.RI "static void \fBshutdown\fP (\fBlistener\fP *l)"
-.br
 .in -1c
-.SH "Macro Definition Documentation"
-.PP 
-.SS "#define DEFAULT_READ_BUF_SIZE   (1024L * 1024L)"
-
-.PP
-Definition at line 37 of file listener\&.c\&.
-.SS "#define INCOMING_MSG_PIPE   1"
-
-.PP
-Definition at line 38 of file listener\&.c\&.
-.SS "#define INCOMING_MSG_PIPE_ID   0"
-
-.PP
-Definition at line 39 of file listener\&.c\&.
-.SS "#define MSG_BP_1QTR   (0\&.25)"
-
-.PP
-Definition at line 111 of file listener\&.c\&.
-.SS "#define MSG_BP_HALF   (0\&.5)"
-
-.PP
-Definition at line 112 of file listener\&.c\&.
-.SS "#define MSG_BP_3QTR   (2\&.0)"
-
-.PP
-Definition at line 113 of file listener\&.c\&.
-.SS "#define RX_INFO_BP_1QTR   (0\&.5)"
-
-.PP
-Definition at line 114 of file listener\&.c\&.
-.SS "#define RX_INFO_BP_HALF   (0\&.5)"
-
-.PP
-Definition at line 115 of file listener\&.c\&.
-.SS "#define RX_INFO_BP_3QTR   (2\&.0)"
-
-.PP
-Definition at line 116 of file listener\&.c\&.
-.SS "#define THREADPOOL_BP   (1\&.0)"
-
-.PP
-Definition at line 117 of file listener\&.c\&.
-.SS "#define TIMEOUT_DELAY   100"
-
-.PP
-Definition at line 278 of file listener\&.c\&.
-.SS "#define DUMP_READ   0"
-
-.PP
-Definition at line 530 of file listener\&.c\&.
 .SH "Function Documentation"
 .PP 
-.SS "static void retry_delivery (\fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
-
-.PP
-Definition at line 810 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, bus_process_boxed_message(), BUS_SEND_SUCCESS, rx_info_t::expect, rx_info_t::id, LOG_MEMORY, observe_backpressure(), boxed_msg::out_seq_id, release_rx_info(), boxed_msg::result, RIS_EXPECT, RX_ERROR_DONE, RX_ERROR_READY_FOR_DELIVERY, rx_info_t::state, bus_msg_result_t::status, rx_info_t::u, and bus::udata\&.
 .SS "struct \fBlistener\fP* listener_init (struct \fBbus\fP *b, struct \fBbus_config\fP *cfg)"
 
 .PP
-Definition at line 43 of file listener\&.c\&.
+Definition at line 39 of file listener\&.c\&.
 .PP
-References listener::bus, BUS_LOG, listener::commit_pipe, listener::fds, listener_msg::id, rx_info_t::id, listener::incoming_msg_pipe, INCOMING_MSG_PIPE_ID, LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, listener::msg_freelist, listener::msgs, listener_msg::next, rx_info_t::next, RIS_INACTIVE, listener::rx_info, listener::rx_info_freelist, listener::rx_info_max_used, rx_info_t::state, and bus::udata\&.
-.SS "bool listener_add_socket (struct \fBlistener\fP *l, \fBconnection_info\fP *ci, intnotify_fd)"
+References listener::bus, BUS_LOG, listener::commit_pipe, listener::fds, listener_msg::id, rx_info_t::id, listener::incoming_msg_pipe, INCOMING_MSG_PIPE_ID, LISTENER_NO_FD, LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, listener::msg_freelist, listener::msgs, listener_msg::next, rx_info_t::next, listener_msg::pipes, RIS_INACTIVE, listener::rx_info, listener::rx_info_freelist, listener::rx_info_max_used, listener::shutdown_notify_fd, rx_info_t::state, and bus::udata\&.
+.SS "bool listener_add_socket (struct \fBlistener\fP *l, \fBconnection_info\fP *ci, int *notify_fd)"
 
 .PP
-Definition at line 88 of file listener\&.c\&.
+Definition at line 99 of file listener\&.c\&.
 .PP
-References listener_msg::add_socket, get_free_msg(), MSG_ADD_SOCKET, push_message(), listener_msg::type, and listener_msg::u\&.
-.SS "bool listener_remove_socket (struct \fBlistener\fP *l, intfd)"
+References listener_msg::add_socket, get_free_msg(), MSG_ADD_SOCKET, listener_msg::pipes, push_message(), listener_msg::type, and listener_msg::u\&.
+.SS "bool listener_remove_socket (struct \fBlistener\fP *l, intfd, int *notify_fd)"
 
 .PP
-Definition at line 100 of file listener\&.c\&.
+Definition at line 110 of file listener\&.c\&.
 .PP
-References get_free_msg(), MSG_REMOVE_SOCKET, push_message(), listener_msg::remove_socket, listener_msg::type, and listener_msg::u\&.
-.SS "static uint16_t get_backpressure (struct \fBlistener\fP *l)\fC [static]\fP"
-
-.PP
-Definition at line 119 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_LOG_SNPRINTF, LOG_SENDER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, MSG_BP_1QTR, MSG_BP_3QTR, MSG_BP_HALF, listener::msgs_in_use, RX_INFO_BP_1QTR, RX_INFO_BP_3QTR, RX_INFO_BP_HALF, listener::rx_info_in_use, THREADPOOL_BP, bus::udata, and listener::upstream_backpressure\&.
-.SS "static void observe_backpressure (\fBlistener\fP *l, size_tbackpressure)\fC [static]\fP"
-
-.PP
-Definition at line 154 of file listener\&.c\&.
-.PP
-References listener::upstream_backpressure\&.
+References get_free_msg(), MSG_REMOVE_SOCKET, listener_msg::pipes, push_message(), listener_msg::remove_socket, listener_msg::type, and listener_msg::u\&.
 .SS "bool listener_hold_response (struct \fBlistener\fP *l, intfd, int64_tseq_id, int16_ttimeout_sec)"
 
 .PP
-Definition at line 159 of file listener\&.c\&.
+Definition at line 120 of file listener\&.c\&.
 .PP
 References listener::bus, BUS_LOG, BUS_LOG_SNPRINTF, get_free_msg(), listener_msg::hold, LOG_LISTENER, LOG_MEMORY, MSG_HOLD_RESPONSE, push_message(), listener_msg::type, listener_msg::u, and bus::udata\&.
 .SS "bool listener_expect_response (struct \fBlistener\fP *l, \fBboxed_msg\fP *box, uint16_t *backpressure)"
 
 .PP
-Definition at line 186 of file listener\&.c\&.
+Definition at line 147 of file listener\&.c\&.
 .PP
-References listener::bus, BUS_LOG_SNPRINTF, listener_msg::expect, get_backpressure(), get_free_msg(), LOG_MEMORY, MSG_EXPECT_RESPONSE, boxed_msg::out_seq_id, push_message(), listener_msg::type, listener_msg::u, and bus::udata\&.
-.SS "bool listener_shutdown (struct \fBlistener\fP *l)"
+References listener::bus, BUS_LOG_SNPRINTF, listener_msg::expect, get_free_msg(), ListenerTask_GetBackpressure(), LOG_MEMORY, MSG_EXPECT_RESPONSE, boxed_msg::out_seq_id, push_message(), listener_msg::type, listener_msg::u, and bus::udata\&.
+.SS "bool listener_shutdown (struct \fBlistener\fP *l, int *notify_fd)"
 
 .PP
-Definition at line 212 of file listener\&.c\&.
+Definition at line 173 of file listener\&.c\&.
 .PP
-References get_free_msg(), MSG_SHUTDOWN, push_message(), and listener_msg::type\&.
+References get_free_msg(), MSG_SHUTDOWN, listener_msg::pipes, push_message(), listener_msg::shutdown, listener_msg::type, and listener_msg::u\&.
 .SS "void listener_free (struct \fBlistener\fP *l)"
 
 .PP
-Definition at line 220 of file listener\&.c\&.
+Definition at line 182 of file listener\&.c\&.
 .PP
-References listener_msg::add_socket, listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, listener::commit_pipe, listener_msg::expect, rx_info_t::expect, listener::fds, free_ci(), INCOMING_MSG_PIPE, listener::incoming_msg_pipe, LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, MSG_ADD_SOCKET, MSG_EXPECT_RESPONSE, listener::msgs, listener::read_buf, remove_socket(), RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, rx_info_t::state, listener::tracked_fds, listener_msg::type, listener_msg::u, rx_info_t::u, and bus::udata\&.
-.SS "void* listener_mainloop (void *arg)"
+References listener_msg::add_socket, listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, listener::commit_pipe, listener_msg::expect, rx_info_t::expect, listener::incoming_msg_pipe, LISTENER_SHUTDOWN_COMPLETE_FD, ListenerCmd_NotifyCaller(), LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, MSG_ADD_SOCKET, MSG_EXPECT_RESPONSE, MSG_REMOVE_SOCKET, listener::msgs, listener_msg::pipes, listener::read_buf, listener_msg::remove_socket, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::shutdown_notify_fd, rx_info_t::state, listener_msg::type, listener_msg::u, rx_info_t::u, and bus::udata\&.
+.SS "static bool push_message (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg, int *reply_fd)\fC [static]\fP"
 
 .PP
-Definition at line 280 of file listener\&.c\&.
+Definition at line 243 of file listener\&.c\&.
 .PP
-References attempt_recv(), BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, check_and_flush_incoming_msg_pipe(), INCOMING_MSG_PIPE, LOG_LISTENER, tick_handler(), TIMEOUT_DELAY, bus::udata, and util_is_resumable_io_error()\&.
-.SS "static void check_and_flush_incoming_msg_pipe (\fBlistener\fP *l, int *res)\fC [static]\fP"
-
-.PP
-Definition at line 329 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_LOG_SNPRINTF, listener::fds, INCOMING_MSG_PIPE_ID, LOG_LISTENER, msg_handler(), listener::msgs, and bus::udata\&.
-.SS "static void set_error_for_socket (\fBlistener\fP *l, intid, intfd, \fBrx_error_t\fPerr)\fC [static]\fP"
-
-.PP
-Definition at line 363 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, rx_info_t::expect, boxed_msg::fd, listener::fds, INCOMING_MSG_PIPE, LOG_LISTENER, release_rx_info(), RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, rx_info_t::u, and bus::udata\&.
-.SS "static void print_SSL_error (struct \fBbus\fP *b, \fBconnection_info\fP *ci, intlvl, const char *prefix)\fC [static]\fP"
-
-.PP
-Definition at line 396 of file listener\&.c\&.
-.PP
-References BUS_LOG_SNPRINTF, connection_info::fd, LOG_LISTENER, and bus::udata\&.
-.SS "static bool socket_read_plain (struct \fBbus\fP *b, \fBlistener\fP *l, intpfd_i, \fBconnection_info\fP *ci)\fC [static]\fP"
-
-.PP
-Definition at line 454 of file listener\&.c\&.
-.PP
-References BUS_LOG_SNPRINTF, connection_info::fd, LOG_LISTENER, listener::read_buf, RX_ERROR_READ_FAILURE, set_error_for_socket(), sink_socket_read(), connection_info::to_read_size, bus::udata, and util_is_resumable_io_error()\&.
-.SS "static bool socket_read_ssl (struct \fBbus\fP *b, \fBlistener\fP *l, intpfd_i, \fBconnection_info\fP *ci)\fC [static]\fP"
-
-.PP
-Definition at line 477 of file listener\&.c\&.
-.PP
-References BUS_ASSERT, BUS_LOG_SNPRINTF, connection_info::fd, LOG_LISTENER, print_SSL_error(), listener::read_buf, RX_ERROR_POLLHUP, RX_ERROR_READ_FAILURE, set_error_for_socket(), sink_socket_read(), connection_info::ssl, connection_info::to_read_size, bus::udata, and util_is_resumable_io_error()\&.
-.SS "static bool sink_socket_read (struct \fBbus\fP *b, \fBlistener\fP *l, \fBconnection_info\fP *ci, ssize_tsize)\fC [static]\fP"
-
-.PP
-Definition at line 532 of file listener\&.c\&.
-.PP
-References BUS_ASSERT, bus_lock_log(), BUS_LOG, BUS_LOG_SNPRINTF, bus_unlock_log(), bus_sink_cb_res_t::full_msg_buffer, grow_read_buf(), LOG_LISTENER, LOG_MEMORY, bus_sink_cb_res_t::next_read, bus_unpack_cb_res_t::ok, process_unpacked_message(), listener::read_buf, listener::read_buf_size, bus::sink_cb, bus_unpack_cb_res_t::success, connection_info::to_read_size, bus_unpack_cb_res_t::u, bus::udata, connection_info::udata, and bus::unpack_cb\&.
-.SS "static void attempt_recv (\fBlistener\fP *l, intavailable)\fC [static]\fP"
-
-.PP
-Definition at line 411 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, BUS_SOCKET_PLAIN, BUS_SOCKET_SSL, connection_info::fd, listener::fd_info, listener::fds, INCOMING_MSG_PIPE, LOG_LISTENER, listener::read_buf_size, RX_ERROR_POLLERR, RX_ERROR_POLLHUP, set_error_for_socket(), socket_read_plain(), socket_read_ssl(), connection_info::to_read_size, listener::tracked_fds, connection_info::type, and bus::udata\&.
-.SS "static \fBrx_info_t\fP* find_info_by_sequence_id (\fBlistener\fP *l, intfd, int64_tseq_id)\fC [static]\fP"
-
-.PP
-Definition at line 575 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, dump_rx_info_table(), rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, bus::log_level, LOG_LISTENER, LOG_MEMORY, boxed_msg::out_seq_id, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, rx_info_t::u, and bus::udata\&.
-.SS "static void process_unpacked_message (\fBlistener\fP *l, \fBconnection_info\fP *ci, \fBbus_unpack_cb_res_t\fPresult)\fC [static]\fP"
-
-.PP
-Definition at line 620 of file listener\&.c\&.
-.PP
-References attempt_delivery(), listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, BUS_NO_SEQ_ID, bus_unpack_cb_res_t::error, bus::error_cb, rx_info_t::expect, connection_info::fd, find_info_by_sequence_id(), rx_info_t::hold, rx_info_t::id, connection_info::largest_seq_id_seen, LOG_LISTENER, bus_unpack_cb_res_t::ok, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_READY_FOR_DELIVERY, rx_info_t::state, bus_unpack_cb_res_t::success, rx_info_t::u, bus_unpack_cb_res_t::u, bus::udata, connection_info::udata, and bus::unexpected_msg_cb\&.
-.SS "static void tick_handler (\fBlistener\fP *l)\fC [static]\fP"
-
-.PP
-Definition at line 687 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, BUS_SEND_RX_FAILURE, BUS_SEND_RX_TIMEOUT, clean_up_completed_info(), dump_rx_info_table(), rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, listener::is_idle, bus::log_level, LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, listener::msgs, listener::msgs_in_use, notify_message_failure(), boxed_msg::out_seq_id, release_rx_info(), retry_delivery(), RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_DONE, RX_ERROR_NONE, RX_ERROR_READY_FOR_DELIVERY, listener::rx_info, listener::rx_info_in_use, listener::rx_info_max_used, rx_info_t::state, rx_info_t::timeout_sec, listener::tracked_fds, boxed_msg::tv_send_done, boxed_msg::tv_send_start, listener_msg::type, rx_info_t::u, and bus::udata\&.
-.SS "static void dump_rx_info_table (\fBlistener\fP *l)\fC [static]\fP"
-
-.PP
-Definition at line 784 of file listener\&.c\&.
-.PP
-References rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, rx_info_t::next, boxed_msg::out_seq_id, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, rx_info_t::timeout_sec, and rx_info_t::u\&.
-.SS "static void clean_up_completed_info (\fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
-
-.PP
-Definition at line 838 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, bus_process_boxed_message(), BUS_SEND_SUCCESS, rx_info_t::expect, boxed_msg::fd, rx_info_t::id, LOG_MEMORY, observe_backpressure(), boxed_msg::out_msg, boxed_msg::out_seq_id, release_rx_info(), boxed_msg::result, RIS_EXPECT, RX_ERROR_DONE, rx_info_t::state, bus_msg_result_t::status, rx_info_t::timeout_sec, rx_info_t::u, and bus::udata\&.
-.SS "static void notify_message_failure (\fBlistener\fP *l, \fBrx_info_t\fP *info, \fBbus_send_status_t\fPstatus)\fC [static]\fP"
-
-.PP
-Definition at line 877 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, bus_process_boxed_message(), rx_info_t::expect, LOG_MEMORY, observe_backpressure(), release_rx_info(), RIS_EXPECT, RX_ERROR_DONE, rx_info_t::state, rx_info_t::u, and bus::udata\&.
-.SS "static \fBrx_info_t\fP* get_free_rx_info (struct \fBlistener\fP *l)\fC [static]\fP"
-
-.PP
-Definition at line 904 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, rx_info_t::id, LOG_LISTENER, LOG_SENDER, MAX_PENDING_MESSAGES, rx_info_t::next, RIS_INACTIVE, listener::rx_info, listener::rx_info_freelist, listener::rx_info_in_use, listener::rx_info_max_used, rx_info_t::state, and bus::udata\&.
-.SS "static \fBconnection_info\fP* get_connection_info (struct \fBlistener\fP *l, intfd)\fC [static]\fP"
-
-.PP
-Definition at line 931 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, connection_info::fd, listener::fd_info, listener::tracked_fds, and bus::udata\&.
-.SS "static void release_rx_info (struct \fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
-
-.PP
-Definition at line 941 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, rx_info_t::expect, get_connection_info(), rx_info_t::hold, rx_info_t::id, LOG_LISTENER, MAX_PENDING_MESSAGES, rx_info_t::next, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_DONE, listener::rx_info, listener::rx_info_freelist, listener::rx_info_in_use, listener::rx_info_max_used, rx_info_t::state, rx_info_t::u, bus::udata, connection_info::udata, and bus::unexpected_msg_cb\&.
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, listener::commit_pipe, listener_msg::id, ListenerTask_ReleaseMsg(), LOG_LISTENER, listener_msg::pipes, and bus::udata\&.
 .SS "static \fBlistener_msg\fP* get_free_msg (\fBlistener\fP *l)\fC [static]\fP"
 
 .PP
-Definition at line 1008 of file listener\&.c\&.
+Definition at line 270 of file listener\&.c\&.
 .PP
-References ATOMIC_BOOL_COMPARE_AND_SWAP, listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, LOG_LISTENER, listener::msg_freelist, MSG_NONE, listener::msgs_in_use, listener_msg::next, listener_msg::type, and bus::udata\&.
-.SS "static void release_msg (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)\fC [static]\fP"
-
-.PP
-Definition at line 1044 of file listener\&.c\&.
-.PP
-References ATOMIC_BOOL_COMPARE_AND_SWAP, listener::bus, BUS_ASSERT, BUS_LOG, listener_msg::id, LOG_LISTENER, MAX_QUEUE_MESSAGES, listener::msg_freelist, MSG_NONE, listener::msgs_in_use, listener_msg::next, listener_msg::type, and bus::udata\&.
-.SS "static bool push_message (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)\fC [static]\fP"
-
-.PP
-Definition at line 1065 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, listener::commit_pipe, listener_msg::id, LOG_LISTENER, release_msg(), and bus::udata\&.
-.SS "static void msg_handler (\fBlistener\fP *l, \fBlistener_msg\fP *pmsg)\fC [static]\fP"
-
-.PP
-Definition at line 1090 of file listener\&.c\&.
-.PP
-References listener_msg::add_socket, add_socket(), listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, listener_msg::expect, expect_response(), listener_msg::hold, hold_response(), listener::is_idle, LOG_LISTENER, MSG_ADD_SOCKET, MSG_EXPECT_RESPONSE, MSG_HOLD_RESPONSE, MSG_NONE, MSG_REMOVE_SOCKET, MSG_SHUTDOWN, release_msg(), listener_msg::remove_socket, remove_socket(), shutdown(), listener_msg::type, listener_msg::u, and bus::udata\&.
-.SS "static void notify_caller (intfd)\fC [static]\fP"
-
-.PP
-Definition at line 1125 of file listener\&.c\&.
-.SS "static bool grow_read_buf (\fBlistener\fP *l, size_tnsize)\fC [static]\fP"
-
-.PP
-Definition at line 1141 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_LOG_SNPRINTF, LOG_MEMORY, listener::read_buf, listener::read_buf_size, and bus::udata\&.
-.SS "static void add_socket (\fBlistener\fP *l, \fBconnection_info\fP *ci, intnotify_fd)\fC [static]\fP"
-
-.PP
-Definition at line 1159 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG, connection_info::fd, listener::fd_info, listener::fds, bus_sink_cb_res_t::full_msg_buffer, grow_read_buf(), INCOMING_MSG_PIPE, LOG_LISTENER, MAX_FDS, bus_sink_cb_res_t::next_read, notify_caller(), listener::read_buf, bus::sink_cb, connection_info::to_read_size, listener::tracked_fds, bus::udata, and connection_info::udata\&.
-.SS "static void free_ci (\fBconnection_info\fP *ci)\fC [static]\fP"
-
-.PP
-Definition at line 1197 of file listener\&.c\&.
-.PP
-References connection_info::ssl\&.
-.SS "static void remove_socket (\fBlistener\fP *l, intfd)\fC [static]\fP"
-
-.PP
-Definition at line 1205 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_LOG_SNPRINTF, listener::fd_info, listener::fds, free_ci(), INCOMING_MSG_PIPE, LOG_LISTENER, listener::tracked_fds, and bus::udata\&.
-.SS "static void hold_response (\fBlistener\fP *l, intfd, int64_tseq_id, int16_ttimeout_sec)\fC [static]\fP"
-
-.PP
-Definition at line 1230 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, get_free_rx_info(), rx_info_t::hold, rx_info_t::id, LOG_LISTENER, RIS_HOLD, RIS_INACTIVE, rx_info_t::state, rx_info_t::timeout_sec, rx_info_t::u, and bus::udata\&.
-.SS "static \fBrx_info_t\fP* get_hold_rx_info (\fBlistener\fP *l, intfd, int64_tseq_id)\fC [static]\fP"
-
-.PP
-Definition at line 1254 of file listener\&.c\&.
-.PP
-References rx_info_t::hold, RIS_HOLD, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, and rx_info_t::u\&.
-.SS "static void attempt_delivery (\fBlistener\fP *l, struct \fBrx_info_t\fP *info)\fC [static]\fP"
-
-.PP
-Definition at line 1266 of file listener\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, bus_process_boxed_message(), BUS_SEND_SUCCESS, clean_up_completed_info(), rx_info_t::expect, rx_info_t::id, LOG_LISTENER, LOG_MEMORY, observe_backpressure(), bus_unpack_cb_res_t::ok, bus_msg_result_t::response, boxed_msg::result, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_DONE, rx_info_t::state, bus_msg_result_t::status, bus_unpack_cb_res_t::success, rx_info_t::u, bus_unpack_cb_res_t::u, bus_msg_result_t::u, and bus::udata\&.
-.SS "static void expect_response (\fBlistener\fP *l, struct \fBboxed_msg\fP *box)\fC [static]\fP"
-
-.PP
-Definition at line 1316 of file listener\&.c\&.
-.PP
-References attempt_delivery(), listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, BUS_SEND_RX_TIMEOUT_EXPECT, rx_info_t::expect, boxed_msg::fd, get_free_rx_info(), get_hold_rx_info(), rx_info_t::hold, rx_info_t::id, LOG_LISTENER, LOG_MEMORY, notify_message_failure(), boxed_msg::out_seq_id, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_NONE, RX_ERROR_READY_FOR_DELIVERY, rx_info_t::state, boxed_msg::timeout_sec, rx_info_t::timeout_sec, rx_info_t::u, and bus::udata\&.
-.SS "static void shutdown (\fBlistener\fP *l)\fC [static]\fP"
-
-.PP
-Definition at line 1383 of file listener\&.c\&.
-.PP
-References listener::shutdown\&.
+References ATOMIC_BOOL_COMPARE_AND_SWAP, listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, LOG_LISTENER, listener::msg_freelist, MSG_NONE, listener::msgs_in_use, listener_msg::next, listener_msg::type, listener_msg::u, and bus::udata\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "connection_info" 3 "Mon Mar 2 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "connection_info" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,7 +12,19 @@ connection_info \-
 
 .in +1c
 .ti -1c
-.RI "int \fBfd\fP"
+.RI "const int \fBfd\fP"
+.br
+.ti -1c
+.RI "const \fBbus_socket_t\fP \fBtype\fP"
+.br
+.ti -1c
+.RI "void * \fBudata\fP"
+.br
+.ti -1c
+.RI "SSL * \fBssl\fP"
+.br
+.ti -1c
+.RI "int64_t \fBlargest_wr_seq_id_seen\fP"
 .br
 .ti -1c
 .RI "\fBrx_error_t\fP \fBerror\fP"
@@ -21,51 +33,46 @@ connection_info \-
 .RI "size_t \fBto_read_size\fP"
 .br
 .ti -1c
-.RI "int64_t \fBlargest_seq_id_seen\fP"
-.br
-.ti -1c
-.RI "SSL * \fBssl\fP"
-.br
-.ti -1c
-.RI "\fBbus_socket_t\fP \fBtype\fP"
-.br
-.ti -1c
-.RI "void * \fBudata\fP"
+.RI "int64_t \fBlargest_rd_seq_id_seen\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 106 of file bus_internal_types\&.h\&.
+Definition at line 112 of file bus_internal_types\&.h\&.
 .SH "Field Documentation"
 .PP 
-.SS "int connection_info::fd"
-
-.PP
-Definition at line 107 of file bus_internal_types\&.h\&.
-.SS "\fBrx_error_t\fP connection_info::error"
-
-.PP
-Definition at line 108 of file bus_internal_types\&.h\&.
-.SS "size_t connection_info::to_read_size"
-
-.PP
-Definition at line 109 of file bus_internal_types\&.h\&.
-.SS "int64_t connection_info::largest_seq_id_seen"
-
-.PP
-Definition at line 110 of file bus_internal_types\&.h\&.
-.SS "SSL* connection_info::ssl"
-
-.PP
-Definition at line 112 of file bus_internal_types\&.h\&.
-.SS "\fBbus_socket_t\fP connection_info::type"
+.SS "const int connection_info::fd"
 
 .PP
 Definition at line 114 of file bus_internal_types\&.h\&.
-.SS "void* connection_info::udata"
+.SS "const \fBbus_socket_t\fP connection_info::type"
 
 .PP
 Definition at line 115 of file bus_internal_types\&.h\&.
+.SS "void* connection_info::udata"
+
+.PP
+Definition at line 116 of file bus_internal_types\&.h\&.
+.SS "SSL* connection_info::ssl"
+
+.PP
+Definition at line 119 of file bus_internal_types\&.h\&.
+.SS "int64_t connection_info::largest_wr_seq_id_seen"
+
+.PP
+Definition at line 122 of file bus_internal_types\&.h\&.
+.SS "\fBrx_error_t\fP connection_info::error"
+
+.PP
+Definition at line 125 of file bus_internal_types\&.h\&.
+.SS "size_t connection_info::to_read_size"
+
+.PP
+Definition at line 126 of file bus_internal_types\&.h\&.
+.SS "int64_t connection_info::largest_rd_seq_id_seen"
+
+.PP
+Definition at line 127 of file bus_internal_types\&.h\&.
 
 .SH "Author"
 .PP 

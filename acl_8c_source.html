@@ -142,7 +142,7 @@
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">char</span> *buf = calloc(1, BUF_START_SIZE);</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">if</span> (buf == NULL) {</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        res = <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a2ae5eb4abdb6ad6cde0826bfe07dc233">ACL_ERROR_MEMORY</a>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">goto</span> cleanup;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    }</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">size_t</span> buf_sz = BUF_START_SIZE;</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">size_t</span> buf_used = 0;</div>
@@ -152,7 +152,7 @@
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        read_sz = read(fd, &amp;buf[buf_used], buf_sz - buf_used);</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordflow">if</span> (read_sz == -1) {</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            res = <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a7005aaee505c8218f785d0298b9e1121">ACL_ERROR_JSON_FILE</a>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">goto</span> cleanup;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (read_sz == 0) {</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        } <span class="keywordflow">else</span> {</div>
@@ -172,7 +172,7 @@
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <a class="code" href="kinetic__logger_8h.html#af4cc85a025fa7e0a8f3ce5c38c5385d9">LOGF2</a>(<span class="stringliteral">&quot; -- read %zd bytes, parsing...\n&quot;</span>, buf_used);</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    res = <a class="code" href="acl_8c.html#a62b88a6ace9e1123da7d76eab4fdd8ba">acl_of_string</a>(buf, buf_used, instance);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>:</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;cleanup:</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">if</span> (buf) { free(buf); }</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    close(fd);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordflow">return</span> res;</div>
@@ -186,15 +186,15 @@
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">struct </span>json_tokener* tokener = NULL;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    acl_group = calloc(1, <span class="keyword">sizeof</span>(*acl_group));</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordflow">if</span> (acl_group == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordflow">if</span> (acl_group == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    acl_group-&gt;<a class="code" href="struct_a_c_l.html#a31589a7069c3c8a793bd376b4aa9323f">ACLs</a> = calloc(1, <span class="keyword">sizeof</span>(KineticProto_Command_Security_ACL *));</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordflow">if</span> (acl_group-&gt;<a class="code" href="struct_a_c_l.html#a31589a7069c3c8a793bd376b4aa9323f">ACLs</a> == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordflow">if</span> (acl_group-&gt;<a class="code" href="struct_a_c_l.html#a31589a7069c3c8a793bd376b4aa9323f">ACLs</a> == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    acl_group-&gt;<a class="code" href="struct_a_c_l.html#a205e7d970fa1dd5bc0b77918d26b0da2">ACL_ceil</a> = 1;</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    acl_group-&gt;<a class="code" href="struct_a_c_l.html#aa678f3971d0a115e062efe2d9e4757ca">ACL_count</a> = 0;</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    tokener = json_tokener_new();</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordflow">if</span> (tokener == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordflow">if</span> (tokener == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordtype">size_t</span> offset = 0;</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
@@ -215,7 +215,7 @@
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                <span class="keywordtype">size_t</span> nsz = 2 * acl_group-&gt;<a class="code" href="struct_a_c_l.html#a205e7d970fa1dd5bc0b77918d26b0da2">ACL_ceil</a> * <span class="keyword">sizeof</span>(acl_group-&gt;<a class="code" href="struct_a_c_l.html#a31589a7069c3c8a793bd376b4aa9323f">ACLs</a>[0]);</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                KineticProto_Command_Security_ACL **nACLs = realloc(acl_group-&gt;<a class="code" href="struct_a_c_l.html#a31589a7069c3c8a793bd376b4aa9323f">ACLs</a>, nsz);</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                <span class="keywordflow">if</span> (nACLs == NULL) {</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    <span class="keywordflow">goto</span> cleanup;</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                    acl_group-&gt;<a class="code" href="struct_a_c_l.html#a205e7d970fa1dd5bc0b77918d26b0da2">ACL_ceil</a> *= 2;</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                    acl_group-&gt;<a class="code" href="struct_a_c_l.html#a31589a7069c3c8a793bd376b4aa9323f">ACLs</a> = nACLs;</div>
@@ -228,7 +228,7 @@
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        }</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    }</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>:</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;cleanup:</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordflow">if</span> (tokener) { json_tokener_free(tokener); }</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    </div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordflow">if</span> (res == <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a6fa115066d7b8458f164f4f87bfd1bbd">ACL_END_OF_STREAM</a> || res == <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a4402ffa882df1bff54f28f4f47776641">ACL_OK</a>) {</div>
@@ -272,12 +272,12 @@
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        scope_count = json_object_array_length(val);</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        res = <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6ab31627ad99a0e169a1db2cf5808915f4">ACL_ERROR_MISSING_FIELD</a>;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="keywordflow">goto</span> cleanup;</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    }</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    </div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <span class="keywordtype">size_t</span> alloc_sz = <span class="keyword">sizeof</span>(*acl);</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    acl = calloc(1, alloc_sz);</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keywordflow">if</span> (acl == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keywordflow">if</span> (acl == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <a class="code" href="kinetic__proto_8c.html#a43633f22053032dea49028c3d32d5601">KineticProto_command_security_acl__init</a>(acl);    </div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;</div>
@@ -298,7 +298,7 @@
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        acl-&gt;key.len = len;</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        data = calloc(1, len + 1);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">if</span> (data == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">if</span> (data == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        memcpy(data, key, len);</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        data[len] = <span class="charliteral">&#39;\0&#39;</span>;</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        acl-&gt;key.data = data;</div>
@@ -310,7 +310,7 @@
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span> *hmac = json_object_get_string(val);</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keywordflow">if</span> (0 != strcmp(hmac, <span class="stringliteral">&quot;HmacSHA1&quot;</span>)) {</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            res = <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a7b0c7396fdcbb97091f3d1a92fe72095">ACL_ERROR_INVALID_FIELD</a>;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keywordflow">goto</span> cleanup;</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="comment">// acl-&gt;key-&gt;type is already set to HMAC_SHA1.</span></div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        }</div>
@@ -319,14 +319,14 @@
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keyword">struct </span>json_object *scopes = NULL;</div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <span class="keywordflow">if</span> (json_object_object_get_ex(obj, <span class="stringliteral">&quot;scope&quot;</span>, &amp;scopes)) {</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        res = <a class="code" href="acl_8c.html#a026e618b71baa42fd9e205b34b7645de">unpack_scopes</a>(acl, scope_count, scopes);</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">if</span> (res != <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a4402ffa882df1bff54f28f4f47776641">ACL_OK</a>) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">if</span> (res != <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a4402ffa882df1bff54f28f4f47776641">ACL_OK</a>) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    }</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    </div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="comment">/* Decrement JSON object refcount, freeing it. */</span></div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    json_object_put(obj);</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    *instance = acl;</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a4402ffa882df1bff54f28f4f47776641">ACL_OK</a>;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>:</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;cleanup:</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="keywordflow">if</span> (obj) { json_object_put(obj); }</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="keywordflow">if</span> (acl) { free(acl); }</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <span class="keywordflow">if</span> (data) { free(data); }</div>
@@ -342,7 +342,7 @@
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    uint8_t *data = NULL;</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    scope_array = calloc(scope_count, <span class="keyword">sizeof</span>(*scope_array));</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordflow">if</span> (scope_array == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordflow">if</span> (scope_array == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    acl-&gt;scope = scope_array;</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;</div>
@@ -350,7 +350,7 @@
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keyword">struct </span>json_object *cur_scope = json_object_array_get_idx(scopes, si);</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="keywordflow">if</span> (cur_scope) {</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            scope = calloc(1, <span class="keyword">sizeof</span>(*scope));</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            <span class="keywordflow">if</span> (scope == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            <span class="keywordflow">if</span> (scope == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            <a class="code" href="kinetic__proto_8c.html#ab14e23ff388c150a53cd4f6f777223dc">KineticProto_command_security_acl_scope__init</a>(scope);</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    </div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            <span class="keyword">struct </span>json_object *val = NULL;</div>
@@ -384,7 +384,7 @@
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            scope-&gt;n_permission = 0;</div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            <span class="keywordflow">if</span> (json_object_object_get_ex(cur_scope, <span class="stringliteral">&quot;permission&quot;</span>, &amp;val)) {</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                perm_array = calloc(<a class="code" href="acl__types_8h.html#ae06b4f36e2c4cc310e38b4adb9205130">ACL_MAX_PERMISSIONS</a>, <span class="keyword">sizeof</span>(*perm_array));</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                <span class="keywordflow">if</span> (perm_array == NULL) { <span class="keywordflow">goto</span> <a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>; }</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                <span class="keywordflow">if</span> (perm_array == NULL) { <span class="keywordflow">goto</span> cleanup; }</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                scope-&gt;permission = perm_array;</div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                perm_array = NULL;</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;</div>
@@ -426,7 +426,7 @@
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    acl-&gt;n_scope = scope_count;</div>
 <div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a4402ffa882df1bff54f28f4f47776641">ACL_OK</a>;</div>
 <div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<a class="code" href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a>:</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;cleanup:</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="keywordflow">if</span> (scope_array) { free(scope_array); }</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <span class="keywordflow">if</span> (scope) { free(scope); }</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    <span class="keywordflow">if</span> (perm_array) { free(perm_array); }</div>
@@ -521,7 +521,6 @@
 <div class="ttc" id="acl__types_8h_html_a783e446a54862b42d595fa00b10fe9c6a6fa115066d7b8458f164f4f87bfd1bbd"><div class="ttname"><a href="acl__types_8h.html#a783e446a54862b42d595fa00b10fe9c6a6fa115066d7b8458f164f4f87bfd1bbd">ACL_END_OF_STREAM</a></div><div class="ttdef"><b>Definition:</b> <a href="acl__types_8h_source.html#l00031">acl_types.h:31</a></div></div>
 <div class="ttc" id="kinetic__proto_8h_html_a717af1557bc938c76cf21a3f803743d7ac41a807f338314690b74f58e2c8f0fab"><div class="ttname"><a href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7ac41a807f338314690b74f58e2c8f0fab">KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_READ</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00120">kinetic_proto.h:120</a></div></div>
 <div class="ttc" id="acl_8c_html_a026e618b71baa42fd9e205b34b7645de"><div class="ttname"><a href="acl_8c.html#a026e618b71baa42fd9e205b34b7645de">unpack_scopes</a></div><div class="ttdeci">static acl_of_file_res unpack_scopes(KineticProto_Command_Security_ACL *acl, int scope_count, json_object *scopes)</div><div class="ttdef"><b>Definition:</b> <a href="acl_8c_source.html#l00281">acl.c:281</a></div></div>
-<div class="ttc" id="sender_8c_html_a35be7855150c6a8fa847eba457e48bdc"><div class="ttname"><a href="sender_8c.html#a35be7855150c6a8fa847eba457e48bdc">cleanup</a></div><div class="ttdeci">static void cleanup(sender *s)</div><div class="ttdef"><b>Definition:</b> <a href="sender_8c_source.html#l00405">sender.c:405</a></div></div>
 <div class="ttc" id="acl_8c_html_a512d6e8e7a54eb1a7d7578071917acee"><div class="ttname"><a href="acl_8c.html#a512d6e8e7a54eb1a7d7578071917acee">permission_table</a></div><div class="ttdeci">static permission_pair permission_table[]</div><div class="ttdef"><b>Definition:</b> <a href="acl_8c_source.html#l00034">acl.c:34</a></div></div>
 <div class="ttc" id="acl__types_8h_html_ae06b4f36e2c4cc310e38b4adb9205130"><div class="ttname"><a href="acl__types_8h.html#ae06b4f36e2c4cc310e38b4adb9205130">ACL_MAX_PERMISSIONS</a></div><div class="ttdeci">#define ACL_MAX_PERMISSIONS</div><div class="ttdef"><b>Definition:</b> <a href="acl__types_8h_source.html#l00027">acl_types.h:27</a></div></div>
 <div class="ttc" id="kinetic__proto_8h_html_a717af1557bc938c76cf21a3f803743d7"><div class="ttname"><a href="kinetic__proto_8h.html#a717af1557bc938c76cf21a3f803743d7">KineticProto_Command_Security_ACL_Permission</a></div><div class="ttdeci">KineticProto_Command_Security_ACL_Permission</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00118">kinetic_proto.h:118</a></div></div>

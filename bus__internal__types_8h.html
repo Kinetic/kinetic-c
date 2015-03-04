@@ -82,9 +82,15 @@ Macros</h2></td></tr>
 <tr class="separator:a76bf250ccc8ac3e852f8785c68903a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82f24c54131d866631239cc371581955"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#a82f24c54131d866631239cc371581955">TIMEOUT_NOT_YET_SET</a>&#160;&#160;&#160;((time_t)(-1))</td></tr>
 <tr class="separator:a82f24c54131d866631239cc371581955"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2614000c9ba78a93265c20646fcc2ae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#ac2614000c9ba78a93265c20646fcc2ae">LISTENER_MSG_TAG</a>&#160;&#160;&#160;0x15</td></tr>
+<tr class="separator:ac2614000c9ba78a93265c20646fcc2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7129e5f5219981ae2b4d3babdc5f6a73"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#a7129e5f5219981ae2b4d3babdc5f6a73">DEF_FD_SET_SIZE2</a>&#160;&#160;&#160;4</td></tr>
+<tr class="separator:a7129e5f5219981ae2b4d3babdc5f6a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a6fe4e46ccd8bedd14692b999d7a1bf4e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4e">shutdown_state_t</a> </td></tr>
+<tr class="separator:a6fe4e46ccd8bedd14692b999d7a1bf4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d85374817fef3ee99882033e167b3fa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3fa">rx_error_t</a> </td></tr>
 <tr class="separator:a0d85374817fef3ee99882033e167b3fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -99,7 +105,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00061">61</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00063">63</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -113,11 +119,61 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00093">93</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00099">99</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac2614000c9ba78a93265c20646fcc2ae"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LISTENER_MSG_TAG&#160;&#160;&#160;0x15</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00131">131</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7129e5f5219981ae2b4d3babdc5f6a73"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEF_FD_SET_SIZE2&#160;&#160;&#160;4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00134">134</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="a6fe4e46ccd8bedd14692b999d7a1bf4e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4e">shutdown_state_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a6fe4e46ccd8bedd14692b999d7a1bf4ea3da66d8f533391529e253a9a0389774d"></a>SHUTDOWN_STATE_RUNNING&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6fe4e46ccd8bedd14692b999d7a1bf4ea20a95bda47f269835aae66b2d8152caf"></a>SHUTDOWN_STATE_SHUTTING_DOWN&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a6fe4e46ccd8bedd14692b999d7a1bf4ea3d7ff9fa774c3ac46f21b11feb359828"></a>SHUTDOWN_STATE_HALTED&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00065">65</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a0d85374817fef3ee99882033e167b3fa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -144,7 +200,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00095">95</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00101">101</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
