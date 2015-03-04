@@ -147,12 +147,12 @@ bool KineticRequest_SendRequest(KineticOperation *operation,
     return bus_send_request(operation->connection->messageBus, &bus_msg);
 }
 
-bool KineticRequest_LockOperation(KineticOperation *operation)
+bool KineticRequest_LockConnection(KineticConnection *connection)
 {
-    return 0 == pthread_mutex_lock(&operation->connection->sendMutex);
+    return 0 == pthread_mutex_lock(&connection->sendMutex);
 }
 
-bool KineticRequest_UnlockOperation(KineticOperation *operation)
+bool KineticRequest_UnlockConnection(KineticConnection *connection)
 {
-    return 0 == pthread_mutex_unlock(&operation->connection->sendMutex);
+    return 0 == pthread_mutex_unlock(&connection->sendMutex);
 }
