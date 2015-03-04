@@ -295,7 +295,7 @@ static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
         case KINETIC_DEVICE_INFO_TYPE_STATISTICS:
             printf("Device Statistics:\n");
             for (i = 0; i < info->numStatistics; i++) {
-                printf("  %s: count=%llu, bytes=%llu\n",
+                printf("  %s: count=%lu, bytes=%lu\n",
                     KineticMessageType_GetName(info->statistics[i].messageType),
                     info->statistics[i].count, info->statistics[i].bytes);
             }
