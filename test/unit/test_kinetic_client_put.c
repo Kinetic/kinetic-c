@@ -23,6 +23,7 @@
 #include "kinetic_types_internal.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
@@ -57,7 +58,7 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     operation.connection = &Connection;
     
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
+    KineticBuilder_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
 
     KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
@@ -79,7 +80,7 @@ void test_KineticClient_Put_should_allow_NULL_pointer_to_value_data_if_length_is
     operation.connection = &Connection;
     
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
+    KineticBuilder_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
 
     KineticStatus status = KineticClient_Put(&Session, &entry, NULL);
@@ -98,7 +99,7 @@ void test_KineticClient_Put_should_return_BUFFER_OVERRUN_if_object_value_too_lon
     
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
 
-    KineticOperation_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_BUFFER_OVERRUN);
+    KineticBuilder_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_BUFFER_OVERRUN);
     KineticAllocator_FreeOperation_Expect(&operation);
 
     KineticStatus status = KineticClient_Put(&Session, &entry, NULL);

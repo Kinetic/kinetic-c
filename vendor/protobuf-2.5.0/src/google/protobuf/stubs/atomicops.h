@@ -183,7 +183,7 @@ GOOGLE_PROTOBUF_ATOMICOPS_ERROR
 #elif defined(GOOGLE_PROTOBUF_ARCH_MIPS)
 #include <google/protobuf/stubs/atomicops_internals_mips_gcc.h>
 #elif defined(__pnacl__)
-#include <google/protobuf/stubs/atomicops_internals_pnacl.h>
+#include <google/protobuf/stubs/atomicops_internals_pnkinetic_acl.h>
 #else
 GOOGLE_PROTOBUF_ATOMICOPS_ERROR
 #endif

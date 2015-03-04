@@ -21,6 +21,7 @@
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
@@ -73,7 +74,7 @@ void test_KineticClient_GetPrevious_should_execute_GETNEXT(void)
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildGetPrevious_Expect(&operation, &entry);
+    KineticBuilder_BuildGetPrevious_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_GetPrevious(&Session, &entry, NULL);

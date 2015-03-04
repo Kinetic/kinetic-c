@@ -145,3 +145,32 @@ void KineticAllocator_FreeOperation(KineticOperation* operation)
     KineticFree(operation);
     LOGF3("Freed operation (0x%0llX) on connection (0x%0llX)", operation, connection);
 }
+
+void KineticAllocator_FreeP2PProtobuf(KineticProto_Command_P2POperation* proto_p2pOp)
+{
+    if (proto_p2pOp != NULL) {
+        if (proto_p2pOp->peer != NULL) {
+            free(proto_p2pOp->peer);
+            proto_p2pOp->peer = NULL;
+        }
+        if (proto_p2pOp->operation != NULL) {
+            for(size_t i = 0; i < proto_p2pOp->n_operation; i++) {
+                if (proto_p2pOp->operation[i] != NULL) {
+                    if (proto_p2pOp->operation[i]->p2pop != NULL) {
+                        KineticAllocator_FreeP2PProtobuf(proto_p2pOp->operation[i]->p2pop);
+                        proto_p2pOp->operation[i]->p2pop = NULL;
+                    }
+                    if (proto_p2pOp->operation[i]->status != NULL) {
+                        free(proto_p2pOp->operation[i]->status);
+                        proto_p2pOp->operation[i]->status = NULL;
+                    }
+                    free(proto_p2pOp->operation[i]);
+                    proto_p2pOp->operation[i] = NULL;
+                }
+            }
+            free(proto_p2pOp->operation);
+            proto_p2pOp->operation = NULL;
+        }
+        free(proto_p2pOp);
+    }
+}

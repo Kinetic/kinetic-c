@@ -23,7 +23,7 @@
 #include <errno.h>
 
 #include "kinetic_logger.h"
-#include "acl.h"
+#include "kinetic_acl.h"
 #include "json.h"
 
 typedef struct {
@@ -45,10 +45,10 @@ static permission_pair permission_table[] = {
 
 #define PERM_TABLE_ROWS sizeof(permission_table)/sizeof(permission_table)[0]
 
-static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
+static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
     size_t offset, size_t *new_offset, struct json_tokener *tokener,
     KineticProto_Command_Security_ACL **instance);
-static acl_of_file_res unpack_scopes(KineticProto_Command_Security_ACL *acl,
+static KineticACLLoadResult unpack_scopes(KineticProto_Command_Security_ACL *acl,
     int scope_count, json_object *scopes);
 
 static const char *str_of_permission(KineticProto_Command_Security_ACL_Permission perm) {
@@ -67,8 +67,8 @@ static KineticProto_Command_Security_ACL_Permission permission_of_str(const char
     return KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION;
 }
 
-acl_of_file_res
-acl_of_file(const char *path, struct ACL **instance) {
+KineticACLLoadResult
+KineticACL_LoadFromFile(const char *path, struct ACL **instance) {
     if (path == NULL || instance == NULL) {
         return ACL_ERROR_NULL;
     }
@@ -81,7 +81,7 @@ acl_of_file(const char *path, struct ACL **instance) {
         errno = 0;
         return ACL_ERROR_BAD_JSON;
     }
-    acl_of_file_res res = ACL_ERROR_NULL;
+    KineticACLLoadResult res = ACL_ERROR_NULL;
 
     const int BUF_START_SIZE = 256;
     char *buf = calloc(1, BUF_START_SIZE);
@@ -123,9 +123,9 @@ cleanup:
     return res;
 }
 
-acl_of_file_res
+KineticACLLoadResult
 acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
-    acl_of_file_res res = ACL_ERROR_MEMORY;
+    KineticACLLoadResult res = ACL_ERROR_MEMORY;
     struct ACL *acl_group = NULL;
     KineticProto_Command_Security_ACL **acl_array = NULL;
     struct json_tokener* tokener = NULL;
@@ -191,7 +191,7 @@ cleanup:
     }
 }
 
-static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
+static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
         size_t offset, size_t *new_offset,
         struct json_tokener *tokener, KineticProto_Command_Security_ACL **instance) {
     struct json_object *obj = json_tokener_parse_ex(tokener,
@@ -207,7 +207,7 @@ static acl_of_file_res read_next_ACL(const char *buf, size_t buf_size,
     
     *new_offset = tokener->char_offset;
     
-    acl_of_file_res res = ACL_ERROR_MEMORY;
+    KineticACLLoadResult res = ACL_ERROR_MEMORY;
     KineticProto_Command_Security_ACL *acl = NULL;
     uint8_t *data = NULL;
 
@@ -278,9 +278,9 @@ cleanup:
     return res;
 }
 
-static acl_of_file_res unpack_scopes(KineticProto_Command_Security_ACL *acl,
+static KineticACLLoadResult unpack_scopes(KineticProto_Command_Security_ACL *acl,
         int scope_count, json_object *scopes) {
-    acl_of_file_res res = ACL_ERROR_MEMORY;
+    KineticACLLoadResult res = ACL_ERROR_MEMORY;
     KineticProto_Command_Security_ACL_Scope **scope_array = NULL;
     KineticProto_Command_Security_ACL_Permission *perm_array = NULL;
     KineticProto_Command_Security_ACL_Scope *scope = NULL;
@@ -379,7 +379,7 @@ cleanup:
     return res;
 }
 
-void acl_fprintf(FILE *f, struct ACL *ACLs) {
+void KineticACL_Print(FILE *f, struct ACL *ACLs) {
     if (ACLs == NULL) {
         fprintf(f, "NULL\n");
         return;
@@ -426,7 +426,7 @@ void acl_fprintf(FILE *f, struct ACL *ACLs) {
     }
 }
 
-void acl_free(struct ACL *ACLs) {
+void KineticACL_Free(struct ACL *ACLs) {
     if (ACLs) {
         for (size_t ai = 0; ai < ACLs->ACL_count; ai++) {
             KineticProto_Command_Security_ACL *acl = ACLs->ACLs[ai];

@@ -23,82 +23,9 @@
 
 #include "kinetic_types_internal.h"
 
-KineticStatus KineticOperation_SendRequest(KineticOperation* const operation);
-KineticStatus KineticOperation_GetStatus(const KineticOperation* const operation);
-void KineticOperation_Complete(KineticOperation* operation, KineticStatus status);
-
-
-/* Operations with non-standard timeouts. */
-typedef enum {
-    KineticOperation_TimeoutSetACL = 30,
-    KineticOperation_TimeoutSetPin = 30,
-    KineticOperation_TimeoutLockUnlock = 30,
-    KineticOperation_TimeoutErase = 180,
-} KineticOperation_NonstandardTimeout;
-
-
-
-/*******************************************************************************
- * Client Operations
-*******************************************************************************/
-
-KineticStatus KineticOperation_NoopCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildNoop(KineticOperation* operation);
-
-KineticStatus KineticOperation_PutCallback(KineticOperation* const operation, KineticStatus const status);
-KineticStatus KineticOperation_BuildPut(KineticOperation* const operation,
-                               KineticEntry* const entry);
-
-KineticStatus KineticOperation_GetCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildGet(KineticOperation* const operation,
-                               KineticEntry* const entry);
-
-void KineticOperation_BuildGetNext(KineticOperation* const operation,
-                                   KineticEntry* const entry);
-void KineticOperation_BuildGetPrevious(KineticOperation* const operation,
-                                       KineticEntry* const entry);
-
-KineticStatus KineticOperation_FlushCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildFlush(KineticOperation* const operation);
-
-KineticStatus KineticOperation_DeleteCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildDelete(KineticOperation* const operation,
-                                  KineticEntry* const entry);
-
-KineticStatus KineticOperation_GetKeyRangeCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildGetKeyRange(KineticOperation* const operation,
-                               KineticKeyRange* range, ByteBufferArray* buffers);
-
-KineticStatus KineticOperation_P2POperationCallback(KineticOperation* const operation, KineticStatus const status);
-KineticStatus KineticOperation_BuildP2POperation(KineticOperation* const operation,
-                                                 KineticP2P_Operation* const p2pOp);
-
-
-/*******************************************************************************
- * Admin Client Operations
-*******************************************************************************/
-
-KineticStatus KineticOperation_SetPinCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildSetPin(KineticOperation* const operation, ByteArray old_pin, ByteArray new_pin, bool lock);
-
-KineticStatus KineticOperation_EraseCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildErase(KineticOperation* const operation, bool secure_erase, ByteArray* pin);
-
-KineticStatus KineticOperation_LockUnlockCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildLockUnlock(KineticOperation* const operation, bool lock, ByteArray* pin);
-
-KineticStatus KineticOperation_GetLogCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildGetLog(KineticOperation* const operation,
-                               KineticLogInfo_Type type,
-                               KineticLogInfo** info);
-
-KineticStatus KineticOperation_SetACLCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildSetACL(KineticOperation* const operation, struct ACL *ACLs);
-
-KineticStatus KineticOperation_SetClusterVersionCallback(KineticOperation* const operation, KineticStatus const status);
-void KineticOperation_BuildSetClusterVersion(KineticOperation* const operation, int64_t new_cluster_version);
-
-KineticStatus KineticOperation_UpdateFirmwareCallback(KineticOperation* const operation, KineticStatus const status);
-KineticStatus KineticOperation_BuildUpdateFirmware(KineticOperation* const operation, const char* fw_path);
+void KineticOperation_ValidateOperation(KineticOperation* op);
+KineticStatus KineticOperation_SendRequest(KineticOperation* const op);
+KineticStatus KineticOperation_GetStatus(const KineticOperation* const op);
+void KineticOperation_Complete(KineticOperation* op, KineticStatus status);
 
 #endif // _KINETIC_OPERATION_H

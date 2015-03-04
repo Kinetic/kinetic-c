@@ -17,24 +17,24 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef ACL_H
-#define ACL_H
+#ifndef KINETIC_ACL_H
+#define KINETIC_ACL_H
 
 #include "acl_types.h"
 #include "kinetic_proto.h"
 
 /* Attempt to instantiate an ACL structure based on the JSON data
  * contained in PATH. */
-acl_of_file_res
-acl_of_file(const char *path, struct ACL **instance);
+KineticACLLoadResult
+KineticACL_LoadFromFile(const char *path, struct ACL **instance);
 
-acl_of_file_res
+KineticACLLoadResult
 acl_of_string(const char *buf, size_t buf_size, struct ACL **instance);
 
-/* fprintf an ACL struct. */
-void acl_fprintf(FILE *f, struct ACL *acl);
+/* Print an ACL struct to the specified file. */
+void KineticACL_Print(FILE *f, struct ACL *acl);
 
 /* Free an ACL struct */
-void acl_free(struct ACL *acl);
+void KineticACL_Free(struct ACL *acl);
 
-#endif
+#endif // KINETIC_ACL_H

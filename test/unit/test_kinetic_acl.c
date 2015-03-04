@@ -18,7 +18,7 @@
 *
 */
 #include "unity.h"
-#include "acl.h"
+#include "kinetic_acl.h"
 #include "acl_types.h"
 
 #include <string.h>
@@ -34,7 +34,7 @@
 void test_acl_of_empty_JSON_object_should_fail(void)
 {
     struct ACL *acl = NULL;
-    acl_of_file_res res = acl_of_file(TEST_DIR("ex0.json"), &acl);
+    KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex0.json"), &acl);
     TEST_ASSERT_EQUAL(ACL_ERROR_MISSING_FIELD, res);
 }
 
@@ -42,15 +42,15 @@ void test_acl_of_nonexistent_file_should_fail(void)
 {
     struct ACL *acl = NULL;
     const char *path = TEST_DIR("nonexistent.json");
-    acl_of_file_res res = acl_of_file(path, &acl);
+    KineticACLLoadResult res = KineticACL_LoadFromFile(path, &acl);
     TEST_ASSERT_EQUAL(ACL_ERROR_BAD_JSON, res);
 }
 
-void test_acl_of_file_ex1_should_parse_file_as_expected(void)
+void test_KineticACL_LoadFromFile_ex1_should_parse_file_as_expected(void)
 {
     struct ACL *acls = NULL;
     
-    acl_of_file_res res = acl_of_file(TEST_DIR("ex1.json"), &acls);
+    KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex1.json"), &acls);
     TEST_ASSERT_EQUAL(ACL_OK, res);
 
     TEST_ASSERT_EQUAL(1, acls->ACL_count);
@@ -85,14 +85,14 @@ void test_acl_of_file_ex1_should_parse_file_as_expected(void)
     TEST_ASSERT_EQUAL(3, sc1->value.len);
     TEST_ASSERT_EQUAL(0, strcmp((char *)sc1->value.data, "foo"));
 
-    acl_free(acls);
+    KineticACL_Free(acls);
 }
 
-void test_acl_of_file_ex2_should_parse_file_as_expected(void)
+void test_KineticACL_LoadFromFile_ex2_should_parse_file_as_expected(void)
 {
     struct ACL *acls = NULL;
 
-    acl_of_file_res res = acl_of_file(TEST_DIR("ex2.json"), &acls);
+    KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex2.json"), &acls);
     TEST_ASSERT_EQUAL(ACL_OK, res);
     TEST_ASSERT_EQUAL(1, acls->ACL_count);
     KineticProto_Command_Security_ACL *acl = acls->ACLs[0];
@@ -115,20 +115,20 @@ void test_acl_of_file_ex2_should_parse_file_as_expected(void)
         sc0->permission[0]);
     TEST_ASSERT_EQUAL(true, sc0->TlsRequired);
 
-    acl_free(acls);
+    KineticACL_Free(acls);
 }
 
-void test_acl_of_file_should_reject_bad_HMAC_type(void)
+void test_KineticACL_LoadFromFile_should_reject_bad_HMAC_type(void)
 {
     struct ACL *acl = NULL;
-    acl_of_file_res res = acl_of_file(TEST_DIR("ex_bad_hmac.json"), &acl);
+    KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex_bad_hmac.json"), &acl);
     TEST_ASSERT_EQUAL(ACL_ERROR_INVALID_FIELD, res);
 }
 
-void test_acl_of_file_should_recognize_all_permission_types(void)
+void test_KineticACL_LoadFromFile_should_recognize_all_permission_types(void)
 {
     struct ACL *acls = NULL;
-    acl_of_file_res res = acl_of_file(TEST_DIR("ex3.json"), &acls);
+    KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex3.json"), &acls);
     TEST_ASSERT_EQUAL(ACL_OK, res);
 
     KineticProto_Command_Security_ACL *acl = acls->ACLs[0];
@@ -167,13 +167,13 @@ void test_acl_of_file_should_recognize_all_permission_types(void)
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SECURITY,
         acl->scope[7]->permission[0]);
 
-    acl_free(acls);
+    KineticACL_Free(acls);
 }
 
-void test_acl_of_file_should_handle_multiple_permissions(void)
+void test_KineticACL_LoadFromFile_should_handle_multiple_permissions(void)
 {
     struct ACL *acls = NULL;
-    acl_of_file_res res = acl_of_file(TEST_DIR("ex-multi-permission.json"), &acls);
+    KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex-multi-permission.json"), &acls);
     TEST_ASSERT_EQUAL(ACL_OK, res);
     
     KineticProto_Command_Security_ACL *acl = acls->ACLs[0];
@@ -183,13 +183,13 @@ void test_acl_of_file_should_handle_multiple_permissions(void)
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_WRITE, acl->scope[0]->permission[1]);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SETUP, acl->scope[0]->permission[2]);
 
-    acl_free(acls);
+    KineticACL_Free(acls);
 }
 
 void test_acl_should_handle_multiple_JSON_objects(void)
 {
     struct ACL *acls = NULL;
-    acl_of_file_res res = acl_of_file(TEST_DIR("ex_multi.json"), &acls);
+    KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex_multi.json"), &acls);
     TEST_ASSERT_EQUAL(ACL_OK, res);
     
     KineticProto_Command_Security_ACL *acl = acls->ACLs[0];
@@ -244,5 +244,5 @@ void test_acl_should_handle_multiple_JSON_objects(void)
         acl2->scope[0]->permission[0]);
     TEST_ASSERT_EQUAL(true, acl2->scope[0]->TlsRequired);
 
-    acl_free(acls);
+    KineticACL_Free(acls);
 }

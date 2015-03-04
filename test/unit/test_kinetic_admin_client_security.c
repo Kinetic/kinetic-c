@@ -26,13 +26,14 @@
 #include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_resourcewaiter.h"
 #include "mock_kinetic_auth.h"
-#include "mock_acl.h"
+#include "mock_kinetic_acl.h"
 
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
@@ -74,9 +75,9 @@ void test_KineticAdminClient_SetACL_should_set_an_ACL(void)
 
     const char *ACL_path = TEST_DIR("ex1.json");
 
-    acl_of_file_ExpectAndReturn(ACL_path, &ACLs, ACL_OK);
+    KineticACL_LoadFromFile_ExpectAndReturn(ACL_path, &ACLs, ACL_OK);
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildSetACL_Expect(&operation, ACLs);
+    KineticBuilder_BuildSetACL_ExpectAndReturn(&operation, ACLs, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_SetACL(&Session, ACL_path);
@@ -89,7 +90,7 @@ void test_KineticAdminClient_SetACL_should_fail_with_KINETIC_STATUS_ACL_ERROR_if
 
     const char *ACL_path = TEST_DIR("ex1.json");
 
-    acl_of_file_ExpectAndReturn(ACL_path, &ACLs, ACL_ERROR_JSON_FILE);
+    KineticACL_LoadFromFile_ExpectAndReturn(ACL_path, &ACLs, ACL_ERROR_JSON_FILE);
 
     KineticStatus status = KineticAdminClient_SetACL(&Session, ACL_path);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_ACL_ERROR, status);

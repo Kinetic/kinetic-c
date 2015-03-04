@@ -58,6 +58,8 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_allocator.o \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
+	$(OUT_DIR)/kinetic_callbacks.o \
+	$(OUT_DIR)/kinetic_builder.o \
 	$(OUT_DIR)/kinetic_request.o \
 	$(OUT_DIR)/kinetic_response.o \
 	$(OUT_DIR)/kinetic_bus.o \

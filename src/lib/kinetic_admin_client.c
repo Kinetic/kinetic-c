@@ -22,10 +22,11 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_operation.h"
+#include "kinetic_builder.h"
 #include "kinetic_allocator.h"
 #include "kinetic_auth.h"
 #include "kinetic_device_info.h"
-#include "acl.h"
+#include "kinetic_acl.h"
 
 #ifdef TEST
 struct ACL *ACLs = NULL;
@@ -69,7 +70,7 @@ KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const sessio
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildSetPin(operation, old_pin, new_pin, false);
+    KineticBuilder_BuildSetPin(operation, old_pin, new_pin, false);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
@@ -91,7 +92,7 @@ KineticStatus KineticAdminClient_SecureErase(KineticSession const * const sessio
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildErase(operation, true, &pin);
+    KineticBuilder_BuildErase(operation, true, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
@@ -113,7 +114,7 @@ KineticStatus KineticAdminClient_InstantErase(KineticSession const * const sessi
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildErase(operation, false, &pin);
+    KineticBuilder_BuildErase(operation, false, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
@@ -134,7 +135,7 @@ KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildSetPin(operation, old_pin, new_pin, true);
+    KineticBuilder_BuildSetPin(operation, old_pin, new_pin, true);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
@@ -156,7 +157,7 @@ KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildLockUnlock(operation, true, &pin);
+    KineticBuilder_BuildLockUnlock(operation, true, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
@@ -178,7 +179,7 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildLockUnlock(operation, false, &pin);
+    KineticBuilder_BuildLockUnlock(operation, false, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
@@ -195,7 +196,7 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticOperation_BuildGetLog(operation, type, info);
+    KineticBuilder_BuildGetLog(operation, type, info);
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
@@ -221,7 +222,7 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const 
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
-    KineticOperation_BuildSetClusterVersion(operation, version);
+    KineticBuilder_BuildSetClusterVersion(operation, version);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
@@ -236,7 +237,7 @@ KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
     #ifndef TEST
     struct ACL *ACLs = NULL;
     #endif
-    acl_of_file_res acl_res = acl_of_file(ACLPath, &ACLs);
+    KineticACLLoadResult acl_res = KineticACL_LoadFromFile(ACLPath, &ACLs);
     if (acl_res != ACL_OK) {
         return KINETIC_STATUS_ACL_ERROR;
     }
@@ -248,7 +249,7 @@ KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
     }
 
     // Initialize request
-    KineticOperation_BuildSetACL(operation, ACLs);
+    KineticBuilder_BuildSetACL(operation, ACLs);
     KineticStatus status = KineticController_ExecuteOperation(operation, NULL);
 
     // FIXME: confirm ACLs are freed
@@ -265,7 +266,7 @@ KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const ses
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
     
-    KineticStatus status = KineticOperation_BuildUpdateFirmware(operation, fw_path);
+    KineticStatus status = KineticBuilder_BuildUpdateFirmware(operation, fw_path);
     if (status != KINETIC_STATUS_SUCCESS) {
         return status;
     }

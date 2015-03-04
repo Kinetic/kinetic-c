@@ -22,6 +22,7 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_device_info.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
@@ -97,7 +98,7 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildGet_Expect(&operation, &entry);
+    KineticBuilder_BuildGet_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_CLUSTER_MISMATCH);
 
     KineticStatus status = KineticClient_Get(&Session, &entry, NULL);
@@ -120,7 +121,7 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildGet_Expect(&operation, &entry);
+    KineticBuilder_BuildGet_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Get(&Session, &entry, NULL);
