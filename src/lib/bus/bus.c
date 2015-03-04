@@ -263,6 +263,7 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
             "rejecting request <fd:%d, seq_id:%lld> due to non-monotonic sequence ID, largest seen is %lld",
             box->fd, (long long)msg->seq_id, (long long)ci->largest_wr_seq_id_seen);
         free(box);
+        return NULL;
     } else {
         ci->largest_wr_seq_id_seen = msg->seq_id;
     }
@@ -412,12 +413,6 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
     /* Spread sockets throughout the different listener threads. */
     struct listener *l = b->listeners[l_id];
     
-    int pipes[2];
-    if (0 != pipe(pipes)) {
-        BUS_LOG(b, 1, LOG_SOCKET_REGISTERED, "pipe failure", b->udata);
-        return false;
-    }
-
     /* Metadata about the connection. Note: This will be shared by the
      * client thread and the listener thread, but each will only modify
      * some of the fields. The client thread will free this. */
