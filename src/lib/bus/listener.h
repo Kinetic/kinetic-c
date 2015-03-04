@@ -57,4 +57,8 @@ bool listener_shutdown(struct listener *l, int *notify_fd);
 /* Free the listener, which must already be shut down. */
 void listener_free(struct listener *l);
 
+#ifdef TEST
+#include "listener_internal_types.h"
+#endif
+
 #endif

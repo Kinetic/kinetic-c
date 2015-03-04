@@ -83,12 +83,15 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_admin_client.o \
 	$(OUT_DIR)/threadpool.o \
 	$(OUT_DIR)/bus.o \
+	$(OUT_DIR)/bus_poll.o \
 	$(OUT_DIR)/bus_ssl.o \
 	$(OUT_DIR)/listener.o \
 	$(OUT_DIR)/listener_cmd.o \
+	$(OUT_DIR)/listener_helper.o \
 	$(OUT_DIR)/listener_io.o \
 	$(OUT_DIR)/listener_task.o \
 	$(OUT_DIR)/send.o \
+	$(OUT_DIR)/send_helper.o \
 	$(OUT_DIR)/syscall.o \
 	$(OUT_DIR)/util.o \
 	$(OUT_DIR)/yacht.o \
@@ -143,7 +146,12 @@ $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/proto
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h
 ${OUT_DIR}/bus.o: ${LIB_DIR}/bus/bus_types.h
 ${OUT_DIR}/sender.o: ${LIB_DIR}/bus/sender_internal.h
+${OUT_DIR}/sender_helper.o: ${LIB_DIR}/bus/sender_internal.h
 ${OUT_DIR}/listener.o: ${LIB_DIR}/bus/listener_internal.h
+${OUT_DIR}/listener_cmd.o: ${LIB_DIR}/bus/listener_internal.h
+${OUT_DIR}/listener_helper.o: ${LIB_DIR}/bus/listener_internal.h
+${OUT_DIR}/listener_io.o: ${LIB_DIR}/bus/listener_internal.h
+${OUT_DIR}/listener_task.o: ${LIB_DIR}/bus/listener_internal.h
 
 $(OUT_DIR)/threadpool.o: ${LIB_DIR}/threadpool/threadpool.c ${LIB_DIR}/threadpool/threadpool.h
 	$(CC) -o $@ -c $< $(CFLAGS)

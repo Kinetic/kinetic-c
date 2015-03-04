@@ -24,14 +24,6 @@
 #include "bus_internal_types.h"
 #include "listener_cmd.h"
 
-static void msg_handler(listener *l, listener_msg *pmsg);
-static void add_socket(listener *l, connection_info *ci, int notify_fd);
-static void remove_socket(listener *l, int fd, int notify_fd);
-static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_sec);
-static void expect_response(listener *l, boxed_msg *box);
-static void shutdown(listener *l, int notify_fd);
-
-static rx_info_t *get_free_rx_info(struct listener *l);
-static rx_info_t *get_hold_rx_info(listener *l, int fd, int64_t seq_id);
+#define LISTENER_CMD_BUF_SIZE 64
 
 #endif

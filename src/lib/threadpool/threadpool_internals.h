@@ -20,6 +20,7 @@
 #ifndef THREADPOOL_INTERNALS_H
 #define THREADPOOL_INTERNALS_H
 
+#include <pthread.h>
 #include "threadpool.h"
 
 typedef enum {
@@ -98,12 +99,5 @@ struct threadpool {
             }                                                           \
         }                                                               \
     } while (0)
-
-static void notify_new_task(struct threadpool *t);
-static bool notify_shutdown(struct threadpool *t);
-static bool spawn(struct threadpool *t);
-static void *thread_task(void *thread_info);
-static void commit_current_task(struct threadpool *t, struct marked_task *task, size_t wh);
-static void release_current_task(struct threadpool *t, struct marked_task *task, size_t rh);
 
 #endif

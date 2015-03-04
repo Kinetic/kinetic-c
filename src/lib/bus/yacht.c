@@ -27,15 +27,7 @@
 #define LOG(...)
 #endif
 
-/* Yet Another C Hash Table:
- *   An (int -> void *metadata) hash table for tracking active file
- *   descriptors and their metadata. */
-struct yacht {
-    size_t size;
-    size_t mask;
-    int *buckets;
-    void **values;
-};
+#include "yacht_internals.h"
 
 static bool insert(int *buckets, void **values,
     size_t mask, size_t max_fill,

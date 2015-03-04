@@ -34,6 +34,7 @@
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_pdu_unpack.h"
 #include "mock_bus.h"
+#include "mock_bus_inward.h"
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
 

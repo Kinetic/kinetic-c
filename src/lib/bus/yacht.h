@@ -54,4 +54,8 @@ typedef void (yacht_free_cb)(void *value, void *udata);
 /* Free the table. */
 void yacht_free(struct yacht *y, yacht_free_cb *cb, void *udata);
 
+#ifdef TEST
+#include "yacht_internals.h"
+#endif
+
 #endif

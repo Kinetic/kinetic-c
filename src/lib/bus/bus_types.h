@@ -38,6 +38,10 @@ struct boxed_msg;
 /* Special sequence ID value indicating none was available. */
 #define BUS_NO_SEQ_ID (-1)
 
+#ifdef TEST
+#define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA) (void)B
+#define BUS_LOG_SNPRINTF(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT, ...) (void)B
+#else
 #define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA)                       \
     do {                                                               \
         struct bus *_b = (B);                                          \
@@ -50,7 +54,7 @@ struct boxed_msg;
             _b->log_cb(event_key, level, msg, udata);                  \
             bus_unlock_log(_b);                                        \
         }                                                              \
-    } while (0)                                                        \
+    } while (0)
 
 #define BUS_LOG_STRINGIFY(X) #X
 
@@ -77,7 +81,8 @@ struct boxed_msg;
             }                                                          \
             bus_unlock_log(_b);                                        \
         }                                                              \
-    } while (0)                                                        \
+    } while (0)
+#endif
 
 #define BUS_ASSERT(B, UDATA, COND) \
     do { \
@@ -191,7 +196,8 @@ typedef enum {
 
 typedef enum {
     BUS_SEND_UNDEFINED = 0,
-    BUS_SEND_SUCCESS = 1,
+    BUS_SEND_REQUEST_COMPLETE = 1,
+    BUS_SEND_SUCCESS = 2,
     BUS_SEND_TX_TIMEOUT = -51,
     BUS_SEND_TX_FAILURE = -52,  // -> socket error
     BUS_SEND_RX_TIMEOUT = -53,
@@ -200,6 +206,7 @@ typedef enum {
     BUS_SEND_UNREGISTERED_SOCKET = -56,
     BUS_SEND_RX_TIMEOUT_EXPECT = -57,
     BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER = -58,
+    BUS_SEND_TIMESTAMP_ERROR = -59,
 } bus_send_status_t;
 
 /* Result from attempting to configure a message bus. */

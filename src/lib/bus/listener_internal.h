@@ -24,7 +24,4 @@
 #include "bus_internal_types.h"
 #include "listener_internal_types.h"
 
-static listener_msg *get_free_msg(listener *l);
-static bool push_message(struct listener *l, listener_msg *msg, int *reply_fd);
-
 #endif

@@ -39,6 +39,10 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
         connection_info *ci = l->fd_info[i];
         BUS_ASSERT(b, b->udata, ci->fd == fd->fd);
         
+        /* TODO: handle POLLIN, *then* check for
+         * (POLLHUP | POLLERR | POLLNVAL), so if we get a status message
+         * with a reason for a hangup we can still pass it along. */
+
         if (fd->revents & (POLLERR | POLLNVAL)) {
             read_from++;
             BUS_LOG(b, 2, LOG_LISTENER,
@@ -99,6 +103,11 @@ static void print_SSL_error(struct bus *b, connection_info *ci, int lvl, const c
     BUS_LOG_SNPRINTF(b, lvl, LOG_LISTENER, b->udata, 64,
         "%s -- ERROR on fd %d -- %s",
         prefix, ci->fd, ERR_error_string(errval, ebuf));
+    (void)ci;
+    (void)lvl;
+    (void)errval;
+    (void)ebuf;
+    (void)prefix;
 }
 
 static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
@@ -106,7 +115,6 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
     for (;;) {
         // ssize_t pending = SSL_pending(ci->ssl);
         ssize_t size = (ssize_t)syscall_SSL_read(ci->ssl, l->read_buf, ci->to_read_size);
-        // fprintf(stderr, "=== PENDING: %zd, got %zd ===\n", pending, size);
         
         if (size == -1) {
             int reason = syscall_SSL_get_error(ci->ssl, size);
@@ -211,7 +219,9 @@ static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
         case RIS_INACTIVE:
             break;
         case RIS_HOLD:
-            ListenerTask_ReleaseRXInfo(l, info);
+            if (info->u.hold.fd == fd) {
+                ListenerTask_ReleaseRXInfo(l, info);
+            }
             break;
         case RIS_EXPECT:
         {
@@ -338,6 +348,7 @@ static void process_unpacked_message(listener *l,
         BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 128,
             "Got opaque_error_id of %lu (0x%08lx)",
             e_id, e_id);
+        (void)e_id;
 
         /* Timeouts will clean up after it; give user code a chance to
          * clean up after it here, though technically speaking they

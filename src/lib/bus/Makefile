@@ -1,20 +1,24 @@
 SOCKET99_PATH=		../../../vendor/socket99
 THREADPOOL_PATH=	../threadpool
 LIB_PATH=		../../../obj
+BASE_PROJECT_INC=	-I.. -I../../../include -I../../../vendor/protobuf-c
 
 OPT=		-O3
 LIB_INC =	-I${SOCKET99_PATH} -I${THREADPOOL_PATH} -I${OPENSSL_PATH}/include
-CFLAGS +=	-std=c99 ${OPT} -Wall -g ${LIB_INC}
+CFLAGS +=	-std=c99 ${OPT} -Wall -g ${LIB_INC} ${BASE_PROJECT_INC}
 LDFLAGS +=	-L. -L${LIB_PATH} -L${THREADPOOL_PATH} -L${OPENSSL_PATH}/lib -L${SOCKET99_PATH} -lsocket99 -lssl -lcrypto
 
 BUS_OBJS = \
 	bus.o \
+	bus_poll.o \
 	bus_ssl.o \
 	listener.o \
 	listener_cmd.o \
+	listener_helper.o \
 	listener_io.o \
 	listener_task.o \
 	send.o \
+	send_helper.o \
 	syscall.o \
 	util.o \
 	yacht.o \

@@ -34,6 +34,13 @@
 #define DEFAULT_TASK_RINGBUF_SIZE2 8
 #define DEFAULT_MAX_THREADS 8
 
+static void notify_new_task(struct threadpool *t);
+static bool notify_shutdown(struct threadpool *t);
+static bool spawn(struct threadpool *t);
+static void *thread_task(void *thread_info);
+static void commit_current_task(struct threadpool *t, struct marked_task *task, size_t wh);
+static void release_current_task(struct threadpool *t, struct marked_task *task, size_t rh);
+
 static void set_defaults(struct threadpool_config *cfg) {
     if (cfg->task_ringbuf_size2 == 0) {
         cfg->task_ringbuf_size2 = DEFAULT_TASK_RINGBUF_SIZE2;

@@ -436,7 +436,14 @@ void ListenerTask_AttemptDelivery(listener *l, struct rx_info_t *info) {
         "releasing box %p at line %d", (void*)box, __LINE__);
 
     bus_msg_result_t *result = &box->result;
-    result->status = BUS_SEND_SUCCESS;
+    if (result->status == BUS_SEND_SUCCESS) {
+    } else if (result->status == BUS_SEND_REQUEST_COMPLETE) {
+        result->status = BUS_SEND_SUCCESS;
+    } else {
+        BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
+            "unexpected status for completed RX event at info +%d, box %p, status %d",
+            info->id, (void *)box, result->status);
+    }
 
     bus_unpack_cb_res_t unpacked_result;
     switch (info->state) {

@@ -33,8 +33,20 @@
 #include "util.h"
 #include "atomic.h"
 #include "yacht.h"
+#include "send_helper.h"
 #include "send_internal.h"
 
+#ifdef TEST
+struct timeval start;
+struct timeval now;
+struct pollfd fds[1];
+size_t backpressure = 0;
+int poll_errno = 0;
+int write_errno = 0;
+#endif
+
+static bool attempt_to_enqueue_hold_message_to_listener(struct bus *b,
+    int fd, int64_t seq_id, int16_t timeout_sec);
 /* Do a blocking send.
  *
  * Returning true indicates that the message has been queued up for
@@ -57,7 +69,11 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
     
     int timeout_msec = box->timeout_sec * 1000;
 
+#ifndef TEST
     struct timeval start;
+    struct timeval now;
+    struct pollfd fds[1];
+#endif
     if (util_timestamp(&start, true)) {
         box->tv_send_start = start;
     } else {
@@ -66,7 +82,6 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
         return false;
     }
 
-    struct pollfd fds[1];
     fds[0].fd = box->fd;
     fds[0].events = POLLOUT;
 
@@ -81,7 +96,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
      * EXPECT hasn't, leading to ambiguity about what to do with
      * the response (which may or may not have arrived).
      * */
-    if (!attempt_to_enqueue_sending_request_message_to_listener(b,
+    if (!attempt_to_enqueue_hold_message_to_listener(b,
             box->fd, box->out_seq_id, box->timeout_sec + 5)) {
         return false;
     }
@@ -90,7 +105,6 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
     int rem_msec = timeout_msec;
 
     while (rem_msec > 0) {
-        struct timeval now;
         if (util_timestamp(&now, true)) {
             size_t usec_elapsed = (((now.tv_sec - start.tv_sec) * 1000000)
                 + (now.tv_usec - start.tv_usec));
@@ -104,10 +118,13 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
              * we don't know what state the connection was left in. */
             BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 128,
                 "gettimeofday failure in poll loop: %d", errno);
-            handle_failure(b, box, BUS_SEND_TX_FAILURE);
+            send_handle_failure(b, box, BUS_SEND_TX_FAILURE);
             return true;
         }
 
+        #ifdef TEST
+        errno = poll_errno;
+        #endif
         int res = syscall_poll(fds, 1, rem_msec);
         BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
             "handle_write: poll res %d", res);
@@ -116,7 +133,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
                 errno = 0;
                 continue;
             } else {
-                handle_failure(b, box, BUS_SEND_TX_FAILURE);
+                send_handle_failure(b, box, BUS_SEND_TX_FAILURE);
                 return true;
             }
         } else if (res == 1) {
@@ -124,26 +141,29 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
             if (revents & POLLNVAL) {
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
                     "do_blocking_send on %d: POLLNVAL => UNREGISTERED_SOCKET", box->fd);
-                handle_failure(b, box, BUS_SEND_UNREGISTERED_SOCKET);
+                send_handle_failure(b, box, BUS_SEND_UNREGISTERED_SOCKET);
                 return true;
             } else if (revents & (POLLERR | POLLHUP)) {
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
                     "do_blocking_send on %d: POLLERR/POLLHUP => TX_FAILURE (%d)",
                     box->fd, revents);
-                handle_failure(b, box, BUS_SEND_TX_FAILURE);
+                send_handle_failure(b, box, BUS_SEND_TX_FAILURE);
                 return true;
             } else if (revents & POLLOUT) {
-                handle_write_res hw_res = handle_write(b, box);
+                send_helper_handle_write_res hw_res = send_helper_handle_write(b, box);
 
                 BUS_LOG_SNPRINTF(b, 4, LOG_SENDER, b->udata, 256,
-                    "handle_write res %d", hw_res);
+                    "send_helper_handle_write res %d", hw_res);
 
                 switch (hw_res) {
-                case HW_OK:
+                case SHHW_OK:
                     continue;
-                case HW_DONE:
+                case SHHW_DONE:
+                    box->result = (bus_msg_result_t){
+                        .status = BUS_SEND_REQUEST_COMPLETE,
+                    };
                     return true;
-                case HW_ERROR:
+                case SHHW_ERROR:
                     return true;
                 }
             } else {
@@ -158,11 +178,11 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
         "do_blocking_send on <fd:%d, seq_id:%lld>: TX_TIMEOUT",
         box->fd, (long long)box->out_seq_id);
-    handle_failure(b, box, BUS_SEND_TX_TIMEOUT);
+    send_handle_failure(b, box, BUS_SEND_TX_TIMEOUT);
     return true;
 }
 
-static bool attempt_to_enqueue_sending_request_message_to_listener(struct bus *b,
+static bool attempt_to_enqueue_hold_message_to_listener(struct bus *b,
     int fd, int64_t seq_id, int16_t timeout_sec) {
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
       "telling listener to expect response, with <fd%d, seq_id:%lld>",
@@ -170,31 +190,31 @@ static bool attempt_to_enqueue_sending_request_message_to_listener(struct bus *b
 
     struct listener *l = bus_get_listener_for_socket(b, fd);
 
-    int delay = 1;
-    const int max_retries = 10;
+    const int max_retries = SEND_NOTIFY_LISTENER_RETRIES;
     for (int try = 0; try < max_retries; try++) {
         if (listener_hold_response(l, fd, seq_id, timeout_sec)) {
             return true;
         } else {
             /* Don't apply much backpressure here since the client
              * thread will get it when the message is done sending. */
-            syscall_poll(NULL, 0, delay);
-            if (delay < 5) { delay++; }
+            syscall_poll(NULL, 0, SEND_NOTIFY_LISTENER_RETRY_DELAY);
         }
     }
     return false;
 }
 
-static void handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status) {
+void send_handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status) {
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-        "handle_failure: box %p, <fd:%d, seq_id:%lld>, status %d",
+        "send_handle_failure: box %p, <fd:%d, seq_id:%lld>, status %d",
         (void*)box, box->fd, (long long)box->out_seq_id, status);
-    
+
     box->result = (bus_msg_result_t){
         .status = status,
     };
     
+    #ifndef TEST
     size_t backpressure = 0;
+    #endif
 
     /* Retry until it succeeds. */
     size_t retries = 0;
@@ -207,211 +227,11 @@ static void handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t stat
             return;
         } else {
             retries++;
-            const int delay = 5;
-            syscall_poll(NULL, 0, delay);
+            syscall_poll(NULL, 0, SEND_NOTIFY_LISTENER_RETRY_DELAY);
             if (retries > 0 && (retries & 255) == 0) {
                 BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 64,
                     "looping on handle_failure retry: %zd", retries);
             }
         }
     }
-}
-
-static ssize_t write_plain(bus *b, boxed_msg *box);
-static ssize_t write_ssl(bus *b, boxed_msg *box, SSL *ssl);
-static bool enqueue_request_sent_message_to_listener(bus *b, boxed_msg *box);
-
-static handle_write_res handle_write(bus *b, boxed_msg *box) {
-    SSL *ssl = box->ssl;
-    ssize_t wrsz = 0;
-
-    /* Attempt a single write to the socket. */
-    if (ssl == BUS_NO_SSL) {
-        wrsz = write_plain(b, box);
-    } else {
-        assert(ssl);
-        wrsz = write_ssl(b, box, ssl);
-    }
-    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-        "wrote %zd", wrsz);
-
-    if (wrsz == -1) {
-        handle_failure(b, box, BUS_SEND_TX_FAILURE);
-        return HW_ERROR;
-    } else if (wrsz == 0) {
-        /* If the OS set POLLOUT but we can't actually write, then
-         * just go back to the poll() loop with no progress.
-         * If we busywait on this, something is deeply wrong. */
-        BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 128,
-            "suspicious: wrote %zd bytes to <fd:%d, seq_id%lld>",
-            wrsz, box->fd, (long long)box->out_seq_id);
-    } else {
-        /* Update amount written so far */
-        box->out_sent_size += wrsz;
-    }
-
-    size_t msg_size = box->out_msg_size;
-    size_t sent_size = box->out_sent_size;
-    size_t rem = msg_size - sent_size;
-
-    BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-        "wrote %zd, rem is %zd", wrsz, rem);
-
-    if (rem == 0) {             /* check if whole message is written */
-        struct timeval tv;
-        if (util_timestamp(&tv, true)) {
-            box->tv_send_done = tv;
-        }
-
-        if (enqueue_request_sent_message_to_listener(b, box)) {
-            return HW_DONE;
-        } else {
-            handle_failure(b, box, BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER);
-            return HW_ERROR;
-        }
-    } else {
-        return HW_OK;
-    }
-}
-
-static ssize_t write_plain(struct bus *b, boxed_msg *box) {
-    int fd = box->fd;
-    uint8_t *msg = box->out_msg;
-    size_t msg_size = box->out_msg_size;
-    size_t sent_size = box->out_sent_size;
-    size_t rem = msg_size - sent_size;
-    
-    BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
-        "write %p to %d, %zd bytes",
-        (void*)&msg[sent_size], fd, rem);
-
-    /* Attempt a single write. ('for' is due to continue-based retry.) */
-    for (;;) {
-        ssize_t wrsz = syscall_write(fd, &msg[sent_size], rem);
-        if (wrsz == -1) {
-            if (util_is_resumable_io_error(errno)) {
-                errno = 0;
-                continue;
-            } else {
-                /* will notify about closed socket upstream */
-                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                    "write: socket error writing, %s", strerror(errno));
-                errno = 0;
-                return -1;
-            }
-        } else if (wrsz > 0) {
-            BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-                "sent: %zd\n", wrsz);
-            return wrsz;
-        } else {
-            return 0;
-        }
-    }
-}
-
-static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
-    uint8_t *msg = box->out_msg;
-    size_t msg_size = box->out_msg_size;
-    ssize_t rem = msg_size - box->out_sent_size;
-    int fd = box->fd;
-    ssize_t written = 0;
-    assert(rem >= 0);
-
-    while (rem > 0) {
-        ssize_t wrsz = syscall_SSL_write(ssl, &msg[box->out_sent_size], rem);
-        BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-            "SSL_write: socket %d, write %zd => wrsz %zd",
-            fd, rem, wrsz);
-        if (wrsz > 0) {
-            written += wrsz;
-            return written;
-        } else if (wrsz < 0) {
-            int reason = syscall_SSL_get_error(ssl, wrsz);
-            switch (reason) {
-            case SSL_ERROR_WANT_WRITE:
-                BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-                    "SSL_write: socket %d: WANT_WRITE", fd);
-                break;
-                
-            case SSL_ERROR_WANT_READ:
-                BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 64,
-                    "SSL_write: socket %d: WANT_READ", fd);
-                assert(false);  // shouldn't get this; we're writing.
-                break;
-                
-            case SSL_ERROR_SYSCALL:
-            {
-                if (util_is_resumable_io_error(errno)) {
-                    errno = 0;
-                    /* don't break; we want to retry on EINTR etc. until
-                     * we get WANT_WRITE, otherwise poll(2) may not retry
-                     * the socket for too long */
-                    continue;
-                } else {
-                    /* will notify about socket error upstream */
-                    BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                        "SSL_write on fd %d: SSL_ERROR_SYSCALL -- %s",
-                        fd, strerror(errno));
-                    errno = 0;                    
-                    return -1;
-                }
-            }
-            case SSL_ERROR_SSL:
-                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                    "SSL_write: socket %d: error SSL (wrsz %zd)",
-                    box->fd, wrsz);
-
-                /* Log error messages from OpenSSL */
-                for (;;) {
-                    unsigned long e = ERR_get_error();
-                    if (e == 0) { break; }  // no more errors
-                    BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 128,
-                        "SSL_write error: %s",
-                        ERR_error_string(e, NULL));
-                }
-                return -1;                
-            default:
-            {
-                BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
-                    "SSL_write on socket %d: match fail: error %d", box->fd, reason);
-                return -1;
-            }
-            }
-        } else {
-            /* SSL_write should give SSL_ERROR_WANT_WRITE when unable
-             * to write further. */
-        }
-    }
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
-        "SSL_write: leaving loop, %zd bytes written", written);
-    return written;
-}
-
-/* Notify the listener that the client has finished sending a message, and
- * transfer all details for handling the response to it. Blocking. */
-static bool enqueue_request_sent_message_to_listener(bus *b, boxed_msg *box) {
-    /* Notify listener that it should expect a response to a
-     * successfully sent message. */
-    BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-        "telling listener to expect sent response, with box %p, seq_id %lld",
-        (void *)box, (long long)box->out_seq_id);
-    
-    struct listener *l = bus_get_listener_for_socket(b, box->fd);
-
-    for (int retries = 0; retries < 10; retries++) {
-        uint16_t backpressure = 0;
-        /* If this succeeds, then this thread cannot touch the box anymore. */
-        if (listener_expect_response(l, box, &backpressure)) {
-            bus_backpressure_delay(b, backpressure,
-                LISTENER_EXPECT_BACKPRESSURE_SHIFT);
-            return true;
-        } else {
-            BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-                "enqueue_request_sent: failed delivery %d", retries);
-            syscall_poll(NULL, 0, 10);  // delay
-        }
-    }
-
-    /* Timeout, will be treated as a TX error */
-    return false;
 }

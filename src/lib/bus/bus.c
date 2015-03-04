@@ -28,6 +28,7 @@
 #include <sys/resource.h>
 
 #include "bus.h"
+#include "bus_poll.h"
 #include "send.h"
 #include "listener.h"
 #include "threadpool.h"
@@ -38,9 +39,9 @@
 #include "syscall.h"
 #include "atomic.h"
 
+#include "kinetic_types_internal.h"
 #include "listener_task.h"
 
-static bool poll_on_completion(struct bus *b, int fd);
 static int listener_id_of_socket(struct bus *b, int fd);
 static void noop_log_cb(log_event_t event,
         int log_level, const char *msg, void *udata);
@@ -50,6 +51,15 @@ static bool attempt_to_increase_resource_limits(struct bus *b);
 static void set_defaults(bus_config *cfg) {
     if (cfg->listener_count == 0) { cfg->listener_count = 1; }
 }
+
+#ifdef TEST
+boxed_msg *test_box = NULL;
+void *value = NULL;
+void *old_value = NULL;
+connection_info *test_ci = NULL;
+int completion_pipe = -1;
+void *unused = NULL;
+#endif
 
 bool bus_init(bus_config *config, struct bus_result *res) {
     if (res == NULL) { return false; }
@@ -229,7 +239,12 @@ static bool attempt_to_increase_resource_limits(struct bus *b) {
  *
  * The box should only ever be accessible on a single thread at a time. */
 static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
-    boxed_msg *box = calloc(1, sizeof(*box));
+    boxed_msg *box = NULL;
+    #ifdef TEST
+    box = test_box;
+    #else
+    box = calloc(1, sizeof(*box));
+    #endif
     if (box == NULL) { return NULL; }
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 64,
@@ -240,7 +255,9 @@ static boxed_msg *box_msg(struct bus *b, bus_user_msg *msg) {
 
     /* Lock hash table and check whether this FD uses SSL. */
     if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
+#ifndef TEST
     void *value = NULL;
+#endif
     connection_info *ci = NULL;
     if (yacht_get(b->fd_set, box->fd, &value)) {
         ci = (connection_info *)value;
@@ -313,71 +330,6 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg)
     return res;
 }
 
-static bool poll_on_completion(struct bus *b, int fd) {
-    /* POLL in a pipe */
-    struct pollfd fds[1];
-    fds[0].fd = fd;
-    fds[0].events = POLLIN;
-
-    for (;;) {
-        BUS_LOG(b, 5, LOG_SENDING_REQUEST, "Polling on completion...tick...", b->udata);
-        int res = syscall_poll(fds, 1, -1);
-        if (res == -1) {
-            if (util_is_resumable_io_error(errno)) {
-                BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
-                    "poll_on_completion, resumable IO error %d", errno);
-                errno = 0;
-                continue;
-            } else {
-                BUS_LOG_SNPRINTF(b, 1, LOG_SENDING_REQUEST, b->udata, 64,
-                    "poll_on_completion, non-resumable IO error %d", errno);
-                return false;
-            }
-        } else if (res == 1) {
-            uint16_t msec = 0;
-            uint8_t read_buf[sizeof(uint8_t) + sizeof(msec)];
-
-            if (fds[0].revents & (POLLERR | POLLHUP | POLLNVAL)) {
-                BUS_LOG(b, 1, LOG_SENDING_REQUEST, "failed (broken alert pipe)", b->udata);
-                return false;
-            }
-
-            BUS_LOG(b, 3, LOG_SENDING_REQUEST, "Reading alert pipe...", b->udata);
-            ssize_t sz = syscall_read(fd, read_buf, sizeof(read_buf));
-
-            if (sz == sizeof(read_buf)) {
-                /* Payload: little-endian uint16_t, msec of backpressure. */
-                assert(read_buf[0] == LISTENER_MSG_TAG);
-
-                msec = (read_buf[1] << 0) + (read_buf[2] << 8);
-                bus_backpressure_delay(b, msec, LISTENER_BACKPRESSURE_SHIFT);
-                BUS_LOG(b, 4, LOG_SENDING_REQUEST, "sent!", b->udata);
-                return true;
-            } else if (sz == -1) {
-                if (util_is_resumable_io_error(errno)) {
-                    BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
-                        "poll_on_completion read, resumable IO error %d", errno);
-                    errno = 0;
-                    continue;
-                } else {
-                    BUS_LOG_SNPRINTF(b, 2, LOG_SENDING_REQUEST, b->udata, 64,
-                        "poll_on_completion read, non-resumable IO error %d", errno);
-                    errno = 0;
-                    return false;
-                }
-            } else {
-                BUS_LOG_SNPRINTF(b, 1, LOG_SENDING_REQUEST, b->udata, 64,
-                    "poll_on_completion bad read size %zd", sz);
-                return false;
-            }
-        } else {
-            BUS_LOG_SNPRINTF(b, 0, LOG_SENDING_REQUEST, b->udata, 64,
-                "poll_on_completion, blocking forever returned 0, errno %d", errno);
-            assert(false);
-        }
-    }
-}
-
 static int listener_id_of_socket(struct bus *b, int fd) {
     /* Just evenly divide sockets between listeners by file descriptor. */
     return fd % b->listener_count;
@@ -416,7 +368,11 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
     /* Metadata about the connection. Note: This will be shared by the
      * client thread and the listener thread, but each will only modify
      * some of the fields. The client thread will free this. */
+    #ifdef TEST
+    connection_info *ci = test_ci;
+    #else
     connection_info *ci = calloc(1, sizeof(*ci));
+    #endif
     if (ci == NULL) { goto cleanup; }
 
     SSL *ssl = NULL;
@@ -434,7 +390,9 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
     ci->largest_rd_seq_id_seen = BUS_NO_SEQ_ID;
     ci->largest_wr_seq_id_seen = BUS_NO_SEQ_ID;
 
+    #ifndef TEST
     void *old_value = NULL;
+    #endif
     /* Lock hash table and save whether this FD uses SSL. */
     if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
     bool set_ok = yacht_set(b->fd_set, fd, ci, &old_value);
@@ -447,12 +405,14 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
     }
 
     bool res = false;
+    #ifndef TEST
     int completion_pipe = -1;
+    #endif
     res = listener_add_socket(l, ci, &completion_pipe);
     if (!res) { goto cleanup; }
 
     BUS_LOG(b, 2, LOG_SOCKET_REGISTERED, "polling on socket add...", b->udata);
-    bool completed = poll_on_completion(b, completion_pipe);
+    bool completed = bus_poll_on_completion(b, completion_pipe);
     if (!completed) { goto cleanup; }
 
     BUS_LOG(b, 2, LOG_SOCKET_REGISTERED, "successfully added socket", b->udata);
@@ -474,22 +434,28 @@ bool bus_release_socket(struct bus *b, int fd, void **socket_udata_out) {
 
     struct listener *l = b->listeners[l_id];
 
-    int completion_fd = -1;
-    if (!listener_remove_socket(l, fd, &completion_fd)) {
+    #ifndef TEST
+    int completion_pipe = -1;
+    #endif
+    if (!listener_remove_socket(l, fd, &completion_pipe)) {
         return false;           /* couldn't send msg to listener */
     }
 
-    bool completed = poll_on_completion(b, completion_fd);
+    bool completed = bus_poll_on_completion(b, completion_pipe);
     if (!completed) {           /* listener hung up while waiting */
         return false;
     }
 
     /* Lock hash table and forget whether this FD uses SSL. */
+    #ifndef TEST
     void *old_value = NULL;
+    #endif
     if (0 != pthread_mutex_lock(&b->fd_set_lock)) { assert(false); }
     bool rm_ok = yacht_remove(b->fd_set, fd, &old_value);
     if (0 != pthread_mutex_unlock(&b->fd_set_lock)) { assert(false); }
-    assert(rm_ok);
+    if (!rm_ok) {
+        return false;
+    }
 
     connection_info *ci = (connection_info *)old_value;
     assert(ci != NULL);
@@ -513,19 +479,24 @@ bool bus_schedule_threadpool_task(struct bus *b, struct threadpool_task *task,
     return threadpool_schedule(b->threadpool, task, backpressure);
 }
 
-static void free_connection_cb(void *value, void *udata) {
+#ifndef TEST
+static
+#endif
+void free_connection_cb(void *value, void *udata) {
     struct bus *b = (struct bus *)udata;
     connection_info *ci = (connection_info *)value;
 
     int l_id = listener_id_of_socket(b, ci->fd);
     struct listener *l = b->listeners[l_id];
 
-    int completion_fd = -1;
-    if (!listener_remove_socket(l, ci->fd, &completion_fd)) {
+    #ifndef TEST
+    int completion_pipe = -1;
+    #endif
+    if (!listener_remove_socket(l, ci->fd, &completion_pipe)) {
         return;           /* couldn't send msg to listener */
     }
 
-    bool completed = poll_on_completion(b, completion_fd);
+    bool completed = bus_poll_on_completion(b, completion_pipe);
     if (!completed) {
         return;
     }
@@ -550,22 +521,37 @@ bool bus_shutdown(bus *b) {
         b->fd_set = NULL;
     }
 
+    #ifndef TEST
+    int completion_pipe = -1;
+    #endif
+
     BUS_LOG(b, 2, LOG_SHUTDOWN, "shutting down listener threads", b->udata);
     for (int i = 0; i < b->listener_count; i++) {
         if (!b->joined[i]) {
             BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
                 "listener_shutdown -- %d", i);
-            int completion_fd = -1;
-            listener_shutdown(b->listeners[i], &completion_fd);
-            poll_on_completion(b, completion_fd);
+            if (!listener_shutdown(b->listeners[i], &completion_pipe)) {
+                b->shutdown_state = SHUTDOWN_STATE_RUNNING;
+                return false;
+            }
+
+            if (!bus_poll_on_completion(b, completion_pipe)) {
+                b->shutdown_state = SHUTDOWN_STATE_RUNNING;
+                return false;
+            }
 
             BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
                 "listener_shutdown -- joining %d", i);
+            #ifndef TEST
             void *unused = NULL;
-            int res = pthread_join(b->threads[i], &unused);
+            #endif
+            int res = syscall_pthread_join(b->threads[i], &unused);
             BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
                 "listener_shutdown -- joined %d", i);
-            assert(res == 0);
+            if (res != 0) {
+                b->shutdown_state = SHUTDOWN_STATE_RUNNING;
+                return false;
+            }
             b->joined[i] = true;
         }
     }

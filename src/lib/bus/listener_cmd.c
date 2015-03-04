@@ -25,10 +25,26 @@
 #include "listener_cmd.h"
 #include "listener_cmd_internal.h"
 #include "listener_task.h"
+#include "listener_helper.h"
+
+static void msg_handler(listener *l, listener_msg *pmsg);
+static void add_socket(listener *l, connection_info *ci, int notify_fd);
+static void remove_socket(listener *l, int fd, int notify_fd);
+static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_sec);
+static void expect_response(listener *l, boxed_msg *box);
+static void shutdown(listener *l, int notify_fd);
+
+#ifdef TEST
+uint8_t reply_buf[sizeof(uint8_t) + sizeof(uint16_t)];
+uint8_t cmd_buf[LISTENER_CMD_BUF_SIZE];
+#endif
 
 void ListenerCmd_NotifyCaller(int fd) {
     if (fd == -1) { return; }
-    uint8_t reply_buf[sizeof(uint8_t) + sizeof(uint16_t)] = {LISTENER_MSG_TAG};
+    #ifndef TEST
+    uint8_t reply_buf[sizeof(uint8_t) + sizeof(uint16_t)];
+    #endif
+    reply_buf[0] = LISTENER_MSG_TAG;
 
     /* TODO: reply_buf[1:2] can be little-endian backpressure.  */
 
@@ -48,14 +64,17 @@ void ListenerCmd_NotifyCaller(int fd) {
 void ListenerCmd_CheckIncomingMessages(listener *l, int *res) {
     struct bus *b = l->bus;
     short events = l->fds[INCOMING_MSG_PIPE_ID].revents;
+
     if (events & (POLLERR | POLLHUP | POLLNVAL)) {  /* hangup/error */
         return;
     }
 
     if (events & POLLIN) {
-        char buf[64];
+        #ifndef TEST
+        char cmd_buf[LISTENER_CMD_BUF_SIZE];
+        #endif
         for (;;) {
-            ssize_t rd = syscall_read(l->fds[INCOMING_MSG_PIPE_ID].fd, buf, sizeof(buf));
+            ssize_t rd = syscall_read(l->fds[INCOMING_MSG_PIPE_ID].fd, cmd_buf, sizeof(cmd_buf));
             if (rd == -1) {
                 if (errno == EINTR) {
                     errno = 0;
@@ -68,7 +87,7 @@ void ListenerCmd_CheckIncomingMessages(listener *l, int *res) {
                 }
             } else {
                 for (ssize_t i = 0; i < rd; i++) {
-                    uint8_t msg_id = buf[i];
+                    uint8_t msg_id = cmd_buf[i];
                     listener_msg *msg = &l->msgs[msg_id];
                     msg_handler(l, msg);
                 }
@@ -122,6 +141,8 @@ static void add_socket(listener *l, connection_info *ci, int notify_fd) {
     if (l->tracked_fds == MAX_FDS) {
         /* error: full */
         BUS_LOG(b, 3, LOG_LISTENER, "FULL", b->udata);
+        ListenerCmd_NotifyCaller(notify_fd);
+        return;
     }
     for (int i = 0; i < l->tracked_fds; i++) {
         if (l->fds[i + INCOMING_MSG_PIPE].fd == ci->fd) {
@@ -142,7 +163,6 @@ static void add_socket(listener *l, connection_info *ci, int notify_fd) {
     BUS_ASSERT(b, b->udata, sink_res.full_msg_buffer == NULL);  // should have nothing to handle yet
     ci->to_read_size = sink_res.next_read;
 
-    //if (!grow_read_buf(l, ci->to_read_size)) {
     if (!ListenerTask_GrowReadBuf(l, ci->to_read_size)) {
         free(ci);
         ListenerCmd_NotifyCaller(notify_fd);
@@ -181,7 +201,7 @@ static void remove_socket(listener *l, int fd, int notify_fd) {
 static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_sec) {
     struct bus *b = l->bus;
     
-    rx_info_t *info = get_free_rx_info(l);
+    rx_info_t *info = listener_helper_get_free_rx_info(l);
     if (info == NULL) {
         BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
             "failed to get free rx_info for <fd:%d, seq_id:%lld>, dropping it",
@@ -202,18 +222,6 @@ static void hold_response(listener *l, int fd, int64_t seq_id, int16_t timeout_s
     memset(&info->u.hold.result, 0, sizeof(info->u.hold.result));
 }
 
-static rx_info_t *get_hold_rx_info(listener *l, int fd, int64_t seq_id) {
-    for (int i = 0; i <= l->rx_info_max_used; i++) {
-        rx_info_t *info = &l->rx_info[i];
-        if (info->state == RIS_HOLD &&
-            info->u.hold.fd == fd &&
-            info->u.hold.seq_id == seq_id) {
-            return info;
-        }
-    }
-    return NULL;
-}
-
 static void expect_response(listener *l, struct boxed_msg *box) {
     struct bus *b = l->bus;
     BUS_ASSERT(b, b->udata, box);
@@ -222,7 +230,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
         (void *)box, box->fd, (long long)box->out_seq_id);
 
     /* If there's a pending HOLD message, convert it. */
-    rx_info_t *info = get_hold_rx_info(l, box->fd, box->out_seq_id);
+    rx_info_t *info = listener_helper_get_hold_rx_info(l, box->fd, box->out_seq_id);
     if (info) {
         BUS_ASSERT(b, b->udata, info->state == RIS_HOLD);
         if (info->u.hold.has_result) {
@@ -257,12 +265,14 @@ static void expect_response(listener *l, struct boxed_msg *box) {
          * itself expose an error. We also don't know if we're going to
          * get a response or not. */
 
+        // FIXME: should we just assert false for this case now?
+
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
             "get_hold_rx_info FAILED: fd %d, seq_id %lld",
             box->fd, (long long)box->out_seq_id);
 
         /* This should be treated like a send timeout. */
-        info = get_free_rx_info(l);
+        info = listener_helper_get_free_rx_info(l);
         BUS_ASSERT(b, b->udata, info);
         BUS_ASSERT(b, b->udata, info->state == RIS_INACTIVE);
 
@@ -282,31 +292,4 @@ static void expect_response(listener *l, struct boxed_msg *box) {
 
 static void shutdown(listener *l, int notify_fd) {
     l->shutdown_notify_fd = notify_fd;
-}
-
-static rx_info_t *get_free_rx_info(struct listener *l) {
-    struct bus *b = l->bus;
-
-    struct rx_info_t *head = l->rx_info_freelist;
-    if (head == NULL) {
-        BUS_LOG(b, 6, LOG_SENDER, "No rx_info cells left!", b->udata);
-        return NULL;
-    } else {
-        l->rx_info_freelist = head->next;
-        head->next = NULL;
-        l->rx_info_in_use++;
-        BUS_LOG(l->bus, 4, LOG_LISTENER, "reserving RX info", l->bus->udata);
-        BUS_ASSERT(b, b->udata, head->state == RIS_INACTIVE);
-        if (l->rx_info_max_used < head->id) {
-            BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
-                "rx_info_max_used <- %d", head->id);
-            l->rx_info_max_used = head->id;
-            BUS_ASSERT(b, b->udata, l->rx_info_max_used < MAX_PENDING_MESSAGES); 
-        }
-
-        BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
-            "got free rx_info_t %d (%p)", head->id, (void *)head);
-        BUS_ASSERT(b, b->udata, head == &l->rx_info[head->id]);
-        return head;
-    }
 }

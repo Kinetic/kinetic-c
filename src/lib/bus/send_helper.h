@@ -17,12 +17,18 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef SEND_INTERNAL_H
-#define SEND_INTERNAL_H
+#ifndef SEND_HELPER_H
+#define SEND_HELPER_H
 
-#include "send.h"
+#include "bus_types.h"
+#include "bus_internal_types.h"
 
-#define SEND_NOTIFY_LISTENER_RETRIES 10
-#define SEND_NOTIFY_LISTENER_RETRY_DELAY 5
+typedef enum {
+    SHHW_OK,
+    SHHW_DONE,
+    SHHW_ERROR = -1,
+} send_helper_handle_write_res;
+
+send_helper_handle_write_res send_helper_handle_write(bus *b, boxed_msg *box);
 
 #endif

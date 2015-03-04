@@ -32,4 +32,6 @@
  * the callback-based error handling will not be used. */
 bool send_do_blocking_send(struct bus *b, boxed_msg *box);
 
+void send_handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status);
+
 #endif

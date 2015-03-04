@@ -90,4 +90,8 @@ bool threadpool_shutdown(struct threadpool *t, bool kill_all);
  * is acceptable. */
 void threadpool_free(struct threadpool *t);
 
+#ifdef TEST
+#include "threadpool_internals.h"
+#endif
+
 #endif

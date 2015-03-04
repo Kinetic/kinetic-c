@@ -17,12 +17,18 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef SEND_INTERNAL_H
-#define SEND_INTERNAL_H
+#ifndef LISTENER_HELPER_H
+#define LISTENER_HELPER_H
 
-#include "send.h"
+#include "bus_internal_types.h"
+#include "listener.h"
+#include "listener_internal_types.h"
 
-#define SEND_NOTIFY_LISTENER_RETRIES 10
-#define SEND_NOTIFY_LISTENER_RETRY_DELAY 5
+listener_msg *listener_helper_get_free_msg(listener *l);
+bool listener_helper_push_message(struct listener *l, listener_msg *msg, int *reply_fd);
+
+rx_info_t *listener_helper_get_free_rx_info(listener *l);
+rx_info_t *listener_helper_get_hold_rx_info(listener *l, int fd, int64_t seq_id);
+
 
 #endif
