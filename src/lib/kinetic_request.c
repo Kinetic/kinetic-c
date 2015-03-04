@@ -152,7 +152,7 @@ bool KineticRequest_LockConnection(KineticConnection *connection)
     return 0 == pthread_mutex_lock(&connection->sendMutex);
 }
 
-bool KineticRequest_UnlockOperation(KineticConnection *connection)
+bool KineticRequest_UnlockConnection(KineticConnection *connection)
 {
     return 0 == pthread_mutex_unlock(&connection->sendMutex);
 }
