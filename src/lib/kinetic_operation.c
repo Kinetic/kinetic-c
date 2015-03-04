@@ -51,11 +51,12 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
     KINETIC_ASSERT(operation->connection != NULL);
     KINETIC_ASSERT(operation->request != NULL);
     
-    if (!KineticRequest_LockOperation(operation)) {
+    KineticConnection *connection = operation->connection;
+    if (!KineticRequest_LockConnection(connection)) {
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
     KineticStatus status = KineticOperation_SendRequestInLock(operation);
-    KineticRequest_UnlockOperation(operation);
+    KineticRequest_UnlockConnection(connection);
     return status;
 }
 
