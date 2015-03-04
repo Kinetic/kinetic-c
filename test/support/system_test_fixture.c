@@ -122,7 +122,7 @@ static void LoadConfiguration(void)
     }
 }
 
-const char* GetSystemTestHost1(void)
+char* GetSystemTestHost1(void)
 {
     LoadConfiguration();
     return Fixture.host1;
@@ -140,7 +140,7 @@ int GetSystemTestTlsPort1(void)
     return Fixture.tlsPort1;
 }
 
-const char* GetSystemTestHost2(void)
+char* GetSystemTestHost2(void)
 {
     LoadConfiguration();
     return Fixture.host2;

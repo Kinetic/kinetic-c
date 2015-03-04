@@ -74,12 +74,12 @@ void tearDown(void)
 void test_kinetic_client_should_be_able_to_store_an_arbitrarily_large_binary_object_and_split_across_entries_via_overlapped_IO_operations(void)
 {
     KineticSessionConfig sessionConfig = {
-        .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
+    strncpy(sessionConfig.host, GetSystemTestHost1(), sizeof(sessionConfig.host)-1);
+    sessionConfig.port = GetSystemTestPort1();
 
     float bandwidthAccumulator = 0.0f, minBandwidth = 1000000000.0f, maxBandwidth = -1000000000.0f;
     float aggregateBandwidthPerIteration[MAX_ITERATIONS];

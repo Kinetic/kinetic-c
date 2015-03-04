@@ -20,8 +20,8 @@
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
 
-char OldPinData[4];
-char NewPinData[4];
+char OldPinData[8];
+char NewPinData[8];
 ByteArray OldPin, NewPin;
 bool ErasePinSet, LockPinSet;
 

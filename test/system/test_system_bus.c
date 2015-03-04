@@ -256,7 +256,7 @@ void test_that_we_can_register_sockets(void)
     socket_info * si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     assert(si != NULL);
 
-    int fd = KineticSocket_Connect(SYSTEM_TEST_HOST, KINETIC_PORT);
+    int fd = KineticSocket_Connect(GetSystemTestHost1(), GetSystemTestPort1());
     assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
     bool result = bus_register_socket(res.bus, BUS_SOCKET_PLAIN, fd, si);
     assert(result);
@@ -294,7 +294,7 @@ void test_that_we_can_register_SSL_sockets(void)
     socket_info * si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     assert(si != NULL);
 
-    int fd = KineticSocket_Connect(SYSTEM_TEST_HOST, KINETIC_TLS_PORT);
+    int fd = KineticSocket_Connect(GetSystemTestHost1(), GetSystemTestTlsPort1());
     assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
     bool result = bus_register_socket(res.bus, BUS_SOCKET_SSL, fd, si);
     assert(result);

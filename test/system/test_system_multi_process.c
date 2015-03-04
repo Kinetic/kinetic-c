@@ -43,11 +43,8 @@ static int NumDaemons = 0;
 static char* CurrentHost;
 static int CurrentPort;
 
-static char* Hosts[] = {SYSTEM_TEST_HOST, SYSTEM_TEST_HOST};
-static const int Ports[] = {KINETIC_PORT, KINETIC_PORT+1};
-
-// static char* Hosts[] = {"10.138.123.153", "10.138.123.128", "10.138.123.112"};
-// static const int Ports[] = {KINETIC_PORT, KINETIC_PORT};
+static char* Hosts[2];
+static int Ports[2];
 
 static void op_finished(KineticCompletionData* kinetic_data, void* clientData);
 
@@ -333,6 +330,10 @@ static void op_finished(KineticCompletionData* kinetic_data, void* clientData)
 void test_kinetic_client_stress_multiple_processes(void)
 {
     srand(time(NULL));
+    Hosts[0] = GetSystemTestHost1();
+    Ports[0] = GetSystemTestPort1();
+    Hosts[1] = GetSystemTestHost2();
+    Ports[1] = GetSystemTestPort2();
     for (NumDaemons = 0; NumDaemons < MaxDaemons; NumDaemons++) {
         pid_t pid = fork();
         if (pid == 0) {

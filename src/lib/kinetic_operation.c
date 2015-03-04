@@ -61,7 +61,11 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const operation)
 
 static void log_request_seq_id(int fd, int64_t seq_id, KineticMessageType mt)
 {
-    #ifndef TEST
+    #ifdef TEST
+    (void)fd;
+    (void)seq_id;
+    (void)mt;
+    #else
     #if KINETIC_LOGGER_LOG_SEQUENCE_ID
     struct timeval tv;
     gettimeofday(&tv, NULL);

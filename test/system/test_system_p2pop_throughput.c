@@ -192,6 +192,6 @@ void test_p2p_throughput(void)
         .logLevel = 1,
     };
     KineticClient * client = KineticClient_Init(&config);
-    run_p2p_throughput_test(client, 200, KINETIC_OBJ_SIZE);
+    run_p2p_throughput_test(client, 50, KINETIC_OBJ_SIZE);
     KineticClient_Shutdown(client);   
 }

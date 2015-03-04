@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     if (client == NULL) { return 1; }
     const char HmacKeyString[] = "asdfasdf";
     KineticSessionConfig config = {
-        .host = SYSTEM_TEST_HOST,
+        .host = "127.0.0.1",
         .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,

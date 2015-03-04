@@ -20,8 +20,8 @@
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
 
-static char OldPinData[4];
-static char NewPinData[4];
+static char OldPinData[8];
+static char NewPinData[8];
 static ByteArray OldPin, NewPin;
 
 static uint8_t KeyData[1024];

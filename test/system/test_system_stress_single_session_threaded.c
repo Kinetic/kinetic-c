@@ -297,12 +297,12 @@ void run_tests(KineticClient * client)
     KineticSession* session;
     const char HmacKeyString[] = "asdfasdf";
     KineticSessionConfig config = {
-        .host = SYSTEM_TEST_HOST,
-        .port = KINETIC_PORT,
         .clusterVersion = 0,
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
+    strncpy(config.host, GetSystemTestHost1(), sizeof(config.host)-1);
+    config.port = GetSystemTestPort1();
     KineticStatus status = KineticClient_CreateSession(&config, client, &session);
     if (status != KINETIC_STATUS_SUCCESS) {
         char msg[128];

@@ -160,7 +160,7 @@ void test_KineticRequest_PackMessage_should_return_SUCCESS_on_message_packing(vo
     size_t offset = sizeof(uint8_t) + 2*sizeof(uint32_t);
 
     // filler where protobuf message would be
-    for (int i = 0; i < packedSize; i++) { buf[i + offset] = 0x33; }
+    for (size_t i = 0; i < packedSize; i++) { buf[i + offset] = 0x33; }
 
     KineticProto_Message__pack_ExpectAndReturn(&request.message.message, &buf[offset], packedSize);
 
@@ -183,13 +183,13 @@ void test_KineticRequest_PackMessage_should_return_SUCCESS_on_message_packing(vo
         0xdd, 0xcc, 0xbb, 0xaa,  // proto length
         0xaa, 0xbb, 0xcc, 0xdd,  // value length
     };
-    for (int i = 0; i < sizeof(expected); i++) {
+    for (size_t i = 0; i < sizeof(expected); i++) {
         TEST_ASSERT_EQUAL(expected[i], out_msg[i]);
     }
-    for (int i = 0; i < packedSize; i++) {
+    for (size_t i = 0; i < packedSize; i++) {
         TEST_ASSERT_EQUAL(0x33, out_msg[i + offset]);
     }
-    for (int i = 0; i < valueLen; i++) {
+    for (size_t i = 0; i < valueLen; i++) {
         TEST_ASSERT_EQUAL(valueBuf[i], out_msg[i + offset + packedSize]);
     }
 }
