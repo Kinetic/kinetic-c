@@ -45,6 +45,7 @@ typedef enum OptionID {
     OPT_PIN                        = 202,
     OPT_NEWPIN                     = 203,
     OPT_LOGTYPE                    = 204,
+    OPT_DEVICELOGNAME              = 205,
 
     // Operations
     OPT_NOOP                       = 300,
@@ -54,7 +55,7 @@ typedef enum OptionID {
     OPT_GETNEXT                    = 304,
     OPT_GETPREVIOUS                = 305,
     OPT_GETLOG                     = 306,
-    OPT_GETVENDORLOG               = 307,
+    OPT_GETDEVICESPECIFICLOG       = 307,
     OPT_SETERASEPIN                = 308,
     OPT_INSTANTERASE               = 309,
     OPT_SECUREERASE                = 310,
@@ -83,6 +84,7 @@ struct UtilConfig {
     int64_t newClusterVersion;
     char file[256];
     KineticLogInfo_Type logType;
+    char deviceLogName[64];
 
     // KineticEntry and associated buffer data
     KineticEntry entry;
@@ -113,9 +115,6 @@ static void ConfigureEntry(
     const char * value);
 static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info);
 static const char* GetOptString(OptionID opt_id);
-// static void ReportConfiguration(
-//     const char * cmd,
-//     struct UtilConfig * cfg);
 
 
 void PrintUsage(const char* exec)
@@ -126,40 +125,40 @@ void PrintUsage(const char* exec)
     // Standard API operations
     printf("%s --noop"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --put [--key <key>] [--value <value>]"
+    printf("%s --put --key <key> --value <value>"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --get [--key <key>]"
+    printf("%s --get --key <key>"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --getnext [--key <key>]"
+    printf("%s --getnext --key <key>"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --getprevious [--key <key>]"
+    printf("%s --getprevious --key <key>"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --delete [--key <key>]"
+    printf("%s --delete --key <key>"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
     
     // Admin API operations
-    printf("%s --setclusterversion <--newclusterversion <newclusterversion>>"
+    printf("%s --getlog --logtype <utilizations|temperatures|capacities|configuration|statistics|messages|limits>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --seterasepin <--pin <oldpin>> <--newpin <newerasepin>>"
+    printf("%s --getdevicespecificlog --devicelogname <name|ID>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --instanterase <--pin <erasepin>>"
+    printf("%s --setclusterversion --newclusterversion <newclusterversion>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --secureerase <--pin <erasepin>>"
+    printf("%s --seterasepin --pin <oldpin> --newpin <newerasepin>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --setlockpin <--pin <oldpin>> <--newpin <newpin>>"
+    printf("%s --instanterase --pin <erasepin>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --lockdevice <--pin <lockpin>>"
+    printf("%s --secureerase --pin <erasepin>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --unlockdevice <--pin <lockpin>>"
+    printf("%s --setlockpin --pin <oldpin>> <--newpin <newpin>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --setacl <--file <acl_json_file>>"
+    printf("%s --lockdevice --pin <lockpin>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --getlog [--type <utilization|temperature|capacity|configuration|message|statistic|limits>"
+    printf("%s --unlockdevice --pin <lockpin>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    // printf("%s --getvendorspecificdevicelog <--name <vendorspecificname>>"
-    //   " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
-    printf("%s --updatefirmware <--file <file>>"
-      " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>] [--pin <pin>]\n", exec);
+    printf("%s --setacl --file <acl_json_file>"
+      " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
+    printf("%s --updatefirmware --file <file> --pin <pin>"
+      " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>] \n", exec);
 }
 
 
@@ -326,15 +325,6 @@ static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
             printf("  maxPinSize: %u\n",                  info->limits->maxPinSize);
             break;
         
-        case KINETIC_DEVICE_INFO_TYPE_DEVICE:
-            printf("Device Info:\n"); {
-                char* dev = calloc(1, info->device->name.len + 1);
-                memcpy(dev, info->device->name.data, info->device->name.len);
-                printf("  %s\n", dev);
-                free(dev);
-            }
-            break;
-        
         default:
             fprintf(stderr, "Unknown log type! (%d)\n", type);
             break;
@@ -389,8 +379,8 @@ static const char* GetOptString(OptionID opt_id)
             str = "getprevious"; break;
         case OPT_GETLOG:
             str = "getlog"; break;
-        case OPT_GETVENDORLOG:
-            str = "getvendorlog"; break;
+        case OPT_GETDEVICESPECIFICLOG:
+            str = "getdevicespecificlog"; break;
         case OPT_SETERASEPIN:
             str = "seterasepin"; break;
         case OPT_INSTANTERASE:
@@ -425,6 +415,7 @@ KineticStatus ExecuteOperation(
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
     KineticLogInfo * logInfo;
+    ByteArray tmpArray;
 
     switch (cfg->opID) {
 
@@ -481,26 +472,32 @@ KineticStatus ExecuteOperation(
             if (status == KINETIC_STATUS_SUCCESS) {
                 printf("GetLog executed successfully.\n"
                        "The device log info has been retrieved!\n");
-                // TODO: report returned log info per specified type
                 PrintLogInfo(cfg->logType, logInfo);
-            }
-            else if (status == KINETIC_STATUS_NOT_FOUND) {
-                fprintf(stderr, "The requested log type is not present on the kinetic device!");
-                status = KINETIC_STATUS_SUCCESS;
             }
             break;
 
-#if 0
-        // TODO: Is this necesary? We could add vendor-specific name as opt-arg to "getlog"
-        // case OPT_GETVENDORLOG:
-        {
-        //     status = KineticClient_GetLog(cfg->session, info_type, &log_info, NULL);
-        //     if (status == KINETIC_STATUS_SUCCESS) {
-        //         printf("GetLog executed successfully."
-        //                "The vendor-specific device log info has been retrieved!\n");
-        //         // TODO: report returned log info per specified type
-        //     } break;    // }
-#endif
+        case OPT_GETDEVICESPECIFICLOG:
+            if (strlen(cfg->deviceLogName) == 0) {
+                fprintf(stderr, "Device-specific log type requires '--devicelogname' to be set!\n");
+                exit(1);
+            }
+            tmpArray.data = (uint8_t*)cfg->deviceLogName;
+            tmpArray.len = strlen(cfg->deviceLogName);
+            status = KineticAdminClient_GetDeviceSpecificLog(cfg->adminSession, tmpArray, &logInfo, NULL);
+            if (status == KINETIC_STATUS_SUCCESS) {
+                printf("GetDeviceSpecificLog executed successfully."
+                       "The device-specific device log info has been retrieved!\n");
+                printf("Device-Specific Log Info:\n");
+                char* dev = calloc(1, logInfo->device->name.len + 1);
+                memcpy(dev, logInfo->device->name.data, logInfo->device->name.len);
+                printf("  %s\n", dev);
+                free(dev);
+            }
+            else if (status == KINETIC_STATUS_NOT_FOUND) {
+                fprintf(stderr, "The specified device-specific log '%s' was not found on the device!\n", cfg->deviceLogName);
+                status = KINETIC_STATUS_SUCCESS;
+            }
+            break;
 
         case OPT_SETERASEPIN:
             status = KineticAdminClient_SetErasePin(cfg->adminSession,
@@ -605,30 +602,6 @@ void ConfigureEntry(struct UtilConfig * cfg, const char* key, const char* tag,
     };
 }
 
-// void ReportConfiguration(
-//     const char* cmd,
-//     struct UtilConfig * cfg)
-// {
-//     printf(
-//        "================================================================================\n"
-//        "Executing '%s' w/session configuration:\n"
-//        "================================================================================\n"
-//        "  host: %s\n"
-//        "  port: %d\n"
-//        "  clusterVersion: %lld\n"
-//        "  identity: %lld\n"
-//        "  key: %zd bytes\n"
-//        "  value: %zd bytes\n"
-//        "================================================================================\n\n",
-//        cmd,
-//        cfg->config.host,
-//        cfg->config.port,
-//        (long long)cfg->config.clusterVersion,
-//        (long long)cfg->config.identity,
-//        cfg->entry.key.bytesUsed,
-//        cfg->entry.value.bytesUsed);
-// }
-
 int ParseOptions(
     const int argc,
     char** const argv,
@@ -645,6 +618,7 @@ int ParseOptions(
         int64_t identity;
         char hmacKey[KINETIC_MAX_KEY_LEN];
         char logType[64];
+        char deviceLogName[64];
         char key[64];
         char version[64];
         char tag[64];
@@ -660,12 +634,11 @@ int ParseOptions(
         .identity = 1,
         .hmacKey = "asdfasdf",
         .logType = "utilizations",
-        .key = "SomeObjectKeyValue",
-        // .version = "v1.0",
+        .key = "foo",
         .tag = "SomeTagValue",
         .algorithm = KINETIC_ALGORITHM_SHA1,
         .force = true,
-        .value = "hello world!",
+        .value = "Hello!",
     };
 
     // Create configuration for long format options
@@ -682,7 +655,7 @@ int ParseOptions(
         {"getnext",                     no_argument,       0, OPT_GETNEXT},
         {"getprevious",                 no_argument,       0, OPT_GETPREVIOUS},
         {"getlog",                      no_argument,       0, OPT_GETLOG},
-        {"getvendorspecificdevicelog",  no_argument,       0, OPT_GETVENDORLOG},
+        {"getdevicespecificlog",        no_argument,       0, OPT_GETDEVICESPECIFICLOG},
         {"seterasepin",                 no_argument,       0, OPT_SETERASEPIN},
         {"instanterase",                no_argument,       0, OPT_INSTANTERASE},
         {"secureerase",                 no_argument,       0, OPT_SECUREERASE},
@@ -706,6 +679,7 @@ int ParseOptions(
         {"pin",                         required_argument, 0, OPT_PIN},
         {"newpin",                      required_argument, 0, OPT_NEWPIN},
         {"logtype",                     required_argument, 0, OPT_LOGTYPE},
+        {"devicelogname",               required_argument, 0, OPT_DEVICELOGNAME},
         {"key",                         required_argument, 0, OPT_KEY},
         {"value",                       required_argument, 0, OPT_VALUE},
         {0,                             0,                 0, 0},
@@ -764,6 +738,9 @@ int ParseOptions(
             case OPT_LOGTYPE:
                 strncpy(opts.logType, optarg, sizeof(opts.logType)-1);
                 break;
+            case OPT_DEVICELOGNAME:
+                strncpy(cfg->deviceLogName, optarg, sizeof(cfg->deviceLogName)-1);
+                break;
 
             case OPT_NOOP:
             case OPT_PUT:
@@ -772,7 +749,7 @@ int ParseOptions(
             case OPT_GETNEXT:
             case OPT_GETPREVIOUS:
             case OPT_GETLOG:
-            case OPT_GETVENDORLOG:
+            case OPT_GETDEVICESPECIFICLOG:
             case OPT_SETERASEPIN:
             case OPT_INSTANTERASE:
             case OPT_SECUREERASE:
@@ -843,9 +820,6 @@ int ParseOptions(
     }
     else if (strcmp("limits", opts.logType) == 0) {
         cfg->logType = KINETIC_DEVICE_INFO_TYPE_LIMITS;
-    }
-    else if (strcmp("device", opts.logType) == 0) {
-        cfg->logType = KINETIC_DEVICE_INFO_TYPE_DEVICE;
     }
     else {
         fprintf(stderr, "Invalid log info type: %s\n", opts.logType);

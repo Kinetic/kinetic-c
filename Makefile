@@ -448,11 +448,17 @@ run: $(UTIL_EXEC)
 	@echo
 	exec $(UTIL_EXEC) --put --host $(KINETIC_HOST1)
 	@echo
+	exec $(UTIL_EXEC) --put --key goo --value Goodbye! --host $(KINETIC_HOST1)
+	@echo
 	exec $(UTIL_EXEC) --get --host $(KINETIC_HOST1)
 	@echo
-	exec $(UTIL_EXEC) --getnext --key "A" --host $(KINETIC_HOST1)
+	exec $(UTIL_EXEC) --getnext --key A --host $(KINETIC_HOST1)
 	@echo
-	exec $(UTIL_EXEC) --getprevious --key "zzzzzzzzzzzzzzzzz" --host $(KINETIC_HOST1)
+	exec $(UTIL_EXEC) --getnext --key foo --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getprevious --key zoo --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getprevious --key goo --host $(KINETIC_HOST1)
 	@echo
 	exec $(UTIL_EXEC) --delete --host $(KINETIC_HOST1)
 	@echo
@@ -472,7 +478,7 @@ run: $(UTIL_EXEC)
 	@echo
 	exec $(UTIL_EXEC) --getlog --logtype limits --host $(KINETIC_HOST1)
 	@echo
-	exec $(UTIL_EXEC) --getlog --logtype device --host $(KINETIC_HOST1)
+	exec $(UTIL_EXEC) --getdevicespecificlog --devicelogname com.Seagate --host $(KINETIC_HOST1)
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
 	@echo
