@@ -6,7 +6,7 @@ v0.12.0 (kinetic-protocol 3.0.5)
 * Added new `KineticAdminClient` API (see `include/kinetic_admin_client.h`)
     * Reloacted existing admin methods to admin API
         * `KineticClient_InstantSecureErase` => `KineticAdminClient_InstantErase`/`KineticAdminClient_SecureErase`
-        * `KineticClient_GetLog` => `KineticAdminClient_GetLog`
+        * `KineticClient_GetLog` => `KineticAdminClient_GetLog`/`KineticAdminClient_GetDeviceSpecificLog`
         * `KineticClient_FreeDeviceInfo` => `KineticAdminClient_LogInfo`
 * Updated `kinetic-c-util` to support new Admin API. Still need to add support for printing info returned from `KineticAdminClient_GetLog`
 * Changed `kinetic-c-util` API to use `getopt_long` for operations in addition to parameters and added usage info via `--help`/`-?` option.
@@ -22,6 +22,7 @@ v0.12.0 (kinetic-protocol 3.0.5)
         * `KINETIC_STATUS_ACL_ERROR`
         * `KINETIC_STATUS_NOT_AUTHORIZED`
         * `KINETIC_STATUS_INVALID_FILE`
+        * `KINETIC_STATUS_INVALID_LOG_TYPE`
 * Set larger timeouts for operations that tend to take approx. 10 seconds, to prevent non-deterministic failures.
 * API change: Eliminated KineticClientConfig.writerThreads, since sender threads are gone.
 

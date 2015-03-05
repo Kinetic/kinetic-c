@@ -554,8 +554,10 @@ void test_KineticBuilder_BuildGetLog_should_build_a_GetLog_request(void)
 
     KineticOperation_ValidateOperation_Expect(&Operation);
 
-    KineticBuilder_BuildGetLog(&Operation, KINETIC_DEVICE_INFO_TYPE_STATISTICS, &pInfo);
+    KineticStatus status = KineticBuilder_BuildGetLog(&Operation,
+        KINETIC_DEVICE_INFO_TYPE_STATISTICS, BYTE_ARRAY_NONE, &pInfo);
 
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG,
         Request.message.command.header->messageType);
@@ -569,6 +571,68 @@ void test_KineticBuilder_BuildGetLog_should_build_a_GetLog_request(void)
     TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_NULL(Operation.response);
+}
+
+void test_KineticBuilder_BuildGetLog_should_build_a_GetLog_request_to_retrieve_device_specific_log_info(void)
+{
+    KineticLogInfo* pInfo;
+    const char nameData[] = "com.WD";
+    ByteArray name = ByteArray_CreateWithCString(nameData);
+
+    KineticOperation_ValidateOperation_Expect(&Operation);
+
+    KineticStatus status = KineticBuilder_BuildGetLog(&Operation, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &pInfo);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG,
+        Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.getLog, Request.command->body->getLog);
+    TEST_ASSERT_NOT_NULL(Request.command->body->getLog->types);
+    TEST_ASSERT_EQUAL(1, Request.command->body->getLog->n_types);
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE,
+        Request.command->body->getLog->types[0]);
+    TEST_ASSERT_EQUAL_PTR(&Request.message.getLogDevice, Request.command->body->getLog->device);
+    TEST_ASSERT_TRUE(Request.command->body->getLog->device->has_name);
+    TEST_ASSERT_EQUAL_PTR(nameData, Request.command->body->getLog->device->name.data);
+    TEST_ASSERT_EQUAL(strlen(nameData), Request.command->body->getLog->device->name.len);
+    TEST_ASSERT_EQUAL_PTR(&pInfo, Operation.deviceInfo);
+    TEST_ASSERT_FALSE(Request.pinAuth);
+    TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
+    TEST_ASSERT_NULL(Operation.response);
+}
+
+void test_KineticBuilder_BuildGetLog_should_return_KINETIC_STATUS_DEVICE_NAME_REQUIRED_if_name_not_specified_correctly(void)
+{
+    KineticLogInfo* pInfo;
+    char nameData[] = "com.WD";
+    ByteArray name;
+    KineticStatus status;
+
+    // Length is zero
+    name.data = (uint8_t*)nameData;
+    name.len = 0;
+    KineticOperation_ValidateOperation_Expect(&Operation);
+    status = KineticBuilder_BuildGetLog(&Operation,
+        KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &pInfo);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_NAME_REQUIRED, status);
+
+    // Data is NULL
+    name.data = NULL;
+    name.len = strlen(nameData);
+    KineticOperation_ValidateOperation_Expect(&Operation);
+    status = KineticBuilder_BuildGetLog(&Operation,
+        KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &pInfo);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_NAME_REQUIRED, status);
+
+    // Length is zero and data is NULL
+    name.data = NULL;
+    name.len = 0;
+    KineticOperation_ValidateOperation_Expect(&Operation);
+    status = KineticBuilder_BuildGetLog(&Operation,
+        KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &pInfo);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_NAME_REQUIRED, status);
 }
 
 void test_KineticBuilder_BuildSetPin_should_build_a_SECURITY_operation_to_set_new_LOCK_PIN(void)

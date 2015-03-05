@@ -29,10 +29,10 @@
  *
  * @param config A configuration struct.
  *
- * @return          Returns a pointer to a `KineticClient`. You need to pass 
+ * @return          Returns a pointer to a KineticClient. You need to pass 
  *                  this pointer to KineticClient_CreateSession() to create 
  *                  new connections. 
- *                  Once you are finished will the `KineticClient`, and there
+ *                  Once you are finished will the KineticClient, and there
  *                  are no active connections. The pointer should be released
  *                  with KineticClient_Shutdown()
  */
@@ -46,7 +46,7 @@ void KineticAdminClient_Shutdown(KineticClient * const client);
 /**
  * @brief Creates a session with the Kinetic Device per specified configuration.
  *
- * @param config   `KineticSessionConfig` structure which must be configured
+ * @param config   KineticSessionConfig structure which must be configured
  *                 by the client prior to creating the device connection.
  *   .host             Host name or IP address to connect to
  *   .port             Port to establish socket connection on
@@ -54,16 +54,16 @@ void KineticAdminClient_Shutdown(KineticClient * const client);
  *   .identity         Identity to use for the session
  *   .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
  *   .pin              PIN to use for PIN-based operations
- * @param client    The `KineticClient` pointer returned from KineticClient_Init()
+ * @param client    The KineticClient pointer returned from KineticClient_Init()
  * @param session   Pointer to a KineticSession pointer that will be populated
  *                  with the allocated/created session upon success.
  *
- * @return          Returns the resulting `KineticStatus`, and `session`
+ * @return          Returns the resulting KineticStatus, and `session`
  *                  will be populated with a pointer to the session instance
  *                  upon success. The client should call
  *                  KineticClient_DestroySession() in order to shutdown a
  *                  connection and cleanup resources when done using a
- *                  `KineticSession`.
+ *                  KineticSession.
  */
 KineticStatus KineticAdminClient_CreateSession(KineticSessionConfig * const config,
     KineticClient * const client, KineticSession** session);
@@ -71,7 +71,7 @@ KineticStatus KineticAdminClient_CreateSession(KineticSessionConfig * const conf
 /**
  * @brief Closes the connection to a host.
  *
- * @param session   The connected `KineticSession` to close. The session
+ * @param session   The connected KineticSession to close. The session
  *                  instance will be freed by this call after closing the
  *                  connection, so the pointer should not longer be used.
  *
@@ -82,7 +82,7 @@ KineticStatus KineticAdminClient_DestroySession(KineticSession * const session);
 /**
  * @brief Sets the erase PIN of the Kinetic Device.
  *
- * @param session   The connected `KineticSession` to close. The session
+ * @param session   The connected KineticSession to close. The session
  *                  instance will be freed by this call after closing the
  *                  connection, so the pointer should not longer be used.
  * @param old_pin   Old erase PIN to change.
@@ -94,7 +94,7 @@ KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const sessio
     ByteArray old_pin, ByteArray new_pin);
 
 /**
- * @brief Executes a SecureErase command to erase all data from the Kinetic device.
+ * @brief Executes a `SecureErase`  command to erase all data from the Kinetic device.
  *
  * @param session   The connected KineticSession to use for the operation.
  * @param pin       PIN to send with operation, which must match the configured erase PIN.
@@ -105,7 +105,7 @@ KineticStatus KineticAdminClient_SecureErase(KineticSession const * const sessio
     ByteArray pin);
 
 /**
- * @brief Executes an InstantErase command to erase all data from the Kinetic device.
+ * @brief Executes an `InstantErase` operation to erase all data from the Kinetic device.
  *
  * @param session   The connected KineticSession to use for the operation.
  * @param pin       PIN to send with operation, which must match the configured erase PIN.
@@ -118,7 +118,7 @@ KineticStatus KineticAdminClient_InstantErase(KineticSession const * const sessi
 /**
  * @brief Sets the lock PIN of the Kinetic Device.
  *
- * @param session   The connected `KineticSession` to close. The session
+ * @param session   The connected KineticSession to close. The session
  *                  instance will be freed by this call after closing the
  *                  connection, so the pointer should not longer be used.
  * @param old_pin   Old erase PIN to change.
@@ -130,7 +130,7 @@ KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session
     ByteArray old_pin, ByteArray new_pin);
 
 /**
- * @brief Executes a LOCK command to lock the Kinetic device.
+ * @brief Executes a `LOCK` operation to lock the Kinetic device.
  *
  * @param session   The connected KineticSession to use for the operation.
  * @param pin       PIN to send with operation, which must match the configured lock PIN.
@@ -141,7 +141,7 @@ KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session
     ByteArray pin);
 
 /**
- * @brief Executes an UNLOCK command to unlock the Kinetic device.
+ * @brief Executes an `UNLOCK` operation to unlock the Kinetic device.
  *
  * @param session   The connected KineticSession to use for the operation.
  * @param pin       PIN to send with operation, which must match the configured lock PIN.
@@ -152,7 +152,7 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
     ByteArray pin);
 
 /**
- * @brief Executes a GETLOG command to retrieve specific configuration and/or
+ * @brief Executes a `GETLOG` operation to retrieve specific configuration and/or
  * operational data from the Kinetic Device.
  *
  * @param session   The connected KineticSession to use for the operation
@@ -160,17 +160,37 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
  * @param info      KineticLogInfo pointer, which will be assigned to
  *                  a dynamically allocated structure populated with
  *                  the requested data, if successful. The client should
- *                  call free() on this pointer in order to free the root
- *                  and any nested structures.
+ *                  call KineticAdminClient_FreeLogInfo() with this pointer
+ *                  in order to free all allocated memory.
  * @param closure   Optional closure. If specified, operation will be
  *                  executed in asynchronous mode, and closure callback
  *                  will be called upon completion in another thread.
  *
- * @return          Returns 0 upon success, -1 or the Kinetic status code
- *                  upon failure
+ * @return          Returns the resulting KineticStatus
  */
 KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
                                    KineticLogInfo_Type type,
+                                   KineticLogInfo** info,
+                                   KineticCompletionClosure* closure);
+/**
+ * @brief Executes a `GETLOG` operation to retrieve device-specific log info
+ * from the Kinetic Device via name/key.
+ *
+ * @param session   The connected KineticSession to use for the operation
+ * @param name      Device specific name to retrieve info for.
+ * @param info      KineticLogInfo pointer, which will be assigned to
+ *                  a dynamically allocated structure populated with
+ *                  the requested data, if successful. The client should
+ *                  call KineticAdminClient_FreeLogInfo() with this pointer
+ *                  in order to free all allocated memory.
+ * @param closure   Optional closure. If specified, operation will be
+ *                  executed in asynchronous mode, and closure callback
+ *                  will be called upon completion in another thread.
+ *
+ * @return          Returns the resulting KineticStatus
+ */
+KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession const * const session,
+                                   ByteArray name,
                                    KineticLogInfo** info,
                                    KineticCompletionClosure* closure);
 
@@ -195,19 +215,18 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const 
     int64_t version);
 
 /**
- * @brief Executes a SECURITY operation, setting one or more ACLs.
+ * @brief Executes a `SECURITY` operation, setting one or more ACLs.
  *
  * @param session       The connected KineticSession to use for the operation
  * @param ACLPath       Path to a JSON file containing one or more ACLs.
  *
- * @return              Returns 0 upon success, -1 or the Kinetic status code
- *                      upon failure.
+ * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
                                         const char *ACLPath);
 
 /**
- * @brief Executes a Firmware Download operation to update the firmware on the Kinetic device.
+ * @brief Executes a `Firmware Download` operation to update the firmware on the Kinetic device.
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param fw_path       Path to firmware update image file.

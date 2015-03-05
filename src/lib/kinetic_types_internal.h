@@ -152,6 +152,7 @@ typedef struct _KineticMessage {
     KineticProto_Command_Setup          setup;
     KineticProto_Command_GetLog         getLog;
     KineticProto_Command_GetLog_Type    getLogType;
+    KineticProto_Command_GetLog_Device  getLogDevice;
     KineticProto_Command_PinOperation   pinOp;
 } KineticMessage;
 

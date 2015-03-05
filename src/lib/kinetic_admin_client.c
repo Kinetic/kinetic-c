@@ -192,11 +192,36 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
     assert(session->connection != NULL);
     assert(info != NULL);
 
+    KineticProto_Command_GetLog_Type protoType =
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(type);
+    if (protoType == KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE) {
+        return KINETIC_STATUS_INVALID_LOG_TYPE;
+    }
+
     KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticBuilder_BuildGetLog(operation, type, info);
+    KineticBuilder_BuildGetLog(operation, protoType, BYTE_ARRAY_NONE, info);
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
+KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession const * const session,
+                                   ByteArray name,
+                                   KineticLogInfo** info,
+                                   KineticCompletionClosure* closure)
+{
+    assert(session != NULL);
+    assert(session->connection != NULL);
+    assert(info != NULL);
+
+    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    // Initialize request
+    KineticBuilder_BuildGetLog(operation, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, info);
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);

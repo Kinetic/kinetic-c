@@ -275,20 +275,28 @@ KineticStatus KineticBuilder_BuildP2POperation(KineticOperation* const op,
 *******************************************************************************/
 
 KineticStatus KineticBuilder_BuildGetLog(KineticOperation* const op,
-    KineticLogInfo_Type type,
-    KineticLogInfo** info)
+    KineticProto_Command_GetLog_Type type, ByteArray name, KineticLogInfo** info)
 {
     KineticOperation_ValidateOperation(op);
-    KineticProto_Command_GetLog_Type protoType =
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(type);
         
     op->request->command->header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG;
     op->request->command->header->has_messageType = true;
     op->request->command->body = &op->request->message.body;
     op->request->command->body->getLog = &op->request->message.getLog;
     op->request->command->body->getLog->types = &op->request->message.getLogType;
-    op->request->command->body->getLog->types[0] = protoType;
+    op->request->command->body->getLog->types[0] = type;
     op->request->command->body->getLog->n_types = 1;
+
+    if (type == KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE) {
+        if (name.data == NULL || name.len == 0) {
+            return KINETIC_STATUS_DEVICE_NAME_REQUIRED;
+        }
+        op->request->message.getLogDevice.name.data = name.data;
+        op->request->message.getLogDevice.name.len = name.len;
+        op->request->message.getLogDevice.has_name = true;
+        op->request->command->body->getLog->device = &op->request->message.getLogDevice;
+    }
+
     op->deviceInfo = info;
     op->callback = &KineticCallbacks_GetLog;
 

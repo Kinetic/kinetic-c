@@ -160,11 +160,6 @@ void test_KineticProtoStatusCode_to_KineticStatus_should_map_from_internal_to_pu
                                             (KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 100)));
 }
 
-void test_KineticProtoStatusCode_to_KineticStatus_should_ensure_all_device_status_codes_are_mapped(void)
-{
-    TEST_IGNORE_MESSAGE("TODO: Add support to status mapping test to ensure all statuses defined by the protocol are mapped to a public status."); 
-}
-
 void test_KineticProto_Command_Synchronization_from_KineticSynchronization_should_map_from_internal_to_public_type(void)
 {
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH,
@@ -212,6 +207,31 @@ void test_KineticProto_Command_Algorithm_from_KineticAlgorithm_should_map_from_p
         KineticProto_Command_Algorithm_from_KineticAlgorithm((KineticAlgorithm) - 19));
 }
 
+void test_KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type_should_convert_from_public_to_protobuf_type(void)
+{
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS));
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_TEMPERATURES));
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_CAPACITIES));
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_CONFIGURATION));
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_STATISTICS));
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_MESSAGES));
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_LIMITS));
+
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type((KineticLogInfo_Type)-1));
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type((KineticLogInfo_Type)((int)KINETIC_DEVICE_INFO_TYPE_LIMITS + 1)));
+    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
+        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type((KineticLogInfo_Type)1000));
+}
+
 void test_Copy_KineticProto_Command_Range_to_ByteBufferArray_should_copy_keys_into_byte_buffers(void)
 {
     ByteBuffer buffers[5];
@@ -219,5 +239,6 @@ void test_Copy_KineticProto_Command_Range_to_ByteBufferArray_should_copy_keys_in
         .buffers = buffers,
         .count = 5,
     };
+
     TEST_ASSERT_TRUE(Copy_KineticProto_Command_Range_to_ByteBufferArray(NULL, &array));
 }

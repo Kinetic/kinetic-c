@@ -117,7 +117,7 @@ void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_t
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, KINETIC_STATUS_SUCCESS);
+    KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, BYTE_ARRAY_NONE, &info, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_GetLog(&session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);

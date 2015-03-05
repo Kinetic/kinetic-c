@@ -370,8 +370,6 @@ KineticProto_Command_GetLog_Type KineticLogInfo_Type_to_KineticProto_Command_Get
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES; break;
     case KINETIC_DEVICE_INFO_TYPE_LIMITS:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS; break;
-    case KINETIC_DEVICE_INFO_TYPE_DEVICE:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE; break;
     default:
         protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE;
     };
@@ -436,6 +434,7 @@ void KineticMessage_Init(KineticMessage* const message)
     KineticProto_command_range__init(&message->keyRange);
     KineticProto_command_setup__init(&message->setup);
     KineticProto_command_get_log__init(&message->getLog);
+    KineticProto_command_get_log_device__init(&message->getLogDevice);
     KineticProto_command_security__init(&message->security);
     KineticProto_command_pin_operation__init(&message->pinOp);
 }

@@ -28,10 +28,10 @@
  *
  * @param config A configuration struct.
  *
- * @return          Returns a pointer to a `KineticClient`. You need to pass 
+ * @return          Returns a pointer to a KineticClient. You need to pass 
  *                  this pointer to KineticClient_CreateSession() to create 
  *                  new connections. 
- *                  Once you are finished will the `KineticClient`, and there
+ *                  Once you are finished will the KineticClient, and there
  *                  are no active connections. The pointer should be release
  *                  with KineticClient_Shutdown()
  */
@@ -48,7 +48,7 @@ void KineticClient_Shutdown(KineticClient * const client);
 /**
  * @brief Creates a session with the Kinetic Device per specified configuration.
  *
- * @param config   `KineticSessionConfig` structure which must be configured
+ * @param config   KineticSessionConfig structure which must be configured
  *                 by the client prior to creating the device connection.
  *   .host             Host name or IP address to connect to
  *   .port             Port to establish socket connection on
@@ -56,16 +56,16 @@ void KineticClient_Shutdown(KineticClient * const client);
  *   .identity         Identity to use for the session
  *   .hmacKey          Key to use for HMAC calculations (NULL-terminated string)
  *   .pin              PIN to use for PIN-based operations
- * @param client    The `KineticClient` pointer returned from KineticClient_Init()
+ * @param client    The KineticClient pointer returned from KineticClient_Init()
  * @param session   Pointer to a KineticSession pointer that will be populated
  *                  with the allocated/created session upon success.
  *
- * @return          Returns the resulting `KineticStatus`, and `session`
+ * @return          Returns the resulting KineticStatus, and `session`
  *                  will be populated with a pointer to the session instance
  *                  upon success. The client should call
  *                  KineticClient_DestroySession() in order to shutdown a
  *                  connection and cleanup resources when done using a
- *                  `KineticSession`.
+ *                  KineticSession.
  */
 KineticStatus KineticClient_CreateSession(KineticSessionConfig * const config,
     KineticClient * const client, KineticSession** session);
@@ -73,7 +73,7 @@ KineticStatus KineticClient_CreateSession(KineticSessionConfig * const config,
 /**
  * @brief Closes the connection to a host.
  *
- * @param session   The connected `KineticSession` to close. The session
+ * @param session   The connected KineticSession to close. The session
  *                  instance will be freed by this call after closing the
  *                  connection, so the pointer should not longer be used.
  *
@@ -82,7 +82,7 @@ KineticStatus KineticClient_CreateSession(KineticSessionConfig * const config,
 KineticStatus KineticClient_DestroySession(KineticSession * const session);
 
 /**
- * @brief Executes a NOOP command to test whether the Kinetic Device is operational.
+ * @brief Executes a `NOOP` operation to test whether the Kinetic Device is operational.
  *
  * @param session       The connected KineticSession to use for the operation.
  *
@@ -91,7 +91,7 @@ KineticStatus KineticClient_DestroySession(KineticSession * const session);
 KineticStatus KineticClient_NoOp(KineticSession const * const session);
 
 /**
- * @brief Executes a PUT command to store/update an entry on the Kinetic Device.
+ * @brief Executes a `PUT` operation to store/update an entry on the Kinetic Device.
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to store. 'value' must
@@ -110,7 +110,7 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
                                 KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a FLUSHALLDATA command to flush pending PUTs or DELETEs.
+ * @brief Executes a `FLUSHALLDATA` operation to flush pending PUTs or DELETEs.
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param closure       Optional closure. If specified, operation will be
@@ -123,7 +123,7 @@ KineticStatus KineticClient_Flush(KineticSession const * const session,
                                   KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GET command to retrieve an entry from the Kinetic Device.
+ * @brief Executes a `GET` operation to retrieve an entry from the Kinetic Device.
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to retrieve. 'value' will
@@ -141,7 +141,7 @@ KineticStatus KineticClient_Get(KineticSession const * const session,
                                 KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GETPREVIOUS command to retrieve the next entry from the Kinetic Device.
+ * @brief Executes a `GETPREVIOUS` operation to retrieve the next entry from the Kinetic Device.
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to retrieve. 'value' will
@@ -163,7 +163,7 @@ KineticStatus KineticClient_GetPrevious(KineticSession const * const session,
                                         KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GETNEXT command to retrieve the next entry from the Kinetic Device.
+ * @brief Executes a `GETNEXT` operation to retrieve the next entry from the Kinetic Device.
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to retrieve. 'value' will
@@ -185,7 +185,7 @@ KineticStatus KineticClient_GetNext(KineticSession const * const session,
                                     KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a DELETE command to delete an entry from the Kinetic Device
+ * @brief Executes a `DELETE` operation to delete an entry from the Kinetic Device
  *
  * @param session       The connected KineticSession to use for the operation.
  * @param entry         Key/value entry for object to delete. 'value' is
@@ -201,7 +201,7 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
                                    KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a GETKEYRANGE command to retrieve a set of keys in the range
+ * @brief Executes a `GETKEYRANGE` operation to retrieve a set of keys in the range
  * specified range from the Kinetic Device
  *
  * @param session       The connected KineticSession to use for the operation
@@ -222,7 +222,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
                                         KineticCompletionClosure* closure);
 
 /**
- * @brief Executes a PEER2PEERPUSH operation allows a client to instruct a Kinetic
+ * @brief Executes a `PEER2PEERPUSH` operation allows a client to instruct a Kinetic
  * Device to copy a set of keys (and associated value and metadata) to another
  * Kinetic Device.
  *
