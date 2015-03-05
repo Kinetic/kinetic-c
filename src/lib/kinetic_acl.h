@@ -20,7 +20,7 @@
 #ifndef KINETIC_ACL_H
 #define KINETIC_ACL_H
 
-#include "acl_types.h"
+#include "kinetic_acl_types.h"
 #include "kinetic_proto.h"
 
 /* Attempt to instantiate an ACL structure based on the JSON data

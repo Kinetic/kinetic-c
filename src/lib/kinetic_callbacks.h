@@ -39,6 +39,7 @@ KineticStatus KineticCallbacks_P2POperation(KineticOperation* const operation, K
 *******************************************************************************/
 KineticStatus KineticCallbacks_GetLog(KineticOperation* const operation, KineticStatus const status);
 KineticStatus KineticCallbacks_SetClusterVersion(KineticOperation* const operation, KineticStatus const status);
+KineticStatus KineticCallbacks_SetACL(KineticOperation* const operation, KineticStatus const status);
 KineticStatus KineticCallbacks_UpdateFirmware(KineticOperation* const operation, KineticStatus const status);
 
 #endif // _KINETIC_CALLBACKS_H

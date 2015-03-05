@@ -27,6 +27,7 @@
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include "kinetic_request.h"
+#include "kinetic_acl.h"
 
 #include <stdlib.h>
 #include <errno.h>
@@ -216,6 +217,24 @@ KineticStatus KineticCallbacks_SetClusterVersion(KineticOperation* const operati
     if (status == KINETIC_STATUS_SUCCESS) {
         KineticSession_SetClusterVersion(operation->connection->pSession, operation->pendingClusterVersion);
         operation->pendingClusterVersion = -1; // Invalidate
+    }
+    return status;
+}
+
+KineticStatus KineticCallbacks_SetACL(KineticOperation* const operation, KineticStatus const status)
+{
+    KINETIC_ASSERT(operation != NULL);
+    KINETIC_ASSERT(operation->connection != NULL);
+    if (operation->request != NULL &&
+        operation->request->command != NULL &&
+        operation->request->command->body != NULL &&
+        operation->request->command->body->security != NULL &&
+        operation->request->command->body->security->acl != NULL)
+    {
+        struct ACL* acls = calloc(1, sizeof(struct ACL));
+        acls->ACL_count = operation->request->command->body->security->n_acl,
+        acls->ACLs = operation->request->command->body->security->acl,
+        KineticACL_Free(acls);
     }
     return status;
 }

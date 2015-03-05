@@ -840,7 +840,7 @@ void test_KineticBuilder_BuildSetACL_should_build_a_SECURITY_operation(void)
 
     TEST_ASSERT_EQUAL_PTR(Request.command->body->security->acl, ACLs.ACLs);
 
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_SetACL, Operation.callback);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetACL, Operation.timeoutSeconds);
 }

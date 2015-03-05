@@ -19,7 +19,6 @@
 */
 #include "unity.h"
 #include "kinetic_acl.h"
-#include "acl_types.h"
 
 #include <string.h>
 #include <stdio.h>

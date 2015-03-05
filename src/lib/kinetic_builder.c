@@ -28,6 +28,7 @@
 #include "kinetic_allocator.h"
 #include "kinetic_logger.h"
 #include "kinetic_request.h"
+#include "kinetic_acl.h"
 #include "kinetic_callbacks.h"
 
 #include <stdlib.h>
@@ -410,7 +411,7 @@ KineticStatus KineticBuilder_BuildSetACL(KineticOperation* const op,
     op->request->command->body->security->n_acl = ACLs->ACL_count;
     op->request->command->body->security->acl = ACLs->ACLs;
 
-    op->callback = &KineticCallbacks_Basic;
+    op->callback = &KineticCallbacks_SetACL;
     op->timeoutSeconds = KineticOperation_TimeoutSetACL;
 
     return KINETIC_STATUS_SUCCESS;
