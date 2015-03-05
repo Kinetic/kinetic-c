@@ -25,6 +25,7 @@
 #include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
@@ -91,7 +92,7 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildGetKeyRange_Expect(&operation, &keyRange, &keyArray);
+    KineticBuilder_BuildGetKeyRange_ExpectAndReturn(&operation, &keyRange, &keyArray, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_BUFFER_OVERRUN);
 
     KineticStatus status = KineticClient_GetKeyRange(&Session, &keyRange, &keyArray, NULL);

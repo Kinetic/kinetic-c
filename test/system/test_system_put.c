@@ -31,7 +31,7 @@ static uint8_t ValueData[KINETIC_OBJ_SIZE];
 static ByteBuffer ValueBuffer;
 void setUp(void)
 {
-    SystemTestSetup(2);
+    SystemTestSetup(1);
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "PUT test key");
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");
     VersionBuffer = ByteBuffer_CreateAndAppendCString(VersionData, sizeof(VersionData), "v1.0");

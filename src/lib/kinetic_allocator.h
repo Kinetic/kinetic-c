@@ -38,4 +38,6 @@ void KineticAllocator_FreeOperation(KineticOperation* operation);
 KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength);
 void KineticAllocator_FreeKineticResponse(KineticResponse * response);
 
+void KineticAllocator_FreeP2PProtobuf(KineticProto_Command_P2POperation* proto_p2pOp);
+
 #endif // _KINETIC_ALLOCATOR

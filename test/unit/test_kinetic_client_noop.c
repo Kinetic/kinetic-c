@@ -23,6 +23,7 @@
 #include "kinetic_types_internal.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
@@ -53,7 +54,7 @@ void test_KineticClient_NoOp_should_execute_NOOP_operation_in_asynchronous_mode(
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildNoop_Expect(&operation);
+    KineticBuilder_BuildNoop_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_NoOp(&Session);

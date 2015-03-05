@@ -26,12 +26,13 @@
 #include "kinetic_device_info.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_auth.h"
 #include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
 #include "mock_kinetic_allocator.h"
-#include "mock_acl.h"
+#include "mock_kinetic_acl.h"
 #include "kinetic_logger.h"
 #include "kinetic_proto.h"
 #include "protobuf-c/protobuf-c.h"
@@ -59,7 +60,7 @@ void test_KineticClient_GetLog_should_request_the_specified_log_data_from_the_de
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
+    KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_GetLog(&Session,

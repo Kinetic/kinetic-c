@@ -22,6 +22,7 @@
 #include "kinetic_types.h"
 #include "kinetic_device_info.h"
 #include "kinetic_types_internal.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
@@ -55,7 +56,7 @@ void test_KineticClient_flush_should_get_success_if_no_writes_are_in_progress(vo
     KineticSession session = {.connection = &connection};
 
     KineticAllocator_NewOperation_ExpectAndReturn(&connection, &operation);
-    KineticOperation_BuildFlush_Expect(&operation);
+    KineticBuilder_BuildFlush_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Flush(&session, NULL);

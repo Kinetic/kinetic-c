@@ -18,6 +18,8 @@
 *
 */
 
+#include "unity.h"
+#include "unity_helper.h"
 #include "kinetic_allocator.h"
 #include "kinetic_resourcewaiter_types.h"
 #include "mock_kinetic_resourcewaiter.h"
@@ -26,8 +28,6 @@
 #include "kinetic_proto.h"
 #include "byte_array.h"
 #include "mock_protobuf-c.h"
-#include "unity.h"
-#include "unity_helper.h"
 #include "mock_kinetic_memory.h"
 #include <stdlib.h>
 #include <pthread.h>
@@ -212,4 +212,9 @@ void test_KineticAllocator_FreeOperation_should_free_response_if_its_not_null(vo
     KineticFree_Expect(&op);
 
     KineticAllocator_FreeOperation(&op);
+}
+
+void test_KineticAllocator_FreeP2PProtobuf_should_free_protobuf_message_P2P_operation_tree(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Need to test P2P protobuf free");
 }
