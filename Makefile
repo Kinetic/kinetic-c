@@ -79,7 +79,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_semaphore.o \
 	$(OUT_DIR)/kinetic_countingsemaphore.o \
 	$(OUT_DIR)/kinetic_resourcewaiter.o \
-	$(OUT_DIR)/acl.o \
+	$(OUT_DIR)/kinetic_acl.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/kinetic_admin_client.o \
@@ -175,7 +175,7 @@ ci: stop_sims start_sims all stop_sims
 
 json: ${OUT_DIR}/libjson-c.a
 
-$(OUT_DIR)/acl.o: json
+$(OUT_DIR)/kinetic_acl.o: json
 
 json_install: json
 	cd ${JSONC} && \

@@ -36,7 +36,7 @@ void test_Secure_should_set_ACL_and_only_be_able_to_executed_permitted_operation
     /* Set the system an ACL that retains the default HMAC key and all
      * permissions on identity 1, but restricts identity 2 and changes
      * the HMAC key. */
-    SystemTestSetup(2);
+    SystemTestSetup(1);
     const char *ACL_path = TEST_DIR("system_test.json");
     KineticStatus res = KineticAdminClient_SetACL(Fixture.adminSession,
         ACL_path);

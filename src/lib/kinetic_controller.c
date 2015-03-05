@@ -216,7 +216,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
             connetionInfoReceived = true;
             logTag = statusTag;
             logAtLevel = 2;
-            protoLogAtLevel = 2;
+            protoLogAtLevel = 3;
         }
         else {
             LOG0("WARNING: Unsolicited status received. Connection being terminated by remote!");
@@ -240,6 +240,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
         (void*)connection->messageBus,
         connection->socket, (long long)seq_id,
         response->header.protobufLength, response->header.valueLength);
+    // if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS)
     KineticLogger_LogProtobuf(protoLogAtLevel, response->proto);
 
     KineticAllocator_FreeKineticResponse(response);
