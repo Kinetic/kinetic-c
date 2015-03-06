@@ -150,7 +150,7 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_and_command
 void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_null_for_operation(void)
 {
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), NULL);
-    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+    KineticOperation * operation = KineticAllocator_NewOperation(&Session);
     TEST_ASSERT_NULL(operation);
 }
 
@@ -166,7 +166,7 @@ void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), NULL);
     KineticFree_Expect(&op);
 
-    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+    KineticOperation * operation = KineticAllocator_NewOperation(&Session);
 
     TEST_ASSERT_NULL(operation);
 }
@@ -183,7 +183,7 @@ void test_KineticAllocator_NewOperation_should_initialize_operation_and_request(
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), &request);
 
     KineticRequest_Init_Expect(&request, &Session);
-    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+    KineticOperation * operation = KineticAllocator_NewOperation(&Session);
 
     TEST_ASSERT_NOT_NULL(operation);
 }

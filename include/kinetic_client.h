@@ -88,7 +88,7 @@ KineticStatus KineticClient_DestroySession(KineticSession * const session);
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_NoOp(KineticSession const * const session);
+KineticStatus KineticClient_NoOp(KineticSession* const session);
 
 /**
  * @brief Executes a `PUT` operation to store/update an entry on the Kinetic Device.
@@ -105,7 +105,7 @@ KineticStatus KineticClient_NoOp(KineticSession const * const session);
  * 
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_Put(KineticSession const * const session,
+KineticStatus KineticClient_Put(KineticSession* const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure);
 
@@ -119,7 +119,7 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
  *                      
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_Flush(KineticSession const * const session,
+KineticStatus KineticClient_Flush(KineticSession* const session,
                                   KineticCompletionClosure* closure);
 
 /**
@@ -136,7 +136,7 @@ KineticStatus KineticClient_Flush(KineticSession const * const session,
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_Get(KineticSession const * const session,
+KineticStatus KineticClient_Get(KineticSession* const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure);
 
@@ -158,7 +158,7 @@ KineticStatus KineticClient_Get(KineticSession const * const session,
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_GetPrevious(KineticSession const * const session,
+KineticStatus KineticClient_GetPrevious(KineticSession* const session,
                                         KineticEntry* const entry,
                                         KineticCompletionClosure* closure);
 
@@ -180,7 +180,7 @@ KineticStatus KineticClient_GetPrevious(KineticSession const * const session,
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_GetNext(KineticSession const * const session,
+KineticStatus KineticClient_GetNext(KineticSession* const session,
                                     KineticEntry* const entry,
                                     KineticCompletionClosure* closure);
 
@@ -196,7 +196,7 @@ KineticStatus KineticClient_GetNext(KineticSession const * const session,
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticClient_Delete(KineticSession const * const session,
+KineticStatus KineticClient_Delete(KineticSession* const session,
                                    KineticEntry* const entry,
                                    KineticCompletionClosure* closure);
 
@@ -217,7 +217,7 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
  * @return              Returns 0 upon success, -1 or the Kinetic status code
  *                      upon failure
  */
-KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
+KineticStatus KineticClient_GetKeyRange(KineticSession* const session,
                                         KineticKeyRange* range, ByteBufferArray* keys,
                                         KineticCompletionClosure* closure);
 
@@ -241,7 +241,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
  *                      You'll need to check the resultStatus in the p2pOp structure
  *                      to check the status of the individual P2P operations.
  */
-KineticStatus KineticClient_P2POperation(KineticSession const * const session,
+KineticStatus KineticClient_P2POperation(KineticSession* const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure);
 

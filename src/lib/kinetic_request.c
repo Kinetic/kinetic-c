@@ -109,7 +109,7 @@ KineticStatus KineticRequest_PackMessage(KineticOperation *operation,
     LOGF2("[PDU TX] pdu: %p, session: %p, bus: %p, "
         "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, msgType: %02x",
         (void*)operation->request,
-        (void*)operation->connection->pSession, (void*)operation->connection->messageBus,
+        (void*)operation->session, (void*)operation->connection->messageBus,
         operation->connection->socket, (long long)request->message.header.sequence,
         header.protobufLength, header.valueLength,
         (void*)operation, request->message.header.messageType);

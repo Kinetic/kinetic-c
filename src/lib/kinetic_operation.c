@@ -92,7 +92,7 @@ static KineticStatus send_request_in_lock(KineticOperation* const op)
     LOGF3("\nSending PDU via fd=%d", op->connection->socket);
     KineticRequest* request = op->request;
 
-    int64_t seq_id = KineticSession_GetNextSequenceCount(op->connection->pSession);
+    int64_t seq_id = KineticSession_GetNextSequenceCount(op->session);
     KINETIC_ASSERT(request->message.header.sequence == KINETIC_SEQUENCE_NOT_YET_BOUND);
     request->message.header.sequence = seq_id;
 
@@ -104,7 +104,7 @@ static KineticStatus send_request_in_lock(KineticOperation* const op)
 
     log_request_seq_id(op->connection->socket, seq_id, request->message.header.messageType);
 
-    KineticSession *session = op->connection->pSession;
+    KineticSession *session = op->session;
     KineticStatus status = KineticRequest_PopulateAuthentication(&session->config,
         op->request, op->pin);
     if (status != KINETIC_STATUS_SUCCESS) {

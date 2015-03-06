@@ -97,7 +97,7 @@ void test_KineticClient_Get_should_execute_GET_operation(void)
     };
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildGet_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_CLUSTER_MISMATCH);
 
@@ -120,7 +120,7 @@ void test_KineticClient_Get_should_execute_GET_operation_and_retrieve_only_metad
 
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildGet_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

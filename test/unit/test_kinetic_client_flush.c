@@ -55,7 +55,7 @@ void test_KineticClient_flush_should_get_success_if_no_writes_are_in_progress(vo
     KineticOperation operation;
     KineticSession session = {.connection = &connection};
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildFlush_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -69,7 +69,7 @@ void test_KineticClient_flush_should_expose_memory_error_from_CreateOperation(vo
     KineticConnection connection;
     KineticSession session = {.connection = &connection};
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&connection, NULL);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, NULL);
     
     KineticStatus status = KineticClient_Flush(&session, NULL);
 

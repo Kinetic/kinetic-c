@@ -455,12 +455,13 @@ static void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr, KineticS
     };
 }
 
-void KineticOperation_Init(KineticOperation* op, KineticSession const * const session)
+void KineticOperation_Init(KineticOperation* op, KineticSession * const session)
 {
     KINETIC_ASSERT(op != NULL);
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(session->connection != NULL);
     *op = (KineticOperation) {
+        .session = session,
         .connection = session->connection,
         .timeoutSeconds = session->timeoutSeconds,
     };

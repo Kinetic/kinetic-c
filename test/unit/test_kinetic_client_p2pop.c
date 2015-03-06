@@ -53,7 +53,7 @@ void test_KineticClient_P2POperation_should_execute_a_p2p_operation(void)
     KineticOperation operation;
     KineticP2P_Operation p2pOp;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildP2POperation_ExpectAndReturn(&operation, &p2pOp, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

@@ -90,7 +90,7 @@ KineticStatus KineticAdminClient_DestroySession(KineticSession * const session);
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const session,
+KineticStatus KineticAdminClient_SetErasePin(KineticSession * const session,
     ByteArray old_pin, ByteArray new_pin);
 
 /**
@@ -101,7 +101,7 @@ KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const sessio
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session,
+KineticStatus KineticAdminClient_SecureErase(KineticSession * const session,
     ByteArray pin);
 
 /**
@@ -112,7 +112,7 @@ KineticStatus KineticAdminClient_SecureErase(KineticSession const * const sessio
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session,
+KineticStatus KineticAdminClient_InstantErase(KineticSession * const session,
     ByteArray pin);
 
 /**
@@ -126,7 +126,7 @@ KineticStatus KineticAdminClient_InstantErase(KineticSession const * const sessi
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session,
+KineticStatus KineticAdminClient_SetLockPin(KineticSession * const session,
     ByteArray old_pin, ByteArray new_pin);
 
 /**
@@ -137,7 +137,7 @@ KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session,
+KineticStatus KineticAdminClient_LockDevice(KineticSession * const session,
     ByteArray pin);
 
 /**
@@ -148,7 +148,7 @@ KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const session,
+KineticStatus KineticAdminClient_UnlockDevice(KineticSession * const session,
     ByteArray pin);
 
 /**
@@ -168,7 +168,7 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
  *
  * @return          Returns the resulting KineticStatus
  */
-KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
+KineticStatus KineticAdminClient_GetLog(KineticSession * const session,
                                    KineticLogInfo_Type type,
                                    KineticLogInfo** info,
                                    KineticCompletionClosure* closure);
@@ -189,7 +189,7 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
  *
  * @return          Returns the resulting KineticStatus
  */
-KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession const * const session,
+KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession * const session,
                                    ByteArray name,
                                    KineticLogInfo** info,
                                    KineticCompletionClosure* closure);
@@ -200,7 +200,7 @@ KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession const * con
  * @param session       The connected KineticSession to use for the operation
  * @param info          The KineticLogInfo result to free.
  */
-void KineticAdminClient_FreeLogInfo(KineticSession const * const session,
+void KineticAdminClient_FreeLogInfo(KineticSession * const session,
                                   KineticLogInfo* info);
 
 /**
@@ -211,7 +211,7 @@ void KineticAdminClient_FreeLogInfo(KineticSession const * const session,
  *
  * @return          Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
+KineticStatus KineticAdminClient_SetClusterVersion(KineticSession * const session,
     int64_t version);
 
 /**
@@ -222,7 +222,7 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const 
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
+KineticStatus KineticAdminClient_SetACL(KineticSession * const session,
                                         const char *ACLPath);
 
 /**
@@ -233,7 +233,7 @@ KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
  *
  * @return              Returns the resulting KineticStatus.
  */
-KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
+KineticStatus KineticAdminClient_UpdateFirmware(KineticSession * const session,
     char const * const fw_path);
 
 #endif // _KINETIC_ADMIN_CLIENT_H

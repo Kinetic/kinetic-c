@@ -28,7 +28,7 @@
 #include <sys/stat.h>
 #include <sys/file.h>
 
-static bool create_entries(KineticSession const * const session, const int count);
+static bool create_entries(KineticSession * const session, const int count);
 
 int main(int argc, char** argv)
 {
@@ -114,7 +114,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-static bool create_entries(KineticSession const * const session, const int count)
+static bool create_entries(KineticSession * const session, const int count)
 {
     static const ssize_t sz = 20;
     char key_buf[sz];

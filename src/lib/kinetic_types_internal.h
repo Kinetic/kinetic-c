@@ -190,6 +190,7 @@ typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operat
 
 // Kinetic Operation
 struct _KineticOperation {
+    KineticSession* session;
     KineticConnection* connection;
     KineticRequest* request;
     KineticResponse* response;
@@ -239,7 +240,7 @@ KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(Kineti
 void KineticConnection_Init(KineticConnection* const con);
 void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con);
 void KineticMessage_Init(KineticMessage* const message);
-void KineticOperation_Init(KineticOperation* op, KineticSession const * const session);
+void KineticOperation_Init(KineticOperation* op, KineticSession * const session);
 void KineticRequest_Init(KineticRequest* pdu, KineticSession const * const session);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

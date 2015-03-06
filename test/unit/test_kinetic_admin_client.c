@@ -116,7 +116,7 @@ void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_t
     KineticLogInfo* info;
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, BYTE_ARRAY_NONE, &info, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -137,7 +137,7 @@ void test_KineticAdminClient_SecureErase_should_build_and_execute_a_SECURE_ERASE
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildErase_ExpectAndReturn(&operation, true, &pin, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -176,7 +176,7 @@ void test_KineticAdminClient_InstantErase_should_build_and_execute_an_INSTANT_SE
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildErase_ExpectAndReturn(&operation, false, &pin, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -214,7 +214,7 @@ void test_KineticAdminClient_LockDevice_should_build_and_execute_an_LOCK_with_PI
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildLockUnlock_ExpectAndReturn(&operation, true, &pin, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -252,7 +252,7 @@ void test_KineticAdminClient_UnlockDevice_should_build_and_execute_an_LOCK_with_
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildLockUnlock_ExpectAndReturn(&operation, false, &pin, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -286,7 +286,7 @@ void test_KineticAdminClient_SetClusterVersion_should_build_and_execute_operatio
     };
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildSetClusterVersion_ExpectAndReturn(&operation, 1402, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -305,7 +305,7 @@ void test_KineticAdminClient_UpdateFirmware_should_build_and_execute_operation(v
     KineticOperation operation;
     const char* path = "some/firmware/update.file";
 
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildUpdateFirmware_ExpectAndReturn(&operation, path, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -324,7 +324,7 @@ void test_KineticAdminClient_UpdateFirmware_should_report_failure_if_failed_to_b
     KineticOperation operation;
     const char* path = "some/firmware/update.file";
 
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildUpdateFirmware_ExpectAndReturn(&operation, path, KINETIC_STATUS_INVALID_REQUEST);
 
     KineticStatus status = KineticAdminClient_UpdateFirmware(&session, path);

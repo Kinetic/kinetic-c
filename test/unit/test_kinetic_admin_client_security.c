@@ -76,7 +76,7 @@ void test_KineticAdminClient_SetACL_should_set_an_ACL(void)
     const char *ACL_path = TEST_DIR("ex1.json");
 
     KineticACL_LoadFromFile_ExpectAndReturn(ACL_path, &ACLs, ACL_OK);
-    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildSetACL_ExpectAndReturn(&operation, ACLs, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

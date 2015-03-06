@@ -24,7 +24,7 @@
 #include "kinetic_types_internal.h"
 #include "bus.h"
 
-KineticStatus KineticController_Init(KineticSession const * const session);
+KineticStatus KineticController_Init(KineticSession * const session);
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure);
 
 void KineticController_HandleUnexpectedResponse(void *msg,

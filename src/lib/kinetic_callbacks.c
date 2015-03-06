@@ -215,7 +215,7 @@ KineticStatus KineticCallbacks_SetClusterVersion(KineticOperation* const operati
     KINETIC_ASSERT(operation != NULL);
     KINETIC_ASSERT(operation->connection != NULL);
     if (status == KINETIC_STATUS_SUCCESS) {
-        KineticSession_SetClusterVersion(operation->connection->pSession, operation->pendingClusterVersion);
+        KineticSession_SetClusterVersion(operation->session, operation->pendingClusterVersion);
         operation->pendingClusterVersion = -1; // Invalidate
     }
     return status;

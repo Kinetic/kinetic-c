@@ -132,19 +132,19 @@ KineticStatus KineticClient_DestroySession(KineticSession* const session)
     return status;
 }
 
-KineticStatus KineticClient_NoOp(KineticSession const * const session)
+KineticStatus KineticClient_NoOp(KineticSession* const session)
 {
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(session->connection != NULL);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticBuilder_BuildNoop(operation);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticClient_Put(KineticSession const * const session,
+KineticStatus KineticClient_Put(KineticSession* const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure)
 {
@@ -156,11 +156,8 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     if (entry->value.array.len > 0) {
         KINETIC_ASSERT(entry->value.array.data != NULL);
     }
-    
-    KINETIC_ASSERT(session->connection->pSession == session);
-    KINETIC_ASSERT(session->connection == session->connection->pSession->connection);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -176,13 +173,13 @@ KineticStatus KineticClient_Put(KineticSession const * const session,
     return res;
 }
 
-KineticStatus KineticClient_Flush(KineticSession const * const session,
+KineticStatus KineticClient_Flush(KineticSession* const session,
                                   KineticCompletionClosure* closure)
 {
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(session->connection != NULL);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
 
     // Initialize request
@@ -209,7 +206,7 @@ typedef enum {
 } GET_COMMAND;
 
 static KineticStatus handle_get_command(GET_COMMAND cmd,
-                                        KineticSession const * const session,
+                                        KineticSession* const session,
                                         KineticEntry* const entry,
                                         KineticCompletionClosure* closure)
 {
@@ -222,7 +219,7 @@ static KineticStatus handle_get_command(GET_COMMAND cmd,
         return KINETIC_STATUS_MISSING_VALUE_BUFFER;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {
         return KINETIC_STATUS_MEMORY_ERROR;
     }
@@ -247,28 +244,28 @@ static KineticStatus handle_get_command(GET_COMMAND cmd,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_Get(KineticSession const * const session,
+KineticStatus KineticClient_Get(KineticSession* const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure)
 {
     return handle_get_command(CMD_GET, session, entry, closure);
 }
 
-KineticStatus KineticClient_GetPrevious(KineticSession const * const session,
+KineticStatus KineticClient_GetPrevious(KineticSession* const session,
                                         KineticEntry* const entry,
                                         KineticCompletionClosure* closure)
 {
     return handle_get_command(CMD_GET_PREVIOUS, session, entry, closure);
 }
 
-KineticStatus KineticClient_GetNext(KineticSession const * const session,
+KineticStatus KineticClient_GetNext(KineticSession* const session,
                                     KineticEntry* const entry,
                                     KineticCompletionClosure* closure)
 {
     return handle_get_command(CMD_GET_NEXT, session, entry, closure);
 }
 
-KineticStatus KineticClient_Delete(KineticSession const * const session,
+KineticStatus KineticClient_Delete(KineticSession* const session,
                                    KineticEntry* const entry,
                                    KineticCompletionClosure* closure)
 {
@@ -276,7 +273,7 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
     KINETIC_ASSERT(session->connection != NULL);
     KINETIC_ASSERT(entry != NULL);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -286,7 +283,7 @@ KineticStatus KineticClient_Delete(KineticSession const * const session,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
+KineticStatus KineticClient_GetKeyRange(KineticSession* const session,
                                         KineticKeyRange* range,
                                         ByteBufferArray* keys,
                                         KineticCompletionClosure* closure)
@@ -298,7 +295,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
     KINETIC_ASSERT(keys->buffers != NULL);
     KINETIC_ASSERT(keys->count > 0);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -308,7 +305,7 @@ KineticStatus KineticClient_GetKeyRange(KineticSession const * const session,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticClient_P2POperation(KineticSession const * const session,
+KineticStatus KineticClient_P2POperation(KineticSession* const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure)
 {
@@ -316,7 +313,7 @@ KineticStatus KineticClient_P2POperation(KineticSession const * const session,
     KINETIC_ASSERT(session->connection != NULL);
     KINETIC_ASSERT(p2pOp != NULL);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request

@@ -91,7 +91,7 @@ void test_KineticClient_GetKeyRange_should_return_a_list_of_keys_within_the_spec
     };
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildGetKeyRange_ExpectAndReturn(&operation, &keyRange, &keyArray, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_BUFFER_OVERRUN);
 

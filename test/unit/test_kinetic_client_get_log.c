@@ -59,7 +59,7 @@ void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_t
     KineticLogInfo* info;
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, BYTE_ARRAY_NONE, &info, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
@@ -86,7 +86,7 @@ void test_KineticAdminClient_GetDeviceSpecificLog_should_request_the_specified_d
     KineticLogInfo* info;
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &info, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 

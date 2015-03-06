@@ -100,50 +100,41 @@ void KineticAllocator_FreeKineticResponse(KineticResponse * response)
     KineticFree(response);
 }
 
-KineticOperation* KineticAllocator_NewOperation(KineticConnection* const connection)
+KineticOperation* KineticAllocator_NewOperation(KineticSession* const session)
 {
-    KINETIC_ASSERT(connection != NULL);
-    KINETIC_ASSERT(connection->pSession != NULL);
-    LOGF3("Allocating new operation on connection (0x%0llX)", connection);
+    KINETIC_ASSERT(session != NULL);
+
+    LOGF3("Allocating new operation on session %p", (void*)session);
     KineticOperation* newOperation =
         (KineticOperation*)KineticCalloc(1, sizeof(KineticOperation));
     if (newOperation == NULL) {
-        LOGF0("Failed allocating new operation on connection (0x%0llX)!", connection);
+        LOGF0("Failed allocating new operation on session %p", (void*)session);
         return NULL;
     }
-    KineticOperation_Init(newOperation, connection->pSession);
-    LOGF3("Allocating new PDU on connection (0x%0llX)", connection);
+    KineticOperation_Init(newOperation, session);
     newOperation->request = (KineticRequest*)KineticCalloc(1, sizeof(KineticRequest));
     if (newOperation->request == NULL) {
-        LOG0("Failed allocating new PDU!");
+        LOGF0("Failed allocating new PDU on session %p", (void*)session);
         KineticFree(newOperation);
         return NULL;
     }
-    KineticRequest_Init(newOperation->request, connection->pSession);
-    LOGF3("Allocated new operation (0x%0llX) on connection (0x%0llX)", newOperation, connection);
+    KineticRequest_Init(newOperation->request, session);
     return newOperation;
 }
 
 void KineticAllocator_FreeOperation(KineticOperation* operation)
 {
     KINETIC_ASSERT(operation != NULL);
-    KineticConnection* const connection = operation->connection;
-    LOGF3("Freeing operation (0x%0llX) on connection (0x%0llX)", operation, connection);
+    LOGF3("Freeing operation %p on session %p", (void*)operation, (void*)operation->session);
     if (operation->request != NULL) {
-        LOGF3("Freeing request PDU (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)",
-            operation->request, operation, connection);
         KineticFree(operation->request);
-        LOGF3("Freed PDU (0x%0llX)", operation->request);
         operation->request = NULL;
     }
     if (operation->response != NULL) {
-        LOGF3("Freeing response (0x%0llX) from operation (0x%0llX) on connection (0x%0llX)",
-            operation->response, operation, connection);
         KineticAllocator_FreeKineticResponse(operation->response);
         operation->response = NULL;
     }
     KineticFree(operation);
-    LOGF3("Freed operation (0x%0llX) on connection (0x%0llX)", operation, connection);
 }
 
 void KineticAllocator_FreeP2PProtobuf(KineticProto_Command_P2POperation* proto_p2pOp)

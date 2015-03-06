@@ -54,7 +54,7 @@ KineticStatus KineticAdminClient_DestroySession(KineticSession * const session)
 }
 
 
-KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const session,
+KineticStatus KineticAdminClient_SetErasePin(KineticSession * const session,
     ByteArray old_pin, ByteArray new_pin)
 {
     KineticStatus status;
@@ -67,14 +67,14 @@ KineticStatus KineticAdminClient_SetErasePin(KineticSession const * const sessio
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticBuilder_BuildSetPin(operation, old_pin, new_pin, false);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticAdminClient_SecureErase(KineticSession const * const session,
+KineticStatus KineticAdminClient_SecureErase(KineticSession * const session,
     ByteArray pin)
 {
     assert(session != NULL);
@@ -89,14 +89,14 @@ KineticStatus KineticAdminClient_SecureErase(KineticSession const * const sessio
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticBuilder_BuildErase(operation, true, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticAdminClient_InstantErase(KineticSession const * const session,
+KineticStatus KineticAdminClient_InstantErase(KineticSession * const session,
     ByteArray pin)
 {
     assert(session != NULL);
@@ -111,7 +111,7 @@ KineticStatus KineticAdminClient_InstantErase(KineticSession const * const sessi
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticBuilder_BuildErase(operation, false, &pin);
@@ -119,7 +119,7 @@ KineticStatus KineticAdminClient_InstantErase(KineticSession const * const sessi
 }
 
 
-KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session,
+KineticStatus KineticAdminClient_SetLockPin(KineticSession * const session,
     ByteArray old_pin, ByteArray new_pin)
 {
     KineticStatus status;
@@ -132,14 +132,14 @@ KineticStatus KineticAdminClient_SetLockPin(KineticSession const * const session
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticBuilder_BuildSetPin(operation, old_pin, new_pin, true);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session,
+KineticStatus KineticAdminClient_LockDevice(KineticSession * const session,
     ByteArray pin)
 {
     assert(session != NULL);
@@ -154,14 +154,14 @@ KineticStatus KineticAdminClient_LockDevice(KineticSession const * const session
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticBuilder_BuildLockUnlock(operation, true, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const session,
+KineticStatus KineticAdminClient_UnlockDevice(KineticSession * const session,
     ByteArray pin)
 {
     assert(session != NULL);
@@ -176,14 +176,14 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession const * const sessi
         return KINETIC_STATUS_MISSING_PIN;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticBuilder_BuildLockUnlock(operation, false, &pin);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
+KineticStatus KineticAdminClient_GetLog(KineticSession * const session,
                                    KineticLogInfo_Type type,
                                    KineticLogInfo** info,
                                    KineticCompletionClosure* closure)
@@ -198,7 +198,7 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
         return KINETIC_STATUS_INVALID_LOG_TYPE;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -208,7 +208,7 @@ KineticStatus KineticAdminClient_GetLog(KineticSession const * const session,
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession const * const session,
+KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession * const session,
                                    ByteArray name,
                                    KineticLogInfo** info,
                                    KineticCompletionClosure* closure)
@@ -217,7 +217,7 @@ KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession const * con
     assert(session->connection != NULL);
     assert(info != NULL);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
@@ -227,7 +227,7 @@ KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession const * con
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-void KineticClient_FreeLogInfo(KineticSession const * const session,
+void KineticClient_FreeLogInfo(KineticSession * const session,
                                   KineticLogInfo* info)
 {
     assert(session != NULL);
@@ -238,20 +238,20 @@ void KineticClient_FreeLogInfo(KineticSession const * const session,
     (void)session;
 }
 
-KineticStatus KineticAdminClient_SetClusterVersion(KineticSession const * const session,
+KineticStatus KineticAdminClient_SetClusterVersion(KineticSession * const session,
     int64_t version)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     KineticBuilder_BuildSetClusterVersion(operation, version);
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
-KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
+KineticStatus KineticAdminClient_SetACL(KineticSession * const session,
         const char *ACLPath) {
     assert(session != NULL);
     assert(session->connection != NULL);
@@ -267,7 +267,7 @@ KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
         return KINETIC_STATUS_ACL_ERROR;
     }
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {
         printf("!operation\n");
         return KINETIC_STATUS_MEMORY_ERROR;
@@ -282,13 +282,13 @@ KineticStatus KineticAdminClient_SetACL(KineticSession const * const session,
     return status;
 }
 
-KineticStatus KineticAdminClient_UpdateFirmware(KineticSession const * const session,
+KineticStatus KineticAdminClient_UpdateFirmware(KineticSession * const session,
     char const * const fw_path)
 {
     assert(session != NULL);
     assert(session->connection != NULL);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
     
     KineticStatus status = KineticBuilder_BuildUpdateFirmware(operation, fw_path);
